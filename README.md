@@ -9,13 +9,13 @@ The documentation is generated for **Docusaurus 2** [docs feature](https://v2.do
 ### npm
 
 ```shell
-npm install --save docusaurus2-graphql-doc-generator
+npm install --save @edno/docusaurus2-graphql-doc-generator
 ```
 
 ### Yarn
 
 ```shell
-yarn add docusaurus2-graphql-doc-generator
+yarn add @edno/docusaurus2-graphql-doc-generator
 ```
 
 Then you add it in your site's `docusaurus.config.js`'s plugins option:
@@ -23,7 +23,7 @@ Then you add it in your site's `docusaurus.config.js`'s plugins option:
 ```js
 module.exports = {
     // ...
-    plugins: ['docusaurus2-graphql-doc-generator'],
+    plugins: ['@edno/docusaurus2-graphql-doc-generator'],
 };
 ```
 
@@ -38,7 +38,7 @@ module.exports = {
   // ...
   plugins: [
     [
-      "docusaurus2-graphql-doc-generator",
+      "@edno/docusaurus2-graphql-doc-generator",
       {
         schema: "https://swapi.graph.cool/",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (outputDocPath/baseURL)

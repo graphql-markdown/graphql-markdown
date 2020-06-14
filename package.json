@@ -1,5 +1,5 @@
 {
-    "name": "docusaurus2-graphql-doc-generator",
+    "name": "@edno/docusaurus2-graphql-doc-generator",
     "version": "0.1.0",
     "license": "MIT",
     "main": "src/index.js",
