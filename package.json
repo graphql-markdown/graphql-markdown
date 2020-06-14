@@ -37,7 +37,7 @@
         "jest": "26.0.1",
         "lint-staged": "10.2.9",
         "ts-jest": "26.0.0",
-        "typescript": "3.9.3"
+        "typescript": "3.9.5"
     },
     "peerDependencies": {
         "@docusaurus/core": "^2.0.0-alpha.56",
