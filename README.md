@@ -75,11 +75,11 @@ A sidebar file `sidebar-schema.js` will be generated for the documentation, and 
 
 ```js
 module.exports = {
-  docsSidebar: [
-      // ... your site's sidebar
-  ],
-  ...require(`./docs/swapi/sidebar-schema`)
-}
+    docsSidebar: [
+        // ... your site's sidebar
+    ],
+    ...require(`./docs/swapi/sidebar-schema`),
+};
 ```
 
 ##### Important
