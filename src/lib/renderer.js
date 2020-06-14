@@ -1,0 +1,89 @@
+const fs = require('fs-extra');
+const path = require('path');
+const { isArray } = require('util');
+const { pull } = require('lodash');
+const moment = require('moment');
+const { toSlug, startCase } = require('./utils');
+const { prettifyJavascript } = require('./prettier');
+
+const SIDEBAR = 'sidebar-schema.js';
+const HOMEPAGE_ID = 'schema';
+
+module.exports = class Renderer {
+    constructor(printer, outputDir, baseURL) {
+        this.outputDir = outputDir;
+        this.baseURL = baseURL;
+        this.p = printer;
+    }
+
+    async renderRootTypes(name, type) {
+        let pages = [];
+        if (type) {
+            const slug = toSlug(name);
+            const dirPath = path.join(this.outputDir, slug);
+            if (isArray(type)) {
+                type = type.reduce(function (r, o) {
+                    if (o && o.name) r[o.name] = o;
+                    return r;
+                }, {});
+            }
+
+            fs.ensureDir(dirPath);
+
+            await Promise.all(Object.keys(type).map((name) => this.renderTypeEntities(dirPath, name, type[name]))).then(
+                (p) => {
+                    pages = [...p];
+                },
+            );
+        }
+        return pages;
+    }
+
+    async renderTypeEntities(dirPath, name, type) {
+        if (type) {
+            const fileName = toSlug(name);
+            const filePath = path.join(dirPath, `${fileName}.md`);
+            const content = this.p.printType(fileName, type);
+            fs.outputFile(filePath, content, async (err) => {
+                if (err) throw err;
+            });
+            const page = path.relative(this.outputDir, filePath).match(/(?<category>[A-z-]+)\/(?<pageId>[A-z-]+).md$/);
+            const slug = path.join(page.groups.category, page.groups.pageId);
+            return { category: startCase(page.groups.category), slug: slug };
+        }
+    }
+
+    renderSidebar(pages) {
+        const filePath = path.join(this.outputDir, SIDEBAR);
+        const content = prettifyJavascript(`module.exports = {
+          schemaSidebar:
+          ${JSON.stringify(this.generateSidebar(pages))}
+        };`);
+        fs.outputFileSync(filePath, content);
+        return path.relative('./', filePath);
+    }
+
+    generateSidebar(pages) {
+        let graphqlSidebar = [{ type: 'doc', id: path.join(this.baseURL, HOMEPAGE_ID) }];
+        pages.map((page) => {
+            const category = graphqlSidebar.find((entry) => 'label' in entry && page.category == entry.label);
+            const items = category && 'items' in category ? category.items : [];
+            const slug = path.join(this.baseURL, page.slug);
+            graphqlSidebar = [
+                ...pull(graphqlSidebar, category),
+                { type: 'category', label: page.category, items: [...items, slug].sort() },
+            ];
+        });
+        return graphqlSidebar;
+    }
+
+    renderHomepage(homepageLocation) {
+        const homePage = path.basename(homepageLocation);
+        const destLocation = path.join(this.outputDir, homePage);
+        fs.copySync(homepageLocation, destLocation);
+        const data = fs
+            .readFileSync(destLocation, 'utf8')
+            .replace(/##generated-date-time##/gm, moment().format('MMMM DD, YYYY [at] h:mm:ss A'));
+        fs.outputFileSync(destLocation, data, 'utf8');
+    }
+};
