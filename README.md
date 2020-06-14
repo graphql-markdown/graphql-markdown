@@ -78,7 +78,7 @@ module.exports = {
     docsSidebar: [
         // ... your site's sidebar
     ],
-    ...require(`./docs/swapi/sidebar-schema`),
+    ...require('./docs/swapi/sidebar-schema'),
 };
 ```
 
