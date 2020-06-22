@@ -27,8 +27,5 @@
     "peerDependencies": {
         "@docusaurus/core": "^2.0.0-alpha.56",
         "@docusaurus/plugin-content-docs": "^2.0.0-alpha.56"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/"
     }
 }
