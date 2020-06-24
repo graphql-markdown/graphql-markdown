@@ -11,20 +11,20 @@
     "@graphql-tools/utils" "6.0.9"
     tslib "~2.0.0"
 
-"@graphql-tools/graphql-file-loader@^6.0.9":
-  version "6.0.9"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-6.0.9.tgz#b1bdf2dc6d6c6993eafc976b779a005e86a39479"
-  integrity sha512-Z+YIypr2SGcUwzhph3AZOnR2Mkb6Mg/Tk9neGAyYx/zvEHJMdUk21Q64B89mwBC1tPdgeEPHf4pDTVRLDk5wUg==
+"@graphql-tools/graphql-file-loader@^6.0.10":
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-6.0.10.tgz#b8853345d71b1168f626ee2d2e10d73e4e30f02c"
+  integrity sha512-SL0KBUkFaZNldTvImlV1OhsL7EjROgoodC5OijjVyDubemAIWp1tjKZmQGCdmc/iJZXDx8vWR1tXi7REatHB2w==
   dependencies:
-    "@graphql-tools/import" "6.0.9"
-    "@graphql-tools/utils" "6.0.9"
+    "@graphql-tools/import" "6.0.10"
+    "@graphql-tools/utils" "6.0.10"
     fs-extra "9.0.1"
     tslib "~2.0.0"
 
-"@graphql-tools/import@6.0.9":
-  version "6.0.9"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.0.9.tgz#20d1ffc480e895de87a69eb94631332126751c29"
-  integrity sha512-e/t5sa29PCOnOdLaoPVWHV7fxag4HX/E1V4cWqvKHs01zei8jsG76SCN6w1PJ9IouJ7YZYhN295DQihCSpuSlQ==
+"@graphql-tools/import@6.0.10":
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.0.10.tgz#835f86729bc8e71ebcc809b6134df1965d9be977"
+  integrity sha512-nrQR7pQkxm9Zmx6VjtffGeLvz+YgPm+ZN9h/AP/dlRjYJSev7LFlzDwAvk4TyFX4qbAY7RjoZ74qn2ezw1Y0Hw==
   dependencies:
     fs-extra "9.0.1"
     resolve-from "5.0.0"
