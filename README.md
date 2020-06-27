@@ -97,19 +97,24 @@ If you decide to use your own home page for the GraphQL generated documentation,
 The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://v2.docusaurus.io/docs/cli).
 
 ```shell
-npx docusaurus graphql-to-doc [schema] [rootPath] [baseURL] [homepage]
+npx docusaurus graphql-to-doc [schema] [rootPath] [baseURL] [homepage] [diffMethod]
 ```
 
 #### Options
 
 By default, the plugin will use the options as defined in the plugin's [configuration](#configuration), but they can be overriden by passing them with the command.
 
-| Name       | Default            | Description                                                                                                                                                                                                                                                                |
-| ---------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `schema`   | `./schema.graphql` | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (e.g. an URL, a GraphQL file, a JSON file...).                                                                                     |
-| `rootPath` | `./docs`           | The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`                                                                                                                                         |
-| `baseURL`  | `schema`           | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the genrated documentation                                                                                                                                                 |
-| `homepage` | `generated.md`     | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />The plugin provides a [default page](assets/generated.md), but you can use your own. |
+| Name         | Default            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `schema`     | `./schema.graphql` | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (e.g. an URL, a GraphQL file, a JSON file...).                                                                                                                                                                                                                                                                                                              |
+| `rootPath`   | `./docs`           | The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`                                                                                                                                                                                                                                                                                                                                                                  |
+| `baseURL`    | `schema`           | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the genrated documentation                                                                                                                                                                                                                                                                                                                                                                          |
+| `homepage`   | `generated.md`     | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />The plugin provides a [default page](assets/generated.md), but you can use your own.                                                                                                                                                                                                                          |
+| `diffMethod` | `SCHEMA-DIFF`      | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
+
+##### About `diffMethod`
+
+The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since last documentation generation, then the full schema documentation will be generated.
 
 ## Contributions
 

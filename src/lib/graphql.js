@@ -19,6 +19,7 @@ const {
     isObjectType,
     isInputObjectType,
     isNullableType,
+    printSchema,
 } = require('graphql');
 const { loadSchema } = require('@graphql-tools/load');
 const { GraphQLFileLoader } = require('@graphql-tools/graphql-file-loader');
@@ -120,4 +121,5 @@ module.exports = {
     isInputObjectType,
     isNullableType,
     isListType,
+    printSchema,
 };

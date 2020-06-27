@@ -6,6 +6,7 @@ const DEFAULT_OPTIONS = {
     rootPath: './docs',
     baseURL: 'schema',
     homepage: path.join(__dirname, '../assets/', 'generated.md'),
+    diffMethod: 'SCHEMA-DIFF',
 };
 
 module.exports = function pluginGraphQLDocGenerator(context, opts) {
@@ -16,14 +17,15 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
 
         extendCli(cli) {
             cli.command('graphql-to-doc')
-                .arguments('[schema] [rootPath] [baseURL] [homepage]')
+                .arguments('[schema] [rootPath] [baseURL] [homepage] [diffMethod]')
                 .description('Generate GraphQL Schema Documentation')
-                .action(async (schema, rootPath, baseURL, homepage) => {
+                .action(async (schema, rootPath, baseURL, homepage, diffMethod) => {
                     baseURL = baseURL || options.baseURL;
                     schema = schema || options.schema;
                     rootPath = path.join(rootPath || options.rootPath, baseURL);
                     homepage = homepage || options.homepage;
-                    await generateDocFromSchema(baseURL, schema, rootPath, homepage);
+                    diffMethod = homepage || options.diffMethod;
+                    await generateDocFromSchema(baseURL, schema, rootPath, homepage, diffMethod);
                 });
         },
     };
