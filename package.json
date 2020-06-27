@@ -12,9 +12,9 @@
     ],
     "author": "Gregory Heitz",
     "dependencies": {
-        "@graphql-tools/graphql-file-loader": "^6.0.9",
+        "@graphql-tools/graphql-file-loader": "^6.0.10",
         "@graphql-tools/json-file-loader": "^6.0.9",
-        "@graphql-tools/load": "^6.0.9",
+        "@graphql-tools/load": "^6.0.10",
         "@graphql-tools/url-loader": "^6.0.9",
         "chalk": "^4.1.0",
         "fs-extra": "^9.0.1",
