@@ -17,7 +17,7 @@ module.exports = async function generateDocFromSchema(baseURL, schemaLocation, o
       let pages = [];
       const r = new Renderer(new Printer(schema, baseURL), outputDir, baseURL);
       const rootTypes = getSchemaMap(schema);
-      await Promise.all(Object.keys(rootTypes).map((typeName) => r.renderRootTypes(typeName, rootTypes[typeName])))
+      Promise.all(Object.keys(rootTypes).map((typeName) => r.renderRootTypes(typeName, rootTypes[typeName])))
         .then((p) => {
           pages = p.reduce((r, i) => [].concat(r, i), []);
         })
