@@ -24,7 +24,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
                     schema = schema || options.schema;
                     rootPath = path.join(rootPath || options.rootPath, baseURL);
                     homepage = homepage || options.homepage;
-                    diffMethod = homepage || options.diffMethod;
+                    diffMethod = diffMethod || options.diffMethod;
                     await generateDocFromSchema(baseURL, schema, rootPath, homepage, diffMethod);
                 });
         },
