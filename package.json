@@ -13,7 +13,7 @@
     "author": "Gregory Heitz",
     "dependencies": {
         "@graphql-inspector/core": "^2.1.0",
-        "@graphql-tools/graphql-file-loader": "^6.0.10",
+        "@graphql-tools/graphql-file-loader": "^6.0.11",
         "@graphql-tools/json-file-loader": "^6.0.9",
         "@graphql-tools/load": "^6.0.11",
         "@graphql-tools/url-loader": "^6.0.9",
