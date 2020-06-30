@@ -4,7 +4,6 @@ const Renderer = require('./renderer');
 const Printer = require('./printer');
 const { round } = require('./utils');
 const { checkSchemaChanges, saveSchemaHash, saveSchemaFile } = require('./diff');
-const path = require('path');
 
 const time = process.hrtime();
 
@@ -14,13 +13,14 @@ module.exports = async function generateDocFromSchema(
     outputDir,
     homepageLocation,
     diffMethod,
+    tmpDir,
 ) {
     return Promise.resolve(
         loadSchema(schemaLocation, {
             loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
         }),
     ).then(async (schema) => {
-        if (await checkSchemaChanges(schema, outputDir, diffMethod)) {
+        if (await checkSchemaChanges(schema, tmpDir, diffMethod)) {
             let pages = [];
             const r = new Renderer(new Printer(schema, baseURL), outputDir, baseURL);
             const rootTypes = getSchemaMap(schema);
@@ -49,7 +49,7 @@ module.exports = async function generateDocFromSchema(
             console.info(chalk.blue(`No changes detected in schema "${schemaLocation}".`));
         }
         // create references for checkSchemaChanges
-        await saveSchemaHash(schema, outputDir);
-        await saveSchemaFile(schema, outputDir);
+        await saveSchemaHash(schema, tmpDir);
+        await saveSchemaFile(schema, tmpDir);
     });
 };
