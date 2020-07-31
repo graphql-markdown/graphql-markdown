@@ -24,9 +24,10 @@ const HEADER_SECTION_ITEM_LEVEL = '- #####';
 const NO_DESCRIPTION_TEXT = 'No description';
 
 module.exports = class Printer {
-    constructor(schema, baseURL) {
+    constructor(schema, baseURL, linkRoot = "/") {
         this.schema = schema;
         this.baseURL = baseURL;
+        this.linkRoot = linkRoot;
     }
 
     toLink(type, name) {
@@ -57,7 +58,7 @@ module.exports = class Printer {
                 break;
         }
         if (category && graphLQLNamedType)
-            return `[${name}](/${path.join(this.baseURL, category, toSlug(graphLQLNamedType))})`;
+            return `[${name}](${path.join(this.linkRoot, this.baseURL, category, toSlug(graphLQLNamedType))})`;
         else return `\`${name}\``;
     }
 

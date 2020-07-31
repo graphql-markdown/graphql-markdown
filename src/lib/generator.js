@@ -11,6 +11,7 @@ module.exports = async function generateDocFromSchema(
     baseURL,
     schemaLocation,
     outputDir,
+    linkRoot, 
     homepageLocation,
     diffMethod,
     tmpDir,
@@ -22,7 +23,7 @@ module.exports = async function generateDocFromSchema(
     ).then(async (schema) => {
         if (await checkSchemaChanges(schema, tmpDir, diffMethod)) {
             let pages = [];
-            const r = new Renderer(new Printer(schema, baseURL), outputDir, baseURL);
+            const r = new Renderer(new Printer(schema, baseURL, linkRoot), outputDir, baseURL);
             const rootTypes = getSchemaMap(schema);
             Promise.all(Object.keys(rootTypes).map((typeName) => r.renderRootTypes(typeName, rootTypes[typeName])))
                 .then((p) => {
