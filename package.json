@@ -24,7 +24,7 @@
         "import": "0.0.6",
         "lodash": "^4.17.20",
         "moment": "^2.26.0",
-        "prettier": "^2.0.5",
+        "prettier": "^2.1.1",
         "slugify": "^1.4.5"
     }
 }
