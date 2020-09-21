@@ -14,7 +14,7 @@
     "dependencies": {
         "@graphql-inspector/core": "^2.2.0",
         "@graphql-tools/graphql-file-loader": "^6.1.0",
-        "@graphql-tools/json-file-loader": "^6.1.0",
+        "@graphql-tools/json-file-loader": "^6.2.3",
         "@graphql-tools/load": "^6.1.0",
         "@graphql-tools/url-loader": "^6.1.0",
         "@oclif/command": "^1.8.0",
