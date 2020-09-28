@@ -23,7 +23,7 @@
         "graphql": "^15.3.0",
         "import": "0.0.6",
         "lodash": "^4.17.20",
-        "moment": "^2.28.0",
+        "moment": "^2.29.0",
         "prettier": "^2.1.1",
         "slugify": "^1.4.5"
     }
