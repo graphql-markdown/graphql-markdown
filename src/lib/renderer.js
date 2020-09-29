@@ -52,7 +52,7 @@ module.exports = class Renderer {
             fs.outputFile(filePath, content, async (err) => {
                 if (err) throw err;
             });
-            const page = path.relative(this.outputDir, filePath).match(/(?<category>[A-z-]+)\/(?<pageId>[A-z-]+).md$/);
+            const page = path.relative(this.outputDir, filePath).match(/(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).md$/);
             const slug = path.join(page.groups.category, page.groups.pageId);
             return { category: startCase(page.groups.category), slug: slug };
         }
