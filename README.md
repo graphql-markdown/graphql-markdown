@@ -43,7 +43,7 @@ module.exports = {
         schema: "https://swapi.graph.cool/",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (outputDocPath/baseURL)
         baseURL: "swapi",
-        homePage: "./docs/swapi.md",
+        homepage: "./docs/swapi.md",
       },
     ],
 };
