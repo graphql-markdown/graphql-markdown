@@ -1,5 +1,7 @@
-import { danger, fail, warn, schedule } from "danger";
 require("colors");
+
+import { danger, fail, warn, schedule } from "danger";
+
 const Diff = require("diff");
 
 const packageLock = danger.git.fileMatch("package-lock.json");
@@ -20,7 +22,15 @@ const getDiffDependencies = (dependencies) => {
 };
 
 if (packageLock.modified || packageLock.created) {
-  fail("'package-lock.json' detected, you must used 'yarn' for dependencies.");
+  fail(
+    "'package-lock.json' detected, you must used 'yarn' for dependencies."[
+      "red"
+    ],
+  );
+}
+
+if (yarnLock.deleted) {
+  fail("This PR deleted the 'yarn.lock' file."["red"]);
 }
 
 if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
@@ -44,5 +54,5 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
 }
 
 if (licenseFile.modified) {
-  warn("This PR modified the LICENSE file.");
+  warn("This PR modified the 'LICENSE' file."["yellow"]);
 }
