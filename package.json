@@ -1,30 +1,81 @@
 {
-    "name": "@edno/docusaurus2-graphql-doc-generator",
-    "version": "0.4.1",
-    "license": "MIT",
-    "main": "src/index.js",
-    "keywords": [
-        "docusaurus2",
-        "graphql",
-        "graphql-schema",
-        "documentation",
-        "plugin"
-    ],
-    "author": "Gregory Heitz",
-    "dependencies": {
-        "@graphql-inspector/core": "^2.2.0",
-        "@graphql-tools/graphql-file-loader": "^6.2.4",
-        "@graphql-tools/json-file-loader": "^6.2.4",
-        "@graphql-tools/load": "^6.2.4",
-        "@graphql-tools/url-loader": "^6.3.0",
-        "@oclif/command": "^1.8.0",
-        "chalk": "^4.1.0",
-        "fs-extra": "^9.0.1",
-        "graphql": "^15.3.0",
-        "import": "0.0.6",
-        "lodash": "^4.17.20",
-        "moment": "^2.29.0",
-        "prettier": "^2.1.2",
-        "slugify": "^1.4.5"
+  "name": "@edno/docusaurus2-graphql-doc-generator",
+  "version": "0.4.1",
+  "license": "MIT",
+  "main": "src/index.js",
+  "keywords": [
+    "docusaurus2",
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "plugin"
+  ],
+  "author": "Gregory Heitz",
+  "scripts": {
+    "prettier": "prettier --write \"**/*.js\"",
+    "lint": "eslint --cache \"**/*.js\" --quiet --fix",
+    "lint:ci": "eslint \"**/*.js\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn prettier",
+      "pre-push": "yarn lint"
     }
+  },
+  "dependencies": {
+    "@graphql-inspector/core": "^2.2.0",
+    "@graphql-tools/graphql-file-loader": "^6.2.3",
+    "@graphql-tools/json-file-loader": "^6.2.3",
+    "@graphql-tools/load": "^6.2.3",
+    "@graphql-tools/url-loader": "^6.2.3",
+    "@oclif/command": "^1.8.0",
+    "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
+    "graphql": "^15.3.0",
+    "import": "0.0.6",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.0",
+    "prettier": "2.1.2",
+    "slugify": "^1.4.5"
+  },
+  "devDependencies": {
+    "eslint": "7.10.0",
+    "eslint-config-prettier": "6.12.0",
+    "eslint-plugin-prettier": "3.1.4",
+    "husky": "4.3.0",
+    "yarn": "1.22.10"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "printWidth": 80,
+    "proseWrap": "never",
+    "singleQuote": false,
+    "trailingComma": "all"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended",
+      "prettier"
+    ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js"
+          ]
+        }
+      }
+    },
+    "parserOptions": {
+      "ecmaVersion": 11,
+      "sourceType": "module"
+    },
+    "rules": {}
+  }
 }
