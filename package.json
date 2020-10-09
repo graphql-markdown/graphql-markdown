@@ -14,12 +14,14 @@
   "scripts": {
     "prettier": "prettier --write \"**/*.js\"",
     "lint": "eslint --cache \"**/*.js\" --quiet --fix",
-    "lint:ci": "eslint \"**/*.js\""
+    "lint:ci": "eslint \"**/*.js\"",
+    "danger": "danger local -b main",
+    "danger:ci": "danger ci -b main"
   },
   "husky": {
     "hooks": {
       "pre-commit": "yarn prettier",
-      "pre-push": "yarn lint"
+      "pre-push": "yarn lint && yarn danger"
     }
   },
   "dependencies": {
@@ -39,6 +41,7 @@
     "slugify": "^1.4.5"
   },
   "devDependencies": {
+    "danger": "10.5.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.12.0",
     "eslint-plugin-prettier": "3.1.4",
