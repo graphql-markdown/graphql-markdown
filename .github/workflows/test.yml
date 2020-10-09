@@ -14,5 +14,5 @@ jobs:
     - name: Install modules
       run: yarn
 
-    - name: Run Jest Tests
-      run: yarn test:ci
+    - name: Run Unit Tests
+      run: yarn test:ci --projects tests/unit
