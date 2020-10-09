@@ -45,7 +45,7 @@ async function checkSchemaChanges(
 
   if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_HASH) {
     if (fs.existsSync(hashFile)) {
-      const hash = fs.readFileSync(hashFile);
+      const hash = fs.readFileSync(hashFile, "utf-8");
       hasDiff = hashSchema != hash;
     }
   }
