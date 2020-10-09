@@ -13,7 +13,8 @@
   "author": "Gregory Heitz",
   "scripts": {
     "prettier": "prettier --write \"**/*.js\"",
-    "lint": "eslint --cache \"**/*.js\" --quiet --fix"
+    "lint": "eslint --cache \"**/*.js\" --quiet --fix",
+    "lint:ci": "eslint \"**/*.js\""
   },
   "husky": {
     "hooks": {

@@ -1,4 +1,4 @@
-name: Super-Linter
+name: Linter
 
 on: push
 
@@ -11,8 +11,8 @@ jobs:
     - name: Checkout Code Base
       uses: actions/checkout@v2
 
-    - name: Lint Code Base
-      uses: github/super-linter@v3
-      env:
-        DEFAULT_BRANCH: main
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install modules
+      run: yarn
+
+    - name: Run ESLint
+      run: yarn lint:ci
