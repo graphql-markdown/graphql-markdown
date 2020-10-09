@@ -5,11 +5,11 @@ describe("lib", () => {
     describe("toSlug()", () => {
       test("returns kebab style slug", () => {
         const text = "This is not a slug, but you can use toSlug() function.";
-        expect(toSlug(text)).toBe(
-          "this-is-not-a-slug-but-you-can-use-to-slug-function",
-        );
+        const expected = "this-is-not-a-slug-but-you-can-use-to-slug-function";
+        expect(toSlug(text)).toBe(expected);
       });
     });
+
     describe("toArray()", () => {
       test("returns an array of values from a k/v object", () => {
         const input = {
@@ -22,9 +22,9 @@ describe("lib", () => {
         const expected = [true, "test", 123, ["one", "two"], { key: "value" }];
         expect(toArray(input)).toEqual(expect.arrayContaining(expected));
       });
+
       test("returns undefined if not an object", () => {
-        const input = "test";
-        expect(toArray(input)).toBeUndefined();
+        expect(toArray("test")).toBeUndefined();
       });
     });
   });
