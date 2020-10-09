@@ -15,7 +15,7 @@
     "prettier": "prettier --write \"**/*.js\"",
     "lint": "eslint --cache \"**/*.js\" --quiet --fix",
     "lint:ci": "eslint \"**/*.js\"",
-    "danger": "danger local -b main",
+    "danger": "danger local -b main --failOnErrors",
     "danger:ci": "danger ci -b main"
   },
   "husky": {
@@ -41,7 +41,9 @@
     "slugify": "^1.4.5"
   },
   "devDependencies": {
+    "colors": "1.4.0",
     "danger": "10.5.0",
+    "diff": "4.0.2",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.12.0",
     "eslint-plugin-prettier": "3.1.4",
