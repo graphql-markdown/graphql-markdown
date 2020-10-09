@@ -12,16 +12,20 @@
   ],
   "author": "Gregory Heitz",
   "scripts": {
-    "prettier": "prettier --write \"**/*.js\"",
+    "prettier": "prettier --write \"**/*.{js,json,md}\"",
     "lint": "eslint --cache \"**/*.js\" --quiet --fix",
     "lint:ci": "eslint \"**/*.js\"",
     "danger": "danger local -b main --failOnErrors",
-    "danger:ci": "danger ci -b main"
+    "danger:ci": "danger ci -b main",
+    "test": "jest",
+    "test:ci": "jest --runInBand --noStackTrace --forceExit --ci",
+    "pre-commit": "yarn prettier",
+    "pre-push": "yarn lint && yarn test --bail && yarn danger"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn prettier",
-      "pre-push": "yarn lint && yarn danger"
+      "pre-commit": "yarn pre-commit",
+      "pre-push": "yarn pre-push"
     }
   },
   "dependencies": {
@@ -46,27 +50,42 @@
     "diff": "4.0.2",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.12.0",
+    "eslint-plugin-jest": "24.1.0",
     "eslint-plugin-prettier": "3.1.4",
     "husky": "4.3.0",
+    "jest": "26.5.2",
     "yarn": "1.22.10"
   },
   "prettier": {
-    "arrowParens": "always",
-    "bracketSpacing": true,
-    "printWidth": 80,
-    "proseWrap": "never",
     "singleQuote": false,
-    "trailingComma": "all"
+    "bracketSpacing": true,
+    "proseWrap": "preserve",
+    "overrides": [
+      {
+        "files": "*.js",
+        "options": {
+          "arrowParens": "always",
+          "printWidth": 80,
+          "trailingComma": "all",
+          "tabWidth": 2
+        }
+      }
+    ]
   },
   "eslintConfig": {
     "env": {
       "node": true,
-      "es6": true
+      "es6": true,
+      "jest": true,
+      "jest/globals": true
     },
     "extends": [
       "eslint:recommended",
       "plugin:prettier/recommended",
       "prettier"
+    ],
+    "plugins": [
+      "jest"
     ],
     "settings": {
       "import/resolver": {
@@ -81,6 +100,46 @@
       "ecmaVersion": 11,
       "sourceType": "module"
     },
+    "overrides": [
+      {
+        "files": [
+          "tests/**/*.js"
+        ],
+        "extends": [
+          "eslint:recommended",
+          "plugin:prettier/recommended",
+          "prettier",
+          "plugin:jest/recommended",
+          "plugin:jest/style"
+        ]
+      }
+    ],
     "rules": {}
+  },
+  "jest": {
+    "displayName": "@edno/docusaurus2-graphql-doc-generator",
+    "verbose": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.js"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/tests/**/?(*.)+(spec|test).js"
+    ],
+    "moduleNameMapper": {
+      "@/(.*)": "<rootDir>/src/$1"
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": -10
+      }
+    }
   }
 }

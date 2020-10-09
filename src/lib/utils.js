@@ -6,7 +6,8 @@ function toSlug(str) {
 }
 
 function toArray(param) {
-  if (param) return Object.keys(param).map((key) => param[key]);
+  if (param && typeof param === "object")
+    return Object.keys(param).map((key) => param[key]);
   return undefined;
 }
 

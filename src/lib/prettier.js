@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const prettier = require("prettier");
 
 function prettifyMarkdown(content) {

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const generateDocFromSchema = require("./lib/generator");
 const path = require("path");
 const os = require("os");
