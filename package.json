@@ -18,7 +18,7 @@
     "danger": "danger local -b main --failOnErrors",
     "danger:ci": "danger ci -b main",
     "test": "jest",
-    "test:ci": "jest --runInBand --noStackTrace --forceExit --ci",
+    "test:ci": "jest --runInBand --noStackTrace --ci",
     "pre-commit": "yarn prettier",
     "pre-push": "yarn lint && yarn test --bail && yarn danger"
   },
@@ -115,31 +115,5 @@
       }
     ],
     "rules": {}
-  },
-  "jest": {
-    "displayName": "@edno/docusaurus2-graphql-doc-generator",
-    "verbose": true,
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*.js"
-    ],
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text"
-    ],
-    "testEnvironment": "node",
-    "testMatch": [
-      "<rootDir>/tests/**/?(*.)+(spec|test).js"
-    ],
-    "moduleNameMapper": {
-      "@/(.*)": "<rootDir>/src/$1"
-    },
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": -10
-      }
-    }
   }
 }
