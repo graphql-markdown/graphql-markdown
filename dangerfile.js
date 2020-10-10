@@ -16,6 +16,7 @@ const PACKAGE_JSON = "package.json";
 const YARN_LOCK = "yarn.lock";
 const LICENSE_FILE = "LICENSE";
 const README_FILE = "README.md";
+const DANGER_FILE = "dangerfile.js";
 const JEST_SNAPSHOT = /^.+\.snap$/;
 
 const packageLock = danger.git.fileMatch(PACKAGE_LOCK);
@@ -23,6 +24,7 @@ const packageJson = danger.git.fileMatch(PACKAGE_JSON);
 const yarnLock = danger.git.fileMatch(YARN_LOCK);
 const licenseFile = danger.git.fileMatch(LICENSE_FILE);
 const readmeFile = danger.git.fileMatch(README_FILE);
+const dangerFile = danger.git.fileMatch(DANGER_FILE);
 
 const getDiffDependencies = (dependencies) => {
   const diff = Diff.diffJson(dependencies.before, dependencies.after);
@@ -107,4 +109,9 @@ if (jestSnapshots.modified.length > 0) {
 if (jestSnapshots.deleted.length > 0) {
   const description = "This PR deleted some Jest snapshot file/s:"[COLOR.WARN];
   warn(`${description}\n - ${jestSnapshots.deleted.join("\n - ")}`);
+}
+
+// rule-danger-file-modified
+if (dangerFile.modified) {
+  warn(`This PR modified the '${DANGER_FILE}' file.`[COLOR.WARN]);
 }
