@@ -43,17 +43,17 @@ function getDefaultValue(argument) {
   }
 }
 
-function getFilteredTypeMap(typemap) {
-  if (!typemap) return undefined;
+function getFilteredTypeMap(typeMap) {
+  if (!typeMap) return undefined;
   const excludeList = SCHEMA_EXCLUDE_LIST_PATTERN;
-  return Object.keys(typemap)
+  return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
-    .reduce((res, key) => ((res[key] = typemap[key]), res), {});
+    .reduce((res, key) => ((res[key] = typeMap[key]), res), {});
 }
 
-function getIntrospectionFieldsList(querytype) {
-  if (!querytype) return undefined;
-  return querytype.getFields();
+function getIntrospectionFieldsList(queryType) {
+  if (!queryType) return undefined;
+  return queryType.getFields();
 }
 
 function getFields(type) {
@@ -74,15 +74,15 @@ function getTypeName(type, name = "") {
   return undefined;
 }
 
-function getTypeFromTypeMap(typemap, type) {
-  if (!typemap) return undefined;
-  return Object.keys(typemap)
-    .filter((key) => typemap[key] instanceof type)
-    .reduce((res, key) => ((res[key] = typemap[key]), res), {});
+function getTypeFromTypeMap(typeMap, type) {
+  if (!typeMap) return undefined;
+  return Object.keys(typeMap)
+    .filter((key) => typeMap[key] instanceof type)
+    .reduce((res, key) => ((res[key] = typeMap[key]), res), {});
 }
 
 function getSchemaMap(schema) {
-  const typemap = getFilteredTypeMap(schema.getTypeMap());
+  const typeMap = getFilteredTypeMap(schema.getTypeMap());
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
@@ -94,12 +94,12 @@ function getSchemaMap(schema) {
       schema.getSubscriptionType && schema.getSubscriptionType(),
     ),
     directives: toArray(schema.getDirectives && schema.getDirectives()),
-    objects: getTypeFromTypeMap(typemap, GraphQLObjectType),
-    unions: getTypeFromTypeMap(typemap, GraphQLUnionType),
-    interfaces: getTypeFromTypeMap(typemap, GraphQLInterfaceType),
-    enums: getTypeFromTypeMap(typemap, GraphQLEnumType),
-    inputs: getTypeFromTypeMap(typemap, GraphQLInputObjectType),
-    scalars: getTypeFromTypeMap(typemap, GraphQLScalarType),
+    objects: getTypeFromTypeMap(typeMap, GraphQLObjectType),
+    unions: getTypeFromTypeMap(typeMap, GraphQLUnionType),
+    interfaces: getTypeFromTypeMap(typeMap, GraphQLInterfaceType),
+    enums: getTypeFromTypeMap(typeMap, GraphQLEnumType),
+    inputs: getTypeFromTypeMap(typeMap, GraphQLInputObjectType),
+    scalars: getTypeFromTypeMap(typeMap, GraphQLScalarType),
   };
 }
 
