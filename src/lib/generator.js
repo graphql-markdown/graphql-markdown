@@ -54,7 +54,7 @@ module.exports = async function generateDocFromSchema(
           const duration = round(sec + msec / 1000000000, 3);
           console.info(
             chalk.green(
-              `Documentation succesfully generated in "${outputDir}" with base URL "${baseURL}".`,
+              `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
             ),
           );
           console.log(
