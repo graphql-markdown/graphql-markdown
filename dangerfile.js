@@ -43,7 +43,7 @@ const getDiffDependencies = (dependencies) => {
 // rule-package-lock-detected
 if (packageLock.modified || packageLock.created) {
   fail(
-    `'${PACKAGE_LOCK}' detected, you must used 'yarn' for dependencies.`[
+    `\`${PACKAGE_LOCK}\` detected, you must used 'yarn' for dependencies.`[
       COLOR.FAIL
     ],
   );
@@ -51,7 +51,7 @@ if (packageLock.modified || packageLock.created) {
 
 // rule-yarn-lock-deleted
 if (yarnLock.deleted) {
-  fail(`This PR deleted the '${YARN_LOCK}' file.`[COLOR.FAIL]);
+  fail(`This PR deleted the \`${YARN_LOCK}\` file.`[COLOR.FAIL]);
 }
 
 // rule-yarn-lock-not-updated
@@ -77,17 +77,17 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
 
 // rule-license-file-modified
 if (licenseFile.modified) {
-  warn(`This PR modified the '${LICENSE_FILE}' file.`[COLOR.WARN]);
+  warn(`This PR modified the \`${LICENSE_FILE}\` file.`[COLOR.WARN]);
 }
 
 // rule-license-file-deleted
 if (licenseFile.deleted) {
-  fail(`This PR deleted the '${LICENSE_FILE}' file.`[COLOR.FAIL]);
+  fail(`This PR deleted the \`${LICENSE_FILE}\` file.`[COLOR.FAIL]);
 }
 
 // rule-readme-file-deleted
 if (readmeFile.deleted) {
-  fail(`This PR deleted the '${README_FILE}' file.`[COLOR.FAIL]);
+  fail(`This PR deleted the \`${README_FILE}\` file.`[COLOR.FAIL]);
 }
 
 const jestSnapshots = {
@@ -113,5 +113,5 @@ if (jestSnapshots.deleted.length > 0) {
 
 // rule-danger-file-modified
 if (dangerFile.modified) {
-  warn(`This PR modified the '${DANGER_FILE}' file.`[COLOR.WARN]);
+  warn(`This PR modified the \`${DANGER_FILE}\` file.`[COLOR.WARN]);
 }
