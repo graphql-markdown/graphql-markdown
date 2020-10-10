@@ -8,11 +8,11 @@ const {
   getDefaultValue,
   getTypeName,
   getFields,
-  isDirective,
+  isDirectiveType,
   isParametrizedField,
   isInterfaceType,
   getNamedType,
-  isInputObjectType,
+  isInputType,
   isListType,
 } = require("./graphql");
 const { toSlug } = require("./utils");
@@ -47,24 +47,27 @@ module.exports = class Printer {
       case isObjectType(graphLQLNamedType):
         category = "objects";
         break;
-      case isInputObjectType(graphLQLNamedType):
+      case isInputType(graphLQLNamedType):
         category = "inputs";
         break;
       case isScalarType(graphLQLNamedType):
         category = "scalars";
         break;
-      case isDirective(graphLQLNamedType):
+      case isDirectiveType(graphLQLNamedType):
         category = "directives";
         break;
     }
-    if (category && graphLQLNamedType)
+    name = isListType(type) ? `\`[${name}]\`` : `\`${name}\``;
+    if (category && graphLQLNamedType) {
       return `[${name}](${path.join(
         this.linkRoot,
         this.baseURL,
         category,
         toSlug(graphLQLNamedType),
       )})`;
-    else return `\`${name}\``;
+    } else {
+      return name;
+    }
   }
 
   printSection(values, section, level = HEADER_SECTION_LEVEL) {
@@ -74,7 +77,7 @@ module.exports = class Printer {
   }
 
   printSectionItems(values, level = HEADER_SECTION_SUB_LEVEL) {
-    if ("map" in values)
+    if (Array.isArray(values))
       return values
         .map((v) => v && this.printSectionItem(v, level))
         .join(`\n\n`);
@@ -82,8 +85,13 @@ module.exports = class Printer {
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
-    let section = `${level} ${this.toLink(type, `\`${getTypeName(type)}\``)} ${
-      "type" in type
+    if (!type) {
+      return "";
+    }
+
+    let section = `${level} ${this.toLink(type, getTypeName(type))} ${
+      type instanceof Object &&
+      Object.prototype.hasOwnProperty.call(type, "type")
         ? `(${this.toLink(type.type, getTypeName(type.type))})`
         : ""
     }\n\n${type.description || ""}\n`;
@@ -124,7 +132,11 @@ module.exports = class Printer {
 
   printCodeArguments(type) {
     let code = "";
-    if ("args" in type && type.args.length > 0) {
+    if (
+      type instanceof Object &&
+      Object.prototype.hasOwnProperty.call(type, "args") &&
+      type.args.length > 0
+    ) {
       code += `(\n`;
       code += type.args.reduce((r, v) => {
         const defaultValue = getDefaultValue(v);
@@ -155,7 +167,9 @@ module.exports = class Printer {
       type,
     )}`;
     code += `${
-      "getInterfaces" in type && type.getInterfaces().length > 0
+      type instanceof Object &&
+      Object.prototype.hasOwnProperty.call(type, "getInterfaces") &&
+      type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
             .map((v) => getTypeName(v))
@@ -176,7 +190,12 @@ module.exports = class Printer {
   }
 
   printDescription(type) {
-    return ("description" in type && type.description) || NO_DESCRIPTION_TEXT;
+    return (
+      (type instanceof Object &&
+        Object.prototype.hasOwnProperty.call(type, "description") &&
+        type.description) ||
+      NO_DESCRIPTION_TEXT
+    );
   }
 
   printCode(type) {
@@ -190,13 +209,13 @@ module.exports = class Printer {
         break;
       case isInterfaceType(type):
       case isObjectType(type):
-      case isInputObjectType(type):
+      case isInputType(type):
         code += this.printCodeType(type);
         break;
       case isScalarType(type):
         code += this.printCodeScalar(type);
         break;
-      case isDirective(type):
+      case isDirectiveType(type):
         code += this.printCodeDirective(type);
         break;
       case isQuery(type):
@@ -210,47 +229,45 @@ module.exports = class Printer {
   }
 
   printType(name, type) {
-    if (type) {
-      const header = this.printHeader(name, getTypeName(type));
-      const description = this.printDescription(type);
-      const code = this.printCode(type);
-
-      let metadata = "";
-      if (isEnumType(type)) {
-        metadata = this.printSection(type.getValues(), "Values");
-      }
-
-      if (isUnionType(type)) {
-        metadata = this.printSection(type.getTypes(), "Possible types");
-      }
-
-      if (
-        isObjectType(type) ||
-        isInterfaceType(type) ||
-        isInputObjectType(type)
-      ) {
-        metadata = this.printSection(getFields(type), "Fields");
-        if ("getInterfaces" in type)
-          metadata += this.printSection(
-            type.getInterfaces && type.getInterfaces(),
-            "Interfaces",
-          );
-      }
-
-      if (isQuery(type)) {
-        metadata = this.printSection(type.args, "Arguments");
-        const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-        metadata += this.printSection([this.schema.getType(queryType)], "Type");
-      }
-
-      if (isDirective(type)) {
-        metadata = this.printSection(type.args, "Arguments");
-      }
-
-      return prettifyMarkdown(
-        `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
-      );
+    if (!type) {
+      return "";
     }
-    return "";
+
+    const header = this.printHeader(name, getTypeName(type));
+    const description = this.printDescription(type);
+    const code = this.printCode(type);
+
+    let metadata = "";
+    if (isEnumType(type)) {
+      metadata = this.printSection(type.getValues(), "Values");
+    }
+
+    if (isUnionType(type)) {
+      metadata = this.printSection(type.getTypes(), "Possible types");
+    }
+
+    if (isObjectType(type) || isInterfaceType(type) || isInputType(type)) {
+      metadata = this.printSection(getFields(type), "Fields");
+      if (
+        type instanceof Object &&
+        Object.prototype.hasOwnProperty.call(type, "getInterfaces")
+      ) {
+        metadata += this.printSection(type.getInterfaces(), "Interfaces");
+      }
+    }
+
+    if (isQuery(type)) {
+      metadata = this.printSection(type.args, "Arguments");
+      const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+      metadata += this.printSection([this.schema.getType(queryType)], "Type");
+    }
+
+    if (isDirectiveType(type)) {
+      metadata = this.printSection(type.args, "Arguments");
+    }
+
+    return prettifyMarkdown(
+      `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
+    );
   }
 };
