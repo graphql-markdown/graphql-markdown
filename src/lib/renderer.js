@@ -1,6 +1,5 @@
 const fs = require("fs-extra");
 const path = require("path");
-const { isArray } = require("util");
 const { pull } = require("lodash");
 const moment = require("moment");
 const { toSlug, startCase } = require("./utils");
@@ -26,7 +25,7 @@ module.exports = class Renderer {
     if (type) {
       const slug = toSlug(name);
       const dirPath = path.join(this.outputDir, slug);
-      if (isArray(type)) {
+      if (Array.isArray(type)) {
         type = type.reduce(function (r, o) {
           if (o && o.name) r[o.name] = o;
           return r;

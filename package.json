@@ -13,7 +13,7 @@
   "author": "Gregory Heitz",
   "scripts": {
     "prettier": "prettier --write \"**/*.{js,json,md}\"",
-    "lint": "eslint --cache \"**/*.js\" --quiet --fix",
+    "lint": "eslint --cache \"**/*.js\" --fix",
     "lint:ci": "eslint \"**/*.js\"",
     "danger": "danger local -b main --failOnErrors",
     "danger:ci": "danger ci -b main",
@@ -40,7 +40,6 @@
     "graphql": "^15.3.0",
     "import": "0.0.6",
     "lodash": "^4.17.20",
-    "memfs": "3.2.0",
     "moment": "^2.29.0",
     "prettier": "2.1.2",
     "slugify": "^1.4.5"
@@ -79,6 +78,7 @@
       "node": true,
       "es6": true,
       "jest": true,
+      "commonjs": true,
       "jest/globals": true
     },
     "extends": [
@@ -116,6 +116,14 @@
         ]
       }
     ],
-    "rules": {}
+    "rules": {
+      "brace-style": [
+        2,
+        "1tbs",
+        {
+          "allowSingleLine": false
+        }
+      ]
+    }
   }
 }
