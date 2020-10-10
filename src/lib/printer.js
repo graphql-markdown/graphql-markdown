@@ -15,7 +15,7 @@ const {
   isInputType,
   isListType,
 } = require("./graphql");
-const { toSlug } = require("./utils");
+const { toSlug, hasProperty, hasMethod } = require("./utils");
 const { prettifyMarkdown } = require("./prettier");
 
 const HEADER_SECTION_LEVEL = "###";
@@ -90,8 +90,7 @@ module.exports = class Printer {
     }
 
     let section = `${level} ${this.toLink(type, getTypeName(type))} ${
-      type instanceof Object &&
-      Object.prototype.hasOwnProperty.call(type, "type")
+      hasProperty(type, "type")
         ? `(${this.toLink(type.type, getTypeName(type.type))})`
         : ""
     }\n\n${type.description || ""}\n`;
@@ -132,11 +131,7 @@ module.exports = class Printer {
 
   printCodeArguments(type) {
     let code = "";
-    if (
-      type instanceof Object &&
-      Object.prototype.hasOwnProperty.call(type, "args") &&
-      type.args.length > 0
-    ) {
+    if (hasProperty(type, "args") && type.args.length > 0) {
       code += `(\n`;
       code += type.args.reduce((r, v) => {
         const defaultValue = getDefaultValue(v);
@@ -167,9 +162,7 @@ module.exports = class Printer {
       type,
     )}`;
     code += `${
-      type instanceof Object &&
-      Object.prototype.hasOwnProperty.call(type, "getInterfaces") &&
-      type.getInterfaces().length > 0
+      hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
             .map((v) => getTypeName(v))
@@ -191,9 +184,7 @@ module.exports = class Printer {
 
   printDescription(type) {
     return (
-      (type instanceof Object &&
-        Object.prototype.hasOwnProperty.call(type, "description") &&
-        type.description) ||
+      (hasProperty(type, "description") && type.description) ||
       NO_DESCRIPTION_TEXT
     );
   }
@@ -248,10 +239,7 @@ module.exports = class Printer {
 
     if (isObjectType(type) || isInterfaceType(type) || isInputType(type)) {
       metadata = this.printSection(getFields(type), "Fields");
-      if (
-        type instanceof Object &&
-        Object.prototype.hasOwnProperty.call(type, "getInterfaces")
-      ) {
+      if (hasMethod(type, "getInterfaces")) {
         metadata += this.printSection(type.getInterfaces(), "Interfaces");
       }
     }

@@ -20,7 +20,9 @@
     "test": "jest",
     "test:ci": "jest --runInBand --noStackTrace --ci",
     "pre-commit": "yarn prettier",
-    "pre-push": "yarn lint && yarn test --bail && yarn danger"
+    "pre-push": "yarn lint && yarn test --bail && yarn danger",
+    "test:stryker": "stryker run",
+    "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text"
   },
   "husky": {
     "hooks": {
@@ -45,6 +47,8 @@
     "slugify": "^1.4.5"
   },
   "devDependencies": {
+    "@stryker-mutator/core": "4.0.0",
+    "@stryker-mutator/jest-runner": "4.0.0",
     "colors": "1.4.0",
     "danger": "10.5.0",
     "diff": "4.0.2",
