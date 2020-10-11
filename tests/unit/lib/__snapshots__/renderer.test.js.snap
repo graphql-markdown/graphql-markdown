@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib renderer class Renderer generateSidebar() generate Docusaurus sidebar object from list of pages 1`] = `
+Array [
+  Object {
+    "id": "graphql/schema",
+    "type": "doc",
+  },
+  Object {
+    "items": Array [
+      "graphql/ipsum",
+      "graphql/lorem",
+    ],
+    "label": "foo",
+    "type": "category",
+  },
+  Object {
+    "items": Array [
+      "graphql/dolor",
+    ],
+    "label": "bar",
+    "type": "category",
+  },
+]
+`;
+
+exports[`lib renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": ".md",
+      "name": "generated.md",
+      "path": "output/generated.md",
+      "size": 399,
+      "type": "file",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 399,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer class Renderer renderRootTypes() render root type 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "bar.md",
+          "path": "output/object/bar.md",
+          "size": 11,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "foo.md",
+          "path": "output/object/foo.md",
+          "size": 11,
+          "type": "file",
+        },
+      ],
+      "name": "object",
+      "path": "output/object",
+      "size": 22,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 22,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": ".js",
+      "name": "sidebar-schema.js",
+      "path": "output/sidebar-schema.js",
+      "size": 261,
+      "type": "file",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 261,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "foo-bar.md",
+          "path": "output/foobar/foo-bar.md",
+          "size": 11,
+          "type": "file",
+        },
+      ],
+      "name": "foobar",
+      "path": "output/foobar",
+      "size": 11,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 11,
+  "type": "directory",
+}
+`;

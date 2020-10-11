@@ -13,14 +13,13 @@ function toArray(param) {
 
 function hasProperty(obj, prop) {
   return (
-    obj instanceof Object && Object.prototype.hasOwnProperty.call(obj, prop)
+    !!(obj && obj[prop]) ||
+    (obj instanceof Object && Object.prototype.hasOwnProperty.call(obj, prop))
   );
 }
 
 function hasMethod(obj, prop) {
-  if (hasProperty(obj, prop)) {
-    return typeof obj[prop] === "function";
-  }
+  return hasProperty(obj, prop) && typeof obj[prop] === "function";
 }
 
 module.exports = { round, startCase, toSlug, toArray, hasProperty, hasMethod };

@@ -4,7 +4,7 @@ const {
   isUnionType,
   isObjectType,
   isScalarType,
-  isQuery,
+  isOperation,
   getDefaultValue,
   getTypeName,
   getFields,
@@ -209,7 +209,7 @@ module.exports = class Printer {
       case isDirectiveType(type):
         code += this.printCodeDirective(type);
         break;
-      case isQuery(type):
+      case isOperation(type):
         code += this.printCodeField(type);
         break;
       default:
@@ -244,7 +244,7 @@ module.exports = class Printer {
       }
     }
 
-    if (isQuery(type)) {
+    if (isOperation(type)) {
       metadata = this.printSection(type.args, "Arguments");
       const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
       metadata += this.printSection([this.schema.getType(queryType)], "Type");

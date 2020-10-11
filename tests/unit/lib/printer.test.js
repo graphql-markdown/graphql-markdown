@@ -402,7 +402,7 @@ describe("lib", () => {
 
         test("returns a Markdown graphql codeblock with type query", () => {
           const entityName = "TestQuery";
-          jest.spyOn(graphql, "isQuery").mockReturnValueOnce(true);
+          jest.spyOn(graphql, "isOperation").mockReturnValueOnce(true);
           const printCode = jest
             .spyOn(printerInstance, "printCodeField")
             .mockReturnValueOnce(entityName);
@@ -489,7 +489,7 @@ describe("lib", () => {
           const entityType = {
             name: "query",
           };
-          jest.spyOn(graphql, "isQuery").mockReturnValue(true);
+          jest.spyOn(graphql, "isOperation").mockReturnValue(true);
           jest.spyOn(graphql, "getTypeName").mockReturnValue(entityType.name);
           jest
             .spyOn(printerInstance, "printHeader")

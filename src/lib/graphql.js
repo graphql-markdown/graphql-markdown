@@ -25,53 +25,61 @@ const { loadSchema } = require("@graphql-tools/load");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 const { UrlLoader } = require("@graphql-tools/url-loader");
 const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
-const { toArray } = require("./utils");
+const { toArray, hasMethod, hasProperty } = require("./utils");
 
-const SCHEMA_EXCLUDE_LIST_PATTERN = /^(?!Query$|Mutation$|Subscription$|__).*$/;
+const SCHEMA_EXCLUDE_LIST_PATTERN = /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
-  if (isListType(argument.type)) return `[${argument.defaultValue}]`;
+  if (isListType(argument.type)) {
+    return `[${argument.defaultValue || ""}]`;
+  }
+
   switch (argument.type) {
     case GraphQLID:
     case GraphQLInt:
-      return `${argument.defaultValue || 0}`;
+      return `${argument.defaultValue || "0"}`;
     case GraphQLFloat:
-      return `${argument.defaultValue || 0.0}`;
+      return `${argument.defaultValue || "0.0"}`;
     case GraphQLString:
     default:
       return argument.defaultValue ? `"${argument.defaultValue}"` : undefined;
   }
 }
 
-function getFilteredTypeMap(typeMap) {
+function getFilteredTypeMap(
+  typeMap,
+  excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
+) {
   if (!typeMap) return undefined;
-  const excludeList = SCHEMA_EXCLUDE_LIST_PATTERN;
   return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
     .reduce((res, key) => ((res[key] = typeMap[key]), res), {});
 }
 
 function getIntrospectionFieldsList(queryType) {
-  if (!queryType) return undefined;
+  if (!queryType && !hasMethod(queryType, "getFields")) {
+    return undefined;
+  }
   return queryType.getFields();
 }
 
 function getFields(type) {
-  if ("getFields" in type) {
-    const fieldMap = type.getFields();
-    return Object.keys(fieldMap).map((name) => fieldMap[name]);
+  if (!hasMethod(type, "getFields")) {
+    return [];
   }
-  return [];
+  const fieldMap = type.getFields();
+  return Object.keys(fieldMap).map((name) => fieldMap[name]);
 }
 
-function getTypeName(type, name = "") {
-  if (type)
-    return (
-      ("name" in type && type.name) ||
-      ("toString" in type && type.toString()) ||
-      name
-    );
-  return undefined;
+function getTypeName(type, defaultName = "") {
+  if (!type) {
+    return undefined;
+  }
+  return (
+    (hasProperty(type, "name") && type.name) ||
+    (hasMethod(type, "toString") && type.toString()) ||
+    defaultName
+  );
 }
 
 function getTypeFromTypeMap(typeMap, type) {
@@ -104,11 +112,11 @@ function getSchemaMap(schema) {
 }
 
 function isParametrizedField(field) {
-  return "args" in field && field.args.length > 0;
+  return hasProperty(field, "args") && field.args.length > 0;
 }
 
-function isQuery(query) {
-  return "type" in query;
+function isOperation(query) {
+  return hasProperty(query, "type");
 }
 
 module.exports = {
@@ -127,10 +135,14 @@ module.exports = {
   isParametrizedField,
   getFields,
   getDefaultValue,
-  isQuery,
+  isOperation,
   isInterfaceType,
   isInputType,
   isNullableType,
   isListType,
   printSchema,
+  getFilteredTypeMap,
+  getIntrospectionFieldsList,
+  getTypeFromTypeMap,
+  SCHEMA_EXCLUDE_LIST_PATTERN,
 };
