@@ -18,9 +18,10 @@
     "danger": "danger local -b main --failOnErrors",
     "danger:ci": "danger ci -b main",
     "test": "jest",
+    "test:unit": "jest --projects tests/unit",
     "test:ci": "jest --runInBand --noStackTrace --ci",
     "pre-commit": "yarn prettier",
-    "pre-push": "yarn lint && yarn test --bail && yarn danger",
+    "pre-push": "yarn lint && yarn test:unit --bail && yarn danger",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text"
   },
