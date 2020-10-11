@@ -1,11 +1,10 @@
 module.exports = {
-  projects: ["<rootDir>/tests/unit"],
+  projects: ["<rootDir>/tests/unit", "<rootDir>/tests/integration"],
   verbose: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   collectCoverage: true,
   coverageReporters: ["text"],
   testEnvironment: "node",
-  testMatch: ["**/?(*.)+(spec|test).js"],
   rootDir: __dirname,
   moduleNameMapper: {
     "@/(.*)": "<rootDir>/src/$1",
