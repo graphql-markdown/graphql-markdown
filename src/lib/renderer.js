@@ -2,7 +2,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const { pull } = require("lodash");
 const moment = require("moment");
-const { toSlug, startCase } = require("./utils");
+const { toSlug, startCase, hasProperty } = require("./utils");
 const { prettifyJavascript } = require("./prettier");
 
 const SIDEBAR = "sidebar-schema.js";
@@ -50,9 +50,7 @@ module.exports = class Renderer {
       const fileName = toSlug(name);
       const filePath = path.join(dirPath, `${fileName}.md`);
       const content = this.p.printType(fileName, type);
-      fs.outputFile(filePath, content, async (err) => {
-        if (err) throw err;
-      });
+      await fs.outputFile(filePath, content, "utf8");
       const page = path
         .relative(this.outputDir, filePath)
         .match(/(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).md$/);
@@ -67,7 +65,7 @@ module.exports = class Renderer {
           schemaSidebar:
           ${JSON.stringify(this.generateSidebar(pages))}
         };`);
-    await fs.outputFile(filePath, content);
+    await fs.outputFile(filePath, content, "utf8");
     return path.relative("./", filePath);
   }
 
@@ -79,7 +77,7 @@ module.exports = class Renderer {
       const category = graphqlSidebar.find(
         (entry) => "label" in entry && page.category == entry.label,
       );
-      const items = category && "items" in category ? category.items : [];
+      const items = hasProperty(category, "items") ? category.items : [];
       const slug = path.join(this.baseURL, page.slug);
       graphqlSidebar = [
         ...pull(graphqlSidebar, category),
@@ -96,7 +94,7 @@ module.exports = class Renderer {
   async renderHomepage(homepageLocation) {
     const homePage = path.basename(homepageLocation);
     const destLocation = path.join(this.outputDir, homePage);
-    fs.copySync(homepageLocation, destLocation);
+    await fs.copy(homepageLocation, destLocation);
     const data = fs
       .readFileSync(destLocation, "utf8")
       .replace(
