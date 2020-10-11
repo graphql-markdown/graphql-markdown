@@ -1,5 +1,5 @@
 module.exports = {
-  projects: ["<rootDir>/tests/*"],
+  projects: ["<rootDir>/tests/unit"],
   verbose: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   collectCoverage: true,
