@@ -65,7 +65,7 @@ module.exports = class Renderer {
           schemaSidebar:
           ${JSON.stringify(this.generateSidebar(pages))}
         };`);
-    await fs.outputFile(filePath, content, "utf8");
+    fs.outputFileSync(filePath, content, "utf8");
     return path.relative("./", filePath);
   }
 
@@ -94,7 +94,7 @@ module.exports = class Renderer {
   async renderHomepage(homepageLocation) {
     const homePage = path.basename(homepageLocation);
     const destLocation = path.join(this.outputDir, homePage);
-    await fs.copy(homepageLocation, destLocation);
+    fs.copySync(homepageLocation, destLocation);
     const data = fs
       .readFileSync(destLocation, "utf8")
       .replace(

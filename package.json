@@ -19,6 +19,7 @@
     "danger:ci": "danger ci -b main",
     "test": "jest",
     "test:unit": "jest --projects tests/unit",
+    "test:integration": "jest --projects tests/integration",
     "test:ci": "jest --runInBand --noStackTrace --ci",
     "pre-commit": "yarn prettier",
     "pre-push": "yarn lint && yarn test --bail && yarn danger",

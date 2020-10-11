@@ -1,0 +1,318 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "deprecated.md",
+          "path": "output/directives/deprecated.md",
+          "size": 470,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "include.md",
+          "path": "output/directives/include.md",
+          "size": 273,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "skip.md",
+          "path": "output/directives/skip.md",
+          "size": 255,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "specified-by.md",
+          "path": "output/directives/specified-by.md",
+          "size": 285,
+          "type": "file",
+        },
+      ],
+      "name": "directives",
+      "path": "output/directives",
+      "size": 1283,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "enums",
+      "path": "output/enums",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "extension": ".md",
+      "name": "generated.md",
+      "path": "output/generated.md",
+      "size": 399,
+      "type": "file",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "tweet-content.md",
+          "path": "output/inputs/tweet-content.md",
+          "size": 182,
+          "type": "file",
+        },
+      ],
+      "name": "inputs",
+      "path": "output/inputs",
+      "size": 182,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "node.md",
+          "path": "output/interfaces/node.md",
+          "size": 148,
+          "type": "file",
+        },
+      ],
+      "name": "interfaces",
+      "path": "output/interfaces",
+      "size": 148,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "create-tweet.md",
+          "path": "output/mutations/create-tweet.md",
+          "size": 258,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "delete-tweet.md",
+          "path": "output/mutations/delete-tweet.md",
+          "size": 224,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "mark-tweet-read.md",
+          "path": "output/mutations/mark-tweet-read.md",
+          "size": 294,
+          "type": "file",
+        },
+      ],
+      "name": "mutations",
+      "path": "output/mutations",
+      "size": 776,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "meta.md",
+          "path": "output/objects/meta.md",
+          "size": 150,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "notification.md",
+          "path": "output/objects/notification.md",
+          "size": 299,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "stat.md",
+          "path": "output/objects/stat.md",
+          "size": 353,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "tweet.md",
+          "path": "output/objects/tweet.md",
+          "size": 633,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "user.md",
+          "path": "output/objects/user.md",
+          "size": 683,
+          "type": "file",
+        },
+      ],
+      "name": "objects",
+      "path": "output/objects",
+      "size": 2118,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "notifications-meta.md",
+          "path": "output/queries/notifications-meta.md",
+          "size": 165,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "tweet.md",
+          "path": "output/queries/tweet.md",
+          "size": 205,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "tweets-meta.md",
+          "path": "output/queries/tweets-meta.md",
+          "size": 144,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "tweets.md",
+          "path": "output/queries/tweets.md",
+          "size": 459,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "user.md",
+          "path": "output/queries/user.md",
+          "size": 199,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "users.md",
+          "path": "output/queries/users.md",
+          "size": 211,
+          "type": "file",
+        },
+      ],
+      "name": "queries",
+      "path": "output/queries",
+      "size": 1383,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "boolean.md",
+          "path": "output/scalars/boolean.md",
+          "size": 123,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "date.md",
+          "path": "output/scalars/date.md",
+          "size": 73,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "id.md",
+          "path": "output/scalars/id.md",
+          "size": 385,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "int.md",
+          "path": "output/scalars/int.md",
+          "size": 187,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "string.md",
+          "path": "output/scalars/string.md",
+          "size": 246,
+          "type": "file",
+        },
+        Object {
+          "extension": ".md",
+          "name": "url.md",
+          "path": "output/scalars/url.md",
+          "size": 70,
+          "type": "file",
+        },
+      ],
+      "name": "scalars",
+      "path": "output/scalars",
+      "size": 1084,
+      "type": "directory",
+    },
+    Object {
+      "extension": ".js",
+      "name": "sidebar-schema.js",
+      "path": "output/sidebar-schema.js",
+      "size": 1718,
+      "type": "file",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".md",
+          "name": "notifications.md",
+          "path": "output/subscriptions/notifications.md",
+          "size": 264,
+          "type": "file",
+        },
+      ],
+      "name": "subscriptions",
+      "path": "output/subscriptions",
+      "size": 264,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "unions",
+      "path": "output/unions",
+      "size": 0,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 9355,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 2`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": "",
+      "name": ".schema",
+      "path": "tmp/.schema",
+      "size": 64,
+      "type": "file",
+    },
+    Object {
+      "extension": ".graphql",
+      "name": "schema.graphql",
+      "path": "tmp/schema.graphql",
+      "size": 977,
+      "type": "file",
+    },
+  ],
+  "name": "tmp",
+  "path": "tmp",
+  "size": 1041,
+  "type": "directory",
+}
+`;
