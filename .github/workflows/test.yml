@@ -19,3 +19,6 @@ jobs:
 
     - name: Run Integration Tests
       run: yarn test:ci --projects tests/integration
+
+    - name: Check Code Coverage
+      run: yarn test:coverage
