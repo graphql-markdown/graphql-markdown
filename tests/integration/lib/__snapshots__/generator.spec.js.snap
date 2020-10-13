@@ -50,7 +50,7 @@ Object {
       "extension": ".md",
       "name": "generated.md",
       "path": "output/generated.md",
-      "size": 399,
+      "size": 32,
       "type": "file",
     },
     Object {
@@ -287,7 +287,7 @@ Object {
   ],
   "name": "output",
   "path": "output",
-  "size": 9355,
+  "size": 8988,
   "type": "directory",
 }
 `;

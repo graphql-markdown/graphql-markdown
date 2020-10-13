@@ -85,7 +85,10 @@ describe("lib", () => {
           expect.assertions(1);
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
-          expect(dirTree(FOLDER)).toMatchSnapshot();
+          expect(dirTree(FOLDER)).toMatchSnapshot({
+            children: [{ size: expect.any(Number) }],
+            size: expect.any(Number),
+          });
         });
       });
 
