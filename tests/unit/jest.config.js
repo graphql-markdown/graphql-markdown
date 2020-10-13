@@ -5,4 +5,5 @@ module.exports = {
   name: "unit",
   displayName: "Unit Tests",
   testMatch: [`${__dirname}/**/?(*.)+(spec|test).js`],
+  coverageDirectory: `${jestConfigBase.coverageDirectory}/unit`,
 };
