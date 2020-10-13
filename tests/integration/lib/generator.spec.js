@@ -11,10 +11,7 @@ describe("lib", () => {
       __data__: mock.load(path.resolve(__dirname, "../../__data__")),
       output: {},
       assets: {
-        "generated.md": mock.load(
-          path.resolve(__dirname, "../../../assets/generated.md"),
-          { lazy: false },
-        ),
+        "generated.md": "Dummy homepage for tweet.graphql",
       },
       tmp: {},
     });

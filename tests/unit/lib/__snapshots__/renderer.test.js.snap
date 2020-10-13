@@ -31,13 +31,13 @@ Object {
       "extension": ".md",
       "name": "generated.md",
       "path": "output/generated.md",
-      "size": 399,
+      "size": Any<Number>,
       "type": "file",
     },
   ],
   "name": "output",
   "path": "output",
-  "size": 399,
+  "size": Any<Number>,
   "type": "directory",
 }
 `;
