@@ -20,7 +20,7 @@ WORKDIR /usr/src/app/docusaurus2
 RUN mkdir $TESTS_FOLDER
 COPY ./tests/e2e/specs $TESTS_FOLDER
 COPY ./tests/e2e/jest.config.js .
-RUN cp $TESTS_FOLDER/docusaurus2-graphql-doc-generator.config.json .
+COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.json .
 # RUN npx docusaurus graphql-to-doc
 # RUN cp docs/sidebar-schema.js ./sidebars.js
 # CMD yarn run start -- --host 0.0.0.0 --port 8080
