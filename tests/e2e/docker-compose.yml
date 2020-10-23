@@ -1,0 +1,14 @@
+services:
+  docusaurus2-graphql-doc-generator:
+    image: docusaurus2-graphql-doc-generator
+    build:
+      context: ../..
+      dockerfile: tests/e2e/docker/Dockerfile
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - ./../../:/usr/src/app/docusaurus2-graphql-doc-generator
+      - ./../../tests/e2e/scripts:/usr/src/app/scripts
+    container_name: docusaurus2-graphql-doc-generator
