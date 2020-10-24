@@ -1,23 +1,8 @@
-const exec = require("child_process").exec;
+const cli = require("./lib/cli");
 
-test("Code should be 0", async () => {
-  const result = await cli();
-  expect(result.code).toBe(0);
+describe("graphql-to-doc", () => {
+  test("should return 0 with success message when completed", async () => {
+    expect.assertions(1);
+    return expect(cli()).resolves.toMatchSnapshot();
+  }, 60000);
 });
-
-function cli(args = []) {
-  return new Promise((resolve) => {
-    exec(
-      `npx docusaurus graphql-to-doc ${args.join(" ")}`,
-      { cwd: process.cwd() },
-      (error, stdout, stderr) => {
-        resolve({
-          code: error && error.code ? error.code : 0,
-          error,
-          stdout,
-          stderr,
-        });
-      },
-    );
-  });
-}

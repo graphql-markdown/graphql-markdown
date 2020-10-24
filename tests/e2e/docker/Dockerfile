@@ -15,13 +15,4 @@ RUN yarn add /usr/src/app/docusaurus2-graphql-doc-generator
 RUN node /usr/src/app/docusaurus2-graphql-doc-generator/tests/e2e/scripts/config-plugin.js
 
 FROM docusaurus2-graphql-doc-generator as tests-e2e
-ENV TESTS_FOLDER=__tests__
-WORKDIR /usr/src/app/docusaurus2
-RUN mkdir $TESTS_FOLDER
-COPY ./tests/e2e/specs $TESTS_FOLDER
-COPY ./tests/e2e/jest.config.js .
-COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.json .
-# RUN npx docusaurus graphql-to-doc
-# RUN cp docs/sidebar-schema.js ./sidebars.js
-# CMD yarn run start -- --host 0.0.0.0 --port 8080
-CMD jest --ci
+WORKDIR /usr/src/app/docusaurus2/__tests__
