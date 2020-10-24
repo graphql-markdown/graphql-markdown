@@ -57,16 +57,16 @@ module.exports = class Printer {
         category = "directives";
         break;
     }
-    name = isListType(type) ? `\`[${name}]\`` : `\`${name}\``;
+
     if (category && graphLQLNamedType) {
-      return `[${name}](${path.join(
+      return `[\`${name}\`](${path.join(
         this.linkRoot,
         this.baseURL,
         category,
         toSlug(graphLQLNamedType),
       )})`;
     } else {
-      return name;
+      return `\`${name}\``;
     }
   }
 
