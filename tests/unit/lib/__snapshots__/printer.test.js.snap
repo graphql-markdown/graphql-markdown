@@ -312,6 +312,6 @@ exports[`lib printer class Printer toLink() returns markdown link for GraphQL sc
 
 exports[`lib printer class Printer toLink() returns markdown link for GraphQL union 1`] = `"[\`TestUnion\`](docs/graphql/unions/test-union)"`;
 
-exports[`lib printer class Printer toLink() returns markdown link surrounded by [] for GraphQL list/array 1`] = `"[\`[TestObjectList]\`](docs/graphql/objects/test-object-list)"`;
+exports[`lib printer class Printer toLink() returns markdown link surrounded by [] for GraphQL list/array 1`] = `"[\`TestObjectList\`](docs/graphql/objects/test-object-list)"`;
 
 exports[`lib printer class Printer toLink() returns plain text for unknown entities 1`] = `"\`fooBar\`"`;
