@@ -37,7 +37,7 @@ describe("graphql-to-doc", () => {
       });
   });
 
-  test("should return 0 with success message when completed as first run", async () => {
+  test("should return 0 with generated message when completed as first run", async () => {
     const generateOutput = await cli();
     expect(generateOutput).toMatchObject({
       code: 0,
@@ -52,11 +52,33 @@ describe("graphql-to-doc", () => {
     messageGenerated.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
-  test("should return 0 with no updated message when schema unchanged", async () => {
+  test("should return 0 with generated message when schema unchanged", async () => {
     const generateOutput = await cli();
     expect(generateOutput).toHaveProperty("code", 0);
+
     const updateOutput = await cli();
     expect(updateOutput).toMatchObject({
+      code: 0,
+      error: null,
+      stderr: "",
+      stdout: expect.any(String),
+    });
+    const stdout = generateOutput.stdout.replace(
+      /[0-9]+\.?[0-9]+/g,
+      "{Any<Number>}",
+    );
+    messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
+  }, 60000);
+
+  test("should return 0 with updated message when completed with force flag", async () => {
+    const generateOutput = await cli();
+    expect(generateOutput).toHaveProperty("code", 0);
+
+    const updateOutput = await cli();
+    expect(updateOutput).toHaveProperty("code", 0);
+
+    const forceOutput = await cli(["--force"]);
+    expect(forceOutput).toMatchObject({
       code: 0,
       error: null,
       stderr: "",
