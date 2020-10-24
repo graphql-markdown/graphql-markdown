@@ -21,6 +21,7 @@
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
     "test:ci": "jest --runInBand --noStackTrace --ci",
+    "test:e2e": "docker-compose run --rm docusaurus2-graphql-doc-generator jest",
     "pre-commit": "yarn prettier && yarn lint",
     "pre-push": "yarn lint:ci && yarn test --bail && yarn test:coverage && yarn danger",
     "test:stryker": "stryker run",
