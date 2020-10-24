@@ -6,7 +6,7 @@ Object {
   "error": null,
   "stderr": "",
   "stdout": "Documentation successfully generated in \\"docs\\" with base URL \\".\\".
-229 pages generated in 3.508s from schema \\"https://graphql.anilist.co/\\".
+229 pages generated in 5.015s from schema \\"https://graphql.anilist.co/\\".
 Remember to update your Docusaurus site's sidebars with \\"docs/sidebar-schema.js\\".
 ",
 }
