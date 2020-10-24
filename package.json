@@ -21,8 +21,8 @@
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
     "test:ci": "jest --runInBand --noStackTrace --ci",
-    "pre-commit": "yarn prettier",
-    "pre-push": "yarn lint && yarn test --bail && yarn test:coverage && yarn danger",
+    "pre-commit": "yarn prettier && yarn lint",
+    "pre-push": "yarn lint:ci && yarn test --bail && yarn test:coverage && yarn danger",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh"
