@@ -1,5 +1,6 @@
 {
   "schema": "https://graphql.anilist.co/",
   "rootPath": "./docs",
-  "baseURL": "."
+  "baseURL": ".",
+  "linkRoot": "/docs"
 }
