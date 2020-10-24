@@ -1,5 +1,6 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
+  "homepage": "https://github.com/edno/docusaurus2-graphql-doc-generator",
   "version": "0.4.1",
   "license": "MIT",
   "main": "src/index.js",
@@ -21,8 +22,9 @@
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
     "test:ci": "jest --runInBand --noStackTrace --ci",
-    "pre-commit": "yarn prettier",
-    "pre-push": "yarn lint && yarn test --bail && yarn test:coverage && yarn danger",
+    "test:e2e": "docker-compose run --rm docusaurus2-graphql-doc-generator jest",
+    "pre-commit": "yarn prettier && yarn lint",
+    "pre-push": "yarn lint:ci && yarn test --bail && yarn test:coverage && yarn danger",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh"

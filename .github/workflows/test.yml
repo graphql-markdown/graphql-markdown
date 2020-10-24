@@ -22,3 +22,17 @@ jobs:
 
     - name: Check Code Coverage
       run: yarn test:coverage
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v2
+
+      - name: Build test container
+        run: docker-compose build
+
+      - name: Run End-to-End Tests
+        run: yarn test:e2e --runInBand --noStackTrace --ci
