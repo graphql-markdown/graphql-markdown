@@ -1,5 +1,9 @@
 # GraphQL Documentation Generator for Docusaurus 2
 
+[![npm](https://img.shields.io/npm/dt/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://packagist.org/packages/edno/codeception-gherkin-param)
+[![Latest Version](https://img.shields.io/npm/v/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
+[![GitHub license](https://img.shields.io/github/license/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://raw.githubusercontent.com/edno/docusaurus2-graphql-doc-generator/master/LICENSE)
+
 This plugin generates a **Markdown documentation** from a **GraphQL schema**.
 
 The documentation is generated for **Docusaurus 2** [docs feature](https://v2.docusaurus.io/docs/docs-introduction).
