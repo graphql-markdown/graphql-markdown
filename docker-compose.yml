@@ -11,7 +11,6 @@ services:
     expose:
       - "8080"
     volumes:
-      - ".nyc_output/:/usr/src/app/docusaurus2/__tests__/.nyc_output"
       - "./tests/e2e/specs:/usr/src/app/docusaurus2/__tests__/specs"
       - "./tests/e2e/jest.config.js:/usr/src/app/docusaurus2/__tests__/jest.config.js"
       - "./tests/e2e/docusaurus2-graphql-doc-generator.config.json:/usr/src/app/docusaurus2/docusaurus2-graphql-doc-generator.config.json"

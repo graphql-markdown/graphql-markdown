@@ -6,4 +6,6 @@ module.exports = {
   reporters: ["html", "progress"],
   testRunner: "jest",
   coverageAnalysis: "perTest",
+  files: ["src/**/*.js", "tests/**/*.js", "!tests/e2e/**/*.js"],
+  transpilers: ["typescript"],
 };
