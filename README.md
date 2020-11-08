@@ -45,7 +45,7 @@ module.exports = {
       "@edno/docusaurus2-graphql-doc-generator",
       {
         schema: "https://swapi.graph.cool/",
-        rootPath: "./docs", // docs will be generated under './docs/swapi' (outputDocPath/baseURL)
+        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
       },
