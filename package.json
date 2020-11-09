@@ -41,7 +41,7 @@
     "@graphql-tools/graphql-file-loader": "6.2.5",
     "@graphql-tools/json-file-loader": "6.2.5",
     "@graphql-tools/load": "6.2.5",
-    "@graphql-tools/url-loader": "6.3.2",
+    "@graphql-tools/url-loader": "6.4.0",
     "@oclif/command": "1.8.0",
     "chalk": "4.1.0",
     "fs-extra": "9.0.1",
