@@ -23,6 +23,19 @@ const HEADER_SECTION_SUB_LEVEL = "####";
 const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 
+const TAG = `
+export const Tag = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+    {children}
+  </span>
+);`;
+
 module.exports = class Printer {
   constructor(schema, baseURL, linkRoot = "/") {
     this.schema = schema;
@@ -93,7 +106,7 @@ module.exports = class Printer {
       hasProperty(type, "type")
         ? `(${this.toLink(type.type, getTypeName(type.type))})`
         : ""
-    }\n\n${type.description || ""}\n`;
+    }\n\n${this.printDescription(type, "")}\n`;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }
@@ -182,11 +195,21 @@ module.exports = class Printer {
     return `---\nid: ${id}\ntitle: ${title}\n---\n`;
   }
 
-  printDescription(type) {
-    return (
-      (hasProperty(type, "description") && type.description) ||
-      NO_DESCRIPTION_TEXT
-    );
+  printDeprecation(type) {
+    if (type.isDeprecated) {
+      return `<sub><sup><Tag color="#ffba00">DEPRECATED</Tag> ${type.deprecationReason}</sup></sub>\n\n`;
+    }
+    return "";
+  }
+
+  printDescription(type, noText = NO_DESCRIPTION_TEXT) {
+    let description = "";
+
+    description = `${this.printDeprecation(type)}${
+      (hasProperty(type, "description") && type.description) || noText
+    }`;
+
+    return description;
   }
 
   printCode(type) {
@@ -255,7 +278,7 @@ module.exports = class Printer {
     }
 
     return prettifyMarkdown(
-      `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
+      `${header}\n\n${TAG}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
     );
   }
 };

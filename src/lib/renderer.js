@@ -48,12 +48,14 @@ module.exports = class Renderer {
   async renderTypeEntities(dirPath, name, type) {
     if (type) {
       const fileName = toSlug(name);
-      const filePath = path.join(dirPath, `${fileName}.md`);
+      const filePath = path.join(dirPath, `${fileName}.mdx`);
       const content = this.p.printType(fileName, type);
       await fs.outputFile(filePath, content, "utf8");
       const page = path
         .relative(this.outputDir, filePath)
-        .match(/(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).md$/);
+        .match(
+          /(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
+        );
       const slug = path.join(page.groups.category, page.groups.pageId);
       return { category: startCase(page.groups.category), slug: slug };
     }
