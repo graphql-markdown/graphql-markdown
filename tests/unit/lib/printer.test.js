@@ -374,6 +374,16 @@ describe("lib", () => {
           const description = printerInstance.printDescription(type);
           expect(description).toMatchSnapshot();
         });
+
+        test("return DEPRECATED tag is deprecated", () => {
+          const type = {
+            description: "Lorem ipsum",
+            isDeprecated: true,
+            deprecationReason: "Foobar",
+          };
+          const description = printerInstance.printDescription(type);
+          expect(description).toMatchSnapshot();
+        });
       });
 
       describe("printCode()", () => {

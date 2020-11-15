@@ -48,16 +48,16 @@ Object {
     Object {
       "children": Array [
         Object {
-          "extension": ".md",
-          "name": "bar.md",
-          "path": "output/object/bar.md",
+          "extension": ".mdx",
+          "name": "bar.mdx",
+          "path": "output/object/bar.mdx",
           "size": 11,
           "type": "file",
         },
         Object {
-          "extension": ".md",
-          "name": "foo.md",
-          "path": "output/object/foo.md",
+          "extension": ".mdx",
+          "name": "foo.mdx",
+          "path": "output/object/foo.mdx",
           "size": 11,
           "type": "file",
         },
@@ -99,9 +99,9 @@ Object {
     Object {
       "children": Array [
         Object {
-          "extension": ".md",
-          "name": "foo-bar.md",
-          "path": "output/foobar/foo-bar.md",
+          "extension": ".mdx",
+          "name": "foo-bar.mdx",
+          "path": "output/foobar/foo-bar.mdx",
           "size": 11,
           "type": "file",
         },

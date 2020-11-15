@@ -28,7 +28,8 @@ type User implements Node {
 
 type Stat {
     views: Int
-    likes: Int
+    likes: Int @deprecated(reason: "Use `reactions`.")
+    reactions: Int
     retweets: Int
     responses: Int
 }
@@ -49,21 +50,23 @@ scalar Date
 type Query {
     Tweet(id: ID!): Tweet
     Tweets(limit: Int = 5, skip: Int = 0, sort_field: String, sort_order: String = "ASC"): [Tweet]!
-    TweetsMeta: Meta
-    User(id: ID!): User
+    TweetsMeta: Meta @deprecated
+    User(id: ID!): User @deprecated(reason: "Use `Users`.")
     Users(id: [ID!]!): [User]!
-    NotificationsMeta: Meta
+    NotificationsMeta: Meta @deprecated
 }
 
 type Mutation {
     createTweet (
-        input: TweetContent
+        input: TweetContent @deprecated(reason: "Use `content`.")
+        content: TweetContent
     ): Tweet
     deleteTweet(id: ID!): Tweet
     markTweetRead(id: ID!): Boolean
 }
 
 input TweetContent {
+  content: String @deprecated(reason: "Use `body`.")
   body: String
 }
 
