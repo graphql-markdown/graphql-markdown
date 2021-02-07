@@ -4,6 +4,10 @@
   "version": "1.1.0",
   "license": "MIT",
   "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edno/docusaurus2-graphql-doc-generator.git"
+  },
   "keywords": [
     "docusaurus2",
     "graphql",
