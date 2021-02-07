@@ -3,6 +3,9 @@ dist
 *.log
 .DS_Store
 .eslintcache
+.vscode
 # stryker temp files
 .stryker-tmp
+# istanbul code coverage
 .nyc_output
+coverage
