@@ -56,7 +56,6 @@
     "@stryker-mutator/core": "4.0.0",
     "@stryker-mutator/jest-runner": "4.1.1",
     "colors": "1.4.0",
-    "coveralls": "3.1.0",
     "danger": "10.6.1",
     "diff": "5.0.0",
     "directory-tree": "2.2.5",
