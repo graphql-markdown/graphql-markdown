@@ -2180,10 +2180,10 @@ cssstyle@^2.2.0:
   dependencies:
     cssom "~0.3.6"
 
-danger@10.6.1:
-  version "10.6.1"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-10.6.1.tgz#b19bd8f15f764b13a4bc3c1cb5b3a74e199f93c4"
-  integrity sha512-uoAhEziWafPq9oCHFFr4d3gMcAmiLaybUT73c1ZEWnATGlwPthGKDOE9DE0TNpr2yMeV9GgpruOD5URivP8LBw==
+danger@10.6.2:
+  version "10.6.2"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-10.6.2.tgz#9d5f471a33a5f092253f694ecee832b3dfbd853b"
+  integrity sha512-EVMone2dJsFzm7VbSspIsV9mOFIjLVdW7WxSO2PMnOCYYoDRKPT3mqgE8pfMWg0xclPjtfJJ7k3AZGirvNWWHQ==
   dependencies:
     "@babel/polyfill" "^7.2.5"
     "@octokit/rest" "^16.43.1"
@@ -2260,7 +2260,7 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@4:
+debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
@@ -2280,13 +2280,6 @@ debug@^3.1.0:
   integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
   dependencies:
     ms "^2.1.1"
-
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
-  integrity sha512-IX2ncY78vDTjZMFUdmsvIRFY2Cf4FnD0wRs+nQwJU8Lu99/tPFdb0VybiiMTPe3I6rQmwsqQqRBvxU+bZ/I8sg==
-  dependencies:
-    ms "2.1.2"
 
 debuglog@^1.0.1:
   version "1.0.1"
