@@ -397,10 +397,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@graphql-inspector/core@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-2.3.0.tgz#d57d11f6b59f65edf5d5056416f4d37e379d9235"
-  integrity sha512-bxYqAvVK7vDQ0O/ygZ/JNs5XCxSe+DtKwkCsov7RMPoSkkFuHyyC9BDTm6eN57wPwVk5AJ5b5s32oYVTphvELA==
+"@graphql-inspector/core@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-2.4.0.tgz#d26ec036227c126af2f83753c49f26df454a570f"
+  integrity sha512-7wHre2vx0TNgAPM6TXTSqlQzotxlF6zvVLNVtKMjW+DPGSco2PjAev1PQR5VnOrFf8U4FfC05Rb0KlcrYi0PTw==
   dependencies:
     dependency-graph "0.9.0"
     tslib "^2.0.0"
