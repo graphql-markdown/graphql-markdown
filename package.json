@@ -54,7 +54,7 @@
     "lodash": "4.17.21",
     "moment": "2.29.1",
     "prettier": "2.2.1",
-    "slugify": "1.4.6"
+    "slugify": "1.4.7"
   },
   "devDependencies": {
     "@stryker-mutator/core": "4.0.0",
