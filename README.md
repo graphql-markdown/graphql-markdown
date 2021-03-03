@@ -43,7 +43,7 @@ module.exports = {
   // ...
   plugins: [
     [
-      "@edno/docusaurus2-graphql-doc-generator",
+      require.resolve("@edno/docusaurus2-graphql-doc-generator"),
       {
         schema: "https://swapi.graph.cool/",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
@@ -51,6 +51,7 @@ module.exports = {
         homepage: "./docs/swapi.md",
       },
     ],
+  ]
 };
 ```
 
