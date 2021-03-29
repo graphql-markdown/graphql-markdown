@@ -41,7 +41,7 @@
     }
   },
   "dependencies": {
-    "@graphql-inspector/core": "2.4.0",
+    "@graphql-inspector/core": "2.5.0",
     "@graphql-tools/graphql-file-loader": "6.2.7",
     "@graphql-tools/json-file-loader": "6.2.6",
     "@graphql-tools/load": "6.2.7",
