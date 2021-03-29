@@ -41,7 +41,7 @@
     }
   },
   "dependencies": {
-    "@graphql-inspector/core": "2.4.0",
+    "@graphql-inspector/core": "2.5.0",
     "@graphql-tools/graphql-file-loader": "6.2.7",
     "@graphql-tools/json-file-loader": "6.2.6",
     "@graphql-tools/load": "6.2.7",
@@ -63,7 +63,7 @@
     "danger": "10.6.4",
     "diff": "5.0.0",
     "directory-tree": "2.2.7",
-    "eslint": "7.22.0",
+    "eslint": "7.23.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-jest": "24.3.2",
     "eslint-plugin-prettier": "3.3.1",
