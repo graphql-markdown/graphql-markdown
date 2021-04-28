@@ -65,11 +65,14 @@ You will also need to add a link to your documentation on your site. One way to 
 module.exports = {
   // ...
   navbar: {
-    links: [
-      to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
-      label: "SWAPI Schema", // change the label with yours
-      position: "left",
-  },
+  items: [
+      {
+        to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
+        label: "SWAPI Schema", // change the label with yours
+        position: "left",
+      }
+    ],
+  }
 }
 ```
 
