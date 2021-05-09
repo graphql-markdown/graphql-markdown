@@ -1,0 +1,61 @@
+{
+  "name": "@edno/graphql-to-markdown",
+  "homepage": "https://github.com/edno/graphql-markdown/tree/main/graphql-to-markdown",
+  "bugs": "https://github.com/edno/graphql-markdown/issues",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "graphql-to-markdown": "./bin/run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edno/graphql-markdown.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "cli"
+  ],
+  "author": "Gregory Heitz @edno",
+  "scripts": {
+    "build": "rm -rf build && tsc -b && oclif-dev readme",
+    "demo": "./bin/run",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "dependencies": {
+    "@graphql-inspector/core": "^2.5.0",
+    "@graphql-tools/graphql-file-loader": "^6.2.7",
+    "@graphql-tools/json-file-loader": "^6.2.6",
+    "@graphql-tools/load": "^6.2.8",
+    "@graphql-tools/url-loader": "^6.9.0",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
+    "chalk": "^4.1.1",
+    "fs-extra": "^9.1.0",
+    "graphql": "^15.5.0",
+    "import": "^0.0.6",
+    "lodash": "^4.17.21",
+    "prettier": "^2.2.1",
+    "slugify": "^1.5.1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
+    "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.168",
+    "@types/node": "^15.0.2",
+    "directory-tree": "^2.2.9",
+    "mock-fs": "^4.14.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "files": [
+    "/bin",
+    "/dist"
+  ],
+  "oclif": {
+    "bin": "graphql-to-markdown"
+  }
+}

@@ -1,15 +1,9 @@
 module.exports = {
-  projects: ["<rootDir>/tests/unit", "<rootDir>/tests/integration"],
+  projects: ["<rootDir>/packages"],
   verbose: true,
-  collectCoverageFrom: ["<rootDir>/src/**/*.js"],
+  collectCoverageFrom: ["<rootDir>/packages/**/src/**/*.js"],
   collectCoverage: true,
   coverageReporters: ["json"],
   coverageDirectory: "<rootDir>/.nyc_output",
   testEnvironment: "node",
-  rootDir: __dirname,
-  moduleNameMapper: {
-    "@/(.*)": "<rootDir>/src/$1",
-    "@data/(.*)": "<rootDir>/tests/__data__/$1",
-    "@assets/(.*)": "<rootDir>/assets/$1",
-  },
 };

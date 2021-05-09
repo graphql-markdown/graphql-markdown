@@ -1,0 +1,318 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "deprecated.mdx",
+          "path": "output/directives/deprecated.mdx",
+          "size": 663,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "include.mdx",
+          "path": "output/directives/include.mdx",
+          "size": 466,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "skip.mdx",
+          "path": "output/directives/skip.mdx",
+          "size": 448,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "specified-by.mdx",
+          "path": "output/directives/specified-by.mdx",
+          "size": 478,
+          "type": "file",
+        },
+      ],
+      "name": "directives",
+      "path": "output/directives",
+      "size": 2055,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "enums",
+      "path": "output/enums",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "extension": ".md",
+      "name": "generated.md",
+      "path": "output/generated.md",
+      "size": 32,
+      "type": "file",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "tweet-content.mdx",
+          "path": "output/inputs/tweet-content.mdx",
+          "size": 451,
+          "type": "file",
+        },
+      ],
+      "name": "inputs",
+      "path": "output/inputs",
+      "size": 451,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "node.mdx",
+          "path": "output/interfaces/node.mdx",
+          "size": 341,
+          "type": "file",
+        },
+      ],
+      "name": "interfaces",
+      "path": "output/interfaces",
+      "size": 341,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "create-tweet.mdx",
+          "path": "output/mutations/create-tweet.mdx",
+          "size": 545,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "delete-tweet.mdx",
+          "path": "output/mutations/delete-tweet.mdx",
+          "size": 417,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "mark-tweet-read.mdx",
+          "path": "output/mutations/mark-tweet-read.mdx",
+          "size": 487,
+          "type": "file",
+        },
+      ],
+      "name": "mutations",
+      "path": "output/mutations",
+      "size": 1449,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "meta.mdx",
+          "path": "output/objects/meta.mdx",
+          "size": 343,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "notification.mdx",
+          "path": "output/objects/notification.mdx",
+          "size": 492,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "stat.mdx",
+          "path": "output/objects/stat.mdx",
+          "size": 695,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "tweet.mdx",
+          "path": "output/objects/tweet.mdx",
+          "size": 826,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "user.mdx",
+          "path": "output/objects/user.mdx",
+          "size": 957,
+          "type": "file",
+        },
+      ],
+      "name": "objects",
+      "path": "output/objects",
+      "size": 3313,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "notifications-meta.mdx",
+          "path": "output/queries/notifications-meta.mdx",
+          "size": 439,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "tweet.mdx",
+          "path": "output/queries/tweet.mdx",
+          "size": 398,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "tweets-meta.mdx",
+          "path": "output/queries/tweets-meta.mdx",
+          "size": 418,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "tweets.mdx",
+          "path": "output/queries/tweets.mdx",
+          "size": 652,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "user.mdx",
+          "path": "output/queries/user.mdx",
+          "size": 466,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "users.mdx",
+          "path": "output/queries/users.mdx",
+          "size": 404,
+          "type": "file",
+        },
+      ],
+      "name": "queries",
+      "path": "output/queries",
+      "size": 2777,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "boolean.mdx",
+          "path": "output/scalars/boolean.mdx",
+          "size": 316,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "date.mdx",
+          "path": "output/scalars/date.mdx",
+          "size": 266,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "id.mdx",
+          "path": "output/scalars/id.mdx",
+          "size": 578,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "int.mdx",
+          "path": "output/scalars/int.mdx",
+          "size": 380,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "string.mdx",
+          "path": "output/scalars/string.mdx",
+          "size": 439,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "url.mdx",
+          "path": "output/scalars/url.mdx",
+          "size": 263,
+          "type": "file",
+        },
+      ],
+      "name": "scalars",
+      "path": "output/scalars",
+      "size": 2242,
+      "type": "directory",
+    },
+    Object {
+      "extension": ".js",
+      "name": "sidebar-schema.js",
+      "path": "output/sidebar-schema.js",
+      "size": 1718,
+      "type": "file",
+    },
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "notifications.mdx",
+          "path": "output/subscriptions/notifications.mdx",
+          "size": 457,
+          "type": "file",
+        },
+      ],
+      "name": "subscriptions",
+      "path": "output/subscriptions",
+      "size": 457,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "unions",
+      "path": "output/unions",
+      "size": 0,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 14835,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 2`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": "",
+      "name": ".schema",
+      "path": "tmp/.schema",
+      "size": 64,
+      "type": "file",
+    },
+    Object {
+      "extension": ".graphql",
+      "name": "schema.graphql",
+      "path": "tmp/schema.graphql",
+      "size": 1173,
+      "type": "file",
+    },
+  ],
+  "name": "tmp",
+  "path": "tmp",
+  "size": 1237,
+  "type": "directory",
+}
+`;

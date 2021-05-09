@@ -4,3 +4,4 @@ dist
 .eslintcache
 .stryker-tmp
 .nyc_output
+build

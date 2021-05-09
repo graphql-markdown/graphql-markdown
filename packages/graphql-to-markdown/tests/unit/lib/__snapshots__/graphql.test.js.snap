@@ -1,0 +1,4052 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib graphql getFields() returns list of type fields 1`] = `
+Array [
+  Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [
+            Object {
+              "arguments": Array [
+                Object {
+                  "kind": "Argument",
+                  "loc": Object {
+                    "end": 1181,
+                    "start": 1157,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1163,
+                      "start": 1157,
+                    },
+                    "value": "reason",
+                  },
+                  "value": Object {
+                    "block": false,
+                    "kind": "StringValue",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1165,
+                    },
+                    "value": "Use \`content\`.",
+                  },
+                },
+              ],
+              "kind": "Directive",
+              "loc": Object {
+                "end": 1182,
+                "start": 1145,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1156,
+                  "start": 1146,
+                },
+                "value": "deprecated",
+              },
+            },
+          ],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1182,
+            "start": 1125,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1130,
+              "start": 1125,
+            },
+            "value": "input",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1144,
+              "start": 1132,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": "Use \`content\`.",
+        "description": undefined,
+        "extensions": undefined,
+        "name": "input",
+        "type": "TweetContent",
+      },
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1212,
+            "start": 1191,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1198,
+              "start": 1191,
+            },
+            "value": "content",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1212,
+              "start": 1200,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "content",
+        "type": "TweetContent",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [
+            Object {
+              "arguments": Array [
+                Object {
+                  "kind": "Argument",
+                  "loc": Object {
+                    "end": 1181,
+                    "start": 1157,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1163,
+                      "start": 1157,
+                    },
+                    "value": "reason",
+                  },
+                  "value": Object {
+                    "block": false,
+                    "kind": "StringValue",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1165,
+                    },
+                    "value": "Use \`content\`.",
+                  },
+                },
+              ],
+              "kind": "Directive",
+              "loc": Object {
+                "end": 1182,
+                "start": 1145,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1156,
+                  "start": 1146,
+                },
+                "value": "deprecated",
+              },
+            },
+          ],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1182,
+            "start": 1125,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1130,
+              "start": 1125,
+            },
+            "value": "input",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1144,
+              "start": 1132,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1212,
+            "start": 1191,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1198,
+              "start": 1191,
+            },
+            "value": "content",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1212,
+              "start": 1200,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1225,
+        "start": 1103,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1114,
+          "start": 1103,
+        },
+        "value": "createTweet",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1225,
+          "start": 1220,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1225,
+            "start": 1220,
+          },
+          "value": "Tweet",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "createTweet",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Tweet",
+  },
+  Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1249,
+            "start": 1242,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1244,
+              "start": 1242,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1249,
+              "start": 1246,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1248,
+                "start": 1246,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1249,
+            "start": 1242,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1244,
+              "start": 1242,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1249,
+              "start": 1246,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1248,
+                "start": 1246,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1257,
+        "start": 1230,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1241,
+          "start": 1230,
+        },
+        "value": "deleteTweet",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1257,
+          "start": 1252,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1257,
+            "start": 1252,
+          },
+          "value": "Tweet",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "deleteTweet",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Tweet",
+  },
+  Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1283,
+            "start": 1276,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1278,
+              "start": 1276,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1283,
+              "start": 1280,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1282,
+                "start": 1280,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1283,
+            "start": 1276,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1278,
+              "start": 1276,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1283,
+              "start": 1280,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1282,
+                "start": 1280,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1293,
+        "start": 1262,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1275,
+          "start": 1262,
+        },
+        "value": "markTweetRead",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1293,
+          "start": 1286,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1293,
+            "start": 1286,
+          },
+          "value": "Boolean",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "markTweetRead",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Boolean",
+  },
+]
+`;
+
+exports[`lib graphql getFilteredTypeMap() returns a filtered map of schema types 1`] = `
+Object {
+  "Boolean": "Boolean",
+  "Date": "Date",
+  "ID": "ID",
+  "Int": "Int",
+  "Meta": "Meta",
+  "Node": "Node",
+  "Notification": "Notification",
+  "Stat": "Stat",
+  "String": "String",
+  "Tweet": "Tweet",
+  "TweetContent": "TweetContent",
+  "Url": "Url",
+  "User": "User",
+}
+`;
+
+exports[`lib graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
+Object {
+  "createTweet": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [
+            Object {
+              "arguments": Array [
+                Object {
+                  "kind": "Argument",
+                  "loc": Object {
+                    "end": 1181,
+                    "start": 1157,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1163,
+                      "start": 1157,
+                    },
+                    "value": "reason",
+                  },
+                  "value": Object {
+                    "block": false,
+                    "kind": "StringValue",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1165,
+                    },
+                    "value": "Use \`content\`.",
+                  },
+                },
+              ],
+              "kind": "Directive",
+              "loc": Object {
+                "end": 1182,
+                "start": 1145,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1156,
+                  "start": 1146,
+                },
+                "value": "deprecated",
+              },
+            },
+          ],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1182,
+            "start": 1125,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1130,
+              "start": 1125,
+            },
+            "value": "input",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1144,
+              "start": 1132,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": "Use \`content\`.",
+        "description": undefined,
+        "extensions": undefined,
+        "name": "input",
+        "type": "TweetContent",
+      },
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1212,
+            "start": 1191,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1198,
+              "start": 1191,
+            },
+            "value": "content",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1212,
+              "start": 1200,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "content",
+        "type": "TweetContent",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [
+            Object {
+              "arguments": Array [
+                Object {
+                  "kind": "Argument",
+                  "loc": Object {
+                    "end": 1181,
+                    "start": 1157,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1163,
+                      "start": 1157,
+                    },
+                    "value": "reason",
+                  },
+                  "value": Object {
+                    "block": false,
+                    "kind": "StringValue",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1165,
+                    },
+                    "value": "Use \`content\`.",
+                  },
+                },
+              ],
+              "kind": "Directive",
+              "loc": Object {
+                "end": 1182,
+                "start": 1145,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1156,
+                  "start": 1146,
+                },
+                "value": "deprecated",
+              },
+            },
+          ],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1182,
+            "start": 1125,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1130,
+              "start": 1125,
+            },
+            "value": "input",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1144,
+              "start": 1132,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1212,
+            "start": 1191,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1198,
+              "start": 1191,
+            },
+            "value": "content",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1212,
+              "start": 1200,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "value": "TweetContent",
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1225,
+        "start": 1103,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1114,
+          "start": 1103,
+        },
+        "value": "createTweet",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1225,
+          "start": 1220,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1225,
+            "start": 1220,
+          },
+          "value": "Tweet",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "createTweet",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Tweet",
+  },
+  "deleteTweet": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1249,
+            "start": 1242,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1244,
+              "start": 1242,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1249,
+              "start": 1246,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1248,
+                "start": 1246,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1249,
+            "start": 1242,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1244,
+              "start": 1242,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1249,
+              "start": 1246,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1248,
+                "start": 1246,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1257,
+        "start": 1230,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1241,
+          "start": 1230,
+        },
+        "value": "deleteTweet",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1257,
+          "start": 1252,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1257,
+            "start": 1252,
+          },
+          "value": "Tweet",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "deleteTweet",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Tweet",
+  },
+  "markTweetRead": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1283,
+            "start": 1276,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1278,
+              "start": 1276,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1283,
+              "start": 1280,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1282,
+                "start": 1280,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1283,
+            "start": 1276,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1278,
+              "start": 1276,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1283,
+              "start": 1280,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1282,
+                "start": 1280,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1293,
+        "start": 1262,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1275,
+          "start": 1262,
+        },
+        "value": "markTweetRead",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1293,
+          "start": 1286,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1293,
+            "start": 1286,
+          },
+          "value": "Boolean",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "markTweetRead",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Boolean",
+  },
+}
+`;
+
+exports[`lib graphql getIntrospectionFieldsList() returns list of queries 1`] = `
+Object {
+  "NotificationsMeta": Object {
+    "args": Array [],
+    "astNode": Object {
+      "arguments": Array [],
+      "description": undefined,
+      "directives": Array [
+        Object {
+          "arguments": Array [],
+          "kind": "Directive",
+          "loc": Object {
+            "end": 1079,
+            "start": 1068,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1079,
+              "start": 1069,
+            },
+            "value": "deprecated",
+          },
+        },
+      ],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1079,
+        "start": 1044,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1061,
+          "start": 1044,
+        },
+        "value": "NotificationsMeta",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 1067,
+          "start": 1063,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1067,
+            "start": 1063,
+          },
+          "value": "Meta",
+        },
+      },
+    },
+    "deprecationReason": "No longer supported",
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": true,
+    "name": "NotificationsMeta",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Meta",
+  },
+  "Tweet": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 807,
+            "start": 800,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 802,
+              "start": 800,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 807,
+              "start": 804,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 806,
+                "start": 804,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 806,
+                  "start": 804,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 807,
+            "start": 800,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 802,
+              "start": 800,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 807,
+              "start": 804,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 806,
+                "start": 804,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 806,
+                  "start": 804,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 815,
+        "start": 794,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 799,
+          "start": 794,
+        },
+        "value": "Tweet",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 815,
+          "start": 810,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 815,
+            "start": 810,
+          },
+          "value": "Tweet",
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "Tweet",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Tweet",
+  },
+  "Tweets": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": Object {
+            "kind": "IntValue",
+            "loc": Object {
+              "end": 841,
+              "start": 840,
+            },
+            "value": "5",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 841,
+            "start": 827,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 832,
+              "start": 827,
+            },
+            "value": "limit",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 837,
+              "start": 834,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 837,
+                "start": 834,
+              },
+              "value": "Int",
+            },
+          },
+        },
+        "defaultValue": 5,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "limit",
+        "type": "Int",
+      },
+      Object {
+        "astNode": Object {
+          "defaultValue": Object {
+            "kind": "IntValue",
+            "loc": Object {
+              "end": 856,
+              "start": 855,
+            },
+            "value": "0",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 856,
+            "start": 843,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 847,
+              "start": 843,
+            },
+            "value": "skip",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 852,
+              "start": 849,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 852,
+                "start": 849,
+              },
+              "value": "Int",
+            },
+          },
+        },
+        "defaultValue": 0,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "skip",
+        "type": "Int",
+      },
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 876,
+            "start": 858,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 868,
+              "start": 858,
+            },
+            "value": "sort_field",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 876,
+              "start": 870,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 876,
+                "start": 870,
+              },
+              "value": "String",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "sort_field",
+        "type": "String",
+      },
+      Object {
+        "astNode": Object {
+          "defaultValue": Object {
+            "block": false,
+            "kind": "StringValue",
+            "loc": Object {
+              "end": 904,
+              "start": 899,
+            },
+            "value": "ASC",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 904,
+            "start": 878,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 888,
+              "start": 878,
+            },
+            "value": "sort_order",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 896,
+              "start": 890,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 896,
+                "start": 890,
+              },
+              "value": "String",
+            },
+          },
+        },
+        "defaultValue": "ASC",
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "sort_order",
+        "type": "String",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": Object {
+            "kind": "IntValue",
+            "loc": Object {
+              "end": 841,
+              "start": 840,
+            },
+            "value": "5",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 841,
+            "start": 827,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 832,
+              "start": 827,
+            },
+            "value": "limit",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 837,
+              "start": 834,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 837,
+                "start": 834,
+              },
+              "value": "Int",
+            },
+          },
+        },
+        Object {
+          "defaultValue": Object {
+            "kind": "IntValue",
+            "loc": Object {
+              "end": 856,
+              "start": 855,
+            },
+            "value": "0",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 856,
+            "start": 843,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 847,
+              "start": 843,
+            },
+            "value": "skip",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 852,
+              "start": 849,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 852,
+                "start": 849,
+              },
+              "value": "Int",
+            },
+          },
+        },
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 876,
+            "start": 858,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 868,
+              "start": 858,
+            },
+            "value": "sort_field",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 876,
+              "start": 870,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 876,
+                "start": 870,
+              },
+              "value": "String",
+            },
+          },
+        },
+        Object {
+          "defaultValue": Object {
+            "block": false,
+            "kind": "StringValue",
+            "loc": Object {
+              "end": 904,
+              "start": 899,
+            },
+            "value": "ASC",
+          },
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 904,
+            "start": 878,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 888,
+              "start": 878,
+            },
+            "value": "sort_order",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 896,
+              "start": 890,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 896,
+                "start": 890,
+              },
+              "value": "String",
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 915,
+        "start": 820,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 826,
+          "start": 820,
+        },
+        "value": "Tweets",
+      },
+      "type": Object {
+        "kind": "NonNullType",
+        "loc": Object {
+          "end": 915,
+          "start": 907,
+        },
+        "type": Object {
+          "kind": "ListType",
+          "loc": Object {
+            "end": 914,
+            "start": 907,
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 913,
+              "start": 908,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 913,
+                "start": 908,
+              },
+              "value": "Tweet",
+            },
+          },
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "Tweets",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "[Tweet]!",
+  },
+  "TweetsMeta": Object {
+    "args": Array [],
+    "astNode": Object {
+      "arguments": Array [],
+      "description": undefined,
+      "directives": Array [
+        Object {
+          "arguments": Array [],
+          "kind": "Directive",
+          "loc": Object {
+            "end": 948,
+            "start": 937,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 948,
+              "start": 938,
+            },
+            "value": "deprecated",
+          },
+        },
+      ],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 948,
+        "start": 920,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 930,
+          "start": 920,
+        },
+        "value": "TweetsMeta",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 936,
+          "start": 932,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 936,
+            "start": 932,
+          },
+          "value": "Meta",
+        },
+      },
+    },
+    "deprecationReason": "No longer supported",
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": true,
+    "name": "TweetsMeta",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "Meta",
+  },
+  "User": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 965,
+            "start": 958,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 960,
+              "start": 958,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 965,
+              "start": 962,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 964,
+                "start": 962,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 964,
+                  "start": 962,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "ID!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 965,
+            "start": 958,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 960,
+              "start": 958,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 965,
+              "start": 962,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 964,
+                "start": 962,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 964,
+                  "start": 962,
+                },
+                "value": "ID",
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [
+        Object {
+          "arguments": Array [
+            Object {
+              "kind": "Argument",
+              "loc": Object {
+                "end": 1007,
+                "start": 985,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 991,
+                  "start": 985,
+                },
+                "value": "reason",
+              },
+              "value": Object {
+                "block": false,
+                "kind": "StringValue",
+                "loc": Object {
+                  "end": 1007,
+                  "start": 993,
+                },
+                "value": "Use \`Users\`.",
+              },
+            },
+          ],
+          "kind": "Directive",
+          "loc": Object {
+            "end": 1008,
+            "start": 973,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 984,
+              "start": 974,
+            },
+            "value": "deprecated",
+          },
+        },
+      ],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1008,
+        "start": 953,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 957,
+          "start": 953,
+        },
+        "value": "User",
+      },
+      "type": Object {
+        "kind": "NamedType",
+        "loc": Object {
+          "end": 972,
+          "start": 968,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 972,
+            "start": 968,
+          },
+          "value": "User",
+        },
+      },
+    },
+    "deprecationReason": "Use \`Users\`.",
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": true,
+    "name": "User",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "User",
+  },
+  "Users": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1029,
+            "start": 1019,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1021,
+              "start": 1019,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1029,
+              "start": 1023,
+            },
+            "type": Object {
+              "kind": "ListType",
+              "loc": Object {
+                "end": 1028,
+                "start": 1023,
+              },
+              "type": Object {
+                "kind": "NonNullType",
+                "loc": Object {
+                  "end": 1027,
+                  "start": 1024,
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 1026,
+                    "start": 1024,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1026,
+                      "start": 1024,
+                    },
+                    "value": "ID",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "id",
+        "type": "[ID!]!",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1029,
+            "start": 1019,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1021,
+              "start": 1019,
+            },
+            "value": "id",
+          },
+          "type": Object {
+            "kind": "NonNullType",
+            "loc": Object {
+              "end": 1029,
+              "start": 1023,
+            },
+            "type": Object {
+              "kind": "ListType",
+              "loc": Object {
+                "end": 1028,
+                "start": 1023,
+              },
+              "type": Object {
+                "kind": "NonNullType",
+                "loc": Object {
+                  "end": 1027,
+                  "start": 1024,
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 1026,
+                    "start": 1024,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 1026,
+                      "start": 1024,
+                    },
+                    "value": "ID",
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1039,
+        "start": 1013,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1018,
+          "start": 1013,
+        },
+        "value": "Users",
+      },
+      "type": Object {
+        "kind": "NonNullType",
+        "loc": Object {
+          "end": 1039,
+          "start": 1032,
+        },
+        "type": Object {
+          "kind": "ListType",
+          "loc": Object {
+            "end": 1038,
+            "start": 1032,
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1037,
+              "start": 1033,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1037,
+                "start": 1033,
+              },
+              "value": "User",
+            },
+          },
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "Users",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "[User]!",
+  },
+}
+`;
+
+exports[`lib graphql getIntrospectionFieldsList() returns list of subscriptions 1`] = `
+Object {
+  "Notifications": Object {
+    "args": Array [
+      Object {
+        "astNode": Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1437,
+            "start": 1427,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1432,
+              "start": 1427,
+            },
+            "value": "limit",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1437,
+              "start": 1434,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1437,
+                "start": 1434,
+              },
+              "value": "Int",
+            },
+          },
+        },
+        "defaultValue": undefined,
+        "deprecationReason": undefined,
+        "description": undefined,
+        "extensions": undefined,
+        "name": "limit",
+        "type": "Int",
+      },
+    ],
+    "astNode": Object {
+      "arguments": Array [
+        Object {
+          "defaultValue": undefined,
+          "description": undefined,
+          "directives": Array [],
+          "kind": "InputValueDefinition",
+          "loc": Object {
+            "end": 1437,
+            "start": 1427,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1432,
+              "start": 1427,
+            },
+            "value": "limit",
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1437,
+              "start": 1434,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1437,
+                "start": 1434,
+              },
+              "value": "Int",
+            },
+          },
+        },
+      ],
+      "description": undefined,
+      "directives": Array [],
+      "kind": "FieldDefinition",
+      "loc": Object {
+        "end": 1455,
+        "start": 1413,
+      },
+      "name": Object {
+        "kind": "Name",
+        "loc": Object {
+          "end": 1426,
+          "start": 1413,
+        },
+        "value": "Notifications",
+      },
+      "type": Object {
+        "kind": "NonNullType",
+        "loc": Object {
+          "end": 1455,
+          "start": 1440,
+        },
+        "type": Object {
+          "kind": "ListType",
+          "loc": Object {
+            "end": 1454,
+            "start": 1440,
+          },
+          "type": Object {
+            "kind": "NamedType",
+            "loc": Object {
+              "end": 1453,
+              "start": 1441,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1453,
+                "start": 1441,
+              },
+              "value": "Notification",
+            },
+          },
+        },
+      },
+    },
+    "deprecationReason": undefined,
+    "description": undefined,
+    "extensions": undefined,
+    "isDeprecated": false,
+    "name": "Notifications",
+    "resolve": undefined,
+    "subscribe": undefined,
+    "type": "[Notification]!",
+  },
+}
+`;
+
+exports[`lib graphql getSchemaMap() returns schema types map 1`] = `
+Object {
+  "directives": Array [
+    "@include",
+    "@skip",
+    "@deprecated",
+    "@specifiedBy",
+  ],
+  "enums": Object {},
+  "inputs": Object {
+    "TweetContent": "TweetContent",
+  },
+  "interfaces": Object {
+    "Node": "Node",
+  },
+  "mutations": Object {
+    "createTweet": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [
+              Object {
+                "arguments": Array [
+                  Object {
+                    "kind": "Argument",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1157,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 1163,
+                        "start": 1157,
+                      },
+                      "value": "reason",
+                    },
+                    "value": Object {
+                      "block": false,
+                      "kind": "StringValue",
+                      "loc": Object {
+                        "end": 1181,
+                        "start": 1165,
+                      },
+                      "value": "Use \`content\`.",
+                    },
+                  },
+                ],
+                "kind": "Directive",
+                "loc": Object {
+                  "end": 1182,
+                  "start": 1145,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1156,
+                    "start": 1146,
+                  },
+                  "value": "deprecated",
+                },
+              },
+            ],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1182,
+              "start": 1125,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1130,
+                "start": 1125,
+              },
+              "value": "input",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1144,
+                  "start": 1132,
+                },
+                "value": "TweetContent",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": "Use \`content\`.",
+          "description": undefined,
+          "extensions": undefined,
+          "name": "input",
+          "type": "TweetContent",
+        },
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1212,
+              "start": 1191,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1198,
+                "start": 1191,
+              },
+              "value": "content",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1212,
+                  "start": 1200,
+                },
+                "value": "TweetContent",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "content",
+          "type": "TweetContent",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [
+              Object {
+                "arguments": Array [
+                  Object {
+                    "kind": "Argument",
+                    "loc": Object {
+                      "end": 1181,
+                      "start": 1157,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 1163,
+                        "start": 1157,
+                      },
+                      "value": "reason",
+                    },
+                    "value": Object {
+                      "block": false,
+                      "kind": "StringValue",
+                      "loc": Object {
+                        "end": 1181,
+                        "start": 1165,
+                      },
+                      "value": "Use \`content\`.",
+                    },
+                  },
+                ],
+                "kind": "Directive",
+                "loc": Object {
+                  "end": 1182,
+                  "start": 1145,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1156,
+                    "start": 1146,
+                  },
+                  "value": "deprecated",
+                },
+              },
+            ],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1182,
+              "start": 1125,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1130,
+                "start": 1125,
+              },
+              "value": "input",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1144,
+                "start": 1132,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1144,
+                  "start": 1132,
+                },
+                "value": "TweetContent",
+              },
+            },
+          },
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1212,
+              "start": 1191,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1198,
+                "start": 1191,
+              },
+              "value": "content",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1212,
+                "start": 1200,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1212,
+                  "start": 1200,
+                },
+                "value": "TweetContent",
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1225,
+          "start": 1103,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1114,
+            "start": 1103,
+          },
+          "value": "createTweet",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 1225,
+            "start": 1220,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1225,
+              "start": 1220,
+            },
+            "value": "Tweet",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "createTweet",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Tweet",
+    },
+    "deleteTweet": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1249,
+              "start": 1242,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1244,
+                "start": 1242,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1249,
+                "start": 1246,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1248,
+                    "start": 1246,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "id",
+          "type": "ID!",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1249,
+              "start": 1242,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1244,
+                "start": 1242,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1249,
+                "start": 1246,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 1248,
+                  "start": 1246,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1248,
+                    "start": 1246,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1257,
+          "start": 1230,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1241,
+            "start": 1230,
+          },
+          "value": "deleteTweet",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 1257,
+            "start": 1252,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1257,
+              "start": 1252,
+            },
+            "value": "Tweet",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "deleteTweet",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Tweet",
+    },
+    "markTweetRead": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1283,
+              "start": 1276,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1278,
+                "start": 1276,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1283,
+                "start": 1280,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1282,
+                    "start": 1280,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "id",
+          "type": "ID!",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1283,
+              "start": 1276,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1278,
+                "start": 1276,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1283,
+                "start": 1280,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 1282,
+                  "start": 1280,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 1282,
+                    "start": 1280,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1293,
+          "start": 1262,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1275,
+            "start": 1262,
+          },
+          "value": "markTweetRead",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 1293,
+            "start": 1286,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1293,
+              "start": 1286,
+            },
+            "value": "Boolean",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "markTweetRead",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Boolean",
+    },
+  },
+  "objects": Object {
+    "Meta": "Meta",
+    "Notification": "Notification",
+    "Stat": "Stat",
+    "Tweet": "Tweet",
+    "User": "User",
+  },
+  "queries": Object {
+    "NotificationsMeta": Object {
+      "args": Array [],
+      "astNode": Object {
+        "arguments": Array [],
+        "description": undefined,
+        "directives": Array [
+          Object {
+            "arguments": Array [],
+            "kind": "Directive",
+            "loc": Object {
+              "end": 1079,
+              "start": 1068,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1079,
+                "start": 1069,
+              },
+              "value": "deprecated",
+            },
+          },
+        ],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1079,
+          "start": 1044,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1061,
+            "start": 1044,
+          },
+          "value": "NotificationsMeta",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 1067,
+            "start": 1063,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 1067,
+              "start": 1063,
+            },
+            "value": "Meta",
+          },
+        },
+      },
+      "deprecationReason": "No longer supported",
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": true,
+      "name": "NotificationsMeta",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Meta",
+    },
+    "Tweet": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 807,
+              "start": 800,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 802,
+                "start": 800,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 807,
+                "start": 804,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 806,
+                  "start": 804,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 806,
+                    "start": 804,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "id",
+          "type": "ID!",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 807,
+              "start": 800,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 802,
+                "start": 800,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 807,
+                "start": 804,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 806,
+                  "start": 804,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 806,
+                    "start": 804,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 815,
+          "start": 794,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 799,
+            "start": 794,
+          },
+          "value": "Tweet",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 815,
+            "start": 810,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 815,
+              "start": 810,
+            },
+            "value": "Tweet",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "Tweet",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Tweet",
+    },
+    "Tweets": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": Object {
+              "kind": "IntValue",
+              "loc": Object {
+                "end": 841,
+                "start": 840,
+              },
+              "value": "5",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 841,
+              "start": 827,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 832,
+                "start": 827,
+              },
+              "value": "limit",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 837,
+                "start": 834,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 837,
+                  "start": 834,
+                },
+                "value": "Int",
+              },
+            },
+          },
+          "defaultValue": 5,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "limit",
+          "type": "Int",
+        },
+        Object {
+          "astNode": Object {
+            "defaultValue": Object {
+              "kind": "IntValue",
+              "loc": Object {
+                "end": 856,
+                "start": 855,
+              },
+              "value": "0",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 856,
+              "start": 843,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 847,
+                "start": 843,
+              },
+              "value": "skip",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 852,
+                "start": 849,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 852,
+                  "start": 849,
+                },
+                "value": "Int",
+              },
+            },
+          },
+          "defaultValue": 0,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "skip",
+          "type": "Int",
+        },
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 876,
+              "start": 858,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 868,
+                "start": 858,
+              },
+              "value": "sort_field",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 876,
+                "start": 870,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 876,
+                  "start": 870,
+                },
+                "value": "String",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "sort_field",
+          "type": "String",
+        },
+        Object {
+          "astNode": Object {
+            "defaultValue": Object {
+              "block": false,
+              "kind": "StringValue",
+              "loc": Object {
+                "end": 904,
+                "start": 899,
+              },
+              "value": "ASC",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 904,
+              "start": 878,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 888,
+                "start": 878,
+              },
+              "value": "sort_order",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 896,
+                "start": 890,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 896,
+                  "start": 890,
+                },
+                "value": "String",
+              },
+            },
+          },
+          "defaultValue": "ASC",
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "sort_order",
+          "type": "String",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": Object {
+              "kind": "IntValue",
+              "loc": Object {
+                "end": 841,
+                "start": 840,
+              },
+              "value": "5",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 841,
+              "start": 827,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 832,
+                "start": 827,
+              },
+              "value": "limit",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 837,
+                "start": 834,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 837,
+                  "start": 834,
+                },
+                "value": "Int",
+              },
+            },
+          },
+          Object {
+            "defaultValue": Object {
+              "kind": "IntValue",
+              "loc": Object {
+                "end": 856,
+                "start": 855,
+              },
+              "value": "0",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 856,
+              "start": 843,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 847,
+                "start": 843,
+              },
+              "value": "skip",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 852,
+                "start": 849,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 852,
+                  "start": 849,
+                },
+                "value": "Int",
+              },
+            },
+          },
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 876,
+              "start": 858,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 868,
+                "start": 858,
+              },
+              "value": "sort_field",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 876,
+                "start": 870,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 876,
+                  "start": 870,
+                },
+                "value": "String",
+              },
+            },
+          },
+          Object {
+            "defaultValue": Object {
+              "block": false,
+              "kind": "StringValue",
+              "loc": Object {
+                "end": 904,
+                "start": 899,
+              },
+              "value": "ASC",
+            },
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 904,
+              "start": 878,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 888,
+                "start": 878,
+              },
+              "value": "sort_order",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 896,
+                "start": 890,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 896,
+                  "start": 890,
+                },
+                "value": "String",
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 915,
+          "start": 820,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 826,
+            "start": 820,
+          },
+          "value": "Tweets",
+        },
+        "type": Object {
+          "kind": "NonNullType",
+          "loc": Object {
+            "end": 915,
+            "start": 907,
+          },
+          "type": Object {
+            "kind": "ListType",
+            "loc": Object {
+              "end": 914,
+              "start": 907,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 913,
+                "start": 908,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 913,
+                  "start": 908,
+                },
+                "value": "Tweet",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "Tweets",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[Tweet]!",
+    },
+    "TweetsMeta": Object {
+      "args": Array [],
+      "astNode": Object {
+        "arguments": Array [],
+        "description": undefined,
+        "directives": Array [
+          Object {
+            "arguments": Array [],
+            "kind": "Directive",
+            "loc": Object {
+              "end": 948,
+              "start": 937,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 948,
+                "start": 938,
+              },
+              "value": "deprecated",
+            },
+          },
+        ],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 948,
+          "start": 920,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 930,
+            "start": 920,
+          },
+          "value": "TweetsMeta",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 936,
+            "start": 932,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 936,
+              "start": 932,
+            },
+            "value": "Meta",
+          },
+        },
+      },
+      "deprecationReason": "No longer supported",
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": true,
+      "name": "TweetsMeta",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "Meta",
+    },
+    "User": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 965,
+              "start": 958,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 960,
+                "start": 958,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 965,
+                "start": 962,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 964,
+                  "start": 962,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 964,
+                    "start": 962,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "id",
+          "type": "ID!",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 965,
+              "start": 958,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 960,
+                "start": 958,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 965,
+                "start": 962,
+              },
+              "type": Object {
+                "kind": "NamedType",
+                "loc": Object {
+                  "end": 964,
+                  "start": 962,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 964,
+                    "start": 962,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [
+          Object {
+            "arguments": Array [
+              Object {
+                "kind": "Argument",
+                "loc": Object {
+                  "end": 1007,
+                  "start": 985,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 991,
+                    "start": 985,
+                  },
+                  "value": "reason",
+                },
+                "value": Object {
+                  "block": false,
+                  "kind": "StringValue",
+                  "loc": Object {
+                    "end": 1007,
+                    "start": 993,
+                  },
+                  "value": "Use \`Users\`.",
+                },
+              },
+            ],
+            "kind": "Directive",
+            "loc": Object {
+              "end": 1008,
+              "start": 973,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 984,
+                "start": 974,
+              },
+              "value": "deprecated",
+            },
+          },
+        ],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1008,
+          "start": 953,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 957,
+            "start": 953,
+          },
+          "value": "User",
+        },
+        "type": Object {
+          "kind": "NamedType",
+          "loc": Object {
+            "end": 972,
+            "start": 968,
+          },
+          "name": Object {
+            "kind": "Name",
+            "loc": Object {
+              "end": 972,
+              "start": 968,
+            },
+            "value": "User",
+          },
+        },
+      },
+      "deprecationReason": "Use \`Users\`.",
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": true,
+      "name": "User",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "User",
+    },
+    "Users": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1029,
+              "start": 1019,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1021,
+                "start": 1019,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1029,
+                "start": 1023,
+              },
+              "type": Object {
+                "kind": "ListType",
+                "loc": Object {
+                  "end": 1028,
+                  "start": 1023,
+                },
+                "type": Object {
+                  "kind": "NonNullType",
+                  "loc": Object {
+                    "end": 1027,
+                    "start": 1024,
+                  },
+                  "type": Object {
+                    "kind": "NamedType",
+                    "loc": Object {
+                      "end": 1026,
+                      "start": 1024,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 1026,
+                        "start": 1024,
+                      },
+                      "value": "ID",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "id",
+          "type": "[ID!]!",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1029,
+              "start": 1019,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1021,
+                "start": 1019,
+              },
+              "value": "id",
+            },
+            "type": Object {
+              "kind": "NonNullType",
+              "loc": Object {
+                "end": 1029,
+                "start": 1023,
+              },
+              "type": Object {
+                "kind": "ListType",
+                "loc": Object {
+                  "end": 1028,
+                  "start": 1023,
+                },
+                "type": Object {
+                  "kind": "NonNullType",
+                  "loc": Object {
+                    "end": 1027,
+                    "start": 1024,
+                  },
+                  "type": Object {
+                    "kind": "NamedType",
+                    "loc": Object {
+                      "end": 1026,
+                      "start": 1024,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 1026,
+                        "start": 1024,
+                      },
+                      "value": "ID",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1039,
+          "start": 1013,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1018,
+            "start": 1013,
+          },
+          "value": "Users",
+        },
+        "type": Object {
+          "kind": "NonNullType",
+          "loc": Object {
+            "end": 1039,
+            "start": 1032,
+          },
+          "type": Object {
+            "kind": "ListType",
+            "loc": Object {
+              "end": 1038,
+              "start": 1032,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1037,
+                "start": 1033,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1037,
+                  "start": 1033,
+                },
+                "value": "User",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "Users",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[User]!",
+    },
+  },
+  "scalars": Object {
+    "Boolean": "Boolean",
+    "Date": "Date",
+    "ID": "ID",
+    "Int": "Int",
+    "String": "String",
+    "Url": "Url",
+  },
+  "subscriptions": Object {
+    "Notifications": Object {
+      "args": Array [
+        Object {
+          "astNode": Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1437,
+              "start": 1427,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1432,
+                "start": 1427,
+              },
+              "value": "limit",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1437,
+                "start": 1434,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1437,
+                  "start": 1434,
+                },
+                "value": "Int",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": undefined,
+          "name": "limit",
+          "type": "Int",
+        },
+      ],
+      "astNode": Object {
+        "arguments": Array [
+          Object {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": Array [],
+            "kind": "InputValueDefinition",
+            "loc": Object {
+              "end": 1437,
+              "start": 1427,
+            },
+            "name": Object {
+              "kind": "Name",
+              "loc": Object {
+                "end": 1432,
+                "start": 1427,
+              },
+              "value": "limit",
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1437,
+                "start": 1434,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1437,
+                  "start": 1434,
+                },
+                "value": "Int",
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": Array [],
+        "kind": "FieldDefinition",
+        "loc": Object {
+          "end": 1455,
+          "start": 1413,
+        },
+        "name": Object {
+          "kind": "Name",
+          "loc": Object {
+            "end": 1426,
+            "start": 1413,
+          },
+          "value": "Notifications",
+        },
+        "type": Object {
+          "kind": "NonNullType",
+          "loc": Object {
+            "end": 1455,
+            "start": 1440,
+          },
+          "type": Object {
+            "kind": "ListType",
+            "loc": Object {
+              "end": 1454,
+              "start": 1440,
+            },
+            "type": Object {
+              "kind": "NamedType",
+              "loc": Object {
+                "end": 1453,
+                "start": 1441,
+              },
+              "name": Object {
+                "kind": "Name",
+                "loc": Object {
+                  "end": 1453,
+                  "start": 1441,
+                },
+                "value": "Notification",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": undefined,
+      "isDeprecated": false,
+      "name": "Notifications",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[Notification]!",
+    },
+  },
+  "unions": Object {},
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLEnumType 1`] = `
+Object {
+  "__DirectiveLocation": "__DirectiveLocation",
+  "__TypeKind": "__TypeKind",
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLInputObjectType 1`] = `
+Object {
+  "TweetContent": "TweetContent",
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLInterfaceType 1`] = `
+Object {
+  "Node": "Node",
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLObjectType 1`] = `
+Object {
+  "Meta": "Meta",
+  "Mutation": "Mutation",
+  "Notification": "Notification",
+  "Query": "Query",
+  "Stat": "Stat",
+  "Subscription": "Subscription",
+  "Tweet": "Tweet",
+  "User": "User",
+  "__Directive": "__Directive",
+  "__EnumValue": "__EnumValue",
+  "__Field": "__Field",
+  "__InputValue": "__InputValue",
+  "__Schema": "__Schema",
+  "__Type": "__Type",
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLScalarType 1`] = `
+Object {
+  "Boolean": "Boolean",
+  "Date": "Date",
+  "ID": "ID",
+  "Int": "Int",
+  "String": "String",
+  "Url": "Url",
+}
+`;
+
+exports[`lib graphql getTypeFromTypeMap() returns a filter map filtered by GraphQLUnionType 1`] = `Object {}`;
