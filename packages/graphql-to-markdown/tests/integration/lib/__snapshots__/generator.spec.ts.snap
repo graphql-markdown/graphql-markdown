@@ -47,76 +47,24 @@ Object {
       "type": "directory",
     },
     Object {
-      "children": Array [
-        Object {
-          "extension": ".mdx",
-          "name": "tweet-content.mdx",
-          "path": "output/inputs/tweet-content.mdx",
-          "size": 293,
-          "type": "file",
-        },
-      ],
+      "children": Array [],
       "name": "inputs",
       "path": "output/inputs",
-      "size": 293,
+      "size": 0,
       "type": "directory",
     },
     Object {
-      "children": Array [
-        Object {
-          "extension": ".mdx",
-          "name": "node.mdx",
-          "path": "output/interfaces/node.mdx",
-          "size": 273,
-          "type": "file",
-        },
-      ],
+      "children": Array [],
       "name": "interfaces",
       "path": "output/interfaces",
-      "size": 273,
+      "size": 0,
       "type": "directory",
     },
     Object {
-      "children": Array [
-        Object {
-          "extension": ".mdx",
-          "name": "meta.mdx",
-          "path": "output/objects/meta.mdx",
-          "size": 268,
-          "type": "file",
-        },
-        Object {
-          "extension": ".mdx",
-          "name": "notification.mdx",
-          "path": "output/objects/notification.mdx",
-          "size": 292,
-          "type": "file",
-        },
-        Object {
-          "extension": ".mdx",
-          "name": "stat.mdx",
-          "path": "output/objects/stat.mdx",
-          "size": 268,
-          "type": "file",
-        },
-        Object {
-          "extension": ".mdx",
-          "name": "tweet.mdx",
-          "path": "output/objects/tweet.mdx",
-          "size": 271,
-          "type": "file",
-        },
-        Object {
-          "extension": ".mdx",
-          "name": "user.mdx",
-          "path": "output/objects/user.mdx",
-          "size": 268,
-          "type": "file",
-        },
-      ],
+      "children": Array [],
       "name": "objects",
       "path": "output/objects",
-      "size": 1367,
+      "size": 0,
       "type": "directory",
     },
     Object {
@@ -179,7 +127,7 @@ Object {
   ],
   "name": "output",
   "path": "output",
-  "size": 6207,
+  "size": 4274,
   "type": "directory",
 }
 `;

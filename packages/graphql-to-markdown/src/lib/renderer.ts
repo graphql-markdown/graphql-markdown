@@ -1,22 +1,16 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import { pull } from "lodash";
-import * as moment from "moment";
 
 import { toSlug, startCase, hasOwnProperty } from "./utils";
 import { prettifyJavascript } from "./prettier";
+import { Printer } from "./printer";
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 export class Renderer {
-  outputDir: string;
-  baseURL: string;
-  p: any;
-  constructor(printer: any, outputDir: string, baseURL: string) {
-    this.outputDir = outputDir;
-    this.baseURL = baseURL;
-    this.p = printer;
+  constructor(readonly printer: Printer, readonly outputDir: string, readonly baseURL: string) {
     this.emptyOutputDir();
   }
 
@@ -25,7 +19,7 @@ export class Renderer {
   }
 
   async renderRootTypes(name: string, type: any) {
-    let pages: ({ category: any; slug: any } | undefined)[] = [];
+    let pages: ({ category: string; slug: string } | undefined)[] = [];
     if (type) {
       const slug = toSlug(name);
       const dirPath = path.join(this.outputDir, slug);
@@ -49,13 +43,13 @@ export class Renderer {
     return pages;
   }
 
-  async renderTypeEntities(dirPath: any, name: string, type: any) {
+  async renderTypeEntities(dirPath: string, name: string, type: any) {
     if (type) {
       const fileName = toSlug(name);
       const filePath = path.join(dirPath, `${fileName}.mdx`);
-      const content = this.p.printType(fileName, type);
+      const content = this.printer.printType(fileName, type);
       await fs.outputFile(filePath, content, "utf8");
-      const page = path
+      const page: any = path
         .relative(this.outputDir, filePath)
         .match(
           /(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
@@ -95,18 +89,5 @@ export class Renderer {
       ];
     });
     return graphqlSidebar;
-  }
-
-  async renderHomepage(homepageLocation: any) {
-    const homePage = path.basename(homepageLocation);
-    const destLocation = path.join(this.outputDir, homePage);
-    fs.copySync(homepageLocation, destLocation);
-    const data = fs
-      .readFileSync(destLocation, "utf8")
-      .replace(
-        /##generated-date-time##/gm,
-        moment().format("MMMM DD, YYYY [at] h:mm:ss A"),
-      );
-    await fs.outputFile(destLocation, data, "utf8");
   }
 }
