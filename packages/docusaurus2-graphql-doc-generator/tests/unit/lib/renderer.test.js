@@ -23,9 +23,6 @@ describe("lib", () => {
             path.resolve(__dirname, "../../../node_modules"),
           ),
           output: {},
-          assets: {
-            [HOMEPAGE]: mock.load(require.resolve(`@assets/${HOMEPAGE}`)),
-          },
         });
         rendererInstance = new Renderer(printerInstance, FOLDER, baseURL);
       });

@@ -6,10 +6,5 @@ module.exports = {
   coverageReporters: ["json"],
   coverageDirectory: "<rootDir>/.nyc_output",
   testEnvironment: "node",
-  rootDir: __dirname,
-  moduleNameMapper: {
-    "@/(.*)": "<rootDir>/src/$1",
-    "@data/(.*)": "<rootDir>/tests/__data__/$1",
-    "@assets/(.*)": "<rootDir>/assets/$1",
-  },
+  rootDir: __dirname
 };

@@ -15,8 +15,8 @@ import {
   isInputType,
   isListType,
   toSlug,
-  hasProperty,
-  hasMethod,
+  hasOwnProperty,
+  hasOwnMethod,
   prettifyMarkdown,
 } from ".";
 
@@ -81,7 +81,7 @@ export class Printer {
         this.linkRoot,
         this.baseURL,
         category,
-        toSlug(graphLQLNamedType)
+        toSlug(graphLQLNamedType),
       )})`;
     } else {
       return `\`${name}\``;
@@ -108,7 +108,7 @@ export class Printer {
     }
 
     let section = `${level} ${this.toLink(type, getTypeName(type))} ${
-      hasProperty(type, "type")
+      hasOwnProperty(type, "type")
         ? `(${this.toLink(type.type, getTypeName(type.type))})`
         : ""
     }\n\n${this.printDescription(type, "")}\n`;
@@ -149,16 +149,16 @@ export class Printer {
 
   printCodeArguments(type: { [x: string]: any; args?: any }) {
     let code = "";
-    if (hasProperty(type, "args") && type.args.length > 0) {
+    if (hasOwnProperty(type, "args") && type.args.length > 0) {
       code += `(\n`;
       code += type.args.reduce(
-        (r: any, v: { name?: any; type: any; defaultValue?: any }) => {
+        (r: any, v: any ) => {
           const defaultValue = getDefaultValue(v);
           return `${r}  ${v.name}: ${v.type.toString()}${
             defaultValue ? ` = ${defaultValue}` : ""
           }\n`;
         },
-        ""
+        "",
       );
       code += `)`;
     }
@@ -180,10 +180,10 @@ export class Printer {
 
   printCodeType(type: any) {
     let code = `${isInterfaceType(type) ? "interface" : "type"} ${getTypeName(
-      type
+      type,
     )}`;
     code += `${
-      hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
+      hasOwnMethod(type, "getInterfaces") && type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
             .map((v: { name: any; toString: () => any }) => getTypeName(v))
@@ -210,14 +210,11 @@ export class Printer {
     return "";
   }
 
-  printDescription(
-    type: any,
-    noText = NO_DESCRIPTION_TEXT
-  ) {
+  printDescription(type: any, noText = NO_DESCRIPTION_TEXT) {
     let description = "";
 
     description = `${this.printDeprecation(type)}${
-      (hasProperty(type, "description") && type.description) || noText
+      (hasOwnProperty(type, "description") && type.description) || noText
     }`;
 
     return description;
@@ -275,7 +272,10 @@ export class Printer {
       metadata = this.printSection(getFields(type), "Fields");
     }
 
-    if ((isObjectType(type) || isInterfaceType(type)) && hasMethod(type, "getInterfaces")) {
+    if (
+      (isObjectType(type) || isInterfaceType(type)) &&
+      hasOwnMethod(type, "getInterfaces")
+    ) {
       metadata += this.printSection(type.getInterfaces(), "Interfaces");
     }
 
@@ -290,7 +290,7 @@ export class Printer {
     }
 
     return prettifyMarkdown(
-      `${header}\n\n${TAG}\n\n${description}\n\n${code}\n\n${metadata}\n\n`
+      `${header}\n\n${TAG}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
     );
   }
 }

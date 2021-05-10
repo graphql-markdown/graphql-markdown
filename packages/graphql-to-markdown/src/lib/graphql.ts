@@ -10,9 +10,13 @@ import {
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
+  GraphQLFieldMap,
+  GraphQLField,
 } from "graphql";
 
-import { toArray, hasMethod, hasProperty } from ".";
+import { Maybe } from "graphql/jsutils/Maybe";
+
+import { toArray, hasOwnMethod, hasOwnProperty } from ".";
 
 export {
   GraphQLEnumType,
@@ -42,9 +46,10 @@ export { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 export { UrlLoader } from "@graphql-tools/url-loader";
 export { JsonFileLoader } from "@graphql-tools/json-file-loader";
 
-export const SCHEMA_EXCLUDE_LIST_PATTERN = /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
+export const SCHEMA_EXCLUDE_LIST_PATTERN =
+  /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
-export function getDefaultValue(argument: { type: any; defaultValue: any; }) {
+export function getDefaultValue(argument: { type: any; defaultValue: any }) {
   if (isListType(argument.type)) {
     return `[${argument.defaultValue || ""}]`;
   }
@@ -62,7 +67,7 @@ export function getDefaultValue(argument: { type: any; defaultValue: any; }) {
 }
 
 export function getFilteredTypeMap(
-  typeMap: { [x: string]: any; },
+  typeMap: { [x: string]: any },
   excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
 ) {
   if (!typeMap) return undefined;
@@ -71,28 +76,35 @@ export function getFilteredTypeMap(
     .reduce((res: any, key) => ((res[key] = typeMap[key]), res), {});
 }
 
-export function getIntrospectionFieldsList(queryType: { getFields: () => any; }) {
-  if (!queryType && !hasMethod(queryType, "getFields")) {
-    return undefined;
+export function getIntrospectionFieldsList(queryType: Maybe<GraphQLObjectType<any, any>>) {
+  if (!queryType){
+    return;
+  }
+
+  if (!hasOwnMethod(queryType, "getFields")) {
+    return;
   }
   return queryType.getFields();
 }
 
-export function getFields(type: { getFields: () => any; }) {
-  if (!hasMethod(type, "getFields")) {
+export function getFields(type: { getFields: () => any }) {
+  if (!hasOwnMethod(type, "getFields")) {
     return [];
   }
   const fieldMap = type.getFields();
   return Object.keys(fieldMap).map((name) => fieldMap[name]);
 }
 
-export function getTypeName(type: { name: any; toString: () => any; }, defaultName = "") {
+export function getTypeName(
+  type: { name: any; toString: () => any },
+  defaultName = "",
+) {
   if (!type) {
     return undefined;
   }
   return (
-    (hasProperty(type, "name") && type.name) ||
-    (hasMethod(type, "toString") && type.toString()) ||
+    (hasOwnProperty(type, "name") && type.name) ||
+    (hasOwnMethod(type, "toString") && type.toString()) ||
     defaultName
   );
 }
@@ -104,7 +116,13 @@ export function getTypeFromTypeMap(typeMap: any, type: any) {
     .reduce((res: any, key) => ((res[key] = typeMap[key]), res), {});
 }
 
-export function getSchemaMap(schema: { getTypeMap: () => any; getQueryType: () => any; getMutationType: () => any; getSubscriptionType: () => any; getDirectives: () => any; }) {
+export function getSchemaMap(schema: {
+  getTypeMap: () => any;
+  getQueryType: () => any;
+  getMutationType: () => any;
+  getSubscriptionType: () => any;
+  getDirectives: () => any;
+}) {
   const typeMap = getFilteredTypeMap(schema.getTypeMap());
   return {
     queries: getIntrospectionFieldsList(
@@ -126,10 +144,10 @@ export function getSchemaMap(schema: { getTypeMap: () => any; getQueryType: () =
   };
 }
 
-export function isParametrizedField(field: { args: string | any[]; }) {
-  return hasProperty(field, "args") && field.args.length > 0;
+export function isParametrizedField(field: GraphQLFieldMap<any, any> | GraphQLField<any, any, { [key: string]: any; }>) {
+  return hasOwnProperty(field, "args") && field.args.length > 0;
 }
 
-export function isOperation(query: any) {
-  return hasProperty(query, "type");
+export function isOperation(query: GraphQLFieldMap<any, any> | GraphQLField<any, any, { [key: string]: any; }>) {
+  return hasOwnProperty(query, "type");
 }

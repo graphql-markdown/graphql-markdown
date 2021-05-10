@@ -1,8 +1,8 @@
-const mock = require("mock-fs");
-const path = require("path");
-const dirTree = require("directory-tree");
+import * as path from "path";
+import * as mock from "mock-fs";
+import * as dirTree from "directory-tree";
 
-const generateDocFromSchema = require("@/lib/generator");
+import { generateDocFromSchema } from "../../../src/lib/generator";
 
 describe("lib", () => {
   beforeEach(() => {
@@ -10,10 +10,6 @@ describe("lib", () => {
       node_modules: mock.load(path.resolve(__dirname, "../../../node_modules")),
       __data__: mock.load(path.resolve(__dirname, "../../__data__")),
       output: {},
-      assets: {
-        "generated.md": "Dummy homepage for tweet.graphql",
-      },
-      tmp: {},
     });
   });
 
@@ -31,7 +27,6 @@ describe("lib", () => {
           "__data__/tweet.graphql",
           "output",
           "docs",
-          "assets/generated.md",
           "SCHEMA-DIFF",
           "tmp",
         );

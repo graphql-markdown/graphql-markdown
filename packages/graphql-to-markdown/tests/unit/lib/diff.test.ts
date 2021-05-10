@@ -1,11 +1,19 @@
-const mock = require("mock-fs");
-const fs = require("fs");
+import * as mock from "mock-fs";
+import * as fs from "fs";
+import type { GraphQLSchema } from "graphql";
+import { Change, ChangeType, CriticalityLevel } from "@graphql-inspector/core";
 
-jest.mock("@/lib/graphql");
-const graphql = require("@/lib/graphql");
+import {
+  checkSchemaChanges,
+  saveSchemaHash,
+  saveSchemaFile,
+} from "../../../src/lib/diff";
+
+jest.mock("../../../src/lib/graphql");
+import * as graphql from "../../../src/lib/graphql";
 
 jest.mock("@graphql-inspector/core");
-const inspector = require("@graphql-inspector/core");
+import * as inspector from "@graphql-inspector/core";
 
 const FOLDER = "output";
 const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
@@ -22,12 +30,6 @@ describe("lib", () => {
 
   describe("diff", () => {
     describe("checkSchemaChanges()", () => {
-      const {
-        checkSchemaChanges,
-        saveSchemaHash,
-        saveSchemaFile,
-      } = require("@/lib/diff");
-
       test("returns true if no valid comparison method is selected", async () => {
         jest
           .spyOn(graphql, "printSchema")
@@ -68,13 +70,21 @@ describe("lib", () => {
       });
 
       test("returns true if SCHEMA-DIFF comparison differs", async () => {
+        const changes: Change[] = [
+          {
+            message: "test",
+            type: ChangeType.DirectiveAdded,
+            criticality: { level: CriticalityLevel.Breaking },
+          },
+        ];
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
         jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([1]));
+          .spyOn(graphql, "loadSchema")
+          .mockImplementationOnce(() => Promise.resolve({} as GraphQLSchema));
+        jest.spyOn(inspector, "diff").mockImplementationOnce(() => changes);
 
         await saveSchemaFile("SCHEMA", FOLDER);
         const check = await checkSchemaChanges(
@@ -89,10 +99,10 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
         jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([]));
+          .spyOn(graphql, "loadSchema")
+          .mockImplementationOnce(() => Promise.resolve({} as GraphQLSchema));
+        jest.spyOn(inspector, "diff").mockImplementationOnce(() => []);
 
         await saveSchemaFile("SCHEMA", FOLDER);
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
@@ -103,10 +113,10 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
         jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([]));
+          .spyOn(graphql, "loadSchema")
+          .mockImplementationOnce(() => Promise.resolve({} as GraphQLSchema));
+        jest.spyOn(inspector, "diff").mockImplementationOnce(() => []);
 
         expect(fs.existsSync(SCHEMA_FILE)).toBeFalsy();
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
@@ -115,8 +125,6 @@ describe("lib", () => {
     });
 
     describe("saveSchemaFile()", () => {
-      const { saveSchemaFile } = require("@/lib/diff");
-
       test("saves introspection schema locally", async () => {
         jest
           .spyOn(graphql, "printSchema")
@@ -128,8 +136,6 @@ describe("lib", () => {
     });
 
     describe("saveSchemaHash()", () => {
-      const { saveSchemaHash } = require("@/lib/diff");
-
       test("saves schema hash into .schema file", async () => {
         jest
           .spyOn(graphql, "printSchema")

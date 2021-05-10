@@ -1,21 +1,20 @@
-const mock = require("mock-fs");
-const path = require("path");
-const dirTree = require("directory-tree");
+import * as path from "path";
+import * as mock from "mock-fs";
+import * as dirTree from "directory-tree";
 
-const Renderer = require("@/lib/renderer");
+import { Renderer } from "../../../src/lib/renderer";
 
-jest.mock("@/lib/printer");
-const Printer = require("@/lib/printer");
+jest.mock("../../../src/lib/printer");
+import { Printer } from "../../../src/lib/printer";
 
 const FOLDER = "output";
-const HOMEPAGE = "generated.md";
 
 describe("lib", () => {
   describe("renderer", () => {
     describe("class Renderer", () => {
-      let rendererInstance,
-        baseURL = "graphql",
-        printerInstance = new Printer("SCHEMA", baseURL, "root");
+      let rendererInstance: Renderer;
+      const baseURL = "graphql";
+      const printerInstance = new Printer("SCHEMA", baseURL, "root");
 
       beforeEach(() => {
         mock({
@@ -23,9 +22,6 @@ describe("lib", () => {
             path.resolve(__dirname, "../../../node_modules"),
           ),
           output: {},
-          assets: {
-            [HOMEPAGE]: mock.load(require.resolve(`@assets/${HOMEPAGE}`)),
-          },
         });
         rendererInstance = new Renderer(printerInstance, FOLDER, baseURL);
       });
@@ -77,18 +73,6 @@ describe("lib", () => {
           ];
           const sidebar = rendererInstance.generateSidebar(pages);
           expect(sidebar).toMatchSnapshot();
-        });
-      });
-
-      describe("renderHomepage()", () => {
-        test("copies default homepage into output folder", async () => {
-          expect.assertions(1);
-          await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
-
-          expect(dirTree(FOLDER)).toMatchSnapshot({
-            children: [{ size: expect.any(Number) }],
-            size: expect.any(Number),
-          });
         });
       });
 

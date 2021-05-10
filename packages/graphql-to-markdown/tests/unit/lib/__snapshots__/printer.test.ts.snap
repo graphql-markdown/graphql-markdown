@@ -109,7 +109,7 @@ arg: boolean
 exports[`lib printer class Printer printCodeScalar() returns scalar code structure 1`] = `"scalar ScalarTypeName"`;
 
 exports[`lib printer class Printer printCodeType() returns an interface with its fields 1`] = `
-"interface undefined {
+"interface TestInterfaceName {
   one
   two
 }"
@@ -210,8 +210,6 @@ Test Input
 \`input\`
 
 Fields
-
-Interfaces
 "
 `;
 
@@ -235,8 +233,6 @@ Test Object
 \`object\`
 
 Fields
-
-Interfaces
 "
 `;
 

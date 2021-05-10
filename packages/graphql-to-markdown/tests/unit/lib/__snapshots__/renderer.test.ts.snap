@@ -24,24 +24,6 @@ Array [
 ]
 `;
 
-exports[`lib renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "extension": ".md",
-      "name": "generated.md",
-      "path": "output/generated.md",
-      "size": Any<Number>,
-      "type": "file",
-    },
-  ],
-  "name": "output",
-  "path": "output",
-  "size": Any<Number>,
-  "type": "directory",
-}
-`;
-
 exports[`lib renderer class Renderer renderRootTypes() render root type 1`] = `
 Object {
   "children": Array [

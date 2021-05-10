@@ -1,9 +1,10 @@
-const fs = require("fs-extra");
-const path = require("path");
-const { pull } = require("lodash");
-const moment = require("moment");
-const { toSlug, startCase, hasProperty } = require("./utils");
-const { prettifyJavascript } = require("./prettier");
+import * as path from "path";
+import * as fs from "fs-extra";
+import { pull } from "lodash";
+import * as moment from "moment";
+
+import { toSlug, startCase, hasOwnProperty } from "./utils";
+import { prettifyJavascript } from "./prettier";
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
@@ -24,7 +25,7 @@ export class Renderer {
   }
 
   async renderRootTypes(name: string, type: any) {
-    let pages: ({ category: any; slug: any; } | undefined)[] = [];
+    let pages: ({ category: any; slug: any } | undefined)[] = [];
     if (type) {
       const slug = toSlug(name);
       const dirPath = path.join(this.outputDir, slug);
@@ -78,11 +79,11 @@ export class Renderer {
     let graphqlSidebar = [
       { type: "doc", id: path.join(this.baseURL, HOMEPAGE_ID) },
     ];
-    pages.map((page: { category: any; slug: any; }) => {
+    pages.map((page: { category: any; slug: any }) => {
       const category: any = graphqlSidebar.find(
         (entry: any) => "label" in entry && page.category == entry.label,
       );
-      const items = hasProperty(category, "items") ? category?.items : [];
+      const items = hasOwnProperty(category, "items") ? category?.items : [];
       const slug = path.join(this.baseURL, page.slug);
       graphqlSidebar = [
         ...pull(graphqlSidebar, category),
@@ -108,4 +109,4 @@ export class Renderer {
       );
     await fs.outputFile(destLocation, data, "utf8");
   }
-};
+}

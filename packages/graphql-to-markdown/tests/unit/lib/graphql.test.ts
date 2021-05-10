@@ -1,6 +1,6 @@
-const { loadSchema } = require("@graphql-tools/load");
-const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
-const {
+import { loadSchema } from "@graphql-tools/load";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import {
   GraphQLEnumType,
   GraphQLUnionType,
   GraphQLScalarType,
@@ -12,9 +12,10 @@ const {
   GraphQLFloat,
   GraphQLString,
   GraphQLList,
-} = require("graphql");
+  GraphQLSchema,
+} from "graphql";
 
-const {
+import {
   getDefaultValue,
   getFilteredTypeMap,
   getIntrospectionFieldsList,
@@ -24,13 +25,13 @@ const {
   getSchemaMap,
   isParametrizedField,
   isOperation,
-} = require("../../../src/lib/graphql");
+} from "../../../src/lib/graphql";
 
-const SCHEMA_FILE = require.resolve("@data/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
 
 describe("lib", () => {
   describe("graphql", () => {
-    let schema;
+    let schema: GraphQLSchema;
 
     beforeAll(async () => {
       schema = await loadSchema(SCHEMA_FILE, {
@@ -170,7 +171,10 @@ describe("lib", () => {
       });
 
       test("returns default name for unknown", () => {
-        const name = getTypeName({ toString: undefined }, "FooBar");
+        const name = getTypeName(
+          { name: "unknowm", toString: () => undefined },
+          "FooBar",
+        );
         expect(name).toBe("FooBar");
       });
     });

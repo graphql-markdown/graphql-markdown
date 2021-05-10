@@ -1,4 +1,9 @@
-const { toSlug, toArray, hasProperty, hasMethod } = require("@/lib/utils");
+import {
+  toSlug,
+  toArray,
+  hasOwnProperty,
+  hasOwnMethod,
+} from "../../../src/lib/utils";
 
 describe("lib", () => {
   describe("utils", () => {
@@ -12,29 +17,30 @@ describe("lib", () => {
 
     describe("hasProperty()", () => {
       test("returns true if object has property", () => {
-        expect(hasProperty({ foo: "test" }, "foo")).toBeTruthy();
+        expect(hasOwnProperty({ foo: "test" }, "foo")).toBeTruthy();
       });
 
       test("returns false if object has not property", () => {
-        expect(hasProperty({ foo: "test" }, "bar")).toBeFalsy();
-      });
-
-      test("returns false if not an object", () => {
-        expect(hasProperty("test", "bar")).toBeFalsy();
-      });
-
-      test("returns false if null", () => {
-        expect(hasProperty(null, "bar")).toBeFalsy();
+        expect(hasOwnProperty({ foo: "test" }, "bar")).toBeFalsy();
       });
     });
 
-    describe("hasMethod()", () => {
+    describe("hasOwnMethod()", () => {
       test("returns true if object has method", () => {
-        expect(hasMethod({ foo: () => {} }, "foo")).toBeTruthy();
+        expect(
+          hasOwnMethod(
+            {
+              foo: () => {
+                return {};
+              },
+            },
+            "foo",
+          ),
+        ).toBeTruthy();
       });
 
       test("returns false if object has not method", () => {
-        expect(hasMethod({ foo: "test" }, "foo")).toBeFalsy();
+        expect(hasOwnMethod({ foo: "test" }, "foo")).toBeFalsy();
       });
     });
 
@@ -49,10 +55,6 @@ describe("lib", () => {
         };
         const expected = [true, "test", 123, ["one", "two"], { key: "value" }];
         expect(toArray(input)).toEqual(expect.arrayContaining(expected));
-      });
-
-      test("returns undefined if not an object", () => {
-        expect(toArray("test")).toBeUndefined();
       });
     });
   });

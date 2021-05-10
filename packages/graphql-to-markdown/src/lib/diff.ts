@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 import * as path from "path";
 
 import { diff } from "@graphql-inspector/core";
@@ -14,8 +14,8 @@ const COMPARE_METHODS = {
 };
 
 export function getSchemaHash(schema: any) {
-  let printedSchema = printSchema(schema, { commentDescriptions: true });
-  let sum = crypto.createHash("sha256");
+  const printedSchema = printSchema(schema, { commentDescriptions: true });
+  const sum = crypto.createHash("sha256");
   sum.update(printedSchema);
   return sum.digest("hex");
 }

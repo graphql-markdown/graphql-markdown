@@ -1,6 +1,9 @@
 import * as chalk from "chalk";
 
-import {Renderer, Printer,  getSchemaMap,
+import {
+  Renderer,
+  Printer,
+  getSchemaMap,
   loadSchema,
   GraphQLFileLoader,
   UrlLoader,
@@ -8,7 +11,7 @@ import {Renderer, Printer,  getSchemaMap,
   checkSchemaChanges,
   saveSchemaHash,
   saveSchemaFile,
-  round
+  round,
 } from ".";
 
 const time = process.hrtime();
@@ -19,7 +22,7 @@ export async function generateDocFromSchema(
   outputDir: string,
   linkRoot: string,
   diffMethod: string,
-  tmpDir: string
+  tmpDir: string,
 ) {
   return Promise.resolve(
     loadSchema(schemaLocation, {
@@ -71,4 +74,4 @@ export async function generateDocFromSchema(
     await saveSchemaHash(schema, tmpDir);
     await saveSchemaFile(schema, tmpDir);
   });
-};
+}
