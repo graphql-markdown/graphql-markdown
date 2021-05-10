@@ -59,15 +59,17 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
     if (packageDiff.dependencies) {
-      const description = "Dependencies changed with no corresponding lockfile changes:"[
-        COLOR.FAIL
-      ];
+      const description =
+        "Dependencies changed with no corresponding lockfile changes:"[
+          COLOR.FAIL
+        ];
       fail(`${description}\n${getDiffDependencies(packageDiff.dependencies)}`);
     }
     if (packageDiff.devDependencies) {
-      const description = "Dev dependencies changed with no corresponding lockfile changes:"[
-        COLOR.FAIL
-      ];
+      const description =
+        "Dev dependencies changed with no corresponding lockfile changes:"[
+          COLOR.FAIL
+        ];
       fail(
         `${description}\n${getDiffDependencies(packageDiff.devDependencies)}`,
       );

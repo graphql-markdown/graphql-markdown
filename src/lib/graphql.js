@@ -27,7 +27,8 @@ const { UrlLoader } = require("@graphql-tools/url-loader");
 const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
 const { toArray, hasMethod, hasProperty } = require("./utils");
 
-const SCHEMA_EXCLUDE_LIST_PATTERN = /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
+const SCHEMA_EXCLUDE_LIST_PATTERN =
+  /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
   if (isListType(argument.type)) {
