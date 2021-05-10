@@ -51,7 +51,7 @@ module.exports = {
         homepage: "./docs/swapi.md",
       },
     ],
-  ]
+  ],
 };
 ```
 
@@ -65,15 +65,15 @@ You will also need to add a link to your documentation on your site. One way to 
 module.exports = {
   // ...
   navbar: {
-  items: [
+    items: [
       {
         to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
         label: "SWAPI Schema", // change the label with yours
         position: "left",
-      }
+      },
     ],
-  }
-}
+  },
+};
 ```
 
 For more details about navbar, please refer to Docusaurus 2 [documentation](https://v2.docusaurus.io/docs/theme-classic/#navbar-links).
