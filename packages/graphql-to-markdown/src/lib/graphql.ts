@@ -12,11 +12,14 @@ import {
   GraphQLInputObjectType,
   GraphQLFieldMap,
   GraphQLField,
+  GraphQLSchema,
+  GraphQLNamedType,
 } from "graphql";
 
 import { Maybe } from "graphql/jsutils/Maybe";
+import { TypeMap } from "graphql/type/schema";
 
-import { toArray, hasOwnMethod, hasOwnProperty } from ".";
+import { hasOwnMethod, hasOwnProperty } from ".";
 
 export {
   GraphQLEnumType,
@@ -49,7 +52,7 @@ export { JsonFileLoader } from "@graphql-tools/json-file-loader";
 export const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
-export function getDefaultValue(argument: { type: any; defaultValue: any }) {
+export function getDefaultValue(argument: { type: unknown; defaultValue: unknown }) {
   if (isListType(argument.type)) {
     return `[${argument.defaultValue || ""}]`;
   }
@@ -67,16 +70,16 @@ export function getDefaultValue(argument: { type: any; defaultValue: any }) {
 }
 
 export function getFilteredTypeMap(
-  typeMap: { [x: string]: any },
+  typeMap: Record<string, GraphQLNamedType>,
   excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
-) {
-  if (!typeMap) return undefined;
+): Maybe<TypeMap> {
+  if (!typeMap) return;
   return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
-    .reduce((res: any, key) => ((res[key] = typeMap[key]), res), {});
+    .reduce((res: TypeMap, key) => ((res[key] = typeMap[key]), res), {});
 }
 
-export function getIntrospectionFieldsList(queryType: Maybe<GraphQLObjectType<any, any>>) {
+export function getIntrospectionFieldsList(queryType: Maybe<GraphQLObjectType<unknown, unknown>>): Maybe<GraphQLFieldMap<unknown, unknown>> {
   if (!queryType){
     return;
   }
@@ -87,20 +90,20 @@ export function getIntrospectionFieldsList(queryType: Maybe<GraphQLObjectType<an
   return queryType.getFields();
 }
 
-export function getFields(type: { getFields: () => any }) {
+export function getFields(type: GraphQLObjectType<unknown, unknown>): Maybe<GraphQLField<any, unknown, Record<string, unknown>>[]> {
   if (!hasOwnMethod(type, "getFields")) {
-    return [];
+    return;
   }
   const fieldMap = type.getFields();
   return Object.keys(fieldMap).map((name) => fieldMap[name]);
 }
 
 export function getTypeName(
-  type: { name: any; toString: () => any },
+  type: GraphQLObjectType<unknown, unknown>,
   defaultName = "",
-) {
+): Maybe<string> {
   if (!type) {
-    return undefined;
+    return;
   }
   return (
     (hasOwnProperty(type, "name") && type.name) ||
@@ -109,21 +112,16 @@ export function getTypeName(
   );
 }
 
-export function getTypeFromTypeMap(typeMap: any, type: any) {
-  if (!typeMap) return undefined;
+export function getTypeFromTypeMap(typeMap: TypeMap, type: any): Maybe<Record<string, unknown>> {
+  if (!typeMap) return;
   return Object.keys(typeMap)
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res: any, key) => ((res[key] = typeMap[key]), res), {});
 }
 
-export function getSchemaMap(schema: {
-  getTypeMap: () => any;
-  getQueryType: () => any;
-  getMutationType: () => any;
-  getSubscriptionType: () => any;
-  getDirectives: () => any;
-}) {
+export function getSchemaMap(schema: GraphQLSchema) {
   const typeMap = getFilteredTypeMap(schema.getTypeMap());
+  if (!typeMap) return;
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
@@ -134,7 +132,7 @@ export function getSchemaMap(schema: {
     subscriptions: getIntrospectionFieldsList(
       schema.getSubscriptionType && schema.getSubscriptionType(),
     ),
-    directives: toArray(schema.getDirectives && schema.getDirectives()),
+    directives: schema.getDirectives(),
     objects: getTypeFromTypeMap(typeMap, GraphQLObjectType),
     unions: getTypeFromTypeMap(typeMap, GraphQLUnionType),
     interfaces: getTypeFromTypeMap(typeMap, GraphQLInterfaceType),
@@ -144,10 +142,10 @@ export function getSchemaMap(schema: {
   };
 }
 
-export function isParametrizedField(field: GraphQLFieldMap<any, any> | GraphQLField<any, any, { [key: string]: any; }>) {
+export function isParametrizedField(field: GraphQLFieldMap<unknown, unknown> | GraphQLField<unknown, unknown, unknown>) {
   return hasOwnProperty(field, "args") && field.args.length > 0;
 }
 
-export function isOperation(query: GraphQLFieldMap<any, any> | GraphQLField<any, any, { [key: string]: any; }>) {
+export function isOperation(query: GraphQLFieldMap<unknown, unknown> | GraphQLField<unknown, unknown, unknown>) {
   return hasOwnProperty(query, "type");
 }
