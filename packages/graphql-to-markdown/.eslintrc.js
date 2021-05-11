@@ -14,7 +14,6 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "prettier",
   ],
-  plugins: ["jest"],
   settings: {
     "import/resolver": {
       node: {
