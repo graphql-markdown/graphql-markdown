@@ -1,5 +1,12 @@
+scalar SRI @specifiedBy(url: "https://www.w3.org/TR/SRI")
+
 interface Node {
   id: ID!
+}
+
+type Media {
+  url: Url!
+  sri: SRI!
 }
 
 type Tweet implements Node {
@@ -23,7 +30,8 @@ type User implements Node {
     last_name: String
     full_name: String
     name: String @deprecated
-    avatar_url: Url
+    avatar_url: String @deprecated(reason: "Replaced by the `Media` field `avatar`.")
+    avatar: Media
 }
 
 type Stat {
