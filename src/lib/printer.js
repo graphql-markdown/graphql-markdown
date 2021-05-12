@@ -212,6 +212,13 @@ module.exports = class Printer {
     return description;
   }
 
+  printSpecification(type) {
+    if (type.specifiedByURL) {
+      return `${HEADER_SECTION_SUB_LEVEL} Specification\n**<${type.specifiedByURL}>**`;
+    }
+    return "";
+  }
+
   printCode(type) {
     let code = "\n```graphql\n";
     switch (true) {
@@ -252,6 +259,10 @@ module.exports = class Printer {
     const code = this.printCode(type);
 
     let metadata = "";
+    if (isScalarType(type)) {
+      metadata = this.printSpecification(type);
+    }
+
     if (isEnumType(type)) {
       metadata = this.printSection(type.getValues(), "Values");
     }
@@ -267,14 +278,13 @@ module.exports = class Printer {
       }
     }
 
-    if (isOperation(type)) {
+    if (isDirectiveType(type) || isOperation(type)) {
       metadata = this.printSection(type.args, "Arguments");
-      const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-      metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
-    if (isDirectiveType(type)) {
-      metadata = this.printSection(type.args, "Arguments");
+    if (isOperation(type)) {
+      const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+      metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
     return prettifyMarkdown(

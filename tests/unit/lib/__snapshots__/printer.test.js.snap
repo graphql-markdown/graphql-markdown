@@ -124,7 +124,7 @@ exports[`lib printer class Printer printCodeType() returns an object with its fi
 
 exports[`lib printer class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
 
-exports[`lib printer class Printer printDescription() return DEPRECATED tag is deprecated 1`] = `
+exports[`lib printer class Printer printDescription() return DEPRECATED tag if deprecated 1`] = `
 "<sub><sup><Tag color=\\"#ffba00\\">DEPRECATED</Tag> Foobar</sup></sub>
 
 Lorem ipsum"
@@ -188,6 +188,36 @@ exports[`lib printer class Printer printSectionItems() returns Markdown one line
 two
 
 three"
+`;
+
+exports[`lib printer class Printer printType() prints a specification section if scalar as directive @specifiedBy 1`] = `
+"---
+id: scalar
+title: undefined
+---
+
+export const Tag = ({children, color}) => (
+<span
+style={{
+      backgroundColor: color,
+      borderRadius: '2px',
+      color: '#fff',
+      padding: '0.2rem',
+    }}>
+{children}
+</span>
+);
+
+Lorem Ipsum
+
+\`\`\`graphql
+scalar undefined
+\`\`\`
+
+#### Specification
+
+**<http://lorem.ipsum>**
+"
 `;
 
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for input implementing interface 1`] = `

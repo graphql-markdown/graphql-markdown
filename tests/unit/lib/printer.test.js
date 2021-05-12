@@ -375,7 +375,7 @@ describe("lib", () => {
           expect(description).toMatchSnapshot();
         });
 
-        test("return DEPRECATED tag is deprecated", () => {
+        test("return DEPRECATED tag if deprecated", () => {
           const type = {
             description: "Lorem ipsum",
             isDeprecated: true,
@@ -523,6 +523,18 @@ describe("lib", () => {
         test("returns an empty string if no type", () => {
           const printedType = printerInstance.printType("any", null);
           expect(printedType).toBe("");
+        });
+
+        test("prints a specification section if scalar as directive @specifiedBy", () => {
+          const scalarType = {
+            name: "Lorem Scalar",
+            description: "Lorem Ipsum",
+            specifiedByURL: "http://lorem.ipsum",
+            toString: () => "Lorem Scalar To String",
+          };
+          jest.spyOn(graphql, "isScalarType").mockReturnValue(true);
+          const printedType = printerInstance.printType("scalar", scalarType);
+          expect(printedType).toMatchSnapshot();
         });
       });
     });
