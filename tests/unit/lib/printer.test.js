@@ -529,7 +529,7 @@ describe("lib", () => {
           const scalarType = {
             name: "Lorem Scalar",
             description: "Lorem Ipsum",
-            specifiedByURL: "http://lorem.ipsum",
+            specifiedByUrl: "http://lorem.ipsum",
             toString: () => "Lorem Scalar To String",
           };
           jest.spyOn(graphql, "isScalarType").mockReturnValue(true);
