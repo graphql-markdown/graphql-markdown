@@ -23,19 +23,6 @@ const HEADER_SECTION_SUB_LEVEL = "####";
 const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 
-const TAG = `
-export const Tag = ({children, color}) => (
-  <span
-    style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-    {children}
-  </span>
-);`;
-
 module.exports = class Printer {
   constructor(schema, baseURL, linkRoot = "/") {
     this.schema = schema;
@@ -197,7 +184,9 @@ module.exports = class Printer {
 
   printDeprecation(type) {
     if (type.isDeprecated) {
-      return `<sub><sup><Tag color="#ffba00">DEPRECATED</Tag> ${type.deprecationReason}</sup></sub>\n\n`;
+      return `<span class="badge badge--warning">DEPRECATED${
+        type.deprecationReason ? ": " + type.deprecationReason : ""
+      }</span>\n\n`;
     }
     return "";
   }
@@ -210,6 +199,13 @@ module.exports = class Printer {
     }`;
 
     return description;
+  }
+
+  printSpecification(type) {
+    if (type.specifiedByUrl) {
+      return `${HEADER_SECTION_LEVEL} Specification<a className="link" style={{fontSize:'1.5em', paddingLeft:'4px'}} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>\n\n`;
+    }
+    return "";
   }
 
   printCode(type) {
@@ -252,6 +248,10 @@ module.exports = class Printer {
     const code = this.printCode(type);
 
     let metadata = "";
+    if (isScalarType(type)) {
+      metadata = this.printSpecification(type);
+    }
+
     if (isEnumType(type)) {
       metadata = this.printSection(type.getValues(), "Values");
     }
@@ -267,18 +267,17 @@ module.exports = class Printer {
       }
     }
 
-    if (isOperation(type)) {
+    if (isDirectiveType(type) || isOperation(type)) {
       metadata = this.printSection(type.args, "Arguments");
+    }
+
+    if (isOperation(type)) {
       const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
       metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
-    if (isDirectiveType(type)) {
-      metadata = this.printSection(type.args, "Arguments");
-    }
-
     return prettifyMarkdown(
-      `${header}\n\n${TAG}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
+      `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
     );
   }
 };

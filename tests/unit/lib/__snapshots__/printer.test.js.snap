@@ -124,8 +124,8 @@ exports[`lib printer class Printer printCodeType() returns an object with its fi
 
 exports[`lib printer class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
 
-exports[`lib printer class Printer printDescription() return DEPRECATED tag is deprecated 1`] = `
-"<sub><sup><Tag color=\\"#ffba00\\">DEPRECATED</Tag> Foobar</sup></sub>
+exports[`lib printer class Printer printDescription() return DEPRECATED tag if deprecated 1`] = `
+"<span class=\\"badge badge--warning\\">DEPRECATED: Foobar</span>
 
 Lorem ipsum"
 `;
@@ -190,20 +190,24 @@ two
 three"
 `;
 
+exports[`lib printer class Printer printType() prints a specification section if scalar as directive @specifiedBy 1`] = `
+"---
+id: scalar
+title: undefined
+---
+
+Lorem Ipsum
+
+\`\`\`graphql
+scalar undefined
+\`\`\`
+
+### Specification<a className=\\"link\\" style={{fontSize:'1.5em', paddingLeft:'4px'}} target=\\"\\\\_blank\\" href=\\"http://lorem.ipsum\\" title=\\"Specified by http://lorem.ipsum\\">⎘</a>
+"
+`;
+
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for input implementing interface 1`] = `
 "header-input
-
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
 
 Test Input
 
@@ -218,18 +222,6 @@ Interfaces
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for object implementing interface 1`] = `
 "header-object
 
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
-
 Test Object
 
 \`object\`
@@ -242,18 +234,6 @@ Interfaces
 
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for query 1`] = `
 "header-query
-
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
 
 Test Query
 
@@ -268,18 +248,6 @@ Type
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type directive 1`] = `
 "header-directive
 
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
-
 Test Directive
 
 \`directive\`
@@ -290,18 +258,6 @@ Arguments
 
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type enum 1`] = `
 "header-enum
-
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
 
 Test Enum
 
@@ -314,18 +270,6 @@ Values
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type input 1`] = `
 "header-input
 
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
-
 Test Input
 
 \`input\`
@@ -336,18 +280,6 @@ Fields
 
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type interface 1`] = `
 "header-interface
-
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
 
 Test Interface
 
@@ -360,18 +292,6 @@ Fields
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type object 1`] = `
 "header-object
 
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
-
 Test Object
 
 \`object\`
@@ -383,18 +303,6 @@ Fields
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type scalar 1`] = `
 "header-scalar
 
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
-
 Test Scalar
 
 \`scalar\`
@@ -403,18 +311,6 @@ Test Scalar
 
 exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type union 1`] = `
 "header-union
-
-export const Tag = ({children, color}) => (
-<span
-style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>
-{children}
-</span>
-);
 
 Test Union
 
