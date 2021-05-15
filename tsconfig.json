@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "lib": ["esnext"],
+    "target": "esnext",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src"
+    ],
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"],
+}

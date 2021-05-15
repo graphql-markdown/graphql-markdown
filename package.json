@@ -1,12 +1,65 @@
 {
-  "name": "@edno/graphql-markdown",
-  "private": true,
+  "name": "@edno/graphql-to-markdown",
+  "homepage": "https://github.com/edno/graphql-markdown/tree/main/graphql-to-markdown",
+  "bugs": "https://github.com/edno/graphql-markdown/issues",
   "version": "1.0.0",
-  "workspaces": [
-    "./packages/*"
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edno/graphql-markdown.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "cli"
   ],
+  "author": "Gregory Heitz @edno",
+  "scripts": {
+    "test": "tap tests/**/*.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov npm run test",
+    "prettier": "prettier --write \"{src,tests}/**/*.{ts,js,json,md}\"",
+    "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --fix --quiet",
+    "build": "rm -rf build && tsc -b && oclif-dev readme",
+    "demo": "./bin/run",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "dependencies": {
+    "@graphql-inspector/core": "^2.5.0",
+    "@graphql-tools/graphql-file-loader": "^6.2.7",
+    "@graphql-tools/json-file-loader": "^6.2.6",
+    "@graphql-tools/load": "^6.2.8",
+    "@graphql-tools/url-loader": "^6.9.0",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
+    "chalk": "^4.1.1",
+    "graphql": "^15.5.0",
+    "unist-util-visit": "^3.1.0"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
+    "@types/node": "^15.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nyc": "^15.1.0",
+    "tap": "^15.0.9",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "unist-builder": "^3.0.0"
+  },
+  "files": [
+    "/bin",
+    "/dist"
+  ],
+  "oclif": {
+    "bin": "graphql-to-markdown"
+  },
   "engines": {
-    "node": "~14.16.1",
-    "npm": "~7.12.0"
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   }
 }
