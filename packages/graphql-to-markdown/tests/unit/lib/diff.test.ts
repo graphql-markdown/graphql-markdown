@@ -3,17 +3,20 @@ import * as fs from "fs";
 import type { GraphQLSchema } from "graphql";
 import { Change, ChangeType, CriticalityLevel } from "@graphql-inspector/core";
 
-import {
-  checkSchemaChanges,
-  saveSchemaHash,
-  saveSchemaFile,
-} from "../../../src/lib/diff";
-
 jest.mock("../../../src/lib/graphql");
 import * as graphql from "../../../src/lib/graphql";
 
 jest.mock("@graphql-inspector/core");
 import * as inspector from "@graphql-inspector/core";
+
+jest.mock("../../../src/lib/printer");
+// import * as printer from "../../../src/lib/printer";
+
+import {
+  checkSchemaChanges,
+  saveSchemaHash,
+  saveSchemaFile,
+} from "../../../src/lib/diff";
 
 const FOLDER = "output";
 const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
@@ -34,7 +37,11 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        const check = await checkSchemaChanges("schema", FOLDER, "FOOBAR");
+        const check = await checkSchemaChanges(
+          <GraphQLSchema>(<unknown>"schema"),
+          FOLDER,
+          "FOOBAR",
+        );
         expect(check).toBeTruthy();
       });
 
@@ -42,11 +49,11 @@ describe("lib", () => {
         const printSchema = jest.spyOn(graphql, "printSchema");
 
         printSchema.mockImplementationOnce(() => "schema");
-        await saveSchemaHash("SCHEMA", FOLDER);
+        await saveSchemaHash(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
 
         printSchema.mockImplementationOnce(() => "schema-new");
         const check = await checkSchemaChanges(
-          "schema-new",
+          <GraphQLSchema>(<unknown>"schema-new"),
           FOLDER,
           "SCHEMA-HASH",
         );
@@ -56,8 +63,12 @@ describe("lib", () => {
       test("returns false if SCHEMA-HASH comparison is equals", async () => {
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        await saveSchemaHash("SCHEMA", FOLDER);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+        await saveSchemaHash(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
+        const check = await checkSchemaChanges(
+          <GraphQLSchema>(<unknown>"schema"),
+          FOLDER,
+          "SCHEMA-HASH",
+        );
         expect(check).toBeFalsy();
       });
 
@@ -65,7 +76,11 @@ describe("lib", () => {
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
         expect(fs.existsSync(HASH_FILE)).toBeFalsy();
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+        const check = await checkSchemaChanges(
+          <GraphQLSchema>(<unknown>"schema"),
+          FOLDER,
+          "SCHEMA-HASH",
+        );
         expect(check).toBeTruthy();
       });
 
@@ -86,9 +101,9 @@ describe("lib", () => {
           .mockImplementationOnce(() => Promise.resolve({} as GraphQLSchema));
         jest.spyOn(inspector, "diff").mockImplementationOnce(() => changes);
 
-        await saveSchemaFile("SCHEMA", FOLDER);
+        await saveSchemaFile(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
         const check = await checkSchemaChanges(
-          "schema-new",
+          <GraphQLSchema>(<unknown>"schema-new"),
           FOLDER,
           "SCHEMA-DIFF",
         );
@@ -96,16 +111,18 @@ describe("lib", () => {
       });
 
       test("returns false if SCHEMA-DIFF comparison is equals", async () => {
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
         jest
           .spyOn(graphql, "loadSchema")
-          .mockImplementationOnce(() => Promise.resolve({} as GraphQLSchema));
+          .mockImplementation(() => Promise.resolve({} as GraphQLSchema));
         jest.spyOn(inspector, "diff").mockImplementationOnce(() => []);
 
-        await saveSchemaFile("SCHEMA", FOLDER);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+        await saveSchemaFile(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
+        const check = await checkSchemaChanges(
+          <GraphQLSchema>(<unknown>"schema"),
+          FOLDER,
+          "SCHEMA-DIFF",
+        );
         expect(check).toBeFalsy();
       });
 
@@ -119,7 +136,11 @@ describe("lib", () => {
         jest.spyOn(inspector, "diff").mockImplementationOnce(() => []);
 
         expect(fs.existsSync(SCHEMA_FILE)).toBeFalsy();
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+        const check = await checkSchemaChanges(
+          <GraphQLSchema>(<unknown>"schema"),
+          FOLDER,
+          "SCHEMA-DIFF",
+        );
         expect(check).toBeTruthy();
       });
     });
@@ -130,7 +151,7 @@ describe("lib", () => {
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        await saveSchemaFile("SCHEMA", FOLDER);
+        await saveSchemaFile(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
         expect(fs.readFileSync(SCHEMA_FILE, "utf8")).toMatchSnapshot();
       });
     });
@@ -141,7 +162,7 @@ describe("lib", () => {
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        await saveSchemaHash("SCHEMA", FOLDER);
+        await saveSchemaHash(<GraphQLSchema>(<unknown>"SCHEMA"), FOLDER);
         expect(fs.readFileSync(HASH_FILE, "utf8")).toMatchSnapshot();
       });
     });

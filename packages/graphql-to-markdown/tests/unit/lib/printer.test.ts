@@ -1,5 +1,13 @@
 import { capitalize } from "lodash";
-import type { GraphQLNamedType } from "graphql";
+import type {
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLNamedType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLType,
+  GraphQLUnionType,
+} from "graphql";
 
 import { Printer } from "../../../src/lib/printer";
 
@@ -25,7 +33,7 @@ describe("lib", () => {
       const schema = { toString: () => "SCHEMA", getType: (type) => type };
 
       beforeEach(() => {
-        printerInstance = new Printer(schema, baseURL, root);
+        printerInstance = new Printer(<GraphQLSchema>schema, baseURL, root);
       });
 
       afterEach(() => {
@@ -75,8 +83,8 @@ describe("lib", () => {
             .spyOn(printerInstance, "printSectionItems")
             .mockImplementation((content) => content);
           const title = "section title";
-          const content = "section content";
-          const section = printerInstance.printSection(content, title);
+          const content = ["section content"];
+          const section = printerInstance.printSection(<any>content, title);
           expect(printSectionItems).toHaveBeenCalledWith(content);
           expect(section).toMatchSnapshot();
         });
@@ -86,14 +94,18 @@ describe("lib", () => {
             .spyOn(printerInstance, "printSectionItems")
             .mockImplementation((content) => content);
           const title = "section title";
-          const content = "section content";
-          const section = printerInstance.printSection(content, title, "#");
+          const content = ["section content"];
+          const section = printerInstance.printSection(
+            <any>content,
+            title,
+            "#",
+          );
           expect(section).toMatchSnapshot();
         });
 
         test("returns empty string if content is empty", () => {
           const title = "section title";
-          const content = "";
+          const content = [];
           const section = printerInstance.printSection(content, title);
           expect(section).toBe("");
         });
@@ -106,7 +118,7 @@ describe("lib", () => {
             .mockImplementation((content) => content);
 
           const itemList = ["one", "two", "three"];
-          const section = printerInstance.printSectionItems(itemList);
+          const section = printerInstance.printSectionItems(<any>itemList);
           expect(printSectionItem).toHaveBeenCalledTimes(3);
           expect(printSectionItem).toHaveBeenLastCalledWith(
             itemList.pop(),
@@ -116,8 +128,8 @@ describe("lib", () => {
         });
 
         test("returns empty text if not a list", () => {
-          const itemList = "list";
-          const section = printerInstance.printSectionItems(itemList);
+          const itemList = ["list"];
+          const section = printerInstance.printSectionItems(<any>itemList);
           expect(section).toMatch("");
         });
       });
@@ -126,12 +138,10 @@ describe("lib", () => {
         test("returns Markdown #### link section with description", () => {
           const type = { name: "EntityTypeName", description: "Lorem ipsum" };
           jest.spyOn(graphql, "getTypeName").mockReturnValue(type.name);
-          jest
-            .spyOn(graphql, "getNamedType")
-            .mockReturnValue(type.name as unknown as GraphQLNamedType);
+          jest.spyOn(graphql, "getNamedType").mockReturnValue(<any>type.name);
           jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
 
-          const section = printerInstance.printSectionItem(type);
+          const section = printerInstance.printSectionItem(<GraphQLType>type);
           expect(section).toMatchSnapshot();
         });
 
@@ -151,7 +161,9 @@ describe("lib", () => {
             .mockReturnValueOnce(false)
             .mockReturnValueOnce(true);
 
-          const section = printerInstance.printSectionItem(type);
+          const section = printerInstance.printSectionItem(
+            <GraphQLType>(<unknown>type),
+          );
           expect(section).toMatchSnapshot();
         });
 
@@ -167,7 +179,7 @@ describe("lib", () => {
             .spyOn(graphql, "getNamedType")
             .mockImplementation((type: any) => type.name);
           jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
-          jest.spyOn(graphql, "isParametrizedField").mockReturnValueOnce(true);
+          jest.spyOn(graphql, "isParametrized").mockReturnValueOnce(true);
           const printSectionItems = jest.spyOn(
             printerInstance,
             "printSectionItems",
@@ -190,13 +202,13 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
-          const code = printerInstance.printCodeEnum(type);
+          const code = printerInstance.printCodeEnum(<GraphQLEnumType>type);
           expect(code).toMatchSnapshot();
         });
 
         test("returns empty string if not enum type", () => {
           jest.spyOn(graphql, "isEnumType").mockReturnValueOnce(false);
-          const code = printerInstance.printCodeEnum(type);
+          const code = printerInstance.printCodeEnum(<GraphQLEnumType>type);
           expect(code).toBe("");
         });
       });
@@ -212,13 +224,15 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
-          const code = printerInstance.printCodeUnion(type);
+          const code = printerInstance.printCodeUnion(<GraphQLUnionType>type);
           expect(code).toMatchSnapshot();
         });
 
         test("returns empty string if not union type", () => {
           jest.spyOn(graphql, "isUnionType").mockReturnValueOnce(false);
-          const code = printerInstance.printCodeUnion(type);
+          const code = printerInstance.printCodeUnion(
+            <GraphQLScalarType>(<unknown>type),
+          );
           expect(code).toBe("");
         });
       });
@@ -232,7 +246,7 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
-          const code = printerInstance.printCodeScalar(type);
+          const code = printerInstance.printCodeScalar(<GraphQLType>type);
           expect(code).toMatchSnapshot();
         });
       });
@@ -277,28 +291,32 @@ describe("lib", () => {
 
       describe("printCodeField()", () => {
         test("returns a field with its type", () => {
-          const type = { name: "FooBar", type: "string" };
+          const entityType = { name: "FooBar", type: "string" };
           jest
             .spyOn(graphql, "getTypeName")
-            .mockReturnValueOnce(type.name)
-            .mockReturnValueOnce(type.type);
+            .mockReturnValueOnce(entityType.name)
+            .mockReturnValueOnce(entityType.type);
           jest
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("");
-          const code = printerInstance.printCodeField(type);
+          const code = printerInstance.printCodeField(
+            <GraphQLField<unknown, unknown, unknown>>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
 
         test("returns a field with its type and arguments", () => {
-          const type = { name: "FooBar", type: "string" };
+          const entityType = { name: "FooBar", type: "string" };
           jest
             .spyOn(graphql, "getTypeName")
-            .mockReturnValueOnce(type.name)
-            .mockReturnValueOnce(type.type);
+            .mockReturnValueOnce(entityType.name)
+            .mockReturnValueOnce(entityType.type);
           jest
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("(\narg: boolean\n)");
-          const code = printerInstance.printCodeField(type);
+          const code = printerInstance.printCodeField(
+            <GraphQLField<unknown, unknown, unknown>>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
       });
@@ -315,31 +333,44 @@ describe("lib", () => {
         });
 
         test("returns a directive with its arguments", () => {
-          const type = { name: "FooBar", type: "string" };
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(type.name);
+          const entityType = { name: "FooBar", type: "string" };
+          jest
+            .spyOn(graphql, "getTypeName")
+            .mockReturnValueOnce(entityType.name);
           jest
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("(\narg: boolean\n)");
-          const code = printerInstance.printCodeDirective(type);
+          const code = printerInstance.printCodeDirective(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
       });
 
       describe("printCodeType()", () => {
         test("returns an interface with its fields", () => {
-          const type = { name: "TestInterfaceName", fields: ["one", "two"] };
+          const entityType = {
+            name: "TestInterfaceName",
+            fields: ["one", "two"],
+          };
           jest.spyOn(graphql, "isInterfaceType").mockReturnValueOnce(true);
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(type.name);
-          jest.spyOn(graphql, "getFields").mockReturnValueOnce(type.fields);
+          jest
+            .spyOn(graphql, "getTypeName")
+            .mockReturnValueOnce(entityType.name);
+          jest
+            .spyOn(graphql, "getFields")
+            .mockReturnValueOnce(entityType.fields);
           jest
             .spyOn(printerInstance, "printCodeField")
             .mockImplementation((name) => `${name}\n`);
-          const code = printerInstance.printCodeType(type);
+          const code = printerInstance.printCodeType(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
 
         test("returns an object with its fields and interfaces", () => {
-          const type = {
+          const entityType = {
             name: "TestName",
             fields: ["one", "two"],
             getInterfaces: () => [{ name: "TestInterfaceName" }],
@@ -348,11 +379,15 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
-          jest.spyOn(graphql, "getFields").mockReturnValueOnce(type.fields);
+          jest
+            .spyOn(graphql, "getFields")
+            .mockReturnValueOnce(entityType.fields);
           jest
             .spyOn(printerInstance, "printCodeField")
             .mockImplementation((name) => `${name}\n`);
-          const code = printerInstance.printCodeType(type);
+          const code = printerInstance.printCodeType(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
       });
@@ -369,24 +404,30 @@ describe("lib", () => {
 
       describe("printDescription()", () => {
         test("returns the type description text", () => {
-          const type = { description: "Lorem ipsum" };
-          const description = printerInstance.printDescription(type);
+          const entityType = { description: "Lorem ipsum" };
+          const description = printerInstance.printDescription(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(description).toMatchSnapshot();
         });
 
         test("returns the default text if no description", () => {
-          const type = {};
-          const description = printerInstance.printDescription(type);
+          const entityType = {};
+          const description = printerInstance.printDescription(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(description).toMatchSnapshot();
         });
 
         test("return DEPRECATED tag is deprecated", () => {
-          const type = {
+          const entityType = {
             description: "Lorem ipsum",
             isDeprecated: true,
             deprecationReason: "Foobar",
           };
-          const description = printerInstance.printDescription(type);
+          const description = printerInstance.printDescription(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(description).toMatchSnapshot();
         });
       });
@@ -395,40 +436,48 @@ describe("lib", () => {
         test.each(graphQLEntityType)(
           "returns a Markdown graphql codeblock with type %s",
           (type) => {
-            const entityName = `Test${capitalize(type)}`;
+            const entityType = { name: `Test${capitalize(type)}` };
             const typeGuardName = `is${capitalize(type)}Type`;
             jest.spyOn(graphql, typeGuardName as any).mockReturnValueOnce(true);
             let printCode;
             if (["interface", "object", "input"].includes(type)) {
               printCode = jest
                 .spyOn(printerInstance, "printCodeType")
-                .mockReturnValueOnce(entityName);
+                .mockReturnValueOnce(entityType.name);
             } else {
               printCode = jest
                 .spyOn(printerInstance, `printCode${capitalize(type)}`)
-                .mockReturnValueOnce(entityName);
+                .mockReturnValueOnce(<any>entityType.name);
             }
-            const code = printerInstance.printCode(entityName);
-            expect(printCode).toHaveBeenCalledWith(entityName);
+            const code = printerInstance.printCode(
+              <GraphQLType>(<unknown>entityType),
+            );
+            expect(printCode).toHaveBeenCalledWith(entityType);
             expect(code).toMatchSnapshot();
           },
         );
 
         test("returns a Markdown graphql codeblock with type query", () => {
-          const entityName = "TestQuery";
+          const entityType = { name: "TestQuery" };
           jest.spyOn(graphql, "isOperation").mockReturnValueOnce(true);
           const printCode = jest
             .spyOn(printerInstance, "printCodeField")
-            .mockReturnValueOnce(entityName);
-          const code = printerInstance.printCode(entityName as any);
-          expect(printCode).toHaveBeenCalledWith(entityName);
+            .mockReturnValueOnce(entityType.name);
+          const code = printerInstance.printCode(
+            <GraphQLType>(<unknown>entityType),
+          );
+          expect(printCode).toHaveBeenCalledWith(entityType);
           expect(code).toMatchSnapshot();
         });
 
         test("returns a Markdown codeblock with non supported message for unsupported type", () => {
-          const entityName = "TestFooBarType";
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(entityName);
-          const code = printerInstance.printCode(entityName as any);
+          const entityType = { name: "TestFooBarType" };
+          jest
+            .spyOn(graphql, "getTypeName")
+            .mockReturnValueOnce(entityType.name);
+          const code = printerInstance.printCode(
+            <GraphQLType>(<unknown>entityType),
+          );
           expect(code).toMatchSnapshot();
         });
       });
@@ -464,7 +513,7 @@ describe("lib", () => {
               .mockImplementation((_, section) => section);
             const printedType = printerInstance.printType(
               entityType.name,
-              entityType,
+              <GraphQLType>(<unknown>entityType),
             );
             expect(printedType).toMatchSnapshot();
           },
@@ -505,7 +554,7 @@ describe("lib", () => {
               .mockImplementation((_, section) => `${section}\n\n`);
             const printedType = printerInstance.printType(
               entityType.name,
-              entityType,
+              <GraphQLType>(<unknown>entityType),
             );
             expect(printedType).toMatchSnapshot();
           },
@@ -516,7 +565,9 @@ describe("lib", () => {
             name: "query",
           };
           jest.spyOn(graphql, "isOperation").mockReturnValue(true);
-          jest.spyOn(graphql, "getTypeName").mockReturnValue(entityType.name);
+          jest
+            .spyOn(graphql, "getTypeName")
+            .mockReturnValue(<any>entityType.name);
           jest
             .spyOn(printerInstance, "printHeader")
             .mockImplementation((name) => `header-${name}\n\n`);
@@ -533,14 +584,9 @@ describe("lib", () => {
             .mockImplementation((_, section) => `${section}\n\n`);
           const printedType = printerInstance.printType(
             entityType.name,
-            entityType,
+            <GraphQLType>(<unknown>entityType),
           );
           expect(printedType).toMatchSnapshot();
-        });
-
-        test("returns an empty string if no type", () => {
-          const printedType = printerInstance.printType("any", null);
-          expect(printedType).toBe("");
         });
       });
     });

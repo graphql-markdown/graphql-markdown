@@ -3,7 +3,7 @@ import { kebabCase } from "lodash";
 
 export { kebabCase, startCase, round } from "lodash";
 
-export function toSlug(input: string) {
+export function toSlug(input: string): string {
   return slugify(kebabCase(input));
 }
 

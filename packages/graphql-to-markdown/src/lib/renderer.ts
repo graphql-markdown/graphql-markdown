@@ -5,6 +5,7 @@ import { pull } from "lodash";
 import { toSlug, startCase, hasOwnProperty } from "./utils";
 import { prettifyJavascript } from "./prettier";
 import { Printer } from "./printer";
+import { Maybe } from "graphql/jsutils/Maybe";
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
@@ -14,11 +15,11 @@ export class Renderer {
     this.emptyOutputDir();
   }
 
-  emptyOutputDir() {
+  emptyOutputDir(): void {
     fs.emptyDirSync(this.outputDir);
   }
 
-  async renderRootTypes(name: string, type: any) {
+  async renderRootTypes(name: string, type: any): Promise<any[]> {
     let pages: ({ category: string; slug: string } | undefined)[] = [];
     if (type) {
       const slug = toSlug(name);
@@ -43,7 +44,7 @@ export class Renderer {
     return pages;
   }
 
-  async renderTypeEntities(dirPath: string, name: string, type: any) {
+  async renderTypeEntities(dirPath: string, name: string, type: any): Promise<Maybe<any>> {
     if (type) {
       const fileName = toSlug(name);
       const filePath = path.join(dirPath, `${fileName}.mdx`);
@@ -59,7 +60,7 @@ export class Renderer {
     }
   }
 
-  async renderSidebar(pages: any[]) {
+  renderSidebar(pages: any[]): string {
     const filePath = path.join(this.outputDir, SIDEBAR);
     const content = prettifyJavascript(`module.exports = {
           schemaSidebar:
@@ -69,7 +70,7 @@ export class Renderer {
     return path.relative("./", filePath);
   }
 
-  generateSidebar(pages: any[]) {
+  generateSidebar(pages: any[]): any {
     let graphqlSidebar = [
       { type: "doc", id: path.join(this.baseURL, HOMEPAGE_ID) },
     ];
