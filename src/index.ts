@@ -3,7 +3,7 @@ import { Command, flags } from "@oclif/command";
 import * as path from "path";
 import * as os from "os";
 
-import { generateDocFromSchema } from "./lib";
+import { generateMarkdownFromSchema } from "./lib/generator";
 
 function getTempDir() {
   return path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator");
@@ -54,14 +54,7 @@ class GraphQLToMarkdown extends Command {
   public async run(): Promise<void> {
     const { flags } = this.parse(GraphQLToMarkdown);
 
-    await generateDocFromSchema(
-      flags.base,
-      flags.schema,
-      flags.root,
-      flags.link,
-      flags.diff,
-      flags.tmp,
-    );
+    await generateMarkdownFromSchema();
   }
 }
 
