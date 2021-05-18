@@ -36,7 +36,8 @@
     "@oclif/plugin-help": "^3.2.2",
     "chalk": "^4.1.1",
     "eta": "^1.12.1",
-    "graphql": "^15.5.0"
+    "graphql": "^15.5.0",
+    "prettier": "^2.3.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
