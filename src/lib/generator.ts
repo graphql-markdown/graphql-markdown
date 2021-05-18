@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { promises as fs } from "fs";
 import * as path from "path";
 
 import * as Eta from "eta";
@@ -10,7 +10,7 @@ import { loadGraphqlConfig } from "./graphql-config";
 
 const OperationTypes = ["Query", "Mutation", "Subscription"];
 
-export const readSchema = async (): Promise<GraphQL.DocumentNode> => {
+export const loadSchema = async (): Promise<GraphQL.DocumentNode> => {
   const config = await loadGraphqlConfig();
   return await config!.getDefault().getSchema("DocumentNode");
 };
@@ -23,10 +23,6 @@ export const renderNode = async (
   node: any,
   layoutsFolder: string
 ): Promise<string> => {
-  if (typeof node === "undefined") {
-    return;
-  }
-
   const result = (await Eta.renderFile(
     `${layoutsFolder}/index`,
     node
@@ -35,14 +31,14 @@ export const renderNode = async (
   return prettier.format(result, { parser: "markdown" });
 };
 
-export const saveToFile = (
+export const saveToFile = async (
   content: string,
   location: { folder: string; file: string },
   outputFolder: string
-): void => {
+): Promise<void> => {
   const filepath = path.resolve(outputFolder, location.folder, location.file);
 
-  fs.writeFileSync(filepath, content);
+  await fs.writeFile(filepath, content);
 };
 
 export const generateMarkdownFromSchema = async (
@@ -57,17 +53,17 @@ export const generateMarkdownFromSchema = async (
     outputFolder = `${__dirname}/output`;
   }
 
-  const schema = await readSchema();
+  const schema = await loadSchema();
 
   const nodes = parseSchema(schema);
 
-  nodes.forEach((node: any) => {
+  nodes.forEach(async (node: any) => {
     if (OperationTypes.includes(node.name)) {
-      node.fields.forEach((element: any) =>
-        renderNode({ ...element, kind: node.name }, layoutsFolder)
+      node.fields.forEach(async (element: any) =>
+        await renderNode({ ...element, kind: node.name }, layoutsFolder)
       );
     } else {
-      renderNode(node, layoutsFolder);
+      await renderNode(node, layoutsFolder);
     }
   });
 };
