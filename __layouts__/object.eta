@@ -1,3 +1,5 @@
+<%~ includeFile('./partials/description', it) %>
+
 <%~ includeFile('./partials/code', it) %>
 
 <%~ includeFile('./partials/params', { title: "Fields", elements: it.fields || [] }) %>

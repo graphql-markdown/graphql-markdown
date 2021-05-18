@@ -1,3 +1,5 @@
+<%~ includeFile('./partials/description', it) %>
+
 ```graphql
 scalar <%~ it.name %> 
 ```

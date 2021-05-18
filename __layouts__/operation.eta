@@ -7,6 +7,8 @@
   }) : []
 %>
 
+<%~ includeFile('./partials/description', it) %>
+
 ```graphql
 <%~ it.operation %> <%~ it.name %><% if (args.length > 0) { %><%~ `(
   ${args.join("\r\n  ")}

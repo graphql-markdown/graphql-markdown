@@ -1,9 +1,0 @@
-<%~ includeFile('./partials/description', it) %>
-
-<% if (['Query','Mutation','Subscription'].includes(it.kind)) { %>
-<%~ includeFile('./operation', {...it, operation: it.kind.toLowerCase() } ) %>
-<% } else if (it.kind === "ScalarTypeDefinition") { %>
-<%~ includeFile('./scalar', it) %>
-<% } else { %>
-<%~ includeFile('./object', it) %>
-<% } %>
