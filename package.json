@@ -18,7 +18,6 @@
   "author": "Gregory Heitz @edno",
   "scripts": {
     "test": "jest",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov npm run test",
     "prettier": "prettier --write \"{src,tests}/**/*.{ts,js,json,md}\"",
     "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --fix --quiet",
     "build": "rm -rf build && tsc -b && oclif-dev readme",

@@ -41,7 +41,7 @@ class GraphQLToMarkdown extends Command {
     schema: flags.string({
       char: "s",
       description: "schema location",
-      default: "./schema.graphl",
+      default: "./schema.graphql",
     }),
     tmp: flags.string({
       char: "t",
@@ -58,4 +58,4 @@ class GraphQLToMarkdown extends Command {
   }
 }
 
-export = GraphQLToMarkdown;
+export default GraphQLToMarkdown;
