@@ -13,7 +13,7 @@ import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 
 import { visitor } from "./visitor";
 
-const RootTypes = ["Query", "Mutation", "Subscription"];
+const OperationTypes = ["Query", "Mutation", "Subscription"];
 
 export const readSchema = async (schemaLocation: string): Promise<string> => {
   const schema = await loadSchema(schemaLocation, {
@@ -29,7 +29,7 @@ export const parseSchema = (schema) => {
 
 export const renderASTSchema = (node: any): Maybe<string> => {
   if (typeof node === "undefined") return;
-  if ( RootTypes.includes(node.name)) {
+  if ( OperationTypes.includes(node.name)) {
     let data: string[] = [];
     node.fields.forEach((element) => {
       data.push(renderASTSchema({...element, kind: node.name}) || "")
