@@ -1,0 +1,9 @@
+```graphql
+<%~ it.kind %> <%~ it.name %> 
+<% if (it.interfaces) { %>
+<% it.interfaces.forEach(function(i, n) { %>
+<% if (n === 0) { %><%~ " implements "  %><% } %>
+<% i.type %>
+<% }) %>
+<% } %>
+```

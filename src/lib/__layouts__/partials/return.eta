@@ -1,0 +1,7 @@
+<% if (['Query','Mutation','Subscription'].includes(it.kind)) { %>
+### Type
+
+#### [`<%~ it.type %>`]
+
+<%~ it.description || "" %>
+<% } %>

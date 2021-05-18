@@ -1,0 +1,8 @@
+<%
+  var deprecated = it.directives.find(directive => directive.name === "deprecated");
+  var reason = deprecated ? deprecated.arguments.find(argument => argument.name === "reason") : undefined;
+%>
+
+<% if (deprecated) { %>
+<span class="badge badge--warning">DEPRECATED<% if (reason) { %>: <%~ reason.value %><% } %></span>
+<% } %>
