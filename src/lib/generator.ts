@@ -9,9 +9,13 @@ const OperationTypes = ["Query", "Mutation", "Subscription"];
 
 export const saveToFile = async (
   content: string,
-  location: { folder: string; file: string },
+  location: { folder: string; file: string }
 ): Promise<void> => {
-  const filepath = path.resolve(getConfigOption('outputFolder'), location.folder, location.file);
+  const filepath = path.resolve(
+    getConfigOption("outputFolder"),
+    location.folder,
+    location.file
+  );
 
   await fs.writeFile(filepath, content);
 };
@@ -23,8 +27,9 @@ export const generateMarkdownFromSchema = async (): Promise<void> => {
 
   nodes.forEach(async (node: any) => {
     if (OperationTypes.includes(node.name)) {
-      node.fields.forEach(async (element: any) =>
-        await renderNode({ ...element, kind: node.name })
+      node.fields.forEach(
+        async (element: any) =>
+          await renderNode({ ...element, kind: node.name })
       );
     } else {
       await renderNode(node);

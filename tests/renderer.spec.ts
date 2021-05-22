@@ -6,7 +6,10 @@ import kindObject from "./__data__/node/object";
 import kindInput from "./__data__/node/input";
 import kindScalar from "./__data__/node/scalar";
 import kindQuery from "./__data__/node/query";
-import { directiveDeprecated, directiveSpecifiedBy } from "./__data__/node/directive";
+import {
+  directiveDeprecated,
+  directiveSpecifiedBy,
+} from "./__data__/node/directive";
 
 describe("renderNode", () => {
   describe("Query", () => {
@@ -15,7 +18,7 @@ describe("renderNode", () => {
 
       const result = await renderNode(kindQuery);
       expect(result).toMatchSnapshot();
-});
+    });
   });
 
   describe("Mutation", () => {
@@ -64,7 +67,7 @@ describe("renderNode", () => {
 
       const result = await renderNode({
         ...kindScalar,
-        description: undefined
+        description: undefined,
       });
       expect(result).toMatchSnapshot();
     });
@@ -76,10 +79,13 @@ describe("renderNode", () => {
       expect(result).toMatchSnapshot();
     });
 
-    it("should render Scalar with specifiedBy", async () => {
+    it("should render Scalar with directive specifiedBy", async () => {
       expect.hasAssertions();
 
-      const result = await renderNode({...kindScalar, directives: [directiveSpecifiedBy]});
+      const result = await renderNode({
+        ...kindScalar,
+        directives: [directiveSpecifiedBy],
+      });
       expect(result).toMatchSnapshot();
     });
   });

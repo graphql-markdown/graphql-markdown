@@ -3,11 +3,9 @@ import * as prettier from "prettier";
 
 import { getConfigOption } from "./config";
 
-export const renderNode = async (
-  node: any,
-): Promise<string> => {
+export const renderNode = async (node: any): Promise<string> => {
   const result = (await Eta.renderFile(
-    `${getConfigOption('layoutsFolder')}/index`,
+    `${getConfigOption("layoutsFolder")}/index`,
     node
   )) as string;
 
