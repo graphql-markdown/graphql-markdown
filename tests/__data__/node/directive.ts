@@ -1,6 +1,4 @@
 export const directiveSpecifiedBy = {
-  kind: "Directive",
-  name: "specifiedBy",
   arguments: [
     {
       kind: "Argument",
@@ -8,11 +6,11 @@ export const directiveSpecifiedBy = {
       value: "https://www.w3.org/TR/SRI",
     },
   ],
+  kind: "Directive",
+  name: "specifiedBy",
 };
 
 export const directiveDeprecated = {
-  kind: "Directive",
-  name: "deprecated",
   arguments: [
     {
       kind: "Argument",
@@ -20,4 +18,6 @@ export const directiveDeprecated = {
       value: "This is deprecated",
     },
   ],
+  kind: "Directive",
+  name: "deprecated",
 };

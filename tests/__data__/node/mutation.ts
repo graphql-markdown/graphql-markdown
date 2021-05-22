@@ -1,18 +1,17 @@
 export default {
-  type: "Boolean",
-  isNull: true,
-  isList: false,
-  name: "markTweetRead",
   arguments: [
     {
-      type: "ID",
-      isNull: false,
-      isList: false,
-      name: "id",
       directives: [],
+      isList: false,
+      isNull: false,
       kind: "InputValueDefinition",
+      name: "id",
+      type: "ID",
     },
   ],
   directives: [],
+  isList: false,
   kind: "Mutation",
+  name: "markTweetRead",
+  type: "Boolean",
 };

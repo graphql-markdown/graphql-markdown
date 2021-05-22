@@ -1,7 +1,7 @@
-import { Command, flags } from "@oclif/command";
-
-import * as path from "path";
 import * as os from "os";
+import * as path from "path";
+
+import { Command, flags } from "@oclif/command";
 
 import { generateMarkdownFromSchema } from "./lib/generator";
 
@@ -15,8 +15,8 @@ class GraphQLToMarkdown extends Command {
   public static flags = {
     base: flags.string({
       char: "s",
-      description: "base URL for links",
       default: "schema",
+      description: "base URL for links",
     }),
     diff: flags.enum({
       char: "d",
@@ -30,23 +30,23 @@ class GraphQLToMarkdown extends Command {
     help: flags.help({ char: "h" }),
     link: flags.string({
       char: "s",
-      description: "root for links in documentation",
       default: "/",
+      description: "root for links in documentation",
     }),
     root: flags.string({
       char: "s",
-      description: "root folder for doc generation",
       default: "./docs",
+      description: "root folder for doc generation",
     }),
     schema: flags.string({
       char: "s",
-      description: "schema location",
       default: "./schema.graphql",
+      description: "schema location",
     }),
     tmp: flags.string({
       char: "t",
-      description: "set temp dir for schema diff",
       default: getTempDir(),
+      description: "set temp dir for schema diff",
     }),
     version: flags.version({ char: "v" }),
   };

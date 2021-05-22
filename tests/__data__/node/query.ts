@@ -1,18 +1,18 @@
 export default {
-  type: "Tweet",
-  isNull: true,
-  isList: false,
-  name: "Tweet",
   arguments: [
     {
-      type: "ID",
-      isNull: false,
-      isList: false,
-      name: "id",
       directives: [],
+      isList: false,
+      isNull: false,
       kind: "InputValueDefinition",
+      name: "id",
+      type: "ID",
     },
   ],
   directives: [],
+  isList: false,
+  isNull: true,
   kind: "Query",
+  name: "Tweet",
+  type: "Tweet",
 };

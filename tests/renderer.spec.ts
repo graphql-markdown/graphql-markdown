@@ -1,15 +1,15 @@
 import { renderNode } from "../src/lib/renderer";
 
-import kindMutation from "./__data__/node/mutation";
-import kindSubscription from "./__data__/node/subscription";
-import kindObject from "./__data__/node/object";
-import kindInput from "./__data__/node/input";
-import kindScalar from "./__data__/node/scalar";
-import kindQuery from "./__data__/node/query";
 import {
   directiveDeprecated,
   directiveSpecifiedBy,
 } from "./__data__/node/directive";
+import kindInput from "./__data__/node/input";
+import kindMutation from "./__data__/node/mutation";
+import kindObject from "./__data__/node/object";
+import kindQuery from "./__data__/node/query";
+import kindScalar from "./__data__/node/scalar";
+import kindSubscription from "./__data__/node/subscription";
 
 describe("renderNode", () => {
   describe("Query", () => {
@@ -40,7 +40,9 @@ describe("renderNode", () => {
   });
 
   describe("Enum", () => {
-    it("should render Enum", () => {});
+    it("should render Enum", () => {
+      expect.hasAssertions();
+    });
   });
 
   describe("Object", () => {
@@ -67,7 +69,7 @@ describe("renderNode", () => {
 
       const result = await renderNode({
         ...kindScalar,
-        description: undefined,
+        description: undefined, // eslint-disable-line no-undefined
       });
       expect(result).toMatchSnapshot();
     });
@@ -91,10 +93,14 @@ describe("renderNode", () => {
   });
 
   describe("Interface", () => {
-    it("should render Interface", () => {});
+    it("should render Interface", () => {
+      expect.hasAssertions();
+    });
   });
 
   describe("Union", () => {
-    it("should render Union", () => {});
+    it("should render Union", () => {
+      expect.hasAssertions();
+    });
   });
 });

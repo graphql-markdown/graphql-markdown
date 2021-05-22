@@ -1,26 +1,26 @@
 export default {
-  kind: "ObjectTypeDefinition",
-  name: "Subscription",
-  interfaces: [],
   directives: [],
   fields: [
     {
-      type: "Notification",
-      isNull: false,
-      isList: true,
-      name: "Notifications",
       arguments: [
         {
-          type: "Int",
-          isNull: true,
-          isList: false,
-          name: "limit",
           directives: [],
+          isList: false,
+          isNull: true,
           kind: "InputValueDefinition",
+          name: "limit",
+          type: "Int",
         },
       ],
       directives: [],
+      isList: true,
+      isNull: false,
       kind: "FieldDefinition",
+      name: "Notifications",
+      type: "Notification",
     },
   ],
+  interfaces: [],
+  kind: "ObjectTypeDefinition",
+  name: "Subscription",
 };

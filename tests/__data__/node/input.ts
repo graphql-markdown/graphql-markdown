@@ -1,23 +1,23 @@
 export default {
-  kind: "InputObjectTypeDefinition",
-  name: "TweetContent",
   directives: [],
   fields: [
     {
-      type: "String",
-      isNull: true,
-      isList: false,
-      name: "content",
       directives: [],
+      isList: false,
+      isNull: true,
       kind: "InputValueDefinition",
+      name: "content",
+      type: "String",
     },
     {
-      type: "String",
-      isNull: true,
-      isList: false,
-      name: "body",
       directives: [],
+      isList: false,
+      isNull: true,
       kind: "InputValueDefinition",
+      name: "body",
+      type: "String",
     },
   ],
+  kind: "InputObjectTypeDefinition",
+  name: "TweetContent",
 };

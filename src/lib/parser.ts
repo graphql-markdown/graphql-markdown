@@ -1,5 +1,4 @@
 import {
-  visit,
   ArgumentNode,
   BooleanValueNode,
   DirectiveDefinitionNode,
@@ -11,67 +10,28 @@ import {
   IntValueNode,
   ListTypeNode,
   ListValueNode,
-  NamedTypeNode,
   NameNode,
+  NamedTypeNode,
   NonNullTypeNode,
-  NullValueNode,
   ObjectFieldNode,
   ObjectValueNode,
   StringValueNode,
   TypeDefinitionNode,
+  visit,
 } from "graphql";
 
 const visitor = {
-  Document: ({ definitions }: DocumentNode) => definitions,
-  Name: ({ value }: NameNode) => value,
-  NamedType: ({ name }: NamedTypeNode) => {
-    return {
-      type: name,
-      isNull: true,
-      isList: false,
-    };
+  Argument: (node: ArgumentNode) => {
+    return node;
   },
-  NonNullType: ({ type }: NonNullTypeNode) => {
-    return {
-      ...type,
-      isNull: false,
-    };
+  BooleanValue: ({ value }: BooleanValueNode) => {
+    return value;
   },
-  ListType: ({ type }: ListTypeNode) => {
-    return {
-      ...type,
-      isList: true,
-    };
+  Document: ({ definitions }: DocumentNode) => {
+    return definitions;
   },
-  StringValue: ({ value }: StringValueNode) => value,
-  IntValue: ({ value }: IntValueNode) => value,
-  FloatValue: ({ value }: FloatValueNode) => value,
-  BooleanValue: ({ value }: BooleanValueNode) => value,
-  NullValue: (_: NullValueNode) => "null",
-  EnumValue: ({ value }: EnumValueNode) => value,
-  ListValue: ({ values }: ListValueNode) => values,
-  ObjectValue: ({ fields }: ObjectValueNode) => fields,
-  ObjectField: (node: ObjectFieldNode) => node,
-  TypeSystemDefinitionNode: (
-    node: TypeDefinitionNode | DirectiveDefinitionNode
-  ) => node,
-  Argument: (node: ArgumentNode) => node,
-  InputValueDefinition: ({
-    type,
-    name,
-    directives,
-    defaultValue,
-    kind,
-    description,
-  }: InputValueDefinitionNode) => {
-    return {
-      ...type,
-      name,
-      directives,
-      defaultValue,
-      kind,
-      description: description,
-    };
+  EnumValue: ({ value }: EnumValueNode) => {
+    return value;
   },
   FieldDefinition: ({
     type,
@@ -83,12 +43,78 @@ const visitor = {
   }: FieldDefinitionNode) => {
     return {
       ...type,
-      name,
       arguments: args,
+      description: description,
       directives,
       kind,
-      description: description,
+      name,
     };
+  },
+  FloatValue: ({ value }: FloatValueNode) => {
+    return value;
+  },
+  InputValueDefinition: ({
+    type,
+    name,
+    directives,
+    defaultValue,
+    kind,
+    description,
+  }: InputValueDefinitionNode) => {
+    return {
+      ...type,
+      defaultValue,
+      description: description,
+      directives,
+      kind,
+      name,
+    };
+  },
+  IntValue: ({ value }: IntValueNode) => {
+    return value;
+  },
+  ListType: ({ type }: ListTypeNode) => {
+    return {
+      ...type,
+      isList: true,
+    };
+  },
+  ListValue: ({ values }: ListValueNode) => {
+    return values;
+  },
+  Name: ({ value }: NameNode) => {
+    return value;
+  },
+  NamedType: ({ name }: NamedTypeNode) => {
+    return {
+      isList: false,
+      isNull: true,
+      type: name,
+    };
+  },
+  NonNullType: ({ type }: NonNullTypeNode) => {
+    return {
+      ...type,
+      isNull: false,
+    };
+  },
+  NullValue: () => {
+    return "null";
+  },
+  ObjectField: (node: ObjectFieldNode) => {
+    return node;
+  },
+  ObjectValue: ({ fields }: ObjectValueNode) => {
+    return fields;
+  },
+
+  StringValue: ({ value }: StringValueNode) => {
+    return value;
+  },
+  TypeSystemDefinitionNode: (
+    node: TypeDefinitionNode | DirectiveDefinitionNode
+  ) => {
+    return node;
   },
 };
 
