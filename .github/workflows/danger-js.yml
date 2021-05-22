@@ -1,4 +1,5 @@
 name: "Danger JS"
+
 on: pull_request
 
 jobs:
@@ -10,10 +11,5 @@ jobs:
     - name: Checkout Code Base
       uses: actions/checkout@v2
 
-    - name: Install modules
-      run: yarn
-
-    - name: Danger
-      run: yarn danger:ci
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Danger JS Action
+      uses: danger/danger-js@9.1.8
