@@ -1,5 +1,5 @@
 const error = 2;
-const indent = 2;
+
 const defaultExtends = [
   "eslint:recommended",
   "plugin:@typescript-eslint/recommended",
@@ -8,31 +8,31 @@ const defaultExtends = [
 ];
 
 module.exports = {
-  root: true,
-  parser: "@typescript-eslint/parser",
   env: {
-    node: true,
+    commonjs: true,
     es6: true,
     jest: true,
-    commonjs: true,
     "jest/globals": true,
+    node: true,
   },
   extends: defaultExtends,
-  plugins: ["@typescript-eslint", "jest"],
-  parserOptions: {
-    ecmaVersion: 11,
-    sourceType: "module",
-  },
   overrides: [
     {
-      files: ["tests/**/*.ts"],
       extends: [
         ...defaultExtends,
         "plugin:jest/recommended",
         "plugin:jest/style",
       ],
+      files: ["tests/**/*.ts"],
     },
   ],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 11,
+    sourceType: "module",
+  },
+  plugins: ["@typescript-eslint", "jest"],
+  root: true,
   rules: {
     "array-bracket-spacing": error,
     "array-element-newline": [error, "consistent"],
@@ -58,7 +58,6 @@ module.exports = {
     "func-names": error,
     "func-style": [error, "declaration", { allowArrowFunctions: true }],
     "function-call-argument-newline": [error, "consistent"],
-    indent: ["error", indent],
     "init-declarations": error,
     "linebreak-style": error,
     "new-parens": error,

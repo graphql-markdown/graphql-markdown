@@ -1,13 +1,14 @@
 require("colors");
-import { danger, fail, warn, schedule } from "danger";
+
 import * as Diff from "diff";
+import { danger, fail, schedule, warn } from "danger";
 import { filter } from "lodash";
 
 const COLOR = {
   ADDED: "green",
-  REMOVED: "red",
   COMMON: "grey",
   FAIL: "red",
+  REMOVED: "red",
   WARN: "yellow",
 };
 
@@ -33,14 +34,14 @@ const getDiffDependencies = (dependencies) => {
     const color = part.added
       ? COLOR.ADDED
       : part.removed
-      ? COLOR.REMOVED
-      : COLOR.COMMON;
+        ? COLOR.REMOVED
+        : COLOR.COMMON;
     colorDiff = `${colorDiff} ${part.value[color]}`;
   });
   return colorDiff;
 };
 
-// rule-yarn-lock-detected
+// Rule-yarn-lock-detected
 if (yarnLock.modified || yarnLock.created) {
   fail(
     `\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`[
@@ -49,12 +50,12 @@ if (yarnLock.modified || yarnLock.created) {
   );
 }
 
-// rule-yarn-lock-deleted
+// Rule-yarn-lock-deleted
 if (packageLock.deleted) {
   fail(`This PR deleted the \`${PACKAGE_LOCK}\` file.`[COLOR.FAIL]);
 }
 
-// rule-yarn-lock-not-updated
+// Rule-yarn-lock-not-updated
 if (packageJson.modified) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
@@ -77,43 +78,47 @@ if (packageJson.modified) {
   });
 }
 
-// rule-license-file-modified
+// Rule-license-file-modified
 if (licenseFile.modified) {
   warn(`This PR modified the \`${LICENSE_FILE}\` file.`[COLOR.WARN]);
 }
 
-// rule-license-file-deleted
+// Rule-license-file-deleted
 if (licenseFile.deleted) {
   fail(`This PR deleted the \`${LICENSE_FILE}\` file.`[COLOR.FAIL]);
 }
 
-// rule-readme-file-deleted
+// Rule-readme-file-deleted
 if (readmeFile.deleted) {
   fail(`This PR deleted the \`${README_FILE}\` file.`[COLOR.FAIL]);
 }
 
 const jestSnapshots = {
-  modified: filter(danger.git.modified_files, (file) =>
-    file.match(JEST_SNAPSHOT)
-  ),
-  deleted: filter(danger.git.deleted_files, (file) =>
-    file.match(JEST_SNAPSHOT)
-  ),
+  deleted: filter(danger.git.deleted_files, (file) => {
+    {
+      return file.match(JEST_SNAPSHOT);
+    }
+  }),
+  modified: filter(danger.git.modified_files, (file) => {
+    {
+      return file.match(JEST_SNAPSHOT);
+    }
+  }),
 };
 
-// rule-jest-snapshot-modified
+// Rule-jest-snapshot-modified
 if (jestSnapshots.modified.length > 0) {
   const description = "This PR modified some Jest snapshot file/s:"[COLOR.WARN];
   warn(`${description}\n - ${jestSnapshots.modified.join("\n - ")}`);
 }
 
-// rule-jest-snapshot-deleted
+// Rule-jest-snapshot-deleted
 if (jestSnapshots.deleted.length > 0) {
   const description = "This PR deleted some Jest snapshot file/s:"[COLOR.WARN];
   warn(`${description}\n - ${jestSnapshots.deleted.join("\n - ")}`);
 }
 
-// rule-danger-file-modified
+// Rule-danger-file-modified
 if (dangerFile.modified) {
   warn(`This PR modified the \`${DANGER_FILE}\` file.`[COLOR.WARN]);
 }
