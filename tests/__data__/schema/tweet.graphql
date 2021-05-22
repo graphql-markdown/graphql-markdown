@@ -9,7 +9,6 @@ type Media {
   sri: SRI!
 }
 
-
 # The tweet
 type Tweet implements Node {
     id: ID!
