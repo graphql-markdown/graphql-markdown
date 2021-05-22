@@ -19,7 +19,7 @@
   "scripts": {
     "test": "jest",
     "prettier": "prettier --write \"{src,tests}/**/*.{ts,js,json,md}\"",
-    "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --fix --quiet",
+    "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --quiet",
     "build": "rm -rf build && tsc -b && oclif-dev readme",
     "demo": "./bin/run",
     "version": "oclif-dev readme && git add README.md"
