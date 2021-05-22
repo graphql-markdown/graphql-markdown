@@ -112,7 +112,7 @@ const visitor = {
     return value;
   },
   TypeSystemDefinitionNode: (
-    node: TypeDefinitionNode | DirectiveDefinitionNode
+    node: DirectiveDefinitionNode | TypeDefinitionNode
   ) => {
     return node;
   },

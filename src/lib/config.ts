@@ -16,7 +16,7 @@ const defaultOptions = {
   layoutsFolder: `${process.cwd()}/__layouts__`,
   outputFolder: `${process.cwd()}/output`,
 };
-const setFileLoaderExtension: GraphQLExtensionDeclaration = (api) => {
+const setFileLoaderExtension: GraphQLExtensionDeclaration = (api: any) => {
   [new GraphQLFileLoader(), new JsonFileLoader(), new UrlLoader()].forEach(
     (loader) => {
       return api.loaders.schema.register(loader);
@@ -30,7 +30,7 @@ const configuration = ((): GraphQLProjectConfig => {
   }).getDefault();
 })();
 
-export const getConfigOption = (name: string): Maybe<string> => {
+export const getConfigOption = (name: string): string => {
   const extensionConfig = configuration.extension(EXTENSION_NAME);
   if (typeof extensionConfig[name] === "undefined") {
     return defaultOptions[name];
@@ -39,7 +39,7 @@ export const getConfigOption = (name: string): Maybe<string> => {
 };
 
 export const loadSchemaFromConfig = (): DocumentNode => {
-  return configuration!.getSchemaSync("DocumentNode");
+  return configuration.getSchemaSync("DocumentNode");
 };
 
 export default configuration;
