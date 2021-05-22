@@ -1,4 +1,5 @@
 import {
+  visit,
   ArgumentNode,
   BooleanValueNode,
   DirectiveDefinitionNode,
@@ -20,7 +21,7 @@ import {
   TypeDefinitionNode,
 } from "graphql";
 
-export const visitor: any = {
+const visitor = {
   Document: ({ definitions }: DocumentNode) => definitions,
   Name: ({ value }: NameNode) => value,
   NamedType: ({ name }: NamedTypeNode) => {
@@ -89,4 +90,8 @@ export const visitor: any = {
       description: description,
     };
   },
+};
+
+export const parseSchema = (schema: DocumentNode): any => {
+  return visit(schema, { leave: visitor });
 };
