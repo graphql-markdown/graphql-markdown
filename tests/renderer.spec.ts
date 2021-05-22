@@ -5,11 +5,17 @@ import kindSubscription from "./__data__/node/subscription";
 import kindObject from "./__data__/node/object";
 import kindInput from "./__data__/node/input";
 import kindScalar from "./__data__/node/scalar";
+import kindQuery from "./__data__/node/query";
 import { directiveDeprecated, directiveSpecifiedBy } from "./__data__/node/directive";
 
 describe("renderNode", () => {
   describe("Query", () => {
-    it("should render Query", () => {});
+    it("should render Query", async () => {
+      expect.hasAssertions();
+
+      const result = await renderNode(kindQuery);
+      expect(result).toMatchSnapshot();
+});
   });
 
   describe("Mutation", () => {

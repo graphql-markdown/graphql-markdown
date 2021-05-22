@@ -49,6 +49,25 @@ ObjectTypeDefinition Media
 "
 `;
 
+exports[`renderNode Query should render Query 1`] = `
+"## Query \`Tweet\`
+
+\`\`\`graphql
+query Tweet(
+  id: ID!
+): Tweet
+\`\`\`
+
+### Arguments
+
+#### id (\`ID\`)
+
+### Type
+
+#### [\`Tweet\`]
+"
+`;
+
 exports[`renderNode Scalar should render Scalar with description supporting Markdown notation 1`] = `
 "## ScalarTypeDefinition \`SRI\`
 
