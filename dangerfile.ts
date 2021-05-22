@@ -1,7 +1,7 @@
 require("colors");
-const { danger, fail, warn, schedule } = require("danger");
-const Diff = require("diff");
-const { filter } = require("lodash");
+import { danger, fail, warn, schedule } from "danger";
+import * as Diff from "diff";
+import { filter } from "lodash";
 
 const COLOR = {
   ADDED: "green",
@@ -40,36 +40,38 @@ const getDiffDependencies = (dependencies) => {
   return colorDiff;
 };
 
-// rule-package-lock-detected
-if (packageLock.modified || packageLock.created) {
+// rule-yarn-lock-detected
+if (yarnLock.modified || yarnLock.created) {
   fail(
-    `\`${PACKAGE_LOCK}\` detected, you must used 'yarn' for dependencies.`[
+    `\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`[
       COLOR.FAIL
-    ],
+    ]
   );
 }
 
 // rule-yarn-lock-deleted
-if (yarnLock.deleted) {
-  fail(`This PR deleted the \`${YARN_LOCK}\` file.`[COLOR.FAIL]);
+if (packageLock.deleted) {
+  fail(`This PR deleted the \`${PACKAGE_LOCK}\` file.`[COLOR.FAIL]);
 }
 
 // rule-yarn-lock-not-updated
-if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
+if (packageJson.modified) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
     if (packageDiff.dependencies) {
-      const description = "Dependencies changed with no corresponding lockfile changes:"[
-        COLOR.FAIL
-      ];
+      const description =
+        "Dependencies changed with no corresponding lockfile changes:"[
+          COLOR.FAIL
+        ];
       fail(`${description}\n${getDiffDependencies(packageDiff.dependencies)}`);
     }
     if (packageDiff.devDependencies) {
-      const description = "Dev dependencies changed with no corresponding lockfile changes:"[
-        COLOR.FAIL
-      ];
+      const description =
+        "Dev dependencies changed with no corresponding lockfile changes:"[
+          COLOR.FAIL
+        ];
       fail(
-        `${description}\n${getDiffDependencies(packageDiff.devDependencies)}`,
+        `${description}\n${getDiffDependencies(packageDiff.devDependencies)}`
       );
     }
   });
@@ -92,10 +94,10 @@ if (readmeFile.deleted) {
 
 const jestSnapshots = {
   modified: filter(danger.git.modified_files, (file) =>
-    file.match(JEST_SNAPSHOT),
+    file.match(JEST_SNAPSHOT)
   ),
   deleted: filter(danger.git.deleted_files, (file) =>
-    file.match(JEST_SNAPSHOT),
+    file.match(JEST_SNAPSHOT)
   ),
 };
 
