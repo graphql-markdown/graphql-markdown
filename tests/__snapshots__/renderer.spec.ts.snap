@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renderNode Input should render Input 1`] = `
+"## InputObjectTypeDefinition \`TweetContent\`
+
+\`\`\`graphql
+InputObjectTypeDefinition TweetContent
+\`\`\`
+
+### Fields
+
+#### content (\`String\`)
+
+#### body (\`String\`)
+"
+`;
+
+exports[`renderNode Mutation should render Mutation 1`] = `
+"## Mutation \`markTweetRead\`
+
+\`\`\`graphql
+mutation markTweetRead(
+  id: ID!
+): Boolean
+\`\`\`
+
+### Arguments
+
+#### id (\`ID\`)
+
+### Type
+
+#### [\`Boolean\`]
+"
+`;
+
+exports[`renderNode Object should render Object 1`] = `
+"## ObjectTypeDefinition \`Media\`
+
+\`\`\`graphql
+ObjectTypeDefinition Media
+\`\`\`
+
+### Fields
+
+#### url (\`Url\`)
+
+#### sri (\`SRI\`)
+"
+`;
+
+exports[`renderNode Scalar should render Scalar with description supporting Markdown notation 1`] = `
+"## ScalarTypeDefinition \`SRI\`
+
+An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
+
+\`\`\`graphql
+scalar SRI
+\`\`\`
+"
+`;
+
+exports[`renderNode Scalar should render Scalar with specifiedBy 1`] = `
+"## ScalarTypeDefinition \`SRI\`
+
+An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
+
+\`\`\`graphql
+scalar SRI
+\`\`\`
+
+#### Specification<a className=\\"link\\" style=\\"font-size:'1.5em', padding-left:'4px'\\" target=\\"_blank\\" href=\\"https://www.w3.org/TR/SRI\\" title=\\"Specified by https://www.w3.org/TR/SRI\\">⎘</a>
+"
+`;
+
+exports[`renderNode Scalar should render Scalar without description 1`] = `
+"## ScalarTypeDefinition \`SRI\`
+
+\`\`\`graphql
+scalar SRI
+\`\`\`
+"
+`;
+
+exports[`renderNode Subscription should render Subscription 1`] = `
+"## ObjectTypeDefinition \`Subscription\`
+
+\`\`\`graphql
+ObjectTypeDefinition Subscription
+\`\`\`
+
+### Fields
+
+#### Notifications (\`Notification\`)
+"
+`;

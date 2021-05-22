@@ -8,8 +8,8 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 const EXTENSION_NAME = "graphql-markdown";
 
 const defaultOptions = {
-  layoutsFolder: `${__dirname}/__layouts__`,
-  outputFolder: `${__dirname}/output`,
+  layoutsFolder: `${process.cwd()}/__layouts__`,
+  outputFolder: `${process.cwd()}/output`,
   excludes: []
 }
 
@@ -34,8 +34,8 @@ export const getConfigOption = (name: string): Maybe<string> => {
   return extensionConfig[name];
 }
 
-export const loadSchemaFromConfig = async (): Promise<DocumentNode> => {
-  return await configuration!.getSchema("DocumentNode");
+export const loadSchemaFromConfig = (): DocumentNode => {
+  return configuration!.getSchemaSync("DocumentNode");
 };
 
 const configuration = loadDefaultConfig();
