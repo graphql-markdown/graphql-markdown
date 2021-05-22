@@ -1,5 +1,3 @@
-const { builtinModules } = require("module");
-
 const defaultExtends = [
   "eslint:recommended",
   "plugin:@typescript-eslint/recommended",
