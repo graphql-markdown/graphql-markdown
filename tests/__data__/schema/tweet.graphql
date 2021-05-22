@@ -4,10 +4,24 @@ interface Node {
   id: ID!
 }
 
+enum MediaType {
+  # Any supported image type
+  IMAGE
+  # Required media player
+  VIDEO
+}
+
 type Media {
   url: Url!
   sri: SRI!
+  type: MediaType!
 }
+
+type Error {
+  message: String!
+}
+
+union TweetResponse = Tweet | Error
 
 # The tweet
 type Tweet implements Node {
@@ -57,8 +71,8 @@ scalar Url
 scalar Date
 
 type Query {
-    Tweet(id: ID!): Tweet
-    Tweets(limit: Int = 5, skip: Int = 0, sort_field: String, sort_order: String = "ASC"): [Tweet]!
+    Tweet(id: ID!): TweetResponse
+    Tweets(limit: Int = 5, skip: Int = 0, sort_field: String, sort_order: String = "ASC"): [TweetResponse]!
     TweetsMeta: Meta @deprecated
     User(id: ID!): User @deprecated(reason: "Use `Users`.")
     Users(id: [ID!]!): [User]!

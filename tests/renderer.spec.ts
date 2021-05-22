@@ -4,12 +4,15 @@ import {
   directiveDeprecated,
   directiveSpecifiedBy,
 } from "./__data__/node/directive";
+import kindEnum from "./__data__/node/enum";
 import kindInput from "./__data__/node/input";
+import kindInterface from "./__data__/node/interface";
 import kindMutation from "./__data__/node/mutation";
 import kindObject from "./__data__/node/object";
 import kindQuery from "./__data__/node/query";
 import kindScalar from "./__data__/node/scalar";
 import kindSubscription from "./__data__/node/subscription";
+import kindUnion from "./__data__/node/union";
 
 describe("renderNode", () => {
   describe("Query", () => {
@@ -40,8 +43,11 @@ describe("renderNode", () => {
   });
 
   describe("Enum", () => {
-    it("should render Enum", () => {
+    it("should render Enum", async () => {
       expect.hasAssertions();
+
+      const result = await renderNode(kindEnum);
+      expect(result).toMatchSnapshot();
     });
   });
 
@@ -93,14 +99,20 @@ describe("renderNode", () => {
   });
 
   describe("Interface", () => {
-    it("should render Interface", () => {
+    it("should render Interface", async () => {
       expect.hasAssertions();
+
+      const result = await renderNode(kindInterface);
+      expect(result).toMatchSnapshot();
     });
   });
 
   describe("Union", () => {
-    it("should render Union", () => {
+    it("should render Union", async () => {
       expect.hasAssertions();
+
+      const result = await renderNode(kindUnion);
+      expect(result).toMatchSnapshot();
     });
   });
 });

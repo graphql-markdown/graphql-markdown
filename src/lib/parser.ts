@@ -3,6 +3,7 @@ import {
   BooleanValueNode,
   DirectiveDefinitionNode,
   DocumentNode,
+  EnumValueDefinitionNode,
   EnumValueNode,
   FieldDefinitionNode,
   FloatValueNode,
@@ -33,6 +34,9 @@ const visitor = {
   EnumValue: ({ value }: EnumValueNode) => {
     return value;
   },
+  EnumValueDefinition: (node: EnumValueDefinitionNode) => {
+    return node;
+  },
   FieldDefinition: ({
     type,
     name,
@@ -44,7 +48,7 @@ const visitor = {
     return {
       ...type,
       arguments: args,
-      description: description,
+      description,
       directives,
       kind,
       name,
@@ -64,7 +68,7 @@ const visitor = {
     return {
       ...type,
       defaultValue,
-      description: description,
+      description,
       directives,
       kind,
       name,
@@ -110,6 +114,9 @@ const visitor = {
 
   StringValue: ({ value }: StringValueNode) => {
     return value;
+  },
+  TypeDefinitionNode: (node: TypeDefinitionNode) => {
+    return node;
   },
   TypeSystemDefinitionNode: (
     node: DirectiveDefinitionNode | TypeDefinitionNode

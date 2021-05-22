@@ -4,7 +4,6 @@ import {
   loadConfigSync,
 } from "graphql-config";
 import { DocumentNode } from "graphql";
-import { Maybe } from "graphql/jsutils/Maybe";
 
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
@@ -13,8 +12,8 @@ import { UrlLoader } from "@graphql-tools/url-loader";
 const EXTENSION_NAME = "graphql-markdown";
 const defaultOptions = {
   excludes: [],
-  layoutsFolder: `${process.cwd()}/__layouts__`,
-  outputFolder: `${process.cwd()}/output`,
+  layoutsFolder: `${process.cwd()}/__layouts__` as const,
+  outputFolder: `${process.cwd()}/output` as const,
 };
 const setFileLoaderExtension: GraphQLExtensionDeclaration = (api: any) => {
   [new GraphQLFileLoader(), new JsonFileLoader(), new UrlLoader()].forEach(

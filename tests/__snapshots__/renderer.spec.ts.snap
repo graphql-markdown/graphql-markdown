@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renderNode Enum should render Enum 1`] = `
+"## EnumTypeDefinition \`MediaType\`
+
+\`\`\`graphql
+EnumTypeDefinition MediaType
+\`\`\`
+"
+`;
+
 exports[`renderNode Input should render Input 1`] = `
 "## InputObjectTypeDefinition \`TweetContent\`
 
@@ -15,13 +24,26 @@ InputObjectTypeDefinition TweetContent
 "
 `;
 
+exports[`renderNode Interface should render Interface 1`] = `
+"## InterfaceTypeDefinition \`Node\`
+
+\`\`\`graphql
+InterfaceTypeDefinition Node
+\`\`\`
+
+### Fields
+
+#### id (\`ID\`)
+"
+`;
+
 exports[`renderNode Mutation should render Mutation 1`] = `
 "## Mutation \`markTweetRead\`
 
 \`\`\`graphql
 mutation markTweetRead(
   id: ID!
-): Boolean
+): Boolean!
 \`\`\`
 
 ### Arguments
@@ -111,5 +133,14 @@ ObjectTypeDefinition Subscription
 ### Fields
 
 #### Notifications (\`Notification\`)
+"
+`;
+
+exports[`renderNode Union should render Union 1`] = `
+"## UnionTypeDefinition \`TweetResponse\`
+
+\`\`\`graphql
+UnionTypeDefinition TweetResponse
+\`\`\`
 "
 `;
