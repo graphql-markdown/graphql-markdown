@@ -22,6 +22,16 @@ describe("renderNode", () => {
       const result = await renderNode(kindQuery);
       expect(result).toMatchSnapshot();
     });
+
+    it("should render Query with directive deprecated", async () => {
+      expect.hasAssertions();
+
+      const result = await renderNode({
+        ...kindQuery,
+        directives: [directiveDeprecated],
+      });
+      expect(result).toMatchSnapshot();
+    });
   });
 
   describe("Mutation", () => {
@@ -31,6 +41,16 @@ describe("renderNode", () => {
       const result = await renderNode(kindMutation);
       expect(result).toMatchSnapshot();
     });
+
+    it("should render Mutation with directive deprecated", async () => {
+      expect.hasAssertions();
+
+      const result = await renderNode({
+        ...kindMutation,
+        directives: [directiveDeprecated],
+      });
+      expect(result).toMatchSnapshot();
+    });
   });
 
   describe("Subscription", () => {
@@ -38,6 +58,16 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindSubscription);
+      expect(result).toMatchSnapshot();
+    });
+
+    it("should render Subscription with directive deprecated", async () => {
+      expect.hasAssertions();
+
+      const result = await renderNode({
+        ...kindSubscription,
+        directives: [directiveDeprecated],
+      });
       expect(result).toMatchSnapshot();
     });
   });
