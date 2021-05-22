@@ -14,35 +14,5 @@ jobs:
     - name: Install modules
       run: yarn
 
-    - name: Run Unit Tests
-      run: yarn test:ci --projects tests/unit
-
-    - name: Run Integration Tests
-      run: yarn test:ci --projects tests/integration
-
-    - name: Check Code Coverage
-      run: yarn test:coverage
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.7.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout Code Base
-        uses: actions/checkout@v2
-
-      - name: Build test container
-        run: docker-compose build
-
-      - name: Run End-to-End Tests
-        run: yarn test:e2e --runInBand --noStackTrace --ci
+    - name: Run Tests
+      run: yarn Test
