@@ -166,30 +166,42 @@ scalar SRI
 `;
 
 exports[`renderNode Subscription should render Subscription 1`] = `
-"## ObjectTypeDefinition \`Subscription\`
+"## Subscription \`Notifications\`
 
 \`\`\`graphql
-ObjectTypeDefinition Subscription
+subscription Notifications(
+  limit: Int!
+): Notification[]!
 \`\`\`
 
-### Fields
+### Arguments
 
-#### Notifications (\`Notification\`)
+#### limit (\`Int\`)
+
+### Type
+
+#### [\`Notification\`]
 "
 `;
 
 exports[`renderNode Subscription should render Subscription with directive deprecated 1`] = `
-"## ObjectTypeDefinition \`Subscription\`
+"## Subscription \`Notifications\`
 
 <span class=\\"badge badge--warning\\">DEPRECATED: This is deprecated</span>
 
 \`\`\`graphql
-ObjectTypeDefinition Subscription
+subscription Notifications(
+  limit: Int!
+): Notification[]!
 \`\`\`
 
-### Fields
+### Arguments
 
-#### Notifications (\`Notification\`)
+#### limit (\`Int\`)
+
+### Type
+
+#### [\`Notification\`]
 "
 `;
 

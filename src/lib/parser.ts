@@ -16,6 +16,8 @@ import {
   NonNullTypeNode,
   ObjectFieldNode,
   ObjectValueNode,
+  OperationTypeDefinitionNode,
+  OperationTypeNode,
   StringValueNode,
   TypeDefinitionNode,
   visit,
@@ -111,7 +113,12 @@ const visitor = {
   ObjectValue: ({ fields }: ObjectValueNode) => {
     return fields;
   },
-
+  OperationType: (node: OperationTypeNode) => {
+    return node.toString();
+  },
+  OperationTypeDefinition: (node: OperationTypeDefinitionNode) => {
+    return node;
+  },
   StringValue: ({ value }: StringValueNode) => {
     return value;
   },

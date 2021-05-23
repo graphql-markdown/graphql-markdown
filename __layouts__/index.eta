@@ -1,5 +1,5 @@
-<% if (['Query','Mutation','Subscription'].includes(it.kind)) { 
-  layout('./operation', {...it, operation: it.kind.toLowerCase() })
+<% if (it.kind === "OperationTypeDefinition") { 
+  layout('./operation', it)
 } else if (it.kind === "ScalarTypeDefinition") {
   layout('./scalar', it)
 } else {

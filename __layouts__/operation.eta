@@ -10,7 +10,7 @@
 <%~ includeFile('./partials/description', it) %>
 
 ```graphql
-<%~ it.operation %> <%~ it.name %><% if (args.length > 0) { %><%~ `(
+<%~ it.operation.toLowerCase() %> <%~ it.name %><% if (args.length > 0) { %><%~ `(
   ${args.join("\r\n  ")}
 )`%><% } %>: <%~ it.type %><%~ it.isList ? "[]" : "" %><%~ !it.isNull ? "!" : "" %>
 

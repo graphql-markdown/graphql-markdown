@@ -11,7 +11,9 @@ export default {
   ],
   directives: [],
   isList: false,
-  kind: "Mutation",
+  isNull: false,
+  kind: "OperationTypeDefinition",
   name: "markTweetRead",
+  operation: "Mutation",
   type: "Boolean",
 };

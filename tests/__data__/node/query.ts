@@ -12,7 +12,8 @@ export default {
   directives: [],
   isList: false,
   isNull: true,
-  kind: "Query",
+  kind: "OperationTypeDefinition",
   name: "Tweet",
+  operation: "Query",
   type: "Tweet",
 };
