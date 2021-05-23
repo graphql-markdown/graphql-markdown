@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`parseSchema should returned a parsed schema  1`] = `
+exports[`parseSchema should returned a parsed schema 1`] = `
 Array [
   Object {
     "directives": Array [
