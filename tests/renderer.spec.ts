@@ -1,6 +1,6 @@
 import { renderNode } from "../src/lib/renderer";
 
-import {
+import kindDirective, {
   directiveDeprecated,
   directiveSpecifiedBy,
 } from "./__data__/node/directive";
@@ -142,6 +142,15 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindUnion);
+      expect(result).toMatchSnapshot();
+    });
+  });
+
+  describe("Directive", () => {
+    it("should render Directive", async () => {
+      expect.hasAssertions();
+
+      const result = await renderNode(kindDirective);
       expect(result).toMatchSnapshot();
     });
   });

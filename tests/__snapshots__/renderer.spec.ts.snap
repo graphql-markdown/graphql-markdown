@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renderNode Directive should render Directive 1`] = `
+"## DirectiveDefinition \`@auth\`
+
+\`\`\`graphql
+DirectiveDefinition @auth
+\`\`\`
+"
+`;
+
 exports[`renderNode Enum should render Enum 1`] = `
 "## EnumTypeDefinition \`MediaType\`
 

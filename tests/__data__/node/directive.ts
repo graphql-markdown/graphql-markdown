@@ -21,3 +21,10 @@ export const directiveDeprecated = {
   kind: "Directive",
   name: "deprecated",
 };
+
+export default {
+  arguments: [],
+  kind: "DirectiveDefinition",
+  name: "@auth",
+  repeatable: true,
+};
