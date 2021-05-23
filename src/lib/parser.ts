@@ -2,6 +2,7 @@ import {
   ArgumentNode,
   BooleanValueNode,
   DirectiveDefinitionNode,
+  DirectiveNode,
   DocumentNode,
   EnumValueDefinitionNode,
   EnumValueNode,
@@ -29,6 +30,12 @@ const visitor = {
   },
   BooleanValue: ({ value }: BooleanValueNode) => {
     return value;
+  },
+  Directive: (node: DirectiveNode) => {
+    return { ...node, name: `@${node.name}` };
+  },
+  DirectiveDefinition: (node: DirectiveDefinitionNode) => {
+    return { ...node, name: `@${node.name}` };
   },
   Document: ({ definitions }: DocumentNode) => {
     return definitions;
@@ -122,9 +129,7 @@ const visitor = {
   StringValue: ({ value }: StringValueNode) => {
     return value;
   },
-  TypeSystemDefinition: (
-    node: DirectiveDefinitionNode | TypeDefinitionNode
-  ) => {
+  TypeDefinition: (node: TypeDefinitionNode) => {
     return node;
   },
 };

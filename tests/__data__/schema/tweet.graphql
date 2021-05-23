@@ -1,3 +1,14 @@
+directive @auth(
+  requires: Role = ADMIN,
+) on OBJECT | FIELD_DEFINITION
+
+enum Role {
+  ADMIN
+  REVIEWER
+  USER
+  UNKNOWN
+}
+
 scalar SRI @specifiedBy(url: "https://www.w3.org/TR/SRI")
 
 interface Node {
@@ -38,7 +49,7 @@ type Tweet implements Node {
     getMeta(meta: String): Meta
 }
 
-type User implements Node {
+type User implements Node @auth(requires: USER) {
     id: ID!
     username: String
     first_name: String

@@ -7,7 +7,7 @@ export const directiveSpecifiedBy = {
     },
   ],
   kind: "Directive",
-  name: "specifiedBy",
+  name: "@specifiedBy",
 };
 
 export const directiveDeprecated = {
@@ -19,7 +19,7 @@ export const directiveDeprecated = {
     },
   ],
   kind: "Directive",
-  name: "deprecated",
+  name: "@deprecated",
 };
 
 export default {

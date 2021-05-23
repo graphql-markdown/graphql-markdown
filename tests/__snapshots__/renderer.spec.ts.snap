@@ -4,7 +4,7 @@ exports[`renderNode Directive should render Directive 1`] = `
 "## DirectiveDefinition \`@auth\`
 
 \`\`\`graphql
-DirectiveDefinition @auth
+directive @auth
 \`\`\`
 "
 `;
@@ -68,8 +68,6 @@ mutation markTweetRead(
 exports[`renderNode Mutation should render Mutation with directive deprecated 1`] = `
 "## Mutation \`markTweetRead\`
 
-<span class=\\"badge badge--warning\\">DEPRECATED: This is deprecated</span>
-
 \`\`\`graphql
 mutation markTweetRead(
   id: ID!
@@ -123,8 +121,6 @@ query Tweet(
 exports[`renderNode Query should render Query with directive deprecated 1`] = `
 "## Query \`Tweet\`
 
-<span class=\\"badge badge--warning\\">DEPRECATED: This is deprecated</span>
-
 \`\`\`graphql
 query Tweet(
   id: ID!
@@ -160,8 +156,6 @@ An \`integrity\` value beginning with at least one string, with each string incl
 \`\`\`graphql
 scalar SRI
 \`\`\`
-
-#### Specification<a className=\\"link\\" style=\\"font-size:'1.5em', padding-left:'4px'\\" target=\\"_blank\\" href=\\"https://www.w3.org/TR/SRI\\" title=\\"Specified by https://www.w3.org/TR/SRI\\">⎘</a>
 "
 `;
 
@@ -195,8 +189,6 @@ subscription Notifications(
 
 exports[`renderNode Subscription should render Subscription with directive deprecated 1`] = `
 "## Subscription \`Notifications\`
-
-<span class=\\"badge badge--warning\\">DEPRECATED: This is deprecated</span>
 
 \`\`\`graphql
 subscription Notifications(

@@ -5,18 +5,20 @@
       case "Mutation":
       case "Subscription":
       default:
-        layout('./operation', it);
+        layout('./operation', it)
     }
-    break;
+    break
   case "ScalarTypeDefinition":
     layout('./scalar', it)
-    break;
+    break
+  case "DirectiveDefinition":
+    layout('./directive', it)
+    break
   case "EnumTypeDefinition":
   case "InputTypeDefinition":
   case "InterfaceTypeDefinition":
   case "ObjectTypeDefinition":
   case "UnionTypeDefinition":
-  case "DirectiveDefinition":
   default:
     layout('./object', it)
 } %>
