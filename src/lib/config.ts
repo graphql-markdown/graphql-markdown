@@ -13,7 +13,7 @@ const EXTENSION_NAME = "graphql-markdown";
 
 const defaultOptions = {
   excludes: [],
-  layoutsFolder: `${process.cwd()}/__layouts__` as const,
+  layoutsFolder: `${process.cwd()}/layouts` as const,
   outputFolder: `${process.cwd()}/output` as const,
 };
 
