@@ -1,5 +1,5 @@
 {
-  "name": "@edno/graphql-to-markdown",
+  "name": "@edno/graphql-markdown",
   "homepage": "https://github.com/edno/graphql-markdown/tree/main/graphql-to-markdown",
   "bugs": "https://github.com/edno/graphql-markdown/issues",
   "version": "1.0.0",
@@ -13,35 +13,28 @@
     "graphql",
     "graphql-schema",
     "documentation",
-    "cli"
+    "markdown"
   ],
   "author": "Gregory Heitz @edno",
   "scripts": {
-    "build": "rm -rf build && tsc -b && oclif-dev readme",
+    "build": "rm -rf build && tsc -b",
     "danger": "danger-local",
     "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --quiet",
     "prettier": "prettier --write \"{src,tests}/**/*.{ts,js,json,md}\"",
-    "start": "./bin/run",
-    "test": "jest",
-    "version": "oclif-dev readme && git add README.md"
+    "test": "jest"
   },
   "dependencies": {
     "@graphql-tools/graphql-file-loader": "^6.2.7",
     "@graphql-tools/json-file-loader": "^6.2.6",
-    "@graphql-tools/url-loader": "^6.9.0",
-    "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.2",
-    "chalk": "^4.1.1",
+    "@graphql-tools/url-loader": "^6.10.1",
     "eta": "^1.12.1",
     "graphql": "^15.5.0",
-    "graphql-config": "^3.2.0",
+    "graphql-config": "^3.3.0",
     "prettier": "^2.3.0"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.0",
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.3.0",
+    "@types/node": "^15.6.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "danger": "^10.6.4",
@@ -56,12 +49,9 @@
     "typescript": "^4.2.4"
   },
   "files": [
-    "/bin",
+    "/layouts",
     "/dist"
   ],
-  "oclif": {
-    "bin": "graphql-to-markdown"
-  },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   }
