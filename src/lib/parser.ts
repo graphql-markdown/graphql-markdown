@@ -122,10 +122,10 @@ const visitor = {
   StringValue: ({ value }: StringValueNode) => {
     return value;
   },
-  TypeDefinitionNode: (node: TypeDefinitionNode) => {
+  TypeDefinition: (node: TypeDefinitionNode) => {
     return node;
   },
-  TypeSystemDefinitionNode: (
+  TypeSystemDefinition: (
     node: DirectiveDefinitionNode | TypeDefinitionNode
   ) => {
     return node;

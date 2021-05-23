@@ -16,6 +16,7 @@
   case "InterfaceTypeDefinition":
   case "ObjectTypeDefinition":
   case "UnionTypeDefinition":
+  case "DirectiveDefinition":
   default:
     layout('./object', it)
 } %>
