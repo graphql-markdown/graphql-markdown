@@ -1,7 +1,21 @@
-<% if (it.kind === "OperationTypeDefinition") { 
-  layout('./operation', it)
-} else if (it.kind === "ScalarTypeDefinition") {
-  layout('./scalar', it)
-} else {
-  layout('./object', it)
+<% switch (it.kind) { 
+  case "OperationTypeDefinition":
+    switch (it.operation) { 
+      case "Query":
+      case "Mutation":
+      case "Subscription":
+      default:
+        layout('./operation', it);
+    }
+    break;
+  case "ScalarTypeDefinition":
+    layout('./scalar', it)
+    break;
+  case "EnumTypeDefinition":
+  case "InputTypeDefinition":
+  case "InterfaceTypeDefinition":
+  case "ObjectTypeDefinition":
+  case "UnionTypeDefinition":
+  default:
+    layout('./object', it)
 } %>
