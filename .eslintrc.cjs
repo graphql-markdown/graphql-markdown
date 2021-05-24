@@ -61,7 +61,6 @@ module.exports = {
       },
     ],
     camelcase: error,
-    "capitalized-comments": error,
     "computed-property-spacing": error,
     curly: error,
     "default-case-last": error,
