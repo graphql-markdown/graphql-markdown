@@ -5,8 +5,6 @@ import { getConfigurationOption, loadSchemaFromConfiguration } from "./config";
 import { parseSchema } from "./parser";
 import { renderNode } from "./renderer";
 
-const OperationTypes = ["query", "mutation", "subscription"] as const;
-
 export const saveToFile = async (
   content: string,
   location: { readonly folder: string; readonly file: string }
@@ -21,23 +19,14 @@ export const saveToFile = async (
   await fs.writeFile(filepath, content);
 };
 
-export const generateMarkdownFromSchema = async (): Promise<void> => {
+export const generateMarkdownFromSchema = async (): Promise<any> => {
   const schema = loadSchemaFromConfiguration();
   const nodes = parseSchema(schema);
 
-  await nodes.forEach(async (node: any) => {
-    if (OperationTypes.includes(node.name)) {
-      await node.fields.forEach(async (element: any) => {
-        {
-          await renderNode({
-            ...element,
-            kind: "OperationTypeDefinition",
-            operation: node.name,
-          });
-        }
-      });
-    } else {
-      await renderNode(node);
-    }
+  const result = await nodes.map(async (node: any) => {
+    const markdown = await renderNode(node);
+    return markdown;
   });
+
+  return result;
 };

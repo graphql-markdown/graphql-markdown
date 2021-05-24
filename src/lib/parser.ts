@@ -134,6 +134,19 @@ const visitor = {
   },
 } as const;
 
-export const parseSchema = (schema: DocumentNode): any => {
-  return visit(schema, { leave: visitor });
+const OperationTypes = ["query", "mutation", "subscription"] as const;
+
+export const parseSchema = (schema: DocumentNode): any[] => {
+  const nodes = visit(schema, { leave: visitor });
+  return nodes.flatMap((node) => {
+    return OperationTypes.includes(node.name.toLowerCase())
+      ? node.fields.map((operation) => {
+          return {
+            ...operation,
+            kind: "OperationTypeDefinition",
+            operation: node.name.toLowerCase(),
+          };
+        })
+      : node;
+  });
 };
