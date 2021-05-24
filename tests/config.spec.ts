@@ -1,6 +1,6 @@
 import * as path from "path";
-import { IFS } from "unionfs/lib/fs";
 
+import { IFS } from "unionfs/lib/fs";
 import { Volume } from "memfs";
 import { ufs } from "unionfs";
 
