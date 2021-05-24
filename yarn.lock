@@ -396,12 +396,13 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@graphql-inspector/core@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-2.5.0.tgz#7682c4fac0e7c27bf21d94bb87ca7983894fbf8f"
-  integrity sha512-qF1e1Jk/xM4NwLWcn3I8uR+oD51dGVu3g/0rAd1N263FPbubQVFS3s+lZMdBHrAfuD5c+y39PCurF8Hdu47/YQ==
+"@graphql-inspector/core@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-2.6.0.tgz#d46e3fe20c8635b03941ac0661bbeca328bfebdf"
+  integrity sha512-jv2j4nJkTK8g2QBpFIQmiIh6newp+kiqmbeWD8aqNYrDdEK9LVBU4wWksQANiK1ByRpsqYkebj/BR38GYZb+tA==
   dependencies:
-    dependency-graph "0.9.0"
+    dependency-graph "0.11.0"
+    object-inspect "1.10.3"
     tslib "^2.0.0"
 
 "@graphql-tools/batch-execute@^7.0.0":
@@ -2386,10 +2387,10 @@ depd@^1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
-dependency-graph@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.9.0.tgz#11aed7e203bc8b00f48356d92db27b265c445318"
-  integrity sha512-9YLIBURXj4DJMFALxXw9K3Y3rwb5Fk0X5/8ipCzaN84+gKxoHK43tVKRNakCQbiEx07E8Uwhuq21BpUagFhZ8w==
+dependency-graph@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.11.0.tgz#ac0ce7ed68a54da22165a85e97a01d53f5eb2e27"
+  integrity sha512-JeMq7fEshyepOWDfcfHK06N3MhyPhz++vtqWhMT5O9A3K42rdsEDpfdVqjaqaAhsw6a+ZqeDvQVtD0hFHQWrzg==
 
 deprecation@^2.0.0, deprecation@^2.3.1:
   version "2.3.1"
@@ -5421,6 +5422,11 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-inspect@1.10.3:
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.10.3.tgz#c2aa7d2d09f50c99375704f7a0adf24c5782d369"
+  integrity sha512-e5mCJlSH7poANfC8z8S9s9S2IN5/4Zb3aZ33f5s8YqoazCFzNLloLU8r5VCG+G7WoqLvAAZoVMcy3tp/3X0Plw==
 
 object-visit@^1.0.0:
   version "1.0.1"
