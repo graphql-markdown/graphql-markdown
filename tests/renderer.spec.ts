@@ -14,7 +14,16 @@ import kindScalar from "./__data__/node/scalar";
 import kindSubscription from "./__data__/node/subscription";
 import kindUnion from "./__data__/node/union";
 
+// mock config implementation
+jest.mock("../src/lib/config", () => {
+  return { getConfigurationOption: jest.fn().mockReturnValue("./layouts") };
+});
+
 describe("renderNode", () => {
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   describe("Query", () => {
     it("should render Query", async () => {
       expect.hasAssertions();
