@@ -5,7 +5,7 @@ import { getConfigurationOption, loadSchemaFromConfiguration } from "./config";
 import { parseSchema } from "./parser";
 import { renderNode } from "./renderer";
 
-const OperationTypes = ["query", "mutation", "subscription"];
+const OperationTypes = ["query", "mutation", "subscription"] as const;
 
 export const saveToFile = async (
   content: string,

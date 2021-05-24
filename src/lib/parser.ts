@@ -132,7 +132,7 @@ const visitor = {
   TypeDefinition: (node: TypeDefinitionNode) => {
     return node;
   },
-};
+} as const;
 
 export const parseSchema = (schema: DocumentNode): any => {
   return visit(schema, { leave: visitor });
