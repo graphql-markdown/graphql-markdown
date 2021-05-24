@@ -1,43 +1,44 @@
-import fsMock from "mock-fs";
-
 import * as path from "path";
+import { IFS } from "unionfs/lib/fs";
 
-const configLib = path.resolve("src/lib/config");
+import { Volume } from "memfs";
+import { ufs } from "unionfs";
 
 const rootDir = process.cwd();
+const configLib = path.resolve(rootDir, "src/lib/config");
+const schemaLocation = "./tests/__data__/schema/tweet.graphql";
 
 const graphqlrc = `---
-schema: ./tests/__data__/schema/tweet.graphql
+schema: ${schemaLocation}
 extensions:
   graphql-markdown:
     layouts: ./my-layouts
     output: ./docs
 `;
 
-beforeEach(() => {
-  fsMock({
-    ".graphqlrc": graphqlrc,
-    // eslint-disable-next-line camelcase
-    node_modules: fsMock.load(path.resolve(rootDir, "node_modules")),
-    src: fsMock.load(path.resolve(rootDir, "src"), { lazy: false }),
-    tests: fsMock.load(path.resolve(rootDir, "tests"), { lazy: false }),
-  });
-});
-
-afterEach(() => {
-  fsMock.restore();
-  jest.resetAllMocks();
+jest.mock(`fs`, () => {
+  const vol = Volume.fromJSON({});
+  vol.mkdirSync(process.cwd(), { recursive: true });
+  vol.writeFileSync(".graphqlrc", graphqlrc);
+  const fs = jest.requireActual("fs");
+  return ufs.use(fs).use(vol as unknown as IFS);
 });
 
 describe("config", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
+
   describe("configuration", () => {
     it("loads schema location from GraphQL Config file", async () => {
       expect.hasAssertions();
 
       const configuration = (await import(configLib)).default;
-      expect(configuration.schema).toBe(
-        "./tests/__data__/schema/tweet.graphql"
-      );
+      expect(configuration.schema).toBe(schemaLocation);
     });
   });
 
@@ -69,8 +70,6 @@ describe("config", () => {
 
       const { loadSchemaFromConfiguration } = await import(configLib);
       const schema = loadSchemaFromConfiguration();
-
-      fsMock.restore(); // needed for snapshot
 
       expect(schema).toMatchSnapshot();
     });
