@@ -1,4 +1,4 @@
-import fsMock, { restore } from "mock-fs";
+import fsMock from "mock-fs";
 
 import * as path from "path";
 
@@ -15,16 +15,13 @@ extensions:
 `;
 
 beforeEach(() => {
-  fsMock(
-    {
-      ".graphqlrc": graphqlrc,
-      // eslint-disable-next-line camelcase
-      node_modules: fsMock.load(path.resolve(rootDir, "node_modules")),
-      src: fsMock.load(path.resolve(rootDir, "src"), { lazy: false }),
-      tests: fsMock.load(path.resolve(rootDir, "tests"), { lazy: false }),
-    },
-    { createCwd: false }
-  );
+  fsMock({
+    ".graphqlrc": graphqlrc,
+    // eslint-disable-next-line camelcase
+    node_modules: fsMock.load(path.resolve(rootDir, "node_modules")),
+    src: fsMock.load(path.resolve(rootDir, "src"), { lazy: false }),
+    tests: fsMock.load(path.resolve(rootDir, "tests"), { lazy: false }),
+  });
 });
 
 afterEach(() => {
@@ -54,10 +51,13 @@ describe("config", () => {
 
     it("returns default options if not set in GraphQL Config file", async () => {
       expect.hasAssertions();
+
       const config = await import(configLib);
       jest.spyOn(config.default, "extension").mockReturnValue({});
+
       const layouts = config.getConfigurationOption("layouts");
       expect(layouts).toBe("./layouts");
+
       const output = config.getConfigurationOption("output");
       expect(output).toBe("./output");
     });
@@ -69,7 +69,9 @@ describe("config", () => {
 
       const { loadSchemaFromConfiguration } = await import(configLib);
       const schema = loadSchemaFromConfiguration();
+
       fsMock.restore(); // needed for snapshot
+
       expect(schema).toMatchSnapshot();
     });
   });
