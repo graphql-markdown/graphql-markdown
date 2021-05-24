@@ -1,7 +1,7 @@
 import * as path from "path";
 import { promises as fs } from "fs";
 
-import { getConfigOption, loadSchemaFromConfig } from "./config";
+import { getConfigurationOption, loadSchemaFromConfiguration } from "./config";
 import { parseSchema } from "./parser";
 import { renderNode } from "./renderer";
 
@@ -12,7 +12,8 @@ export const saveToFile = async (
   location: { readonly folder: string; readonly file: string }
 ): Promise<void> => {
   const filepath = path.resolve(
-    getConfigOption("outputFolder"),
+    process.cwd(),
+    getConfigurationOption("output"),
     location.folder,
     location.file
   );
@@ -21,7 +22,7 @@ export const saveToFile = async (
 };
 
 export const generateMarkdownFromSchema = async (): Promise<void> => {
-  const schema = loadSchemaFromConfig();
+  const schema = loadSchemaFromConfiguration();
   const nodes = parseSchema(schema);
 
   await nodes.forEach(async (node: any) => {

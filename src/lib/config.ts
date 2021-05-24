@@ -12,9 +12,9 @@ import { UrlLoader } from "@graphql-tools/url-loader";
 const EXTENSION_NAME = "graphql-markdown";
 
 const defaultOptions = {
-  excludes: [],
-  layoutsFolder: `${process.cwd()}/layouts` as const,
-  outputFolder: `${process.cwd()}/output` as const,
+  excludes: [] as const,
+  layouts: "./layouts" as const,
+  output: "./output" as const,
 };
 
 const setFileLoaderExtension: GraphQLExtensionDeclaration = (api: any) => {
@@ -27,12 +27,13 @@ const setFileLoaderExtension: GraphQLExtensionDeclaration = (api: any) => {
 };
 
 const configuration = ((): GraphQLProjectConfig => {
-  return loadConfigSync({
+  const config = loadConfigSync({
     extensions: [setFileLoaderExtension],
-  }).getDefault();
+  });
+  return config.getDefault();
 })();
 
-export const getConfigOption = (name: string): string => {
+export const getConfigurationOption = (name: string): string => {
   const extensionConfig = configuration.extension(EXTENSION_NAME);
   if (typeof extensionConfig[name] === "undefined") {
     return defaultOptions[name];
@@ -40,7 +41,7 @@ export const getConfigOption = (name: string): string => {
   return extensionConfig[name];
 };
 
-export const loadSchemaFromConfig = (): DocumentNode => {
+export const loadSchemaFromConfiguration = (): DocumentNode => {
   return configuration.getSchemaSync("DocumentNode");
 };
 
