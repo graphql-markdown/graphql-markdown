@@ -29,6 +29,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindQuery);
+
       expect(result).toMatchSnapshot();
     });
 
@@ -39,6 +40,7 @@ describe("renderNode", () => {
         ...kindQuery,
         directives: [directiveDeprecated],
       });
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -48,6 +50,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindMutation);
+
       expect(result).toMatchSnapshot();
     });
 
@@ -58,6 +61,7 @@ describe("renderNode", () => {
         ...kindMutation,
         directives: [directiveDeprecated],
       });
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -67,6 +71,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindSubscription);
+
       expect(result).toMatchSnapshot();
     });
 
@@ -77,6 +82,7 @@ describe("renderNode", () => {
         ...kindSubscription,
         directives: [directiveDeprecated],
       });
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -86,6 +92,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindEnum);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -95,6 +102,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindObject);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -104,6 +112,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindInput);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -116,6 +125,7 @@ describe("renderNode", () => {
         ...kindScalar,
         description: undefined, // eslint-disable-line no-undefined
       });
+
       expect(result).toMatchSnapshot();
     });
 
@@ -123,6 +133,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindScalar);
+
       expect(result).toMatchSnapshot();
     });
 
@@ -133,6 +144,7 @@ describe("renderNode", () => {
         ...kindScalar,
         directives: [directiveSpecifiedBy],
       });
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -142,6 +154,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindInterface);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -151,6 +164,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindUnion);
+
       expect(result).toMatchSnapshot();
     });
   });
@@ -160,6 +174,7 @@ describe("renderNode", () => {
       expect.hasAssertions();
 
       const result = await renderNode(kindDirective);
+
       expect(result).toMatchSnapshot();
     });
   });

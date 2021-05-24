@@ -38,6 +38,7 @@ describe("config", () => {
       expect.hasAssertions();
 
       const configuration = (await import(configLib)).default;
+
       expect(configuration.schema).toBe(schemaLocation);
     });
   });
@@ -47,6 +48,7 @@ describe("config", () => {
       expect.hasAssertions();
 
       const { getConfigurationOption } = await import(configLib);
+
       expect(getConfigurationOption("layouts")).toBe("./my-layouts");
     });
 
@@ -56,11 +58,8 @@ describe("config", () => {
       const config = await import(configLib);
       jest.spyOn(config.default, "extension").mockReturnValue({});
 
-      const layouts = config.getConfigurationOption("layouts");
-      expect(layouts).toBe("./layouts");
-
-      const output = config.getConfigurationOption("output");
-      expect(output).toBe("./output");
+      expect(config.getConfigurationOption("layouts")).toBe("./layouts");
+      expect(config.getConfigurationOption("output")).toBe("./output");
     });
   });
 
