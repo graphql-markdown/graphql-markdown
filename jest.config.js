@@ -4,7 +4,7 @@ export default {
   globals: {
     "ts-jest": {
       diagnostics: false,
-      tsconfig: "<rootDir>/tsconfig.json",
+      tsconfig: "<rootDir>/tsconfig.eslint.json",
     },
   },
   preset: "ts-jest",
