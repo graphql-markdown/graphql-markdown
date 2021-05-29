@@ -8,6 +8,7 @@ const defaultExtends = [
 ];
 
 module.exports = {
+  root: true,
   env: {
     commonjs: true,
     es6: true,
@@ -30,7 +31,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 11,
     sourceType: "module",
-    project: ['./tsconfig.eslint.json']
+    tsconfigRootDir: __dirname,
+    project: ['./packages/*/tsconfig.eslint.json']
   },
   plugins: ["@typescript-eslint", "jest"],
   root: true,

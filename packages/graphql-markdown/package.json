@@ -18,8 +18,6 @@
   "author": "Gregory Heitz @edno",
   "scripts": {
     "build": "rm -rf build && tsc -b",
-    "lint": "eslint \"{src,tests}/**/*.{ts,js}\" --quiet",
-    "prettier": "prettier --write \"{src,tests}/**/*.{ts,js,json,md}\"",
     "test": "jest"
   },
   "dependencies": {
@@ -34,13 +32,6 @@
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.1",
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "danger": "^10.6.4",
-    "eslint": "^7.27.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^24.3.6",
-    "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.0.3",
     "lodash": "^4.17.21",
     "memfs": "^3.2.2",

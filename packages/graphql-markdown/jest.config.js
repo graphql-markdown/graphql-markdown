@@ -1,4 +1,5 @@
 export default {
+  displayName: "graphql-markdown",
   coverageDirectory: "./coverage",
   coveragePathIgnorePatterns: ["node_modules", "tests"],
   globals: {
@@ -8,6 +9,7 @@ export default {
     },
   },
   preset: "ts-jest",
+  roots: ['<rootDir>'],
   testEnvironment: "node",
   testMatch: ["<rootDir>/tests/**/*.spec.ts"],
   testPathIgnorePatterns: ["/node_modules/"],
