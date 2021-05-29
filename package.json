@@ -4,5 +4,9 @@
   "version": "1.0.0",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "engines": {
+    "npm": "^7.15.0",
+    "node": "^14.16.1"
+  }
 }

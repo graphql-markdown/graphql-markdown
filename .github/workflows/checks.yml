@@ -20,6 +20,11 @@ jobs:
       with:
         node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
 
+    - name: Install npm
+      run: |
+        NPM_VERSION=$(cat package.json | jq -r .engines.npm | grep -o '[^\^]*$')
+        npm install -g npm@$NPM_VERSION
+
     - name: Install modules
       run: npm install 
 
