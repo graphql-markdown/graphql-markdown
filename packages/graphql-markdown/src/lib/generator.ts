@@ -1,7 +1,13 @@
 import * as path from "path";
 import { promises as fs } from "fs";
 
-import { __basedir, getConfigurationOption, loadSchemaFromConfiguration , parseSchema , renderNode } from "../";
+import {
+  __basedir,
+  getConfigurationOption,
+  loadSchemaFromConfiguration,
+  parseSchema,
+  renderNode,
+} from "../";
 
 export const saveToFile = async (
   content: string,
