@@ -3,7 +3,6 @@ const path = require("path");
 const { pull } = require("lodash");
 const moment = require("moment");
 const { toSlug, startCase, hasProperty } = require("./utils");
-const { prettifyJavascript } = require("./prettier");
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
@@ -65,10 +64,10 @@ module.exports = class Renderer {
 
   async renderSidebar(pages) {
     const filePath = path.join(this.outputDir, SIDEBAR);
-    const content = prettifyJavascript(`module.exports = {
+    const content = `module.exports = {
           schemaSidebar:
           ${JSON.stringify(this.generateSidebar(pages))}
-        };`);
+        };`;
     fs.outputFileSync(filePath, content, "utf8");
     return path.relative("./", filePath);
   }

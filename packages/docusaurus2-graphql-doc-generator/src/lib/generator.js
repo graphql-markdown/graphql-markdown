@@ -1,13 +1,8 @@
 const chalk = require("chalk");
 const {
   getSchemaMap,
-  loadSchema,
-  GraphQLFileLoader,
-  UrlLoader,
-  JsonFileLoader,
 } = require("./graphql");
 const Renderer = require("./renderer");
-const Printer = require("./printer");
 const { round } = require("./utils");
 const {
   checkSchemaChanges,
@@ -26,11 +21,7 @@ module.exports = async function generateDocFromSchema(
   diffMethod,
   tmpDir
 ) {
-  return Promise.resolve(
-    loadSchema(schemaLocation, {
-      loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
-    })
-  ).then(async (schema) => {
+  
     if (await checkSchemaChanges(schema, tmpDir, diffMethod)) {
       let pages = [];
       const r = new Renderer(
@@ -57,7 +48,7 @@ module.exports = async function generateDocFromSchema(
         })
         .then((sidebarPath) => {
           const [sec, msec] = process.hrtime(time);
-          const duration = round(sec + msec / 1000000000, 3);
+          const duration = round(sec + msec / 1e9, 3);
           console.info(
             chalk.green(
               `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`
@@ -82,5 +73,4 @@ module.exports = async function generateDocFromSchema(
     // create references for checkSchemaChanges
     await saveSchemaHash(schema, tmpDir);
     await saveSchemaFile(schema, tmpDir);
-  });
-};
+}
