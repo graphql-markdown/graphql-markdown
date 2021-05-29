@@ -1,16 +1,14 @@
 import * as path from "path";
 import { promises as fs } from "fs";
 
-import { getConfigurationOption, loadSchemaFromConfiguration } from "./config";
-import { parseSchema } from "./parser";
-import { renderNode } from "./renderer";
+import { __basedir, getConfigurationOption, loadSchemaFromConfiguration , parseSchema , renderNode } from "../";
 
 export const saveToFile = async (
   content: string,
   location: { readonly folder: string; readonly file: string }
 ): Promise<void> => {
   const filepath = path.resolve(
-    process.cwd(),
+    __basedir,
     getConfigurationOption("output"),
     location.folder,
     location.file

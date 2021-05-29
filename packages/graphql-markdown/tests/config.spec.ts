@@ -1,12 +1,9 @@
-import * as path from "path";
-
 import { IFS } from "unionfs/lib/fs";
 import { Volume } from "memfs";
 import { ufs } from "unionfs";
 
-const rootDir = process.cwd();
-const configLib = path.resolve(rootDir, "src/lib/config");
-const schemaLocation = "./tests/__data__/schema/tweet.graphql";
+const configLib = require.resolve("../src/lib/config");
+const schemaLocation = require.resolve("./__data__/schema/tweet.graphql");
 
 const graphqlrc = `---
 schema: ${schemaLocation}

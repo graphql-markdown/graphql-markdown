@@ -3,11 +3,11 @@ import * as path from "path";
 import * as Eta from "eta";
 import * as prettier from "prettier";
 
-import { getConfigurationOption } from "./config";
+import { __basedir, getConfigurationOption } from "../";
 
 export const renderNode = async (node: any): Promise<string> => {
   const layout = path.resolve(
-    process.cwd(),
+    __basedir,
     getConfigurationOption("layouts"),
     "layout"
   );

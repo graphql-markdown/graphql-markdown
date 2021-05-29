@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/edno/graphql-markdown.git"
