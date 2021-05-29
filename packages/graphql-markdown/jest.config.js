@@ -1,7 +1,5 @@
 export default {
   displayName: "graphql-markdown",
-  coverageDirectory: "./coverage",
-  coveragePathIgnorePatterns: ["node_modules", "tests"],
   globals: {
     "ts-jest": {
       diagnostics: false,

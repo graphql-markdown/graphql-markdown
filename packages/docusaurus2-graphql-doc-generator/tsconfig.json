@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "lib": ["esnext"],
+    "strictNullChecks": true,
+    "target": "esnext",
+    "types" : ["node", "jest"]
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"],
+}

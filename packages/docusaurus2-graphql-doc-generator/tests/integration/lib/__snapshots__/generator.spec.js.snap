@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "name": "directives",
+      "path": "output/directives",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "enums",
+      "path": "output/enums",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "inputs",
+      "path": "output/inputs",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "interfaces",
+      "path": "output/interfaces",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "mutations",
+      "path": "output/mutations",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "objects",
+      "path": "output/objects",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "queries",
+      "path": "output/queries",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "scalars",
+      "path": "output/scalars",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "subscriptions",
+      "path": "output/subscriptions",
+      "size": 0,
+      "type": "directory",
+    },
+    Object {
+      "children": Array [],
+      "name": "unions",
+      "path": "output/unions",
+      "size": 0,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 0,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 2`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": "",
+      "name": ".schema",
+      "path": "tmp/.schema",
+      "size": 64,
+      "type": "file",
+    },
+    Object {
+      "extension": ".graphql",
+      "name": "schema.graphql",
+      "path": "tmp/schema.graphql",
+      "size": 1351,
+      "type": "file",
+    },
+  ],
+  "name": "tmp",
+  "path": "tmp",
+  "size": 1415,
+  "type": "directory",
+}
+`;

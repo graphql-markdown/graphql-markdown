@@ -8,7 +8,6 @@ const defaultExtends = [
 ];
 
 module.exports = {
-  root: true,
   env: {
     commonjs: true,
     es6: true,
@@ -24,7 +23,15 @@ module.exports = {
         "plugin:jest/recommended",
         "plugin:jest/style",
       ],
-      files: ["tests/**/*.ts"],
+      files: ["packages/**/tests/**/*.ts"],
+    },
+    {
+      extends: [
+        "eslint:recommended",
+        "plugin:prettier/recommended",
+        "prettier"
+      ],
+      files: ["packages/**/*.js"],
     },
   ],
   parser: "@typescript-eslint/parser",
