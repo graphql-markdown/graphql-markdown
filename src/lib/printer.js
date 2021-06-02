@@ -203,7 +203,10 @@ module.exports = class Printer {
 
   printSpecification(type) {
     if (type.specifiedByUrl) {
-      return `${HEADER_SECTION_LEVEL} Specification<a className="link" style={{fontSize:'1.5em', paddingLeft:'4px'}} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>\n\n`;
+      return `
+export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
+${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>\n\n
+      `;
     }
     return "";
   }
