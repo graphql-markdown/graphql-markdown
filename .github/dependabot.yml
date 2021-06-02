@@ -9,3 +9,6 @@ updates:
       labels:
           - 'automerge'
           - 'dependencies'
+      commit_message:
+          prefix: "chore"
+          include_scope: true
