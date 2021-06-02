@@ -4,11 +4,20 @@ updates:
       directory: '/' # Location of package manifests
       schedule:
           interval: 'weekly'
-      # Disable rebasing for npm pull requests
       rebase-strategy: 'auto'
       labels:
           - 'automerge'
           - 'dependencies'
       commit_message:
-          prefix: "chore"
-          include_scope: true
+          prefix: "npm"
+          include: "scope"
+
+    - package-ecosystem: 'docker' # See documentation for possible values
+      directory: '/tests/e2e/docker' # Location of package manifests
+      schedule:
+          interval: 'weekly'
+      labels:
+          - 'automerge'
+          - 'dependencies'
+      commit_message:
+          prefix: "docker"
