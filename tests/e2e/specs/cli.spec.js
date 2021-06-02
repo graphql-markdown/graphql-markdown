@@ -7,15 +7,21 @@ const rootDir = "/usr/src/app/docusaurus2";
 
 const pluginConfig = require(`${rootDir}/docusaurus2-graphql-doc-generator.config.json`);
 
-const docsDir = path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL );
+const docsDir = path.resolve(
+  rootDir,
+  pluginConfig.rootPath,
+  pluginConfig.baseURL,
+);
 
 const messageGenerated = [
   `Documentation successfully generated in "${path.join(
-    pluginConfig.rootPath, pluginConfig.baseURL
+    pluginConfig.rootPath,
+    pluginConfig.baseURL,
   )}" with base URL "${pluginConfig.baseURL}".`,
   `{Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
   `Remember to update your Docusaurus site's sidebars with "${path.join(
-    pluginConfig.rootPath, pluginConfig.baseURL,
+    pluginConfig.rootPath,
+    pluginConfig.baseURL,
     "sidebar-schema.js",
   )}".`,
 ];
