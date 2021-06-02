@@ -32,7 +32,8 @@
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "demo": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh start-demo.sh"
+    "demo": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh start.sh",
+    "build:e2e": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh build.sh"
   },
   "husky": {
     "hooks": {

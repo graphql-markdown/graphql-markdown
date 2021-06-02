@@ -48,4 +48,4 @@ jobs:
         run: yarn test:e2e --runInBand --noStackTrace --ci
 
       - name: Check Docusaurus Production build
-        run: yarn demo
+        run: yarn build:e2e
