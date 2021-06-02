@@ -8,7 +8,7 @@ updates:
       labels:
           - 'automerge'
           - 'dependencies'
-      commit_message:
+      commit-message:
           prefix: "npm"
           include: "scope"
 
@@ -19,5 +19,5 @@ updates:
       labels:
           - 'automerge'
           - 'dependencies'
-      commit_message:
+      commit-message:
           prefix: "docker"
