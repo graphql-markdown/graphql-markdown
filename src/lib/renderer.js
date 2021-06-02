@@ -99,6 +99,7 @@ module.exports = class Renderer {
     fs.copySync(homepageLocation, destLocation);
     const data = fs
       .readFileSync(destLocation, "utf8")
+      .replace(/##baseURL##/gm, path.resolve("/", this.baseURL))
       .replace(
         /##generated-date-time##/gm,
         moment().format("MMMM DD, YYYY [at] h:mm:ss A"),

@@ -46,3 +46,6 @@ jobs:
 
       - name: Run End-to-End Tests
         run: yarn test:e2e --runInBand --noStackTrace --ci
+
+      - name: Check Docusaurus Production build
+        run: yarn build:e2e

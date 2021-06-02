@@ -1,5 +1,6 @@
 ---
 id: schema
+slug: ##baseURL##
 title: Schema Documentation
 ---
 

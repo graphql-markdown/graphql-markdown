@@ -1,7 +1,7 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
   "homepage": "https://github.com/edno/docusaurus2-graphql-doc-generator",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
@@ -32,7 +32,8 @@
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "demo": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh start-demo.sh"
+    "demo": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh start.sh",
+    "build:e2e": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh build.sh"
   },
   "husky": {
     "hooks": {
@@ -41,37 +42,37 @@
     }
   },
   "dependencies": {
-    "@graphql-inspector/core": "2.6.1",
-    "@graphql-tools/graphql-file-loader": "6.2.7",
-    "@graphql-tools/json-file-loader": "6.2.6",
-    "@graphql-tools/load": "6.2.8",
-    "@graphql-tools/url-loader": "6.10.1",
-    "@oclif/command": "1.8.0",
-    "chalk": "4.1.1",
-    "fs-extra": "10.0.0",
-    "graphql": "15.5.0",
-    "lodash": "4.17.21",
-    "moment": "2.29.1",
-    "prettier": "2.3.0",
-    "slugify": "1.5.3"
+    "@graphql-inspector/core": "^2.6.1",
+    "@graphql-tools/graphql-file-loader": "^6.2.7",
+    "@graphql-tools/json-file-loader": "^6.2.6",
+    "@graphql-tools/load": "^6.2.8",
+    "@graphql-tools/url-loader": "^6.10.1",
+    "@oclif/command": "^1.8.0",
+    "chalk": "^4.1.1",
+    "fs-extra": "^10.0.0",
+    "graphql": "^15.5.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "prettier": "^2.3.0",
+    "slugify": "^1.5.3"
   },
   "devDependencies": {
-    "@stryker-mutator/core": "4.0.0",
-    "@stryker-mutator/jest-runner": "4.1.1",
-    "colors": "1.4.0",
-    "danger": "10.6.4",
-    "diff": "5.0.0",
-    "directory-tree": "2.2.9",
-    "eslint": "7.27.0",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-jest": "24.3.6",
-    "eslint-plugin-prettier": "3.4.0",
-    "husky": "6.0.0",
-    "jest": "27.0.3",
-    "mock-fs": "5.0.0",
-    "npm": "7.15.0",
-    "nyc": "15.1.0",
-    "yarn": "1.22.10"
+    "@stryker-mutator/core": "^4.0.0",
+    "@stryker-mutator/jest-runner": "^4.1.1",
+    "colors": "^1.4.0",
+    "danger": "^10.6.4",
+    "diff": "^5.0.0",
+    "directory-tree": "^2.2.9",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^6.0.0",
+    "jest": "^27.0.3",
+    "mock-fs": "^5.0.0",
+    "npm": "^7.15.0",
+    "nyc": "^15.1.0",
+    "yarn": "^1.22.10"
   },
   "prettier": {
     "singleQuote": false,

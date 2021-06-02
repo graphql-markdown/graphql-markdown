@@ -16,4 +16,3 @@ RUN node /usr/src/app/docusaurus2-graphql-doc-generator/tests/e2e/scripts/config
 
 FROM docusaurus2-graphql-doc-generator as tests-e2e
 WORKDIR /usr/src/app/docusaurus2/__tests__
-
