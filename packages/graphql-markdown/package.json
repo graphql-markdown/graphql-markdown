@@ -28,7 +28,9 @@
     "eta": "^1.12.1",
     "graphql": "^15.5.0",
     "graphql-config": "^3.3.0",
-    "prettier": "^2.3.0"
+    "kebab-case": "^1.0.1",
+    "prettier": "^2.3.0",
+    "slugify": "^1.5.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

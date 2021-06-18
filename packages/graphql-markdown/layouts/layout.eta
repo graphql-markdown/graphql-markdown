@@ -16,6 +16,7 @@
     break
   case "EnumTypeDefinition":
   case "InputTypeDefinition":
+  case "InputObjectTypeDefinition":
   case "InterfaceTypeDefinition":
   case "ObjectTypeDefinition":
   case "UnionTypeDefinition":

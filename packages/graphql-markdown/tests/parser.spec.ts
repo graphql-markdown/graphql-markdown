@@ -5,23 +5,25 @@ import { DocumentNode } from "graphql";
 
 import { parseSchema } from "../src/lib/parser";
 
-describe("parseSchema", () => {
-  let schema: DocumentNode; // eslint-disable-line init-declarations
+describe("parser", () => {
+  describe("parseSchema", () => {
+    let schema: DocumentNode; // eslint-disable-line init-declarations
 
-  beforeAll(async () => {
-    const schemaLocation = path.resolve(
-      `${__dirname}/__data__/schema/tweet.json`
-    );
-    schema = JSON.parse(
-      (await fs.readFile(schemaLocation)).toString()
-    ) as unknown as DocumentNode;
-  });
+    beforeAll(async () => {
+      const schemaLocation = path.resolve(
+        `${__dirname}/__data__/schema/tweet.json`
+      );
+      schema = JSON.parse(
+        (await fs.readFile(schemaLocation)).toString()
+      ) as unknown as DocumentNode;
+    });
 
-  it("should returned a parsed schema", () => {
-    expect.hasAssertions();
+    it("should returned a parsed schema", () => {
+      expect.hasAssertions();
 
-    const parsed = parseSchema(schema);
+      const parsed = parseSchema(schema);
 
-    expect(parsed).toMatchSnapshot();
+      expect(parsed).toMatchSnapshot();
+    });
   });
 });

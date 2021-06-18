@@ -150,3 +150,23 @@ export const parseSchema = (schema: DocumentNode): any[] => {
       : node;
   });
 };
+
+export const getSimplifiedNodeKind = (node: any): string => {
+  switch (node.kind) {
+    case "OperationTypeDefinition":
+      return node.operation;
+    case "DirectiveDefinition":
+      return "Directive";
+    case "ScalarTypeDefinition":
+    case "EnumTypeDefinition":
+    case "InputTypeDefinition":
+    case "InterfaceTypeDefinition":
+    case "ObjectTypeDefinition":
+    case "UnionTypeDefinition":
+      return node.kind.replace(/^(?<kind>[A-z]+)TypeDefinition$/, "$<kind>");
+    case "InputObjectTypeDefinition":
+      return "Input";
+    default:
+      return "Object";
+  }
+};

@@ -4,4 +4,4 @@ export const __basedir = path.resolve(__dirname, ".."); // eslint-disable-line n
 export * from "./lib/config";
 export * from "./lib/generator";
 export * from "./lib/parser";
-export * from "./lib/renderer";
+export * from "./lib/render";

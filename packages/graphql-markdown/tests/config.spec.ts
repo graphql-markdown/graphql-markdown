@@ -13,7 +13,7 @@ extensions:
     output: ./docs
 `;
 
-jest.mock(`fs`, () => {
+jest.mock("fs", () => {
   const vol = Volume.fromJSON({});
   vol.mkdirSync(process.cwd(), { recursive: true });
   vol.writeFileSync(".graphqlrc", graphqlrc);

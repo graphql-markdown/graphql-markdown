@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renderNode Directive should render Directive 1`] = `
+exports[`render renderNode Directive should render Directive 1`] = `
 "## DirectiveDefinition \`@auth\`
 
 \`\`\`graphql
@@ -9,7 +9,7 @@ directive @auth
 "
 `;
 
-exports[`renderNode Enum should render Enum 1`] = `
+exports[`render renderNode Enum should render Enum 1`] = `
 "## EnumTypeDefinition \`MediaType\`
 
 \`\`\`graphql
@@ -18,7 +18,7 @@ EnumTypeDefinition MediaType
 "
 `;
 
-exports[`renderNode Input should render Input 1`] = `
+exports[`render renderNode Input should render Input 1`] = `
 "## InputObjectTypeDefinition \`TweetContent\`
 
 \`\`\`graphql
@@ -33,7 +33,7 @@ InputObjectTypeDefinition TweetContent
 "
 `;
 
-exports[`renderNode Interface should render Interface 1`] = `
+exports[`render renderNode Interface should render Interface 1`] = `
 "## InterfaceTypeDefinition \`Node\`
 
 \`\`\`graphql
@@ -46,7 +46,7 @@ InterfaceTypeDefinition Node
 "
 `;
 
-exports[`renderNode Mutation should render Mutation 1`] = `
+exports[`render renderNode Mutation should render Mutation 1`] = `
 "## Mutation \`markTweetRead\`
 
 \`\`\`graphql
@@ -65,7 +65,7 @@ mutation markTweetRead(
 "
 `;
 
-exports[`renderNode Mutation should render Mutation with directive deprecated 1`] = `
+exports[`render renderNode Mutation should render Mutation with directive deprecated 1`] = `
 "## Mutation \`markTweetRead\`
 
 \`\`\`graphql
@@ -84,7 +84,7 @@ mutation markTweetRead(
 "
 `;
 
-exports[`renderNode Object should render Object 1`] = `
+exports[`render renderNode Object should render Object 1`] = `
 "## ObjectTypeDefinition \`Media\`
 
 \`\`\`graphql
@@ -99,7 +99,7 @@ ObjectTypeDefinition Media
 "
 `;
 
-exports[`renderNode Query should render Query 1`] = `
+exports[`render renderNode Query should render Query 1`] = `
 "## Query \`Tweet\`
 
 \`\`\`graphql
@@ -118,7 +118,7 @@ query Tweet(
 "
 `;
 
-exports[`renderNode Query should render Query with directive deprecated 1`] = `
+exports[`render renderNode Query should render Query with directive deprecated 1`] = `
 "## Query \`Tweet\`
 
 \`\`\`graphql
@@ -137,7 +137,7 @@ query Tweet(
 "
 `;
 
-exports[`renderNode Scalar should render Scalar with description supporting Markdown notation 1`] = `
+exports[`render renderNode Scalar should render Scalar with description supporting Markdown notation 1`] = `
 "## ScalarTypeDefinition \`SRI\`
 
 An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
@@ -148,7 +148,7 @@ scalar SRI
 "
 `;
 
-exports[`renderNode Scalar should render Scalar with directive specifiedBy 1`] = `
+exports[`render renderNode Scalar should render Scalar with directive specifiedBy 1`] = `
 "## ScalarTypeDefinition \`SRI\`
 
 An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
@@ -159,7 +159,7 @@ scalar SRI
 "
 `;
 
-exports[`renderNode Scalar should render Scalar without description 1`] = `
+exports[`render renderNode Scalar should render Scalar without description 1`] = `
 "## ScalarTypeDefinition \`SRI\`
 
 \`\`\`graphql
@@ -168,7 +168,7 @@ scalar SRI
 "
 `;
 
-exports[`renderNode Subscription should render Subscription 1`] = `
+exports[`render renderNode Subscription should render Subscription 1`] = `
 "## Subscription \`Notifications\`
 
 \`\`\`graphql
@@ -187,7 +187,7 @@ subscription Notifications(
 "
 `;
 
-exports[`renderNode Subscription should render Subscription with directive deprecated 1`] = `
+exports[`render renderNode Subscription should render Subscription with directive deprecated 1`] = `
 "## Subscription \`Notifications\`
 
 \`\`\`graphql
@@ -206,7 +206,7 @@ subscription Notifications(
 "
 `;
 
-exports[`renderNode Union should render Union 1`] = `
+exports[`render renderNode Union should render Union 1`] = `
 "## UnionTypeDefinition \`TweetResponse\`
 
 \`\`\`graphql
