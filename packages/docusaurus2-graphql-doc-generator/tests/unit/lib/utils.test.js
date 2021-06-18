@@ -1,4 +1,4 @@
-const { toSlug, toArray, hasProperty, hasMethod } = require("@/lib/utils");
+const { toSlug, toArray, hasProperty, hasMethod } = import("@/lib/utils");
 
 describe("lib", () => {
   describe("utils", () => {
@@ -30,7 +30,7 @@ describe("lib", () => {
 
     describe("hasMethod()", () => {
       test("returns true if object has method", () => {
-        expect(hasMethod({ foo: () => {} }, "foo")).toBeTruthy();
+        expect(hasMethod({ foo: () => ({}) }, "foo")).toBeTruthy();
       });
 
       test("returns false if object has not method", () => {
@@ -41,11 +41,11 @@ describe("lib", () => {
     describe("toArray()", () => {
       test("returns an array of values from a k/v object", () => {
         const input = {
-          bool: true,
-          string: "test",
-          number: 123,
           array: ["one", "two"],
+          bool: true,
           child: { key: "value" },
+          number: 123,
+          string: "test",
         };
         const expected = [true, "test", 123, ["one", "two"], { key: "value" }];
         expect(toArray(input)).toEqual(expect.arrayContaining(expected));
