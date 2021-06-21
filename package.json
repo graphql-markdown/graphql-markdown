@@ -63,7 +63,7 @@
     "danger": "^10.6.4",
     "diff": "^5.0.0",
     "directory-tree": "^2.2.9",
-    "eslint": "^7.28.0",
+    "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-prettier": "^3.4.0",
