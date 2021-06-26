@@ -3,6 +3,9 @@ const {
   GraphQLUnionType,
   GraphQLScalarType,
   isListType,
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLFloat,
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
@@ -38,12 +41,29 @@ function getDefaultValue(argument) {
 
     return argument.defaultValue !== null && argument.defaultValue !== undefined
       ? `[${defaultValues
-          .map((defaultValue) => `"${defaultValue}"`)
+          .map((defaultValue) => {
+            return printDefaultValue(argument, `"${defaultValue}"`);
+          })
           .join(", ")}]`
       : undefined;
   }
 
-  return `"${argument.defaultValue}"`;
+  return printDefaultValue(argument, argument.defaultValue);
+}
+
+function printDefaultValue(argument, value) {
+  if (isEnumType(argument.type)) {
+    return value;
+  }
+
+  switch (argument.type) {
+    case GraphQLInt:
+    case GraphQLFloat:
+    case GraphQLBoolean:
+      return value;
+    default:
+      return `"${value}"`;
+  }
 }
 
 function getFilteredTypeMap(
