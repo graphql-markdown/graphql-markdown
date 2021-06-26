@@ -3,10 +3,6 @@ const {
   GraphQLUnionType,
   GraphQLScalarType,
   isListType,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLFloat,
-  GraphQLString,
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
@@ -32,19 +28,14 @@ const SCHEMA_EXCLUDE_LIST_PATTERN =
 
 function getDefaultValue(argument) {
   if (isListType(argument.type)) {
-    return `[${argument.defaultValue || ""}]`;
+    return argument.defaultValue !== null && argument.defaultValue !== undefined
+      ? `[${argument.defaultValue}]`
+      : undefined;
   }
 
-  switch (argument.type) {
-    case GraphQLID:
-    case GraphQLInt:
-      return `${argument.defaultValue || "0"}`;
-    case GraphQLFloat:
-      return `${argument.defaultValue || "0.0"}`;
-    case GraphQLString:
-    default:
-      return argument.defaultValue ? `"${argument.defaultValue}"` : undefined;
-  }
+  return argument.defaultValue !== null && argument.defaultValue !== undefined
+    ? `"${argument.defaultValue}"`
+    : undefined;
 }
 
 function getFilteredTypeMap(
