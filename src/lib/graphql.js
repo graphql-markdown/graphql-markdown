@@ -27,15 +27,23 @@ const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
+  if (argument.defaultValue === null || argument.defaultValue === undefined) {
+    return undefined;
+  }
+
   if (isListType(argument.type)) {
+    const defaultValues = Array.isArray(argument.defaultValue)
+      ? argument.defaultValue
+      : [argument.defaultValue];
+
     return argument.defaultValue !== null && argument.defaultValue !== undefined
-      ? `[${argument.defaultValue}]`
+      ? `[${defaultValues
+          .map((defaultValue) => `"${defaultValue}"`)
+          .join(", ")}]`
       : undefined;
   }
 
-  return argument.defaultValue !== null && argument.defaultValue !== undefined
-    ? `"${argument.defaultValue}"`
-    : undefined;
+  return `"${argument.defaultValue}"`;
 }
 
 function getFilteredTypeMap(
