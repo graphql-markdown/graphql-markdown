@@ -237,7 +237,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       default:
         code += `"${getTypeName(type)}" not supported`;
     }
-    code += "```\n";
+    code += "\n```\n";
     return code;
   }
 
