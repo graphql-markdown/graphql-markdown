@@ -68,7 +68,7 @@
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
-    "jest": "^27.0.5",
+    "jest": "^27.0.6",
     "mock-fs": "^5.0.0",
     "npm": "^7.19.0",
     "nyc": "^15.1.0",
