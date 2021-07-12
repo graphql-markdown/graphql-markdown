@@ -6,6 +6,13 @@ Object {
     Object {
       "children": Array [
         Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/directives/_category_.yml",
+          "size": 20,
+          "type": "file",
+        },
+        Object {
           "extension": ".mdx",
           "name": "deprecated.mdx",
           "path": "output/directives/deprecated.mdx",
@@ -36,14 +43,22 @@ Object {
       ],
       "name": "directives",
       "path": "output/directives",
-      "size": 1283,
+      "size": 1303,
       "type": "directory",
     },
     Object {
-      "children": Array [],
+      "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/enums/_category_.yml",
+          "size": 15,
+          "type": "file",
+        },
+      ],
       "name": "enums",
       "path": "output/enums",
-      "size": 0,
+      "size": 15,
       "type": "directory",
     },
     Object {
@@ -56,6 +71,13 @@ Object {
     Object {
       "children": Array [
         Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/inputs/_category_.yml",
+          "size": 16,
+          "type": "file",
+        },
+        Object {
           "extension": ".mdx",
           "name": "tweet-content.mdx",
           "path": "output/inputs/tweet-content.mdx",
@@ -65,11 +87,18 @@ Object {
       ],
       "name": "inputs",
       "path": "output/inputs",
-      "size": 258,
+      "size": 274,
       "type": "directory",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/interfaces/_category_.yml",
+          "size": 20,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "node.mdx",
@@ -80,11 +109,18 @@ Object {
       ],
       "name": "interfaces",
       "path": "output/interfaces",
-      "size": 148,
+      "size": 168,
       "type": "directory",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/mutations/_category_.yml",
+          "size": 19,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "create-tweet.mdx",
@@ -109,11 +145,18 @@ Object {
       ],
       "name": "mutations",
       "path": "output/mutations",
-      "size": 870,
+      "size": 889,
       "type": "directory",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/objects/_category_.yml",
+          "size": 17,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "media.mdx",
@@ -159,11 +202,18 @@ Object {
       ],
       "name": "objects",
       "path": "output/objects",
-      "size": 2714,
+      "size": 2731,
       "type": "directory",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/queries/_category_.yml",
+          "size": 17,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "notifications-meta.mdx",
@@ -209,11 +259,18 @@ Object {
       ],
       "name": "queries",
       "path": "output/queries",
-      "size": 1601,
+      "size": 1618,
       "type": "directory",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/scalars/_category_.yml",
+          "size": 17,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "boolean.mdx",
@@ -266,18 +323,25 @@ Object {
       ],
       "name": "scalars",
       "path": "output/scalars",
-      "size": 1399,
+      "size": 1416,
       "type": "directory",
     },
     Object {
       "extension": ".js",
       "name": "sidebar-schema.js",
       "path": "output/sidebar-schema.js",
-      "size": 1782,
+      "size": 114,
       "type": "file",
     },
     Object {
       "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/subscriptions/_category_.yml",
+          "size": 23,
+          "type": "file",
+        },
         Object {
           "extension": ".mdx",
           "name": "notifications.mdx",
@@ -288,20 +352,28 @@ Object {
       ],
       "name": "subscriptions",
       "path": "output/subscriptions",
-      "size": 264,
+      "size": 287,
       "type": "directory",
     },
     Object {
-      "children": Array [],
+      "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/unions/_category_.yml",
+          "size": 16,
+          "type": "file",
+        },
+      ],
       "name": "unions",
       "path": "output/unions",
-      "size": 0,
+      "size": 16,
       "type": "directory",
     },
   ],
   "name": "output",
   "path": "output",
-  "size": 10351,
+  "size": 8863,
   "type": "directory",
 }
 `;
