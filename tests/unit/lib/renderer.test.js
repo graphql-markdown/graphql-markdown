@@ -9,6 +9,7 @@ const Printer = require("@/lib/printer");
 
 const FOLDER = "output";
 const HOMEPAGE = "generated.md";
+const SIDEBAR = "sidebar.json";
 
 describe("lib", () => {
   describe("renderer", () => {
@@ -20,11 +21,12 @@ describe("lib", () => {
       beforeEach(() => {
         mock({
           node_modules: mock.load(
-            path.resolve(__dirname, "../../../node_modules"),
+            path.resolve(__dirname, "../../../node_modules")
           ),
           output: {},
           assets: {
             [HOMEPAGE]: mock.load(require.resolve(`@assets/${HOMEPAGE}`)),
+            [SIDEBAR]: mock.load(require.resolve(`@assets/${SIDEBAR}`)),
           },
         });
         rendererInstance = new Renderer(printerInstance, FOLDER, baseURL);
@@ -45,7 +47,7 @@ describe("lib", () => {
           const meta = await rendererInstance.renderTypeEntities(
             output,
             "FooBar",
-            "FooBar",
+            "FooBar"
           );
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 
@@ -57,26 +59,8 @@ describe("lib", () => {
         test("creates Docusaurus compatible sidebar.js into output folder", async () => {
           expect.assertions(1);
 
-          const pages = [
-            { category: "foo", slug: "lorem" },
-            { category: "foo", slug: "ipsum" },
-            { category: "bar", slug: "dolor" },
-          ];
-
-          await rendererInstance.renderSidebar(pages);
+          await rendererInstance.renderSidebar();
           expect(dirTree(FOLDER)).toMatchSnapshot();
-        });
-      });
-
-      describe("generateSidebar()", () => {
-        test("generate Docusaurus sidebar object from list of pages", async () => {
-          const pages = [
-            { category: "foo", slug: "lorem" },
-            { category: "foo", slug: "ipsum" },
-            { category: "bar", slug: "dolor" },
-          ];
-          const sidebar = rendererInstance.generateSidebar(pages);
-          expect(sidebar).toMatchSnapshot();
         });
       });
 
