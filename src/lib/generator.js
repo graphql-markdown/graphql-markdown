@@ -24,7 +24,7 @@ module.exports = async function generateDocFromSchema(
   linkRoot,
   homepageLocation,
   diffMethod,
-  tmpDir
+  tmpDir,
 ) {
   const schema = await loadSchema(schemaLocation, {
     loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
@@ -34,16 +34,16 @@ module.exports = async function generateDocFromSchema(
     const renderer = new Renderer(
       new Printer(schema, baseURL, linkRoot),
       outputDir,
-      baseURL
+      baseURL,
     );
     const rootTypes = getSchemaMap(schema);
 
     const pages = await Promise.all(
       Object.keys(rootTypes)
         .map((typeName) =>
-          renderer.renderRootTypes(typeName, rootTypes[typeName])
+          renderer.renderRootTypes(typeName, rootTypes[typeName]),
         )
-        .flat()
+        .flat(),
     );
 
     await renderer.renderHomepage(homepageLocation);
@@ -53,18 +53,18 @@ module.exports = async function generateDocFromSchema(
     const duration = round(sec + msec / 1000000000, 3);
     console.info(
       chalk.green(
-        `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`
-      )
+        `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+      ),
     );
     console.log(
       chalk.blue(
-        `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`
-      )
+        `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`,
+      ),
     );
     console.info(
       chalk.blue.bold(
-        `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`
-      )
+        `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+      ),
     );
 
     // create references for checkSchemaChanges
@@ -72,7 +72,7 @@ module.exports = async function generateDocFromSchema(
     await saveSchemaFile(schema, tmpDir);
   } else {
     console.info(
-      chalk.blue(`No changes detected in schema "${schemaLocation}".`)
+      chalk.blue(`No changes detected in schema "${schemaLocation}".`),
     );
   }
 };

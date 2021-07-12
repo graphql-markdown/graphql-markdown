@@ -34,7 +34,7 @@ describe("lib", () => {
           "docs",
           "assets/generated.md",
           "SCHEMA-DIFF",
-          "tmp"
+          "tmp",
         );
 
         expect(dirTree("output")).toMatchSnapshot();

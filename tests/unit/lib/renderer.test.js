@@ -21,7 +21,7 @@ describe("lib", () => {
       beforeEach(() => {
         mock({
           node_modules: mock.load(
-            path.resolve(__dirname, "../../../node_modules")
+            path.resolve(__dirname, "../../../node_modules"),
           ),
           output: {},
           assets: {
@@ -47,7 +47,7 @@ describe("lib", () => {
           const meta = await rendererInstance.renderTypeEntities(
             output,
             "FooBar",
-            "FooBar"
+            "FooBar",
           );
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 

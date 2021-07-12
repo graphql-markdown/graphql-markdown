@@ -39,8 +39,8 @@ module.exports = class Renderer {
 
       pages = await Promise.all(
         Object.keys(type).map((name) =>
-          this.renderTypeEntities(dirPath, name, type[name])
-        )
+          this.renderTypeEntities(dirPath, name, type[name]),
+        ),
       );
     }
     return pages || [];
@@ -55,7 +55,7 @@ module.exports = class Renderer {
       const page = path
         .relative(this.outputDir, filePath)
         .match(
-          /(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).mdx?$/
+          /(?<category>[A-z][A-z0-9-]*)\/(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
         );
       const slug = path.join(page.groups.category, page.groups.pageId);
       return { category: startCase(page.groups.category), slug: slug };
@@ -80,7 +80,7 @@ module.exports = class Renderer {
     };
 
     const content = prettifyJavascript(
-      `module.exports = ${JSON.stringify(sidebar, null, 2)};`
+      `module.exports = ${JSON.stringify(sidebar, null, 2)};`,
     );
 
     const filePath = path.join(this.outputDir, SIDEBAR);
@@ -98,7 +98,7 @@ module.exports = class Renderer {
       .replace(/##baseURL##/gm, path.resolve("/", this.baseURL))
       .replace(
         /##generated-date-time##/gm,
-        moment().format("MMMM DD, YYYY [at] h:mm:ss A")
+        moment().format("MMMM DD, YYYY [at] h:mm:ss A"),
       );
     await fs.outputFile(destLocation, data, "utf8");
   }

@@ -3,7 +3,7 @@ const fs = require("fs");
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.json";
 
 const docusaurusConfig = require.resolve(
-  `${process.cwd()}/docusaurus.config.js`
+  `${process.cwd()}/docusaurus.config.js`,
 );
 
 let config = require(docusaurusConfig);
@@ -33,7 +33,7 @@ config = {
 const configExportString = `const path = require("path");
 module.exports = ${JSON.stringify(config)};\n`.replace(
   `"@config@"`,
-  `require(path.resolve(__dirname, "${pluginConfigFilename}"))`
+  `require(path.resolve(__dirname, "${pluginConfigFilename}"))`,
 );
 
 fs.writeFile(docusaurusConfig, configExportString, (err) => {
