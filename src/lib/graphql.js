@@ -30,7 +30,7 @@ const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
-  if (argument.defaultValue === null || argument.defaultValue === undefined) {
+  if (argument.defaultValue === null || typeof argument.defaultValue === "undefined") {
     return undefined;
   }
 
