@@ -39,13 +39,11 @@ function getDefaultValue(argument) {
       ? argument.defaultValue
       : [argument.defaultValue];
 
-    return argument.defaultValue !== null && argument.defaultValue !== undefined
-      ? `[${defaultValues
+    return `[${defaultValues
           .map((defaultValue) => {
             return printDefaultValue(argument, `"${defaultValue}"`);
           })
           .join(", ")}]`
-      : undefined;
   }
 
   return printDefaultValue(argument, argument.defaultValue);
