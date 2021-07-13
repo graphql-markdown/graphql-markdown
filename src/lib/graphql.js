@@ -6,6 +6,8 @@ const {
   GraphQLBoolean,
   GraphQLInt,
   GraphQLFloat,
+  GraphQLID,
+  GraphQLString,
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
@@ -30,7 +32,10 @@ const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
-  if (argument.defaultValue === null || typeof argument.defaultValue === "undefined") {
+  if (
+    argument.defaultValue === null ||
+    typeof argument.defaultValue === "undefined"
+  ) {
     return undefined;
   }
 
@@ -39,11 +44,13 @@ function getDefaultValue(argument) {
       ? argument.defaultValue
       : [argument.defaultValue];
 
-    return `[${defaultValues
-          .map((defaultValue) => {
-            return printDefaultValue(argument, `"${defaultValue}"`);
-          })
-          .join(", ")}]`
+    const defaultValuesString = defaultValues
+      .map((defaultValue) => {
+        return printDefaultValue(argument, defaultValue);
+      })
+      .join(", ");
+
+    return `[${defaultValuesString}]`;
   }
 
   return printDefaultValue(argument, argument.defaultValue);
@@ -59,6 +66,8 @@ function printDefaultValue(argument, value) {
     case GraphQLFloat:
     case GraphQLBoolean:
       return value;
+    case GraphQLID:
+    case GraphQLString:
     default:
       return `"${value}"`;
   }
