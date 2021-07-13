@@ -116,7 +116,7 @@ describe("lib", () => {
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
-      test("returns array default value as string for type GraphQLList", () => {
+      test("returns array default value as string for type GraphQLList(GraphQLID)", () => {
         const argument = {
           name: "id",
           description: undefined,
@@ -125,6 +125,17 @@ describe("lib", () => {
           extensions: undefined,
         };
         expect(getDefaultValue(argument)).toBe('["0", "1"]');
+      });
+
+      test("returns array default value as string for type GraphQLList(GraphQLInt)", () => {
+        const argument = {
+          name: "foobar",
+          description: undefined,
+          type: new GraphQLList(GraphQLInt),
+          defaultValue: [0, 1],
+          extensions: undefined,
+        };
+        expect(getDefaultValue(argument)).toBe("[0, 1]");
       });
     });
 

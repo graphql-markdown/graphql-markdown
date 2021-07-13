@@ -46,22 +46,22 @@ function getDefaultValue(argument) {
 
     const defaultValuesString = defaultValues
       .map((defaultValue) => {
-        return printDefaultValue(argument, defaultValue);
+        return printDefaultValue(argument.type.ofType, defaultValue);
       })
       .join(", ");
 
     return `[${defaultValuesString}]`;
   }
 
-  return printDefaultValue(argument, argument.defaultValue);
+  return printDefaultValue(argument.type, argument.defaultValue);
 }
 
-function printDefaultValue(argument, value) {
-  if (isEnumType(argument.type)) {
+function printDefaultValue(type, value) {
+  if (isEnumType(type)) {
     return value;
   }
 
-  switch (argument.type) {
+  switch (type) {
     case GraphQLInt:
     case GraphQLFloat:
     case GraphQLBoolean:
