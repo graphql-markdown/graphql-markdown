@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/dt/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
 [![Latest Version](https://img.shields.io/npm/v/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
 [![GitHub license](https://img.shields.io/github/license/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://raw.githubusercontent.com/edno/docusaurus2-graphql-doc-generator/main/LICENSE)
-[![Coverage Status](https://img.shields.io/coveralls/github/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://coveralls.io/github/edno/docusaurus2-graphql-doc-generator?branch=main)
+[![Coverage Status](https://img.shields.io/coveralls/github/edno/graphql-markdown?style=flat-square)](https://coveralls.io/github/edno/graphql-markdown?branch=main)
 
 This plugin generates a **Markdown documentation** from a **GraphQL schema**.
 
@@ -36,7 +36,7 @@ module.exports = {
 
 You can define some or all of the plugin options directly at the plugin level in your site's `docusaurus.config.js`:
 
-#### Plugin Options
+### Plugin Options
 
 ```js
 module.exports = {
@@ -57,7 +57,7 @@ module.exports = {
 
 Each option is described in the section [Options](#options).
 
-#### Site Settings
+### Site Settings
 
 You will also need to add a link to your documentation on your site. One way to do it is to add it to your site's navbar in `docusaurus.config.js`:
 
@@ -78,7 +78,7 @@ module.exports = {
 
 For more details about navbar, please refer to Docusaurus 2 [documentation](https://v2.docusaurus.io/docs/theme-classic/#navbar-links).
 
-#### Sidebars Settings
+### Sidebars Settings
 
 A sidebar file `sidebar-schema.js` will be generated for the documentation, and you will need to add it to your site's `sidebars.js`:
 
@@ -91,15 +91,26 @@ module.exports = {
 };
 ```
 
-##### Important
+#### Important
 
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
 > For example: if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
 
-#### Home Page
+### Home Page
 
-If you decide to use your own home page for the GraphQL generated documentation, then use the page ID `schema`.
+If you decide to use your own home page for the GraphQL generated documentation, then set the page ID to `id: schema` and the sidebar position to `sidebar_position: 1`:
+
+```markdown
+---
+id: schema
+slug: /schema
+title: Schema Documentation
+sidebar_position: 1
+---
+
+This documentation has been automatically generated from the GraphQL schema.
+```
 
 ## Usage
 
@@ -109,7 +120,7 @@ The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://v
 npx docusaurus graphql-to-doc
 ```
 
-#### Options
+### Options
 
 By default, the plugin will use the options as defined in the plugin's [configuration](#configuration), but they can be overriden by passing them with the command.
 

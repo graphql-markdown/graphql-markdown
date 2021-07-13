@@ -1,29 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`lib renderer class Renderer generateSidebar() generate Docusaurus sidebar object from list of pages 1`] = `
-Array [
-  Object {
-    "id": "graphql/schema",
-    "type": "doc",
-  },
-  Object {
-    "items": Array [
-      "graphql/ipsum",
-      "graphql/lorem",
-    ],
-    "label": "foo",
-    "type": "category",
-  },
-  Object {
-    "items": Array [
-      "graphql/dolor",
-    ],
-    "label": "bar",
-    "type": "category",
-  },
-]
-`;
-
 exports[`lib renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
 Object {
   "children": Array [
@@ -48,6 +24,13 @@ Object {
     Object {
       "children": Array [
         Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/object/_category_.yml",
+          "size": 16,
+          "type": "file",
+        },
+        Object {
           "extension": ".mdx",
           "name": "bar.mdx",
           "path": "output/object/bar.mdx",
@@ -64,13 +47,13 @@ Object {
       ],
       "name": "object",
       "path": "output/object",
-      "size": 22,
+      "size": 38,
       "type": "directory",
     },
   ],
   "name": "output",
   "path": "output",
-  "size": 22,
+  "size": 38,
   "type": "directory",
 }
 `;
@@ -82,13 +65,13 @@ Object {
       "extension": ".js",
       "name": "sidebar-schema.js",
       "path": "output/sidebar-schema.js",
-      "size": 261,
+      "size": 114,
       "type": "file",
     },
   ],
   "name": "output",
   "path": "output",
-  "size": 261,
+  "size": 114,
   "type": "directory",
 }
 `;

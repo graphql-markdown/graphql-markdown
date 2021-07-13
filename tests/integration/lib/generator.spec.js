@@ -12,6 +12,7 @@ describe("lib", () => {
       output: {},
       assets: {
         "generated.md": "Dummy homepage for tweet.graphql",
+        "sidebar.json": mock.load(require.resolve(`@assets/sidebar.json`)),
       },
       tmp: {},
     });
