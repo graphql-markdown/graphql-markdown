@@ -3,8 +3,6 @@
 import { hrtime } from "process";
 import path from "path";
 
-import chalk from "chalk";
-
 import type { LoadContext, Plugin } from "@docusaurus/types";
 
 import { PluginOptions } from "./types";
@@ -20,6 +18,12 @@ const DEFAULT_OPTIONS: PluginOptions = {
 
 const DEFAULT_PLUGIN_ID = "default";
 
+const CONSOLE_CLI_COLOR = {
+  BLUE: "\033[34m",
+  GREEN: "\033[32m",
+  RED: "\033[31m",
+};
+
 const generate = async (options: PluginOptions): Promise<void> => {
   const startTime = hrtime.bigint();
 
@@ -33,18 +37,18 @@ const generate = async (options: PluginOptions): Promise<void> => {
   const endTime = hrtime.bigint();
 
   console.info(
-    chalk.green(`
-Documentation successfully generated in "${outputDir}" with base URL "${options.baseURL}".
-`)
+    CONSOLE_CLI_COLOR.GREEN,
+    `Documentation successfully generated in "${outputDir}" with base URL "${options.baseURL}".
+`
   );
 
   console.log(
-    chalk.blue(`
-${pages} pages generated in ${endTime - startTime}ms from schema "${
+    CONSOLE_CLI_COLOR.BLUE,
+    `${pages} pages generated in ${endTime - startTime}ms from schema "${
       options.schema
     }".
 Remember to update your Docusaurus configuration with "${sidebar}".
-`)
+`
   );
 };
 
