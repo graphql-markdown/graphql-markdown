@@ -3,7 +3,7 @@
   "homepage": "https://github.com/edno/graphql-markdown",
   "version": "2.0.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/edno/graphql-markdown.git"
