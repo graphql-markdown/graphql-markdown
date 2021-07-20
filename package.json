@@ -54,7 +54,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prettier": "^2.3.2",
-    "slugify": "^1.5.3"
+    "slugify": "^1.6.0"
   },
   "files": [
     "assets"
