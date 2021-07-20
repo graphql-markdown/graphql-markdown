@@ -5,8 +5,11 @@ import { hrtime } from "process";
 import chalk from "chalk";
 
 import { generateDocFromSchema } from "./lib/generator";
+import { PluginOptions } from "./type";
 
-const DEFAULT_OPTIONS = {
+import type { LoadContext, Plugin } from "@docusaurus/types";
+
+const DEFAULT_OPTIONS: PluginOptions = {
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "schema",
@@ -14,73 +17,69 @@ const DEFAULT_OPTIONS = {
   homepage: path.join(__dirname, "../assets/", "generated.md"),
 };
 
-const actionGenerateDocs = async (options) => {
+const actionGenerateDocs = async (options: PluginOptions): Promise<void> => {
   const startTime = hrtime.bigint();
 
-  const outputDir = path.join(options.root, baseURL);
+  const outputDir = path.join(options.rootPath, options.baseURL);
 
-  const { pages, sidebar } = await generateDocFromSchema(options.schema, {
-    baseURL: options.base,
-    outputDir,
-    linkRoot: options.link,
-    homepage: options.homepage,
-  });
+  const { pages, sidebar } = await generateDocFromSchema(options.schema, options);
 
   const endTime = hrtime.bigint();
-  const duration = ((endTime - startTime) / 1e9).toFixed(3);
 
   console.info(
     chalk.green(`
-Documentation successfully generated in "${outputDir}" with base URL "${options.base}".
+Documentation successfully generated in "${outputDir}" with base URL "${options.baseURL}".
 `)
   );
 
   console.log(
     chalk.blue(`
-${pages} pages generated in ${duration}s from schema "${options.schema}".
+${pages} pages generated in ${endTime - startTime}ms from schema "${
+      options.schema
+    }".
 Remember to update your Docusaurus configuration with "${sidebar}".
 `)
   );
-
-  const pluginGraphQLDocGenerator = (context, options) => {
-    // Merge defaults with user-defined options.
-    const configuration = { ...DEFAULT_OPTIONS, ...options };
-    return {
-      name: "docusaurus-graphql-doc-generator",
-
-      extendCli: (cli) => {
-        cli
-          .command("graphql-to-doc")
-          .option(
-            "-s, --schema <schema>",
-            "Schema location",
-            configuration.schema
-          )
-          .option(
-            "-r, --root <rootPath>",
-            "Root folder for doc generation",
-            configuration.rootPath
-          )
-          .option(
-            "-b, --base <baseURL>",
-            "Base URL to be used by Docusaurus",
-            configuration.baseURL
-          )
-          .option(
-            "-l, --link <linkRoot>",
-            "Root for links in documentation",
-            configuration.linkRoot
-          )
-          .option(
-            "-h, --homepage <homepage>",
-            "File location for doc landing page",
-            configuration.homepage
-          )
-          .description("Generate GraphQL Schema Documentation")
-          .action(actionGenerateDocs);
-      },
-    };
-  };
-
-  module.exports = pluginGraphQLDocGenerator;
 };
+
+const pluginGraphQLDocGenerator = (context: LoadContext, options: PluginOptions): Plugin => {
+  // Merge defaults with user-defined options.
+  const configuration = { ...DEFAULT_OPTIONS, ...options };
+  return {
+    name: "docusaurus-graphql-doc-generator",
+
+    extendCli: (cli) => {
+      cli
+        .command("graphql-to-doc")
+        .option(
+          "-s, --schema <schema>",
+          "Schema location",
+          configuration.schema
+        )
+        .option(
+          "-r, --rootPath <rootPath>",
+          "Root folder for doc generation",
+          configuration.rootPath
+        )
+        .option(
+          "-b, --baseURL <baseURL>",
+          "Base URL to be used by Docusaurus",
+          configuration.baseURL
+        )
+        .option(
+          "-l, --linkRoot <linkRoot>",
+          "Root for links in documentation",
+          configuration.linkRoot
+        )
+        .option(
+          "-h, --homepage <homepage>",
+          "File location for doc landing page",
+          configuration.homepage
+        )
+        .description("Generate GraphQL Schema Documentation")
+        .action(actionGenerateDocs);
+    },
+  };
+};
+
+export default pluginGraphQLDocGenerator;

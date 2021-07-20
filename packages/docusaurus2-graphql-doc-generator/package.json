@@ -17,15 +17,13 @@
   ],
   "author": "Gregory Heitz",
   "dependencies": {
-    "@edno/graphql-markdown": "^1.0.0",
-    "@oclif/command": "^1.8.0",
-    "chalk": "^4.1.1",
-    "fs-extra": "^10.0.0",
-    "lodash": "^4.17.21",
-    "moment": "^2.29.1",
-    "slugify": "^1.5.3"
+    "@edno/graphql-markdown": "./packages/graphql-markdown",
+    "chalk": "^4.1.1"
   },
   "devDependencies": {
+    "@docusaurus/plugin-content-docs": "^2.0.0-beta.3",
+    "@docusaurus/types": "^2.0.0-beta.3",
+    "commander": "^5.1.0",
     "directory-tree": "^2.2.9",
     "jest": "^27.0.3",
     "mock-fs": "^5.0.0"
