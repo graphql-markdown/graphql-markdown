@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/edno/graphql-markdown.git"
   },
+  "files": [
+    "assets"
+  ],
   "keywords": [
     "docusaurus2",
     "graphql",

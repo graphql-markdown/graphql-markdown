@@ -20,8 +20,7 @@ config = {
       ...config.themeConfig.navbar,
       items: [
         {
-          to: "docs/schema",
-          activeBasePath: "docs",
+          to: "/docs/schema",
           label: "Schema",
           position: "left",
         },
@@ -47,9 +46,11 @@ fs.writeFile(docusaurusConfig, configExportString, (err) => {
 
 const sidebarConfig = require.resolve(`${process.cwd()}/sidebars.js`);
 
-const sidebarConfigString = `const path = require("path");
+const sidebarConfigString = `
+const path = require("path");
 const pluginConfig = require(path.resolve(__dirname, "${pluginConfigFilename}"));
-module.exports = require(path.resolve(__dirname, pluginConfig.rootPath, "sidebar-schema.js"));\n`;
+module.exports = require(path.resolve(__dirname, pluginConfig.rootPath, pluginConfig.baseURL, "sidebar-schema.js"));
+\n`;
 
 fs.writeFile(sidebarConfig, sidebarConfigString, (err) => {
   if (err) {
