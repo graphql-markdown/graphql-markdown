@@ -23,9 +23,6 @@
   "dependencies": {
     "@edno/graphql-markdown": "./packages/graphql-markdown"
   },
-  "peerDependencies": {
-    "@docusaurus/plugin-content-docs": "2.x"
-  },
   "devDependencies": {
     "@docusaurus/plugin-content-docs": "^2.0.0-beta.3",
     "@docusaurus/types": "^2.0.0-beta.3",
