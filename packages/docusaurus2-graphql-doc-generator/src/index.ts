@@ -55,7 +55,8 @@ const pluginGraphQLDocGenerator = (
   // Merge defaults with user-defined options.
   const configuration: PluginOptions = { ...DEFAULT_OPTIONS, ...options };
 
-  const isDefaultPluginId = options.id === DEFAULT_PLUGIN_ID;
+  const isDefaultPluginId =
+    typeof options.id === "undefined" ? true : options.id === DEFAULT_PLUGIN_ID;
 
   const command = isDefaultPluginId
     ? "graphql-to-doc"
