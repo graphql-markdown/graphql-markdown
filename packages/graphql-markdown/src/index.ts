@@ -12,6 +12,13 @@ export type ParsedNode = {
   markdown?: string;
 };
 
+export type Result = {
+  type: string;
+  name: string;
+  markdown?: string;
+  filepath?: string;
+};
+
 // mock type
 // https://github.com/kamilkisiela/graphql-config/blob/master/src/extension.ts
 export interface ExtensionAPI {
@@ -34,4 +41,4 @@ export interface LoadConfigOptions {
   legacy?: boolean;
 }
 
-export { generateMarkdownFromSchema, Result } from "./lib/generator";
+export { generateMarkdownFromSchema } from "./lib/generator";

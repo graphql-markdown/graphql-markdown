@@ -3,7 +3,7 @@ import path from "path";
 
 import prettier from "prettier";
 
-import { ParsedNode, generateMarkdownFromSchema } from "@edno/graphql-markdown";
+import { generateMarkdownFromSchema } from "@edno/graphql-markdown";
 
 import { PluginOptions, Sidebar } from "../types";
 
@@ -52,42 +52,16 @@ const renderSidebar = async ({
   return path.relative("./", filePath);
 };
 
-const renderPage = async (
-  { type, name, markdown }: ParsedNode,
-  { rootPath }: PluginOptions
-): Promise<void> => {
-  const dirPath = path.resolve(rootPath, type);
-  const filePath = path.resolve(dirPath, name);
-  if (!fs.existsSync(dirPath)) {
-    await fs.promises.mkdir(dirPath, { recursive: true });
-  }
-  await fs.promises.writeFile(filePath, markdown);
-};
-
-const renderPages = async (
-  pages: ParsedNode[],
-  options: PluginOptions
-): Promise<void> => {
-  await Promise.all(
-    // eslint-disable-next-line require-await
-    pages.map(async (page) => {
-      return renderPage(page, options);
-    })
-  );
-};
-
 export const generateDocFromSchema = async (
   schemaLocation: string,
   options: PluginOptions
 ): Promise<{ pages: number; sidebar: string }> => {
-  const pages = await generateMarkdownFromSchema(schemaLocation);
+  const pages = await generateMarkdownFromSchema({ saveToFiles: true });
 
   // eslint-disable-next-line no-magic-numbers
   if (typeof pages === "undefined" || pages.length === 0) {
     throw new Error("Parsing error, no pages generated");
   }
-
-  await renderPages(pages, options);
 
   await renderHomepage(options.homepage, options);
   const sidebarPath = await renderSidebar(options);

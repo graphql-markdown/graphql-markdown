@@ -1,6 +1,7 @@
 import {
   GraphQLExtensionDeclaration,
   GraphQLProjectConfig,
+  IExtensions,
   loadConfig,
 } from "graphql-config";
 import { DocumentNode } from "graphql";
@@ -50,9 +51,12 @@ const loadConfiguration = async (
 
 export class Configuration {
   static configuration: Maybe<GraphQLProjectConfig>;
+  static extensionConfig: ConfigurationOptions;
 
   private constructor(readonly configuration: Maybe<GraphQLProjectConfig>) {
     Configuration.configuration = configuration;
+    Configuration.extensionConfig =
+      Configuration.configuration?.extension(EXTENSION_NAME) ?? defaultOptions;
   }
 
   static load = async (options?: LoadConfigOptions): Promise<Configuration> => {
@@ -60,13 +64,12 @@ export class Configuration {
     return new Configuration(configuration);
   };
 
-  static get = (name: string): string => {
-    const extensionConfig =
-      Configuration.configuration?.extension(EXTENSION_NAME);
-    if (typeof extensionConfig[name] === "undefined") {
-      return defaultOptions[name];
-    }
-    return extensionConfig[name];
+  static get = (name: string): unknown => {
+    return Configuration.extensionConfig[name];
+  };
+
+  static set = <T>(name: string, value: T): void => {
+    Configuration.extensionConfig[name] = value;
   };
 
   // eslint-disable-next-line require-await

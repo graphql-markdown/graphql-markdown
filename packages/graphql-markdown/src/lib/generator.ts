@@ -1,14 +1,7 @@
-import { LoadConfigOptions, ParsedNode } from "..";
+import { Configuration, ConfigurationOptions } from "./config";
+import { LoadConfigOptions, ParsedNode, Result } from "..";
 import { renderNode, saveMarkdownFile } from "./render";
-import { Configuration } from "./config";
 import { parseSchema } from "./parser";
-
-export type Result = {
-  type: string;
-  name: string;
-  markdown?: string;
-  filepath?: string;
-};
 
 const loadNodes = async (
   options?: LoadConfigOptions
@@ -24,22 +17,28 @@ const loadNodes = async (
   return parseSchema(schema);
 };
 
-export const generateMarkdownFromSchema = async (
-  options?: LoadConfigOptions,
-  saveToFiles?: boolean
-): Promise<Result[]> => {
-  const nodes = await loadNodes(options);
+type Options = {
+  saveToFiles?: boolean;
+  loaderOptions?: LoadConfigOptions;
+  generatorOptions?: ConfigurationOptions;
+};
 
-  const processor = saveToFiles === true ? saveMarkdownFile : renderNode;
+export const generateMarkdownFromSchema = async (
+  options?: Options
+): Promise<Result[]> => {
+  const nodes = await loadNodes(options?.loaderOptions);
+
+  const processor =
+    options?.saveToFiles === true ? saveMarkdownFile : renderNode;
 
   const results = await Promise.all(
     nodes.map(async (node: ParsedNode): Promise<Result> => {
-      const result = await processor(node);
+      const result = await processor(node, options?.generatorOptions);
       return {
         name: node.name,
         type: node.type,
         // eslint-disable-next-line prettier/prettier
-        ...saveToFiles === true ? { filepath: result } : { markdown: result },
+        ...options?.saveToFiles === true ? { filepath: result } : { markdown: result },
       };
     })
   );
