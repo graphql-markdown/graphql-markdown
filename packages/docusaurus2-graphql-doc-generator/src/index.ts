@@ -18,15 +18,17 @@ const DEFAULT_OPTIONS: PluginOptions = {
   schema: "./schema.graphql",
 };
 
+const DEFAULT_PLUGIN_ID = "default";
+
 const actionGenerateDocs = async (options: PluginOptions): Promise<void> => {
   const startTime = hrtime.bigint();
 
   const outputDir = path.join(options.rootPath, options.baseURL);
 
-  const { pages, sidebar } = await generateDocFromSchema(
-    options.schema,
-    options
-  );
+  const { pages, sidebar } = await generateDocFromSchema(options.schema, {
+    ...options,
+    rootPath: outputDir,
+  });
 
   const endTime = hrtime.bigint();
 
@@ -51,11 +53,26 @@ const pluginGraphQLDocGenerator = (
   options: PluginOptions
 ): Plugin<unknown> => {
   // Merge defaults with user-defined options.
-  const configuration = { ...DEFAULT_OPTIONS, ...options };
+  const configuration: PluginOptions = { ...DEFAULT_OPTIONS, ...options };
+
+  const isDefaultPluginId = options.id === DEFAULT_PLUGIN_ID;
+
+  const command = isDefaultPluginId
+    ? "graphql-to-doc"
+    : `graphql-to-doc:${options.id}`;
+  const commandDescription = isDefaultPluginId
+    ? "Generate GraphQL Schema Documentation"
+    : `Generate GraphQL Schema Documentation (${options.id})`;
+
   return {
     extendCli: (cli) => {
       cli
-        .command("graphql-to-doc")
+        .action(async (options) => {
+          // eslint-disable-next-line no-return-await
+          return await actionGenerateDocs(options);
+        })
+        .command(command)
+        .description(commandDescription)
         .option(
           "-s, --schema <schema>",
           "Schema location",
@@ -80,9 +97,7 @@ const pluginGraphQLDocGenerator = (
           "-h, --homepage <homepage>",
           "File location for doc landing page",
           configuration.homepage
-        )
-        .description("Generate GraphQL Schema Documentation")
-        .action(actionGenerateDocs);
+        );
     },
     name: "docusaurus-graphql-doc-generator",
   };
