@@ -20,7 +20,7 @@ const DEFAULT_OPTIONS: PluginOptions = {
 
 const DEFAULT_PLUGIN_ID = "default";
 
-const actionGenerateDocs = async (options: PluginOptions): Promise<void> => {
+const generate = async (options: PluginOptions): Promise<void> => {
   const startTime = hrtime.bigint();
 
   const outputDir = path.join(options.rootPath, options.baseURL);
@@ -61,6 +61,9 @@ const pluginGraphQLDocGenerator = (
   const command = isDefaultPluginId
     ? "graphql-to-doc"
     : `graphql-to-doc:${options.id}`;
+  const alias = isDefaultPluginId
+    ? "graphql-to-markdown"
+    : `graphql-to-markdown:${options.id}`;
   const commandDescription = isDefaultPluginId
     ? "Generate GraphQL Schema Documentation"
     : `Generate GraphQL Schema Documentation (${options.id})`;
@@ -70,32 +73,33 @@ const pluginGraphQLDocGenerator = (
       cli
         .action(async (options) => {
           // eslint-disable-next-line no-return-await
-          return await actionGenerateDocs(options);
+          return await generate(options);
         })
+        .alias(alias)
         .command(command)
         .description(commandDescription)
         .option(
-          "-s, --schema <schema>",
+          "-s, --schema <location>",
           "Schema location",
           configuration.schema
         )
         .option(
-          "-r, --rootPath <rootPath>",
+          "-r, --rootPath <path>",
           "Root folder for doc generation",
           configuration.rootPath
         )
         .option(
-          "-b, --baseURL <baseURL>",
+          "-b, --baseURL <path>",
           "Base URL to be used by Docusaurus",
           configuration.baseURL
         )
         .option(
-          "-l, --linkRoot <linkRoot>",
+          "-l, --linkRoot <path>",
           "Root for links in documentation",
           configuration.linkRoot
         )
         .option(
-          "-h, --homepage <homepage>",
+          "-h, --homepage <path>",
           "File location for doc landing page",
           configuration.homepage
         );
