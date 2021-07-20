@@ -2,7 +2,6 @@ require("colors");
 
 import * as Diff from "diff";
 import { danger, fail, schedule, warn } from "danger";
-import { filter } from "lodash";
 
 const COLOR = {
   ADDED: "green",
@@ -94,12 +93,12 @@ if (readmeFile.deleted) {
 }
 
 const jestSnapshots = {
-  deleted: filter(danger.git.deleted_files, (file) => {
+  deleted: danger.git.deleted_files.filter(file => {
     {
       return file.match(JEST_SNAPSHOT);
     }
   }),
-  modified: filter(danger.git.modified_files, (file) => {
+  modified: danger.git.modified_files.filter(file => {
     {
       return file.match(JEST_SNAPSHOT);
     }
