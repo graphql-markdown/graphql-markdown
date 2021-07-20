@@ -1,7 +1,37 @@
-import path from "path";
-export const __basedir = path.resolve(__dirname, ".."); // eslint-disable-line no-underscore-dangle
+export type Maybe<T> = T | undefined;
 
-export * from "./lib/config";
-export * from "./lib/generator";
-export * from "./lib/parser";
-export * from "./lib/render";
+export type ParsedNode = {
+  arguments?: unknown;
+  type: string;
+  name: string;
+  directives?: unknown;
+  defaultValue?: string;
+  kind: string;
+  description?: string;
+  operation: string;
+  markdown?: string;
+};
+
+// mock type
+// https://github.com/kamilkisiela/graphql-config/blob/master/src/extension.ts
+export interface ExtensionAPI {
+  logger: unknown;
+  loaders: {
+    schema: {
+      register: (args: unknown) => unknown;
+    };
+    documents: unknown;
+  };
+}
+
+export interface LoadConfigOptions {
+  filepath?: string;
+  rootDir?: string;
+  extensions?: unknown;
+  throwOnMissing?: boolean;
+  throwOnEmpty?: boolean;
+  configName?: string;
+  legacy?: boolean;
+}
+
+export { generateMarkdownFromSchema, Result } from "./lib/generator";

@@ -1,15 +1,21 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "rootDir": "src",
+    "outDir": "dist",
     "lib": ["esnext"],
     "strictNullChecks": true,
     "target": "esnext",
-    "types" : ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "@edno/graphql-markdown": ["../../packages/graphql-markdown"]
+    }
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules"],
+  "references": [{ "path": "../../packages/graphql-markdown" }]
 }

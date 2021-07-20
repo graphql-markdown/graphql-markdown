@@ -6,18 +6,19 @@ import * as prettier from "prettier";
 import kebabCase from "kebab-case";
 import slugify from "slugify";
 
-import {
-  __basedir,
-  getConfigurationOption,
-  getSimplifiedNodeKind,
-} from "../index";
+import { Configuration, ConfigurationOptions } from "./config";
+import { Maybe, ParsedNode } from "..";
+import { getSimplifiedNodeKind } from "./parser";
 
-import { ParsedNode } from "src/types";
+const __basedir = path.resolve(__dirname, "../.."); // eslint-disable-line no-underscore-dangle
 
-export const renderNode = async (node: ParsedNode): Promise<string> => {
+export const renderNode = async (
+  node: ParsedNode,
+  options?: Maybe<ConfigurationOptions>
+): Promise<string> => {
   const layout = path.resolve(
     __basedir,
-    getConfigurationOption("layouts"),
+    options?.layouts ?? Configuration.get("layouts"),
     "layout"
   );
   const result = (await Eta.renderFile(layout, node)) as string;
@@ -29,17 +30,20 @@ export const slug = (input: string): string => {
   return slugify(kebabCase(input));
 };
 
-export const saveMarkdownFile = async (node: ParsedNode): Promise<string> => {
+export const saveMarkdownFile = async (
+  node: ParsedNode,
+  options?: Maybe<ConfigurationOptions>
+): Promise<string> => {
   const folder = getSimplifiedNodeKind(node);
-  const filename = `${slug(node.name)}.md`;
+  const filename = `${slug(node.name)}.${options?.mdx === true ? "mdx" : "md"}`;
   const filePath = path.resolve(
     __basedir,
-    getConfigurationOption("output"),
+    options?.output ?? Configuration.get("output"),
     slug(folder),
     filename
   );
 
-  const markdown = await renderNode(node);
+  const markdown = await renderNode(node, options);
   await fs.writeFile(filePath, markdown);
 
   return filePath;

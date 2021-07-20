@@ -1,7 +1,7 @@
 import {
   GraphQLExtensionDeclaration,
   GraphQLProjectConfig,
-  loadConfigSync,
+  loadConfig,
 } from "graphql-config";
 import { DocumentNode } from "graphql";
 
@@ -9,13 +9,21 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { UrlLoader } from "@graphql-tools/url-loader";
 
-import { ExtensionAPI } from "src/types";
+import { ExtensionAPI, LoadConfigOptions, Maybe } from "..";
 
 const EXTENSION_NAME = "graphql-markdown" as const;
 
-const defaultOptions = {
+export type ConfigurationOptions = {
+  excludes?: readonly string[];
+  layouts?: string;
+  mdx?: boolean;
+  output?: string;
+};
+
+const defaultOptions: ConfigurationOptions = {
   excludes: [] as const,
   layouts: "./layouts" as const,
+  mdx: false as const,
   output: "./output" as const,
 } as const;
 
@@ -30,23 +38,39 @@ const setFileLoaderExtension: GraphQLExtensionDeclaration = (
   return { name: EXTENSION_NAME };
 };
 
-const configuration = ((): GraphQLProjectConfig => {
-  const config = loadConfigSync({
+const loadConfiguration = async (
+  options?: LoadConfigOptions
+): Promise<Maybe<GraphQLProjectConfig>> => {
+  const config = await loadConfig({
+    ...options,
     extensions: [setFileLoaderExtension],
   });
-  return config.getDefault();
-})();
+  return config?.getDefault();
+};
 
-export const getConfigurationOption = (name: string): string => {
-  const extensionConfig = configuration.extension(EXTENSION_NAME);
-  if (typeof extensionConfig[name] === "undefined") {
-    return defaultOptions[name];
+export class Configuration {
+  static configuration: Maybe<GraphQLProjectConfig>;
+
+  private constructor(readonly configuration: Maybe<GraphQLProjectConfig>) {
+    Configuration.configuration = configuration;
   }
-  return extensionConfig[name];
-};
 
-export const loadSchemaFromConfiguration = (): DocumentNode => {
-  return configuration.getSchemaSync("DocumentNode");
-};
+  static load = async (options?: LoadConfigOptions): Promise<Configuration> => {
+    const configuration = await loadConfiguration(options);
+    return new Configuration(configuration);
+  };
 
-export default configuration;
+  static get = (name: string): string => {
+    const extensionConfig =
+      Configuration.configuration?.extension(EXTENSION_NAME);
+    if (typeof extensionConfig[name] === "undefined") {
+      return defaultOptions[name];
+    }
+    return extensionConfig[name];
+  };
+
+  // eslint-disable-next-line require-await
+  static loadSchema = async (): Promise<Maybe<DocumentNode>> => {
+    return Configuration.configuration?.getSchema("DocumentNode");
+  };
+}

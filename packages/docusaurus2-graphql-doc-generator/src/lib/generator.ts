@@ -1,11 +1,11 @@
-import { promises as fs } from "fs";
+import fs from "fs";
 import path from "path";
-
-import type { Sidebar } from "@docusaurus/plugin-content-docs";
 
 import prettier from "prettier";
 
-import { PluginOptions } from "../types";
+import { ParsedNode, generateMarkdownFromSchema } from "@edno/graphql-markdown";
+
+import { PluginOptions, Sidebar } from "../types";
 
 const SIDEBAR_FILE = "sidebar-schema.js";
 
@@ -21,10 +21,10 @@ const renderHomepage = async (
   homepageLocation: string,
   { rootPath }: PluginOptions
 ): Promise<string> => {
-  const homepage = await fs.readFile(homepageLocation, "utf8");
+  const homepage = await fs.promises.readFile(homepageLocation, "utf8");
 
   const filePath = path.join(rootPath, path.basename(homepageLocation));
-  await fs.writeFile(filePath, prettifyMarkdown(homepage), "utf8");
+  await fs.promises.writeFile(filePath, prettifyMarkdown(homepage), "utf8");
 
   return path.relative("./", filePath);
 };
@@ -43,16 +43,51 @@ const renderSidebar = async ({
   };
 
   const filePath = path.join(rootPath, SIDEBAR_FILE);
-  await fs.writeFile(filePath, prettifyJSON(JSON.stringify(sidebar)), "utf8");
+  await fs.promises.writeFile(
+    filePath,
+    prettifyJSON(JSON.stringify(sidebar)),
+    "utf8"
+  );
 
   return path.relative("./", filePath);
+};
+
+const renderPage = async (
+  { type, name, markdown }: ParsedNode,
+  { rootPath }: PluginOptions
+): Promise<void> => {
+  const dirPath = path.resolve(rootPath, type);
+  const filePath = path.resolve(dirPath, name);
+  if (!fs.existsSync(dirPath)) {
+    await fs.promises.mkdir(dirPath, { recursive: true });
+  }
+  await fs.promises.writeFile(filePath, markdown);
+};
+
+const renderPages = async (
+  pages: ParsedNode[],
+  options: PluginOptions
+): Promise<void> => {
+  await Promise.all(
+    // eslint-disable-next-line require-await
+    pages.map(async (page) => {
+      return renderPage(page, options);
+    })
+  );
 };
 
 export const generateDocFromSchema = async (
   schemaLocation: string,
   options: PluginOptions
 ): Promise<{ pages: number; sidebar: string }> => {
-  const pages: unknown[] = [];
+  const pages = await generateMarkdownFromSchema(schemaLocation);
+
+  // eslint-disable-next-line no-magic-numbers
+  if (typeof pages === "undefined" || pages.length === 0) {
+    throw new Error("Parsing error, no pages generated");
+  }
+
+  await renderPages(pages, options);
 
   await renderHomepage(options.homepage, options);
   const sidebarPath = await renderSidebar(options);

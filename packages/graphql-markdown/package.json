@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/edno/graphql-markdown.git"
@@ -34,7 +35,8 @@
   },
   "devDependencies": {
     "@jest/types": "^27.0.6",
-    "@types/node": "^16.3.3",
+    "@types/node": "^15.12.2",
+    "@types/ws": "^7.4.7",
     "jest": "^27.0.6",
     "memfs": "^3.2.2",
     "ts-jest": "^27.0.3",

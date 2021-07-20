@@ -1,17 +1,48 @@
-import { ParsedNode } from "src/types";
+import { LoadConfigOptions, ParsedNode } from "..";
+import { renderNode, saveMarkdownFile } from "./render";
+import { Configuration } from "./config";
+import { parseSchema } from "./parser";
 
-import { loadSchemaFromConfiguration, parseSchema, renderNode } from "../";
+export type Result = {
+  type: string;
+  name: string;
+  markdown?: string;
+  filepath?: string;
+};
 
-export const generateMarkdownFromSchema = async (): Promise<string[]> => {
-  const schema = loadSchemaFromConfiguration();
-  const nodes = parseSchema(schema);
+const loadNodes = async (
+  options?: LoadConfigOptions
+): Promise<ParsedNode[]> => {
+  await Configuration.load(options);
 
-  const result = await Promise.all(
-    nodes.map(async (node: ParsedNode) => {
-      const markdown = await renderNode(node);
-      return markdown;
+  const schema = await Configuration.loadSchema();
+
+  if (typeof schema === "undefined") {
+    throw new Error("An error occurred while loading the schema");
+  }
+
+  return parseSchema(schema);
+};
+
+export const generateMarkdownFromSchema = async (
+  options?: LoadConfigOptions,
+  saveToFiles?: boolean
+): Promise<Result[]> => {
+  const nodes = await loadNodes(options);
+
+  const processor = saveToFiles === true ? saveMarkdownFile : renderNode;
+
+  const results = await Promise.all(
+    nodes.map(async (node: ParsedNode): Promise<Result> => {
+      const result = await processor(node);
+      return {
+        name: node.name,
+        type: node.type,
+        // eslint-disable-next-line prettier/prettier
+        ...saveToFiles === true ? { filepath: result } : { markdown: result },
+      };
     })
   );
 
-  return result;
+  return results;
 };

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [],
+  "references": [
+    { "path": "packages/graphql-markdown" },
+    { "path": "packages/docusaurus2-graphql-doc-generator" }
+  ]
+}

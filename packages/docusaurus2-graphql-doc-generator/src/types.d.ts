@@ -6,3 +6,6 @@ export type PluginOptions = {
   schema: string;
   rootPath: string;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Sidebar = Record<string, any>;

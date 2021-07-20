@@ -26,7 +26,7 @@ import {
   visit,
 } from "graphql";
 
-import { ParsedNode } from "src/types";
+import { ParsedNode } from "..";
 
 const visitor = {
   Argument: (node: ArgumentNode) => {
