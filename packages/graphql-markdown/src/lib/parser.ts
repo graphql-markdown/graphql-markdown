@@ -1,4 +1,5 @@
 import {
+  ASTNode,
   ArgumentNode,
   BooleanValueNode,
   DirectiveDefinitionNode,
@@ -16,6 +17,7 @@ import {
   NamedTypeNode,
   NonNullTypeNode,
   ObjectFieldNode,
+  ObjectTypeDefinitionNode,
   ObjectValueNode,
   OperationTypeDefinitionNode,
   OperationTypeNode,
@@ -23,6 +25,8 @@ import {
   TypeDefinitionNode,
   visit,
 } from "graphql";
+
+import { ParsedNode } from "src/types";
 
 const visitor = {
   Argument: (node: ArgumentNode) => {
@@ -134,24 +138,40 @@ const visitor = {
   },
 } as const;
 
-const OperationTypes = ["query", "mutation", "subscription"] as const;
+const OperationTypes: readonly string[] = [
+  "query",
+  "mutation",
+  "subscription",
+] as const;
 
-export const parseSchema = (schema: DocumentNode): any[] => {
-  const nodes = visit(schema, { leave: visitor });
+const isNodeTypeOperation = (
+  node: ASTNode
+): node is ObjectTypeDefinitionNode => {
+  return (
+    "name" in node &&
+    typeof node.name !== "undefined" &&
+    OperationTypes.includes(node.name.value.toLowerCase()) &&
+    "fields" in node
+  );
+};
+
+export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
+  const nodes: ASTNode[] = visit(schema, { leave: visitor });
   return nodes.flatMap((node) => {
-    return OperationTypes.includes(node.name.toLowerCase())
-      ? node.fields.map((operation) => {
-          return {
-            ...operation,
-            kind: "OperationTypeDefinition",
-            operation: node.name.toLowerCase(),
-          };
-        })
-      : node;
+    if (isNodeTypeOperation(node) && typeof node.fields !== "undefined") {
+      return node.fields.map<ParsedNode>((operation: FieldDefinitionNode) => {
+        return {
+          ...operation,
+          kind: "OperationTypeDefinition",
+          operation: node.name.value.toLowerCase(),
+        } as unknown as ParsedNode;
+      });
+    }
+    return node as unknown as ParsedNode;
   });
 };
 
-export const getSimplifiedNodeKind = (node: any): string => {
+export const getSimplifiedNodeKind = (node: ParsedNode): string => {
   switch (node.kind) {
     case "OperationTypeDefinition":
       return node.operation;

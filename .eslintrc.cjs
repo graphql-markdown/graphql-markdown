@@ -53,7 +53,6 @@ module.exports = {
     "@typescript-eslint/prefer-literal-enum-member": error,
     "@typescript-eslint/prefer-optional-chain": error,
     "@typescript-eslint/prefer-readonly": error,
-    "@typescript-eslint/prefer-readonly-parameter-types": error,
     "@typescript-eslint/promise-function-async": error,
     "@typescript-eslint/sort-type-union-intersection-members": error,
     "@typescript-eslint/strict-boolean-expressions": error,

@@ -1,20 +1,21 @@
+/* eslint-disable no-console */
 /* istanbul ignore file */
-import path from "path";
 import { hrtime } from "process";
+import path from "path";
 
 import chalk from "chalk";
 
-import { generateDocFromSchema } from "./lib/generator";
-import { PluginOptions } from "./type";
-
 import type { LoadContext, Plugin } from "@docusaurus/types";
 
+import { PluginOptions } from "./types";
+import { generateDocFromSchema } from "./lib/generator";
+
 const DEFAULT_OPTIONS: PluginOptions = {
-  schema: "./schema.graphql",
-  rootPath: "./docs",
   baseURL: "schema",
-  linkRoot: "/",
   homepage: path.join(__dirname, "../assets/", "generated.md"),
+  linkRoot: "/",
+  rootPath: "./docs",
+  schema: "./schema.graphql",
 };
 
 const actionGenerateDocs = async (options: PluginOptions): Promise<void> => {
@@ -22,7 +23,10 @@ const actionGenerateDocs = async (options: PluginOptions): Promise<void> => {
 
   const outputDir = path.join(options.rootPath, options.baseURL);
 
-  const { pages, sidebar } = await generateDocFromSchema(options.schema, options);
+  const { pages, sidebar } = await generateDocFromSchema(
+    options.schema,
+    options
+  );
 
   const endTime = hrtime.bigint();
 
@@ -42,12 +46,13 @@ Remember to update your Docusaurus configuration with "${sidebar}".
   );
 };
 
-const pluginGraphQLDocGenerator = (context: LoadContext, options: PluginOptions): Plugin => {
+const pluginGraphQLDocGenerator = (
+  context: LoadContext,
+  options: PluginOptions
+): Plugin<unknown> => {
   // Merge defaults with user-defined options.
   const configuration = { ...DEFAULT_OPTIONS, ...options };
   return {
-    name: "docusaurus-graphql-doc-generator",
-
     extendCli: (cli) => {
       cli
         .command("graphql-to-doc")
@@ -79,6 +84,7 @@ const pluginGraphQLDocGenerator = (context: LoadContext, options: PluginOptions)
         .description("Generate GraphQL Schema Documentation")
         .action(actionGenerateDocs);
     },
+    name: "docusaurus-graphql-doc-generator",
   };
 };
 

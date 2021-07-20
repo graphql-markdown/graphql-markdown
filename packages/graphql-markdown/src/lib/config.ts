@@ -9,6 +9,8 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { UrlLoader } from "@graphql-tools/url-loader";
 
+import { ExtensionAPI } from "src/types";
+
 const EXTENSION_NAME = "graphql-markdown" as const;
 
 const defaultOptions = {
@@ -17,7 +19,9 @@ const defaultOptions = {
   output: "./output" as const,
 } as const;
 
-const setFileLoaderExtension: GraphQLExtensionDeclaration = (api: any) => {
+const setFileLoaderExtension: GraphQLExtensionDeclaration = (
+  api: ExtensionAPI
+) => {
   [new GraphQLFileLoader(), new JsonFileLoader(), new UrlLoader()].forEach(
     (loader) => {
       return api.loaders.schema.register(loader);
