@@ -150,7 +150,7 @@ const isNodeTypeOperation = (
   return (
     "name" in node &&
     typeof node.name !== "undefined" &&
-    OperationTypes.includes(node.name.value.toLowerCase()) &&
+    OperationTypes.includes(node.name.toString().toLowerCase()) &&
     "fields" in node
   );
 };
@@ -163,7 +163,7 @@ export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
         return {
           ...operation,
           kind: "OperationTypeDefinition",
-          operation: node.name.value.toLowerCase(),
+          operation: node.name.toString().toLowerCase(),
         } as unknown as ParsedNode;
       });
     }

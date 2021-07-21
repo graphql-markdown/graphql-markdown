@@ -13,6 +13,12 @@ import { ExtensionAPI, LoadConfigOptions, Maybe } from "..";
 
 const EXTENSION_NAME = "graphql-markdown" as const;
 
+export const OPTION = {
+  LAYOUTS: "layouts",
+  MDX: "mdx",
+  OUTPUT: "output",
+};
+
 export type ConfigurationOptions = {
   excludes?: readonly string[];
   layouts?: string;
@@ -22,8 +28,8 @@ export type ConfigurationOptions = {
 
 const defaultOptions: ConfigurationOptions = {
   excludes: [] as const,
-  layouts: "./layouts" as const,
-  mdx: false as const,
+  [OPTION.LAYOUTS]: "./layouts" as const,
+  [OPTION.OUTPUT]: false as const,
   output: "./output" as const,
 } as const;
 
@@ -65,11 +71,11 @@ export class Configuration {
     return new Configuration(configuration);
   };
 
-  static get = (name: string): unknown => {
+  static get = (name: string): string => {
     return Configuration.extension[name];
   };
 
-  static set = <T>(name: string, value: T): void => {
+  static set = (name: string, value: string): void => {
     Configuration.extension[name] = value;
   };
 

@@ -6,21 +6,27 @@ import * as prettier from "prettier";
 import kebabCase from "kebab-case";
 import slugify from "slugify";
 
-import { Configuration, ConfigurationOptions } from "./config";
+import { Configuration, ConfigurationOptions, OPTION } from "./config";
 import { Maybe, ParsedNode } from "..";
 import { getSimplifiedNodeKind } from "./parser";
 
 const __basedir = path.resolve(__dirname, "../.."); // eslint-disable-line no-underscore-dangle
 
+const INDEX = "layout";
+
+const EXTENSION = {
+  MD: ".md",
+  MDX: ".mdx",
+};
+
 export const renderNode = async (
   node: ParsedNode,
   options?: Maybe<ConfigurationOptions>
 ): Promise<string> => {
-  const layout = path.resolve(
-    __basedir,
-    options?.layouts ?? Configuration.get("layouts"),
-    "layout"
-  );
+  const layoutsFolder =
+    options?.[OPTION.LAYOUTS] ?? Configuration.get(OPTION.LAYOUTS);
+
+  const layout = path.resolve(__basedir, layoutsFolder, INDEX);
   const result = (await Eta.renderFile(layout, node)) as string;
 
   return prettier.format(result, { parser: "markdown" });
@@ -34,11 +40,17 @@ export const saveMarkdownFile = async (
   node: ParsedNode,
   options?: Maybe<ConfigurationOptions>
 ): Promise<string> => {
+  const outputFolder =
+    options?.[OPTION.OUTPUT] ?? Configuration.get(OPTION.OUTPUT);
   const folder = getSimplifiedNodeKind(node);
-  const filename = `${slug(node.name)}.${options?.mdx === true ? "mdx" : "md"}`;
+  const extension =
+    (options?.[OPTION.MDX] ?? Configuration.get(OPTION.MDX)) === true
+      ? EXTENSION.MDX
+      : EXTENSION.MD;
+  const filename = `${slug(node.name)}${extension}`;
   const filePath = path.resolve(
     __basedir,
-    options?.output ?? Configuration.get("output"),
+    outputFolder,
     slug(folder),
     filename
   );
