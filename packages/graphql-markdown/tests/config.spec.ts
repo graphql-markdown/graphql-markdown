@@ -2,7 +2,18 @@ import { IFS } from "unionfs/lib/fs";
 import { Volume } from "memfs";
 import { ufs } from "unionfs";
 
-const configLib = require.resolve("../src/lib/config");
+jest.mock("fs", () => {
+  const vol = Volume.fromJSON({});
+  vol.mkdirSync(process.cwd(), { recursive: true });
+
+  const fs = jest.requireActual("fs");
+  return ufs.use(fs).use(vol as unknown as IFS);
+});
+
+import fs from "fs";
+
+import { Configuration } from "../src/lib/config";
+
 const schemaLocation = require.resolve("./__data__/schema/tweet.graphql");
 
 const graphqlrc = `---
@@ -13,15 +24,11 @@ extensions:
     output: ./docs
 `;
 
-jest.mock("fs", () => {
-  const vol = Volume.fromJSON({});
-  vol.mkdirSync(process.cwd(), { recursive: true });
-  vol.writeFileSync(".graphqlrc", graphqlrc);
-  const fs = jest.requireActual("fs");
-  return ufs.use(fs).use(vol as unknown as IFS);
-});
-
 describe("config", () => {
+  beforeEach(async () => {
+    await fs.promises.writeFile(".graphqlrc", graphqlrc);
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -30,44 +37,50 @@ describe("config", () => {
     jest.resetAllMocks();
   });
 
-  describe("configuration", () => {
-    it("loads schema location from GraphQL Config file", async () => {
-      expect.hasAssertions();
+  describe("Configuration", () => {
+    describe("load", () => {
+      it("loads schema location from GraphQL Config file", async () => {
+        expect.hasAssertions();
 
-      const configuration = (await import(configLib)).default;
+        await Configuration.load();
 
-      expect(configuration.schema).toBe(schemaLocation);
-    });
-  });
-
-  describe("getConfigurationOption", () => {
-    it("loads graphql-markdown options from GraphQL Config file", async () => {
-      expect.hasAssertions();
-
-      const { getConfigurationOption } = await import(configLib);
-
-      expect(getConfigurationOption("layouts")).toBe("./my-layouts");
+        expect(Configuration.project).toBeDefined();
+        expect(Configuration.project?.schema).toBe(schemaLocation);
+      });
     });
 
-    it("returns default options if not set in GraphQL Config file", async () => {
-      expect.hasAssertions();
+    describe("get", () => {
+      it("loads graphql-markdown options from GraphQL Config file", async () => {
+        expect.hasAssertions();
 
-      const config = await import(configLib);
-      jest.spyOn(config.default, "extension").mockReturnValue({});
+        await Configuration.load();
 
-      expect(config.getConfigurationOption("layouts")).toBe("./layouts");
-      expect(config.getConfigurationOption("output")).toBe("./output");
+        expect(Configuration.extension).toBeDefined();
+        expect(Configuration.get("layouts")).toBe("./my-layouts");
+      });
+
+      it("returns default options if not set in GraphQL Config file", async () => {
+        expect.hasAssertions();
+
+        await fs.promises.writeFile(".graphqlrc", `schema: ${schemaLocation}`);
+        await Configuration.load();
+
+        expect(Configuration.project).toBeDefined();
+        expect(Configuration.extension).toBeDefined();
+        expect(Configuration.get("layouts")).toBe("./layouts");
+        expect(Configuration.get("output")).toBe("./output");
+      });
     });
-  });
 
-  describe("loadSchemaFromConfiguration", () => {
-    it("loads graphql schema as DocumentNode from GraphQL Config file", async () => {
-      expect.hasAssertions();
+    describe("schema", () => {
+      it("loads graphql schema as DocumentNode from GraphQL Config file", async () => {
+        expect.hasAssertions();
 
-      const { loadSchemaFromConfiguration } = await import(configLib);
-      const schema = loadSchemaFromConfiguration();
+        await Configuration.load();
+        const schema = await Configuration.schema();
 
-      expect(schema).toMatchSnapshot();
+        expect(schema).toMatchSnapshot();
+      });
     });
   });
 });

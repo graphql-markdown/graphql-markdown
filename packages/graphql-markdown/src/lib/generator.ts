@@ -8,7 +8,7 @@ const loadNodes = async (
 ): Promise<ParsedNode[]> => {
   await Configuration.load(options);
 
-  const schema = await Configuration.loadSchema();
+  const schema = await Configuration.schema();
 
   if (typeof schema === "undefined") {
     throw new Error("An error occurred while loading the schema");

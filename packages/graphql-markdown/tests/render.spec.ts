@@ -1,8 +1,8 @@
+/* eslint-disable init-declarations */
 import { promises as fs } from "fs";
 
-import kebabCase from "kebab-case";
-
 import { renderNode, saveMarkdownFile, slug } from "../src/lib/render";
+import { ParsedNode } from "../src";
 
 import kindDirective, {
   directiveDeprecated,
@@ -38,38 +38,42 @@ describe.only("render", () => {
     beforeEach(() => {
       spyFsWriteFile = jest
         .spyOn(fs, "writeFile")
-        .mockImplementation(() => Promise.resolve());
+        // eslint-disable-next-line require-await
+        .mockImplementation(async () => Promise.resolve());
     });
 
     afterEach(() => {
       jest.restoreAllMocks();
     });
 
-    const nodeKinds: [string, any][] = [
-      ["Query", kindQuery],
-      ["Mutation", kindMutation],
-      ["Subscription", kindSubscription],
-      ["Enum", kindEnum],
-      ["Object", kindObject],
-      ["Input", kindInput],
-      ["Scalar", kindScalar],
-      ["Interface", kindInterface],
-      ["Union", kindUnion],
-      ["Directive", kindDirective],
+    const nodeKinds: [string, ParsedNode][] = [
+      ["Query", kindQuery as unknown as ParsedNode],
+      ["Mutation", kindMutation as unknown as ParsedNode],
+      ["Subscription", kindSubscription as unknown as ParsedNode],
+      ["Enum", kindEnum as unknown as ParsedNode],
+      ["Object", kindObject as unknown as ParsedNode],
+      ["Input", kindInput as unknown as ParsedNode],
+      ["Scalar", kindScalar as unknown as ParsedNode],
+      ["Interface", kindInterface as unknown as ParsedNode],
+      ["Union", kindUnion as unknown as ParsedNode],
+      ["Directive", kindDirective as unknown as ParsedNode],
     ];
 
-    describe.each<[string, any]>(nodeKinds)("%s", (kind, node) => {
-      it(`should save file in '${kind.toLowerCase()}' folder`, async () => {
-        expect.hasAssertions();
+    describe.each<[string, ParsedNode]>(nodeKinds)(
+      "%s",
+      (kind: string, node: ParsedNode) => {
+        it(`should save file in '${kind.toLowerCase()}' folder`, async () => {
+          expect.hasAssertions();
 
-        const filepath = await saveMarkdownFile(node);
+          const filepath = await saveMarkdownFile(node);
 
-        const matcher = new RegExp(`.+/${slug(kind)}/${slug(node.name)}.md$`);
+          const matcher = new RegExp(`.+/${slug(kind)}/${slug(node.name)}.md$`);
 
-        expect(filepath).toEqual(expect.stringMatching(matcher));
-        expect(spyFsWriteFile).toHaveBeenCalled();
-      });
-    });
+          expect(filepath).toEqual(expect.stringMatching(matcher));
+          expect(spyFsWriteFile).toHaveBeenCalled();
+        });
+      }
+    );
   });
 
   describe("renderNode", () => {
@@ -81,7 +85,7 @@ describe.only("render", () => {
       it("should render Query", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindQuery);
+        const result = await renderNode(kindQuery as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -92,7 +96,7 @@ describe.only("render", () => {
         const result = await renderNode({
           ...kindQuery,
           directives: [directiveDeprecated],
-        });
+        } as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -102,7 +106,7 @@ describe.only("render", () => {
       it("should render Mutation", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindMutation);
+        const result = await renderNode(kindMutation as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -113,7 +117,7 @@ describe.only("render", () => {
         const result = await renderNode({
           ...kindMutation,
           directives: [directiveDeprecated],
-        });
+        } as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -123,7 +127,9 @@ describe.only("render", () => {
       it("should render Subscription", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindSubscription);
+        const result = await renderNode(
+          kindSubscription as unknown as ParsedNode
+        );
 
         expect(result).toMatchSnapshot();
       });
@@ -144,7 +150,7 @@ describe.only("render", () => {
       it("should render Enum", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindEnum);
+        const result = await renderNode(kindEnum as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -154,7 +160,7 @@ describe.only("render", () => {
       it("should render Object", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindObject);
+        const result = await renderNode(kindObject as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -164,7 +170,7 @@ describe.only("render", () => {
       it("should render Input", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindInput);
+        const result = await renderNode(kindInput as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -177,7 +183,7 @@ describe.only("render", () => {
         const result = await renderNode({
           ...kindScalar,
           description: undefined, // eslint-disable-line no-undefined
-        });
+        } as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -185,7 +191,7 @@ describe.only("render", () => {
       it("should render Scalar with description supporting Markdown notation", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindScalar);
+        const result = await renderNode(kindScalar as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -196,7 +202,7 @@ describe.only("render", () => {
         const result = await renderNode({
           ...kindScalar,
           directives: [directiveSpecifiedBy],
-        });
+        } as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -206,7 +212,7 @@ describe.only("render", () => {
       it("should render Interface", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindInterface);
+        const result = await renderNode(kindInterface as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -216,7 +222,7 @@ describe.only("render", () => {
       it("should render Union", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindUnion);
+        const result = await renderNode(kindUnion as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });
@@ -226,7 +232,7 @@ describe.only("render", () => {
       it("should render Directive", async () => {
         expect.hasAssertions();
 
-        const result = await renderNode(kindDirective);
+        const result = await renderNode(kindDirective as unknown as ParsedNode);
 
         expect(result).toMatchSnapshot();
       });

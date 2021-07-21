@@ -9,7 +9,7 @@ export default {
   preset: "ts-jest",
   roots: ['<rootDir>'],
   testEnvironment: "node",
-  testMatch: ["<rootDir>/tests/**/*.spec.ts"],
+  testMatch: ["<rootDir>/tests/**/*.(spec|test).ts"],
   testPathIgnorePatterns: ["/node_modules/"],
   transform: {},
 };

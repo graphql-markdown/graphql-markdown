@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`config loadSchemaFromConfiguration loads graphql schema as DocumentNode from GraphQL Config file 1`] = `
+exports[`config Configuration schema loads graphql schema as DocumentNode from GraphQL Config file 1`] = `
 Object {
   "definitions": Array [
     Object {
