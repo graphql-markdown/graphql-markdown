@@ -1,14 +1,4 @@
-import { IFS } from "unionfs/lib/fs";
-import { Volume } from "memfs";
-import { ufs } from "unionfs";
-
-jest.mock("fs", () => {
-  const vol = Volume.fromJSON({});
-  vol.mkdirSync(process.cwd(), { recursive: true });
-
-  const fs = jest.requireActual("fs");
-  return ufs.use(fs).use(vol as unknown as IFS);
-});
+jest.mock("fs");
 
 import fs from "fs";
 
