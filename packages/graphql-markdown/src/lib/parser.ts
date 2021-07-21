@@ -28,6 +28,30 @@ import {
 
 import { ParsedNode } from "..";
 
+const GRAPHQL_KIND = {
+  DIRECTIVE: "DirectiveDefinition",
+  ENUM_TYPE: "EnumTypeDefinition",
+  INPUT_OBJECT_TYPE: "InputObjectTypeDefinition",
+  INPUT_TYPE: "InputTypeDefinition",
+  INTERFACE_TYPE: "InterfaceTypeDefinition",
+  OBJECT_TYPE: "ObjectTypeDefinition",
+  OPERATION_TYPE: "OperationTypeDefinition",
+  SCALAR_TYPE: "ScalarTypeDefinition",
+  UNION_TYPE: "UnionTypeDefinition",
+} as const;
+
+const SIMPLIFIED_NODE_KIND = {
+  DIRECTIVE: "Directive",
+  INPUT: "Input",
+  OBJECT: "Object",
+} as const;
+
+const OPERATION_TYPE = {
+  MUTATION: "mutation",
+  QUERY: "query",
+  SUBSCRIPTION: "subscription",
+} as const;
+
 const visitor = {
   Argument: (node: ArgumentNode) => {
     return node;
@@ -139,9 +163,9 @@ const visitor = {
 } as const;
 
 const OperationTypes: readonly string[] = [
-  "query",
-  "mutation",
-  "subscription",
+  OPERATION_TYPE.QUERY,
+  OPERATION_TYPE.MUTATION,
+  OPERATION_TYPE.SUBSCRIPTION,
 ] as const;
 
 const isNodeTypeOperation = (
@@ -162,7 +186,7 @@ export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
       return node.fields.map<ParsedNode>((operation: FieldDefinitionNode) => {
         return {
           ...operation,
-          kind: "OperationTypeDefinition",
+          kind: GRAPHQL_KIND.OPERATION_TYPE,
           operation: node.name.toString().toLowerCase(),
         } as unknown as ParsedNode;
       });
@@ -173,20 +197,20 @@ export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
 
 export const getSimplifiedNodeKind = (node: ParsedNode): string => {
   switch (node.kind) {
-    case "OperationTypeDefinition":
+    case GRAPHQL_KIND.OPERATION_TYPE:
       return node.operation;
-    case "DirectiveDefinition":
-      return "Directive";
-    case "ScalarTypeDefinition":
-    case "EnumTypeDefinition":
-    case "InputTypeDefinition":
-    case "InterfaceTypeDefinition":
-    case "ObjectTypeDefinition":
-    case "UnionTypeDefinition":
+    case GRAPHQL_KIND.DIRECTIVE:
+      return SIMPLIFIED_NODE_KIND.DIRECTIVE;
+    case GRAPHQL_KIND.SCALAR_TYPE:
+    case GRAPHQL_KIND.ENUM_TYPE:
+    case GRAPHQL_KIND.INPUT_TYPE:
+    case GRAPHQL_KIND.INTERFACE_TYPE:
+    case GRAPHQL_KIND.OBJECT_TYPE:
+    case GRAPHQL_KIND.UNION_TYPE:
       return node.kind.replace(/^(?<kind>[A-z]+)TypeDefinition$/, "$<kind>");
-    case "InputObjectTypeDefinition":
-      return "Input";
+    case GRAPHQL_KIND.INPUT_OBJECT_TYPE:
+      return SIMPLIFIED_NODE_KIND.INPUT;
     default:
-      return "Object";
+      return SIMPLIFIED_NODE_KIND.OBJECT;
   }
 };
