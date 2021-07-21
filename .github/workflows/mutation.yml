@@ -1,0 +1,21 @@
+name: Mutation Test
+
+on: push
+
+env:
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+jobs:
+  mutation:
+    name: Mutation Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code Base
+      uses: actions/checkout@v2
+
+    - name: Install modules
+      run: yarn
+
+    - name: Run Mutations Tests
+      run: yarn test:stryker --reporters clear-text,dashboard
