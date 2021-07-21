@@ -1,6 +1,17 @@
 name: E2E Test
 
-on: push
+on: 
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - '**.js'
+      - '**.json'
+      - '**.yml'
+      - '!dangerfile.js'
+      - '!.github'
+      - '.github/workflows/e2e.yml'
 
 jobs:
   e2e:

@@ -1,6 +1,17 @@
 name: Test
 
-on: push
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - '**.js'
+      - '**.json'
+      - '**.yml'
+      - '!dangerfile.js'
+      - '!.github'
+      - '.github/workflows/test.yml'
 
 jobs:
   test:
