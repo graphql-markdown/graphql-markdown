@@ -1,6 +1,17 @@
 name: Linter
 
-on: push
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - '**.js'
+      - '**.json'
+      - '**.yml'
+      - '!dangerfile.js'
+      - '!.github'
+      - '.github/workflows/linter.yml'
 
 jobs:
   lint:
