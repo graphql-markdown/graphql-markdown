@@ -1,12 +1,16 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
   "homepage": "https://github.com/edno/graphql-markdown",
+  "description": "",
+  "bugs": {
+    "url": "https://github.com/edno/graphql-markdown/issues"
+  },
   "version": "2.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/edno/graphql-markdown.git"
+    "url": "git+https://github.com/edno/graphql-markdown.git"
   },
   "keywords": [
     "docusaurus2",
@@ -38,5 +42,8 @@
   "engines": {
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
+  },
+  "directories": {
+    "test": "tests"
   }
 }

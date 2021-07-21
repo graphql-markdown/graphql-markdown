@@ -1,7 +1,10 @@
 {
   "name": "@edno/graphql-markdown",
   "homepage": "https://github.com/edno/graphql-markdown/tree/main/graphql-to-markdown",
-  "bugs": "https://github.com/edno/graphql-markdown/issues",
+  "description": "",
+  "bugs": {
+    "url": "https://github.com/edno/graphql-markdown/issues"
+  },
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
@@ -9,7 +12,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/edno/graphql-markdown.git"
+    "url": "git+https://github.com/edno/graphql-markdown.git"
   },
   "keywords": [
     "graphql",
@@ -52,5 +55,8 @@
   "engines": {
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
+  },
+  "directories": {
+    "test": "tests"
   }
 }
