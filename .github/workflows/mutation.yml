@@ -1,6 +1,9 @@
 name: Mutation Test
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
