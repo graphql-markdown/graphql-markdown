@@ -9,3 +9,4 @@ dist
 # istanbul code coverage
 .nyc_output
 coverage
+reports

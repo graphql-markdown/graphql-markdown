@@ -1,0 +1,29 @@
+name: Mutation Test
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+jobs:
+  mutation:
+    name: Mutation Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.7.0
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Checkout Code Base
+      uses: actions/checkout@v2
+
+    - name: Install modules
+      run: yarn
+
+    - name: Run Mutations Tests
+      run: yarn test:stryker --reporters clear-text,dashboard

@@ -27,25 +27,3 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.7.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout Code Base
-        uses: actions/checkout@v2
-
-      - name: Build test container
-        run: docker-compose build
-
-      - name: Run End-to-End Tests
-        run: yarn test:e2e --runInBand --noStackTrace --ci
-
-      - name: Check Docusaurus Production build
-        run: yarn build:e2e
