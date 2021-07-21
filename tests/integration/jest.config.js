@@ -4,6 +4,6 @@ module.exports = {
   ...jestConfigBase,
   name: "integration",
   displayName: "Integration Tests",
-  testMatch: [`${__dirname}/**/?(*.)+(spec|test).js`],
+  testMatch: ["integration/**/?(*.)+(spec|test).js"],
   coverageDirectory: `${jestConfigBase.coverageDirectory}/integration`,
 };

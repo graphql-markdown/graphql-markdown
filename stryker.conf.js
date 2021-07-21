@@ -1,11 +1,13 @@
-/**
- * @type {import('@stryker-mutator/api/core').StrykerOptions}
- */
 module.exports = {
   packageManager: "yarn",
-  reporters: ["html", "progress"],
+  reporters: ["clear-text", "progress", "html"],
+  thresholds: { high: 80, low: 60, break: 50 },
   testRunner: "jest",
   coverageAnalysis: "perTest",
-  files: ["src/**/*.js", "tests/**/*.js", "!tests/e2e/**/*.js"],
-  transpilers: ["typescript"],
+  ignorePatterns: ["!node_modules", "tests/e2e/**"],
+  symlinkNodeModules: false,
+  jest: {
+    projectType: "custom",
+    configFile: "jest.config.js",
+  },
 };
