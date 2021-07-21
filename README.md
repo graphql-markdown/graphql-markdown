@@ -35,7 +35,7 @@ module.exports = {
 
 ## Configuration
 
-You can define some or all of the plugin options directly at the plugin level in your site's `docusaurus.config.js`:
+You can define some or all of the plugin options directly at the plugin level in in the Docusaurus configuration file `docusaurus.config.js`:
 
 ### Plugin Options
 
@@ -159,7 +159,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 | `tmpDir`     | `-t, --tmp <tmpDir>`        | _OS temp folder_   | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |              | `-f, --force`               | -                  | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-##### About `diffMethod`
+#### About `diffMethod`
 
 The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since last documentation generation, then the full schema documentation will be generated.
 
