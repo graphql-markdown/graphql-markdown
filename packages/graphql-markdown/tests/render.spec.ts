@@ -21,13 +21,15 @@ import kindUnion from "./__data__/node/union";
 // mock config implementation
 jest.mock("../src/lib/config", () => {
   return {
-    getConfigurationOption: jest.fn((name) => {
-      return name === "layouts"
-        ? "./layouts"
-        : name === "output"
-        ? "./output"
-        : name;
-    }),
+    Configuration: {
+      get: jest.fn((name) => {
+        return name === "layouts"
+          ? "./layouts"
+          : name === "output"
+          ? "./output"
+          : name;
+      }),
+    },
   };
 });
 
