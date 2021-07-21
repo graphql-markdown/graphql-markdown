@@ -21,7 +21,7 @@ jobs:
       run: yarn test:ci --projects tests/integration
 
     - name: Run Mutations Tests
-      run: yarn test:stryker -- --reporters clear-text,dashboard
+      run: yarn test:stryker --reporters clear-text,dashboard
       env:
         STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
