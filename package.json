@@ -48,7 +48,7 @@
   "dependencies": {
     "@graphql-inspector/core": "^2.6.1",
     "@graphql-tools/graphql-file-loader": "^6.2.7",
-    "@graphql-tools/json-file-loader": "^6.2.6",
+    "@graphql-tools/json-file-loader": "^7.0.1",
     "@graphql-tools/load": "^6.2.8",
     "@graphql-tools/url-loader": "^7.0.3",
     "@oclif/command": "^1.8.0",
@@ -65,7 +65,7 @@
   ],
   "devDependencies": {
     "@stryker-mutator/core": "^5.2.2",
-    "@stryker-mutator/jest-runner": "^5.2.2",
+    "@stryker-mutator/jest-runner": "^5.2.3",
     "colors": "^1.4.0",
     "danger": "^10.6.6",
     "diff": "^5.0.0",
