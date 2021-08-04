@@ -10,8 +10,10 @@ FROM docusaurus2 as docusaurus2-graphql-doc-generator
 WORKDIR /usr/src/app
 RUN mkdir docusaurus2-graphql-doc-generator
 ADD . docusaurus2-graphql-doc-generator
+WORKDIR /usr/src/app/docusaurus2-graphql-doc-generator
+RUN yarn pack --filename docusaurus2-graphql-doc-generator.tgz
 WORKDIR /usr/src/app/docusaurus2
-RUN yarn add /usr/src/app/docusaurus2-graphql-doc-generator
+RUN yarn add /usr/src/app/docusaurus2-graphql-doc-generator/docusaurus2-graphql-doc-generator.tgz
 RUN node /usr/src/app/docusaurus2-graphql-doc-generator/tests/e2e/scripts/config-plugin.js
 
 FROM docusaurus2-graphql-doc-generator as tests-e2e
