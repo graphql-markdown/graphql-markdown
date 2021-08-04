@@ -63,7 +63,7 @@ export class Configuration {
     Configuration.project = configuration;
     Configuration.extension = {
       ...defaultOptions,
-      ...Configuration.project?.extension(EXTENSION_NAME),
+      ...configuration?.extension(EXTENSION_NAME),
     };
   };
 

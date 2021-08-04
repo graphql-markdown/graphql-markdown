@@ -271,7 +271,6 @@ Object {
           },
         },
       ],
-      "interfaces": Array [],
       "kind": "InterfaceTypeDefinition",
       "loc": Object {
         "end": 213,
@@ -2632,6 +2631,7 @@ Object {
       "directives": Array [],
       "fields": Array [
         Object {
+          "arguments": Array [],
           "defaultValue": undefined,
           "description": undefined,
           "directives": Array [
@@ -2707,6 +2707,7 @@ Object {
           },
         },
         Object {
+          "arguments": Array [],
           "defaultValue": undefined,
           "description": undefined,
           "directives": Array [],
