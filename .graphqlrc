@@ -1,1 +1,5 @@
-schema: /Users/gregory.heitz/Workspace/livp/docusaurus2-graphql-doc-generator/packages/graphql-markdown/tests/__data__/schema/tweet.graphql
+schema: packages/graphql-markdown/tests/__data__/schema/tweet.graphql
+extensions:
+  graphql-markdown:
+    layouts: ./my-layouts
+    output: ./docs
