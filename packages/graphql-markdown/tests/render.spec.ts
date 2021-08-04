@@ -34,7 +34,7 @@ jest.mock("../src/lib/config", () => {
   };
 });
 
-describe.only("render", () => {
+describe("render", () => {
   describe("saveMarkdownFile", () => {
     let spyFsWriteFile: jest.SpyInstance;
 
