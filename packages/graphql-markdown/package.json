@@ -49,8 +49,8 @@
     "unionfs": "^4.4.0"
   },
   "files": [
-    "/layouts",
-    "/dist"
+    "dist",
+    "layouts"
   ],
   "engines": {
     "npm": ">=7.0.0",
