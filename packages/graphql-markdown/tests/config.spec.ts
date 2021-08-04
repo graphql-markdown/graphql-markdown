@@ -1,10 +1,11 @@
 jest.mock("fs");
 
-import fs from "fs";
+import path from "path";
+import { promises as fs } from "fs";
 
 import { Configuration } from "../src/lib/config";
 
-const schemaLocation = require.resolve("./__data__/schema/tweet.graphql");
+const schemaLocation = "tweet.graphql"
 
 const graphqlrc = `---
 schema: ${schemaLocation}
@@ -16,7 +17,10 @@ extensions:
 
 describe("config", () => {
   beforeEach(async () => {
-    await fs.promises.writeFile(".graphqlrc", graphqlrc);
+    await fs.writeFile(".graphqlrc", graphqlrc);
+    
+    const data = jest.requireActual("fs").readFileSync(path.resolve(__dirname, `__data__/schema/${schemaLocation}`))
+    await fs.writeFile(schemaLocation, data);
   });
 
   afterEach(() => {
@@ -52,7 +56,7 @@ describe("config", () => {
       it("returns default options if not set in GraphQL Config file", async () => {
         expect.hasAssertions();
 
-        await fs.promises.writeFile(".graphqlrc", `schema: ${schemaLocation}`);
+        await fs.writeFile(".graphqlrc", `schema: ${schemaLocation}`);
         await Configuration.load();
 
         expect(Configuration.project).toBeDefined();
@@ -62,13 +66,12 @@ describe("config", () => {
       });
     });
 
-    describe("schema", () => {
+    describe.only("schema", () => {
       it("loads graphql schema as DocumentNode from GraphQL Config file", async () => {
         expect.hasAssertions();
 
         await Configuration.load();
         const schema = await Configuration.schema();
-
         expect(schema).toMatchSnapshot();
       });
     });

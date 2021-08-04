@@ -58,17 +58,13 @@ export class Configuration {
   static project: Maybe<GraphQLProjectConfig>;
   static extension: ConfigurationOptions;
 
-  private constructor(readonly configuration: Maybe<GraphQLProjectConfig>) {
+  static load = async (options?: LoadConfigOptions): Promise<void> => {
+    const configuration = await loadConfiguration(options);
     Configuration.project = configuration;
     Configuration.extension = {
       ...defaultOptions,
       ...Configuration.project?.extension(EXTENSION_NAME),
     };
-  }
-
-  static load = async (options?: LoadConfigOptions): Promise<Configuration> => {
-    const configuration = await loadConfiguration(options);
-    return new Configuration(configuration);
   };
 
   static get = (name: string): string => {
@@ -81,6 +77,6 @@ export class Configuration {
 
   // eslint-disable-next-line require-await
   static schema = async (): Promise<Maybe<DocumentNode>> => {
-    return Configuration.project?.getSchema("DocumentNode");
+    return Configuration.project!.getSchema("DocumentNode");
   };
 }

@@ -1,7 +1,7 @@
-const fs = require("fs-extra");
-const path = require("path");
+import fs from "fs-extra";
+import path from "path";
 
-const cli = require("./lib/cli");
+import cli from "./lib/cli";
 
 const rootDir = "/usr/src/app/docusaurus2";
 

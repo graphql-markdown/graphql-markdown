@@ -1,8 +1,9 @@
-const mock = require("mock-fs");
-const path = require("path");
-const dirTree = require("directory-tree");
+import path from "path";
 
-const generateDocFromSchema = require("@/lib/generator");
+import mock  from "mock-fs";
+import dirTree from "directory-tree";
+
+import generateDocFromSchema from "../../../src/lib/generator";
 
 describe("lib", () => {
   beforeEach(() => {

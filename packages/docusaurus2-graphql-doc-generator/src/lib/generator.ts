@@ -1,4 +1,4 @@
-import fs from "fs";
+import { promises as fs } from "fs";
 import path from "path";
 
 import prettier from "prettier";
@@ -21,10 +21,10 @@ const renderHomepage = async (
   homepageLocation: string,
   { rootPath }: PluginOptions
 ): Promise<string> => {
-  const homepage = await fs.promises.readFile(homepageLocation, "utf8");
+  const homepage = await fs.readFile(homepageLocation, "utf8");
 
   const filePath = path.join(rootPath, path.basename(homepageLocation));
-  await fs.promises.writeFile(filePath, prettifyMarkdown(homepage), "utf8");
+  await fs.writeFile(filePath, prettifyMarkdown(homepage), "utf8");
 
   return path.relative("./", filePath);
 };
@@ -43,7 +43,7 @@ const renderSidebar = async ({
   };
 
   const filePath = path.join(rootPath, SIDEBAR_FILE);
-  await fs.promises.writeFile(
+  await fs.writeFile(
     filePath,
     prettifyJSON(JSON.stringify(sidebar)),
     "utf8"
