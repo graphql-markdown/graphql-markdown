@@ -76,7 +76,7 @@
     "mock-fs": "^5.0.0",
     "npm": "^7.20.3",
     "nyc": "^15.1.0",
-    "yarn": "^1.22.10"
+    "yarn": "^1.22.11"
   },
   "prettier": {
     "singleQuote": false,
