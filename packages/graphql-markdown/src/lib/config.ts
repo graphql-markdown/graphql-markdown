@@ -9,28 +9,26 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { UrlLoader } from "@graphql-tools/url-loader";
 
-import { ExtensionAPI, LoadConfigOptions, Maybe } from "..";
+import {
+  ConfigurationOptions,
+  ExtensionAPI,
+  LoadConfigOptions,
+  Maybe,
+} from "..";
 
+const DOCUMENT_NODE_TYPE = "DocumentNode" as const;
 const EXTENSION_NAME = "graphql-markdown" as const;
-
 export const OPTION = {
   LAYOUTS: "layouts",
   MDX: "mdx",
   OUTPUT: "output",
-};
-
-export type ConfigurationOptions = {
-  excludes?: readonly string[];
-  layouts?: string;
-  mdx?: boolean;
-  output?: string;
-};
+} as const;
 
 const defaultOptions: ConfigurationOptions = {
   excludes: [] as const,
   [OPTION.LAYOUTS]: "./layouts" as const,
-  [OPTION.OUTPUT]: false as const,
-  output: "./output" as const,
+  [OPTION.MDX]: false as const,
+  [OPTION.OUTPUT]: "./output" as const,
 } as const;
 
 const setFileLoaderExtension: GraphQLExtensionDeclaration = (
@@ -58,25 +56,31 @@ export class Configuration {
   static project: Maybe<GraphQLProjectConfig>;
   static extension: ConfigurationOptions;
 
-  static load = async (options?: LoadConfigOptions): Promise<void> => {
-    const configuration = await loadConfiguration(options);
+  static load = async (options?: {
+    graphqlConfig?: LoadConfigOptions;
+    markdownConfig?: ConfigurationOptions;
+  }): Promise<void> => {
+    const { graphqlConfig, markdownConfig } = options ?? {};
+
+    const configuration = await loadConfiguration(graphqlConfig);
     Configuration.project = configuration;
     Configuration.extension = {
       ...defaultOptions,
       ...configuration?.extension(EXTENSION_NAME),
+      ...markdownConfig,
     };
   };
 
-  static get = (name: string): string => {
+  static get = (name: string): boolean | number | string => {
     return Configuration.extension[name];
   };
 
-  static set = (name: string, value: string): void => {
+  static set = (name: string, value: boolean | number | string): void => {
     Configuration.extension[name] = value;
   };
 
   // eslint-disable-next-line require-await
   static schema = async (): Promise<Maybe<DocumentNode>> => {
-    return Configuration.project?.getSchema("DocumentNode");
+    return Configuration.project?.getSchema(DOCUMENT_NODE_TYPE);
   };
 }
