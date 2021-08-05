@@ -77,6 +77,6 @@ export class Configuration {
 
   // eslint-disable-next-line require-await
   static schema = async (): Promise<Maybe<DocumentNode>> => {
-    return Configuration.project!.getSchema("DocumentNode");
+    return Configuration.project?.getSchema("DocumentNode");
   };
 }
