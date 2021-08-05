@@ -28,7 +28,7 @@
     "@edno/graphql-markdown": "^1.0.0"
   },
   "devDependencies": {
-    "@docusaurus/types": "^2.0.0-beta.3",
+    "@docusaurus/types": "^2.0.0-beta.4",
     "@jest/types": "^27.0.6",
     "@types/node": "^15.12.2",
     "directory-tree": "^2.2.9",
