@@ -5,3 +5,4 @@ dist
 .stryker-tmp
 .nyc_output
 build
+reports
