@@ -5,7 +5,6 @@ import { Configuration } from "../src/lib/config";
 const schemaLocation = `packages/graphql-markdown/tests/__data__/schema/tweet.graphql`;
 
 describe("config", () => {
-
   afterEach(() => {
     jest.clearAllMocks();
   });

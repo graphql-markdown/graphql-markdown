@@ -30,7 +30,7 @@ jest.mock("../src/lib/config", () => {
           : name;
       }),
     },
-    OPTION: jest.requireActual("../src/lib/config").OPTION
+    OPTION: jest.requireActual("../src/lib/config").OPTION,
   };
 });
 

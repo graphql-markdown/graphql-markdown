@@ -37,8 +37,11 @@ export const generateMarkdownFromSchema = async (
       return {
         name: node.name,
         type: node.type,
-        // eslint-disable-next-line prettier/prettier
-        ...options?.saveToFiles === true ? { filepath: result } : { markdown: result },
+        /* eslint-disable prettier/prettier */
+        ...(options?.saveToFiles === true
+          ? { filepath: result }
+          : { markdown: result }),
+        /* eslint-enable */
       };
     })
   );

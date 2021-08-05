@@ -19,11 +19,11 @@ const prettifyMarkdown = (content: string): string => {
 
 const renderHomepage = async (
   homepageLocation: string,
-  { rootPath }: PluginOptions
+  options: PluginOptions
 ): Promise<string> => {
   const homepage = await fs.readFile(homepageLocation, "utf8");
 
-  const filePath = path.join(rootPath, path.basename(homepageLocation));
+  const filePath = path.join(options.rootPath, path.basename(homepageLocation));
   await fs.writeFile(filePath, prettifyMarkdown(homepage), "utf8");
 
   return path.relative("./", filePath);
@@ -43,11 +43,7 @@ const renderSidebar = async ({
   };
 
   const filePath = path.join(rootPath, SIDEBAR_FILE);
-  await fs.writeFile(
-    filePath,
-    prettifyJSON(JSON.stringify(sidebar)),
-    "utf8"
-  );
+  await fs.writeFile(filePath, prettifyJSON(JSON.stringify(sidebar)), "utf8");
 
   return path.relative("./", filePath);
 };
@@ -60,6 +56,10 @@ export const generateDocFromSchema = async (
 
   // eslint-disable-next-line no-magic-numbers
   if (typeof pages === "undefined" || pages.length === 0) {
+    throw new Error("Parsing error, no pages generated");
+  }
+
+  if (typeof options === "undefined") {
     throw new Error("Parsing error, no pages generated");
   }
 

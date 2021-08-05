@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const fs = require("fs");
 
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.json";
@@ -10,24 +12,24 @@ let config = require(docusaurusConfig);
 
 config = {
   ...config,
-  title: "GraphQL to Doc",
-  tagline: "Markdown documentation from a GraphQL schema.",
   organizationName: "edno",
+  plugins: [["@edno/docusaurus2-graphql-doc-generator", "@config@"]],
   projectName: "docusaurus2-graphql-doc",
+  tagline: "Markdown documentation from a GraphQL schema.",
   themeConfig: {
     ...config.themeConfig,
     navbar: {
       ...config.themeConfig.navbar,
       items: [
         {
-          to: "/docs/schema",
           label: "Schema",
           position: "left",
+          to: "/docs/schema",
         },
       ],
     },
+    title: "GraphQL to Doc",
   },
-  plugins: [["@edno/docusaurus2-graphql-doc-generator", "@config@"]],
 };
 
 const configExportString = `const path = require("path");

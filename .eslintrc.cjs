@@ -1,4 +1,5 @@
 const error = 2;
+const off = 0;
 
 const defaultExtends = [
   "eslint:recommended",
@@ -46,6 +47,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-unnecessary-type-assertion": error,
     "@typescript-eslint/no-unnecessary-type-arguments": error,
+    "@typescript-eslint/no-var-requires": off,
     "@typescript-eslint/non-nullable-type-assertion-style": error,
     "@typescript-eslint/prefer-enum-initializers": error,
     "@typescript-eslint/prefer-for-of": error,
@@ -88,7 +90,6 @@ module.exports = {
     "no-duplicate-imports": error,
     "no-else-return": error,
     "no-eq-null": error,
-    "no-extra-parens": error,
     "no-labels": error,
     "no-lonely-if": error,
     "no-loop-func": error,
@@ -101,7 +102,6 @@ module.exports = {
     "no-new-wrappers": error,
     "no-param-reassign": error,
     "no-return-assign": error,
-    "no-return-await": error,
     "no-self-compare": error,
     "no-sequences": error,
     "no-trailing-spaces": error,

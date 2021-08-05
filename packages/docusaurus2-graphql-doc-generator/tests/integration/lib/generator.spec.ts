@@ -1,21 +1,27 @@
 import path from "path";
 
-import mock  from "mock-fs";
 import dirTree from "directory-tree";
+import mock from "mock-fs";
 
-import generateDocFromSchema from "../../../src/lib/generator";
+import { generateDocFromSchema } from "../../../src/lib/generator";
 
 describe("lib", () => {
   beforeEach(() => {
-    mock({
-      node_modules: mock.load(path.resolve(__dirname, "../../../node_modules")),
-      __data__: mock.load(path.resolve(__dirname, "../../__data__")),
-      output: {},
-      assets: {
-        "generated.md": "Dummy homepage for tweet.graphql",
+    mock(
+      {
+        __data__: mock.load(path.resolve(__dirname, "../../__data__")),
+        assets: {
+          "generated.md": "Dummy homepage for tweet.graphql",
+        },
+        // eslint-disable-next-line camelcase
+        node_modules: mock.load(
+          path.resolve(__dirname, "../../../node_modules")
+        ),
+        output: {},
+        tmp: {},
       },
-      tmp: {},
-    });
+      { createCwd: true, createTmp: true }
+    );
   });
 
   afterEach(() => {
@@ -25,17 +31,15 @@ describe("lib", () => {
   describe("renderer", () => {
     describe("generateDocFromSchema()", () => {
       test("generates Markdown document structure from GraphQL schema", async () => {
-        expect.assertions(2);
+        expect.hasAssertions();
 
-        await generateDocFromSchema(
-          "graphql",
-          "__data__/tweet.graphql",
-          "output",
-          "docs",
-          "assets/generated.md",
-          "SCHEMA-DIFF",
-          "tmp"
-        );
+        await generateDocFromSchema("__data__/tweet.graphql", {
+          baseURL: "test",
+          homepage: "generated.md",
+          linkRoot: "test",
+          rootPath: "test",
+          schema: "test",
+        });
 
         expect(dirTree("output")).toMatchSnapshot();
         expect(dirTree("tmp")).toMatchSnapshot();
