@@ -1,0 +1,11 @@
+<% if (it.elements.length > 0) { %>
+### <%~ it.title %>
+
+<% it.elements.forEach(function(element) { %>
+#### <%~ element.name %> (`<%~ element.type %>`)
+<%~ includeFile('./deprecated', { directives: element.directives || [] }) %>
+<%~ element.description || "" %>
+
+
+<% }) %>
+<% } %>

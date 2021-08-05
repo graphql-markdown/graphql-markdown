@@ -1,0 +1,21 @@
+<% var args = it.arguments ? it.arguments.map(arg => {
+    var element = `${arg.name}: ${arg.type}`
+    if (element.isList) element = `${element}[]`
+    if (!element.isNull) element = `${element}!`
+    if (element.defaultValue) element = `${element} = ${element.defaultValue}`
+    return `${element}`;
+  }) : []
+%>
+
+<%~ includeFile('./partials/description', it) %>
+
+```graphql
+<%~ it.operation.toLowerCase() %> <%~ it.name %><% if (args.length > 0) { %><%~ `(
+  ${args.join("\r\n  ")}
+)`%><% } %>: <%~ it.type %><%~ it.isList ? "[]" : "" %><%~ !it.isNull ? "!" : "" %>
+
+```
+
+<%~ includeFile('./partials/params', { title: "Arguments", elements: it.arguments || [] }) %>
+
+<%~ includeFile('./partials/return', it) %>

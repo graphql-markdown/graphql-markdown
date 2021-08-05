@@ -1,0 +1,27 @@
+<%~ includeFile('./partials/headers', { title: it.name }) %>
+
+<% switch (it.kind) { 
+  case "OperationTypeDefinition":
+    switch (it.operation) { 
+      case "Query":
+      case "Mutation":
+      case "Subscription":
+      default:
+        layout('./operation', it)
+    }
+    break
+  case "ScalarTypeDefinition":
+    layout('./scalar', it)
+    break
+  case "DirectiveDefinition":
+    layout('./directive', it)
+    break
+  case "EnumTypeDefinition":
+  case "InputTypeDefinition":
+  case "InputObjectTypeDefinition":
+  case "InterfaceTypeDefinition":
+  case "ObjectTypeDefinition":
+  case "UnionTypeDefinition":
+  default:
+    layout('./object', it)
+} %>

@@ -1,0 +1,14 @@
+<%~ includeFile('./partials/description', it) %>
+
+```graphql
+scalar <%~ it.name %> 
+```
+
+<%
+  var specifiedBy = it.directives.find(directive => directive.name === "specifiedBy");
+  var specifiedByUrl = specifiedBy ? specifiedBy.arguments.find(argument => argument.name === "url") : undefined;
+%>
+
+<% if (specifiedByUrl) { %>
+#### Specification<a className="link" style="font-size:'1.5em', padding-left:'4px'" target="_blank" href="<%~ specifiedByUrl.value %>" title="Specified by <%~ specifiedByUrl.value %>">⎘</a>
+<% } %>
