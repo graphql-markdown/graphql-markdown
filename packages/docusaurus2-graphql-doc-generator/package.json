@@ -39,7 +39,7 @@
   },
   "files": [
     "dist",
-    "assets"
+    "layouts"
   ],
   "engines": {
     "npm": ">=7.0.0",
