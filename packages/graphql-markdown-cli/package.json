@@ -1,0 +1,41 @@
+{
+  "name": "@edno/graphql-markdown-cli",
+  "homepage": "https://github.com/edno/graphql-markdown#readme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@edno/graphql-markdown": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "rm -rf build && tsc -b",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edno/graphql-markdown.git"
+  },
+  "author": "Gregory Heitz @edno",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edno/graphql-markdown/issues"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "keywords": [
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "markdown"
+  ],
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}
