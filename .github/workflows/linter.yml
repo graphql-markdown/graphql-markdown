@@ -8,6 +8,7 @@ on:
       - 'assets/**'
       - '**.js'
       - '**.json'
+      - '**.lock'
       - '**.yml'
       - '!dangerfile.js'
       - '!.github'
