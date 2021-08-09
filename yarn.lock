@@ -1162,15 +1162,6 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stryker-mutator/api@5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/api/-/api-5.2.2.tgz#852ee66e0411a93c56993b2cc840a7428c9b18cf"
-  integrity sha512-Qtmgx355PAuEJpk+bHmuMExqE6juME7td96nqoBvFt3DHyqdg4wXXsBggKPPX58TNa9Wvlw/h5GElmfSrthxjw==
-  dependencies:
-    mutation-testing-metrics "1.7.4"
-    mutation-testing-report-schema "1.7.4"
-    tslib "~2.3.0"
-
 "@stryker-mutator/api@5.2.3":
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/api/-/api-5.2.3.tgz#4e411631598cbdf72abccb93bdfd161d7b3ed987"
@@ -1181,13 +1172,13 @@
     tslib "~2.3.0"
 
 "@stryker-mutator/core@^5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-5.2.2.tgz#2581851be791f3a8b534811b54a2b35ca4875f9c"
-  integrity sha512-fF9L/zRTQxCqFbX/CGVrxUvUdoOAWkaTkLZ2BSM27XKJlCj66nDYWwMPoKlvstoYnOARcpNW/7Ct+jjSQxliBA==
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-5.2.3.tgz#681ee69701fd708c8159d83151e95b455b38ceab"
+  integrity sha512-PKup+xtI+JwQupuV1sm4o3C9BWnGx2gumxnMeB6yo5/2VXdCoPPMZxrQtqVhQWJCrMFggjRjZko4p7IdI+ROBA==
   dependencies:
-    "@stryker-mutator/api" "5.2.2"
-    "@stryker-mutator/instrumenter" "5.2.2"
-    "@stryker-mutator/util" "5.2.2"
+    "@stryker-mutator/api" "5.2.3"
+    "@stryker-mutator/instrumenter" "5.2.3"
+    "@stryker-mutator/util" "5.2.3"
     ajv "~8.6.0"
     chalk "~4.1.0"
     commander "~8.0.0"
@@ -1213,10 +1204,10 @@
     typed-inject "~3.0.0"
     typed-rest-client "~1.8.0"
 
-"@stryker-mutator/instrumenter@5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/instrumenter/-/instrumenter-5.2.2.tgz#ee9fa7b9e7b8be216a0a4de8bc86c20b654317b6"
-  integrity sha512-icObGmy4ySqezJZjaHRXS5NG9QS/tRHGaruvaquGGTJZC041FdWtHgxfYOsBxeJxOnl3Ddo3dmj2l44qRr+26Q==
+"@stryker-mutator/instrumenter@5.2.3":
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/instrumenter/-/instrumenter-5.2.3.tgz#6dadd90001f8dfa8b5746baab63c39e8822d40e6"
+  integrity sha512-oCQNoKmsH8EG4qrscSa0mf9rq+vL75TYMjF5SsnYsHDveeglol4TZRX7vChRzAnKLQxDdoIUFNDqkiDPvoZcLw==
   dependencies:
     "@babel/core" "~7.14.0"
     "@babel/generator" "~7.14.3"
@@ -1225,8 +1216,8 @@
     "@babel/plugin-proposal-decorators" "~7.14.5 "
     "@babel/plugin-proposal-private-methods" "^7.12.1"
     "@babel/preset-typescript" "~7.14.5 "
-    "@stryker-mutator/api" "5.2.2"
-    "@stryker-mutator/util" "5.2.2"
+    "@stryker-mutator/api" "5.2.3"
+    "@stryker-mutator/util" "5.2.3"
     angular-html-parser "~1.8.0"
     weapon-regex "~0.6.0"
 
@@ -1239,13 +1230,6 @@
     "@stryker-mutator/util" "5.2.3"
     semver "~7.3.5"
     tslib "~2.3.0"
-
-"@stryker-mutator/util@5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/util/-/util-5.2.2.tgz#3211009d32e652c7b9121a06c4ecc013b126956c"
-  integrity sha512-6CQIGdP4u88HqpWpiqVn2XdhFU/bQ1Ith+ifxnvmfuL5O/s3Kuib8kHOyQYo743XIR7pBTdFhtw848K5254hxA==
-  dependencies:
-    lodash.flatmap "~4.5.0"
 
 "@stryker-mutator/util@5.2.3":
   version "5.2.3"
