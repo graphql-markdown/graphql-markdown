@@ -2,8 +2,9 @@
 
 [![npm](https://img.shields.io/npm/dt/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
 [![Latest Version](https://img.shields.io/npm/v/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
-[![GitHub license](https://img.shields.io/github/license/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://raw.githubusercontent.com/edno/docusaurus2-graphql-doc-generator/main/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://raw.githubusercontent.com/edno/docusaurus2-graphql-doc-generator/main/LICENSE)
 [![Coverage Status](https://img.shields.io/coveralls/github/edno/graphql-markdown?style=flat-square)](https://coveralls.io/github/edno/graphql-markdown?branch=main)
+[![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fedno%2Fgraphql-markdown%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/edno/graphql-markdown/main)
 
 This plugin generates a **Markdown documentation** from a **GraphQL schema**.
 
@@ -34,7 +35,7 @@ module.exports = {
 
 ## Configuration
 
-You can define some or all of the plugin options directly at the plugin level in your site's `docusaurus.config.js`:
+You can define some or all of the plugin options directly at the plugin level in in the Docusaurus configuration file `docusaurus.config.js`:
 
 ### Plugin Options
 
@@ -80,22 +81,45 @@ For more details about navbar, please refer to Docusaurus 2 [documentation](http
 
 ### Sidebars Settings
 
-A sidebar file `sidebar-schema.js` will be generated for the documentation, and you will need to add it to your site's `sidebars.js`:
+A sidebar file `sidebar-schema.js` will be generated for the documentation, you have them different options depending on your Docusaurus setup:
+
+#### 1. Single Docs instance
+
+In this use case, you have a unique set of documentation, then you just need to add a reference to `sidebar-schema.js` into the default `sidebar.js`.
 
 ```js
 module.exports = {
   docsSidebar: [
     // ... your site's sidebar
   ],
-  ...require("./docs/swapi/sidebar-schema"),
+  ...require("./docs/swapi/sidebar-schema.js"),
 };
 ```
 
-#### Important
+##### Important
 
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
 > For example: if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
+
+#### 2. Docs Multi-instance
+
+In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-instance](https://docusaurus.io/docs/next/docs-multi-instance)), then you need to add a reference to `sidebar-schema.js` into the dedicated instance of `@docusaurus/plugin-content-docs`:
+
+```js
+plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'api',
+        path: 'api',
+        routeBasePath: 'api',
+        sidebarPath: require.resolve('./api/sidebar-schema.js'),
+        // ... other options
+      },
+    ],
+  ],
+```
 
 ### Home Page
 
@@ -135,7 +159,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 | `tmpDir`     | `-t, --tmp <tmpDir>`        | _OS temp folder_   | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |              | `-f, --force`               | -                  | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-##### About `diffMethod`
+#### About `diffMethod`
 
 The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since last documentation generation, then the full schema documentation will be generated.
 
