@@ -1,7 +1,5 @@
 {
-  "name": "@edno/graphql-markdown",
   "private": true,
-  "version": "1.0.0",
   "workspaces": [
     "packages/*"
   ],

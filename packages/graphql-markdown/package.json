@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@edno/graphql-markdown",
   "homepage": "https://github.com/edno/graphql-markdown/tree/main/graphql-to-markdown",
   "description": "",
@@ -12,7 +13,8 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edno/graphql-markdown.git"
+    "url": "git+https://github.com/edno/graphql-markdown.git",
+    "directory": "packages/graphql-markdown"
   },
   "keywords": [
     "graphql",
@@ -26,9 +28,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@graphql-tools/graphql-file-loader": "^7.0.2",
-    "@graphql-tools/json-file-loader": "^7.0.2",
-    "@graphql-tools/url-loader": "^7.0.4",
+    "@graphql-tools/graphql-file-loader": "^7.0.3",
+    "@graphql-tools/json-file-loader": "^7.1.0",
+    "@graphql-tools/url-loader": "^7.0.8",
     "eta": "^1.12.3",
     "graphql": "^15.5.1",
     "graphql-config": "^4.0.1",
