@@ -2,6 +2,7 @@ export default {
   directives: [],
   kind: "UnionTypeDefinition",
   name: "TweetResponse",
+  simplifiedKind: "union",
   types: [
     {
       isList: false,

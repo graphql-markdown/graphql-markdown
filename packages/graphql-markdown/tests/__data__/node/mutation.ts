@@ -15,5 +15,6 @@ export default {
   kind: "OperationTypeDefinition",
   name: "markTweetRead",
   operation: "Mutation",
+  simplifiedKind: "mutation",
   type: "Boolean",
 };

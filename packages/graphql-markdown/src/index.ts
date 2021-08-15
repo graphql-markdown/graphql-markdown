@@ -9,6 +9,7 @@ export type ParsedNode = {
   markdown?: string;
   name: string;
   operation: string;
+  simplifiedKind: string;
   type: string;
 };
 

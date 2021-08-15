@@ -15,5 +15,6 @@ export default {
   kind: "OperationTypeDefinition",
   name: "Tweet",
   operation: "Query",
+  simplifiedKind: "query",
   type: "Tweet",
 };

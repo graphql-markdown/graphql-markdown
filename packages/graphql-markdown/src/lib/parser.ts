@@ -29,27 +29,35 @@ import {
 import { ParsedNode } from "..";
 
 const GRAPHQL_KIND = {
-  DIRECTIVE: "DirectiveDefinition",
-  ENUM_TYPE: "EnumTypeDefinition",
-  INPUT_OBJECT_TYPE: "InputObjectTypeDefinition",
-  INPUT_TYPE: "InputTypeDefinition",
-  INTERFACE_TYPE: "InterfaceTypeDefinition",
-  OBJECT_TYPE: "ObjectTypeDefinition",
-  OPERATION_TYPE: "OperationTypeDefinition",
-  SCALAR_TYPE: "ScalarTypeDefinition",
-  UNION_TYPE: "UnionTypeDefinition",
+  DirectiveDefinition: "DirectiveDefinition",
+  EnumTypeDefinition: "EnumTypeDefinition",
+  InputObjectTypeDefinition: "InputObjectTypeDefinition",
+  InputTypeDefinition: "InputTypeDefinition",
+  InterfaceTypeDefinition: "InterfaceTypeDefinition",
+  ObjectTypeDefinition: "ObjectTypeDefinition",
+  OperationTypeDefinition: "OperationTypeDefinition",
+  ScalarTypeDefinition: "ScalarTypeDefinition",
+  UnionTypeDefinition: "UnionTypeDefinition",
 } as const;
 
 const SIMPLIFIED_NODE_KIND = {
-  DIRECTIVE: "Directive",
-  INPUT: "Input",
-  OBJECT: "Object",
+  DirectiveDefinition: "directive",
+  EnumTypeDefinition: "enum",
+  InputObjectTypeDefinition: "input",
+  InputTypeDefinition: "interface",
+  Mutation: "mutation",
+  ObjectTypeDefinition: "object",
+  OperationTypeDefinition: "operation",
+  Query: "query",
+  ScalarTypeDefinition: "scalar",
+  Subscription: "subscription",
+  UnionTypeDefinition: "union",
 } as const;
 
 const OPERATION_TYPE = {
-  MUTATION: "mutation",
-  QUERY: "query",
-  SUBSCRIPTION: "subscription",
+  MUTATION: "Mutation",
+  QUERY: "Query",
+  SUBSCRIPTION: "Subscription",
 } as const;
 
 const visitor = {
@@ -169,14 +177,19 @@ const OperationTypes: readonly string[] = [
 ] as const;
 
 const isNodeTypeOperation = (
-  node: ASTNode
+  node: ASTNode | ParsedNode
 ): node is ObjectTypeDefinitionNode => {
   return (
     "name" in node &&
     typeof node.name !== "undefined" &&
-    OperationTypes.includes(node.name.toString().toLowerCase()) &&
+    OperationTypes.includes(node.name.toString()) &&
     "fields" in node
   );
+};
+
+export const getSimplifiedNodeKind = (node: ASTNode | ParsedNode): string => {
+  const kind = "operation" in node ? node.operation : node.kind;
+  return SIMPLIFIED_NODE_KIND[kind] ?? node.kind;
 };
 
 export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
@@ -184,33 +197,20 @@ export const parseSchema = (schema: DocumentNode): ParsedNode[] => {
   return nodes.flatMap((node) => {
     if (isNodeTypeOperation(node) && typeof node.fields !== "undefined") {
       return node.fields.map<ParsedNode>((operation: FieldDefinitionNode) => {
-        return {
+        const parsedNode = {
           ...operation,
-          kind: GRAPHQL_KIND.OPERATION_TYPE,
-          operation: node.name.toString().toLowerCase(),
+          kind: GRAPHQL_KIND.OperationTypeDefinition,
+          operation: node.name,
         } as unknown as ParsedNode;
+        return {
+          ...parsedNode,
+          simplifiedKind: getSimplifiedNodeKind(parsedNode),
+        } as ParsedNode;
       });
     }
-    return node as unknown as ParsedNode;
+    return {
+      ...node,
+      simplifiedKind: getSimplifiedNodeKind(node),
+    } as ParsedNode;
   });
-};
-
-export const getSimplifiedNodeKind = (node: ParsedNode): string => {
-  switch (node.kind) {
-    case GRAPHQL_KIND.OPERATION_TYPE:
-      return node.operation;
-    case GRAPHQL_KIND.DIRECTIVE:
-      return SIMPLIFIED_NODE_KIND.DIRECTIVE;
-    case GRAPHQL_KIND.SCALAR_TYPE:
-    case GRAPHQL_KIND.ENUM_TYPE:
-    case GRAPHQL_KIND.INPUT_TYPE:
-    case GRAPHQL_KIND.INTERFACE_TYPE:
-    case GRAPHQL_KIND.OBJECT_TYPE:
-    case GRAPHQL_KIND.UNION_TYPE:
-      return node.kind.replace(/^(?<kind>[A-z]+)TypeDefinition$/, "$<kind>");
-    case GRAPHQL_KIND.INPUT_OBJECT_TYPE:
-      return SIMPLIFIED_NODE_KIND.INPUT;
-    default:
-      return SIMPLIFIED_NODE_KIND.OBJECT;
-  }
 };

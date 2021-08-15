@@ -14,4 +14,5 @@ export default {
   interfaces: [],
   kind: "InterfaceTypeDefinition",
   name: "Node",
+  simplifiedKind: "interface",
 };

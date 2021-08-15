@@ -4,4 +4,5 @@ export default {
   directives: [],
   kind: "ScalarTypeDefinition",
   name: "SRI",
+  simplifiedKind: "scalar",
 };

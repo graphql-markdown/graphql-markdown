@@ -1,11 +1,28 @@
 import * as path from "path";
 import { promises as fs } from "fs";
 
-import { DocumentNode } from "graphql";
+import { ASTNode, DocumentNode } from "graphql";
 
-import { parseSchema } from "../src/lib/parser";
+import { getSimplifiedNodeKind, parseSchema } from "../src/lib/parser";
 
 describe("parser", () => {
+  describe("getSimplifiedNodeKind", () => {
+    const operations = [
+      ["./__data__/node/mutation", "mutation"],
+      ["./__data__/node/query", "query"],
+      ["./__data__/node/subscription", "subscription"],
+    ];
+    it.each(operations)(
+      "should return the operation object name as simplified type",
+      async (source: string, expected: string) => {
+        expect.hasAssertions();
+
+        const node: ASTNode = (await import(source)).default as ASTNode;
+        expect(getSimplifiedNodeKind(node)).toEqual(expected);
+      }
+    );
+  });
+
   describe("parseSchema", () => {
     let schema: DocumentNode; // eslint-disable-line init-declarations
 

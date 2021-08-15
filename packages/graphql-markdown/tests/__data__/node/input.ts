@@ -20,4 +20,5 @@ export default {
   ],
   kind: "InputObjectTypeDefinition",
   name: "TweetContent",
+  simplifiedKind: "input",
 };

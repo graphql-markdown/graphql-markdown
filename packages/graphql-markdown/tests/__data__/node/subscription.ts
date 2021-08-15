@@ -15,5 +15,6 @@ export default {
   kind: "OperationTypeDefinition",
   name: "Notifications",
   operation: "Subscription",
+  simplifiedKind: "subscription",
   type: "Notification",
 };

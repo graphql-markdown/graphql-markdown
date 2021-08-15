@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`render renderNode Directive should render Directive 1`] = `
-"## DirectiveDefinition \`@auth\`
+"## directive \`@auth\`
 
 \`\`\`graphql
 directive @auth
@@ -10,7 +10,7 @@ directive @auth
 `;
 
 exports[`render renderNode Enum should render Enum 1`] = `
-"## EnumTypeDefinition \`MediaType\`
+"## enum \`MediaType\`
 
 \`\`\`graphql
 EnumTypeDefinition MediaType
@@ -19,7 +19,7 @@ EnumTypeDefinition MediaType
 `;
 
 exports[`render renderNode Input should render Input 1`] = `
-"## InputObjectTypeDefinition \`TweetContent\`
+"## input \`TweetContent\`
 
 \`\`\`graphql
 InputObjectTypeDefinition TweetContent
@@ -34,7 +34,7 @@ InputObjectTypeDefinition TweetContent
 `;
 
 exports[`render renderNode Interface should render Interface 1`] = `
-"## InterfaceTypeDefinition \`Node\`
+"## interface \`Node\`
 
 \`\`\`graphql
 InterfaceTypeDefinition Node
@@ -85,7 +85,7 @@ mutation markTweetRead(
 `;
 
 exports[`render renderNode Object should render Object 1`] = `
-"## ObjectTypeDefinition \`Media\`
+"## object \`Media\`
 
 \`\`\`graphql
 ObjectTypeDefinition Media
@@ -138,7 +138,7 @@ query Tweet(
 `;
 
 exports[`render renderNode Scalar should render Scalar with description supporting Markdown notation 1`] = `
-"## ScalarTypeDefinition \`SRI\`
+"## scalar \`SRI\`
 
 An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
 
@@ -149,7 +149,7 @@ scalar SRI
 `;
 
 exports[`render renderNode Scalar should render Scalar with directive specifiedBy 1`] = `
-"## ScalarTypeDefinition \`SRI\`
+"## scalar \`SRI\`
 
 An \`integrity\` value beginning with at least one string, with each string including a prefix indicating a particular hash algorithm (e.g. \`sha256\`, \`sha384\`, \`sha512\`), followed by a dash \`-\`, and ending with the actual base64-encoded hash.
 
@@ -160,7 +160,7 @@ scalar SRI
 `;
 
 exports[`render renderNode Scalar should render Scalar without description 1`] = `
-"## ScalarTypeDefinition \`SRI\`
+"## scalar \`SRI\`
 
 \`\`\`graphql
 scalar SRI
@@ -207,7 +207,7 @@ subscription Notifications(
 `;
 
 exports[`render renderNode Union should render Union 1`] = `
-"## UnionTypeDefinition \`TweetResponse\`
+"## union \`TweetResponse\`
 
 \`\`\`graphql
 UnionTypeDefinition TweetResponse

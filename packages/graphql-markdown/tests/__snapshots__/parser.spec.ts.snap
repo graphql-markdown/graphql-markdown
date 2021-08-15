@@ -18,6 +18,7 @@ Array [
     ],
     "kind": "ScalarTypeDefinition",
     "name": "SRI",
+    "simplifiedKind": "scalar",
   },
   Object {
     "directives": Array [],
@@ -36,11 +37,13 @@ Array [
     "interfaces": Array [],
     "kind": "InterfaceTypeDefinition",
     "name": "Node",
+    "simplifiedKind": "InterfaceTypeDefinition",
   },
   Object {
     "directives": Array [],
     "kind": "EnumTypeDefinition",
     "name": "MediaType",
+    "simplifiedKind": "enum",
     "values": Array [
       Object {
         "directives": Array [],
@@ -91,6 +94,7 @@ Array [
     "interfaces": Array [],
     "kind": "ObjectTypeDefinition",
     "name": "Media",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
@@ -109,11 +113,13 @@ Array [
     "interfaces": Array [],
     "kind": "ObjectTypeDefinition",
     "name": "Error",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
     "kind": "UnionTypeDefinition",
     "name": "TweetResponse",
+    "simplifiedKind": "union",
     "types": Array [
       Object {
         "isList": false,
@@ -211,6 +217,7 @@ Array [
     ],
     "kind": "ObjectTypeDefinition",
     "name": "Tweet",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
@@ -323,6 +330,7 @@ Array [
     ],
     "kind": "ObjectTypeDefinition",
     "name": "User",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
@@ -393,6 +401,7 @@ Array [
     "interfaces": Array [],
     "kind": "ObjectTypeDefinition",
     "name": "Stat",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
@@ -431,6 +440,7 @@ Array [
     "interfaces": Array [],
     "kind": "ObjectTypeDefinition",
     "name": "Notification",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
@@ -449,16 +459,19 @@ Array [
     "interfaces": Array [],
     "kind": "ObjectTypeDefinition",
     "name": "Meta",
+    "simplifiedKind": "object",
   },
   Object {
     "directives": Array [],
     "kind": "ScalarTypeDefinition",
     "name": "Url",
+    "simplifiedKind": "scalar",
   },
   Object {
     "directives": Array [],
     "kind": "ScalarTypeDefinition",
     "name": "Date",
+    "simplifiedKind": "scalar",
   },
   Object {
     "arguments": Array [
@@ -479,7 +492,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "Tweet",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "TweetResponse",
   },
   Object {
@@ -531,7 +545,8 @@ Array [
     "isNull": false,
     "kind": "OperationTypeDefinition",
     "name": "Tweets",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "TweetResponse",
   },
   Object {
@@ -548,7 +563,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "TweetsMeta",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "Meta",
   },
   Object {
@@ -582,7 +598,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "User",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "User",
   },
   Object {
@@ -604,7 +621,8 @@ Array [
     "isNull": false,
     "kind": "OperationTypeDefinition",
     "name": "Users",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "User",
   },
   Object {
@@ -621,7 +639,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "NotificationsMeta",
-    "operation": "query",
+    "operation": "Query",
+    "simplifiedKind": "query",
     "type": "Meta",
   },
   Object {
@@ -665,7 +684,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "createTweet",
-    "operation": "mutation",
+    "operation": "Mutation",
+    "simplifiedKind": "mutation",
     "type": "Tweet",
   },
   Object {
@@ -687,7 +707,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "deleteTweet",
-    "operation": "mutation",
+    "operation": "Mutation",
+    "simplifiedKind": "mutation",
     "type": "Tweet",
   },
   Object {
@@ -709,7 +730,8 @@ Array [
     "isNull": true,
     "kind": "OperationTypeDefinition",
     "name": "markTweetRead",
-    "operation": "mutation",
+    "operation": "Mutation",
+    "simplifiedKind": "mutation",
     "type": "Boolean",
   },
   Object {
@@ -750,6 +772,7 @@ Array [
     ],
     "kind": "InputObjectTypeDefinition",
     "name": "TweetContent",
+    "simplifiedKind": "input",
   },
   Object {
     "arguments": Array [
@@ -770,7 +793,8 @@ Array [
     "isNull": false,
     "kind": "OperationTypeDefinition",
     "name": "Notifications",
-    "operation": "subscription",
+    "operation": "Subscription",
+    "simplifiedKind": "subscription",
     "type": "Notification",
   },
 ]

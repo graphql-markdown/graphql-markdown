@@ -2,6 +2,7 @@ export default {
   directives: [],
   kind: "EnumTypeDefinition",
   name: "MediaType",
+  simplifiedKind: "enum",
   values: [
     {
       directives: [],

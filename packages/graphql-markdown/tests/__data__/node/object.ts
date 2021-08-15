@@ -23,4 +23,5 @@ export default {
   interfaces: [],
   kind: "ObjectTypeDefinition",
   name: "Media",
+  simplifiedKind: "object",
 };

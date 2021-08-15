@@ -8,6 +8,7 @@ export const directiveSpecifiedBy = {
   ],
   kind: "Directive",
   name: "@specifiedBy",
+  simplifiedKind: "directive",
 };
 
 export const directiveDeprecated = {
@@ -20,6 +21,7 @@ export const directiveDeprecated = {
   ],
   kind: "Directive",
   name: "@deprecated",
+  simplifiedKind: "directive",
 };
 
 export default {
@@ -27,4 +29,5 @@ export default {
   kind: "DirectiveDefinition",
   name: "@auth",
   repeatable: true,
+  simplifiedKind: "directive",
 };
