@@ -49,7 +49,6 @@ const renderSidebar = async ({
 };
 
 export const generateDocFromSchema = async (
-  schemaLocation: string,
   options: PluginOptions
 ): Promise<{ pages: number; sidebar: string }> => {
   const pages = await generateMarkdownFromSchema({ saveToFiles: true });

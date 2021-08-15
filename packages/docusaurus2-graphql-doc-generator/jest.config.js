@@ -1,13 +1,15 @@
 module.exports = {
-  name: "docusaurus2-graphql-doc-generator",
-  testEnvironment: "node",
-  roots: ['<rootDir>'],
-  testMatch: ["<rootDir>/tests/**/?(*.)+(spec|test).js"],
-  testPathIgnorePatterns: ["/node_modules/"],
-  transform: {},
-  moduleNameMapper: {
-    "@/(.*)": "<rootDir>/src/$1",
-    "@data/(.*)": "<rootDir>/tests/__data__/$1",
-    "@assets/(.*)": "<rootDir>/assets/$1",
+  displayName: "docusaurus2-graphql-doc-generator",
+  globals: {
+    "ts-jest": {
+      diagnostics: false,
+      tsconfig: "<rootDir>/tsconfig.eslint.json",
+    },
   },
+  preset: "ts-jest",
+  roots: ['<rootDir>'],
+  testEnvironment: "node",
+  testMatch: ["<rootDir>/tests/**/*.(spec|test).ts"],
+  testPathIgnorePatterns: ["/node_modules/", "e2e"],
+  transform: {},
 };
