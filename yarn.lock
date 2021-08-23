@@ -539,12 +539,12 @@
     value-or-promise "1.0.10"
 
 "@graphql-tools/graphql-file-loader@^7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.0.3.tgz#92d3e11a24919b52f63850dbc7d02e7fdc401cf1"
-  integrity sha512-++eBR9i+xwqe43FLaRWJnD0zSBVjP6Iw5cwIBkoEaYmCl8VLFnQHuECKpC1OzOxEWUtbrE34nHMUWlP8CPFTVQ==
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.0.5.tgz#38d538fd1cf746627b38e948c8fa90d2148fed47"
+  integrity sha512-hYdz/zvA2z2M6zqgTCkEiqWPIKLsFirg1ZawaKzCLN0sUi+hRrLVTc1eIlz/vfR8ojvswEq81OMtk5d+lbHiHQ==
   dependencies:
     "@graphql-tools/import" "^6.2.6"
-    "@graphql-tools/utils" "8.1.0"
+    "@graphql-tools/utils" "^8.1.1"
     globby "^11.0.3"
     tslib "~2.3.0"
     unixify "^1.0.0"
