@@ -508,9 +508,9 @@
     strip-json-comments "^3.1.1"
 
 "@graphql-inspector/core@^2.6.1":
-  version "2.6.1"
-  resolved "https://registry.npmjs.org/@graphql-inspector/core/-/core-2.6.1.tgz"
-  integrity sha512-IwllJf0lsjOT9kInOY+kMv/+V77CrEoD6X0ZnUgIc+oZ9IDlq7RhMx1v4YuvM+HBUCkUBJXdS2/Ug1UOvk45WQ==
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-2.7.0.tgz#28cd28160322a323c68bab81b3c663623b5b52d1"
+  integrity sha512-vD4ILW7VK+12/3cd6oBEaRB4iviGGSu9dwe/gi+7+YEeEt7WapHDos6JpNi4jSOfnfbKrDoakFSI7q85GZkCOg==
   dependencies:
     dependency-graph "0.11.0"
     object-inspect "1.10.3"
