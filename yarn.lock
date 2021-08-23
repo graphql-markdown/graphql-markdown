@@ -558,11 +558,11 @@
     tslib "~2.2.0"
 
 "@graphql-tools/json-file-loader@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/json-file-loader/-/json-file-loader-7.1.0.tgz#99e7911e0adf4072da995acf83ab72113d1e928e"
-  integrity sha512-anM5mnn3ayrc77StoBN+sinQXJoiYmtV3V4Bl52hybmRMwkdqPdJLQkGgZoYlEAxlqwk7BPwumfJCMTaiVSpzA==
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/json-file-loader/-/json-file-loader-7.1.2.tgz#8cff19b6fb179aaea806506d7d5699246b857ae2"
+  integrity sha512-/CrnNBwi4WDvt4yc2PcRmQxqGIOtK84s4iI5vsHwlcK7D02WX1cza4YEblFlMQUkxR9pmwGIYXverUOiaysqRA==
   dependencies:
-    "@graphql-tools/utils" "8.1.0"
+    "@graphql-tools/utils" "^8.1.1"
     globby "^11.0.3"
     tslib "~2.3.0"
     unixify "^1.0.0"
@@ -626,6 +626,13 @@
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.1.0.tgz#ea64fefa5c3bcb3dec06be765c128c1bf0cc829f"
   integrity sha512-V5a7xAxZ6DHzrYYticmsLgWim+vGnC6ztbiOXrO5cGtOOk5NSK657SZXsyVOR7hNvdWiHSW0dlBZb6zkkfOnHA==
+  dependencies:
+    tslib "~2.3.0"
+
+"@graphql-tools/utils@^8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.1.1.tgz#2ef056a1d6e1e909085e1115d3bb48f890c2a2b6"
+  integrity sha512-QbFNoBmBiZ+ej4y6mOv8Ba4lNhcrTEKXAhZ0f74AhdEXi7b9xbGUH/slO5JaSyp85sGQYIPmxjRPpXBjLklbmw==
   dependencies:
     tslib "~2.3.0"
 
