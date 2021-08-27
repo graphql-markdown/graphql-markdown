@@ -241,7 +241,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
   }
 
   printType(name, type) {
-    if (typeof(type) === "undefined" || type === null) {
+    if (typeof type === "undefined" || type === null) {
       return "";
     }
 
@@ -278,7 +278,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
-    const markdown = `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`
+    const markdown = `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`;
     return prettifyMarkdown(markdown);
   }
 };

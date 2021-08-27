@@ -24,4 +24,12 @@ function hasMethod(obj, prop) {
   return hasProperty(obj, prop) && typeof obj[prop] === "function";
 }
 
-module.exports = { round, startCase, toSlug, toArray, hasProperty, hasMethod, pathUrl };
+module.exports = {
+  round,
+  startCase,
+  toSlug,
+  toArray,
+  hasProperty,
+  hasMethod,
+  pathUrl,
+};

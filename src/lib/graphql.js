@@ -99,7 +99,7 @@ function getFields(type) {
 }
 
 function getTypeName(type, defaultName = "") {
-  if (typeof(type) === "undefined") {
+  if (typeof type === "undefined") {
     return defaultName;
   }
   return (

@@ -51,7 +51,7 @@ describe("lib", () => {
             "FooBar",
           );
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
-          
+
           const folder = dirTree(FOLDER);
           mock.restore();
           expect(folder).toMatchSnapshot();
@@ -87,7 +87,9 @@ describe("lib", () => {
       describe("renderRootTypes()", () => {
         test("render root type", async () => {
           expect.assertions(1);
-          jest.spyOn(printerInstance, "printType").mockImplementation(() => "content");
+          jest
+            .spyOn(printerInstance, "printType")
+            .mockImplementation(() => "content");
           await rendererInstance.renderRootTypes("Object", [
             { name: "foo" },
             { name: "bar" },

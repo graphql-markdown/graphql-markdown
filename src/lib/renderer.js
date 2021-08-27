@@ -39,7 +39,7 @@ module.exports = class Renderer {
 
       pages = await Promise.all(
         Object.keys(type).map(async (name) => {
-          return await this.renderTypeEntities(dirPath, name, type[name])
+          return await this.renderTypeEntities(dirPath, name, type[name]);
         }),
       );
     }
@@ -52,11 +52,10 @@ module.exports = class Renderer {
       const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
       const content = this.printer.printType(fileName, type);
       await fs.outputFile(filePath, content, "utf8");
-      const pagePath = path.relative(this.outputDir, filePath)
-      const page = pagePath
-        .match(
-          /(?<category>[A-z][A-z0-9-]*)[\\\/]+(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
-        );
+      const pagePath = path.relative(this.outputDir, filePath);
+      const page = pagePath.match(
+        /(?<category>[A-z][A-z0-9-]*)[\\/]+(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
+      );
       const slug = pathUrl.join(page.groups.category, page.groups.pageId);
       return { category: startCase(page.groups.category), slug: slug };
     }
