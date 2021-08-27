@@ -14,9 +14,9 @@ const SIDEBAR = "sidebar.json";
 describe("lib", () => {
   describe("renderer", () => {
     describe("class Renderer", () => {
-      let rendererInstance,
-        baseURL = "graphql",
-        printerInstance = new Printer("SCHEMA", baseURL, "root");
+      let rendererInstance;
+      let baseURL = "graphql";
+      let printerInstance;
 
       beforeEach(() => {
         mock({
@@ -29,6 +29,7 @@ describe("lib", () => {
             [SIDEBAR]: mock.load(require.resolve(`@assets/${SIDEBAR}`)),
           },
         });
+        printerInstance = new Printer("SCHEMA", baseURL, "root");
         rendererInstance = new Renderer(printerInstance, FOLDER, baseURL);
       });
 
@@ -50,8 +51,10 @@ describe("lib", () => {
             "FooBar",
           );
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
-
-          expect(dirTree(FOLDER)).toMatchSnapshot();
+          
+          const folder = dirTree(FOLDER);
+          mock.restore();
+          expect(folder).toMatchSnapshot();
         });
       });
 
@@ -60,7 +63,10 @@ describe("lib", () => {
           expect.assertions(1);
 
           await rendererInstance.renderSidebar();
-          expect(dirTree(FOLDER)).toMatchSnapshot();
+
+          const folder = dirTree(FOLDER);
+          mock.restore();
+          expect(folder).toMatchSnapshot();
         });
       });
 
@@ -69,7 +75,9 @@ describe("lib", () => {
           expect.assertions(1);
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
-          expect(dirTree(FOLDER)).toMatchSnapshot({
+          const folder = dirTree(FOLDER);
+          mock.restore();
+          expect(folder).toMatchSnapshot({
             children: [{ size: expect.any(Number) }],
             size: expect.any(Number),
           });
@@ -79,11 +87,15 @@ describe("lib", () => {
       describe("renderRootTypes()", () => {
         test("render root type", async () => {
           expect.assertions(1);
+          jest.spyOn(printerInstance, "printType").mockImplementation(() => "content");
           await rendererInstance.renderRootTypes("Object", [
             { name: "foo" },
             { name: "bar" },
           ]);
-          expect(dirTree(FOLDER)).toMatchSnapshot();
+
+          const folder = dirTree(FOLDER);
+          mock.restore();
+          expect(folder).toMatchSnapshot();
         });
       });
     });

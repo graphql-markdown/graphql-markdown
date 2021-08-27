@@ -1,4 +1,3 @@
-const path = require("path");
 const {
   isEnumType,
   isUnionType,
@@ -15,7 +14,7 @@ const {
   isInputType,
   isListType,
 } = require("./graphql");
-const { toSlug, hasProperty, hasMethod } = require("./utils");
+const { toSlug, hasProperty, hasMethod, pathUrl } = require("./utils");
 const { prettifyMarkdown } = require("./prettier");
 
 const HEADER_SECTION_LEVEL = "###";
@@ -59,7 +58,7 @@ module.exports = class Printer {
     }
 
     if (category && graphLQLNamedType) {
-      return `[\`${name}\`](${path.join(
+      return `[\`${name}\`](${pathUrl.join(
         this.linkRoot,
         this.baseURL,
         category,
@@ -242,7 +241,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
   }
 
   printType(name, type) {
-    if (!type) {
+    if (typeof(type) === "undefined" || type === null) {
       return "";
     }
 
@@ -279,8 +278,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
-    return prettifyMarkdown(
-      `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`,
-    );
+    const markdown = `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`
+    return prettifyMarkdown(markdown);
   }
 };

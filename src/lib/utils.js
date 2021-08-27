@@ -1,3 +1,5 @@
+const pathUrl = require("path").posix;
+
 const slugify = require("slugify");
 const { kebabCase, startCase, round } = require("lodash");
 
@@ -22,4 +24,4 @@ function hasMethod(obj, prop) {
   return hasProperty(obj, prop) && typeof obj[prop] === "function";
 }
 
-module.exports = { round, startCase, toSlug, toArray, hasProperty, hasMethod };
+module.exports = { round, startCase, toSlug, toArray, hasProperty, hasMethod, pathUrl };

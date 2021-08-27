@@ -99,8 +99,8 @@ function getFields(type) {
 }
 
 function getTypeName(type, defaultName = "") {
-  if (!type) {
-    return undefined;
+  if (typeof(type) === "undefined") {
+    return defaultName;
   }
   return (
     (hasProperty(type, "name") && type.name) ||

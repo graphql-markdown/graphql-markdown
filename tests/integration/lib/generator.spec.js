@@ -8,11 +8,11 @@ describe("lib", () => {
   beforeEach(() => {
     mock({
       node_modules: mock.load(path.resolve(__dirname, "../../../node_modules")),
-      __data__: mock.load(path.resolve(__dirname, "../../__data__")),
+      __data__: mock.load(path.resolve(__dirname, "../../__data__"), {lazy: false}),
       output: {},
       assets: {
         "generated.md": "Dummy homepage for tweet.graphql",
-        "sidebar.json": mock.load(require.resolve(`@assets/sidebar.json`)),
+        "sidebar.json": mock.load(require.resolve("@assets/sidebar.json"), {lazy: false}),
       },
       tmp: {},
     });
@@ -37,8 +37,13 @@ describe("lib", () => {
           "tmp",
         );
 
-        expect(dirTree("output")).toMatchSnapshot();
-        expect(dirTree("tmp")).toMatchSnapshot();
+        const outputFolder = dirTree("output");
+        const tmpFolder = dirTree("tmp")
+
+        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
+        expect(outputFolder).toMatchSnapshot();
+        expect(tmpFolder).toMatchSnapshot();
       });
     });
   });

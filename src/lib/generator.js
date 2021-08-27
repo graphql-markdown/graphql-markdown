@@ -30,7 +30,9 @@ module.exports = async function generateDocFromSchema(
     loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
   });
 
-  if (await checkSchemaChanges(schema, tmpDir, diffMethod)) {
+  const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
+
+  if (hasChanged) {
     const renderer = new Renderer(
       new Printer(schema, baseURL, linkRoot),
       outputDir,
