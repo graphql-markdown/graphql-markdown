@@ -5,6 +5,9 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ["json"],
   coverageDirectory: "<rootDir>/.nyc_output",
+  globals: {
+    "__OS__": require("os").platform() === 'win32' ? 'windows' : 'unix'
+  },
   testEnvironment: "node",
   rootDir: __dirname,
   moduleNameMapper: {

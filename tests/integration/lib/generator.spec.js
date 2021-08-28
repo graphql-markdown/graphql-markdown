@@ -46,8 +46,8 @@ describe("lib", () => {
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-        expect(outputFolder).toMatchSnapshot();
-        expect(tmpFolder).toMatchSnapshot();
+        expect(outputFolder).toMatchSnapshot(__OS__);
+        expect(tmpFolder).toMatchSnapshot(__OS__);
       });
     });
   });

@@ -53,7 +53,7 @@ describe("lib", () => {
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 
           const outputFolder = dirTree(OUTPUT);
-          expect(outputFolder).toMatchSnapshot();
+          expect(outputFolder).toMatchSnapshot(__OS__);
         });
       });
 
@@ -64,7 +64,7 @@ describe("lib", () => {
           await rendererInstance.renderSidebar();
 
           const outputFolder = dirTree(OUTPUT);
-          expect(outputFolder).toMatchSnapshot();
+          expect(outputFolder).toMatchSnapshot(__OS__);
         });
       });
 
@@ -93,7 +93,7 @@ describe("lib", () => {
           ]);
 
           const outputFolder = dirTree(OUTPUT);
-          expect(outputFolder).toMatchSnapshot();
+          expect(outputFolder).toMatchSnapshot(__OS__);
         });
       });
     });

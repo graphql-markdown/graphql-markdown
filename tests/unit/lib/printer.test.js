@@ -41,7 +41,7 @@ describe("lib", () => {
               .mockReturnValueOnce(true);
             jest.spyOn(graphql, "getNamedType").mockReturnValue(entityName);
             const link = printerInstance.toLink(type, entityName);
-            expect(link).toMatchSnapshot();
+            expect(link).toMatchSnapshot(__OS__);
           },
         );
 
@@ -55,14 +55,14 @@ describe("lib", () => {
             .mockReturnValueOnce(true);
           jest.spyOn(graphql, "getNamedType").mockReturnValue(entityName);
           const link = printerInstance.toLink(type, entityName);
-          expect(link).toMatchSnapshot();
+          expect(link).toMatchSnapshot(__OS__);
         });
 
         test("returns plain text for unknown entities", () => {
           const type = "any";
           const entityName = "fooBar";
           const link = printerInstance.toLink(type, entityName);
-          expect(link).toMatchSnapshot();
+          expect(link).toMatchSnapshot(__OS__);
         });
       });
 
@@ -75,7 +75,7 @@ describe("lib", () => {
           const content = "section content";
           const section = printerInstance.printSection(content, title);
           expect(printSectionItems).toHaveBeenCalledWith(content);
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
 
         test("returns Markdown custom section level", () => {
@@ -85,7 +85,7 @@ describe("lib", () => {
           const title = "section title";
           const content = "section content";
           const section = printerInstance.printSection(content, title, "#");
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
 
         test("returns empty string if content is empty", () => {
@@ -109,7 +109,7 @@ describe("lib", () => {
             itemList.pop(),
             "####",
           );
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
 
         test("returns empty text if not a list", () => {
@@ -127,7 +127,7 @@ describe("lib", () => {
           jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
 
           const section = printerInstance.printSectionItem(type);
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
 
         test("returns Markdown #### link section with sub type", () => {
@@ -147,7 +147,7 @@ describe("lib", () => {
             .mockReturnValueOnce(true);
 
           const section = printerInstance.printSectionItem(type);
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
 
         test("returns Markdown #### link section with field parameters", () => {
@@ -170,7 +170,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
           expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
-          expect(section).toMatchSnapshot();
+          expect(section).toMatchSnapshot(__OS__);
         });
       });
 
@@ -186,7 +186,7 @@ describe("lib", () => {
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
           const code = printerInstance.printCodeEnum(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns empty string if not enum type", () => {
@@ -208,7 +208,7 @@ describe("lib", () => {
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
           const code = printerInstance.printCodeUnion(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns empty string if not union type", () => {
@@ -228,7 +228,7 @@ describe("lib", () => {
             .spyOn(graphql, "getTypeName")
             .mockImplementation((type) => type.name);
           const code = printerInstance.printCodeScalar(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
       });
 
@@ -249,7 +249,7 @@ describe("lib", () => {
             .spyOn(graphql, "getDefaultValue")
             .mockImplementation((type) => type.default || null);
           const code = printerInstance.printCodeArguments(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns an empty string if args list empty", () => {
@@ -281,7 +281,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("");
           const code = printerInstance.printCodeField(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns a field with its type and arguments", () => {
@@ -294,7 +294,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("(\narg: boolean\n)");
           const code = printerInstance.printCodeField(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
       });
 
@@ -306,7 +306,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("");
           const code = printerInstance.printCodeDirective(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns a directive with its arguments", () => {
@@ -316,7 +316,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeArguments")
             .mockReturnValueOnce("(\narg: boolean\n)");
           const code = printerInstance.printCodeDirective(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
       });
 
@@ -330,7 +330,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeField")
             .mockImplementation((name) => `${name}\n`);
           const code = printerInstance.printCodeType(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns an object with its fields and interfaces", () => {
@@ -348,7 +348,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printCodeField")
             .mockImplementation((name) => `${name}\n`);
           const code = printerInstance.printCodeType(type);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
       });
 
@@ -358,7 +358,7 @@ describe("lib", () => {
             "an-object-type-name",
             "An Object Type Name",
           );
-          expect(header).toMatchSnapshot();
+          expect(header).toMatchSnapshot(__OS__);
         });
       });
 
@@ -366,13 +366,13 @@ describe("lib", () => {
         test("returns the type description text", () => {
           const type = { description: "Lorem ipsum" };
           const description = printerInstance.printDescription(type);
-          expect(description).toMatchSnapshot();
+          expect(description).toMatchSnapshot(__OS__);
         });
 
         test("returns the default text if no description", () => {
           const type = {};
           const description = printerInstance.printDescription(type);
-          expect(description).toMatchSnapshot();
+          expect(description).toMatchSnapshot(__OS__);
         });
 
         test("return DEPRECATED tag if deprecated", () => {
@@ -382,7 +382,7 @@ describe("lib", () => {
             deprecationReason: "Foobar",
           };
           const description = printerInstance.printDescription(type);
-          expect(description).toMatchSnapshot();
+          expect(description).toMatchSnapshot(__OS__);
         });
       });
 
@@ -406,7 +406,7 @@ describe("lib", () => {
             }
             const code = printerInstance.printCode(entityName);
             expect(printCode).toHaveBeenCalledWith(entityName);
-            expect(code).toMatchSnapshot();
+            expect(code).toMatchSnapshot(__OS__);
           },
         );
 
@@ -418,14 +418,14 @@ describe("lib", () => {
             .mockReturnValueOnce(entityName);
           const code = printerInstance.printCode(entityName);
           expect(printCode).toHaveBeenCalledWith(entityName);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
 
         test("returns a Markdown codeblock with non supported message for unsupported type", () => {
           const entityName = "TestFooBarType";
           jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(entityName);
           const code = printerInstance.printCode(entityName);
-          expect(code).toMatchSnapshot();
+          expect(code).toMatchSnapshot(__OS__);
         });
       });
 
@@ -457,7 +457,7 @@ describe("lib", () => {
               entityType.name,
               entityType,
             );
-            expect(printedType).toMatchSnapshot();
+            expect(printedType).toMatchSnapshot(__OS__);
           },
         );
 
@@ -491,7 +491,7 @@ describe("lib", () => {
               entityType.name,
               entityType,
             );
-            expect(printedType).toMatchSnapshot();
+            expect(printedType).toMatchSnapshot(__OS__);
           },
         );
 
@@ -517,7 +517,7 @@ describe("lib", () => {
             entityType.name,
             entityType,
           );
-          expect(printedType).toMatchSnapshot();
+          expect(printedType).toMatchSnapshot(__OS__);
         });
 
         test("returns an empty string if no type", () => {
@@ -534,7 +534,7 @@ describe("lib", () => {
           };
           jest.spyOn(graphql, "isScalarType").mockReturnValue(true);
           const printedType = printerInstance.printType("scalar", scalarType);
-          expect(printedType).toMatchSnapshot();
+          expect(printedType).toMatchSnapshot(__OS__);
         });
       });
     });

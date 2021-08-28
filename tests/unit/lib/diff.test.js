@@ -123,7 +123,7 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
 
         await saveSchemaFile("SCHEMA", FOLDER);
-        expect(fs.readFileSync(SCHEMA_FILE, "utf8")).toMatchSnapshot();
+        expect(fs.readFileSync(SCHEMA_FILE, "utf8")).toMatchSnapshot(__OS__);
       });
     });
 
@@ -136,7 +136,7 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
 
         await saveSchemaHash("SCHEMA", FOLDER);
-        expect(fs.readFileSync(HASH_FILE, "utf8")).toMatchSnapshot();
+        expect(fs.readFileSync(HASH_FILE, "utf8")).toMatchSnapshot(__OS__);
       });
     });
   });
