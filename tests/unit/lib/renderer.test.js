@@ -53,6 +53,9 @@ describe("lib", () => {
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 
           const outputFolder = dirTree(OUTPUT);
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
           expect(outputFolder).toMatchSnapshot();
         });
       });
@@ -64,6 +67,9 @@ describe("lib", () => {
           await rendererInstance.renderSidebar();
 
           const outputFolder = dirTree(OUTPUT);
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+          
           expect(outputFolder).toMatchSnapshot();
         });
       });
@@ -74,6 +80,9 @@ describe("lib", () => {
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
           const outputFolder = dirTree(OUTPUT);
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
           expect(outputFolder).toMatchSnapshot({
             children: [{ size: expect.any(Number) }],
             size: expect.any(Number),
@@ -93,6 +102,9 @@ describe("lib", () => {
           ]);
 
           const outputFolder = dirTree(OUTPUT);
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
           expect(outputFolder).toMatchSnapshot();
         });
       });

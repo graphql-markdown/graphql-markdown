@@ -62,7 +62,8 @@ describe("lib", () => {
       test("returns true if SCHEMA-HASH comparison has no reference hash file", async () => {
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        expect(fs.existsSync(HASH_FILE)).toBeFalsy();
+        const hasHashFile = fs.existsSync(HASH_FILE);
+        expect(hasHashFile).toBeFalsy();
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
         expect(check).toBeTruthy();
       });
@@ -108,7 +109,8 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
-        expect(fs.existsSync(SCHEMA_FILE)).toBeFalsy();
+        const hasSchemaFile = fs.existsSync(SCHEMA_FILE);
+        expect(hasSchemaFile).toBeFalsy();
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
         expect(check).toBeTruthy();
       });
@@ -123,7 +125,11 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
 
         await saveSchemaFile("SCHEMA", FOLDER);
-        expect(fs.readFileSync(SCHEMA_FILE, "utf8")).toMatchSnapshot();
+        const file = await fs.promises.readFile(SCHEMA_FILE, "utf8");
+
+        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
+        expect(file).toMatchSnapshot();
       });
     });
 
@@ -136,7 +142,12 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
 
         await saveSchemaHash("SCHEMA", FOLDER);
-        expect(fs.readFileSync(HASH_FILE, "utf8")).toMatchSnapshot();
+
+        const file = await fs.promises.readFile(HASH_FILE, "utf8");
+
+        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
+        expect(file).toMatchSnapshot();
       });
     });
   });
