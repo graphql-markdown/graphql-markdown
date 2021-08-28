@@ -12,5 +12,5 @@ module.exports = {
     "@data/(.*)": "<rootDir>/tests/__data__/$1",
     "@assets/(.*)": "<rootDir>/assets/$1",
   },
-  snapshotResolver: '<rootDir>/tests/jest-snapshot-resolver.js',
+  snapshotResolver: "<rootDir>/tests/jest-snapshot-resolver.js",
 };

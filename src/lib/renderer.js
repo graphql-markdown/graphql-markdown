@@ -38,7 +38,11 @@ module.exports = class Renderer {
       await fsExtra.ensureDir(dirPath);
 
       const filePath = path.join(dirPath, "_category_.yml");
-      await fsExtra.outputFile(filePath, `label: '${startCase(name)}'\n`, "utf8");
+      await fsExtra.outputFile(
+        filePath,
+        `label: '${startCase(name)}'\n`,
+        "utf8",
+      );
 
       pages = await Promise.all(
         Object.keys(type).map(async (name) => {
@@ -95,7 +99,7 @@ module.exports = class Renderer {
     const homePage = path.basename(homepageLocation);
     const destLocation = path.join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
-    
+
     await fsExtra.copy(homepageLocation, destLocation);
 
     const template = await fs.readFile(destLocation, "utf8");
