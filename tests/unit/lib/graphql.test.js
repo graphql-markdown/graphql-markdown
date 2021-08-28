@@ -142,24 +142,24 @@ describe("lib", () => {
     describe("getFilteredTypeMap()", () => {
       test("returns a filtered map of schema types", () => {
         const schemaTypeMap = getFilteredTypeMap(schema.getTypeMap());
-        expect(schemaTypeMap).toMatchSnapshot(__OS__);
+        expect(schemaTypeMap).toMatchSnapshot();
       });
     });
 
     describe("getIntrospectionFieldsList()", () => {
       test("returns list of queries", () => {
         const list = getIntrospectionFieldsList(schema.getQueryType());
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns list of mutations", () => {
         const list = getIntrospectionFieldsList(schema.getMutationType());
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns list of subscriptions", () => {
         const list = getIntrospectionFieldsList(schema.getSubscriptionType());
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns undefined if null", () => {
@@ -171,7 +171,7 @@ describe("lib", () => {
     describe("getFields()", () => {
       test("returns list of type fields", () => {
         const fields = getFields(schema.getMutationType());
-        expect(fields).toMatchSnapshot(__OS__);
+        expect(fields).toMatchSnapshot();
       });
     });
 
@@ -200,12 +200,12 @@ describe("lib", () => {
     describe("getTypeFromTypeMap()", () => {
       test("returns a filter map filtered by GraphQLObjectType", () => {
         const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLObjectType);
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLUnionType", () => {
         const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLUnionType);
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLInterfaceType", () => {
@@ -213,12 +213,12 @@ describe("lib", () => {
           schema.getTypeMap(),
           GraphQLInterfaceType,
         );
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLEnumType", () => {
         const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLEnumType);
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLInputObjectType", () => {
@@ -226,19 +226,19 @@ describe("lib", () => {
           schema.getTypeMap(),
           GraphQLInputObjectType,
         );
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLScalarType", () => {
         const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLScalarType);
-        expect(list).toMatchSnapshot(__OS__);
+        expect(list).toMatchSnapshot();
       });
     });
 
     describe("getSchemaMap()", () => {
       test("returns schema types map", () => {
         const schemaTypeMap = getSchemaMap(schema);
-        expect(schemaTypeMap).toMatchSnapshot(__OS__);
+        expect(schemaTypeMap).toMatchSnapshot();
       });
     });
 

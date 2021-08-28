@@ -5,9 +5,6 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ["json"],
   coverageDirectory: "<rootDir>/.nyc_output",
-  globals: {
-    "__OS__": require("os").platform() === 'win32' ? 'windows' : 'unix'
-  },
   testEnvironment: "node",
   rootDir: __dirname,
   moduleNameMapper: {
@@ -15,4 +12,5 @@ module.exports = {
     "@data/(.*)": "<rootDir>/tests/__data__/$1",
     "@assets/(.*)": "<rootDir>/assets/$1",
   },
+  snapshotResolver: '<rootDir>/tests/jest-snapshot-resolver.js',
 };

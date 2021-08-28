@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`lib diff saveSchemaFile() saves introspection schema locally: unix 1`] = `"schema"`;
-
-exports[`lib diff saveSchemaFile() saves introspection schema locally: windows 1`] = `"schema"`;
-
-exports[`lib diff saveSchemaHash() saves schema hash into .schema file: unix 1`] = `"df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4"`;
-
-exports[`lib diff saveSchemaHash() saves schema hash into .schema file: windows 1`] = `"df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4"`;
