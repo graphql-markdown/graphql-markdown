@@ -1,8 +1,10 @@
+const path = require("path");
+
 const snapshotOS = require("os").platform() === "win32" ? "windows" : "unix";
-const snapshotsFolder = `__snapshots__/${snapshotOS}/`;
+const snapshotsFolder = path.normalize(`__snapshots__/${snapshotOS}/`);
 
 module.exports = {
-  testPathForConsistencyCheck: "some/tests/example.test.js",
+  testPathForConsistencyCheck: path.normalize("some/tests/example.test.js"),
 
   resolveSnapshotPath: (testPath, snapshotExtension) =>
     testPath.replace(
