@@ -6,7 +6,7 @@ Object {
     Object {
       "extension": ".md",
       "name": "generated.md",
-      "path": "output\\\\generated.md",
+      "path": "output/generated.md",
       "size": Any<Number>,
       "type": "file",
     },
@@ -14,6 +14,46 @@ Object {
   "name": "output",
   "path": "output",
   "size": Any<Number>,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer class Renderer renderRootTypes() render root type: unix 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".yml",
+          "name": "_category_.yml",
+          "path": "output/object/_category_.yml",
+          "size": 16,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "bar.mdx",
+          "path": "output/object/bar.mdx",
+          "size": 7,
+          "type": "file",
+        },
+        Object {
+          "extension": ".mdx",
+          "name": "foo.mdx",
+          "path": "output/object/foo.mdx",
+          "size": 7,
+          "type": "file",
+        },
+      ],
+      "name": "object",
+      "path": "output/object",
+      "size": 30,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 30,
   "type": "directory",
 }
 `;
@@ -58,6 +98,24 @@ Object {
 }
 `;
 
+exports[`lib renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder: unix 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "extension": ".js",
+      "name": "sidebar-schema.js",
+      "path": "output/sidebar-schema.js",
+      "size": 114,
+      "type": "file",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 114,
+  "type": "directory",
+}
+`;
+
 exports[`lib renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder: windows 1`] = `
 Object {
   "children": Array [
@@ -72,6 +130,32 @@ Object {
   "name": "output",
   "path": "output",
   "size": 114,
+  "type": "directory",
+}
+`;
+
+exports[`lib renderer class Renderer renderTypeEntities() creates entity page into output folder: unix 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "extension": ".mdx",
+          "name": "foo-bar.mdx",
+          "path": "output/foobar/foo-bar.mdx",
+          "size": 11,
+          "type": "file",
+        },
+      ],
+      "name": "foobar",
+      "path": "output/foobar",
+      "size": 11,
+      "type": "directory",
+    },
+  ],
+  "name": "output",
+  "path": "output",
+  "size": 11,
   "type": "directory",
 }
 `;
