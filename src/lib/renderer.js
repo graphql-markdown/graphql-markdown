@@ -1,6 +1,9 @@
-const fs = require("fs-extra");
+const fs = require("fs").promises;
 const path = require("path");
+
+const fsExtra = require("fs-extra");
 const moment = require("moment");
+
 const { toSlug, startCase, pathUrl } = require("./utils");
 const { prettifyJavascript } = require("./prettier");
 
@@ -16,7 +19,7 @@ module.exports = class Renderer {
   }
 
   emptyOutputDir() {
-    fs.emptyDirSync(this.outputDir);
+    fsExtra.emptyDirSync(this.outputDir);
   }
 
   async renderRootTypes(name, type) {
@@ -32,10 +35,10 @@ module.exports = class Renderer {
         }, {});
       }
 
-      await fs.ensureDir(dirPath);
+      await fsExtra.ensureDir(dirPath);
 
       const filePath = path.join(dirPath, "_category_.yml");
-      await fs.outputFile(filePath, `label: '${startCase(name)}'\n`, "utf8");
+      await fsExtra.outputFile(filePath, `label: '${startCase(name)}'\n`, "utf8");
 
       pages = await Promise.all(
         Object.keys(type).map(async (name) => {
@@ -51,7 +54,7 @@ module.exports = class Renderer {
       const fileName = toSlug(name);
       const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
       const content = this.printer.printType(fileName, type);
-      await fs.outputFile(filePath, content, "utf8");
+      await fsExtra.outputFile(filePath, content, "utf8");
       const pagePath = path.relative(this.outputDir, filePath);
       const page = pagePath.match(
         /(?<category>[A-z][A-z0-9-]*)[\\/]+(?<pageId>[A-z][A-z0-9-]*).mdx?$/,
@@ -83,7 +86,7 @@ module.exports = class Renderer {
     );
 
     const filePath = path.join(this.outputDir, SIDEBAR);
-    await fs.outputFile(filePath, content, "utf8");
+    await fsExtra.outputFile(filePath, content, "utf8");
 
     return path.relative("./", filePath);
   }
@@ -91,14 +94,18 @@ module.exports = class Renderer {
   async renderHomepage(homepageLocation) {
     const homePage = path.basename(homepageLocation);
     const destLocation = path.join(this.outputDir, homePage);
-    await fs.copy(homepageLocation, destLocation);
+    const slug = pathUrl.resolve("/", this.baseURL);
+    
+    await fsExtra.copy(homepageLocation, destLocation);
+
     const template = await fs.readFile(destLocation, "utf8");
+
     const data = template
-      .replace(/##baseURL##/gm, pathUrl.resolve("/", this.baseURL))
+      .replace(/##baseURL##/gm, slug)
       .replace(
         /##generated-date-time##/gm,
         moment().format("MMMM DD, YYYY [at] h:mm:ss A"),
       );
-    await fs.outputFile(destLocation, data, "utf8");
+    await fsExtra.outputFile(destLocation, data, "utf8");
   }
 };

@@ -7,7 +7,7 @@ const Renderer = require("@/lib/renderer");
 jest.mock("@/lib/printer");
 const Printer = require("@/lib/printer");
 
-const FOLDER = "output";
+const OUTPUT = "output";
 const HOMEPAGE = "generated.md";
 const SIDEBAR = "sidebar.json";
 
@@ -23,14 +23,14 @@ describe("lib", () => {
           node_modules: mock.load(
             path.resolve(__dirname, "../../../node_modules"),
           ),
-          output: {},
+          [OUTPUT]: {},
           assets: {
             [HOMEPAGE]: mock.load(require.resolve(`@assets/${HOMEPAGE}`)),
             [SIDEBAR]: mock.load(require.resolve(`@assets/${SIDEBAR}`)),
           },
         });
         printerInstance = new Printer("SCHEMA", baseURL, "root");
-        rendererInstance = new Renderer(printerInstance, FOLDER, baseURL);
+        rendererInstance = new Renderer(printerInstance, OUTPUT, baseURL);
       });
 
       afterEach(() => {
@@ -43,7 +43,7 @@ describe("lib", () => {
           jest
             .spyOn(printerInstance, "printType")
             .mockReturnValue("Lorem ipsum");
-          const output = `${FOLDER}/foobar`;
+          const output = `${OUTPUT}/foobar`;
 
           const meta = await rendererInstance.renderTypeEntities(
             output,
@@ -52,8 +52,8 @@ describe("lib", () => {
           );
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 
-          const folder = dirTree(FOLDER);
-          expect(folder).toMatchSnapshot();
+          const outputFolder = dirTree(OUTPUT);
+          expect(outputFolder).toMatchSnapshot();
         });
       });
 
@@ -63,8 +63,8 @@ describe("lib", () => {
 
           await rendererInstance.renderSidebar();
 
-          const folder = dirTree(FOLDER);
-          expect(folder).toMatchSnapshot();
+          const outputFolder = dirTree(OUTPUT);
+          expect(outputFolder).toMatchSnapshot();
         });
       });
 
@@ -73,8 +73,8 @@ describe("lib", () => {
           expect.assertions(1);
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
-          const folder = dirTree(FOLDER);
-          expect(folder).toMatchSnapshot({
+          const outputFolder = dirTree(OUTPUT);
+          expect(outputFolder).toMatchSnapshot({
             children: [{ size: expect.any(Number) }],
             size: expect.any(Number),
           });
@@ -92,8 +92,8 @@ describe("lib", () => {
             { name: "bar" },
           ]);
 
-          const folder = dirTree(FOLDER);
-          expect(folder).toMatchSnapshot();
+          const outputFolder = dirTree(OUTPUT);
+          expect(outputFolder).toMatchSnapshot();
         });
       });
     });
