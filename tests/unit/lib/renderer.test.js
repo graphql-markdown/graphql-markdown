@@ -69,7 +69,7 @@ describe("lib", () => {
           const outputFolder = dirTree(OUTPUT);
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
-          
+
           expect(outputFolder).toMatchSnapshot();
         });
       });
