@@ -53,7 +53,6 @@ describe("lib", () => {
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
 
           const folder = dirTree(FOLDER);
-          mock.restore();
           expect(folder).toMatchSnapshot();
         });
       });
@@ -65,7 +64,6 @@ describe("lib", () => {
           await rendererInstance.renderSidebar();
 
           const folder = dirTree(FOLDER);
-          mock.restore();
           expect(folder).toMatchSnapshot();
         });
       });
@@ -76,7 +74,6 @@ describe("lib", () => {
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
           const folder = dirTree(FOLDER);
-          mock.restore();
           expect(folder).toMatchSnapshot({
             children: [{ size: expect.any(Number) }],
             size: expect.any(Number),
@@ -96,7 +93,6 @@ describe("lib", () => {
           ]);
 
           const folder = dirTree(FOLDER);
-          mock.restore();
           expect(folder).toMatchSnapshot();
         });
       });
