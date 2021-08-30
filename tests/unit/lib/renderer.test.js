@@ -48,6 +48,7 @@ describe("lib", () => {
       describe("renderTypeEntities()", () => {
         test("creates entity page into output folder", async () => {
           expect.assertions(2);
+
           jest
             .spyOn(printerInstance, "printType")
             .mockReturnValue("Lorem ipsum");
@@ -58,12 +59,11 @@ describe("lib", () => {
             "FooBar",
             "FooBar",
           );
-          expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
-
           const outputFolder = dirTree(OUTPUT);
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
+          expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderTypeEntities.json"),
           );
@@ -89,8 +89,8 @@ describe("lib", () => {
       describe("renderHomepage()", () => {
         test("copies default homepage into output folder", async () => {
           expect.assertions(1);
-          await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
 
+          await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
           const outputFolder = dirTree(OUTPUT);
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
@@ -104,6 +104,7 @@ describe("lib", () => {
       describe("renderRootTypes()", () => {
         test("render root type", async () => {
           expect.assertions(1);
+
           jest
             .spyOn(printerInstance, "printType")
             .mockImplementation(() => "content");
