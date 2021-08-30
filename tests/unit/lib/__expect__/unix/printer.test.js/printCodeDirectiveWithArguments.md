@@ -1,0 +1,3 @@
+directive @FooBar(
+arg: boolean
+)

@@ -1,0 +1,15 @@
+{
+  "path": "output",
+  "name": "output",
+  "children": [
+    {
+      "path": "output/generated.md",
+      "name": "generated.md",
+      "size": 433,
+      "extension": ".md",
+      "type": "file"
+    }
+  ],
+  "size": 433,
+  "type": "directory"
+}

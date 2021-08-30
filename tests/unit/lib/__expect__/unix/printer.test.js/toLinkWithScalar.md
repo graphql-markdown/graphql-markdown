@@ -1,0 +1,1 @@
+[`TestScalar`](docs/graphql/scalars/test-scalar)
