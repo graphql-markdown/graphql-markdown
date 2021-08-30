@@ -15,8 +15,8 @@ on:
       - '.github/workflows/test-win.yml'
 
 jobs:
-  test:
-    name: Test Code Base
+  test-windows:
+    name: Test Code Base (Windows)
     runs-on: windows-latest
 
     steps:
