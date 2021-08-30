@@ -59,12 +59,9 @@ module.exports = class Printer {
     }
 
     if (category && graphLQLNamedType) {
-      return `[\`${name}\`](${path.join(
-        this.linkRoot,
-        this.baseURL,
-        category,
-        toSlug(graphLQLNamedType),
-      )})`;
+      return `[\`${name}\`](${path
+        .posix.join(this.linkRoot, this.baseURL, category, toSlug(graphLQLNamedType))
+      })`;
     } else {
       return `\`${name}\``;
     }
