@@ -54,7 +54,9 @@ describe("lib", () => {
 
             const link = printerInstance.toLink(type, entityName);
 
-            expect(link).toMatchFile(path.join(EXPECT_PATH, `toLinkWith${capitalize(type)}.md`));
+            expect(link).toMatchFile(
+              path.join(EXPECT_PATH, `toLinkWith${capitalize(type)}.md`),
+            );
           },
         );
 
@@ -84,7 +86,9 @@ describe("lib", () => {
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(link).toMatchFile(path.join(EXPECT_PATH, `toLinkWithUnkown.md`));
+          expect(link).toMatchFile(
+            path.join(EXPECT_PATH, `toLinkWithUnkown.md`),
+          );
         });
       });
 
@@ -593,7 +597,9 @@ describe("lib", () => {
           const code = printerInstance.printCode(entityName);
 
           expect(printCode).toHaveBeenCalledWith(entityName);
-          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeWithQuery.md"));
+          expect(code).toMatchFile(
+            path.join(EXPECT_PATH, "printCodeWithQuery.md"),
+          );
         });
 
         test("returns a Markdown codeblock with non supported message for unsupported type", () => {
@@ -684,7 +690,10 @@ describe("lib", () => {
             );
 
             expect(printedType).toMatchFile(
-              path.join(EXPECT_PATH, `printTypeWith${capitalize(type)}Interface.md`),
+              path.join(
+                EXPECT_PATH,
+                `printTypeWith${capitalize(type)}Interface.md`,
+              ),
             );
           },
         );
