@@ -12,5 +12,9 @@ module.exports = {
     "@data/(.*)": "<rootDir>/tests/__data__/$1",
     "@assets/(.*)": "<rootDir>/assets/$1",
   },
-  snapshotResolver: "<rootDir>/tests/jest-snapshot-resolver.js",
+  setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.js"],
+  watchPathIgnorePatterns: ["__expected__"],
+  globals: {
+    __OS__: require("os").platform() === "win32" ? "windows" : "unix",
+  },
 };

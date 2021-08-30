@@ -1,0 +1,4 @@
+interface undefined {
+  one
+  two
+}

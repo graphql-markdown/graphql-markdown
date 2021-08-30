@@ -1,5 +1,6 @@
-const mock = require("mock-fs");
 const path = require("path");
+
+const mock = require("mock-fs");
 const dirTree = require("directory-tree");
 
 const Renderer = require("@/lib/renderer");
@@ -10,6 +11,13 @@ const Printer = require("@/lib/printer");
 const OUTPUT = "output";
 const HOMEPAGE = "generated.md";
 const SIDEBAR = "sidebar.json";
+
+const EXPECT_PATH = path.join(
+  __dirname,
+  "__expect__",
+  __OS__,
+  path.basename(__filename),
+);
 
 describe("lib", () => {
   describe("renderer", () => {
@@ -56,7 +64,9 @@ describe("lib", () => {
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-          expect(outputFolder).toMatchSnapshot();
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(EXPECT_PATH, "renderTypeEntities.json"),
+          );
         });
       });
 
@@ -70,7 +80,9 @@ describe("lib", () => {
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-          expect(outputFolder).toMatchSnapshot();
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(EXPECT_PATH, "renderSidebar.json"),
+          );
         });
       });
 
@@ -83,10 +95,9 @@ describe("lib", () => {
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-          expect(outputFolder).toMatchSnapshot({
-            children: [{ size: expect.any(Number) }],
-            size: expect.any(Number),
-          });
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(EXPECT_PATH, "renderHomepage.json"),
+          );
         });
       });
 
@@ -105,7 +116,9 @@ describe("lib", () => {
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-          expect(outputFolder).toMatchSnapshot();
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(EXPECT_PATH, "renderRootTypes.json"),
+          );
         });
       });
     });

@@ -1,8 +1,15 @@
 const mock = require("mock-fs");
-const path = require("path");
+const path = require("path"); // to be loaded after mock-fs
 const dirTree = require("directory-tree");
 
 const generateDocFromSchema = require("@/lib/generator");
+
+const EXPECT_PATH = path.join(
+  __dirname,
+  "__expect__",
+  __OS__,
+  path.basename(__filename),
+);
 
 describe("lib", () => {
   beforeEach(() => {
@@ -46,8 +53,12 @@ describe("lib", () => {
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-        expect(outputFolder).toMatchSnapshot();
-        expect(tmpFolder).toMatchSnapshot();
+        expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `generateDocFromSchemaOutputFolder.hash`),
+        );
+        expect(JSON.stringify(tmpFolder, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `generateDocFromSchemaTmpFolder.hash`),
+        );
       });
     });
   });

@@ -1,3 +1,5 @@
+const path = require("path");
+
 const { loadSchema } = require("@graphql-tools/load");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 const {
@@ -28,6 +30,13 @@ const {
 
 const SCHEMA_FILE = require.resolve("@data/tweet.graphql");
 
+const EXPECT_PATH = path.join(
+  __dirname,
+  "__expect__",
+  __OS__,
+  path.basename(__filename),
+);
+
 describe("lib", () => {
   describe("graphql", () => {
     let schema;
@@ -40,6 +49,8 @@ describe("lib", () => {
 
     describe("getDefaultValue()", () => {
       test("returns default value as an integer when defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -47,10 +58,13 @@ describe("lib", () => {
           defaultValue: 5,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBe(5);
       });
 
       test("returns default value as a float when defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -58,10 +72,13 @@ describe("lib", () => {
           defaultValue: 5.3,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBe(5.3);
       });
 
       test("returns undefined for type GraphQLInt if not default value defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -69,10 +86,13 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns undefined for type GraphQLID if not default value defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -80,10 +100,13 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns undefined for type GraphQLFloat if not default value defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -91,10 +114,13 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns undefined for type GraphQLString if not default value defined", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -102,10 +128,13 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns undefined for type GraphQLList without default value", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "id",
           description: undefined,
@@ -113,10 +142,13 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns array default value as string for type GraphQLList(GraphQLID)", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "id",
           description: undefined,
@@ -124,10 +156,13 @@ describe("lib", () => {
           defaultValue: ["0", "1"],
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBe('["0", "1"]');
       });
 
       test("returns array default value as string for type GraphQLList(GraphQLInt)", () => {
+        expect.hasAssertions();
+
         const argument = {
           name: "foobar",
           description: undefined,
@@ -135,154 +170,254 @@ describe("lib", () => {
           defaultValue: [0, 1],
           extensions: undefined,
         };
+
         expect(getDefaultValue(argument)).toBe("[0, 1]");
       });
     });
 
     describe("getFilteredTypeMap()", () => {
       test("returns a filtered map of schema types", () => {
+        expect.hasAssertions();
+
         const schemaTypeMap = getFilteredTypeMap(schema.getTypeMap());
-        expect(schemaTypeMap).toMatchSnapshot();
+
+        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getFilteredTypeMap.json`),
+        );
       });
     });
 
     describe("getIntrospectionFieldsList()", () => {
       test("returns list of queries", () => {
+        expect.hasAssertions();
+
         const list = getIntrospectionFieldsList(schema.getQueryType());
-        expect(list).toMatchSnapshot();
+
+        expect(JSON.stringify(list, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getIntrospectionFieldsListQueries.json`),
+        );
       });
 
       test("returns list of mutations", () => {
+        expect.hasAssertions();
+
         const list = getIntrospectionFieldsList(schema.getMutationType());
-        expect(list).toMatchSnapshot();
+
+        expect(JSON.stringify(list, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getIntrospectionFieldsListMutations.json`),
+        );
       });
 
       test("returns list of subscriptions", () => {
+        expect.hasAssertions();
+
         const list = getIntrospectionFieldsList(schema.getSubscriptionType());
-        expect(list).toMatchSnapshot();
+
+        expect(JSON.stringify(list, null, 2)).toMatchFile(
+          path.join(
+            EXPECT_PATH,
+            `getIntrospectionFieldsListSubscriptions.json`,
+          ),
+        );
       });
 
       test("returns undefined if null", () => {
+        expect.hasAssertions();
+
         const list = getIntrospectionFieldsList(null);
+
         expect(list).toBeUndefined();
       });
     });
 
     describe("getFields()", () => {
       test("returns list of type fields", () => {
+        expect.hasAssertions();
+
         const fields = getFields(schema.getMutationType());
-        expect(fields).toMatchSnapshot();
+
+        expect(JSON.stringify(fields, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getFields.json`),
+        );
       });
     });
 
     describe("getTypeName()", () => {
       test("returns type name for object", () => {
+        expect.hasAssertions();
+
         const name = getTypeName(schema.getType("Tweet"));
+
         expect(name).toBe("Tweet");
       });
 
       test("returns type name for interface", () => {
+        expect.hasAssertions();
+
         const name = getTypeName(schema.getType("Node"));
+
         expect(name).toBe("Node");
       });
 
       test("returns type name for scalar", () => {
+        expect.hasAssertions();
+
         const name = getTypeName(schema.getType("ID"));
+
         expect(name).toBe("ID");
       });
 
       test("returns default name for unknown", () => {
+        expect.hasAssertions();
+
         const name = getTypeName({ toString: undefined }, "FooBar");
+
         expect(name).toBe("FooBar");
       });
     });
 
     describe("getTypeFromTypeMap()", () => {
       test("returns a filter map filtered by GraphQLObjectType", () => {
-        const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLObjectType);
-        expect(list).toMatchSnapshot();
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLObjectType);
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLObjectType.json`),
+        );
       });
 
       test("returns a filter map filtered by GraphQLUnionType", () => {
-        const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLUnionType);
-        expect(list).toMatchSnapshot();
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLUnionType);
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLUnionType.json`),
+        );
       });
 
       test("returns a filter map filtered by GraphQLInterfaceType", () => {
-        const list = getTypeFromTypeMap(
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(
           schema.getTypeMap(),
           GraphQLInterfaceType,
         );
-        expect(list).toMatchSnapshot();
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLInterfaceType.json`),
+        );
       });
 
       test("returns a filter map filtered by GraphQLEnumType", () => {
-        const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLEnumType);
-        expect(list).toMatchSnapshot();
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLEnumType);
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLEnumType.json`),
+        );
       });
 
       test("returns a filter map filtered by GraphQLInputObjectType", () => {
-        const list = getTypeFromTypeMap(
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(
           schema.getTypeMap(),
           GraphQLInputObjectType,
         );
-        expect(list).toMatchSnapshot();
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(
+            EXPECT_PATH,
+            `getTypeFromTypeMapGraphQLInputObjectType.json`,
+          ),
+        );
       });
 
       test("returns a filter map filtered by GraphQLScalarType", () => {
-        const list = getTypeFromTypeMap(schema.getTypeMap(), GraphQLScalarType);
-        expect(list).toMatchSnapshot();
+        expect.hasAssertions();
+
+        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLScalarType);
+
+        expect(JSON.stringify(map, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLScalarType.json`),
+        );
       });
     });
 
     describe("getSchemaMap()", () => {
       test("returns schema types map", () => {
+        expect.hasAssertions();
+
         const schemaTypeMap = getSchemaMap(schema);
-        expect(schemaTypeMap).toMatchSnapshot();
+
+        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
+          path.join(EXPECT_PATH, `getSchemaMap.json`),
+        );
       });
     });
 
     describe("isParametrizedField()", () => {
       test("returns true if type is parametrized", () => {
+        expect.hasAssertions();
+
         const mutations = getIntrospectionFieldsList(schema.getMutationType());
         const res = isParametrizedField(mutations["createTweet"]);
+
         expect(res).toBeTruthy();
       });
 
       test("returns false if type is not parametrized", () => {
+        expect.hasAssertions();
+
         const queries = getIntrospectionFieldsList(schema.getQueryType());
         const res = isParametrizedField(queries["TweetsMeta"]);
+
         expect(res).toBeFalsy();
       });
     });
 
     describe("isOperation()", () => {
       test("returns true if type is mutation", () => {
+        expect.hasAssertions();
+
         const mutations = getIntrospectionFieldsList(schema.getMutationType());
         const res = isOperation(mutations["createTweet"]);
+
         expect(res).toBeTruthy();
       });
 
       test("returns true if type is query", () => {
+        expect.hasAssertions();
+
         const queries = getIntrospectionFieldsList(schema.getQueryType());
         const res = isOperation(queries["Tweets"]);
+
         expect(res).toBeTruthy();
       });
 
       test("returns true if type is subscription", () => {
+        expect.hasAssertions();
+
         const subscriptions = getIntrospectionFieldsList(
           schema.getSubscriptionType(),
         );
         const res = isOperation(subscriptions["Notifications"]);
+
         expect(res).toBeTruthy();
       });
 
       test("returns false if type is not an operation", () => {
+        expect.hasAssertions();
+
         const objects = getTypeFromTypeMap(
           schema.getTypeMap(),
           GraphQLObjectType,
         );
         const res = isOperation(objects["Tweet"]);
+
         expect(res).toBeFalsy();
       });
     });

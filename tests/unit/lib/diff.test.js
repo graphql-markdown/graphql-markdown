@@ -1,5 +1,7 @@
+const path = require("path");
+
 const mock = require("mock-fs");
-const fs = require("fs");
+const fs = require("fs"); // must be loaded after mock-fs
 
 jest.mock("@/lib/graphql");
 const graphql = require("@/lib/graphql");
@@ -10,6 +12,13 @@ const inspector = require("@graphql-inspector/core");
 const FOLDER = "output";
 const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
 const HASH_FILE = `${FOLDER}/.schema`;
+
+const EXPECT_PATH = path.join(
+  __dirname,
+  "__expect__",
+  __OS__,
+  path.basename(__filename),
+);
 
 describe("lib", () => {
   beforeEach(() => {
@@ -29,14 +38,20 @@ describe("lib", () => {
       } = require("@/lib/diff");
 
       test("returns true if no valid comparison method is selected", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
+
         const check = await checkSchemaChanges("schema", FOLDER, "FOOBAR");
+
         expect(check).toBeTruthy();
       });
 
       test("returns true if SCHEMA-HASH comparison differs", async () => {
+        expect.hasAssertions();
+
         const printSchema = jest.spyOn(graphql, "printSchema");
 
         printSchema.mockImplementationOnce(() => "schema");
@@ -48,27 +63,36 @@ describe("lib", () => {
           FOLDER,
           "SCHEMA-HASH",
         );
+
         expect(check).toBeTruthy();
       });
 
       test("returns false if SCHEMA-HASH comparison is equals", async () => {
+        expect.hasAssertions();
+
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
         await saveSchemaHash("SCHEMA", FOLDER);
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+
         expect(check).toBeFalsy();
       });
 
       test("returns true if SCHEMA-HASH comparison has no reference hash file", async () => {
+        expect.hasAssertions();
+
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
         const hasHashFile = fs.existsSync(HASH_FILE);
-        expect(hasHashFile).toBeFalsy();
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+
+        expect(hasHashFile).toBeFalsy();
         expect(check).toBeTruthy();
       });
 
       test("returns true if SCHEMA-DIFF comparison differs", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
@@ -83,10 +107,13 @@ describe("lib", () => {
           FOLDER,
           "SCHEMA-DIFF",
         );
+
         expect(check).toBeTruthy();
       });
 
       test("returns false if SCHEMA-DIFF comparison is equals", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
@@ -97,10 +124,13 @@ describe("lib", () => {
 
         await saveSchemaFile("SCHEMA", FOLDER);
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+
         expect(check).toBeFalsy();
       });
 
       test("returns true if SCHEMA-DIFF no schema introspection file exists", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
@@ -110,8 +140,9 @@ describe("lib", () => {
           .mockImplementationOnce(() => Promise.resolve([]));
 
         const hasSchemaFile = fs.existsSync(SCHEMA_FILE);
-        expect(hasSchemaFile).toBeFalsy();
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+
+        expect(hasSchemaFile).toBeFalsy();
         expect(check).toBeTruthy();
       });
     });
@@ -120,6 +151,8 @@ describe("lib", () => {
       const { saveSchemaFile } = require("@/lib/diff");
 
       test("saves introspection schema locally", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
@@ -129,7 +162,9 @@ describe("lib", () => {
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-        expect(file).toMatchSnapshot();
+        expect(file).toMatchFile(
+          path.join(EXPECT_PATH, `saveSchemaFile.schema`),
+        );
       });
     });
 
@@ -137,6 +172,8 @@ describe("lib", () => {
       const { saveSchemaHash } = require("@/lib/diff");
 
       test("saves schema hash into .schema file", async () => {
+        expect.hasAssertions();
+
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
@@ -147,7 +184,7 @@ describe("lib", () => {
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-        expect(file).toMatchSnapshot();
+        expect(file).toMatchFile(path.join(EXPECT_PATH, `saveSchemaHash.hash`));
       });
     });
   });

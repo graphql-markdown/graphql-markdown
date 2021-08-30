@@ -1,0 +1,3 @@
+FooBar(
+arg: boolean
+): string

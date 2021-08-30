@@ -1,0 +1,4 @@
+
+```graphql
+"TestFooBarType" not supported
+```
