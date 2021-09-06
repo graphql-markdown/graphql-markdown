@@ -539,23 +539,23 @@
     value-or-promise "1.0.10"
 
 "@graphql-tools/graphql-file-loader@^7.0.3":
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.0.6.tgz#602a2013dc926e17542c979b8f9af45187329bcb"
-  integrity sha512-jndtcNwPUQxEiY/3FKNbAb4dpNXO8tXoDZzrnvv+z/tf27ViiZW0KUBkO4Mw4b0sqaDq+fS4d6BXzVFQQUPolA==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.1.0.tgz#6249074a7d268a30c81e923ee2bb991ec9a4c7b7"
+  integrity sha512-VWGetkBuyWrUxSpMnbpzZs2yHWBFeo9nTYjc8+o+xyJKpG/CRfvQrhBRNRFfV/5C0j5/Z1FMfUgsroEAG5H3HQ==
   dependencies:
-    "@graphql-tools/import" "^6.2.6"
-    "@graphql-tools/utils" "^8.1.2"
+    "@graphql-tools/import" "^6.4.0"
+    "@graphql-tools/utils" "^8.2.0"
     globby "^11.0.3"
     tslib "~2.3.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@^6.2.6":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.3.1.tgz#731c47ab6c6ac9f7994d75c76b6c2fa127d2d483"
-  integrity sha512-1szR19JI6WPibjYurMLdadHKZoG9C//8I/FZ0Dt4vJSbrMdVNp8WFxg4QnZrDeMG4MzZc90etsyF5ofKjcC+jw==
+"@graphql-tools/import@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.4.0.tgz#eb2178d6df8d964e7b9d6b1ed75f80d12f9060a7"
+  integrity sha512-jfE01oPcmc4vzAcYLs6xT7XC4jJWrM1HNtIwc7HyyHTxrC3nf36XrF3txEZ2l20GT53+OWnMgYx1HhauLGdJmA==
   dependencies:
     resolve-from "5.0.0"
-    tslib "~2.2.0"
+    tslib "~2.3.0"
 
 "@graphql-tools/json-file-loader@^7.1.0":
   version "7.2.0"
@@ -6923,11 +6923,6 @@ tslib@~2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.1.0.tgz"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
-
-tslib@~2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.2.0.tgz"
-  integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
 
 tsutils@^3.21.0:
   version "3.21.0"
