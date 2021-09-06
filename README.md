@@ -163,6 +163,24 @@ By default, the plugin will use the options as defined in the plugin's [configur
 
 The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since last documentation generation, then the full schema documentation will be generated.
 
+## Troubleshooting
+
+### `Duplicate "graphql" modules cannot be used at the same time`
+
+Add a `resolutions` entry to your `package.json` file:
+
+```json
+"resolutions": {
+  "graphql": "15.5.2"
+}
+```
+
+### `Unable to find any GraphQL type definitions`
+
+Try changing the temporary folder for the plugin by setting `tmpDir: "./.docusaurus"` (see [options](#options) section for more details).
+
+You can also disable the schema diff feature by setting `diffMethod: "NONE"`.
+
 ## Contributions
 
 Contributions, issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
