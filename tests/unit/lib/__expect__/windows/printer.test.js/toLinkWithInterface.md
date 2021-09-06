@@ -1,0 +1,1 @@
+[`TestInterface`](docs/graphql/interfaces/test-interface)

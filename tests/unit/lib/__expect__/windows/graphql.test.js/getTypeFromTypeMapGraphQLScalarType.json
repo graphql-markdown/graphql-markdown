@@ -1,0 +1,9 @@
+{
+  "SRI": "SRI",
+  "ID": "ID",
+  "String": "String",
+  "Int": "Int",
+  "Url": "Url",
+  "Date": "Date",
+  "Boolean": "Boolean"
+}

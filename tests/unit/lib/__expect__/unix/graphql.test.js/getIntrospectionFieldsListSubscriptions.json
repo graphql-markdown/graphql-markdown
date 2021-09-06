@@ -1,0 +1,122 @@
+{
+  "Notifications": {
+    "name": "Notifications",
+    "type": "[Notification]!",
+    "args": [
+      {
+        "name": "limit",
+        "type": "Int",
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1607,
+              "end": 1612
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1614,
+                "end": 1617
+              }
+            },
+            "loc": {
+              "start": 1614,
+              "end": 1617
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1607,
+            "end": 1617
+          }
+        }
+      }
+    ],
+    "isDeprecated": false,
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "Notifications",
+        "loc": {
+          "start": 1593,
+          "end": 1606
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1607,
+              "end": 1612
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1614,
+                "end": 1617
+              }
+            },
+            "loc": {
+              "start": 1614,
+              "end": 1617
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1607,
+            "end": 1617
+          }
+        }
+      ],
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Notification",
+              "loc": {
+                "start": 1621,
+                "end": 1633
+              }
+            },
+            "loc": {
+              "start": 1621,
+              "end": 1633
+            }
+          },
+          "loc": {
+            "start": 1620,
+            "end": 1634
+          }
+        },
+        "loc": {
+          "start": 1620,
+          "end": 1635
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1593,
+        "end": 1635
+      }
+    }
+  }
+}

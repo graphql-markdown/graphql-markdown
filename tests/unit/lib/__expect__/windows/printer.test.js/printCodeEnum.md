@@ -1,0 +1,4 @@
+enum EnumTypeName {
+  one
+  two
+}
