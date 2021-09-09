@@ -1,0 +1,10 @@
+scripts
+tests
+.github
+.husky
+.nyc_output
+.vscode
+*.yml
+/*.js
+*ignore
+*.log
