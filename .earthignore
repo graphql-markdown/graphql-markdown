@@ -1,12 +1,2 @@
-tests/**
-!tests/e2e/**
-!tests/__data__
 node_modules/**
-__mocks__/**
-.*
-scripts/**
-dangerfile.*
-jest.*
-stryker.*
-nyc.*
 *.log

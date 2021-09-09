@@ -32,11 +32,11 @@
     "test:ci": "jest --runInBand --noStackTrace --ci",
     "test:smoke": "earthly +smoke-test",
     "pre-commit": "yarn prettier && yarn lint",
-    "pre-push": "yarn lint:ci && yarn test --bail && yarn test:coverage && yarn danger",
+    "pre-push": "earthly +all",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "demo": "docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
+    "demo": "earthly +image && docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
     "build:smoke": "earthly +image"
   },
   "husky": {

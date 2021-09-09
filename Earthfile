@@ -10,15 +10,16 @@ build:
   RUN yarn pack --filename docusaurus2-graphql-doc-generator.tgz
 
 lint: 
+  ARG flag
   FROM +build
-  RUN prettier "**/*.{js,json,md}"
-  RUN yarn eslint "**/*.js"
-
-lint-fix: 
-  FROM +build
-  RUN prettier --write "**/*.{js,json,md}"
-  RUN yarn eslint "**/*.js" --fix
-  SAVE ARTIFACT src AS LOCAL ./src
+  IF [ "$flag" = "fix" ]
+    RUN yarn prettier --write "**/*.{js,json,md}"
+    RUN yarn eslint "**/*.js" --fix
+    SAVE ARTIFACT src AS LOCAL ./src
+  ELSE
+    RUN yarn prettier "**/*.{js,json,md}"
+    RUN yarn eslint "**/*.js"
+  END
 
 unit-test:
   FROM +deps
@@ -54,8 +55,8 @@ smoke-test:
   RUN jest
 
 image:
-  FROM +smoke-init
   ARG port=8080
+  FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc
   RUN yarn build --no-minify
@@ -65,6 +66,7 @@ image:
 
 all:
   BUILD +build
+  BUILD +lint
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test
