@@ -8,3 +8,4 @@ tests
 /*.js
 *ignore
 *.log
+Earthfile
