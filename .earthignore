@@ -1,5 +1,6 @@
 tests/**
-!tests/e2e/scripts/**
+!tests/e2e/**
+!tests/__data__
 node_modules/**
 __mocks__/**
 .*
