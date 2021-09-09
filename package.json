@@ -37,7 +37,7 @@
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
     "demo": "docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
-    "build:smoke": "earthly +docker"
+    "build:smoke": "earthly +image"
   },
   "husky": {
     "hooks": {

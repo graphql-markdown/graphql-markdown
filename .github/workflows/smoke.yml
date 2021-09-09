@@ -1,4 +1,4 @@
-name: E2E Test
+name: Smoke Tests
 
 on: 
   push:
@@ -16,8 +16,8 @@ on:
       - '.github/workflows/e2e.yml'
 
 jobs:
-  e2e:
-    name: E2E Tests
+  smoke:
+    name: Smoke Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +26,13 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: earthly/actions/setup-earthly@v1
+      - name: Install earthly
+        uses: earthly/actions/setup-earthly@v1
         with:
           version: v0.5.10
 
       - name: Run Smoke Tests
         run: earthly github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
 
-      - name: Check Docusaurus Production build
-        run: earthly github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+docker
+      - name: Docusaurus Production Smoke Build
+        run: earthly github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+image

@@ -53,12 +53,14 @@ smoke-test:
   WORKDIR /docusaurus2
   RUN jest
 
-docker:
+image:
   FROM +smoke-init
-  WORKDIR /docusaurus2/scripts
-  RUN sh build.sh
-  EXPOSE 8080
-  ENTRYPOINT ["sh", "start.sh"]
+  ARG port=8080
+  WORKDIR /docusaurus2
+  RUN npx docusaurus graphql-to-doc
+  RUN yarn build --no-minify
+  EXPOSE $port
+  ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
   SAVE IMAGE graphql-markdown:demo
 
 all:
