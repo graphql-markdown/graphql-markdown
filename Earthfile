@@ -64,6 +64,12 @@ image:
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
   SAVE IMAGE graphql-markdown:demo
 
+publish:
+  FROM node:lts-alpine
+  GIT CLONE --branch main https://github.com/edno/graphql-markdown.git /graphql-markdown
+  WORKDIR /graphql-markdown
+  RUN --secret NODE_AUTH_TOKEN=+secrets/token npm publish
+
 all:
   BUILD +build
   BUILD +lint
