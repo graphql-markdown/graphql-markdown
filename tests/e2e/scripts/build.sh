@@ -2,7 +2,7 @@
 
 set -e
 
-cd /usr/src/app/docusaurus2
+cd /docusaurus2
 
 npx docusaurus graphql-to-doc
 

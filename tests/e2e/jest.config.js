@@ -6,4 +6,5 @@ module.exports = {
   rootDir: __dirname,
   testMatch: ["<rootDir>/**/?(*.)+(spec|test).js"],
   collectCoverage: false,
+  transform: {},
 };
