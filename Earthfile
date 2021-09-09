@@ -68,4 +68,4 @@ all:
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test
-  BUILD +docker
+  BUILD +image
