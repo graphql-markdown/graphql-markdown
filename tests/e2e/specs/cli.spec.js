@@ -3,7 +3,7 @@ const path = require("path");
 
 const cli = require("./lib/cli");
 
-const rootDir = "/usr/src/app/docusaurus2";
+const rootDir = "/docusaurus2";
 
 const pluginConfig = require(`${rootDir}/docusaurus2-graphql-doc-generator.config.json`);
 

@@ -30,14 +30,14 @@
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
     "test:ci": "jest --runInBand --noStackTrace --ci",
-    "test:e2e": "docker-compose run --rm docusaurus2-graphql-doc-generator jest",
+    "test:smoke": "earthly +smoke-test",
     "pre-commit": "yarn prettier && yarn lint",
-    "pre-push": "yarn lint:ci && yarn test --bail && yarn test:coverage && yarn danger",
+    "pre-push": "earthly +all",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "demo": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh start.sh",
-    "build:e2e": "docker-compose run --service-ports --rm --workdir=\"/usr/src/app/docusaurus2\" docusaurus2-graphql-doc-generator sh build.sh"
+    "demo": "earthly +image && docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
+    "build:smoke": "earthly +image"
   },
   "husky": {
     "hooks": {
