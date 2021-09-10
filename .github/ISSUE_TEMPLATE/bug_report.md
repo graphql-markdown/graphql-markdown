@@ -1,24 +1,29 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: ""
 labels: bug
 assignees: edno
-
 ---
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
 **To Reproduce**
+Steps for reproducing the issue.
+
 - **GraphQL schema**
+
 If applicable, add an extract of the GraphQL schema.
+
 ```graphql
 
 ```
 
 - **Docusaurus configuration**
+
 If applicable, add an extract of the Docusaurus configuration.
+
 ```js
 
 ```
