@@ -26,5 +26,8 @@ jobs:
     - name: Install modules
       run: yarn
 
+    - name: Run Prettier
+      run: yarn prettier
+
     - name: Run ESLint
-      run: yarn lint:ci
+      run: yarn lint
