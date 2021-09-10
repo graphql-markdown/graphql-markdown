@@ -36,8 +36,10 @@
     "demo": "earthly +image && docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
     "build:smoke": "earthly +image",
     "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
+    "prepublish": "pinst --disable",
     "postpublish": "pinst --enable",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
     "prepare": "husky install"
   },
   "dependencies": {
