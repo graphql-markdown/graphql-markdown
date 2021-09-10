@@ -33,7 +33,7 @@ describe("lib", () => {
           ),
           [OUTPUT]: {},
           assets: {
-            [HOMEPAGE]: mock.load(require.resolve(`@assets/${HOMEPAGE}`)),
+            [HOMEPAGE]: "Test Homepage",
             [SIDEBAR]: mock.load(require.resolve(`@assets/${SIDEBAR}`)),
           },
         });

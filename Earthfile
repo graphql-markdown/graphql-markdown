@@ -1,5 +1,6 @@
 FROM node:lts-alpine
 WORKDIR /graphql-markdown
+ENV NPM_TOKEN=""
 
 deps:
     COPY . .
@@ -11,23 +12,35 @@ build:
 
 lint: 
   ARG flag
-  FROM +build
-  IF [ "$flag" = "fix" ]
+  FROM +deps
+  IF [ "$flag" = "update" ]
     RUN yarn prettier --write "**/*.{js,json,md}"
     RUN yarn eslint "**/*.js" --fix
-    SAVE ARTIFACT src AS LOCAL ./src
+    SAVE ARTIFACT --if-exists ./ AS LOCAL ./
   ELSE
-    RUN yarn prettier "**/*.{js,json,md}"
+    RUN yarn prettier --check "**/*.{js,json,md}"
     RUN yarn eslint "**/*.js"
   END
 
 unit-test:
+  ARG flag
   FROM +deps
-  RUN yarn jest --projects tests/unit
+  IF [ "$flag" = "update" ]
+    RUN yarn jest --projects tests/unit -u
+    SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
+  ELSE
+    RUN yarn jest --projects tests/unit
+  END
 
 integration-test:
+  ARG flag
   FROM +deps
-  RUN yarn jest --projects tests/integration
+  IF [ "$flag" = "update" ]
+    RUN yarn jest --projects tests/integration -u
+    SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
+  ELSE
+    RUN yarn jest --projects tests/integration
+  END
 
 smoke-init:
   FROM +build
@@ -65,10 +78,10 @@ image:
   SAVE IMAGE graphql-markdown:demo
 
 publish:
-  FROM node:lts-alpine
+  FROM +all
   GIT CLONE --branch main https://github.com/edno/graphql-markdown.git /graphql-markdown
   WORKDIR /graphql-markdown
-  RUN --secret NODE_AUTH_TOKEN=+secrets/token npm publish
+  RUN --secret NPM_TOKEN=+secrets/token npm publish
 
 all:
   BUILD +build
@@ -76,4 +89,3 @@ all:
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test
-  BUILD +image
