@@ -4,3 +4,5 @@ dist
 .eslintcache
 .stryker-tmp
 .nyc_output
+__expect__
+__snapshots__
