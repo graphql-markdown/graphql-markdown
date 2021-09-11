@@ -1,3 +1,6 @@
+---
+slug: /
+---
 # GraphQL Documentation Generator for Docusaurus 2
 
 [![npm](https://img.shields.io/npm/dt/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)

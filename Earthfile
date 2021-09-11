@@ -50,9 +50,11 @@ smoke-init:
   RUN yarn set version latest
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.json ./docusaurus2-graphql-doc-generator.config.json
-  COPY ./tests/e2e/scripts ./scripts
+  COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
-  RUN node ./scripts/config-plugin.js
+  COPY ./graphql-markdown.svg ./static/img/graphql-markdown.svg
+  COPY ./README.md ./docs/README.md
+  RUN node config-plugin.js
 
 smoke-test-deps:
   FROM +smoke-init
