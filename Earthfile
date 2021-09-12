@@ -14,12 +14,12 @@ lint:
   ARG flag
   FROM +deps
   IF [ "$flag" = "update" ]
-    RUN yarn prettier --write "**/*.{js,json,md}"
-    RUN yarn eslint "**/*.js" --fix
+    RUN yarn prettier --write
+    RUN yarn lint --fix
     SAVE ARTIFACT --if-exists ./ AS LOCAL ./
   ELSE
-    RUN yarn prettier --check "**/*.{js,json,md}"
-    RUN yarn eslint "**/*.js"
+    RUN yarn prettier --check
+    RUN yarn lint
   END
 
 unit-test:
