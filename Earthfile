@@ -14,12 +14,12 @@ lint:
   ARG flag
   FROM +deps
   IF [ "$flag" = "update" ]
-    RUN yarn prettier --write "**/*.{js,json,md}"
-    RUN yarn eslint "**/*.js" --fix
+    RUN yarn prettier --write
+    RUN yarn lint --fix
     SAVE ARTIFACT --if-exists ./ AS LOCAL ./
   ELSE
-    RUN yarn prettier --check "**/*.{js,json,md}"
-    RUN yarn eslint "**/*.js"
+    RUN yarn prettier --check
+    RUN yarn lint
   END
 
 unit-test:
@@ -47,32 +47,38 @@ smoke-init:
   WORKDIR /
   RUN npx --quiet @docusaurus/init@latest init docusaurus2 classic
   WORKDIR /docusaurus2
-  RUN yarn set version latest
+  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+  RUN yarn install
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.json ./docusaurus2-graphql-doc-generator.config.json
-  COPY ./tests/e2e/scripts ./scripts
+  COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
-  RUN node ./scripts/config-plugin.js
-
-smoke-test-deps:
-  FROM +smoke-init
-  RUN yarn global add fs-extra jest
-  WORKDIR /docusaurus2
-  RUN yarn install
-  COPY ./tests/e2e/specs ./__tests__
-  COPY ./tests/e2e/jest.config.js ./jest.config.js
+  COPY ./docs/img ./static/img
+  COPY ./README.md ./docs/README.md
+  RUN node config-plugin.js
 
 smoke-test:
-  FROM +smoke-test-deps
+  FROM +smoke-init
   WORKDIR /docusaurus2
+  RUN yarn global add fs-extra jest
+  COPY ./tests/e2e/specs ./__tests__
+  COPY ./tests/e2e/jest.config.js ./jest.config.js
   RUN jest
 
-image:
-  ARG port=8080
+build-demo:
+  ARG flag
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc
-  RUN yarn build --no-minify
+  RUN yarn build
+  IF [ "$flag" = "update" ]
+    SAVE ARTIFACT ./build AS LOCAL docs
+  END
+
+image-demo:
+  ARG port=8080
+  FROM +build-demo
+  WORKDIR /docusaurus2
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
   SAVE IMAGE graphql-markdown:demo

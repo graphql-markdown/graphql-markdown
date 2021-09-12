@@ -21,8 +21,8 @@
   ],
   "author": "Gregory Heitz",
   "scripts": {
-    "prettier": "prettier --check \"**/*.{js,json,md}\"",
-    "lint": "eslint \"**/*.js\"",
+    "prettier": "prettier \"{src,tests,assets}/**/*.{js,json,md}\"",
+    "lint": "eslint \"{src,tests,assets}/**/*.js\"",
     "danger": "danger local -b main --failOnErrors",
     "danger:ci": "danger ci -b main",
     "test": "jest",

@@ -6,3 +6,5 @@ dist
 .nyc_output
 __expect__
 __snapshots__
+docs
+README.md
