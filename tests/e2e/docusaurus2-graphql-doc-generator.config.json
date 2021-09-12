@@ -1,6 +1,7 @@
 {
-  "schema": "./data/tweet.graphql",
-  "rootPath": "./",
+  "schema": "https://graphql.anilist.co/",
+  "rootPath": "./docs",
   "baseURL": "schema",
-  "linkRoot": "/schema"
+  "linkRoot": "/",
+  "homepage": "data/anilist.md"
 }

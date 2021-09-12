@@ -9,16 +9,16 @@ const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
 const config = {
   url: "https://edno.github.io/",
-  baseUrl: "/graphql-markdown/",
-  onBrokenLinks: "throw",
+  baseUrl: "/",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   title: "GraphQL to Markdown",
   tagline: "Markdown documentation for GraphQL schema.",
   organizationName: "edno",
   projectName: "graphql-markdown",
+  trailingSlash: false,
   themeConfig: {
-    defaultMode: "dark",
     respectPrefersColorScheme: true,
     navbar: {
       title: "GraphQL-Markdown",
@@ -27,11 +27,10 @@ const config = {
         src: "img/graphql-markdown.svg",
         target: "_self",
       },
-      style: "dark",
       items: [
         {
-          to: "/docs/schema",
-          label: "Schema",
+          to: "/schema",
+          label: "Demo",
           position: "left",
         },
         {
@@ -45,39 +44,16 @@ const config = {
   presets: [
     [
       "@docusaurus/preset-classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
           path: "docs",
           routeBasePath: "/",
-          sidebarPath: false,
+          sidebarPath: "sidebars.js",
         },
-        theme: {
-          customCss: `require.resolve("./src/css/custom.css")`,
-        },
-      }),
-    ],
-  ],
-  plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        path: "/docs",
-        routeBasePath: "/",
-        sidebarPath: false,
       },
     ],
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "schema",
-        path: "docs/schema",
-        routeBasePath: "/schema",
-        sidebarPath: `require.resolve("./sidebars.js")`,
-      },
-    ],
-    ["@edno/docusaurus2-graphql-doc-generator", "@config@"],
   ],
+  plugins: [["@edno/docusaurus2-graphql-doc-generator", "@config@"]],
 };
 
 const configExportString = `const path = require("path");
