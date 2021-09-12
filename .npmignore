@@ -10,3 +10,4 @@ tests
 *.log
 Earthfile
 *.tgz
+.tmp-earthly-out

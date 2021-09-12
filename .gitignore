@@ -11,3 +11,4 @@ dist
 coverage
 reports
 *.tgz
+.tmp-earthly-out
