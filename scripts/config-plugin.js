@@ -1,15 +1,12 @@
 const fs = require("fs");
-// const path = require("path");
 
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.json";
-
-// const pluginConfig = require(`./${pluginConfigFilename}`);
 
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
 const config = {
   url: "https://edno.github.io/",
-  baseUrl: "/",
+  baseUrl: "/graphql-markdown/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
