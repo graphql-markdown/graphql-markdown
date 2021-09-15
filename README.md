@@ -187,3 +187,9 @@ You can also disable the schema diff feature by setting `diffMethod: "NONE"`.
 ## Contributions
 
 Contributions, issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
+
+<a href="https://github.com/edno/graphql-markdown/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=edno/graphql-markdown" />
+</a>
+
+Made with [contributors-img](https://contrib.rocks).
