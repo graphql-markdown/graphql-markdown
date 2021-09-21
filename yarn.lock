@@ -521,21 +521,22 @@
     value-or-promise "1.0.10"
 
 "@graphql-tools/url-loader@^7.0.12":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/url-loader/-/url-loader-7.1.0.tgz#371fb4bc975364033cab892a344cc9f979d96ac4"
-  integrity sha512-h0NAcjPBei/Zf69OeFZWUbPXKA2aK5YXyfAZkAc+LP8pnBDBZW+mPr2lOZZJPJ8LMZPPjf5hwVHqXGImduHgmA==
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/url-loader/-/url-loader-7.2.0.tgz#f70f77b9a3cfb8de0460a05a93590d16a68af09a"
+  integrity sha512-1HOyt89TlzINko/Sa39oNQCzvbIshAiz+ECaoJKkIfkQZzXWzRkDrU5nEIPGm/FsCHm519OiJeaLwPLbdqnrLw==
   dependencies:
     "@ardatan/fetch-event-source" "2.0.2"
     "@graphql-tools/delegate" "^8.2.0"
     "@graphql-tools/utils" "^8.2.0"
     "@graphql-tools/wrap" "^8.1.0"
-    "@n1ru4l/graphql-live-query" "0.7.1"
+    "@n1ru4l/graphql-live-query" "0.8.1"
     "@types/websocket" "1.0.4"
     "@types/ws" "^7.4.7"
     abort-controller "3.0.0"
     cross-fetch "3.1.4"
     extract-files "11.0.0"
     form-data "4.0.0"
+    graphql-sse "^1.0.1"
     graphql-ws "^5.4.1"
     is-promise "4.0.0"
     isomorphic-ws "4.0.1"
@@ -546,7 +547,7 @@
     tslib "~2.3.0"
     valid-url "1.0.9"
     value-or-promise "1.0.10"
-    ws "8.2.1"
+    ws "8.2.2"
 
 "@graphql-tools/utils@^8.2.0", "@graphql-tools/utils@^8.2.2":
   version "8.2.2"
@@ -776,10 +777,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@n1ru4l/graphql-live-query@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@n1ru4l/graphql-live-query/-/graphql-live-query-0.7.1.tgz#c020d017c3ed6bcfdde49a7106ba035e4d0774f5"
-  integrity sha512-5kJPe2FkPNsCGu9tocKIzUSNO986qAqdnbk8hIFqWlpVPBAmEAOYb1mr6PA18FYAlu7ojWm9Hm13k29aj2GGlQ==
+"@n1ru4l/graphql-live-query@0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@n1ru4l/graphql-live-query/-/graphql-live-query-0.8.1.tgz#2d6ca6157dafdc5d122a1aeb623b43e939c4b238"
+  integrity sha512-x5SLY+L9/5s07OJprISXx4csNBPF74UZeTI01ZPSaxOtRz2Gljk652kSPf6OjMLtx5uATr35O0M3G0LYhHBLtg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -3337,6 +3338,11 @@ graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0,
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
+
+graphql-sse@^1.0.1:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/graphql-sse/-/graphql-sse-1.0.4.tgz#051598b0e06c225327aac659f19fcc18bcaa0191"
+  integrity sha512-oB43ifRcEdElgep9jTP9qsj5cJ7Ny/1tAFyIl1W3A0hXRRg/P71tUHzMFBrRkEsJ9IA7MTp+RKSJfh52QR6PBQ==
 
 graphql-ws@^5.4.1:
   version "5.4.1"
@@ -7320,10 +7326,10 @@ write-file-atomic@^3.0.0, write-file-atomic@^3.0.3:
     signal-exit "^3.0.2"
     typedarray-to-buffer "^3.1.5"
 
-ws@8.2.1:
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.1.tgz#bdd92b3c56fdb47d2379b5ae534281922cc5bd12"
-  integrity sha512-XkgWpJU3sHU7gX8f13NqTn6KQ85bd1WU7noBHTT8fSohx7OS1TPY8k+cyRPCzFkia7C4mM229yeHr1qK9sM4JQ==
+ws@8.2.2:
+  version "8.2.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.2.tgz#ca684330c6dd6076a737250ed81ac1606cb0a63e"
+  integrity sha512-Q6B6H2oc8QY3llc3cB8kVmQ6pnJWVQbP7Q5algTcIxx7YEpc0oU4NBVHlztA7Ekzfhw2r0rPducMUiCGWKQRzw==
 
 "ws@^5.2.0 || ^6.0.0 || ^7.0.0", ws@^7.4.6:
   version "7.5.4"
