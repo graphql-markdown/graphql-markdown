@@ -45,12 +45,11 @@ module.exports = class Renderer {
       "utf8",
     );
 
-    const pages = await Promise.all(
+    return Promise.all(
       Object.keys(type).map(async (name) => {
         return this.renderTypeEntities(dirPath, name, type[name]);
       }),
     );
-    return pages;
   }
 
   async renderTypeEntities(dirPath, name, type) {
@@ -64,7 +63,7 @@ module.exports = class Renderer {
     await fsExtra.outputFile(filePath, content, "utf8");
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
-      /(?<category>[A-z][A-z0-9-_]*)[\\/]+(?<pageId>[A-z][A-z0-9-_]*).mdx?$/,
+      /(?<category>[A-z0-9-_]+)[\\/]+(?<pageId>[A-z0-9-_]+).mdx?$/,
     );
     const slug = pathUrl.join(page.groups.category, page.groups.pageId);
     return { category: startCase(page.groups.category), slug: slug };
