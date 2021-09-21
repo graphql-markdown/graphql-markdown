@@ -1,13 +1,15 @@
 {
   "path": "output",
   "name": "output",
-  "size": 114,
-  "type": "directory",
   "children": [
     {
       "path": "output/sidebar-schema.js",
       "name": "sidebar-schema.js",
-      "size": 114
+      "size": 114,
+      "type": "file",
+      "extension": ".js"
     }
-  ]
+  ],
+  "size": 114,
+  "type": "directory"
 }

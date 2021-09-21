@@ -1,21 +1,23 @@
 {
   "path": "output",
   "name": "output",
-  "size": 11,
-  "type": "directory",
   "children": [
     {
       "path": "output/foobar",
       "name": "foobar",
-      "size": 11,
-      "type": "directory",
       "children": [
         {
           "path": "output/foobar/foo-bar.mdx",
           "name": "foo-bar.mdx",
-          "size": 11
+          "size": 11,
+          "type": "file",
+          "extension": ".mdx"
         }
-      ]
+      ],
+      "size": 11,
+      "type": "directory"
     }
-  ]
+  ],
+  "size": 11,
+  "type": "directory"
 }

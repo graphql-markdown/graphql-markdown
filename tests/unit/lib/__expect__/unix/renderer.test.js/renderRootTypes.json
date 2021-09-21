@@ -1,31 +1,37 @@
 {
   "path": "output",
   "name": "output",
-  "size": 30,
-  "type": "directory",
   "children": [
     {
       "path": "output/object",
       "name": "object",
-      "size": 30,
-      "type": "directory",
       "children": [
         {
           "path": "output/object/_category_.yml",
           "name": "_category_.yml",
-          "size": 16
+          "size": 16,
+          "type": "file",
+          "extension": ".yml"
         },
         {
           "path": "output/object/bar.mdx",
           "name": "bar.mdx",
-          "size": 7
+          "size": 7,
+          "type": "file",
+          "extension": ".mdx"
         },
         {
           "path": "output/object/foo.mdx",
           "name": "foo.mdx",
-          "size": 7
+          "size": 7,
+          "type": "file",
+          "extension": ".mdx"
         }
-      ]
+      ],
+      "size": 30,
+      "type": "directory"
     }
-  ]
+  ],
+  "size": 30,
+  "type": "directory"
 }

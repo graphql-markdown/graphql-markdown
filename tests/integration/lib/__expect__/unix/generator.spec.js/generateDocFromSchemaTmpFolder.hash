@@ -1,18 +1,22 @@
 {
   "path": "tmp",
   "name": "tmp",
-  "size": 1450,
-  "type": "directory",
   "children": [
     {
       "path": "tmp/.schema",
       "name": ".schema",
-      "size": 64
+      "size": 64,
+      "type": "file",
+      "extension": ""
     },
     {
       "path": "tmp/schema.graphql",
       "name": "schema.graphql",
-      "size": 1386
+      "size": 1386,
+      "type": "file",
+      "extension": ".graphql"
     }
-  ]
+  ],
+  "size": 1450,
+  "type": "directory"
 }
