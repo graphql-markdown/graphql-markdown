@@ -1,375 +1,293 @@
 {
   "path": "output",
   "name": "output",
+  "size": 8855,
+  "type": "directory",
   "children": [
     {
       "path": "output/directives",
       "name": "directives",
+      "size": 1303,
+      "type": "directory",
       "children": [
         {
           "path": "output/directives/_category_.yml",
           "name": "_category_.yml",
-          "size": 20,
-          "extension": ".yml",
-          "type": "file"
+          "size": 20
         },
         {
           "path": "output/directives/deprecated.mdx",
           "name": "deprecated.mdx",
-          "size": 470,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 470
         },
         {
           "path": "output/directives/include.mdx",
           "name": "include.mdx",
-          "size": 273,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 273
         },
         {
           "path": "output/directives/skip.mdx",
           "name": "skip.mdx",
-          "size": 255,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 255
         },
         {
           "path": "output/directives/specified-by.mdx",
           "name": "specified-by.mdx",
-          "size": 285,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 285
         }
-      ],
-      "size": 1303,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/enums",
       "name": "enums",
+      "size": 15,
+      "type": "directory",
       "children": [
         {
           "path": "output/enums/_category_.yml",
           "name": "_category_.yml",
-          "size": 15,
-          "extension": ".yml",
-          "type": "file"
+          "size": 15
         }
-      ],
-      "size": 15,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/generated.md",
       "name": "generated.md",
-      "size": 32,
-      "extension": ".md",
-      "type": "file"
+      "size": 32
     },
     {
       "path": "output/inputs",
       "name": "inputs",
+      "size": 274,
+      "type": "directory",
       "children": [
         {
           "path": "output/inputs/_category_.yml",
           "name": "_category_.yml",
-          "size": 16,
-          "extension": ".yml",
-          "type": "file"
+          "size": 16
         },
         {
           "path": "output/inputs/tweet-content.mdx",
           "name": "tweet-content.mdx",
-          "size": 258,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 258
         }
-      ],
-      "size": 274,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/interfaces",
       "name": "interfaces",
+      "size": 168,
+      "type": "directory",
       "children": [
         {
           "path": "output/interfaces/_category_.yml",
           "name": "_category_.yml",
-          "size": 20,
-          "extension": ".yml",
-          "type": "file"
+          "size": 20
         },
         {
           "path": "output/interfaces/node.mdx",
           "name": "node.mdx",
-          "size": 148,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 148
         }
-      ],
-      "size": 168,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/mutations",
       "name": "mutations",
+      "size": 889,
+      "type": "directory",
       "children": [
         {
           "path": "output/mutations/_category_.yml",
           "name": "_category_.yml",
-          "size": 19,
-          "extension": ".yml",
-          "type": "file"
+          "size": 19
         },
         {
           "path": "output/mutations/create-tweet.mdx",
           "name": "create-tweet.mdx",
-          "size": 352,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 352
         },
         {
           "path": "output/mutations/delete-tweet.mdx",
           "name": "delete-tweet.mdx",
-          "size": 224,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 224
         },
         {
           "path": "output/mutations/mark-tweet-read.mdx",
           "name": "mark-tweet-read.mdx",
-          "size": 294,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 294
         }
-      ],
-      "size": 889,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/objects",
       "name": "objects",
+      "size": 2731,
+      "type": "directory",
       "children": [
         {
           "path": "output/objects/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
-          "extension": ".yml",
-          "type": "file"
+          "size": 17
         },
         {
           "path": "output/objects/media.mdx",
           "name": "media.mdx",
-          "size": 212,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 212
         },
         {
           "path": "output/objects/meta.mdx",
           "name": "meta.mdx",
-          "size": 150,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 150
         },
         {
           "path": "output/objects/notification.mdx",
           "name": "notification.mdx",
-          "size": 299,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 299
         },
         {
           "path": "output/objects/stat.mdx",
           "name": "stat.mdx",
-          "size": 496,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 496
         },
         {
           "path": "output/objects/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 633,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 633
         },
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 924,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 924
         }
-      ],
-      "size": 2731,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/queries",
       "name": "queries",
+      "size": 1614,
+      "type": "directory",
       "children": [
         {
           "path": "output/queries/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
-          "extension": ".yml",
-          "type": "file"
+          "size": 17
         },
         {
           "path": "output/queries/notifications-meta.mdx",
           "name": "notifications-meta.mdx",
-          "size": 240,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 240
         },
         {
           "path": "output/queries/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 205,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 205
         },
         {
           "path": "output/queries/tweets-meta.mdx",
           "name": "tweets-meta.mdx",
-          "size": 219,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 219
         },
         {
           "path": "output/queries/tweets.mdx",
           "name": "tweets.mdx",
-          "size": 455,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 455
         },
         {
           "path": "output/queries/user.mdx",
           "name": "user.mdx",
-          "size": 267,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 267
         },
         {
           "path": "output/queries/users.mdx",
           "name": "users.mdx",
-          "size": 211,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 211
         }
-      ],
-      "size": 1614,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/scalars",
       "name": "scalars",
+      "size": 1416,
+      "type": "directory",
       "children": [
         {
           "path": "output/scalars/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
-          "extension": ".yml",
-          "type": "file"
+          "size": 17
         },
         {
           "path": "output/scalars/boolean.mdx",
           "name": "boolean.mdx",
-          "size": 123,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 123
         },
         {
           "path": "output/scalars/date.mdx",
           "name": "date.mdx",
-          "size": 73,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 73
         },
         {
           "path": "output/scalars/id.mdx",
           "name": "id.mdx",
-          "size": 385,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 385
         },
         {
           "path": "output/scalars/int.mdx",
           "name": "int.mdx",
-          "size": 187,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 187
         },
         {
           "path": "output/scalars/sri.mdx",
           "name": "sri.mdx",
-          "size": 315,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 315
         },
         {
           "path": "output/scalars/string.mdx",
           "name": "string.mdx",
-          "size": 246,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 246
         },
         {
           "path": "output/scalars/url.mdx",
           "name": "url.mdx",
-          "size": 70,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 70
         }
-      ],
-      "size": 1416,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/sidebar-schema.js",
       "name": "sidebar-schema.js",
-      "size": 114,
-      "extension": ".js",
-      "type": "file"
+      "size": 114
     },
     {
       "path": "output/subscriptions",
       "name": "subscriptions",
+      "size": 283,
+      "type": "directory",
       "children": [
         {
           "path": "output/subscriptions/_category_.yml",
           "name": "_category_.yml",
-          "size": 23,
-          "extension": ".yml",
-          "type": "file"
+          "size": 23
         },
         {
           "path": "output/subscriptions/notifications.mdx",
           "name": "notifications.mdx",
-          "size": 260,
-          "extension": ".mdx",
-          "type": "file"
+          "size": 260
         }
-      ],
-      "size": 283,
-      "type": "directory"
+      ]
     },
     {
       "path": "output/unions",
       "name": "unions",
+      "size": 16,
+      "type": "directory",
       "children": [
         {
           "path": "output/unions/_category_.yml",
           "name": "_category_.yml",
-          "size": 16,
-          "extension": ".yml",
-          "type": "file"
+          "size": 16
         }
-      ],
-      "size": 16,
-      "type": "directory"
+      ]
     }
-  ],
-  "size": 8855,
-  "type": "directory"
+  ]
 }

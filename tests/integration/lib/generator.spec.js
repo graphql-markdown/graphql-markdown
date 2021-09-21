@@ -48,8 +48,12 @@ describe("lib", () => {
           "tmp",
         );
 
-        const outputFolder = dirTree("output");
-        const tmpFolder = dirTree("tmp");
+        const outputFolder = dirTree("output", {
+          attributes: ["size", "type", "extension"],
+        });
+        const tmpFolder = dirTree("tmp", {
+          attributes: ["size", "type", "extension"],
+        });
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
