@@ -80,7 +80,7 @@ function getFilteredTypeMap(
   if (!typeMap) return undefined;
   return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
-    .reduce((res, key) => ((res[key] = typeMap[key]), res), {});
+    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getIntrospectionFieldsList(queryType) {
@@ -113,7 +113,7 @@ function getTypeFromTypeMap(typeMap, type) {
   if (!typeMap) return undefined;
   return Object.keys(typeMap)
     .filter((key) => typeMap[key] instanceof type)
-    .reduce((res, key) => ((res[key] = typeMap[key]), res), {});
+    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getSchemaMap(schema) {
