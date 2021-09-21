@@ -87,7 +87,7 @@ describe("lib", () => {
           const link = printerInstance.toLink(type, entityName);
 
           expect(link).toMatchFile(
-            path.join(EXPECT_PATH, `toLinkWithUnkown.md`),
+            path.join(EXPECT_PATH, `toLinkWithUnknown.md`),
           );
         });
       });
@@ -101,7 +101,7 @@ describe("lib", () => {
 
           const printSectionItems = jest
             .spyOn(printerInstance, "printSectionItems")
-            .mockImplementation((content) => content);
+            .mockImplementation((sectionItems) => sectionItems);
 
           const section = printerInstance.printSection(content, title);
 
@@ -120,7 +120,7 @@ describe("lib", () => {
 
           jest
             .spyOn(printerInstance, "printSectionItems")
-            .mockImplementation((content) => content);
+            .mockImplementation((sectionItems) => sectionItems);
 
           const section = printerInstance.printSection(content, title, "#");
 
@@ -147,7 +147,7 @@ describe("lib", () => {
 
           const printSectionItem = jest
             .spyOn(printerInstance, "printSectionItem")
-            .mockImplementation((content) => content);
+            .mockImplementation((sectionItems) => sectionItems);
 
           const itemList = ["one", "two", "three"];
 
@@ -201,10 +201,10 @@ describe("lib", () => {
 
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
           jest
             .spyOn(graphql, "getNamedType")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
           jest
             .spyOn(graphql, "isObjectType")
             .mockReturnValueOnce(false)
@@ -227,11 +227,11 @@ describe("lib", () => {
 
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
 
           jest
             .spyOn(graphql, "getNamedType")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
           jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
           jest.spyOn(graphql, "isParametrizedField").mockReturnValueOnce(true);
           const printSectionItems = jest.spyOn(
@@ -243,7 +243,7 @@ describe("lib", () => {
 
           expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionWithFielParameters.md`),
+            path.join(EXPECT_PATH, `printSectionWithFieldParameters.md`),
           );
         });
       });
@@ -260,7 +260,7 @@ describe("lib", () => {
           jest.spyOn(graphql, "isEnumType").mockReturnValueOnce(true);
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
 
           const code = printerInstance.printCodeEnum(type);
 
@@ -290,7 +290,7 @@ describe("lib", () => {
           jest.spyOn(graphql, "isUnionType").mockReturnValueOnce(true);
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
 
           const code = printerInstance.printCodeUnion(type);
 
@@ -318,7 +318,7 @@ describe("lib", () => {
 
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((paramType) => paramType.name);
 
           const code = printerInstance.printCodeScalar(type);
 
@@ -346,7 +346,7 @@ describe("lib", () => {
 
           jest
             .spyOn(graphql, "getDefaultValue")
-            .mockImplementation((type) => type.default || null);
+            .mockImplementation((paramType) => paramType.default || null);
 
           const code = printerInstance.printCodeArguments(type);
 
@@ -488,11 +488,11 @@ describe("lib", () => {
           jest.spyOn(graphql, "isInterfaceType").mockReturnValueOnce(false);
           jest
             .spyOn(graphql, "getTypeName")
-            .mockImplementation((type) => type.name);
+            .mockImplementation((entityType) => entityType.name);
           jest.spyOn(graphql, "getFields").mockReturnValueOnce(type.fields);
           jest
             .spyOn(printerInstance, "printCodeField")
-            .mockImplementation((name) => `${name}\n`);
+            .mockImplementation((codeField) => `${codeField}\n`);
 
           const code = printerInstance.printCodeType(type);
 
@@ -634,13 +634,17 @@ describe("lib", () => {
               .mockReturnValueOnce(true);
             jest
               .spyOn(printerInstance, "printHeader")
-              .mockImplementation((name) => `header-${name}`);
+              .mockImplementation((header) => `header-${header}`);
             jest
               .spyOn(printerInstance, "printDescription")
-              .mockImplementation((type) => `Test ${capitalize(type.name)}`);
+              .mockImplementation(
+                (paramType) => `Test ${capitalize(paramType.name)}`,
+              );
             jest
               .spyOn(printerInstance, "printCode")
-              .mockImplementation((type) => `\`\`\`${type.name}\`\`\``);
+              .mockImplementation(
+                (paramType) => `\`\`\`${paramType.name}\`\`\``,
+              );
             jest
               .spyOn(printerInstance, "printSection")
               .mockImplementation((_, section) => section);
@@ -661,9 +665,9 @@ describe("lib", () => {
             expect.hasAssertions();
             const entityType = {
               name: type,
-              getValues: () => {},
-              getTypes: () => {},
-              getInterfaces: () => {},
+              getValues: () => ({}),
+              getTypes: () => ({}),
+              getInterfaces: () => ({}),
             };
 
             jest
@@ -712,10 +716,14 @@ describe("lib", () => {
             .mockImplementation((name) => `header-${name}\n\n`);
           jest
             .spyOn(printerInstance, "printDescription")
-            .mockImplementation((type) => `Test ${capitalize(type.name)}\n\n`);
+            .mockImplementation(
+              (paramType) => `Test ${capitalize(paramType.name)}\n\n`,
+            );
           jest
             .spyOn(printerInstance, "printCode")
-            .mockImplementation((type) => `\`\`\`${type.name}\`\`\`\n\n`);
+            .mockImplementation(
+              (paramType) => `\`\`\`${paramType.name}\`\`\`\n\n`,
+            );
           jest
             .spyOn(printerInstance, "printSection")
             .mockImplementation((_, section) => `${section}\n\n`);

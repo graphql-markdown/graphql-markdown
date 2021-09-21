@@ -84,15 +84,17 @@ module.exports = class Printer {
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
-    if (!type) {
+    if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    let section = `${level} ${this.toLink(type, getTypeName(type))} ${
-      hasProperty(type, "type")
-        ? `(${this.toLink(type.type, getTypeName(type.type))})`
-        : ""
-    }\n\n${this.printDescription(type, "")}\n`;
+    const typeNameLink = this.toLink(type, getTypeName(type));
+    const parentTypeLink = hasProperty(type, "type")
+      ? `(${this.toLink(type.type, getTypeName(type.type))})`
+      : "";
+    const description = this.printDescription(type, "");
+
+    let section = `${level} ${typeNameLink} ${parentTypeLink}\n\n${description}\n`;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }
@@ -133,10 +135,12 @@ module.exports = class Printer {
     if (hasProperty(type, "args") && type.args.length > 0) {
       code += `(\n`;
       code += type.args.reduce((r, v) => {
-        const defaultValue = getDefaultValue(v);
-        return `${r}  ${v.name}: ${v.type.toString()}${
-          defaultValue ? ` = ${defaultValue}` : ""
-        }\n`;
+        const defaultValue = getDefaultValue(v)
+          ? ` = ${getDefaultValue(v)}`
+          : "";
+        const propType = v.type.toString();
+        const propName = v.name.toString();
+        return `${r}  ${propName}: ${propType}${defaultValue}\n`;
       }, "");
       code += `)`;
     }
@@ -157,24 +161,20 @@ module.exports = class Printer {
   }
 
   printCodeType(type) {
-    let code = `${isInterfaceType(type) ? "interface" : "type"} ${getTypeName(
-      type,
-    )}`;
-    code += `${
+    const entity = isInterfaceType(type) ? "interface" : "type";
+    const name = getTypeName(type);
+    const extendsInterface =
       hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
-            .map((v) => getTypeName(v))
+            .map((field) => getTypeName(field))
             .join(", ")}`
-        : ""
-    }`;
-    code += ` {\n`;
-    code += getFields(type)
+        : "";
+    const typeFields = getFields(type)
       .map((v) => `  ${this.printCodeField(v)}`)
       .join("");
-    code += `}`;
 
-    return code;
+    return `${entity} ${name}${extendsInterface} {\n${typeFields}}`;
   }
 
   printHeader(id, title) {

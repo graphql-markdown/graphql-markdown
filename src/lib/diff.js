@@ -38,8 +38,8 @@ async function checkSchemaChanges(
 
   if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_DIFF) {
     if (fs.existsSync(schemaRef)) {
-      const diff = await getDiff(schema, schemaRef);
-      hasDiff = diff.length > 0;
+      const schemaDiff = await getDiff(schema, schemaRef);
+      hasDiff = schemaDiff.length > 0;
     }
   }
 
