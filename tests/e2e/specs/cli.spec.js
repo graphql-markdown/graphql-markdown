@@ -51,10 +51,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(
-      /[0-9]+\.?[0-9]+/g,
-      "{Any<Number>}",
-    );
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
     messageGenerated.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
@@ -69,10 +66,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(
-      /[0-9]+\.?[0-9]+/g,
-      "{Any<Number>}",
-    );
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
     messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
@@ -90,10 +84,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(
-      /[0-9]+\.?[0-9]+/g,
-      "{Any<Number>}",
-    );
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
     messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 });

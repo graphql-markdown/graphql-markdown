@@ -96,7 +96,7 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
+        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([1]));
@@ -117,7 +117,7 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
+        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
@@ -134,7 +134,7 @@ describe("lib", () => {
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => {});
+        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
