@@ -6,15 +6,15 @@
       "path": "tmp/.schema",
       "name": ".schema",
       "size": 64,
-      "extension": "",
-      "type": "file"
+      "type": "file",
+      "extension": ""
     },
     {
       "path": "tmp/schema.graphql",
       "name": "schema.graphql",
       "size": 1386,
-      "extension": ".graphql",
-      "type": "file"
+      "type": "file",
+      "extension": ".graphql"
     }
   ],
   "size": 1450,

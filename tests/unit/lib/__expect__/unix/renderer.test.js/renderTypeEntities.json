@@ -10,8 +10,8 @@
           "path": "output/foobar/foo-bar.mdx",
           "name": "foo-bar.mdx",
           "size": 11,
-          "extension": ".mdx",
-          "type": "file"
+          "type": "file",
+          "extension": ".mdx"
         }
       ],
       "size": 11,

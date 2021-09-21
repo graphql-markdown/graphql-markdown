@@ -6,8 +6,8 @@
       "path": "output/generated.md",
       "name": "generated.md",
       "size": 13,
-      "extension": ".md",
-      "type": "file"
+      "type": "file",
+      "extension": ".md"
     }
   ],
   "size": 13,

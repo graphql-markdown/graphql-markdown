@@ -59,7 +59,9 @@ describe("lib", () => {
             "FooBar",
             "FooBar",
           );
-          const outputFolder = dirTree(OUTPUT);
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
@@ -76,7 +78,9 @@ describe("lib", () => {
 
           await rendererInstance.renderSidebar();
 
-          const outputFolder = dirTree(OUTPUT);
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
@@ -91,7 +95,9 @@ describe("lib", () => {
           expect.assertions(1);
 
           await rendererInstance.renderHomepage(`assets/${HOMEPAGE}`);
-          const outputFolder = dirTree(OUTPUT);
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
@@ -113,7 +119,9 @@ describe("lib", () => {
             { name: "bar" },
           ]);
 
-          const outputFolder = dirTree(OUTPUT);
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
