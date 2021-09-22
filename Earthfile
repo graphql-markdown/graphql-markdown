@@ -42,6 +42,11 @@ integration-test:
     RUN yarn jest --projects tests/integration
   END
 
+mutation-test:
+  FROM +deps
+  RUN yarn stryker run --logLevel error
+  SAVE ARTIFACT reports AS LOCAL ./reports
+
 smoke-init:
   FROM +build
   WORKDIR /
