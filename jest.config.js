@@ -10,6 +10,6 @@ module.exports = {
   rootDir: __dirname,
   setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.js"],
   testEnvironment: "node",
-  testMatch: ["**/tests/(unit|integration)/**/*.test.js"],
+  testMatch: ["**/tests/(unit|integration)/**/*.(test|spec).js"],
   watchPathIgnorePatterns: ["__expected__"],
 };
