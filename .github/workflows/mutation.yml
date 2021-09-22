@@ -33,4 +33,4 @@ jobs:
       run: yarn
 
     - name: Run Mutations Tests
-      run: yarn stryker --reporters dashboard --inPlace
+      run: yarn stryker run --reporters dashboard --inPlace
