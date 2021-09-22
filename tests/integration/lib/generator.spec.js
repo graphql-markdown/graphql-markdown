@@ -2,7 +2,7 @@ const mock = require("mock-fs");
 const path = require("path"); // to be loaded after mock-fs
 const dirTree = require("directory-tree");
 
-const generateDocFromSchema = require("@/lib/generator");
+const generateDocFromSchema = require("../../../src/lib/generator");
 
 const EXPECT_PATH = path.join(
   __dirname,
@@ -21,9 +21,12 @@ describe("lib", () => {
       output: {},
       assets: {
         "generated.md": "Dummy homepage for tweet.graphql",
-        "sidebar.json": mock.load(require.resolve("@assets/sidebar.json"), {
-          lazy: false,
-        }),
+        "sidebar.json": mock.load(
+          require.resolve("../../../assets/sidebar.json"),
+          {
+            lazy: false,
+          },
+        ),
       },
       tmp: {},
     });

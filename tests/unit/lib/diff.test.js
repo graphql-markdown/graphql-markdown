@@ -3,8 +3,8 @@ const path = require("path");
 const mock = require("mock-fs");
 const fs = require("fs"); // must be loaded after mock-fs
 
-jest.mock("@/lib/graphql");
-const graphql = require("@/lib/graphql");
+jest.mock("../../../src/lib/graphql");
+const graphql = require("../../../src/lib/graphql");
 
 jest.mock("@graphql-inspector/core");
 const inspector = require("@graphql-inspector/core");
@@ -35,7 +35,7 @@ describe("lib", () => {
         checkSchemaChanges,
         saveSchemaHash,
         saveSchemaFile,
-      } = require("@/lib/diff");
+      } = require("../../../src/lib/diff");
 
       test("returns true if no valid comparison method is selected", async () => {
         expect.hasAssertions();
@@ -148,7 +148,7 @@ describe("lib", () => {
     });
 
     describe("saveSchemaFile()", () => {
-      const { saveSchemaFile } = require("@/lib/diff");
+      const { saveSchemaFile } = require("../../../src/lib/diff");
 
       test("saves introspection schema locally", async () => {
         expect.hasAssertions();
@@ -169,7 +169,7 @@ describe("lib", () => {
     });
 
     describe("saveSchemaHash()", () => {
-      const { saveSchemaHash } = require("@/lib/diff");
+      const { saveSchemaHash } = require("../../../src/lib/diff");
 
       test("saves schema hash into .schema file", async () => {
         expect.hasAssertions();
