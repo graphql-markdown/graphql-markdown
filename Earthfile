@@ -44,7 +44,7 @@ integration-test:
 
 mutation-test:
   FROM +deps
-  RUN yarn stryker run --logLevel error
+  RUN yarn stryker run --logLevel error --inPlace
   SAVE ARTIFACT reports AS LOCAL ./reports
 
 smoke-init:
