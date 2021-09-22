@@ -7,6 +7,7 @@ module.exports = {
     __OS__: require("os").platform() === "win32" ? "windows" : "unix",
   },
   projects: ["<rootDir>/tests/unit", "<rootDir>/tests/integration"],
+  rootDir: __dirname,
   setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.js"],
   testEnvironment: "node",
   testMatch: ["**/tests/(unit|integration)/**/*.test.js"],
