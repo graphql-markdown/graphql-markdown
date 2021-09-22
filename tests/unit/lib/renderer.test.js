@@ -3,10 +3,10 @@ const path = require("path");
 const mock = require("mock-fs");
 const dirTree = require("directory-tree");
 
-const Renderer = require("@/lib/renderer");
+const Renderer = require("../../../src/lib/renderer");
 
-jest.mock("@/lib/printer");
-const Printer = require("@/lib/printer");
+jest.mock("../../../src/lib/printer");
+const Printer = require("../../../src/lib/printer");
 
 const OUTPUT = "output";
 const HOMEPAGE = "generated.md";
@@ -34,7 +34,9 @@ describe("lib", () => {
           [OUTPUT]: {},
           assets: {
             [HOMEPAGE]: "Test Homepage",
-            [SIDEBAR]: mock.load(require.resolve(`@assets/${SIDEBAR}`)),
+            [SIDEBAR]: mock.load(
+              require.resolve(`@../../../assets/${SIDEBAR}`),
+            ),
           },
         });
         printerInstance = new Printer("SCHEMA", baseURL, "root");

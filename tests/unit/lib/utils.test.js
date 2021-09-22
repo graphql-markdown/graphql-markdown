@@ -1,4 +1,9 @@
-const { toSlug, toArray, hasProperty, hasMethod } = require("@/lib/utils");
+const {
+  toSlug,
+  toArray,
+  hasProperty,
+  hasMethod,
+} = require("../../../src/lib/utils");
 
 describe("lib", () => {
   describe("utils", () => {

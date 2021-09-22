@@ -2,10 +2,10 @@ const path = require("path");
 
 const { capitalize } = require("lodash");
 
-const Printer = require("@/lib/printer");
+const Printer = require("../../../src/lib/printer");
 
-jest.mock("@/lib/graphql");
-const graphql = require("@/lib/graphql");
+jest.mock("../../../src/lib/graphql");
+const graphql = require("../../../src/lib/graphql");
 
 const graphQLEntityType = [
   "enum",

@@ -28,7 +28,7 @@ const {
   isOperation,
 } = require("../../../src/lib/graphql");
 
-const SCHEMA_FILE = require.resolve("@data/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
 
 const EXPECT_PATH = path.join(
   __dirname,
