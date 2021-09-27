@@ -60,7 +60,7 @@
     "colors": "^1.4.0",
     "danger": "^10.6.6",
     "diff": "^5.0.0",
-    "directory-tree": "^2.3.1",
+    "directory-tree": "^3.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^24.4.0",
