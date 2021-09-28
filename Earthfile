@@ -1,4 +1,5 @@
-FROM node:lts-alpine
+ARG nodeVersion=lts
+FROM node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
 ENV NPM_TOKEN=""
 
@@ -13,7 +14,7 @@ build:
 lint: 
   ARG flag
   FROM +deps
-  IF [ "$flag" = "update" ]
+  IF [ "$(flag)" = 'update' ]
     RUN yarn prettier --write
     RUN yarn lint --fix
     SAVE ARTIFACT --if-exists ./ AS LOCAL ./
@@ -25,7 +26,7 @@ lint:
 unit-test:
   ARG flag
   FROM +deps
-  IF [ "$flag" = "update" ]
+  IF [ "$(flag)" = 'update' ]
     RUN yarn jest --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
@@ -35,7 +36,7 @@ unit-test:
 integration-test:
   ARG flag
   FROM +deps
-  IF [ "$flag" = "update" ]
+  IF [ "$(flag)" = 'update' ]
     RUN yarn jest --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
@@ -76,8 +77,8 @@ build-demo:
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc
   RUN yarn build
-  IF [ "$flag" = "update" ]
-    SAVE ARTIFACT ./build AS LOCAL docs
+  IF [ "$(flag)" != 'ignore' ]
+    SAVE ARTIFACT --force ./build AS LOCAL docs
   END
 
 image-demo:
