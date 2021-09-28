@@ -31,6 +31,11 @@ const config = {
           position: "left",
         },
         {
+          href: "https://github.com/edno/graphql-markdown/releases",
+          label: "Release Notes",
+          position: "right",
+        },
+        {
           href: "https://github.com/edno/graphql-markdown",
           label: "GitHub",
           position: "right",
