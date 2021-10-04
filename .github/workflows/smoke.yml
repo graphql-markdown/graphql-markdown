@@ -19,6 +19,8 @@ jobs:
   smoke:
     name: Smoke Tests
     runs-on: ubuntu-latest
+    env:
+      EARTHLY_CI: true
 
     steps:
       - name: Cancel Previous Runs
@@ -32,7 +34,7 @@ jobs:
           version: v0.5.10
 
       - name: Run Smoke Tests
-        run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+        run: earthly github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
 
       - name: Docusaurus Production Smoke Build
-        run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+build-demo
+        run: earthly github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+build-demo
