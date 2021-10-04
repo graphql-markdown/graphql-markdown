@@ -581,6 +581,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@isaacs/string-locale-compare@*":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz#291c227e93fd407a96ecd59879a35809120e432b"
+  integrity sha512-SQ7Kzhh9+D+ZW9MA0zkYv3VXhIDNx+LzM6EJ+/65I3QY+enU6Itte7E5XX7EWrqLW2FN4n06GWzBnPoC3th2aQ==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -5467,10 +5472,11 @@ npm-user-validate@*:
   integrity sha512-uQwcd/tY+h1jnEaze6cdX/LrhWhoBxfSknxentoqmIuStxUExxjWd3ULMLFPiFUrZKbOVMowH6Jq2FRWfmhcEw==
 
 npm@^7.23.0:
-  version "7.24.1"
-  resolved "https://registry.yarnpkg.com/npm/-/npm-7.24.1.tgz#4d23670f46c828e88f6b853497d2a896e8fac41b"
-  integrity sha512-U7/C++ZgB3zNH/kzhSJMnp3pO2iLrZRGUUXAgCCLB/by+sR+dKVhP/ik9+sTOGk9wk3zbmwHAYDT8igkv1ss0g==
+  version "7.24.2"
+  resolved "https://registry.yarnpkg.com/npm/-/npm-7.24.2.tgz#861117af8241bea592289f22407230e5300e59ca"
+  integrity sha512-120p116CE8VMMZ+hk8IAb1inCPk4Dj3VZw29/n2g6UI77urJKVYb7FZUDW8hY+EBnfsjI/2yrobBgFyzo7YpVQ==
   dependencies:
+    "@isaacs/string-locale-compare" "*"
     "@npmcli/arborist" "*"
     "@npmcli/ci-detect" "*"
     "@npmcli/config" "*"
