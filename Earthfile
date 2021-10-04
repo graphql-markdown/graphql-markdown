@@ -36,7 +36,7 @@ unit-test:
 integration-test:
   ARG flag=
   FROM +deps
-  IF [ "$(flag)" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn jest --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
