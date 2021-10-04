@@ -40,7 +40,7 @@
     "postpack": "pinst --enable"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^2.9.0",
+    "@graphql-inspector/core": "^3.0.1",
     "@graphql-tools/graphql-file-loader": "^7.1.0",
     "@graphql-tools/json-file-loader": "^7.2.0",
     "@graphql-tools/load": "^7.3.0",
