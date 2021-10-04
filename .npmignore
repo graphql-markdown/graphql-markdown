@@ -11,3 +11,6 @@ tests
 Earthfile
 *.tgz
 .tmp-earthly-out
+docs/
+*.svg
+CODE_OF_CONDUCT.md
