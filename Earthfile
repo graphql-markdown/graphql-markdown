@@ -34,7 +34,7 @@ unit-test:
   END
 
 integration-test:
-  ARG flag=
+  ARG flag
   FROM +deps
   IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn jest --projects tests/integration -u
