@@ -14,7 +14,7 @@ build:
 lint: 
   ARG flag
   FROM +deps
-  IF [ "$(flag)" = 'update' ]
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn prettier --write
     RUN yarn lint --fix
     SAVE ARTIFACT --if-exists ./ AS LOCAL ./
@@ -26,7 +26,7 @@ lint:
 unit-test:
   ARG flag
   FROM +deps
-  IF [ "$(flag)" = 'update' ]
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn jest --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
@@ -36,7 +36,7 @@ unit-test:
 integration-test:
   ARG flag
   FROM +deps
-  IF [ "$(flag)" = 'update' ]
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn jest --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
@@ -77,7 +77,7 @@ build-demo:
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc
   RUN yarn build
-  IF [ "$(flag)" != 'ignore' ]
+  IF [ "$flag" != 'ignore' ] && [ ! $EARTHLY_CI ]
     SAVE ARTIFACT --force ./build AS LOCAL docs
   END
 

@@ -28,8 +28,6 @@ jobs:
 
       - name: Install earthly
         uses: earthly/actions/setup-earthly@v1
-        with:
-          version: v0.5.10
 
       - name: Run Smoke Tests
         run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
