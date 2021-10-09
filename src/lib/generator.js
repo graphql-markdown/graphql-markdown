@@ -1,4 +1,4 @@
-const chalk = require("chalk");
+const pico = require("picocolors");
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
@@ -49,18 +49,20 @@ module.exports = async function generateDocFromSchema({
     const [sec, msec] = process.hrtime(time);
     const duration = round(sec + msec / 1000000000, 3);
     console.info(
-      chalk.green(
+      pico.green(
         `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
       ),
     );
     console.log(
-      chalk.blue(
+      pico.blue(
         `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`,
       ),
     );
     console.info(
-      chalk.blue.bold(
-        `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+      pico.blue(
+        pico.bold(
+          `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+        ),
       ),
     );
 
@@ -69,7 +71,7 @@ module.exports = async function generateDocFromSchema({
     await saveSchemaFile(schema, tmpDir);
   } else {
     console.info(
-      chalk.blue(`No changes detected in schema "${schemaLocation}".`),
+      pico.blue(`No changes detected in schema "${schemaLocation}".`),
     );
   }
 };
