@@ -47,9 +47,9 @@ module.exports = {
   // ...
   plugins: [
     [
-      require.resolve("@edno/docusaurus2-graphql-doc-generator"),
+      '@edno/docusaurus2-graphql-doc-generator',,
       {
-        schema: "https://swapi.graph.cool/",
+        schema: "./schema/swapi.graphql",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
@@ -60,6 +60,47 @@ module.exports = {
 ```
 
 Each option is described in the section [Options](#options).
+
+### <a name="loaders" />Plugin Loaders
+
+Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
+Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
+
+However, this behavior can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
+
+If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
+
+```shell
+yarn add @graphql-tools/url-loader
+```
+
+Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
+
+```js
+plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+      {
+        // ... other options
+        loaders: {
+          UrlLoader: "@graphql-tools/url-loader"
+        }
+      },
+    ],
+  ],
+```
+
+You can declare as many loaders as you need using the structure:
+
+```ts
+type className = string; // UrlLoader
+
+type moduleName = string; // "@graphql-tools/url-loader"
+
+type loaders = {
+  [className: className]: moduleName
+}
+```
 
 ### Site Settings
 
@@ -156,52 +197,12 @@ By default, the plugin will use the options as defined in the plugin's [configur
 | `baseURL`    | `-b, --base <baseURL>`      | `schema`                                                    | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the generated documentation.                                                                                                                                                                                                                                                                                                                                                                        |
 | `diffMethod` | `-d, --diff <diffMethod>`   | `SCHEMA-DIFF`                                               | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
 | `homepage`   | `-h, --homepage <homepage>` | `generated.md`                                              | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />By default, the plugin provides a default page `assets/generated.md`.                                                                                                                                                                                                                                         |
-| `loaders`    |                             | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` | GraphQL schema loader/s to be used (see [Loaders](#loaders)).                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `linkRoot`   | `-l, --link <linkRoot>`     | `/`                                                         | The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `loaders`    |                             | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` | GraphQL schema loader/s to be used (see [Loaders](#loaders)).                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `rootPath`   | `-r, --root <rootPath>`     | `./docs`                                                    | The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`.                                                                                                                                                                                                                                                                                                                                                                 |
-| `schema`     | `-s, --schema <schema>`     | `./schema.graphql`                                          | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (see [Loaders](#loaders)).                                                                                                                                                                                                                                                                                                                                 |
+| `schema`     | `-s, --schema <schema>`     | `./schema.graphql`                                          | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (see [Loaders](#loaders)).                                                                                                                                                                                                                                                                                                                                  |
 | `tmpDir`     | `-t, --tmp <tmpDir>`        | _OS temp folder_                                            | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |              | `-f, --force`               | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-
-#### Loaders
-
-Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
-Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
-
-However, this behavior can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
-
-If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
-
-```shell
-yarn add @graphql-tools/url-loader
-```
-
-Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
-
-```js
-plugins: [
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-      {
-        loaders: {
-          UrlLoader: "@graphql-tools/url-loader"
-        }
-      },
-    ],
-  ],
-```
-
-You can declare as many loaders as you need using the structure:
-
-```ts
-type className = string; // UrlLoader
-
-type moduleName = string; // "@graphql-tools/url-loader"
-
-type loaders = {
-  [className: className]: moduleName
-}
-```
 
 #### About `diffMethod`
 
