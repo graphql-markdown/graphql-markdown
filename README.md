@@ -194,8 +194,13 @@ plugins: [
 You can declare as many loaders as you need using the structure:
 
 ```ts
+type className = string; // UrlLoader
+
+type moduleName = string; // "@graphql-tools/url-loader"
+
 type loaders = {
-  [className: string]: {moduleName: string}
+  [className: className]: moduleName
+}
 }
 ```
 
