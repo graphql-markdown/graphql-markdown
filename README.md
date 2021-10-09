@@ -173,7 +173,7 @@ However, this behavior can be extended by installing additional GraphQL document
 If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
 
 ```shell
-yarn install @graphql-tools/url-loader
+yarn add @graphql-tools/url-loader
 ```
 
 Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
