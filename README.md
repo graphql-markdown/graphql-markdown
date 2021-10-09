@@ -201,7 +201,6 @@ type moduleName = string; // "@graphql-tools/url-loader"
 type loaders = {
   [className: className]: moduleName
 }
-}
 ```
 
 #### About `diffMethod`
