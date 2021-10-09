@@ -1,11 +1,5 @@
-const chalk = require("chalk");
-const {
-  getSchemaMap,
-  loadSchema,
-  GraphQLFileLoader,
-  UrlLoader,
-  JsonFileLoader,
-} = require("./graphql");
+const pico = require("picocolors");
+const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
 const { round } = require("./utils");
@@ -17,7 +11,7 @@ const {
 
 const time = process.hrtime();
 
-module.exports = async function generateDocFromSchema(
+module.exports = async function generateDocFromSchema({
   baseURL,
   schemaLocation,
   outputDir,
@@ -25,9 +19,10 @@ module.exports = async function generateDocFromSchema(
   homepageLocation,
   diffMethod,
   tmpDir,
-) {
+  loaders,
+}) {
   const schema = await loadSchema(schemaLocation, {
-    loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
+    loaders: getDocumentLoaders(loaders),
   });
 
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
@@ -54,18 +49,20 @@ module.exports = async function generateDocFromSchema(
     const [sec, msec] = process.hrtime(time);
     const duration = round(sec + msec / 1000000000, 3);
     console.info(
-      chalk.green(
+      pico.green(
         `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
       ),
     );
     console.log(
-      chalk.blue(
+      pico.blue(
         `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`,
       ),
     );
     console.info(
-      chalk.blue.bold(
-        `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+      pico.blue(
+        pico.bold(
+          `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+        ),
       ),
     );
 
@@ -74,7 +71,7 @@ module.exports = async function generateDocFromSchema(
     await saveSchemaFile(schema, tmpDir);
   } else {
     console.info(
-      chalk.blue(`No changes detected in schema "${schemaLocation}".`),
+      pico.blue(`No changes detected in schema "${schemaLocation}".`),
     );
   }
 };

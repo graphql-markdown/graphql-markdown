@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.json";
+const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
 
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 

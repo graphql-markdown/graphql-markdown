@@ -41,15 +41,16 @@ describe("lib", () => {
       test("generates Markdown document structure from GraphQL schema", async () => {
         expect.assertions(2);
 
-        await generateDocFromSchema(
-          "graphql",
-          "__data__/tweet.graphql",
-          "output",
-          "docs",
-          "assets/generated.md",
-          "SCHEMA-DIFF",
-          "tmp",
-        );
+        await generateDocFromSchema({
+          baseURL: "graphql",
+          schemaLocation: "__data__/tweet.graphql",
+          outputDir: "output",
+          linkRoot: "docs",
+          homepageLocation: "assets/generated.md",
+          diffMethod: "SCHEMA-DIFF",
+          tmpDir: "tmp",
+          loaders: {},
+        });
 
         const outputFolder = dirTree("output", {
           attributes: ["size", "type", "extension"],

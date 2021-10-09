@@ -56,7 +56,8 @@ smoke-init:
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN yarn install
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.json ./docusaurus2-graphql-doc-generator.config.json
+  RUN yarn add @graphql-tools/url-loader
+  COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
   COPY ./docs/img ./static/img

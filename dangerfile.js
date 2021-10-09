@@ -1,14 +1,14 @@
-require("colors");
 const { danger, fail, warn, schedule } = require("danger");
 const Diff = require("diff");
 const { filter } = require("lodash");
+const pico = require("picocolors");
 
 const COLOR = {
-  ADDED: "green",
-  REMOVED: "red",
-  COMMON: "grey",
-  FAIL: "red",
-  WARN: "yellow",
+  ADDED: pico.green,
+  REMOVED: pico.red,
+  COMMON: pico.gray,
+  FAIL: pico.red,
+  WARN: pico.yellow,
 };
 
 const PACKAGE_LOCK = "package-lock.json";
@@ -35,7 +35,7 @@ const getDiffDependencies = (dependencies) => {
       : part.removed
       ? COLOR.REMOVED
       : COLOR.COMMON;
-    colorDiff = `${colorDiff} ${part.value[color]}`;
+    colorDiff = `${colorDiff} ${color(part.value)}`;
   });
   return colorDiff;
 };
@@ -43,15 +43,15 @@ const getDiffDependencies = (dependencies) => {
 // rule-package-lock-detected
 if (packageLock.modified || packageLock.created) {
   fail(
-    `\`${PACKAGE_LOCK}\` detected, you must used 'yarn' for dependencies.`[
-      COLOR.FAIL
-    ],
+    COLOR.FAIL(
+      `\`${PACKAGE_LOCK}\` detected, you must used 'yarn' for dependencies.`,
+    ),
   );
 }
 
 // rule-yarn-lock-deleted
 if (yarnLock.deleted) {
-  fail(`This PR deleted the \`${YARN_LOCK}\` file.`[COLOR.FAIL]);
+  fail(COLOR.FAIL(`This PR deleted the \`${YARN_LOCK}\` file.`));
 }
 
 // rule-yarn-lock-not-updated
@@ -59,17 +59,15 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
     if (packageDiff.dependencies) {
-      const description =
-        "Dependencies changed with no corresponding lockfile changes:"[
-          COLOR.FAIL
-        ];
+      const description = COLOR.FAIL(
+        "Dependencies changed with no corresponding lockfile changes:",
+      );
       fail(`${description}\n${getDiffDependencies(packageDiff.dependencies)}`);
     }
     if (packageDiff.devDependencies) {
-      const description =
-        "Dev dependencies changed with no corresponding lockfile changes:"[
-          COLOR.FAIL
-        ];
+      const description = COLOR.FAIL(
+        "Dev dependencies changed with no corresponding lockfile changes:",
+      );
       fail(
         `${description}\n${getDiffDependencies(packageDiff.devDependencies)}`,
       );
@@ -79,17 +77,17 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
 
 // rule-license-file-modified
 if (licenseFile.modified) {
-  warn(`This PR modified the \`${LICENSE_FILE}\` file.`[COLOR.WARN]);
+  warn(COLOR.WARN(`This PR modified the \`${LICENSE_FILE}\` file.`));
 }
 
 // rule-license-file-deleted
 if (licenseFile.deleted) {
-  fail(`This PR deleted the \`${LICENSE_FILE}\` file.`[COLOR.FAIL]);
+  fail(COLOR.FAIL(`This PR deleted the \`${LICENSE_FILE}\` file.`));
 }
 
 // rule-readme-file-deleted
 if (readmeFile.deleted) {
-  fail(`This PR deleted the \`${README_FILE}\` file.`[COLOR.FAIL]);
+  fail(COLOR.FAIL(`This PR deleted the \`${README_FILE}\` file.`));
 }
 
 const jestSnapshots = {
@@ -103,17 +101,17 @@ const jestSnapshots = {
 
 // rule-jest-snapshot-modified
 if (jestSnapshots.modified.length > 0) {
-  const description = "This PR modified some Jest snapshot file/s:"[COLOR.WARN];
+  const description = COLOR.WARN("This PR modified some Jest snapshot file/s:");
   warn(`${description}\n - ${jestSnapshots.modified.join("\n - ")}`);
 }
 
 // rule-jest-snapshot-deleted
 if (jestSnapshots.deleted.length > 0) {
-  const description = "This PR deleted some Jest snapshot file/s:"[COLOR.WARN];
+  const description = COLOR.WARN("This PR deleted some Jest snapshot file/s:");
   warn(`${description}\n - ${jestSnapshots.deleted.join("\n - ")}`);
 }
 
 // rule-danger-file-modified
 if (dangerFile.modified) {
-  warn(`This PR modified the \`${DANGER_FILE}\` file.`[COLOR.WARN]);
+  warn(COLOR.WARN(`This PR modified the \`${DANGER_FILE}\` file.`));
 }

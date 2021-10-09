@@ -16,3 +16,5 @@ This documentation has been automatically generated using [AniList APIv2](https:
   "homepage": "data/anilist.md"
 }
 ```
+
+<small><i>Generated on ##generated-date-time##.</i></small>

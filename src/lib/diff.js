@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const fs = require("fs-extra");
 const path = require("path");
-const { loadSchema, GraphQLFileLoader, printSchema } = require("./graphql");
+const { loadSchema, getDocumentLoaders, printSchema } = require("./graphql");
 const { diff } = require("@graphql-inspector/core");
 
 const SCHEMA_HASH_FILE = ".schema";
@@ -9,6 +9,10 @@ const SCHEMA_REF = "schema.graphql";
 const COMPARE_METHODS = {
   COMPARE_WITH_SCHEMA_DIFF: "SCHEMA-DIFF",
   COMPARE_WITH_SCHEMA_HASH: "SCHEMA-HASH",
+};
+
+const defaultLoaders = {
+  GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
 };
 
 function getSchemaHash(schema) {
@@ -21,7 +25,7 @@ function getSchemaHash(schema) {
 async function getDiff(schemaNew, schemaOld) {
   return Promise.resolve(
     loadSchema(schemaOld, {
-      loaders: [new GraphQLFileLoader()],
+      loaders: getDocumentLoaders(defaultLoaders),
     }),
   ).then((schemaRef) => diff(schemaRef, schemaNew));
 }
