@@ -11,11 +11,13 @@ const DEFAULT_OPTIONS = {
   homepage: path.join(__dirname, "../assets/", "generated.md"),
   diffMethod: "SCHEMA-DIFF",
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
+  loaders: {},
 };
 
 module.exports = function pluginGraphQLDocGenerator(context, opts) {
   // Merge defaults with user-defined options.
   const config = { ...DEFAULT_OPTIONS, ...opts };
+
   return {
     name: "docusaurus-graphql-doc-generator",
 
@@ -52,22 +54,16 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
         )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          const baseURL = options.base;
-          const linkRoot = options.link;
-          const schema = options.schema;
-          const rootPath = path.join(options.root, baseURL);
-          const homepage = options.homepage;
-          const diffMethod = options.force ? "FORCE" : options.diff;
-          const tmpDir = options.tmp;
-          await generateDocFromSchema(
-            baseURL,
-            schema,
-            rootPath,
-            linkRoot,
-            homepage,
-            diffMethod,
-            tmpDir,
-          );
+          await generateDocFromSchema({
+            baseURL: options.base,
+            schemaLocation: options.schema,
+            outputDir: path.join(options.root, options.base),
+            linkRoot: options.link,
+            homepageLocation: options.homepage,
+            diffMethod: options.force ? "FORCE" : options.diff,
+            tmpDir: options.tmp,
+            loaders: config.loaders,
+          });
         });
     },
   };

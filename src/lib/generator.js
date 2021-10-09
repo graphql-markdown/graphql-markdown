@@ -1,11 +1,5 @@
 const chalk = require("chalk");
-const {
-  getSchemaMap,
-  loadSchema,
-  GraphQLFileLoader,
-  UrlLoader,
-  JsonFileLoader,
-} = require("./graphql");
+const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
 const { round } = require("./utils");
@@ -17,7 +11,7 @@ const {
 
 const time = process.hrtime();
 
-module.exports = async function generateDocFromSchema(
+module.exports = async function generateDocFromSchema({
   baseURL,
   schemaLocation,
   outputDir,
@@ -25,9 +19,10 @@ module.exports = async function generateDocFromSchema(
   homepageLocation,
   diffMethod,
   tmpDir,
-) {
+  loaders,
+}) {
   const schema = await loadSchema(schemaLocation, {
-    loaders: [new GraphQLFileLoader(), new UrlLoader(), new JsonFileLoader()],
+    loaders: getDocumentLoaders(loaders),
   });
 
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);

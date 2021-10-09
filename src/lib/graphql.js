@@ -23,13 +23,36 @@ const {
   printSchema,
 } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
-const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
-const { UrlLoader } = require("@graphql-tools/url-loader");
-const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
+
 const { hasMethod, hasProperty } = require("./utils");
 
 const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
+
+const defaultLoaders = {
+  GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+};
+
+function getDocumentLoaders(extraLoaders = {}) {
+  const loadersList = { ...defaultLoaders, ...extraLoaders };
+
+  var loaders = [];
+
+  Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
+    try {
+      const { [className]: Loader } = require(graphqlDocumentLoader);
+      loaders.push(new Loader());
+    } catch (error) {
+      console.warn(graphqlDocumentLoader, error.message);
+    }
+  });
+
+  if (loaders.length < 1) {
+    throw new Error("No GraphQL document loaders available.");
+  }
+
+  return loaders;
+}
 
 function getDefaultValue(argument) {
   if (
@@ -148,9 +171,7 @@ function isOperation(query) {
 
 module.exports = {
   loadSchema,
-  GraphQLFileLoader,
-  UrlLoader,
-  JsonFileLoader,
+  getDocumentLoaders,
   isDirectiveType,
   isObjectType,
   getNamedType,

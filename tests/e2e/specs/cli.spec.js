@@ -5,7 +5,7 @@ const cli = require("./lib/cli");
 
 const rootDir = "/docusaurus2";
 
-const pluginConfig = require(`${rootDir}/docusaurus2-graphql-doc-generator.config.json`);
+const pluginConfig = require(`${rootDir}/docusaurus2-graphql-doc-generator.config.js`);
 
 const docsDir = path.resolve(
   rootDir,
@@ -51,7 +51,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
     messageGenerated.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
@@ -66,7 +66,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
     messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
@@ -84,7 +84,7 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d+/g, "{Any<Number>}");
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
     messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 });
