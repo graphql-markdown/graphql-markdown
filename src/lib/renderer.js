@@ -2,7 +2,6 @@ const fs = require("fs").promises;
 const path = require("path");
 
 const fsExtra = require("fs-extra");
-const moment = require("moment");
 
 const { toSlug, startCase, pathUrl } = require("./utils");
 const { prettifyJavascript } = require("./prettier");
@@ -106,10 +105,7 @@ module.exports = class Renderer {
 
     const data = template
       .replace(/##baseURL##/gm, slug)
-      .replace(
-        /##generated-date-time##/gm,
-        moment().format("MMMM DD, YYYY [at] h:mm:ss A"),
-      );
+      .replace(/##generated-date-time##/gm, new Date().toLocaleString());
     await fsExtra.outputFile(destLocation, data, "utf8");
   }
 };

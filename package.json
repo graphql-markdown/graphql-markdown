@@ -48,7 +48,6 @@
     "fs-extra": "^10.0.0",
     "graphql": "^15.6.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
     "prettier": "^2.4.1",
     "slugify": "^1.6.0"
   },
