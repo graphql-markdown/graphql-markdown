@@ -35,11 +35,6 @@
     "prettier": "^2.4.1",
     "slugify": "^1.6.1"
   },
-  "peerDependencies": {
-    "@graphql-tools/graphql-file-loader": "^7.3.0",
-    "@graphql-tools/json-file-loader": "^7.3.0",
-    "@graphql-tools/url-loader": "^7.2.1"
-  },
   "devDependencies": {
     "@jest/types": "^27.2.5",
     "@types/jest": "^27.0.2",

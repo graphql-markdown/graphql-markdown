@@ -42,11 +42,20 @@ export interface LoadConfigOptions {
   throwOnEmpty?: boolean;
 }
 
+type ClassName = string; // UrlLoader
+
+type ModuleName = string; // "@graphql-tools/url-loader"
+
+export type Loaders = {
+  [className: ClassName]: ModuleName
+}
+
 export type ConfigurationOptions = {
   excludes?: readonly string[];
   layouts?: string;
   mdx?: boolean;
   output?: string;
+  loaders?: Loaders
 };
 
 export { generateMarkdownFromSchema } from "./lib/generator";

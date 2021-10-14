@@ -5,38 +5,45 @@ import {
 } from "graphql-config";
 import { DocumentNode } from "graphql";
 
-import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { JsonFileLoader } from "@graphql-tools/json-file-loader";
-import { UrlLoader } from "@graphql-tools/url-loader";
-
 import {
   ConfigurationOptions,
   ExtensionAPI,
   LoadConfigOptions,
+  Loaders,
   Maybe,
 } from "..";
 
 const DOCUMENT_NODE_TYPE = "DocumentNode" as const;
 const EXTENSION_NAME = "graphql-markdown" as const;
 export const OPTION = {
+  EXCLUDES: "excludes",
   LAYOUTS: "layouts",
   MDX: "mdx",
   OUTPUT: "output",
+  LOADERS: "loaders",
 } as const;
 
 const defaultOptions: ConfigurationOptions = {
-  excludes: [] as const,
+  [OPTION.EXCLUDES]: [] as const,
   [OPTION.LAYOUTS]: "./layouts" as const,
   [OPTION.MDX]: false as const,
   [OPTION.OUTPUT]: "./output" as const,
+  [OPTION.LOADERS]: {} as const
 } as const;
 
 const setFileLoaderExtension: GraphQLExtensionDeclaration = (
   api: ExtensionAPI
 ) => {
-  [new GraphQLFileLoader(), new JsonFileLoader(), new UrlLoader()].forEach(
-    (loader) => {
-      return api.loaders.schema.register(loader);
+  const loadersList = Configuration.get(OPTION.LOADERS) as Loaders;
+
+  if(Object.keys(loadersList).length === 0) {
+    throw new Error("No loaders declared in configuration.")
+  }
+
+  Object.entries(loadersList).forEach(
+    ([className, graphqlDocumentLoader]) => {
+      const { [className]: Loader } = require(graphqlDocumentLoader)
+      return api.loaders.schema.register(new Loader());
     }
   );
   return { name: EXTENSION_NAME };
@@ -71,11 +78,11 @@ export class Configuration {
     };
   };
 
-  static get = (name: string): boolean | number | string => {
+  static get = (name: string): boolean | number | string | Loaders => {
     return Configuration.extension[name];
   };
 
-  static set = (name: string, value: boolean | number | string): void => {
+  static set = (name: string, value: boolean | number | string | Loaders): void => {
     Configuration.extension[name] = value;
   };
 
