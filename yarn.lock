@@ -5266,9 +5266,9 @@ npm-user-validate@*:
   integrity sha512-uQwcd/tY+h1jnEaze6cdX/LrhWhoBxfSknxentoqmIuStxUExxjWd3ULMLFPiFUrZKbOVMowH6Jq2FRWfmhcEw==
 
 npm@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/npm/-/npm-8.0.0.tgz#28955335bb3142217b0ae80fc1ca6eb652da2534"
-  integrity sha512-bhZ8L73aloy8CEEhRjkyJp55icQzpsOqdWWA95xZyyLwL52ASgVOm8CsXKcZgIlrh4/cQTeJMuIK6krBju43HA==
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/npm/-/npm-8.1.0.tgz#2b4a44f00cab4ae7e8fb2d8180f2af92e1098b09"
+  integrity sha512-rPiiYY4t8pqK1rCDQy1bE6HRR63B2RwfYsIVc1/BNkeIilvqZMwGeTksSBK8WTozBz8c/tMd7jk0c4Q4f/F+UA==
   dependencies:
     "@isaacs/string-locale-compare" "*"
     "@npmcli/arborist" "*"
@@ -5729,6 +5729,11 @@ picocolors@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-0.2.1.tgz#570670f793646851d1ba135996962abad587859f"
   integrity sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA==
+
+picocolors@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
+  integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
 picomatch@^2.0.4, picomatch@^2.2.3:
   version "2.3.0"
