@@ -196,12 +196,12 @@
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 924,
+          "size": 920,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 2731,
+      "size": 2727,
       "type": "directory"
     },
     {
@@ -370,6 +370,6 @@
       "type": "directory"
     }
   ],
-  "size": 8855,
+  "size": 8851,
   "type": "directory"
 }

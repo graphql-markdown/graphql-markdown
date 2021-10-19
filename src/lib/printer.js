@@ -14,7 +14,13 @@ const {
   isInputType,
   isListType,
 } = require("./graphql");
-const { toSlug, hasProperty, hasMethod, pathUrl } = require("./utils");
+const {
+  toSlug,
+  hasProperty,
+  hasMethod,
+  pathUrl,
+  escapeMDX,
+} = require("./utils");
 const { prettifyMarkdown } = require("./prettier");
 
 const HEADER_SECTION_LEVEL = "###";
@@ -184,7 +190,7 @@ module.exports = class Printer {
   printDeprecation(type) {
     if (type.isDeprecated) {
       return `<span class="badge badge--warning">DEPRECATED${
-        type.deprecationReason ? ": " + type.deprecationReason : ""
+        type.deprecationReason ? ": " + escapeMDX(type.deprecationReason) : ""
       }</span>\n\n`;
     }
     return "";
@@ -194,7 +200,8 @@ module.exports = class Printer {
     let description = "";
 
     description = `${this.printDeprecation(type)}${
-      (hasProperty(type, "description") && type.description) || noText
+      (hasProperty(type, "description") && escapeMDX(type.description)) ||
+      noText
     }`;
 
     return description;
