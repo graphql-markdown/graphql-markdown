@@ -3,6 +3,7 @@ const {
   toArray,
   hasProperty,
   hasMethod,
+  escapeMDX,
 } = require("../../../src/lib/utils");
 
 describe("lib", () => {
@@ -58,6 +59,14 @@ describe("lib", () => {
 
       test("returns undefined if not an object", () => {
         expect(toArray("test")).toBeUndefined();
+      });
+    });
+
+    describe("escapeMDX()", () => {
+      test("returns string with HTML &#x0000; format for MDX special characters", () => {
+        expect(escapeMDX("{MDX} <special> characters")).toBe(
+          "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters",
+        );
       });
     });
   });

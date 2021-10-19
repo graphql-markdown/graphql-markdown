@@ -24,7 +24,20 @@ function hasMethod(obj, prop) {
   return hasProperty(obj, prop) && typeof obj[prop] === "function";
 }
 
+function toHTMLUnicode(char) {
+  const unichar = char.charCodeAt(0).toString(16).padStart(4, "0");
+  return `&#x${unichar.toUpperCase()};`;
+}
+
+function escapeMDX(str) {
+  if (typeof str === "string") {
+    return str.replace(/[<>{}]/g, toHTMLUnicode);
+  }
+  return str;
+}
+
 module.exports = {
+  escapeMDX,
   round,
   startCase,
   toSlug,

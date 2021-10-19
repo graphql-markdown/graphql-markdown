@@ -30,7 +30,7 @@ type User implements Node {
     last_name: String
     full_name: String
     name: String @deprecated
-    avatar_url: Url @deprecated(reason: "Replaced by the `Media` field `avatar`.")
+    avatar_url: Url @deprecated(reason: "Use Media { avatar }.")
     avatar: Media
 }
 
