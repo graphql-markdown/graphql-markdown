@@ -3,7 +3,7 @@ const path = require("path");
 
 const fsExtra = require("fs-extra");
 
-const { toSlug, startCase, pathUrl } = require("./utils");
+const { toSlug, startCase, pathUrl, docLocations } = require("./utils");
 const { prettifyJavascript } = require("./prettier");
 
 const SIDEBAR = "sidebar-schema.js";
@@ -21,7 +21,7 @@ module.exports = class Renderer {
     fsExtra.emptyDirSync(this.outputDir);
   }
 
-  async renderRootTypes(typeName, type) {
+  async renderRootTypes(typeName, type, directiveToGroupBy) {
     if (typeof type === "undefined" || type === null) {
       return undefined;
     }
@@ -46,19 +46,20 @@ module.exports = class Renderer {
 
     return Promise.all(
       Object.keys(type).map(async (name) => {
+        let updatedDirPath = path.join(this.outputDir, directiveToGroupBy ? docLocations[name].category : '', slug);
         return this.renderTypeEntities(dirPath, name, type[name]);
       }),
     );
   }
 
-  async renderTypeEntities(dirPath, name, type) {
+  async renderTypeEntities(dirPath, name, type, directiveToGroupBy) {
     if (typeof type === "undefined" || type === null) {
       return undefined;
     }
 
     const fileName = toSlug(name);
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
-    const content = this.printer.printType(fileName, type);
+    const content = this.printer.printType(fileName, type, directiveToGroupBy);
     await fsExtra.outputFile(filePath, content, "utf8");
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(

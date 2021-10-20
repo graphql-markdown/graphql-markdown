@@ -2,7 +2,7 @@ const pico = require("picocolors");
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
-const { round } = require("./utils");
+const { round, setUpCategorizationInfo  } = require("./utils");
 const {
   checkSchemaChanges,
   saveSchemaHash,
@@ -20,6 +20,8 @@ module.exports = async function generateDocFromSchema({
   diffMethod,
   tmpDir,
   loaders,
+  directiveToGroupBy,
+  directiveFieldForGrouping
 }) {
   const schema = await loadSchema(schemaLocation, {
     loaders: getDocumentLoaders(loaders),
@@ -34,11 +36,13 @@ module.exports = async function generateDocFromSchema({
       baseURL,
     );
     const rootTypes = getSchemaMap(schema);
-
+    if(directiveToGroupBy){
+      setUpCategorizationInfo(rootTypes, directiveToGroupBy, directiveFieldForGrouping, linkRoot);
+    }
     const pages = await Promise.all(
       Object.keys(rootTypes)
         .map((typeName) =>
-          renderer.renderRootTypes(typeName, rootTypes[typeName]),
+          renderer.renderRootTypes(typeName, rootTypes[typeName], directiveToGroupBy),
         )
         .flat(),
     );
