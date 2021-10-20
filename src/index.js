@@ -55,17 +55,22 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
         .option(
           "-gbd, --groupByDirective <directive>",
           "Group Documentation By Directive",
-          config.groupByDirective
+          config.groupByDirective,
         )
         .option(
           "-fg, --directiveFieldForGrouping <directiveField>",
           "Field in directive for grouping",
-          config.directiveFieldForGrouping
+          config.directiveFieldForGrouping,
         )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          if((options.groupByDirective || options.directiveFieldForGrouping) && !(options.groupByDirective && options.directiveFieldForGrouping)){
-            throw new Error('Need to specify both directive to group by and relevant field');
+          if (
+            (options.groupByDirective || options.directiveFieldForGrouping) &&
+            !(options.groupByDirective && options.directiveFieldForGrouping)
+          ) {
+            throw new Error(
+              "Need to specify both directive to group by and relevant field",
+            );
           }
           await generateDocFromSchema({
             baseURL: options.base,
@@ -77,7 +82,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             tmpDir: options.tmp,
             loaders: config.loaders,
             directiveToGroupBy: options.groupByDirective,
-            directiveFieldForGrouping: options.directiveFieldForGrouping
+            directiveFieldForGrouping: options.directiveFieldForGrouping,
           });
         });
     },

@@ -1,5 +1,5 @@
 const pathUrl = require("path").posix;
-const {get} = require("lodash")
+const { get } = require("lodash");
 const slugify = require("slugify");
 const { kebabCase, startCase, round } = require("lodash");
 const docLocations = {};
@@ -36,34 +36,52 @@ function escapeMDX(str) {
   return str;
 }
 
-function setUpCategorizationInfo(rootTypes, directiveToGroupBy, directiveFieldForGrouping, linkRoot){
+function setUpCategorizationInfo(
+  rootTypes,
+  directiveToGroupBy,
+  directiveFieldForGrouping,
+  linkRoot,
+) {
   Object.keys(rootTypes).map((typeName) => {
-    if(rootTypes[typeName]){
+    if (rootTypes[typeName]) {
       if (Array.isArray(rootTypes[typeName])) {
         rootTypes[typeName] = rootTypes[typeName].reduce(function (r, o) {
           if (o && o.name) r[o.name] = o;
           return r;
         }, {});
       }
-        let categoryInDirective;
-        Object.keys(rootTypes[typeName]).map((name) => {
-          let allDirectives= get(rootTypes[typeName][name], 'astNode.directives');
-          if(allDirectives){
-            allDirectives.forEach(directive => {
-              if(directive.name.value === directiveToGroupBy && directive.arguments.length > 0){
-                   directive.arguments.forEach(argument => {
-                       if(argument.name.value === directiveFieldForGrouping){
-                        categoryInDirective = argument.value.value;
-                       }
-                   });
-              }
-            })
-          }
-          categoryInDirective = categoryInDirective ? categoryInDirective : 'Miscellaneous';
-          docLocations[name] =  {link: categoryInDirective ?  `${pathUrl.join(linkRoot, categoryInDirective, typeName)}` :  `${pathUrl.join(linkRoot, 'Miscellaneous', typeName, name)}`, category: categoryInDirective};
-         })
+      let categoryInDirective;
+      Object.keys(rootTypes[typeName]).map((name) => {
+        let allDirectives = get(
+          rootTypes[typeName][name],
+          "astNode.directives",
+        );
+        if (allDirectives) {
+          allDirectives.forEach((directive) => {
+            if (
+              directive.name.value === directiveToGroupBy &&
+              directive.arguments.length > 0
+            ) {
+              directive.arguments.forEach((argument) => {
+                if (argument.name.value === directiveFieldForGrouping) {
+                  categoryInDirective = argument.value.value;
+                }
+              });
+            }
+          });
+        }
+        categoryInDirective = categoryInDirective
+          ? categoryInDirective
+          : "Miscellaneous";
+        docLocations[name] = {
+          link: categoryInDirective
+            ? `${pathUrl.join(linkRoot, categoryInDirective, typeName)}`
+            : `${pathUrl.join(linkRoot, "Miscellaneous", typeName, name)}`,
+          category: categoryInDirective,
+        };
+      });
     }
-  })
+  });
 }
 
 module.exports = {
@@ -76,5 +94,5 @@ module.exports = {
   hasMethod,
   pathUrl,
   docLocations,
-  setUpCategorizationInfo
+  setUpCategorizationInfo,
 };

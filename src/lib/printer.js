@@ -20,7 +20,7 @@ const {
   hasMethod,
   pathUrl,
   escapeMDX,
-  docLocations 
+  docLocations,
 } = require("./utils");
 const { prettifyMarkdown } = require("./prettier");
 
@@ -64,8 +64,14 @@ module.exports = class Printer {
         break;
     }
 
-    if(directiveToGroupBy && docLocations[graphLQLNamedType.name] && docLocations[graphLQLNamedType.name].link){
-      return `[\`${name}\`](${docLocations[graphLQLNamedType.name].link}/${toSlug(graphLQLNamedType.name)})`
+    if (
+      directiveToGroupBy &&
+      docLocations[graphLQLNamedType.name] &&
+      docLocations[graphLQLNamedType.name].link
+    ) {
+      return `[\`${name}\`](${
+        docLocations[graphLQLNamedType.name].link
+      }/${toSlug(graphLQLNamedType.name)})`;
     } else if (category && graphLQLNamedType) {
       return `[\`${name}\`](${pathUrl.join(
         this.linkRoot,
@@ -251,7 +257,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
   }
 
   printType(name, type, directive) {
-    directiveToGroupBy = directive
+    directiveToGroupBy = directive;
     if (typeof type === "undefined" || type === null) {
       return "";
     }
