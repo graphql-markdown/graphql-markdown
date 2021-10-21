@@ -1,7 +1,6 @@
 name: Mutation Test
 
 on:
-  pull_request:
   push:
     branches:
       - main
