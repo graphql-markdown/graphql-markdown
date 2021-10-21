@@ -1,6 +1,7 @@
 name: Linter
 
 on:
+  pull_request:
   push:
     paths:
       - 'src/**'
