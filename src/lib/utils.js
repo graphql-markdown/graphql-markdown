@@ -1,7 +1,7 @@
 const pathUrl = require("path").posix;
 
 const slugify = require("slugify");
-const { kebabCase, startCase, round } = require("lodash");
+const round = require("lodash.round");
 
 function toSlug(str) {
   return slugify(kebabCase(str));
@@ -36,10 +36,42 @@ function escapeMDX(str) {
   return str;
 }
 
+function firstUppercase(word) {
+  const sliceUppercase = word.slice(0, 1).toUpperCase();
+  const sliceDefaultcase = word.slice(1);
+  return `${sliceUppercase}${sliceDefaultcase}`;
+}
+
+function capitalize(word) {
+  return firstUppercase(word.toLowerCase());
+}
+
+function _stringCaseBuilder(str, transformation, separator) {
+  return str
+    .toString()
+    .replace(/([a-z]+|[0-9]+)([A-Z])/g, "$1 $2")
+    .replace(/([a-z]+)([0-9])/g, "$1 $2")
+    .replace(/([0-9]+)([a-z])/g, "$1 $2")
+    .split(/[^0-9A-Za-z]+/g)
+    .map((word) => transformation(word))
+    .join(separator);
+}
+
+function startCase(str) {
+  return _stringCaseBuilder(str, firstUppercase, " ");
+}
+
+function kebabCase(str) {
+  return _stringCaseBuilder(str, (word) => word.toLowerCase(), "-");
+}
+
 module.exports = {
+  capitalize,
   escapeMDX,
   round,
   startCase,
+  kebabCase,
+  firstUppercase,
   toSlug,
   toArray,
   hasProperty,

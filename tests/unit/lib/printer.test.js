@@ -1,6 +1,6 @@
 const path = require("path");
 
-const { capitalize } = require("lodash");
+const { capitalize } = require("../../../src/lib/utils");
 
 const Printer = require("../../../src/lib/printer");
 
