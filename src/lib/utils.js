@@ -42,7 +42,7 @@ function setUpCategorizationInfo(
   directiveFieldForGrouping,
   linkRoot,
 ) {
-  Object.keys(rootTypes).map((typeName) => {
+  Object.keys(rootTypes).forEach((typeName) => {
     if (rootTypes[typeName]) {
       if (Array.isArray(rootTypes[typeName])) {
         rootTypes[typeName] = rootTypes[typeName].reduce(function (r, o) {
@@ -51,7 +51,7 @@ function setUpCategorizationInfo(
         }, {});
       }
       let categoryInDirective;
-      Object.keys(rootTypes[typeName]).map((name) => {
+      Object.keys(rootTypes[typeName]).forEach((name) => {
         let allDirectives = get(
           rootTypes[typeName][name],
           "astNode.directives",

@@ -46,12 +46,15 @@ module.exports = class Renderer {
 
     return Promise.all(
       Object.keys(type).map(async (name) => {
-        let updatedDirPath = path.join(
-          this.outputDir,
-          directiveToGroupBy ? docLocations[name].category : "",
-          slug,
+        return this.renderTypeEntities(
+          path.join(
+            this.outputDir,
+            directiveToGroupBy ? docLocations[name].category : "",
+            slug,
+          ),
+          name,
+          type[name],
         );
-        return this.renderTypeEntities(updatedDirPath, name, type[name]);
       }),
     );
   }
