@@ -1,6 +1,7 @@
 const mock = require("mock-fs");
 const path = require("path"); // to be loaded after mock-fs
 const dirTree = require("directory-tree");
+const fs = require('fs');
 
 const generateDocFromSchema = require("../../../src/lib/generator");
 
@@ -60,7 +61,6 @@ describe("lib", () => {
         });
 
         mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
-
         expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `generateDocFromSchemaOutputFolder.hash`),
         );
@@ -68,6 +68,53 @@ describe("lib", () => {
           path.join(EXPECT_PATH, `generateDocFromSchemaTmpFolder.hash`),
         );
       });
+    });
+    test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
+      await generateDocFromSchema({
+        baseURL: "graphql",
+        schemaLocation: "__data__/schema_with_grouping.graphql",
+        outputDir: "output",
+        linkRoot: "docs",
+        homepageLocation: "assets/generated.md",
+        diffMethod: "SCHEMA-DIFF",
+        tmpDir: "tmp",
+        loaders: {},
+        directiveToGroupBy: "doc",
+        directiveFieldForGrouping: "category",
+      });
+
+      const outputFolder = dirTree("output", {
+        attributes: ["size", "type", "extension"],
+      });
+
+      mock.restore();
+      expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+        path.join(EXPECT_PATH, `generateDocFromSchemaWithGroupingOutputFolder.hash`,
+        ),
+      );
+    });
+    test("No generated.md file is generated when homepageLocation is set to false", async () => {
+      await generateDocFromSchema({
+        baseURL: "graphql",
+        schemaLocation: "__data__/tweet.graphql",
+        outputDir: "output",
+        linkRoot: "docs",
+        homepageLocation: false,
+        diffMethod: "SCHEMA-DIFF",
+        tmpDir: "tmp",
+        loaders: {},
+        directiveToGroupBy: "doc",
+        directiveFieldForGrouping: "category",
+      });
+
+      const outputFolder = dirTree("output", {
+        attributes: ["size", "type", "extension"],
+      });
+      mock.restore();
+      expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+        path.join(EXPECT_PATH, `generateDocFromSchemaWithHomePageFalse.hash`,
+        ),
+      );
     });
   });
 });

@@ -1,0 +1,53 @@
+directive @doc(
+  category: String
+) on OBJECT |  INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+
+scalar Date
+scalar EmailAddress
+scalar PhoneNumber
+scalar Time
+
+type Mutation {
+  UpdateGrade(input: String): String  @doc(category: "Grade") 
+}
+
+type Mutation{
+  UpdateGPA(input: Int): Int @doc(category: "Grade") 
+}
+
+type Mutation{
+  AddCourse(input: String): String  @doc(category: "Course") 
+}
+
+type Mutation{
+  DropCourse(input: String): String  @doc(category: "Course") 
+}
+
+
+type Query {
+  GPA(input: String): Int  @doc(category: "Grade") 
+  WeightedGPA(input: String): Int  @doc(category: "Grade") 
+  UnWeightedGPA(input: String): Int  @doc(category: "Grade") 
+}
+
+
+type Query {
+  allCourses: [String]  @doc(category: "Course") 
+  mathCourses: [String]  @doc(category: "Course") 
+  scienceCourses: [String]  @doc(category: "Course") 
+}
+
+type Semester {
+  startDate: Date
+  withdrawDate: Date
+  endDate: Date
+}
+
+type DepartmentInformation {
+  email: EmailAddress
+  number: PhoneNumber
+  departmentOpenTime: Time
+  departmentCloseTime: Time
+}
+

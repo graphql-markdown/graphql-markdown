@@ -55,8 +55,9 @@ module.exports = async function generateDocFromSchema({
         )
         .flat(),
     );
-
-    await renderer.renderHomepage(homepageLocation);
+    if(homepageLocation){
+      await renderer.renderHomepage(homepageLocation);
+    }          
     const sidebarPath = await renderer.renderSidebar();
 
     const [sec, msec] = process.hrtime(time);
