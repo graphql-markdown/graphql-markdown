@@ -73,9 +73,9 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             );
           }
           await generateDocFromSchema({
-            baseURL: options.base || '',
+            baseURL: options.base || "",
             schemaLocation: options.schema,
-            outputDir: path.join(options.root, options.base || ''),
+            outputDir: path.join(options.root, options.base || ""),
             linkRoot: options.link,
             homepageLocation: options.homepage,
             diffMethod: options.force ? "FORCE" : options.diff,

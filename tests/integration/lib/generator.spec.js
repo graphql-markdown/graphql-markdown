@@ -88,7 +88,9 @@ describe("lib", () => {
 
       mock.restore();
       expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-        path.join(EXPECT_PATH, `generateDocFromSchemaWithGroupingOutputFolder.hash`,
+        path.join(
+          EXPECT_PATH,
+          `generateDocFromSchemaWithGroupingOutputFolder.hash`,
         ),
       );
     });
@@ -111,8 +113,7 @@ describe("lib", () => {
       });
       mock.restore();
       expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-        path.join(EXPECT_PATH, `generateDocFromSchemaWithHomePageFalse.hash`,
-        ),
+        path.join(EXPECT_PATH, `generateDocFromSchemaWithHomePageFalse.hash`),
       );
     });
   });
