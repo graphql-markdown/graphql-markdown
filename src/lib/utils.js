@@ -5,12 +5,6 @@
 const pathUrl = require("path").posix;
 
 /**
- * Number functions
- */
-
-const round = require("lodash.round");
-
-/**
  * Array functions
  */
 
@@ -39,25 +33,24 @@ function hasMethod(obj, prop) {
  * String functions
  */
 
-function trimCharacter(str, char, { start = true, end = true } = {}) {
-  const regex =
-    (start ? `^${char}` : "") +
-    (start && end ? "|" : "") +
-    (end ? `${char}$` : "");
-  return str.replace(new RegExp(`${regex}`), "");
-}
-
 function _stringCaseBuilder(str, transformation, separator) {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
-    .toString()
     .replace(/([a-z]+|[0-9]+)([A-Z])/g, "$1 $2")
     .replace(/([a-z]+)([0-9])/g, "$1 $2")
     .replace(/([0-9]+)([a-z])/g, "$1 $2")
     .split(/[^0-9A-Za-z]+/g)
     .map((word) => (hasTransformation ? transformation(word) : word))
     .join(separator);
-  return trimCharacter(stringCase, separator);
+  return prune(stringCase, separator);
+}
+
+function prune(str, char, { start = true, end = true } = {}) {
+  const regex =
+    (start ? `^${char}` : "") +
+    (start && end ? "|" : "") +
+    (end ? `${char}$` : "");
+  return str.replace(new RegExp(`${regex}`), "");
 }
 
 function toSlug(str) {
@@ -88,7 +81,10 @@ function capitalize(word) {
 
 // from https://stackoverflow.com/a/37511463
 function replaceDiacritics(str) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return str
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 function startCase(str) {
@@ -107,9 +103,10 @@ module.exports = {
   hasMethod,
   hasProperty,
   pathUrl,
+  prune,
   replaceDiacritics,
-  round,
   startCase,
   toArray,
+  toHTMLUnicode,
   toSlug,
 };
