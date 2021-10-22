@@ -1,17 +1,28 @@
+/**
+ * Path functions
+ */
+
 const pathUrl = require("path").posix;
 
-const slugify = require("slugify");
+/**
+ * Number functions
+ */
+
 const round = require("lodash.round");
 
-function toSlug(str) {
-  return slugify(kebabCase(str));
-}
+/**
+ * Array functions
+ */
 
 function toArray(param) {
   if (param && typeof param === "object")
     return Object.keys(param).map((key) => param[key]);
   return undefined;
 }
+
+/**
+ * Object functions
+ */
 
 function hasProperty(obj, prop) {
   return (
@@ -22,6 +33,35 @@ function hasProperty(obj, prop) {
 
 function hasMethod(obj, prop) {
   return hasProperty(obj, prop) && typeof obj[prop] === "function";
+}
+
+/**
+ * String functions
+ */
+
+function trimCharacter(str, char, { start = true, end = true } = {}) {
+  const regex =
+    (start ? `^${char}` : "") +
+    (start && end ? "|" : "") +
+    (end ? `${char}$` : "");
+  return str.replace(new RegExp(`${regex}`), "");
+}
+
+function _stringCaseBuilder(str, transformation, separator) {
+  const hasTransformation = typeof transformation === "function";
+  const stringCase = replaceDiacritics(str)
+    .toString()
+    .replace(/([a-z]+|[0-9]+)([A-Z])/g, "$1 $2")
+    .replace(/([a-z]+)([0-9])/g, "$1 $2")
+    .replace(/([0-9]+)([a-z])/g, "$1 $2")
+    .split(/[^0-9A-Za-z]+/g)
+    .map((word) => (hasTransformation ? transformation(word) : word))
+    .join(separator);
+  return trimCharacter(stringCase, separator);
+}
+
+function toSlug(str) {
+  return kebabCase(str);
 }
 
 function toHTMLUnicode(char) {
@@ -46,15 +86,9 @@ function capitalize(word) {
   return firstUppercase(word.toLowerCase());
 }
 
-function _stringCaseBuilder(str, transformation, separator) {
-  return str
-    .toString()
-    .replace(/([a-z]+|[0-9]+)([A-Z])/g, "$1 $2")
-    .replace(/([a-z]+)([0-9])/g, "$1 $2")
-    .replace(/([0-9]+)([a-z])/g, "$1 $2")
-    .split(/[^0-9A-Za-z]+/g)
-    .map((word) => transformation(word))
-    .join(separator);
+// from https://stackoverflow.com/a/37511463
+function replaceDiacritics(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function startCase(str) {
@@ -68,13 +102,14 @@ function kebabCase(str) {
 module.exports = {
   capitalize,
   escapeMDX,
+  firstUppercase,
+  kebabCase,
+  hasMethod,
+  hasProperty,
+  pathUrl,
+  replaceDiacritics,
   round,
   startCase,
-  kebabCase,
-  firstUppercase,
-  toSlug,
   toArray,
-  hasProperty,
-  hasMethod,
-  pathUrl,
+  toSlug,
 };
