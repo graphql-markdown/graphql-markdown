@@ -36,48 +36,57 @@ function escapeMDX(str) {
   return str;
 }
 
+function getCategory(
+  allDirectives,
+  directiveToGroupBy,
+  directiveFieldForGrouping,
+) {
+  let categoryInDirective;
+  if (allDirectives) {
+    allDirectives.forEach((directive) => {
+      if (
+        directive.name.value === directiveToGroupBy &&
+        directive.arguments.length > 0
+      ) {
+        directive.arguments.forEach((argument) => {
+          if (argument.name.value === directiveFieldForGrouping) {
+            categoryInDirective = argument.value.value;
+          }
+        });
+      }
+    });
+  }
+  return categoryInDirective ? categoryInDirective : "Miscellaneous";
+}
+
+function convertArrayToObject(typeArray) {
+  return typeArray.reduce(function (r, o) {
+    if (o && o.name) r[o.name] = o;
+    return r;
+  }, {});
+}
+
 function setUpCategorizationInfo(
   rootTypes,
   directiveToGroupBy,
   directiveFieldForGrouping,
   linkRoot,
 ) {
+  let category;
   Object.keys(rootTypes).forEach((typeName) => {
     if (rootTypes[typeName]) {
       if (Array.isArray(rootTypes[typeName])) {
-        rootTypes[typeName] = rootTypes[typeName].reduce(function (r, o) {
-          if (o && o.name) r[o.name] = o;
-          return r;
-        }, {});
+        rootTypes[typeName] = convertArrayToObject(rootTypes[typeName]);
       }
-      let categoryInDirective;
       Object.keys(rootTypes[typeName]).forEach((name) => {
-        let allDirectives = get(
-          rootTypes[typeName][name],
-          "astNode.directives",
+        category = getCategory(
+          get(rootTypes[typeName][name], "astNode.directives"),
+          directiveToGroupBy,
+          directiveFieldForGrouping,
         );
-        if (allDirectives) {
-          allDirectives.forEach((directive) => {
-            if (
-              directive.name.value === directiveToGroupBy &&
-              directive.arguments.length > 0
-            ) {
-              directive.arguments.forEach((argument) => {
-                if (argument.name.value === directiveFieldForGrouping) {
-                  categoryInDirective = argument.value.value;
-                }
-              });
-            }
-          });
-        }
-        categoryInDirective = categoryInDirective
-          ? categoryInDirective
-          : "Miscellaneous";
         docLocations[name] = {
-          link: categoryInDirective
-            ? `${pathUrl.join(linkRoot, categoryInDirective, typeName)}`
-            : `${pathUrl.join(linkRoot, "Miscellaneous", typeName, name)}`,
-          category: categoryInDirective,
+          link: `${pathUrl.join(linkRoot, category, typeName)}`,
+          category,
         };
       });
     }
