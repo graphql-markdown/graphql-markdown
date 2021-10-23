@@ -2,7 +2,6 @@ const pico = require("picocolors");
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
-const { round } = require("./utils");
 const {
   checkSchemaChanges,
   saveSchemaHash,
@@ -47,7 +46,7 @@ module.exports = async function generateDocFromSchema({
     const sidebarPath = await renderer.renderSidebar();
 
     const [sec, msec] = process.hrtime(time);
-    const duration = round(sec + msec / 1000000000, 3);
+    const duration = (sec + msec / 1e9).toFixed(3);
     console.info(
       pico.green(
         `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,

@@ -1,4 +1,3 @@
-const fs = require("fs").promises;
 const path = require("path");
 
 const fsExtra = require("fs-extra");
@@ -101,7 +100,7 @@ module.exports = class Renderer {
 
     await fsExtra.copy(homepageLocation, destLocation);
 
-    const template = await fs.readFile(destLocation, "utf8");
+    const template = await fsExtra.readFile(destLocation, "utf8");
 
     const data = template
       .replace(/##baseURL##/gm, slug)
