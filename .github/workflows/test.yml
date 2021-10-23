@@ -28,10 +28,10 @@ jobs:
       run: yarn
 
     - name: Run Unit Tests
-      run: yarn test:ci --projects tests/unit
+      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/unit
 
     - name: Run Integration Tests
-      run: yarn test:ci --projects tests/integration
+      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/integration
 
     - name: Check Code Coverage
       run: yarn test:coverage

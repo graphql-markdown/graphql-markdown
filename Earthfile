@@ -27,20 +27,20 @@ unit-test:
   ARG flag
   FROM +deps
   IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
-    RUN yarn jest --projects tests/unit -u
+    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
-    RUN yarn jest --projects tests/unit
+    RUN NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/unit
   END
 
 integration-test:
   ARG flag
   FROM +deps
   IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
-    RUN yarn jest --projects tests/integration -u
+    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
-    RUN yarn jest --projects tests/integration
+    RUN NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --detectOpenHandles --projects tests/integration
   END
 
 mutation-test:
@@ -70,7 +70,7 @@ smoke-test:
   RUN yarn global add fs-extra jest
   COPY ./tests/e2e/specs ./__tests__
   COPY ./tests/e2e/jest.config.js ./jest.config.js
-  RUN jest
+  RUN NODE_ENV=ci node --expose-gc /usr/local/bin/jest --logHeapUsage --detectOpenHandles
 
 build-demo:
   ARG flag
