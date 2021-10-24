@@ -28,7 +28,6 @@
     "test": "jest",
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
-    "test:ci": "jest --runInBand --noStackTrace --ci",
     "test:smoke": "earthly +smoke-test",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
