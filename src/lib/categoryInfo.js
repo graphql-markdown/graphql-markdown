@@ -16,7 +16,7 @@ module.exports = class CategoryInfo {
     this.docLocations = {};
     this.fallbackCategory = fallbackCategory;
     this.baseURL = baseURL;
-    if(this.directiveToGroupBy){
+    if (this.directiveToGroupBy) {
       this.setUpCategorizationInfo();
     }
   }
