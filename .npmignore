@@ -16,3 +16,5 @@ docs/
 *.md
 !README.md
 output
+reports
+coverage
