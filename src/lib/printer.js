@@ -1,3 +1,7 @@
+const { toSlug, escapeMDX } = require("../utils/string");
+const { hasProperty, hasMethod } = require("../utils/object");
+const { pathUrl } = require("../utils/url");
+
 const {
   isEnumType,
   isUnionType,
@@ -14,13 +18,7 @@ const {
   isInputType,
   isListType,
 } = require("./graphql");
-const {
-  toSlug,
-  hasProperty,
-  hasMethod,
-  pathUrl,
-  escapeMDX,
-} = require("./utils");
+
 const { prettifyMarkdown } = require("./prettier");
 
 const HEADER_SECTION_LEVEL = "###";

@@ -1,6 +1,7 @@
+const mock = require("mock-fs");
+
 const path = require("path");
 
-const mock = require("mock-fs");
 const dirTree = require("directory-tree");
 
 const Renderer = require("../../../src/lib/renderer");
@@ -35,7 +36,7 @@ describe("lib", () => {
           assets: {
             [HOMEPAGE]: "Test Homepage",
             [SIDEBAR]: mock.load(
-              require.resolve(`@../../../assets/${SIDEBAR}`),
+              path.resolve(__dirname, `../../../assets/${SIDEBAR}`),
             ),
           },
         });

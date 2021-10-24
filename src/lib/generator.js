@@ -1,4 +1,5 @@
 const pico = require("picocolors");
+
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
@@ -36,6 +37,8 @@ module.exports = async function generateDocFromSchema({
       baseURL,
     );
     const rootTypes = getSchemaMap(schema);
+
+    await renderer.emptyOutputDir();
 
     const pages = await Promise.all(
       Object.keys(rootTypes)

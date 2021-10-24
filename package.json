@@ -28,7 +28,6 @@
     "test": "jest",
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
-    "test:ci": "jest --runInBand --noStackTrace --ci",
     "test:smoke": "earthly +smoke-test",
     "test:stryker": "stryker run",
     "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
@@ -44,7 +43,6 @@
     "@graphql-tools/graphql-file-loader": "^7.1.0",
     "@graphql-tools/load": "^7.3.2",
     "@oclif/command": "^1.8.0",
-    "fs-extra": "^10.0.0",
     "graphql": "^15.6.0",
     "picocolors": "^1.0.0",
     "prettier": "^2.4.1"
@@ -63,7 +61,7 @@
     "jest": "^27.2.4",
     "jest-file-snapshot": "^0.5.0",
     "lodash.filter": "^4.6.0",
-    "mock-fs": "^5.0.0",
+    "mock-fs": "^5.1.1",
     "pinst": "^2.1.6"
   },
   "prettier": {

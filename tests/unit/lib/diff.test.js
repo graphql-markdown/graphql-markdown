@@ -1,7 +1,9 @@
-const path = require("path");
+const mockfs = require("mock-fs");
 
-const mock = require("mock-fs");
-const fs = require("fs"); // must be loaded after mock-fs
+const path = require("path");
+const { promises: fs } = require("fs"); // must be loaded after mock-fs
+
+const { fileExists } = require("../../../src/utils/fs");
 
 jest.mock("../../../src/lib/graphql");
 const graphql = require("../../../src/lib/graphql");
@@ -9,34 +11,34 @@ const graphql = require("../../../src/lib/graphql");
 jest.mock("@graphql-inspector/core");
 const inspector = require("@graphql-inspector/core");
 
-const FOLDER = "output";
-const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
-const HASH_FILE = `${FOLDER}/.schema`;
-
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
+const {
+  checkSchemaChanges,
+  saveSchemaHash,
+  saveSchemaFile,
+} = require("../../../src/lib/diff");
 
 describe("lib", () => {
+  const FOLDER = "output";
+  const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
+  const HASH_FILE = `${FOLDER}/.schema`;
+
   beforeEach(() => {
-    mock({ output: {} });
+    mockfs({ [FOLDER]: {} });
   });
 
   afterEach(() => {
-    mock.restore();
+    mockfs.restore();
   });
 
   describe("diff", () => {
-    describe("checkSchemaChanges()", () => {
-      const {
-        checkSchemaChanges,
-        saveSchemaHash,
-        saveSchemaFile,
-      } = require("../../../src/lib/diff");
+    const EXPECT_PATH = path.join(
+      __dirname,
+      "__expect__",
+      __OS__,
+      path.basename(__filename),
+    );
 
+    describe("checkSchemaChanges()", () => {
       test("returns true if no valid comparison method is selected", async () => {
         expect.hasAssertions();
 
@@ -83,7 +85,7 @@ describe("lib", () => {
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        const hasHashFile = fs.existsSync(HASH_FILE);
+        const hasHashFile = await fileExists(HASH_FILE);
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
 
         expect(hasHashFile).toBeFalsy();
@@ -148,7 +150,7 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
-        const hasSchemaFile = fs.existsSync(SCHEMA_FILE);
+        const hasSchemaFile = await fileExists(SCHEMA_FILE);
         const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
 
         expect(hasSchemaFile).toBeFalsy();
@@ -167,9 +169,9 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
 
         await saveSchemaFile("SCHEMA", FOLDER);
-        const file = await fs.promises.readFile(SCHEMA_FILE, "utf8");
+        const file = await fs.readFile(SCHEMA_FILE, "utf8");
 
-        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+        mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
         expect(file).toMatchFile(
           path.join(EXPECT_PATH, `saveSchemaFile.schema`),
@@ -189,9 +191,9 @@ describe("lib", () => {
 
         await saveSchemaHash("SCHEMA", FOLDER);
 
-        const file = await fs.promises.readFile(HASH_FILE, "utf8");
+        const file = await fs.readFile(HASH_FILE, "utf8");
 
-        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+        mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
         expect(file).toMatchFile(path.join(EXPECT_PATH, `saveSchemaHash.hash`));
       });
