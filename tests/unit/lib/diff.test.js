@@ -22,15 +22,8 @@ describe("lib", () => {
   const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
   const HASH_FILE = `${FOLDER}/.schema`;
 
-  const EXPECT_PATH = path.join(
-    __dirname,
-    "__expect__",
-    __OS__,
-    path.basename(__filename),
-  );
-
   beforeEach(() => {
-    mockfs({ output: {} });
+    mockfs({ [FOLDER]: {} });
   });
 
   afterEach(() => {
@@ -38,6 +31,13 @@ describe("lib", () => {
   });
 
   describe("diff", () => {
+    const EXPECT_PATH = path.join(
+      __dirname,
+      "__expect__",
+      __OS__,
+      path.basename(__filename),
+    );
+
     describe("checkSchemaChanges()", () => {
       test("returns true if no valid comparison method is selected", async () => {
         expect.hasAssertions();
