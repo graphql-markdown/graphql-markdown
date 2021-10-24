@@ -80,6 +80,7 @@ describe("lib", () => {
         loaders: {},
         directiveToGroupBy: "doc",
         directiveFieldForGrouping: "category",
+        fallbackCategory: "Miscellaneous",
       });
 
       const outputFolder = dirTree("output", {
