@@ -64,10 +64,7 @@
     "jest-file-snapshot": "^0.5.0",
     "lodash.filter": "^4.6.0",
     "mock-fs": "^5.0.0",
-    "npm": "^8.0.0",
-    "nyc": "^15.1.0",
-    "pinst": "^2.1.6",
-    "yarn": "^1.22.11"
+    "pinst": "^2.1.6"
   },
   "prettier": {
     "singleQuote": false,
