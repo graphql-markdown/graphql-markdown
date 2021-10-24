@@ -27,7 +27,7 @@ function getSchemaHash(schema) {
 async function getDiff(schemaNew, schemaOld) {
   return Promise.resolve(
     loadSchema(schemaOld, {
-      loaders: getDocumentLoaders(defaultLoaders),
+      loaders: getDocumentLoaders(defaultLoaders).loaders,
     }),
   ).then((schemaRef) => diff(schemaRef, schemaNew));
 }
