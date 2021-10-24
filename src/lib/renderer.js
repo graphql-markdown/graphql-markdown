@@ -13,11 +13,10 @@ module.exports = class Renderer {
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
-    this.emptyOutputDir();
   }
 
-  emptyOutputDir() {
-    fsExtra.emptyDirSync(this.outputDir);
+  async emptyOutputDir() {
+    await fsExtra.emptyDir(this.outputDir);
   }
 
   async renderRootTypes(typeName, type) {

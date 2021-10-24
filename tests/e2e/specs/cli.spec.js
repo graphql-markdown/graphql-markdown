@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 
-const cli = require("./lib/cli");
+const cli = require("../../helpers/cli");
 
 const rootDir = "/docusaurus2";
 

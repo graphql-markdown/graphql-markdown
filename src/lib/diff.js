@@ -19,8 +19,7 @@ const defaultLoaders = {
 
 function getSchemaHash(schema) {
   let printedSchema = printSchema(schema, { commentDescriptions: true });
-  let sum = crypto.createHash("sha256");
-  sum.update(printedSchema);
+  let sum = crypto.createHash("sha256").update(printedSchema);
   return sum.digest("hex");
 }
 

@@ -68,7 +68,8 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn global add fs-extra jest
-  COPY ./tests/e2e/specs ./__tests__
+  COPY ./tests/e2e/specs ./__tests__/e2e/specs
+  COPY ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
   RUN NODE_ENV=ci node --expose-gc /usr/local/bin/jest --logHeapUsage --detectOpenHandles
 

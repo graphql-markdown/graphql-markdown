@@ -34,6 +34,8 @@ module.exports = async function generateDocFromSchema({
     );
     const rootTypes = getSchemaMap(schema);
 
+    await renderer.emptyOutputDir();
+
     const pages = await Promise.all(
       Object.keys(rootTypes)
         .map((typeName) =>

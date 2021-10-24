@@ -1,6 +1,4 @@
 const path = require("path");
-
-const mock = require("mock-fs");
 const fs = require("fs"); // must be loaded after mock-fs
 
 jest.mock("../../../src/lib/graphql");
@@ -9,34 +7,34 @@ const graphql = require("../../../src/lib/graphql");
 jest.mock("@graphql-inspector/core");
 const inspector = require("@graphql-inspector/core");
 
-const FOLDER = "output";
-const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
-const HASH_FILE = `${FOLDER}/.schema`;
-
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
+const {
+  checkSchemaChanges,
+  saveSchemaHash,
+  saveSchemaFile,
+} = require("../../../src/lib/diff");
 
 describe("lib", () => {
+  const FOLDER = "output";
+  const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
+  const HASH_FILE = `${FOLDER}/.schema`;
+
+  const EXPECT_PATH = path.join(
+    __dirname,
+    "__expect__",
+    __OS__,
+    path.basename(__filename),
+  );
+
   beforeEach(() => {
-    mock({ output: {} });
+    fs.rmdirSync(FOLDER, { recursive: true });
   });
 
-  afterEach(() => {
-    mock.restore();
+  afterAll(() => {
+    fs.rmdirSync(FOLDER, { recursive: true });
   });
 
   describe("diff", () => {
     describe("checkSchemaChanges()", () => {
-      const {
-        checkSchemaChanges,
-        saveSchemaHash,
-        saveSchemaFile,
-      } = require("../../../src/lib/diff");
-
       test("returns true if no valid comparison method is selected", async () => {
         expect.hasAssertions();
 
@@ -160,7 +158,7 @@ describe("lib", () => {
         await saveSchemaFile("SCHEMA", FOLDER);
         const file = await fs.promises.readFile(SCHEMA_FILE, "utf8");
 
-        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+        // mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
         expect(file).toMatchFile(
           path.join(EXPECT_PATH, `saveSchemaFile.schema`),
@@ -182,7 +180,7 @@ describe("lib", () => {
 
         const file = await fs.promises.readFile(HASH_FILE, "utf8");
 
-        mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+        // mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
         expect(file).toMatchFile(path.join(EXPECT_PATH, `saveSchemaHash.hash`));
       });
