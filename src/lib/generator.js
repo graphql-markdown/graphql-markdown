@@ -2,12 +2,13 @@ const pico = require("picocolors");
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
-const { round, setUpCategorizationInfo } = require("./utils");
+const { round } = require("./utils");
 const {
   checkSchemaChanges,
   saveSchemaHash,
   saveSchemaFile,
 } = require("./diff");
+const CategoryInfo = require("./categoryInfo");
 
 const time = process.hrtime();
 
@@ -22,6 +23,7 @@ module.exports = async function generateDocFromSchema({
   loaders,
   directiveToGroupBy,
   directiveFieldForGrouping,
+  fallbackCategory,
 }) {
   const schema = await loadSchema(schemaLocation, {
     loaders: getDocumentLoaders(loaders),
@@ -30,34 +32,29 @@ module.exports = async function generateDocFromSchema({
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
 
   if (hasChanged) {
+    const rootTypes = getSchemaMap(schema);
+    const categoryInfo = new CategoryInfo(
+      rootTypes,
+      directiveToGroupBy,
+      directiveFieldForGrouping,
+      linkRoot,
+      baseURL,
+      fallbackCategory,
+    );
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot),
+      new Printer(schema, baseURL, linkRoot, categoryInfo),
       outputDir,
       baseURL,
+      categoryInfo,
     );
-    const rootTypes = getSchemaMap(schema);
-    if (directiveToGroupBy) {
-      setUpCategorizationInfo(
-        rootTypes,
-        directiveToGroupBy,
-        directiveFieldForGrouping,
-        linkRoot,
-      );
-    }
     const pages = await Promise.all(
       Object.keys(rootTypes)
         .map((typeName) =>
-          renderer.renderRootTypes(
-            typeName,
-            rootTypes[typeName],
-            directiveToGroupBy,
-          ),
+          renderer.renderRootTypes(typeName, rootTypes[typeName]),
         )
         .flat(),
     );
-    if (homepageLocation) {
-      await renderer.renderHomepage(homepageLocation);
-    }
+    await renderer.renderHomepage(homepageLocation);
     const sidebarPath = await renderer.renderSidebar();
 
     const [sec, msec] = process.hrtime(time);

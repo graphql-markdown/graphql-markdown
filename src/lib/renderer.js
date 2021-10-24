@@ -1,16 +1,16 @@
 const fs = require("fs").promises;
 const path = require("path");
-
 const fsExtra = require("fs-extra");
 
-const { toSlug, startCase, pathUrl, docLocations } = require("./utils");
+const { toSlug, startCase, pathUrl } = require("./utils");
 const { prettifyJavascript } = require("./prettier");
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL) {
+  constructor(printer, outputDir, baseURL, categoryInfo) {
+    this.categoryInfo = categoryInfo;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
@@ -21,7 +21,7 @@ module.exports = class Renderer {
     fsExtra.emptyDirSync(this.outputDir);
   }
 
-  async renderRootTypes(typeName, type, directiveToGroupBy) {
+  async renderRootTypes(typeName, type) {
     if (typeof type === "undefined" || type === null) {
       return undefined;
     }
@@ -49,7 +49,9 @@ module.exports = class Renderer {
         return this.renderTypeEntities(
           path.join(
             this.outputDir,
-            directiveToGroupBy ? docLocations[name].category : "",
+            this.categoryInfo && this.categoryInfo.directiveToGroupBy
+              ? this.categoryInfo.docLocations[name].category
+              : "",
             slug,
           ),
           name,
@@ -59,14 +61,14 @@ module.exports = class Renderer {
     );
   }
 
-  async renderTypeEntities(dirPath, name, type, directiveToGroupBy) {
+  async renderTypeEntities(dirPath, name, type) {
     if (typeof type === "undefined" || type === null) {
       return undefined;
     }
 
     const fileName = toSlug(name);
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
-    const content = this.printer.printType(fileName, type, directiveToGroupBy);
+    const content = this.printer.printType(fileName, type);
     await fsExtra.outputFile(filePath, content, "utf8");
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(

@@ -62,20 +62,30 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           "Field in directive for grouping",
           config.directiveFieldForGrouping,
         )
+        .option(
+          "-fc, --fallbackCategory <category",
+          "Fallback category when there is not specified",
+          config.fallbackCategory,
+        )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
           if (
-            (options.groupByDirective || options.directiveFieldForGrouping) &&
-            !(options.groupByDirective && options.directiveFieldForGrouping)
+            (options.groupByDirective ||
+              options.directiveFieldForGrouping ||
+              options.fallbackCategory) &&
+            !(
+              (options.groupByDirective && options.directiveFieldForGrouping) ||
+              options.fallbackCategory
+            )
           ) {
             throw new Error(
               "Need to specify both directive to group by and relevant field",
             );
           }
           await generateDocFromSchema({
-            baseURL: options.base || "",
+            baseURL: options.base,
             schemaLocation: options.schema,
-            outputDir: path.join(options.root, options.base || ""),
+            outputDir: path.join(options.root, options.base),
             linkRoot: options.link,
             homepageLocation: options.homepage,
             diffMethod: options.force ? "FORCE" : options.diff,
@@ -83,6 +93,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             loaders: config.loaders,
             directiveToGroupBy: options.groupByDirective,
             directiveFieldForGrouping: options.directiveFieldForGrouping,
+            fallbackCategory: options.fallbackCategory,
           });
         });
     },
