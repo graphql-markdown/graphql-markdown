@@ -26,6 +26,7 @@ const {
   getSchemaMap,
   isParametrizedField,
   isOperation,
+  getDocumentLoaders,
 } = require("../../../src/lib/graphql");
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
@@ -44,6 +45,37 @@ describe("lib", () => {
     beforeAll(async () => {
       schema = await loadSchema(SCHEMA_FILE, {
         loaders: [new GraphQLFileLoader()],
+      });
+    });
+
+    describe("getDocumentLoaders", () => {
+      test("returns loaders when plugin config loaders format is a string", () => {
+        const loaders = {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+        };
+        const { loaders: documentLoaders, loaderOptions } =
+          getDocumentLoaders(loaders);
+
+        expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
+        expect(loaderOptions).toMatchObject({});
+      });
+
+      test("returns loaders and configuration when plugin config loaders format is an object", () => {
+        const loaders = {
+          GraphQLFileLoader: {
+            module: "@graphql-tools/graphql-file-loader",
+            options: {
+              option1: true,
+            },
+          },
+        };
+        const { loaders: documentLoaders, loaderOptions } =
+          getDocumentLoaders(loaders);
+
+        expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
+        expect(loaderOptions).toMatchObject({
+          option1: true,
+        });
       });
     });
 

@@ -21,8 +21,11 @@ module.exports = async function generateDocFromSchema({
   tmpDir,
   loaders,
 }) {
+  const { loaders: documentLoaders, loaderOptions } =
+    getDocumentLoaders(loaders);
   const schema = await loadSchema(schemaLocation, {
-    loaders: getDocumentLoaders(loaders),
+    loaders: documentLoaders,
+    ...loaderOptions,
   });
 
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);

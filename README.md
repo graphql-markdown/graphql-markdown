@@ -96,9 +96,15 @@ You can declare as many loaders as you need using the structure:
 type className = string; // UrlLoader
 
 type moduleName = string; // "@graphql-tools/url-loader"
+type moduleOptions = { [option: string]: any };
+
+type module = { 
+  module: moduleName, 
+  options: moduleOptions | undefined 
+}
 
 type loaders = {
-  [className: className]: moduleName
+  [className: className]: moduleName | module
 }
 ```
 

@@ -37,11 +37,23 @@ function getDocumentLoaders(extraLoaders = {}) {
   const loadersList = { ...defaultLoaders, ...extraLoaders };
 
   var loaders = [];
+  var loaderOptions = {};
 
   Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
     try {
-      const { [className]: Loader } = require(graphqlDocumentLoader);
-      loaders.push(new Loader());
+      if (typeof graphqlDocumentLoader === "string") {
+        const { [className]: Loader } = require(graphqlDocumentLoader);
+        loaders.push(new Loader());
+      } else {
+        if (!graphqlDocumentLoader.module) {
+          throw new Error(
+            `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
+          );
+        }
+        const { [className]: Loader } = require(graphqlDocumentLoader.module);
+        loaders.push(new Loader());
+        Object.assign(loaderOptions, graphqlDocumentLoader.options);
+      }
     } catch (error) {
       console.warn(graphqlDocumentLoader, error.message);
     }
@@ -51,7 +63,7 @@ function getDocumentLoaders(extraLoaders = {}) {
     throw new Error("No GraphQL document loaders available.");
   }
 
-  return loaders;
+  return { loaders, loaderOptions };
 }
 
 function getDefaultValue(argument) {
