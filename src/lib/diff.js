@@ -1,7 +1,7 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const fsExtra = require("fs-extra");
+const { fileExists, readFile, saveFile } = require("../utils/fs");
 
 const { loadSchema, getDocumentLoaders, printSchema } = require("./graphql");
 const { diff } = require("@graphql-inspector/core");
@@ -42,15 +42,15 @@ async function checkSchemaChanges(
   const schemaRef = path.join(outputDir, SCHEMA_REF);
 
   if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_DIFF) {
-    if (fsExtra.existsSync(schemaRef)) {
+    if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
       hasDiff = schemaDiff.length > 0;
     }
   }
 
   if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_HASH) {
-    if (fsExtra.existsSync(hashFile)) {
-      const hash = await fsExtra.readFile(hashFile, "utf-8");
+    if (await fileExists(hashFile)) {
+      const hash = await readFile(hashFile);
       hasDiff = hashSchema != hash;
     }
   }
@@ -60,13 +60,13 @@ async function checkSchemaChanges(
 async function saveSchemaFile(schema, outputDir) {
   const schemaFile = path.join(outputDir, SCHEMA_REF);
   const schemaPrint = printSchema(schema);
-  await fsExtra.outputFile(schemaFile, schemaPrint);
+  await saveFile(schemaFile, schemaPrint);
 }
 
 async function saveSchemaHash(schema, outputDir) {
   const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
   const hashSchema = getSchemaHash(schema);
-  await fsExtra.outputFile(hashFile, hashSchema);
+  await saveFile(hashFile, hashSchema);
 }
 
 module.exports = { checkSchemaChanges, saveSchemaHash, saveSchemaFile };

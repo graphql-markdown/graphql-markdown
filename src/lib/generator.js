@@ -1,4 +1,5 @@
 const pico = require("picocolors");
+
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");

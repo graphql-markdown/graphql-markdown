@@ -1,35 +1,4 @@
 /**
- * Path functions
- */
-
-const pathUrl = require("path").posix;
-
-/**
- * Array functions
- */
-
-function toArray(param) {
-  if (param && typeof param === "object")
-    return Object.keys(param).map((key) => param[key]);
-  return undefined;
-}
-
-/**
- * Object functions
- */
-
-function hasProperty(obj, prop) {
-  return (
-    !!(obj && obj[prop]) ||
-    (obj instanceof Object && Object.prototype.hasOwnProperty.call(obj, prop))
-  );
-}
-
-function hasMethod(obj, prop) {
-  return hasProperty(obj, prop) && typeof obj[prop] === "function";
-}
-
-/**
  * String functions
  */
 
@@ -100,13 +69,9 @@ module.exports = {
   escapeMDX,
   firstUppercase,
   kebabCase,
-  hasMethod,
-  hasProperty,
-  pathUrl,
   prune,
   replaceDiacritics,
   startCase,
-  toArray,
   toHTMLUnicode,
   toSlug,
 };

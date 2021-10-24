@@ -1,4 +1,5 @@
 const mock = require("mock-fs");
+
 const path = require("path"); // to be loaded after mock-fs
 const dirTree = require("directory-tree");
 
@@ -22,7 +23,7 @@ describe("lib", () => {
       assets: {
         "generated.md": "Dummy homepage for tweet.graphql",
         "sidebar.json": mock.load(
-          require.resolve("../../../assets/sidebar.json"),
+          path.resolve(__dirname, "../../../assets/sidebar.json"),
           {
             lazy: false,
           },
@@ -33,6 +34,10 @@ describe("lib", () => {
   });
 
   afterEach(() => {
+    mock.restore();
+  });
+
+  afterAll(() => {
     mock.restore();
   });
 

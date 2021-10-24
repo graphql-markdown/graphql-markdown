@@ -1,6 +1,6 @@
-const path = require("path");
+const mock = require("mock-fs");
 
-const { mockfs: fs, Volume } = require("../../helpers/fs");
+const path = require("path");
 
 const dirTree = require("directory-tree");
 
@@ -27,25 +27,25 @@ describe("lib", () => {
       let baseURL = "graphql";
       let printerInstance;
 
-      beforeEach(async () => {
-        const vol = Volume.fromJSON({
+      beforeEach(() => {
+        mock({
+          node_modules: mock.load(
+            path.resolve(__dirname, "../../../node_modules"),
+          ),
+          [OUTPUT]: {},
           assets: {
             [HOMEPAGE]: "Test Homepage",
-            [SIDEBAR]: fs.readFileSync(
-              require.resolve(`../../../assets/${SIDEBAR}`),
+            [SIDEBAR]: mock.load(
+              path.resolve(__dirname, `../../../assets/${SIDEBAR}`),
             ),
           },
         });
-        fs.use(vol);
-
-        await fs.promises.rmdir(OUTPUT, { recursive: true });
-
         printerInstance = new Printer("SCHEMA", baseURL, "root");
         rendererInstance = new Renderer(printerInstance, OUTPUT, baseURL);
       });
 
-      afterAll(async () => {
-        await fs.promises.rmdir(OUTPUT, { recursive: true });
+      afterEach(() => {
+        mock.restore();
       });
 
       describe("renderTypeEntities()", () => {
@@ -66,6 +66,8 @@ describe("lib", () => {
             attributes: ["size", "type", "extension"],
           });
 
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderTypeEntities.json"),
@@ -83,6 +85,8 @@ describe("lib", () => {
             attributes: ["size", "type", "extension"],
           });
 
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderSidebar.json"),
           );
@@ -97,6 +101,8 @@ describe("lib", () => {
           const outputFolder = dirTree(OUTPUT, {
             attributes: ["size", "type", "extension"],
           });
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderHomepage.json"),
@@ -119,6 +125,8 @@ describe("lib", () => {
           const outputFolder = dirTree(OUTPUT, {
             attributes: ["size", "type", "extension"],
           });
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderRootTypes.json"),
