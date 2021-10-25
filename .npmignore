@@ -13,8 +13,6 @@ Earthfile
 .tmp-earthly-out
 docs/
 *.svg
-*.md
-!README.md
 output
 reports
 coverage
