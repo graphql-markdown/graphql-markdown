@@ -1,8 +1,15 @@
-const fs = require("fs").promises;
 const path = require("path");
-const fsExtra = require("fs-extra");
 
-const { toSlug, startCase, pathUrl } = require("./utils");
+const { toSlug, startCase } = require("../utils/string");
+const { pathUrl } = require("../utils/url");
+const {
+  saveFile,
+  emptyDir,
+  ensureDir,
+  copyFile,
+  readFile,
+} = require("../utils/fs");
+
 const { prettifyJavascript } = require("./prettier");
 
 const SIDEBAR = "sidebar-schema.js";
@@ -14,11 +21,10 @@ module.exports = class Renderer {
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
-    this.emptyOutputDir();
   }
 
-  emptyOutputDir() {
-    fsExtra.emptyDirSync(this.outputDir);
+  async emptyOutputDir() {
+    await emptyDir(this.outputDir);
   }
 
   async renderRootTypes(typeName, type) {
@@ -35,14 +41,10 @@ module.exports = class Renderer {
       }, {});
     }
 
-    await fsExtra.ensureDir(dirPath);
+    await ensureDir(dirPath);
 
     const filePath = path.join(dirPath, "_category_.yml");
-    await fsExtra.outputFile(
-      filePath,
-      `label: '${startCase(typeName)}'\n`,
-      "utf8",
-    );
+    await saveFile(filePath, `label: '${startCase(typeName)}'\n`);
 
     return Promise.all(
       Object.keys(type).map(async (name) => {
@@ -68,13 +70,16 @@ module.exports = class Renderer {
 
     const fileName = toSlug(name);
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
+
     const content = this.printer.printType(fileName, type);
-    await fsExtra.outputFile(filePath, content, "utf8");
+    await saveFile(filePath, content);
+
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
       /(?<category>[A-z0-9-_]+)[\\/]+(?<pageId>[A-z0-9-_]+).mdx?$/,
     );
     const slug = pathUrl.join(page.groups.category, page.groups.pageId);
+
     return { category: startCase(page.groups.category), slug: slug };
   }
 
@@ -99,7 +104,7 @@ module.exports = class Renderer {
     const content = prettifyJavascript(`module.exports = ${jsonSidebar};`);
 
     const filePath = path.join(this.outputDir, SIDEBAR);
-    await fsExtra.outputFile(filePath, content, "utf8");
+    await saveFile(filePath, content);
 
     return path.relative("./", filePath);
   }
@@ -109,13 +114,14 @@ module.exports = class Renderer {
     const destLocation = path.join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
 
-    await fsExtra.copy(homepageLocation, destLocation);
+    await copyFile(homepageLocation, destLocation);
 
-    const template = await fs.readFile(destLocation, "utf8");
+    const template = await readFile(destLocation);
 
     const data = template
+      .toString()
       .replace(/##baseURL##/gm, slug)
       .replace(/##generated-date-time##/gm, new Date().toLocaleString());
-    await fsExtra.outputFile(destLocation, data, "utf8");
+    await saveFile(destLocation, data);
   }
 };

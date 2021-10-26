@@ -1,6 +1,6 @@
 const { danger, fail, warn, schedule } = require("danger");
 const Diff = require("diff");
-const { filter } = require("lodash");
+const filter = require("lodash.filter");
 const pico = require("picocolors");
 
 const COLOR = {

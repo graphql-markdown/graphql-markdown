@@ -1,7 +1,7 @@
-const fs = require("fs-extra");
 const path = require("path");
+const { promises: fs } = require("fs");
 
-const cli = require("./lib/cli");
+const cli = require("../../helpers/cli");
 
 const rootDir = "/docusaurus2";
 
@@ -32,15 +32,7 @@ const messageNoUpdate = [
 
 describe("graphql-to-doc", () => {
   beforeAll(async () => {
-    fs.ensureDir(docsDir)
-      .then(() => {
-        fs.emptyDir(docsDir, (err) => {
-          if (err) return console.error(err);
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    fs.mkdir(docsDir, { recursive: true });
   });
 
   test("should return 0 with generated message when completed as first run", async () => {

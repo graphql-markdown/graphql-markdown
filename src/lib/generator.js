@@ -1,8 +1,8 @@
 const pico = require("picocolors");
+
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
-const { round } = require("./utils");
 const {
   checkSchemaChanges,
   saveSchemaHash,
@@ -25,8 +25,11 @@ module.exports = async function generateDocFromSchema({
   directiveFieldForGrouping,
   fallbackCategory,
 }) {
+  const { loaders: documentLoaders, loaderOptions } =
+    getDocumentLoaders(loaders);
   const schema = await loadSchema(schemaLocation, {
-    loaders: getDocumentLoaders(loaders),
+    loaders: documentLoaders,
+    ...loaderOptions,
   });
 
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
@@ -58,7 +61,7 @@ module.exports = async function generateDocFromSchema({
     const sidebarPath = await renderer.renderSidebar();
 
     const [sec, msec] = process.hrtime(time);
-    const duration = round(sec + msec / 1000000000, 3);
+    const duration = (sec + msec / 1e9).toFixed(3);
     console.info(
       pico.green(
         `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,

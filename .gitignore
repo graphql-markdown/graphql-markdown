@@ -12,3 +12,4 @@ coverage
 reports
 *.tgz
 .tmp-earthly-out
+output

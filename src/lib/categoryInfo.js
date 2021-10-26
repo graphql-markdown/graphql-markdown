@@ -1,5 +1,5 @@
 const pathUrl = require("path").posix;
-const { convertArrayToObject } = require("./utils");
+const { convertArrayToObject } = require("../utils/array.js");
 module.exports = class CategoryInfo {
   constructor(
     rootTypes,

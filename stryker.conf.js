@@ -1,4 +1,8 @@
 module.exports = {
+  commandRunner: {
+    command:
+      "NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand",
+  },
   coverageAnalysis: "perTest",
   jest: {
     config: {
