@@ -21,9 +21,7 @@ module.exports = async function generateDocFromSchema({
   diffMethod,
   tmpDir,
   loaders,
-  directiveToGroupBy,
-  directiveFieldForGrouping,
-  fallbackCategory,
+  groupByDirective
 }) {
   const { loaders: documentLoaders, loaderOptions } =
     getDocumentLoaders(loaders);
@@ -38,11 +36,9 @@ module.exports = async function generateDocFromSchema({
     const rootTypes = getSchemaMap(schema);
     const categoryInfo = new CategoryInfo(
       rootTypes,
-      directiveToGroupBy,
-      directiveFieldForGrouping,
       linkRoot,
       baseURL,
-      fallbackCategory,
+      groupByDirective
     );
     const renderer = new Renderer(
       new Printer(schema, baseURL, linkRoot, categoryInfo),

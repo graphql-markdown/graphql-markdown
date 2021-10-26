@@ -2,20 +2,16 @@ const { convertArrayToObject } = require("../utils/array");
 module.exports = class CategoryInfo {
   constructor(
     rootTypes,
-    directiveToGroupBy,
-    directiveFieldForGrouping,
     linkRoot,
     baseURL,
-    fallbackCategory,
+    groupByDirective
   ) {
     this.rootTypes = rootTypes;
-    this.directiveToGroupBy = directiveToGroupBy;
-    this.directiveFieldForGrouping = directiveFieldForGrouping;
     this.linkRoot = linkRoot;
-    this.group = {};
-    this.fallbackCategory = fallbackCategory;
     this.baseURL = baseURL;
-    if (this.directiveToGroupBy) {
+    this.groupByDirective = groupByDirective;
+    this.group = {};
+    if (this.groupByDirective.directive) {
       this.setUpCategorizationInfo();
     }
   }
@@ -40,21 +36,21 @@ module.exports = class CategoryInfo {
   }
   getGroup(allDirectives) {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
-      return this.fallbackCategory;
+      return this.groupByDirective.fallback;
     }
     let categoryInDirective;
     allDirectives.forEach((directive) => {
       if (
-        directive.name.value === this.directiveToGroupBy &&
+        directive.name.value === this.groupByDirective.directive &&
         directive.arguments.length > 0
       ) {
         directive.arguments.forEach((argument) => {
-          if (argument.name.value === this.directiveFieldForGrouping) {
+          if (argument.name.value === this.groupByDirective.field) {
             categoryInDirective = argument.value.value;
           }
         });
       }
     });
-    return categoryInDirective || this.fallbackCategory;
+    return categoryInDirective || this.groupByDirective.fallback;
   }
 };
