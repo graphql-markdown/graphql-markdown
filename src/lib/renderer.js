@@ -52,7 +52,7 @@ module.exports = class Renderer {
           path.join(
             this.outputDir,
             this.categoryInfo && this.categoryInfo.directiveToGroupBy
-              ? this.categoryInfo.docLocations[name].category
+              ? this.categoryInfo.group[name]
               : "",
             slug,
           ),

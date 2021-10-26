@@ -60,26 +60,19 @@ module.exports = class Printer {
         category = "directives";
         break;
     }
-    if (
-      this.categoryInfo &&
-      this.categoryInfo.directiveToGroupBy &&
-      this.categoryInfo.docLocations[graphLQLNamedType.name] &&
-      this.categoryInfo.docLocations[graphLQLNamedType.name].link
-    ) {
-      return `[\`${name}\`](${pathUrl.join(
-        this.categoryInfo.docLocations[graphLQLNamedType.name].link,
-        toSlug(graphLQLNamedType.name),
-      )})`;
-    } else if (category && graphLQLNamedType) {
-      return `[\`${name}\`](${pathUrl.join(
-        this.linkRoot,
-        this.baseURL,
-        category,
-        toSlug(graphLQLNamedType),
-      )})`;
-    } else {
-      return `\`${name}\``;
-    }
+    if (category && graphLQLNamedType) {
+       const group  = this.categoryInfo && this.categoryInfo.group[graphLQLNamedType.name] || "";
+       return `[\`${name}\`](${pathUrl.join(
+         this.linkRoot,
+         this.baseURL,
+         toSlug(group),
+         toSlug(category),
+         toSlug(graphLQLNamedType.name || graphLQLNamedType),
+
+       )})`;
+     } else {
+       return `\`${name}\``;
+     }
   }
 
   printSection(values, section, level = HEADER_SECTION_LEVEL) {

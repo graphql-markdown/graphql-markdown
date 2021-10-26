@@ -1,4 +1,4 @@
-const { pathUrl } = require("../utils/url");
+const pathUrl = require("../utils/url");
 const { convertArrayToObject } = require("../utils/array");
 module.exports = class CategoryInfo {
   constructor(
@@ -13,7 +13,7 @@ module.exports = class CategoryInfo {
     this.directiveToGroupBy = directiveToGroupBy;
     this.directiveFieldForGrouping = directiveFieldForGrouping;
     this.linkRoot = linkRoot;
-    this.docLocations = {};
+    this.group = {};
     this.fallbackCategory = fallbackCategory;
     this.baseURL = baseURL;
     if (this.directiveToGroupBy) {
@@ -21,7 +21,6 @@ module.exports = class CategoryInfo {
     }
   }
   setUpCategorizationInfo() {
-    let category;
     let allDirectves;
     Object.keys(this.rootTypes).forEach((typeName) => {
       if (this.rootTypes[typeName]) {
@@ -35,21 +34,12 @@ module.exports = class CategoryInfo {
             allDirectves =
               this.rootTypes[typeName][name]["astNode"]["directives"];
           }
-          category = this.getCategory(allDirectves);
-          this.docLocations[name] = {
-            link: `${pathUrl.join(
-              this.linkRoot,
-              this.baseURL,
-              category,
-              typeName,
-            )}`,
-            category,
-          };
+          this.group[name] = this.getGroup(allDirectves);
         });
       }
     });
   }
-  getCategory(allDirectives) {
+  getGroup(allDirectives) {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.fallbackCategory;
     }
