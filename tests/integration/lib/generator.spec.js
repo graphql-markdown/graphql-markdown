@@ -2,7 +2,7 @@ const mockfs = require("mock-fs");
 
 const path = require("path");
 const dirTree = require("directory-tree");
-const fs = require("fs");
+
 const generateDocFromSchema = require("../../../src/lib/generator");
 
 const EXPECT_PATH = path.join(
