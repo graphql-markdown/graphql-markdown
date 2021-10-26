@@ -1,4 +1,3 @@
-const pathUrl = require("../utils/url");
 const { convertArrayToObject } = require("../utils/array");
 module.exports = class CategoryInfo {
   constructor(
