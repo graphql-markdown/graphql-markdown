@@ -53,34 +53,23 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           config.tmpDir,
         )
         .option(
-          "-gbd, --groupByDirective <directive>",
+          "-gbd, --groupByDirective <@directive(field|=fallback)>",
           "Group Documentation By Directive",
           config.groupByDirective,
         )
-        .option(
-          "-fg, --directiveFieldForGrouping <directiveField>",
-          "Field in directive for grouping",
-          config.directiveFieldForGrouping,
-        )
-        .option(
-          "-fc, --fallbackCategory <category",
-          "Fallback category when there is not specified",
-          config.fallbackCategory,
-        )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          if (
-            (options.groupByDirective ||
-              options.directiveFieldForGrouping ||
-              options.fallbackCategory) &&
-            !(
-              (options.groupByDirective && options.directiveFieldForGrouping) ||
-              options.fallbackCategory
-            )
-          ) {
-            throw new Error(
-              "Need to specify both directive to group by and relevant field",
+          const regex =
+            /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+
+          let groupByDirective;
+          if (regex.test(options.groupByDirective)) {
+            groupByDirective = Object.assign(
+              {},
+              regex.exec(options.groupByDirective).groups,
             );
+          } else {
+            throw new Exception(`Invalid "${options.groupByDirective}"`);
           }
           await generateDocFromSchema({
             baseURL: options.base,
@@ -91,9 +80,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
-            directiveToGroupBy: options.groupByDirective,
-            directiveFieldForGrouping: options.directiveFieldForGrouping,
-            fallbackCategory: options.fallbackCategory,
+            groupByDirective,
           });
         });
     },
