@@ -99,7 +99,7 @@ describe("lib", () => {
       expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
         path.join(
           EXPECT_PATH,
-          `generateDocFromSchemaWithGroupingOutputFolder.hash`,
+          `generateDocFromSchemaWithGroupingOutputFolder`,
         ),
       );
     });
