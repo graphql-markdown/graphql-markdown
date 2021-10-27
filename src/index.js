@@ -68,7 +68,8 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
               {},
               regex.exec(options.groupByDirective).groups,
             );
-            groupByDirective.fallback = groupByDirective.fallback || 'Miscellaneous'
+            groupByDirective.fallback =
+              groupByDirective.fallback || "Miscellaneous";
           } else {
             throw new Exception(`Invalid "${options.groupByDirective}"`);
           }

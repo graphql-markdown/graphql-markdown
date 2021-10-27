@@ -1,11 +1,6 @@
 const { convertArrayToObject } = require("../utils/array");
 module.exports = class CategoryInfo {
-  constructor(
-    rootTypes,
-    linkRoot,
-    baseURL,
-    groupByDirective
-  ) {
+  constructor(rootTypes, linkRoot, baseURL, groupByDirective) {
     this.rootTypes = rootTypes;
     this.linkRoot = linkRoot;
     this.baseURL = baseURL;
@@ -38,12 +33,12 @@ module.exports = class CategoryInfo {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.groupByDirective.fallback;
     }
-    let categoryInDirective
+    let categoryInDirective;
     allDirectives.forEach((directive) => {
-      if (
-        directive.name.value === this.groupByDirective.directive
-      ) {
-        const field = directive.arguments.filter( ({ name }) => name.value === this.groupByDirective.field);
+      if (directive.name.value === this.groupByDirective.directive) {
+        const field = directive.arguments.filter(
+          ({ name }) => name.value === this.groupByDirective.field,
+        );
         categoryInDirective = field[0].value.value;
       }
     });

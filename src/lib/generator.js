@@ -21,7 +21,7 @@ module.exports = async function generateDocFromSchema({
   diffMethod,
   tmpDir,
   loaders,
-  groupByDirective
+  groupByDirective,
 }) {
   const { loaders: documentLoaders, loaderOptions } =
     getDocumentLoaders(loaders);
@@ -38,7 +38,7 @@ module.exports = async function generateDocFromSchema({
       rootTypes,
       linkRoot,
       baseURL,
-      groupByDirective
+      groupByDirective,
     );
     const renderer = new Renderer(
       new Printer(schema, baseURL, linkRoot, categoryInfo),

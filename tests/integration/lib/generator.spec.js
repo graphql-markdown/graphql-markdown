@@ -86,7 +86,11 @@ describe("lib", () => {
         diffMethod: "SCHEMA-DIFF",
         tmpDir: "tmp",
         loaders: {},
-        groupByDirective:  { directive: "doc", field: "category", fallback: "Miscellaneous" }
+        groupByDirective: {
+          directive: "doc",
+          field: "category",
+          fallback: "Miscellaneous",
+        },
       });
 
       const outputFolder = dirTree("output", {
