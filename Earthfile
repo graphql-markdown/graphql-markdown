@@ -99,9 +99,7 @@ build-demo:
   RUN yarn build
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
-  IF [ "$flag" = 'update' ]
-    SAVE ARTIFACT --force ./build AS LOCAL docs
-  END
+  SAVE ARTIFACT --force ./build AS LOCAL docs
   SAVE IMAGE graphql-markdown:demo
 
 publish:
