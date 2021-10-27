@@ -19,6 +19,7 @@ lint:
     RUN yarn lint --fix
     SAVE ARTIFACT --if-exists ./ AS LOCAL ./
   ELSE
+    ENV NODE_ENV=ci
     RUN yarn prettier --check
     RUN yarn lint
   END
@@ -30,7 +31,8 @@ unit-test:
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
-    RUN NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
+    ENV NODE_ENV=ci
+    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
   END
 
 integration-test:
@@ -40,13 +42,16 @@ integration-test:
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
-    RUN NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
+    ENV NODE_ENV=ci
+    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
   END
 
 mutation-test:
   FROM +deps
   RUN yarn stryker run --logLevel error --inPlace
-  SAVE ARTIFACT reports AS LOCAL ./reports
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+    SAVE ARTIFACT reports AS LOCAL ./reports
+  END
 
 smoke-init:
   FROM +build
@@ -71,30 +76,33 @@ smoke-test:
   COPY ./tests/e2e/specs ./__tests__/e2e/specs
   COPY ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
-  RUN NODE_ENV=ci node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
+  ENV NODE_ENV=ci
+  RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
+  ENTRYPOINT ["npx", "docusaurus", "graphql-to-doc"]
 
-build-demo:
-  ARG flag
+smoke-run:
+  ARG OPTIONS=
   FROM +smoke-init
   WORKDIR /docusaurus2
-  RUN npx docusaurus graphql-to-doc
+  RUN npx docusaurus graphql-to-doc $OPTIONS
   RUN yarn build
-  IF [ "$flag" != 'ignore' ] && [ ! $EARTHLY_CI ]
-    SAVE ARTIFACT --force ./build AS LOCAL docs
-  END
 
-image-demo:
+build-demo:
   ARG port=8080
-  FROM +build-demo
+  FROM +smoke-init
   WORKDIR /docusaurus2
+  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force
+  RUN yarn build
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
+  SAVE ARTIFACT --force ./build AS LOCAL docs
   SAVE IMAGE graphql-markdown:demo
 
 publish:
   FROM +all
   GIT CLONE --branch main https://github.com/edno/graphql-markdown.git /graphql-markdown
   WORKDIR /graphql-markdown
+  RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
   RUN --secret NPM_TOKEN=+secrets/token npm publish
 
 all:
