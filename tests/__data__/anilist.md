@@ -13,7 +13,10 @@ This documentation has been automatically generated using [AniList APIv2](https:
   "rootPath": "./docs",
   "baseURL": "schema",
   "linkRoot": "/",
-  "homepage": "data/anilist.md"
+  "homepage": "data/anilist.md",
+  "loaders": {
+    "UrlLoader": "@graphql-tools/url-loader"
+  }
 }
 ```
 
