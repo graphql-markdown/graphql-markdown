@@ -47,11 +47,9 @@ module.exports = async function generateDocFromSchema({
       categoryInfo,
     );
     const pages = await Promise.all(
-      Object.keys(rootTypes)
-        .map((typeName) =>
-          renderer.renderRootTypes(typeName, rootTypes[typeName]),
-        )
-        .flat(),
+      Object.keys(rootTypes).map((typeName) =>
+        renderer.renderRootTypes(typeName, rootTypes[typeName]),
+      ),
     );
     await renderer.renderHomepage(homepageLocation);
     const sidebarPath = await renderer.renderSidebar();
@@ -65,7 +63,9 @@ module.exports = async function generateDocFromSchema({
     );
     console.log(
       pico.blue(
-        `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`,
+        `${
+          pages.flat().length
+        } pages generated in ${duration}s from schema "${schemaLocation}".`,
       ),
     );
     console.info(

@@ -42,7 +42,6 @@
     "@graphql-inspector/core": "^3.0.1",
     "@graphql-tools/graphql-file-loader": "^7.1.0",
     "@graphql-tools/load": "^7.3.2",
-    "@oclif/command": "^1.8.0",
     "graphql": "^15.6.0",
     "picocolors": "^1.0.0",
     "prettier": "^2.4.1"
@@ -56,6 +55,7 @@
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.0.1",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.2",
     "jest": "^27.2.4",
@@ -80,63 +80,11 @@
       }
     ]
   },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "es6": true,
-      "jest": true,
-      "commonjs": true,
-      "jest/globals": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended",
-      "prettier"
-    ],
-    "plugins": [
-      "jest"
-    ],
-    "globals": {
-      "__OS__": "writable"
-    },
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "extensions": [
-            ".js"
-          ]
-        }
-      }
-    },
-    "parserOptions": {
-      "ecmaVersion": 11,
-      "sourceType": "module"
-    },
-    "overrides": [
-      {
-        "files": [
-          "tests/**/*.js"
-        ],
-        "extends": [
-          "eslint:recommended",
-          "plugin:prettier/recommended",
-          "prettier",
-          "plugin:jest/recommended",
-          "plugin:jest/style"
-        ]
-      }
-    ],
-    "rules": {
-      "brace-style": [
-        2,
-        "1tbs",
-        {
-          "allowSingleLine": false
-        }
-      ]
-    }
-  },
   "directories": {
     "test": "tests"
+  },
+  "engineStrict" : true,
+  "engines": {
+    "node": ">=14.14.0"
   }
 }
