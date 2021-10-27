@@ -14,7 +14,7 @@ on:
       - '**.yml'
       - '!dangerfile.js'
       - '!.github'
-      - '.github/workflows/e2e.yml'
+      - '.github/workflows/smoke.yml'
 
 jobs:
   smoke:
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.7.0
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -32,6 +32,13 @@ jobs:
 
       - name: Run Smoke Tests
         run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+        env:
+          EARTHLY_NO_CACHE: true
 
-      - name: Docusaurus Production Smoke Build
-        run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+build-demo
+      - name: Docusaurus Production Smoke Build without parameters and local schema
+        run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+
+      - name: Docusaurus Production Smoke Build with parameters and remote schema
+        run: earthly --ci --build-arg OPTIONS="$OPTIONS" github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        env:
+          OPTIONS: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
