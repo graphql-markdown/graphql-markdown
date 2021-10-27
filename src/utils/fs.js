@@ -4,7 +4,7 @@ const readFile = fs.readFile;
 const copyFile = fs.copyFile;
 
 async function emptyDir(dirpath) {
-  await fs.rmdir(dirpath, { recursive: true });
+  await fs.rm(dirpath, { recursive: true });
   await ensureDir(dirpath);
 }
 
