@@ -32,6 +32,8 @@ jobs:
 
       - name: Run Smoke Tests
         run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+        env:
+          EARTHLY_NO_CACHE: true
 
       - name: Docusaurus Production Smoke Build without parameters and local schema
         run: earthly --ci github.com/edno/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
