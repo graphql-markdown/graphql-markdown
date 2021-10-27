@@ -61,18 +61,20 @@ module.exports = class Printer {
         break;
     }
     if (category && graphLQLNamedType) {
-       const group  = this.categoryInfo && this.categoryInfo.group[graphLQLNamedType.name] || "";
-       return `[\`${name}\`](${pathUrl.join(
-         this.linkRoot,
-         this.baseURL,
-         toSlug(group),
-         toSlug(category),
-         toSlug(graphLQLNamedType.name || graphLQLNamedType),
-
-       )})`;
-     } else {
-       return `\`${name}\``;
-     }
+      const group =
+        (this.categoryInfo &&
+          this.categoryInfo.group[graphLQLNamedType.name]) ||
+        "";
+      return `[\`${name}\`](${pathUrl.join(
+        this.linkRoot,
+        this.baseURL,
+        toSlug(group),
+        toSlug(category),
+        toSlug(graphLQLNamedType.name || graphLQLNamedType),
+      )})`;
+    } else {
+      return `\`${name}\``;
+    }
   }
 
   printSection(values, section, level = HEADER_SECTION_LEVEL) {

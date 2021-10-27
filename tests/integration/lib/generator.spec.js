@@ -86,9 +86,7 @@ describe("lib", () => {
         diffMethod: "SCHEMA-DIFF",
         tmpDir: "tmp",
         loaders: {},
-        directiveToGroupBy: "doc",
-        directiveFieldForGrouping: "category",
-        fallbackCategory: "Miscellaneous",
+        groupByDirective:  { directive: "doc", field: "category", fallback: "Miscellaneous" }
       });
 
       const outputFolder = dirTree("output", {
@@ -97,10 +95,7 @@ describe("lib", () => {
 
       mockfs.restore();
       expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-        path.join(
-          EXPECT_PATH,
-          `generateDocFromSchemaWithGroupingOutputFolder`,
-        ),
+        path.join(EXPECT_PATH, `generateDocFromSchemaWithGroupingOutputFolder`),
       );
     });
   });
