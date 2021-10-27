@@ -96,7 +96,7 @@ build-demo:
   RUN yarn build
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
-  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  IF [ "$flag" = 'update' ]
     SAVE ARTIFACT --force ./build AS LOCAL docs
   END
   SAVE IMAGE graphql-markdown:demo
