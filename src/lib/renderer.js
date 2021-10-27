@@ -51,7 +51,7 @@ module.exports = class Renderer {
         return this.renderTypeEntities(
           path.join(
             this.outputDir,
-            this.categoryInfo && this.categoryInfo.directiveToGroupBy
+            this.categoryInfo && this.categoryInfo.groupByDirective
               ? this.categoryInfo.group[name]
               : "",
             slug,
