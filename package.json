@@ -85,6 +85,6 @@
   },
   "engineStrict" : true,
   "engines": {
-    "node": ">=14"
+    "node": ">=14.14.0"
   }
 }
