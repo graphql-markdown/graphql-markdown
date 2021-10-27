@@ -110,7 +110,7 @@ publish:
   RUN --secret NPM_TOKEN=+secrets/token npm publish
 
 all:
-  BUILD +build
+  BUILD +build-package
   BUILD +lint
   BUILD +unit-test
   BUILD +integration-test
