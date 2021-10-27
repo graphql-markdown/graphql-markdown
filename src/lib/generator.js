@@ -41,11 +41,9 @@ module.exports = async function generateDocFromSchema({
     await renderer.emptyOutputDir();
 
     const pages = await Promise.all(
-      Object.keys(rootTypes)
-        .map((typeName) =>
-          renderer.renderRootTypes(typeName, rootTypes[typeName]),
-        )
-        .flat(),
+      Object.keys(rootTypes).map((typeName) =>
+        renderer.renderRootTypes(typeName, rootTypes[typeName]),
+      ),
     );
 
     await renderer.renderHomepage(homepageLocation);
@@ -60,7 +58,9 @@ module.exports = async function generateDocFromSchema({
     );
     console.log(
       pico.blue(
-        `${pages.length} pages generated in ${duration}s from schema "${schemaLocation}".`,
+        `${
+          pages.flat().length
+        } pages generated in ${duration}s from schema "${schemaLocation}".`,
       ),
     );
     console.info(
