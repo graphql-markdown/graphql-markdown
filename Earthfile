@@ -7,10 +7,6 @@ deps:
     COPY . .
     RUN yarn install --frozen-lockfile
 
-build:
-  FROM +deps
-  RUN yarn pack --filename docusaurus2-graphql-doc-generator.tgz
-
 lint: 
   ARG flag
   FROM +deps
@@ -53,13 +49,20 @@ mutation-test:
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
-smoke-init:
-  FROM +build
+build-package:
+  FROM +deps
+  RUN yarn pack --filename docusaurus2-graphql-doc-generator.tgz
+
+build-docusaurus:
+  FROM +build-package
   WORKDIR /
   RUN npx --quiet @docusaurus/init@latest init docusaurus2 classic
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN yarn install
+
+smoke-init:
+  FROM +build-docusaurus
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   RUN yarn add @graphql-tools/url-loader
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
