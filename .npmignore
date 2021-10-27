@@ -16,3 +16,4 @@ docs/
 output
 reports
 coverage
+.eslintrc.json
