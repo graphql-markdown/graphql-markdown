@@ -14,7 +14,7 @@ on:
       - '**.yml'
       - '!dangerfile.js'
       - '!.github'
-      - '.github/workflows/e2e.yml'
+      - '.github/workflows/smoke.yml'
 
 jobs:
   smoke:
