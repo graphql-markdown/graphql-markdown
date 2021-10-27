@@ -6,7 +6,7 @@
     "commonjs": true,
     "jest/globals": true
   },
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended", "prettier", "plugin:node/recommended"],
   "plugins": ["jest"],
   "globals": {
     "__OS__": "writable"
@@ -35,6 +35,7 @@
     }
   ],
   "rules": {
+    "node/no-deprecated-api": 2,
     "brace-style": [
       2,
       "1tbs",
