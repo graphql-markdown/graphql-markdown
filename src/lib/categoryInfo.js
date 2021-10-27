@@ -11,7 +11,7 @@ module.exports = class CategoryInfo {
     this.baseURL = baseURL;
     this.groupByDirective = groupByDirective;
     this.group = {};
-    if (this.groupByDirective.directive) {
+    if (this.groupByDirective) {
       this.setUpCategorizationInfo();
     }
   }
@@ -38,17 +38,13 @@ module.exports = class CategoryInfo {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.groupByDirective.fallback;
     }
-    let categoryInDirective;
+    let categoryInDirective
     allDirectives.forEach((directive) => {
       if (
-        directive.name.value === this.groupByDirective.directive &&
-        directive.arguments.length > 0
+        directive.name.value === this.groupByDirective.directive
       ) {
-        directive.arguments.forEach((argument) => {
-          if (argument.name.value === this.groupByDirective.field) {
-            categoryInDirective = argument.value.value;
-          }
-        });
+        const field = directive.arguments.filter( ({ name }) => name.value === this.groupByDirective.field);
+        categoryInDirective = field[0].value.value;
       }
     });
     return categoryInDirective || this.groupByDirective.fallback;
