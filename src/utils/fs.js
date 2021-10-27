@@ -4,12 +4,14 @@ const readFile = fs.readFile;
 const copyFile = fs.copyFile;
 
 async function emptyDir(dirpath) {
-  await fs.rm(dirpath, { recursive: true });
+  await fs.rm(dirpath, { recursive: true, force: true });
   await ensureDir(dirpath);
 }
 
 async function ensureDir(dirpath) {
-  await fs.mkdir(dirpath, { recursive: true });
+  if (!fileExists(dirpath)) {
+    await fs.mkdir(dirpath, { recursive: true });
+  }
 }
 
 async function fileExists(filepath) {
