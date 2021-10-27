@@ -88,6 +88,7 @@ smoke-run:
   RUN yarn build
 
 build-demo:
+  ARG flag
   ARG port=8080
   FROM +smoke-init
   WORKDIR /docusaurus2
@@ -95,7 +96,9 @@ build-demo:
   RUN yarn build
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
-  SAVE ARTIFACT --force ./build AS LOCAL docs
+  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+    SAVE ARTIFACT --force ./build AS LOCAL docs
+  END
   SAVE IMAGE graphql-markdown:demo
 
 publish:
