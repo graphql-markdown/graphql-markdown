@@ -42,7 +42,6 @@
     "@graphql-inspector/core": "^3.0.1",
     "@graphql-tools/graphql-file-loader": "^7.1.0",
     "@graphql-tools/load": "^7.3.2",
-    "@oclif/command": "^1.8.0",
     "graphql": "^15.6.0",
     "picocolors": "^1.0.0",
     "prettier": "^2.4.1"
