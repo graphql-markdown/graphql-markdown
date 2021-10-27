@@ -82,5 +82,9 @@
   },
   "directories": {
     "test": "tests"
+  },
+  "engineStrict" : true,
+  "engines": {
+    "node": ">=14"
   }
 }
