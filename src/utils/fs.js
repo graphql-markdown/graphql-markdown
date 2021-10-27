@@ -9,7 +9,7 @@ async function emptyDir(dirpath) {
 }
 
 async function ensureDir(dirpath) {
-  if (!fileExists(dirpath)) {
+  if (!(await fileExists(dirpath))) {
     await fs.mkdir(dirpath, { recursive: true });
   }
 }
