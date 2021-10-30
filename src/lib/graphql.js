@@ -24,7 +24,7 @@ const {
 } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
 
-const { hasMethod, hasProperty } = require("../utils/object");
+const { hasMethod, hasProperty } = require("../utils/scalars/object");
 
 const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
