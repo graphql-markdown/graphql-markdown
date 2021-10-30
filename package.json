@@ -23,17 +23,11 @@
   "scripts": {
     "prettier": "prettier \"{src,tests,assets}/**/*.{js,json,md}\"",
     "lint": "eslint \"{src,tests,assets}/**/*.js\"",
-    "danger": "danger local -b main --failOnErrors",
-    "danger:ci": "danger ci -b main",
     "test": "jest",
     "test:unit": "jest --projects tests/unit",
     "test:integration": "jest --projects tests/integration",
     "test:smoke": "earthly +smoke-test",
-    "test:stryker": "stryker run",
-    "test:stryker:ci": "stryker run --reporters=progress-append-only --reporters=clear-text",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "demo": "earthly +image && docker run --rm --name graphql-markdown-demo -p 8080:8080/tcp graphql-markdown:demo",
-    "build:smoke": "earthly +image",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
