@@ -1,7 +1,7 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const { fileExists, readFile, saveFile } = require("../utils/fs");
+const { fileExists, readFile, saveFile } = require("../utils/helpers/fs");
 
 const { loadSchema, getDocumentLoaders, printSchema } = require("./graphql");
 const { diff } = require("@graphql-inspector/core");
