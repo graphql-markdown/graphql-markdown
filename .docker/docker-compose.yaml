@@ -1,8 +1,6 @@
 version: "3.8"
 services:
-  backend:
+  graphql-markdown:
     build:
       context: .
       target: development
-    args:
-    - nodeVersion=lts

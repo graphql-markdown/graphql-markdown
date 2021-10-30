@@ -1,6 +1,4 @@
-ARG nodeVersion=lts
-
-FROM node:$nodeVersion-alpine as build  
+FROM node:lts-alpine as build  
 WORKDIR /node/src/github.com/edno/graphql-markdown
 COPY . .
 
