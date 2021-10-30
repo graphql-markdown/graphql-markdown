@@ -3,4 +3,4 @@ services:
   graphql-markdown:
     build:
       context: .
-      target: development
+      target: build
