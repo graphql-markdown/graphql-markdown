@@ -3,7 +3,7 @@ const mockfs = require("mock-fs");
 const path = require("path");
 const { promises: fs } = require("fs"); // must be loaded after mock-fs
 
-const { fileExists } = require("../../../src/utils/fs");
+const { fileExists } = require("../../../src/utils/helpers/fs");
 
 jest.mock("../../../src/lib/graphql");
 const graphql = require("../../../src/lib/graphql");

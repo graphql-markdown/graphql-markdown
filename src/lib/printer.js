@@ -1,7 +1,3 @@
-const { toSlug, escapeMDX } = require("../utils/string");
-const { hasProperty, hasMethod } = require("../utils/object");
-const { pathUrl } = require("../utils/url");
-
 const {
   isEnumType,
   isUnionType,
@@ -19,7 +15,10 @@ const {
   isListType,
 } = require("./graphql");
 
-const { prettifyMarkdown } = require("./prettier");
+const { toSlug, escapeMDX } = require("../utils/scalars/string");
+const { hasProperty, hasMethod } = require("../utils/scalars/object");
+const { pathUrl } = require("../utils/scalars/url");
+const { prettifyMarkdown } = require("../utils/helpers/prettier");
 
 const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";

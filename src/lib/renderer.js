@@ -1,16 +1,15 @@
 const path = require("path");
 
-const { toSlug, startCase } = require("../utils/string");
-const { pathUrl } = require("../utils/url");
+const { toSlug, startCase } = require("../utils/scalars/string");
+const { pathUrl } = require("../utils/scalars/url");
+const { prettifyJavascript } = require("../utils/helpers/prettier");
 const {
   saveFile,
   emptyDir,
   ensureDir,
   copyFile,
   readFile,
-} = require("../utils/fs");
-
-const { prettifyJavascript } = require("./prettier");
+} = require("../utils/helpers/fs");
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";

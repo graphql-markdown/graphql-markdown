@@ -1,4 +1,4 @@
-const { toSlug, escapeMDX } = require("../../../src/utils/string");
+const { toSlug, escapeMDX } = require("../../../../src/utils/scalars/string");
 
 describe("utils", () => {
   describe("string", () => {
