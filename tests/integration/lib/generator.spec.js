@@ -78,6 +78,8 @@ describe("lib", () => {
     });
     
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
+      expect.assertions(1);
+      
       await generateDocFromSchema({
         baseURL: "graphql",
         schemaLocation: "__data__/schema_with_grouping.graphql",
