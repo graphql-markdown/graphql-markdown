@@ -60,17 +60,16 @@ module.exports = class Printer {
         break;
     }
     if (category && graphLQLNamedType) {
-      const group =
-        (this.group &&
-          this.group.group &&
-          this.group.group[graphLQLNamedType.name]) ||
-        "";
+      name = graphLQLNamedType.name || graphLQLNamedType;
+      const group = toSlug(
+        hasProperty(this.group, name) ? this.group[name] : "",
+      )
       return `[\`${name}\`](${pathUrl.join(
         this.linkRoot,
         this.baseURL,
-        toSlug(group),
-        toSlug(category),
-        toSlug(graphLQLNamedType.name || graphLQLNamedType),
+        group,
+        category,
+        toSlug(name),
       )})`;
     } else {
       return `\`${name}\``;
