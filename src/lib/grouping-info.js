@@ -11,7 +11,7 @@ module.exports = class GroupingInfo {
     }
   }
   setUpCategorizationInfo() {
-    let allDirectves;
+    let allDirectives;
     Object.keys(this.rootTypes).forEach((typeName) => {
       if (this.rootTypes[typeName]) {
         if (Array.isArray(this.rootTypes[typeName])) {
