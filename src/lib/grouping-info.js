@@ -26,19 +26,22 @@ module.exports = class GroupInfo {
   }
 
   getGroup(allDirectives) {
+    let group = this.groupByDirective.fallback; // default value is fallback, and it will be only overridden if a group is found
+   
     if (typeof allDirectives === "undefined" || allDirectives === null) {
-      return this.groupByDirective.fallback;
+       return group;
     }
-    let groupInDirective;
-    allDirectives.forEach((directive) => {
-      if (directive.name.value === this.groupByDirective.directive) {
-        const field = directive.arguments.filter(
-          ({ name }) => name.value === this.groupByDirective.field,
-        );
-        groupInDirective = field[0].value.value;
-      }
-    });
-    return groupInDirective || this.groupByDirective.fallback;
+    
+     allDirectives.forEach((directive) => {
+       if (directive.name.value === this.groupByDirective.directive) {
+         const field = directive.arguments.find(
+           ({ name }) => name.value === this.groupByDirective.field,
+         );
+         group = field.value.value;
+       }
+     });
+     
+     return group;
   }
   parseOptionGroupByDirective(groupByDirective) {
     const regex =
