@@ -1,30 +1,25 @@
 const { convertArrayToObject } = require("../utils/scalars/array");
 module.exports = class GroupingInfo {
-  constructor(rootTypes, linkRoot, baseURL, groupByDirective) {
-    this.rootTypes = rootTypes;
-    this.linkRoot = linkRoot;
-    this.baseURL = baseURL;
-    this.groupByDirective = groupByDirective;
-    this.group = {};
-    if (this.groupByDirective) {
-      this.setUpCategorizationInfo();
+  constructor(rootTypes, groupByDirective) {
+    this.group = undefined;
+    if (groupByDirective) {
+      this.groupByDirective = groupByDirective;
+      this.group = {};
+      this.generateGroupInfo(rootTypes);
     }
   }
-  setUpCategorizationInfo() {
+  generateGroupInfo(rootTypes) {
     let allDirectives;
-    Object.keys(this.rootTypes).forEach((typeName) => {
-      if (this.rootTypes[typeName]) {
-        if (Array.isArray(this.rootTypes[typeName])) {
-          this.rootTypes[typeName] = convertArrayToObject(
-            this.rootTypes[typeName],
-          );
+    Object.keys(rootTypes).forEach((typeName) => {
+      if (rootTypes[typeName]) {
+        if (Array.isArray(rootTypes[typeName])) {
+          rootTypes[typeName] = convertArrayToObject(rootTypes[typeName]);
         }
-        Object.keys(this.rootTypes[typeName]).forEach((name) => {
-          if (this.rootTypes[typeName][name]["astNode"]) {
-            allDirectves =
-              this.rootTypes[typeName][name]["astNode"]["directives"];
+        Object.keys(rootTypes[typeName]).forEach((name) => {
+          if (rootTypes[typeName][name]["astNode"]) {
+            allDirectives = rootTypes[typeName][name]["astNode"]["directives"];
           }
-          this.group[name] = this.getGroup(allDirectves);
+          this.group[name] = this.getGroup(allDirectives);
         });
       }
     });
@@ -44,13 +39,14 @@ module.exports = class GroupingInfo {
     });
     return groupInDirective || this.groupByDirective.fallback;
   }
-   parseOptionGroupByDirective(groupByDirective) {
-    const regex = /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
-  
+  parseOptionGroupByDirective(groupByDirective) {
+    const regex =
+      /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+
     if (typeof groupByDirective !== "string") {
       return undefined;
     }
-  
+
     const parsed = regex.exec(groupByDirective);
     if (parsed) {
       const { directive, field, fallback = "Miscellaneous" } = parsed.groups;

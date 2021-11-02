@@ -62,6 +62,7 @@ module.exports = class Printer {
     if (category && graphLQLNamedType) {
       const group =
         (this.groupingInfo &&
+          this.groupingInfo.group &&
           this.groupingInfo.group[graphLQLNamedType.name]) ||
         "";
       return `[\`${name}\`](${pathUrl.join(

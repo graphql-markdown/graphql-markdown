@@ -70,7 +70,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
-            groupByDirective,
+            groupByDirective: options.groupByDirective,
           });
         });
     },
