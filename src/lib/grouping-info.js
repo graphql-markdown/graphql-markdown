@@ -44,4 +44,19 @@ module.exports = class GroupingInfo {
     });
     return groupInDirective || this.groupByDirective.fallback;
   }
+   parseOptionGroupByDirective(groupByDirective) {
+    const regex = /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+  
+    if (typeof groupByDirective !== "string") {
+      return undefined;
+    }
+  
+    const parsed = regex.exec(groupByDirective);
+    if (parsed) {
+      const { directive, field, fallback = "Miscellaneous" } = parsed.groups;
+      return { directive, field, fallback };
+    } else {
+      throw new Error(`Invalid "${groupByDirective}"`);
+    }
+  }
 };

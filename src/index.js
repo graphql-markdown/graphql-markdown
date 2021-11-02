@@ -2,6 +2,7 @@
 const generateDocFromSchema = require("./lib/generator");
 const path = require("path");
 const os = require("os");
+const groupingInfo = require("./lib/grouping-info");
 
 const DEFAULT_OPTIONS = {
   schema: "./schema.graphl",
@@ -59,20 +60,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
         )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          const regex =
-            /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
-
-          let groupByDirective;
-          if (regex.test(options.groupByDirective)) {
-            groupByDirective = Object.assign(
-              {},
-              regex.exec(options.groupByDirective).groups,
-            );
-            groupByDirective.fallback =
-              groupByDirective.fallback || "Miscellaneous";
-          } else {
-            throw new Error(`Invalid "${options.groupByDirective}"`);
-          }
+          groupingInfo.parseOptionGroupByDirective(options.groupByDirective);
           await generateDocFromSchema({
             baseURL: options.base,
             schemaLocation: options.schema,

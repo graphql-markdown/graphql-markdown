@@ -34,14 +34,14 @@ module.exports = async function generateDocFromSchema({
 
   if (hasChanged) {
     const rootTypes = getSchemaMap(schema);
-    const groupingInfo = new groupingInfo(
+    const groupingInfoObj = new groupingInfo(
       rootTypes,
       linkRoot,
       baseURL,
       groupByDirective,
     );
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot, groupingInfo),
+      new Printer(schema, baseURL, linkRoot, groupingInfoObj),
       outputDir,
       baseURL,
       groupingInfo,
