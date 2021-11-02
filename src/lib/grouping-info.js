@@ -1,5 +1,5 @@
 const { convertArrayToObject } = require("../utils/scalars/array");
-module.exports = class GroupingInfo {
+module.exports = class GroupInfo {
   constructor(rootTypes, groupByDirective) {
     this.group = undefined;
     if (groupByDirective) {
@@ -24,7 +24,7 @@ module.exports = class GroupingInfo {
       }
     });
   }
-  
+
   getGroup(allDirectives) {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.groupByDirective.fallback;
