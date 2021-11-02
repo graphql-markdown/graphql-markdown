@@ -92,7 +92,7 @@ describe("lib", () => {
         groupByDirective: {
           directive: "doc",
           field: "category",
-          fallback: "Miscellaneous",
+          fallback: "misc",
         },
       });
 
