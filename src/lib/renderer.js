@@ -15,8 +15,8 @@ const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL, categoryInfo) {
-    this.categoryInfo = categoryInfo;
+  constructor(printer, outputDir, baseURL, groupingInfo) {
+    this.groupingInfo = groupingInfo;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
@@ -50,8 +50,8 @@ module.exports = class Renderer {
         return this.renderTypeEntities(
           path.join(
             this.outputDir,
-            this.categoryInfo && this.categoryInfo.groupByDirective
-              ? this.categoryInfo.group[name]
+            this.groupingInfo && this.groupingInfo.groupByDirective
+              ? this.groupingInfo.group[name]
               : "",
             slug,
           ),

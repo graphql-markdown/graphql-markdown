@@ -1,5 +1,5 @@
-const { convertArrayToObject } = require("../utils/array");
-module.exports = class CategoryInfo {
+const { convertArrayToObject } = require("../utils/scalars/array");
+module.exports = class GroupingInfo {
   constructor(rootTypes, linkRoot, baseURL, groupByDirective) {
     this.rootTypes = rootTypes;
     this.linkRoot = linkRoot;
@@ -33,15 +33,15 @@ module.exports = class CategoryInfo {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.groupByDirective.fallback;
     }
-    let categoryInDirective;
+    let groupInDirective;
     allDirectives.forEach((directive) => {
       if (directive.name.value === this.groupByDirective.directive) {
         const field = directive.arguments.filter(
           ({ name }) => name.value === this.groupByDirective.field,
         );
-        categoryInDirective = field[0].value.value;
+        groupInDirective = field[0].value.value;
       }
     });
-    return categoryInDirective || this.groupByDirective.fallback;
+    return groupInDirective || this.groupByDirective.fallback;
   }
 };

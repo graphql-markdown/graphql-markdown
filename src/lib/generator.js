@@ -8,7 +8,7 @@ const {
   saveSchemaHash,
   saveSchemaFile,
 } = require("./diff");
-const CategoryInfo = require("./categoryInfo");
+const groupingInfo = require("./grouping-info");
 
 const time = process.hrtime();
 
@@ -34,17 +34,17 @@ module.exports = async function generateDocFromSchema({
 
   if (hasChanged) {
     const rootTypes = getSchemaMap(schema);
-    const categoryInfo = new CategoryInfo(
+    const groupingInfo = new groupingInfo(
       rootTypes,
       linkRoot,
       baseURL,
       groupByDirective,
     );
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot, categoryInfo),
+      new Printer(schema, baseURL, linkRoot, groupingInfo),
       outputDir,
       baseURL,
-      categoryInfo,
+      groupingInfo,
     );
     const pages = await Promise.all(
       Object.keys(rootTypes).map((typeName) =>
