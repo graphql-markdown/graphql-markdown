@@ -71,7 +71,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             groupByDirective.fallback =
               groupByDirective.fallback || "Miscellaneous";
           } else {
-            throw new Exception(`Invalid "${options.groupByDirective}"`);
+            throw new Error(`Invalid "${options.groupByDirective}"`);
           }
           await generateDocFromSchema({
             baseURL: options.base,
