@@ -25,11 +25,11 @@ const HEADER_SECTION_SUB_LEVEL = "####";
 const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 module.exports = class Printer {
-  constructor(schema, baseURL, linkRoot = "/", groupingInfo) {
+  constructor(schema, baseURL, linkRoot = "/", group) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.groupingInfo = groupingInfo;
+    this.group = group;
   }
 
   toLink(type, name) {
@@ -61,9 +61,9 @@ module.exports = class Printer {
     }
     if (category && graphLQLNamedType) {
       const group =
-        (this.groupingInfo &&
-          this.groupingInfo.group &&
-          this.groupingInfo.group[graphLQLNamedType.name]) ||
+        (this.group &&
+          this.group.group &&
+          this.group.group[graphLQLNamedType.name]) ||
         "";
       return `[\`${name}\`](${pathUrl.join(
         this.linkRoot,
