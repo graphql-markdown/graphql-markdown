@@ -76,6 +76,7 @@ describe("lib", () => {
         );
       });
     });
+    
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
       await generateDocFromSchema({
         baseURL: "graphql",

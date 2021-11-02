@@ -24,6 +24,7 @@ module.exports = class GroupingInfo {
       }
     });
   }
+  
   getGroup(allDirectives) {
     if (typeof allDirectives === "undefined" || allDirectives === null) {
       return this.groupByDirective.fallback;
