@@ -67,7 +67,6 @@ describe("lib", () => {
         });
 
         mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
-
         expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, "generateDocFromSchemaOutputFolder.hash"),
         );
@@ -76,10 +75,10 @@ describe("lib", () => {
         );
       });
     });
-    
+
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
       expect.assertions(1);
-      
+
       await generateDocFromSchema({
         baseURL: "graphql",
         schemaLocation: "__data__/schema_with_grouping.graphql",
@@ -95,7 +94,6 @@ describe("lib", () => {
           fallback: "misc",
         },
       });
-
       const outputFolder = dirTree("output", {
         attributes: ["size", "type", "extension"],
       });
