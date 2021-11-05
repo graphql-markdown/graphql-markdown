@@ -3,281 +3,83 @@
   "name": "output",
   "children": [
     {
-      "path": "output/Course",
-      "name": "Course",
+      "path": "output/course",
+      "name": "course",
       "children": [
         {
-          "path": "output/Course/mutations",
+          "path": "output/course/_category_.yml",
+          "name": "_category_.yml",
+          "size": 16,
+          "type": "file",
+          "extension": ".yml"
+        },
+        {
+          "path": "output/course/mutations",
           "name": "mutations",
           "children": [
             {
-              "path": "output/Course/mutations/add-course.mdx",
+              "path": "output/course/mutations/_category_.yml",
+              "name": "_category_.yml",
+              "size": 19,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/course/mutations/add-course.mdx",
               "name": "add-course.mdx",
-              "size": 448,
+              "size": 430,
               "type": "file",
               "extension": ".mdx"
             },
             {
-              "path": "output/Course/mutations/drop-course.mdx",
+              "path": "output/course/mutations/drop-course.mdx",
               "name": "drop-course.mdx",
-              "size": 451,
+              "size": 433,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 899,
+          "size": 882,
           "type": "directory"
         },
         {
-          "path": "output/Course/queries",
+          "path": "output/course/queries",
           "name": "queries",
           "children": [
             {
-              "path": "output/Course/queries/all-courses.mdx",
+              "path": "output/course/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 17,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/course/queries/all-courses.mdx",
               "name": "all-courses.mdx",
-              "size": 349,
+              "size": 340,
               "type": "file",
               "extension": ".mdx"
             },
             {
-              "path": "output/Course/queries/math-courses.mdx",
+              "path": "output/course/queries/math-courses.mdx",
               "name": "math-courses.mdx",
+              "size": 343,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/course/queries/science-courses.mdx",
+              "name": "science-courses.mdx",
               "size": 352,
               "type": "file",
               "extension": ".mdx"
-            },
-            {
-              "path": "output/Course/queries/science-courses.mdx",
-              "name": "science-courses.mdx",
-              "size": 361,
-              "type": "file",
-              "extension": ".mdx"
             }
           ],
-          "size": 1062,
+          "size": 1052,
           "type": "directory"
         }
       ],
-      "size": 1961,
-      "type": "directory"
-    },
-    {
-      "path": "output/Grade",
-      "name": "Grade",
-      "children": [
-        {
-          "path": "output/Grade/mutations",
-          "name": "mutations",
-          "children": [
-            {
-              "path": "output/Grade/mutations/update-gpa.mdx",
-              "name": "update-gpa.mdx",
-              "size": 380,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Grade/mutations/update-grade.mdx",
-              "name": "update-grade.mdx",
-              "size": 454,
-              "type": "file",
-              "extension": ".mdx"
-            }
-          ],
-          "size": 834,
-          "type": "directory"
-        },
-        {
-          "path": "output/Grade/queries",
-          "name": "queries",
-          "children": [
-            {
-              "path": "output/Grade/queries/gpa.mdx",
-              "name": "gpa.mdx",
-              "size": 370,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Grade/queries/un-weighted-gpa.mdx",
-              "name": "un-weighted-gpa.mdx",
-              "size": 402,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Grade/queries/weighted-gpa.mdx",
-              "name": "weighted-gpa.mdx",
-              "size": 395,
-              "type": "file",
-              "extension": ".mdx"
-            }
-          ],
-          "size": 1167,
-          "type": "directory"
-        }
-      ],
-      "size": 2001,
-      "type": "directory"
-    },
-    {
-      "path": "output/Miscellaneous",
-      "name": "Miscellaneous",
-      "children": [
-        {
-          "path": "output/Miscellaneous/directives",
-          "name": "directives",
-          "children": [
-            {
-              "path": "output/Miscellaneous/directives/deprecated.mdx",
-              "name": "deprecated.mdx",
-              "size": 484,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/directives/doc.mdx",
-              "name": "doc.mdx",
-              "size": 184,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/directives/include.mdx",
-              "name": "include.mdx",
-              "size": 287,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/directives/skip.mdx",
-              "name": "skip.mdx",
-              "size": 269,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/directives/specified-by.mdx",
-              "name": "specified-by.mdx",
-              "size": 299,
-              "type": "file",
-              "extension": ".mdx"
-            }
-          ],
-          "size": 1523,
-          "type": "directory"
-        },
-        {
-          "path": "output/Miscellaneous/objects",
-          "name": "objects",
-          "children": [
-            {
-              "path": "output/Miscellaneous/objects/department-information.mdx",
-              "name": "department-information.mdx",
-              "size": 562,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/objects/semester.mdx",
-              "name": "semester.mdx",
-              "size": 365,
-              "type": "file",
-              "extension": ".mdx"
-            }
-          ],
-          "size": 927,
-          "type": "directory"
-        },
-        {
-          "path": "output/Miscellaneous/scalars",
-          "name": "scalars",
-          "children": [
-            {
-              "path": "output/Miscellaneous/scalars/boolean.mdx",
-              "name": "boolean.mdx",
-              "size": 123,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/date.mdx",
-              "name": "date.mdx",
-              "size": 73,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/email-address.mdx",
-              "name": "email-address.mdx",
-              "size": 98,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/int.mdx",
-              "name": "int.mdx",
-              "size": 187,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/phone-number.mdx",
-              "name": "phone-number.mdx",
-              "size": 95,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/string.mdx",
-              "name": "string.mdx",
-              "size": 246,
-              "type": "file",
-              "extension": ".mdx"
-            },
-            {
-              "path": "output/Miscellaneous/scalars/time.mdx",
-              "name": "time.mdx",
-              "size": 73,
-              "type": "file",
-              "extension": ".mdx"
-            }
-          ],
-          "size": 895,
-          "type": "directory"
-        }
-      ],
-      "size": 3345,
-      "type": "directory"
-    },
-    {
-      "path": "output/directives",
-      "name": "directives",
-      "children": [
-        {
-          "path": "output/directives/_category_.yml",
-          "name": "_category_.yml",
-          "size": 20,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 20,
-      "type": "directory"
-    },
-    {
-      "path": "output/enums",
-      "name": "enums",
-      "children": [
-        {
-          "path": "output/enums/_category_.yml",
-          "name": "_category_.yml",
-          "size": 15,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 15,
+      "size": 1950,
       "type": "directory"
     },
     {
@@ -288,93 +90,241 @@
       "extension": ".md"
     },
     {
-      "path": "output/inputs",
-      "name": "inputs",
+      "path": "output/grade",
+      "name": "grade",
       "children": [
         {
-          "path": "output/inputs/_category_.yml",
+          "path": "output/grade/_category_.yml",
           "name": "_category_.yml",
-          "size": 16,
+          "size": 15,
           "type": "file",
           "extension": ".yml"
+        },
+        {
+          "path": "output/grade/mutations",
+          "name": "mutations",
+          "children": [
+            {
+              "path": "output/grade/mutations/_category_.yml",
+              "name": "_category_.yml",
+              "size": 19,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/grade/mutations/update-gpa.mdx",
+              "name": "update-gpa.mdx",
+              "size": 362,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/grade/mutations/update-grade.mdx",
+              "name": "update-grade.mdx",
+              "size": 436,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 817,
+          "type": "directory"
+        },
+        {
+          "path": "output/grade/queries",
+          "name": "queries",
+          "children": [
+            {
+              "path": "output/grade/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 17,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/grade/queries/gpa.mdx",
+              "name": "gpa.mdx",
+              "size": 352,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/grade/queries/un-weighted-gpa.mdx",
+              "name": "un-weighted-gpa.mdx",
+              "size": 384,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/grade/queries/weighted-gpa.mdx",
+              "name": "weighted-gpa.mdx",
+              "size": 377,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 1130,
+          "type": "directory"
         }
       ],
-      "size": 16,
+      "size": 1962,
       "type": "directory"
     },
     {
-      "path": "output/interfaces",
-      "name": "interfaces",
+      "path": "output/misc",
+      "name": "misc",
       "children": [
         {
-          "path": "output/interfaces/_category_.yml",
+          "path": "output/misc/_category_.yml",
           "name": "_category_.yml",
-          "size": 20,
+          "size": 14,
           "type": "file",
           "extension": ".yml"
-        }
-      ],
-      "size": 20,
-      "type": "directory"
-    },
-    {
-      "path": "output/mutations",
-      "name": "mutations",
-      "children": [
+        },
         {
-          "path": "output/mutations/_category_.yml",
-          "name": "_category_.yml",
-          "size": 19,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 19,
-      "type": "directory"
-    },
-    {
-      "path": "output/objects",
-      "name": "objects",
-      "children": [
+          "path": "output/misc/directives",
+          "name": "directives",
+          "children": [
+            {
+              "path": "output/misc/directives/_category_.yml",
+              "name": "_category_.yml",
+              "size": 20,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/directives/deprecated.mdx",
+              "name": "deprecated.mdx",
+              "size": 475,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/directives/doc.mdx",
+              "name": "doc.mdx",
+              "size": 175,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/directives/include.mdx",
+              "name": "include.mdx",
+              "size": 277,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/directives/skip.mdx",
+              "name": "skip.mdx",
+              "size": 259,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/directives/specified-by.mdx",
+              "name": "specified-by.mdx",
+              "size": 289,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 1495,
+          "type": "directory"
+        },
         {
-          "path": "output/objects/_category_.yml",
-          "name": "_category_.yml",
-          "size": 17,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 17,
-      "type": "directory"
-    },
-    {
-      "path": "output/queries",
-      "name": "queries",
-      "children": [
+          "path": "output/misc/objects",
+          "name": "objects",
+          "children": [
+            {
+              "path": "output/misc/objects/_category_.yml",
+              "name": "_category_.yml",
+              "size": 17,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/objects/department-information.mdx",
+              "name": "department-information.mdx",
+              "size": 526,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/objects/semester.mdx",
+              "name": "semester.mdx",
+              "size": 338,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 881,
+          "type": "directory"
+        },
         {
-          "path": "output/queries/_category_.yml",
-          "name": "_category_.yml",
-          "size": 17,
-          "type": "file",
-          "extension": ".yml"
+          "path": "output/misc/scalars",
+          "name": "scalars",
+          "children": [
+            {
+              "path": "output/misc/scalars/_category_.yml",
+              "name": "_category_.yml",
+              "size": 17,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/scalars/boolean.mdx",
+              "name": "boolean.mdx",
+              "size": 123,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/date.mdx",
+              "name": "date.mdx",
+              "size": 73,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/email-address.mdx",
+              "name": "email-address.mdx",
+              "size": 98,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/int.mdx",
+              "name": "int.mdx",
+              "size": 187,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/phone-number.mdx",
+              "name": "phone-number.mdx",
+              "size": 95,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/string.mdx",
+              "name": "string.mdx",
+              "size": 246,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "output/misc/scalars/time.mdx",
+              "name": "time.mdx",
+              "size": 73,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 912,
+          "type": "directory"
         }
       ],
-      "size": 17,
-      "type": "directory"
-    },
-    {
-      "path": "output/scalars",
-      "name": "scalars",
-      "children": [
-        {
-          "path": "output/scalars/_category_.yml",
-          "name": "_category_.yml",
-          "size": 17,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 17,
+      "size": 3302,
       "type": "directory"
     },
     {
@@ -383,23 +333,8 @@
       "size": 114,
       "type": "file",
       "extension": ".js"
-    },
-    {
-      "path": "output/unions",
-      "name": "unions",
-      "children": [
-        {
-          "path": "output/unions/_category_.yml",
-          "name": "_category_.yml",
-          "size": 16,
-          "type": "file",
-          "extension": ".yml"
-        }
-      ],
-      "size": 16,
-      "type": "directory"
     }
   ],
-  "size": 7610,
+  "size": 7360,
   "type": "directory"
 }
