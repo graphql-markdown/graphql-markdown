@@ -34,15 +34,15 @@ module.exports = async function generateDocFromSchema({
 
   if (hasChanged) {
     const rootTypes = getSchemaMap(schema);
-    const {group} = new GroupInfo(rootTypes, groupByDirective);
+    const { group }  = new GroupInfo(rootTypes, groupByDirective);
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot, {group}),
+      new Printer(schema, baseURL, linkRoot, group),
       outputDir,
       baseURL,
-      {group},
+      group,
     );
     const pages = await Promise.all(
-      Object.keys(rootTypes).map((typeName) =>
+      Object.keys(rootTypes).map((typeName) =>  
         renderer.renderRootTypes(typeName, rootTypes[typeName]),
       ),
     );
