@@ -63,7 +63,7 @@ module.exports = class Printer {
       name = graphLQLNamedType.name || graphLQLNamedType;
       const group = toSlug(
         hasProperty(this.group, name) ? this.group[name] : "",
-      )
+      );
       return `[\`${name}\`](${pathUrl.join(
         this.linkRoot,
         this.baseURL,
