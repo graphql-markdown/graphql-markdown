@@ -60,7 +60,6 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
         )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          groupingInfo.parseOptionGroupByDirective(options.groupByDirective);
           await generateDocFromSchema({
             baseURL: options.base,
             schemaLocation: options.schema,
@@ -70,7 +69,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
-            groupByDirective: options.groupByDirective,
+            groupByDirective: new groupingInfo().parseOptionGroupByDirective(options.groupByDirective)
           });
         });
     },
