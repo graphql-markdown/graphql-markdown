@@ -1,6 +1,6 @@
 const path = require("path");
 
-const { convertArrayToObject} = require("../utils/scalars/array");
+const { convertArrayToObject } = require("../utils/scalars/array");
 const { hasProperty } = require("../utils/scalars/object");
 const { toSlug, startCase } = require("../utils/scalars/string");
 const { pathUrl } = require("../utils/scalars/url");

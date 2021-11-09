@@ -8,7 +8,7 @@ const {
   saveSchemaHash,
   saveSchemaFile,
 } = require("./diff");
-const GroupInfo = require("./grouping-info");
+const GroupInfo = require("./group-info");
 
 const time = process.hrtime();
 

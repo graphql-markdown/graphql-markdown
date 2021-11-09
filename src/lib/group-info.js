@@ -43,7 +43,7 @@ module.exports = class GroupInfo {
 
     return group;
   }
-  parseOptionGroupByDirective(groupByDirective) {
+  static parseOption(groupByDirective) {
     const regex =
       /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
 

@@ -2,7 +2,7 @@
 const generateDocFromSchema = require("./lib/generator");
 const path = require("path");
 const os = require("os");
-const groupingInfo = require("./lib/grouping-info");
+const GroupInfo = require("./lib/group-info");
 
 const DEFAULT_OPTIONS = {
   schema: "./schema.graphl",
@@ -69,9 +69,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
-            groupByDirective: new groupingInfo().parseOptionGroupByDirective(
-              options.groupByDirective,
-            ),
+            groupByDirective: GroupInfo.parseOption(options.groupByDirective),
           });
         });
     },
