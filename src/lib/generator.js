@@ -8,6 +8,7 @@ const {
   saveSchemaHash,
   saveSchemaFile,
 } = require("./diff");
+const GroupInfo = require("./group-info");
 
 const time = process.hrtime();
 
@@ -20,6 +21,7 @@ module.exports = async function generateDocFromSchema({
   diffMethod,
   tmpDir,
   loaders,
+  groupByDirective,
 }) {
   const { loaders: documentLoaders, loaderOptions } =
     getDocumentLoaders(loaders);
@@ -31,21 +33,19 @@ module.exports = async function generateDocFromSchema({
   const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
 
   if (hasChanged) {
+    const rootTypes = getSchemaMap(schema);
+    const { group } = new GroupInfo(rootTypes, groupByDirective);
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot),
+      new Printer(schema, baseURL, linkRoot, group),
       outputDir,
       baseURL,
+      group,
     );
-    const rootTypes = getSchemaMap(schema);
-
-    await renderer.emptyOutputDir();
-
     const pages = await Promise.all(
       Object.keys(rootTypes).map((typeName) =>
         renderer.renderRootTypes(typeName, rootTypes[typeName]),
       ),
     );
-
     await renderer.renderHomepage(homepageLocation);
     const sidebarPath = await renderer.renderSidebar();
 

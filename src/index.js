@@ -2,6 +2,7 @@
 const generateDocFromSchema = require("./lib/generator");
 const path = require("path");
 const os = require("os");
+const GroupInfo = require("./lib/group-info");
 
 const DEFAULT_OPTIONS = {
   schema: "./schema.graphl",
@@ -52,6 +53,11 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           "Set temp dir for schema diff",
           config.tmpDir,
         )
+        .option(
+          "-gbd, --groupByDirective <@directive(field|=fallback)>",
+          "Group Documentation By Directive",
+          config.groupByDirective,
+        )
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
           await generateDocFromSchema({
@@ -63,6 +69,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
+            groupByDirective: GroupInfo.parseOption(options.groupByDirective),
           });
         });
     },

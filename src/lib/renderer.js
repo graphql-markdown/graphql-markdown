@@ -1,5 +1,7 @@
 const path = require("path");
 
+const { convertArrayToObject } = require("../utils/scalars/array");
+const { hasProperty } = require("../utils/scalars/object");
 const { toSlug, startCase } = require("../utils/scalars/string");
 const { pathUrl } = require("../utils/scalars/url");
 const { prettifyJavascript } = require("../utils/helpers/prettier");
@@ -9,13 +11,15 @@ const {
   ensureDir,
   copyFile,
   readFile,
+  fileExists,
 } = require("../utils/helpers/fs");
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL) {
+  constructor(printer, outputDir, baseURL, group) {
+    this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
@@ -25,27 +29,35 @@ module.exports = class Renderer {
     await emptyDir(this.outputDir);
   }
 
-  async renderRootTypes(typeName, type) {
+  async generateCategoryMetafile(category, dirPath) {
+    const filePath = path.join(dirPath, "_category_.yml");
+    if (!(await fileExists(filePath))) {
+      await ensureDir(dirPath);
+      await saveFile(filePath, `label: '${startCase(category)}'\n`);
+    }
+  }
+
+  async renderRootTypes(rootTypeName, type) {
     if (typeof type === "undefined" || type === null) {
       return undefined;
     }
 
-    const slug = toSlug(typeName);
-    const dirPath = path.join(this.outputDir, slug);
     if (Array.isArray(type)) {
-      type = type.reduce(function (r, o) {
-        if (o && o.name) r[o.name] = o;
-        return r;
-      }, {});
+      type = convertArrayToObject(type);
     }
-
-    await ensureDir(dirPath);
-
-    const filePath = path.join(dirPath, "_category_.yml");
-    await saveFile(filePath, `label: '${startCase(typeName)}'\n`);
 
     return Promise.all(
       Object.keys(type).map(async (name) => {
+        let dirPath = this.outputDir;
+
+        if (hasProperty(this.group, name)) {
+          dirPath = path.join(dirPath, toSlug(this.group[name]));
+          await this.generateCategoryMetafile(this.group[name], dirPath);
+        }
+
+        dirPath = path.join(dirPath, toSlug(rootTypeName));
+        await this.generateCategoryMetafile(rootTypeName, dirPath);
+
         return this.renderTypeEntities(dirPath, name, type[name]);
       }),
     );
