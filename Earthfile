@@ -60,6 +60,7 @@ build-docusaurus:
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN yarn install
+  RUN yarn upgrade @docusaurus/core@latest @docusaurus/preset-classic@latest
 
 smoke-init:
   FROM +build-docusaurus
