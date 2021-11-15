@@ -67,6 +67,7 @@ smoke-init:
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   RUN yarn add @graphql-tools/url-loader
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
+  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-groups.config.js ./docusaurus2-graphql-doc-generator-groups.config.js
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
   COPY ./docs/img ./static/img
@@ -97,6 +98,7 @@ build-demo:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force
+  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --force
   RUN yarn build
   EXPOSE $port
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
