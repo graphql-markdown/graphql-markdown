@@ -82,11 +82,21 @@ const sidebarConfig = require.resolve(`${process.cwd()}/sidebars.js`);
 
 const sidebarConfigString = `
 const path = require("path");
+const { existsSync } = require("fs");
+
 const basicSchema = require(path.resolve(__dirname, "${pluginConfigFilename}"));
+const { schemaSidebar } = require(path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js"));
+
+let sidebar = { basic: schemaSidebar };
+
 const groupSchema = require(path.resolve(__dirname, "${pluginGroupConfigFilename}"));
-const { schemaSidebar: basic } = require(path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js"));
-const { schemaSidebar: group } = require(path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js"));
-module.exports = { basic, group };
+const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
+if (existsSync(groupBySidebarFile)) {
+  const { schemaSidebar } = require(groupBySidebarFile);
+  sidebar = { ...sidebar, group: schemaSidebar };
+}
+
+module.exports = sidebar;
 \n`;
 
 fs.writeFile(sidebarConfig, sidebarConfigString, (err) => {
