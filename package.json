@@ -13,11 +13,12 @@
     "url": "git+https://github.com/edno/graphql-markdown.git"
   },
   "keywords": [
-    "docusaurus2",
+    "docusaurus",
     "graphql",
     "graphql-schema",
     "documentation",
-    "plugin"
+    "plugin",
+    "markdown"
   ],
   "author": "Gregory Heitz",
   "scripts": {
