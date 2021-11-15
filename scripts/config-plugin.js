@@ -84,10 +84,14 @@ const sidebarConfigString = `
 const path = require("path");
 const { existsSync } = require("fs");
 
-const basicSchema = require(path.resolve(__dirname, "${pluginConfigFilename}"));
-const { schemaSidebar } = require(path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js"));
+let sidebar = {};
 
-let sidebar = { basic: schemaSidebar };
+const basicSchema = require(path.resolve(__dirname, "${pluginConfigFilename}"));
+const basicSidebarFile = path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js");
+if (existsSync(basicSidebarFile)) {
+  const { schemaSidebar } = require(basicSidebarFile);
+  sidebar = { ...sidebar, basic: schemaSidebar };
+}
 
 const groupSchema = require(path.resolve(__dirname, "${pluginGroupConfigFilename}"));
 const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
