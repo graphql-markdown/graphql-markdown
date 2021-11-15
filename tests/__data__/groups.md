@@ -13,7 +13,7 @@ This is an example of documentation with grouping by GraphQL directive using the
   "rootPath": "./docs",
   "baseURL": "group-by",
   "linkRoot": "/",
-  "homepage": "data/groups.md",
+  "homepage": "data/groups.md"
 }
 ```
 

@@ -7,5 +7,5 @@ module.exports = {
     directive: "doc",
     field: "category",
     fallback: "Common",
-  }
+  },
 };
