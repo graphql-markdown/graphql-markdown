@@ -1,6 +1,7 @@
 const fs = require("fs");
 
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
+const pluginGroupConfigFilename = "docusaurus2-graphql-doc-generator-groups.config.js";
 
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
@@ -27,7 +28,12 @@ const config = {
       items: [
         {
           to: "/schema",
-          label: "Demo",
+          label: "Demo 1",
+          position: "left",
+        },
+        {
+          to: "/group-by",
+          label: "Demo 2",
           position: "left",
         },
         {
@@ -76,8 +82,25 @@ const sidebarConfig = require.resolve(`${process.cwd()}/sidebars.js`);
 
 const sidebarConfigString = `
 const path = require("path");
-const {rootPath, baseURL} = require(path.resolve(__dirname, "${pluginConfigFilename}"));
-module.exports = require(path.resolve(__dirname, rootPath, baseURL, "sidebar-schema.js"));
+const { existsSync } = require("fs");
+
+let sidebar = {};
+
+const basicSchema = require(path.resolve(__dirname, "${pluginConfigFilename}"));
+const basicSidebarFile = path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js");
+if (existsSync(basicSidebarFile)) {
+  const { schemaSidebar } = require(basicSidebarFile);
+  sidebar = { ...sidebar, basic: schemaSidebar };
+}
+
+const groupSchema = require(path.resolve(__dirname, "${pluginGroupConfigFilename}"));
+const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
+if (existsSync(groupBySidebarFile)) {
+  const { schemaSidebar } = require(groupBySidebarFile);
+  sidebar = { ...sidebar, group: schemaSidebar };
+}
+
+module.exports = sidebar;
 \n`;
 
 fs.writeFile(sidebarConfig, sidebarConfigString, (err) => {

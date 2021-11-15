@@ -6,6 +6,8 @@ Take this document as a set of guidelines, not rules, for contributing to this p
 
 > If this is your first time contribution to an open source project, then you should start with the section [First time contributor](#first-time-contributor), and then continue with [Getting started](#getting-started).
 
+**Don't forget to read our [code of conduct](CODE_OF_CONDUCT.md).**
+
 ## Table of Contents
 
 * [First time contributor](#first-time-contributor)
@@ -159,3 +161,17 @@ There are 3 types of tests using in this project, all based on Jest:
 * `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options then you will need to update those tests.
 
   > The tests run within a Docker container.
+
+### Build documentation
+
+You can build the documentation with the command:
+
+```shell
+earthly +build-demo
+```
+
+This will update documentation into `docs` folder, and it will also create a local Docker image `graphql-markdown:demo` for local tests:
+
+```shell
+docker --rm -it -p 8080:8080 run graphql-markdown:demo
+```
