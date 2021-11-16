@@ -77,7 +77,7 @@
   "directories": {
     "test": "tests"
   },
-  "engineStrict" : true,
+  "engineStrict": true,
   "engines": {
     "node": ">=14.14.0"
   }
