@@ -16,4 +16,6 @@ docs/
 output
 reports
 coverage
-.eslintrc.json
+CODE_OF_CONDUCT.md 
+CONTRIBUTING.md 
+.eslint*
