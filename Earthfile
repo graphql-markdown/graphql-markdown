@@ -65,7 +65,7 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
-  RUN yarn add @graphql-tools/url-loader
+  RUN yarn add graphql @graphql-tools/url-loader
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator-groups.config.js ./docusaurus2-graphql-doc-generator-groups.config.js
   COPY ./scripts/config-plugin.js ./config-plugin.js

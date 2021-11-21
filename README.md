@@ -14,6 +14,8 @@ The documentation is generated for **Docusaurus 2** [docs feature](https://v2.do
 
 ## Installation
 
+> Note that `graphql` package is a peer-dependency starting version `1.7.0`, and it should be installed if not yet present.
+
 ### npm
 
 ```shell
