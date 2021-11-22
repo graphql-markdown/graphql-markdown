@@ -25,7 +25,7 @@ const HEADER_SECTION_SUB_LEVEL = "####";
 const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 module.exports = class Printer {
-  constructor(schema, baseURL, linkRoot = "/", group) {
+  constructor(schema, baseURL, linkRoot = "/", group = undefined) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;

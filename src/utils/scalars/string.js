@@ -5,9 +5,9 @@
 function _stringCaseBuilder(str, transformation, separator) {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
-    .replace(/([a-z]+|[0-9]+)([A-Z])/g, "$1 $2")
-    .replace(/([a-z]+)([0-9])/g, "$1 $2")
-    .replace(/([0-9]+)([a-z])/g, "$1 $2")
+    .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
+    .replace(/([a-z]+)(\d)/g, "$1 $2")
+    .replace(/(\d+)([a-z])/g, "$1 $2")
     .split(/[^0-9A-Za-z]+/g)
     .map((word) => (hasTransformation ? transformation(word) : word))
     .join(separator);
@@ -27,8 +27,8 @@ function toSlug(str) {
 }
 
 function toHTMLUnicode(char) {
-  const unichar = char.charCodeAt(0).toString(16).padStart(4, "0");
-  return `&#x${unichar.toUpperCase()};`;
+  const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
+  return `&#x${unicodeChar.toUpperCase()};`;
 }
 
 function escapeMDX(str) {
@@ -40,8 +40,8 @@ function escapeMDX(str) {
 
 function firstUppercase(word) {
   const sliceUppercase = word.slice(0, 1).toUpperCase();
-  const sliceDefaultcase = word.slice(1);
-  return `${sliceUppercase}${sliceDefaultcase}`;
+  const sliceDefaultCase = word.slice(1);
+  return `${sliceUppercase}${sliceDefaultCase}`;
 }
 
 function capitalize(word) {
