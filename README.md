@@ -286,7 +286,7 @@ If the error persists, check that you have the correct class name in the configu
 
 ## Contributions
 
-Contributions, issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
+[Contributions](https://github.com/edno/graphql-markdown/blob/main/CONTRIBUTING.md), issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
 
 <a href="https://github.com/edno/graphql-markdown/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=edno/graphql-markdown" />
