@@ -1,4 +1,5 @@
 const { promises: fs } = require("fs");
+const { dirname } = require("path");
 
 const readFile = fs.readFile;
 const copyFile = fs.copyFile;
@@ -24,7 +25,7 @@ async function fileExists(filepath) {
 }
 
 async function saveFile(filepath, data) {
-  await ensureDir(require("path").dirname(filepath));
+  await ensureDir(dirname(filepath));
   await fs.writeFile(filepath, data);
 }
 

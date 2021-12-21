@@ -4,8 +4,9 @@ WORKDIR /graphql-markdown
 ENV NPM_TOKEN=""
 
 deps:
-    COPY . .
-    RUN yarn install --frozen-lockfile
+  RUN npm install -g npm@latest
+  COPY . .
+  RUN yarn install --frozen-lockfile --silent
 
 lint: 
   ARG flag
@@ -59,13 +60,13 @@ build-docusaurus:
   RUN npx --quiet @docusaurus/init@latest init docusaurus2 classic
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  RUN yarn install
+  RUN yarn install --silent
   RUN yarn upgrade @docusaurus/core@latest @docusaurus/preset-classic@latest
 
 smoke-init:
   FROM +build-docusaurus
-  RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   RUN yarn add graphql @graphql-tools/url-loader
+  RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
   COPY ./tests/e2e/docusaurus2-graphql-doc-generator-groups.config.js ./docusaurus2-graphql-doc-generator-groups.config.js
   COPY ./scripts/config-plugin.js ./config-plugin.js
@@ -83,7 +84,6 @@ smoke-test:
   COPY ./tests/e2e/jest.config.js ./jest.config.js
   ENV NODE_ENV=ci
   RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
-  ENTRYPOINT ["npx", "docusaurus", "graphql-to-doc"]
 
 smoke-run:
   ARG OPTIONS=
