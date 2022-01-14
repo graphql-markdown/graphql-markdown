@@ -65,8 +65,6 @@ module.exports = async function generateDocFromSchema({
     await saveSchemaHash(schema, tmpDir);
     await saveSchemaFile(schema, tmpDir);
   } else {
-    console.info(
-      pico.blue(`No changes detected in schema "${schemaLocation}".`),
-    );
+    console.info(`No changes detected in schema "${schemaLocation}".`);
   }
 };
