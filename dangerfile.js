@@ -57,7 +57,7 @@ if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
 
 // rule-license-file-modified
 if (licenseFile.modified) {
-  warn((`This PR modified the \`${LICENSE_FILE}\` file.`);
+  warn(`This PR modified the \`${LICENSE_FILE}\` file.`);
 }
 
 // rule-license-file-deleted
