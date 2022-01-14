@@ -1,5 +1,3 @@
-const pico = require("picocolors");
-
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
@@ -52,23 +50,15 @@ module.exports = async function generateDocFromSchema({
     const [sec, msec] = process.hrtime(time);
     const duration = (sec + msec / 1e9).toFixed(3);
     console.info(
-      pico.green(
-        `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
-      ),
+      `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
     );
     console.log(
-      pico.blue(
-        `${
-          pages.flat().length
-        } pages generated in ${duration}s from schema "${schemaLocation}".`,
-      ),
+      `${
+        pages.flat().length
+      } pages generated in ${duration}s from schema "${schemaLocation}".`,
     );
     console.info(
-      pico.blue(
-        pico.bold(
-          `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
-        ),
-      ),
+      `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
     );
 
     // create references for checkSchemaChanges
