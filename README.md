@@ -187,6 +187,19 @@ sidebar_position: 1
 This documentation has been automatically generated from the GraphQL schema.
 ```
 
+> ***Trick***
+> *If you want to hide it from the sidebar (like in the demo), then set the front matter `sidebar_class_name` (or `className` depending on your Docusaurus version) to `navbar__toggle`.*
+>
+> ```markdown
+> ---
+> id: schema
+> slug: /schema
+> title: Schema Documentation
+> sidebar_position: 1
+> sidebar_class_name: navbar__toggle
+> ---
+> ```
+
 ## Usage
 
 The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://v2.docusaurus.io/docs/cli).

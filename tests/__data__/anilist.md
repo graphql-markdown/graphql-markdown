@@ -3,6 +3,7 @@ id: schema
 slug: /schema
 title: Schema Documentation
 sidebar_position: 1
+sidebar_class_name: navbar__toggle
 ---
 
 This documentation has been automatically generated using [AniList APIv2](https://anilist.gitbook.io/anilist-apiv2-docs/) endpoint with following plugin configuration:
