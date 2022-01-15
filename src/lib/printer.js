@@ -18,7 +18,6 @@ const {
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
-const { prettifyMarkdown } = require("../utils/helpers/prettier");
 
 const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";
@@ -287,6 +286,6 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     }
 
     const markdown = `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`;
-    return prettifyMarkdown(markdown);
+    return markdown;
   }
 };

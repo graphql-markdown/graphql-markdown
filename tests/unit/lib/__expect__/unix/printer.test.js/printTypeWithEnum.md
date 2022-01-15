@@ -2,6 +2,7 @@ header-enum
 
 Test Enum
 
-`enum`
+```enum```
 
 Values
+

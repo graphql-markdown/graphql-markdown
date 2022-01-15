@@ -7,20 +7,23 @@ try {
   console.debug("Prettier is not found");
 }
 
-function prettifyMarkdown(content) {
-  if (typeof prettier == "undefined") {
+function hasPrettierModule() {
+  return typeof prettier === "undefined";
+}
+
+function prettify(content, parser) {
+  if (!hasPrettierModule()) {
     return content;
   }
+  return prettier.format(content, { parser });
+}
 
-  return prettier.format(content, { parser: "markdown" });
+function prettifyMarkdown(content) {
+  return prettify(content, "markdown");
 }
 
 function prettifyJavascript(content) {
-  if (typeof prettier == "undefined") {
-    return content;
-  }
-
-  return prettier.format(content, { parser: "babel" });
+  return prettify(content, "babel");
 }
 
-module.exports = { prettifyMarkdown, prettifyJavascript };
+module.exports = { hasPrettierModule, prettifyMarkdown, prettifyJavascript };

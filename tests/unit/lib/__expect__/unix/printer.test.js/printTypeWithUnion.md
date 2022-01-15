@@ -2,6 +2,7 @@ header-union
 
 Test Union
 
-`union`
+```union```
 
 Possible types
+

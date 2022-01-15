@@ -13,6 +13,7 @@ const DEFAULT_OPTIONS = {
   diffMethod: "SCHEMA-DIFF",
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
   loaders: {},
+  pretty: false,
 };
 
 module.exports = function pluginGraphQLDocGenerator(context, opts) {
@@ -58,6 +59,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           "Group Documentation By Directive",
           config.groupByDirective,
         )
+        .option("--pretty", "Prettify generated files")
         .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
           await generateDocFromSchema({
@@ -70,6 +72,7 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             tmpDir: options.tmp,
             loaders: config.loaders,
             groupByDirective: GroupInfo.parseOption(options.groupByDirective),
+            prettify: options.pretty || config.pretty,
           });
         });
     },

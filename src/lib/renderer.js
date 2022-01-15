@@ -4,7 +4,11 @@ const { convertArrayToObject } = require("../utils/scalars/array");
 const { hasProperty } = require("../utils/scalars/object");
 const { toSlug, startCase } = require("../utils/scalars/string");
 const { pathUrl } = require("../utils/scalars/url");
-const { prettifyJavascript } = require("../utils/helpers/prettier");
+const {
+  hasPrettierModule,
+  prettifyJavascript,
+  prettifyMarkdown,
+} = require("../utils/helpers/prettier");
 const {
   saveFile,
   emptyDir,
@@ -18,11 +22,12 @@ const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL, group) {
+  constructor(printer, outputDir, baseURL, group, prettify) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
+    this.prettify = prettify && hasPrettierModule();
   }
 
   async emptyOutputDir() {
@@ -72,7 +77,10 @@ module.exports = class Renderer {
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
 
     const content = this.printer.printType(fileName, type);
-    await saveFile(filePath, content);
+    await saveFile(
+      filePath,
+      this.prettify ? prettifyMarkdown(content) : content,
+    );
 
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
@@ -100,11 +108,13 @@ module.exports = class Renderer {
       }),
     };
 
-    const jsonSidebar = JSON.stringify(sidebar, null, 2);
-    const content = prettifyJavascript(`module.exports = ${jsonSidebar};`);
+    const jsonSidebar = `module.exports = ${JSON.stringify(sidebar, null, 2)};`;
 
     const filePath = path.join(this.outputDir, SIDEBAR);
-    await saveFile(filePath, content);
+    await saveFile(
+      filePath,
+      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar,
+    );
 
     return path.relative("./", filePath);
   }
