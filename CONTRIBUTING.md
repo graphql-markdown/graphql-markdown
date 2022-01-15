@@ -173,5 +173,5 @@ earthly +build-demo
 This will update documentation into `docs` folder, and it will also create a local Docker image `graphql-markdown:demo` for local tests:
 
 ```shell
-docker --rm -it -p 8080:8080 run graphql-markdown:demo
+docker run --rm -it -p 8080:8080 graphql-markdown:demo
 ```
