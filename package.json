@@ -10,7 +10,7 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edno/graphql-markdown.git"
+    "url": "https://github.com/edno/graphql-markdown.git"
   },
   "keywords": [
     "docusaurus",
@@ -20,7 +20,17 @@
     "plugin",
     "markdown"
   ],
-  "author": "Gregory Heitz",
+  "author": {
+    "name" : "Gregory Heitz"
+  },
+  "contributors": [ 
+    { "name": "jocrau" },
+    { "name": "mimo84" },
+    { "name": "coder2034" },
+    { "name": "lauzierj" },
+    { "name": "jineshshah36" },
+    { "name": "GuiHash" }
+  ],
   "scripts": {
     "prettier": "prettier \"{src,tests,assets}/**/*.{js,json,md}\"",
     "lint": "eslint \"{src,tests,assets}/**/*.js\"",
