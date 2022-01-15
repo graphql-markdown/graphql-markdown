@@ -1,12 +1,29 @@
 /* istanbul ignore file */
-const prettier = require("prettier");
+let prettier;
+
+try {
+  prettier = require("prettier");
+} catch (e) {
+  console.debug("Prettier is not found");
+}
+
+function hasPrettierModule() {
+  return typeof prettier === "undefined";
+}
+
+function prettify(content, parser) {
+  if (!hasPrettierModule()) {
+    return content;
+  }
+  return prettier.format(content, { parser });
+}
 
 function prettifyMarkdown(content) {
-  return prettier.format(content, { parser: "markdown" });
+  return prettify(content, "markdown");
 }
 
 function prettifyJavascript(content) {
-  return prettier.format(content, { parser: "babel" });
+  return prettify(content, "babel");
 }
 
-module.exports = { prettifyMarkdown, prettifyJavascript };
+module.exports = { hasPrettierModule, prettifyMarkdown, prettifyJavascript };

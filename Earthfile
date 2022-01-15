@@ -97,7 +97,8 @@ build-demo:
   ARG port=8080
   FROM +smoke-init
   WORKDIR /docusaurus2
-  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force
+  RUN yarn add prettier
+  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force --pretty
   RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --force
   RUN yarn build
   EXPOSE $port
