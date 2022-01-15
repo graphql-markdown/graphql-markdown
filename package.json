@@ -39,8 +39,8 @@
     "@graphql-tools/load": "^7.3.2"
   },
   "peerDependencies": {
-    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0",
-    "prettier": "^2.4.1"
+    "graphql": "^14.0 || ^15.0 || ^16.0",
+    "prettier": "^2.0"
   },
   "peerDependenciesMeta": {
     "prettier": {
