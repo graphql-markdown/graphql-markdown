@@ -8,7 +8,7 @@ try {
 }
 
 function hasPrettierModule() {
-  return typeof prettier === "undefined";
+  return typeof prettier !== "undefined";
 }
 
 function prettify(content, parser) {
