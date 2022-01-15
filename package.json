@@ -21,15 +21,27 @@
     "markdown"
   ],
   "author": {
-    "name" : "Gregory Heitz"
+    "name": "Gregory Heitz"
   },
-  "contributors": [ 
-    { "name": "jocrau" },
-    { "name": "mimo84" },
-    { "name": "coder2034" },
-    { "name": "lauzierj" },
-    { "name": "jineshshah36" },
-    { "name": "GuiHash" }
+  "contributors": [
+    {
+      "name": "jocrau"
+    },
+    {
+      "name": "mimo84"
+    },
+    {
+      "name": "coder2034"
+    },
+    {
+      "name": "lauzierj"
+    },
+    {
+      "name": "jineshshah36"
+    },
+    {
+      "name": "GuiHash"
+    }
   ],
   "scripts": {
     "prettier": "prettier \"{src,tests,assets}/**/*.{js,json,md}\"",
