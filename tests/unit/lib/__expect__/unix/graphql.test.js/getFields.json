@@ -7,6 +7,7 @@
         "name": "input",
         "type": "TweetContent",
         "deprecationReason": "Use `content`.",
+        "extensions": {},
         "astNode": {
           "kind": "InputValueDefinition",
           "name": {
@@ -84,6 +85,7 @@
       {
         "name": "content",
         "type": "TweetContent",
+        "extensions": {},
         "astNode": {
           "kind": "InputValueDefinition",
           "name": {
@@ -117,7 +119,7 @@
         }
       }
     ],
-    "isDeprecated": false,
+    "extensions": {},
     "astNode": {
       "kind": "FieldDefinition",
       "name": {
@@ -263,6 +265,7 @@
       {
         "name": "id",
         "type": "ID!",
+        "extensions": {},
         "astNode": {
           "kind": "InputValueDefinition",
           "name": {
@@ -303,7 +306,7 @@
         }
       }
     ],
-    "isDeprecated": false,
+    "extensions": {},
     "astNode": {
       "kind": "FieldDefinition",
       "name": {
@@ -383,6 +386,7 @@
       {
         "name": "id",
         "type": "ID!",
+        "extensions": {},
         "astNode": {
           "kind": "InputValueDefinition",
           "name": {
@@ -423,7 +427,7 @@
         }
       }
     ],
-    "isDeprecated": false,
+    "extensions": {},
     "astNode": {
       "kind": "FieldDefinition",
       "name": {

@@ -222,12 +222,12 @@
             {
               "path": "output/misc/directives/specified-by.mdx",
               "name": "specified-by.mdx",
-              "size": 296,
+              "size": 294,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1532,
+          "size": 1530,
           "type": "directory"
         },
         {
@@ -324,7 +324,7 @@
           "type": "directory"
         }
       ],
-      "size": 3414,
+      "size": 3412,
       "type": "directory"
     },
     {
@@ -335,6 +335,6 @@
       "extension": ".js"
     }
   ],
-  "size": 7575,
+  "size": 7573,
   "type": "directory"
 }

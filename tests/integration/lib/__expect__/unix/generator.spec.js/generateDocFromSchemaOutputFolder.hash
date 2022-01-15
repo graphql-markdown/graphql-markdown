@@ -37,12 +37,12 @@
         {
           "path": "output/directives/specified-by.mdx",
           "name": "specified-by.mdx",
-          "size": 291,
+          "size": 289,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 1328,
+      "size": 1326,
       "type": "directory"
     },
     {
@@ -167,7 +167,7 @@
         {
           "path": "output/objects/stat.mdx",
           "name": "stat.mdx",
-          "size": 517,
+          "size": 445,
           "type": "file",
           "extension": ".mdx"
         },
@@ -181,12 +181,12 @@
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 953,
+          "size": 787,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 2847,
+      "size": 2609,
       "type": "directory"
     },
     {
@@ -203,7 +203,7 @@
         {
           "path": "output/queries/notifications-meta.mdx",
           "name": "notifications-meta.mdx",
-          "size": 250,
+          "size": 175,
           "type": "file",
           "extension": ".mdx"
         },
@@ -217,7 +217,7 @@
         {
           "path": "output/queries/tweets-meta.mdx",
           "name": "tweets-meta.mdx",
-          "size": 229,
+          "size": 154,
           "type": "file",
           "extension": ".mdx"
         },
@@ -231,7 +231,7 @@
         {
           "path": "output/queries/user.mdx",
           "name": "user.mdx",
-          "size": 279,
+          "size": 211,
           "type": "file",
           "extension": ".mdx"
         },
@@ -243,7 +243,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1689,
+      "size": 1471,
       "type": "directory"
     },
     {
@@ -288,7 +288,7 @@
         {
           "path": "output/scalars/sri.mdx",
           "name": "sri.mdx",
-          "size": 328,
+          "size": 76,
           "type": "file",
           "extension": ".mdx"
         },
@@ -307,7 +307,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1465,
+      "size": 1213,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 9162,
+  "size": 8452,
   "type": "directory"
 }
