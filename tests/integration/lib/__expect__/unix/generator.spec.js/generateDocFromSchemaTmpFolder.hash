@@ -12,11 +12,11 @@
     {
       "path": "tmp/schema.graphql",
       "name": "schema.graphql",
-      "size": 1368,
+      "size": 1367,
       "type": "file",
       "extension": ".graphql"
     }
   ],
-  "size": 1432,
+  "size": 1431,
   "type": "directory"
 }

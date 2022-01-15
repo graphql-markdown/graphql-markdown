@@ -6,6 +6,7 @@
       {
         "name": "limit",
         "type": "Int",
+        "extensions": {},
         "astNode": {
           "kind": "InputValueDefinition",
           "name": {
@@ -39,7 +40,7 @@
         }
       }
     ],
-    "isDeprecated": false,
+    "extensions": {},
     "astNode": {
       "kind": "FieldDefinition",
       "name": {

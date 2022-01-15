@@ -7,6 +7,7 @@
         {
           "name": "id",
           "type": "ID!",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -47,7 +48,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -128,6 +129,7 @@
           "name": "limit",
           "type": "Int",
           "defaultValue": 5,
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -172,6 +174,7 @@
           "name": "skip",
           "type": "Int",
           "defaultValue": 0,
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -215,6 +218,7 @@
         {
           "name": "sort_field",
           "type": "String",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -251,6 +255,7 @@
           "name": "sort_order",
           "type": "String",
           "defaultValue": "ASC",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -293,7 +298,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -495,8 +500,8 @@
       "name": "TweetsMeta",
       "type": "Meta",
       "args": [],
-      "isDeprecated": true,
       "deprecationReason": "No longer supported",
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -554,6 +559,7 @@
         {
           "name": "id",
           "type": "ID!",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -594,8 +600,8 @@
           }
         }
       ],
-      "isDeprecated": true,
       "deprecationReason": "Use `Users`.",
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -717,6 +723,7 @@
         {
           "name": "id",
           "type": "[ID!]!",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -771,7 +778,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -876,8 +883,8 @@
       "name": "NotificationsMeta",
       "type": "Meta",
       "args": [],
-      "isDeprecated": true,
       "deprecationReason": "No longer supported",
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -938,6 +945,7 @@
           "name": "input",
           "type": "TweetContent",
           "deprecationReason": "Use `content`.",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -1015,6 +1023,7 @@
         {
           "name": "content",
           "type": "TweetContent",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -1048,7 +1057,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -1194,6 +1203,7 @@
         {
           "name": "id",
           "type": "ID!",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -1234,7 +1244,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -1314,6 +1324,7 @@
         {
           "name": "id",
           "type": "ID!",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -1354,7 +1365,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
@@ -1436,6 +1447,7 @@
         {
           "name": "limit",
           "type": "Int",
+          "extensions": {},
           "astNode": {
             "kind": "InputValueDefinition",
             "name": {
@@ -1469,7 +1481,7 @@
           }
         }
       ],
-      "isDeprecated": false,
+      "extensions": {},
       "astNode": {
         "kind": "FieldDefinition",
         "name": {
