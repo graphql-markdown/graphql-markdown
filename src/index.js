@@ -72,7 +72,8 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             tmpDir: options.tmp,
             loaders: config.loaders,
             groupByDirective:
-              GroupInfo.parseOption(options.groupByDirective) || config.groupByDirective,
+              GroupInfo.parseOption(options.groupByDirective) ||
+              config.groupByDirective,
             prettify: options.pretty || config.pretty,
           });
         });
