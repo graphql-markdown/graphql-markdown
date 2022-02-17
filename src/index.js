@@ -71,7 +71,9 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
             diffMethod: options.force ? "FORCE" : options.diff,
             tmpDir: options.tmp,
             loaders: config.loaders,
-            groupByDirective: GroupInfo.parseOption(options.groupByDirective),
+            groupByDirective:
+              GroupInfo.parseOption(options.groupByDirective) ||
+              config.groupByDirective,
             prettify: options.pretty || config.pretty,
           });
         });
