@@ -48,7 +48,7 @@ module.exports = {
   // ...
   plugins: [
     [
-      '@edno/docusaurus2-graphql-doc-generator',,
+      '@edno/docusaurus2-graphql-doc-generator',
       {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
