@@ -12,6 +12,12 @@ This plugin generates a **Markdown documentation** from a **GraphQL schema**.
 
 The documentation is generated for **Docusaurus 2** [docs feature](https://v2.docusaurus.io/docs/docs-introduction).
 
+## Try it
+
+Use the [Codesandbox project](https://codesandbox.io/s/graphql-markdown-5gzzwo?file=/graphql-markdown.config.js) to try with your own schema by editing `graphql-markdown.config.js`.
+
+Open a new terminal and run `npx docusaurus graphql-to-doc`.
+
 ## Installation
 
 > Note that `graphql` package is a peer-dependency starting version `1.7.0`, and it should be installed if not yet present.
