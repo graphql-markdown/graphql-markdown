@@ -14,9 +14,10 @@ The documentation is generated for **Docusaurus 2** [docs feature](https://v2.do
 
 ## Try it
 
-Use the [Codesandbox project](https://codesandbox.io/s/graphql-markdown-5gzzwo?file=/graphql-markdown.config.js) to try with your own schema by editing `graphql-markdown.config.js`.
+Use the [CodeSandbox template](https://codesandbox.io/s/graphql-markdown-5gzzwo?file=/graphql-markdown.config.js) or fork our [demo repo](https://github.com/edno/graphql-markdown-demo) to try with your own GraphQL schema.
 
-Open a new terminal and run `npx docusaurus graphql-to-doc`.
+1. Edit the configuration in `graphql-markdown.config.js`
+2. Run `npx docusaurus graphql-to-doc` in a new terminal
 
 ## Installation
 
