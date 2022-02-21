@@ -88,7 +88,7 @@
     "jest-file-snapshot": "^0.5.0",
     "lodash.filter": "^4.6.0",
     "mock-fs": "^5.1.2",
-    "pinst": "^2.1.6",
+    "pinst": "^3.0.0",
     "prettier": "^2.5.1"
   },
   "prettier": {
