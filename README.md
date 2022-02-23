@@ -46,7 +46,7 @@ module.exports = {
 
 ## Configuration
 
-You can define some or all of the plugin options directly at the plugin level in in the Docusaurus configuration file `docusaurus.config.js`:
+You can define some or all of the plugin options directly at the plugin level in the Docusaurus configuration file `docusaurus.config.js`:
 
 ### Plugin Options
 
@@ -74,7 +74,7 @@ Each option is described in the section [Options](#options).
 Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
 Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
 
-However, this behavior can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
+However, this behaviour can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
 
 If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
 
@@ -139,7 +139,7 @@ For more details about navbar, please refer to Docusaurus 2 [documentation](http
 
 ### Sidebars Settings
 
-A sidebar file `sidebar-schema.js` will be generated for the documentation, you have them different options depending on your Docusaurus setup:
+A sidebar file `sidebar-schema.js` will be generated for the documentation, you have different options depending on your Docusaurus setup:
 
 #### 1. Single Docs instance
 
@@ -158,7 +158,7 @@ module.exports = {
 
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
-> For example: if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
+> For example, if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
 
 #### 2. Docs Multi-instance
 
@@ -236,13 +236,13 @@ By default, the plugin will use the options as defined in the plugin's [configur
 
 #### About `diffMethod`
 
-The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since last documentation generation, then the full schema documentation will be generated.
+The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since the last documentation generation, then the full schema documentation will be generated.
 
 #### About `groupByDirective`
 
 The `groupByDirective` is used to add grouping to the documentation to provide for an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
 
-For example, we have two mutations called `addCourse` and `dropCourse`, and we want to group them together under a category called `Courses`.
+For example, we have two mutations called `addCourse` and `dropCourse`, and we want to group them under a category called `Courses`.
 
 We can accomplish this by adding a directive called `doc` with a field `category` to each mutation. Also, we can add a fallback option called `Common` which is for types that we don't explicitly add a directive to.
 
