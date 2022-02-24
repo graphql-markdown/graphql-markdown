@@ -86,16 +86,16 @@ Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` c
 
 ```js
 plugins: [
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-      {
-        // ... other options
-        loaders: {
-          UrlLoader: "@graphql-tools/url-loader"
-        }
-      },
-    ],
+  [
+    '@edno/docusaurus2-graphql-doc-generator',
+    {
+      // ... other options
+      loaders: {
+        UrlLoader: "@graphql-tools/url-loader"
+      }
+    },
   ],
+],
 ```
 
 You can declare as many loaders as you need using the structure:
@@ -166,17 +166,17 @@ In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-in
 
 ```js
 plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'api',
-        path: 'api',
-        routeBasePath: 'api',
-        sidebarPath: require.resolve('./api/sidebar-schema.js'),
-        // ... other options
-      },
-    ],
+  [
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'api',
+      path: 'api',
+      routeBasePath: 'api',
+      sidebarPath: require.resolve('./api/sidebar-schema.js'),
+      // ... other options
+    },
   ],
+],
 ```
 
 ### Home Page
@@ -266,18 +266,18 @@ or the plugin configuration `groupByDirective`:
 
 ```js
 plugins: [
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-      {
-        // ... other options
-        groupByDirective: {
-          directive: "doc",
-          field: "category",
-          fallback: "Common", // default is Miscellaneous
-        }
-      },
-    ],
+  [
+    '@edno/docusaurus2-graphql-doc-generator',
+    {
+      // ... other options
+      groupByDirective: {
+        directive: "doc",
+        field: "category",
+        fallback: "Common", // default is Miscellaneous
+      }
+    },
   ],
+],
 ```
 
 ## Troubleshooting
