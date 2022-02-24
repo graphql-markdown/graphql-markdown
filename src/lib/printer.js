@@ -209,8 +209,10 @@ module.exports = class Printer {
 
   printSpecification(type) {
     if (type.specifiedByUrl) {
+      // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
       return `
 export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
+
 ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>\n\n
       `;
     }
