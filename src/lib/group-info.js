@@ -44,12 +44,12 @@ module.exports = class GroupInfo {
     return group;
   }
   static parseOption(groupByDirective) {
-    const regex =
-      /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
-
     if (typeof groupByDirective !== "string") {
       return undefined;
     }
+
+    const regex =
+      /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
 
     const parsed = regex.exec(groupByDirective);
     if (parsed) {
