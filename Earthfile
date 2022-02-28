@@ -79,10 +79,17 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn global add fs-extra jest
-  COPY ./tests/e2e/specs ./__tests__/e2e/specs
+  COPY ./tests/e2e/specs/cli.spec.js ./__tests__/e2e/specs/cli.spec.js
   COPY ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
   ENV NODE_ENV=ci
+  RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
+  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance.config.js ./docusaurus2-graphql-doc-generator-multi-instance.config.js
+  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance-1.config.js ./docusaurus2-graphql-doc-generator-multi-instance-1.config.js
+  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance-2.config.js ./docusaurus2-graphql-doc-generator-multi-instance-2.config.js
+  COPY ./scripts/config-plugin-multi-instance.js ./config-plugin-multi-instance.js
+  COPY ./tests/e2e/specs/cli-multi-instance.spec.js ./__tests__/e2e/specs/cli.spec.js
+  RUN node config-plugin-multi-instance.js
   RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
 
 smoke-run:
