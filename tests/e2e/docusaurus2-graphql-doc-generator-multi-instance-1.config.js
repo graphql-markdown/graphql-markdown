@@ -1,10 +1,7 @@
 module.exports = {
-  id: "config-A",
-  schema: "data/tweet-A.graphql",
-  rootPath: "./docs-tweet-A",
+  id: "tweet",
+  schema: "data/tweet.graphql",
+  rootPath: "./docs-tweet",
   baseURL: "schema",
   linkRoot: "/",
-  loaders: {
-    UrlLoader: "@graphql-tools/url-loader",
-  },
 };

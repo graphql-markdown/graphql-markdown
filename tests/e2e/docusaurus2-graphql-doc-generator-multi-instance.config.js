@@ -1,22 +1,4 @@
 module.exports = [
-  {
-    id: "config-A",
-    schema: "data/tweet-A.graphql",
-    rootPath: "./docs-tweet-A",
-    baseURL: "schema",
-    linkRoot: "/",
-    loaders: {
-      UrlLoader: "@graphql-tools/url-loader",
-    },
-  },
-  {
-    id: "config-B",
-    schema: "data/tweet-B.graphql",
-    rootPath: "./docs-tweet-B",
-    baseURL: "schema",
-    linkRoot: "/",
-    loaders: {
-      UrlLoader: "@graphql-tools/url-loader",
-    },
-  },
+  require("./docusaurus2-graphql-doc-generator-multi-instance-1.config.js"),
+  require("./docusaurus2-graphql-doc-generator-multi-instance-2.config.js"),
 ];

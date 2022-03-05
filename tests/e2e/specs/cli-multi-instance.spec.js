@@ -39,19 +39,27 @@ describe("graphql-to-doc", () => {
     });
   });
 
-  test("should return 0 with generated message when completed as first run", async () => {
-    const generateOutput = await cli();
+  test("should return 0 with generated message when completed with force flag", async () => {
+    for (const [index, pluginConfig] of pluginConfigs.entries()) {
+      const generateOutput = await cli({
+        commandID: pluginConfig.id,
+        args: ["--force"],
+      });
 
-    expect(generateOutput).toMatchObject({
-      code: 0,
-      error: null,
-      stderr: "",
-      stdout: expect.any(String),
-    });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+      expect(generateOutput).toMatchObject({
+        code: 0,
+        error: null,
+        stderr: "",
+        stdout: expect.any(String),
+      });
 
-    messagesGenerated.map((messageGenerated) => {
+      const stdout = generateOutput.stdout.replace(
+        /\d+\.?\d*/g,
+        "{Any<Number>}",
+      );
+
+      const messageGenerated = messagesGenerated[index];
       messageGenerated.forEach((message) => expect(stdout).toMatch(message));
-    });
+    }
   }, 60000);
 });

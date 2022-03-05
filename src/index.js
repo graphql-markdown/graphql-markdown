@@ -1,32 +1,22 @@
 /* istanbul ignore file */
 const generateDocFromSchema = require("./lib/generator");
-const path = require("path");
-const os = require("os");
-const { pluginConfigs } = require("./utils/helpers/other.js");
-const { mergeConfigWithCLIOptions } = require("./utils/helpers/other.js");
-
-const DEFAULT_OPTIONS = {
-  schema: "./schema.graphl",
-  rootPath: "./docs",
-  baseURL: "schema",
-  linkRoot: "/",
-  homepage: path.join(__dirname, "../assets/", "generated.md"),
-  diffMethod: "SCHEMA-DIFF",
-  tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
-  loaders: {},
-  pretty: false,
-};
+const { buildConfig } = require("./config.js");
 
 module.exports = function pluginGraphQLDocGenerator(context, opts) {
-  // Merge defaults with user-defined options in config file.
-  pluginConfigs.push({ ...DEFAULT_OPTIONS, ...opts });
+  const isDefaultId = opts.id === "default";
+
+  const command = isDefaultId ? "graphql-to-doc" : `graphql-to-doc:${opts.id}`;
+  const description = isDefaultId
+    ? "Generate GraphQL Schema Documentation"
+    : `Generate GraphQL Schema Documentation for configuration with id ${opts.id}`;
 
   return {
     name: "docusaurus-graphql-doc-generator",
 
     extendCli(cli) {
       cli
-        .command("graphql-to-doc")
+        .command(command)
+        .description(description)
         .option("-s, --schema <schema>", "Schema location")
         .option("-r, --root <rootPath>", "Root folder for doc generation")
         .option("-b, --base <baseURL>", "Base URL to be used by Docusaurus")
@@ -43,13 +33,8 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
           "Group Documentation By Directive",
         )
         .option("--pretty", "Prettify generated files")
-        .description("Generate GraphQL Schema Documentation")
         .action(async (options) => {
-          for (const config of pluginConfigs) {
-            await generateDocFromSchema(
-              mergeConfigWithCLIOptions(config, options),
-            );
-          }
+          await generateDocFromSchema(buildConfig(opts, options));
         });
     },
   };

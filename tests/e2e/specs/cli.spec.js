@@ -69,7 +69,7 @@ describe("graphql-to-doc", () => {
     const updateOutput = await cli();
     expect(updateOutput).toHaveProperty("code", 0);
 
-    const forceOutput = await cli(["--force"]);
+    const forceOutput = await cli({ args: ["--force"] });
     expect(forceOutput).toMatchObject({
       code: 0,
       error: null,
