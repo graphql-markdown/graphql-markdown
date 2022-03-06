@@ -3,6 +3,7 @@ name: Smoke Tests
 on: 
   pull_request:
     types: [opened, reopened, synchronize]
+  push:    
     paths:
       - 'Earthfile'
       - 'src/**'
