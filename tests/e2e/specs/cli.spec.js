@@ -5,34 +5,38 @@ const cli = require("../../helpers/cli");
 
 const rootDir = "/docusaurus2";
 
-const pluginConfig = require(`${rootDir}/docusaurus2-graphql-doc-generator.config.js`);
+const pluginConfigs = require(`${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`);
 
-const docsDir = path.resolve(
-  rootDir,
-  pluginConfig.rootPath,
-  pluginConfig.baseURL,
-);
+const docsDirs = [];
+const messagesGenerated = [];
 
-const messageGenerated = [
-  `Documentation successfully generated in "${path.join(
-    pluginConfig.rootPath,
-    pluginConfig.baseURL,
-  )}" with base URL "${pluginConfig.baseURL}".`,
-  `{Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
-  `Remember to update your Docusaurus site's sidebars with "${path.join(
-    pluginConfig.rootPath,
-    pluginConfig.baseURL,
-    "sidebar-schema.js",
-  )}".`,
-];
+for (const pluginConfig of pluginConfigs) {
+  docsDirs.push(
+    path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
+  );
+  messagesGenerated.push([
+    `Documentation successfully generated in "${path.join(
+      pluginConfig.rootPath,
+      pluginConfig.baseURL,
+    )}" with base URL "${pluginConfig.baseURL}".`,
+    `{Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
+    `Remember to update your Docusaurus site's sidebars with "${path.join(
+      pluginConfig.rootPath,
+      pluginConfig.baseURL,
+      "sidebar-schema.js",
+    )}".`,
+  ]);
+}
 
 const messageNoUpdate = [
-  `No changes detected in schema "${pluginConfig.schema}".`,
+  `No changes detected in schema "${pluginConfigs[0].schema}".`,
 ];
 
 describe("graphql-to-doc", () => {
   beforeAll(async () => {
-    fs.mkdir(docsDir, { recursive: true });
+    docsDirs.map((docsDir) => {
+      fs.mkdir(docsDir, { recursive: true });
+    });
   });
 
   test("should return 0 with generated message when completed as first run", async () => {
@@ -44,10 +48,10 @@ describe("graphql-to-doc", () => {
       stdout: expect.any(String),
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
-    messageGenerated.forEach((message) => expect(stdout).toMatch(message));
+    messagesGenerated[0].forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
-  test("should return 0 with generated message when schema unchanged", async () => {
+  test("should return 0 with no update message when schema unchanged", async () => {
     const generateOutput = await cli();
     expect(generateOutput).toHaveProperty("code", 0);
 
@@ -58,11 +62,11 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+    const stdout = updateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
     messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
-  test("should return 0 with updated message when completed with force flag", async () => {
+  test("should return 0 with generated message when completed with force flag", async () => {
     const generateOutput = await cli();
     expect(generateOutput).toHaveProperty("code", 0);
 
@@ -76,7 +80,32 @@ describe("graphql-to-doc", () => {
       stderr: "",
       stdout: expect.any(String),
     });
-    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
-    messageNoUpdate.forEach((message) => expect(stdout).toMatch(message));
+    const stdout = forceOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+    messagesGenerated[0].forEach((message) => expect(stdout).toMatch(message));
+  }, 60000);
+
+  test("should return 0 with generated message when completed with force flag (multi-instance)", async () => {
+    for (const [index, pluginConfig] of pluginConfigs.entries()) {
+      const generateOutput = await cli({
+        commandID: pluginConfig.id,
+        args: ["--force"],
+      });
+
+      expect(generateOutput).toMatchObject({
+        code: 0,
+        error: null,
+        stderr: "",
+        stdout: expect.any(String),
+      });
+
+      const stdout = generateOutput.stdout.replace(
+        /\d+\.?\d*/g,
+        "{Any<Number>}",
+      );
+
+      messagesGenerated[index].forEach((message) =>
+        expect(stdout).toMatch(message),
+      );
+    }
   }, 60000);
 });

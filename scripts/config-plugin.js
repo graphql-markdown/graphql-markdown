@@ -1,7 +1,8 @@
 const fs = require("fs");
 
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
-const pluginGroupConfigFilename = "docusaurus2-graphql-doc-generator-groups.config.js";
+const pluginGroupConfigFilename =
+  "docusaurus2-graphql-doc-generator-groups.config.js";
 
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
@@ -62,14 +63,22 @@ const config = {
       },
     ],
   ],
-  plugins: [["@edno/docusaurus2-graphql-doc-generator", "@config@"]],
+  plugins: [
+    ["@edno/docusaurus2-graphql-doc-generator", "@config1@"],
+    ["@edno/docusaurus2-graphql-doc-generator", "@config2@"],
+  ],
 };
 
 const configExportString = `const path = require("path");
-module.exports = ${JSON.stringify(config)};\n`.replace(
-  `"@config@"`,
-  `require(path.resolve(__dirname, "${pluginConfigFilename}"))`,
-);
+module.exports = ${JSON.stringify(config)};\n`
+  .replace(
+    `"@config1@"`,
+    `require(path.resolve(__dirname, "data/${pluginConfigFilename}"))`,
+  )
+  .replace(
+    `"@config2@"`,
+    `require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"))`,
+  );
 
 fs.writeFile(docusaurusConfig, configExportString, (err) => {
   if (err) {
@@ -87,14 +96,14 @@ const { existsSync } = require("fs");
 
 let sidebar = {};
 
-const basicSchema = require(path.resolve(__dirname, "${pluginConfigFilename}"));
+const basicSchema = require(path.resolve(__dirname, "data/${pluginConfigFilename}"));
 const basicSidebarFile = path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js");
 if (existsSync(basicSidebarFile)) {
   const { schemaSidebar } = require(basicSidebarFile);
   sidebar = { ...sidebar, basic: schemaSidebar };
 }
 
-const groupSchema = require(path.resolve(__dirname, "${pluginGroupConfigFilename}"));
+const groupSchema = require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"));
 const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
 if (existsSync(groupBySidebarFile)) {
   const { schemaSidebar } = require(groupBySidebarFile);

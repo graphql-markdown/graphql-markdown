@@ -67,8 +67,6 @@ smoke-init:
   FROM +build-docusaurus
   RUN yarn add graphql @graphql-tools/url-loader
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator.config.js ./docusaurus2-graphql-doc-generator.config.js
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-groups.config.js ./docusaurus2-graphql-doc-generator-groups.config.js
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
   COPY ./docs/img ./static/img
@@ -83,13 +81,6 @@ smoke-test:
   COPY ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
   ENV NODE_ENV=ci
-  RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance.config.js ./docusaurus2-graphql-doc-generator-multi-instance.config.js
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance-1.config.js ./docusaurus2-graphql-doc-generator-multi-instance-1.config.js
-  COPY ./tests/e2e/docusaurus2-graphql-doc-generator-multi-instance-2.config.js ./docusaurus2-graphql-doc-generator-multi-instance-2.config.js
-  COPY ./scripts/config-plugin-multi-instance.js ./config-plugin-multi-instance.js
-  COPY ./tests/e2e/specs/cli-multi-instance.spec.js ./__tests__/e2e/specs/cli.spec.js
-  RUN node config-plugin-multi-instance.js
   RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
 
 smoke-run:
