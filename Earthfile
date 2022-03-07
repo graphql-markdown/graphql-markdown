@@ -77,7 +77,7 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn global add fs-extra jest
-  COPY ./tests/e2e/specs/cli.spec.js ./__tests__/e2e/specs/cli.spec.js
+  COPY ./tests/e2e/specs ./__tests__/e2e/specs
   COPY ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
   ENV NODE_ENV=ci
