@@ -118,7 +118,7 @@ plugins: [
     [
       '@edno/docusaurus2-graphql-doc-generator',
       {
-        id: "admin"
+        id: "admin",
         schema: "./schema/admin.graphql",
         rootPath: "./docs", // docs will be generated under './docs/admin' (rootPath/baseURL)
         baseURL: "admin",
