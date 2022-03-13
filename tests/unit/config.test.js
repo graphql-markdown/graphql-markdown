@@ -1,3 +1,6 @@
+const path = require("path");
+
+const { COMPARE_METHOD } = require("../../src/lib/diff");
 const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
 
 jest.mock("../../src/lib/group-info");
@@ -16,15 +19,18 @@ describe("config", () => {
 
       expect(config).toEqual(
         expect.objectContaining({
-          baseURL: "schema",
-          diffMethod: "SCHEMA-DIFF",
-          groupByDirective: undefined,
+          baseURL: DEFAULT_OPTIONS.baseURL,
+          diffMethod: DEFAULT_OPTIONS.diffMethod,
+          groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
-          linkRoot: "/",
-          loaders: {},
-          outputDir: "docs/schema",
-          prettify: false,
-          schemaLocation: "./schema.graphql",
+          linkRoot: DEFAULT_OPTIONS.linkRoot,
+          loaders: DEFAULT_OPTIONS.loaders,
+          outputDir: path.join(
+            DEFAULT_OPTIONS.rootPath,
+            DEFAULT_OPTIONS.baseURL,
+          ),
+          prettify: DEFAULT_OPTIONS.pretty,
+          schemaLocation: DEFAULT_OPTIONS.schema,
           tmpDir: expect.stringMatching(
             /.+@edno\/docusaurus2-graphql-doc-generator$/,
           ),
@@ -56,35 +62,21 @@ describe("config", () => {
 
       const config = buildConfig(configFileOpts);
 
-      expect(config).toEqual(
-        expect.objectContaining({
-          baseURL: "docs/schema",
-          diffMethod: "NO-DIFF",
-          groupByDirective: {
-            directive: "doc",
-            field: "category",
-            fallback: "Common",
-          },
-          homepageLocation: "assets/my-homepage.md",
-          linkRoot: "/docs",
-          loaders: {
-            UrlLoader: "@graphql-tools/url-loader",
-          },
-          outputDir: "output/docs/schema",
-          prettify: true,
-          schemaLocation: "assets/my-schema.graphql",
-          tmpDir: "./tmp",
-        }),
-      );
+      expect(config).toStrictEqual({
+        baseURL: configFileOpts.baseURL,
+        diffMethod: configFileOpts.diffMethod,
+        groupByDirective: configFileOpts.groupByDirective,
+        homepageLocation: configFileOpts.homepage,
+        linkRoot: configFileOpts.linkRoot,
+        loaders: configFileOpts.loaders,
+        outputDir: path.join(configFileOpts.rootPath, configFileOpts.baseURL),
+        prettify: configFileOpts.pretty,
+        schemaLocation: configFileOpts.schema,
+        tmpDir: configFileOpts.tmpDir,
+      });
     });
 
     test("override config set in docusaurus if cli options set", () => {
-      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue({
-        directive: "group",
-        field: "name",
-        fallback: "misc",
-      });
-
       const configFileOpts = {
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
@@ -102,56 +94,53 @@ describe("config", () => {
           fallback: "Common",
         },
       };
-
       const cliOpts = {
         base: "cli/schema",
         schema: "cli/my-schema.graphql",
         root: "cli",
         link: "/cli",
         homepage: "cli/my-homepage.md",
-        force: true,
+        diff: "CLI",
         tmp: "./cli",
         groupByDirective: "@group(name|=misc)",
         pretty: true,
       };
 
+      jest
+        .spyOn(groupInfo, "parseGroupByOption")
+        .mockReturnValue(cliOpts.groupByDirective);
+
       const config = buildConfig(configFileOpts, cliOpts);
 
-      expect(config).toEqual(
-        expect.objectContaining({
-          baseURL: "cli/schema",
-          diffMethod: "FORCE",
-          groupByDirective: {
-            directive: "group",
-            field: "name",
-            fallback: "misc",
-          },
-          homepageLocation: "cli/my-homepage.md",
-          linkRoot: "/cli",
-          loaders: {
-            UrlLoader: "@graphql-tools/url-loader",
-          },
-          outputDir: "cli/cli/schema",
-          prettify: true,
-          schemaLocation: "cli/my-schema.graphql",
-          tmpDir: "./cli",
-        }),
-      );
+      expect(config).toStrictEqual({
+        baseURL: cliOpts.base,
+        diffMethod: cliOpts.diff,
+        groupByDirective: cliOpts.groupByDirective,
+        homepageLocation: cliOpts.homepage,
+        linkRoot: cliOpts.link,
+        loaders: configFileOpts.loaders,
+        outputDir: path.join(cliOpts.root, cliOpts.base),
+        prettify: cliOpts.pretty,
+        schemaLocation: cliOpts.schema,
+        tmpDir: cliOpts.tmp,
+      });
     });
 
     test("schema option from CLI overrides that of config file", () => {
+      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+
       const configFileOpts = {
         baseURL: "base-from-config-file",
         schema: "schemaFromConfigFile.graphql",
       };
       const cliOpts = { pretty: true, schema: "schemaFromCLI.graphql" };
+
       const input = buildConfig(configFileOpts, cliOpts);
-      const expected = {
+
+      expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
-        outputDir: `${DEFAULT_OPTIONS.rootPath.slice(2)}/${
-          configFileOpts.baseURL
-        }`,
+        outputDir: path.join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
@@ -159,28 +148,28 @@ describe("config", () => {
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: cliOpts.pretty,
-      };
-      expect(input).toStrictEqual(expected);
+      });
     });
 
     test("force flag from CLI switches diff method to FORCE", () => {
+      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+
       const cliOpts = { force: true };
+
       const input = buildConfig({}, cliOpts);
-      const expected = {
+
+      expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
-        outputDir: `${DEFAULT_OPTIONS.rootPath.slice(2)}/${
-          DEFAULT_OPTIONS.baseURL
-        }`,
+        outputDir: path.join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
-        diffMethod: "FORCE",
+        diffMethod: COMPARE_METHOD.FORCE,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: DEFAULT_OPTIONS.pretty,
-      };
-      expect(input).toStrictEqual(expected);
+      });
     });
   });
 });
