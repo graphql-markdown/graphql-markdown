@@ -18,15 +18,17 @@ const DEFAULT_OPTIONS = {
 };
 
 function buildConfig(configFileOpts, cliOpts) {
-  // Merge defaults with user-defined options in config file.
-  const config = { ...DEFAULT_OPTIONS, ...configFileOpts };
+  let config = DEFAULT_OPTIONS;
 
-  if (typeof configFileOpts == "undefined" || configFileOpts == null) {
-    configFileOpts = {};
+  if (typeof configFileOpts != "undefined" && configFileOpts != null) {
+    config = { ...DEFAULT_OPTIONS, ...configFileOpts };
   }
+
   if (typeof cliOpts == "undefined" || cliOpts == null) {
     cliOpts = {};
   }
+
+  // Merge defaults with user-defined options in config file.
 
   const baseURL = cliOpts.base ?? config.baseURL;
   const schemaLocation = cliOpts.schema ?? config.schema;
