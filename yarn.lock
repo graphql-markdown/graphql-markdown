@@ -447,7 +447,7 @@
     object-inspect "1.10.3"
     tslib "^2.0.0"
 
-"@graphql-tools/graphql-file-loader@^7.3.3":
+"@graphql-tools/graphql-file-loader@^7.3.4":
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.4.tgz#61e3e7e6223a21fbdd987f2abaa6f14104ab7b4a"
   integrity sha512-Q0/YtDq0APR6syRclsQMNguWKRlchd8nFTOpLhfc7Xeiy21VhEEi4Ik+quRySfb7ubDfJGhiUq4MQW43FhWJvg==
@@ -467,7 +467,7 @@
     resolve-from "5.0.0"
     tslib "~2.3.0"
 
-"@graphql-tools/load@^7.5.1":
+"@graphql-tools/load@^7.5.2":
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/@graphql-tools/load/-/load-7.5.2.tgz#0e46129f412bd038ac56996083458c1b8828526f"
   integrity sha512-URPqVP77mYxdZxT895DzrWf2C23S3yC/oAmXD4D4YlxR5eVVH/fxu0aZR78WcEKF331fWSiFwWy9j7BZWvkj7g==
