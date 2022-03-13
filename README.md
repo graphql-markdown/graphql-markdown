@@ -21,21 +21,21 @@ Use the [CodeSandbox template](https://codesandbox.io/s/edno-graphql-markdown-de
 
 ## Installation
 
-> Note that `graphql` package is a peer-dependency starting version `1.7.0`, and it should be installed if not yet present.
+**`graphql` package is a peer-dependency starting version `1.7.0`, and it must be installed separatly.**
 
 ### npm
 
 ```shell
-npm install --save @edno/docusaurus2-graphql-doc-generator
+npm install @edno/docusaurus2-graphql-doc-generator graphql
 ```
 
 ### Yarn
 
 ```shell
-yarn add @edno/docusaurus2-graphql-doc-generator
+yarn add @edno/docusaurus2-graphql-doc-generator graphql
 ```
 
-Then you add it in your site's `docusaurus.config.js`'s plugins option:
+Add `@edno/docusaurus2-graphql-doc-generator` to your site's `docusaurus.config.js` plugins option:
 
 ```js
 module.exports = {
