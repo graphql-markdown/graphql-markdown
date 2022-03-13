@@ -47,6 +47,9 @@
     },
     {
       "name": "jlndk"
+    },
+    {
+      "name": "elias-pap"
     }
   ],
   "scripts": {
