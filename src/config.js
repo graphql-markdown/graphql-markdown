@@ -1,13 +1,16 @@
 const path = require("path");
 const os = require("os");
-const GroupInfo = require("./lib/group-info");
+
+const { parseGroupByOption } = require("./lib/group-info");
+
+const ASSETS_LOCATION = path.join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
-  schema: "./schema.graphl",
+  schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "schema",
   linkRoot: "/",
-  homepage: path.join(__dirname, "../assets/", "generated.md"),
+  homepage: path.join(ASSETS_LOCATION, "generated.md"),
   diffMethod: "SCHEMA-DIFF",
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
   loaders: {},
@@ -15,8 +18,17 @@ const DEFAULT_OPTIONS = {
 };
 
 function buildConfig(configFileOpts, cliOpts) {
+  let config = DEFAULT_OPTIONS;
+
+  if (typeof configFileOpts != "undefined" && configFileOpts != null) {
+    config = { ...DEFAULT_OPTIONS, ...configFileOpts };
+  }
+
+  if (typeof cliOpts == "undefined" || cliOpts == null) {
+    cliOpts = {};
+  }
+
   // Merge defaults with user-defined options in config file.
-  const config = { ...DEFAULT_OPTIONS, ...configFileOpts };
 
   const baseURL = cliOpts.base ?? config.baseURL;
   const schemaLocation = cliOpts.schema ?? config.schema;
@@ -24,12 +36,13 @@ function buildConfig(configFileOpts, cliOpts) {
   const outputDir = path.join(root, baseURL);
   const linkRoot = cliOpts.link ?? config.linkRoot;
   const homepageLocation = cliOpts.homepage ?? config.homepage;
-  const diff = cliOpts.diff ?? config.diffMethod;
-  const diffMethod = cliOpts.force ? "FORCE" : diff;
+  const diffMethod = cliOpts.force
+    ? "FORCE"
+    : cliOpts.diff ?? config.diffMethod;
   const tmpDir = cliOpts.tmp ?? config.tmpDir;
   const loaders = config.loaders;
   const groupByDirective =
-    GroupInfo.parseOption(cliOpts.groupByDirective) || config.groupByDirective;
+    parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective;
   const prettify = cliOpts.pretty ?? config.pretty;
 
   return {

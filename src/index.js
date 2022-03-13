@@ -1,18 +1,22 @@
 /* istanbul ignore file */
-const generateDocFromSchema = require("./lib/generator");
 const { buildConfig } = require("./config.js");
+const generateDocFromSchema = require("./lib/generator");
 
-module.exports = function pluginGraphQLDocGenerator(context, opts) {
-  const isDefaultId = opts.id === "default";
+const NAME = "docusaurus-graphql-doc-generator";
+const COMMAND = "graphql-to-doc";
+const DESCRIPTION = "Generate GraphQL Schema Documentation";
+const DEFAULT_ID = "default";
 
-  const command = isDefaultId ? "graphql-to-doc" : `graphql-to-doc:${opts.id}`;
+module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
+  const isDefaultId = configOptions.id === DEFAULT_ID;
+
+  const command = isDefaultId ? COMMAND : `${COMMAND}:${configOptions.id}`;
   const description = isDefaultId
-    ? "Generate GraphQL Schema Documentation"
-    : `Generate GraphQL Schema Documentation for configuration with id ${opts.id}`;
+    ? DESCRIPTION
+    : `${DESCRIPTION} for configuration with id ${configOptions.id}`;
 
   return {
-    name: "docusaurus-graphql-doc-generator",
-
+    name: NAME,
     extendCli(cli) {
       cli
         .command(command)
@@ -30,11 +34,11 @@ module.exports = function pluginGraphQLDocGenerator(context, opts) {
         .option("-t, --tmp <tmpDir>", "Set temp dir for schema diff")
         .option(
           "-gbd, --groupByDirective <@directive(field|=fallback)>",
-          "Group Documentation By Directive",
+          "Group documentation by directive",
         )
         .option("--pretty", "Prettify generated files")
-        .action(async (options) => {
-          await generateDocFromSchema(buildConfig(opts, options));
+        .action(async (cliOptions) => {
+          await generateDocFromSchema(buildConfig(configOptions, cliOptions));
         });
     },
   };

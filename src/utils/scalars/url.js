@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * Path functions
  */

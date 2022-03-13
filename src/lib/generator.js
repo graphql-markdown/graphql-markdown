@@ -1,4 +1,5 @@
 const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
+const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
 const {
@@ -6,7 +7,6 @@ const {
   saveSchemaHash,
   saveSchemaFile,
 } = require("./diff");
-const GroupInfo = require("./group-info");
 
 const time = process.hrtime();
 
@@ -33,12 +33,12 @@ module.exports = async function generateDocFromSchema({
 
   if (hasChanged) {
     const rootTypes = getSchemaMap(schema);
-    const { group } = new GroupInfo(rootTypes, groupByDirective);
+    const groups = new getGroups(rootTypes, groupByDirective);
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot, group),
+      new Printer(schema, baseURL, linkRoot, groups),
       outputDir,
       baseURL,
-      group,
+      groups,
       prettify,
     );
     const pages = await Promise.all(
