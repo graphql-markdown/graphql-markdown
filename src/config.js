@@ -2,6 +2,7 @@ const path = require("path");
 const os = require("os");
 
 const { parseGroupByOption } = require("./lib/group-info");
+const { COMPARE_METHOD } = require("./lib/diff");
 
 const ASSETS_LOCATION = path.join(__dirname, "../assets/");
 
@@ -37,7 +38,7 @@ function buildConfig(configFileOpts, cliOpts) {
   const linkRoot = cliOpts.link ?? config.linkRoot;
   const homepageLocation = cliOpts.homepage ?? config.homepage;
   const diffMethod = cliOpts.force
-    ? "FORCE"
+    ? COMPARE_METHOD.FORCE
     : cliOpts.diff ?? config.diffMethod;
   const tmpDir = cliOpts.tmp ?? config.tmpDir;
   const loaders = config.loaders;

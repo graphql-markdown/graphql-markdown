@@ -8,9 +8,10 @@ const { diff } = require("@graphql-inspector/core");
 
 const SCHEMA_HASH_FILE = ".schema";
 const SCHEMA_REF = "schema.graphql";
-const COMPARE_METHODS = {
-  COMPARE_WITH_SCHEMA_DIFF: "SCHEMA-DIFF",
-  COMPARE_WITH_SCHEMA_HASH: "SCHEMA-HASH",
+const COMPARE_METHOD = {
+  DIFF: "SCHEMA-DIFF",
+  HASH: "SCHEMA-HASH",
+  FORCE: "FORCE",
 };
 
 const defaultLoaders = {
@@ -34,21 +35,21 @@ async function getDiff(schemaNew, schemaOld) {
 async function checkSchemaChanges(
   schema,
   outputDir,
-  method = COMPARE_METHODS.COMPARE_WITH_SCHEMA_DIFF,
+  method = COMPARE_METHOD.DIFF,
 ) {
   const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
   const hashSchema = getSchemaHash(schema);
   let hasDiff = true;
   const schemaRef = path.join(outputDir, SCHEMA_REF);
 
-  if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_DIFF) {
+  if (method === COMPARE_METHOD.DIFF) {
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
       hasDiff = schemaDiff.length > 0;
     }
   }
 
-  if (method === COMPARE_METHODS.COMPARE_WITH_SCHEMA_HASH) {
+  if (method === COMPARE_METHOD.HASH) {
     if (await fileExists(hashFile)) {
       const hash = await readFile(hashFile);
       hasDiff = hashSchema != hash;
@@ -69,4 +70,9 @@ async function saveSchemaHash(schema, outputDir) {
   await saveFile(hashFile, hashSchema);
 }
 
-module.exports = { checkSchemaChanges, saveSchemaHash, saveSchemaFile };
+module.exports = {
+  checkSchemaChanges,
+  saveSchemaHash,
+  saveSchemaFile,
+  COMPARE_METHOD,
+};

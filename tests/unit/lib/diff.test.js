@@ -15,6 +15,7 @@ const {
   checkSchemaChanges,
   saveSchemaHash,
   saveSchemaFile,
+  COMPARE_METHOD,
 } = require("../../../src/lib/diff");
 
 describe("lib", () => {
@@ -51,7 +52,7 @@ describe("lib", () => {
         expect(check).toBeTruthy();
       });
 
-      test("returns true if SCHEMA-HASH comparison differs", async () => {
+      test("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
         expect.hasAssertions();
 
         const printSchema = jest.spyOn(graphql, "printSchema");
@@ -63,36 +64,44 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema-new",
           FOLDER,
-          "SCHEMA-HASH",
+          COMPARE_METHOD.HASH,
         );
 
         expect(check).toBeTruthy();
       });
 
-      test("returns false if SCHEMA-HASH comparison is equals", async () => {
+      test("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
         expect.hasAssertions();
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
         await saveSchemaHash("SCHEMA", FOLDER);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+        const check = await checkSchemaChanges(
+          "schema",
+          FOLDER,
+          COMPARE_METHOD.HASH,
+        );
 
         expect(check).toBeFalsy();
       });
 
-      test("returns true if SCHEMA-HASH comparison has no reference hash file", async () => {
+      test("returns true if COMPARE_METHOD.HASH comparison has no reference hash file", async () => {
         expect.hasAssertions();
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
         const hasHashFile = await fileExists(HASH_FILE);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-HASH");
+        const check = await checkSchemaChanges(
+          "schema",
+          FOLDER,
+          COMPARE_METHOD.HASH,
+        );
 
         expect(hasHashFile).toBeFalsy();
         expect(check).toBeTruthy();
       });
 
-      test("returns true if SCHEMA-DIFF comparison differs", async () => {
+      test("returns true if COMPARE_METHOD.DIFF comparison differs", async () => {
         expect.hasAssertions();
 
         jest
@@ -110,13 +119,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema-new",
           FOLDER,
-          "SCHEMA-DIFF",
+          COMPARE_METHOD.DIFF,
         );
 
         expect(check).toBeTruthy();
       });
 
-      test("returns false if SCHEMA-DIFF comparison is equals", async () => {
+      test("returns false if COMPARE_METHOD.DIFF comparison is equals", async () => {
         expect.hasAssertions();
 
         jest
@@ -131,12 +140,16 @@ describe("lib", () => {
           .mockImplementationOnce(() => Promise.resolve([]));
 
         await saveSchemaFile("SCHEMA", FOLDER);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+        const check = await checkSchemaChanges(
+          "schema",
+          FOLDER,
+          COMPARE_METHOD.DIFF,
+        );
 
         expect(check).toBeFalsy();
       });
 
-      test("returns true if SCHEMA-DIFF no schema introspection file exists", async () => {
+      test("returns true if COMPARE_METHOD.DIFF no schema introspection file exists", async () => {
         expect.hasAssertions();
 
         jest
@@ -151,7 +164,11 @@ describe("lib", () => {
           .mockImplementationOnce(() => Promise.resolve([]));
 
         const hasSchemaFile = await fileExists(SCHEMA_FILE);
-        const check = await checkSchemaChanges("schema", FOLDER, "SCHEMA-DIFF");
+        const check = await checkSchemaChanges(
+          "schema",
+          FOLDER,
+          COMPARE_METHOD.DIFF,
+        );
 
         expect(hasSchemaFile).toBeFalsy();
         expect(check).toBeTruthy();
