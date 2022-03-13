@@ -2,7 +2,7 @@
  * String functions
  */
 
-function _stringCaseBuilder(str, transformation, separator) {
+function stringCaseBuilder(str, transformation, separator) {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -14,12 +14,20 @@ function _stringCaseBuilder(str, transformation, separator) {
   return prune(stringCase, separator);
 }
 
-function prune(str, char, { start = true, end = true } = {}) {
-  const regex =
-    (start ? `^${char}` : "") +
-    (start && end ? "|" : "") +
-    (end ? `${char}$` : "");
-  return str.replace(new RegExp(`${regex}`), "");
+function prune(str, char) {
+  let res = str;
+
+  if (res[0] === char) {
+    // Remove first character
+    res = res.slice(1);
+  }
+
+  if (res[res.length - 1] === char) {
+    // Remove last character
+    res = res.slice(0, -1);
+  }
+
+  return res;
 }
 
 function toSlug(str) {
@@ -57,11 +65,11 @@ function replaceDiacritics(str) {
 }
 
 function startCase(str) {
-  return _stringCaseBuilder(str, firstUppercase, " ");
+  return stringCaseBuilder(str, firstUppercase, " ");
 }
 
 function kebabCase(str) {
-  return _stringCaseBuilder(str, (word) => word.toLowerCase(), "-");
+  return stringCaseBuilder(str, (word) => word.toLowerCase(), "-");
 }
 
 module.exports = {
@@ -72,6 +80,7 @@ module.exports = {
   prune,
   replaceDiacritics,
   startCase,
+  stringCaseBuilder,
   toHTMLUnicode,
   toSlug,
 };

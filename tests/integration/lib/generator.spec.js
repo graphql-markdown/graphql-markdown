@@ -74,34 +74,70 @@ describe("lib", () => {
           path.join(EXPECT_PATH, "generateDocFromSchemaTmpFolder.hash"),
         );
       });
-    });
 
-    test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
-      expect.assertions(1);
+      test('outputs "no schema changed" message when called twice', async () => {
+        expect.assertions(1);
 
-      await generateDocFromSchema({
-        baseURL: "graphql",
-        schemaLocation: "__data__/schema_with_grouping.graphql",
-        outputDir: "output",
-        linkRoot: "docs",
-        homepageLocation: "assets/generated.md",
-        diffMethod: "SCHEMA-DIFF",
-        tmpDir: "tmp",
-        loaders: {},
-        groupByDirective: {
-          directive: "doc",
-          field: "category",
-          fallback: "misc",
-        },
+        const logSpy = jest.spyOn(console, "info");
+        const schemaLocation = "__data__/tweet.graphql";
+
+        await generateDocFromSchema({
+          baseURL: "graphql",
+          schemaLocation,
+          outputDir: "output",
+          linkRoot: "docs",
+          homepageLocation: "assets/generated.md",
+          diffMethod: "SCHEMA-DIFF",
+          tmpDir: "tmp",
+          loaders: {},
+        });
+
+        await generateDocFromSchema({
+          baseURL: "graphql",
+          schemaLocation,
+          outputDir: "output",
+          linkRoot: "docs",
+          homepageLocation: "assets/generated.md",
+          diffMethod: "SCHEMA-DIFF",
+          tmpDir: "tmp",
+          loaders: {},
+        });
+
+        expect(logSpy).toHaveBeenCalledWith(
+          `No changes detected in schema "${schemaLocation}".`,
+        );
       });
-      const outputFolder = dirTree("output", {
-        attributes: ["size", "type", "extension"],
-      });
 
-      mockfs.restore();
-      expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-        path.join(EXPECT_PATH, `generateDocFromSchemaWithGroupingOutputFolder`),
-      );
+      test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
+        expect.assertions(1);
+
+        await generateDocFromSchema({
+          baseURL: "graphql",
+          schemaLocation: "__data__/schema_with_grouping.graphql",
+          outputDir: "output",
+          linkRoot: "docs",
+          homepageLocation: "assets/generated.md",
+          diffMethod: "SCHEMA-DIFF",
+          tmpDir: "tmp",
+          loaders: {},
+          groupByDirective: {
+            directive: "doc",
+            field: "category",
+            fallback: "misc",
+          },
+        });
+        const outputFolder = dirTree("output", {
+          attributes: ["size", "type", "extension"],
+        });
+
+        mockfs.restore();
+        expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+          path.join(
+            EXPECT_PATH,
+            `generateDocFromSchemaWithGroupingOutputFolder`,
+          ),
+        );
+      });
     });
   });
 });
