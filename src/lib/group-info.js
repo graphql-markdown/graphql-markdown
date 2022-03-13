@@ -4,19 +4,18 @@ const DEFAULT_GROUP = "Miscellaneous";
 const OPTION_REGEX =
   /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
 
-function parseGroupInfoOption(groupByDirective) {
-  if (typeof groupByDirective !== "string") {
+function parseGroupByOption(groupOptions) {
+  if (typeof groupOptions !== "string") {
     return undefined;
   }
 
-  const { groups: parsedOptions = undefined } =
-    OPTION_REGEX.exec(groupByDirective);
+  const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
   if (typeof parsedOptions == "undefined" || parsedOptions == null) {
-    throw new Error(`Invalid "${groupByDirective}"`);
+    throw new Error(`Invalid "${groupOptions}"`);
   }
 
-  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions;
+  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups;
   return { directive, field, fallback };
 }
 
@@ -74,4 +73,4 @@ function getGroupInfo(allDirectives, groupByDirective) {
   return group;
 }
 
-module.exports = { getGroups, parseGroupInfoOption };
+module.exports = { getGroups, parseGroupByOption };
