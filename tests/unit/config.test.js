@@ -1,4 +1,4 @@
-const { buildConfig } = require("../../src/config");
+const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
 
 jest.mock("../../src/lib/group-info");
 const groupInfo = require("../../src/lib/group-info");
@@ -137,6 +137,50 @@ describe("config", () => {
           tmpDir: "./cli",
         }),
       );
+    });
+
+    test("schema option from CLI overrides that of config file", () => {
+      const configFileOpts = {
+        baseURL: "base-from-config-file",
+        schema: "schemaFromConfigFile.graphql",
+      };
+      const cliOpts = { pretty: true, schema: "schemaFromCLI.graphql" };
+      const input = buildConfig(configFileOpts, cliOpts);
+      const expected = {
+        baseURL: configFileOpts.baseURL,
+        schemaLocation: cliOpts.schema,
+        outputDir: `${DEFAULT_OPTIONS.rootPath.slice(2)}/${
+          configFileOpts.baseURL
+        }`,
+        linkRoot: DEFAULT_OPTIONS.linkRoot,
+        homepageLocation: DEFAULT_OPTIONS.homepage,
+        diffMethod: DEFAULT_OPTIONS.diffMethod,
+        tmpDir: DEFAULT_OPTIONS.tmpDir,
+        loaders: DEFAULT_OPTIONS.loaders,
+        groupByDirective: undefined,
+        prettify: cliOpts.pretty,
+      };
+      expect(input).toStrictEqual(expected);
+    });
+
+    test("force flag from CLI switches diff method to FORCE", () => {
+      const cliOpts = { force: true };
+      const input = buildConfig({}, cliOpts);
+      const expected = {
+        baseURL: DEFAULT_OPTIONS.baseURL,
+        schemaLocation: DEFAULT_OPTIONS.schema,
+        outputDir: `${DEFAULT_OPTIONS.rootPath.slice(2)}/${
+          DEFAULT_OPTIONS.baseURL
+        }`,
+        linkRoot: DEFAULT_OPTIONS.linkRoot,
+        homepageLocation: DEFAULT_OPTIONS.homepage,
+        diffMethod: "FORCE",
+        tmpDir: DEFAULT_OPTIONS.tmpDir,
+        loaders: DEFAULT_OPTIONS.loaders,
+        groupByDirective: undefined,
+        prettify: DEFAULT_OPTIONS.pretty,
+      };
+      expect(input).toStrictEqual(expected);
     });
   });
 });

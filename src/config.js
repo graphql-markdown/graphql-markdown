@@ -59,4 +59,4 @@ function buildConfig(configFileOpts, cliOpts) {
   };
 }
 
-module.exports = { buildConfig };
+module.exports = { buildConfig, DEFAULT_OPTIONS };
