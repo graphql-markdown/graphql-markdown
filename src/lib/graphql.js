@@ -29,12 +29,12 @@ const { hasMethod, hasProperty } = require("../utils/scalars/object");
 const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
-const defaultLoaders = {
+const DefaultLoaders = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
 };
 
 function getDocumentLoaders(extraLoaders = {}) {
-  const loadersList = { ...defaultLoaders, ...extraLoaders };
+  const loadersList = { ...DefaultLoaders, ...extraLoaders };
 
   var loaders = [];
   var loaderOptions = {};
@@ -112,14 +112,19 @@ function getFilteredTypeMap(
   typeMap,
   excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
 ) {
-  if (!typeMap) return undefined;
+  if (typeof typeMap == "undefined" || typeMap == null) {
+    return undefined;
+  }
   return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getIntrospectionFieldsList(queryType) {
-  if (!queryType && !hasMethod(queryType, "getFields")) {
+  if (
+    (typeof queryType == "undefined" || queryType == null) &&
+    !hasMethod(queryType, "getFields")
+  ) {
     return undefined;
   }
   return queryType.getFields();
@@ -134,7 +139,7 @@ function getFields(type) {
 }
 
 function getTypeName(type, defaultName = "") {
-  if (typeof type === "undefined") {
+  if (typeof type === "undefined" || type == null) {
     return defaultName;
   }
   return (
@@ -145,7 +150,9 @@ function getTypeName(type, defaultName = "") {
 }
 
 function getTypeFromTypeMap(typeMap, type) {
-  if (!typeMap) return undefined;
+  if (typeof typeMap == "undefined" || typeMap == null) {
+    return undefined;
+  }
   return Object.keys(typeMap)
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});

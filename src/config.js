@@ -1,13 +1,16 @@
 const path = require("path");
 const os = require("os");
-const GroupInfo = require("./lib/group-info");
+
+const { parseGroupInfoOption } = require("./lib/group-info");
+
+const ASSETS_LOCATION = path.join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
   schema: "./schema.graphl",
   rootPath: "./docs",
   baseURL: "schema",
   linkRoot: "/",
-  homepage: path.join(__dirname, "../assets/", "generated.md"),
+  homepage: path.join(ASSETS_LOCATION, "generated.md"),
   diffMethod: "SCHEMA-DIFF",
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
   loaders: {},
@@ -29,7 +32,7 @@ function buildConfig(configFileOpts, cliOpts) {
   const tmpDir = cliOpts.tmp ?? config.tmpDir;
   const loaders = config.loaders;
   const groupByDirective =
-    GroupInfo.parseOption(cliOpts.groupByDirective) || config.groupByDirective;
+    parseGroupInfoOption(cliOpts.groupByDirective) || config.groupByDirective;
   const prettify = cliOpts.pretty ?? config.pretty;
 
   return {
