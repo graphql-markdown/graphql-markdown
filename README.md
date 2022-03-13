@@ -211,6 +211,7 @@ This documentation has been automatically generated from the GraphQL schema.
 ## Usage
 
 The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://v2.docusaurus.io/docs/cli).
+> Note: In case you have [multiple instances of the plugin](https://docusaurus.io/docs/using-plugins#multi-instance-plugins-and-plugin-ids) configured in `docusaurus.config.js`, you have to assign a unique id to each plugin instance. A new command per instance is added with the form `graphql-to-doc:<id>`
 
 ```shell
 npx docusaurus graphql-to-doc
