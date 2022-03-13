@@ -81,6 +81,8 @@
   "devDependencies": {
     "@stryker-mutator/core": "^5.6.1",
     "@stryker-mutator/jest-runner": "^5.6.1",
+    "commitizen": "^4.2.4",
+    "cz-emoji": "^1.3.1",
     "diff": "^5.0.0",
     "directory-tree": "^3.2.2",
     "eslint": "^8.11.0",
@@ -119,5 +121,79 @@
   "engineStrict": true,
   "engines": {
     "node": ">=14.14.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-emoji"
+    },
+    "cz-emoji": {
+      "skipQuestions": [
+        "scope",
+        "issues",
+        "breaking"
+      ],
+      "types": [
+        {
+          "emoji": "✨",
+          "code": ":sparkles:",
+          "description": "Add a new feature.",
+          "name": "feat"
+        },
+        {
+          "emoji": "🐛",
+          "code": ":bug:",
+          "description": "Fix a bug.",
+          "name": "fix"
+        },
+        {
+          "emoji": "📦️",
+          "code": ":package:",
+          "description": "Update dependencies.",
+          "name": "build"
+        },
+        {
+          "emoji": "🔧",
+          "code": ":wrench:",
+          "description": "Update configuration files.",
+          "name": "conf"
+        },
+        {
+          "emoji": "♻️",
+          "code": ":recycle:",
+          "description": "Refactor code.",
+          "name": "refactor"
+        },
+        {
+          "emoji": "🧪",
+          "code": ":test_tube:",
+          "description": "Update tests.",
+          "name": "test"
+        },
+        {
+          "emoji": "👷",
+          "code": ":construction_worker:",
+          "description": "Update CI.",
+          "name": "ci"
+        },
+        {
+          "emoji": "📝",
+          "code": ":memo:",
+          "description": "Update documentation.",
+          "name": "docs"
+        },
+        {
+          "emoji": "🔖",
+          "code": ":bookmark:",
+          "description": "Add a tag / release.",
+          "name": "tag"
+        },
+        {
+          "emoji": "🧑‍💻",
+          "code": ":technologist:",
+          "description": "Other changes.",
+          "name": "other"
+        }
+      ]
+    }
   }
 }
