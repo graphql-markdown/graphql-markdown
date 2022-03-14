@@ -10,21 +10,19 @@ Take this document as a set of guidelines, not rules, for contributing to this p
 
 ## Table of Contents
 
-- [Contributing guide](#contributing-guide)
-  - [Table of Contents](#table-of-contents)
-  - [First time contributor](#first-time-contributor)
-  - [Getting started](#getting-started)
-    - [Pre-requisites](#pre-requisites)
-    - [Create a repository branch](#create-a-repository-branch)
-  - [Make your changes](#make-your-changes)
-    - [Documentation](#documentation)
-    - [Code](#code)
-    - [Commiting changes](#commiting-changes)
-  - [Coding style](#coding-style)
-    - [Code structure](#code-structure)
-    - [Dependencies](#dependencies)
-    - [Tests](#tests)
-    - [Build documentation](#build-documentation)
+* [First time contributor](#first-time-contributor)
+* [Getting started](#getting-started)
+  * [Pre-requisites](#pre-requisites)
+  * [Create a repository branch](#create-a-repository-branch)
+* [Make your changes](#make-your-changes)
+  * [Documentation](#documentation)
+  * [Code](#code)
+  * [Commiting changes](#commiting-changes)
+* [Coding style](#coding-style)
+  * [Code structure](#code-structure)
+  * [Dependencies](#dependencies)
+  * [Tests](#tests)
+  * [Build documentation](#build-documentation)
 
 ## First time contributor
 
@@ -111,7 +109,7 @@ When making your changes, remember to check your code by running:
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `yarn lint` and `yarn test` will be automatically triggered when commiting code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Commiting changes
 
