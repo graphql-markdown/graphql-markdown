@@ -1,21 +1,21 @@
 ---
 slug: /
 ---
-# GraphQL Documentation Generator for Docusaurus 2
+# GraphQL Documentation Generator for Docusaurus
 
 [![Latest Version](https://img.shields.io/npm/v/@edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://www.npmjs.com/package/@edno/docusaurus2-graphql-doc-generator)
-[![GitHub License](https://img.shields.io/github/license/edno/docusaurus2-graphql-doc-generator?style=flat-square)](https://raw.githubusercontent.com/edno/docusaurus2-graphql-doc-generator/main/LICENSE)
-[![Coverage Status](https://img.shields.io/coveralls/github/edno/graphql-markdown?style=flat-square)](https://coveralls.io/github/edno/graphql-markdown?branch=main)
-[![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fedno%2Fgraphql-markdown%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/edno/graphql-markdown/main)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat-square)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+[![Coverage Status](https://img.shields.io/coveralls/github/graphql-markdown/graphql-markdown?style=flat-square)](https://coveralls.io/github/graphql-markdown/graphql-markdown?branch=main)
+[![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%graphql-markdown%2Fgraphql-markdown%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 This plugin generates a **Markdown documentation** from a **GraphQL schema**.
 
-The documentation is generated for **Docusaurus 2** [docs feature](https://v2.docusaurus.io/docs/docs-introduction).
+The documentation is generated for **Docusaurus** [docs feature](https://docusaurus.io/docs/docs-introduction).
 
 ## Try it
 
-Use the [CodeSandbox template](https://codesandbox.io/s/edno-graphql-markdown-demo-iiyj3c?file=/graphql-markdown.config.js) or fork our [demo repo](https://github.com/edno/graphql-markdown-demo) to try with your own GraphQL schema.
+Use the [CodeSandbox template](https://codesandbox.io/s/edno-graphql-markdown-demo-iiyj3c?file=/graphql-markdown.config.js) or fork our [demo repo](https://github.com/graphql-markdown/graphql-markdown-demo) to try with your own GraphQL schema.
 
 1. Edit the configuration in `graphql-markdown.config.js`
 2. Run `npx docusaurus graphql-to-doc` in a new terminal
@@ -348,10 +348,10 @@ If the error persists, check that you have the correct class name in the configu
 
 ## Contributions
 
-[Contributions](https://github.com/edno/graphql-markdown/blob/main/CONTRIBUTING.md), issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
+[Contributions](CONTRIBUTING.md), issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
 
-<a href="https://github.com/edno/graphql-markdown/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=edno/graphql-markdown" />
+<a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown" />
 </a>
 
 Made with [contributors-img](https://contrib.rocks).

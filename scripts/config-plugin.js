@@ -7,7 +7,7 @@ const pluginGroupConfigFilename =
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
 const config = {
-  url: "https://edno.github.io/",
+  url: "https://graphql-markdown.github.io/",
   baseUrl: "/graphql-markdown/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -38,12 +38,12 @@ const config = {
           position: "left",
         },
         {
-          href: "https://github.com/edno/graphql-markdown/releases",
+          href: "https://github.com/graphql-markdown/graphql-markdown/releases",
           label: "Release Notes",
           position: "right",
         },
         {
-          href: "https://github.com/edno/graphql-markdown",
+          href: "https://github.com/graphql-markdown/graphql-markdown",
           label: "GitHub",
           position: "right",
         },
