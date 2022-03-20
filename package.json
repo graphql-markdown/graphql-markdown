@@ -1,6 +1,6 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
-  "homepage": "https://graphql-markdown.github.io/graphql-markdown",
+  "homepage": "https://graphql-markdown.github.io",
   "description": "Docusaurus 2 plugin for generating Markdown documentation from a GraphQL schema.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
@@ -18,7 +18,8 @@
     "graphql-schema",
     "documentation",
     "plugin",
-    "markdown"
+    "markdown",
+    "graphql-markdown"
   ],
   "author": {
     "name": "Gregory Heitz"

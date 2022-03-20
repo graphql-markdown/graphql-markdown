@@ -1,14 +1,23 @@
 node_modules
-dist
+
+# generated files
+output
+docs
+.schema
+.tmp-earthly-out
 *.log
 .DS_Store
 .eslintcache
+
 # stryker temp files
 .stryker-tmp
+
 # istanbul code coverage
 .nyc_output
 coverage
 reports
+
+# package build
+dist
 *.tgz
-.tmp-earthly-out
-output
+
