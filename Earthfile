@@ -106,7 +106,7 @@ build-demo:
 
 publish:
   FROM +all
-  GIT CLONE --branch main https://github.com/edno/graphql-markdown.git /graphql-markdown
+  GIT CLONE --branch main https://github.com/graphql-markdown/graphql-markdown.git /graphql-markdown
   WORKDIR /graphql-markdown
   RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
   RUN --secret NPM_TOKEN=+secrets/token npm publish
