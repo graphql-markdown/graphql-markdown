@@ -11,13 +11,3 @@ updates:
       commit-message:
           prefix: "npm"
           include: "scope"
-
-    - package-ecosystem: 'docker' # See documentation for possible values
-      directory: '/tests/e2e/docker' # Location of package manifests
-      schedule:
-          interval: 'weekly'
-      labels:
-          - 'automerge'
-          - 'dependencies'
-      commit-message:
-          prefix: "docker"
