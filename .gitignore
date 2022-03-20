@@ -13,3 +13,4 @@ reports
 .tmp-earthly-out
 output
 docs
+.schema
