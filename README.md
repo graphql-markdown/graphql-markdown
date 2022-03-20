@@ -72,7 +72,7 @@ See [multi-intance](#plugin-multi-instance) section, if you want to use 2 distin
 
 ## Usage
 
-The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://v2.docusaurus.io/docs/cli).
+The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://docusaurus.io/docs/cli).
 
 ```shell
 npx docusaurus graphql-to-doc
@@ -201,7 +201,7 @@ module.exports = {
 };
 ```
 
-For more details about navbar, please refer to Docusaurus 2 [documentation](https://v2.docusaurus.io/docs/theme-classic/#navbar-links).
+For more details about navbar, please refer to Docusaurus 2 [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar-link).
 
 ### Sidebars Settings
 
