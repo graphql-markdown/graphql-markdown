@@ -7,8 +7,8 @@ const pluginGroupConfigFilename =
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
 const config = {
-  url: "https://graphql-markdown.github.io/",
-  baseUrl: "/graphql-markdown/",
+  url: "https://graphql-markdown.github.io",
+  baseUrl: "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
