@@ -1,16 +1,16 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
-  "homepage": "https://edno.github.io/graphql-markdown",
+  "homepage": "https://graphql-markdown.github.io/graphql-markdown",
   "description": "Docusaurus 2 plugin for generating Markdown documentation from a GraphQL schema.",
   "bugs": {
-    "url": "https://github.com/edno/graphql-markdown/issues"
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
   "version": "1.9.0",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/edno/graphql-markdown.git"
+    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
   "keywords": [
     "docusaurus",
