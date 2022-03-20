@@ -69,8 +69,9 @@ smoke-init:
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./tests/__data__ ./data
-  COPY ./assets/img ./static/img
-  COPY ./README.md ./docs/README.md
+  COPY ./graphql-markdown.svg ./static/img/
+  COPY ./favicon.ico ./static/img/
+  COPY ./*.md ./docs/*.md
   RUN touch ./docs/.nojekyll
   RUN node config-plugin.js
 
