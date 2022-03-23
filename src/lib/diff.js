@@ -75,4 +75,6 @@ module.exports = {
   saveSchemaHash,
   saveSchemaFile,
   COMPARE_METHOD,
+  SCHEMA_HASH_FILE,
+  SCHEMA_REF,
 };
