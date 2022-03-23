@@ -16,12 +16,12 @@ const {
   saveSchemaHash,
   saveSchemaFile,
   COMPARE_METHOD,
+  SCHEMA_HASH_FILE,
+  SCHEMA_REF,
 } = require("../../../src/lib/diff");
 
 describe("lib", () => {
   const FOLDER = "output";
-  const SCHEMA_FILE = `${FOLDER}/schema.graphql`;
-  const HASH_FILE = `${FOLDER}/.schema`;
 
   beforeEach(() => {
     mockfs({ [FOLDER]: {} });
@@ -90,7 +90,7 @@ describe("lib", () => {
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        const hasHashFile = await fileExists(HASH_FILE);
+        const hasHashFile = await fileExists(`${FOLDER}/${SCHEMA_HASH_FILE}`);
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
@@ -163,7 +163,7 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
-        const hasSchemaFile = await fileExists(SCHEMA_FILE);
+        const hasSchemaFile = await fileExists(`${FOLDER}/${SCHEMA_REF}`);
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
@@ -175,44 +175,24 @@ describe("lib", () => {
       });
     });
 
-    describe("saveSchemaFile()", () => {
-      const { saveSchemaFile } = require("../../../src/lib/diff");
-
-      test("saves introspection schema locally", async () => {
+    describe.each([
+      [saveSchemaHash, SCHEMA_HASH_FILE, "saveSchemaHash.hash"],
+      [saveSchemaFile, SCHEMA_REF, "saveSchemaFile.schema"],
+    ])("%p", (method, reference, expected) => {
+      test(`saves reference data into file ${reference}`, async () => {
         expect.hasAssertions();
 
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        await saveSchemaFile("SCHEMA", FOLDER);
-        const file = await fs.readFile(SCHEMA_FILE, "utf8");
+        await method("SCHEMA", FOLDER);
+
+        const file = await fs.readFile(`${FOLDER}/${reference}`, "utf8");
 
         mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-        expect(file).toMatchFile(
-          path.join(EXPECT_PATH, `saveSchemaFile.schema`),
-        );
-      });
-    });
-
-    describe("saveSchemaHash()", () => {
-      const { saveSchemaHash } = require("../../../src/lib/diff");
-
-      test("saves schema hash into .schema file", async () => {
-        expect.hasAssertions();
-
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
-
-        await saveSchemaHash("SCHEMA", FOLDER);
-
-        const file = await fs.readFile(HASH_FILE, "utf8");
-
-        mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
-
-        expect(file).toMatchFile(path.join(EXPECT_PATH, `saveSchemaHash.hash`));
+        expect(file).toMatchFile(path.join(EXPECT_PATH, expected));
       });
     });
   });

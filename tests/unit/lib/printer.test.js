@@ -625,8 +625,8 @@ describe("lib", () => {
 
             const entityType = {
               name: type,
-              getValues: () => {},
-              getTypes: () => {},
+              getValues: () => ({}),
+              getTypes: () => ({}),
             };
 
             jest
@@ -675,18 +675,16 @@ describe("lib", () => {
               .mockReturnValueOnce(true);
             jest
               .spyOn(printerInstance, "printHeader")
-              .mockImplementation((name) => `header-${name}\n\n`);
+              .mockImplementation((n) => `header-${n}\n\n`);
             jest
               .spyOn(printerInstance, "printDescription")
-              .mockImplementation(
-                (type) => `Test ${capitalize(type.name)}\n\n`,
-              );
+              .mockImplementation((t) => `Test ${capitalize(t.name)}\n\n`);
             jest
               .spyOn(printerInstance, "printCode")
-              .mockImplementation((type) => `\`\`\`${type.name}\`\`\`\n\n`);
+              .mockImplementation((t) => `\`\`\`${t.name}\`\`\`\n\n`);
             jest
               .spyOn(printerInstance, "printSection")
-              .mockImplementation((_, section) => `${section}\n\n`);
+              .mockImplementation((_, s) => `${s}\n\n`);
 
             const printedType = printerInstance.printType(
               entityType.name,
@@ -713,20 +711,16 @@ describe("lib", () => {
           jest.spyOn(graphql, "getTypeName").mockReturnValue(entityType.name);
           jest
             .spyOn(printerInstance, "printHeader")
-            .mockImplementation((name) => `header-${name}\n\n`);
+            .mockImplementation((n) => `header-${n}\n\n`);
           jest
             .spyOn(printerInstance, "printDescription")
-            .mockImplementation(
-              (paramType) => `Test ${capitalize(paramType.name)}\n\n`,
-            );
+            .mockImplementation((t) => `Test ${capitalize(t.name)}\n\n`);
           jest
             .spyOn(printerInstance, "printCode")
-            .mockImplementation(
-              (paramType) => `\`\`\`${paramType.name}\`\`\`\n\n`,
-            );
+            .mockImplementation((t) => `\`\`\`${t.name}\`\`\`\n\n`);
           jest
             .spyOn(printerInstance, "printSection")
-            .mockImplementation((_, section) => `${section}\n\n`);
+            .mockImplementation((_, s) => `${s}\n\n`);
 
           const printedType = printerInstance.printType(
             entityType.name,

@@ -25,7 +25,7 @@ describe("utils", () => {
 
     describe("hasMethod()", () => {
       test("returns true if object has method", () => {
-        expect(hasMethod({ foo: () => {} }, "foo")).toBeTruthy();
+        expect(hasMethod({ foo: () => ({}) }, "foo")).toBeTruthy();
       });
 
       test("returns false if object has not method", () => {

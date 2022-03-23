@@ -84,7 +84,7 @@ module.exports = class Renderer {
 
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
-      /(?<category>[A-z0-9-_]+)[\\/]+(?<pageId>[A-z0-9-_]+).mdx?$/,
+      /(?<category>[A-z0-9-]+)[\\/]+(?<pageId>[A-z0-9-]+).mdx?$/,
     );
     const slug = pathUrl.join(page.groups.category, page.groups.pageId);
 
