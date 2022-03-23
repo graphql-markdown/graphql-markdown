@@ -34,7 +34,7 @@ const messageNoUpdate = [
 
 describe("graphql-to-doc", () => {
   beforeAll(async () => {
-    docsDirs.map((docsDir) => {
+    docsDirs.forEach((docsDir) => {
       fs.mkdir(docsDir, { recursive: true });
     });
   });
