@@ -176,8 +176,6 @@ describe("lib", () => {
     });
 
     describe("saveSchemaFile()", () => {
-      const { saveSchemaFile } = require("../../../src/lib/diff");
-
       test("saves introspection schema locally", async () => {
         expect.hasAssertions();
 
@@ -197,8 +195,6 @@ describe("lib", () => {
     });
 
     describe("saveSchemaHash()", () => {
-      const { saveSchemaHash } = require("../../../src/lib/diff");
-
       test("saves schema hash into .schema file", async () => {
         expect.hasAssertions();
 
