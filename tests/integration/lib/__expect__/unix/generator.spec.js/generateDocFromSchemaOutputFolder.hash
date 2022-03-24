@@ -66,12 +66,12 @@
         {
           "path": "output/inputs/tweet-content.mdx",
           "name": "tweet-content.mdx",
-          "size": 270,
+          "size": 271,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 286,
+      "size": 287,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 8452,
+  "size": 8453,
   "type": "directory"
 }
