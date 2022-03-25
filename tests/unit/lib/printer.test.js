@@ -500,6 +500,26 @@ describe("lib", () => {
             path.join(EXPECT_PATH, "printCodeTypeWithObject.md"),
           );
         });
+        test("returns an input with its fields", () => {
+          expect.hasAssertions();
+
+          const type = {
+            name: "TestName",
+            fields: ["one", "two"],
+          };
+          jest.spyOn(graphql, "isInputType").mockReturnValueOnce(true);
+          jest
+            .spyOn(graphql, "getTypeName")
+            .mockImplementation((entityType) => entityType.name);
+          jest.spyOn(graphql, "getFields").mockReturnValueOnce(type.fields);
+          jest
+            .spyOn(printerInstance, "printCodeField")
+            .mockImplementation((codeField) => `${codeField}\n`);
+          const code = printerInstance.printCodeType(type);
+          expect(code).toMatchFile(
+            path.join(EXPECT_PATH, "printCodeTypeWithInput.md"),
+          );
+        });
       });
 
       describe("printHeader()", () => {

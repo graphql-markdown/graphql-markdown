@@ -167,7 +167,12 @@ module.exports = class Printer {
   }
 
   printCodeType(type) {
-    const entity = isInterfaceType(type) ? "interface" : "type";
+    let entity;
+    if (isInputType(type)) {
+      entity = "input";
+    } else {
+      entity = isInterfaceType(type) ? "interface" : "type";
+    }
     const name = getTypeName(type);
     const extendsInterface =
       hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
