@@ -8,6 +8,7 @@ slug: /
 [![Coverage Status](https://img.shields.io/coveralls/github/graphql-markdown/graphql-markdown?style=flat-square)](https://coveralls.io/github/graphql-markdown/graphql-markdown?branch=main)
 [![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgraphql-markdown%2Fgraphql-markdown%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main)
 [![Sonar Tech Debt](https://img.shields.io/sonar/tech_debt/graphql-markdown_graphql-markdown/main?server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/project/overview?id=graphql-markdown_graphql-markdown)
+[![Snyk Package Health](https://snyk.io/advisor/npm-package/@edno/docusaurus2-graphql-doc-generator/badge.svg)](https://snyk.io/advisor/npm-package/@edno/docusaurus2-graphql-doc-generator)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 This plugin generates a **Markdown documentation** from a **GraphQL schema**.
