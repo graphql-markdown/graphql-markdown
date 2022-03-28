@@ -9,5 +9,5 @@ updates:
           - 'automerge'
           - 'dependencies'
       commit-message:
-          prefix: "npm"
+          prefix: "📦 npm"
           include: "scope"
