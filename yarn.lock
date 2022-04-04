@@ -500,9 +500,9 @@
     strip-json-comments "^3.1.1"
 
 "@graphql-inspector/core@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-3.1.1.tgz#9e5348a91c9143e6490c77082577bba9922ae2d9"
-  integrity sha512-DP+FgKl93ESPLxg1Hujw1tIpsjfHeZDXKU5/43k8f5yQ2jCWM34NywROuICTNTYLuVL6gVxY/PSwWiCjVvlUMw==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-3.1.2.tgz#9ef2a72601a77cb0dcc09c5fbd870413bc687ad8"
+  integrity sha512-f+w1LG6JkGuORBVZM9ZM4j/nT2TgPZwk40m7XutWozNKZpguVG8ChQsldAzb9xPpRZ6Qj/qRfMYMyiA4AAqQbg==
   dependencies:
     dependency-graph "0.11.0"
     object-inspect "1.10.3"
