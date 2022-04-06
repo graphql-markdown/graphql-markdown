@@ -22,8 +22,10 @@ Earthfile
 .eslint*
 .nvmrc
 *.ico
+*.lock
 
-CODE_OF_CONDUCT.md 
-CONTRIBUTING.md 
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+SECURITY.md
 
 sonar-project.properties
