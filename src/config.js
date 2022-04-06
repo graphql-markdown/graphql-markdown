@@ -29,18 +29,22 @@ function buildConfig(configFileOpts, cliOpts) {
     cliOpts = {};
   }
 
-  // Merge defaults with user-defined options in config file.
+  const baseURL = cliOpts.base ?? config.baseURL;
+
   return {
-    'baseURL' : cliOpts.base ?? config.baseURL,
-    'schemaLocation' : cliOpts.schema ?? config.schema,
-    'outputDir' : path.join(cliOpts.root ?? config.rootPath, baseURL),
-    'linkRoot' : cliOpts.link ?? config.linkRoot,
-    'homepageLocation' : cliOpts.homepage ?? config.homepage,
-    'diffMethod' cliOpts.force ? COMPARE_METHOD.FORCE : cliOpts.diff ?? config.diffMethod,
-    'tmpDir' : cliOpts.tmp ?? config.tmpDir,
-    'loaders' : config.loaders,
-    'groupByDirective' : parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
-    'prettify' : cliOpts.pretty ?? config.pretty,
+    baseURL,
+    schemaLocation: cliOpts.schema ?? config.schema,
+    outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
+    linkRoot: cliOpts.link ?? config.linkRoot,
+    homepageLocation: cliOpts.homepage ?? config.homepage,
+    diffMethod: cliOpts.force
+      ? COMPARE_METHOD.FORCE
+      : cliOpts.diff ?? config.diffMethod,
+    tmpDir: cliOpts.tmp ?? config.tmpDir,
+    loaders: config.loaders,
+    groupByDirective:
+      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+    prettify: cliOpts.pretty ?? config.pretty,
   };
 }
 
