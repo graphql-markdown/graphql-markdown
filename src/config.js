@@ -29,34 +29,22 @@ function buildConfig(configFileOpts, cliOpts) {
     cliOpts = {};
   }
 
-  // Merge defaults with user-defined options in config file.
-
   const baseURL = cliOpts.base ?? config.baseURL;
-  const schemaLocation = cliOpts.schema ?? config.schema;
-  const root = cliOpts.root ?? config.rootPath;
-  const outputDir = path.join(root, baseURL);
-  const linkRoot = cliOpts.link ?? config.linkRoot;
-  const homepageLocation = cliOpts.homepage ?? config.homepage;
-  const diffMethod = cliOpts.force
-    ? COMPARE_METHOD.FORCE
-    : cliOpts.diff ?? config.diffMethod;
-  const tmpDir = cliOpts.tmp ?? config.tmpDir;
-  const loaders = config.loaders;
-  const groupByDirective =
-    parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective;
-  const prettify = cliOpts.pretty ?? config.pretty;
 
   return {
     baseURL,
-    schemaLocation,
-    outputDir,
-    linkRoot,
-    homepageLocation,
-    diffMethod,
-    tmpDir,
-    loaders,
-    groupByDirective,
-    prettify,
+    schemaLocation: cliOpts.schema ?? config.schema,
+    outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
+    linkRoot: cliOpts.link ?? config.linkRoot,
+    homepageLocation: cliOpts.homepage ?? config.homepage,
+    diffMethod: cliOpts.force
+      ? COMPARE_METHOD.FORCE
+      : cliOpts.diff ?? config.diffMethod,
+    tmpDir: cliOpts.tmp ?? config.tmpDir,
+    loaders: config.loaders,
+    groupByDirective:
+      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+    prettify: cliOpts.pretty ?? config.pretty,
   };
 }
 
