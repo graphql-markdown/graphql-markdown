@@ -1,3 +1,5 @@
+VERSION 0.6
+
 ARG nodeVersion=lts
 FROM node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
@@ -68,10 +70,11 @@ smoke-init:
   RUN yarn add graphql @graphql-tools/url-loader
   RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
   COPY ./scripts/config-plugin.js ./config-plugin.js
+  COPY ./.docs/custom.css ./src/css/custom.css
   COPY ./tests/__data__ ./data
   COPY ./graphql-markdown.svg ./static/img/
   COPY ./favicon.ico ./static/img/
-  COPY ./*.md ./docs/*.md
+  COPY ./README.md ./docs/README.md
   RUN touch ./docs/.nojekyll
   RUN node config-plugin.js
 
@@ -94,15 +97,14 @@ smoke-run:
 
 build-demo:
   ARG flag
-  ARG port=8080
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn add prettier
   RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force --pretty
   RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --force
   RUN yarn build
-  EXPOSE $port
-  ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=$port"]
+  EXPOSE 8080
+  ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=8080"]
   SAVE ARTIFACT --force ./build AS LOCAL docs
   SAVE IMAGE graphql-markdown:demo
 

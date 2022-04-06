@@ -60,6 +60,9 @@ const config = {
           routeBasePath: "/",
           sidebarPath: "sidebars.js",
         },
+        theme: {
+          customCss: require.resolve("./src/css/custom.css")
+        }
       },
     ],
   ],
