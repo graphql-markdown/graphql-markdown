@@ -95,25 +95,20 @@ smoke-run:
   RUN npx docusaurus graphql-to-doc $OPTIONS
   RUN yarn build
 
-build-demo:
-  ARG flag
+build-docs:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn add prettier
   RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force --pretty
   RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --force
   RUN yarn build
+  SAVE ARTIFACT --force ./build AS LOCAL docs
+
+build-image:
+  FROM +build-demo
   EXPOSE 8080
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=8080"]
-  SAVE ARTIFACT --force ./build AS LOCAL docs
-  SAVE IMAGE graphql-markdown:demo
-
-publish:
-  FROM +all
-  GIT CLONE --branch main https://github.com/graphql-markdown/graphql-markdown.git /graphql-markdown
-  WORKDIR /graphql-markdown
-  RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-  RUN --secret NPM_TOKEN=+secrets/token npm publish
+  SAVE IMAGE graphql-markdown:docs
 
 all:
   BUILD +build-package
