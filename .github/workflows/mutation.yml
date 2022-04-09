@@ -15,16 +15,17 @@ on:
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
-concurrency:  mutation
-  group: mutation
-  cancel-in-progress: true
-
 jobs:
   mutation:
     name: Mutation Tests
     runs-on: ubuntu-latest
 
     steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Checkout Code Base
       uses: actions/checkout@v2
 
