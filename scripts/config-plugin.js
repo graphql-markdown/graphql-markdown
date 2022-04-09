@@ -12,12 +12,13 @@ const config = {
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  title: "GraphQL to Markdown",
-  tagline: "Markdown documentation for GraphQL schema.",
+  title: "GraphQL-Markdown",
+  tagline: "Flexible GraphQL Documentation Generator",
   organizationName: "edno",
   projectName: "graphql-markdown",
   trailingSlash: false,
   themeConfig: {
+    image: "img/preview.png",
     respectPrefersColorScheme: true,
     navbar: {
       title: "GraphQL-Markdown",

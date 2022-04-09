@@ -72,8 +72,9 @@ smoke-init:
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./.docs/custom.css ./src/css/custom.css
   COPY ./tests/__data__ ./data
-  COPY ./graphql-markdown.svg ./static/img/
-  COPY ./favicon.ico ./static/img/
+  COPY ./*.svg ./static/img/
+  COPY ./*.png ./static/img/
+  COPY ./*.ico ./static/img/
   COPY ./README.md ./docs/README.md
   RUN touch ./docs/.nojekyll
   RUN node config-plugin.js
