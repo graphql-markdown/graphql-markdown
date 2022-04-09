@@ -105,7 +105,7 @@ build-docs:
   SAVE ARTIFACT --force ./build AS LOCAL docs
 
 build-image:
-  FROM +build-demo
+  FROM +build-docs
   EXPOSE 8080
   ENTRYPOINT ["yarn", "serve", "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
