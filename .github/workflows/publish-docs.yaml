@@ -48,7 +48,7 @@ jobs:
 
     - name: Push changes to website repo
       run: |
-        cp -Rf ../package/docs/** website/
+        cp -Rf package/docs/** website/
         cd website
         git commit -am ":memo: Update documentation"
         git push
