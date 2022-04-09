@@ -1,0 +1,53 @@
+name: Publish docs
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: publish-docs
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish docs
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: earthly/actions-setup@v1
+      with:
+        version: "latest"
+
+    - name: Docker login # to avoid dockerhub rate-limiting
+      run: docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
+
+    - name: Setup git
+      run: |
+        git config --global user.name "GraphQL-Markdown bot"
+        git config --global user.email "graphql-markdown-bot@edno.io"
+
+    - name: Checkout package repo
+      uses: actions/checkout@v2
+      with:
+        path: package
+        token: ${{ secrets.GRAPHQL_MARKDOWN_PAT }}
+
+    - name: Checkout website repo
+      uses: actions/checkout@v2
+      with:
+        repository: graphql-markdown/graphql-markdown.github.io
+        path: website
+        token: ${{ secrets.GRAPHQL_MARKDOWN_PAT }}
+            
+    - name: Build docs
+      run: |
+        cd package
+        earthly +build-docs
+
+    - name: Push changes to website repo
+      run: |
+        cp -Rf ../package/docs/** website/
+        cd website
+        git commit -am ":memo: Update documentation"
+        git push
