@@ -50,5 +50,6 @@ jobs:
       run: |
         cp -Rf package/docs/** website/
         cd website
+        git add --all
         git commit -am ":memo: Update documentation"
         git push
