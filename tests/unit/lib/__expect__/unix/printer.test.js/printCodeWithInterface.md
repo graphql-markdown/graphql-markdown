@@ -1,4 +1,3 @@
-
 ```graphql
 TestInterface
 ```
