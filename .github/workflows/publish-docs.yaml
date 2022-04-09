@@ -32,14 +32,14 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: package
-        token: ${{ secrets.GRAPHQL_MARKDOWN_PAT }}
+        token: ${{ secrets.BOT_PAT }}
 
     - name: Checkout website repo
       uses: actions/checkout@v3
       with:
         repository: graphql-markdown/graphql-markdown.github.io
         path: website
-        token: ${{ secrets.GRAPHQL_MARKDOWN_PAT }}
+        token: ${{ secrets.BOT_PAT }}
             
     - name: Build docs
       run: |
