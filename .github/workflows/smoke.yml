@@ -19,17 +19,15 @@ on:
       - '!.github'
       - '.github/workflows/smoke.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     name: Smoke Tests
     runs-on: ubuntu-latest
-
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install earthly
         uses: earthly/actions-setup@v1
         with:
