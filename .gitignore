@@ -8,6 +8,7 @@ docs
 *.log
 .DS_Store
 .eslintcache
+.dccache
 
 # stryker temp files
 .stryker-tmp
