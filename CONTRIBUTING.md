@@ -17,7 +17,7 @@ Take this document as a set of guidelines, not rules, for contributing to this p
 * [Make your changes](#make-your-changes)
   * [Documentation](#documentation)
   * [Code](#code)
-  * [Commiting changes](#commiting-changes)
+  * [Committing changes](#committing-changes)
 * [Coding style](#coding-style)
   * [Code structure](#code-structure)
   * [Dependencies](#dependencies)
@@ -63,7 +63,7 @@ If you do not yet have an IDE, then I recommend [VS Code](https://code.visualstu
     * fix: `fix/short-description-of-the-fix` , you can also reference an existing issue, eg `fix/issue-456`
     * documentation: `doc/short-description-of-the-change`
 
-If you aim at a code contribution, you will need few additional steps:
+If you aim at a code contribution, you will need to perform few additional steps:
 
 * checkout your forked repository to your computer ([doc](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)).
 
@@ -88,7 +88,7 @@ If you aim at a code contribution, you will need few additional steps:
 
 ## Make your changes
 
-> **Keep changes small and focused.** This means a pull request should only aim at one purpose: fixing typo in the documentation, fixing one bug at a time, changing one behaviour.
+> **Keep changes small and focused.** This means a pull request should only aim at one purpose: fixing typo in the documentation, fixing one bug at a time, changing one behavior.
 
 ### Documentation
 
@@ -109,7 +109,7 @@ When making your changes, remember to check your code by running:
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `yarn lint` and `yarn test` will be automatically triggered when commiting code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `yarn lint` and `yarn test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
@@ -166,7 +166,7 @@ There are 3 types of tests used in this project, all based on Jest:
 
 * `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
 
-  > The tests run within a Docker container.
+  > The tests run within a Docker container using Earthly.
 
 ### Build documentation
 
@@ -178,7 +178,7 @@ earthly +build-docs
 
 This will update documentation into `docs` folder. 
 
-You can also create a local Docker image `graphql-markdown:docs` for local tests:
+You can also create a local Docker image `graphql-markdown:docs` for tests:
 
 ```shell
 earthly +build-image
