@@ -66,9 +66,9 @@
     "postpack": "pinst --enable"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^3.1.1",
-    "@graphql-tools/graphql-file-loader": "^7.3.4",
-    "@graphql-tools/load": "^7.5.2"
+    "@graphql-inspector/core": "^3.1.2",
+    "@graphql-tools/graphql-file-loader": "^7.3.8",
+    "@graphql-tools/load": "^7.5.7"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",
