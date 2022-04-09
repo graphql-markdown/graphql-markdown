@@ -6,7 +6,6 @@ title: undefined
 
 Lorem Ipsum
 
-
 ```graphql
 scalar undefined
 ```
