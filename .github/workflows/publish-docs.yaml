@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: earthly/actions-setup@v1
+    - name: Install Earthly
+      uses: earthly/actions-setup@v1
       with:
         version: "latest"
 
@@ -28,13 +29,13 @@ jobs:
         git config --global user.email "graphql-markdown-bot@edno.io"
 
     - name: Checkout package repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: package
         token: ${{ secrets.GRAPHQL_MARKDOWN_PAT }}
 
     - name: Checkout website repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: graphql-markdown/graphql-markdown.github.io
         path: website
