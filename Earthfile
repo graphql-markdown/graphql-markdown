@@ -2,11 +2,10 @@ VERSION 0.6
 
 ARG nodeVersion=lts
 FROM docker.io/library/node:$nodeVersion-alpine
+RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
-ENV NPM_TOKEN=""
 
 deps:
-  RUN npm install -g npm@latest
   COPY . .
   RUN yarn install --frozen-lockfile --silent
 
@@ -16,9 +15,8 @@ lint:
   IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
     RUN yarn prettier --write
     RUN yarn lint --fix
-    SAVE ARTIFACT --if-exists ./ AS LOCAL ./
   ELSE
-    ENV NODE_ENV=ci
+    RUN export NODE_ENV=ci
     RUN yarn prettier --check
     RUN yarn lint
   END
@@ -30,7 +28,7 @@ unit-test:
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
-    ENV NODE_ENV=ci
+    RUN export NODE_ENV=ci
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
   END
 
@@ -41,7 +39,7 @@ integration-test:
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
-    ENV NODE_ENV=ci
+    RUN export NODE_ENV=ci
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
   END
 
@@ -55,9 +53,9 @@ mutation-test:
 build-package:
   FROM +deps
   RUN yarn pack --filename docusaurus2-graphql-doc-generator.tgz
+  SAVE ARTIFACT docusaurus2-graphql-doc-generator.tgz
 
 build-docusaurus:
-  FROM +build-package
   WORKDIR /
   RUN npx --quiet @docusaurus/init@latest init docusaurus2 classic
   WORKDIR /docusaurus2
@@ -68,13 +66,12 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN yarn add graphql @graphql-tools/url-loader
-  RUN yarn add /graphql-markdown/docusaurus2-graphql-doc-generator.tgz
+  COPY +build-package/docusaurus2-graphql-doc-generator.tgz ./
+  RUN yarn add ./docusaurus2-graphql-doc-generator.tgz
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./.docs/custom.css ./src/css/custom.css
-  COPY ./tests/__data__ ./data
-  COPY ./*.svg ./static/img/
-  COPY ./*.png ./static/img/
-  COPY ./*.ico ./static/img/
+  COPY --dir ./tests/__data__ ./data
+  COPY ./*.svg ./*.png ./*.ico ./static/img/
   COPY ./README.md ./docs/README.md
   RUN touch ./docs/.nojekyll
   RUN node config-plugin.js
@@ -83,10 +80,10 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN yarn global add fs-extra jest
-  COPY ./tests/e2e/specs ./__tests__/e2e/specs
-  COPY ./tests/helpers ./__tests__/helpers
+  COPY --dir ./tests/e2e/specs ./__tests__/e2e/specs
+  COPY --dir ./tests/helpers ./__tests__/helpers
   COPY ./tests/e2e/jest.config.js ./jest.config.js
-  ENV NODE_ENV=ci
+  RUN export NODE_ENV=ci
   RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
 
 smoke-run:
