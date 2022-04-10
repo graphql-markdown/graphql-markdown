@@ -4,29 +4,29 @@ const { dirname } = require("path");
 const readFile = fs.readFile;
 const copyFile = fs.copyFile;
 
-async function emptyDir(dirpath) {
-  await fs.rm(dirpath, { recursive: true, force: true });
-  await ensureDir(dirpath);
+async function emptyDir(dirPath) {
+  await fs.rm(dirPath, { recursive: true, force: true });
+  await ensureDir(dirPath);
 }
 
-async function ensureDir(dirpath) {
-  if (!(await fileExists(dirpath))) {
-    await fs.mkdir(dirpath, { recursive: true });
+async function ensureDir(dirPath) {
+  if (!(await fileExists(dirPath))) {
+    await fs.mkdir(dirPath, { recursive: true });
   }
 }
 
-async function fileExists(filepath) {
+async function fileExists(filePath) {
   try {
-    await fs.stat(filepath);
+    await fs.stat(filePath);
     return true;
   } catch (error) {
     return false;
   }
 }
 
-async function saveFile(filepath, data) {
-  await ensureDir(dirname(filepath));
-  await fs.writeFile(filepath, data);
+async function saveFile(filePath, data) {
+  await ensureDir(dirname(filePath));
+  await fs.writeFile(filePath, data);
 }
 
 module.exports = {

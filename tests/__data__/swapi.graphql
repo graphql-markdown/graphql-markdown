@@ -515,7 +515,7 @@ type Planet implements Node {
   terrains: [String]
 
   """
-  The percentage of the planet surface that is naturally occuring water or bodies
+  The percentage of the planet surface that is naturally occurring water or bodies
   of water.
   """
   surfaceWater: Float
@@ -856,9 +856,9 @@ type Starship implements Node {
 
   """
   The maximum speed of this starship in atmosphere. null if this starship is
-  incapable of atmosphering flight.
+  incapable of atmospheric flight.
   """
-  maxAtmospheringSpeed: Int
+  maxAtmosphericSpeed: Int
 
   """The class of this starships hyperdrive."""
   hyperdriveRating: Float
@@ -1034,7 +1034,7 @@ type Vehicle implements Node {
   passengers: String
 
   """The maximum speed of this vehicle in atmosphere."""
-  maxAtmospheringSpeed: Int
+  maxAtmosphericSpeed: Int
 
   """The maximum number of kilograms that this vehicle can transport."""
   cargoCapacity: Float
