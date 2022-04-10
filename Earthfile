@@ -1,7 +1,7 @@
 VERSION 0.6
 
 ARG nodeVersion=lts
-FROM node:$nodeVersion-alpine
+FROM docker.io/library/node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
 ENV NPM_TOKEN=""
 

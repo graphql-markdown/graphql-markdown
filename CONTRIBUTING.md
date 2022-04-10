@@ -49,10 +49,12 @@ If you aim at a code contribution, you will need the following tools:
 * [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 * [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
 * [yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
-* [docker](https://www.docker.com/products/docker-desktop)
+* [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)*
 * [earthly](https://earthly.dev/get-earthly)
 
 If you do not yet have an IDE, then I recommend [VS Code](https://code.visualstudio.com/download) for this project.
+
+*\* For using `podman` with `earthly`, you need to run `earthly config global.container_frontend podman-shell` (see [earthly ticket](https://github.com/earthly/earthly/issues/760#issuecomment-932323241)).*
 
 ### Create a repository branch
 
