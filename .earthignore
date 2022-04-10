@@ -6,3 +6,5 @@ node_modules/**
 *.tgz
 .husky
 .github
+Earthfile
+.earthlyignore
