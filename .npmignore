@@ -11,6 +11,8 @@ coverage/
 .vscode
 .schema
 .docs
+.dccache
+.editorconfig
 
 *.yml
 /*.js
@@ -30,3 +32,5 @@ CONTRIBUTING.md
 SECURITY.md
 
 sonar-project.properties
+
+preview.png
