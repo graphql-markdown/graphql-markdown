@@ -6,6 +6,7 @@
     "earthly.earthfile-syntax-highlighting",
     "knisterpeter.vscode-commitizen",
     "snyk-security.snyk-vulnerability-scanner",
-    "GraphQL.vscode-graphql"
+    "graphql.vscode-graphql",
+    "EditorConfig.EditorConfig"
   ]
 }
