@@ -1,5 +1,5 @@
 {
-	"recommendations": [
+  "recommendations": [
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
     "ms-azuretools.vscode-docker",
