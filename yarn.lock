@@ -509,22 +509,22 @@
     tslib "^2.0.0"
 
 "@graphql-tools/graphql-file-loader@^7.3.8":
-  version "7.3.9"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.9.tgz#38bb191fb84084d1c88ee5c26257d52177666afc"
-  integrity sha512-jCc4X6+PFVQlhpd+bvHxfldteYrzWvoYDNy+dzPgw3O/NYtjJ/B1wH6X2L4wXI+CDlKEdUKSEe+Dk6j9gmaItw==
+  version "7.3.10"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.10.tgz#a907ba961fa2358c18c13709d8c1c3b8e666b6c2"
+  integrity sha512-IkhBU3ho+LL9hKSwiBX/of0zIkq/T1Z3Cd8v2COZAsq1qfg07s1xJUA+gZYZPkxcaa12ThUxyNGf5SuF6T7uZA==
   dependencies:
-    "@graphql-tools/import" "6.6.11"
-    "@graphql-tools/utils" "8.6.7"
+    "@graphql-tools/import" "6.6.12"
+    "@graphql-tools/utils" "8.6.8"
     globby "^11.0.3"
     tslib "~2.3.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@6.6.11":
-  version "6.6.11"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.11.tgz#37fcd394f362bac9dc14556daae8a6310ed31721"
-  integrity sha512-lKIRTsDxqdzrJtEOnqW4pr73/QRbGhyc37xewz4EvCYoUk6FEwqilEZIrkChmdQFjOV9BnwxFCp8KaS0P+qU4A==
+"@graphql-tools/import@6.6.12":
+  version "6.6.12"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.12.tgz#73e7d43124e1ac0065f5118da8375b626fb9ad54"
+  integrity sha512-M0detzy3ihJGJbo7MZ6j02198o2nBhiY2MpnWEMRtUMgmZgz5ZTctK3lIxMsd+6LU96m+mc1i2MNIruTHQ6czw==
   dependencies:
-    "@graphql-tools/utils" "8.6.7"
+    "@graphql-tools/utils" "8.6.8"
     resolve-from "5.0.0"
     tslib "~2.3.0"
 
@@ -560,6 +560,13 @@
   version "8.6.7"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.6.7.tgz#0e21101233743eb67a5782a5a40919d85ddb1021"
   integrity sha512-Qi3EN95Rt3hb8CyDKpPKFWOPrnc00P18cpVTXEgtKxetSP39beJBeEEtLB0R53eP/6IolsyTZOTgkET1EaERaw==
+  dependencies:
+    tslib "~2.3.0"
+
+"@graphql-tools/utils@8.6.8":
+  version "8.6.8"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.6.8.tgz#a0824ed5810f66c504df4e97c5900786ac0c260e"
+  integrity sha512-EdUUeKi/wp/UvuknyINpQ/uXDqTM3qxPPPDIq5RpfW0zQOeCvbZcx8xHoMox0TYKvKtg3zoB7aprUtoW+iZLxw==
   dependencies:
     tslib "~2.3.0"
 
