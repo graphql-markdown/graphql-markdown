@@ -51,5 +51,5 @@ jobs:
         cp -Rf package/docs/** website/
         cd website
         git add --all
-        git commit -am ":memo: update documentation ({{ github.sha }})"
+        git commit -am ":memo: update documentation ($GITHUB_SHA)"
         git push
