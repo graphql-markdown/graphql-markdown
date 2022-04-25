@@ -509,22 +509,22 @@
     tslib "^2.0.0"
 
 "@graphql-tools/graphql-file-loader@^7.3.8":
-  version "7.3.10"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.10.tgz#a907ba961fa2358c18c13709d8c1c3b8e666b6c2"
-  integrity sha512-IkhBU3ho+LL9hKSwiBX/of0zIkq/T1Z3Cd8v2COZAsq1qfg07s1xJUA+gZYZPkxcaa12ThUxyNGf5SuF6T7uZA==
+  version "7.3.11"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.11.tgz#3acc3fffdba5e1d47750ea693577c2388e6cf22b"
+  integrity sha512-3RMTfBN0VYSJH+5he9DxW8nGSn5p2+dNN2O2H88QSSwGorkONmKBdmf+9+JTzrEDvPObOzBjIuSD8wCnXlNaQA==
   dependencies:
-    "@graphql-tools/import" "6.6.12"
-    "@graphql-tools/utils" "8.6.8"
+    "@graphql-tools/import" "6.6.13"
+    "@graphql-tools/utils" "8.6.9"
     globby "^11.0.3"
     tslib "~2.3.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@6.6.12":
-  version "6.6.12"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.12.tgz#73e7d43124e1ac0065f5118da8375b626fb9ad54"
-  integrity sha512-M0detzy3ihJGJbo7MZ6j02198o2nBhiY2MpnWEMRtUMgmZgz5ZTctK3lIxMsd+6LU96m+mc1i2MNIruTHQ6czw==
+"@graphql-tools/import@6.6.13":
+  version "6.6.13"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.13.tgz#5561204a16ce3d1308aa96fb5e54cd1e550c748c"
+  integrity sha512-yqdCem+ZZFVAaIC2IxWyAXSEHLNPIuMzm4avTQe/LbYNRFRTpzyIYo3clc22ixeuh2LqSL3tLXKq2IsggCAeQw==
   dependencies:
-    "@graphql-tools/utils" "8.6.8"
+    "@graphql-tools/utils" "8.6.9"
     resolve-from "5.0.0"
     tslib "~2.3.0"
 
@@ -555,13 +555,6 @@
     "@graphql-tools/utils" "8.6.9"
     tslib "~2.3.0"
     value-or-promise "1.0.11"
-
-"@graphql-tools/utils@8.6.8":
-  version "8.6.8"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.6.8.tgz#a0824ed5810f66c504df4e97c5900786ac0c260e"
-  integrity sha512-EdUUeKi/wp/UvuknyINpQ/uXDqTM3qxPPPDIq5RpfW0zQOeCvbZcx8xHoMox0TYKvKtg3zoB7aprUtoW+iZLxw==
-  dependencies:
-    tslib "~2.3.0"
 
 "@graphql-tools/utils@8.6.9":
   version "8.6.9"
