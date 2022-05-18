@@ -47,6 +47,16 @@ module.exports = {
 };
 ```
 
+## Usage
+
+The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://docusaurus.io/docs/cli).
+
+```shell
+npx docusaurus graphql-to-doc
+```
+
+Command line options are described in the section [Options](#options).
+
 ## Configuration
 
 You can define some or all of the plugin options directly at the plugin level in the Docusaurus configuration file `docusaurus.config.js`:
@@ -71,146 +81,6 @@ module.exports = {
 Each option is described in the section [Options](#options).
 
 See [multi-intance](#plugin-multi-instance) section, if you want to use 2 distinct schemas.
-
-## Usage
-
-The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://docusaurus.io/docs/cli).
-
-```shell
-npx docusaurus graphql-to-doc
-```
-
-Command line options are described in the section [Options](#options).
-
-## Options
-
-By default, the plugin will use the options as defined in the plugin's [configuration](#configuration), but they can be overridden by passing them with the command.
-
-| Config File        | CLI Flag                                                  | Default                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|--------------------|-----------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `baseURL`          | `-b, --base <baseURL>`                                    | `schema`                                                    | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the generated documentation.                                                                                                                                                                                                                                                                                                                                                                        |
-| `diffMethod`       | `-d, --diff <diffMethod>`                                 | `SCHEMA-DIFF`                                               | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
-| `docOptions`          | `--noPagination`, `--noToc`                          | `{pagination: true, toc: true}` | Documentation presentation options (see [options](#documentation-options)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `groupByDirective` | `-gdb, --groupByDirective <@directive(field\|=fallback)>` | -                                                           | Group documentation by directive (see [groupByDirective](#option-groupbydirective)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `homepage`         | `-h, --homepage <homepage>`                               | `generated.md`                                              | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />By default, the plugin provides a default page `assets/generated.md`.                                                                                                                                                                                                                                         |
-| `linkRoot`         | `-l, --link <linkRoot>`                                   | `/`                                                         | The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.                                                                                                                                                                                                                                                                                                                                                                                    |
-| `loaders`          |                                                           | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` | GraphQL schema loader/s to be used (see [Loaders](#plugin-loaders)).                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `pretty`           | `--pretty`                                                | `false`                                                     | Use `prettier` to format generated files. The package `prettier` has to be installed separately. If `prettier` is not present, then the formatting will be always skipped.                                                                                                                                                                                                                                                                                                                          |
-| `rootPath`         | `-r, --root <rootPath>`                                   | `./docs`                                                    | The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`.                                                                                                                                                                                                                                                                                                                                                                 |
-| `schema`           | `-s, --schema <schema>`                                   | `./schema.graphql`                                          | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (see [Loaders](#plugin-loaders)).                                                                                                                                                                                                                                                                                                                           |
-| `tmpDir`           | `-t, --tmp <tmpDir>`                                      | *OS temp folder*                                            | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|                    | `-f, --force`                                             | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-
-### Documentation options
-
-From `1.10.0`, the plugin allows disabling some of the Docusaurus documentation features:
-
-- `docOptions.pagination`: page buttons `Previous` and `Next`
-- `docOptions.toc`: page table of content
-
-By default, the options are enabled. They can be disabled by setting them to `false` in the configuration file, or using the corresponding command line flags.
-
-```js
-plugins: [
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-       {
-        schema: "./schema/swapi.graphql",
-        rootPath: "./docs",
-        baseURL: "swapi",
-        homepage: "./docs/swapi.md",
-        docOptions: {
-          pagination: false, // disable buttons previous and next, same as cli flag --noPagination
-          toc: false, // disable page table of content, same as cli flag --noToc
-        },
-      },
-    ],
-  ],
-```
-
-### Plugin Multi-instance
-
-From `1.9.0`, the plugin can support multiple instances.
-
-To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
-
-```js
-plugins: [
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-       {
-        // id: 'swapi', // omitted => default instance
-        schema: "./schema/swapi.graphql",
-        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
-        baseURL: "swapi",
-        homepage: "./docs/swapi.md",
-      },
-    ],
-    [
-      '@edno/docusaurus2-graphql-doc-generator',
-      {
-        id: "admin",
-        schema: "./schema/admin.graphql",
-        rootPath: "./docs", // docs will be generated under './docs/admin' (rootPath/baseURL)
-        baseURL: "admin",
-        homepage: "./docs/admin.md",
-      },
-    ],
-  ],
-```
-
-Instance with an `id` will have their own command line:
-
-```shell
-npx docusaurus graphql-to-doc:admin
-```
-
-### Plugin Loaders
-
-Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
-Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
-
-However, this behaviour can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
-
-If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
-
-```shell
-yarn add @graphql-tools/url-loader
-```
-
-Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
-
-```js
-plugins: [
-  [
-    '@edno/docusaurus2-graphql-doc-generator',
-    {
-      // ... other options
-      loaders: {
-        UrlLoader: "@graphql-tools/url-loader"
-      }
-    },
-  ],
-],
-```
-
-You can declare as many loaders as you need using the structure:
-
-```ts
-type className = string; // UrlLoader
-
-type moduleName = string; // "@graphql-tools/url-loader"
-type moduleOptions = { [option: string]: any };
-
-type module = { 
-  module: moduleName, 
-  options: moduleOptions | undefined 
-}
-
-type loaders = {
-  [className: className]: moduleName | module
-}
-```
 
 ### Site Settings
 
@@ -273,6 +143,136 @@ plugins: [
     },
   ],
 ],
+```
+
+### Plugin Multi-instance
+
+From `1.9.0`, the plugin can support multiple instances.
+
+To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
+
+```js
+plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+       {
+        // id: 'swapi', // omitted => default instance
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+      },
+    ],
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+      {
+        id: "admin",
+        schema: "./schema/admin.graphql",
+        rootPath: "./docs", // docs will be generated under './docs/admin' (rootPath/baseURL)
+        baseURL: "admin",
+        homepage: "./docs/admin.md",
+      },
+    ],
+  ],
+```
+
+Instance with an `id` will have their own command line:
+
+```shell
+npx docusaurus graphql-to-doc:admin
+```
+
+## Options
+
+By default, the plugin will use the options as defined in the plugin's [configuration](#configuration), but they can be overridden by passing them with the command.
+
+| Config File        | CLI Flag                                                  | Default                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|--------------------|-----------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `baseURL`          | `-b, --base <baseURL>`                                    | `schema`                                                    | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the generated documentation.                                                                                                                                                                                                                                                                                                                                                                        |
+| `diffMethod`       | `-d, --diff <diffMethod>`                                 | `SCHEMA-DIFF`                                               | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
+| `docOptions`          | `--noPagination`, `--noToc`                          | `{pagination: true, toc: true}` | Documentation presentation options (see [options](#documentation-options)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `groupByDirective` | `-gdb, --groupByDirective <@directive(field\|=fallback)>` | -                                                           | Group documentation by directive (see [groupByDirective](#option-groupbydirective)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `homepage`         | `-h, --homepage <homepage>`                               | `generated.md`                                              | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />By default, the plugin provides a default page `assets/generated.md`.                                                                                                                                                                                                                                         |
+| `linkRoot`         | `-l, --link <linkRoot>`                                   | `/`                                                         | The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `loaders`          |                                                           | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` | GraphQL schema loader/s to be used (see [Loaders](#plugin-loaders)).                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `pretty`           | `--pretty`                                                | `false`                                                     | Use `prettier` to format generated files. The package `prettier` has to be installed separately. If `prettier` is not present, then the formatting will be always skipped.                                                                                                                                                                                                                                                                                                                          |
+| `rootPath`         | `-r, --root <rootPath>`                                   | `./docs`                                                    | The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`.                                                                                                                                                                                                                                                                                                                                                                 |
+| `schema`           | `-s, --schema <schema>`                                   | `./schema.graphql`                                          | The schema location. It should be compatible with the GraphQL Tools [schema loaders](https://www.graphql-tools.com/docs/schema-loading) (see [Loaders](#plugin-loaders)).                                                                                                                                                                                                                                                                                                                           |
+| `tmpDir`           | `-t, --tmp <tmpDir>`                                      | *OS temp folder*                                            | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|                    | `-f, --force`                                             | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+### Documentation options
+
+From `1.10.0`, the plugin allows disabling some of the Docusaurus documentation features:
+
+- `docOptions.pagination`: page buttons `Previous` and `Next`
+- `docOptions.toc`: page table of content
+
+By default, the options are enabled. They can be disabled by setting them to `false` in the configuration file, or using the corresponding command line flags.
+
+```js
+plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        docOptions: {
+          pagination: false, // disable buttons previous and next, same as cli flag --noPagination
+          toc: false, // disable page table of content, same as cli flag --noToc
+        },
+      },
+    ],
+  ],
+```
+
+### Plugin Loaders
+
+Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
+Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
+
+However, this behaviour can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
+
+If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
+
+```shell
+yarn add @graphql-tools/url-loader
+```
+
+Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
+
+```js
+plugins: [
+  [
+    '@edno/docusaurus2-graphql-doc-generator',
+    {
+      // ... other options
+      loaders: {
+        UrlLoader: "@graphql-tools/url-loader"
+      }
+    },
+  ],
+],
+```
+
+You can declare as many loaders as you need using the structure:
+
+```ts
+type className = string; // UrlLoader
+
+type moduleName = string; // "@graphql-tools/url-loader"
+type moduleOptions = { [option: string]: any };
+
+type module = { 
+  module: moduleName, 
+  options: moduleOptions | undefined 
+}
+
+type loaders = {
+  [className: className]: moduleName | module
+}
 ```
 
 ### Home Page
