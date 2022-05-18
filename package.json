@@ -67,8 +67,8 @@
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.1.2",
-    "@graphql-tools/graphql-file-loader": "^7.3.8",
-    "@graphql-tools/load": "^7.5.7"
+    "@graphql-tools/graphql-file-loader": "^7.3.12",
+    "@graphql-tools/load": "^7.5.11"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",
