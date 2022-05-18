@@ -29,6 +29,8 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           "-h, --homepage <homepage>",
           "File location for doc landing page",
         )
+        .option("--noPagination", "Disable page navigation buttons")
+        .option("--noToc", "Disable page table of content")
         .option("-f, --force", "Force document generation")
         .option("-d, --diff <diffMethod>", "Set diff method")
         .option("-t, --tmp <tmpDir>", "Set temp dir for schema diff")

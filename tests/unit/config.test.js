@@ -100,8 +100,8 @@ describe("config", () => {
           fallback: "Common",
         },
         docOptions: {
-          pagination: false,
-          toc: false,
+          pagination: true,
+          toc: true,
         },
       };
       const cliOpts = {
@@ -114,6 +114,8 @@ describe("config", () => {
         tmp: "./cli",
         groupByDirective: "@group(name|=misc)",
         pretty: true,
+        noToc: true,
+        noPagination: true,
       };
 
       jest
@@ -133,7 +135,10 @@ describe("config", () => {
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
-        docOptions: configFileOpts.docOptions, // doc options are limited to config file
+        docOptions: {
+          pagination: !cliOpts.noPagination,
+          toc: !cliOpts.noToc,
+        },
       });
     });
 

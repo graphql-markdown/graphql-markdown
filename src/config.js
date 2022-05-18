@@ -49,7 +49,10 @@ function buildConfig(configFileOpts, cliOpts) {
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
-    docOptions: config.docOptions,
+    docOptions: {
+      pagination: !cliOpts.noPagination && config.docOptions.pagination,
+      toc: !cliOpts.noToc && config.docOptions.toc,
+    },
   };
 }
 

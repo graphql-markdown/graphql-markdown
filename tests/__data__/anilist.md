@@ -20,6 +20,10 @@ This documentation has been automatically generated using [AniList APIv2](https:
   "homepage": "data/anilist.md",
   "loaders": {
     "UrlLoader": "@graphql-tools/url-loader"
+  },
+  "docOptions": {
+    "pagination": false,
+    "toc": false
   }
 }
 ```
