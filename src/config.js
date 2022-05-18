@@ -16,6 +16,10 @@ const DEFAULT_OPTIONS = {
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
   loaders: {},
   pretty: false,
+  docOptions: {
+    pagination: true,
+    toc: true,
+  },
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -37,14 +41,24 @@ function buildConfig(configFileOpts, cliOpts) {
     outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
     linkRoot: cliOpts.link ?? config.linkRoot,
     homepageLocation: cliOpts.homepage ?? config.homepage,
-    diffMethod: cliOpts.force
-      ? COMPARE_METHOD.FORCE
-      : cliOpts.diff ?? config.diffMethod,
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
     tmpDir: cliOpts.tmp ?? config.tmpDir,
     loaders: config.loaders,
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
+    docOptions: getDocOptions(cliOpts, config.docOptions),
+  };
+}
+
+function getDiffMethod(diff, force) {
+  return force ? COMPARE_METHOD.FORCE : diff;
+}
+
+function getDocOptions(cliOpts, configOptions) {
+  return {
+    pagination: !cliOpts.noPagination && configOptions.pagination,
+    toc: !cliOpts.noToc && configOptions.toc,
   };
 }
 

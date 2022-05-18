@@ -188,8 +188,12 @@ module.exports = class Printer {
     return `${entity} ${name}${extendsInterface} {\n${typeFields}}`;
   }
 
-  printHeader(id, title) {
-    return `---\nid: ${id}\ntitle: ${title}\n---\n`;
+  printHeader(id, title, options) {
+    const { toc, pagination } = { toc: true, pagination: true, ...options };
+    const pagination_buttons = pagination
+      ? ""
+      : `pagination_next: null\npagination_prev: null\n`;
+    return `---\nid: ${id}\ntitle: ${title}\nhide_table_of_contents: ${!toc}\n${pagination_buttons}---\n`;
   }
 
   printDeprecation(type) {
@@ -252,13 +256,12 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     }
     return code.trim() + "\n```\n";
   }
-
-  printType(name, type) {
+  printType(name, type, options) {
     if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    const header = this.printHeader(name, getTypeName(type));
+    const header = this.printHeader(name, getTypeName(type), options);
     const description = this.printDescription(type);
     const code = this.printCode(type);
 

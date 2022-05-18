@@ -34,6 +34,7 @@ describe("config", () => {
           tmpDir: expect.stringMatching(
             /.+@edno\/docusaurus2-graphql-doc-generator$/,
           ),
+          docOptions: DEFAULT_OPTIONS.docOptions,
         }),
       );
     });
@@ -58,6 +59,10 @@ describe("config", () => {
           fallback: "Common",
         },
         pretty: true,
+        docOptions: {
+          pagination: false,
+          toc: false,
+        },
       };
 
       const config = buildConfig(configFileOpts);
@@ -73,6 +78,7 @@ describe("config", () => {
         prettify: configFileOpts.pretty,
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
+        docOptions: configFileOpts.docOptions,
       });
     });
 
@@ -93,6 +99,10 @@ describe("config", () => {
           field: "category",
           fallback: "Common",
         },
+        docOptions: {
+          pagination: true,
+          toc: true,
+        },
       };
       const cliOpts = {
         base: "cli/schema",
@@ -104,6 +114,8 @@ describe("config", () => {
         tmp: "./cli",
         groupByDirective: "@group(name|=misc)",
         pretty: true,
+        noToc: true,
+        noPagination: true,
       };
 
       jest
@@ -123,6 +135,10 @@ describe("config", () => {
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
+        docOptions: {
+          pagination: !cliOpts.noPagination,
+          toc: !cliOpts.noToc,
+        },
       });
     });
 
@@ -148,6 +164,7 @@ describe("config", () => {
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: cliOpts.pretty,
+        docOptions: DEFAULT_OPTIONS.docOptions,
       });
     });
 
@@ -169,6 +186,7 @@ describe("config", () => {
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: DEFAULT_OPTIONS.pretty,
+        docOptions: DEFAULT_OPTIONS.docOptions,
       });
     });
   });

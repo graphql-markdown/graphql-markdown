@@ -9,4 +9,8 @@ module.exports = {
     field: "category",
     fallback: "Common",
   },
+  docOptions: {
+    pagination: true,
+    toc: true,
+  },
 };

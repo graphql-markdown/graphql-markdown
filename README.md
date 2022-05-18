@@ -90,6 +90,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 |--------------------|-----------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `baseURL`          | `-b, --base <baseURL>`                                    | `schema`                                                    | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the generated documentation.                                                                                                                                                                                                                                                                                                                                                                        |
 | `diffMethod`       | `-d, --diff <diffMethod>`                                 | `SCHEMA-DIFF`                                               | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
+| `docOptions`          | `--no-pagination`, `--no-toc`                          | `{pagination: true, toc: true}` | Documentation presentation options (see [options](#documentation-presentation-options)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `groupByDirective` | `-gdb, --groupByDirective <@directive(field\|=fallback)>` | -                                                           | Group documentation by directive (see [groupByDirective](#option-groupbydirective)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `homepage`         | `-h, --homepage <homepage>`                               | `generated.md`                                              | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />By default, the plugin provides a default page `assets/generated.md`.                                                                                                                                                                                                                                         |
 | `linkRoot`         | `-l, --link <linkRoot>`                                   | `/`                                                         | The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -100,9 +101,36 @@ By default, the plugin will use the options as defined in the plugin's [configur
 | `tmpDir`           | `-t, --tmp <tmpDir>`                                      | *OS temp folder*                                            | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |                    | `-f, --force`                                             | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
+###  Documentation presentation options
+
+From `1.10.0`, the plugin allows disabling some of the Docusaurus documentation features:
+
+- `docOptions.pagination`: page buttons `Previous` and `Next`
+- `docOptions.toc`: page table of content
+
+By default, the options are enabled. They can be disabled by setting them to `false` in the configuration file, or using the corresponding command line flags.
+
+```js
+plugins: [
+    [
+      '@edno/docusaurus2-graphql-doc-generator',
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        docOptions: {
+          pagination: false, // disable buttons previous and next, same as cli flag --noPagination
+          toc: false, // disable page table of content, same as cli flag --noToc
+        },
+      },
+    ],
+  ],
+```
+
 ### Plugin Multi-instance
 
-From 1.9.0, the plugin can support multiple instances.
+From `1.9.0`, the plugin can support multiple instances.
 
 To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
 

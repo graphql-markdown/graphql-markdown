@@ -533,6 +533,34 @@ describe("lib", () => {
 
           expect(header).toMatchFile(path.join(EXPECT_PATH, "printHeader.md"));
         });
+
+        test("returns a Docusaurus document header with ToC disabled", () => {
+          expect.hasAssertions();
+
+          const header = printerInstance.printHeader(
+            "an-object-type-name",
+            "An Object Type Name",
+            { toc: false },
+          );
+
+          expect(header).toMatchFile(
+            path.join(EXPECT_PATH, "printHeaderNoToC.md"),
+          );
+        });
+
+        test("returns a Docusaurus document header with pagination disabled", () => {
+          expect.hasAssertions();
+
+          const header = printerInstance.printHeader(
+            "an-object-type-name",
+            "An Object Type Name",
+            { pagination: false },
+          );
+
+          expect(header).toMatchFile(
+            path.join(EXPECT_PATH, "printHeaderNoPagination.md"),
+          );
+        });
       });
 
       describe("printDescription()", () => {
