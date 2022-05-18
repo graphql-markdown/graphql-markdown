@@ -1,5 +1,4 @@
 module.exports = {
-  name: "e2e",
   displayName: "End-to-End Tests",
   testEnvironment: "node",
   verbose: true,
