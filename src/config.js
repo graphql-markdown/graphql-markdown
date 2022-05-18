@@ -16,6 +16,10 @@ const DEFAULT_OPTIONS = {
   tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
   loaders: {},
   pretty: false,
+  docOptions: {
+    pagination: true,
+    toc: true,
+  },
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -45,6 +49,7 @@ function buildConfig(configFileOpts, cliOpts) {
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
+    docOptions: config.docOptions,
   };
 }
 

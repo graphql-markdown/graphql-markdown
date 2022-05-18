@@ -34,6 +34,7 @@ describe("config", () => {
           tmpDir: expect.stringMatching(
             /.+@edno\/docusaurus2-graphql-doc-generator$/,
           ),
+          docOptions: DEFAULT_OPTIONS.docOptions,
         }),
       );
     });
@@ -58,6 +59,10 @@ describe("config", () => {
           fallback: "Common",
         },
         pretty: true,
+        docOptions: {
+          pagination: false,
+          toc: false,
+        },
       };
 
       const config = buildConfig(configFileOpts);
@@ -73,6 +78,7 @@ describe("config", () => {
         prettify: configFileOpts.pretty,
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
+        docOptions: configFileOpts.docOptions,
       });
     });
 
@@ -92,6 +98,10 @@ describe("config", () => {
           directive: "doc",
           field: "category",
           fallback: "Common",
+        },
+        docOptions: {
+          pagination: false,
+          toc: false,
         },
       };
       const cliOpts = {
@@ -123,6 +133,7 @@ describe("config", () => {
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
+        docOptions: configFileOpts.docOptions, // doc options are limited to config file
       });
     });
 
@@ -148,6 +159,7 @@ describe("config", () => {
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: cliOpts.pretty,
+        docOptions: DEFAULT_OPTIONS.docOptions,
       });
     });
 
@@ -169,6 +181,7 @@ describe("config", () => {
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: undefined,
         prettify: DEFAULT_OPTIONS.pretty,
+        docOptions: DEFAULT_OPTIONS.docOptions,
       });
     });
   });

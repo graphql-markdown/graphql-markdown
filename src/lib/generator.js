@@ -21,6 +21,7 @@ module.exports = async function generateDocFromSchema({
   loaders,
   groupByDirective,
   prettify,
+  docOptions,
 }) {
   const { loaders: documentLoaders, loaderOptions } =
     getDocumentLoaders(loaders);
@@ -40,6 +41,7 @@ module.exports = async function generateDocFromSchema({
       baseURL,
       groups,
       prettify,
+      docOptions,
     );
     const pages = await Promise.all(
       Object.keys(rootTypes).map((typeName) =>

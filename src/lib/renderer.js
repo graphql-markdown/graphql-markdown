@@ -22,12 +22,13 @@ const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL, group, prettify) {
+  constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
     this.prettify = prettify && hasPrettierModule();
+    this.options = docOptions;
   }
 
   async emptyOutputDir() {
@@ -76,7 +77,7 @@ module.exports = class Renderer {
     const fileName = toSlug(name);
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
 
-    const content = this.printer.printType(fileName, type);
+    const content = this.printer.printType(fileName, type, this.options);
     await saveFile(
       filePath,
       this.prettify ? prettifyMarkdown(content) : content,
