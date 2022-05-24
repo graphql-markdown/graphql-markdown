@@ -341,17 +341,19 @@ describe("lib", () => {
                 default: "defaultValue",
               },
               { name: "ParamNoDefault", type: "any" },
+              { name: "ParamIntZero", type: "int", default: 0 },
+              { name: "ParamIntNoDefault", type: "int" },
             ],
           };
 
           jest
             .spyOn(graphql, "getDefaultValue")
-            .mockImplementation((paramType) => paramType.default || null);
+            .mockImplementation((paramType) => paramType.default);
 
           const code = printerInstance.printCodeArguments(type);
 
           expect(code).toMatchFile(
-            path.join(EXPECT_PATH, `printCodeArguments.md`),
+            path.join(EXPECT_PATH, "printCodeArguments.md"),
           );
         });
 

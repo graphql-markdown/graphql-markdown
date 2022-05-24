@@ -1,7 +1,6 @@
 directive @doc(
   category: String
-) on OBJECT |  INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
-
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
 scalar Date
 scalar EmailAddress
@@ -24,13 +23,11 @@ type Mutation{
   DropCourse(input: String): String  @doc(category: "Course") 
 }
 
-
 type Query {
-  GPA(input: String): Int  @doc(category: "Grade") 
-  WeightedGPA(input: String): Int  @doc(category: "Grade") 
-  UnWeightedGPA(input: String): Int  @doc(category: "Grade") 
+  GPA(skip: Int = 0): Int  @doc(category: "Grade") 
+  WeightedGPA(input: String, skip: Int): Int  @doc(category: "Grade") 
+  UnWeightedGPA(input: String, skip: Int): Int  @doc(category: "Grade") 
 }
-
 
 type Query {
   allCourses: [String]  @doc(category: "Course") 
