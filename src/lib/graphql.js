@@ -74,21 +74,21 @@ function getDefaultValue(argument) {
     return undefined;
   }
 
-  if (isListType(argument.type)) {
-    const defaultValues = Array.isArray(argument.defaultValue)
-      ? argument.defaultValue
-      : [argument.defaultValue];
-
-    const defaultValuesString = defaultValues
-      .map((defaultValue) => {
-        return printDefaultValue(argument.type.ofType, defaultValue);
-      })
-      .join(", ");
-
-    return `[${defaultValuesString}]`;
+  if (!isListType(argument.type)) {
+    return printDefaultValue(argument.type, argument.defaultValue);
   }
 
-  return printDefaultValue(argument.type, argument.defaultValue);
+  const defaultValues = Array.isArray(argument.defaultValue)
+    ? argument.defaultValue
+    : [argument.defaultValue];
+
+  const defaultValuesString = defaultValues
+    .map((defaultValue) => {
+      return printDefaultValue(argument.type.ofType, defaultValue);
+    })
+    .join(", ");
+
+  return `[${defaultValuesString}]`;
 }
 
 function printDefaultValue(type, value) {
