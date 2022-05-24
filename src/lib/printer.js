@@ -141,12 +141,15 @@ module.exports = class Printer {
     if (hasProperty(type, "args") && type.args.length > 0) {
       code += `(\n`;
       code += type.args.reduce((r, v) => {
-        const defaultValue = getDefaultValue(v)
+        const defaultValue = getDefaultValue(v);
+        const hasDefaultValue =
+          typeof defaultValue !== "undefined" && defaultValue !== null;
+        const printedDefault = hasDefaultValue
           ? ` = ${getDefaultValue(v)}`
           : "";
         const propType = v.type.toString();
         const propName = v.name.toString();
-        return `${r}  ${propName}: ${propType}${defaultValue}\n`;
+        return `${r}  ${propName}: ${propType}${printedDefault}\n`;
       }, "");
       code += `)`;
     }
