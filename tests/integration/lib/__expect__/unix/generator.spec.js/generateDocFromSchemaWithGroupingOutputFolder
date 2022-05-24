@@ -143,30 +143,30 @@
             {
               "path": "output/grade/queries/gpa.mdx",
               "name": "gpa.mdx",
-              "size": 391,
+              "size": 384,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/grade/queries/un-weighted-gpa.mdx",
               "name": "un-weighted-gpa.mdx",
-              "size": 423,
+              "size": 492,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/grade/queries/weighted-gpa.mdx",
               "name": "weighted-gpa.mdx",
-              "size": 416,
+              "size": 485,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1247,
+          "size": 1378,
           "type": "directory"
         }
       ],
-      "size": 2157,
+      "size": 2288,
       "type": "directory"
     },
     {
@@ -335,6 +335,6 @@
       "extension": ".js"
     }
   ],
-  "size": 8259,
+  "size": 8390,
   "type": "directory"
 }
