@@ -341,6 +341,7 @@ describe("lib", () => {
                 default: "defaultValue",
               },
               { name: "ParamNoDefault", type: "any" },
+              { name: "ParamIntZero", type: "int", default: 0 },
             ],
           };
 
