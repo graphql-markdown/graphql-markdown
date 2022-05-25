@@ -25,8 +25,8 @@ type Mutation{
 
 type Query {
   GPA(skip: Int = 0): Int  @doc(category: "Grade") 
-  WeightedGPA(input: String, skip: Int): Int  @doc(category: "Grade") 
-  UnWeightedGPA(input: String, skip: Int): Int  @doc(category: "Grade") 
+  WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
+  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
 }
 
 type Query {
@@ -47,4 +47,3 @@ type DepartmentInformation {
   departmentOpenTime: Time
   departmentCloseTime: Time
 }
-
