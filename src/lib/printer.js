@@ -102,20 +102,28 @@ module.exports = class Printer {
     return "";
   }
 
+  printLink(type, withAttributes = false) {
+    const link = this.toLink(type, getTypeName(type));
+    if (!withAttributes) {
+      return link.link;
+    }
+    const nullableFlag = isNullableType(type) ? "" : "!";
+    const text = isListType(type)
+      ? `[${link.text}${nullableFlag}]`
+      : `${link.text}${nullableFlag}`;
+    return `[\`${text}\`](${link.url})`;
+  }
+
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
     if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    const typeNameLink = this.toLink(type, getTypeName(type)).link;
+    const typeNameLink = this.printLink(type);
     const description = this.printDescription(type, "");
-    let parentTypeLink = "";
-    if (hasProperty(type, "type")) {
-      const parentTypeName = getTypeName(type.type);
-      const link = this.toLink(type.type, parentTypeName);
-      const nullableFlag = isNullableType(type.type) ? "" : "!";
-      parentTypeLink = ` ([\`${link.text}${nullableFlag}\`](${link.url}))`;
-    }
+    const parentTypeLink = hasProperty(type, "type")
+      ? ` (${this.printLink(type.type, true)})`
+      : "";
 
     let section = `${level} ${typeNameLink}${parentTypeLink}\n\n${description}\n`;
     if (isParametrizedField(type)) {
