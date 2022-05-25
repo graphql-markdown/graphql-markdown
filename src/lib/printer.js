@@ -13,6 +13,7 @@ const {
   getNamedType,
   isInputType,
   isListType,
+  isNullableType,
 } = require("./graphql");
 
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
@@ -31,48 +32,60 @@ module.exports = class Printer {
     this.group = group;
   }
 
-  toLink(type, name) {
-    let graphLQLNamedType = getNamedType(type);
-    if (isListType(type)) graphLQLNamedType = getNamedType(type.ofType);
-    let category;
+  getLinkCategory(graphLQLNamedType) {
     switch (true) {
       case isEnumType(graphLQLNamedType):
-        category = "enums";
-        break;
+        return "enums";
       case isUnionType(graphLQLNamedType):
-        category = "unions";
-        break;
+        return "unions";
       case isInterfaceType(graphLQLNamedType):
-        category = "interfaces";
-        break;
+        return "interfaces";
       case isObjectType(graphLQLNamedType):
-        category = "objects";
-        break;
+        return "objects";
       case isInputType(graphLQLNamedType):
-        category = "inputs";
-        break;
+        return "inputs";
       case isScalarType(graphLQLNamedType):
-        category = "scalars";
-        break;
+        return "scalars";
       case isDirectiveType(graphLQLNamedType):
-        category = "directives";
-        break;
+        return "directives";
     }
-    if (category && graphLQLNamedType) {
-      name = graphLQLNamedType.name || graphLQLNamedType;
-      const group = toSlug(
-        hasProperty(this.group, name) ? this.group[name] : "",
-      );
-      return `[\`${name}\`](${pathUrl.join(
-        this.linkRoot,
-        this.baseURL,
-        group,
-        category,
-        toSlug(name),
-      )})`;
-    } else {
-      return `\`${name}\``;
+    return undefined;
+  }
+
+  toLink(type, name) {
+    const graphLQLNamedType = isListType(type)
+      ? getNamedType(type.ofType)
+      : getNamedType(type);
+
+    const category = this.getLinkCategory(graphLQLNamedType);
+
+    if (
+      typeof category === "undefined" ||
+      typeof graphLQLNamedType === "undefined" ||
+      graphLQLNamedType === null
+    ) {
+      return {
+        text: name,
+        url: "#",
+        link: `[\`${name}\`](#)`,
+      };
     }
+
+    const text = graphLQLNamedType.name || graphLQLNamedType;
+    const group = toSlug(hasProperty(this.group, text) ? this.group[text] : "");
+    const url = pathUrl.join(
+      this.linkRoot,
+      this.baseURL,
+      group,
+      category,
+      toSlug(name),
+    );
+
+    return {
+      text: text,
+      url: url,
+      link: `[\`${text}\`](${url})`,
+    };
   }
 
   printSection(values, section, level = HEADER_SECTION_LEVEL) {
@@ -94,16 +107,21 @@ module.exports = class Printer {
       return "";
     }
 
-    const typeNameLink = this.toLink(type, getTypeName(type));
-    const parentTypeLink = hasProperty(type, "type")
-      ? `(${this.toLink(type.type, getTypeName(type.type))})`
-      : "";
+    const typeNameLink = this.toLink(type, getTypeName(type)).link;
     const description = this.printDescription(type, "");
+    let parentTypeLink = "";
+    if (hasProperty(type, "type")) {
+      const parentTypeName = getTypeName(type.type);
+      const link = this.toLink(type.type, parentTypeName);
+      const nullableFlag = isNullableType(type.type) ? "" : "!";
+      parentTypeLink = ` ([\`${link.text}${nullableFlag}\`](${link.url}))`;
+    }
 
-    let section = `${level} ${typeNameLink} ${parentTypeLink}\n\n${description}\n`;
+    let section = `${level} ${typeNameLink}${parentTypeLink}\n\n${description}\n`;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }
+
     return section;
   }
 

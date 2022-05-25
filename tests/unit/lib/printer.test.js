@@ -47,6 +47,7 @@ describe("lib", () => {
             expect.hasAssertions();
 
             const entityName = `Test${capitalize(type)}`;
+
             jest
               .spyOn(graphql, `is${capitalize(type)}Type`)
               .mockReturnValueOnce(true);
@@ -54,8 +55,8 @@ describe("lib", () => {
 
             const link = printerInstance.toLink(type, entityName);
 
-            expect(link).toMatchFile(
-              path.join(EXPECT_PATH, `toLinkWith${capitalize(type)}.md`),
+            expect(JSON.stringify(link)).toMatchFile(
+              path.join(EXPECT_PATH, `toLinkWith${capitalize(type)}.json`),
             );
           },
         );
@@ -72,10 +73,13 @@ describe("lib", () => {
             .spyOn(graphql, `is${capitalize(subtype)}Type`)
             .mockReturnValueOnce(true);
           jest.spyOn(graphql, "getNamedType").mockReturnValue(entityName);
+          jest.spyOn(graphql, "isNullableType").mockReturnValue(true);
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(link).toMatchFile(path.join(EXPECT_PATH, `toLinkWithList.md`));
+          expect(JSON.stringify(link)).toMatchFile(
+            path.join(EXPECT_PATH, "toLinkWithList.json"),
+          );
         });
 
         test("returns plain text for unknown entities", () => {
@@ -86,8 +90,8 @@ describe("lib", () => {
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(link).toMatchFile(
-            path.join(EXPECT_PATH, `toLinkWithUnknown.md`),
+          expect(JSON.stringify(link)).toMatchFile(
+            path.join(EXPECT_PATH, "toLinkWithUnknown.json"),
           );
         });
       });
@@ -108,7 +112,7 @@ describe("lib", () => {
           expect(printSectionItems).toHaveBeenCalledWith(content);
 
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSection.md`),
+            path.join(EXPECT_PATH, "printSection.md"),
           );
         });
 
@@ -125,7 +129,7 @@ describe("lib", () => {
           const section = printerInstance.printSection(content, title, "#");
 
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionCustomLevel.md`),
+            path.join(EXPECT_PATH, "printSectionCustomLevel.md"),
           );
         });
 
@@ -159,7 +163,7 @@ describe("lib", () => {
             "####",
           );
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionItems.md`),
+            path.join(EXPECT_PATH, "printSectionItems.md"),
           );
         });
 
@@ -187,35 +191,43 @@ describe("lib", () => {
           const section = printerInstance.printSectionItem(type);
 
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionItem.md`),
+            path.join(EXPECT_PATH, "printSectionItem.md"),
           );
         });
 
-        test("returns Markdown #### link section with sub type", () => {
-          expect.hasAssertions();
+        test.each([{ nullable: true }, { nullable: false }])(
+          "returns Markdown #### link section with sub type list is $is_list and nullable is $nullable",
+          ({ nullable }) => {
+            expect.hasAssertions();
 
-          const type = {
-            name: "EntityTypeName",
-            type: { name: "AnObjectType" },
-          };
+            const label = nullable ? "Nullable" : "NonNullable";
 
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockImplementation((paramType) => paramType.name);
-          jest
-            .spyOn(graphql, "getNamedType")
-            .mockImplementation((paramType) => paramType.name);
-          jest
-            .spyOn(graphql, "isObjectType")
-            .mockReturnValueOnce(false)
-            .mockReturnValueOnce(true);
+            const type = {
+              name: "EntityTypeName",
+              type: { name: `${label}ObjectType` },
+            };
 
-          const section = printerInstance.printSectionItem(type);
+            jest.spyOn(graphql, "isNullableType").mockReturnValue(nullable);
+            jest
+              .spyOn(graphql, "getTypeName")
+              .mockImplementation((paramType) => paramType.name);
+            jest
+              .spyOn(graphql, "getNamedType")
+              .mockImplementation((paramType) =>
+                paramType ? paramType.name : null,
+              );
+            jest
+              .spyOn(graphql, "isObjectType")
+              .mockReturnValueOnce(false)
+              .mockReturnValueOnce(true);
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionItemWithSubType.md`),
-          );
-        });
+            const section = printerInstance.printSectionItem(type);
+
+            expect(section).toMatchFile(
+              path.join(EXPECT_PATH, `printSectionItemWithSubType${label}.md`),
+            );
+          },
+        );
 
         test("returns Markdown #### link section with field parameters", () => {
           expect.hasAssertions();
@@ -228,7 +240,6 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getTypeName")
             .mockImplementation((paramType) => paramType.name);
-
           jest
             .spyOn(graphql, "getNamedType")
             .mockImplementation((paramType) => paramType.name);
@@ -243,7 +254,7 @@ describe("lib", () => {
 
           expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
           expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionWithFieldParameters.md`),
+            path.join(EXPECT_PATH, "printSectionWithFieldParameters.md"),
           );
         });
       });
@@ -264,7 +275,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeEnum(type);
 
-          expect(code).toMatchFile(path.join(EXPECT_PATH, `printCodeEnum.md`));
+          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeEnum.md"));
         });
 
         test("returns empty string if not enum type", () => {
@@ -294,7 +305,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeUnion(type);
 
-          expect(code).toMatchFile(path.join(EXPECT_PATH, `printCodeUnion.md`));
+          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeUnion.md"));
         });
 
         test("returns empty string if not union type", () => {
@@ -323,7 +334,7 @@ describe("lib", () => {
           const code = printerInstance.printCodeScalar(type);
 
           expect(code).toMatchFile(
-            path.join(EXPECT_PATH, `printCodeScalar.md`),
+            path.join(EXPECT_PATH, "printCodeScalar.md"),
           );
         });
       });
