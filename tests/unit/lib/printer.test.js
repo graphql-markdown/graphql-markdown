@@ -195,12 +195,18 @@ describe("lib", () => {
           );
         });
 
-        test.each([{ nullable: true }, { nullable: false }])(
+        test.each([
+          { nullable: true, is_list: true },
+          { nullable: true, is_list: false },
+          { nullable: false, is_list: true },
+          { nullable: false, is_list: false },
+        ])(
           "returns Markdown #### link section with sub type list is $is_list and nullable is $nullable",
-          ({ nullable }) => {
+          ({ nullable, is_list }) => {
             expect.hasAssertions();
 
-            const label = nullable ? "Nullable" : "NonNullable";
+            let label = nullable ? "Nullable" : "NonNullable";
+            label += is_list ? "List" : "";
 
             const type = {
               name: "EntityTypeName",
@@ -208,6 +214,7 @@ describe("lib", () => {
             };
 
             jest.spyOn(graphql, "isNullableType").mockReturnValue(nullable);
+            jest.spyOn(graphql, "isListType").mockReturnValue(is_list);
             jest
               .spyOn(graphql, "getTypeName")
               .mockImplementation((paramType) => paramType.name);
@@ -243,6 +250,7 @@ describe("lib", () => {
           jest
             .spyOn(graphql, "getNamedType")
             .mockImplementation((paramType) => paramType.name);
+          jest.spyOn(graphql, "isNullableType").mockReturnValue(true);
           jest.spyOn(graphql, "isObjectType").mockReturnValueOnce(true);
           jest.spyOn(graphql, "isParametrizedField").mockReturnValueOnce(true);
           const printSectionItems = jest.spyOn(
