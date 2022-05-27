@@ -67,7 +67,6 @@ module.exports = class Printer {
       return {
         text: name,
         url: "#",
-        link: `[\`${name}\`](#)`,
       };
     }
 
@@ -84,7 +83,6 @@ module.exports = class Printer {
     return {
       text: text,
       url: url,
-      link: `[\`${text}\`](${url})`,
     };
   }
 
@@ -104,9 +102,11 @@ module.exports = class Printer {
 
   printLink(type, withAttributes = false) {
     const link = this.toLink(type, getTypeName(type));
+
     if (!withAttributes) {
-      return link.link;
+      return `[\`${link.text}\`](${link.url})`;
     }
+
     const nullableFlag = isNullableType(type) ? "" : "!";
     const text = isListType(type)
       ? `[${link.text}${nullableFlag}]`
