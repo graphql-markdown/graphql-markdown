@@ -38,23 +38,23 @@ async function checkSchemaChanges(
 ) {
   const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
   const hashSchema = getSchemaHash(schema);
-  let hasDiff = true;
   const schemaRef = path.join(outputDir, SCHEMA_REF);
 
   if (method === COMPARE_METHOD.DIFF) {
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
-      hasDiff = schemaDiff.length > 0;
+      return schemaDiff.length > 0;
     }
   }
 
   if (method === COMPARE_METHOD.HASH) {
     if (await fileExists(hashFile)) {
       const hash = await readFile(hashFile);
-      hasDiff = hashSchema != hash;
+      return hashSchema != hash;
     }
   }
-  return hasDiff;
+
+  return true;
 }
 
 async function saveSchemaFile(schema, outputDir) {
