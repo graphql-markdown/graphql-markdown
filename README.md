@@ -290,7 +290,7 @@ sidebar_position: 1
 This documentation has been automatically generated from the GraphQL schema.
 ```
 
-> ***Trick***
+> ***Tip***
 >
 > *If you want to hide it from the sidebar (like in the demo), then set the front matter `sidebar_class_name` (or `className` depending on your Docusaurus version) to `navbar__toggle`.*
 >
