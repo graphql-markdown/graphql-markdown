@@ -18,7 +18,8 @@ const {
   fileExists,
 } = require("../utils/helpers/fs");
 
-const { schemaSidebar } = require("../../assets/sidebar.json");
+const { ASSETS_LOCATION } = require("../config");
+const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
