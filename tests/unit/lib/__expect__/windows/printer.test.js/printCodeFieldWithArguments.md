@@ -1,3 +1,0 @@
-FooBar(
-arg: boolean
-): string

@@ -1,1 +1,0 @@
-[`TestObjectList`](docs/graphql/objects/test-object-list)

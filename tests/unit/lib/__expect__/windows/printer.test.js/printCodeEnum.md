@@ -1,4 +1,0 @@
-enum EnumTypeName {
-  one
-  two
-}
