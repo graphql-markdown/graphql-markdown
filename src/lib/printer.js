@@ -24,6 +24,9 @@ const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";
 const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
+const MARKDOWN_EOL = "\n";
+const MARKDOWN_EOP = "\n\n";
+
 module.exports = class Printer {
   constructor(schema, baseURL, linkRoot = "/", group = undefined) {
     this.schema = schema;
@@ -87,17 +90,23 @@ module.exports = class Printer {
   }
 
   printSection(values, section, level = HEADER_SECTION_LEVEL) {
-    if (values.length > 0)
-      return `${level} ${section}\n\n${this.printSectionItems(values)}\n\n`;
-    return "";
+    if (values.length === 0) {
+      return "";
+    }
+
+    return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(
+      values,
+    )}${MARKDOWN_EOP}`;
   }
 
   printSectionItems(values, level = HEADER_SECTION_SUB_LEVEL) {
-    if (Array.isArray(values))
-      return values
-        .map((v) => v && this.printSectionItem(v, level))
-        .join(`\n\n`);
-    return "";
+    if (!Array.isArray(values)) {
+      return "";
+    }
+
+    return values
+      .map((v) => v && this.printSectionItem(v, level))
+      .join(MARKDOWN_EOP);
   }
 
   printLink(type, withAttributes = false) {
@@ -125,7 +134,7 @@ module.exports = class Printer {
       ? ` (${this.printLink(type.type, true)})`
       : "";
 
-    let section = `${level} ${typeNameLink}${parentTypeLink}\n\n${description}\n`;
+    let section = `${level} ${typeNameLink}${parentTypeLink}${MARKDOWN_EOP}${description}${MARKDOWN_EOL}`;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }
@@ -134,27 +143,31 @@ module.exports = class Printer {
   }
 
   printCodeEnum(type) {
-    let code = "";
-    if (isEnumType(type)) {
-      code += `enum ${getTypeName(type)} {\n`;
-      code += type
-        .getValues()
-        .map((v) => `  ${getTypeName(v)}`)
-        .join("\n");
-      code += `\n}`;
+    if (!isEnumType(type)) {
+      return "";
     }
+
+    let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
+    code += type
+      .getValues()
+      .map((v) => `  ${getTypeName(v)}`)
+      .join(MARKDOWN_EOL);
+    code += `${MARKDOWN_EOL}}`;
+
     return code;
   }
 
   printCodeUnion(type) {
-    let code = "";
-    if (isUnionType(type)) {
-      code += `union ${getTypeName(type)} = `;
-      code += type
-        .getTypes()
-        .map((v) => getTypeName(v))
-        .join(" | ");
+    if (!isUnionType(type)) {
+      return "";
     }
+
+    let code = `union ${getTypeName(type)} = `;
+    code += type
+      .getTypes()
+      .map((v) => getTypeName(v))
+      .join(" | ");
+
     return code;
   }
 
@@ -163,45 +176,54 @@ module.exports = class Printer {
   }
 
   printCodeArguments(type) {
-    let code = "";
-    if (hasProperty(type, "args") && type.args.length > 0) {
-      code += `(\n`;
-      code += type.args.reduce((r, v) => {
-        const defaultValue = getDefaultValue(v);
-        const hasDefaultValue =
-          typeof defaultValue !== "undefined" && defaultValue !== null;
-        const printedDefault = hasDefaultValue
-          ? ` = ${getDefaultValue(v)}`
-          : "";
-        const propType = v.type.toString();
-        const propName = v.name.toString();
-        return `${r}  ${propName}: ${propType}${printedDefault}\n`;
-      }, "");
-      code += `)`;
+    if (!hasProperty(type, "args") || type.args.length === 0) {
+      return "";
     }
+
+    let code = `(${MARKDOWN_EOL}`;
+    code += type.args.reduce((r, v) => {
+      const defaultValue = getDefaultValue(v);
+      const hasDefaultValue =
+        typeof defaultValue !== "undefined" && defaultValue !== null;
+      const printedDefault = hasDefaultValue ? ` = ${getDefaultValue(v)}` : "";
+      const propType = v.type.toString();
+      const propName = v.name.toString();
+      return `${r}  ${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
+    }, "");
+    code += `)`;
+
     return code;
   }
 
   printCodeField(type) {
     let code = `${getTypeName(type)}`;
     code += this.printCodeArguments(type);
-    code += `: ${getTypeName(type.type)}\n`;
+    code += `: ${getTypeName(type.type)}${MARKDOWN_EOL}`;
+
     return code;
   }
 
   printCodeDirective(type) {
     let code = `directive @${getTypeName(type)}`;
     code += this.printCodeArguments(type);
+
     return code;
   }
 
   printCodeType(type) {
     let entity;
-    if (isInputType(type)) {
-      entity = "input";
-    } else {
-      entity = isInterfaceType(type) ? "interface" : "type";
+
+    switch (true) {
+      case isInputType(type):
+        entity = "input";
+        break;
+      case isInterfaceType(type):
+        entity = "interface";
+        break;
+      default:
+        entity = "type";
     }
+
     const name = getTypeName(type);
     const extendsInterface =
       hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
@@ -214,51 +236,49 @@ module.exports = class Printer {
       .map((v) => `  ${this.printCodeField(v)}`)
       .join("");
 
-    return `${entity} ${name}${extendsInterface} {\n${typeFields}}`;
+    return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
   }
 
   printHeader(id, title, options) {
     const { toc, pagination } = { toc: true, pagination: true, ...options };
     const pagination_buttons = pagination
       ? ""
-      : `pagination_next: null\npagination_prev: null\n`;
-    return `---\nid: ${id}\ntitle: ${title}\nhide_table_of_contents: ${!toc}\n${pagination_buttons}---\n`;
+      : `pagination_next: null${MARKDOWN_EOL}pagination_prev: null${MARKDOWN_EOL}`;
+    return `---${MARKDOWN_EOL}id: ${id}${MARKDOWN_EOL}title: ${title}\nhide_table_of_contents: ${!toc}${MARKDOWN_EOL}${pagination_buttons}---${MARKDOWN_EOL}`;
   }
 
   printDeprecation(type) {
-    if (type.isDeprecated) {
-      return `<span class="badge badge--warning">DEPRECATED${
-        type.deprecationReason ? ": " + escapeMDX(type.deprecationReason) : ""
-      }</span>\n\n`;
+    if (!type.isDeprecated) {
+      return "";
     }
-    return "";
+
+    const reason = type.deprecationReason
+      ? ": " + escapeMDX(type.deprecationReason)
+      : "";
+    return `<span class="badge badge--warning">DEPRECATED${reason}</span>${MARKDOWN_EOP}`;
   }
 
   printDescription(type, noText = NO_DESCRIPTION_TEXT) {
-    let description = "";
-
-    description = `${this.printDeprecation(type)}${
-      (hasProperty(type, "description") && escapeMDX(type.description)) ||
-      noText
-    }`;
-
-    return description;
+    const description =
+      hasProperty(type, "description") && escapeMDX(type.description);
+    return `${this.printDeprecation(type)}${description || noText}`;
   }
 
   printSpecification(type) {
-    if (type.specifiedByUrl) {
-      // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
-      return `
+    if (!type.specifiedByUrl) {
+      return "";
+    }
+
+    // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
+    return `
 export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
 
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>\n\n
+${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>${MARKDOWN_EOP}
       `;
-    }
-    return "";
   }
 
   printCode(type) {
-    let code = "\n```graphql\n";
+    let code = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
     switch (true) {
       case isEnumType(type):
         code += this.printCodeEnum(type);
@@ -283,8 +303,9 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       default:
         code += `"${getTypeName(type)}" not supported`;
     }
-    return code.trim() + "\n```\n";
+    return code.trim() + `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
   }
+
   printType(name, type, options) {
     if (typeof type === "undefined" || type === null) {
       return "";
@@ -323,6 +344,6 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       metadata += this.printSection([this.schema.getType(queryType)], "Type");
     }
 
-    return `${header}\n\n${description}\n\n${code}\n\n${metadata}\n\n`;
+    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}`;
   }
 };
