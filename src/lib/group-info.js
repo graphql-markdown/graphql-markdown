@@ -61,13 +61,13 @@ function getGroupInfo(allDirectives, groupByDirective) {
   }
 
   for (const directive of allDirectives) {
-    if (directive.name.value === groupByDirective.directive) {
-      const field = directive.arguments.find(
-        ({ name }) => name.value === groupByDirective.field,
-      );
-      group = field.value.value;
-      break;
+    if (directive.name.value !== groupByDirective.directive) {
+      continue;
     }
+    const field = directive.arguments.find(
+      ({ name }) => name.value === groupByDirective.field,
+    );
+    return field.value.value;
   }
 
   return group;

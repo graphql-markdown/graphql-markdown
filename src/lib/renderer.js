@@ -18,6 +18,9 @@ const {
   fileExists,
 } = require("../utils/helpers/fs");
 
+const { ASSETS_LOCATION } = require("../config");
+const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
+
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 
@@ -37,10 +40,13 @@ module.exports = class Renderer {
 
   async generateCategoryMetafile(category, dirPath) {
     const filePath = path.join(dirPath, "_category_.yml");
-    if (!(await fileExists(filePath))) {
-      await ensureDir(dirPath);
-      await saveFile(filePath, `label: '${startCase(category)}'\n`);
+
+    if (await fileExists(filePath)) {
+      return;
     }
+
+    await ensureDir(dirPath);
+    await saveFile(filePath, `label: '${startCase(category)}'\n`);
   }
 
   async renderRootTypes(rootTypeName, type) {
@@ -93,7 +99,6 @@ module.exports = class Renderer {
   }
 
   async renderSidebar() {
-    const { schemaSidebar } = require("../../assets/sidebar.json");
     const sidebar = {
       schemaSidebar: schemaSidebar.map((entry) => {
         switch (entry.type) {

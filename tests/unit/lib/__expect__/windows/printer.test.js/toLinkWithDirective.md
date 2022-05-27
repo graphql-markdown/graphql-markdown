@@ -1,1 +1,0 @@
-[`TestDirective`](docs/graphql/directives/test-directive)

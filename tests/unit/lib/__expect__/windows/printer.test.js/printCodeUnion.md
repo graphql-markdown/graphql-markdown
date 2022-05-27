@@ -1,1 +1,0 @@
-union UnionTypeName = one | two

@@ -4,6 +4,7 @@ const os = require("os");
 const { parseGroupByOption } = require("./lib/group-info");
 const { COMPARE_METHOD } = require("./lib/diff");
 
+const PACKAGE_NAME = "@edno/docusaurus2-graphql-doc-generator";
 const ASSETS_LOCATION = path.join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
@@ -12,8 +13,8 @@ const DEFAULT_OPTIONS = {
   baseURL: "schema",
   linkRoot: "/",
   homepage: path.join(ASSETS_LOCATION, "generated.md"),
-  diffMethod: "SCHEMA-DIFF",
-  tmpDir: path.join(os.tmpdir(), "@edno/docusaurus2-graphql-doc-generator"),
+  diffMethod: COMPARE_METHOD.DIFF,
+  tmpDir: path.join(os.tmpdir(), PACKAGE_NAME),
   loaders: {},
   pretty: false,
   docOptions: {
@@ -62,4 +63,4 @@ function getDocOptions(cliOpts, configOptions) {
   };
 }
 
-module.exports = { buildConfig, DEFAULT_OPTIONS };
+module.exports = { buildConfig, DEFAULT_OPTIONS, ASSETS_LOCATION };
