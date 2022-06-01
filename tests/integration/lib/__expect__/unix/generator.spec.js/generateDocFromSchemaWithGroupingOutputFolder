@@ -295,12 +295,12 @@
             {
               "path": "output/misc/queries/search-role.mdx",
               "name": "search-role.mdx",
-              "size": 428,
+              "size": 429,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 445,
+          "size": 446,
           "type": "directory"
         },
         {
@@ -368,7 +368,7 @@
           "type": "directory"
         }
       ],
-      "size": 4524,
+      "size": 4525,
       "type": "directory"
     },
     {
@@ -379,6 +379,6 @@
       "extension": ".js"
     }
   ],
-  "size": 9135,
+  "size": 9136,
   "type": "directory"
 }

@@ -56,9 +56,7 @@ module.exports = class Printer {
   }
 
   toLink(type, name) {
-    const graphLQLNamedType = isListType(type)
-      ? getNamedType(type.ofType)
-      : getNamedType(type);
+    const graphLQLNamedType = getNamedType(type);
 
     const category = this.getLinkCategory(graphLQLNamedType);
 
@@ -80,7 +78,7 @@ module.exports = class Printer {
       this.baseURL,
       group,
       category,
-      toSlug(name),
+      toSlug(text),
     );
 
     return {
@@ -116,11 +114,13 @@ module.exports = class Printer {
       return `[\`${link.text}\`](${link.url})`;
     }
 
+    let text = `${link.text}`;
+    if (isListType(type)) {
+      text = `[${text}${isNullableType(type.ofType) ? "" : "!"}]`;
+    }
     const nullableFlag = isNullableType(type) ? "" : "!";
-    const text = isListType(type)
-      ? `[${link.text}${nullableFlag}]`
-      : `${link.text}${nullableFlag}`;
-    return `[\`${text}\`](${link.url})`;
+
+    return `[\`${text}${nullableFlag}\`](${link.url})`;
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
