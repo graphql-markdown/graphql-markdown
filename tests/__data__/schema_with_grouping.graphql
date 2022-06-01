@@ -23,6 +23,11 @@ type Mutation{
   DropCourse(input: String): String  @doc(category: "Course") 
 }
 
+enum Roles {
+  ADMIN
+  USER
+}
+
 type Query {
   GPA(skip: Int = 0): Int  @doc(category: "Grade") 
   WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
@@ -33,6 +38,7 @@ type Query {
   allCourses: [String]  @doc(category: "Course") 
   mathCourses: [String]  @doc(category: "Course") 
   scienceCourses: [String]  @doc(category: "Course") 
+  searchRole(roles: [Roles!] = [ADMIN]): Int!
 }
 
 type Semester {

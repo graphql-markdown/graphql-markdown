@@ -231,6 +231,28 @@
           "type": "directory"
         },
         {
+          "path": "output/misc/enums",
+          "name": "enums",
+          "children": [
+            {
+              "path": "output/misc/enums/_category_.yml",
+              "name": "_category_.yml",
+              "size": 15,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/enums/roles.mdx",
+              "name": "roles.mdx",
+              "size": 183,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 198,
+          "type": "directory"
+        },
+        {
           "path": "output/misc/objects",
           "name": "objects",
           "children": [
@@ -257,6 +279,28 @@
             }
           ],
           "size": 1007,
+          "type": "directory"
+        },
+        {
+          "path": "output/misc/queries",
+          "name": "queries",
+          "children": [
+            {
+              "path": "output/misc/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 17,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/queries/search-role.mdx",
+              "name": "search-role.mdx",
+              "size": 428,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 445,
           "type": "directory"
         },
         {
@@ -324,7 +368,7 @@
           "type": "directory"
         }
       ],
-      "size": 3881,
+      "size": 4524,
       "type": "directory"
     },
     {
@@ -335,6 +379,6 @@
       "extension": ".js"
     }
   ],
-  "size": 8492,
+  "size": 9135,
   "type": "directory"
 }
