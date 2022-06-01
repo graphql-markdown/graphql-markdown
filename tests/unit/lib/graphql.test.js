@@ -14,6 +14,7 @@ const {
   GraphQLFloat,
   GraphQLString,
   GraphQLList,
+  GraphQLBoolean,
 } = require("graphql");
 
 const {
@@ -48,7 +49,7 @@ describe("lib", () => {
       });
     });
 
-    describe("getDocumentLoaders", () => {
+    describe("getDocumentLoaders()", () => {
       test("returns loaders when plugin config loaders format is a string", () => {
         const loaders = {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
@@ -79,12 +80,15 @@ describe("lib", () => {
       });
     });
 
+    // covers printDefaultValue()
     describe("getDefaultValue()", () => {
       test.each([
         { type: GraphQLInt, value: 5 },
         { type: GraphQLInt, value: 0 },
         { type: GraphQLFloat, value: 5.3 },
         { type: GraphQLFloat, value: 0.0 },
+        { type: GraphQLBoolean, value: true },
+        { type: GraphQLBoolean, value: false },
       ])("returns $value value as default for $type", ({ type, value }) => {
         expect.hasAssertions();
 
@@ -104,6 +108,7 @@ describe("lib", () => {
         { type: GraphQLID },
         { type: GraphQLFloat },
         { type: GraphQLString },
+        { type: GraphQLBoolean },
         { type: new GraphQLList(GraphQLID) },
       ])(
         "returns undefined for type $type if not default value defined",
@@ -136,7 +141,7 @@ describe("lib", () => {
         expect(getDefaultValue(argument)).toBe('["0", "1"]');
       });
 
-      test("returns array default value as string for type GraphQLList(GraphQLInt)", () => {
+      test("returns array default value unformatted for type GraphQLList(GraphQLInt)", () => {
         expect.hasAssertions();
 
         const argument = {
@@ -148,6 +153,52 @@ describe("lib", () => {
         };
 
         expect(getDefaultValue(argument)).toBe("[0, 1]");
+      });
+
+      test("returns unformatted default value for type GraphQLEnum", () => {
+        expect.hasAssertions();
+
+        const enumType = new GraphQLEnumType({
+          name: "RGB",
+          values: {
+            RED: { value: "RED" },
+            GREEN: { value: "GREEN" },
+            BLUE: { value: "BLUE" },
+          },
+        });
+
+        const argument = {
+          name: "color",
+          description: undefined,
+          type: enumType,
+          defaultValue: "RED",
+          extensions: undefined,
+        };
+
+        expect(getDefaultValue(argument)).toBe("RED");
+      });
+
+      test("returns array default value unformatted for type GraphQLList(GraphQLEnum)", () => {
+        expect.hasAssertions();
+
+        const enumType = new GraphQLEnumType({
+          name: "RGB",
+          values: {
+            RED: { value: "RED" },
+            GREEN: { value: "GREEN" },
+            BLUE: { value: "BLUE" },
+          },
+        });
+
+        const argument = {
+          name: "color",
+          description: undefined,
+          type: new GraphQLList(enumType),
+          defaultValue: ["RED"],
+          extensions: undefined,
+        };
+
+        expect(getDefaultValue(argument)).toBe("[RED]");
       });
     });
 

@@ -66,45 +66,43 @@ function getDocumentLoaders(extraLoaders = {}) {
   return { loaders, loaderOptions };
 }
 
-function getDefaultValue(argument) {
-  if (
-    argument.defaultValue === null ||
-    typeof argument.defaultValue === "undefined"
-  ) {
+function getListDefaultValues(type, value) {
+  const defaultValues = Array.isArray(value) ? value : [value];
+
+  const defaultValuesString = defaultValues.map((defaultValue) =>
+    getDefaultValue({ type, defaultValue }),
+  );
+
+  return `[${defaultValuesString.join(", ")}]`;
+}
+
+function getDefaultValue({ type, defaultValue }) {
+  if (defaultValue === null || typeof defaultValue === "undefined") {
     return undefined;
   }
 
-  if (!isListType(argument.type)) {
-    return printDefaultValue(argument.type, argument.defaultValue);
+  if (isListType(type)) {
+    return getListDefaultValues(getNamedType(type), defaultValue);
   }
 
-  const defaultValues = Array.isArray(argument.defaultValue)
-    ? argument.defaultValue
-    : [argument.defaultValue];
-
-  const defaultValuesString = defaultValues
-    .map((defaultValue) => {
-      return printDefaultValue(argument.type.ofType, defaultValue);
-    })
-    .join(", ");
-
-  return `[${defaultValuesString}]`;
+  return formatDefaultValue(type, defaultValue);
 }
 
-function printDefaultValue(type, value) {
+function formatDefaultValue(type, defaultValue) {
   if (isEnumType(type)) {
-    return value;
+    return defaultValue;
   }
 
   switch (type) {
     case GraphQLInt:
     case GraphQLFloat:
     case GraphQLBoolean:
-      return value;
+      return defaultValue;
     case GraphQLID:
     case GraphQLString:
+      return `"${defaultValue}"`;
     default:
-      return `"${value}"`;
+      return defaultValue;
   }
 }
 
