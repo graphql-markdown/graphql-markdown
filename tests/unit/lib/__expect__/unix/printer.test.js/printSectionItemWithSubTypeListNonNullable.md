@@ -1,3 +1,3 @@
-#### [`EntityTypeName`](#) ([``](docs/graphql/objects/non-nullable-object-type))
+#### [`EntityTypeName`](#) ([`[NonNullableObjectType]!`](docs/graphql/objects/non-nullable-object-type))
 
 
