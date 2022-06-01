@@ -66,7 +66,7 @@ module.exports = {
   // ...
   plugins: [
     [
-      '@edno/docusaurus2-graphql-doc-generator',
+      "@edno/docusaurus2-graphql-doc-generator",
       {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
@@ -133,12 +133,12 @@ In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-in
 ```js
 plugins: [
   [
-    '@docusaurus/plugin-content-docs',
+    "@docusaurus/plugin-content-docs",
     {
-      id: 'api',
-      path: 'api',
-      routeBasePath: 'api',
-      sidebarPath: require.resolve('./api/sidebar-schema.js'),
+      id: "api",
+      path: "api",
+      routeBasePath: "api",
+      sidebarPath: require.resolve("./api/sidebar-schema.js"),
       // ... other options
     },
   ],
@@ -154,7 +154,7 @@ To add another instance, you need to assign a unique `id` attribute to plugin in
 ```js
 plugins: [
     [
-      '@edno/docusaurus2-graphql-doc-generator',
+      "@edno/docusaurus2-graphql-doc-generator",
        {
         // id: 'swapi', // omitted => default instance
         schema: "./schema/swapi.graphql",
@@ -164,7 +164,7 @@ plugins: [
       },
     ],
     [
-      '@edno/docusaurus2-graphql-doc-generator',
+      "@edno/docusaurus2-graphql-doc-generator",
       {
         id: "admin",
         schema: "./schema/admin.graphql",
@@ -213,7 +213,7 @@ By default, the options are enabled. They can be disabled by setting them to `fa
 ```js
 plugins: [
     [
-      '@edno/docusaurus2-graphql-doc-generator',
+      "@edno/docusaurus2-graphql-doc-generator",
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",
@@ -246,7 +246,7 @@ Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` c
 ```js
 plugins: [
   [
-    '@edno/docusaurus2-graphql-doc-generator',
+    "@edno/docusaurus2-graphql-doc-generator",
     {
       // ... other options
       loaders: {
@@ -337,7 +337,7 @@ or the plugin configuration `groupByDirective`:
 ```js
 plugins: [
   [
-    '@edno/docusaurus2-graphql-doc-generator',
+    "@edno/docusaurus2-graphql-doc-generator",
     {
       // ... other options
       groupByDirective: {
