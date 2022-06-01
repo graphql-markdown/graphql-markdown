@@ -38,7 +38,7 @@ type Query {
   allCourses: [String]  @doc(category: "Course") 
   mathCourses: [String]  @doc(category: "Course") 
   scienceCourses: [String]  @doc(category: "Course") 
-  searchRole(roles: [Roles!] = [ADMIN]): Int!
+  searchRole(roles: [Roles!]! = [ADMIN]): Int!
 }
 
 type Semester {

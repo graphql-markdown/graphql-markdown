@@ -19,6 +19,7 @@ const {
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
+const { isNonNullType } = require("graphql");
 
 const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";
@@ -115,12 +116,15 @@ module.exports = class Printer {
     }
 
     let text = `${link.text}`;
-    if (isListType(type)) {
-      text = `[${text}${isNullableType(type.ofType) ? "" : "!"}]`;
+    if (isListType(type) || (isNonNullType(type) && isListType(type.ofType))) {
+      const subtype =
+        isNonNullType(type) && isListType(type.ofType) ? type.ofType : type;
+      text = `[${text}${isNullableType(subtype.ofType) ? "" : "!"}]`;
     }
     const nullableFlag = isNullableType(type) ? "" : "!";
 
     return `[\`${text}${nullableFlag}\`](${link.url})`;
+    // return `[\`${getTypeName(type.type)}\`](${link.url})`;
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {

@@ -7,6 +7,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY . .
+  RUN npm install -g npm@latest
   RUN yarn install --frozen-lockfile --silent
 
 lint: 

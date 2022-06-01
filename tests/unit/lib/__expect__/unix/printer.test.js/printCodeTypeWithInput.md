@@ -1,4 +1,4 @@
 input TestName {
-  one
-  two
+  one: String
+  two: Boolean
 }
