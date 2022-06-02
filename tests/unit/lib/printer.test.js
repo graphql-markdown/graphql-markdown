@@ -836,7 +836,7 @@ describe("lib", () => {
               .mockImplementation((header) => `header-${header.toLowerCase()}`);
             jest
               .spyOn(printerInstance, "printDescription")
-              .mockImplementation((type) => `Test ${type.name}`);
+              .mockImplementation((t) => `Test ${t.name}`);
 
             const printedType = printerInstance.printType(name, type);
 
@@ -860,7 +860,7 @@ describe("lib", () => {
           const scalarType = new GraphQLScalarType({
             name: "LoremScalar",
             description: "Lorem Ipsum",
-            specifiedByURL: "http://lorem.ipsum",
+            specifiedByURL: "https://lorem.ipsum",
           });
 
           jest

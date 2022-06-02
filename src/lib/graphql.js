@@ -36,8 +36,8 @@ const DefaultLoaders = {
 function getDocumentLoaders(extraLoaders = {}) {
   const loadersList = { ...DefaultLoaders, ...extraLoaders };
 
-  var loaders = [];
-  var loaderOptions = {};
+  const loaders = [];
+  const loaderOptions = {};
 
   Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
     try {

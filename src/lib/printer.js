@@ -124,7 +124,6 @@ module.exports = class Printer {
     const nullableFlag = isNullableType(type) ? "" : "!";
 
     return `[\`${text}${nullableFlag}\`](${link.url})`;
-    // return `[\`${getTypeName(type.type)}\`](${link.url})`;
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
