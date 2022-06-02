@@ -1,3 +1,3 @@
 ```graphql
-TestUnion
+union TestUnion =
 ```

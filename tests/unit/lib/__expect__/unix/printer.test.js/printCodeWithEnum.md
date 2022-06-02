@@ -1,3 +1,5 @@
 ```graphql
-TestEnum
+enum TestEnum {
+
+}
 ```

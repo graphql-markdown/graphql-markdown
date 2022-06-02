@@ -1,3 +1,4 @@
 ```graphql
-TestInterface
+interface TestInterface {
+}
 ```

@@ -2,7 +2,11 @@ header-object
 
 Test Object
 
-```object```
+```graphql
+type TestObject {
+}
+```
 
-Fields
+
+
 

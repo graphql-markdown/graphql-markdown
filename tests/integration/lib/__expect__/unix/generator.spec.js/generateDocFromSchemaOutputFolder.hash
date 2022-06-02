@@ -238,12 +238,12 @@
         {
           "path": "output/queries/users.mdx",
           "name": "users.mdx",
-          "size": 253,
+          "size": 256,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 1675,
+      "size": 1678,
       "type": "directory"
     },
     {
@@ -288,7 +288,7 @@
         {
           "path": "output/scalars/sri.mdx",
           "name": "sri.mdx",
-          "size": 105,
+          "size": 358,
           "type": "file",
           "extension": ".mdx"
         },
@@ -307,7 +307,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1416,
+      "size": 1669,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 9514,
+  "size": 9770,
   "type": "directory"
 }

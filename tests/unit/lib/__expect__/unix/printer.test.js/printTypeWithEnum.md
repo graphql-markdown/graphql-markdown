@@ -2,7 +2,12 @@ header-enum
 
 Test Enum
 
-```enum```
+```graphql
+enum TestEnum {
 
-Values
+}
+```
+
+
+
 

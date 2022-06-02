@@ -1,3 +1,4 @@
 ```graphql
-TestInput
+input TestInput {
+}
 ```

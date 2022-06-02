@@ -1,3 +1,3 @@
 ```graphql
-TestDirective
+directive @TestDirective
 ```

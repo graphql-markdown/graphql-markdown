@@ -56,7 +56,7 @@
             {
               "path": "output/course/queries/all-courses.mdx",
               "name": "all-courses.mdx",
-              "size": 376,
+              "size": 375,
               "type": "file",
               "extension": ".mdx"
             },
@@ -75,11 +75,11 @@
               "extension": ".mdx"
             }
           ],
-          "size": 1158,
+          "size": 1157,
           "type": "directory"
         }
       ],
-      "size": 2142,
+      "size": 2141,
       "type": "directory"
     },
     {
@@ -379,6 +379,6 @@
       "extension": ".js"
     }
   ],
-  "size": 9137,
+  "size": 9136,
   "type": "directory"
 }
