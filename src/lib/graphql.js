@@ -19,7 +19,8 @@ const {
   isInterfaceType,
   isObjectType,
   isInputObjectType: isInputType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
   printSchema,
 } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
@@ -206,7 +207,8 @@ module.exports = {
   isOperation,
   isInterfaceType,
   isInputType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
   isListType,
   printSchema,
   getFilteredTypeMap,

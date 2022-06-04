@@ -13,13 +13,13 @@ const {
   getNamedType,
   isInputType,
   isListType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
 } = require("./graphql");
 
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
-const { isNonNullType } = require("graphql");
 
 const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";
@@ -108,6 +108,26 @@ module.exports = class Printer {
       .join(MARKDOWN_EOP);
   }
 
+  printLinkAttributes(type, text) {
+    if (typeof type == "undefined") {
+      return text;
+    }
+
+    if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
+      text = this.printLinkAttributes(type.ofType, text);
+    }
+
+    if (isListType(type)) {
+      return `[${text}]`;
+    }
+
+    if (isNonNullType(type)) {
+      return `${text}!`;
+    }
+
+    return text;
+  }
+
   printLink(type, withAttributes = false) {
     const link = this.toLink(type, getTypeName(type));
 
@@ -115,15 +135,9 @@ module.exports = class Printer {
       return `[\`${link.text}\`](${link.url})`;
     }
 
-    let text = `${link.text}`;
-    if (isListType(type) || (isNonNullType(type) && isListType(type.ofType))) {
-      const subtype =
-        isNonNullType(type) && isListType(type.ofType) ? type.ofType : type;
-      text = `[${text}${isNullableType(subtype.ofType) ? "" : "!"}]`;
-    }
-    const nullableFlag = isNullableType(type) ? "" : "!";
+    const text = this.printLinkAttributes(type, link.text);
 
-    return `[\`${text}${nullableFlag}\`](${link.url})`;
+    return `[\`${text}\`](${link.url})`;
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {

@@ -1,11 +1,5 @@
 const path = require("path");
 
-const Printer = require("../../../src/lib/printer");
-
-const graphql = require("../../../src/lib/graphql");
-
-const { getNamedType, isNullableType, isListType } = graphql;
-
 const {
   GraphQLNonNull,
   GraphQLInt,
@@ -21,6 +15,8 @@ const {
   GraphQLInputObjectType,
   GraphQLInterfaceType,
 } = require("graphql");
+
+const Printer = require("../../../src/lib/printer");
 
 const EXPECT_PATH = path.join(
   __dirname,
@@ -265,23 +261,6 @@ describe("lib", () => {
       });
 
       describe("printSectionItem()", () => {
-        beforeEach(() => {
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockImplementation((paramType) =>
-              paramType ? paramType.name : null,
-            );
-          jest
-            .spyOn(graphql, "getNamedType")
-            .mockImplementation((paramType) =>
-              paramType ? paramType.name : null,
-            );
-        });
-
-        afterEach(() => {
-          jest.resetAllMocks();
-        });
-
         test("returns Markdown #### link section with description", () => {
           expect.hasAssertions();
 
@@ -387,27 +366,9 @@ describe("lib", () => {
           const type = {
             name: "EntityTypeNameList",
             type: new GraphQLNonNull(
-              new GraphQLList(
-                new GraphQLNonNull(
-                  new GraphQLList(new GraphQLNonNull(GraphQLInt)),
-                ),
-              ),
+              new GraphQLList(new GraphQLNonNull(GraphQLInt)),
             ),
           };
-
-          jest
-            .spyOn(graphql, "getNamedType")
-            .mockImplementation((paramType) => getNamedType(paramType));
-          jest
-            .spyOn(graphql, "isNullableType")
-            .mockImplementation((paramType) => isNullableType(paramType));
-          jest
-            .spyOn(graphql, "isScalarType")
-            .mockReturnValueOnce(false)
-            .mockReturnValueOnce(true);
-          jest
-            .spyOn(graphql, "isListType")
-            .mockImplementation((paramType) => isListType(paramType));
 
           const section = printerInstance.printSectionItem(type);
 
@@ -431,11 +392,6 @@ describe("lib", () => {
               two: { value: "two" },
             },
           });
-
-          jest.spyOn(graphql, "isEnumType").mockReturnValueOnce(true);
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockImplementation((paramType) => paramType.name);
 
           const code = printerInstance.printCodeEnum(type);
 
@@ -493,10 +449,6 @@ describe("lib", () => {
         test("returns scalar code structure", () => {
           expect.hasAssertions();
 
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockImplementation((paramType) => paramType.name);
-
           const code = printerInstance.printCodeScalar(type);
 
           expect(code).toMatchFile(
@@ -522,10 +474,6 @@ describe("lib", () => {
               ParamIntNoDefault: { type: "int" },
             },
           });
-
-          jest
-            .spyOn(graphql, "getDefaultValue")
-            .mockImplementation((paramType) => paramType.default);
 
           const code = printerInstance.printCodeArguments(type);
 
@@ -566,14 +514,6 @@ describe("lib", () => {
 
           const type = { name: "FooBar", type: "string" };
 
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockReturnValueOnce(type.name)
-            .mockReturnValueOnce(type.type);
-          jest
-            .spyOn(printerInstance, "printCodeArguments")
-            .mockReturnValueOnce("");
-
           const code = printerInstance.printCodeField(type);
 
           expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeField.md"));
@@ -583,14 +523,6 @@ describe("lib", () => {
           expect.hasAssertions();
 
           const type = { name: "FooBar", type: "string" };
-
-          jest
-            .spyOn(graphql, "getTypeName")
-            .mockReturnValueOnce(type.name)
-            .mockReturnValueOnce(type.type);
-          jest
-            .spyOn(printerInstance, "printCodeArguments")
-            .mockReturnValueOnce("(\narg: boolean\n)");
 
           const code = printerInstance.printCodeField(type);
 
@@ -606,11 +538,6 @@ describe("lib", () => {
 
           const type = { name: "FooBar", type: "string" };
 
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(type.name);
-          jest
-            .spyOn(printerInstance, "printCodeArguments")
-            .mockReturnValueOnce("");
-
           const code = printerInstance.printCodeDirective(type);
 
           expect(code).toMatchFile(
@@ -622,11 +549,6 @@ describe("lib", () => {
           expect.hasAssertions();
 
           const type = { name: "FooBar", type: "string" };
-
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(type.name);
-          jest
-            .spyOn(printerInstance, "printCodeArguments")
-            .mockReturnValueOnce("(\narg: boolean\n)");
 
           const code = printerInstance.printCodeDirective(type);
 
@@ -688,6 +610,7 @@ describe("lib", () => {
           });
 
           const code = printerInstance.printCodeType(type);
+
           expect(code).toMatchFile(
             path.join(EXPECT_PATH, "printCodeTypeWithInput.md"),
           );
@@ -794,8 +717,6 @@ describe("lib", () => {
           expect.hasAssertions();
 
           const type = "TestFooBarType";
-
-          jest.spyOn(graphql, "getTypeName").mockReturnValueOnce(type);
 
           const code = printerInstance.printCode(type);
 
