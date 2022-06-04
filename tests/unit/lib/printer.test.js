@@ -522,7 +522,16 @@ describe("lib", () => {
         test("returns a field with its type and arguments", () => {
           expect.hasAssertions();
 
-          const type = { name: "FooBar", type: "string" };
+          const type = {
+            name: "TypeFooBar",
+            type: GraphQLString,
+            args: [
+              {
+                name: "ArgFooBar",
+                type: GraphQLString,
+              },
+            ],
+          };
 
           const code = printerInstance.printCodeField(type);
 
@@ -536,7 +545,11 @@ describe("lib", () => {
         test("returns a directive", () => {
           expect.hasAssertions();
 
-          const type = { name: "FooBar", type: "string" };
+          const type = new GraphQLDirective({
+            name: "FooBar",
+            type: GraphQLString,
+            locations: [],
+          });
 
           const code = printerInstance.printCodeDirective(type);
 
@@ -548,7 +561,16 @@ describe("lib", () => {
         test("returns a directive with its arguments", () => {
           expect.hasAssertions();
 
-          const type = { name: "FooBar", type: "string" };
+          const type = new GraphQLDirective({
+            name: "FooBar",
+            type: GraphQLString,
+            locations: [],
+            args: {
+              ArgFooBar: {
+                type: GraphQLBoolean,
+              },
+            },
+          });
 
           const code = printerInstance.printCodeDirective(type);
 

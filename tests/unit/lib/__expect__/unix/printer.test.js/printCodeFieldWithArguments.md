@@ -1,3 +1,3 @@
-FooBar(
-arg: boolean
-): string
+TypeFooBar(
+  ArgFooBar: String
+): String
