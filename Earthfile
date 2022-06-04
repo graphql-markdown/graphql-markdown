@@ -7,7 +7,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY . .
-  RUN npm install -g npm@latest
+  RUN npm config set update-notifier false
   RUN yarn install --frozen-lockfile --silent
 
 lint: 
@@ -80,6 +80,7 @@ smoke-init:
 smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
+  RUN npm config set update-notifier false
   RUN yarn global add fs-extra jest
   COPY --dir ./tests/e2e/specs ./__tests__/e2e/specs
   COPY --dir ./tests/helpers ./__tests__/helpers
