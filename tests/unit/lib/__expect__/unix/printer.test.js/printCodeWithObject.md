@@ -1,3 +1,4 @@
 ```graphql
-TestObject
+type TestObject {
+}
 ```

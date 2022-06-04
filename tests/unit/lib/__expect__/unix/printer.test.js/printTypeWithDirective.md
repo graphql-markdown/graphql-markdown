@@ -2,7 +2,10 @@ header-directive
 
 Test Directive
 
-```directive```
+```graphql
+directive @TestDirective
+```
 
-Arguments
+
+
 

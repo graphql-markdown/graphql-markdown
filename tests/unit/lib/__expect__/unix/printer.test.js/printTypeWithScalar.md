@@ -2,7 +2,10 @@ header-scalar
 
 Test Scalar
 
-```scalar```
+```graphql
+scalar TestScalar
+```
+
 
 
 

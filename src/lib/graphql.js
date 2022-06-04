@@ -19,7 +19,8 @@ const {
   isInterfaceType,
   isObjectType,
   isInputObjectType: isInputType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
   printSchema,
 } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
@@ -36,8 +37,8 @@ const DefaultLoaders = {
 function getDocumentLoaders(extraLoaders = {}) {
   const loadersList = { ...DefaultLoaders, ...extraLoaders };
 
-  var loaders = [];
-  var loaderOptions = {};
+  const loaders = [];
+  const loaderOptions = {};
 
   Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
     try {
@@ -120,7 +121,8 @@ function getFilteredTypeMap(
 
 function getIntrospectionFieldsList(queryType) {
   if (
-    (typeof queryType == "undefined" || queryType == null) &&
+    typeof queryType == "undefined" ||
+    queryType == null ||
     !hasMethod(queryType, "getFields")
   ) {
     return undefined;
@@ -137,14 +139,16 @@ function getFields(type) {
 }
 
 function getTypeName(type, defaultName = "") {
-  if (typeof type === "undefined" || type == null) {
-    return defaultName;
+  switch (true) {
+    case hasProperty(type, "name"):
+      return type.name;
+    case hasMethod(type, "toString"):
+      return type.toString();
+    case typeof type === "undefined":
+    case type == null:
+    default:
+      return defaultName;
   }
-  return (
-    (hasProperty(type, "name") && type.name) ||
-    (hasMethod(type, "toString") && type.toString()) ||
-    defaultName
-  );
 }
 
 function getTypeFromTypeMap(typeMap, type) {
@@ -178,12 +182,12 @@ function getSchemaMap(schema) {
   };
 }
 
-function isParametrizedField(field) {
-  return hasProperty(field, "args") && field.args.length > 0;
+function isParametrizedField(type) {
+  return hasProperty(type, "args") && type.args.length > 0;
 }
 
-function isOperation(query) {
-  return hasProperty(query, "type");
+function isOperation(type) {
+  return hasProperty(type, "type");
 }
 
 module.exports = {
@@ -203,7 +207,8 @@ module.exports = {
   isOperation,
   isInterfaceType,
   isInputType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
   isListType,
   printSchema,
   getFilteredTypeMap,

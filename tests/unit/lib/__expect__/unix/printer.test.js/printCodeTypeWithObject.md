@@ -1,4 +1,4 @@
 type TestName implements TestInterfaceName {
-  one
-  two
+  one: String
+  two: Boolean
 }

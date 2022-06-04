@@ -1,4 +1,4 @@
-interface undefined {
-  one
-  two
+interface TestInterfaceName {
+  one: String
+  two: Boolean
 }

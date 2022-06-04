@@ -2,7 +2,11 @@ header-input
 
 Test Input
 
-```input```
+```graphql
+input TestInput {
+}
+```
 
-Fields
+
+
 

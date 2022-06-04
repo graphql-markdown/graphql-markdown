@@ -1,3 +1,3 @@
 ```graphql
-TestQuery
+TestQuery: ID
 ```

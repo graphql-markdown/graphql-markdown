@@ -1,6 +1,6 @@
-#### [`EntityTypeName`](docs/graphql/objects/entity-type-name)
+#### [`EntityTypeName`](#)
 
 
-- ##### [`ParameterTypeName`](#)
+- ##### [`ParameterTypeName`](#) ([`String`](docs/graphql/scalars/string))
 
 

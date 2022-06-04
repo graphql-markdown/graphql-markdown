@@ -13,7 +13,8 @@ const {
   getNamedType,
   isInputType,
   isListType,
-  isNullableType,
+  isNonNullType,
+  isLeafType,
 } = require("./graphql");
 
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
@@ -107,6 +108,26 @@ module.exports = class Printer {
       .join(MARKDOWN_EOP);
   }
 
+  printLinkAttributes(type, text) {
+    if (typeof type == "undefined") {
+      return text;
+    }
+
+    if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
+      text = this.printLinkAttributes(type.ofType, text);
+    }
+
+    if (isListType(type)) {
+      return `[${text}]`;
+    }
+
+    if (isNonNullType(type)) {
+      return `${text}!`;
+    }
+
+    return text;
+  }
+
   printLink(type, withAttributes = false) {
     const link = this.toLink(type, getTypeName(type));
 
@@ -114,13 +135,9 @@ module.exports = class Printer {
       return `[\`${link.text}\`](${link.url})`;
     }
 
-    let text = `${link.text}`;
-    if (isListType(type)) {
-      text = `[${text}${isNullableType(type.ofType) ? "" : "!"}]`;
-    }
-    const nullableFlag = isNullableType(type) ? "" : "!";
+    const text = this.printLinkAttributes(type, link.text);
 
-    return `[\`${text}${nullableFlag}\`](${link.url})`;
+    return `[\`${text}\`](${link.url})`;
   }
 
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
@@ -265,21 +282,26 @@ module.exports = class Printer {
   }
 
   printSpecification(type) {
-    if (!type.specifiedByUrl) {
+    if (!type.specifiedByURL && !type.specifiedByUrl) {
       return "";
     }
+
+    const url = type.specifiedByURL || type.specifiedByUrl;
 
     // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
     return `
 export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
 
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${type.specifiedByUrl}" title="Specified by ${type.specifiedByUrl}">⎘</a>${MARKDOWN_EOP}
+${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
       `;
   }
 
   printCode(type) {
     let code = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
     switch (true) {
+      case isOperation(type):
+        code += this.printCodeField(type);
+        break;
       case isEnumType(type):
         code += this.printCodeEnum(type);
         break;
@@ -297,13 +319,43 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       case isDirectiveType(type):
         code += this.printCodeDirective(type);
         break;
-      case isOperation(type):
-        code += this.printCodeField(type);
-        break;
       default:
         code += `"${getTypeName(type)}" not supported`;
     }
     return code.trim() + `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
+  }
+
+  printTypeMetadata(type) {
+    let metadata;
+    switch (true) {
+      case isScalarType(type):
+        return this.printSpecification(type);
+      case isEnumType(type):
+        return this.printSection(type.getValues(), "Values");
+      case isUnionType(type):
+        return this.printSection(type.getTypes(), "Possible types");
+      case isObjectType(type):
+      case isInterfaceType(type):
+      case isInputType(type):
+        metadata = this.printSection(getFields(type), "Fields");
+        if (hasMethod(type, "getInterfaces")) {
+          metadata += this.printSection(type.getInterfaces(), "Interfaces");
+        }
+        return metadata;
+      case isDirectiveType(type):
+      case isOperation(type):
+        metadata = this.printSection(type.args, "Arguments");
+
+        if (isOperation(type)) {
+          const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+          metadata += this.printSection(
+            [this.schema.getType(queryType)],
+            "Type",
+          );
+        }
+        return metadata;
+    }
+    return metadata;
   }
 
   printType(name, type, options) {
@@ -314,35 +366,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     const header = this.printHeader(name, getTypeName(type), options);
     const description = this.printDescription(type);
     const code = this.printCode(type);
-
-    let metadata = "";
-    if (isScalarType(type)) {
-      metadata = this.printSpecification(type);
-    }
-
-    if (isEnumType(type)) {
-      metadata = this.printSection(type.getValues(), "Values");
-    }
-
-    if (isUnionType(type)) {
-      metadata = this.printSection(type.getTypes(), "Possible types");
-    }
-
-    if (isObjectType(type) || isInterfaceType(type) || isInputType(type)) {
-      metadata = this.printSection(getFields(type), "Fields");
-      if (hasMethod(type, "getInterfaces")) {
-        metadata += this.printSection(type.getInterfaces(), "Interfaces");
-      }
-    }
-
-    if (isDirectiveType(type) || isOperation(type)) {
-      metadata = this.printSection(type.args, "Arguments");
-    }
-
-    if (isOperation(type)) {
-      const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-      metadata += this.printSection([this.schema.getType(queryType)], "Type");
-    }
+    const metadata = this.printTypeMetadata(type);
 
     return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}`;
   }

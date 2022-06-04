@@ -1,3 +1,3 @@
 directive @FooBar(
-arg: boolean
+  ArgFooBar: Boolean
 )

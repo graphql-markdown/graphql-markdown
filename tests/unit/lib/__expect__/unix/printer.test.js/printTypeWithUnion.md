@@ -2,7 +2,10 @@ header-union
 
 Test Union
 
-```union```
+```graphql
+union TestUnion =
+```
 
-Possible types
+
+
 

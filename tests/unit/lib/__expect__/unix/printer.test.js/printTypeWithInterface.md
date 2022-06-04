@@ -2,7 +2,11 @@ header-interface
 
 Test Interface
 
-```interface```
+```graphql
+interface TestInterface {
+}
+```
 
-Fields
+
+
 
