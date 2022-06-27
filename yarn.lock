@@ -470,22 +470,22 @@
     tslib "^2.0.0"
 
 "@graphql-tools/graphql-file-loader@^7.3.14":
-  version "7.3.15"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.15.tgz#f99072bc792d361fb3f3fcfcbd3e16ea98d8bbae"
-  integrity sha512-Sw9XadW3bxH3ACNXE8Tsjh+BVedRCJTuRn3NfO//zOYQZiC3HDTzq9MvnW1a00SmPCXg47rxQpq9L3bdLX0Ohg==
+  version "7.3.16"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.16.tgz#4ac44c9b0d26a4986819c05898bf012920e73cdd"
+  integrity sha512-X/D/Fy2mT+4lJBXxjJ207yMeG9OZkkPSB62WK5Tdquqcicwaf8TK2gzdDexDx5sMeWHzF96mQRas7ilbvis7Og==
   dependencies:
-    "@graphql-tools/import" "6.6.17"
-    "@graphql-tools/utils" "8.6.13"
+    "@graphql-tools/import" "6.6.18"
+    "@graphql-tools/utils" "8.7.0"
     globby "^11.0.3"
     tslib "^2.4.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@6.6.17":
-  version "6.6.17"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.17.tgz#fb5b5a75b8bd81e9abfd22b04894babf7c0f6ff3"
-  integrity sha512-rnKT2ZaFM+IbSFE0iOGG5sqdaDDv/XHHH43VIpV4ozryKoK9re3qrhEgfDOHaW47zMLGKrHLPCC/QGf0IpJquw==
+"@graphql-tools/import@6.6.18":
+  version "6.6.18"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.18.tgz#98d290daa77fff848f572482574126526355e88b"
+  integrity sha512-zZbR2o3PpdqtQmjquCkp9DD14Nxns/CljboQpUtFlzffUjj9UtVizhEPzluVELrlegeseTDcWd2781moZSUzMA==
   dependencies:
-    "@graphql-tools/utils" "8.6.13"
+    "@graphql-tools/utils" "8.7.0"
     resolve-from "5.0.0"
     tslib "^2.4.0"
 
@@ -516,13 +516,6 @@
     "@graphql-tools/utils" "8.7.0"
     tslib "^2.4.0"
     value-or-promise "1.0.11"
-
-"@graphql-tools/utils@8.6.13":
-  version "8.6.13"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.6.13.tgz#2b4fb7f9f8a29b25eecd44551fb95974de32f969"
-  integrity sha512-FiVqrQzj4cgz0HcZ3CxUs8NtBGPZFpmsVyIgwmL6YCwIhjJQnT72h8G3/vk5zVfjfesht85YGp0inWWuoCKWzg==
-  dependencies:
-    tslib "^2.4.0"
 
 "@graphql-tools/utils@8.7.0":
   version "8.7.0"
