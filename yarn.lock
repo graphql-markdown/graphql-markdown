@@ -699,22 +699,22 @@
     tslib "^2.0.0"
 
 "@graphql-tools/graphql-file-loader@^7.3.14":
-  version "7.3.16"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.3.16.tgz#4ac44c9b0d26a4986819c05898bf012920e73cdd"
-  integrity sha512-X/D/Fy2mT+4lJBXxjJ207yMeG9OZkkPSB62WK5Tdquqcicwaf8TK2gzdDexDx5sMeWHzF96mQRas7ilbvis7Og==
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.4.0.tgz#c06e36248dd6a2025de65a1cfce03222ad0e74c2"
+  integrity sha512-r1lslE5GlWO/nbDX82enHjvva7qQiZEIPm+LC9JSgKaYuVoYHuIuIAVYkpBHeaRK1Kbh/86pEhL7PuBZ/cIWSA==
   dependencies:
-    "@graphql-tools/import" "6.6.18"
-    "@graphql-tools/utils" "8.7.0"
+    "@graphql-tools/import" "6.7.0"
+    "@graphql-tools/utils" "8.8.0"
     globby "^11.0.3"
     tslib "^2.4.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@6.6.18":
-  version "6.6.18"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.6.18.tgz#98d290daa77fff848f572482574126526355e88b"
-  integrity sha512-zZbR2o3PpdqtQmjquCkp9DD14Nxns/CljboQpUtFlzffUjj9UtVizhEPzluVELrlegeseTDcWd2781moZSUzMA==
+"@graphql-tools/import@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.7.0.tgz#5174c46b73f5931e68b9715fec9178bc924d2bba"
+  integrity sha512-u9JL4fClKKyBTQpgb4QFacYUwgBCs4lW1NaHX0hD2zBdahIYidokBY0QkOqOCEAnWeFqpEmAjB62ulLiAJWc2g==
   dependencies:
-    "@graphql-tools/utils" "8.7.0"
+    "@graphql-tools/utils" "8.8.0"
     resolve-from "5.0.0"
     tslib "^2.4.0"
 
@@ -745,13 +745,6 @@
     "@graphql-tools/utils" "8.8.0"
     tslib "^2.4.0"
     value-or-promise "1.0.11"
-
-"@graphql-tools/utils@8.7.0":
-  version "8.7.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.7.0.tgz#b46aa632ea61c1d8a43bf3012d695de73a696b3b"
-  integrity sha512-71rJZJKJVOMsDlBGFq9gf1PaBbeW0kt8nZWmc50lhxYrCn0rzRY0auGrhhOWhdhZ5WsCWFxpnDurdF5VqB4Iig==
-  dependencies:
-    tslib "^2.4.0"
 
 "@graphql-tools/utils@8.8.0":
   version "8.8.0"
