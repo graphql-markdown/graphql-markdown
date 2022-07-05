@@ -4,6 +4,9 @@ module.exports = {
   baseURL: "schema",
   linkRoot: "/",
   loaders: {
-    UrlLoader: "@graphql-tools/url-loader",
+    UrlLoader: {
+      module: "@graphql-tools/url-loader",
+      options: { method: "POST" },
+    },
   },
 };
