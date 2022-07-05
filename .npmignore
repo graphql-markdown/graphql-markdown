@@ -34,3 +34,5 @@ SECURITY.md
 sonar-project.properties
 
 preview.png
+
+renovate.json
