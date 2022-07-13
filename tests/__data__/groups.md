@@ -17,12 +17,14 @@ This is an example of documentation with grouping by GraphQL directive using the
   "rootPath": "./docs",
   "baseURL": "group-by",
   "linkRoot": "/",
-  "assets": "data",
-  "homepage": "groups.md",
+  "homepage": "data/groups.md",
   "groupByDirective": {
     "directive": "doc",
     "field": "category",
     "fallback": "Common"
+  },
+  "docOptions": {
+    "index": true
   }
 }
 ```

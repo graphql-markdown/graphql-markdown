@@ -16,8 +16,7 @@ This documentation has been automatically generated using [AniList APIv2](https:
   "schema": "https://graphql.anilist.co/",
   "rootPath": "./docs",
   "linkRoot": "/",
-  "assets": "data",
-  "homepage": "anilist.md",
+  "homepage": "data/anilist.md",
   "loaders": {
     "UrlLoader": {
       "module": "@graphql-tools/url-loader",
@@ -26,8 +25,7 @@ This documentation has been automatically generated using [AniList APIv2](https:
   },
   "docOptions": {
     "pagination": false,
-    "toc": false,
-    "index": true
+    "toc": false
   }
 }
 ```
