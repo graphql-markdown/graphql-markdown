@@ -118,7 +118,7 @@ describe("config", () => {
         pretty: true,
         noToc: true,
         noPagination: true,
-        noIndex: true,
+        index: true,
       };
 
       jest
@@ -141,7 +141,7 @@ describe("config", () => {
         docOptions: {
           pagination: !cliOpts.noPagination,
           toc: !cliOpts.noToc,
-          index: !cliOpts.noIndex,
+          index: cliOpts.index,
         },
       });
     });
