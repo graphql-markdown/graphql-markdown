@@ -9,7 +9,7 @@
         {
           "path": "output/directives/_category_.yml",
           "name": "_category_.yml",
-          "size": 20,
+          "size": 29,
           "type": "file",
           "extension": ".yml"
         },
@@ -42,7 +42,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1465,
+      "size": 1474,
       "type": "directory"
     },
     {
@@ -59,7 +59,7 @@
         {
           "path": "output/inputs/_category_.yml",
           "name": "_category_.yml",
-          "size": 16,
+          "size": 25,
           "type": "file",
           "extension": ".yml"
         },
@@ -71,7 +71,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 326,
+      "size": 335,
       "type": "directory"
     },
     {
@@ -81,7 +81,7 @@
         {
           "path": "output/interfaces/_category_.yml",
           "name": "_category_.yml",
-          "size": 20,
+          "size": 29,
           "type": "file",
           "extension": ".yml"
         },
@@ -93,7 +93,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 211,
+      "size": 220,
       "type": "directory"
     },
     {
@@ -103,7 +103,7 @@
         {
           "path": "output/mutations/_category_.yml",
           "name": "_category_.yml",
-          "size": 19,
+          "size": 28,
           "type": "file",
           "extension": ".yml"
         },
@@ -129,7 +129,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1030,
+      "size": 1039,
       "type": "directory"
     },
     {
@@ -139,7 +139,7 @@
         {
           "path": "output/objects/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
+          "size": 26,
           "type": "file",
           "extension": ".yml"
         },
@@ -186,7 +186,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 2915,
+      "size": 2924,
       "type": "directory"
     },
     {
@@ -196,7 +196,7 @@
         {
           "path": "output/queries/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
+          "size": 26,
           "type": "file",
           "extension": ".yml"
         },
@@ -243,7 +243,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1678,
+      "size": 1687,
       "type": "directory"
     },
     {
@@ -253,7 +253,7 @@
         {
           "path": "output/scalars/_category_.yml",
           "name": "_category_.yml",
-          "size": 17,
+          "size": 26,
           "type": "file",
           "extension": ".yml"
         },
@@ -307,7 +307,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 1669,
+      "size": 1678,
       "type": "directory"
     },
     {
@@ -324,7 +324,7 @@
         {
           "path": "output/subscriptions/_category_.yml",
           "name": "_category_.yml",
-          "size": 23,
+          "size": 32,
           "type": "file",
           "extension": ".yml"
         },
@@ -336,10 +336,10 @@
           "extension": ".mdx"
         }
       ],
-      "size": 328,
+      "size": 337,
       "type": "directory"
     }
   ],
-  "size": 9770,
+  "size": 9842,
   "type": "directory"
 }

@@ -62,6 +62,7 @@ describe("config", () => {
         docOptions: {
           pagination: false,
           toc: false,
+          index: false,
         },
       };
 
@@ -102,6 +103,7 @@ describe("config", () => {
         docOptions: {
           pagination: true,
           toc: true,
+          index: true,
         },
       };
       const cliOpts = {
@@ -116,6 +118,7 @@ describe("config", () => {
         pretty: true,
         noToc: true,
         noPagination: true,
+        index: true,
       };
 
       jest
@@ -138,6 +141,7 @@ describe("config", () => {
         docOptions: {
           pagination: !cliOpts.noPagination,
           toc: !cliOpts.noToc,
+          index: cliOpts.index,
         },
       });
     });

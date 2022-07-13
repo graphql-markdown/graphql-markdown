@@ -1,6 +1,7 @@
 const mock = require("mock-fs");
 
 const path = require("path");
+const fs = require("fs");
 
 const dirTree = require("directory-tree");
 
@@ -131,6 +132,76 @@ describe("lib", () => {
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(EXPECT_PATH, "renderRootTypes.json"),
           );
+        });
+      });
+
+      describe("generateCategoryMetafile()", () => {
+        test("generate _category_.yml file", async () => {
+          expect.assertions(2);
+
+          const category = "foobar";
+          const outputPath = "output/docs";
+
+          await rendererInstance.generateCategoryMetafile(category, outputPath);
+
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
+
+          const content = fs.readFileSync(
+            path.join(outputPath, "_category_.yml"),
+            "utf-8",
+          );
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(EXPECT_PATH, "generateCategoryMetafile.json"),
+          );
+
+          expect(content).toMatchInlineSnapshot(`
+            "label: Foobar
+            link: null
+            "
+          `);
+        });
+
+        test("generate _category_.yml file with generated index", async () => {
+          expect.assertions(2);
+
+          const category = "foobar";
+          const outputPath = "output/docs";
+
+          rendererInstance.options = { index: true };
+
+          await rendererInstance.generateCategoryMetafile(category, outputPath);
+
+          const outputFolder = dirTree(OUTPUT, {
+            attributes: ["size", "type", "extension"],
+          });
+
+          const content = fs.readFileSync(
+            path.join(outputPath, "_category_.yml"),
+            "utf-8",
+          );
+
+          mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
+
+          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
+            path.join(
+              EXPECT_PATH,
+              "generateCategoryMetafileGeneratedIndex.json",
+            ),
+          );
+
+          expect(content).toMatchInlineSnapshot(`
+            "label: Foobar
+            link: 
+              type: generated-index
+              title: 'Foobar overview'
+
+            "
+          `);
         });
       });
     });

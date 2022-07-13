@@ -31,6 +31,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         )
         .option("--noPagination", "Disable page navigation buttons")
         .option("--noToc", "Disable page table of content")
+        .option("--index", "Enable generated index for categories")
         .option("-f, --force", "Force document generation")
         .option("-d, --diff <diffMethod>", "Set diff method")
         .option("-t, --tmp <tmpDir>", "Set temp dir for schema diff")

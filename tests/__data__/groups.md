@@ -22,6 +22,9 @@ This is an example of documentation with grouping by GraphQL directive using the
     "directive": "doc",
     "field": "category",
     "fallback": "Common"
+  },
+  "docOptions": {
+    "index": true
   }
 }
 ```
