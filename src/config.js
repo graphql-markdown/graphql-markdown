@@ -8,20 +8,21 @@ const PACKAGE_NAME = "@edno/docusaurus2-graphql-doc-generator";
 const ASSETS_LOCATION = path.join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
-  schema: "./schema.graphql",
-  rootPath: "./docs",
+  assets: ASSETS_LOCATION,
   baseURL: "schema",
-  linkRoot: "/",
-  homepage: path.join(ASSETS_LOCATION, "generated.md"),
   diffMethod: COMPARE_METHOD.DIFF,
-  tmpDir: path.join(os.tmpdir(), PACKAGE_NAME),
-  loaders: {},
-  pretty: false,
   docOptions: {
     pagination: true,
     toc: true,
     index: false,
   },
+  homepage: "generated.md",
+  linkRoot: "/",
+  loaders: {},
+  pretty: false,
+  rootPath: "./docs",
+  schema: "./schema.graphql",
+  tmpDir: path.join(os.tmpdir(), PACKAGE_NAME),
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -37,19 +38,27 @@ function buildConfig(configFileOpts, cliOpts) {
 
   const baseURL = cliOpts.base ?? config.baseURL;
 
+  const assetsLocation = cliOpts.assets ?? config.assets;
+
+  const homepage = cliOpts.homepage ?? config.homepage;
+  const homepageLocation = path.isAbsolute(homepage)
+    ? homepage
+    : path.join(assetsLocation, homepage);
+
   return {
+    assetsLocation,
     baseURL,
-    schemaLocation: cliOpts.schema ?? config.schema,
-    outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
-    linkRoot: cliOpts.link ?? config.linkRoot,
-    homepageLocation: cliOpts.homepage ?? config.homepage,
     diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
-    tmpDir: cliOpts.tmp ?? config.tmpDir,
-    loaders: config.loaders,
+    docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+    homepageLocation,
+    linkRoot: cliOpts.link ?? config.linkRoot,
+    loaders: config.loaders,
+    outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
     prettify: cliOpts.pretty ?? config.pretty,
-    docOptions: getDocOptions(cliOpts, config.docOptions),
+    schemaLocation: cliOpts.schema ?? config.schema,
+    tmpDir: cliOpts.tmp ?? config.tmpDir,
   };
 }
 

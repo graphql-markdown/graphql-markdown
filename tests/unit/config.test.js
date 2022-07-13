@@ -43,11 +43,12 @@ describe("config", () => {
       jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
+        assets: "assets",
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
         rootPath: "output",
         linkRoot: "/docs",
-        homepage: "assets/my-homepage.md",
+        homepage: "my-homepage.md",
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
@@ -69,10 +70,14 @@ describe("config", () => {
       const config = buildConfig(configFileOpts);
 
       expect(config).toStrictEqual({
+        assetsLocation: configFileOpts.assets,
         baseURL: configFileOpts.baseURL,
         diffMethod: configFileOpts.diffMethod,
         groupByDirective: configFileOpts.groupByDirective,
-        homepageLocation: configFileOpts.homepage,
+        homepageLocation: path.join(
+          configFileOpts.assets,
+          configFileOpts.homepage,
+        ),
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
         outputDir: path.join(configFileOpts.rootPath, configFileOpts.baseURL),
@@ -85,6 +90,7 @@ describe("config", () => {
 
     test("override config set in docusaurus if cli options set", () => {
       const configFileOpts = {
+        assets: "assets",
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
         rootPath: "output",
@@ -107,6 +113,7 @@ describe("config", () => {
         },
       };
       const cliOpts = {
+        assets: "foobar",
         base: "cli/schema",
         schema: "cli/my-schema.graphql",
         root: "cli",
@@ -128,10 +135,11 @@ describe("config", () => {
       const config = buildConfig(configFileOpts, cliOpts);
 
       expect(config).toStrictEqual({
+        assetsLocation: cliOpts.assets,
         baseURL: cliOpts.base,
         diffMethod: cliOpts.diff,
         groupByDirective: cliOpts.groupByDirective,
-        homepageLocation: cliOpts.homepage,
+        homepageLocation: path.join(cliOpts.assets, cliOpts.homepage),
         linkRoot: cliOpts.link,
         loaders: configFileOpts.loaders,
         outputDir: path.join(cliOpts.root, cliOpts.base),
@@ -158,11 +166,15 @@ describe("config", () => {
       const input = buildConfig(configFileOpts, cliOpts);
 
       expect(input).toStrictEqual({
+        assetsLocation: DEFAULT_OPTIONS.assets,
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
         outputDir: path.join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
-        homepageLocation: DEFAULT_OPTIONS.homepage,
+        homepageLocation: path.join(
+          DEFAULT_OPTIONS.assets,
+          DEFAULT_OPTIONS.homepage,
+        ),
         diffMethod: DEFAULT_OPTIONS.diffMethod,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
         loaders: DEFAULT_OPTIONS.loaders,
@@ -180,11 +192,15 @@ describe("config", () => {
       const input = buildConfig({}, cliOpts);
 
       expect(input).toStrictEqual({
+        assetsLocation: DEFAULT_OPTIONS.assets,
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
         outputDir: path.join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
-        homepageLocation: DEFAULT_OPTIONS.homepage,
+        homepageLocation: path.join(
+          DEFAULT_OPTIONS.assets,
+          DEFAULT_OPTIONS.homepage,
+        ),
         diffMethod: COMPARE_METHOD.FORCE,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
         loaders: DEFAULT_OPTIONS.loaders,

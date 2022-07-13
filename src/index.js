@@ -26,6 +26,10 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         .option("-b, --base <baseURL>", "Base URL to be used by Docusaurus")
         .option("-l, --link <linkRoot>", "Root for links in documentation")
         .option(
+          "-a, --assets <assetsPath>",
+          "Path for documentation assets (homepage, indexes)",
+        )
+        .option(
           "-h, --homepage <homepage>",
           "File location for doc landing page",
         )

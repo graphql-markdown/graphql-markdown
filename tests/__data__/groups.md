@@ -17,7 +17,8 @@ This is an example of documentation with grouping by GraphQL directive using the
   "rootPath": "./docs",
   "baseURL": "group-by",
   "linkRoot": "/",
-  "homepage": "data/groups.md",
+  "assets": "data",
+  "homepage": "groups.md",
   "groupByDirective": {
     "directive": "doc",
     "field": "category",
