@@ -9,7 +9,7 @@
         {
           "path": "output/object/_category_.yml",
           "name": "_category_.yml",
-          "size": 16,
+          "size": 25,
           "type": "file",
           "extension": ".yml"
         },
@@ -28,10 +28,10 @@
           "extension": ".mdx"
         }
       ],
-      "size": 30,
+      "size": 39,
       "type": "directory"
     }
   ],
-  "size": 30,
+  "size": 39,
   "type": "directory"
 }

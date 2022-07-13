@@ -27,6 +27,7 @@ This documentation has been automatically generated using [AniList APIv2](https:
   "docOptions": {
     "pagination": false,
     "toc": false
+    // "index": true (default)
   }
 }
 ```

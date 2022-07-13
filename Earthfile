@@ -100,7 +100,7 @@ build-docs:
   WORKDIR /docusaurus2
   RUN yarn add prettier
   RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force --pretty --noPagination --noToc
-  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --force
+  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --noIndex --force
   RUN yarn build
   SAVE ARTIFACT --force ./build AS LOCAL docs
 

@@ -20,6 +20,7 @@ const DEFAULT_OPTIONS = {
   docOptions: {
     pagination: true,
     toc: true,
+    index: true,
   },
 };
 
@@ -60,6 +61,7 @@ function getDocOptions(cliOpts, configOptions) {
   return {
     pagination: !cliOpts.noPagination && configOptions.pagination,
     toc: !cliOpts.noToc && configOptions.toc,
+    index: !cliOpts.noIndex && configOptions.toc,
   };
 }
 

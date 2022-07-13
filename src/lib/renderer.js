@@ -23,6 +23,7 @@ const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
+const CATEGORY_YAML = "_category_.yml";
 
 module.exports = class Renderer {
   constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
@@ -39,14 +40,21 @@ module.exports = class Renderer {
   }
 
   async generateCategoryMetafile(category, dirPath) {
-    const filePath = path.join(dirPath, "_category_.yml");
+    const filePath = path.join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
       return;
     }
 
     await ensureDir(dirPath);
-    await saveFile(filePath, `label: '${startCase(category)}'\n`);
+
+    const label = startCase(category);
+    const link =
+      typeof this.options === "undefined" || !this.options.index
+        ? "null"
+        : `\n  type: generated-index\n  title: '${label} overview'\n`;
+
+    await saveFile(filePath, `label: ${label}\nlink: ${link}\n`);
   }
 
   async renderRootTypes(rootTypeName, type) {
