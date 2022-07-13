@@ -47,7 +47,7 @@ describe("config", () => {
         schema: "assets/my-schema.graphql",
         rootPath: "output",
         linkRoot: "/docs",
-        homepage: "my-homepage.md",
+        homepage: "assets/my-homepage.md",
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
