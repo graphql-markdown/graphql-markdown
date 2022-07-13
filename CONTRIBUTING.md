@@ -96,8 +96,6 @@ If you aim at a code contribution, you will need to perform few additional steps
 
 The project uses Markdown for writing documentation ([doc](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github)).
 
-> Do not change the content of the `docs` folder. This folder contains the pages of the website and it is auto-generated using Docusaurus (see [Build documentation](#build-documentation)).
-
 You should edit the documentation, or add new documentation files, directly in your branch from your Github fork.
 
 ### Code
