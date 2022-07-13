@@ -81,7 +81,7 @@ module.exports = {
 
 Each option is described in the section [Options](#options).
 
-See [multi-intance](#plugin-multi-instance) section, if you want to use 2 distinct schemas.
+See [multi-instance](#plugin-multi-instance) section, if you want to use 2 distinct schemas.
 
 ### Site Settings
 
@@ -152,7 +152,7 @@ From `1.9.0`, the plugin can support multiple instances.
 
 To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
 
-```js
+```js {15 }
 plugins: [
     [
       "@edno/docusaurus2-graphql-doc-generator",
@@ -191,7 +191,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 |--------------------|-----------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `baseURL`          | `-b, --base <baseURL>`                                    | `schema`                                                    | The base URL to be used by Docusaurus. It will also be used as folder name under `rootPath` for the generated documentation.                                                                                                                                                                                                                                                                                                                                                                        |
 | `diffMethod`       | `-d, --diff <diffMethod>`                                 | `SCHEMA-DIFF`                                               | The method to be used for identifying changes in the schema for triggering the documentation generation. The possible values are:<br /> - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com/) for identifying changes in the schema (including description)<br /> - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)<br />Any other value will disable the change detection. |
-| `docOptions`          | `--noPagination`, `--noToc`                          | `{pagination: true, toc: true}` | Documentation presentation options (see [options](#documentation-options)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `docOptions`          | `--noPagination`, `--noToc`, `--index`                          | `{pagination: true, toc: true, index: false}` | Documentation presentation options (see [options](#documentation-options)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `groupByDirective` | `-gdb, --groupByDirective <@directive(field\|=fallback)>` | -                                                           | Group documentation by directive (see [groupByDirective](#option-groupbydirective)).                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `homepage`         | `-h, --homepage <homepage>`                               | `generated.md`                                              | The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.<br />By default, the plugin provides a default page `assets/generated.md`.                                                                                                                                                                                                                                         |
 | `linkRoot`         | `-l, --link <linkRoot>`                                   | `/`                                                         | The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -206,12 +206,11 @@ By default, the plugin will use the options as defined in the plugin's [configur
 
 From `1.10.0`, the plugin allows disabling some of the Docusaurus documentation features:
 
-- `docOptions.pagination`: page buttons `Previous` and `Next`
-- `docOptions.toc`: page table of content
+- `docOptions.pagination`: page buttons `Previous` and `Next` (default: `true`)
+- `docOptions.toc`: page table of content (default: `true`)
+- `docOptions.index`: generate index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) (default: `false`)
 
-By default, the options are enabled. They can be disabled by setting them to `false` in the configuration file, or using the corresponding command line flags.
-
-```js
+```js {9-13}
 plugins: [
     [
       "@edno/docusaurus2-graphql-doc-generator",
@@ -223,6 +222,7 @@ plugins: [
         docOptions: {
           pagination: false, // disable buttons previous and next, same as cli flag --noPagination
           toc: false, // disable page table of content, same as cli flag --noToc
+          index: true, // enable generated index pages, same as cli flag --index
         },
       },
     ],
@@ -280,7 +280,7 @@ type loaders = {
 
 If you decide to use your own home page for the GraphQL generated documentation, then set the page ID to `id: schema` and the sidebar position to `sidebar_position: 1`:
 
-```markdown
+```markdown {2,5}
 ---
 id: schema
 slug: /schema
@@ -295,7 +295,7 @@ This documentation has been automatically generated from the GraphQL schema.
 >
 > *If you want to hide it from the sidebar (like in the demo), then set the front matter `sidebar_class_name` (or `className` depending on your Docusaurus version) to `navbar__toggle`.*
 >
-> ```markdown
+> ```markdown {6}
 > ---
 > id: schema
 > slug: /schema
@@ -335,7 +335,7 @@ npx docusaurus graphql-to-doc -gdb "@doc(category|=Common)"
 
 or the plugin configuration `groupByDirective`:
 
-```js
+```js {6-10}
 plugins: [
   [
     "@edno/docusaurus2-graphql-doc-generator",
@@ -379,7 +379,7 @@ If the error persists, check that you have the correct class name in the configu
 
 ## Licence
 
-GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).         
+GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
 
 This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/graphql-markdown/graphql-markdown) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
 
