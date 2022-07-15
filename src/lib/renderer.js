@@ -11,7 +11,6 @@ const {
 } = require("../utils/helpers/prettier");
 const {
   saveFile,
-  emptyDir,
   ensureDir,
   copyFile,
   readFile,
@@ -33,10 +32,6 @@ module.exports = class Renderer {
     this.printer = printer;
     this.prettify = prettify && hasPrettierModule();
     this.options = docOptions;
-  }
-
-  async emptyOutputDir() {
-    await emptyDir(this.outputDir);
   }
 
   async generateCategoryMetafile(category, dirPath) {
