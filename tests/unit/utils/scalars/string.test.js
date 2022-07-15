@@ -3,6 +3,7 @@ const {
   escapeMDX,
   stringCaseBuilder,
   prune,
+  capitalize,
 } = require("../../../../src/utils/scalars/string");
 
 describe("utils", () => {
@@ -54,6 +55,24 @@ describe("utils", () => {
         expect(escapeMDX(5)).toBe(5);
         expect(escapeMDX({ five: 5 })).toEqual({ five: 5 });
       });
+    });
+
+    describe("capitalize()", () => {
+      test.each([
+        ["A", "A"],
+        ["foobar", "Foobar"],
+        [
+          "the quick brown fox jumps over the lazy dog",
+          "The quick brown fox jumps over the lazy dog",
+        ],
+        ["42 dollars", "42 dollars"],
+        ["fooBar", "Foobar"],
+      ])(
+        "returns capitalized string: first letter uppercase, rest lowercase",
+        (input, expected) => {
+          expect(capitalize(input)).toBe(expected);
+        },
+      );
     });
   });
 });

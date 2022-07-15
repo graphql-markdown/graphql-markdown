@@ -9,6 +9,7 @@ const Renderer = require("../../../src/lib/renderer");
 
 jest.mock("../../../src/lib/printer");
 const Printer = require("../../../src/lib/printer");
+const { ensureDir } = require("../../../src/utils/helpers/fs");
 
 const OUTPUT = "output";
 const HOMEPAGE = "generated.md";
@@ -74,6 +75,19 @@ describe("lib", () => {
             path.join(EXPECT_PATH, "renderTypeEntities.json"),
           );
         });
+
+        test.each([[undefined, null]])(
+          "do nothing if type is not defined",
+          async (type) => {
+            expect.assertions(1);
+            const meta = await rendererInstance.renderTypeEntities(
+              "test",
+              "FooBar",
+              type,
+            );
+            expect(meta).toBeUndefined();
+          },
+        );
       });
 
       describe("renderSidebar()", () => {
@@ -202,6 +216,31 @@ describe("lib", () => {
 
             "
           `);
+        });
+
+        test("do not generate _category_.yml file if it exists", async () => {
+          expect.assertions(1);
+
+          const category = "foobar";
+          const outputPath = "output/docs";
+
+          const data = "The quick brown fox jumps over the lazy dog";
+
+          await ensureDir(outputPath);
+          fs.writeFileSync(
+            path.join(outputPath, "_category_.yml"),
+            data,
+            "utf-8",
+          );
+
+          await rendererInstance.generateCategoryMetafile(category, outputPath);
+
+          const content = fs.readFileSync(
+            path.join(outputPath, "_category_.yml"),
+            "utf-8",
+          );
+
+          expect(content).toEqual(data);
         });
       });
     });
