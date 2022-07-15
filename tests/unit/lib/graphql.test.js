@@ -127,33 +127,33 @@ describe("lib", () => {
         },
       );
 
-      test("returns array default value as string for type GraphQLList(GraphQLID)", () => {
-        expect.hasAssertions();
-
-        const argument = {
-          name: "id",
-          description: undefined,
+      test.each([
+        {
           type: new GraphQLList(GraphQLID),
           defaultValue: ["0", "1"],
-          extensions: undefined,
-        };
-
-        expect(getDefaultValue(argument)).toBe('["0", "1"]');
-      });
-
-      test("returns array default value unformatted for type GraphQLList(GraphQLInt)", () => {
-        expect.hasAssertions();
-
-        const argument = {
-          name: "foobar",
-          description: undefined,
+          expected: '["0", "1"]',
+        },
+        {
           type: new GraphQLList(GraphQLInt),
-          defaultValue: [0, 1],
-          extensions: undefined,
-        };
+          defaultValue: 42,
+          expected: "[42]",
+        },
+      ])(
+        "returns array default value as string for type $type",
+        ({ type, defaultValue, expected }) => {
+          expect.hasAssertions();
 
-        expect(getDefaultValue(argument)).toBe("[0, 1]");
-      });
+          const argument = {
+            name: "id",
+            description: undefined,
+            type,
+            defaultValue,
+            extensions: undefined,
+          };
+
+          expect(getDefaultValue(argument)).toBe(expected);
+        },
+      );
 
       test("returns unformatted default value for type GraphQLEnum", () => {
         expect.hasAssertions();
@@ -212,6 +212,17 @@ describe("lib", () => {
           path.join(EXPECT_PATH, `getFilteredTypeMap.json`),
         );
       });
+
+      test.each([[undefined], [null]])(
+        "returns undefined if typeMap is not defined",
+        (typeMap) => {
+          expect.hasAssertions();
+
+          const schemaTypeMap = getFilteredTypeMap(typeMap);
+
+          expect(schemaTypeMap).toBeUndefined();
+        },
+      );
     });
 
     describe("getIntrospectionFieldsList()", () => {
@@ -266,6 +277,14 @@ describe("lib", () => {
         expect(JSON.stringify(fields, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getFields.json`),
         );
+      });
+
+      test("returns empty list if getFields not supported", () => {
+        expect.hasAssertions();
+
+        const fields = getFields("test");
+
+        expect(fields).toStrictEqual([]);
       });
     });
 
@@ -372,6 +391,17 @@ describe("lib", () => {
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLScalarType.json`),
         );
       });
+
+      test.each([[null], [undefined]])(
+        "returns undefined it typeMap is not defined",
+        (typeMap) => {
+          expect.hasAssertions();
+
+          const map = getTypeFromTypeMap(typeMap, GraphQLScalarType);
+
+          expect(map).toBeUndefined();
+        },
+      );
     });
 
     describe("getSchemaMap()", () => {

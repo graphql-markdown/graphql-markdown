@@ -817,6 +817,92 @@ describe("lib", () => {
           );
         });
       });
+
+      describe("printDeprecation()", () => {
+        test("prints deprecated badge if type is deprecated", () => {
+          expect.hasAssertions();
+
+          const type = {
+            name: "EntityTypeName",
+            isDeprecated: true,
+          };
+          const deprecation = printerInstance.printDeprecation(type);
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            "<span class=\\"badge badge--warning\\">DEPRECATED</span>
+
+            "
+          `);
+        });
+
+        test("prints deprecation reason if type is deprecated with reason", () => {
+          expect.hasAssertions();
+
+          const type = {
+            name: "EntityTypeName",
+            isDeprecated: true,
+            deprecationReason: "foobar",
+          };
+          const deprecation = printerInstance.printDeprecation(type);
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            "<span class=\\"badge badge--warning\\">DEPRECATED: foobar</span>
+
+            "
+          `);
+        });
+
+        test("does not print deprecated badge if type is not deprecated", () => {
+          expect.hasAssertions();
+
+          const type = new GraphQLScalarType({
+            name: "LoremScalar",
+            description: "Lorem Ipsum",
+            specifiedByURL: "https://lorem.ipsum",
+          });
+
+          const deprecation = printerInstance.printDeprecation(type);
+
+          expect(deprecation).toBe("");
+        });
+      });
+
+      describe("printSpecification()", () => {
+        test("prints specification link if directive specified by is present", () => {
+          expect.hasAssertions();
+
+          const type = new GraphQLScalarType({
+            name: "LoremScalar",
+            description: "Lorem Ipsum",
+            specifiedByURL: "https://lorem.ipsum",
+          });
+
+          const deprecation = printerInstance.printSpecification(type);
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            "
+            export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
+
+            ### Specification<a className=\\"link\\" style={specifiedByLinkCss} target=\\"_blank\\" href=\\"https://lorem.ipsum\\" title=\\"Specified by https://lorem.ipsum\\">⎘</a>
+
+
+                  "
+          `);
+        });
+
+        test("does not print specification link if directive specified by is not present", () => {
+          expect.hasAssertions();
+
+          const type = new GraphQLScalarType({
+            name: "LoremScalar",
+            description: "Lorem Ipsum",
+          });
+
+          const deprecation = printerInstance.printSpecification(type);
+
+          expect(deprecation).toBe("");
+        });
+      });
     });
   });
 });
