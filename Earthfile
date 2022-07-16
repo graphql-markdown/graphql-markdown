@@ -13,7 +13,7 @@ deps:
 lint: 
   ARG flag
   FROM +deps
-  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  IF [ ! $(EARTHLY_CI) ]
     RUN yarn prettier --write
     RUN yarn lint --fix
   ELSE
@@ -25,7 +25,7 @@ lint:
 unit-test:
   ARG flag
   FROM +deps
-  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  IF [ ! $(EARTHLY_CI) ]
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit -u
     SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
   ELSE
@@ -36,7 +36,7 @@ unit-test:
 integration-test:
   ARG flag
   FROM +deps
-  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  IF [ ! $(EARTHLY_CI) ]
     RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration -u
     SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
   ELSE
@@ -46,8 +46,8 @@ integration-test:
 
 mutation-test:
   FROM +deps
-  RUN yarn stryker run --logLevel error --inPlace
-  IF [ "$flag" = 'update' ] && [ ! $(EARTHLY_CI) ]
+  RUN yarn stryker run
+  IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
