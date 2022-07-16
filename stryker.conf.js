@@ -11,7 +11,7 @@ module.exports = {
     configFile: "jest.config.js",
     projectType: "custom",
   },
-  mutate: ["src/**/*.js", "!src/**/index.js"],
+  mutate: ["src/**/*.js", "!src/**/index.js", "!src/**/prettier.js"],
   packageManager: "yarn",
   reporters: ["clear-text", "progress", "html"],
   testRunner: "jest",
