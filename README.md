@@ -25,7 +25,7 @@ Use the [CodeSandbox template](https://codesandbox.io/s/github/graphql-markdown/
 
 ## Installation
 
-**`graphql` package is a peer-dependency starting version `1.7.0`, and it must be installed separatly.**
+**`graphql` package is a peer-dependency, and it should be installed separately.**
 
 ### npm
 
@@ -148,8 +148,6 @@ plugins: [
 
 ### Plugin Multi-instance
 
-From `1.9.0`, the plugin can support multiple instances.
-
 To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
 
 ```js {15 }
@@ -204,7 +202,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 
 ### Documentation options
 
-From `1.10.0`, the plugin allows disabling some of the Docusaurus documentation features:
+Use these options to tweak some of the Docusaurus documentation features:
 
 - `docOptions.pagination`: page buttons `Previous` and `Next` (default: `true`)
 - `docOptions.toc`: page table of content (default: `true`)
@@ -231,12 +229,11 @@ plugins: [
 
 ### Plugin Loaders
 
-Starting version `1.5.0`, `docusaurus2-graphql-doc-generator` only provides `graphql-file-loader` document loader out-of-the-box.
-Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
+`graphql-file-loader`, the local file loader, is provided out-of-the-box. Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
 
-However, this behaviour can be extended by installing additional GraphQL document loaders (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
+Additional GraphQL document loaders can be used (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
 
-If you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
+For example, if you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
 
 ```shell
 yarn add @graphql-tools/url-loader
