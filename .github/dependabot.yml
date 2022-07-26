@@ -17,5 +17,5 @@ updates:
       interval: weekly
     open-pull-requests-limit: 10
     commit-message:
-      prefix: ":construction_worker: gha"
+      prefix: "🔧 gha"
       include: "scope"
