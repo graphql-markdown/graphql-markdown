@@ -162,7 +162,7 @@ function getTypeFromTypeMap(typeMap, type) {
 
 function getSchemaMap(schema) {
   const typeMap = getFilteredTypeMap(schema.getTypeMap());
-  const schemaMap = {
+  return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
     ),
@@ -180,8 +180,6 @@ function getSchemaMap(schema) {
     inputs: getTypeFromTypeMap(typeMap, GraphQLInputObjectType),
     scalars: getTypeFromTypeMap(typeMap, GraphQLScalarType),
   };
-
-  return schemaMap;
 }
 
 function getRelationOfReturn(type, schemaMap) {
