@@ -162,7 +162,7 @@ function getTypeFromTypeMap(typeMap, type) {
 
 function getSchemaMap(schema) {
   const typeMap = getFilteredTypeMap(schema.getTypeMap());
-  return {
+  const schemaMap = {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
     ),
@@ -180,6 +180,87 @@ function getSchemaMap(schema) {
     inputs: getTypeFromTypeMap(typeMap, GraphQLInputObjectType),
     scalars: getTypeFromTypeMap(typeMap, GraphQLScalarType),
   };
+
+  return schemaMap;
+}
+
+function getRelationOfReturn(type, schemaMap) {
+  const relations = { queries: [], mutations: [], subscriptions: [] };
+
+  for (const relation of Object.keys(relations)) {
+    for (const [relationName, relationType] of Object.entries(
+      schemaMap[relation],
+    )) {
+      if (getNamedType(relationType.type).name === type.name) {
+        if (relations[relation].includes(relationName)) {
+          continue;
+        }
+        relations[relation].push(relationName);
+      }
+    }
+  }
+
+  return relations;
+}
+
+function getRelationOfField(type, schemaMap) {
+  const relations = {
+    queries: [],
+    mutations: [],
+    subscriptions: [],
+    objects: [],
+    interfaces: [],
+    inputs: [],
+  };
+
+  for (const relation of Object.keys(relations)) {
+    for (const [relationName, relationType] of Object.entries(
+      schemaMap[relation],
+    )) {
+      if (typeof relationType === "undefined") {
+        continue;
+      }
+
+      const fields = Object.assign(
+        {},
+        relationType.args ?? {},
+        relationType._fields ?? {},
+      );
+      for (const fieldDef of Object.values(fields)) {
+        if (getNamedType(fieldDef.type).name === type.name) {
+          if (relations[relation].includes(relationName)) {
+            continue;
+          }
+          relations[relation].push(relationName);
+        }
+      }
+    }
+  }
+
+  return relations;
+}
+
+function getRelationOfUnion(type, schemaMap) {
+  const relations = { unions: [] };
+
+  for (const [relationName, relationType] of Object.entries(schemaMap.unions)) {
+    if (relationType._types.find((subType) => subType.name === type.name)) {
+      if (relations.unions.includes(relationName)) {
+        continue;
+      }
+      relations.unions.push(relationName);
+    }
+  }
+
+  return relations;
+}
+
+function getRelationOfInterface(type, schema) {
+  if (!isInterfaceType(type)) {
+    return { objects: [], interfaces: [] };
+  }
+
+  return schema.getImplementations(type);
 }
 
 function isParametrizedField(type) {
@@ -215,4 +296,8 @@ module.exports = {
   getIntrospectionFieldsList,
   getTypeFromTypeMap,
   SCHEMA_EXCLUDE_LIST_PATTERN,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfUnion,
+  getRelationOfInterface,
 };
