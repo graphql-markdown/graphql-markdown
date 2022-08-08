@@ -225,14 +225,15 @@ function getRelationOfField(type, schema) {
       continue;
     }
 
-    for (let [relationName, relationType] of Object.entries(entity)) {
+    for (const [relationName, relationType] of Object.entries(entity)) {
       if (typeof relationType === "undefined") {
         continue;
       }
 
-      if (isDirectiveType(relationType)) {
-        relationName = relationType.name;
-      }
+      // directives are handled as flat array instead of map
+      const key = isDirectiveType(relationType)
+        ? relationType.name
+        : relationName;
 
       const fields = Object.assign(
         {},
@@ -241,10 +242,10 @@ function getRelationOfField(type, schema) {
       );
       for (const fieldDef of Object.values(fields)) {
         if (getNamedType(fieldDef.type).name === type.name) {
-          if (relations[relation].includes(relationName)) {
+          if (relations[relation].includes(key)) {
             continue;
           }
-          relations[relation].push(relationName);
+          relations[relation].push(key);
         }
       }
     }
