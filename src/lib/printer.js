@@ -17,11 +17,10 @@ const {
   isLeafType,
   getRelationOfReturn,
   getRelationOfField,
-  getRelationOfUnion,
-  getRelationOfInterface,
+  getRelationOfImplementation,
 } = require("./graphql");
 
-const { toSlug, escapeMDX } = require("../utils/scalars/string");
+const { toSlug, escapeMDX, capitalize } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
 
@@ -362,13 +361,47 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     return metadata;
   }
 
-  printRelationOf(type) {
-    const returnedBy = getRelationOfReturn(type, this.schema);
-    // const declaredAsFieldBy = getRelationOfField(type, this.schema);
-    // const memberOfUnion = getRelationOfUnion(type, this.schema);
-    // const implementedBy = getRelationOfInterface(type, this.schema);
+  printRelations(type) {
+    const relations = {
+      "Return of": getRelationOfReturn,
+      "Field of": getRelationOfField,
+      "Implemented by": getRelationOfImplementation,
+    };
 
-    return this.printSection(returnedBy, "Returned by");
+    let data = "";
+    for (const [section, getRelation] of Object.entries(relations)) {
+      data += this.printRelationOf(type, section, getRelation);
+    }
+
+    return data;
+  }
+
+  printRelationOf(type, section, getRelation) {
+    if (typeof type === "undefined" || isOperation(type)) {
+      return "";
+    }
+
+    const relations = getRelation(type, this.schema);
+
+    if (typeof relations === "undefined") {
+      return "";
+    }
+
+    let data = "";
+    let hasRelation = false;
+    for (const [relation, types] of Object.entries(relations)) {
+      if (types.length > 0) {
+        const content = types.join(", ");
+        data += `- **${capitalize(relation)}**: ${content}${MARKDOWN_EOL}`;
+        hasRelation = true;
+      }
+    }
+
+    if (!hasRelation) {
+      return "";
+    }
+
+    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${data}${MARKDOWN_EOP}`;
   }
 
   printType(name, type, options) {
@@ -380,8 +413,8 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
-    const relations = this.printRelationOf(type);
+    const relations = this.printRelations(type);
 
-    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}`;
+    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
 };

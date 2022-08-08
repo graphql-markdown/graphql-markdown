@@ -16,6 +16,8 @@ const {
   GraphQLInterfaceType,
 } = require("graphql");
 
+const graphqlLib = require("../../../src/lib/graphql");
+
 const Printer = require("../../../src/lib/printer");
 
 const EXPECT_PATH = path.join(
@@ -32,7 +34,13 @@ describe("lib", () => {
 
       const baseURL = "graphql";
       const root = "docs";
-      const schema = { toString: () => "SCHEMA", getType: (type) => type };
+      const schema = {
+        toString: () => "SCHEMA",
+        getType: (type) => type,
+        getTypeMap: () => {},
+        getDirectives: () => {},
+        getImplementations: () => {},
+      };
 
       const types = [
         {
@@ -901,6 +909,53 @@ describe("lib", () => {
           const deprecation = printerInstance.printSpecification(type);
 
           expect(deprecation).toBe("");
+        });
+      });
+
+      describe("printReturnOf()", () => {
+        beforeEach(() => {
+          jest.mock("../../../src/lib/graphql");
+        });
+
+        afterEach(() => {
+          jest.resetAllMocks();
+        });
+
+        test("prints type relations", () => {
+          expect.hasAssertions();
+
+          const type = new GraphQLScalarType({
+            name: "String",
+            description: "Lorem Ipsum",
+          });
+
+          jest
+            .spyOn(graphqlLib, "getRelationOfReturn")
+            .mockImplementation(() => ({
+              queries: ["Foo"],
+              interfaces: ["Foo"],
+              subscriptions: ["Foo"],
+            }));
+
+          jest
+            .spyOn(graphqlLib, "getRelationOfField")
+            .mockImplementation(() => ({
+              queries: ["Foo"],
+              objects: ["Foo"],
+              directives: ["Foo"],
+            }));
+
+          jest
+            .spyOn(graphqlLib, "getRelationOfImplementation")
+            .mockImplementation(() => ({
+              unions: ["Foo"],
+              interfaces: ["Foo"],
+              object: ["Foo"],
+            }));
+
+          const deprecation = printerInstance.printRelations(type);
+
+          expect(deprecation).toMatchInlineSnapshot(`""`);
         });
       });
     });
