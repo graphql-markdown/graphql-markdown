@@ -225,9 +225,13 @@ function getRelationOfField(type, schema) {
       continue;
     }
 
-    for (const [relationName, relationType] of Object.entries(entity)) {
+    for (let [relationName, relationType] of Object.entries(entity)) {
       if (typeof relationType === "undefined") {
         continue;
+      }
+
+      if (isDirectiveType(relationType)) {
+        relationName = relationType.name;
       }
 
       const fields = Object.assign(
@@ -278,6 +282,13 @@ function getRelationOfInterface(type, schema) {
   return schema.getImplementations(type);
 }
 
+function getRelationOfImplementation(type, schema) {
+  return {
+    ...getRelationOfInterface(type, schema),
+    ...getRelationOfUnion(type, schema),
+  };
+}
+
 function isParametrizedField(type) {
   return hasProperty(type, "args") && type.args.length > 0;
 }
@@ -315,4 +326,5 @@ module.exports = {
   getRelationOfField,
   getRelationOfUnion,
   getRelationOfInterface,
+  getRelationOfImplementation,
 };

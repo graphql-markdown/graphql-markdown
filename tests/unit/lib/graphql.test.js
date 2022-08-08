@@ -33,6 +33,7 @@ const {
   getRelationOfUnion,
   getRelationOfReturn,
   getRelationOfField,
+  getRelationOfImplementation,
 } = require("../../../src/lib/graphql");
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
@@ -489,27 +490,29 @@ describe("lib", () => {
     test("returns types and interfaces extending an interface", () => {
       const schema = buildSchema(`
         interface Being {
-            name(surname: Boolean): String
+          name(surname: Boolean): String
         }
+        
         interface Mammal {
-            mother: Mammal
-            father: Mammal
+          mother: Mammal
+          father: Mammal
         }
+
         interface Pet implements Being {
-            name(surname: Boolean): String
+          name(surname: Boolean): String
         }
         
         interface Canine implements Mammal & Being {
-            name(surname: Boolean): String
-            mother: Canine
-            father: Canine
+          name(surname: Boolean): String
+          mother: Canine
+          father: Canine
         }
         
         type Dog implements Being & Pet & Mammal & Canine {
-            name(surname: Boolean): String
-            nickname: String
-            mother: Dog
-            father: Dog
+          name(surname: Boolean): String
+          nickname: String
+          mother: Dog
+          father: Dog
         }
       `);
 
@@ -563,6 +566,62 @@ describe("lib", () => {
         Object {
           "unions": Array [
             "Task",
+          ],
+        }
+      `);
+    });
+  });
+
+  describe("getRelationOfImplementation", () => {
+    test("returns implementations compatible with type", () => {
+      const schema = buildSchema(`
+        interface Being {
+          name(surname: Boolean): String
+        }
+
+        interface Mammal {
+          mother: Mammal
+          father: Mammal
+        }
+
+        interface Canine implements Mammal & Being {
+          name(surname: Boolean): String
+          mother: Canine
+          father: Canine
+        }
+        
+        type Dog implements Being & Mammal & Canine {
+          name(surname: Boolean): String
+          nickname: String
+          mother: Dog
+          father: Dog
+        }
+
+        type Cat implements Being & Mammal {
+          name(surname: Boolean): String
+          nickname: String
+          mother: Dog
+          father: Dog
+        }
+
+        union Pet = Dog | Cat | Being
+      `);
+
+      const compositeType = schema.getType("Being");
+
+      const relations = getRelationOfImplementation(compositeType, schema);
+
+      expect(relations).toMatchInlineSnapshot(`
+        Object {
+          "interfaces": Array [
+            "Canine",
+          ],
+          "objects": Array [
+            "Dog",
+            "Cat",
+          ],
+          "unions": Array [
+            "Pet",
           ],
         }
       `);
@@ -646,7 +705,10 @@ describe("lib", () => {
 
       expect(relations).toMatchInlineSnapshot(`
         Object {
-          "directives": Array [],
+          "directives": Array [
+            "deprecated",
+            "specifiedBy",
+          ],
           "inputs": Array [],
           "interfaces": Array [
             "Record",
