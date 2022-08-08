@@ -182,13 +182,18 @@ function getSchemaMap(schema) {
   };
 }
 
-function getRelationOfReturn(type, schemaMap) {
+function getRelationOfReturn(type, schema) {
   const relations = { queries: [], mutations: [], subscriptions: [] };
 
+  const schemaMap = getSchemaMap(schema);
+
   for (const relation of Object.keys(relations)) {
-    for (const [relationName, relationType] of Object.entries(
-      schemaMap[relation],
-    )) {
+    const entity = schemaMap[relation];
+    if (typeof entity === "undefined") {
+      continue;
+    }
+
+    for (const [relationName, relationType] of Object.entries(entity)) {
       if (getNamedType(relationType.type).name === type.name) {
         if (relations[relation].includes(relationName)) {
           continue;
@@ -201,7 +206,7 @@ function getRelationOfReturn(type, schemaMap) {
   return relations;
 }
 
-function getRelationOfField(type, schemaMap) {
+function getRelationOfField(type, schema) {
   const relations = {
     queries: [],
     mutations: [],
@@ -209,12 +214,18 @@ function getRelationOfField(type, schemaMap) {
     objects: [],
     interfaces: [],
     inputs: [],
+    directives: [],
   };
 
+  const schemaMap = getSchemaMap(schema);
+
   for (const relation of Object.keys(relations)) {
-    for (const [relationName, relationType] of Object.entries(
-      schemaMap[relation],
-    )) {
+    const entity = schemaMap[relation];
+    if (typeof entity === "undefined") {
+      continue;
+    }
+
+    for (const [relationName, relationType] of Object.entries(entity)) {
       if (typeof relationType === "undefined") {
         continue;
       }
@@ -238,8 +249,14 @@ function getRelationOfField(type, schemaMap) {
   return relations;
 }
 
-function getRelationOfUnion(type, schemaMap) {
+function getRelationOfUnion(type, schema) {
   const relations = { unions: [] };
+
+  const schemaMap = getSchemaMap(schema);
+
+  if (typeof schemaMap.unions === "undefined") {
+    return relations;
+  }
 
   for (const [relationName, relationType] of Object.entries(schemaMap.unions)) {
     if (relationType._types.find((subType) => subType.name === type.name)) {

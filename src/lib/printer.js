@@ -15,6 +15,10 @@ const {
   isListType,
   isNonNullType,
   isLeafType,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfUnion,
+  getRelationOfInterface,
 } = require("./graphql");
 
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
@@ -358,6 +362,15 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     return metadata;
   }
 
+  printRelationOf(type) {
+    const returnedBy = getRelationOfReturn(type, this.schema);
+    // const declaredAsFieldBy = getRelationOfField(type, this.schema);
+    // const memberOfUnion = getRelationOfUnion(type, this.schema);
+    // const implementedBy = getRelationOfInterface(type, this.schema);
+
+    return this.printSection(returnedBy, "Returned by");
+  }
+
   printType(name, type, options) {
     if (typeof type === "undefined" || type === null) {
       return "";
@@ -367,7 +380,8 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
+    const relations = this.printRelationOf(type);
 
-    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}`;
+    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}`;
   }
 };

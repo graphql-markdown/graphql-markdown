@@ -557,7 +557,7 @@ describe("lib", () => {
 
       const compositeType = schema.getType("Meeting");
 
-      const relations = getRelationOfUnion(compositeType, getSchemaMap(schema));
+      const relations = getRelationOfUnion(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
         Object {
@@ -594,10 +594,7 @@ describe("lib", () => {
 
       const compositeType = schema.getType("StudyItem");
 
-      const relations = getRelationOfReturn(
-        compositeType,
-        getSchemaMap(schema),
-      );
+      const relations = getRelationOfReturn(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
         Object {
@@ -619,9 +616,9 @@ describe("lib", () => {
   describe("getRelationOfField", () => {
     test("returns queries, subscriptions and mutations using a type", () => {
       const schema = buildSchema(`
-      interface Record {
-        id: String!
-      }
+        interface Record {
+          id: String!
+        }
 
         type StudyItem implements Record {
           id: String!
@@ -645,10 +642,11 @@ describe("lib", () => {
 
       const compositeType = schema.getType("String");
 
-      const relations = getRelationOfField(compositeType, getSchemaMap(schema));
+      const relations = getRelationOfField(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
         Object {
+          "directives": Array [],
           "inputs": Array [],
           "interfaces": Array [
             "Record",
