@@ -66,12 +66,12 @@
         {
           "path": "output/inputs/tweet-content.mdx",
           "name": "tweet-content.mdx",
-          "size": 360,
+          "size": 396,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 385,
+      "size": 421,
       "type": "directory"
     },
     {
@@ -153,14 +153,14 @@
         {
           "path": "output/objects/meta.mdx",
           "name": "meta.mdx",
-          "size": 325,
+          "size": 403,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/notification.mdx",
           "name": "notification.mdx",
-          "size": 413,
+          "size": 456,
           "type": "file",
           "extension": ".mdx"
         },
@@ -174,19 +174,19 @@
         {
           "path": "output/objects/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 842,
+          "size": 958,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 988,
+          "size": 1028,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 3492,
+      "size": 3769,
       "type": "directory"
     },
     {
@@ -260,7 +260,7 @@
         {
           "path": "output/scalars/boolean.mdx",
           "name": "boolean.mdx",
-          "size": 324,
+          "size": 365,
           "type": "file",
           "extension": ".mdx"
         },
@@ -274,14 +274,14 @@
         {
           "path": "output/scalars/id.mdx",
           "name": "id.mdx",
-          "size": 740,
+          "size": 878,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/int.mdx",
           "name": "int.mdx",
-          "size": 390,
+          "size": 456,
           "type": "file",
           "extension": ".mdx"
         },
@@ -295,7 +295,7 @@
         {
           "path": "output/scalars/string.mdx",
           "name": "string.mdx",
-          "size": 650,
+          "size": 673,
           "type": "file",
           "extension": ".mdx"
         },
@@ -307,7 +307,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 2994,
+      "size": 3262,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 11914,
+  "size": 12495,
   "type": "directory"
 }

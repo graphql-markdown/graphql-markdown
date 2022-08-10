@@ -55,24 +55,36 @@ module.exports = class Printer {
         return "scalars";
       case isDirectiveType(graphLQLNamedType):
         return "directives";
+      case isOperation(graphLQLNamedType):
+        return "operation";
     }
     return undefined;
   }
 
-  toLink(type, name) {
+  toLink(type, name, operation) {
+    const fallback = {
+      text: name,
+      url: "#",
+    };
+
     const graphLQLNamedType = getNamedType(type);
 
-    const category = this.getLinkCategory(graphLQLNamedType);
+    let category = this.getLinkCategory(graphLQLNamedType);
 
     if (
       typeof category === "undefined" ||
       typeof graphLQLNamedType === "undefined" ||
       graphLQLNamedType === null
     ) {
-      return {
-        text: name,
-        url: "#",
-      };
+      return fallback;
+    }
+
+    // special case for support relation map
+    if (category === "operation") {
+      if (typeof operation === "undefined") {
+        return fallback;
+      }
+      category = operation;
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
@@ -377,7 +389,11 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
   }
 
   printRelationOf(type, section, getRelation) {
-    if (typeof type === "undefined" || isOperation(type)) {
+    if (
+      typeof type === "undefined" ||
+      typeof getRelation !== "function" ||
+      isOperation(type)
+    ) {
       return "";
     }
 
@@ -387,19 +403,21 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       return "";
     }
 
+    const getRelationLink = (relation, type) => {
+      const operation = isOperation(type) ? relation : undefined;
+      const link = this.toLink(type, type.name, operation);
+      return `[${link.text}](${link.url})`;
+    };
+
     let data = "";
     let hasRelation = false;
     for (const [relation, types] of Object.entries(relations)) {
-      if (types.length > 0) {
-        const content = types
-          .map((t) => {
-            const link = this.toLink(t);
-            return `[${link.text}](${link.url})`;
-          })
-          .join(", ");
-        data += `- **${capitalize(relation)}**: ${content}${MARKDOWN_EOL}`;
-        hasRelation = true;
+      if (types.length === 0) {
+        continue;
       }
+      const content = types.map((t) => getRelationLink(relation, t)).join(", ");
+      data += `- **${capitalize(relation)}**: ${content}${MARKDOWN_EOL}`;
+      hasRelation = true;
     }
 
     if (!hasRelation) {

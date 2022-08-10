@@ -244,12 +244,12 @@
             {
               "path": "output/misc/enums/roles.mdx",
               "name": "roles.mdx",
-              "size": 231,
+              "size": 268,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 255,
+          "size": 292,
           "type": "directory"
         },
         {
@@ -367,7 +367,7 @@
             {
               "path": "output/misc/scalars/int.mdx",
               "name": "int.mdx",
-              "size": 461,
+              "size": 790,
               "type": "file",
               "extension": ".mdx"
             },
@@ -381,7 +381,7 @@
             {
               "path": "output/misc/scalars/string.mdx",
               "name": "string.mdx",
-              "size": 723,
+              "size": 1179,
               "type": "file",
               "extension": ".mdx"
             },
@@ -393,11 +393,11 @@
               "extension": ".mdx"
             }
           ],
-          "size": 3014,
+          "size": 3799,
           "type": "directory"
         }
       ],
-      "size": 7203,
+      "size": 8025,
       "type": "directory"
     },
     {
@@ -408,6 +408,6 @@
       "extension": ".js"
     }
   ],
-  "size": 11888,
+  "size": 12710,
   "type": "directory"
 }
