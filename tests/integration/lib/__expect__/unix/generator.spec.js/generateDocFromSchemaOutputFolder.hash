@@ -288,7 +288,7 @@
         {
           "path": "output/scalars/sri.mdx",
           "name": "sri.mdx",
-          "size": 431,
+          "size": 429,
           "type": "file",
           "extension": ".mdx"
         },
@@ -307,7 +307,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 3320,
+      "size": 3318,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 20222,
+  "size": 20220,
   "type": "directory"
 }

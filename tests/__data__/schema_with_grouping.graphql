@@ -6,6 +6,7 @@ scalar Date
 scalar EmailAddress
 scalar PhoneNumber
 scalar Time
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
   UpdateGrade(input: String): String  @doc(category: "Grade") 
@@ -58,4 +59,5 @@ type DepartmentInformation implements Record {
   number: PhoneNumber
   departmentOpenTime: Time
   departmentCloseTime: Time
+  website: URL
 }

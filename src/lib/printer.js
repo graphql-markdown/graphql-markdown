@@ -362,7 +362,7 @@ module.exports = class Printer {
     return `
 export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
 
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={{specifiedByLinkCss}} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
+${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
       `;
   }
 
