@@ -34,11 +34,22 @@ const BULLET_SEPARATOR =
   "<strong style={{ color: 'var(--ifm-color-secondary-darkest)' }}>●</strong>";
 
 module.exports = class Printer {
-  constructor(schema, baseURL, linkRoot = "/", group = undefined) {
+  constructor(
+    schema,
+    baseURL,
+    linkRoot = "/",
+    options = {
+      group: undefined,
+      printParentType: true,
+      printRelatedTypes: true,
+    },
+  ) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.group = group;
+    this.group = options.group;
+    this.printParentType = options.printParentType ?? true;
+    this.printRelatedTypes = options.printRelatedTypes ?? true;
   }
 
   getLinkCategory(graphLQLNamedType) {
@@ -170,10 +181,11 @@ module.exports = class Printer {
     const link = this.toLink(type, getTypeName(type));
 
     if (!withAttributes) {
-      const text = //`\`${link.text}\``;
-        typeof parentType === "undefined"
-          ? `\`${link.text}\``
-          : `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`;
+      const printParentType =
+        this.printParentType && typeof parentType !== "undefined";
+      const text = printParentType
+        ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
+        : `\`${link.text}\``;
       return `[${text}](${link.url})`;
     }
 
@@ -485,7 +497,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={{specifiedByLink
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
-    const relations = this.printRelations(type);
+    const relations = this.printRelatedTypes ? this.printRelations(type) : "";
 
     return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
