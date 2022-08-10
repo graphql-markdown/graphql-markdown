@@ -244,12 +244,12 @@
             {
               "path": "output/misc/enums/roles.mdx",
               "name": "roles.mdx",
-              "size": 227,
+              "size": 231,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 251,
+          "size": 255,
           "type": "directory"
         },
         {
@@ -317,58 +317,58 @@
             {
               "path": "output/misc/scalars/boolean.mdx",
               "name": "boolean.mdx",
-              "size": 208,
+              "size": 285,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/date.mdx",
               "name": "date.mdx",
-              "size": 150,
+              "size": 188,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/email-address.mdx",
               "name": "email-address.mdx",
-              "size": 188,
+              "size": 240,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/int.mdx",
               "name": "int.mdx",
-              "size": 417,
+              "size": 461,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/phone-number.mdx",
               "name": "phone-number.mdx",
-              "size": 185,
+              "size": 237,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/string.mdx",
               "name": "string.mdx",
-              "size": 564,
+              "size": 723,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/time.mdx",
               "name": "time.mdx",
-              "size": 163,
+              "size": 215,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1901,
+          "size": 2375,
           "type": "directory"
         }
       ],
-      "size": 5374,
+      "size": 5852,
       "type": "directory"
     },
     {
@@ -379,6 +379,6 @@
       "extension": ".js"
     }
   ],
-  "size": 10059,
+  "size": 10537,
   "type": "directory"
 }

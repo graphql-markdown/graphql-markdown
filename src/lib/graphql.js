@@ -195,10 +195,10 @@ function getRelationOfReturn(type, schema) {
 
     for (const [relationName, relationType] of Object.entries(entity)) {
       if (getNamedType(relationType.type).name === type.name) {
-        if (relations[relation].includes(relationName)) {
+        if (relations[relation].find((r) => r.name === relationName)) {
           continue;
         }
-        relations[relation].push(relationName);
+        relations[relation].push(relationType);
       }
     }
   }
@@ -242,10 +242,10 @@ function getRelationOfField(type, schema) {
       );
       for (const fieldDef of Object.values(fields)) {
         if (getNamedType(fieldDef.type).name === type.name) {
-          if (relations[relation].includes(key)) {
+          if (relations[relation].find((r) => r === key || r.name === key)) {
             continue;
           }
-          relations[relation].push(key);
+          relations[relation].push(relationType);
         }
       }
     }
@@ -265,10 +265,10 @@ function getRelationOfUnion(type, schema) {
 
   for (const [relationName, relationType] of Object.entries(schemaMap.unions)) {
     if (relationType._types.find((subType) => subType.name === type.name)) {
-      if (relations.unions.includes(relationName)) {
+      if (relations.unions.find((r) => r.name === relationName)) {
         continue;
       }
-      relations.unions.push(relationName);
+      relations.unions.push(relationType);
     }
   }
 

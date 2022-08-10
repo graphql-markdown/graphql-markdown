@@ -658,14 +658,554 @@ describe("lib", () => {
       expect(relations).toMatchInlineSnapshot(`
         Object {
           "mutations": Array [
-            "addStudyItem",
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 308,
+                      "start": 292,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 299,
+                        "start": 292,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 308,
+                        "start": 301,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 307,
+                          "start": 301,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 307,
+                            "start": 301,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "subject",
+                  "type": "String!",
+                },
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 324,
+                      "start": 310,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 318,
+                        "start": 310,
+                      },
+                      "value": "duration",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 324,
+                        "start": 320,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 323,
+                          "start": 320,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 323,
+                            "start": 320,
+                          },
+                          "value": "Int",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "duration",
+                  "type": "Int!",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 308,
+                      "start": 292,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 299,
+                        "start": 292,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 308,
+                        "start": 301,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 307,
+                          "start": 301,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 307,
+                            "start": 301,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 324,
+                      "start": 310,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 318,
+                        "start": 310,
+                      },
+                      "value": "duration",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 324,
+                        "start": 320,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 323,
+                          "start": 320,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 323,
+                            "start": 320,
+                          },
+                          "value": "Int",
+                        },
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 336,
+                  "start": 279,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 291,
+                    "start": 279,
+                  },
+                  "value": "addStudyItem",
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 336,
+                    "start": 327,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 336,
+                      "start": 327,
+                    },
+                    "value": "StudyItem",
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "addStudyItem",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "StudyItem",
+            },
           ],
           "queries": Array [
-            "getStudyItems",
-            "getStudyItem",
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 175,
+                      "start": 160,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 167,
+                        "start": 160,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 175,
+                        "start": 169,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 175,
+                          "start": 169,
+                        },
+                        "value": "String",
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "subject",
+                  "type": "String",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 175,
+                      "start": 160,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 167,
+                        "start": 160,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 175,
+                        "start": 169,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 175,
+                          "start": 169,
+                        },
+                        "value": "String",
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 190,
+                  "start": 146,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 159,
+                    "start": 146,
+                  },
+                  "value": "getStudyItems",
+                },
+                "type": Object {
+                  "kind": "ListType",
+                  "loc": Object {
+                    "end": 190,
+                    "start": 178,
+                  },
+                  "type": Object {
+                    "kind": "NonNullType",
+                    "loc": Object {
+                      "end": 189,
+                      "start": 179,
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 188,
+                        "start": 179,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 188,
+                          "start": 179,
+                        },
+                        "value": "StudyItem",
+                      },
+                    },
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "getStudyItems",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "[StudyItem!]",
+            },
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 221,
+                      "start": 214,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 216,
+                        "start": 214,
+                      },
+                      "value": "id",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 221,
+                        "start": 218,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 220,
+                          "start": 218,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 220,
+                            "start": 218,
+                          },
+                          "value": "ID",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "id",
+                  "type": "ID!",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 221,
+                      "start": 214,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 216,
+                        "start": 214,
+                      },
+                      "value": "id",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 221,
+                        "start": 218,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 220,
+                          "start": 218,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 220,
+                            "start": 218,
+                          },
+                          "value": "ID",
+                        },
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 233,
+                  "start": 201,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 213,
+                    "start": 201,
+                  },
+                  "value": "getStudyItem",
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 233,
+                    "start": 224,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 233,
+                      "start": 224,
+                    },
+                    "value": "StudyItem",
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "getStudyItem",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "StudyItem",
+            },
           ],
           "subscriptions": Array [
-            "listStudyItems",
+            Object {
+              "args": Array [],
+              "astNode": Object {
+                "arguments": Array [],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 418,
+                  "start": 390,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 404,
+                    "start": 390,
+                  },
+                  "value": "listStudyItems",
+                },
+                "type": Object {
+                  "kind": "ListType",
+                  "loc": Object {
+                    "end": 418,
+                    "start": 406,
+                  },
+                  "type": Object {
+                    "kind": "NonNullType",
+                    "loc": Object {
+                      "end": 417,
+                      "start": 407,
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 416,
+                        "start": 407,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 416,
+                          "start": 407,
+                        },
+                        "value": "StudyItem",
+                      },
+                    },
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "listStudyItems",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "[StudyItem!]",
+            },
           ],
         }
       `);
@@ -706,22 +1246,506 @@ describe("lib", () => {
       expect(relations).toMatchInlineSnapshot(`
         Object {
           "directives": Array [
-            "deprecated",
-            "specifiedBy",
+            "@deprecated",
+            "@specifiedBy",
           ],
           "inputs": Array [],
           "interfaces": Array [
             "Record",
           ],
           "mutations": Array [
-            "addStudyItem",
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 394,
+                      "start": 378,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 385,
+                        "start": 378,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 394,
+                        "start": 387,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 393,
+                          "start": 387,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 393,
+                            "start": 387,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "subject",
+                  "type": "String!",
+                },
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 410,
+                      "start": 396,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 404,
+                        "start": 396,
+                      },
+                      "value": "duration",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 410,
+                        "start": 406,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 409,
+                          "start": 406,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 409,
+                            "start": 406,
+                          },
+                          "value": "Int",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "duration",
+                  "type": "Int!",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 394,
+                      "start": 378,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 385,
+                        "start": 378,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 394,
+                        "start": 387,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 393,
+                          "start": 387,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 393,
+                            "start": 387,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 410,
+                      "start": 396,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 404,
+                        "start": 396,
+                      },
+                      "value": "duration",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 410,
+                        "start": 406,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 409,
+                          "start": 406,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 409,
+                            "start": 406,
+                          },
+                          "value": "Int",
+                        },
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 422,
+                  "start": 365,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 377,
+                    "start": 365,
+                  },
+                  "value": "addStudyItem",
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 422,
+                    "start": 413,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 422,
+                      "start": 413,
+                    },
+                    "value": "StudyItem",
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "addStudyItem",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "StudyItem",
+            },
           ],
           "objects": Array [
             "StudyItem",
           ],
           "queries": Array [
-            "getStudyItems",
-            "getStudyItem",
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 257,
+                      "start": 242,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 249,
+                        "start": 242,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 257,
+                        "start": 251,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 257,
+                          "start": 251,
+                        },
+                        "value": "String",
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "subject",
+                  "type": "String",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 257,
+                      "start": 242,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 249,
+                        "start": 242,
+                      },
+                      "value": "subject",
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 257,
+                        "start": 251,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 257,
+                          "start": 251,
+                        },
+                        "value": "String",
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 272,
+                  "start": 228,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 241,
+                    "start": 228,
+                  },
+                  "value": "getStudyItems",
+                },
+                "type": Object {
+                  "kind": "ListType",
+                  "loc": Object {
+                    "end": 272,
+                    "start": 260,
+                  },
+                  "type": Object {
+                    "kind": "NonNullType",
+                    "loc": Object {
+                      "end": 271,
+                      "start": 261,
+                    },
+                    "type": Object {
+                      "kind": "NamedType",
+                      "loc": Object {
+                        "end": 270,
+                        "start": 261,
+                      },
+                      "name": Object {
+                        "kind": "Name",
+                        "loc": Object {
+                          "end": 270,
+                          "start": 261,
+                        },
+                        "value": "StudyItem",
+                      },
+                    },
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "getStudyItems",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "[StudyItem!]",
+            },
+            Object {
+              "args": Array [
+                Object {
+                  "astNode": Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 307,
+                      "start": 296,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 298,
+                        "start": 296,
+                      },
+                      "value": "id",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 307,
+                        "start": 300,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 306,
+                          "start": 300,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 306,
+                            "start": 300,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                  "defaultValue": undefined,
+                  "deprecationReason": undefined,
+                  "description": undefined,
+                  "extensions": Object {},
+                  "name": "id",
+                  "type": "String!",
+                },
+              ],
+              "astNode": Object {
+                "arguments": Array [
+                  Object {
+                    "defaultValue": undefined,
+                    "description": undefined,
+                    "directives": Array [],
+                    "kind": "InputValueDefinition",
+                    "loc": Object {
+                      "end": 307,
+                      "start": 296,
+                    },
+                    "name": Object {
+                      "kind": "Name",
+                      "loc": Object {
+                        "end": 298,
+                        "start": 296,
+                      },
+                      "value": "id",
+                    },
+                    "type": Object {
+                      "kind": "NonNullType",
+                      "loc": Object {
+                        "end": 307,
+                        "start": 300,
+                      },
+                      "type": Object {
+                        "kind": "NamedType",
+                        "loc": Object {
+                          "end": 306,
+                          "start": 300,
+                        },
+                        "name": Object {
+                          "kind": "Name",
+                          "loc": Object {
+                            "end": 306,
+                            "start": 300,
+                          },
+                          "value": "String",
+                        },
+                      },
+                    },
+                  },
+                ],
+                "description": undefined,
+                "directives": Array [],
+                "kind": "FieldDefinition",
+                "loc": Object {
+                  "end": 319,
+                  "start": 283,
+                },
+                "name": Object {
+                  "kind": "Name",
+                  "loc": Object {
+                    "end": 295,
+                    "start": 283,
+                  },
+                  "value": "getStudyItem",
+                },
+                "type": Object {
+                  "kind": "NamedType",
+                  "loc": Object {
+                    "end": 319,
+                    "start": 310,
+                  },
+                  "name": Object {
+                    "kind": "Name",
+                    "loc": Object {
+                      "end": 319,
+                      "start": 310,
+                    },
+                    "value": "StudyItem",
+                  },
+                },
+              },
+              "deprecationReason": undefined,
+              "description": undefined,
+              "extensions": Object {},
+              "name": "getStudyItem",
+              "resolve": undefined,
+              "subscribe": undefined,
+              "type": "StudyItem",
+            },
           ],
           "subscriptions": Array [],
         }

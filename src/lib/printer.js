@@ -391,7 +391,12 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     let hasRelation = false;
     for (const [relation, types] of Object.entries(relations)) {
       if (types.length > 0) {
-        const content = types.join(", ");
+        const content = types
+          .map((t) => {
+            const link = this.toLink(t);
+            return `[${link.text}](${link.url})`;
+          })
+          .join(", ");
         data += `- **${capitalize(relation)}**: ${content}${MARKDOWN_EOL}`;
         hasRelation = true;
       }
