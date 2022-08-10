@@ -406,7 +406,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     const getRelationLink = (relation, type) => {
       const operation = isOperation(type) ? relation : undefined;
       const link = this.toLink(type, type.name, operation);
-      return `[${link.text}](${link.url})`;
+      return `[\`${link.text}\`](${link.url})`;
     };
 
     let data = "";
