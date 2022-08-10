@@ -253,6 +253,28 @@
           "type": "directory"
         },
         {
+          "path": "output/misc/interfaces",
+          "name": "interfaces",
+          "children": [
+            {
+              "path": "output/misc/interfaces/_category_.yml",
+              "name": "_category_.yml",
+              "size": 29,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "output/misc/interfaces/record.mdx",
+              "name": "record.mdx",
+              "size": 363,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 392,
+          "type": "directory"
+        },
+        {
           "path": "output/misc/objects",
           "name": "objects",
           "children": [
@@ -266,19 +288,19 @@
             {
               "path": "output/misc/objects/department-information.mdx",
               "name": "department-information.mdx",
-              "size": 595,
+              "size": 755,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/objects/semester.mdx",
               "name": "semester.mdx",
-              "size": 399,
+              "size": 559,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1020,
+          "size": 1340,
           "type": "directory"
         },
         {
@@ -336,6 +358,13 @@
               "extension": ".mdx"
             },
             {
+              "path": "output/misc/scalars/id.mdx",
+              "name": "id.mdx",
+              "size": 639,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
               "path": "output/misc/scalars/int.mdx",
               "name": "int.mdx",
               "size": 461,
@@ -364,11 +393,11 @@
               "extension": ".mdx"
             }
           ],
-          "size": 2375,
+          "size": 3014,
           "type": "directory"
         }
       ],
-      "size": 5852,
+      "size": 7203,
       "type": "directory"
     },
     {
@@ -379,6 +408,6 @@
       "extension": ".js"
     }
   ],
-  "size": 10537,
+  "size": 11888,
   "type": "directory"
 }

@@ -41,13 +41,19 @@ type Query {
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
 }
 
-type Semester {
+interface Record {
+  id: ID!
+}
+
+type Semester implements Record {
+  id: ID!
   startDate: Date
   withdrawDate: Date
   endDate: Date
 }
 
-type DepartmentInformation {
+type DepartmentInformation implements Record {
+  id: ID!
   email: EmailAddress
   number: PhoneNumber
   departmentOpenTime: Time

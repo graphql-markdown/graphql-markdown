@@ -276,11 +276,31 @@ function getRelationOfUnion(type, schema) {
 }
 
 function getRelationOfInterface(type, schema) {
-  if (!isInterfaceType(type)) {
-    return { objects: [], interfaces: [] };
+  const relations = { objects: [], interfaces: [] };
+
+  const schemaMap = getSchemaMap(schema);
+
+  for (const relation of Object.keys(relations)) {
+    const entity = schemaMap[relation];
+    if (typeof entity === "undefined") {
+      continue;
+    }
+
+    for (const [relationName, relationType] of Object.entries(
+      schemaMap[relation],
+    )) {
+      if (
+        relationType._interfaces.find((subType) => subType.name === type.name)
+      ) {
+        if (relations[relation].find((r) => r.name === relationName)) {
+          continue;
+        }
+        relations[relation].push(relationType);
+      }
+    }
   }
 
-  return schema.getImplementations(type);
+  return relations;
 }
 
 function getRelationOfImplementation(type, schema) {
