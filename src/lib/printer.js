@@ -30,6 +30,8 @@ const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
+const BULLET_SEPARATOR =
+  "<strong style={{ color: 'var(--ifm-color-secondary-darkest)' }}>●</strong>";
 
 module.exports = class Printer {
   constructor(schema, baseURL, linkRoot = "/", group = undefined) {
@@ -103,29 +105,50 @@ module.exports = class Printer {
     };
   }
 
-  printSection(values, section, level = HEADER_SECTION_LEVEL) {
+  printSection(
+    values,
+    section,
+    { level, parentType } = {
+      level: HEADER_SECTION_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (values.length === 0) {
       return "";
     }
 
-    return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(
-      values,
-    )}${MARKDOWN_EOP}`;
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_LEVEL;
+    }
+
+    return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(values, {
+      parentType,
+    })}${MARKDOWN_EOP}`;
   }
 
-  printSectionItems(values, level = HEADER_SECTION_SUB_LEVEL) {
+  printSectionItems(
+    values,
+    { level, parentType } = {
+      level: HEADER_SECTION_SUB_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (!Array.isArray(values)) {
       return "";
     }
 
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_SUB_LEVEL;
+    }
+
     return values
-      .map((v) => v && this.printSectionItem(v, level))
+      .map((v) => v && this.printSectionItem(v, { level, parentType }))
       .join(MARKDOWN_EOP);
   }
 
   printLinkAttributes(type, text) {
     if (typeof type == "undefined") {
-      return text;
+      return text ?? "";
     }
 
     if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
@@ -143,11 +166,15 @@ module.exports = class Printer {
     return text;
   }
 
-  printLink(type, withAttributes = false) {
+  printLink(type, withAttributes = false, parentType = undefined) {
     const link = this.toLink(type, getTypeName(type));
 
     if (!withAttributes) {
-      return `[\`${link.text}\`](${link.url})`;
+      const text = //`\`${link.text}\``;
+        typeof parentType === "undefined"
+          ? `\`${link.text}\``
+          : `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`;
+      return `[${text}](${link.url})`;
     }
 
     const text = this.printLinkAttributes(type, link.text);
@@ -155,20 +182,36 @@ module.exports = class Printer {
     return `[\`${text}\`](${link.url})`;
   }
 
-  printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
+  printSectionItem(
+    type,
+    { level, parentType } = {
+      level: HEADER_SECTION_SUB_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    const typeNameLink = this.printLink(type);
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_SUB_LEVEL;
+    }
+
+    const typeNameLink = this.printLink(type, false, parentType);
     const description = this.printDescription(type, "");
     const parentTypeLink = hasProperty(type, "type")
-      ? ` (${this.printLink(type.type, true)})`
+      ? ` ${BULLET_SEPARATOR} ${this.printLink(type.type, true)}`
       : "";
 
     let section = `${level} ${typeNameLink}${parentTypeLink}${MARKDOWN_EOP}${description}${MARKDOWN_EOL}`;
     if (isParametrizedField(type)) {
-      section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
+      section += this.printSectionItems(type.args, {
+        level: HEADER_SECTION_ITEM_LEVEL,
+        parentType:
+          typeof parentType === "undefined"
+            ? undefined
+            : `${parentType}.${type.name}`,
+      });
     }
 
     return section;
@@ -307,7 +350,7 @@ module.exports = class Printer {
     return `
 export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
 
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
+${HEADER_SECTION_LEVEL} Specification<a className="link" style={{specifiedByLinkCss}} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
       `;
   }
 
@@ -346,20 +389,26 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       case isScalarType(type):
         return this.printSpecification(type);
       case isEnumType(type):
-        return this.printSection(type.getValues(), "Values");
+        return this.printSection(type.getValues(), "Values", {
+          parentType: type.name,
+        });
       case isUnionType(type):
         return this.printSection(type.getTypes(), "Possible types");
       case isObjectType(type):
       case isInterfaceType(type):
       case isInputType(type):
-        metadata = this.printSection(getFields(type), "Fields");
+        metadata = this.printSection(getFields(type), "Fields", {
+          parentType: type.name,
+        });
         if (hasMethod(type, "getInterfaces")) {
           metadata += this.printSection(type.getInterfaces(), "Interfaces");
         }
         return metadata;
       case isDirectiveType(type):
       case isOperation(type):
-        metadata = this.printSection(type.args, "Arguments");
+        metadata = this.printSection(type.args, "Arguments", {
+          parentType: type.name,
+        });
 
         if (isOperation(type)) {
           const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");

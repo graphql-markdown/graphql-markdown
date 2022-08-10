@@ -199,7 +199,9 @@ describe("lib", () => {
 
           const section = printerInstance.printSection(content, title);
 
-          expect(printSectionItems).toHaveBeenCalledWith(content);
+          expect(printSectionItems).toHaveBeenCalledWith(content, {
+            parentType: undefined,
+          });
 
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSection.md"),
@@ -216,7 +218,9 @@ describe("lib", () => {
             .spyOn(printerInstance, "printSectionItems")
             .mockImplementation((sectionItems) => sectionItems);
 
-          const section = printerInstance.printSection(content, title, "#");
+          const section = printerInstance.printSection(content, title, {
+            level: "#",
+          });
 
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionCustomLevel.md"),
@@ -248,10 +252,9 @@ describe("lib", () => {
           const section = printerInstance.printSectionItems(itemList);
 
           expect(printSectionItem).toHaveBeenCalledTimes(3);
-          expect(printSectionItem).toHaveBeenLastCalledWith(
-            itemList.pop(),
-            "####",
-          );
+          expect(printSectionItem).toHaveBeenLastCalledWith(itemList.pop(), {
+            level: "####",
+          });
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionItems.md"),
           );
@@ -347,7 +350,10 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
+          expect(printSectionItems).toHaveBeenCalledWith(type.args, {
+            level: "- #####",
+            parentType: undefined,
+          });
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionWithFieldParameters.md"),
           );
@@ -891,7 +897,7 @@ describe("lib", () => {
             "
             export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
 
-            ### Specification<a className=\\"link\\" style={specifiedByLinkCss} target=\\"_blank\\" href=\\"https://lorem.ipsum\\" title=\\"Specified by https://lorem.ipsum\\">⎘</a>
+            ### Specification<a className=\\"link\\" style={{specifiedByLinkCss}} target=\\"_blank\\" href=\\"https://lorem.ipsum\\" title=\\"Specified by https://lorem.ipsum\\">⎘</a>
 
 
                   "
