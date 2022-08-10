@@ -39,7 +39,7 @@ module.exports = class Printer {
     baseURL,
     linkRoot = "/",
     options = {
-      group: undefined,
+      groups: undefined,
       printParentType: true,
       printRelatedTypes: true,
     },
@@ -47,7 +47,7 @@ module.exports = class Printer {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.group = options.group;
+    this.groups = options.groups;
     this.printParentType = options.printParentType ?? true;
     this.printRelatedTypes = options.printRelatedTypes ?? true;
   }
@@ -101,7 +101,7 @@ module.exports = class Printer {
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = toSlug(hasProperty(this.group, text) ? this.group[text] : "");
+    const group = hasProperty(this.groups, text) ? toSlug(this.groups[text]) : "";
     const url = pathUrl.join(
       this.linkRoot,
       this.baseURL,
