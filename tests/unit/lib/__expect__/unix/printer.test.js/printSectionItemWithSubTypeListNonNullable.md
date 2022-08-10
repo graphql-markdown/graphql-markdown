@@ -1,3 +1,3 @@
-#### [`EntityTypeName`](#) <strong style={{ color: 'var(--ifm-color-secondary-darkest)' }}>●</strong> [`[NonNullableObjectType]!`](docs/graphql/objects/non-nullable-object-type)
+#### [`EntityTypeName`](#) <span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span> [`[NonNullableObjectType]!`](docs/graphql/objects/non-nullable-object-type)
 
 

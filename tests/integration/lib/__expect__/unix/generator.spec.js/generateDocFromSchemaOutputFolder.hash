@@ -16,33 +16,33 @@
         {
           "path": "output/directives/deprecated.mdx",
           "name": "deprecated.mdx",
-          "size": 650,
+          "size": 686,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/directives/include.mdx",
           "name": "include.mdx",
-          "size": 450,
+          "size": 486,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/directives/skip.mdx",
           "name": "skip.mdx",
-          "size": 429,
+          "size": 465,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/directives/specified-by.mdx",
           "name": "specified-by.mdx",
-          "size": 464,
+          "size": 500,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 2022,
+      "size": 2166,
       "type": "directory"
     },
     {
@@ -66,12 +66,12 @@
         {
           "path": "output/inputs/tweet-content.mdx",
           "name": "tweet-content.mdx",
-          "size": 676,
+          "size": 748,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 701,
+      "size": 773,
       "type": "directory"
     },
     {
@@ -88,12 +88,12 @@
         {
           "path": "output/interfaces/node.mdx",
           "name": "node.mdx",
-          "size": 436,
+          "size": 472,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 465,
+      "size": 501,
       "type": "directory"
     },
     {
@@ -110,26 +110,26 @@
         {
           "path": "output/mutations/create-tweet.mdx",
           "name": "create-tweet.mdx",
-          "size": 683,
+          "size": 755,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/mutations/delete-tweet.mdx",
           "name": "delete-tweet.mdx",
-          "size": 409,
+          "size": 445,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/mutations/mark-tweet-read.mdx",
           "name": "mark-tweet-read.mdx",
-          "size": 479,
+          "size": 515,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 1599,
+      "size": 1743,
       "type": "directory"
     },
     {
@@ -146,47 +146,47 @@
         {
           "path": "output/objects/media.mdx",
           "name": "media.mdx",
-          "size": 596,
+          "size": 668,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/meta.mdx",
           "name": "meta.mdx",
-          "size": 540,
+          "size": 576,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/notification.mdx",
           "name": "notification.mdx",
-          "size": 875,
+          "size": 983,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/stat.mdx",
           "name": "stat.mdx",
-          "size": 1225,
+          "size": 1405,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 1898,
+          "size": 2150,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 2082,
+          "size": 2370,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 7242,
+      "size": 8178,
       "type": "directory"
     },
     {
@@ -210,7 +210,7 @@
         {
           "path": "output/queries/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 384,
+          "size": 420,
           "type": "file",
           "extension": ".mdx"
         },
@@ -224,26 +224,26 @@
         {
           "path": "output/queries/tweets.mdx",
           "name": "tweets.mdx",
-          "size": 1062,
+          "size": 1206,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/queries/user.mdx",
           "name": "user.mdx",
-          "size": 377,
+          "size": 413,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/queries/users.mdx",
           "name": "users.mdx",
-          "size": 390,
+          "size": 426,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 2626,
+      "size": 2878,
       "type": "directory"
     },
     {
@@ -331,15 +331,15 @@
         {
           "path": "output/subscriptions/notifications.mdx",
           "name": "notifications.mdx",
-          "size": 447,
+          "size": 483,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 479,
+      "size": 515,
       "type": "directory"
     }
   ],
-  "size": 18602,
+  "size": 20222,
   "type": "directory"
 }

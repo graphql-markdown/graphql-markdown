@@ -31,7 +31,7 @@ const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
 const BULLET_SEPARATOR =
-  "<strong style={{ color: 'var(--ifm-color-secondary-darkest)' }}>●</strong>";
+  "<span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span>";
 
 module.exports = class Printer {
   constructor(

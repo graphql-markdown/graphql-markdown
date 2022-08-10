@@ -1,3 +1,3 @@
-#### [`EntityTypeNameList`](#) <strong style={{ color: 'var(--ifm-color-secondary-darkest)' }}>●</strong> [`[Int!]`](docs/graphql/scalars/int)
+#### [`EntityTypeNameList`](#) <span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span> [`[Int!]`](docs/graphql/scalars/int)
 
 
