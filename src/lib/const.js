@@ -18,8 +18,6 @@ const HEADER_SECTION_ITEM_LEVEL = "- #####";
 const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
-const BULLET_SEPARATOR =
-  "<span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span>";
 
 module.exports = {
   ROOT_TYPE_LOCALE,
@@ -29,5 +27,4 @@ module.exports = {
   NO_DESCRIPTION_TEXT,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  BULLET_SEPARATOR,
 };

@@ -894,13 +894,9 @@ describe("lib", () => {
           const deprecation = printerInstance.printSpecification(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
+            "### <SpecifiedBy url=\\"https://lorem.ipsum\\"/>
+
             "
-            export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
-
-            ### Specification<a className=\\"link\\" style={specifiedByLinkCss} target=\\"_blank\\" href=\\"https://lorem.ipsum\\" title=\\"Specified by https://lorem.ipsum\\">⎘</a>
-
-
-                  "
           `);
         });
 
@@ -952,7 +948,7 @@ describe("lib", () => {
           expect(deprecation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <span class=\\"badge badge--secondary\\">interface</span>, [\`Baz\`](#)  <span class=\\"badge badge--secondary\\">subscription</span>, [\`Foo\`](#)  <span class=\\"badge badge--secondary\\">query</span>
+            [\`Bar\`](#)  <span class=\\"badge badge--secondary\\">interface</span> <Bullet /> [\`Baz\`](#)  <span class=\\"badge badge--secondary\\">subscription</span> <Bullet /> [\`Foo\`](#)  <span class=\\"badge badge--secondary\\">query</span>
 
             "
           `);

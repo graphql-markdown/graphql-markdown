@@ -1,5 +1,11 @@
 header-scalar
 
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+
 Lorem Ipsum
 
 ```graphql
@@ -7,13 +13,9 @@ scalar LoremScalar
 ```
 
 
-
-export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
-
-### Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="https://lorem.ipsum" title="Specified by https://lorem.ipsum">⎘</a>
+### <SpecifiedBy url="https://lorem.ipsum"/>
 
 
-      
 
 
 

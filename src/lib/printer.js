@@ -29,7 +29,6 @@ const {
   HEADER_SECTION_SUB_LEVEL,
   HEADER_SECTION_ITEM_LEVEL,
   NO_DESCRIPTION_TEXT,
-  BULLET_SEPARATOR,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } = require("./const");
@@ -232,7 +231,7 @@ module.exports = class Printer {
     const typeNameLink = this.printLink(type, false, parentType);
     const description = this.printDescription(type, "");
     const parentTypeLink = hasProperty(type, "type")
-      ? ` ${BULLET_SEPARATOR} ${this.printLink(type.type, true)}`
+      ? ` <Bullet /> ${this.printLink(type.type, true)}`
       : "";
 
     let section = `${level} ${typeNameLink}${parentTypeLink}${MARKDOWN_EOP}${description}${MARKDOWN_EOL}`;
@@ -379,11 +378,7 @@ module.exports = class Printer {
     const url = type.specifiedByURL || type.specifiedByUrl;
 
     // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
-    return `
-export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
-
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
-      `;
+    return `${HEADER_SECTION_LEVEL} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}`;
   }
 
   printCode(type) {
@@ -498,7 +493,9 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       return "";
     }
 
-    const content = [...data].sort((a, b) => a.localeCompare(b)).join(", ");
+    const content = [...data]
+      .sort((a, b) => a.localeCompare(b))
+      .join(" <Bullet /> ");
 
     return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
@@ -509,11 +506,16 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     }
 
     const header = this.printHeader(name, getTypeName(type), options);
+    const mdx = `
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+`;
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
     const relations = this.printRelatedTypes ? this.printRelations(type) : "";
 
-    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
+    return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
 };
