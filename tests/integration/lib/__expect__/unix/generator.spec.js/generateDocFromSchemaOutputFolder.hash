@@ -66,12 +66,12 @@
         {
           "path": "output/inputs/tweet-content.mdx",
           "name": "tweet-content.mdx",
-          "size": 748,
+          "size": 785,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 773,
+      "size": 810,
       "type": "directory"
     },
     {
@@ -88,12 +88,12 @@
         {
           "path": "output/interfaces/node.mdx",
           "name": "node.mdx",
-          "size": 472,
+          "size": 560,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 501,
+      "size": 589,
       "type": "directory"
     },
     {
@@ -146,47 +146,47 @@
         {
           "path": "output/objects/media.mdx",
           "name": "media.mdx",
-          "size": 668,
+          "size": 705,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/meta.mdx",
           "name": "meta.mdx",
-          "size": 576,
+          "size": 701,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/notification.mdx",
           "name": "notification.mdx",
-          "size": 983,
+          "size": 1021,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/stat.mdx",
           "name": "stat.mdx",
-          "size": 1405,
+          "size": 1442,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/tweet.mdx",
           "name": "tweet.mdx",
-          "size": 2150,
+          "size": 2330,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/objects/user.mdx",
           "name": "user.mdx",
-          "size": 2370,
+          "size": 2495,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 8178,
+      "size": 8720,
       "type": "directory"
     },
     {
@@ -260,54 +260,54 @@
         {
           "path": "output/scalars/boolean.mdx",
           "name": "boolean.mdx",
-          "size": 371,
+          "size": 501,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/date.mdx",
           "name": "date.mdx",
-          "size": 232,
+          "size": 321,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/id.mdx",
           "name": "id.mdx",
-          "size": 896,
+          "size": 1306,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/int.mdx",
           "name": "int.mdx",
-          "size": 464,
+          "size": 628,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/sri.mdx",
           "name": "sri.mdx",
-          "size": 429,
+          "size": 466,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/string.mdx",
           "name": "string.mdx",
-          "size": 687,
+          "size": 996,
           "type": "file",
           "extension": ".mdx"
         },
         {
           "path": "output/scalars/url.mdx",
           "name": "url.mdx",
-          "size": 213,
+          "size": 302,
           "type": "file",
           "extension": ".mdx"
         }
       ],
-      "size": 3318,
+      "size": 4546,
       "type": "directory"
     },
     {
@@ -340,6 +340,6 @@
       "type": "directory"
     }
   ],
-  "size": 20220,
+  "size": 22115,
   "type": "directory"
 }

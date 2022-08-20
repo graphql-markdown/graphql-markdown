@@ -918,7 +918,7 @@ describe("lib", () => {
         });
       });
 
-      describe("printReturnOf()", () => {
+      describe("printRelationOf()", () => {
         beforeEach(() => {
           jest.mock("../../../src/lib/graphql");
         });
@@ -938,30 +938,40 @@ describe("lib", () => {
           jest
             .spyOn(graphqlLib, "getRelationOfReturn")
             .mockImplementation(() => ({
-              queries: ["Foo"],
-              interfaces: ["Foo"],
-              subscriptions: ["Foo"],
+              queries: [{ name: "Foo" }],
+              interfaces: [{ name: "Bar" }],
+              subscriptions: [{ name: "Baz" }],
             }));
 
-          jest
-            .spyOn(graphqlLib, "getRelationOfField")
-            .mockImplementation(() => ({
-              queries: ["Foo"],
-              objects: ["Foo"],
-              directives: ["Foo"],
-            }));
+          const deprecation = printerInstance.printRelationOf(
+            type,
+            "RelationOf",
+            graphqlLib.getRelationOfReturn,
+          );
 
-          jest
-            .spyOn(graphqlLib, "getRelationOfImplementation")
-            .mockImplementation(() => ({
-              unions: ["Foo"],
-              interfaces: ["Foo"],
-              object: ["Foo"],
-            }));
+          expect(deprecation).toMatchInlineSnapshot(`
+            "### RelationOf
 
-          const deprecation = printerInstance.printRelations(type);
+            [\`Bar\`](#)  <span class=\\"badge badge--secondary\\">interface</span>, [\`Baz\`](#)  <span class=\\"badge badge--secondary\\">subscription</span>, [\`Foo\`](#)  <span class=\\"badge badge--secondary\\">query</span>
 
-          expect(deprecation).toMatchInlineSnapshot(`""`);
+            "
+          `);
+        });
+      });
+
+      describe("getRootTypeLocaleFromString()", () => {
+        test("returns object of local strings from root type string", () => {
+          expect.hasAssertions();
+
+          const deprecation =
+            printerInstance.getRootTypeLocaleFromString("queries");
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            Object {
+              "plural": "queries",
+              "singular": "query",
+            }
+          `);
         });
       });
     });

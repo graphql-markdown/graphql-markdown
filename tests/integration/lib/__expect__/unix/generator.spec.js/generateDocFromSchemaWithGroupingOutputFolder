@@ -244,12 +244,12 @@
             {
               "path": "output/misc/enums/roles.mdx",
               "name": "roles.mdx",
-              "size": 384,
+              "size": 420,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 408,
+          "size": 444,
           "type": "directory"
         },
         {
@@ -266,12 +266,12 @@
             {
               "path": "output/misc/interfaces/record.mdx",
               "name": "record.mdx",
-              "size": 536,
+              "size": 624,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 565,
+          "size": 653,
           "type": "directory"
         },
         {
@@ -339,72 +339,72 @@
             {
               "path": "output/misc/scalars/boolean.mdx",
               "name": "boolean.mdx",
-              "size": 289,
+              "size": 381,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/date.mdx",
               "name": "date.mdx",
-              "size": 190,
+              "size": 227,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/email-address.mdx",
               "name": "email-address.mdx",
-              "size": 242,
+              "size": 279,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/id.mdx",
               "name": "id.mdx",
-              "size": 645,
+              "size": 772,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/int.mdx",
               "name": "int.mdx",
-              "size": 808,
+              "size": 1212,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/phone-number.mdx",
               "name": "phone-number.mdx",
-              "size": 239,
+              "size": 276,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/string.mdx",
               "name": "string.mdx",
-              "size": 1207,
+              "size": 1873,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/time.mdx",
               "name": "time.mdx",
-              "size": 217,
+              "size": 254,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/scalars/url.mdx",
               "name": "url.mdx",
-              "size": 487,
+              "size": 524,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 4350,
+          "size": 5824,
           "type": "directory"
         }
       ],
-      "size": 11756,
+      "size": 13354,
       "type": "directory"
     },
     {
@@ -415,6 +415,6 @@
       "extension": ".js"
     }
   ],
-  "size": 17998,
+  "size": 19596,
   "type": "directory"
 }

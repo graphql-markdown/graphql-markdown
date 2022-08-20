@@ -20,7 +20,7 @@ const {
   getRelationOfImplementation,
 } = require("./graphql");
 
-const { toSlug, escapeMDX, capitalize } = require("../utils/scalars/string");
+const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
 
@@ -32,6 +32,19 @@ const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
 const BULLET_SEPARATOR =
   "<span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span>";
+const ROOT_TYPE = {
+  QUERY: { singular: "query", plural: "queries" },
+  MUTATION: { singular: "mutation", plural: "mutations" },
+  SUBSCRIPTION: { singular: "subscription", plural: "subscriptions" },
+  TYPE: { singular: "object", plural: "objects" },
+  INTERFACE: { singular: "interface", plural: "interfaces" },
+  DIRECTIVE: { singular: "directive", plural: "directives" },
+  SCALAR: { singular: "scalar", plural: "scalars" },
+  ENUM: { singular: "enum", plural: "enums" },
+  OPERATION: { singular: "operation", plural: "operations" },
+  UNION: { singular: "union", plural: "unions" },
+  INPUT: { singular: "input", plural: "inputs" },
+};
 
 module.exports = class Printer {
   constructor(
@@ -52,24 +65,33 @@ module.exports = class Printer {
     this.printRelatedTypes = options.printRelatedTypes ?? true;
   }
 
+  getRootTypeLocaleFromString(text) {
+    for (const [type, props] of Object.entries(ROOT_TYPE)) {
+      if (Object.values(props).includes(text)) {
+        return ROOT_TYPE[type];
+      }
+    }
+    return undefined;
+  }
+
   getLinkCategory(graphLQLNamedType) {
     switch (true) {
       case isEnumType(graphLQLNamedType):
-        return "enums";
+        return ROOT_TYPE.ENUM;
       case isUnionType(graphLQLNamedType):
-        return "unions";
+        return ROOT_TYPE.UNION;
       case isInterfaceType(graphLQLNamedType):
-        return "interfaces";
+        return ROOT_TYPE.INTERFACE;
       case isObjectType(graphLQLNamedType):
-        return "objects";
+        return ROOT_TYPE.TYPE;
       case isInputType(graphLQLNamedType):
-        return "inputs";
+        return ROOT_TYPE.INPUT;
       case isScalarType(graphLQLNamedType):
-        return "scalars";
+        return ROOT_TYPE.SCALAR;
       case isDirectiveType(graphLQLNamedType):
-        return "directives";
+        return ROOT_TYPE.DIRECTIVE;
       case isOperation(graphLQLNamedType):
-        return "operation";
+        return ROOT_TYPE.OPERATION;
     }
     return undefined;
   }
@@ -93,7 +115,7 @@ module.exports = class Printer {
     }
 
     // special case for support relation map
-    if (category === "operation") {
+    if (category === ROOT_TYPE.OPERATION) {
       if (typeof operation === "undefined") {
         return fallback;
       }
@@ -108,7 +130,7 @@ module.exports = class Printer {
       this.linkRoot,
       this.baseURL,
       group,
-      category,
+      category.plural,
       toSlug(text),
     );
 
@@ -116,6 +138,14 @@ module.exports = class Printer {
       text: text,
       url: url,
     };
+  }
+
+  getRelationLink(category, type) {
+    if (typeof category === "undefined") {
+      return "";
+    }
+    const link = this.toLink(type, type.name, category);
+    return `[\`${link.text}\`](${link.url})  <span class="badge badge--secondary">${category.singular}</span>`;
   }
 
   printSection(
@@ -438,8 +468,8 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
 
   printRelations(type) {
     const relations = {
-      "Return of": getRelationOfReturn,
-      "Field of": getRelationOfField,
+      "Returned by": getRelationOfReturn,
+      "Member of": getRelationOfField,
       "Implemented by": getRelationOfImplementation,
     };
 
@@ -466,28 +496,23 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       return "";
     }
 
-    const getRelationLink = (relation, type) => {
-      const operation = isOperation(type) ? relation : undefined;
-      const link = this.toLink(type, type.name, operation);
-      return `[\`${link.text}\`](${link.url})`;
-    };
-
-    let data = "";
-    let hasRelation = false;
+    let data = [];
     for (const [relation, types] of Object.entries(relations)) {
       if (types.length === 0) {
         continue;
       }
-      const content = types.map((t) => getRelationLink(relation, t)).join(", ");
-      data += `- **${capitalize(relation)}**: ${content}${MARKDOWN_EOL}`;
-      hasRelation = true;
+
+      const category = this.getRootTypeLocaleFromString(relation);
+      data = data.concat(types.map((t) => this.getRelationLink(category, t)));
     }
 
-    if (!hasRelation) {
+    if (data.length === 0) {
       return "";
     }
 
-    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${data}${MARKDOWN_EOP}`;
+    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${data
+      .sort()
+      .join(`, `)}${MARKDOWN_EOP}`;
   }
 
   printType(name, type, options) {
