@@ -498,9 +498,9 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       return "";
     }
 
-    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${data
-      .sort()
-      .join(`, `)}${MARKDOWN_EOP}`;
+    const content = data.sort().join(", ");
+
+    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
 
   printType(name, type, options) {
