@@ -132,7 +132,7 @@ module.exports = class Printer {
       return "";
     }
     const link = this.toLink(type, type.name, category);
-    return `[\`${link.text}\`](${link.url})  <span class="badge badge--secondary">${category.singular}</span>`;
+    return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
   }
 
   printSection(
@@ -361,7 +361,7 @@ module.exports = class Printer {
     const reason = type.deprecationReason
       ? ": " + escapeMDX(type.deprecationReason)
       : "";
-    return `<span class="badge badge--warning">DEPRECATED${reason}</span>${MARKDOWN_EOP}`;
+    return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
   printDescription(type, noText = NO_DESCRIPTION_TEXT) {
@@ -510,6 +510,8 @@ module.exports = class Printer {
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span></>
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
 `;
     const description = this.printDescription(type);
     const code = this.printCode(type);

@@ -1,3 +1,3 @@
-<span class="badge badge--warning">DEPRECATED: Foobar</span>
+<Badge class="warning" text="DEPRECATED: Foobar"/>
 
 Lorem ipsum
