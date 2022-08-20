@@ -83,7 +83,8 @@ Each option is described in the section [Options](#options).
 
 See [multi-instance](#plugin-multi-instance) section, if you want to use 2 distinct schemas.
 
-### Site Settings
+<details>
+  <summary><h3>Site Settings</h3></summary>
 
 You will also need to add a link to your documentation on your site. One way to do it is to add it to your site's navbar in `docusaurus.config.js`:
 
@@ -102,13 +103,16 @@ module.exports = {
 };
 ```
 
-For more details about navbar, please refer to Docusaurus 2 [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar-link).
+For more details about navbar, please refer to Docusaurus [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar-link).
+</details>
 
-### Sidebars Settings
+<details>
+  <summary><h3>Sidebars Settings</h3></summary>
 
 A sidebar file `sidebar-schema.js` will be generated for the documentation, you have different options depending on your Docusaurus setup:
 
-#### 1. Single Docs instance
+<details>
+  <summary><h4>Single Docs instance</h4></summary>
 
 In this use case, you have a unique set of documentation, then you just need to add a reference to `sidebar-schema.js` into the default `sidebar.js`.
 
@@ -126,8 +130,10 @@ module.exports = {
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
 > For example, if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
+</details>
 
-#### 2. Docs Multi-instance
+<details>
+  <summary><h4>Docs Multi-instance</h4></summary>
 
 In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-instance](https://docusaurus.io/docs/docs-multi-instance)), then you need to add a reference to `sidebar-schema.js` into the dedicated instance of `@docusaurus/plugin-content-docs`:
 
@@ -145,8 +151,11 @@ plugins: [
   ],
 ],
 ```
+</details>
+</details>
 
-### Plugin Multi-instance
+<details>
+  <summary><h3>Plugin Multi-instance</h3></summary>
 
 To add another instance, you need to assign a unique `id` attribute to plugin instances (if not set, then `id` value is `default`).
 
@@ -180,6 +189,7 @@ Instance with an `id` will have their own command line:
 ```shell
 npx docusaurus graphql-to-doc:admin
 ```
+</details>
 
 ## Options
 
@@ -202,7 +212,8 @@ By default, the plugin will use the options as defined in the plugin's [configur
 | `tmpDir`           | `-t, --tmp <tmpDir>`                                      | *OS temp folder*                                            | The folder used for storing schema copy and signature used by `diffMethod`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |                    | `-f, --force`                                             | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-### Documentation options
+<details>
+  <summary><h3>Documentation options</h3></summary>
 
 Use these options to tweak some of the Docusaurus documentation features:
 
@@ -228,8 +239,10 @@ plugins: [
     ],
   ],
 ```
+</details>
 
-### Plugin Loaders
+<details>
+  <summary><h3>Loaders</h3></summary>
 
 `graphql-file-loader`, the local file loader, is provided out-of-the-box. Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
 
@@ -274,8 +287,10 @@ type loaders = {
   [className: className]: moduleName | module
 }
 ```
+</details>
 
-### Home Page
+<details>
+  <summary><h3>Home Page</h3></summary>
 
 If you decide to use your own home page for the GraphQL generated documentation, then set the page ID to `id: schema` and the sidebar position to `sidebar_position: 1`:
 
@@ -303,12 +318,16 @@ This documentation has been automatically generated from the GraphQL schema.
 > sidebar_class_name: navbar__toggle
 > ---
 > ```
+</details>
 
-### Option `diffMethod`
+<details>
+  <summary><h3>Option diffMethod</h3></summary>
 
 The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since the last documentation generation, then the full schema documentation will be generated.
+</details>
 
-### Option `groupByDirective`
+<details>
+  <summary><h3>Option groupByDirective</h3></summary>
 
 The `groupByDirective` is used to add grouping to the documentation to provide for an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
 
@@ -349,6 +368,7 @@ plugins: [
   ],
 ],
 ```
+</details>
 
 ## Troubleshooting
 
