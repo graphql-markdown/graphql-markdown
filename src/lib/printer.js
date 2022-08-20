@@ -22,8 +22,8 @@ const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
 
 const HEADER_SECTION_LEVEL = "###";
-const HEADER_SECTION_SUB_LEVEL = "####";
-const HEADER_SECTION_ITEM_LEVEL = "- #####";
+const HEADER_SECTION_SUB_LEVEL = "#####";
+const HEADER_SECTION_ITEM_LEVEL = "######";
 const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
@@ -140,6 +140,49 @@ module.exports = class Printer {
     return `[\`${text}\`](${link.url})`;
   }
 
+  getTypeBadges(type) {
+    const rootType = hasProperty(type, "type") ? type.type : type;
+
+    const badges = [];
+
+    if (type.isDeprecated) {
+      badges.push("deprecated");
+    }
+
+    if (isNonNullType(rootType)) {
+      badges.push("non-null");
+    }
+
+    if (isListType(rootType)) {
+      badges.push("list");
+    }
+
+    const category = this.getLinkCategory(getNamedType(rootType));
+    if (typeof category !== "undefined") {
+      badges.push(category);
+    }
+
+    return badges;
+  }
+
+  printBadges(type) {
+    const badges = this.getTypeBadges(type);
+
+    if (badges.length === 0) {
+      return "";
+    }
+
+    return `● ${badges
+      .map((badge) => `<span class="badge badge--secondary">${badge}</span>`)
+      .join(" ")}`;
+  }
+
+  printParentLink(type) {
+    return hasProperty(type, "type")
+      ? ` ● ${this.printLink(type.type, true)}`
+      : "";
+  }
+
   printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
     if (typeof type === "undefined" || type === null) {
       return "";
@@ -147,11 +190,10 @@ module.exports = class Printer {
 
     const typeNameLink = this.printLink(type);
     const description = this.printDescription(type, "");
-    const parentTypeLink = hasProperty(type, "type")
-      ? ` (${this.printLink(type.type, true)})`
-      : "";
+    const parentTypeLink = this.printParentLink(type);
+    const badges = this.printBadges(type);
 
-    let section = `${level} ${typeNameLink}${parentTypeLink}${MARKDOWN_EOP}${description}${MARKDOWN_EOL}`;
+    let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
     }

@@ -10,10 +10,9 @@ type TestObject implements TestInterface {
 
 ### Interfaces
 
-#### [`TestInterface`](#)
-
-Test TestInterface
-
+##### [`TestInterface`](#) 
+> Test TestInterface
+> 
 
 
 
