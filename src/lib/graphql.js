@@ -182,9 +182,7 @@ function getSchemaMap(schema) {
   };
 }
 
-function getRelationOfReturn(type, schema) {
-  const relations = { queries: [], mutations: [], subscriptions: [] };
-
+function mapRelationOf(relations, schema, callback) {
   const schemaMap = getSchemaMap(schema);
 
   for (const relation of Object.keys(relations)) {
@@ -193,17 +191,31 @@ function getRelationOfReturn(type, schema) {
       continue;
     }
 
+    let results = [];
     for (const [relationName, relationType] of Object.entries(entity)) {
-      if (getNamedType(relationType.type).name === type.name) {
-        if (relations[relation].find((r) => r.name === relationName)) {
-          continue;
-        }
-        relations[relation].push(relationType);
-      }
+      results = callback(relationName, relationType, results);
     }
+    relations[relation] = results;
   }
 
   return relations;
+}
+
+function getRelationOfReturn(type, schema) {
+  const relations = { queries: [], mutations: [], subscriptions: [] };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      if (getNamedType(relationType.type).name === type.name) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
+      }
+      return results;
+    },
+  );
 }
 
 function getRelationOfField(type, schema) {
@@ -217,19 +229,10 @@ function getRelationOfField(type, schema) {
     directives: [],
   };
 
-  const schemaMap = getSchemaMap(schema);
-
-  for (const relation of Object.keys(relations)) {
-    const entity = schemaMap[relation];
-    if (typeof entity === "undefined") {
-      continue;
-    }
-
-    for (const [relationName, relationType] of Object.entries(entity)) {
-      if (typeof relationType === "undefined") {
-        continue;
-      }
-
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
       // directives are handled as flat array instead of map
       const key = isDirectiveType(relationType)
         ? relationType.name
@@ -242,65 +245,50 @@ function getRelationOfField(type, schema) {
       );
       for (const fieldDef of Object.values(fields)) {
         if (getNamedType(fieldDef.type).name === type.name) {
-          if (relations[relation].find((r) => r === key || r.name === key)) {
-            continue;
+          if (!results.find((r) => r === key || r.name === key)) {
+            results.push(relationType);
           }
-          relations[relation].push(relationType);
         }
       }
-    }
-  }
-
-  return relations;
+      return results;
+    },
+  );
 }
 
 function getRelationOfUnion(type, schema) {
   const relations = { unions: [] };
 
-  const schemaMap = getSchemaMap(schema);
-
-  if (typeof schemaMap.unions === "undefined") {
-    return relations;
-  }
-
-  for (const [relationName, relationType] of Object.entries(schemaMap.unions)) {
-    if (relationType._types.find((subType) => subType.name === type.name)) {
-      if (relations.unions.find((r) => r.name === relationName)) {
-        continue;
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      if (relationType._types.find((subType) => subType.name === type.name)) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
       }
-      relations.unions.push(relationType);
-    }
-  }
-
-  return relations;
+      return results;
+    },
+  );
 }
 
 function getRelationOfInterface(type, schema) {
   const relations = { objects: [], interfaces: [] };
 
-  const schemaMap = getSchemaMap(schema);
-
-  for (const relation of Object.keys(relations)) {
-    const entity = schemaMap[relation];
-    if (typeof entity === "undefined") {
-      continue;
-    }
-
-    for (const [relationName, relationType] of Object.entries(
-      schemaMap[relation],
-    )) {
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
       if (
         relationType._interfaces.find((subType) => subType.name === type.name)
       ) {
-        if (relations[relation].find((r) => r.name === relationName)) {
-          continue;
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
         }
-        relations[relation].push(relationType);
       }
-    }
-  }
-
-  return relations;
+      return results;
+    },
+  );
 }
 
 function getRelationOfImplementation(type, schema) {
