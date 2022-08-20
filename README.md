@@ -130,6 +130,7 @@ module.exports = {
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
 > For example, if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`
+
 </details>
 
 <details>
@@ -151,6 +152,7 @@ plugins: [
   ],
 ],
 ```
+
 </details>
 </details>
 
@@ -189,6 +191,7 @@ Instance with an `id` will have their own command line:
 ```shell
 npx docusaurus graphql-to-doc:admin
 ```
+
 </details>
 
 ## Options
@@ -237,6 +240,7 @@ plugins: [
     ],
   ],
 ```
+
 </details>
 
 <details>
@@ -285,6 +289,7 @@ type loaders = {
   [className: className]: moduleName | module
 }
 ```
+
 </details>
 
 <details>
@@ -316,6 +321,7 @@ This documentation has been automatically generated from the GraphQL schema.
 > sidebar_class_name: navbar__toggle
 > ---
 > ```
+
 </details>
 
 <details>
@@ -366,6 +372,7 @@ plugins: [
   ],
 ],
 ```
+
 </details>
 
 ## Troubleshooting
@@ -394,7 +401,7 @@ Install and declare the missing GraphQL document loader package, see [Loaders](#
 
 If the error persists, check that you have the correct class name in the configuration declaration.
 
-## Licence
+## License
 
 GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
 
