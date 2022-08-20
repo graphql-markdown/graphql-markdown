@@ -195,7 +195,7 @@ function mapRelationOf(relations, schema, callback) {
     for (const [relationName, relationType] of Object.entries(entity)) {
       results = callback(relationName, relationType, results);
     }
-    relations[relation] = results;
+    relations[relation] = results.sort();
   }
 
   return relations;
