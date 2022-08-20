@@ -23,28 +23,16 @@ const {
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
-
-const HEADER_SECTION_LEVEL = "###";
-const HEADER_SECTION_SUB_LEVEL = "####";
-const HEADER_SECTION_ITEM_LEVEL = "- #####";
-const NO_DESCRIPTION_TEXT = "No description";
-const MARKDOWN_EOL = "\n";
-const MARKDOWN_EOP = "\n\n";
-const BULLET_SEPARATOR =
-  "<span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span>";
-const ROOT_TYPE = {
-  QUERY: { singular: "query", plural: "queries" },
-  MUTATION: { singular: "mutation", plural: "mutations" },
-  SUBSCRIPTION: { singular: "subscription", plural: "subscriptions" },
-  TYPE: { singular: "object", plural: "objects" },
-  INTERFACE: { singular: "interface", plural: "interfaces" },
-  DIRECTIVE: { singular: "directive", plural: "directives" },
-  SCALAR: { singular: "scalar", plural: "scalars" },
-  ENUM: { singular: "enum", plural: "enums" },
-  OPERATION: { singular: "operation", plural: "operations" },
-  UNION: { singular: "union", plural: "unions" },
-  INPUT: { singular: "input", plural: "inputs" },
-};
+const {
+  ROOT_TYPE_LOCALE,
+  HEADER_SECTION_LEVEL,
+  HEADER_SECTION_SUB_LEVEL,
+  HEADER_SECTION_ITEM_LEVEL,
+  NO_DESCRIPTION_TEXT,
+  BULLET_SEPARATOR,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} = require("./const");
 
 module.exports = class Printer {
   constructor(
@@ -66,9 +54,9 @@ module.exports = class Printer {
   }
 
   getRootTypeLocaleFromString(text) {
-    for (const [type, props] of Object.entries(ROOT_TYPE)) {
+    for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
       if (Object.values(props).includes(text)) {
-        return ROOT_TYPE[type];
+        return ROOT_TYPE_LOCALE[type];
       }
     }
     return undefined;
@@ -77,21 +65,21 @@ module.exports = class Printer {
   getLinkCategory(graphLQLNamedType) {
     switch (true) {
       case isEnumType(graphLQLNamedType):
-        return ROOT_TYPE.ENUM;
+        return ROOT_TYPE_LOCALE.ENUM;
       case isUnionType(graphLQLNamedType):
-        return ROOT_TYPE.UNION;
+        return ROOT_TYPE_LOCALE.UNION;
       case isInterfaceType(graphLQLNamedType):
-        return ROOT_TYPE.INTERFACE;
+        return ROOT_TYPE_LOCALE.INTERFACE;
       case isObjectType(graphLQLNamedType):
-        return ROOT_TYPE.TYPE;
+        return ROOT_TYPE_LOCALE.TYPE;
       case isInputType(graphLQLNamedType):
-        return ROOT_TYPE.INPUT;
+        return ROOT_TYPE_LOCALE.INPUT;
       case isScalarType(graphLQLNamedType):
-        return ROOT_TYPE.SCALAR;
+        return ROOT_TYPE_LOCALE.SCALAR;
       case isDirectiveType(graphLQLNamedType):
-        return ROOT_TYPE.DIRECTIVE;
+        return ROOT_TYPE_LOCALE.DIRECTIVE;
       case isOperation(graphLQLNamedType):
-        return ROOT_TYPE.OPERATION;
+        return ROOT_TYPE_LOCALE.OPERATION;
     }
     return undefined;
   }
@@ -115,7 +103,7 @@ module.exports = class Printer {
     }
 
     // special case for support relation map
-    if (category === ROOT_TYPE.OPERATION) {
+    if (category === ROOT_TYPE_LOCALE.OPERATION) {
       if (typeof operation === "undefined") {
         return fallback;
       }
