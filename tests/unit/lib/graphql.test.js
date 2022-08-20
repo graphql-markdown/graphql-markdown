@@ -617,8 +617,8 @@ describe("lib", () => {
             "Canine",
           ],
           "objects": Array [
-            "Cat",
             "Dog",
+            "Cat",
           ],
           "unions": Array [
             "Pet",

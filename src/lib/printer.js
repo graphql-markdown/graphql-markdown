@@ -498,7 +498,7 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       return "";
     }
 
-    const content = [...data].sort().join(", ");
+    const content = [...data].sort((a, b) => a.localeCompare(b)).join(", ");
 
     return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
