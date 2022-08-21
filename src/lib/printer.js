@@ -23,6 +23,7 @@ const {
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
+
 const {
   ROOT_TYPE_LOCALE,
   HEADER_SECTION_LEVEL,
@@ -31,7 +32,8 @@ const {
   NO_DESCRIPTION_TEXT,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-} = require("./const");
+} = require("../const/strings");
+const mdx = require("../const/mdx");
 
 module.exports = class Printer {
   constructor(
@@ -506,13 +508,6 @@ module.exports = class Printer {
     }
 
     const header = this.printHeader(name, getTypeName(type), options);
-    const mdx = `
-export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span></>
-
-export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
-
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
-`;
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
