@@ -62,6 +62,11 @@ describe("config", () => {
           toc: false,
           index: false,
         },
+        printTypeOptions: {
+          parentTypePrefix: false,
+          relatedTypeSection: false,
+          typeBadges: false,
+        },
       };
 
       const config = buildConfig(configFileOpts);
@@ -78,7 +83,7 @@ describe("config", () => {
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: configFileOpts.docOptions,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printTypeOptions: configFileOpts.printTypeOptions,
       });
     });
 

@@ -9,7 +9,7 @@ pagination_prev: null
 sidebar_class_name: navbar__toggle
 ---
 
-This is an example of documentation with grouping by GraphQL directive using the `groupByDirective` option (see [documentation](/#about-groupbydirective)):
+This is an example of documentation grouping with GraphQL directive using the `groupByDirective` option (see [documentation](/#about-groupbydirective)):
 
 ```json
 {
@@ -25,7 +25,12 @@ This is an example of documentation with grouping by GraphQL directive using the
   },
   "docOptions": {
     "index": true
-  }
+  },
+  "printTypeOptions": {
+    "parentTypePrefix": false,
+    "relatedTypeSection": false,
+    "typeBadges": false,
+  },
 }
 ```
 

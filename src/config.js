@@ -55,7 +55,7 @@ function buildConfig(configFileOpts, cliOpts) {
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
     docOptions: getDocOptions(cliOpts, config.docOptions),
-    printTypeOptions: gePrintTypeOptions(cliOpts, config.docOptions),
+    printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
   };
 }
 
@@ -73,10 +73,10 @@ function getDocOptions(cliOpts, configOptions) {
 
 function gePrintTypeOptions(cliOpts, configOptions) {
   return {
-    parentTypePrefix: !cliOpts.noParentType ?? configOptions.parentTypePrefix,
+    parentTypePrefix: !cliOpts.noParentType && configOptions.parentTypePrefix,
     relatedTypeSection:
-      !cliOpts.noRelatedType ?? configOptions.relatedTypeSection,
-    typeBadges: !cliOpts.noTypeBadges ?? configOptions.typeBadges,
+      !cliOpts.noRelatedType && configOptions.relatedTypeSection,
+    typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
   };
 }
 
