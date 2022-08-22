@@ -24,6 +24,7 @@ const DEFAULT_OPTIONS = {
   },
   printParentType: true,
   printRelatedTypes: true,
+  printTypeBadges: true,
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -54,6 +55,7 @@ function buildConfig(configFileOpts, cliOpts) {
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printParentType: !cliOpts.noParentType ?? config.parentTypePrefix,
     printRelatedTypes: !cliOpts.noRelatedType ?? config.relatedTypeSection,
+    printTypeBadges: !cliOpts.noTypeBadges ?? config.typeBadges,
   };
 }
 

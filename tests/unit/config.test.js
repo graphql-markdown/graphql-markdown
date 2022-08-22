@@ -81,6 +81,7 @@ describe("config", () => {
         docOptions: configFileOpts.docOptions,
         printParentType: DEFAULT_OPTIONS.printParentType,
         printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeBadges: DEFAULT_OPTIONS.printTypeBadges,
       });
     });
 
@@ -147,6 +148,7 @@ describe("config", () => {
         },
         printParentType: DEFAULT_OPTIONS.printParentType,
         printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeBadges: DEFAULT_OPTIONS.printTypeBadges,
       });
     });
 
@@ -175,6 +177,7 @@ describe("config", () => {
         docOptions: DEFAULT_OPTIONS.docOptions,
         printParentType: DEFAULT_OPTIONS.printParentType,
         printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeBadges: DEFAULT_OPTIONS.printTypeBadges,
       });
     });
 
@@ -199,6 +202,7 @@ describe("config", () => {
         docOptions: DEFAULT_OPTIONS.docOptions,
         printParentType: DEFAULT_OPTIONS.printParentType,
         printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeBadges: DEFAULT_OPTIONS.printTypeBadges,
       });
     });
   });
