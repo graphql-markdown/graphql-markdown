@@ -1,6 +1,6 @@
 #### [`EntityTypeName`](#)
 
 
-- ##### [`ParameterTypeName`](#) ([`String`](docs/graphql/scalars/string))
+- ##### [`ParameterTypeName`](#) <Bullet /> [`String`](docs/graphql/scalars/string)
 
 

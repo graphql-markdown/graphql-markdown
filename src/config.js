@@ -1,20 +1,20 @@
-const path = require("path");
-const os = require("os");
+const { join } = require("path");
+const { tmpdir } = require("os");
 
 const { parseGroupByOption } = require("./lib/group-info");
 const { COMPARE_METHOD } = require("./lib/diff");
 
 const PACKAGE_NAME = "@edno/docusaurus2-graphql-doc-generator";
-const ASSETS_LOCATION = path.join(__dirname, "../assets/");
+const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "schema",
   linkRoot: "/",
-  homepage: path.join(ASSETS_LOCATION, "generated.md"),
+  homepage: join(ASSETS_LOCATION, "generated.md"),
   diffMethod: COMPARE_METHOD.DIFF,
-  tmpDir: path.join(os.tmpdir(), PACKAGE_NAME),
+  tmpDir: join(tmpdir(), PACKAGE_NAME),
   loaders: {},
   pretty: false,
   docOptions: {
@@ -22,6 +22,8 @@ const DEFAULT_OPTIONS = {
     toc: true,
     index: false,
   },
+  printParentType: true,
+  printRelatedTypes: true,
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -40,7 +42,7 @@ function buildConfig(configFileOpts, cliOpts) {
   return {
     baseURL,
     schemaLocation: cliOpts.schema ?? config.schema,
-    outputDir: path.join(cliOpts.root ?? config.rootPath, baseURL),
+    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
     linkRoot: cliOpts.link ?? config.linkRoot,
     homepageLocation: cliOpts.homepage ?? config.homepage,
     diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
@@ -50,6 +52,8 @@ function buildConfig(configFileOpts, cliOpts) {
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
     docOptions: getDocOptions(cliOpts, config.docOptions),
+    printParentType: !cliOpts.noParentType ?? config.parentTypePrefix,
+    printRelatedTypes: !cliOpts.noRelatedType ?? config.relatedTypeSection,
   };
 }
 

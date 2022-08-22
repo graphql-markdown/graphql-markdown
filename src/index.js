@@ -30,6 +30,8 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           "File location for doc landing page",
         )
         .option("--noPagination", "Disable page navigation buttons")
+        .option("--noParentType", "Disable parent type name as field prefix")
+        .option("--noRelatedType", "Disable related types sections")
         .option("--noToc", "Disable page table of content")
         .option("--index", "Enable generated index for categories")
         .option("-f, --force", "Force document generation")

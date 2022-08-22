@@ -1,3 +1,3 @@
-#### [`EntityTypeName`](#) ([`NonNullableObjectType!`](docs/graphql/objects/non-nullable-object-type))
+#### [`EntityTypeName`](#) <Bullet /> [`NonNullableObjectType!`](docs/graphql/objects/non-nullable-object-type)
 
 

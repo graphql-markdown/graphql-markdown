@@ -1,3 +1,3 @@
-#### [`EntityTypeNameList`](#) ([`[Int!]!`](docs/graphql/scalars/int))
+#### [`EntityTypeNameList`](#) <Bullet /> [`[Int!]!`](docs/graphql/scalars/int)
 
 

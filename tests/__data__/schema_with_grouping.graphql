@@ -6,6 +6,7 @@ scalar Date
 scalar EmailAddress
 scalar PhoneNumber
 scalar Time
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
   UpdateGrade(input: String): String  @doc(category: "Grade") 
@@ -41,15 +42,22 @@ type Query {
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
 }
 
-type Semester {
+interface Record {
+  id: ID!
+}
+
+type Semester implements Record {
+  id: ID!
   startDate: Date
   withdrawDate: Date
   endDate: Date
 }
 
-type DepartmentInformation {
+type DepartmentInformation implements Record {
+  id: ID!
   email: EmailAddress
   number: PhoneNumber
   departmentOpenTime: Time
   departmentCloseTime: Time
+  website: URL
 }
