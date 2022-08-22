@@ -22,9 +22,11 @@ const DEFAULT_OPTIONS = {
     toc: true,
     index: false,
   },
-  printParentType: true,
-  printRelatedTypes: true,
-  printTypeBadges: true,
+  printTypeOptions: {
+    parentTypePrefix: true,
+    relatedTypeSection: true,
+    typeBadges: true,
+  },
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -53,9 +55,7 @@ function buildConfig(configFileOpts, cliOpts) {
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     prettify: cliOpts.pretty ?? config.pretty,
     docOptions: getDocOptions(cliOpts, config.docOptions),
-    printParentType: !cliOpts.noParentType ?? config.parentTypePrefix,
-    printRelatedTypes: !cliOpts.noRelatedType ?? config.relatedTypeSection,
-    printTypeBadges: !cliOpts.noTypeBadges ?? config.typeBadges,
+    printTypeOptions: gePrintTypeOptions(cliOpts, config.docOptions),
   };
 }
 
@@ -68,6 +68,15 @@ function getDocOptions(cliOpts, configOptions) {
     pagination: !cliOpts.noPagination && configOptions.pagination,
     toc: !cliOpts.noToc && configOptions.toc,
     index: cliOpts.index || configOptions.index,
+  };
+}
+
+function gePrintTypeOptions(cliOpts, configOptions) {
+  return {
+    parentTypePrefix: !cliOpts.noParentType ?? configOptions.parentTypePrefix,
+    relatedTypeSection:
+      !cliOpts.noRelatedType ?? configOptions.relatedTypeSection,
+    typeBadges: !cliOpts.noTypeBadges ?? configOptions.typeBadges,
   };
 }
 

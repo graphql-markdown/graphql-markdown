@@ -1,3 +1,3 @@
-#### [`EntityTypeName`](docs/graphql/objects/entity-type-name) <Bullet /><Badge class="secondary" text="object"/>
+#### [`EntityTypeName`](docs/graphql/objects/entity-type-name) <Badge class="secondary" text="object"/>
 > Lorem ipsum
 > 

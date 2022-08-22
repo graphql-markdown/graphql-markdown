@@ -40,18 +40,18 @@ module.exports = class Printer {
     schema,
     baseURL,
     linkRoot = "/",
-    options = {
+    { groups, printTypeOptions } = {
       groups: undefined,
-      printParentType: true,
-      printRelatedTypes: true,
+      printTypeOptions: undefined,
     },
   ) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.groups = options.groups;
-    this.printParentType = options.printParentType ?? true;
-    this.printRelatedTypes = options.printRelatedTypes ?? true;
+    this.groups = groups;
+    this.parentTypePrefix = printTypeOptions?.parentTypePrefix ?? true;
+    this.relatedTypeSection = printTypeOptions?.relatedTypeSection ?? true;
+    this.typeBadges = printTypeOptions?.typeBadges ?? true;
   }
 
   getRootTypeLocaleFromString(text) {
@@ -203,7 +203,7 @@ module.exports = class Printer {
 
     if (!withAttributes) {
       const printParentType =
-        this.printParentType && typeof parentType !== "undefined";
+        this.parentTypePrefix && typeof parentType !== "undefined";
       const text = printParentType
         ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
         : `\`${link.text}\``;
@@ -241,18 +241,22 @@ module.exports = class Printer {
   }
 
   printBadges(type) {
+    if (!this.typeBadges) {
+      return "";
+    }
+
     const badges = this.getTypeBadges(type);
 
     if (badges.length === 0) {
       return "";
     }
 
-    return `<Bullet />${badges
+    return badges
       .map(
         (badge) =>
           `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
       )
-      .join(" ")}`;
+      .join(" ");
   }
 
   printParentLink(type) {
@@ -556,7 +560,7 @@ module.exports = class Printer {
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
-    const relations = this.printRelatedTypes ? this.printRelations(type) : "";
+    const relations = this.relatedTypeSection ? this.printRelations(type) : "";
 
     return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
