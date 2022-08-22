@@ -13,4 +13,9 @@ module.exports = {
     pagination: true,
     toc: true,
   },
+  printTypeOptions: {
+    parentTypePrefix: false,
+    relatedTypeSection: false,
+    typeBadges: false,
+  },
 };

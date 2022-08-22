@@ -40,18 +40,18 @@ module.exports = class Printer {
     schema,
     baseURL,
     linkRoot = "/",
-    options = {
+    { groups, printTypeOptions } = {
       groups: undefined,
-      printParentType: true,
-      printRelatedTypes: true,
+      printTypeOptions: undefined,
     },
   ) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.groups = options.groups;
-    this.printParentType = options.printParentType ?? true;
-    this.printRelatedTypes = options.printRelatedTypes ?? true;
+    this.groups = groups;
+    this.parentTypePrefix = printTypeOptions?.parentTypePrefix ?? true;
+    this.relatedTypeSection = printTypeOptions?.relatedTypeSection ?? true;
+    this.typeBadges = printTypeOptions?.typeBadges ?? true;
   }
 
   getRootTypeLocaleFromString(text) {
@@ -203,7 +203,7 @@ module.exports = class Printer {
 
     if (!withAttributes) {
       const printParentType =
-        this.printParentType && typeof parentType !== "undefined";
+        this.parentTypePrefix && typeof parentType !== "undefined";
       const text = printParentType
         ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
         : `\`${link.text}\``;
@@ -213,6 +213,56 @@ module.exports = class Printer {
     const text = this.printLinkAttributes(type, link.text);
 
     return `[\`${text}\`](${link.url})`;
+  }
+
+  getTypeBadges(type) {
+    const rootType = hasProperty(type, "type") ? type.type : type;
+
+    const badges = [];
+
+    if (type.isDeprecated) {
+      badges.push("deprecated");
+    }
+
+    if (isNonNullType(rootType)) {
+      badges.push("non-null");
+    }
+
+    if (isListType(rootType)) {
+      badges.push("list");
+    }
+
+    const category = this.getLinkCategory(getNamedType(rootType));
+    if (typeof category !== "undefined") {
+      badges.push(category);
+    }
+
+    return badges;
+  }
+
+  printBadges(type) {
+    if (!this.typeBadges) {
+      return "";
+    }
+
+    const badges = this.getTypeBadges(type);
+
+    if (badges.length === 0) {
+      return "";
+    }
+
+    return badges
+      .map(
+        (badge) =>
+          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
+      )
+      .join(" ");
+  }
+
+  printParentLink(type) {
+    return hasProperty(type, "type")
+      ? `<Bullet />${this.printLink(type.type, true)}`
+      : "";
   }
 
   printSectionItem(
@@ -232,11 +282,10 @@ module.exports = class Printer {
 
     const typeNameLink = this.printLink(type, false, parentType);
     const description = this.printDescription(type, "");
-    const parentTypeLink = hasProperty(type, "type")
-      ? ` <Bullet /> ${this.printLink(type.type, true)}`
-      : "";
+    const badges = this.printBadges(type);
+    const parentTypeLink = this.printParentLink(type);
 
-    let section = `${level} ${typeNameLink}${parentTypeLink}${MARKDOWN_EOP}${description}${MARKDOWN_EOL}`;
+    let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, {
         level: HEADER_SECTION_ITEM_LEVEL,
@@ -497,7 +546,7 @@ module.exports = class Printer {
 
     const content = [...data]
       .sort((a, b) => a.localeCompare(b))
-      .join(" <Bullet /> ");
+      .join("<Bullet />");
 
     return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
@@ -511,7 +560,7 @@ module.exports = class Printer {
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
-    const relations = this.printRelatedTypes ? this.printRelations(type) : "";
+    const relations = this.relatedTypeSection ? this.printRelations(type) : "";
 
     return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }

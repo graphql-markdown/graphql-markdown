@@ -22,8 +22,7 @@ module.exports = async function generateDocFromSchema({
   groupByDirective,
   prettify,
   docOptions,
-  printParentType = true,
-  printRelatedTypes = true,
+  printTypeOptions,
 }) {
   const { loaders: documentLoaders, loaderOptions } =
     getDocumentLoaders(loaders);
@@ -40,8 +39,7 @@ module.exports = async function generateDocFromSchema({
     const renderer = new Renderer(
       new Printer(schema, baseURL, linkRoot, {
         groups,
-        printParentType,
-        printRelatedTypes,
+        printTypeOptions,
       }),
       outputDir,
       baseURL,

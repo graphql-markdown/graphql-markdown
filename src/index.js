@@ -33,6 +33,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         .option("--noParentType", "Disable parent type name as field prefix")
         .option("--noRelatedType", "Disable related types sections")
         .option("--noToc", "Disable page table of content")
+        .option("--noTypeBadges", "Disable badges for types")
         .option("--index", "Enable generated index for categories")
         .option("-f, --force", "Force document generation")
         .option("-d, --diff <diffMethod>", "Set diff method")

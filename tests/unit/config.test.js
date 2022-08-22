@@ -32,8 +32,7 @@ describe("config", () => {
             /.+@edno\/docusaurus2-graphql-doc-generator$/,
           ),
           docOptions: DEFAULT_OPTIONS.docOptions,
-          printParentType: DEFAULT_OPTIONS.printParentType,
-          printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         }),
       );
     });
@@ -63,6 +62,11 @@ describe("config", () => {
           toc: false,
           index: false,
         },
+        printTypeOptions: {
+          parentTypePrefix: false,
+          relatedTypeSection: false,
+          typeBadges: false,
+        },
       };
 
       const config = buildConfig(configFileOpts);
@@ -79,8 +83,7 @@ describe("config", () => {
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: configFileOpts.docOptions,
-        printParentType: DEFAULT_OPTIONS.printParentType,
-        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeOptions: configFileOpts.printTypeOptions,
       });
     });
 
@@ -145,8 +148,7 @@ describe("config", () => {
           toc: !cliOpts.noToc,
           index: cliOpts.index,
         },
-        printParentType: DEFAULT_OPTIONS.printParentType,
-        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
       });
     });
 
@@ -173,8 +175,7 @@ describe("config", () => {
         groupByDirective: undefined,
         prettify: cliOpts.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
-        printParentType: DEFAULT_OPTIONS.printParentType,
-        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
       });
     });
 
@@ -197,8 +198,7 @@ describe("config", () => {
         groupByDirective: undefined,
         prettify: DEFAULT_OPTIONS.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
-        printParentType: DEFAULT_OPTIONS.printParentType,
-        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
       });
     });
   });

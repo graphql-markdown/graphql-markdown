@@ -1,6 +1,5 @@
-#### [`EntityTypeName`](#)
-
-
-- ##### [`ParameterTypeName`](#) <Bullet /> [`String`](docs/graphql/scalars/string)
-
-
+#### [`EntityTypeName`](#) 
+> 
+> ##### [`ParameterTypeName`](#)<Bullet />[`String`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 

@@ -1,7 +1,7 @@
 header-query
 
 
-export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>●</span></>
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
@@ -17,10 +17,9 @@ TestQuery: ID
 
 ### Type
 
-#### [`ID`](#)
-
-Test Query
-
+#### [`ID`](#) 
+> Test Query
+> 
 
 
 

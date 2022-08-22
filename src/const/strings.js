@@ -14,7 +14,7 @@ const ROOT_TYPE_LOCALE = {
 
 const HEADER_SECTION_LEVEL = "###";
 const HEADER_SECTION_SUB_LEVEL = "####";
-const HEADER_SECTION_ITEM_LEVEL = "- #####";
+const HEADER_SECTION_ITEM_LEVEL = "#####";
 const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
