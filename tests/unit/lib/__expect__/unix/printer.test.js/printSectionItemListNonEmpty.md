@@ -1,3 +1,3 @@
-#### [`EntityTypeNameList`](#) <Bullet /> [`[Int!]`](docs/graphql/scalars/int) ● <span class="badge badge--secondary">list</span> <span class="badge badge--secondary">[object Object]</span>
+#### [`EntityTypeNameList`](#)<Bullet />[`[Int!]`](docs/graphql/scalars/int) <Bullet /><Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
 > 
 > 

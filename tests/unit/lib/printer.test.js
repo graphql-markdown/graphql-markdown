@@ -351,7 +351,7 @@ describe("lib", () => {
           const section = printerInstance.printSectionItem(type);
 
           expect(printSectionItems).toHaveBeenCalledWith(type.args, {
-            level: "- #####",
+            level: "#####",
             parentType: undefined,
           });
           expect(section).toMatchFile(
@@ -948,7 +948,7 @@ describe("lib", () => {
           expect(deprecation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <Badge class=\\"secondary\\" text=\\"interface\\"/> <Bullet /> [\`Baz\`](#)  <Badge class=\\"secondary\\" text=\\"subscription\\"/> <Bullet /> [\`Foo\`](#)  <Badge class=\\"secondary\\" text=\\"query\\"/>
+            [\`Bar\`](#)  <Badge class=\\"secondary\\" text=\\"interface\\"/><Bullet />[\`Baz\`](#)  <Badge class=\\"secondary\\" text=\\"subscription\\"/><Bullet />[\`Foo\`](#)  <Badge class=\\"secondary\\" text=\\"query\\"/>
 
             "
           `);

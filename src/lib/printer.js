@@ -247,14 +247,17 @@ module.exports = class Printer {
       return "";
     }
 
-    return `● ${badges
-      .map((badge) => `<span class="badge badge--secondary">${badge}</span>`)
+    return `<Bullet />${badges
+      .map(
+        (badge) =>
+          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
+      )
       .join(" ")}`;
   }
 
   printParentLink(type) {
     return hasProperty(type, "type")
-      ? ` ● ${this.printLink(type.type, true)}`
+      ? `<Bullet />${this.printLink(type.type, true)}`
       : "";
   }
 
@@ -276,9 +279,7 @@ module.exports = class Printer {
     const typeNameLink = this.printLink(type, false, parentType);
     const description = this.printDescription(type, "");
     const badges = this.printBadges(type);
-    const parentTypeLink = hasProperty(type, "type")
-      ? ` <Bullet /> ${this.printLink(type.type, true)}`
-      : "";
+    const parentTypeLink = this.printParentLink(type);
 
     let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
@@ -541,7 +542,7 @@ module.exports = class Printer {
 
     const content = [...data]
       .sort((a, b) => a.localeCompare(b))
-      .join(" <Bullet /> ");
+      .join("<Bullet />");
 
     return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
