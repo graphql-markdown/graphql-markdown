@@ -16,6 +16,8 @@ const {
   GraphQLInterfaceType,
 } = require("graphql");
 
+const graphqlLib = require("../../../src/lib/graphql");
+
 const Printer = require("../../../src/lib/printer");
 
 const EXPECT_PATH = path.join(
@@ -32,7 +34,13 @@ describe("lib", () => {
 
       const baseURL = "graphql";
       const root = "docs";
-      const schema = { toString: () => "SCHEMA", getType: (type) => type };
+      const schema = {
+        toString: () => "SCHEMA",
+        getType: (type) => type,
+        getTypeMap: () => {},
+        getDirectives: () => {},
+        getImplementations: () => {},
+      };
 
       const types = [
         {
@@ -191,7 +199,9 @@ describe("lib", () => {
 
           const section = printerInstance.printSection(content, title);
 
-          expect(printSectionItems).toHaveBeenCalledWith(content);
+          expect(printSectionItems).toHaveBeenCalledWith(content, {
+            parentType: undefined,
+          });
 
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSection.md"),
@@ -208,7 +218,9 @@ describe("lib", () => {
             .spyOn(printerInstance, "printSectionItems")
             .mockImplementation((sectionItems) => sectionItems);
 
-          const section = printerInstance.printSection(content, title, "#");
+          const section = printerInstance.printSection(content, title, {
+            level: "#",
+          });
 
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionCustomLevel.md"),
@@ -240,10 +252,9 @@ describe("lib", () => {
           const section = printerInstance.printSectionItems(itemList);
 
           expect(printSectionItem).toHaveBeenCalledTimes(3);
-          expect(printSectionItem).toHaveBeenLastCalledWith(
-            itemList.pop(),
-            "####",
-          );
+          expect(printSectionItem).toHaveBeenLastCalledWith(itemList.pop(), {
+            level: "####",
+          });
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionItems.md"),
           );
@@ -339,7 +350,10 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(printSectionItems).toHaveBeenCalledWith(type.args, "- #####");
+          expect(printSectionItems).toHaveBeenCalledWith(type.args, {
+            level: "- #####",
+            parentType: undefined,
+          });
           expect(section).toMatchFile(
             path.join(EXPECT_PATH, "printSectionWithFieldParameters.md"),
           );
@@ -829,7 +843,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<span class=\\"badge badge--warning\\">DEPRECATED</span>
+            "<Badge class=\\"warning\\" text=\\"DEPRECATED\\"/>
 
             "
           `);
@@ -846,7 +860,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<span class=\\"badge badge--warning\\">DEPRECATED: foobar</span>
+            "<Badge class=\\"warning\\" text=\\"DEPRECATED: foobar\\"/>
 
             "
           `);
@@ -880,13 +894,9 @@ describe("lib", () => {
           const deprecation = printerInstance.printSpecification(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
+            "### <SpecifiedBy url=\\"https://lorem.ipsum\\"/>
+
             "
-            export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
-
-            ### Specification<a className=\\"link\\" style={specifiedByLinkCss} target=\\"_blank\\" href=\\"https://lorem.ipsum\\" title=\\"Specified by https://lorem.ipsum\\">⎘</a>
-
-
-                  "
           `);
         });
 
@@ -901,6 +911,63 @@ describe("lib", () => {
           const deprecation = printerInstance.printSpecification(type);
 
           expect(deprecation).toBe("");
+        });
+      });
+
+      describe("printRelationOf()", () => {
+        beforeEach(() => {
+          jest.mock("../../../src/lib/graphql");
+        });
+
+        afterEach(() => {
+          jest.resetAllMocks();
+        });
+
+        test("prints type relations", () => {
+          expect.hasAssertions();
+
+          const type = new GraphQLScalarType({
+            name: "String",
+            description: "Lorem Ipsum",
+          });
+
+          jest
+            .spyOn(graphqlLib, "getRelationOfReturn")
+            .mockImplementation(() => ({
+              queries: [{ name: "Foo" }],
+              interfaces: [{ name: "Bar" }],
+              subscriptions: [{ name: "Baz" }],
+            }));
+
+          const deprecation = printerInstance.printRelationOf(
+            type,
+            "RelationOf",
+            graphqlLib.getRelationOfReturn,
+          );
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            "### RelationOf
+
+            [\`Bar\`](#)  <Badge class=\\"secondary\\" text=\\"interface\\"/> <Bullet /> [\`Baz\`](#)  <Badge class=\\"secondary\\" text=\\"subscription\\"/> <Bullet /> [\`Foo\`](#)  <Badge class=\\"secondary\\" text=\\"query\\"/>
+
+            "
+          `);
+        });
+      });
+
+      describe("getRootTypeLocaleFromString()", () => {
+        test("returns object of local strings from root type string", () => {
+          expect.hasAssertions();
+
+          const deprecation =
+            printerInstance.getRootTypeLocaleFromString("queries");
+
+          expect(deprecation).toMatchInlineSnapshot(`
+            Object {
+              "plural": "queries",
+              "singular": "query",
+            }
+          `);
         });
       });
     });

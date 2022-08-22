@@ -1,4 +1,4 @@
-const path = require("path");
+const { join } = require("path");
 
 const { COMPARE_METHOD } = require("../../src/lib/diff");
 const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
@@ -25,16 +25,15 @@ describe("config", () => {
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
-          outputDir: path.join(
-            DEFAULT_OPTIONS.rootPath,
-            DEFAULT_OPTIONS.baseURL,
-          ),
+          outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
           prettify: DEFAULT_OPTIONS.pretty,
           schemaLocation: DEFAULT_OPTIONS.schema,
           tmpDir: expect.stringMatching(
             /.+@edno\/docusaurus2-graphql-doc-generator$/,
           ),
           docOptions: DEFAULT_OPTIONS.docOptions,
+          printParentType: DEFAULT_OPTIONS.printParentType,
+          printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
         }),
       );
     });
@@ -75,11 +74,13 @@ describe("config", () => {
         homepageLocation: configFileOpts.homepage,
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
-        outputDir: path.join(configFileOpts.rootPath, configFileOpts.baseURL),
+        outputDir: join(configFileOpts.rootPath, configFileOpts.baseURL),
         prettify: configFileOpts.pretty,
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: configFileOpts.docOptions,
+        printParentType: DEFAULT_OPTIONS.printParentType,
+        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
       });
     });
 
@@ -106,6 +107,7 @@ describe("config", () => {
           index: true,
         },
       };
+
       const cliOpts = {
         base: "cli/schema",
         schema: "cli/my-schema.graphql",
@@ -134,7 +136,7 @@ describe("config", () => {
         homepageLocation: cliOpts.homepage,
         linkRoot: cliOpts.link,
         loaders: configFileOpts.loaders,
-        outputDir: path.join(cliOpts.root, cliOpts.base),
+        outputDir: join(cliOpts.root, cliOpts.base),
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
@@ -143,6 +145,8 @@ describe("config", () => {
           toc: !cliOpts.noToc,
           index: cliOpts.index,
         },
+        printParentType: DEFAULT_OPTIONS.printParentType,
+        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
       });
     });
 
@@ -160,7 +164,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
-        outputDir: path.join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL),
+        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
@@ -169,6 +173,8 @@ describe("config", () => {
         groupByDirective: undefined,
         prettify: cliOpts.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
+        printParentType: DEFAULT_OPTIONS.printParentType,
+        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
       });
     });
 
@@ -182,7 +188,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
-        outputDir: path.join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: COMPARE_METHOD.FORCE,
@@ -191,6 +197,8 @@ describe("config", () => {
         groupByDirective: undefined,
         prettify: DEFAULT_OPTIONS.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
+        printParentType: DEFAULT_OPTIONS.printParentType,
+        printRelatedTypes: DEFAULT_OPTIONS.printRelatedTypes,
       });
     });
   });

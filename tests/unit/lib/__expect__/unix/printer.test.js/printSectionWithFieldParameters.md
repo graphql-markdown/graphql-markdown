@@ -1,3 +1,5 @@
-#### [`EntityTypeName`](#) - No description
-> - ##### [`ParameterTypeName`](#) ([`String`](docs/graphql/scalars/string)) - No description
+#### [`EntityTypeName`](#) 
+> 
+> - ##### [`ParameterTypeName`](#) <Bullet /> [`String`](docs/graphql/scalars/string) ● <span class="badge badge--secondary">[object Object]</span>
+> 
 > 

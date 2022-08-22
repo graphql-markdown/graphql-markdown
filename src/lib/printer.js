@@ -15,70 +15,111 @@ const {
   isListType,
   isNonNullType,
   isLeafType,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfImplementation,
 } = require("./graphql");
 
 const { toSlug, escapeMDX } = require("../utils/scalars/string");
 const { hasProperty, hasMethod } = require("../utils/scalars/object");
 const { pathUrl } = require("../utils/scalars/url");
 
-const HEADER_SECTION_LEVEL = "###";
-const HEADER_SECTION_SUB_LEVEL = "#####";
-const HEADER_SECTION_ITEM_LEVEL = "######";
-const NO_DESCRIPTION_TEXT = "No description";
-const MARKDOWN_EOL = "\n";
-const MARKDOWN_EOP = "\n\n";
+const {
+  ROOT_TYPE_LOCALE,
+  HEADER_SECTION_LEVEL,
+  HEADER_SECTION_SUB_LEVEL,
+  HEADER_SECTION_ITEM_LEVEL,
+  NO_DESCRIPTION_TEXT,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} = require("../const/strings");
+const mdx = require("../const/mdx");
 
 module.exports = class Printer {
-  constructor(schema, baseURL, linkRoot = "/", group = undefined) {
+  constructor(
+    schema,
+    baseURL,
+    linkRoot = "/",
+    options = {
+      groups: undefined,
+      printParentType: true,
+      printRelatedTypes: true,
+    },
+  ) {
     this.schema = schema;
     this.baseURL = baseURL;
     this.linkRoot = linkRoot;
-    this.group = group;
+    this.groups = options.groups;
+    this.printParentType = options.printParentType ?? true;
+    this.printRelatedTypes = options.printRelatedTypes ?? true;
+  }
+
+  getRootTypeLocaleFromString(text) {
+    for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
+      if (Object.values(props).includes(text)) {
+        return ROOT_TYPE_LOCALE[type];
+      }
+    }
+    return undefined;
   }
 
   getLinkCategory(graphLQLNamedType) {
     switch (true) {
       case isEnumType(graphLQLNamedType):
-        return "enums";
+        return ROOT_TYPE_LOCALE.ENUM;
       case isUnionType(graphLQLNamedType):
-        return "unions";
+        return ROOT_TYPE_LOCALE.UNION;
       case isInterfaceType(graphLQLNamedType):
-        return "interfaces";
+        return ROOT_TYPE_LOCALE.INTERFACE;
       case isObjectType(graphLQLNamedType):
-        return "objects";
+        return ROOT_TYPE_LOCALE.TYPE;
       case isInputType(graphLQLNamedType):
-        return "inputs";
+        return ROOT_TYPE_LOCALE.INPUT;
       case isScalarType(graphLQLNamedType):
-        return "scalars";
+        return ROOT_TYPE_LOCALE.SCALAR;
       case isDirectiveType(graphLQLNamedType):
-        return "directives";
+        return ROOT_TYPE_LOCALE.DIRECTIVE;
+      case isOperation(graphLQLNamedType):
+        return ROOT_TYPE_LOCALE.OPERATION;
     }
     return undefined;
   }
 
-  toLink(type, name) {
+  toLink(type, name, operation) {
+    const fallback = {
+      text: name,
+      url: "#",
+    };
+
     const graphLQLNamedType = getNamedType(type);
 
-    const category = this.getLinkCategory(graphLQLNamedType);
+    let category = this.getLinkCategory(graphLQLNamedType);
 
     if (
       typeof category === "undefined" ||
       typeof graphLQLNamedType === "undefined" ||
       graphLQLNamedType === null
     ) {
-      return {
-        text: name,
-        url: "#",
-      };
+      return fallback;
+    }
+
+    // special case for support relation map
+    if (category === ROOT_TYPE_LOCALE.OPERATION) {
+      if (typeof operation === "undefined") {
+        return fallback;
+      }
+      category = operation;
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = toSlug(hasProperty(this.group, text) ? this.group[text] : "");
+    const group = hasProperty(this.groups, text)
+      ? toSlug(this.groups[text])
+      : "";
     const url = pathUrl.join(
       this.linkRoot,
       this.baseURL,
       group,
-      category,
+      category.plural,
       toSlug(text),
     );
 
@@ -88,29 +129,58 @@ module.exports = class Printer {
     };
   }
 
-  printSection(values, section, level = HEADER_SECTION_LEVEL) {
+  getRelationLink(category, type) {
+    if (typeof category === "undefined") {
+      return "";
+    }
+    const link = this.toLink(type, type.name, category);
+    return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
+  }
+
+  printSection(
+    values,
+    section,
+    { level, parentType } = {
+      level: HEADER_SECTION_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (values.length === 0) {
       return "";
     }
 
-    return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(
-      values,
-    )}${MARKDOWN_EOP}`;
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_LEVEL;
+    }
+
+    return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(values, {
+      parentType,
+    })}${MARKDOWN_EOP}`;
   }
 
-  printSectionItems(values, level = HEADER_SECTION_SUB_LEVEL) {
+  printSectionItems(
+    values,
+    { level, parentType } = {
+      level: HEADER_SECTION_SUB_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (!Array.isArray(values)) {
       return "";
     }
 
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_SUB_LEVEL;
+    }
+
     return values
-      .map((v) => v && this.printSectionItem(v, level))
+      .map((v) => v && this.printSectionItem(v, { level, parentType }))
       .join(MARKDOWN_EOP);
   }
 
   printLinkAttributes(type, text) {
     if (typeof type == "undefined") {
-      return text;
+      return text ?? "";
     }
 
     if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
@@ -128,11 +198,16 @@ module.exports = class Printer {
     return text;
   }
 
-  printLink(type, withAttributes = false) {
+  printLink(type, withAttributes = false, parentType = undefined) {
     const link = this.toLink(type, getTypeName(type));
 
     if (!withAttributes) {
-      return `[\`${link.text}\`](${link.url})`;
+      const printParentType =
+        this.printParentType && typeof parentType !== "undefined";
+      const text = printParentType
+        ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
+        : `\`${link.text}\``;
+      return `[${text}](${link.url})`;
     }
 
     const text = this.printLinkAttributes(type, link.text);
@@ -183,19 +258,37 @@ module.exports = class Printer {
       : "";
   }
 
-  printSectionItem(type, level = HEADER_SECTION_SUB_LEVEL) {
+  printSectionItem(
+    type,
+    { level, parentType } = {
+      level: HEADER_SECTION_SUB_LEVEL,
+      parentType: undefined,
+    },
+  ) {
     if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    const typeNameLink = this.printLink(type);
+    if (typeof level === "undefined") {
+      level = HEADER_SECTION_SUB_LEVEL;
+    }
+
+    const typeNameLink = this.printLink(type, false, parentType);
     const description = this.printDescription(type, "");
-    const parentTypeLink = this.printParentLink(type);
     const badges = this.printBadges(type);
+    const parentTypeLink = hasProperty(type, "type")
+      ? ` <Bullet /> ${this.printLink(type.type, true)}`
+      : "";
 
     let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
-      section += this.printSectionItems(type.args, HEADER_SECTION_ITEM_LEVEL);
+      section += this.printSectionItems(type.args, {
+        level: HEADER_SECTION_ITEM_LEVEL,
+        parentType:
+          typeof parentType === "undefined"
+            ? undefined
+            : `${parentType}.${type.name}`,
+      });
     }
 
     return section;
@@ -314,7 +407,7 @@ module.exports = class Printer {
     const reason = type.deprecationReason
       ? ": " + escapeMDX(type.deprecationReason)
       : "";
-    return `<span class="badge badge--warning">DEPRECATED${reason}</span>${MARKDOWN_EOP}`;
+    return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
   printDescription(type, noText = NO_DESCRIPTION_TEXT) {
@@ -331,11 +424,7 @@ module.exports = class Printer {
     const url = type.specifiedByURL || type.specifiedByUrl;
 
     // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
-    return `
-export const specifiedByLinkCss = { fontSize:'1.5em', paddingLeft:'4px' };
-
-${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkCss} target="_blank" href="${url}" title="Specified by ${url}">⎘</a>${MARKDOWN_EOP}
-      `;
+    return `${HEADER_SECTION_LEVEL} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}`;
   }
 
   printCode(type) {
@@ -373,20 +462,26 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
       case isScalarType(type):
         return this.printSpecification(type);
       case isEnumType(type):
-        return this.printSection(type.getValues(), "Values");
+        return this.printSection(type.getValues(), "Values", {
+          parentType: type.name,
+        });
       case isUnionType(type):
         return this.printSection(type.getTypes(), "Possible types");
       case isObjectType(type):
       case isInterfaceType(type):
       case isInputType(type):
-        metadata = this.printSection(getFields(type), "Fields");
+        metadata = this.printSection(getFields(type), "Fields", {
+          parentType: type.name,
+        });
         if (hasMethod(type, "getInterfaces")) {
           metadata += this.printSection(type.getInterfaces(), "Interfaces");
         }
         return metadata;
       case isDirectiveType(type):
       case isOperation(type):
-        metadata = this.printSection(type.args, "Arguments");
+        metadata = this.printSection(type.args, "Arguments", {
+          parentType: type.name,
+        });
 
         if (isOperation(type)) {
           const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
@@ -400,6 +495,57 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     return metadata;
   }
 
+  printRelations(type) {
+    const relations = {
+      "Returned by": getRelationOfReturn,
+      "Member of": getRelationOfField,
+      "Implemented by": getRelationOfImplementation,
+    };
+
+    let data = "";
+    for (const [section, getRelation] of Object.entries(relations)) {
+      data += this.printRelationOf(type, section, getRelation);
+    }
+
+    return data;
+  }
+
+  printRelationOf(type, section, getRelation) {
+    if (
+      typeof type === "undefined" ||
+      typeof getRelation !== "function" ||
+      isOperation(type)
+    ) {
+      return "";
+    }
+
+    const relations = getRelation(type, this.schema);
+
+    if (typeof relations === "undefined") {
+      return "";
+    }
+
+    let data = [];
+    for (const [relation, types] of Object.entries(relations)) {
+      if (types.length === 0) {
+        continue;
+      }
+
+      const category = this.getRootTypeLocaleFromString(relation);
+      data = data.concat(types.map((t) => this.getRelationLink(category, t)));
+    }
+
+    if (data.length === 0) {
+      return "";
+    }
+
+    const content = [...data]
+      .sort((a, b) => a.localeCompare(b))
+      .join(" <Bullet /> ");
+
+    return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  }
+
   printType(name, type, options) {
     if (typeof type === "undefined" || type === null) {
       return "";
@@ -409,7 +555,8 @@ ${HEADER_SECTION_LEVEL} Specification<a className="link" style={specifiedByLinkC
     const description = this.printDescription(type);
     const code = this.printCode(type);
     const metadata = this.printTypeMetadata(type);
+    const relations = this.printRelatedTypes ? this.printRelations(type) : "";
 
-    return `${header}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}`;
+    return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
 };

@@ -182,6 +182,122 @@ function getSchemaMap(schema) {
   };
 }
 
+function mapRelationOf(relations, schema, callback) {
+  const schemaMap = getSchemaMap(schema);
+
+  for (const relation of Object.keys(relations)) {
+    const entity = schemaMap[relation];
+    if (typeof entity === "undefined") {
+      continue;
+    }
+
+    let results = [];
+    for (const [relationName, relationType] of Object.entries(entity)) {
+      results = callback(relationName, relationType, results);
+    }
+    relations[relation] = results;
+  }
+
+  return relations;
+}
+
+function getRelationOfReturn(type, schema) {
+  const relations = { queries: [], mutations: [], subscriptions: [] };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      if (getNamedType(relationType.type).name === type.name) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
+      }
+      return results;
+    },
+  );
+}
+
+function getRelationOfField(type, schema) {
+  const relations = {
+    queries: [],
+    mutations: [],
+    subscriptions: [],
+    objects: [],
+    interfaces: [],
+    inputs: [],
+    directives: [],
+  };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      // directives are handled as flat array instead of map
+      const key = isDirectiveType(relationType)
+        ? relationType.name
+        : relationName;
+
+      const fields = Object.assign(
+        {},
+        relationType.args ?? {},
+        relationType._fields ?? {},
+      );
+      for (const fieldDef of Object.values(fields)) {
+        if (getNamedType(fieldDef.type).name === type.name) {
+          if (!results.find((r) => r === key || r.name === key)) {
+            results.push(relationType);
+          }
+        }
+      }
+      return results;
+    },
+  );
+}
+
+function getRelationOfUnion(type, schema) {
+  const relations = { unions: [] };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      if (relationType._types.find((subType) => subType.name === type.name)) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
+      }
+      return results;
+    },
+  );
+}
+
+function getRelationOfInterface(type, schema) {
+  const relations = { objects: [], interfaces: [] };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (relationName, relationType, results) => {
+      if (
+        relationType._interfaces.find((subType) => subType.name === type.name)
+      ) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
+      }
+      return results;
+    },
+  );
+}
+
+function getRelationOfImplementation(type, schema) {
+  return {
+    ...getRelationOfInterface(type, schema),
+    ...getRelationOfUnion(type, schema),
+  };
+}
+
 function isParametrizedField(type) {
   return hasProperty(type, "args") && type.args.length > 0;
 }
@@ -215,4 +331,9 @@ module.exports = {
   getIntrospectionFieldsList,
   getTypeFromTypeMap,
   SCHEMA_EXCLUDE_LIST_PATTERN,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfUnion,
+  getRelationOfInterface,
+  getRelationOfImplementation,
 };
