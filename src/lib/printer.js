@@ -85,6 +85,17 @@ module.exports = class Printer {
     return undefined;
   }
 
+  getGroup(type) {
+    if (typeof this.groups === "undefined") {
+      return "";
+    }
+    const graphLQLNamedType = getNamedType(type);
+    const typeName = graphLQLNamedType.name || graphLQLNamedType;
+    return hasProperty(this.groups, typeName)
+      ? toSlug(this.groups[typeName])
+      : "";
+  }
+
   toLink(type, name, operation) {
     const fallback = {
       text: name,
@@ -112,9 +123,7 @@ module.exports = class Printer {
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = hasProperty(this.groups, text)
-      ? toSlug(this.groups[text])
-      : "";
+    const group = this.getGroup(type);
     const url = pathUrl.join(
       this.linkRoot,
       this.baseURL,
@@ -235,6 +244,11 @@ module.exports = class Printer {
     const category = this.getLinkCategory(getNamedType(rootType));
     if (typeof category !== "undefined") {
       badges.push(category);
+    }
+
+    const group = this.getGroup(rootType);
+    if (group !== "") {
+      badges.push(group);
     }
 
     return badges;
