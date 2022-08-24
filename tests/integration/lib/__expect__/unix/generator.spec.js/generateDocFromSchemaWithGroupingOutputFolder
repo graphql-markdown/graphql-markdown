@@ -27,19 +27,19 @@
             {
               "path": "output/course/mutations/add-course.mdx",
               "name": "add-course.mdx",
-              "size": 1096,
+              "size": 1174,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/course/mutations/drop-course.mdx",
               "name": "drop-course.mdx",
-              "size": 1100,
+              "size": 1178,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 2224,
+          "size": 2380,
           "type": "directory"
         },
         {
@@ -56,30 +56,30 @@
             {
               "path": "output/course/queries/all-courses.mdx",
               "name": "all-courses.mdx",
-              "size": 886,
+              "size": 925,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/course/queries/math-courses.mdx",
               "name": "math-courses.mdx",
-              "size": 889,
+              "size": 928,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/course/queries/science-courses.mdx",
               "name": "science-courses.mdx",
-              "size": 898,
+              "size": 937,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 2699,
+          "size": 2816,
           "type": "directory"
         }
       ],
-      "size": 4948,
+      "size": 5221,
       "type": "directory"
     },
     {
@@ -114,19 +114,19 @@
             {
               "path": "output/grade/mutations/update-gpa.mdx",
               "name": "update-gpa.mdx",
-              "size": 1028,
+              "size": 1106,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/grade/mutations/update-grade.mdx",
               "name": "update-grade.mdx",
-              "size": 1104,
+              "size": 1182,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 2160,
+          "size": 2316,
           "type": "directory"
         },
         {
@@ -143,30 +143,30 @@
             {
               "path": "output/grade/queries/gpa.mdx",
               "name": "gpa.mdx",
-              "size": 1005,
+              "size": 1083,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/grade/queries/un-weighted-gpa.mdx",
               "name": "un-weighted-gpa.mdx",
-              "size": 1289,
+              "size": 1406,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/grade/queries/weighted-gpa.mdx",
               "name": "weighted-gpa.mdx",
-              "size": 1278,
+              "size": 1395,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 3598,
+          "size": 3910,
           "type": "directory"
         }
       ],
-      "size": 5782,
+      "size": 6250,
       "type": "directory"
     },
     {
@@ -194,40 +194,40 @@
             {
               "path": "output/misc/directives/deprecated.mdx",
               "name": "deprecated.mdx",
-              "size": 1096,
+              "size": 1135,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/directives/doc.mdx",
               "name": "doc.mdx",
-              "size": 791,
+              "size": 830,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/directives/include.mdx",
               "name": "include.mdx",
-              "size": 939,
+              "size": 978,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/directives/skip.mdx",
               "name": "skip.mdx",
-              "size": 918,
+              "size": 957,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/directives/specified-by.mdx",
               "name": "specified-by.mdx",
-              "size": 953,
+              "size": 992,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 4726,
+          "size": 4921,
           "type": "directory"
         },
         {
@@ -266,12 +266,12 @@
             {
               "path": "output/misc/interfaces/record.mdx",
               "name": "record.mdx",
-              "size": 1060,
+              "size": 1099,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1089,
+          "size": 1128,
           "type": "directory"
         },
         {
@@ -288,19 +288,19 @@
             {
               "path": "output/misc/objects/department-information.mdx",
               "name": "department-information.mdx",
-              "size": 2134,
+              "size": 2407,
               "type": "file",
               "extension": ".mdx"
             },
             {
               "path": "output/misc/objects/semester.mdx",
               "name": "semester.mdx",
-              "size": 1558,
+              "size": 1753,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 3718,
+          "size": 4186,
           "type": "directory"
         },
         {
@@ -317,12 +317,12 @@
             {
               "path": "output/misc/queries/search-role.mdx",
               "name": "search-role.mdx",
-              "size": 1094,
+              "size": 1172,
               "type": "file",
               "extension": ".mdx"
             }
           ],
-          "size": 1120,
+          "size": 1198,
           "type": "directory"
         },
         {
@@ -404,7 +404,7 @@
           "type": "directory"
         }
       ],
-      "size": 21227,
+      "size": 22007,
       "type": "directory"
     },
     {
@@ -415,6 +415,6 @@
       "extension": ".js"
     }
   ],
-  "size": 32105,
+  "size": 33626,
   "type": "directory"
 }
