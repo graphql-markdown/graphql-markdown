@@ -465,7 +465,7 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@graphql-inspector/core@^3.1.2":
+"@graphql-inspector/core@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@graphql-inspector/core/-/core-3.3.0.tgz#3982909cec46a5b3050a8265569503f20a3b5742"
   integrity sha512-LRtk9sHgj9qqVPIkkThAVq3iZ7QxgHCx6elEwd0eesZBCmaIYQxD/BFu+VT8jr10YfOURBZuAnVdyGu64vYpBg==
@@ -474,7 +474,7 @@
     object-inspect "1.10.3"
     tslib "^2.0.0"
 
-"@graphql-tools/graphql-file-loader@^7.3.14":
+"@graphql-tools/graphql-file-loader@^7.5.2":
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.5.2.tgz#3a3ec1a4a76d15b174de0e4fe4d7686ed2aa961a"
   integrity sha512-4M5c5SRnxTURNwfq46dlEspWGk+nQpO2nF/p9kxaPiXG0iMAQ8suOd3jQk99LEefQpVhFNb5FumyvUnyW0BogA==
@@ -494,7 +494,7 @@
     resolve-from "5.0.0"
     tslib "^2.4.0"
 
-"@graphql-tools/load@^7.5.13":
+"@graphql-tools/load@^7.7.4":
   version "7.7.4"
   resolved "https://registry.yarnpkg.com/@graphql-tools/load/-/load-7.7.4.tgz#8c96df814edb850bcf1b1652c56fb53a098455f8"
   integrity sha512-2VtVWeMNizNTTc8Dv/hs0lrvGHaLko8jpBoP9TewFdBz6pAXPsLHYnNAhEfBYJd+Vk5GZbnWTfVColxhnF8NEQ==
