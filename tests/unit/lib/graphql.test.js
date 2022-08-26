@@ -521,11 +521,11 @@ describe("lib", () => {
       const relations = getRelationOfInterface(interfaceType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
-        Object {
-          "interfaces": Array [
+        {
+          "interfaces": [
             "Canine",
           ],
-          "objects": Array [
+          "objects": [
             "Dog",
           ],
         }
@@ -563,8 +563,8 @@ describe("lib", () => {
       const relations = getRelationOfUnion(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
-        Object {
-          "unions": Array [
+        {
+          "unions": [
             "Task",
           ],
         }
@@ -612,15 +612,15 @@ describe("lib", () => {
       const relations = getRelationOfImplementation(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
-        Object {
-          "interfaces": Array [
+        {
+          "interfaces": [
             "Canine",
           ],
-          "objects": Array [
+          "objects": [
             "Dog",
             "Cat",
           ],
-          "unions": Array [
+          "unions": [
             "Pet",
           ],
         }
@@ -656,43 +656,43 @@ describe("lib", () => {
       const relations = getRelationOfReturn(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
-        Object {
-          "mutations": Array [
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+        {
+          "mutations": [
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 308,
                       "start": 292,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 299,
                         "start": 292,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 308,
                         "start": 301,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 307,
                           "start": 301,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 307,
                             "start": 301,
                           },
@@ -704,43 +704,43 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "subject",
                   "type": "String!",
                 },
-                Object {
-                  "astNode": Object {
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 324,
                       "start": 310,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 318,
                         "start": 310,
                       },
                       "value": "duration",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 324,
                         "start": 320,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 323,
                           "start": 320,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 323,
                             "start": 320,
                           },
@@ -752,45 +752,45 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "duration",
                   "type": "Int!",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 308,
                       "start": 292,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 299,
                         "start": 292,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 308,
                         "start": 301,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 307,
                           "start": 301,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 307,
                             "start": 301,
                           },
@@ -799,38 +799,38 @@ describe("lib", () => {
                       },
                     },
                   },
-                  Object {
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 324,
                       "start": 310,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 318,
                         "start": 310,
                       },
                       "value": "duration",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 324,
                         "start": 320,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 323,
                           "start": 320,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 323,
                             "start": 320,
                           },
@@ -841,29 +841,29 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 336,
                   "start": 279,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 291,
                     "start": 279,
                   },
                   "value": "addStudyItem",
                 },
-                "type": Object {
+                "type": {
                   "kind": "NamedType",
-                  "loc": Object {
+                  "loc": {
                     "end": 336,
                     "start": 327,
                   },
-                  "name": Object {
+                  "name": {
                     "kind": "Name",
-                    "loc": Object {
+                    "loc": {
                       "end": 336,
                       "start": 327,
                     },
@@ -873,43 +873,43 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "addStudyItem",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "StudyItem",
             },
           ],
-          "queries": Array [
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+          "queries": [
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 175,
                       "start": 160,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 167,
                         "start": 160,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 175,
                         "start": 169,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 175,
                           "start": 169,
                         },
@@ -920,39 +920,39 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "subject",
                   "type": "String",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 175,
                       "start": 160,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 167,
                         "start": 160,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 175,
                         "start": 169,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 175,
                           "start": 169,
                         },
@@ -962,41 +962,41 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 190,
                   "start": 146,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 159,
                     "start": 146,
                   },
                   "value": "getStudyItems",
                 },
-                "type": Object {
+                "type": {
                   "kind": "ListType",
-                  "loc": Object {
+                  "loc": {
                     "end": 190,
                     "start": 178,
                   },
-                  "type": Object {
+                  "type": {
                     "kind": "NonNullType",
-                    "loc": Object {
+                    "loc": {
                       "end": 189,
                       "start": 179,
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 188,
                         "start": 179,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 188,
                           "start": 179,
                         },
@@ -1008,47 +1008,47 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "getStudyItems",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "[StudyItem!]",
             },
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 221,
                       "start": 214,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 216,
                         "start": 214,
                       },
                       "value": "id",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 221,
                         "start": 218,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 220,
                           "start": 218,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 220,
                             "start": 218,
                           },
@@ -1060,45 +1060,45 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "id",
                   "type": "ID!",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 221,
                       "start": 214,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 216,
                         "start": 214,
                       },
                       "value": "id",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 221,
                         "start": 218,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 220,
                           "start": 218,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 220,
                             "start": 218,
                           },
@@ -1109,29 +1109,29 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 233,
                   "start": 201,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 213,
                     "start": 201,
                   },
                   "value": "getStudyItem",
                 },
-                "type": Object {
+                "type": {
                   "kind": "NamedType",
-                  "loc": Object {
+                  "loc": {
                     "end": 233,
                     "start": 224,
                   },
-                  "name": Object {
+                  "name": {
                     "kind": "Name",
-                    "loc": Object {
+                    "loc": {
                       "end": 233,
                       "start": 224,
                     },
@@ -1141,54 +1141,54 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "getStudyItem",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "StudyItem",
             },
           ],
-          "subscriptions": Array [
-            Object {
-              "args": Array [],
-              "astNode": Object {
-                "arguments": Array [],
+          "subscriptions": [
+            {
+              "args": [],
+              "astNode": {
+                "arguments": [],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 418,
                   "start": 390,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 404,
                     "start": 390,
                   },
                   "value": "listStudyItems",
                 },
-                "type": Object {
+                "type": {
                   "kind": "ListType",
-                  "loc": Object {
+                  "loc": {
                     "end": 418,
                     "start": 406,
                   },
-                  "type": Object {
+                  "type": {
                     "kind": "NonNullType",
-                    "loc": Object {
+                    "loc": {
                       "end": 417,
                       "start": 407,
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 416,
                         "start": 407,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 416,
                           "start": 407,
                         },
@@ -1200,7 +1200,7 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "listStudyItems",
               "resolve": undefined,
               "subscribe": undefined,
@@ -1244,51 +1244,51 @@ describe("lib", () => {
       const relations = getRelationOfField(compositeType, schema);
 
       expect(relations).toMatchInlineSnapshot(`
-        Object {
-          "directives": Array [
+        {
+          "directives": [
             "@deprecated",
             "@specifiedBy",
           ],
-          "inputs": Array [],
-          "interfaces": Array [
+          "inputs": [],
+          "interfaces": [
             "Record",
           ],
-          "mutations": Array [
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+          "mutations": [
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 394,
                       "start": 378,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 385,
                         "start": 378,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 394,
                         "start": 387,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 393,
                           "start": 387,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 393,
                             "start": 387,
                           },
@@ -1300,43 +1300,43 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "subject",
                   "type": "String!",
                 },
-                Object {
-                  "astNode": Object {
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 410,
                       "start": 396,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 404,
                         "start": 396,
                       },
                       "value": "duration",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 410,
                         "start": 406,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 409,
                           "start": 406,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 409,
                             "start": 406,
                           },
@@ -1348,45 +1348,45 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "duration",
                   "type": "Int!",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 394,
                       "start": 378,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 385,
                         "start": 378,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 394,
                         "start": 387,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 393,
                           "start": 387,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 393,
                             "start": 387,
                           },
@@ -1395,38 +1395,38 @@ describe("lib", () => {
                       },
                     },
                   },
-                  Object {
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 410,
                       "start": 396,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 404,
                         "start": 396,
                       },
                       "value": "duration",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 410,
                         "start": 406,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 409,
                           "start": 406,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 409,
                             "start": 406,
                           },
@@ -1437,29 +1437,29 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 422,
                   "start": 365,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 377,
                     "start": 365,
                   },
                   "value": "addStudyItem",
                 },
-                "type": Object {
+                "type": {
                   "kind": "NamedType",
-                  "loc": Object {
+                  "loc": {
                     "end": 422,
                     "start": 413,
                   },
-                  "name": Object {
+                  "name": {
                     "kind": "Name",
-                    "loc": Object {
+                    "loc": {
                       "end": 422,
                       "start": 413,
                     },
@@ -1469,46 +1469,46 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "addStudyItem",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "StudyItem",
             },
           ],
-          "objects": Array [
+          "objects": [
             "StudyItem",
           ],
-          "queries": Array [
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+          "queries": [
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 257,
                       "start": 242,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 249,
                         "start": 242,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 257,
                         "start": 251,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 257,
                           "start": 251,
                         },
@@ -1519,39 +1519,39 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "subject",
                   "type": "String",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 257,
                       "start": 242,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 249,
                         "start": 242,
                       },
                       "value": "subject",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 257,
                         "start": 251,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 257,
                           "start": 251,
                         },
@@ -1561,41 +1561,41 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 272,
                   "start": 228,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 241,
                     "start": 228,
                   },
                   "value": "getStudyItems",
                 },
-                "type": Object {
+                "type": {
                   "kind": "ListType",
-                  "loc": Object {
+                  "loc": {
                     "end": 272,
                     "start": 260,
                   },
-                  "type": Object {
+                  "type": {
                     "kind": "NonNullType",
-                    "loc": Object {
+                    "loc": {
                       "end": 271,
                       "start": 261,
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NamedType",
-                      "loc": Object {
+                      "loc": {
                         "end": 270,
                         "start": 261,
                       },
-                      "name": Object {
+                      "name": {
                         "kind": "Name",
-                        "loc": Object {
+                        "loc": {
                           "end": 270,
                           "start": 261,
                         },
@@ -1607,47 +1607,47 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "getStudyItems",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "[StudyItem!]",
             },
-            Object {
-              "args": Array [
-                Object {
-                  "astNode": Object {
+            {
+              "args": [
+                {
+                  "astNode": {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 307,
                       "start": 296,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 298,
                         "start": 296,
                       },
                       "value": "id",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 307,
                         "start": 300,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 306,
                           "start": 300,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 306,
                             "start": 300,
                           },
@@ -1659,45 +1659,45 @@ describe("lib", () => {
                   "defaultValue": undefined,
                   "deprecationReason": undefined,
                   "description": undefined,
-                  "extensions": Object {},
+                  "extensions": {},
                   "name": "id",
                   "type": "String!",
                 },
               ],
-              "astNode": Object {
-                "arguments": Array [
-                  Object {
+              "astNode": {
+                "arguments": [
+                  {
                     "defaultValue": undefined,
                     "description": undefined,
-                    "directives": Array [],
+                    "directives": [],
                     "kind": "InputValueDefinition",
-                    "loc": Object {
+                    "loc": {
                       "end": 307,
                       "start": 296,
                     },
-                    "name": Object {
+                    "name": {
                       "kind": "Name",
-                      "loc": Object {
+                      "loc": {
                         "end": 298,
                         "start": 296,
                       },
                       "value": "id",
                     },
-                    "type": Object {
+                    "type": {
                       "kind": "NonNullType",
-                      "loc": Object {
+                      "loc": {
                         "end": 307,
                         "start": 300,
                       },
-                      "type": Object {
+                      "type": {
                         "kind": "NamedType",
-                        "loc": Object {
+                        "loc": {
                           "end": 306,
                           "start": 300,
                         },
-                        "name": Object {
+                        "name": {
                           "kind": "Name",
-                          "loc": Object {
+                          "loc": {
                             "end": 306,
                             "start": 300,
                           },
@@ -1708,29 +1708,29 @@ describe("lib", () => {
                   },
                 ],
                 "description": undefined,
-                "directives": Array [],
+                "directives": [],
                 "kind": "FieldDefinition",
-                "loc": Object {
+                "loc": {
                   "end": 319,
                   "start": 283,
                 },
-                "name": Object {
+                "name": {
                   "kind": "Name",
-                  "loc": Object {
+                  "loc": {
                     "end": 295,
                     "start": 283,
                   },
                   "value": "getStudyItem",
                 },
-                "type": Object {
+                "type": {
                   "kind": "NamedType",
-                  "loc": Object {
+                  "loc": {
                     "end": 319,
                     "start": 310,
                   },
-                  "name": Object {
+                  "name": {
                     "kind": "Name",
-                    "loc": Object {
+                    "loc": {
                       "end": 319,
                       "start": 310,
                     },
@@ -1740,14 +1740,14 @@ describe("lib", () => {
               },
               "deprecationReason": undefined,
               "description": undefined,
-              "extensions": Object {},
+              "extensions": {},
               "name": "getStudyItem",
               "resolve": undefined,
               "subscribe": undefined,
               "type": "StudyItem",
             },
           ],
-          "subscriptions": Array [],
+          "subscriptions": [],
         }
       `);
     });

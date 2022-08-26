@@ -843,7 +843,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class=\\"warning\\" text=\\"DEPRECATED\\"/>
+            "<Badge class="warning" text="DEPRECATED"/>
 
             "
           `);
@@ -860,7 +860,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class=\\"warning\\" text=\\"DEPRECATED: foobar\\"/>
+            "<Badge class="warning" text="DEPRECATED: foobar"/>
 
             "
           `);
@@ -894,7 +894,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printSpecification(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "### <SpecifiedBy url=\\"https://lorem.ipsum\\"/>
+            "### <SpecifiedBy url="https://lorem.ipsum"/>
 
             "
           `);
@@ -948,7 +948,7 @@ describe("lib", () => {
           expect(deprecation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <Badge class=\\"secondary\\" text=\\"interface\\"/><Bullet />[\`Baz\`](#)  <Badge class=\\"secondary\\" text=\\"subscription\\"/><Bullet />[\`Foo\`](#)  <Badge class=\\"secondary\\" text=\\"query\\"/>
+            [\`Bar\`](#)  <Badge class="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="secondary" text="query"/>
 
             "
           `);
@@ -963,7 +963,7 @@ describe("lib", () => {
             printerInstance.getRootTypeLocaleFromString("queries");
 
           expect(deprecation).toMatchInlineSnapshot(`
-            Object {
+            {
               "plural": "queries",
               "singular": "query",
             }
