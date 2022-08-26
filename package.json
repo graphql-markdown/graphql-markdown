@@ -121,7 +121,7 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=14.14.0"
+    "node": ">=16.16.0"
   },
   "config": {
     "commitizen": {
