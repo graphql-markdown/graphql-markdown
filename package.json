@@ -1,11 +1,11 @@
 {
   "name": "@edno/docusaurus2-graphql-doc-generator",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "Docusaurus 2 plugin for generating Markdown documentation from a GraphQL schema.",
+  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.11.0",
+  "version": "1.12.0",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
@@ -66,9 +66,9 @@
     "postpack": "pinst --enable"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^3.1.2",
-    "@graphql-tools/graphql-file-loader": "^7.3.14",
-    "@graphql-tools/load": "^7.5.13"
+    "@graphql-inspector/core": "^3.3.0",
+    "@graphql-tools/graphql-file-loader": "^7.5.2",
+    "@graphql-tools/load": "^7.7.4"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",
@@ -100,28 +100,11 @@
     "pinst": "3.0.0",
     "prettier": "2.7.1"
   },
-  "prettier": {
-    "singleQuote": false,
-    "bracketSpacing": true,
-    "proseWrap": "preserve",
-    "overrides": [
-      {
-        "files": "*.js",
-        "options": {
-          "arrowParens": "always",
-          "printWidth": 80,
-          "trailingComma": "all",
-          "tabWidth": 2
-        }
-      }
-    ]
-  },
   "directories": {
     "test": "tests"
   },
-  "engineStrict": true,
   "engines": {
-    "node": ">=14.14.0"
+    "node": ">=16.16.0"
   },
   "config": {
     "commitizen": {
