@@ -119,7 +119,6 @@
   "directories": {
     "test": "tests"
   },
-  "engineStrict": true,
   "engines": {
     "node": ">=16.16.0"
   },
