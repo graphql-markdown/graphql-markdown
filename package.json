@@ -104,7 +104,7 @@
     "test": "tests"
   },
   "engines": {
-    "node": ">=16.16.0"
+    "node": ">=16.14"
   },
   "config": {
     "commitizen": {
