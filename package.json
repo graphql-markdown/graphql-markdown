@@ -100,22 +100,6 @@
     "pinst": "3.0.0",
     "prettier": "2.7.1"
   },
-  "prettier": {
-    "singleQuote": false,
-    "bracketSpacing": true,
-    "proseWrap": "preserve",
-    "overrides": [
-      {
-        "files": "*.js",
-        "options": {
-          "arrowParens": "always",
-          "printWidth": 80,
-          "trailingComma": "all",
-          "tabWidth": 2
-        }
-      }
-    ]
-  },
   "directories": {
     "test": "tests"
   },
