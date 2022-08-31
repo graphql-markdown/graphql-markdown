@@ -214,9 +214,25 @@ describe("lib", () => {
 
         const schemaTypeMap = getFilteredTypeMap(schema.getTypeMap());
 
-        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getFilteredTypeMap.json`),
-        );
+        expect(schemaTypeMap).toMatchInlineSnapshot(`
+          {
+            "Boolean": "Boolean",
+            "Date": "Date",
+            "ID": "ID",
+            "Int": "Int",
+            "Media": "Media",
+            "Meta": "Meta",
+            "Node": "Node",
+            "Notification": "Notification",
+            "SRI": "SRI",
+            "Stat": "Stat",
+            "String": "String",
+            "Tweet": "Tweet",
+            "TweetContent": "TweetContent",
+            "Url": "Url",
+            "User": "User",
+          }
+        `);
       });
 
       test.each([[undefined], [null]])(

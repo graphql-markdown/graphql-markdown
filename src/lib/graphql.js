@@ -109,14 +109,22 @@ function formatDefaultValue(type, defaultValue) {
 
 function getFilteredTypeMap(
   typeMap,
-  excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
+  filterOperationKind = ["Query", "Mutation", "Subscription"],
 ) {
   if (typeof typeMap == "undefined" || typeMap == null) {
     return undefined;
   }
 
+  const filterOperationFragmentRegExp =
+    filterOperationKind.length > 0
+      ? [...filterOperationKind, ""].join("$|")
+      : "";
+  const excludeListRegExp = new RegExp(
+    `^(?!${filterOperationFragmentRegExp}__.+$).*$`,
+  );
+
   return Object.keys(typeMap)
-    .filter((key) => excludeList.test(key))
+    .filter((key) => excludeListRegExp.test(key))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -161,8 +169,9 @@ function getTypeFromTypeMap(typeMap, type) {
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function getSchemaMap(schema) {
-  const typeMap = getFilteredTypeMap(schema.getTypeMap());
+function getSchemaMap(schema, filterOperationKind) {
+  const typeMap = getFilteredTypeMap(schema.getTypeMap(), filterOperationKind);
+
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
