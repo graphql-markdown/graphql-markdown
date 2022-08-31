@@ -61,7 +61,7 @@
     "test:integration": "jest --projects tests/integration",
     "test:smoke": "earthly +smoke-test",
     "test:coverage": "sh ./scripts/coverage.sh",
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
   },
