@@ -15,10 +15,13 @@ describe("subscription object", () => {
   test("returns a filtered map of schema types", () => {
     const schemaTypeMap = getFilteredTypeMap(schema.getTypeMap());
 
-    expect(schemaTypeMap).toEqual(
-      expect.objectContaining({
-        Subscription: expect.any(Object),
-      }),
-    );
+    expect(schemaTypeMap).toMatchInlineSnapshot(`
+      {
+        "Boolean": "Boolean",
+        "ID": "ID",
+        "String": "String",
+        "Subscription": "Subscription",
+      }
+    `);
   });
 });

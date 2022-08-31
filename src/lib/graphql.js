@@ -115,8 +115,6 @@ function getFilteredTypeMap(
     return undefined;
   }
 
-  console.log(Object.keys(typeMap));
-
   return Object.keys(typeMap)
     .filter((key) => excludeList.test(key))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
