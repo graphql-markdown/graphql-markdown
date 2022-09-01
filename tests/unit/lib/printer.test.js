@@ -40,6 +40,10 @@ describe("lib", () => {
         getTypeMap: () => {},
         getDirectives: () => {},
         getImplementations: () => {},
+        getRootType: () => undefined,
+        getQueryType: () => undefined,
+        getMutationType: () => undefined,
+        getSubscriptionType: () => undefined,
       };
 
       const types = [
@@ -774,6 +778,9 @@ describe("lib", () => {
             jest
               .spyOn(printerInstance, "printDescription")
               .mockImplementation(() => `Test ${name}`);
+            jest
+              .spyOn(printerInstance, "printRelations")
+              .mockImplementation(() => "");
 
             const printedType = printerInstance.printType(name, type);
 
@@ -794,6 +801,9 @@ describe("lib", () => {
             jest
               .spyOn(printerInstance, "printDescription")
               .mockImplementation((t) => `Test ${t.name}`);
+            jest
+              .spyOn(printerInstance, "printRelations")
+              .mockImplementation(() => "");
 
             const printedType = printerInstance.printType(name, type);
 
@@ -823,6 +833,9 @@ describe("lib", () => {
           jest
             .spyOn(printerInstance, "printHeader")
             .mockImplementation((header) => `header-${header.toLowerCase()}`);
+          jest
+            .spyOn(printerInstance, "printRelations")
+            .mockImplementation(() => "");
 
           const printedType = printerInstance.printType("scalar", scalarType);
 
