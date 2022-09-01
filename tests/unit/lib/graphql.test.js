@@ -221,6 +221,7 @@ describe("lib", () => {
             "ID": "ID",
             "Int": "Int",
             "Media": "Media",
+            "MediaType": "MediaType",
             "Meta": "Meta",
             "Node": "Node",
             "Notification": "Notification",

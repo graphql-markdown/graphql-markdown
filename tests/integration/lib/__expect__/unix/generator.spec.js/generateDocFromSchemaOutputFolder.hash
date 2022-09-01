@@ -46,6 +46,28 @@
       "type": "directory"
     },
     {
+      "path": "output/enums",
+      "name": "enums",
+      "children": [
+        {
+          "path": "output/enums/_category_.yml",
+          "name": "_category_.yml",
+          "size": 24,
+          "type": "file",
+          "extension": ".yml"
+        },
+        {
+          "path": "output/enums/media-type.mdx",
+          "name": "media-type.mdx",
+          "size": 891,
+          "type": "file",
+          "extension": ".mdx"
+        }
+      ],
+      "size": 915,
+      "type": "directory"
+    },
+    {
       "path": "output/generated.md",
       "name": "generated.md",
       "size": 32,
@@ -146,7 +168,7 @@
         {
           "path": "output/objects/media.mdx",
           "name": "media.mdx",
-          "size": 1126,
+          "size": 1318,
           "type": "file",
           "extension": ".mdx"
         },
@@ -186,7 +208,7 @@
           "extension": ".mdx"
         }
       ],
-      "size": 10124,
+      "size": 10316,
       "type": "directory"
     },
     {
@@ -340,6 +362,6 @@
       "type": "directory"
     }
   ],
-  "size": 33556,
+  "size": 34663,
   "type": "directory"
 }
