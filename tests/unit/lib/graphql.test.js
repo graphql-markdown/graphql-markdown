@@ -24,7 +24,7 @@ const {
   getIntrospectionFieldsList,
   getFields,
   getTypeName,
-  getTypeFromTypeMap,
+  getTypeFromSchema,
   getSchemaMap,
   isParametrizedField,
   isOperation,
@@ -236,11 +236,11 @@ describe("lib", () => {
       });
 
       test.each([[undefined], [null]])(
-        "returns undefined if typeMap is not defined",
-        (typeMap) => {
+        "returns undefined if schema is not defined",
+        (schema) => {
           expect.hasAssertions();
 
-          const schemaTypeMap = getFilteredTypeMap(typeMap);
+          const schemaTypeMap = getFilteredTypeMap(schema);
 
           expect(schemaTypeMap).toBeUndefined();
         },
@@ -344,11 +344,11 @@ describe("lib", () => {
       });
     });
 
-    describe("getTypeFromTypeMap()", () => {
+    describe("getTypeFromSchema()", () => {
       test("returns a filter map filtered by GraphQLObjectType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLObjectType);
+        const map = getTypeFromSchema(schema, GraphQLObjectType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLObjectType.json`),
@@ -358,7 +358,7 @@ describe("lib", () => {
       test("returns a filter map filtered by GraphQLUnionType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLUnionType);
+        const map = getTypeFromSchema(schema, GraphQLUnionType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLUnionType.json`),
@@ -368,10 +368,7 @@ describe("lib", () => {
       test("returns a filter map filtered by GraphQLInterfaceType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(
-          schema.getTypeMap(),
-          GraphQLInterfaceType,
-        );
+        const map = getTypeFromSchema(schema, GraphQLInterfaceType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLInterfaceType.json`),
@@ -381,7 +378,7 @@ describe("lib", () => {
       test("returns a filter map filtered by GraphQLEnumType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLEnumType);
+        const map = getTypeFromSchema(schema, GraphQLEnumType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLEnumType.json`),
@@ -391,10 +388,7 @@ describe("lib", () => {
       test("returns a filter map filtered by GraphQLInputObjectType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(
-          schema.getTypeMap(),
-          GraphQLInputObjectType,
-        );
+        const map = getTypeFromSchema(schema, GraphQLInputObjectType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(
@@ -407,7 +401,7 @@ describe("lib", () => {
       test("returns a filter map filtered by GraphQLScalarType", () => {
         expect.hasAssertions();
 
-        const map = getTypeFromTypeMap(schema.getTypeMap(), GraphQLScalarType);
+        const map = getTypeFromSchema(schema, GraphQLScalarType);
 
         expect(JSON.stringify(map, null, 2)).toMatchFile(
           path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLScalarType.json`),
@@ -419,7 +413,7 @@ describe("lib", () => {
         (typeMap) => {
           expect.hasAssertions();
 
-          const map = getTypeFromTypeMap(typeMap, GraphQLScalarType);
+          const map = getTypeFromSchema(typeMap, GraphQLScalarType);
 
           expect(map).toBeUndefined();
         },
@@ -491,10 +485,7 @@ describe("lib", () => {
       test("returns false if type is not an operation", () => {
         expect.hasAssertions();
 
-        const objects = getTypeFromTypeMap(
-          schema.getTypeMap(),
-          GraphQLObjectType,
-        );
+        const objects = getTypeFromSchema(schema, GraphQLObjectType);
         const res = isOperation(objects["Tweet"]);
 
         expect(res).toBeFalsy();

@@ -195,18 +195,19 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getTypeFromTypeMap(typeMap, type) {
-  if (typeof typeMap == "undefined" || typeMap == null) {
+function getTypeFromSchema(schema, type) {
+  if (typeof schema == "undefined" || schema == null) {
     return undefined;
   }
+
+  const typeMap = getFilteredTypeMap(schema);
+
   return Object.keys(typeMap)
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getSchemaMap(schema) {
-  const typeMap = getFilteredTypeMap(schema);
-
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
@@ -218,12 +219,12 @@ function getSchemaMap(schema) {
       schema.getSubscriptionType && schema.getSubscriptionType(),
     ),
     directives: schema.getDirectives(),
-    objects: getTypeFromTypeMap(typeMap, GraphQLObjectType),
-    unions: getTypeFromTypeMap(typeMap, GraphQLUnionType),
-    interfaces: getTypeFromTypeMap(typeMap, GraphQLInterfaceType),
-    enums: getTypeFromTypeMap(typeMap, GraphQLEnumType),
-    inputs: getTypeFromTypeMap(typeMap, GraphQLInputObjectType),
-    scalars: getTypeFromTypeMap(typeMap, GraphQLScalarType),
+    objects: getTypeFromSchema(schema, GraphQLObjectType),
+    unions: getTypeFromSchema(schema, GraphQLUnionType),
+    interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
+    enums: getTypeFromSchema(schema, GraphQLEnumType),
+    inputs: getTypeFromSchema(schema, GraphQLInputObjectType),
+    scalars: getTypeFromSchema(schema, GraphQLScalarType),
   };
 }
 
@@ -374,7 +375,7 @@ module.exports = {
   printSchema,
   getFilteredTypeMap,
   getIntrospectionFieldsList,
-  getTypeFromTypeMap,
+  getTypeFromSchema,
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfUnion,
