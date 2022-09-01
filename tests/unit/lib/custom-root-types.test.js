@@ -17,7 +17,7 @@ describe("graphql", () => {
     test("loadSchema returns schema with custom root types", () => {
       expect.hasAssertions();
 
-      expect(schema.getQueryType()).toMatchInlineSnapshot(`"Root"`);
+      expect(schema.getQueryType().name).toBe("Root");
       expect(schema.getMutationType()).toBeUndefined();
       expect(schema.getSubscriptionType()).toBeUndefined();
     });
