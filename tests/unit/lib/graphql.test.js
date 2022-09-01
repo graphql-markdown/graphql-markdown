@@ -212,7 +212,7 @@ describe("lib", () => {
       test("returns a filtered map of schema types", () => {
         expect.hasAssertions();
 
-        const schemaTypeMap = getFilteredTypeMap(schema.getTypeMap());
+        const schemaTypeMap = getFilteredTypeMap(schema);
 
         expect(schemaTypeMap).toMatchInlineSnapshot(`
           {

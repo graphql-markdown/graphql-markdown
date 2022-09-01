@@ -22,17 +22,47 @@ const {
   isNonNullType,
   isLeafType,
   printSchema,
+  GraphQLSchema,
+  OperationTypeNode,
 } = require("graphql");
-const { loadSchema } = require("@graphql-tools/load");
+const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
 const { hasMethod, hasProperty } = require("../utils/scalars/object");
 
-const SCHEMA_EXCLUDE_LIST_PATTERN =
-  /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
+const OperationTypeNodes = [
+  OperationTypeNode.QUERY,
+  OperationTypeNode.MUTATION,
+  OperationTypeNode.SUBSCRIPTION,
+];
 
 const DefaultLoaders = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
 };
+
+async function loadSchema(schemaLocation, options) {
+  const rootTypes = hasProperty(options, "rootTypes")
+    ? options.rootTypes
+    : undefined;
+
+  if (hasProperty(options, "rootTypes")) {
+    delete options["rootTypes"];
+  }
+
+  const schema = await asyncLoadSchema(schemaLocation, options);
+
+  if (typeof rootTypes === "undefined") {
+    return schema;
+  }
+
+  const config = {
+    ...schema.toConfig(),
+    query: schema.getType(rootTypes.query ?? "Query"),
+    mutation: schema.getType(rootTypes.mutation ?? "Mutation"),
+    subscription: schema.getType(rootTypes.subscription ?? "Subscription"),
+  };
+
+  return new GraphQLSchema(config);
+}
 
 function getDocumentLoaders(extraLoaders = {}) {
   const loadersList = { ...DefaultLoaders, ...extraLoaders };
@@ -107,21 +137,26 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getFilteredTypeMap(
-  typeMap,
-  filterOperationKind = ["Query", "Mutation", "Subscription"],
-) {
-  if (typeof typeMap == "undefined" || typeMap == null) {
+function getFilteredTypeMap(schema) {
+  if (typeof schema == "undefined" || schema == null) {
     return undefined;
   }
 
+  const operationKinds = [];
+  OperationTypeNodes.forEach((operationTypeNode) => {
+    const operationType = schema.getRootType(operationTypeNode);
+    if (typeof operationType !== "undefined") {
+      operationKinds.push(operationType.name);
+    }
+  });
+
   const filterOperationFragmentRegExp =
-    filterOperationKind.length > 0
-      ? [...filterOperationKind, ""].join("$|")
-      : "";
+    operationKinds.length > 0 ? [...operationKinds, ""].join("$|") : "";
   const excludeListRegExp = new RegExp(
     `^(?!${filterOperationFragmentRegExp}__.+$).*$`,
   );
+
+  const typeMap = schema.getTypeMap();
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
@@ -169,8 +204,8 @@ function getTypeFromTypeMap(typeMap, type) {
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function getSchemaMap(schema, filterOperationKind) {
-  const typeMap = getFilteredTypeMap(schema.getTypeMap(), filterOperationKind);
+function getSchemaMap(schema) {
+  const typeMap = getFilteredTypeMap(schema);
 
   return {
     queries: getIntrospectionFieldsList(
@@ -340,7 +375,6 @@ module.exports = {
   getFilteredTypeMap,
   getIntrospectionFieldsList,
   getTypeFromTypeMap,
-  SCHEMA_EXCLUDE_LIST_PATTERN,
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfUnion,
