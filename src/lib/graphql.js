@@ -137,7 +137,7 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getFilteredTypeMap(schema) {
+function getTypeFromSchema(schema, type) {
   if (typeof schema == "undefined" || schema == null) {
     return undefined;
   }
@@ -160,6 +160,7 @@ function getFilteredTypeMap(schema) {
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
+    .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -193,18 +194,6 @@ function getTypeName(type, defaultName = "") {
     default:
       return defaultName;
   }
-}
-
-function getTypeFromSchema(schema, type) {
-  if (typeof schema == "undefined" || schema == null) {
-    return undefined;
-  }
-
-  const typeMap = getFilteredTypeMap(schema);
-
-  return Object.keys(typeMap)
-    .filter((key) => typeMap[key] instanceof type)
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getSchemaMap(schema) {
@@ -373,7 +362,6 @@ module.exports = {
   isLeafType,
   isListType,
   printSchema,
-  getFilteredTypeMap,
   getIntrospectionFieldsList,
   getTypeFromSchema,
   getRelationOfReturn,

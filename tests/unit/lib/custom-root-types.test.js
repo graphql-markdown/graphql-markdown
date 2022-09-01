@@ -1,5 +1,15 @@
+const path = require("path");
+
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
-const { loadSchema, getFilteredTypeMap } = require("../../../src/lib/graphql");
+
+const { loadSchema, getSchemaMap } = require("../../../src/lib/graphql");
+
+const EXPECT_PATH = path.join(
+  __dirname,
+  "__expect__",
+  __OS__,
+  path.basename(__filename),
+);
 
 const SCHEMA_FILE = require.resolve(
   "../../__data__/schema_with_custom_root_types.graphql",
@@ -22,20 +32,14 @@ describe("graphql", () => {
       expect(schema.getSubscriptionType()).toBeUndefined();
     });
 
-    test("getFilteredTypeMap returns a filtered map of schema types", () => {
+    test("getSchemaMap returns a filtered map of schema types", () => {
       expect.hasAssertions();
 
-      const schemaTypeMap = getFilteredTypeMap(schema);
+      const schemaTypeMap = getSchemaMap(schema);
 
-      expect(schemaTypeMap).toMatchInlineSnapshot(`
-              {
-                "Boolean": "Boolean",
-                "ID": "ID",
-                "Int": "Int",
-                "String": "String",
-                "Subscription": "Subscription",
-              }
-          `);
+      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
+        path.join(EXPECT_PATH, `getSchemaMapCustomRootTypes.json`),
+      );
     });
   });
 });

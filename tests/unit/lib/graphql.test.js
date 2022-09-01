@@ -20,7 +20,6 @@ const {
 
 const {
   getDefaultValue,
-  getFilteredTypeMap,
   getIntrospectionFieldsList,
   getFields,
   getTypeName,
@@ -206,46 +205,6 @@ describe("lib", () => {
 
         expect(getDefaultValue(argument)).toBe("[RED]");
       });
-    });
-
-    describe("getFilteredTypeMap()", () => {
-      test("returns a filtered map of schema types", () => {
-        expect.hasAssertions();
-
-        const schemaTypeMap = getFilteredTypeMap(schema);
-
-        expect(schemaTypeMap).toMatchInlineSnapshot(`
-          {
-            "Boolean": "Boolean",
-            "Date": "Date",
-            "ID": "ID",
-            "Int": "Int",
-            "Media": "Media",
-            "MediaType": "MediaType",
-            "Meta": "Meta",
-            "Node": "Node",
-            "Notification": "Notification",
-            "SRI": "SRI",
-            "Stat": "Stat",
-            "String": "String",
-            "Tweet": "Tweet",
-            "TweetContent": "TweetContent",
-            "Url": "Url",
-            "User": "User",
-          }
-        `);
-      });
-
-      test.each([[undefined], [null]])(
-        "returns undefined if schema is not defined",
-        (schema) => {
-          expect.hasAssertions();
-
-          const schemaTypeMap = getFilteredTypeMap(schema);
-
-          expect(schemaTypeMap).toBeUndefined();
-        },
-      );
     });
 
     describe("getIntrospectionFieldsList()", () => {
