@@ -309,7 +309,8 @@ You can declare as many loaders as you need using the structure:
 type className = string; // UrlLoader
 
 type moduleName = string; // "@graphql-tools/url-loader"
-type moduleOptions = { [option: string]: any };
+type rootTypes = { query?: string, mutation?: string, subscription?: string};
+type moduleOptions = { [option: string]: any, rootType?: rootTypes };
 
 type module = { 
   module: moduleName, 
@@ -319,6 +320,19 @@ type module = {
 type loaders = {
   [className: className]: moduleName | module
 }
+```
+
+For custom operation root types (queries not of type `Query`, or root type for other purpose), use the loader option `rootTypes`:
+
+- use a custom type name to override standard type
+- use a empty string to disable the custom standard type
+
+```js
+rootTypes: { 
+  query: "Root", // use type Root for queries
+  subscription: "", // disable subscriptions
+  // mutations use default root type
+  }
 ```
 
 </details>
