@@ -117,7 +117,11 @@ module.exports = class Renderer {
       }),
     };
 
-    const jsonSidebar = `module.exports = ${JSON.stringify(sidebar, null, 2)};`;
+    const jsonSidebar = `
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+
+module.exports = ${JSON.stringify(sidebar, null, 2)};
+`;
 
     const filePath = path.join(this.outputDir, SIDEBAR);
     await saveFile(

@@ -92,7 +92,7 @@ describe("lib", () => {
 
       describe("renderSidebar()", () => {
         test("creates Docusaurus compatible sidebar.js into output folder", async () => {
-          expect.assertions(1);
+          expect.assertions(2);
 
           await rendererInstance.renderSidebar();
 
@@ -100,10 +100,24 @@ describe("lib", () => {
             attributes: ["size", "type", "extension"],
           });
 
+          expect(outputFolder.children).toMatchInlineSnapshot(`
+            [
+              {
+                "extension": ".js",
+                "name": "sidebar-schema.js",
+                "path": "output/sidebar-schema.js",
+                "size": 191,
+                "type": "file",
+              },
+            ]
+          `);
+
+          const sidebarFile = fs.readFileSync(outputFolder.children[0].path);
+
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
-          expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-            path.join(EXPECT_PATH, "renderSidebar.json"),
+          expect(sidebarFile).toMatchFile(
+            path.join(EXPECT_PATH, "renderSidebar.sidebar-schema.js"),
           );
         });
       });

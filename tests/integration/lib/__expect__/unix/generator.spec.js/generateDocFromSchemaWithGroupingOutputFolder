@@ -410,11 +410,11 @@
     {
       "path": "output/sidebar-schema.js",
       "name": "sidebar-schema.js",
-      "size": 116,
+      "size": 191,
       "type": "file",
       "extension": ".js"
     }
   ],
-  "size": 33626,
+  "size": 33701,
   "type": "directory"
 }
