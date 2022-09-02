@@ -321,18 +321,36 @@ type loaders = {
   [className: className]: moduleName | module
 }
 ```
+</details>
 
-For custom operation root types (queries not of type `Query`, or root type for other purpose), use the loader option `rootTypes`:
+<details>
+  <summary><h3>Custom root types</h3></summary>
+
+For custom operation root types (queries not of type `Query`, or root type name used for other purpose), use the loader option `rootTypes`:
 
 - use a custom type name to override standard type
-- use a empty string to disable the custom standard type
+- use a empty string to disable the GraphQL standard type
+- unset root types will use the GraphQL standard type
 
 ```js
-rootTypes: { 
-  query: "Root", // use type Root for queries
-  subscription: "", // disable subscriptions
-  // mutations use default root type
-  }
+plugins: [
+  [
+    "@edno/docusaurus2-graphql-doc-generator",
+    {
+      // ... other options
+      loaders: {
+      GraphQLFileLoader: {
+        module: "@graphql-tools/graphql-file-loader",
+        options: { 
+          rootTypes: { 
+            query: "Root", // use custom root type Root for queries, instead of Query
+            subscription: "" // disable Subscription type
+          },
+        }
+      }
+    },
+  ],
+],
 ```
 
 </details>
