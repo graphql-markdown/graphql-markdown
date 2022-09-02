@@ -215,7 +215,7 @@ By default, the plugin will use the options as defined in the plugin's [configur
 |                    | `-f, --force`                                             | -                                                           | Force documentation generation (bypass diff).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 <details>
-  <summary><h3>Documentation options</h3></summary>
+  <summary><h3 id="documentation-option">Documentation options</h3></summary>
 
 Use these options to tweak some of the Docusaurus documentation features:
 
@@ -245,7 +245,7 @@ plugins: [
 </details>
 
 <details>
-  <summary><h3>Type information options</h3></summary>
+  <summary><h3 id="type-information-options">Type information options</h3></summary>
 
 Use these options to toggle type information rendered on pages:
 
@@ -275,7 +275,7 @@ plugins: [
 </details>
 
 <details>
-  <summary><h3>Loaders</h3></summary>
+  <summary><h3 id="plugin-loaders">Loaders</h3></summary>
 
 `graphql-file-loader`, the local file loader, is provided out-of-the-box. Thus, by default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
 
@@ -321,16 +321,23 @@ type loaders = {
   [className: className]: moduleName | module
 }
 ```
+
 </details>
 
 <details>
-  <summary><h3>Custom root types</h3></summary>
+  <summary><h3 id="custom-root-types">Custom root types</h3></summary>
 
 For custom operation root types (queries not of type `Query`, or root type name used for other purpose), use the loader option `rootTypes`:
+
+```ts
+type rootTypes = { query?: string, mutation?: string, subscription?: string};
+```
 
 - use a custom type name to override standard type
 - use a empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
+
+Add the option `rootTypes` to the loader options under `docusaurus2-graphql-doc-generator` configuration (see also [Loaders](#plugin-loaders)):
 
 ```js
 plugins: [
@@ -356,7 +363,7 @@ plugins: [
 </details>
 
 <details>
-  <summary><h3>Home Page</h3></summary>
+  <summary><h3 id="home-page">Home Page</h3></summary>
 
 If you decide to use your own home page for the GraphQL generated documentation, then set the page ID to `id: schema` and the sidebar position to `sidebar_position: 1`:
 
@@ -388,13 +395,13 @@ This documentation has been automatically generated from the GraphQL schema.
 </details>
 
 <details>
-  <summary><h3>Option diffMethod</h3></summary>
+  <summary><h3 id="option-diffmethod">Option diffMethod</h3></summary>
 
 The `diffMethod` is only used for identifying if the schema has changed. If a change is detected since the last documentation generation, then the full schema documentation will be generated.
 </details>
 
 <details>
-  <summary><h3>Option groupByDirective</h3></summary>
+  <summary><h3 id="option-groupbydirective">Option groupByDirective</h3></summary>
 
 The `groupByDirective` is used to add grouping to the documentation to provide for an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
 
