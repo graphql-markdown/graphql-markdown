@@ -14,8 +14,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 962,
-                "end": 964
+                "start": 1016,
+                "end": 1018
               }
             },
             "type": {
@@ -26,24 +26,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 966,
-                    "end": 968
+                    "start": 1020,
+                    "end": 1022
                   }
                 },
                 "loc": {
-                  "start": 966,
-                  "end": 968
+                  "start": 1020,
+                  "end": 1022
                 }
               },
               "loc": {
-                "start": 966,
-                "end": 969
+                "start": 1020,
+                "end": 1023
               }
             },
             "directives": [],
             "loc": {
-              "start": 962,
-              "end": 969
+              "start": 1016,
+              "end": 1023
             }
           }
         }
@@ -55,8 +55,8 @@
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 956,
-            "end": 961
+            "start": 1010,
+            "end": 1015
           }
         },
         "arguments": [
@@ -66,8 +66,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 962,
-                "end": 964
+                "start": 1016,
+                "end": 1018
               }
             },
             "type": {
@@ -78,24 +78,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 966,
-                    "end": 968
+                    "start": 1020,
+                    "end": 1022
                   }
                 },
                 "loc": {
-                  "start": 966,
-                  "end": 968
+                  "start": 1020,
+                  "end": 1022
                 }
               },
               "loc": {
-                "start": 966,
-                "end": 969
+                "start": 1020,
+                "end": 1023
               }
             },
             "directives": [],
             "loc": {
-              "start": 962,
-              "end": 969
+              "start": 1016,
+              "end": 1023
             }
           }
         ],
@@ -105,19 +105,19 @@
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 972,
-              "end": 977
+              "start": 1026,
+              "end": 1031
             }
           },
           "loc": {
-            "start": 972,
-            "end": 977
+            "start": 1026,
+            "end": 1031
           }
         },
         "directives": [],
         "loc": {
-          "start": 956,
-          "end": 977
+          "start": 1010,
+          "end": 1031
         }
       }
     },
@@ -136,8 +136,8 @@
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 989,
-                "end": 994
+                "start": 1043,
+                "end": 1048
               }
             },
             "type": {
@@ -146,27 +146,27 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 996,
-                  "end": 999
+                  "start": 1050,
+                  "end": 1053
                 }
               },
               "loc": {
-                "start": 996,
-                "end": 999
+                "start": 1050,
+                "end": 1053
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "5",
               "loc": {
-                "start": 1002,
-                "end": 1003
+                "start": 1056,
+                "end": 1057
               }
             },
             "directives": [],
             "loc": {
-              "start": 989,
-              "end": 1003
+              "start": 1043,
+              "end": 1057
             }
           }
         },
@@ -181,8 +181,8 @@
               "kind": "Name",
               "value": "skip",
               "loc": {
-                "start": 1005,
-                "end": 1009
+                "start": 1059,
+                "end": 1063
               }
             },
             "type": {
@@ -191,27 +191,27 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1011,
-                  "end": 1014
+                  "start": 1065,
+                  "end": 1068
                 }
               },
               "loc": {
-                "start": 1011,
-                "end": 1014
+                "start": 1065,
+                "end": 1068
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "0",
               "loc": {
-                "start": 1017,
-                "end": 1018
+                "start": 1071,
+                "end": 1072
               }
             },
             "directives": [],
             "loc": {
-              "start": 1005,
-              "end": 1018
+              "start": 1059,
+              "end": 1072
             }
           }
         },
@@ -225,8 +225,8 @@
               "kind": "Name",
               "value": "sort_field",
               "loc": {
-                "start": 1020,
-                "end": 1030
+                "start": 1074,
+                "end": 1084
               }
             },
             "type": {
@@ -235,19 +235,19 @@
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1032,
-                  "end": 1038
+                  "start": 1086,
+                  "end": 1092
                 }
               },
               "loc": {
-                "start": 1032,
-                "end": 1038
+                "start": 1086,
+                "end": 1092
               }
             },
             "directives": [],
             "loc": {
-              "start": 1020,
-              "end": 1038
+              "start": 1074,
+              "end": 1092
             }
           }
         },
@@ -262,8 +262,8 @@
               "kind": "Name",
               "value": "sort_order",
               "loc": {
-                "start": 1040,
-                "end": 1050
+                "start": 1094,
+                "end": 1104
               }
             },
             "type": {
@@ -272,13 +272,13 @@
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1052,
-                  "end": 1058
+                  "start": 1106,
+                  "end": 1112
                 }
               },
               "loc": {
-                "start": 1052,
-                "end": 1058
+                "start": 1106,
+                "end": 1112
               }
             },
             "defaultValue": {
@@ -286,14 +286,14 @@
               "value": "ASC",
               "block": false,
               "loc": {
-                "start": 1061,
-                "end": 1066
+                "start": 1115,
+                "end": 1120
               }
             },
             "directives": [],
             "loc": {
-              "start": 1040,
-              "end": 1066
+              "start": 1094,
+              "end": 1120
             }
           }
         }
@@ -305,8 +305,8 @@
           "kind": "Name",
           "value": "Tweets",
           "loc": {
-            "start": 982,
-            "end": 988
+            "start": 1036,
+            "end": 1042
           }
         },
         "arguments": [
@@ -316,8 +316,8 @@
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 989,
-                "end": 994
+                "start": 1043,
+                "end": 1048
               }
             },
             "type": {
@@ -326,27 +326,27 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 996,
-                  "end": 999
+                  "start": 1050,
+                  "end": 1053
                 }
               },
               "loc": {
-                "start": 996,
-                "end": 999
+                "start": 1050,
+                "end": 1053
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "5",
               "loc": {
-                "start": 1002,
-                "end": 1003
+                "start": 1056,
+                "end": 1057
               }
             },
             "directives": [],
             "loc": {
-              "start": 989,
-              "end": 1003
+              "start": 1043,
+              "end": 1057
             }
           },
           {
@@ -355,8 +355,8 @@
               "kind": "Name",
               "value": "skip",
               "loc": {
-                "start": 1005,
-                "end": 1009
+                "start": 1059,
+                "end": 1063
               }
             },
             "type": {
@@ -365,27 +365,27 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1011,
-                  "end": 1014
+                  "start": 1065,
+                  "end": 1068
                 }
               },
               "loc": {
-                "start": 1011,
-                "end": 1014
+                "start": 1065,
+                "end": 1068
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "0",
               "loc": {
-                "start": 1017,
-                "end": 1018
+                "start": 1071,
+                "end": 1072
               }
             },
             "directives": [],
             "loc": {
-              "start": 1005,
-              "end": 1018
+              "start": 1059,
+              "end": 1072
             }
           },
           {
@@ -394,8 +394,8 @@
               "kind": "Name",
               "value": "sort_field",
               "loc": {
-                "start": 1020,
-                "end": 1030
+                "start": 1074,
+                "end": 1084
               }
             },
             "type": {
@@ -404,19 +404,19 @@
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1032,
-                  "end": 1038
+                  "start": 1086,
+                  "end": 1092
                 }
               },
               "loc": {
-                "start": 1032,
-                "end": 1038
+                "start": 1086,
+                "end": 1092
               }
             },
             "directives": [],
             "loc": {
-              "start": 1020,
-              "end": 1038
+              "start": 1074,
+              "end": 1092
             }
           },
           {
@@ -425,8 +425,8 @@
               "kind": "Name",
               "value": "sort_order",
               "loc": {
-                "start": 1040,
-                "end": 1050
+                "start": 1094,
+                "end": 1104
               }
             },
             "type": {
@@ -435,13 +435,13 @@
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1052,
-                  "end": 1058
+                  "start": 1106,
+                  "end": 1112
                 }
               },
               "loc": {
-                "start": 1052,
-                "end": 1058
+                "start": 1106,
+                "end": 1112
               }
             },
             "defaultValue": {
@@ -449,14 +449,14 @@
               "value": "ASC",
               "block": false,
               "loc": {
-                "start": 1061,
-                "end": 1066
+                "start": 1115,
+                "end": 1120
               }
             },
             "directives": [],
             "loc": {
-              "start": 1040,
-              "end": 1066
+              "start": 1094,
+              "end": 1120
             }
           }
         ],
@@ -470,29 +470,29 @@
                 "kind": "Name",
                 "value": "Tweet",
                 "loc": {
-                  "start": 1070,
-                  "end": 1075
+                  "start": 1124,
+                  "end": 1129
                 }
               },
               "loc": {
-                "start": 1070,
-                "end": 1075
+                "start": 1124,
+                "end": 1129
               }
             },
             "loc": {
-              "start": 1069,
-              "end": 1076
+              "start": 1123,
+              "end": 1130
             }
           },
           "loc": {
-            "start": 1069,
-            "end": 1077
+            "start": 1123,
+            "end": 1131
           }
         },
         "directives": [],
         "loc": {
-          "start": 982,
-          "end": 1077
+          "start": 1036,
+          "end": 1131
         }
       }
     },
@@ -508,8 +508,8 @@
           "kind": "Name",
           "value": "TweetsMeta",
           "loc": {
-            "start": 1082,
-            "end": 1092
+            "start": 1136,
+            "end": 1146
           }
         },
         "arguments": [],
@@ -519,13 +519,13 @@
             "kind": "Name",
             "value": "Meta",
             "loc": {
-              "start": 1094,
-              "end": 1098
+              "start": 1148,
+              "end": 1152
             }
           },
           "loc": {
-            "start": 1094,
-            "end": 1098
+            "start": 1148,
+            "end": 1152
           }
         },
         "directives": [
@@ -535,20 +535,20 @@
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1100,
-                "end": 1110
+                "start": 1154,
+                "end": 1164
               }
             },
             "arguments": [],
             "loc": {
-              "start": 1099,
-              "end": 1110
+              "start": 1153,
+              "end": 1164
             }
           }
         ],
         "loc": {
-          "start": 1082,
-          "end": 1110
+          "start": 1136,
+          "end": 1164
         }
       }
     },
@@ -566,8 +566,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1120,
-                "end": 1122
+                "start": 1174,
+                "end": 1176
               }
             },
             "type": {
@@ -578,24 +578,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1124,
-                    "end": 1126
+                    "start": 1178,
+                    "end": 1180
                   }
                 },
                 "loc": {
-                  "start": 1124,
-                  "end": 1126
+                  "start": 1178,
+                  "end": 1180
                 }
               },
               "loc": {
-                "start": 1124,
-                "end": 1127
+                "start": 1178,
+                "end": 1181
               }
             },
             "directives": [],
             "loc": {
-              "start": 1120,
-              "end": 1127
+              "start": 1174,
+              "end": 1181
             }
           }
         }
@@ -608,8 +608,8 @@
           "kind": "Name",
           "value": "User",
           "loc": {
-            "start": 1115,
-            "end": 1119
+            "start": 1169,
+            "end": 1173
           }
         },
         "arguments": [
@@ -619,8 +619,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1120,
-                "end": 1122
+                "start": 1174,
+                "end": 1176
               }
             },
             "type": {
@@ -631,24 +631,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1124,
-                    "end": 1126
+                    "start": 1178,
+                    "end": 1180
                   }
                 },
                 "loc": {
-                  "start": 1124,
-                  "end": 1126
+                  "start": 1178,
+                  "end": 1180
                 }
               },
               "loc": {
-                "start": 1124,
-                "end": 1127
+                "start": 1178,
+                "end": 1181
               }
             },
             "directives": [],
             "loc": {
-              "start": 1120,
-              "end": 1127
+              "start": 1174,
+              "end": 1181
             }
           }
         ],
@@ -658,13 +658,13 @@
             "kind": "Name",
             "value": "User",
             "loc": {
-              "start": 1130,
-              "end": 1134
+              "start": 1184,
+              "end": 1188
             }
           },
           "loc": {
-            "start": 1130,
-            "end": 1134
+            "start": 1184,
+            "end": 1188
           }
         },
         "directives": [
@@ -674,8 +674,8 @@
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1136,
-                "end": 1146
+                "start": 1190,
+                "end": 1200
               }
             },
             "arguments": [
@@ -685,8 +685,8 @@
                   "kind": "Name",
                   "value": "reason",
                   "loc": {
-                    "start": 1147,
-                    "end": 1153
+                    "start": 1201,
+                    "end": 1207
                   }
                 },
                 "value": {
@@ -694,25 +694,25 @@
                   "value": "Use `Users`.",
                   "block": false,
                   "loc": {
-                    "start": 1155,
-                    "end": 1169
+                    "start": 1209,
+                    "end": 1223
                   }
                 },
                 "loc": {
-                  "start": 1147,
-                  "end": 1169
+                  "start": 1201,
+                  "end": 1223
                 }
               }
             ],
             "loc": {
-              "start": 1135,
-              "end": 1170
+              "start": 1189,
+              "end": 1224
             }
           }
         ],
         "loc": {
-          "start": 1115,
-          "end": 1170
+          "start": 1169,
+          "end": 1224
         }
       }
     },
@@ -730,8 +730,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1181,
-                "end": 1183
+                "start": 1235,
+                "end": 1237
               }
             },
             "type": {
@@ -746,34 +746,34 @@
                       "kind": "Name",
                       "value": "ID",
                       "loc": {
-                        "start": 1186,
-                        "end": 1188
+                        "start": 1240,
+                        "end": 1242
                       }
                     },
                     "loc": {
-                      "start": 1186,
-                      "end": 1188
+                      "start": 1240,
+                      "end": 1242
                     }
                   },
                   "loc": {
-                    "start": 1186,
-                    "end": 1189
+                    "start": 1240,
+                    "end": 1243
                   }
                 },
                 "loc": {
-                  "start": 1185,
-                  "end": 1190
+                  "start": 1239,
+                  "end": 1244
                 }
               },
               "loc": {
-                "start": 1185,
-                "end": 1191
+                "start": 1239,
+                "end": 1245
               }
             },
             "directives": [],
             "loc": {
-              "start": 1181,
-              "end": 1191
+              "start": 1235,
+              "end": 1245
             }
           }
         }
@@ -785,8 +785,8 @@
           "kind": "Name",
           "value": "Users",
           "loc": {
-            "start": 1175,
-            "end": 1180
+            "start": 1229,
+            "end": 1234
           }
         },
         "arguments": [
@@ -796,8 +796,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1181,
-                "end": 1183
+                "start": 1235,
+                "end": 1237
               }
             },
             "type": {
@@ -812,34 +812,34 @@
                       "kind": "Name",
                       "value": "ID",
                       "loc": {
-                        "start": 1186,
-                        "end": 1188
+                        "start": 1240,
+                        "end": 1242
                       }
                     },
                     "loc": {
-                      "start": 1186,
-                      "end": 1188
+                      "start": 1240,
+                      "end": 1242
                     }
                   },
                   "loc": {
-                    "start": 1186,
-                    "end": 1189
+                    "start": 1240,
+                    "end": 1243
                   }
                 },
                 "loc": {
-                  "start": 1185,
-                  "end": 1190
+                  "start": 1239,
+                  "end": 1244
                 }
               },
               "loc": {
-                "start": 1185,
-                "end": 1191
+                "start": 1239,
+                "end": 1245
               }
             },
             "directives": [],
             "loc": {
-              "start": 1181,
-              "end": 1191
+              "start": 1235,
+              "end": 1245
             }
           }
         ],
@@ -853,29 +853,29 @@
                 "kind": "Name",
                 "value": "User",
                 "loc": {
-                  "start": 1195,
-                  "end": 1199
+                  "start": 1249,
+                  "end": 1253
                 }
               },
               "loc": {
-                "start": 1195,
-                "end": 1199
+                "start": 1249,
+                "end": 1253
               }
             },
             "loc": {
-              "start": 1194,
-              "end": 1200
+              "start": 1248,
+              "end": 1254
             }
           },
           "loc": {
-            "start": 1194,
-            "end": 1201
+            "start": 1248,
+            "end": 1255
           }
         },
         "directives": [],
         "loc": {
-          "start": 1175,
-          "end": 1201
+          "start": 1229,
+          "end": 1255
         }
       }
     },
@@ -891,8 +891,8 @@
           "kind": "Name",
           "value": "NotificationsMeta",
           "loc": {
-            "start": 1206,
-            "end": 1223
+            "start": 1260,
+            "end": 1277
           }
         },
         "arguments": [],
@@ -902,13 +902,13 @@
             "kind": "Name",
             "value": "Meta",
             "loc": {
-              "start": 1225,
-              "end": 1229
+              "start": 1279,
+              "end": 1283
             }
           },
           "loc": {
-            "start": 1225,
-            "end": 1229
+            "start": 1279,
+            "end": 1283
           }
         },
         "directives": [
@@ -918,20 +918,20 @@
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1231,
-                "end": 1241
+                "start": 1285,
+                "end": 1295
               }
             },
             "arguments": [],
             "loc": {
-              "start": 1230,
-              "end": 1241
+              "start": 1284,
+              "end": 1295
             }
           }
         ],
         "loc": {
-          "start": 1206,
-          "end": 1241
+          "start": 1260,
+          "end": 1295
         }
       }
     }
@@ -952,8 +952,8 @@
               "kind": "Name",
               "value": "input",
               "loc": {
-                "start": 1287,
-                "end": 1292
+                "start": 1341,
+                "end": 1346
               }
             },
             "type": {
@@ -962,13 +962,13 @@
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1294,
-                  "end": 1306
+                  "start": 1348,
+                  "end": 1360
                 }
               },
               "loc": {
-                "start": 1294,
-                "end": 1306
+                "start": 1348,
+                "end": 1360
               }
             },
             "directives": [
@@ -978,8 +978,8 @@
                   "kind": "Name",
                   "value": "deprecated",
                   "loc": {
-                    "start": 1308,
-                    "end": 1318
+                    "start": 1362,
+                    "end": 1372
                   }
                 },
                 "arguments": [
@@ -989,8 +989,8 @@
                       "kind": "Name",
                       "value": "reason",
                       "loc": {
-                        "start": 1319,
-                        "end": 1325
+                        "start": 1373,
+                        "end": 1379
                       }
                     },
                     "value": {
@@ -998,25 +998,25 @@
                       "value": "Use `content`.",
                       "block": false,
                       "loc": {
-                        "start": 1327,
-                        "end": 1343
+                        "start": 1381,
+                        "end": 1397
                       }
                     },
                     "loc": {
-                      "start": 1319,
-                      "end": 1343
+                      "start": 1373,
+                      "end": 1397
                     }
                   }
                 ],
                 "loc": {
-                  "start": 1307,
-                  "end": 1344
+                  "start": 1361,
+                  "end": 1398
                 }
               }
             ],
             "loc": {
-              "start": 1287,
-              "end": 1344
+              "start": 1341,
+              "end": 1398
             }
           }
         },
@@ -1030,8 +1030,8 @@
               "kind": "Name",
               "value": "content",
               "loc": {
-                "start": 1353,
-                "end": 1360
+                "start": 1407,
+                "end": 1414
               }
             },
             "type": {
@@ -1040,19 +1040,19 @@
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1362,
-                  "end": 1374
+                  "start": 1416,
+                  "end": 1428
                 }
               },
               "loc": {
-                "start": 1362,
-                "end": 1374
+                "start": 1416,
+                "end": 1428
               }
             },
             "directives": [],
             "loc": {
-              "start": 1353,
-              "end": 1374
+              "start": 1407,
+              "end": 1428
             }
           }
         }
@@ -1064,8 +1064,8 @@
           "kind": "Name",
           "value": "createTweet",
           "loc": {
-            "start": 1265,
-            "end": 1276
+            "start": 1319,
+            "end": 1330
           }
         },
         "arguments": [
@@ -1075,8 +1075,8 @@
               "kind": "Name",
               "value": "input",
               "loc": {
-                "start": 1287,
-                "end": 1292
+                "start": 1341,
+                "end": 1346
               }
             },
             "type": {
@@ -1085,13 +1085,13 @@
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1294,
-                  "end": 1306
+                  "start": 1348,
+                  "end": 1360
                 }
               },
               "loc": {
-                "start": 1294,
-                "end": 1306
+                "start": 1348,
+                "end": 1360
               }
             },
             "directives": [
@@ -1101,8 +1101,8 @@
                   "kind": "Name",
                   "value": "deprecated",
                   "loc": {
-                    "start": 1308,
-                    "end": 1318
+                    "start": 1362,
+                    "end": 1372
                   }
                 },
                 "arguments": [
@@ -1112,8 +1112,8 @@
                       "kind": "Name",
                       "value": "reason",
                       "loc": {
-                        "start": 1319,
-                        "end": 1325
+                        "start": 1373,
+                        "end": 1379
                       }
                     },
                     "value": {
@@ -1121,25 +1121,25 @@
                       "value": "Use `content`.",
                       "block": false,
                       "loc": {
-                        "start": 1327,
-                        "end": 1343
+                        "start": 1381,
+                        "end": 1397
                       }
                     },
                     "loc": {
-                      "start": 1319,
-                      "end": 1343
+                      "start": 1373,
+                      "end": 1397
                     }
                   }
                 ],
                 "loc": {
-                  "start": 1307,
-                  "end": 1344
+                  "start": 1361,
+                  "end": 1398
                 }
               }
             ],
             "loc": {
-              "start": 1287,
-              "end": 1344
+              "start": 1341,
+              "end": 1398
             }
           },
           {
@@ -1148,8 +1148,8 @@
               "kind": "Name",
               "value": "content",
               "loc": {
-                "start": 1353,
-                "end": 1360
+                "start": 1407,
+                "end": 1414
               }
             },
             "type": {
@@ -1158,19 +1158,19 @@
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1362,
-                  "end": 1374
+                  "start": 1416,
+                  "end": 1428
                 }
               },
               "loc": {
-                "start": 1362,
-                "end": 1374
+                "start": 1416,
+                "end": 1428
               }
             },
             "directives": [],
             "loc": {
-              "start": 1353,
-              "end": 1374
+              "start": 1407,
+              "end": 1428
             }
           }
         ],
@@ -1180,19 +1180,19 @@
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 1382,
-              "end": 1387
+              "start": 1436,
+              "end": 1441
             }
           },
           "loc": {
-            "start": 1382,
-            "end": 1387
+            "start": 1436,
+            "end": 1441
           }
         },
         "directives": [],
         "loc": {
-          "start": 1265,
-          "end": 1387
+          "start": 1319,
+          "end": 1441
         }
       }
     },
@@ -1210,8 +1210,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1404,
-                "end": 1406
+                "start": 1458,
+                "end": 1460
               }
             },
             "type": {
@@ -1222,24 +1222,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1408,
-                    "end": 1410
+                    "start": 1462,
+                    "end": 1464
                   }
                 },
                 "loc": {
-                  "start": 1408,
-                  "end": 1410
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1408,
-                "end": 1411
+                "start": 1462,
+                "end": 1465
               }
             },
             "directives": [],
             "loc": {
-              "start": 1404,
-              "end": 1411
+              "start": 1458,
+              "end": 1465
             }
           }
         }
@@ -1251,8 +1251,8 @@
           "kind": "Name",
           "value": "deleteTweet",
           "loc": {
-            "start": 1392,
-            "end": 1403
+            "start": 1446,
+            "end": 1457
           }
         },
         "arguments": [
@@ -1262,8 +1262,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1404,
-                "end": 1406
+                "start": 1458,
+                "end": 1460
               }
             },
             "type": {
@@ -1274,24 +1274,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1408,
-                    "end": 1410
+                    "start": 1462,
+                    "end": 1464
                   }
                 },
                 "loc": {
-                  "start": 1408,
-                  "end": 1410
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1408,
-                "end": 1411
+                "start": 1462,
+                "end": 1465
               }
             },
             "directives": [],
             "loc": {
-              "start": 1404,
-              "end": 1411
+              "start": 1458,
+              "end": 1465
             }
           }
         ],
@@ -1301,19 +1301,19 @@
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 1414,
-              "end": 1419
+              "start": 1468,
+              "end": 1473
             }
           },
           "loc": {
-            "start": 1414,
-            "end": 1419
+            "start": 1468,
+            "end": 1473
           }
         },
         "directives": [],
         "loc": {
-          "start": 1392,
-          "end": 1419
+          "start": 1446,
+          "end": 1473
         }
       }
     },
@@ -1331,8 +1331,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1438,
-                "end": 1440
+                "start": 1492,
+                "end": 1494
               }
             },
             "type": {
@@ -1343,24 +1343,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1442,
-                    "end": 1444
+                    "start": 1496,
+                    "end": 1498
                   }
                 },
                 "loc": {
-                  "start": 1442,
-                  "end": 1444
+                  "start": 1496,
+                  "end": 1498
                 }
               },
               "loc": {
-                "start": 1442,
-                "end": 1445
+                "start": 1496,
+                "end": 1499
               }
             },
             "directives": [],
             "loc": {
-              "start": 1438,
-              "end": 1445
+              "start": 1492,
+              "end": 1499
             }
           }
         }
@@ -1372,8 +1372,8 @@
           "kind": "Name",
           "value": "markTweetRead",
           "loc": {
-            "start": 1424,
-            "end": 1437
+            "start": 1478,
+            "end": 1491
           }
         },
         "arguments": [
@@ -1383,8 +1383,8 @@
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1438,
-                "end": 1440
+                "start": 1492,
+                "end": 1494
               }
             },
             "type": {
@@ -1395,24 +1395,24 @@
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1442,
-                    "end": 1444
+                    "start": 1496,
+                    "end": 1498
                   }
                 },
                 "loc": {
-                  "start": 1442,
-                  "end": 1444
+                  "start": 1496,
+                  "end": 1498
                 }
               },
               "loc": {
-                "start": 1442,
-                "end": 1445
+                "start": 1496,
+                "end": 1499
               }
             },
             "directives": [],
             "loc": {
-              "start": 1438,
-              "end": 1445
+              "start": 1492,
+              "end": 1499
             }
           }
         ],
@@ -1422,19 +1422,19 @@
             "kind": "Name",
             "value": "Boolean",
             "loc": {
-              "start": 1448,
-              "end": 1455
+              "start": 1502,
+              "end": 1509
             }
           },
           "loc": {
-            "start": 1448,
-            "end": 1455
+            "start": 1502,
+            "end": 1509
           }
         },
         "directives": [],
         "loc": {
-          "start": 1424,
-          "end": 1455
+          "start": 1478,
+          "end": 1509
         }
       }
     }
@@ -1454,8 +1454,8 @@
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1589,
-                "end": 1594
+                "start": 1643,
+                "end": 1648
               }
             },
             "type": {
@@ -1464,19 +1464,19 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1596,
-                  "end": 1599
+                  "start": 1650,
+                  "end": 1653
                 }
               },
               "loc": {
-                "start": 1596,
-                "end": 1599
+                "start": 1650,
+                "end": 1653
               }
             },
             "directives": [],
             "loc": {
-              "start": 1589,
-              "end": 1599
+              "start": 1643,
+              "end": 1653
             }
           }
         }
@@ -1488,8 +1488,8 @@
           "kind": "Name",
           "value": "Notifications",
           "loc": {
-            "start": 1575,
-            "end": 1588
+            "start": 1629,
+            "end": 1642
           }
         },
         "arguments": [
@@ -1499,8 +1499,8 @@
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1589,
-                "end": 1594
+                "start": 1643,
+                "end": 1648
               }
             },
             "type": {
@@ -1509,19 +1509,19 @@
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1596,
-                  "end": 1599
+                  "start": 1650,
+                  "end": 1653
                 }
               },
               "loc": {
-                "start": 1596,
-                "end": 1599
+                "start": 1650,
+                "end": 1653
               }
             },
             "directives": [],
             "loc": {
-              "start": 1589,
-              "end": 1599
+              "start": 1643,
+              "end": 1653
             }
           }
         ],
@@ -1535,29 +1535,29 @@
                 "kind": "Name",
                 "value": "Notification",
                 "loc": {
-                  "start": 1603,
-                  "end": 1615
+                  "start": 1657,
+                  "end": 1669
                 }
               },
               "loc": {
-                "start": 1603,
-                "end": 1615
+                "start": 1657,
+                "end": 1669
               }
             },
             "loc": {
-              "start": 1602,
-              "end": 1616
+              "start": 1656,
+              "end": 1670
             }
           },
           "loc": {
-            "start": 1602,
-            "end": 1617
+            "start": 1656,
+            "end": 1671
           }
         },
         "directives": [],
         "loc": {
-          "start": 1575,
-          "end": 1617
+          "start": 1629,
+          "end": 1671
         }
       }
     }
@@ -1580,7 +1580,9 @@
   "interfaces": {
     "Node": "Node"
   },
-  "enums": {},
+  "enums": {
+    "MediaType": "MediaType"
+  },
   "inputs": {
     "TweetContent": "TweetContent"
   },

@@ -22,17 +22,47 @@ const {
   isNonNullType,
   isLeafType,
   printSchema,
+  GraphQLSchema,
+  OperationTypeNode,
 } = require("graphql");
-const { loadSchema } = require("@graphql-tools/load");
+const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
 const { hasMethod, hasProperty } = require("../utils/scalars/object");
 
-const SCHEMA_EXCLUDE_LIST_PATTERN =
-  /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
+const OperationTypeNodes = [
+  OperationTypeNode.QUERY,
+  OperationTypeNode.MUTATION,
+  OperationTypeNode.SUBSCRIPTION,
+];
 
 const DefaultLoaders = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
 };
+
+async function loadSchema(schemaLocation, options) {
+  const rootTypes = hasProperty(options, "rootTypes")
+    ? options.rootTypes
+    : undefined;
+
+  if (hasProperty(options, "rootTypes")) {
+    delete options["rootTypes"];
+  }
+
+  const schema = await asyncLoadSchema(schemaLocation, options);
+
+  if (typeof rootTypes === "undefined") {
+    return schema;
+  }
+
+  const config = {
+    ...schema.toConfig(),
+    query: schema.getType(rootTypes.query ?? "Query"),
+    mutation: schema.getType(rootTypes.mutation ?? "Mutation"),
+    subscription: schema.getType(rootTypes.subscription ?? "Subscription"),
+  };
+
+  return new GraphQLSchema(config);
+}
 
 function getDocumentLoaders(extraLoaders = {}) {
   const loadersList = { ...DefaultLoaders, ...extraLoaders };
@@ -107,15 +137,30 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getFilteredTypeMap(
-  typeMap,
-  excludeList = SCHEMA_EXCLUDE_LIST_PATTERN,
-) {
-  if (typeof typeMap == "undefined" || typeMap == null) {
+function getTypeFromSchema(schema, type) {
+  if (typeof schema == "undefined" || schema == null) {
     return undefined;
   }
+
+  const operationKinds = [];
+  OperationTypeNodes.forEach((operationTypeNode) => {
+    const operationType = schema.getRootType(operationTypeNode);
+    if (typeof operationType !== "undefined") {
+      operationKinds.push(operationType.name);
+    }
+  });
+
+  const filterOperationFragmentRegExp =
+    operationKinds.length > 0 ? [...operationKinds, ""].join("$|") : "";
+  const excludeListRegExp = new RegExp(
+    `^(?!${filterOperationFragmentRegExp}__.+$).*$`,
+  );
+
+  const typeMap = schema.getTypeMap();
+
   return Object.keys(typeMap)
-    .filter((key) => excludeList.test(key))
+    .filter((key) => excludeListRegExp.test(key))
+    .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -151,17 +196,7 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getTypeFromTypeMap(typeMap, type) {
-  if (typeof typeMap == "undefined" || typeMap == null) {
-    return undefined;
-  }
-  return Object.keys(typeMap)
-    .filter((key) => typeMap[key] instanceof type)
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
-}
-
 function getSchemaMap(schema) {
-  const typeMap = getFilteredTypeMap(schema.getTypeMap());
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
@@ -173,12 +208,12 @@ function getSchemaMap(schema) {
       schema.getSubscriptionType && schema.getSubscriptionType(),
     ),
     directives: schema.getDirectives(),
-    objects: getTypeFromTypeMap(typeMap, GraphQLObjectType),
-    unions: getTypeFromTypeMap(typeMap, GraphQLUnionType),
-    interfaces: getTypeFromTypeMap(typeMap, GraphQLInterfaceType),
-    enums: getTypeFromTypeMap(typeMap, GraphQLEnumType),
-    inputs: getTypeFromTypeMap(typeMap, GraphQLInputObjectType),
-    scalars: getTypeFromTypeMap(typeMap, GraphQLScalarType),
+    objects: getTypeFromSchema(schema, GraphQLObjectType),
+    unions: getTypeFromSchema(schema, GraphQLUnionType),
+    interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
+    enums: getTypeFromSchema(schema, GraphQLEnumType),
+    inputs: getTypeFromSchema(schema, GraphQLInputObjectType),
+    scalars: getTypeFromSchema(schema, GraphQLScalarType),
   };
 }
 
@@ -327,10 +362,8 @@ module.exports = {
   isLeafType,
   isListType,
   printSchema,
-  getFilteredTypeMap,
   getIntrospectionFieldsList,
-  getTypeFromTypeMap,
-  SCHEMA_EXCLUDE_LIST_PATTERN,
+  getTypeFromSchema,
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfUnion,
