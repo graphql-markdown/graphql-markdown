@@ -130,11 +130,12 @@ The quickest way to understand the code structure is to look at the folder struc
     * `printer.js` is the class transforming GraphQL nodes into Markdown.
     * `renderer.js` is responsible for generating Markdown file structure, and other Docusaurus files.
     * `diff.js` contains methods for identifying schema changes.
+    * `config.js` manages the config settings (CLI flags and JS).
   * `utils` contains some utilities for manipulating basic structures such as `object`, `array`, `string` and `url` , and some helpers for `diff` and `prettier` .
 * `tests` folder contains all tests needed (see [tests](#tests) section).
 * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
 * `scripts` folder contains a few scripts used by Github Actions and Docker.
-* `docs` folder contains Docusaurus generated documentation - **DO NOT MODIFY MANUALLY**.
+* `.docs` folder contains custom CSS for the online documentation.
 
 > The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
 
@@ -170,13 +171,13 @@ There are 3 types of tests used in this project, all based on Jest:
 
 ### Build documentation
 
+> The documentation is automatically generated and published when a new release is created.
+
 You can build the documentation locally with the command:
 
 ```shell
 earthly +build-docs
 ```
-
-This will update documentation into `docs` folder. 
 
 You can also create a local Docker image `graphql-markdown:docs` for tests:
 
