@@ -185,5 +185,3 @@ You can also create a local Docker image `graphql-markdown:docs` for tests:
 earthly +build-image
 docker run --rm -it -p 8080:8080 graphql-markdown:docs
 ```
-
-> **Remember not to push any commit with files from `docs` folder.**
