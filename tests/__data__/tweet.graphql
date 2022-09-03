@@ -4,9 +4,15 @@ interface Node {
   id: ID!
 }
 
+enum MediaType {
+  IMAGE
+  MOVIE
+}
+
 type Media {
   url: Url!
   sri: SRI!
+  type: MediaType
 }
 
 type Tweet implements Node {

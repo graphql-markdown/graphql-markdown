@@ -1,0 +1,445 @@
+{
+  "queries": {
+    "allSubscription": {
+      "name": "allSubscription",
+      "type": "[Subscription]",
+      "args": [
+        {
+          "name": "after",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "after",
+              "loc": {
+                "start": 86,
+                "end": 91
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 93,
+                  "end": 99
+                }
+              },
+              "loc": {
+                "start": 93,
+                "end": 99
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 86,
+              "end": 99
+            }
+          }
+        },
+        {
+          "name": "first",
+          "type": "Int",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "first",
+              "loc": {
+                "start": 101,
+                "end": 106
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 108,
+                  "end": 111
+                }
+              },
+              "loc": {
+                "start": 108,
+                "end": 111
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 101,
+              "end": 111
+            }
+          }
+        },
+        {
+          "name": "before",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "before",
+              "loc": {
+                "start": 113,
+                "end": 119
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 121,
+                  "end": 127
+                }
+              },
+              "loc": {
+                "start": 121,
+                "end": 127
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 113,
+              "end": 127
+            }
+          }
+        },
+        {
+          "name": "last",
+          "type": "Int",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "last",
+              "loc": {
+                "start": 129,
+                "end": 133
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 135,
+                  "end": 138
+                }
+              },
+              "loc": {
+                "start": 135,
+                "end": 138
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 129,
+              "end": 138
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "allSubscription",
+          "loc": {
+            "start": 70,
+            "end": 85
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "after",
+              "loc": {
+                "start": 86,
+                "end": 91
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 93,
+                  "end": 99
+                }
+              },
+              "loc": {
+                "start": 93,
+                "end": 99
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 86,
+              "end": 99
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "first",
+              "loc": {
+                "start": 101,
+                "end": 106
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 108,
+                  "end": 111
+                }
+              },
+              "loc": {
+                "start": 108,
+                "end": 111
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 101,
+              "end": 111
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "before",
+              "loc": {
+                "start": 113,
+                "end": 119
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 121,
+                  "end": 127
+                }
+              },
+              "loc": {
+                "start": 121,
+                "end": 127
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 113,
+              "end": 127
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "last",
+              "loc": {
+                "start": 129,
+                "end": 133
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 135,
+                  "end": 138
+                }
+              },
+              "loc": {
+                "start": 135,
+                "end": 138
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 129,
+              "end": 138
+            }
+          }
+        ],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Subscription",
+              "loc": {
+                "start": 142,
+                "end": 154
+              }
+            },
+            "loc": {
+              "start": 142,
+              "end": 154
+            }
+          },
+          "loc": {
+            "start": 141,
+            "end": 155
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 70,
+          "end": 155
+        }
+      }
+    },
+    "subscription": {
+      "name": "subscription",
+      "type": "Subscription",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 171,
+                "end": 173
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 175,
+                  "end": 177
+                }
+              },
+              "loc": {
+                "start": 175,
+                "end": 177
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 171,
+              "end": 177
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "subscription",
+          "loc": {
+            "start": 158,
+            "end": 170
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 171,
+                "end": 173
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 175,
+                  "end": 177
+                }
+              },
+              "loc": {
+                "start": 175,
+                "end": 177
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 171,
+              "end": 177
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Subscription",
+            "loc": {
+              "start": 180,
+              "end": 192
+            }
+          },
+          "loc": {
+            "start": 180,
+            "end": 192
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 158,
+          "end": 192
+        }
+      }
+    }
+  },
+  "directives": [
+    "@include",
+    "@skip",
+    "@deprecated",
+    "@specifiedBy"
+  ],
+  "objects": {
+    "Subscription": "Subscription"
+  },
+  "unions": {},
+  "interfaces": {},
+  "enums": {},
+  "inputs": {},
+  "scalars": {
+    "String": "String",
+    "ID": "ID",
+    "Int": "Int",
+    "Boolean": "Boolean"
+  }
+}
