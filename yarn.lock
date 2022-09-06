@@ -973,23 +973,23 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stryker-mutator/api@6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/api/-/api-6.2.0.tgz#5f7430ad1cb7dc4634fdfda3fb72c13b7daaa169"
-  integrity sha512-+SAexFKQx5bc6k0IMv5wSZi0T5FCYfYtFLyz/upCFUet4IKkf6dAwlyw1kvKtP7fi40CZZ0Lk4rkz9svpcK+Jg==
+"@stryker-mutator/api@6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/api/-/api-6.2.2.tgz#683cfab1638b80d33cac5573c7ab24ff7cbfd89d"
+  integrity sha512-ZMR3ubUh059Xb769ryE1LkwZR7PWbt5TITYYkHZd7pG5yLVzPMDP0d29CQBJW2H7YjlopgImVL8sw8U/RgDcGg==
   dependencies:
     mutation-testing-metrics "1.7.10"
     mutation-testing-report-schema "1.7.10"
     tslib "~2.4.0"
 
-"@stryker-mutator/core@6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-6.2.0.tgz#56012236d8139618e6da7549063e901295ac9c76"
-  integrity sha512-YtEYYfEYmizYc/O6Si5qhG41TuWZBHxYGDIjswCpkIqonSr60SYnyicwcWxUFuMxPWCaL9VrvkQfsSvv3iqepw==
+"@stryker-mutator/core@6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/core/-/core-6.2.2.tgz#5aeeef24512d413c174f98a2bceb832efd2bbc44"
+  integrity sha512-1JS8UIMrwWeHqp508HXwRNmsAkHCtGskCwFWLLJSarVH9lyB8gyhTbhkaRHJGiEuaSTsxV1LZ5VzLK6OLgPtxw==
   dependencies:
-    "@stryker-mutator/api" "6.2.0"
-    "@stryker-mutator/instrumenter" "6.2.0"
-    "@stryker-mutator/util" "6.2.0"
+    "@stryker-mutator/api" "6.2.2"
+    "@stryker-mutator/instrumenter" "6.2.2"
+    "@stryker-mutator/util" "6.2.2"
     ajv "~8.11.0"
     chalk "~5.0.0"
     commander "~9.4.0"
@@ -1018,10 +1018,10 @@
     typed-inject "~3.0.0"
     typed-rest-client "~1.8.0"
 
-"@stryker-mutator/instrumenter@6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/instrumenter/-/instrumenter-6.2.0.tgz#c7e9cacb80bbfd0d3235f8a728b183ee3cb618b9"
-  integrity sha512-tHGT66xuhgH5yD82PCEK5SPgkINhnmz8TU17F+DrhdfY1ayVdzj/aD/PwWADByzt7JzW5vJTCCIOmjgUmVLp0g==
+"@stryker-mutator/instrumenter@6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/instrumenter/-/instrumenter-6.2.2.tgz#c7709ff03e30a40df9a7459c2f36c83103a59e1b"
+  integrity sha512-FZIvyL3uiIaLvOSKXe6jnq0FMo6lWy4NoGyYt5K/wmDxN2QuSaChGu/tVe4Z+Ui+4O3/DiGqWY5FWKGv1iHEPA==
   dependencies:
     "@babel/core" "~7.19.0"
     "@babel/generator" "~7.19.0"
@@ -1030,25 +1030,25 @@
     "@babel/plugin-proposal-decorators" "~7.19.0"
     "@babel/plugin-proposal-private-methods" "~7.18.0"
     "@babel/preset-typescript" "~7.18.0"
-    "@stryker-mutator/api" "6.2.0"
-    "@stryker-mutator/util" "6.2.0"
+    "@stryker-mutator/api" "6.2.2"
+    "@stryker-mutator/util" "6.2.2"
     angular-html-parser "~1.8.0"
     weapon-regex "~1.0.2"
 
-"@stryker-mutator/jest-runner@6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/jest-runner/-/jest-runner-6.2.0.tgz#240c4fd4602c6f479ef2eefb797b3d9575d98ff7"
-  integrity sha512-ZCzJTzP1x1+BWtQNUtBAeRG1Q9mw18gFOZxEYnXaUhsTapCZxoYaBFjgkz5m4roNECgxXFLh+46Q8nrobt+rnw==
+"@stryker-mutator/jest-runner@6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/jest-runner/-/jest-runner-6.2.2.tgz#758b69575d4087c722011ff32cf679a4763588c6"
+  integrity sha512-xWuzuBUIB2MQVJBCdK5K8/SRV4fu2+wAd9FoZY6AIkKCVv0Od0eYZ6MB78V6jSG9R2/KF9I+zzrQ94PEnp5zaQ==
   dependencies:
-    "@stryker-mutator/api" "6.2.0"
-    "@stryker-mutator/util" "6.2.0"
+    "@stryker-mutator/api" "6.2.2"
+    "@stryker-mutator/util" "6.2.2"
     semver "~7.3.7"
     tslib "~2.4.0"
 
-"@stryker-mutator/util@6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@stryker-mutator/util/-/util-6.2.0.tgz#4bbc7356e155b0ec79c08f943e98bf8616dab87b"
-  integrity sha512-liUx27oGQhnCjJwjkHZ+sNxpOzoWxci0+6UBf4nj5IRKA1of+Ed3S/JzqvGdG7rxsSfC4lnqRfsZdh/w6FUspQ==
+"@stryker-mutator/util@6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/util/-/util-6.2.2.tgz#d9e8564d2cc922a5c8fc32f4e454bf26c154a0e9"
+  integrity sha512-BjE9wP8V8Vh4VMr/pReNLlMNxSzl25OHJBDK1Y4WN/b+HY9gVy7PiX2HEYiXg7LniHIZ54vX5VLuLzJOfb6pGQ==
   dependencies:
     lodash.flatmap "~4.5.0"
 
