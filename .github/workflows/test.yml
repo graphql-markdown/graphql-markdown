@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install modules
-      run: yarn
+      run: npm ci
 
     - name: Run Unit Tests
       run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
@@ -37,7 +37,7 @@ jobs:
       run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
 
     - name: Check Code Coverage
-      run: yarn test:coverage
+      run: npm run test:coverage
 
     - name: Coveralls
       continue-on-error: true

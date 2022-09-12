@@ -61,9 +61,11 @@
     "test:integration": "jest --projects tests/integration",
     "test:smoke": "earthly +smoke-test",
     "test:coverage": "sh ./scripts/coverage.sh",
+    "test:mutation": "stryker run --reporters progress,html",
     "prepare": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "stryker": "stryker"
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.3.0",
