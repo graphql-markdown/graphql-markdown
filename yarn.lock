@@ -587,22 +587,22 @@
     tslib "^2.0.0"
 
 "@graphql-tools/graphql-file-loader@^7.5.2":
-  version "7.5.4"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.5.4.tgz#6157747af28a4f9b013c6d4ccaf262d917e69b16"
-  integrity sha512-Lw9kCMvwhMUYggrIRcXpGoGmP/NEil61fqvr8iGeHAAlg6qWpY41pF0sLZ4fDbJ10bPzUuqfVQxgCaOkx22/aQ==
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/graphql-file-loader/-/graphql-file-loader-7.5.5.tgz#d8afb391282e3dc33005df04bdec8488e4ab101d"
+  integrity sha512-OL+7qO1S66TpMK7OGz8Ag2WL08HlxKxrObVSDlxzWbSubWuXM5v959XscYAKRf6daYcVpkfNvO37QjflL9mjhg==
   dependencies:
-    "@graphql-tools/import" "6.7.5"
-    "@graphql-tools/utils" "8.11.0"
+    "@graphql-tools/import" "6.7.6"
+    "@graphql-tools/utils" "8.12.0"
     globby "^11.0.3"
     tslib "^2.4.0"
     unixify "^1.0.0"
 
-"@graphql-tools/import@6.7.5":
-  version "6.7.5"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.7.5.tgz#c087c67b8bb0e94df798ac4112d16a13055acfb2"
-  integrity sha512-xEIsWMoq1Ywi9H4rbeag0kYem9D+1K6GNB5EP7JZp8fKS7U3DYt+xCMy7/eSCf9TNPxe3q9FVMPWSVqf0Pzk3g==
+"@graphql-tools/import@6.7.6":
+  version "6.7.6"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/import/-/import-6.7.6.tgz#9bc0bb304a6fcc43aa2c9177631670b1fdfb2115"
+  integrity sha512-WtUyiO2qCaK/H4u81zAw/NbBvCOzwKl4N+Vl+FqrFCzYobscwL6x6roePyoXM1O3+JJIIn3CETv4kg4kwxaBVw==
   dependencies:
-    "@graphql-tools/utils" "8.11.0"
+    "@graphql-tools/utils" "8.12.0"
     resolve-from "5.0.0"
     tslib "^2.4.0"
 
@@ -638,6 +638,13 @@
   version "8.11.0"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.11.0.tgz#764ebf9b371b5f5cb66228267c68bea996cc8c03"
   integrity sha512-4lkc+F/hsQTjNnnfFh7lzrhRmRm1y2ARfKA6RD5FbTJO58JadirNbkY5u4lsVEPBZHiivHqAiQ/pIBhGMyEMcQ==
+  dependencies:
+    tslib "^2.4.0"
+
+"@graphql-tools/utils@8.12.0":
+  version "8.12.0"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.12.0.tgz#243bc4f5fc2edbc9e8fd1038189e57d837cbe31f"
+  integrity sha512-TeO+MJWGXjUTS52qfK4R8HiPoF/R7X+qmgtOYd8DTH0l6b+5Y/tlg5aGeUJefqImRq7nvi93Ms40k/Uz4D5CWw==
   dependencies:
     tslib "^2.4.0"
 
