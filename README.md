@@ -33,12 +33,6 @@ Use the [CodeSandbox template](https://codesandbox.io/s/github/graphql-markdown/
 npm install @edno/docusaurus2-graphql-doc-generator graphql
 ```
 
-### Yarn
-
-```shell
-yarn add @edno/docusaurus2-graphql-doc-generator graphql
-```
-
 Add `@edno/docusaurus2-graphql-doc-generator` to your site's `docusaurus.config.js` plugins option:
 
 ```js
@@ -284,7 +278,7 @@ Additional GraphQL document loaders can be used (see [full list](https://github.
 For example, if you want to load a schema from a URL, you first need to install the package `@graphql-tools/url-loader` into your Docusaurus project:
 
 ```shell
-yarn add @graphql-tools/url-loader
+npm install @graphql-tools/url-loader
 ```
 
 Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:

@@ -16,7 +16,7 @@ module.exports = {
     enableFindRelatedTests: true,
   },
   mutate: ["src/**/*.js", "!src/**/index.js", "!src/**/prettier.js"],
-  packageManager: "yarn",
+  packageManager: "npm",
   reporters: ["html"],
   testRunner: "jest",
   testRunnerNodeArgs: ["--experimental-vm-modules"],

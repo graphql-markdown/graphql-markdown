@@ -48,7 +48,6 @@ If you aim at a code contribution, you will need the following tools:
 
 * [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 * [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
-* [yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 * [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)*
 * [earthly](https://earthly.dev/get-earthly)
 
@@ -79,7 +78,7 @@ If you aim at a code contribution, you will need to perform few additional steps
 * from the local folder, install repository packages
 
   ```shell
-  yarn install
+  npm install
   ```
 
 * from the local folder, check that everything is working
@@ -104,12 +103,12 @@ The code base is full Javascript using NodeJS, and Jest for tests. The codebase 
 
 When making your changes, remember to check your code by running:
 
-* `yarn lint` checks that the code respects Javascript standards.
-* `yarn test` runs the test suites.
+* `npm run lint` checks that the code respects Javascript standards.
+* `npm test` runs the test suites.
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `yarn lint` and `yarn test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `npm run lint` and `npm test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
@@ -179,7 +178,7 @@ You can build the documentation locally with the command:
 earthly +build-docs
 ```
 
-You can also create a local Docker image `graphql-markdown:docs` for tests:
+You can also create a local container image `graphql-markdown:docs` for tests:
 
 ```shell
 earthly +build-image

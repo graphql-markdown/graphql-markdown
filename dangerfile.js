@@ -26,18 +26,18 @@ const getDiffDependencies = (dependencies) => {
   return stringDiff;
 };
 
-// rule-package-lock-detected
-if (packageLock.modified || packageLock.created) {
-  fail(`\`${PACKAGE_LOCK}\` detected, you must used 'yarn' for dependencies.`);
+// rule-yarn-lock-detected
+if (yarnLock.modified || yarnLock.created) {
+  fail(`\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`);
 }
 
-// rule-yarn-lock-deleted
-if (yarnLock.deleted) {
-  fail(`This PR deleted the \`${YARN_LOCK}\` file.`);
+// rule-npm-lock-deleted
+if (packageLock.deleted) {
+  fail(`This PR deleted the \`${PACKAGE_LOCK}\` file.`);
 }
 
-// rule-yarn-lock-not-updated
-if (packageJson.modified && !(yarnLock.modified || yarnLock.created)) {
+// rule-npm-lock-not-updated
+if (yarnLock.modified && !(packageLock.modified || packageLock.created)) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
     if (packageDiff.dependencies) {
