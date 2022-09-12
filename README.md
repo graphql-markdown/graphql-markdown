@@ -27,8 +27,6 @@ Use the [CodeSandbox template](https://codesandbox.io/s/github/graphql-markdown/
 
 **`graphql` package is a peer-dependency, and it should be installed separately.**
 
-### npm
-
 ```shell
 npm install @edno/docusaurus2-graphql-doc-generator graphql
 ```
