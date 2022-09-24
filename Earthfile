@@ -90,6 +90,7 @@ smoke-run:
   ARG OPTIONS=
   FROM +smoke-init
   WORKDIR /docusaurus2
+  RUN mkdir docs
   RUN npx docusaurus graphql-to-doc $OPTIONS
   RUN npm run build
   RUN npm run clear
