@@ -9,14 +9,14 @@ pagination_prev: null
 sidebar_class_name: navbar__toggle
 ---
 
-This is an example of documentation grouping with GraphQL directive using the `groupByDirective` option (see [documentation](/#about-groupbydirective)):
+This is an example of documentation grouping with GraphQL directive using the `groupByDirective` option (see [documentation](/docs/advanced/group-by-directive)):
 
 ```json
 {
   "schema": "data/schema_with_grouping.graphql",
   "rootPath": "./docs",
-  "baseURL": "group-by",
-  "linkRoot": "/",
+  "baseURL": ".",
+  "linkRoot": "/group-by",
   "homepage": "data/groups.md",
   "groupByDirective": {
     "directive": "doc",

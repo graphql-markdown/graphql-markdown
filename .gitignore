@@ -2,7 +2,7 @@ node_modules
 
 # generated files
 output
-docs
+build
 .schema
 .tmp-earthly-out
 *.log

@@ -4,6 +4,8 @@ docs/
 output/
 reports/
 coverage/
+website/
+build/
 
 .github
 .husky

@@ -6,6 +6,6 @@ dist
 .nyc_output
 __expect__
 __snapshots__
-docs
+build
 README.md
 output
