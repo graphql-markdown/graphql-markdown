@@ -5,6 +5,7 @@
     "autobuild",
     "automerge",
     "Battlestation",
+    "cmfcmf",
     "codeql",
     "codesee",
     "coverallsapp",
@@ -33,6 +34,9 @@
     "MGLT",
     "mimo84",
     "mockfs",
+    "nocheck",
+    "noopener",
+    "noreferrer",
     "picocolors",
     "pinst",
     "postpack",
@@ -43,6 +47,7 @@
     "Starships",
     "swapi",
     "tada",
+    "Treeware",
     "Yavin"
   ]
 }

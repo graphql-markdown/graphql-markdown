@@ -70,11 +70,9 @@ smoke-init:
   COPY +build-package/docusaurus2-graphql-doc-generator.tgz ./
   RUN npm install ./docusaurus2-graphql-doc-generator.tgz
   COPY ./scripts/config-plugin.js ./config-plugin.js
-  COPY ./.docs/custom.css ./src/css/custom.css
+  COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./tests/__data__ ./data
-  COPY ./*.svg ./*.png ./*.ico ./static/img/
-  COPY ./README.md ./docs/README.md
-  RUN touch ./docs/.nojekyll
+  COPY ./website/static/img ./static/img
   RUN node config-plugin.js
 
 smoke-test:
@@ -94,15 +92,34 @@ smoke-run:
   WORKDIR /docusaurus2
   RUN npx docusaurus graphql-to-doc $OPTIONS
   RUN npm run build
+  RUN npm run clear
 
-build-docs:
+build-examples:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm install prettier
-  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/ --force --pretty --noPagination --noToc
-  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)" --base "group-by" --index --noTypeBadges --noParentType --noRelatedType --force
+  RUN mkdir examples
+  RUN mkdir docs
+  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/  --link "/schema" --force --pretty --noPagination --noToc
   RUN npm run build
-  SAVE ARTIFACT --force ./build AS LOCAL docs
+  RUN npm run clear
+  RUN mv docs ./examples/schema
+  RUN mkdir docs
+  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --index --noTypeBadges --noParentType --noRelatedType --force
+  RUN npm run build
+  RUN npm run clear
+  RUN mv docs ./examples/group-by
+  SAVE ARTIFACT ./examples
+
+build-docs:
+  COPY ./website ./
+  COPY --dir docs ./docs
+  COPY +build-examples/examples ./examples
+  COPY +build-package/docusaurus2-graphql-doc-generator.tgz .
+  RUN npm install
+  RUN npm install ./docusaurus2-graphql-doc-generator.tgz
+  RUN npm run build
+  SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
   FROM +build-docs
