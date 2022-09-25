@@ -78,7 +78,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 ## `homepage`
 
-The location of the landing page to be used for the documentation, relative to the current workspace. The file will be copied at the root folder of the generated documentation.
+The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/homepage)). The file will be copied at the root folder of the generated documentation.
 
 The plugin provides a default page in `assets/generated`.
 
@@ -152,7 +152,7 @@ Use [`prettier`](https://prettier.io) to format generated files.
 <br/>
 
 :::info
-The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will be always skipped.
+The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
 :::
 
 ## `rootPath`

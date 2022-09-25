@@ -35,6 +35,19 @@ function HomepageHeader() {
   );
 }
 
+function Thanks() {
+  return (
+    <div className='col col--6 col--offset-3 padding-bottom--xl'>
+      <div className='text--center'>
+        <h3 className='padding-bottom--md'>Thanks to our contributors</h3>
+        <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
+          <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown" />
+        </a>
+      </div>
+  </div>
+  );
+}
+
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
@@ -45,6 +58,7 @@ export default function Home() {
       <main>
         <HomepageFeatures />
       </main>
+      <Thanks />
     </Layout>
   );
 }
