@@ -52,6 +52,15 @@ const config = {
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
+        sitemap: {
+          changefreq: 'monthly',
+          priority: 0.5,
+          ignorePatterns: [
+            '/schema/**',
+            '/group-by/**'
+          ],
+          filename: 'sitemap.xml',
+        },
       }),
     ],
   ],
