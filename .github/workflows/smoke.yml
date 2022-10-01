@@ -15,6 +15,7 @@ on:
       - '**.json'
       - '**.lock'
       - '**.yml'
+      - '!website'
       - '!dangerfile.js'
       - '!.github'
       - '.github/workflows/smoke.yml'

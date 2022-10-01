@@ -16,6 +16,7 @@ on:
       - '**.yml'
       - '!dangerfile.js'
       - '!.github'
+      - '!website'
       - '.github/workflows/test.yml'
 
 jobs:
