@@ -56,10 +56,10 @@ The `npm run start` command builds your website locally and serves it through a 
 
 ### Install the plugin
 
-Add the `@edno/docusaurus2-graphql-doc-generator` plugin to your site installation:
+Add the `@graphql-markdown/docusaurus` plugin to your site installation:
 
 ```shell
-npm install @edno/docusaurus2-graphql-doc-generator graphql
+npm install @graphql-markdown/docusaurus graphql
 ```
 
 :::info

@@ -53,8 +53,8 @@ mutation-test:
 
 build-package:
   FROM +deps
-  RUN npm pack | tail -n 1 | xargs -t -I{} mv {} docusaurus2-graphql-doc-generator.tgz
-  SAVE ARTIFACT docusaurus2-graphql-doc-generator.tgz
+  RUN npm pack | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
+  SAVE ARTIFACT docusaurus-plugin.tgz
 
 build-docusaurus:
   WORKDIR /
@@ -67,8 +67,8 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN npm install graphql @graphql-tools/url-loader
-  COPY +build-package/docusaurus2-graphql-doc-generator.tgz ./
-  RUN npm install ./docusaurus2-graphql-doc-generator.tgz
+  COPY +build-package/docusaurus-plugin.tgz ./
+  RUN npm install ./docusaurus-plugin.tgz
   COPY ./scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./tests/__data__ ./data
@@ -116,9 +116,9 @@ build-docs:
   COPY ./website ./
   COPY --dir docs ./docs
   COPY +build-examples/examples ./examples
-  COPY +build-package/docusaurus2-graphql-doc-generator.tgz .
+  COPY +build-package/docusaurus-plugin.tgz .
   RUN npm install
-  RUN npm install ./docusaurus2-graphql-doc-generator.tgz
+  RUN npm install ./docusaurus-plugin.tgz
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 

@@ -28,9 +28,7 @@ describe("config", () => {
           outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
           prettify: DEFAULT_OPTIONS.pretty,
           schemaLocation: DEFAULT_OPTIONS.schema,
-          tmpDir: expect.stringMatching(
-            /.+@edno\/docusaurus2-graphql-doc-generator$/,
-          ),
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
           docOptions: DEFAULT_OPTIONS.docOptions,
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         }),

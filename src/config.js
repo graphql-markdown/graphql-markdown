@@ -4,7 +4,7 @@ const { tmpdir } = require("os");
 const { parseGroupByOption } = require("./lib/group-info");
 const { COMPARE_METHOD } = require("./lib/diff");
 
-const PACKAGE_NAME = "@edno/docusaurus2-graphql-doc-generator";
+const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
