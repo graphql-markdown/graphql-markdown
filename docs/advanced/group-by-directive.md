@@ -32,7 +32,7 @@ or the plugin configuration `groupByDirective`:
 ```js {6-10}
 plugins: [
   [
-    "@edno/docusaurus2-graphql-doc-generator",
+    "@graphql-markdown/docusaurus",
     {
       // ... other options
       groupByDirective: {

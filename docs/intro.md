@@ -6,7 +6,7 @@ hide_table_of_contents: true
 
 # Introduction
 
-The `@edno/docusaurus2-graphql-doc-generator` package extends the Docusaurus CLI with commands for generating MDX using a GraphQL schema as the source.
+The `@graphql-markdown/docusaurus` package extends the Docusaurus CLI with commands for generating MDX using a GraphQL schema as the source.
 
 ## Features
 

@@ -12,7 +12,7 @@ Assign a unique `id` attribute to each plugin instance (if not set, then `id` va
 ```js {15 }
 plugins: [
     [
-      "@edno/docusaurus2-graphql-doc-generator",
+      "@graphql-markdown/docusaurus",
        {
         // id: 'swapi', // omitted => default instance
         schema: "./schema/swapi.graphql",
@@ -22,7 +22,7 @@ plugins: [
       },
     ],
     [
-      "@edno/docusaurus2-graphql-doc-generator",
+      "@graphql-markdown/docusaurus",
       {
         id: "admin",
         schema: "./schema/admin.graphql",

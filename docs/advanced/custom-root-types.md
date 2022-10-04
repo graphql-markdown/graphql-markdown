@@ -20,7 +20,7 @@ Add the option `rootTypes` to the loader options under `docusaurus2-graphql-doc-
 ```js
 plugins: [
   [
-    "@edno/docusaurus2-graphql-doc-generator",
+    "@graphql-markdown/docusaurus",
     {
       // ... other options
       loaders: {

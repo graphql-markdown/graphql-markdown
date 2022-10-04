@@ -52,7 +52,7 @@ Use these options to tweak some of the Docusaurus documentation features:
 ```js {9-13}
 plugins: [
     [
-      "@edno/docusaurus2-graphql-doc-generator",
+      "@graphql-markdown/docusaurus",
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",
@@ -125,7 +125,7 @@ Use these options to toggle type information rendered on pages:
 ```js {9-13}
 plugins: [
     [
-      "@edno/docusaurus2-graphql-doc-generator",
+      "@graphql-markdown/docusaurus",
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",

@@ -20,7 +20,7 @@ Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` c
 ```js
 plugins: [
   [
-    "@edno/docusaurus2-graphql-doc-generator",
+    "@graphql-markdown/docusaurus",
     {
       // ... other options
       loaders: {

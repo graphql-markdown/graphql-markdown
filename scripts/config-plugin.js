@@ -68,8 +68,8 @@ const config = {
     ],
   ],
   plugins: [
-    ["@edno/docusaurus2-graphql-doc-generator", "@config1@"],
-    ["@edno/docusaurus2-graphql-doc-generator", "@config2@"],
+    ["@graphql-markdown/docusaurus", "@config1@"],
+    ["@graphql-markdown/docusaurus", "@config2@"],
   ],
 };
 
