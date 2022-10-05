@@ -62,7 +62,7 @@
     "test:smoke": "earthly +smoke-test",
     "test:coverage": "sh ./scripts/coverage.sh",
     "test:mutation": "stryker run --reporters progress,html",
-    "prepare": "husky install",
+    "prepare": "cd $CWD && husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker"
