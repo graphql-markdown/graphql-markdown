@@ -1,0 +1,101 @@
+{
+  "name": "@graphql-markdown/docusaurus",
+  "homepage": "https://graphql-markdown.github.io",
+  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "bugs": {
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
+  },
+  "version": "1.14.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+  },
+  "keywords": [
+    "docusaurus",
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "plugin",
+    "markdown",
+    "graphql-markdown"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "contributors": [
+    {
+      "name": "jocrau"
+    },
+    {
+      "name": "mimo84"
+    },
+    {
+      "name": "coder2034"
+    },
+    {
+      "name": "lauzierj"
+    },
+    {
+      "name": "jineshshah36"
+    },
+    {
+      "name": "GuiHash"
+    },
+    {
+      "name": "davidyaha"
+    },
+    {
+      "name": "jlndk"
+    },
+    {
+      "name": "elias-pap"
+    }
+  ],
+  "scripts": {
+    "prettier": "prettier \"{src,tests,assets}/**/*.{js,json,md}\"",
+    "lint": "eslint \"{src,tests,assets}/**/*.js\"",
+    "test": "jest",
+    "test:unit": "jest --projects tests/unit",
+    "test:integration": "jest --projects tests/integration",
+    "test:smoke": "earthly +smoke-test",
+    "test:coverage": "sh ./scripts/coverage.sh",
+    "test:mutation": "stryker run --reporters progress,html",
+    "prepare": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "stryker": "stryker"
+  },
+  "dependencies": {
+    "@graphql-inspector/core": "^3.3.0",
+    "@graphql-tools/graphql-file-loader": "^7.5.2",
+    "@graphql-tools/load": "^7.7.4"
+  },
+  "peerDependencies": {
+    "graphql": "^14.0 || ^15.0 || ^16.0",
+    "prettier": "^2.5"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "6.2.2",
+    "@stryker-mutator/jest-runner": "6.2.2",
+    "diff": "5.1.0",
+    "directory-tree": "3.3.1",
+    "graphql": "16.6.0",
+    "jest": "29.1.2",
+    "jest-file-snapshot": "0.5.0",
+    "lodash.filter": "4.6.0",
+    "mock-fs": "5.1.4"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "engines": {
+    "node": ">=16.14"
+  }
+}
