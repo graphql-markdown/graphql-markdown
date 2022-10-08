@@ -9,13 +9,13 @@ module.exports = {
       notify: false,
       reporters: [],
       verbose: false,
-      testMatch: ["**/tests/unit/**/*.(test).js"], // unit tests only
+      testMatch: ["packages/**/tests/unit/**/*.(test).js"], // unit tests only
     },
     configFile: "jest.config.js",
     projectType: "custom",
     enableFindRelatedTests: true,
   },
-  mutate: ["src/**/*.js", "!src/**/index.js", "!src/**/prettier.js"],
+  mutate: ["packages/**/src/**/*.js", "!packages/**/src/**/index.js", "!packages/**/src/**/prettier.js"],
   packageManager: "npm",
   reporters: ["html"],
   testRunner: "jest",

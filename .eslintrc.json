@@ -24,7 +24,7 @@
   },
   "overrides": [
     {
-      "files": ["tests/**/*.js"],
+      "files": ["packages/**/tests/**/*.js"],
       "extends": [
         "eslint:recommended",
         "plugin:prettier/recommended",

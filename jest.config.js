@@ -1,14 +1,14 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ["<rootDir>/src/**/*.js"],
+  collectCoverageFrom: ["<rootDir>/packages/**/src/**/*.js"],
   coverageDirectory: "<rootDir>/.nyc_output",
   coverageReporters: ["json"],
   globals: {
     __OS__: require("os").platform() === "win32" ? "windows" : "unix",
   },
-  projects: ["<rootDir>/tests/unit", "<rootDir>/tests/integration"],
+  projects: ["<rootDir>/packages/docusaurus/tests/unit", "<rootDir>/packages/docusaurus/tests/integration"],
   rootDir: __dirname,
-  setupFilesAfterEnv: ["<rootDir>/tests/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/packages/docusaurus/tests/jest.setup.js"],
   testEnvironment: "node",
   testMatch: ["**/tests/(unit|integration)/**/*.(test|spec).js"],
   watchPathIgnorePatterns: ["__expected__"],
