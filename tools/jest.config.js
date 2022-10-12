@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/packages/**/src/**/*.js"],
@@ -7,7 +9,7 @@ module.exports = {
     __OS__: require("os").platform() === "win32" ? "windows" : "unix",
   },
   projects: ["<rootDir>/packages/docusaurus/tests/unit", "<rootDir>/packages/docusaurus/tests/integration"],
-  rootDir: __dirname,
+  rootDir: path.join(__dirname, ".."),
   setupFilesAfterEnv: ["<rootDir>/packages/docusaurus/tests/jest.setup.js"],
   testEnvironment: "node",
   testMatch: ["**/tests/(unit|integration)/**/*.(test|spec).js"],

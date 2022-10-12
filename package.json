@@ -9,7 +9,7 @@
   "scripts": {
     "prettier": "prettier --config ./tools/.prettierrc \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
     "lint": "eslint --config ./tools/.eslintrc.json \"packages/**/{src,tests,assets}/**/*.js\"",
-    "test": "jest",
+    "test": "jest --config=./tools/jest.config.js",
     "stryker": "stryker run ./tools/stryker.conf.js"
   },
   "config": {

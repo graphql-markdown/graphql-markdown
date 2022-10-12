@@ -1,4 +1,4 @@
-const jestConfigBase = require("../../../../jest.config");
+const jestConfigBase = require("../../../../tools/jest.config");
 
 module.exports = {
   ...jestConfigBase,
