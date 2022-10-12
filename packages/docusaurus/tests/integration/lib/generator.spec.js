@@ -16,7 +16,7 @@ describe("lib", () => {
   beforeEach(() => {
     mockfs({
       node_modules: mockfs.load(
-        path.resolve(__dirname, "../../../node_modules"),
+        path.resolve(__dirname, "../../../../../node_modules"),
       ),
       __data__: mockfs.load(path.resolve(__dirname, "../../__data__"), {
         lazy: false,
