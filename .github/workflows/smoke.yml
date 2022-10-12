@@ -32,7 +32,7 @@ jobs:
       - name: Install earthly
         uses: earthly/actions-setup@v1
         with:
-          version: "latest"
+          version: latest
 
       - name: Run Smoke Tests
         run: earthly --ci github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test

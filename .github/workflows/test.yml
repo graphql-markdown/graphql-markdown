@@ -32,10 +32,10 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
+      run: npm test -- --runInBand --projects packages/docusaurus/tests/unit
 
     - name: Run Integration Tests
-      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
+      run: npm test -- --runInBand --projects packages/docusaurus/tests/integration
 
     - name: Check Code Coverage
       run: npm run test:coverage

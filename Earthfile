@@ -46,7 +46,7 @@ integration-test:
 
 mutation-test:
   FROM +deps
-  RUN npm run stryker -- run --reporters progress,html
+  RUN npm run stryker -- --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END

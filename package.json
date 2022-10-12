@@ -7,10 +7,10 @@
     "./website"
   ],
   "scripts": {
-    "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
-    "lint": "eslint \"packages/**/{src,tests,assets}/**/*.js\"",
+    "prettier": "prettier --config ./tools/.prettierrc \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
+    "lint": "eslint --config ./tools/.eslintrc.json \"packages/**/{src,tests,assets}/**/*.js\"",
     "test": "jest",
-    "stryker": "stryker"
+    "stryker": "stryker run ./tools/stryker.conf.js"
   },
   "config": {
     "commitizen": {
