@@ -8,16 +8,9 @@ on:
       - main
     paths:
       - 'Earthfile'
-      - 'src/**'
-      - 'tests/**'
-      - 'assets/**'
-      - '**.js'
-      - '**.json'
-      - '**.lock'
-      - '**.yml'
-      - '!website'
-      - '!dangerfile.js'
-      - '!.github'
+      - 'packages/**/src/**'
+      - 'packages/**/tests/**'
+      - 'packages/**/assets/**'
       - '.github/workflows/smoke.yml'
 
 concurrency:

@@ -5,12 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - '**.js'
-      - '!website'
-      - '!dangerfile.js'
-      - '!.github'
+      - 'packages/**/src/**'
+      - 'packages/**/tests/**'
       - '.github/workflows/mutation.yml'
 
 env:
