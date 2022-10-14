@@ -13,7 +13,7 @@ function HomepageHeader() {
       <div className="container">
         <img src='/img/preview.svg' style={{height: "200px", width: "800px", objectFit: "cover"}} className="margin-bottom--lg" />
         <p className="hero__subtitle">
-           <span style={{color: '#36c46f'}}>Human-friendly</span> documentation for <a target="_blank" rel="noopener noreferrer" href="https://graphql.org/"><span style={{color: "#e535ab"}}>GraphQL</span></a> schemas.
+           <span style={{color: '#36c46f'}}>Flexible</span> documentation for <a target="_blank" rel="noopener noreferrer" href="https://graphql.org/"><span style={{color: "#e535ab"}}>GraphQL</span></a> schemas.
         </p>
         <p className="hero__subtitle">
             Powered by <a target="_blank" rel="noopener noreferrer" href="https://docusaurus.io"><span style={{color: "#36c46f"}}>Docusaurus</span></a>.
