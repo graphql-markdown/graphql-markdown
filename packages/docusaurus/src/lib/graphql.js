@@ -78,7 +78,7 @@ function getDocumentLoaders(extraLoaders = {}) {
       } else {
         if (!graphqlDocumentLoader.module) {
           throw new Error(
-            `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
+            `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`
           );
         }
         const { [className]: Loader } = require(graphqlDocumentLoader.module);
@@ -101,7 +101,7 @@ function getListDefaultValues(type, value) {
   const defaultValues = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
-    getDefaultValue({ type, defaultValue }),
+    getDefaultValue({ type, defaultValue })
   );
 
   return `[${defaultValuesString.join(", ")}]`;
@@ -153,7 +153,7 @@ function getTypeFromSchema(schema, type) {
   const filterOperationFragmentRegExp =
     operationKinds.length > 0 ? [...operationKinds, ""].join("$|") : "";
   const excludeListRegExp = new RegExp(
-    `^(?!${filterOperationFragmentRegExp}__.+$).*$`,
+    `^(?!${filterOperationFragmentRegExp}__.+$).*$`
   );
 
   const typeMap = schema.getTypeMap();
@@ -199,13 +199,13 @@ function getTypeName(type, defaultName = "") {
 function getSchemaMap(schema) {
   return {
     queries: getIntrospectionFieldsList(
-      schema.getQueryType && schema.getQueryType(),
+      schema.getQueryType && schema.getQueryType()
     ),
     mutations: getIntrospectionFieldsList(
-      schema.getMutationType && schema.getMutationType(),
+      schema.getMutationType && schema.getMutationType()
     ),
     subscriptions: getIntrospectionFieldsList(
-      schema.getSubscriptionType && schema.getSubscriptionType(),
+      schema.getSubscriptionType && schema.getSubscriptionType()
     ),
     directives: schema.getDirectives(),
     objects: getTypeFromSchema(schema, GraphQLObjectType),
@@ -249,7 +249,7 @@ function getRelationOfReturn(type, schema) {
         }
       }
       return results;
-    },
+    }
   );
 }
 
@@ -276,7 +276,7 @@ function getRelationOfField(type, schema) {
       const fields = Object.assign(
         {},
         relationType.args ?? {},
-        relationType._fields ?? {},
+        relationType._fields ?? {}
       );
       for (const fieldDef of Object.values(fields)) {
         if (getNamedType(fieldDef.type).name === type.name) {
@@ -286,7 +286,7 @@ function getRelationOfField(type, schema) {
         }
       }
       return results;
-    },
+    }
   );
 }
 
@@ -303,7 +303,7 @@ function getRelationOfUnion(type, schema) {
         }
       }
       return results;
-    },
+    }
   );
 }
 
@@ -322,7 +322,7 @@ function getRelationOfInterface(type, schema) {
         }
       }
       return results;
-    },
+    }
   );
 }
 

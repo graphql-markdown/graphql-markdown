@@ -74,7 +74,7 @@ module.exports = class Renderer {
         await this.generateCategoryMetafile(rootTypeName, dirPath);
 
         return this.renderTypeEntities(dirPath, name, type[name]);
-      }),
+      })
     );
   }
 
@@ -89,12 +89,12 @@ module.exports = class Renderer {
     const content = this.printer.printType(fileName, type, this.options);
     await saveFile(
       filePath,
-      this.prettify ? prettifyMarkdown(content) : content,
+      this.prettify ? prettifyMarkdown(content) : content
     );
 
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
     );
     const slug = pathUrl.join(page.groups.category, page.groups.pageId);
 
@@ -126,7 +126,7 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
     const filePath = path.join(this.outputDir, SIDEBAR);
     await saveFile(
       filePath,
-      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar,
+      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar
     );
 
     return path.relative("./", filePath);

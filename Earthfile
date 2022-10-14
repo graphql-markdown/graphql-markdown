@@ -26,27 +26,27 @@ unit-test:
   ARG flag
   FROM +deps
   IF [ ! $(EARTHLY_CI) ]
-    RUN npm test -- --runInBand --projects packages/docusaurus/tests/unit -u
+    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/unit -u
     SAVE ARTIFACT --if-exists packages/docusaurus/tests/unit AS LOCAL ./packages/docusaurus/tests/unit
   ELSE
     RUN export NODE_ENV=ci
-    RUN npm test -- --runInBand --projects packages/docusaurus/tests/unit
+    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/unit
   END
 
 integration-test:
   ARG flag
   FROM +deps
   IF [ ! $(EARTHLY_CI) ]
-    RUN npm test -- --runInBand --projects packages/docusaurus/tests/integration -u
+    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/integration -u
     SAVE ARTIFACT --if-exists packages/docusaurus/tests/integration AS LOCAL ./packages/docusaurus/tests/integration
   ELSE
     RUN export NODE_ENV=ci
-    RUN npm test -- --runInBand --projects packages/docusaurus/tests/integration
+    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects ests/integration
   END
 
 mutation-test:
   FROM +deps
-  RUN npm run stryker -- --reporters progress,html
+  RUN npm run stryker --w @graphql-markdown/docusaurus -- --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END

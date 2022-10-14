@@ -12,18 +12,18 @@ const messagesGenerated = [];
 
 for (const pluginConfig of pluginConfigs) {
   docsDirs.push(
-    path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
+    path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL)
   );
   messagesGenerated.push([
     `Documentation successfully generated in "${path.join(
       pluginConfig.rootPath,
-      pluginConfig.baseURL,
+      pluginConfig.baseURL
     )}" with base URL "${pluginConfig.baseURL}".`,
     `{Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
     `Remember to update your Docusaurus site's sidebars with "${path.join(
       pluginConfig.rootPath,
       pluginConfig.baseURL,
-      "sidebar-schema.js",
+      "sidebar-schema.js"
     )}".`,
   ]);
 }
@@ -100,11 +100,11 @@ describe("graphql-to-doc", () => {
 
       const stdout = generateOutput.stdout.replace(
         /\d+\.?\d*/g,
-        "{Any<Number>}",
+        "{Any<Number>}"
       );
 
       messagesGenerated[index].forEach((message) =>
-        expect(stdout).toMatch(message),
+        expect(stdout).toMatch(message)
       );
     }
   }, 60000);

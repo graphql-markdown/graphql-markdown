@@ -65,7 +65,7 @@ function getGroupInfo(allDirectives, groupByDirective) {
       continue;
     }
     const field = directive.arguments.find(
-      ({ name }) => name.value === groupByDirective.field,
+      ({ name }) => name.value === groupByDirective.field
     );
     return field.value.value;
   }

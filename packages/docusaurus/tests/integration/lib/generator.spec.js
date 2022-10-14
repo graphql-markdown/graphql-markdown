@@ -9,14 +9,14 @@ const EXPECT_PATH = path.join(
   __dirname,
   "__expect__",
   __OS__,
-  path.basename(__filename),
+  path.basename(__filename)
 );
 
 describe("lib", () => {
   beforeEach(() => {
     mockfs({
       node_modules: mockfs.load(
-        path.resolve(__dirname, "../../../../../node_modules"),
+        path.resolve(__dirname, "../../../../../node_modules")
       ),
       __data__: mockfs.load(path.resolve(__dirname, "../../__data__"), {
         lazy: false,
@@ -28,7 +28,7 @@ describe("lib", () => {
           path.resolve(__dirname, "../../../assets/sidebar.json"),
           {
             lazy: false,
-          },
+          }
         ),
       },
       tmp: {},
@@ -68,10 +68,10 @@ describe("lib", () => {
 
         mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
         expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, "generateDocFromSchemaOutputFolder.hash"),
+          path.join(EXPECT_PATH, "generateDocFromSchemaOutputFolder.hash")
         );
         expect(JSON.stringify(tmpFolder, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, "generateDocFromSchemaTmpFolder.hash"),
+          path.join(EXPECT_PATH, "generateDocFromSchemaTmpFolder.hash")
         );
       });
 
@@ -104,7 +104,7 @@ describe("lib", () => {
         });
 
         expect(logSpy).toHaveBeenCalledWith(
-          `No changes detected in schema "${schemaLocation}".`,
+          `No changes detected in schema "${schemaLocation}".`
         );
       });
 
@@ -134,8 +134,8 @@ describe("lib", () => {
         expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
           path.join(
             EXPECT_PATH,
-            `generateDocFromSchemaWithGroupingOutputFolder`,
-          ),
+            `generateDocFromSchemaWithGroupingOutputFolder`
+          )
         );
       });
     });

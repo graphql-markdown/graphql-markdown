@@ -8,11 +8,11 @@ const EXPECT_PATH = path.join(
   __dirname,
   "__expect__",
   __OS__,
-  path.basename(__filename),
+  path.basename(__filename)
 );
 
 const SCHEMA_FILE = require.resolve(
-  "../../__data__/schema_with_custom_root_types.graphql",
+  "../../__data__/schema_with_custom_root_types.graphql"
 );
 describe("graphql", () => {
   describe("schema with custom rootTypes", () => {
@@ -38,7 +38,7 @@ describe("graphql", () => {
       const schemaTypeMap = getSchemaMap(schema);
 
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
-        path.join(EXPECT_PATH, `getSchemaMapCustomRootTypes.json`),
+        path.join(EXPECT_PATH, `getSchemaMapCustomRootTypes.json`)
       );
     });
   });

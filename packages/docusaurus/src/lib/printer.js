@@ -43,7 +43,7 @@ module.exports = class Printer {
     { groups, printTypeOptions } = {
       groups: undefined,
       printTypeOptions: undefined,
-    },
+    }
   ) {
     this.schema = schema;
     this.baseURL = baseURL;
@@ -129,7 +129,7 @@ module.exports = class Printer {
       this.baseURL,
       group,
       category.plural,
-      toSlug(text),
+      toSlug(text)
     );
 
     return {
@@ -152,7 +152,7 @@ module.exports = class Printer {
     { level, parentType } = {
       level: HEADER_SECTION_LEVEL,
       parentType: undefined,
-    },
+    }
   ) {
     if (values.length === 0) {
       return "";
@@ -172,7 +172,7 @@ module.exports = class Printer {
     { level, parentType } = {
       level: HEADER_SECTION_SUB_LEVEL,
       parentType: undefined,
-    },
+    }
   ) {
     if (!Array.isArray(values)) {
       return "";
@@ -268,7 +268,7 @@ module.exports = class Printer {
     return badges
       .map(
         (badge) =>
-          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
+          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`
       )
       .join(" ");
   }
@@ -284,7 +284,7 @@ module.exports = class Printer {
     { level, parentType } = {
       level: HEADER_SECTION_SUB_LEVEL,
       parentType: undefined,
-    },
+    }
   ) {
     if (typeof type === "undefined" || type === null) {
       return "";
@@ -506,7 +506,7 @@ module.exports = class Printer {
           const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
           metadata += this.printSection(
             [this.schema.getType(queryType)],
-            "Type",
+            "Type"
           );
         }
         return metadata;

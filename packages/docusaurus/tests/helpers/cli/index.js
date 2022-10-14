@@ -18,7 +18,7 @@ module.exports = function cli({
           stdout,
           stderr,
         });
-      },
+      }
     );
   });
 };

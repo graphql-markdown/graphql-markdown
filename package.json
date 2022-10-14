@@ -7,7 +7,9 @@
     "website"
   ],
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prettier": "prettier --config tools/.prettierrc \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
+    "lint": "eslint --config tools/.eslintrc.json \"packages/**/{src,tests,assets}/**/*.js\""
   },
   "config": {
     "commitizen": {

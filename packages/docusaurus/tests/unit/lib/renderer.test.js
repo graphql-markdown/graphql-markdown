@@ -19,7 +19,7 @@ const EXPECT_PATH = path.join(
   __dirname,
   "__expect__",
   __OS__,
-  path.basename(__filename),
+  path.basename(__filename)
 );
 
 describe("lib", () => {
@@ -32,13 +32,13 @@ describe("lib", () => {
       beforeEach(() => {
         mock({
           node_modules: mock.load(
-            path.resolve(__dirname, "../../../node_modules"),
+            path.resolve(__dirname, "../../../node_modules")
           ),
           [OUTPUT]: {},
           assets: {
             [HOMEPAGE]: "Test Homepage",
             [SIDEBAR]: mock.load(
-              path.resolve(__dirname, `../../../assets/${SIDEBAR}`),
+              path.resolve(__dirname, `../../../assets/${SIDEBAR}`)
             ),
           },
         });
@@ -62,7 +62,7 @@ describe("lib", () => {
           const meta = await rendererInstance.renderTypeEntities(
             output,
             "FooBar",
-            "FooBar",
+            "FooBar"
           );
           const outputFolder = dirTree(OUTPUT, {
             attributes: ["size", "type", "extension"],
@@ -72,7 +72,7 @@ describe("lib", () => {
 
           expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-            path.join(EXPECT_PATH, "renderTypeEntities.json"),
+            path.join(EXPECT_PATH, "renderTypeEntities.json")
           );
         });
 
@@ -83,10 +83,10 @@ describe("lib", () => {
             const meta = await rendererInstance.renderTypeEntities(
               "test",
               "FooBar",
-              type,
+              type
             );
             expect(meta).toBeUndefined();
-          },
+          }
         );
       });
 
@@ -117,7 +117,7 @@ describe("lib", () => {
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(sidebarFile).toMatchFile(
-            path.join(EXPECT_PATH, "renderSidebar.sidebar-schema.js"),
+            path.join(EXPECT_PATH, "renderSidebar.sidebar-schema.js")
           );
         });
       });
@@ -134,7 +134,7 @@ describe("lib", () => {
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-            path.join(EXPECT_PATH, "renderHomepage.json"),
+            path.join(EXPECT_PATH, "renderHomepage.json")
           );
         });
       });
@@ -158,7 +158,7 @@ describe("lib", () => {
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-            path.join(EXPECT_PATH, "renderRootTypes.json"),
+            path.join(EXPECT_PATH, "renderRootTypes.json")
           );
         });
       });
@@ -178,13 +178,13 @@ describe("lib", () => {
 
           const content = fs.readFileSync(
             path.join(outputPath, "_category_.yml"),
-            "utf-8",
+            "utf-8"
           );
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
 
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-            path.join(EXPECT_PATH, "generateCategoryMetafile.json"),
+            path.join(EXPECT_PATH, "generateCategoryMetafile.json")
           );
 
           expect(content).toMatchInlineSnapshot(`
@@ -210,7 +210,7 @@ describe("lib", () => {
 
           const content = fs.readFileSync(
             path.join(outputPath, "_category_.yml"),
-            "utf-8",
+            "utf-8"
           );
 
           mock.restore(); // see https://github.com/tschaub/mock-fs#caveats
@@ -218,8 +218,8 @@ describe("lib", () => {
           expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
             path.join(
               EXPECT_PATH,
-              "generateCategoryMetafileGeneratedIndex.json",
-            ),
+              "generateCategoryMetafileGeneratedIndex.json"
+            )
           );
 
           expect(content).toMatchInlineSnapshot(`
@@ -244,14 +244,14 @@ describe("lib", () => {
           fs.writeFileSync(
             path.join(outputPath, "_category_.yml"),
             data,
-            "utf-8",
+            "utf-8"
           );
 
           await rendererInstance.generateCategoryMetafile(category, outputPath);
 
           const content = fs.readFileSync(
             path.join(outputPath, "_category_.yml"),
-            "utf-8",
+            "utf-8"
           );
 
           expect(content).toEqual(data);

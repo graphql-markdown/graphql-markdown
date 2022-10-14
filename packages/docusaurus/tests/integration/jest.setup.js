@@ -1,1 +1,1 @@
-require("../jest.setup");
+require("../../jest.setup");

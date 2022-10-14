@@ -34,7 +34,7 @@ async function getDiff(schemaNew, schemaOld) {
 async function checkSchemaChanges(
   schema,
   outputDir,
-  method = COMPARE_METHOD.DIFF,
+  method = COMPARE_METHOD.DIFF
 ) {
   const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
   const hashSchema = getSchemaHash(schema);

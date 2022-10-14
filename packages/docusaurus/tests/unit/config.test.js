@@ -31,7 +31,7 @@ describe("config", () => {
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
           docOptions: DEFAULT_OPTIONS.docOptions,
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
-        }),
+        })
       );
     });
 

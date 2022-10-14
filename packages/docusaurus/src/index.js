@@ -27,7 +27,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         .option("-l, --link <linkRoot>", "Root for links in documentation")
         .option(
           "-h, --homepage <homepage>",
-          "File location for doc landing page",
+          "File location for doc landing page"
         )
         .option("--noPagination", "Disable page navigation buttons")
         .option("--noParentType", "Disable parent type name as field prefix")
@@ -40,7 +40,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         .option("-t, --tmp <tmpDir>", "Set temp dir for schema diff")
         .option(
           "-gbd, --groupByDirective <@directive(field|=fallback)>",
-          "Group documentation by directive",
+          "Group documentation by directive"
         )
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {

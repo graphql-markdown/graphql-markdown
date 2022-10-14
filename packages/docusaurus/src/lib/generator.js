@@ -45,12 +45,12 @@ module.exports = async function generateDocFromSchema({
       baseURL,
       groups,
       prettify,
-      docOptions,
+      docOptions
     );
     const pages = await Promise.all(
       Object.keys(rootTypes).map((typeName) =>
-        renderer.renderRootTypes(typeName, rootTypes[typeName]),
-      ),
+        renderer.renderRootTypes(typeName, rootTypes[typeName])
+      )
     );
     await renderer.renderHomepage(homepageLocation);
     const sidebarPath = await renderer.renderSidebar();
@@ -58,15 +58,15 @@ module.exports = async function generateDocFromSchema({
     const [sec, msec] = process.hrtime(time);
     const duration = (sec + msec / 1e9).toFixed(3);
     console.info(
-      `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+      `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`
     );
     console.log(
       `${
         pages.flat().length
-      } pages generated in ${duration}s from schema "${schemaLocation}".`,
+      } pages generated in ${duration}s from schema "${schemaLocation}".`
     );
     console.info(
-      `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+      `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`
     );
 
     // create references for checkSchemaChanges
