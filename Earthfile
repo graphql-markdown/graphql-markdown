@@ -53,7 +53,7 @@ mutation-test:
 
 build-package:
   FROM +deps
-  RUN npm pack | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
+  RUN npm pack --w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
   SAVE ARTIFACT docusaurus-plugin.tgz
 
 build-docusaurus:
