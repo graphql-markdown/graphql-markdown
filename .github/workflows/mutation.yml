@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'packages/**/src/**'
-      - 'packages/**/tests/**'
+      - 'packages/**/src/**/*'
+      - 'packages/**/tests/**/*'
       - '.github/workflows/mutation.yml'
 
 env:
