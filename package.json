@@ -11,6 +11,7 @@
     "prettier": "prettier --config ./tools/.prettierrc \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
     "lint": "eslint --config ./tools/.eslintrc.json \"packages/**/{src,tests,assets}/**/*.js\"",
     "test": "jest --config=./tools/jest.config.js",
+    "test:coverage": "sh ./scripts/coverage.sh",
     "stryker": "stryker run ./tools/stryker.conf.js"
   },
   "config": {
