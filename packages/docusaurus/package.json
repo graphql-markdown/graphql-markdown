@@ -55,7 +55,12 @@
   ],
   "scripts": {
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "prettier": "prettier --config ../../tools/.prettierrc \"{src,tests,assets}/**/*.{js,json,md}\"",
+    "lint": "eslint --config ../../tools/.eslintrc.json \"/{src,tests,assets}/**/*.js\"",
+    "test": "jest",
+    "test:coverage": "sh ../../scripts/coverage.sh",
+    "stryker": "stryker run ../../tools/stryker.conf.js"
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.3.0",

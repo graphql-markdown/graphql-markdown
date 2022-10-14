@@ -12,11 +12,11 @@ on:
 
 jobs:
   test:
-    name: Test package @graphql-markdown/${{matrix.package}}
+    name: Test package ${{matrix.package}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [docusaurus]
+        package: ['@graphql-markdown/docusaurus']
 
     steps:
     - name: Checkout Code Base
@@ -26,13 +26,13 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: npm test -- --runInBand --projects packages/${{matrix.package}}/tests/unit
+      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/unit
 
     - name: Run Integration Tests
-      run: npm test -- --runInBand --projects packages/${{matrix.package}}/tests/integration
+      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/integration
 
     - name: Check Code Coverage
-      run: npm run test:coverage
+      run: npm run test:coverage -w ${{matrix.package}}
 
     - name: Coveralls
       continue-on-error: true

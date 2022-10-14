@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "echo no test",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
