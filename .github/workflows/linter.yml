@@ -12,8 +12,11 @@ on:
 
 jobs:
   lint:
-    name: Lint Code Base
+    name: Lint@graphql-markdown/${{matrix.package}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [docusaurus]
 
     steps:
     - name: Checkout Code Base
