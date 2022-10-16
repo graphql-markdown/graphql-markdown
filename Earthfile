@@ -6,7 +6,8 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY . .
+  COPY package.json package-lock.json ./
+  COPY --dir tools scripts packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
