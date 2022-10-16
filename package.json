@@ -115,6 +115,6 @@
     "graphql": "16.6.0"
   },
   "resolutions": {
-    "chalk": "4.1.2"
+    "chalk": "5.1.2"
   }
 }
