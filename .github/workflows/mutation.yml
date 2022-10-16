@@ -5,12 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - '**.js'
-      - '!website'
-      - '!dangerfile.js'
-      - '!.github'
+      - 'packages/**/src/**/*'
+      - 'packages/**/tests/**/*'
       - '.github/workflows/mutation.yml'
 
 env:
@@ -22,8 +18,12 @@ concurrency:
 
 jobs:
   mutation:
-    name: Mutation Tests
+    name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ['@graphql-markdown/docusaurus']
+
     steps:
     - name: Checkout Code Base
       uses: actions/checkout@v3
@@ -32,4 +32,4 @@ jobs:
       run: npm ci
 
     - name: Run Mutations Tests
-      run: npm run stryker -- run --reporters dashboard
+      run: npm run stryker -w ${{matrix.package}} -- --reporters dashboard

@@ -1,0 +1,108 @@
+{
+  "name": "@graphql-markdown/docusaurus",
+  "homepage": "https://graphql-markdown.github.io",
+  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "bugs": {
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
+  },
+  "version": "1.14.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+  },
+  "keywords": [
+    "docusaurus",
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "plugin",
+    "markdown",
+    "graphql-markdown"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "contributors": [
+    {
+      "name": "jocrau"
+    },
+    {
+      "name": "mimo84"
+    },
+    {
+      "name": "coder2034"
+    },
+    {
+      "name": "lauzierj"
+    },
+    {
+      "name": "jineshshah36"
+    },
+    {
+      "name": "GuiHash"
+    },
+    {
+      "name": "davidyaha"
+    },
+    {
+      "name": "jlndk"
+    },
+    {
+      "name": "elias-pap"
+    }
+  ],
+  "scripts": {
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "test": "jest",
+    "test:coverage": "sh ../../scripts/coverage.sh",
+    "stryker": "stryker run"
+  },
+  "dependencies": {
+    "@graphql-inspector/core": "^3.4.0",
+    "@graphql-tools/graphql-file-loader": "^7.5.5",
+    "@graphql-tools/load": "^7.7.7"
+  },
+  "peerDependencies": {
+    "graphql": "^14.0 || ^15.0 || ^16.0",
+    "prettier": "^2.5"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@graphql-markdown/config": "1.0.0",
+    "@stryker-mutator/core": "6.2.3",
+    "@stryker-mutator/jest-runner": "6.2.3",
+    "commitizen": "4.2.5",
+    "cz-emoji": "1.3.1",
+    "diff": "5.1.0",
+    "eslint": "8.25.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-jest": "27.1.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "graphql": "16.6.0",
+    "husky": "8.0.1",
+    "jest": "29.2.0",
+    "jest-file-snapshot": "0.5.0",
+    "lodash.filter": "4.6.0",
+    "pinst": "3.0.0",
+    "prettier": "2.7.1",
+    "memfs": "3.4.7",
+    "unionfs": "4.4.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "engines": {
+    "node": ">=16.14"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

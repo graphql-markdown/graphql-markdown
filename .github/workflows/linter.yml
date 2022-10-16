@@ -2,26 +2,21 @@ name: Linter
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'assets/**'
-      - '**.js'
-      - '**.json'
-      - '**.lock'
-      - '**.yml'
-      - '!dangerfile.js'
-      - '!.github'
+      - 'packages/**/*'
       - '.github/workflows/linter.yml'
 
 jobs:
   lint:
-    name: Lint Code Base
+    name: Lint@graphql-markdown/${{matrix.package}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [docusaurus]
 
     steps:
     - name: Checkout Code Base

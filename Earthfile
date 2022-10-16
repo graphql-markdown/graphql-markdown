@@ -6,7 +6,8 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY . .
+  COPY package.json package-lock.json ./
+  COPY --dir config scripts packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
@@ -25,35 +26,25 @@ lint:
 unit-test:
   ARG flag
   FROM +deps
-  IF [ ! $(EARTHLY_CI) ]
-    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit -u
-    SAVE ARTIFACT --if-exists tests/unit AS LOCAL ./tests/unit
-  ELSE
-    RUN export NODE_ENV=ci
-    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
-  END
+  RUN export NODE_ENV=ci
+  RUN npm test -ws -- --runInBand --selectProjects unit
 
 integration-test:
   ARG flag
   FROM +deps
-  IF [ ! $(EARTHLY_CI) ]
-    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration -u
-    SAVE ARTIFACT --if-exists tests/integration AS LOCAL ./tests/integration
-  ELSE
-    RUN export NODE_ENV=ci
-    RUN node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
-  END
+  RUN export NODE_ENV=ci
+  RUN npm test -ws -- --runInBand --selectProjects integration
 
 mutation-test:
   FROM +deps
-  RUN npm run stryker -- run --reporters progress,html
+  RUN npm run stryker -w @graphql-markdown/docusaurus -- --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
 build-package:
   FROM +deps
-  RUN npm pack | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
+  RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
   SAVE ARTIFACT docusaurus-plugin.tgz
 
 build-docusaurus:
@@ -69,9 +60,9 @@ smoke-init:
   RUN npm install graphql @graphql-tools/url-loader
   COPY +build-package/docusaurus-plugin.tgz ./
   RUN npm install ./docusaurus-plugin.tgz
-  COPY ./scripts/config-plugin.js ./config-plugin.js
+  COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
-  COPY --dir ./tests/__data__ ./data
+  COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY ./website/static/img ./static/img
   RUN node config-plugin.js
 
@@ -80,11 +71,11 @@ smoke-test:
   WORKDIR /docusaurus2
   RUN npm config set update-notifier false
   RUN npm install -g fs-extra jest
-  COPY --dir ./tests/e2e/specs ./__tests__/e2e/specs
-  COPY --dir ./tests/helpers ./__tests__/helpers
-  COPY ./tests/e2e/jest.config.js ./jest.config.js
+  COPY --dir ./packages/docusaurus/tests/e2e/specs ./__tests__/e2e/specs
+  COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
+  COPY ./packages/docusaurus/tests/e2e/jest.config.js ./jest.config.js
   RUN export NODE_ENV=ci
-  RUN node --expose-gc /usr/local/bin/jest --logHeapUsage --runInBand
+  RUN npx jest --runInBand
 
 smoke-run:
   ARG OPTIONS=

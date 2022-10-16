@@ -17,8 +17,11 @@ build
 .nyc_output
 coverage
 reports
+tmp
+output
 
 # package build
 dist
 *.tgz
 
+bin

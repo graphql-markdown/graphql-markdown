@@ -1,0 +1,420 @@
+{
+  "path": "/output",
+  "name": "output",
+  "children": [
+    {
+      "path": "/output/course",
+      "name": "course",
+      "children": [
+        {
+          "path": "/output/course/_category_.yml",
+          "name": "_category_.yml",
+          "size": 25,
+          "type": "file",
+          "extension": ".yml"
+        },
+        {
+          "path": "/output/course/mutations",
+          "name": "mutations",
+          "children": [
+            {
+              "path": "/output/course/mutations/_category_.yml",
+              "name": "_category_.yml",
+              "size": 28,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/course/mutations/add-course.mdx",
+              "name": "add-course.mdx",
+              "size": 1174,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/course/mutations/drop-course.mdx",
+              "name": "drop-course.mdx",
+              "size": 1178,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 2380,
+          "type": "directory"
+        },
+        {
+          "path": "/output/course/queries",
+          "name": "queries",
+          "children": [
+            {
+              "path": "/output/course/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 26,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/course/queries/all-courses.mdx",
+              "name": "all-courses.mdx",
+              "size": 925,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/course/queries/math-courses.mdx",
+              "name": "math-courses.mdx",
+              "size": 928,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/course/queries/science-courses.mdx",
+              "name": "science-courses.mdx",
+              "size": 937,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 2816,
+          "type": "directory"
+        }
+      ],
+      "size": 5221,
+      "type": "directory"
+    },
+    {
+      "path": "/output/generated.md",
+      "name": "generated.md",
+      "size": 32,
+      "type": "file",
+      "extension": ".md"
+    },
+    {
+      "path": "/output/grade",
+      "name": "grade",
+      "children": [
+        {
+          "path": "/output/grade/_category_.yml",
+          "name": "_category_.yml",
+          "size": 24,
+          "type": "file",
+          "extension": ".yml"
+        },
+        {
+          "path": "/output/grade/mutations",
+          "name": "mutations",
+          "children": [
+            {
+              "path": "/output/grade/mutations/_category_.yml",
+              "name": "_category_.yml",
+              "size": 28,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/grade/mutations/update-gpa.mdx",
+              "name": "update-gpa.mdx",
+              "size": 1106,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/grade/mutations/update-grade.mdx",
+              "name": "update-grade.mdx",
+              "size": 1182,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 2316,
+          "type": "directory"
+        },
+        {
+          "path": "/output/grade/queries",
+          "name": "queries",
+          "children": [
+            {
+              "path": "/output/grade/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 26,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/grade/queries/gpa.mdx",
+              "name": "gpa.mdx",
+              "size": 1083,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/grade/queries/un-weighted-gpa.mdx",
+              "name": "un-weighted-gpa.mdx",
+              "size": 1406,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/grade/queries/weighted-gpa.mdx",
+              "name": "weighted-gpa.mdx",
+              "size": 1395,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 3910,
+          "type": "directory"
+        }
+      ],
+      "size": 6250,
+      "type": "directory"
+    },
+    {
+      "path": "/output/misc",
+      "name": "misc",
+      "children": [
+        {
+          "path": "/output/misc/_category_.yml",
+          "name": "_category_.yml",
+          "size": 23,
+          "type": "file",
+          "extension": ".yml"
+        },
+        {
+          "path": "/output/misc/directives",
+          "name": "directives",
+          "children": [
+            {
+              "path": "/output/misc/directives/_category_.yml",
+              "name": "_category_.yml",
+              "size": 29,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/directives/deprecated.mdx",
+              "name": "deprecated.mdx",
+              "size": 1135,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/directives/doc.mdx",
+              "name": "doc.mdx",
+              "size": 830,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/directives/include.mdx",
+              "name": "include.mdx",
+              "size": 978,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/directives/skip.mdx",
+              "name": "skip.mdx",
+              "size": 957,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/directives/specified-by.mdx",
+              "name": "specified-by.mdx",
+              "size": 992,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 4921,
+          "type": "directory"
+        },
+        {
+          "path": "/output/misc/enums",
+          "name": "enums",
+          "children": [
+            {
+              "path": "/output/misc/enums/_category_.yml",
+              "name": "_category_.yml",
+              "size": 24,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/enums/roles.mdx",
+              "name": "roles.mdx",
+              "size": 883,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 907,
+          "type": "directory"
+        },
+        {
+          "path": "/output/misc/interfaces",
+          "name": "interfaces",
+          "children": [
+            {
+              "path": "/output/misc/interfaces/_category_.yml",
+              "name": "_category_.yml",
+              "size": 29,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/interfaces/record.mdx",
+              "name": "record.mdx",
+              "size": 1099,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 1128,
+          "type": "directory"
+        },
+        {
+          "path": "/output/misc/objects",
+          "name": "objects",
+          "children": [
+            {
+              "path": "/output/misc/objects/_category_.yml",
+              "name": "_category_.yml",
+              "size": 26,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/objects/department-information.mdx",
+              "name": "department-information.mdx",
+              "size": 2407,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/objects/semester.mdx",
+              "name": "semester.mdx",
+              "size": 1753,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 4186,
+          "type": "directory"
+        },
+        {
+          "path": "/output/misc/queries",
+          "name": "queries",
+          "children": [
+            {
+              "path": "/output/misc/queries/_category_.yml",
+              "name": "_category_.yml",
+              "size": 26,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/queries/search-role.mdx",
+              "name": "search-role.mdx",
+              "size": 1172,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 1198,
+          "type": "directory"
+        },
+        {
+          "path": "/output/misc/scalars",
+          "name": "scalars",
+          "children": [
+            {
+              "path": "/output/misc/scalars/_category_.yml",
+              "name": "_category_.yml",
+              "size": 26,
+              "type": "file",
+              "extension": ".yml"
+            },
+            {
+              "path": "/output/misc/scalars/boolean.mdx",
+              "name": "boolean.mdx",
+              "size": 834,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/date.mdx",
+              "name": "date.mdx",
+              "size": 682,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/email-address.mdx",
+              "name": "email-address.mdx",
+              "size": 734,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/id.mdx",
+              "name": "id.mdx",
+              "size": 1223,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/int.mdx",
+              "name": "int.mdx",
+              "size": 1643,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/phone-number.mdx",
+              "name": "phone-number.mdx",
+              "size": 731,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/string.mdx",
+              "name": "string.mdx",
+              "size": 2294,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/time.mdx",
+              "name": "time.mdx",
+              "size": 709,
+              "type": "file",
+              "extension": ".mdx"
+            },
+            {
+              "path": "/output/misc/scalars/url.mdx",
+              "name": "url.mdx",
+              "size": 768,
+              "type": "file",
+              "extension": ".mdx"
+            }
+          ],
+          "size": 9644,
+          "type": "directory"
+        }
+      ],
+      "size": 22007,
+      "type": "directory"
+    },
+    {
+      "path": "/output/sidebar-schema.js",
+      "name": "sidebar-schema.js",
+      "size": 191,
+      "type": "file",
+      "extension": ".js"
+    }
+  ],
+  "size": 33701,
+  "type": "directory"
+}

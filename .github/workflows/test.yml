@@ -2,27 +2,21 @@ name: Test
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]    
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'assets/**'
-      - '**.js'
-      - '**.json'
-      - '**.lock'
-      - '**.yml'
-      - '!dangerfile.js'
-      - '!.github'
-      - '!website'
+      - 'packages/**/*'
       - '.github/workflows/test.yml'
 
 jobs:
   test:
-    name: Test Code Base
+    name: Test package ${{matrix.package}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ['@graphql-markdown/docusaurus']
 
     steps:
     - name: Checkout Code Base
@@ -32,13 +26,13 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/unit
+      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/unit
 
     - name: Run Integration Tests
-      run: NODE_ENV=ci node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --projects tests/integration
+      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/integration
 
     - name: Check Code Coverage
-      run: npm run test:coverage
+      run: npm run test:coverage -w ${{matrix.package}}
 
     - name: Coveralls
       continue-on-error: true
