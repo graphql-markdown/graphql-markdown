@@ -47,7 +47,7 @@ describe("utils", () => {
     describe("escapeMDX()", () => {
       test("returns string with HTML &#x0000; format for MDX special characters", () => {
         expect(escapeMDX("{MDX} <special> characters")).toBe(
-          "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters"
+          "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters",
         );
       });
 
@@ -71,7 +71,7 @@ describe("utils", () => {
         "returns capitalized string: first letter uppercase, rest lowercase",
         (input, expected) => {
           expect(capitalize(input)).toBe(expected);
-        }
+        },
       );
     });
   });

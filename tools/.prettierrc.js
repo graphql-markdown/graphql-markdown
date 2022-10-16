@@ -1,4 +1,4 @@
-{
+module.exports = {
   "singleQuote": false,
   "bracketSpacing": true,
   "proseWrap": "preserve",

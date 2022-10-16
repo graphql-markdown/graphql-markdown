@@ -8,9 +8,10 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "prettier": "prettier --config tools/.prettierrc \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
+    "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{js,json,md}\"",
     "lint": "eslint --config tools/.eslintrc.json \"packages/**/{src,tests,assets}/**/*.js\""
   },
+  "prettier": "./tools/.prettierrc.js",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-emoji"

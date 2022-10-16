@@ -47,7 +47,7 @@ describe("lib", () => {
           expect.hasAssertions();
 
           expect(parseGroupByOption(groupOptions)).toBeUndefined();
-        }
+        },
       );
     });
   });

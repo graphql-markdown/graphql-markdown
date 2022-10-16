@@ -36,7 +36,7 @@ describe("lib", () => {
       __dirname,
       "__expect__",
       __OS__,
-      path.basename(__filename)
+      path.basename(__filename),
     );
 
     describe("checkSchemaChanges()", () => {
@@ -64,7 +64,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema-new",
           FOLDER,
-          COMPARE_METHOD.HASH
+          COMPARE_METHOD.HASH,
         );
 
         expect(check).toBeTruthy();
@@ -79,7 +79,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
-          COMPARE_METHOD.HASH
+          COMPARE_METHOD.HASH,
         );
 
         expect(check).toBeFalsy();
@@ -94,7 +94,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
-          COMPARE_METHOD.HASH
+          COMPARE_METHOD.HASH,
         );
 
         expect(hasHashFile).toBeFalsy();
@@ -119,7 +119,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema-new",
           FOLDER,
-          COMPARE_METHOD.DIFF
+          COMPARE_METHOD.DIFF,
         );
 
         expect(check).toBeTruthy();
@@ -143,7 +143,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
-          COMPARE_METHOD.DIFF
+          COMPARE_METHOD.DIFF,
         );
 
         expect(check).toBeFalsy();
@@ -167,7 +167,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           "schema",
           FOLDER,
-          COMPARE_METHOD.DIFF
+          COMPARE_METHOD.DIFF,
         );
 
         expect(hasSchemaFile).toBeFalsy();
