@@ -99,12 +99,12 @@ You should edit the documentation, or add new documentation files, directly in y
 
 ### Code
 
-The code base is full Javascript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding).
+The code base is full Javascript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
 
 When making your changes, remember to check your code by running:
 
 * `npm run lint` checks that the code respects Javascript standards.
-* `npm test` runs the test suites.
+* `npm test -ws` runs the test suites.
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
@@ -122,19 +122,23 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 
 The quickest way to understand the code structure is to look at the folder structure:
 
-* `src` contains all JS files used by the plugin.
-  * `index.js` is the plugin entrypoint.
-  * `lib` contains all classes used for reading schema and generating markdown.
-    * `generator.js` is controlling the logic, sequencing the calls to other classes.
-    * `printer.js` is the class transforming GraphQL nodes into Markdown.
-    * `renderer.js` is responsible for generating Markdown file structure, and other Docusaurus files.
-    * `diff.js` contains methods for identifying schema changes.
-    * `config.js` manages the config settings (CLI flags and JS).
-  * `utils` contains some utilities for manipulating basic structures such as `object`, `array`, `string` and `url` , and some helpers for `diff` and `prettier` .
-* `tests` folder contains all tests needed (see [tests](#tests) section).
-* `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
+* `packages` contains packages sources
+  * `docusaurus` contains source for the @graphql-markdown/docusaurus packages
+    * `src` contains all JS files used by the plugin.
+      * `index.js` is the plugin entrypoint.
+      * `lib` contains all classes used for reading schema and generating markdown.
+        * `generator.js` is controlling the logic, sequencing the calls to other classes.
+        * `printer.js` is the class transforming GraphQL nodes into Markdown.
+        * `renderer.js` is responsible for generating Markdown file structure, and other Docusaurus files.
+        * `diff.js` contains methods for identifying schema changes.
+        * `config.js` manages the config settings (CLI flags and JS).
+      * `utils` contains some utilities for manipulating basic structures such as `object`, `array`, `string` and `url` , and some helpers for `diff` and `prettier`.
+    * `tests` folder contains all tests needed (see [tests](#tests) section).
+    * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
 * `scripts` folder contains a few scripts used by Github Actions and Docker.
-* `.docs` folder contains custom CSS for the online documentation.
+* `config` folder configuration files for development tools.
+* `docs` folder contains online documentation.
+* `website` folder contains Docusaurus file for generating website.
 
 > The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
 
