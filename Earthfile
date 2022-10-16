@@ -75,7 +75,7 @@ smoke-test:
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
   COPY ./packages/docusaurus/tests/e2e/jest.config.js ./jest.config.js
   RUN export NODE_ENV=ci
-  RUN npm test -- --runInBand
+  RUN npx jest --runInBand
 
 smoke-run:
   ARG OPTIONS=
