@@ -26,10 +26,10 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/unit
+      run: npm test -w ${{matrix.package}} -- --runInBand --selectProjects unit
 
     - name: Run Integration Tests
-      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/integration
+      run: npm test -w ${{matrix.package}} -- --runInBand --selectProjects integration
 
     - name: Check Code Coverage
       run: npm run test:coverage -w ${{matrix.package}}
