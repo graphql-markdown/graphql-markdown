@@ -81,7 +81,9 @@ describe("lib", () => {
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        const hasHashFile = await fileExists(`${"/output"}/${SCHEMA_HASH_FILE}`);
+        const hasHashFile = await fileExists(
+          `${"/output"}/${SCHEMA_HASH_FILE}`,
+        );
         const check = await checkSchemaChanges(
           "schema",
           "/output",
@@ -179,7 +181,9 @@ describe("lib", () => {
 
         await method("SCHEMA", "/output");
 
-        expect(vol.toJSON(`/output/${reference}`, undefined, true)).toMatchSnapshot();
+        expect(
+          vol.toJSON(`/output/${reference}`, undefined, true),
+        ).toMatchSnapshot();
       });
     });
   });

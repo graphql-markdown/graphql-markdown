@@ -73,7 +73,9 @@ describe("lib", () => {
 
           await rendererInstance.renderSidebar();
 
-          expect(vol.toJSON("/output/sidebar-schema.js", undefined, true)).toMatchSnapshot();
+          expect(
+            vol.toJSON("/output/sidebar-schema.js", undefined, true),
+          ).toMatchSnapshot();
         });
       });
 

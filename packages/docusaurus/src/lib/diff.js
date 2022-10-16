@@ -24,11 +24,11 @@ function getSchemaHash(schema) {
   return sum.digest("hex");
 }
 
-async function getDiff(schemaNew, schemaOld) {
-  const schemaRef = await loadSchema(schemaOld, {
+async function getDiff(schemaNew, schemaOldLocation) {
+  const schemaOld = await loadSchema(schemaOldLocation, {
     loaders: getDocumentLoaders(defaultLoaders).loaders,
   });
-  return diff(schemaRef, schemaNew);
+  return diff(schemaOld, schemaNew);
 }
 
 async function checkSchemaChanges(
@@ -49,7 +49,7 @@ async function checkSchemaChanges(
 
   if (method === COMPARE_METHOD.HASH) {
     if (await fileExists(hashFile)) {
-      const hash = await readFile(hashFile);
+      const hash = await readFile(hashFile, { encoding: "utf8", flag: "r" });
       return hashSchema != hash;
     }
   }

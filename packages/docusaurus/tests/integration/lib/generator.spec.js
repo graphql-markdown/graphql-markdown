@@ -21,7 +21,7 @@ describe("lib", () => {
 
     describe("generateDocFromSchema()", () => {
       test("generates Markdown document structure from GraphQL schema", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         const config = {
           baseURL: "graphql",
@@ -29,7 +29,7 @@ describe("lib", () => {
           outputDir: "/output",
           linkRoot: "docs",
           homepageLocation: "/assets/generated.md",
-          diffMethod: "SCHEMA-DIFF",
+          diffMethod: "NONE",
           tmpDir: "/temp",
           loaders: {},
         };
@@ -37,7 +37,6 @@ describe("lib", () => {
         await generateDocFromSchema(config);
 
         expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
-        expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
       });
 
       test('outputs "no schema changed" message when called twice', async () => {
@@ -51,17 +50,16 @@ describe("lib", () => {
           outputDir: "/output",
           linkRoot: "docs",
           homepageLocation: "/assets/generated.md",
-          diffMethod: "SCHEMA-DIFF",
+          diffMethod: "SCHEMA-HASH",
           tmpDir: "/temp",
           loaders: {},
         };
 
         await generateDocFromSchema(config);
-
         await generateDocFromSchema(config);
 
         expect(logSpy).toHaveBeenCalledWith(
-          `No changes detected in schema "${schemaLocation}".`,
+          `No changes detected in schema "${config.schemaLocation}".`,
         );
       });
 

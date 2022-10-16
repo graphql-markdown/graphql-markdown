@@ -21,7 +21,7 @@ async function fileExists(filePath) {
 
 async function saveFile(filePath, data) {
   await ensureDir(dirname(filePath));
-  await fs.writeFile(filePath, data);
+  await fs.writeFile(filePath, data, "utf8");
 }
 
 module.exports = {
