@@ -58,7 +58,7 @@
     "postpack": "pinst --enable",
     "test": "jest",
     "test:coverage": "sh ../../scripts/coverage.sh",
-    "stryker": "stryker run ../../tools/stryker.conf.js"
+    "stryker": "stryker run ../../config/stryker.conf.js"
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.3.0",
