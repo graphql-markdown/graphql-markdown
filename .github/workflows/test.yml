@@ -28,12 +28,14 @@ jobs:
     - name: Run Unit Tests
       run: |
         npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects unit
-        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/coverage-unit.json
+        mkdir packages/docusaurus/coverage/unit
+        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/unit/coverage-final.json
 
     - name: Run Integration Tests
       run: |
         npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects integration
-        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/coverage-integration.json
+        mkdir packages/docusaurus/coverage/integration
+        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/integration/coverage.json
 
     - name: Check Code Coverage
       run: npm run test:coverage -w ${{matrix.package}}
