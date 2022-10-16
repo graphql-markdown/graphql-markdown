@@ -26,10 +26,14 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects unit
+      run: |
+        npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects unit
+        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/coverage-unit.json
 
     - name: Run Integration Tests
-      run: npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects integration
+      run: |
+        npm test -w ${{matrix.package}} -- --coverage --runInBand --selectProjects integration
+        mv packages/docusaurus/coverage/coverage-final.json packages/docusaurus/coverage/coverage-integration.json
 
     - name: Check Code Coverage
       run: npm run test:coverage -w ${{matrix.package}}
