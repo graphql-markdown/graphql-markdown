@@ -3,9 +3,6 @@ module.exports = {
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   coverageReporters: ["json"],
   testEnvironment: "node",
-  coverageThreshold: {
-    global: require("./nyc.config"),
-  },
   projects: [
     {
       displayName: "unit",
