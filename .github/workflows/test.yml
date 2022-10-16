@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    name: Test package ${{matrix.package}}
+    name: Test ${{matrix.package}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
