@@ -1,3 +1,0 @@
-```graphql
-scalar TestScalar
-```

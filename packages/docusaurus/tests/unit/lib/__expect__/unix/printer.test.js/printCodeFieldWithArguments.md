@@ -1,3 +1,0 @@
-TypeFooBar(
-  ArgFooBar: String
-): String

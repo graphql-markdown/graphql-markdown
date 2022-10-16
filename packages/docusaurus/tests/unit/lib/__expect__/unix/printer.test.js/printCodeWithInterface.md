@@ -1,4 +1,0 @@
-```graphql
-interface TestInterface {
-}
-```

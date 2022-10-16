@@ -1,4 +1,7 @@
-{
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`graphql schema with custom rootTypes getSchemaMap returns a filtered map of schema types 1`] = `
+"{
   "queries": {
     "allSubscription": {
       "name": "allSubscription",
@@ -442,4 +445,5 @@
     "Int": "Int",
     "Boolean": "Boolean"
   }
-}
+}"
+`;

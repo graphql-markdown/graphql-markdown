@@ -1,3 +1,0 @@
-```graphql
-TestQuery: ID
-```

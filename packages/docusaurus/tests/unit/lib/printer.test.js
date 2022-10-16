@@ -1,5 +1,3 @@
-const path = require("path");
-
 const {
   GraphQLNonNull,
   GraphQLInt,
@@ -19,13 +17,6 @@ const {
 const graphqlLib = require("../../../src/lib/graphql");
 
 const Printer = require("../../../src/lib/printer");
-
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
 
 describe("lib", () => {
   describe("printer", () => {
@@ -154,9 +145,7 @@ describe("lib", () => {
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(JSON.stringify(link)).toMatchFile(
-            path.join(EXPECT_PATH, `toLinkWithTestDirective.json`),
-          );
+          expect(JSON.stringify(link)).toMatchSnapshot();
         });
 
         test("returns markdown link surrounded by [] for GraphQL list/array", () => {
@@ -171,9 +160,7 @@ describe("lib", () => {
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(JSON.stringify(link)).toMatchFile(
-            path.join(EXPECT_PATH, "toLinkWithList.json"),
-          );
+          expect(JSON.stringify(link)).toMatchSnapshot();
         });
 
         test("returns plain text for unknown entities", () => {
@@ -184,9 +171,7 @@ describe("lib", () => {
 
           const link = printerInstance.toLink(type, entityName);
 
-          expect(JSON.stringify(link)).toMatchFile(
-            path.join(EXPECT_PATH, "toLinkWithUnknown.json"),
-          );
+          expect(JSON.stringify(link)).toMatchSnapshot();
         });
       });
 
@@ -207,9 +192,7 @@ describe("lib", () => {
             parentType: undefined,
           });
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSection.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown custom section level", () => {
@@ -226,9 +209,7 @@ describe("lib", () => {
             level: "#",
           });
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSectionCustomLevel.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns empty string if content is empty", () => {
@@ -259,9 +240,7 @@ describe("lib", () => {
           expect(printSectionItem).toHaveBeenLastCalledWith(itemList.pop(), {
             level: "####",
           });
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSectionItems.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns empty text if not a list", () => {
@@ -286,9 +265,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSectionItem.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown #### link section with sub type is non-nullable", () => {
@@ -305,9 +282,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, `printSectionItemWithSubTypeNonNullable.md`),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown #### link section with sub type list and non-nullable", () => {
@@ -326,12 +301,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(section).toMatchFile(
-            path.join(
-              EXPECT_PATH,
-              `printSectionItemWithSubTypeListNonNullable.md`,
-            ),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown #### link section with field parameters", () => {
@@ -358,9 +328,7 @@ describe("lib", () => {
             level: "#####",
             parentType: undefined,
           });
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSectionWithFieldParameters.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown #### link section with non empty nullable list [!]", () => {
@@ -373,9 +341,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(section).toMatchFile(
-            path.join(EXPECT_PATH, "printSectionItemListNonEmpty.md"),
-          );
+          expect(section).toMatchSnapshot();
         });
 
         test("returns Markdown #### link section with non empty no nullable list [!]!", () => {
@@ -390,12 +356,7 @@ describe("lib", () => {
 
           const section = printerInstance.printSectionItem(type);
 
-          expect(section).toMatchFile(
-            path.join(
-              EXPECT_PATH,
-              "printSectionItemNonNullableListNonEmpty.md",
-            ),
-          );
+          expect(section).toMatchSnapshot();
         });
       });
 
@@ -413,7 +374,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeEnum(type);
 
-          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeEnum.md"));
+          expect(code).toMatchSnapshot();
         });
 
         test("returns empty string if not enum type", () => {
@@ -441,7 +402,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeUnion(type);
 
-          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeUnion.md"));
+          expect(code).toMatchSnapshot();
         });
 
         test("returns empty string if not union type", () => {
@@ -469,9 +430,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeScalar(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeScalar.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
       });
 
@@ -495,9 +454,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeArguments(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeArguments.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
 
         test("returns an empty string if args list empty", () => {
@@ -534,7 +491,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeField(type);
 
-          expect(code).toMatchFile(path.join(EXPECT_PATH, "printCodeField.md"));
+          expect(code).toMatchSnapshot();
         });
 
         test("returns a field with its type and arguments", () => {
@@ -553,9 +510,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeField(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeFieldWithArguments.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
       });
 
@@ -571,9 +526,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeDirective(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeDirective.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
 
         test("returns a directive with its arguments", () => {
@@ -592,9 +545,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeDirective(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeDirectiveWithArguments.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
       });
 
@@ -612,9 +563,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeType(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeTypeWithInterface.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
 
         test("returns an object with its fields and interfaces", () => {
@@ -633,9 +582,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeType(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeTypeWithObject.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
 
         test("returns an input with its fields", () => {
@@ -651,9 +598,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCodeType(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeTypeWithInput.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
       });
 
@@ -666,7 +611,7 @@ describe("lib", () => {
             "An Object Type Name",
           );
 
-          expect(header).toMatchFile(path.join(EXPECT_PATH, "printHeader.md"));
+          expect(header).toMatchSnapshot();
         });
 
         test("returns a Docusaurus document header with ToC disabled", () => {
@@ -678,9 +623,7 @@ describe("lib", () => {
             { toc: false },
           );
 
-          expect(header).toMatchFile(
-            path.join(EXPECT_PATH, "printHeaderNoToC.md"),
-          );
+          expect(header).toMatchSnapshot();
         });
 
         test("returns a Docusaurus document header with pagination disabled", () => {
@@ -692,9 +635,7 @@ describe("lib", () => {
             { pagination: false },
           );
 
-          expect(header).toMatchFile(
-            path.join(EXPECT_PATH, "printHeaderNoPagination.md"),
-          );
+          expect(header).toMatchSnapshot();
         });
       });
 
@@ -705,9 +646,7 @@ describe("lib", () => {
           const type = { description: "Lorem ipsum" };
           const description = printerInstance.printDescription(type);
 
-          expect(description).toMatchFile(
-            path.join(EXPECT_PATH, "printDescription.md"),
-          );
+          expect(description).toMatchSnapshot();
         });
 
         test("returns the default text if no description", () => {
@@ -716,9 +655,7 @@ describe("lib", () => {
           const type = {};
           const description = printerInstance.printDescription(type);
 
-          expect(description).toMatchFile(
-            path.join(EXPECT_PATH, "printDescriptionWithDefault.md"),
-          );
+          expect(description).toMatchSnapshot();
         });
 
         test("return DEPRECATED tag if deprecated", () => {
@@ -729,16 +666,14 @@ describe("lib", () => {
           };
           const description = printerInstance.printDescription(type);
 
-          expect(description).toMatchFile(
-            path.join(EXPECT_PATH, "printDescriptionWithDeprecated.md"),
-          );
+          expect(description).toMatchSnapshot();
         });
       });
 
       describe("printCode()", () => {
         test.each(types)(
           "returns a Markdown graphql codeblock with type $name",
-          ({ name, type, spyOn }) => {
+          ({ type, spyOn }) => {
             expect.hasAssertions();
 
             const printCode = jest.spyOn(printerInstance, spyOn);
@@ -747,9 +682,7 @@ describe("lib", () => {
 
             expect(printCode).toHaveBeenCalledWith(type);
 
-            expect(code).toMatchFile(
-              path.join(EXPECT_PATH, `printCodeWith${name}.md`),
-            );
+            expect(code).toMatchSnapshot();
           },
         );
 
@@ -760,9 +693,7 @@ describe("lib", () => {
 
           const code = printerInstance.printCode(type);
 
-          expect(code).toMatchFile(
-            path.join(EXPECT_PATH, "printCodeWithUnsupported.md"),
-          );
+          expect(code).toMatchSnapshot();
         });
       });
 
@@ -784,9 +715,7 @@ describe("lib", () => {
 
             const printedType = printerInstance.printType(name, type);
 
-            expect(printedType).toMatchFile(
-              path.join(EXPECT_PATH, `printTypeWith${name}.md`),
-            );
+            expect(printedType).toMatchSnapshot();
           },
         );
 
@@ -807,9 +736,7 @@ describe("lib", () => {
 
             const printedType = printerInstance.printType(name, type);
 
-            expect(printedType).toMatchFile(
-              path.join(EXPECT_PATH, `printTypeWith${name}ExtendInterface.md`),
-            );
+            expect(printedType).toMatchSnapshot();
           },
         );
 
@@ -839,9 +766,7 @@ describe("lib", () => {
 
           const printedType = printerInstance.printType("scalar", scalarType);
 
-          expect(printedType).toMatchFile(
-            path.join(EXPECT_PATH, `printTypeWithScalarWithSpecifiedBy.md`),
-          );
+          expect(printedType).toMatchSnapshot();
         });
       });
 

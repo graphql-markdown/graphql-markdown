@@ -9,7 +9,7 @@ module.exports = {
       notify: false,
       reporters: [],
       verbose: false,
-      testMatch: ["tests/unit/**/*.test.js"], // unit tests only
+      testMatch: ["**/tests/unit/**/*.test.js"], // unit tests only
     },
     configFile: "jest.config",
     projectType: "custom",

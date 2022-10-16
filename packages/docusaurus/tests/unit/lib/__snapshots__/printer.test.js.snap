@@ -1,0 +1,539 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib printer class Printer printCode() returns a Markdown codeblock with non supported message for unsupported type 1`] = `
+"\`\`\`graphql
+"TestFooBarType" not supported
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Directive 1`] = `
+"\`\`\`graphql
+directive @TestDirective
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Enum 1`] = `
+"\`\`\`graphql
+enum TestEnum {
+
+}
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Input 1`] = `
+"\`\`\`graphql
+input TestInput {
+}
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Interface 1`] = `
+"\`\`\`graphql
+interface TestInterface {
+}
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Object 1`] = `
+"\`\`\`graphql
+type TestObject {
+}
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Query 1`] = `
+"\`\`\`graphql
+TestQuery: ID
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Scalar 1`] = `
+"\`\`\`graphql
+scalar TestScalar
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCode() returns a Markdown graphql codeblock with type Union 1`] = `
+"\`\`\`graphql
+union TestUnion =
+\`\`\`
+"
+`;
+
+exports[`lib printer class Printer printCodeArguments() returns a Markdown one line per formatted argument with default value surrounded by () 1`] = `
+"(
+  ParamWithDefault: string = defaultValue
+  ParamNoDefault: any
+  ParamIntZero: int = 0
+  ParamIntNoDefault: int
+)"
+`;
+
+exports[`lib printer class Printer printCodeDirective() returns a directive 1`] = `"directive @FooBar"`;
+
+exports[`lib printer class Printer printCodeDirective() returns a directive with its arguments 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+)"
+`;
+
+exports[`lib printer class Printer printCodeEnum() returns enum code structure 1`] = `
+"enum EnumTypeName {
+  one
+  two
+}"
+`;
+
+exports[`lib printer class Printer printCodeField() returns a field with its type 1`] = `
+"FooBar: string
+"
+`;
+
+exports[`lib printer class Printer printCodeField() returns a field with its type and arguments 1`] = `
+"TypeFooBar(
+  ArgFooBar: String
+): String
+"
+`;
+
+exports[`lib printer class Printer printCodeScalar() returns scalar code structure 1`] = `"scalar ScalarTypeName"`;
+
+exports[`lib printer class Printer printCodeType() returns an input with its fields 1`] = `
+"input TestName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`lib printer class Printer printCodeType() returns an interface with its fields 1`] = `
+"interface TestInterfaceName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`lib printer class Printer printCodeType() returns an object with its fields and interfaces 1`] = `
+"type TestName implements TestInterfaceName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`lib printer class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
+
+exports[`lib printer class Printer printDescription() return DEPRECATED tag if deprecated 1`] = `
+"<Badge class="warning" text="DEPRECATED: Foobar"/>
+
+Lorem ipsum"
+`;
+
+exports[`lib printer class Printer printDescription() returns the default text if no description 1`] = `"No description"`;
+
+exports[`lib printer class Printer printDescription() returns the type description text 1`] = `"Lorem ipsum"`;
+
+exports[`lib printer class Printer printHeader() returns a Docusaurus document header 1`] = `
+"---
+id: an-object-type-name
+title: An Object Type Name
+hide_table_of_contents: false
+---
+"
+`;
+
+exports[`lib printer class Printer printHeader() returns a Docusaurus document header with ToC disabled 1`] = `
+"---
+id: an-object-type-name
+title: An Object Type Name
+hide_table_of_contents: true
+---
+"
+`;
+
+exports[`lib printer class Printer printHeader() returns a Docusaurus document header with pagination disabled 1`] = `
+"---
+id: an-object-type-name
+title: An Object Type Name
+hide_table_of_contents: false
+pagination_next: null
+pagination_prev: null
+---
+"
+`;
+
+exports[`lib printer class Printer printSection() returns Markdown ### section by default 1`] = `
+"### section title
+
+section content
+
+"
+`;
+
+exports[`lib printer class Printer printSection() returns Markdown custom section level 1`] = `
+"# section title
+
+section content
+
+"
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with description 1`] = `
+"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) <Badge class="secondary" text="object"/>
+> Lorem ipsum
+> "
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with field parameters 1`] = `
+"#### [\`EntityTypeName\`](#) 
+> 
+> ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty no nullable list [!]! 1`] = `
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](docs/graphql/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty nullable list [!] 1`] = `
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](docs/graphql/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type is non-nullable 1`] = `
+"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+> 
+> "
+`;
+
+exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type list and non-nullable 1`] = `
+"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+> 
+> "
+`;
+
+exports[`lib printer class Printer printSectionItems() returns Markdown one line per item 1`] = `
+"one
+
+two
+
+three"
+`;
+
+exports[`lib printer class Printer printType() prints a specification section if scalar as directive @specifiedBy 1`] = `
+"header-scalar
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Lorem Ipsum
+
+\`\`\`graphql
+scalar LoremScalar
+\`\`\`
+
+
+### <SpecifiedBy url="https://lorem.ipsum"/>
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for InterfaceType implementing interface 1`] = `
+"header-interfacetype
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test TestInterfaceType
+
+\`\`\`graphql
+interface TestInterfaceType implements TestInterface {
+}
+\`\`\`
+
+
+### Interfaces
+
+#### [\`TestInterface\`](#) 
+> Test TestInterface
+> 
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for Object implementing interface 1`] = `
+"header-object
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test TestObject
+
+\`\`\`graphql
+type TestObject implements TestInterface {
+}
+\`\`\`
+
+
+### Interfaces
+
+#### [\`TestInterface\`](#) 
+> Test TestInterface
+> 
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Directive 1`] = `
+"header-directive
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Directive
+
+\`\`\`graphql
+directive @TestDirective
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Enum 1`] = `
+"header-enum
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Enum
+
+\`\`\`graphql
+enum TestEnum {
+
+}
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Input 1`] = `
+"header-input
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Input
+
+\`\`\`graphql
+input TestInput {
+}
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Interface 1`] = `
+"header-interface
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Interface
+
+\`\`\`graphql
+interface TestInterface {
+}
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Object 1`] = `
+"header-object
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Object
+
+\`\`\`graphql
+type TestObject {
+}
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Query 1`] = `
+"header-query
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Query
+
+\`\`\`graphql
+TestQuery: ID
+\`\`\`
+
+
+### Type
+
+#### [\`ID\`](#) 
+> Test Query
+> 
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Scalar 1`] = `
+"header-scalar
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Scalar
+
+\`\`\`graphql
+scalar TestScalar
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer printType() returns a Markdown formatted Docusaurus content for type Union 1`] = `
+"header-union
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Test Union
+
+\`\`\`graphql
+union TestUnion =
+\`\`\`
+
+
+
+
+
+
+"
+`;
+
+exports[`lib printer class Printer toLink() returns markdown link for GraphQL directive 1`] = `"{"text":"TestDirective","url":"docs/graphql/directives/test-directive"}"`;
+
+exports[`lib printer class Printer toLink() returns markdown link surrounded by [] for GraphQL list/array 1`] = `"{"text":"TestObjectList","url":"docs/graphql/objects/test-object-list"}"`;
+
+exports[`lib printer class Printer toLink() returns plain text for unknown entities 1`] = `"{"text":"fooBar","url":"#"}"`;

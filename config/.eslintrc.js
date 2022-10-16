@@ -14,9 +14,6 @@ module.exports = {
     "plugin:node/recommended",
   ],
   plugins: ["jest"],
-  globals: {
-    __OS__: "writable",
-  },
   settings: {
     "import/resolver": {
       node: {

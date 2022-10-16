@@ -2,10 +2,6 @@ const config = {
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   coverageReporters: ["json"],
-  globals: {
-    __OS__: require("os").platform() === "win32" ? "windows" : "unix",
-  },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   testEnvironment: "node",
   watchPathIgnorePatterns: ["__expected__"],
 };

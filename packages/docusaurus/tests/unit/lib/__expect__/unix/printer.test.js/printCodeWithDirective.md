@@ -1,3 +1,0 @@
-```graphql
-directive @TestDirective
-```

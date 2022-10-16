@@ -1,4 +1,0 @@
-### section title
-
-section content
-
