@@ -162,7 +162,7 @@ There are 3 types of tests used in this project, all based on Jest:
 
 * `integration` for testing the logic of the main classes. If your changes are located in `src/lib`, then you will need to add your tests here.
 
-  >  If your tests interact with the filesystem, then you should make use of file system mocking with `mock-fs`.
+  >  If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
 
 * `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
 

@@ -1,0 +1,2618 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
+{
+  "course/_category_.yml": "label: Course
+link: null
+",
+  "course/mutations/_category_.yml": "label: Mutations
+link: null
+",
+  "course/mutations/add-course.mdx": "---
+id: add-course
+title: AddCourse
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+AddCourse(
+  input: String
+): String
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>AddCourse.<b>input</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "course/mutations/drop-course.mdx": "---
+id: drop-course
+title: DropCourse
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+DropCourse(
+  input: String
+): String
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>DropCourse.<b>input</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "course/queries/_category_.yml": "label: Queries
+link: null
+",
+  "course/queries/all-courses.mdx": "---
+id: all-courses
+title: allCourses
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+allCourses: [String]
+\`\`\`
+
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "course/queries/math-courses.mdx": "---
+id: math-courses
+title: mathCourses
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+mathCourses: [String]
+\`\`\`
+
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "course/queries/science-courses.mdx": "---
+id: science-courses
+title: scienceCourses
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scienceCourses: [String]
+\`\`\`
+
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "generated.md": "Dummy homepage for tweet.graphql",
+  "grade/_category_.yml": "label: Grade
+link: null
+",
+  "grade/mutations/_category_.yml": "label: Mutations
+link: null
+",
+  "grade/mutations/update-gpa.mdx": "---
+id: update-gpa
+title: UpdateGPA
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+UpdateGPA(
+  input: Int
+): Int
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>UpdateGPA.<b>input</b></code>](#)<Bullet />[\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+> 
+
+
+
+
+
+",
+  "grade/mutations/update-grade.mdx": "---
+id: update-grade
+title: UpdateGrade
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+UpdateGrade(
+  input: String
+): String
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>UpdateGrade.<b>input</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+> 
+
+
+
+
+
+",
+  "grade/queries/_category_.yml": "label: Queries
+link: null
+",
+  "grade/queries/gpa.mdx": "---
+id: gpa
+title: GPA
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+GPA(
+  skip: Int = 0
+): Int
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>GPA.<b>skip</b></code>](#)<Bullet />[\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+> 
+
+
+
+
+
+",
+  "grade/queries/un-weighted-gpa.mdx": "---
+id: un-weighted-gpa
+title: UnWeightedGPA
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+UnWeightedGPA(
+  input: String
+  skip: Int!
+): Int
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>UnWeightedGPA.<b>input</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>UnWeightedGPA.<b>skip</b></code>](#)<Bullet />[\`Int!\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+> 
+
+
+
+
+
+",
+  "grade/queries/weighted-gpa.mdx": "---
+id: weighted-gpa
+title: WeightedGPA
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+WeightedGPA(
+  input: String
+  skip: Int!
+): Int
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>WeightedGPA.<b>input</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>WeightedGPA.<b>skip</b></code>](#)<Bullet />[\`Int!\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+> 
+
+
+
+
+
+",
+  "misc/_category_.yml": "label: Misc
+link: null
+",
+  "misc/directives/_category_.yml": "label: Directives
+link: null
+",
+  "misc/directives/deprecated.mdx": "---
+id: deprecated
+title: deprecated
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Marks an element of a GraphQL schema as no longer supported.
+
+\`\`\`graphql
+directive @deprecated(
+  reason: String = "No longer supported"
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>deprecated.<b>reason</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax, as specified by [CommonMark](https://commonmark.org/).
+> 
+
+
+
+
+
+",
+  "misc/directives/doc.mdx": "---
+id: doc
+title: doc
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+directive @doc(
+  category: String
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>doc.<b>category</b></code>](#)<Bullet />[\`String\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+
+
+
+
+",
+  "misc/directives/include.mdx": "---
+id: include
+title: include
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Directs the executor to include this field or fragment only when the \`if\` argument is true.
+
+\`\`\`graphql
+directive @include(
+  if: Boolean!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>include.<b>if</b></code>](#)<Bullet />[\`Boolean!\`](docs/graphql/misc/scalars/boolean) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> Included when true.
+> 
+
+
+
+
+
+",
+  "misc/directives/skip.mdx": "---
+id: skip
+title: skip
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Directs the executor to skip this field or fragment when the \`if\` argument is true.
+
+\`\`\`graphql
+directive @skip(
+  if: Boolean!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>skip.<b>if</b></code>](#)<Bullet />[\`Boolean!\`](docs/graphql/misc/scalars/boolean) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> Skipped when true.
+> 
+
+
+
+
+
+",
+  "misc/directives/specified-by.mdx": "---
+id: specified-by
+title: specifiedBy
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Exposes a URL that specifies the behavior of this scalar.
+
+\`\`\`graphql
+directive @specifiedBy(
+  url: String!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>specifiedBy.<b>url</b></code>](#)<Bullet />[\`String!\`](docs/graphql/misc/scalars/string) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The URL that specifies the behavior of this scalar.
+> 
+
+
+
+
+
+",
+  "misc/enums/_category_.yml": "label: Enums
+link: null
+",
+  "misc/enums/roles.mdx": "---
+id: roles
+title: Roles
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+enum Roles {
+  ADMIN
+  USER
+}
+\`\`\`
+
+
+### Values
+
+#### [<code style={{ fontWeight: 'normal' }}>Roles.<b>ADMIN</b></code>](#) 
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Roles.<b>USER</b></code>](#) 
+> 
+> 
+
+
+
+### Member of
+
+[\`searchRole\`](docs/graphql/misc/queries/search-role)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "misc/interfaces/_category_.yml": "label: Interfaces
+link: null
+",
+  "misc/interfaces/record.mdx": "---
+id: record
+title: Record
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+interface Record {
+  id: ID!
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Record.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/misc/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+
+
+### Implemented by
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/><Bullet />[\`Semester\`](docs/graphql/misc/objects/semester)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/objects/_category_.yml": "label: Objects
+link: null
+",
+  "misc/objects/department-information.mdx": "---
+id: department-information
+title: DepartmentInformation
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type DepartmentInformation implements Record {
+  id: ID!
+  email: EmailAddress
+  number: PhoneNumber
+  departmentOpenTime: Time
+  departmentCloseTime: Time
+  website: URL
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/misc/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>email</b></code>](#)<Bullet />[\`EmailAddress\`](docs/graphql/misc/scalars/email-address) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>number</b></code>](#)<Bullet />[\`PhoneNumber\`](docs/graphql/misc/scalars/phone-number) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>departmentOpenTime</b></code>](#)<Bullet />[\`Time\`](docs/graphql/misc/scalars/time) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>departmentCloseTime</b></code>](#)<Bullet />[\`Time\`](docs/graphql/misc/scalars/time) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>DepartmentInformation.<b>website</b></code>](#)<Bullet />[\`URL\`](docs/graphql/misc/scalars/url) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Interfaces
+
+#### [\`Record\`](docs/graphql/misc/interfaces/record) <Badge class="secondary" text="interface"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+
+
+
+
+",
+  "misc/objects/semester.mdx": "---
+id: semester
+title: Semester
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Semester implements Record {
+  id: ID!
+  startDate: Date
+  withdrawDate: Date
+  endDate: Date
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Semester.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/misc/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Semester.<b>startDate</b></code>](#)<Bullet />[\`Date\`](docs/graphql/misc/scalars/date) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Semester.<b>withdrawDate</b></code>](#)<Bullet />[\`Date\`](docs/graphql/misc/scalars/date) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Semester.<b>endDate</b></code>](#)<Bullet />[\`Date\`](docs/graphql/misc/scalars/date) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Interfaces
+
+#### [\`Record\`](docs/graphql/misc/interfaces/record) <Badge class="secondary" text="interface"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+
+
+
+
+",
+  "misc/queries/_category_.yml": "label: Queries
+link: null
+",
+  "misc/queries/search-role.mdx": "---
+id: search-role
+title: searchRole
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+searchRole(
+  roles: [Roles!]! = ADMIN
+): Int!
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>searchRole.<b>roles</b></code>](#)<Bullet />[\`[Roles!]!\`](docs/graphql/misc/enums/roles) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="enum"/> <Badge class="secondary" text="misc"/>
+> 
+> 
+
+### Type
+
+#### [\`Int\`](docs/graphql/misc/scalars/int) <Badge class="secondary" text="scalar"/> <Badge class="secondary" text="misc"/>
+> The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+> 
+
+
+
+
+
+",
+  "misc/scalars/_category_.yml": "label: Scalars
+link: null
+",
+  "misc/scalars/boolean.mdx": "---
+id: boolean
+title: Boolean
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`Boolean\` scalar type represents \`true\` or \`false\`.
+
+\`\`\`graphql
+scalar Boolean
+\`\`\`
+
+
+
+
+### Member of
+
+[\`include\`](docs/graphql/misc/directives/include)  <Badge class="secondary" text="directive"/><Bullet />[\`skip\`](docs/graphql/misc/directives/skip)  <Badge class="secondary" text="directive"/>
+
+
+
+",
+  "misc/scalars/date.mdx": "---
+id: date
+title: Date
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar Date
+\`\`\`
+
+
+
+
+### Member of
+
+[\`Semester\`](docs/graphql/misc/objects/semester)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/scalars/email-address.mdx": "---
+id: email-address
+title: EmailAddress
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar EmailAddress
+\`\`\`
+
+
+
+
+### Member of
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/scalars/id.mdx": "---
+id: id
+title: ID
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID.
+
+\`\`\`graphql
+scalar ID
+\`\`\`
+
+
+
+
+### Member of
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/><Bullet />[\`Record\`](docs/graphql/misc/interfaces/record)  <Badge class="secondary" text="interface"/><Bullet />[\`Semester\`](docs/graphql/misc/objects/semester)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/scalars/int.mdx": "---
+id: int
+title: Int
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+
+\`\`\`graphql
+scalar Int
+\`\`\`
+
+
+
+
+### Returned by
+
+[\`GPA\`](docs/graphql/grade/queries/gpa)  <Badge class="secondary" text="query"/><Bullet />[\`searchRole\`](docs/graphql/misc/queries/search-role)  <Badge class="secondary" text="query"/><Bullet />[\`UnWeightedGPA\`](docs/graphql/grade/queries/un-weighted-gpa)  <Badge class="secondary" text="query"/><Bullet />[\`UpdateGPA\`](docs/graphql/grade/mutations/update-gpa)  <Badge class="secondary" text="mutation"/><Bullet />[\`WeightedGPA\`](docs/graphql/grade/queries/weighted-gpa)  <Badge class="secondary" text="query"/>
+
+### Member of
+
+[\`GPA\`](docs/graphql/grade/queries/gpa)  <Badge class="secondary" text="query"/><Bullet />[\`UnWeightedGPA\`](docs/graphql/grade/queries/un-weighted-gpa)  <Badge class="secondary" text="query"/><Bullet />[\`UpdateGPA\`](docs/graphql/grade/mutations/update-gpa)  <Badge class="secondary" text="mutation"/><Bullet />[\`WeightedGPA\`](docs/graphql/grade/queries/weighted-gpa)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "misc/scalars/phone-number.mdx": "---
+id: phone-number
+title: PhoneNumber
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar PhoneNumber
+\`\`\`
+
+
+
+
+### Member of
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/scalars/string.mdx": "---
+id: string
+title: String
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+
+\`\`\`graphql
+scalar String
+\`\`\`
+
+
+
+
+### Returned by
+
+[\`AddCourse\`](docs/graphql/course/mutations/add-course)  <Badge class="secondary" text="mutation"/><Bullet />[\`allCourses\`](docs/graphql/course/queries/all-courses)  <Badge class="secondary" text="query"/><Bullet />[\`DropCourse\`](docs/graphql/course/mutations/drop-course)  <Badge class="secondary" text="mutation"/><Bullet />[\`mathCourses\`](docs/graphql/course/queries/math-courses)  <Badge class="secondary" text="query"/><Bullet />[\`scienceCourses\`](docs/graphql/course/queries/science-courses)  <Badge class="secondary" text="query"/><Bullet />[\`UpdateGrade\`](docs/graphql/grade/mutations/update-grade)  <Badge class="secondary" text="mutation"/>
+
+### Member of
+
+[\`AddCourse\`](docs/graphql/course/mutations/add-course)  <Badge class="secondary" text="mutation"/><Bullet />[\`deprecated\`](docs/graphql/misc/directives/deprecated)  <Badge class="secondary" text="directive"/><Bullet />[\`doc\`](docs/graphql/misc/directives/doc)  <Badge class="secondary" text="directive"/><Bullet />[\`DropCourse\`](docs/graphql/course/mutations/drop-course)  <Badge class="secondary" text="mutation"/><Bullet />[\`specifiedBy\`](docs/graphql/misc/directives/specified-by)  <Badge class="secondary" text="directive"/><Bullet />[\`UnWeightedGPA\`](docs/graphql/grade/queries/un-weighted-gpa)  <Badge class="secondary" text="query"/><Bullet />[\`UpdateGrade\`](docs/graphql/grade/mutations/update-grade)  <Badge class="secondary" text="mutation"/><Bullet />[\`WeightedGPA\`](docs/graphql/grade/queries/weighted-gpa)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "misc/scalars/time.mdx": "---
+id: time
+title: Time
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar Time
+\`\`\`
+
+
+
+
+### Member of
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "misc/scalars/url.mdx": "---
+id: url
+title: URL
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar URL
+\`\`\`
+
+
+### <SpecifiedBy url="https://tools.ietf.org/html/rfc3986"/>
+
+
+
+### Member of
+
+[\`DepartmentInformation\`](docs/graphql/misc/objects/department-information)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "sidebar-schema.js": "
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+
+module.exports = {
+  "schemaSidebar": [
+    {
+      "type": "autogenerated",
+      "dirName": "graphql"
+    }
+  ]
+};
+",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 2`] = `
+{
+  ".schema": "88d3bf2a330a38918a56839aaa69cc0abcfc3de31257ea1fa3538a8463c55921",
+  "schema.graphql": "directive @doc(category: String) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+scalar Date
+
+scalar EmailAddress
+
+scalar PhoneNumber
+
+scalar Time
+
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+
+type Mutation {
+  UpdateGrade(input: String): String
+  UpdateGPA(input: Int): Int
+  AddCourse(input: String): String
+  DropCourse(input: String): String
+}
+
+enum Roles {
+  ADMIN
+  USER
+}
+
+type Query {
+  GPA(skip: Int = 0): Int
+  WeightedGPA(input: String, skip: Int!): Int
+  UnWeightedGPA(input: String, skip: Int!): Int
+  allCourses: [String]
+  mathCourses: [String]
+  scienceCourses: [String]
+  searchRole(roles: [Roles!]! = [ADMIN]): Int!
+}
+
+interface Record {
+  id: ID!
+}
+
+type Semester implements Record {
+  id: ID!
+  startDate: Date
+  withdrawDate: Date
+  endDate: Date
+}
+
+type DepartmentInformation implements Record {
+  id: ID!
+  email: EmailAddress
+  number: PhoneNumber
+  departmentOpenTime: Time
+  departmentCloseTime: Time
+  website: URL
+}",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+{
+  "directives/_category_.yml": "label: Directives
+link: null
+",
+  "directives/deprecated.mdx": "---
+id: deprecated
+title: deprecated
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Marks an element of a GraphQL schema as no longer supported.
+
+\`\`\`graphql
+directive @deprecated(
+  reason: String = "No longer supported"
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>deprecated.<b>reason</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax, as specified by [CommonMark](https://commonmark.org/).
+> 
+
+
+
+
+
+",
+  "directives/include.mdx": "---
+id: include
+title: include
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Directs the executor to include this field or fragment only when the \`if\` argument is true.
+
+\`\`\`graphql
+directive @include(
+  if: Boolean!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>include.<b>if</b></code>](#)<Bullet />[\`Boolean!\`](docs/graphql/scalars/boolean) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> Included when true.
+> 
+
+
+
+
+
+",
+  "directives/skip.mdx": "---
+id: skip
+title: skip
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Directs the executor to skip this field or fragment when the \`if\` argument is true.
+
+\`\`\`graphql
+directive @skip(
+  if: Boolean!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>skip.<b>if</b></code>](#)<Bullet />[\`Boolean!\`](docs/graphql/scalars/boolean) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> Skipped when true.
+> 
+
+
+
+
+
+",
+  "directives/specified-by.mdx": "---
+id: specified-by
+title: specifiedBy
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+Exposes a URL that specifies the behavior of this scalar.
+
+\`\`\`graphql
+directive @specifiedBy(
+  url: String!
+)
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>specifiedBy.<b>url</b></code>](#)<Bullet />[\`String!\`](docs/graphql/scalars/string) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> The URL that specifies the behavior of this scalar.
+> 
+
+
+
+
+
+",
+  "enums/_category_.yml": "label: Enums
+link: null
+",
+  "enums/media-type.mdx": "---
+id: media-type
+title: MediaType
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+enum MediaType {
+  IMAGE
+  MOVIE
+}
+\`\`\`
+
+
+### Values
+
+#### [<code style={{ fontWeight: 'normal' }}>MediaType.<b>IMAGE</b></code>](#) 
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>MediaType.<b>MOVIE</b></code>](#) 
+> 
+> 
+
+
+
+### Member of
+
+[\`Media\`](docs/graphql/objects/media)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "generated.md": "Dummy homepage for tweet.graphql",
+  "inputs/_category_.yml": "label: Inputs
+link: null
+",
+  "inputs/tweet-content.mdx": "---
+id: tweet-content
+title: TweetContent
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+input TweetContent {
+  content: String
+  body: String
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>TweetContent.<b>content</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>TweetContent.<b>body</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+
+
+### Member of
+
+[\`createTweet\`](docs/graphql/mutations/create-tweet)  <Badge class="secondary" text="mutation"/>
+
+
+
+",
+  "interfaces/_category_.yml": "label: Interfaces
+link: null
+",
+  "interfaces/node.mdx": "---
+id: node
+title: Node
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+interface Node {
+  id: ID!
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Node.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+
+
+### Implemented by
+
+[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/><Bullet />[\`User\`](docs/graphql/objects/user)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "mutations/_category_.yml": "label: Mutations
+link: null
+",
+  "mutations/create-tweet.mdx": "---
+id: create-tweet
+title: createTweet
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+createTweet(
+  input: TweetContent
+  content: TweetContent
+): Tweet
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>createTweet.<b>input</b></code>](#)<Bullet />[\`TweetContent\`](docs/graphql/inputs/tweet-content) <Badge class="secondary" text="input"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>createTweet.<b>content</b></code>](#)<Bullet />[\`TweetContent\`](docs/graphql/inputs/tweet-content) <Badge class="secondary" text="input"/>
+> 
+> 
+
+### Type
+
+#### [\`Tweet\`](docs/graphql/objects/tweet) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "mutations/delete-tweet.mdx": "---
+id: delete-tweet
+title: deleteTweet
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+deleteTweet(
+  id: ID!
+): Tweet
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>deleteTweet.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`Tweet\`](docs/graphql/objects/tweet) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "mutations/mark-tweet-read.mdx": "---
+id: mark-tweet-read
+title: markTweetRead
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+markTweetRead(
+  id: ID!
+): Boolean
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>markTweetRead.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`Boolean\`](docs/graphql/scalars/boolean) <Badge class="secondary" text="scalar"/>
+> The \`Boolean\` scalar type represents \`true\` or \`false\`.
+> 
+
+
+
+
+
+",
+  "objects/_category_.yml": "label: Objects
+link: null
+",
+  "objects/media.mdx": "---
+id: media
+title: Media
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Media {
+  url: Url!
+  sri: SRI!
+  type: MediaType
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Media.<b>url</b></code>](#)<Bullet />[\`Url!\`](docs/graphql/scalars/url) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Media.<b>sri</b></code>](#)<Bullet />[\`SRI!\`](docs/graphql/scalars/sri) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Media.<b>type</b></code>](#)<Bullet />[\`MediaType\`](docs/graphql/enums/media-type) <Badge class="secondary" text="enum"/>
+> 
+> 
+
+
+
+### Member of
+
+[\`User\`](docs/graphql/objects/user)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "objects/meta.mdx": "---
+id: meta
+title: Meta
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Meta {
+  count: Int
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Meta.<b>count</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+
+
+### Returned by
+
+[\`NotificationsMeta\`](docs/graphql/queries/notifications-meta)  <Badge class="secondary" text="query"/><Bullet />[\`TweetsMeta\`](docs/graphql/queries/tweets-meta)  <Badge class="secondary" text="query"/>
+
+### Member of
+
+[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "objects/notification.mdx": "---
+id: notification
+title: Notification
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Notification {
+  id: ID
+  date: Date
+  type: String
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Notification.<b>id</b></code>](#)<Bullet />[\`ID\`](docs/graphql/scalars/id) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Notification.<b>date</b></code>](#)<Bullet />[\`Date\`](docs/graphql/scalars/date) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Notification.<b>type</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+
+
+### Returned by
+
+[\`Notifications\`](docs/graphql/subscriptions/notifications)  <Badge class="secondary" text="subscription"/>
+
+
+
+",
+  "objects/stat.mdx": "---
+id: stat
+title: Stat
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Stat {
+  views: Int
+  likes: Int
+  reactions: Int
+  retweets: Int
+  responses: Int
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Stat.<b>views</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Stat.<b>likes</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Stat.<b>reactions</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Stat.<b>retweets</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Stat.<b>responses</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+
+
+### Member of
+
+[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "objects/tweet.mdx": "---
+id: tweet
+title: Tweet
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type Tweet implements Node {
+  id: ID!
+  body: String
+  date: Date
+  Author: User
+  Stats: Stat
+  getMeta(
+  meta: String
+): Meta
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>body</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>date</b></code>](#)<Bullet />[\`Date\`](docs/graphql/scalars/date) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>Author</b></code>](#)<Bullet />[\`User\`](docs/graphql/objects/user) <Badge class="secondary" text="object"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>Stats</b></code>](#)<Bullet />[\`Stat\`](docs/graphql/objects/stat) <Badge class="secondary" text="object"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>getMeta</b></code>](#)<Bullet />[\`Meta\`](docs/graphql/objects/meta) <Badge class="secondary" text="object"/>
+> 
+> ##### [<code style={{ fontWeight: 'normal' }}>Tweet.getMeta.<b>meta</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Interfaces
+
+#### [\`Node\`](docs/graphql/interfaces/node) <Badge class="secondary" text="interface"/>
+> 
+> 
+
+
+
+### Returned by
+
+[\`createTweet\`](docs/graphql/mutations/create-tweet)  <Badge class="secondary" text="mutation"/><Bullet />[\`deleteTweet\`](docs/graphql/mutations/delete-tweet)  <Badge class="secondary" text="mutation"/><Bullet />[\`Tweet\`](docs/graphql/queries/tweet)  <Badge class="secondary" text="query"/><Bullet />[\`Tweets\`](docs/graphql/queries/tweets)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "objects/user.mdx": "---
+id: user
+title: User
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+type User implements Node {
+  id: ID!
+  username: String
+  first_name: String
+  last_name: String
+  full_name: String
+  name: String
+  avatar_url: Url
+  avatar: Media
+}
+\`\`\`
+
+
+### Fields
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>username</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>first_name</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>last_name</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>full_name</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>name</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>avatar_url</b></code>](#)<Bullet />[\`Url\`](docs/graphql/scalars/url) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>avatar</b></code>](#)<Bullet />[\`Media\`](docs/graphql/objects/media) <Badge class="secondary" text="object"/>
+> 
+> 
+
+### Interfaces
+
+#### [\`Node\`](docs/graphql/interfaces/node) <Badge class="secondary" text="interface"/>
+> 
+> 
+
+
+
+### Returned by
+
+[\`User\`](docs/graphql/queries/user)  <Badge class="secondary" text="query"/><Bullet />[\`Users\`](docs/graphql/queries/users)  <Badge class="secondary" text="query"/>
+
+### Member of
+
+[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "queries/_category_.yml": "label: Queries
+link: null
+",
+  "queries/notifications-meta.mdx": "---
+id: notifications-meta
+title: NotificationsMeta
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+NotificationsMeta: Meta
+\`\`\`
+
+
+### Type
+
+#### [\`Meta\`](docs/graphql/objects/meta) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "queries/tweet.mdx": "---
+id: tweet
+title: Tweet
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+Tweet(
+  id: ID!
+): Tweet
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweet.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`Tweet\`](docs/graphql/objects/tweet) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "queries/tweets-meta.mdx": "---
+id: tweets-meta
+title: TweetsMeta
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+TweetsMeta: Meta
+\`\`\`
+
+
+### Type
+
+#### [\`Meta\`](docs/graphql/objects/meta) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "queries/tweets.mdx": "---
+id: tweets
+title: Tweets
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+Tweets(
+  limit: Int = 5
+  skip: Int = 0
+  sort_field: String
+  sort_order: String = "ASC"
+): [Tweet]!
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweets.<b>limit</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweets.<b>skip</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweets.<b>sort_field</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>Tweets.<b>sort_order</b></code>](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`Tweet\`](docs/graphql/objects/tweet) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "queries/user.mdx": "---
+id: user
+title: User
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+User(
+  id: ID!
+): User
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>User.<b>id</b></code>](#)<Bullet />[\`ID!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`User\`](docs/graphql/objects/user) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "queries/users.mdx": "---
+id: users
+title: Users
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+Users(
+  id: [ID!]!
+): [User]!
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>Users.<b>id</b></code>](#)<Bullet />[\`[ID!]!\`](docs/graphql/scalars/id) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`User\`](docs/graphql/objects/user) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+  "scalars/_category_.yml": "label: Scalars
+link: null
+",
+  "scalars/boolean.mdx": "---
+id: boolean
+title: Boolean
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`Boolean\` scalar type represents \`true\` or \`false\`.
+
+\`\`\`graphql
+scalar Boolean
+\`\`\`
+
+
+
+
+### Returned by
+
+[\`markTweetRead\`](docs/graphql/mutations/mark-tweet-read)  <Badge class="secondary" text="mutation"/>
+
+### Member of
+
+[\`include\`](docs/graphql/directives/include)  <Badge class="secondary" text="directive"/><Bullet />[\`skip\`](docs/graphql/directives/skip)  <Badge class="secondary" text="directive"/>
+
+
+
+",
+  "scalars/date.mdx": "---
+id: date
+title: Date
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar Date
+\`\`\`
+
+
+
+
+### Member of
+
+[\`Notification\`](docs/graphql/objects/notification)  <Badge class="secondary" text="object"/><Bullet />[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "scalars/id.mdx": "---
+id: id
+title: ID
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID.
+
+\`\`\`graphql
+scalar ID
+\`\`\`
+
+
+
+
+### Member of
+
+[\`deleteTweet\`](docs/graphql/mutations/delete-tweet)  <Badge class="secondary" text="mutation"/><Bullet />[\`markTweetRead\`](docs/graphql/mutations/mark-tweet-read)  <Badge class="secondary" text="mutation"/><Bullet />[\`Node\`](docs/graphql/interfaces/node)  <Badge class="secondary" text="interface"/><Bullet />[\`Notification\`](docs/graphql/objects/notification)  <Badge class="secondary" text="object"/><Bullet />[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/><Bullet />[\`Tweet\`](docs/graphql/queries/tweet)  <Badge class="secondary" text="query"/><Bullet />[\`User\`](docs/graphql/objects/user)  <Badge class="secondary" text="object"/><Bullet />[\`User\`](docs/graphql/queries/user)  <Badge class="secondary" text="query"/><Bullet />[\`Users\`](docs/graphql/queries/users)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "scalars/int.mdx": "---
+id: int
+title: Int
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`Int\` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+
+\`\`\`graphql
+scalar Int
+\`\`\`
+
+
+
+
+### Member of
+
+[\`Meta\`](docs/graphql/objects/meta)  <Badge class="secondary" text="object"/><Bullet />[\`Notifications\`](docs/graphql/subscriptions/notifications)  <Badge class="secondary" text="subscription"/><Bullet />[\`Stat\`](docs/graphql/objects/stat)  <Badge class="secondary" text="object"/><Bullet />[\`Tweets\`](docs/graphql/queries/tweets)  <Badge class="secondary" text="query"/>
+
+
+
+",
+  "scalars/sri.mdx": "---
+id: sri
+title: SRI
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar SRI
+\`\`\`
+
+
+### <SpecifiedBy url="https://www.w3.org/TR/SRI"/>
+
+
+
+### Member of
+
+[\`Media\`](docs/graphql/objects/media)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "scalars/string.mdx": "---
+id: string
+title: String
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+The \`String\` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+
+\`\`\`graphql
+scalar String
+\`\`\`
+
+
+
+
+### Member of
+
+[\`deprecated\`](docs/graphql/directives/deprecated)  <Badge class="secondary" text="directive"/><Bullet />[\`Notification\`](docs/graphql/objects/notification)  <Badge class="secondary" text="object"/><Bullet />[\`specifiedBy\`](docs/graphql/directives/specified-by)  <Badge class="secondary" text="directive"/><Bullet />[\`Tweet\`](docs/graphql/objects/tweet)  <Badge class="secondary" text="object"/><Bullet />[\`TweetContent\`](docs/graphql/inputs/tweet-content)  <Badge class="secondary" text="input"/><Bullet />[\`Tweets\`](docs/graphql/queries/tweets)  <Badge class="secondary" text="query"/><Bullet />[\`User\`](docs/graphql/objects/user)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "scalars/url.mdx": "---
+id: url
+title: Url
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+scalar Url
+\`\`\`
+
+
+
+
+### Member of
+
+[\`Media\`](docs/graphql/objects/media)  <Badge class="secondary" text="object"/><Bullet />[\`User\`](docs/graphql/objects/user)  <Badge class="secondary" text="object"/>
+
+
+
+",
+  "sidebar-schema.js": "
+/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
+
+module.exports = {
+  "schemaSidebar": [
+    {
+      "type": "autogenerated",
+      "dirName": "graphql"
+    }
+  ]
+};
+",
+  "subscriptions/_category_.yml": "label: Subscriptions
+link: null
+",
+  "subscriptions/notifications.mdx": "---
+id: notifications
+title: Notifications
+hide_table_of_contents: false
+---
+
+
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
+
+export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
+
+export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+
+
+No description
+
+\`\`\`graphql
+Notifications(
+  limit: Int
+): [Notification]!
+\`\`\`
+
+
+### Arguments
+
+#### [<code style={{ fontWeight: 'normal' }}>Notifications.<b>limit</b></code>](#)<Bullet />[\`Int\`](docs/graphql/scalars/int) <Badge class="secondary" text="scalar"/>
+> 
+> 
+
+### Type
+
+#### [\`Notification\`](docs/graphql/objects/notification) <Badge class="secondary" text="object"/>
+> 
+> 
+
+
+
+
+
+",
+}
+`;
+
+exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 2`] = `
+{
+  ".schema": "c05900f7decd8963dc0215dd4a348646c7d59b7e97d670bf5a22dc0be5511915",
+  "schema.graphql": "scalar SRI @specifiedBy(url: "https://www.w3.org/TR/SRI")
+
+interface Node {
+  id: ID!
+}
+
+enum MediaType {
+  IMAGE
+  MOVIE
+}
+
+type Media {
+  url: Url!
+  sri: SRI!
+  type: MediaType
+}
+
+type Tweet implements Node {
+  id: ID!
+  body: String
+  date: Date
+  Author: User
+  Stats: Stat
+  getMeta(meta: String): Meta
+}
+
+type User implements Node {
+  id: ID!
+  username: String
+  first_name: String
+  last_name: String
+  full_name: String
+  name: String @deprecated
+  avatar_url: Url @deprecated(reason: "Use Media { avatar }.")
+  avatar: Media
+}
+
+type Stat {
+  views: Int
+  likes: Int @deprecated(reason: "Use \`reactions\`.")
+  reactions: Int
+  retweets: Int
+  responses: Int
+}
+
+type Notification {
+  id: ID
+  date: Date
+  type: String
+}
+
+type Meta {
+  count: Int
+}
+
+scalar Url
+
+scalar Date
+
+type Query {
+  Tweet(id: ID!): Tweet
+  Tweets(limit: Int = 5, skip: Int = 0, sort_field: String, sort_order: String = "ASC"): [Tweet]!
+  TweetsMeta: Meta @deprecated
+  User(id: ID!): User @deprecated(reason: "Use \`Users\`.")
+  Users(id: [ID!]!): [User]!
+  NotificationsMeta: Meta @deprecated
+}
+
+type Mutation {
+  createTweet(input: TweetContent @deprecated(reason: "Use \`content\`."), content: TweetContent): Tweet
+  deleteTweet(id: ID!): Tweet
+  markTweetRead(id: ID!): Boolean
+}
+
+input TweetContent {
+  content: String @deprecated(reason: "Use \`body\`.")
+  body: String
+}
+
+type Subscription {
+  Notifications(limit: Int): [Notification]!
+}",
+}
+`;

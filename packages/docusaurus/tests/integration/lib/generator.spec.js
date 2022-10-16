@@ -1,107 +1,64 @@
-const mockfs = require("mock-fs");
-
-const path = require("path");
-const dirTree = require("directory-tree");
+const { vol } = require("memfs");
+jest.mock("fs");
 
 const generateDocFromSchema = require("../../../src/lib/generator");
 
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
-
 describe("lib", () => {
-  beforeEach(() => {
-    mockfs({
-      node_modules: mockfs.load(
-        path.resolve(__dirname, "../../../../../node_modules"),
-      ),
-      __data__: mockfs.load(path.resolve(__dirname, "../../__data__"), {
-        lazy: false,
-      }),
-      output: {},
-      assets: {
-        "generated.md": "Dummy homepage for tweet.graphql",
-        "sidebar.json": mockfs.load(
-          path.resolve(__dirname, "../../../assets/sidebar.json"),
-          {
-            lazy: false,
-          },
-        ),
-      },
-      tmp: {},
-    });
-  });
-
-  afterEach(() => {
-    mockfs.restore();
-  });
-
-  afterAll(() => {
-    mockfs.restore();
-  });
-
   describe("renderer", () => {
+    beforeEach(() => {
+      jest.resetModules();
+
+      vol.fromJSON({
+        "/output": {},
+        "/temp": {},
+        "/assets/generated.md": "Dummy homepage for tweet.graphql",
+      });
+    });
+
+    afterEach(() => {
+      vol.reset();
+    });
+
     describe("generateDocFromSchema()", () => {
       test("generates Markdown document structure from GraphQL schema", async () => {
         expect.assertions(2);
 
-        await generateDocFromSchema({
+        const config = {
           baseURL: "graphql",
-          schemaLocation: "__data__/tweet.graphql",
-          outputDir: "output",
+          schemaLocation: "tests/__data__/tweet.graphql",
+          outputDir: "/output",
           linkRoot: "docs",
-          homepageLocation: "assets/generated.md",
+          homepageLocation: "/assets/generated.md",
           diffMethod: "SCHEMA-DIFF",
-          tmpDir: "tmp",
+          tmpDir: "/temp",
           loaders: {},
-        });
+        };
 
-        const outputFolder = dirTree("output", {
-          attributes: ["size", "type", "extension"],
-        });
-        const tmpFolder = dirTree("tmp", {
-          attributes: ["size", "type", "extension"],
-        });
+        await generateDocFromSchema(config);
 
-        mockfs.restore(); // see https://github.com/tschaub/mock-fs#caveats
-        expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, "generateDocFromSchemaOutputFolder.hash"),
-        );
-        expect(JSON.stringify(tmpFolder, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, "generateDocFromSchemaTmpFolder.hash"),
-        );
+        expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
+        expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
       });
 
       test('outputs "no schema changed" message when called twice', async () => {
         expect.assertions(1);
 
         const logSpy = jest.spyOn(console, "info");
-        const schemaLocation = "__data__/tweet.graphql";
 
-        await generateDocFromSchema({
+        const config = {
           baseURL: "graphql",
-          schemaLocation,
-          outputDir: "output",
+          schemaLocation: "tests/__data__/tweet.graphql",
+          outputDir: "/output",
           linkRoot: "docs",
-          homepageLocation: "assets/generated.md",
+          homepageLocation: "/assets/generated.md",
           diffMethod: "SCHEMA-DIFF",
-          tmpDir: "tmp",
+          tmpDir: "/temp",
           loaders: {},
-        });
+        };
 
-        await generateDocFromSchema({
-          baseURL: "graphql",
-          schemaLocation,
-          outputDir: "output",
-          linkRoot: "docs",
-          homepageLocation: "assets/generated.md",
-          diffMethod: "SCHEMA-DIFF",
-          tmpDir: "tmp",
-          loaders: {},
-        });
+        await generateDocFromSchema(config);
+
+        await generateDocFromSchema(config);
 
         expect(logSpy).toHaveBeenCalledWith(
           `No changes detected in schema "${schemaLocation}".`,
@@ -109,34 +66,28 @@ describe("lib", () => {
       });
 
       test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
-        await generateDocFromSchema({
+        const config = {
           baseURL: "graphql",
-          schemaLocation: "__data__/schema_with_grouping.graphql",
-          outputDir: "output",
+          schemaLocation: "tests/__data__/schema_with_grouping.graphql",
+          outputDir: "/output",
           linkRoot: "docs",
-          homepageLocation: "assets/generated.md",
+          homepageLocation: "/assets/generated.md",
           diffMethod: "SCHEMA-DIFF",
-          tmpDir: "tmp",
+          tmpDir: "/temp",
           loaders: {},
           groupByDirective: {
             directive: "doc",
             field: "category",
             fallback: "misc",
           },
-        });
-        const outputFolder = dirTree("output", {
-          attributes: ["size", "type", "extension"],
-        });
+        };
 
-        mockfs.restore();
-        expect(JSON.stringify(outputFolder, null, 2)).toMatchFile(
-          path.join(
-            EXPECT_PATH,
-            `generateDocFromSchemaWithGroupingOutputFolder`,
-          ),
-        );
+        await generateDocFromSchema(config);
+
+        expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
+        expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
       });
     });
   });
