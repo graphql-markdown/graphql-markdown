@@ -1,8 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-rm -rf .nyc_output || true
-run -rf .stryker-tmp || true
 npm run lint
 npm run prettier -- --check
 npm test -ws
