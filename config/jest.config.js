@@ -3,6 +3,7 @@ module.exports = {
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   coverageReporters: ["json"],
   testEnvironment: "node",
+  coverageDirectory: "<rootDir>/.nyc_output",
   projects: [
     {
       displayName: "unit",
