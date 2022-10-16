@@ -1,6 +1,6 @@
 {
-  "name": "graphql-markdown-website",
-  "version": "0.0.0",
+  "name": "@graphql-markdown/website",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "test": "echo nothing to do",

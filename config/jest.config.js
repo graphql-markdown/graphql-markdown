@@ -13,13 +13,13 @@ const config = {
 module.exports = {
   projects: [
     {
-      displayName: "Unit Tests",
+      displayName: "unit",
       testMatch: ["<rootDir>/tests/unit/**/?(*.)+(spec|test).js"],
       coverageDirectory: `<rootDir>/.nyc_output/unit`,
       ...config,
     },
     {
-      displayName: "Integration Tests",
+      displayName: "integration",
       testMatch: ["<rootDir>/tests/integration/**/?(*.)+(spec|test).js"],
       coverageDirectory: `<rootDir>/.nyc_output/integration`,
       ...config,

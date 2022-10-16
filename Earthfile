@@ -26,35 +26,25 @@ lint:
 unit-test:
   ARG flag
   FROM +deps
-  IF [ ! $(EARTHLY_CI) ]
-    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/unit -u
-    SAVE ARTIFACT --if-exists packages/docusaurus/tests/unit AS LOCAL ./packages/docusaurus/tests/unit
-  ELSE
-    RUN export NODE_ENV=ci
-    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/unit
-  END
+  RUN export NODE_ENV=ci
+  RUN npm test -ws -- --runInBand --selectProjects unit
 
 integration-test:
   ARG flag
   FROM +deps
-  IF [ ! $(EARTHLY_CI) ]
-    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects tests/integration -u
-    SAVE ARTIFACT --if-exists packages/docusaurus/tests/integration AS LOCAL ./packages/docusaurus/tests/integration
-  ELSE
-    RUN export NODE_ENV=ci
-    RUN npm test --w @graphql-markdown/docusaurus -- --runInBand --projects ests/integration
-  END
+  RUN export NODE_ENV=ci
+  RUN npm test -ws -- --runInBand --selectProjects integration
 
 mutation-test:
   FROM +deps
-  RUN npm run stryker --w @graphql-markdown/docusaurus -- --reporters progress,html
+  RUN npm run stryker -w @graphql-markdown/docusaurus -- --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
 build-package:
   FROM +deps
-  RUN npm pack --w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
+  RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
   SAVE ARTIFACT docusaurus-plugin.tgz
 
 build-docusaurus:

@@ -7,5 +7,5 @@ COVERAGE_FILE=coverage-final.json
 for FILE in $(find $COVERAGE_DIR -name $COVERAGE_FILE); do
   mv "$FILE" $COVERAGE_DIR/$(basename $(dirname "$FILE")).json
 done
-npx -y --quiet nyc merge --nycrc-path ./config/nyc.config.js $COVERAGE_DIR $COVERAGE_DIR/coverage.json
-npx -y --quiet nyc report --nycrc-path ./config/nyc.config.js --reporter=lcov --reporter=text --check-coverage
+npx -y --quiet nyc merge $COVERAGE_DIR $COVERAGE_DIR/coverage.json
+npx -y --quiet nyc report --reporter=lcov --reporter=text --check-coverage
