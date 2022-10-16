@@ -12,11 +12,11 @@ on:
 
 jobs:
   test:
-    name: Test package ${{matrix.package}}
+    name: Test ${{matrix.package}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ['@graphql-markdown/docusaurus']
+        package: ['docusaurus']
 
     steps:
     - name: Checkout Code Base
@@ -26,16 +26,24 @@ jobs:
       run: npm ci
 
     - name: Run Unit Tests
-      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/unit
+      run: |
+        npm test -w @graphql-markdown/${{matrix.package}} -- --coverage --runInBand --selectProjects unit
+        mkdir packages/${{matrix.package}}/.nyc_output/unit
+        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/unit/coverage-final.json
 
     - name: Run Integration Tests
-      run: npm test -w ${{matrix.package}} -- --runInBand --projects tests/integration
+      run: |
+        npm test -w @graphql-markdown/${{matrix.package}} -- --coverage --runInBand --selectProjects integration
+        mkdir packages/${{matrix.package}}/.nyc_output/integration
+        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration/coverage.json
 
     - name: Check Code Coverage
-      run: npm run test:coverage -w ${{matrix.package}}
+      run: npm run test:coverage -w @graphql-markdown/${{matrix.package}}
 
     - name: Coveralls
       continue-on-error: true
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
+        base-path: ./packages/${{matrix.package}}

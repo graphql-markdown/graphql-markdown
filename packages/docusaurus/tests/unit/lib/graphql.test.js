@@ -1,5 +1,3 @@
-const path = require("path");
-
 const { loadSchema } = require("@graphql-tools/load");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 const {
@@ -36,13 +34,6 @@ const {
 } = require("../../../src/lib/graphql");
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
-
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
 
 describe("lib", () => {
   describe("graphql", () => {
@@ -213,9 +204,7 @@ describe("lib", () => {
 
         const list = getIntrospectionFieldsList(schema.getQueryType());
 
-        expect(JSON.stringify(list, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getIntrospectionFieldsListQueries.json`),
-        );
+        expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
       });
 
       test("returns list of mutations", () => {
@@ -223,9 +212,7 @@ describe("lib", () => {
 
         const list = getIntrospectionFieldsList(schema.getMutationType());
 
-        expect(JSON.stringify(list, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getIntrospectionFieldsListMutations.json`),
-        );
+        expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
       });
 
       test("returns list of subscriptions", () => {
@@ -233,12 +220,7 @@ describe("lib", () => {
 
         const list = getIntrospectionFieldsList(schema.getSubscriptionType());
 
-        expect(JSON.stringify(list, null, 2)).toMatchFile(
-          path.join(
-            EXPECT_PATH,
-            `getIntrospectionFieldsListSubscriptions.json`,
-          ),
-        );
+        expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
       });
 
       test("returns undefined if null", () => {
@@ -256,9 +238,7 @@ describe("lib", () => {
 
         const fields = getFields(schema.getMutationType());
 
-        expect(JSON.stringify(fields, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getFields.json`),
-        );
+        expect(JSON.stringify(fields, null, 2)).toMatchSnapshot();
       });
 
       test("returns empty list if getFields not supported", () => {
@@ -310,9 +290,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLObjectType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLObjectType.json`),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLUnionType", () => {
@@ -320,9 +298,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLUnionType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLUnionType.json`),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLInterfaceType", () => {
@@ -330,9 +306,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLInterfaceType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLInterfaceType.json`),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLEnumType", () => {
@@ -340,9 +314,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLEnumType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLEnumType.json`),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLInputObjectType", () => {
@@ -350,12 +322,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLInputObjectType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(
-            EXPECT_PATH,
-            `getTypeFromTypeMapGraphQLInputObjectType.json`,
-          ),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test("returns a filter map filtered by GraphQLScalarType", () => {
@@ -363,9 +330,7 @@ describe("lib", () => {
 
         const map = getTypeFromSchema(schema, GraphQLScalarType);
 
-        expect(JSON.stringify(map, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getTypeFromTypeMapGraphQLScalarType.json`),
-        );
+        expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
       });
 
       test.each([[null], [undefined]])(
@@ -386,9 +351,7 @@ describe("lib", () => {
 
         const schemaTypeMap = getSchemaMap(schema);
 
-        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
-          path.join(EXPECT_PATH, `getSchemaMap.json`),
-        );
+        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
       });
     });
 

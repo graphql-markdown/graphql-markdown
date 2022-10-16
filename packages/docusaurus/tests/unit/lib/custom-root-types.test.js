@@ -1,15 +1,6 @@
-const path = require("path");
-
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
 const { loadSchema, getSchemaMap } = require("../../../src/lib/graphql");
-
-const EXPECT_PATH = path.join(
-  __dirname,
-  "__expect__",
-  __OS__,
-  path.basename(__filename),
-);
 
 const SCHEMA_FILE = require.resolve(
   "../../__data__/schema_with_custom_root_types.graphql",
@@ -37,9 +28,7 @@ describe("graphql", () => {
 
       const schemaTypeMap = getSchemaMap(schema);
 
-      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchFile(
-        path.join(EXPECT_PATH, `getSchemaMapCustomRootTypes.json`),
-      );
+      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
     });
   });
 });

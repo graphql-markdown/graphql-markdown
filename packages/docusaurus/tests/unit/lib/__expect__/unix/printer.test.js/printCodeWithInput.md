@@ -1,4 +1,0 @@
-```graphql
-input TestInput {
-}
-```

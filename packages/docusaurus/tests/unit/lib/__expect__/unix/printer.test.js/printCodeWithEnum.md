@@ -1,5 +1,0 @@
-```graphql
-enum TestEnum {
-
-}
-```

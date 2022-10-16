@@ -15,7 +15,7 @@
   "prettier": "./config/.prettierrc.js",
   "eslintConfig": {
     "extends": [
-        "./config/.eslintrc.js"
+      "./config/.eslintrc.js"
     ]
   },
   "config": {
