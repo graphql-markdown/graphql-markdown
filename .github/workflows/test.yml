@@ -38,7 +38,7 @@ jobs:
         mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration/coverage.json
 
     - name: Check Code Coverage
-      run: npm run test:coverage -w ${{matrix.package}}
+      run: npm run test:coverage -w @graphql-markdown/${{matrix.package}}
 
     - name: Coveralls
       continue-on-error: true
