@@ -53,6 +53,7 @@ jobs:
   coverage:
       name: Report coverage
       runs-on: ubuntu-latest
+      needs: test
       steps:
         - name: Coveralls
           continue-on-error: true
