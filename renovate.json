@@ -1,5 +1,12 @@
 {
-  "extends": [
-    "config:base"
+  "extends": ["config:base"],
+  "semanticCommits": "enabled",
+  "packageRules": [
+    {
+      "matchPaths": ["website/**"],
+      "matchUpdateTypes": ["major", "minor"],
+      "matchBaseBranches": ["main"],
+      "enabled": false
+    }
   ]
 }
