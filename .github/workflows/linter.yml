@@ -12,11 +12,8 @@ on:
 
 jobs:
   lint:
-    name: Lint ${{matrix.package}}
+    name: Lint
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: ['@graphql-markdown/docusaurus']
 
     steps:
     - name: Checkout Code Base
