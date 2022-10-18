@@ -44,7 +44,7 @@ mutation-test:
 
 build-packages:
   FROM +deps
-  RUN build
+  RUN mkdir build
   RUN npm pack -w @graphql-markdown/core | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-core.tgz
   RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-docusaurus.tgz
   SAVE ARTIFACT build
