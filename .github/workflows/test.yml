@@ -15,6 +15,7 @@ jobs:
     name: Test ${{matrix.package}}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         package: ['docusaurus', 'core', 'diff', 'printer-legacy']
 
