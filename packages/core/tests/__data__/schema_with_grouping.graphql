@@ -1,0 +1,63 @@
+directive @doc(
+  category: String
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+scalar Date
+scalar EmailAddress
+scalar PhoneNumber
+scalar Time
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+
+type Mutation {
+  UpdateGrade(input: String): String  @doc(category: "Grade") 
+}
+
+type Mutation{
+  UpdateGPA(input: Int): Int @doc(category: "Grade") 
+}
+
+type Mutation{
+  AddCourse(input: String): String  @doc(category: "Course") 
+}
+
+type Mutation{
+  DropCourse(input: String): String  @doc(category: "Course") 
+}
+
+enum Roles {
+  ADMIN
+  USER
+}
+
+type Query {
+  GPA(skip: Int = 0): Int  @doc(category: "Grade") 
+  WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
+  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
+}
+
+type Query {
+  allCourses: [String]  @doc(category: "Course") 
+  mathCourses: [String]  @doc(category: "Course") 
+  scienceCourses: [String]  @doc(category: "Course") 
+  searchRole(roles: [Roles!]! = [ADMIN]): Int!
+}
+
+interface Record {
+  id: ID!
+}
+
+type Semester implements Record {
+  id: ID!
+  startDate: Date
+  withdrawDate: Date
+  endDate: Date
+}
+
+type DepartmentInformation implements Record {
+  id: ID!
+  email: EmailAddress
+  number: PhoneNumber
+  departmentOpenTime: Time
+  departmentCloseTime: Time
+  website: URL
+}

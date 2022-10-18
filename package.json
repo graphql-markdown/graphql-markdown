@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "workspaces": [
     "packages/*",
-    "website",
     "config"
   ],
   "scripts": {
@@ -93,7 +92,9 @@
     }
   },
   "dependencies": {
-    "@graphql-markdown/docusaurus": "file:packages/docusaurus"
+    "@graphql-markdown/docusaurus": "file:packages/docusaurus",
+    "@graphql-markdown/core": "file:packages/core",
+    "@graphql-markdown/config": "file:packages/config"
   },
   "devDependencies": {
     "@graphql-markdown/config": "file:config",

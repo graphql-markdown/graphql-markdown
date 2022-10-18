@@ -1,7 +1,7 @@
 {
-  "name": "@graphql-markdown/docusaurus",
+  "name": "@graphql-markdown/diff",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "description": "GraphQL-Markdown diff package.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
@@ -13,7 +13,6 @@
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
   "keywords": [
-    "docusaurus",
     "graphql",
     "graphql-schema",
     "documentation",
@@ -59,18 +58,6 @@
     "test": "jest",
     "test:coverage": "sh ../../scripts/coverage.sh",
     "stryker": "stryker run"
-  },
-  "dependencies": {
-    "@graphql-markdown/core": "1.14.0"
-  },
-  "peerDependencies": {
-    "graphql": "^14.0 || ^15.0 || ^16.0",
-    "prettier": "^2.5"
-  },
-  "peerDependenciesMeta": {
-    "prettier": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@graphql-markdown/config": "1.0.0",

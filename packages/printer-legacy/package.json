@@ -1,7 +1,7 @@
 {
-  "name": "@graphql-markdown/docusaurus",
+  "name": "@graphql-markdown/printer-legacy",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "description": "GraphQL-Markdown legacy Docusaurus printer.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
@@ -60,21 +60,8 @@
     "test:coverage": "sh ../../scripts/coverage.sh",
     "stryker": "stryker run"
   },
-  "dependencies": {
-    "@graphql-markdown/core": "1.14.0"
-  },
-  "peerDependencies": {
-    "graphql": "^14.0 || ^15.0 || ^16.0",
-    "prettier": "^2.5"
-  },
-  "peerDependenciesMeta": {
-    "prettier": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@graphql-markdown/config": "1.0.0",
-    "@stryker-mutator/core": "6.2.3",
     "@stryker-mutator/jest-runner": "6.2.3",
     "diff": "5.1.0",
     "eslint": "8.25.0",

@@ -1,7 +1,7 @@
 {
-  "name": "@graphql-markdown/docusaurus",
+  "name": "@graphql-markdown/core",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "description": "GraphQL-Markdown core package for generating Markdown documentation from a GraphQL schema.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
@@ -13,7 +13,6 @@
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
   "keywords": [
-    "docusaurus",
     "graphql",
     "graphql-schema",
     "documentation",
@@ -61,7 +60,9 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "1.14.0"
+    "@graphql-inspector/core": "^3.4.0",
+    "@graphql-tools/graphql-file-loader": "^7.5.5",
+    "@graphql-tools/load": "^7.7.7"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",

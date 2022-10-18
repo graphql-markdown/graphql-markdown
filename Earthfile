@@ -27,25 +27,27 @@ unit-test:
   ARG flag
   FROM +deps
   RUN export NODE_ENV=ci
-  RUN npm test -ws -- --runInBand --selectProjects unit
+  RUN npm test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects unit
 
 integration-test:
   ARG flag
   FROM +deps
   RUN export NODE_ENV=ci
-  RUN npm test -ws -- --runInBand --selectProjects integration
+  RUN npm run test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects integration
 
 mutation-test:
   FROM +deps
-  RUN npm run stryker -w @graphql-markdown/docusaurus -- --reporters progress,html
+  RUN npm run stryker --workspaces --if-present -- --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
-build-package:
+build-packages:
   FROM +deps
-  RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} docusaurus-plugin.tgz
-  SAVE ARTIFACT docusaurus-plugin.tgz
+  RUN build
+  RUN npm pack -w @graphql-markdown/core | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-core.tgz
+  RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-docusaurus.tgz
+  SAVE ARTIFACT build
 
 build-docusaurus:
   WORKDIR /
@@ -58,8 +60,9 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN npm install graphql @graphql-tools/url-loader
-  COPY +build-package/docusaurus-plugin.tgz ./
-  RUN npm install ./docusaurus-plugin.tgz
+  COPY +build-packages/build ./
+  RUN npm install ./build/graphql-markdown-core.tgz
+  RUN npm install ./build/graphql-markdown-docusaurus.tgz
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
