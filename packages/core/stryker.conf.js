@@ -1,1 +1,1 @@
-module.exports = require("@graphql-markdown/config").stryker;
+module.exports = require("@graphql-markdown/tools-config").stryker;

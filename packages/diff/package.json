@@ -60,7 +60,7 @@
     "stryker": "stryker run"
   },
   "devDependencies": {
-    "@graphql-markdown/config": "1.0.0",
+    "@graphql-markdown/tools-config": "1.0.0",
     "@stryker-mutator/core": "6.2.3",
     "@stryker-mutator/jest-runner": "6.2.3",
     "diff": "5.1.0",

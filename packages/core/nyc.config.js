@@ -1,1 +1,1 @@
-module.exports = require("@graphql-markdown/config").nyc;
+module.exports = require("@graphql-markdown/tools-config").nyc;

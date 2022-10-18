@@ -1,1 +1,1 @@
-module.exports = require("@graphql-markdown/config").jest;
+module.exports = require("@graphql-markdown/tools-config").jest;
