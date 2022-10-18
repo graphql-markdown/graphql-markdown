@@ -50,7 +50,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         parallel: true
-        flag-name: run-${{ matrix.package }}
+        flag-name: package-${{ matrix.package }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
         base-path: ./packages/${{matrix.package}}
