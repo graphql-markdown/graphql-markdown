@@ -46,7 +46,7 @@ describe("lib", () => {
         expect(check).toBeTruthy();
       });
 
-      test("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
+      test.skip("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
         expect.assertions(2);
 
         const printSchema = jest.spyOn(graphql, "printSchema");
@@ -68,7 +68,7 @@ describe("lib", () => {
         expect(check).toBeTruthy();
       });
 
-      test("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
+      test.skip("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
         expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
