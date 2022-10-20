@@ -114,7 +114,9 @@
     "diff": "5.1.0",
     "lodash.filter": "4.6.0",
     "jest": "29.2.1",
-    "graphql": "16.6.0"
+    "graphql": "16.6.0",
+    "memfs": "3.4.7",
+    "unionfs": "4.4.0"
   },
   "resolutions": {
     "chalk": "5.1.2"

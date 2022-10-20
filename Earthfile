@@ -58,9 +58,11 @@ build-docusaurus:
 
 smoke-init:
   FROM +build-docusaurus
-  RUN npm install graphql @graphql-tools/url-loader
+  RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
   COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
   RUN npm install ./graphql-markdown-core.tgz
+  COPY (+build-package/graphql-markdown-diff.tgz --package=diff) ./
+  RUN npm install ./graphql-markdown-diff.tgz
   COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
   RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
