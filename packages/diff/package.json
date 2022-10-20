@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.4.0",
-    "@graphql-markdown/core": "^1.14.0",
     "@graphql-tools/load": "^7.7.7"
   },
   "peerDependencies": {
