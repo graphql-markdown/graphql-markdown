@@ -60,20 +60,23 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^3.4.0",
-    "@graphql-tools/graphql-file-loader": "^7.5.5",
     "@graphql-tools/load": "^7.7.7"
   },
   "peerDependencies": {
+    "@graphql-markdown/diff": "^1.14.0",
     "graphql": "^14.0 || ^15.0 || ^16.0",
     "prettier": "^2.5"
   },
   "peerDependenciesMeta": {
+    "@graphql-markdown/diff": {
+      "optional": true
+    },
     "prettier": {
       "optional": true
     }
   },
   "devDependencies": {
+    "@graphql-markdown/diff": "1.14.0",
     "@graphql-markdown/tools-config": "1.0.0",
     "@stryker-mutator/core": "6.2.3",
     "@stryker-mutator/jest-runner": "6.2.3",

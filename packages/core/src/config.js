@@ -2,7 +2,7 @@ const { join } = require("path");
 const { tmpdir } = require("os");
 
 const { parseGroupByOption } = require("./lib/group-info");
-const { COMPARE_METHOD } = require("./lib/diff");
+const { COMPARE_METHOD } = require("@graphql-markdown/diff");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");

@@ -1,10 +1,10 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-const { fileExists } = require("../../../src/utils/helpers/fs");
+const { fileExists } = require("@graphql-markdown/core").utils.helpers.fs;
 
-jest.mock("../../../src/lib/graphql");
-const graphql = require("../../../src/lib/graphql");
+jest.mock("@graphql-markdown/core");
+const graphql = require("@graphql-markdown/core").graphql;
 
 jest.mock("@graphql-inspector/core");
 const inspector = require("@graphql-inspector/core");
@@ -16,7 +16,7 @@ const {
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,
-} = require("../../../src/lib/diff");
+} = require("../../src/index");
 
 describe("lib", () => {
   describe("diff", () => {

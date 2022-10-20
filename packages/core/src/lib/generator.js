@@ -6,7 +6,7 @@ const {
   checkSchemaChanges,
   saveSchemaHash,
   saveSchemaFile,
-} = require("./diff");
+} = require("@graphql-markdown/diff");
 
 const time = process.hrtime();
 

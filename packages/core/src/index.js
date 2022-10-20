@@ -3,6 +3,7 @@
 module.exports = {
   generateDocFromSchema: require("./lib/generator"),
   groupInfo: require("./lib/group-info"),
-  diff: require("./lib/diff"),
   config: require("./config"),
+  utils: require("./utils"),
+  graphql: require("./lib/graphql"),
 };

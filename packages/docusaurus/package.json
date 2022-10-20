@@ -61,7 +61,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "1.14.0"
+    "@graphql-markdown/core": "^1.14.0"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",

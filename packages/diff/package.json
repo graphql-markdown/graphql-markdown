@@ -59,8 +59,17 @@
     "test:coverage": "sh ../../scripts/coverage.sh",
     "stryker": "stryker run"
   },
+  "dependencies": {
+    "@graphql-inspector/core": "^3.4.0",
+    "@graphql-markdown/core": "^1.14.0",
+    "@graphql-tools/load": "^7.7.7"
+  },
+  "peerDependencies": {
+    "@graphql-tools/graphql-file-loader": "^7.5.5"
+  },
   "devDependencies": {
     "@graphql-markdown/tools-config": "1.0.0",
+    "@graphql-tools/graphql-file-loader": "^7.5.5",
     "@stryker-mutator/core": "6.2.3",
     "@stryker-mutator/jest-runner": "6.2.3",
     "diff": "5.1.0",

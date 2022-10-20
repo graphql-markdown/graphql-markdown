@@ -1,10 +1,14 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const { fileExists, readFile, saveFile } = require("../utils/helpers/fs");
+const { fileExists, readFile, saveFile } = require("@graphql-markdown/core")
+  .utils.helpers.fs;
 
-const { loadSchema, getDocumentLoaders, printSchema } = require("./graphql");
+const { printSchema } = require("graphql");
+const { loadSchema } = require("@graphql-tools/load");
 const { diff } = require("@graphql-inspector/core");
+
+const GraphQLFileLoader = require("@graphql-tools/graphql-file-loader");
 
 const SCHEMA_HASH_FILE = ".schema";
 const SCHEMA_REF = "schema.graphql";
@@ -12,10 +16,6 @@ const COMPARE_METHOD = {
   DIFF: "SCHEMA-DIFF",
   HASH: "SCHEMA-HASH",
   FORCE: "FORCE",
-};
-
-const defaultLoaders = {
-  GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
 };
 
 function getSchemaHash(schema) {
@@ -26,7 +26,7 @@ function getSchemaHash(schema) {
 
 async function getDiff(schemaNew, schemaOldLocation) {
   const schemaOld = await loadSchema(schemaOldLocation, {
-    loaders: getDocumentLoaders(defaultLoaders).loaders,
+    loaders: { GraphQLFileLoader },
   });
   return diff(schemaOld, schemaNew);
 }
