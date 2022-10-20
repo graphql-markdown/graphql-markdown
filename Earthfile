@@ -42,12 +42,11 @@ mutation-test:
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
 
-build-packages:
+build-package:
   FROM +deps
-  RUN mkdir build
-  RUN npm pack -w @graphql-markdown/core | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-core.tgz
-  RUN npm pack -w @graphql-markdown/docusaurus | tail -n 1 | xargs -t -I{} mv {} build/graphql-markdown-docusaurus.tgz
-  SAVE ARTIFACT build
+  ARG --required package
+  RUN npm pack -w @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
+  SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus:
   WORKDIR /
@@ -60,9 +59,10 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN npm install graphql @graphql-tools/url-loader
-  COPY +build-packages/build ./
-  RUN npm install ./build/graphql-markdown-core.tgz
-  RUN npm install ./build/graphql-markdown-docusaurus.tgz
+  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
+  RUN npm install ./graphql-markdown-core.tgz
+  COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
+  RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
