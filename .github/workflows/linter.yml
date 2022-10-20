@@ -8,6 +8,8 @@ on:
       - main
     paths:
       - 'packages/**/*'
+      - 'config/*'
+      - '*.json'
       - '.github/workflows/linter.yml'
 
 jobs:

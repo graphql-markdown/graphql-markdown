@@ -8,7 +8,9 @@ on:
       - main
     paths:
       - 'Earthfile'
-      - 'packages/**'
+      - 'packages/**/*'
+      - 'config/*'
+      - '*.json'      
       - '.github/workflows/smoke.yml'
 
 concurrency:
