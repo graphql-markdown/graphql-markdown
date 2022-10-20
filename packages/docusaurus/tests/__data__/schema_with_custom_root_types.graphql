@@ -1,9 +1,0 @@
-type Subscription {
-  callbackUrl: String!
-  id: ID!
-}
-
-type Root {
-  allSubscription(after: String, first: Int, before: String, last: Int): [Subscription]
-  subscription(id: ID): Subscription
-}
