@@ -17,9 +17,8 @@ const COMPARE_METHOD = {
 };
 
 function getSchemaHash(schema) {
-  let printedSchema = printSchema(schema, { commentDescriptions: true });
-  let sum = crypto.createHash("sha256").update(printedSchema);
-  return sum.digest("hex");
+  const printedSchema = printSchema(schema, { commentDescriptions: true });
+  return crypto.createHash("sha256").update(printedSchema).digest("hex");
 }
 
 async function getDiff(schemaNew, schemaOldLocation) {
@@ -34,11 +33,8 @@ async function checkSchemaChanges(
   outputDir,
   method = COMPARE_METHOD.DIFF,
 ) {
-  const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
-  const hashSchema = getSchemaHash(schema);
-  const schemaRef = path.join(outputDir, SCHEMA_REF);
-
   if (method === COMPARE_METHOD.DIFF) {
+    const schemaRef = path.join(outputDir, SCHEMA_REF);
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
       return schemaDiff.length > 0;
@@ -47,9 +43,11 @@ async function checkSchemaChanges(
   }
 
   if (method === COMPARE_METHOD.HASH) {
+    const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
     if (await fileExists(hashFile)) {
       const hash = await readFile(hashFile, { encoding: "utf8", flag: "r" });
-      return hashSchema != hash;
+      const hashSchema = getSchemaHash(schema);
+      return !(hashSchema === hash);
     }
     await saveSchemaHash(schema, outputDir);
   }
@@ -71,6 +69,8 @@ async function saveSchemaHash(schema, outputDir) {
 
 module.exports = {
   checkSchemaChanges,
+  saveSchemaFile,
+  saveSchemaHash,
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,

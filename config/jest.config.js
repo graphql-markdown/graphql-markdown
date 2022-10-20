@@ -4,7 +4,7 @@ module.exports = {
   coverageReporters: ["json"],
   testEnvironment: "node",
   coverageDirectory: "<rootDir>/.nyc_output",
-  roots: ["<rootDir>", "<rootDir>/../../__mocks__"],
+  roots: ["<rootDir>/src"],
   projects: [
     {
       displayName: "unit",

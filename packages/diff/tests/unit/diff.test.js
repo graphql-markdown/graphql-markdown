@@ -3,8 +3,11 @@ jest.mock("fs");
 
 const { fileExists } = require("../../src/utils/helpers/fs");
 
-jest.mock("@graphql-markdown/core");
-const graphql = require("@graphql-markdown/core").graphql;
+jest.mock("graphql");
+const graphql = require("graphql");
+
+jest.mock("@graphql-tools/load");
+const graphqlLoad = require("@graphql-tools/load");
 
 jest.mock("@graphql-inspector/core");
 const inspector = require("@graphql-inspector/core");
@@ -32,7 +35,7 @@ describe("lib", () => {
 
     describe("checkSchemaChanges()", () => {
       test("returns true if no valid comparison method is selected", async () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         jest
           .spyOn(graphql, "printSchema")
@@ -44,12 +47,15 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
         const printSchema = jest.spyOn(graphql, "printSchema");
-
         printSchema.mockImplementationOnce(() => "schema");
+
         await saveSchemaHash("SCHEMA", "/output");
+        const hasHashFile = await fileExists(
+          `${"/output"}/${SCHEMA_HASH_FILE}`,
+        );
 
         printSchema.mockImplementationOnce(() => "schema-new");
         const check = await checkSchemaChanges(
@@ -58,11 +64,12 @@ describe("lib", () => {
           COMPARE_METHOD.HASH,
         );
 
+        expect(hasHashFile).toBeTruthy();
         expect(check).toBeTruthy();
       });
 
       test("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
@@ -77,7 +84,7 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.HASH comparison has no reference hash file", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
@@ -95,15 +102,14 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.DIFF comparison differs", async () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
-          .spyOn(graphql, "getDocumentLoaders")
-          .mockImplementationOnce(() => ({ loaders: [] }));
+          .spyOn(graphqlLoad, "loadSchema")
+          .mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([1]));
@@ -119,15 +125,14 @@ describe("lib", () => {
       });
 
       test("returns false if COMPARE_METHOD.DIFF comparison is equals", async () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
-          .spyOn(graphql, "getDocumentLoaders")
-          .mockImplementationOnce(() => ({ loaders: [] }));
+          .spyOn(graphqlLoad, "loadSchema")
+          .mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
@@ -143,15 +148,14 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.DIFF no schema introspection file exists", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
         jest
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
-        jest.spyOn(graphql, "loadSchema").mockImplementationOnce(() => ({}));
         jest
-          .spyOn(graphql, "getDocumentLoaders")
-          .mockImplementationOnce(() => ({ loaders: [] }));
+          .spyOn(graphqlLoad, "loadSchema")
+          .mockImplementationOnce(() => ({}));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
@@ -173,7 +177,7 @@ describe("lib", () => {
       [saveSchemaFile, SCHEMA_REF],
     ])("%p", (method, reference) => {
       test(`saves reference data into file ${reference}`, async () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         jest
           .spyOn(graphql, "printSchema")
