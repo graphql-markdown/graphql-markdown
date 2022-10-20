@@ -1,14 +1,12 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const { fileExists, readFile, saveFile } = require("@graphql-markdown/core")
-  .utils.helpers.fs;
-
 const { printSchema } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
 const { diff } = require("@graphql-inspector/core");
+const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
-const GraphQLFileLoader = require("@graphql-tools/graphql-file-loader");
+const { fileExists, readFile, saveFile } = require("./utils/helpers/fs");
 
 const SCHEMA_HASH_FILE = ".schema";
 const SCHEMA_REF = "schema.graphql";
@@ -26,7 +24,7 @@ function getSchemaHash(schema) {
 
 async function getDiff(schemaNew, schemaOldLocation) {
   const schemaOld = await loadSchema(schemaOldLocation, {
-    loaders: { GraphQLFileLoader },
+    loaders: [new GraphQLFileLoader()],
   });
   return diff(schemaOld, schemaNew);
 }
@@ -45,6 +43,7 @@ async function checkSchemaChanges(
       const schemaDiff = await getDiff(schema, schemaRef);
       return schemaDiff.length > 0;
     }
+    await saveSchemaFile(schema, outputDir);
   }
 
   if (method === COMPARE_METHOD.HASH) {
@@ -52,6 +51,7 @@ async function checkSchemaChanges(
       const hash = await readFile(hashFile, { encoding: "utf8", flag: "r" });
       return hashSchema != hash;
     }
+    await saveSchemaHash(schema, outputDir);
   }
 
   return true;
@@ -71,8 +71,6 @@ async function saveSchemaHash(schema, outputDir) {
 
 module.exports = {
   checkSchemaChanges,
-  saveSchemaHash,
-  saveSchemaFile,
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,

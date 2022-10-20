@@ -2,11 +2,7 @@ const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 const Printer = require("./printer");
-const {
-  checkSchemaChanges,
-  saveSchemaHash,
-  saveSchemaFile,
-} = require("@graphql-markdown/diff");
+const { checkSchemaChanges } = require("@graphql-markdown/diff");
 
 const time = process.hrtime();
 
@@ -68,10 +64,6 @@ module.exports = async function generateDocFromSchema({
     console.info(
       `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
     );
-
-    // create references for checkSchemaChanges
-    await saveSchemaHash(schema, tmpDir);
-    await saveSchemaFile(schema, tmpDir);
   } else {
     console.info(`No changes detected in schema "${schemaLocation}".`);
   }

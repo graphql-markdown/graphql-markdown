@@ -10,7 +10,7 @@ describe("lib", () => {
 
       vol.fromJSON({
         "/output": {},
-        "/temp": {},
+        "/temp_test": {},
         "/assets/generated.md": "Dummy homepage for tweet.graphql",
       });
     });

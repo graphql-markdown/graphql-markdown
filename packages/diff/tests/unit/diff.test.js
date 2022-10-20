@@ -1,7 +1,7 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-const { fileExists } = require("@graphql-markdown/core").utils.helpers.fs;
+const { fileExists } = require("../../src/utils/helpers/fs");
 
 jest.mock("@graphql-markdown/core");
 const graphql = require("@graphql-markdown/core").graphql;

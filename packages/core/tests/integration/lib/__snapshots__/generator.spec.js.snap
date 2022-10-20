@@ -1165,7 +1165,6 @@ module.exports = {
 
 exports[`lib renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 2`] = `
 {
-  ".schema": "88d3bf2a330a38918a56839aaa69cc0abcfc3de31257ea1fa3538a8463c55921",
   "schema.graphql": "directive @doc(category: String) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
 scalar Date
