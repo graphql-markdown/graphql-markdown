@@ -12,7 +12,6 @@ deps:
   RUN npm ci
 
 lint: 
-  ARG flag
   FROM +deps
   IF [ ! $(EARTHLY_CI) ]
     RUN npm run prettier -- --write
@@ -24,13 +23,11 @@ lint:
   END
 
 unit-test:
-  ARG flag
   FROM +deps
   RUN export NODE_ENV=ci
   RUN npm test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects unit
 
 integration-test:
-  ARG flag
   FROM +deps
   RUN export NODE_ENV=ci
   RUN npm run test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects integration
@@ -59,10 +56,14 @@ build-docusaurus:
 smoke-init:
   FROM +build-docusaurus
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
-  RUN npm install ./graphql-markdown-core.tgz
+  COPY (+build-package/graphql-markdown-utils.tgz --package=utils) ./
+  RUN npm install ./graphql-markdown-utils.tgz
+  COPY (+build-package/graphql-markdown-printer-legacy.tgz --package=printer-legacy) ./
+  RUN npm install ./graphql-markdown-printer-legacy.tgz
   COPY (+build-package/graphql-markdown-diff.tgz --package=diff) ./
   RUN npm install ./graphql-markdown-diff.tgz
+  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
+  RUN npm install ./graphql-markdown-core.tgz
   COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
   RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
@@ -112,9 +113,17 @@ build-docs:
   COPY ./website ./
   COPY --dir docs ./docs
   COPY +build-examples/examples ./examples
-  COPY +build-package/docusaurus-plugin.tgz .
   RUN npm install
-  RUN npm install ./docusaurus-plugin.tgz
+  COPY (+build-package/graphql-markdown-utils.tgz --package=utils) ./
+  RUN npm install ./graphql-markdown-utils.tgz
+  COPY (+build-package/graphql-markdown-printer-legacy.tgz --package=printer-legacy) ./
+  RUN npm install ./graphql-markdown-printer-legacy.tgz
+  COPY (+build-package/graphql-markdown-diff.tgz --package=diff) ./
+  RUN npm install ./graphql-markdown-diff.tgz
+  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
+  RUN npm install ./graphql-markdown-core.tgz
+  COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
+  RUN npm install ./graphql-markdown-docusaurus.tgz
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
@@ -125,7 +134,6 @@ build-image:
   SAVE IMAGE graphql-markdown:docs
 
 all:
-  BUILD +build-package
   BUILD +lint
   BUILD +unit-test
   BUILD +integration-test
