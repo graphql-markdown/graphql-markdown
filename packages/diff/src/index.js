@@ -39,38 +39,25 @@ async function checkSchemaChanges(
       const schemaDiff = await getDiff(schema, schemaRef);
       return schemaDiff.length > 0;
     }
-    await saveSchemaFile(schema, outputDir);
+    const schemaPrint = printSchema(schema);
+    await saveFile(schemaRef, schemaPrint);
   }
 
   if (method === COMPARE_METHOD.HASH) {
     const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
+    const hashSchema = getSchemaHash(schema);
     if (await fileExists(hashFile)) {
       const hash = await readFile(hashFile, { encoding: "utf8", flag: "r" });
-      const hashSchema = getSchemaHash(schema);
       return !(hashSchema === hash);
     }
-    await saveSchemaHash(schema, outputDir);
+    await saveFile(hashFile, hashSchema);
   }
 
   return true;
 }
 
-async function saveSchemaFile(schema, outputDir) {
-  const schemaFile = path.join(outputDir, SCHEMA_REF);
-  const schemaPrint = printSchema(schema);
-  await saveFile(schemaFile, schemaPrint);
-}
-
-async function saveSchemaHash(schema, outputDir) {
-  const hashFile = path.join(outputDir, SCHEMA_HASH_FILE);
-  const hashSchema = getSchemaHash(schema);
-  await saveFile(hashFile, hashSchema);
-}
-
 module.exports = {
   checkSchemaChanges,
-  saveSchemaFile,
-  saveSchemaHash,
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,

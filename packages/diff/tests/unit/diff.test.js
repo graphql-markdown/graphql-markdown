@@ -1,8 +1,6 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-const { fileExists } = require("../../src/utils/helpers/fs");
-
 jest.mock("graphql");
 const graphql = require("graphql");
 
@@ -14,8 +12,6 @@ const inspector = require("@graphql-inspector/core");
 
 const {
   checkSchemaChanges,
-  saveSchemaHash,
-  saveSchemaFile,
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,
@@ -46,16 +42,15 @@ describe("lib", () => {
         expect(check).toBeTruthy();
       });
 
-      test.skip("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
-        expect.assertions(2);
+      test("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
+        expect.assertions(1);
 
         const printSchema = jest.spyOn(graphql, "printSchema");
         printSchema.mockImplementationOnce(() => "schema");
 
-        await saveSchemaHash("SCHEMA", "/output");
-        const hasHashFile = await fileExists(
-          `${"/output"}/${SCHEMA_HASH_FILE}`,
-        );
+        vol.fromJSON({
+          [`${"/output"}/${SCHEMA_HASH_FILE}`]: "",
+        });
 
         printSchema.mockImplementationOnce(() => "schema-new");
         const check = await checkSchemaChanges(
@@ -64,16 +59,19 @@ describe("lib", () => {
           COMPARE_METHOD.HASH,
         );
 
-        expect(hasHashFile).toBeTruthy();
         expect(check).toBeTruthy();
       });
 
-      test.skip("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
+      test("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
         expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        await saveSchemaHash("SCHEMA", "/output");
+        vol.fromJSON({
+          [`${"/output"}/${SCHEMA_HASH_FILE}`]:
+            "df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4",
+        });
+
         const check = await checkSchemaChanges(
           "schema",
           "/output",
@@ -84,20 +82,20 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.HASH comparison has no reference hash file", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
 
-        const hasHashFile = await fileExists(
-          `${"/output"}/${SCHEMA_HASH_FILE}`,
-        );
+        vol.fromJSON({
+          [`${"/output"}/${SCHEMA_REF}`]: "schema",
+        });
+
         const check = await checkSchemaChanges(
           "schema",
           "/output",
           COMPARE_METHOD.HASH,
         );
 
-        expect(hasHashFile).toBeFalsy();
         expect(check).toBeTruthy();
       });
 
@@ -114,7 +112,10 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([1]));
 
-        await saveSchemaFile("SCHEMA", "/output");
+        vol.fromJSON({
+          [`${"/output"}/${SCHEMA_REF}`]: "schema",
+        });
+
         const check = await checkSchemaChanges(
           "schema-new",
           "/output",
@@ -137,7 +138,10 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
-        await saveSchemaFile("SCHEMA", "/output");
+        vol.fromJSON({
+          [`${"/output"}/${SCHEMA_REF}`]: "schema",
+        });
+
         const check = await checkSchemaChanges(
           "schema",
           "/output",
@@ -148,7 +152,7 @@ describe("lib", () => {
       });
 
       test("returns true if COMPARE_METHOD.DIFF no schema introspection file exists", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         jest
           .spyOn(graphql, "printSchema")
@@ -160,34 +164,13 @@ describe("lib", () => {
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
-        const hasSchemaFile = await fileExists(`${"/output"}/${SCHEMA_REF}`);
         const check = await checkSchemaChanges(
           "schema",
           "/output",
           COMPARE_METHOD.DIFF,
         );
 
-        expect(hasSchemaFile).toBeFalsy();
         expect(check).toBeTruthy();
-      });
-    });
-
-    describe.each([
-      [saveSchemaHash, SCHEMA_HASH_FILE],
-      [saveSchemaFile, SCHEMA_REF],
-    ])("%p", (method, reference) => {
-      test(`saves reference data into file ${reference}`, async () => {
-        expect.assertions(1);
-
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
-
-        await method("SCHEMA", "/output");
-
-        expect(
-          vol.toJSON(`/output/${reference}`, undefined, true),
-        ).toMatchSnapshot();
       });
     });
   });
