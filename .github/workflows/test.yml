@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ['docusaurus', 'core', 'diff', 'printer-legacy']
+        package: ['docusaurus', 'core', 'diff', 'printer-legacy', 'utils']
 
     steps:
     - name: Checkout Code Base
