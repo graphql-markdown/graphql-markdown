@@ -1,11 +1,11 @@
 const path = require("path");
 const crypto = require("crypto");
 
-const { printSchema } = require("graphql");
 const { loadSchema } = require("@graphql-tools/load");
 const { diff } = require("@graphql-inspector/core");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
+const { printSchema } = require("@graphql-markdown/utils").graphql;
 const {
   fs: { fileExists, readFile, saveFile },
 } = require("@graphql-markdown/utils").helpers;

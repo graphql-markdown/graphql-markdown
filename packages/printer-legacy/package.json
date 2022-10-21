@@ -63,9 +63,6 @@
   "dependencies": {
     "@graphql-markdown/utils": "1.14.0"
   },
-  "peerDependencies": {
-    "graphql": "^14.0 || ^15.0 || ^16.0"
-  },
   "devDependencies": {
     "@graphql-markdown/tools-config": "1.0.0",
     "@stryker-mutator/jest-runner": "6.2.3",
