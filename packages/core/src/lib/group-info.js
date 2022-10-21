@@ -17,8 +17,7 @@ function parseGroupByOption(groupOptions) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
-  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups;
-  return { directive, field, fallback };
+  return ({ directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups);
 }
 
 function getGroups(rootTypes, groupByDirective) {
