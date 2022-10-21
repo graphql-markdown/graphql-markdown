@@ -1,21 +1,16 @@
 const path = require("path");
 
-const { convertArrayToObject } = require("../utils/scalars/array");
-const { hasProperty } = require("../utils/scalars/object");
-const { toSlug, startCase } = require("../utils/scalars/string");
-const { pathUrl } = require("../utils/scalars/url");
 const {
-  hasPrettierModule,
-  prettifyJavascript,
-  prettifyMarkdown,
-} = require("../utils/helpers/prettier");
+  array: { convertArrayToObject },
+  object: { hasProperty },
+  string: { toSlug, startCase },
+  url: { pathUrl },
+} = require("@graphql-markdown/utils").scalars;
+
 const {
-  saveFile,
-  ensureDir,
-  copyFile,
-  readFile,
-  fileExists,
-} = require("../utils/helpers/fs");
+  prettier: { hasPrettierModule, prettifyJavascript, prettifyMarkdown },
+  fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
+} = require("@graphql-markdown/utils").helpers;
 
 const { ASSETS_LOCATION } = require("../config");
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);

@@ -4,5 +4,4 @@ module.exports = {
   generateDocFromSchema: require("./lib/generator"),
   groupInfo: require("./lib/group-info"),
   config: require("./config"),
-  graphql: require("./lib/graphql"),
 };

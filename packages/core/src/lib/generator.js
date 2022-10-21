@@ -1,7 +1,8 @@
-const { getSchemaMap, loadSchema, getDocumentLoaders } = require("./graphql");
+const { getSchemaMap, loadSchema, getDocumentLoaders } =
+  require("@graphql-markdown/utils").graphql;
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
-const Printer = require("./printer");
+const Printer = require("@graphql-markdown/printer-legacy");
 const { checkSchemaChanges } = require("@graphql-markdown/diff");
 
 const time = process.hrtime();

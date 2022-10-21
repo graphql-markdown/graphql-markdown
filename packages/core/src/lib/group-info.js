@@ -1,4 +1,5 @@
-const { convertArrayToObject } = require("../utils/scalars/array");
+const { convertArrayToObject } = require("@graphql-markdown/utils").scalars
+  .array;
 
 const DEFAULT_GROUP = "Miscellaneous";
 const OPTION_REGEX =

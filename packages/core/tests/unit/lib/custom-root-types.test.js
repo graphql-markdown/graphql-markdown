@@ -1,6 +1,6 @@
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
-const { loadSchema, getSchemaMap } = require("../../../src/lib/graphql");
+const { loadSchema, getSchemaMap } = require("@graphql-markdown/utils").graphql;
 
 const SCHEMA_FILE = require.resolve(
   "../../__data__/schema_with_custom_root_types.graphql",

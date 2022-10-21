@@ -1,7 +1,4 @@
-const {
-  toArray,
-  convertArrayToObject,
-} = require("../../../../src/utils/scalars/array");
+const { toArray, convertArrayToObject } = require("../../../src/scalars/array");
 
 describe("utils", () => {
   describe("array", () => {

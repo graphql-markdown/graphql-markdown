@@ -1,7 +1,4 @@
-const {
-  hasProperty,
-  hasMethod,
-} = require("../../../../src/utils/scalars/object");
+const { hasProperty, hasMethod } = require("../../../src/scalars/object");
 
 describe("utils", () => {
   describe("object", () => {

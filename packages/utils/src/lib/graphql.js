@@ -27,7 +27,7 @@ const {
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
-const { hasMethod, hasProperty } = require("../utils/scalars/object");
+const { hasMethod, hasProperty } = require("../scalars/object");
 
 const OperationTypeNodes = [
   OperationTypeNode.QUERY,

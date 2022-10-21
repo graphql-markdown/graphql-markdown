@@ -6,9 +6,11 @@ const fs = require("fs");
 
 const Renderer = require("../../../src/lib/renderer");
 
-jest.mock("../../../src/lib/printer");
-const Printer = require("../../../src/lib/printer");
-const { ensureDir } = require("../../../src/utils/helpers/fs");
+jest.mock("@graphql-markdown/printer-legacy");
+const Printer = require("@graphql-markdown/printer-legacy");
+const {
+  fs: { ensureDir },
+} = require("@graphql-markdown/utils").helpers;
 
 describe("lib", () => {
   describe("renderer", () => {

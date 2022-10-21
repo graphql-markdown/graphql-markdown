@@ -14,9 +14,9 @@ const {
   GraphQLInterfaceType,
 } = require("graphql");
 
-const graphqlLib = require("../../../src/lib/graphql");
+const graphqlLib = require("@graphql-markdown/utils").graphql;
 
-const Printer = require("../../../src/lib/printer");
+const Printer = require("../../src/index");
 
 describe("lib", () => {
   describe("printer", () => {
@@ -854,7 +854,7 @@ describe("lib", () => {
 
       describe("printRelationOf()", () => {
         beforeEach(() => {
-          jest.mock("../../../src/lib/graphql");
+          jest.mock("graphql");
         });
 
         afterEach(() => {
