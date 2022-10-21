@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   env: {
@@ -12,6 +14,7 @@ module.exports = {
     "plugin:prettier/recommended",
     "prettier",
     "plugin:node/recommended",
+    "plugin:import/recommended",
   ],
   plugins: ["jest"],
   settings: {
@@ -38,13 +41,29 @@ module.exports = {
     },
   ],
   rules: {
-    "node/no-unpublished-require": 0, // temporary fix
+    "node/no-extraneous-require": 0,
     "node/no-deprecated-api": 2,
     "brace-style": [
       2,
       "1tbs",
       {
         allowSingleLine: false,
+      },
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+        optionalDependencies: true,
+        peerDependencies: true,
+        packageDir: [
+          "./",
+          "packages/core",
+          "packages/diff",
+          "packages/docusaurus",
+          "packages/printer-legacy",
+          "packages/utils",
+        ],
       },
     ],
   },

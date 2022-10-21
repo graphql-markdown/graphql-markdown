@@ -102,6 +102,7 @@
     "diff": "5.1.0",
     "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "27.1.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.2.1",
