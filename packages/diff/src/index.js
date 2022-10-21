@@ -50,7 +50,7 @@ async function checkSchemaChanges(
     const hashSchema = getSchemaHash(schema);
     if (await fileExists(hashFile)) {
       const hash = await readFile(hashFile, { encoding: "utf8", flag: "r" });
-      return !(hashSchema === hash);
+      return hashSchema !== hash;
     }
     await saveFile(hashFile, hashSchema);
   }
