@@ -50,5 +50,13 @@ describe("lib", () => {
         },
       );
     });
+
+    describe("getGroups()", () => {
+      test("returns object", () => {});
+    });
+
+    describe("getGroupName()", () => {
+      test("returns group name", () => {});
+    });
   });
 });

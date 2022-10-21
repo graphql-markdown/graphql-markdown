@@ -1,5 +1,6 @@
-const { convertArrayToObject } = require("@graphql-markdown/utils").scalars
-  .array;
+const {
+  array: { convertArrayToObject },
+} = require("@graphql-markdown/utils").scalars;
 
 const DEFAULT_GROUP = "Miscellaneous";
 const OPTION_REGEX =
@@ -28,25 +29,14 @@ function getGroups(rootTypes, groupByDirective) {
   }
 
   Object.keys(rootTypes).forEach((typeName) => {
-    if (
-      typeof rootTypes[typeName] != "undefined" &&
-      rootTypes[typeName] != null
-    ) {
-      if (Array.isArray(rootTypes[typeName])) {
-        rootTypes[typeName] = convertArrayToObject(rootTypes[typeName]);
+    let rootType = rootTypes[typeName];
+    if (typeof rootType != "undefined" && rootType != null) {
+      if (Array.isArray(rootType)) {
+        rootType = convertArrayToObject(rootType);
       }
 
-      Object.keys(rootTypes[typeName]).forEach((name) => {
-        if (
-          typeof rootTypes[typeName][name]["astNode"] != "undefined" &&
-          rootTypes[typeName][name]["astNode"] != null
-        ) {
-          const allDirectives =
-            rootTypes[typeName][name]["astNode"]["directives"];
-          groups[name] = getGroupInfo(allDirectives, groupByDirective);
-        } else {
-          groups[name] = groupByDirective.fallback;
-        }
+      Object.keys(rootType).forEach((type) => {
+        groups[type] = getGroupName(rootType[type], groupByDirective);
       });
     }
   });
@@ -54,8 +44,14 @@ function getGroups(rootTypes, groupByDirective) {
   return groups;
 }
 
-function getGroupInfo(allDirectives, groupByDirective) {
+function getGroupName(type, groupByDirective) {
   let group = groupByDirective.fallback; // default value is fallback, and it will be only overridden if a group is found
+
+  if (typeof type.astNode == "undefined" || type.astNode == null) {
+    return group;
+  }
+
+  const allDirectives = type.astNode.directives;
 
   if (!Array.isArray(allDirectives)) {
     return group;
