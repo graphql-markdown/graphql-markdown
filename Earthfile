@@ -7,7 +7,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY package.json package-lock.json ./
-  COPY --dir config scripts packages ./
+  COPY --dir config packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
