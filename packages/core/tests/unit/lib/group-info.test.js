@@ -1,6 +1,6 @@
 const {
   parseGroupByOption,
-  getGroups,
+  // getGroups,
   getGroupName,
 } = require("../../../src/lib/group-info");
 
@@ -98,19 +98,37 @@ describe("lib", () => {
       test("returns fallback group name if no directive", () => {
         expect.assertions(1);
         const type = schema.getType("Unicorn");
-        expect(getGroupName(type, {  fallback: "default", directive: "doc", field: "category" })).toBe("default");
+        expect(
+          getGroupName(type, {
+            fallback: "default",
+            directive: "doc",
+            field: "category",
+          }),
+        ).toBe("default");
       });
 
       test("returns fallback name if no matching directive", () => {
         expect.assertions(1);
         const type = schema.getType("Elf");
-        expect(getGroupName(type,  {fallback: "default", directive: "doc", field: "category" }))).toBe("default");
+        expect(
+          getGroupName(type, {
+            fallback: "default",
+            directive: "doc",
+            field: "category",
+          }),
+        ).toBe("default");
       });
 
       test("returns group name if category directive", () => {
         expect.assertions(1);
         const type = schema.getType("Bird");
-        expect(getGroupName(type, { fallback: "default", directive: "doc", field: "category" })).toBe("animal");
+        expect(
+          getGroupName(type, {
+            fallback: "default",
+            directive: "doc",
+            field: "category",
+          }),
+        ).toBe("animal");
       });
     });
   });
