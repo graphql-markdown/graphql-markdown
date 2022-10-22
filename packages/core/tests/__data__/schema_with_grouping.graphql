@@ -10,17 +10,8 @@ scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
   UpdateGrade(input: String): String  @doc(category: "Grade") 
-}
-
-type Mutation{
   UpdateGPA(input: Int): Int @doc(category: "Grade") 
-}
-
-type Mutation{
   AddCourse(input: String): String  @doc(category: "Course") 
-}
-
-type Mutation{
   DropCourse(input: String): String  @doc(category: "Course") 
 }
 

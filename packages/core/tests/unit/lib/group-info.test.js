@@ -1,7 +1,40 @@
-const { parseGroupByOption } = require("../../../src/lib/group-info");
+const {
+  parseGroupByOption,
+  getGroups,
+  getGroupName,
+} = require("../../../src/lib/group-info");
+
+const { buildSchema } = require("graphql");
 
 describe("lib", () => {
   describe("group-info", () => {
+    const schema = buildSchema(`
+    directive @doc(
+      category: String
+    ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+    
+    directive @tag(
+      category: String
+    ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+    
+
+    type Unicorn {
+      name: String!
+    }
+
+    type Bird @doc(category: "animal") {
+      name: String!
+    }
+
+    type Fish {
+      name: String!
+    }
+
+    type Elf @tag(category: "fantasy") {
+      name: String!
+    }
+  `);
+
     describe("parseGroupByOption()", () => {
       test("returns object with groupBy config", () => {
         expect.hasAssertions();
@@ -56,7 +89,29 @@ describe("lib", () => {
     });
 
     describe("getGroupName()", () => {
-      test("returns group name", () => {});
+      test("returns fallback group name if invalid type", () => {
+        expect.assertions(1);
+
+        expect(getGroupName({}, { fallback: "default" })).toBe("default");
+      });
+
+      test("returns fallback group name if no directive", () => {
+        expect.assertions(1);
+        const type = schema.getType("Unicorn");
+        expect(getGroupName(type, {  fallback: "default", directive: "doc", field: "category" })).toBe("default");
+      });
+
+      test("returns fallback name if no matching directive", () => {
+        expect.assertions(1);
+        const type = schema.getType("Elf");
+        expect(getGroupName(type,  {fallback: "default", directive: "doc", field: "category" }))).toBe("default");
+      });
+
+      test("returns group name if category directive", () => {
+        expect.assertions(1);
+        const type = schema.getType("Bird");
+        expect(getGroupName(type, { fallback: "default", directive: "doc", field: "category" })).toBe("animal");
+      });
     });
   });
 });

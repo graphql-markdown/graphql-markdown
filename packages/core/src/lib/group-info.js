@@ -70,4 +70,4 @@ function getGroupName(type, groupByDirective) {
   return group;
 }
 
-module.exports = { getGroups, parseGroupByOption };
+module.exports = { getGroupName, getGroups, parseGroupByOption };
