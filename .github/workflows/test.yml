@@ -33,19 +33,21 @@ jobs:
         npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects unit
         [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
         mkdir packages/${{matrix.package}}/.nyc_output/unit
-        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/unit/coverage-final.json
+        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/unit.json
 
     - name: Run Integration Tests
       run: |
         npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects integration
         [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
         mkdir packages/${{matrix.package}}/.nyc_output/integration
-        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration/coverage.json
+        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration.json
 
     - name: Check Code Coverage
       run: |
         [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-        npm run coverage -w @graphql-markdown/${{matrix.package}}
+        cd packages/${{matrix.package}}
+        npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
+        npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
 
     - name: Coveralls
       continue-on-error: true
