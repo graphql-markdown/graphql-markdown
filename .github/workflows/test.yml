@@ -45,7 +45,7 @@ jobs:
     - name: Check Code Coverage
       run: |
         [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-        npm run test:coverage -w @graphql-markdown/${{matrix.package}}
+        npm run coverage -w @graphql-markdown/${{matrix.package}}
 
     - name: Coveralls
       continue-on-error: true
