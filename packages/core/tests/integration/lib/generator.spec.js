@@ -1,6 +1,10 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
+jest.mock("@graphql-markdown/printer-legacy");
+jest.mock("@graphql-markdown/diff");
+const diff = require("@graphql-markdown/diff");
+
 const generateDocFromSchema = require("../../../src/lib/generator");
 
 describe("lib", () => {
@@ -55,7 +59,7 @@ describe("lib", () => {
           loaders: {},
         };
 
-        await generateDocFromSchema(config);
+        jest.spyOn(diff, "checkSchemaChanges").mockReturnValue(false);
         await generateDocFromSchema(config);
 
         expect(logSpy).toHaveBeenCalledWith(
@@ -72,7 +76,7 @@ describe("lib", () => {
           outputDir: "/output",
           linkRoot: "docs",
           homepageLocation: "/assets/generated.md",
-          diffMethod: "SCHEMA-DIFF",
+          diffMethod: "NONE",
           tmpDir: "/temp",
           loaders: {},
           groupByDirective: {
