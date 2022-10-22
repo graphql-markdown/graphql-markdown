@@ -89,46 +89,25 @@ describe("lib", () => {
     });
 
     describe("getGroupName()", () => {
-      test("returns fallback group name if invalid type", () => {
-        expect.assertions(1);
-
-        expect(getGroupName({}, { fallback: "default" })).toBe("default");
-      });
-
-      test("returns fallback group name if no directive", () => {
-        expect.assertions(1);
-        const type = schema.getType("Unicorn");
-        expect(
-          getGroupName(type, {
-            fallback: "default",
-            directive: "doc",
-            field: "category",
-          }),
-        ).toBe("default");
-      });
-
-      test("returns fallback name if no matching directive", () => {
-        expect.assertions(1);
-        const type = schema.getType("Elf");
-        expect(
-          getGroupName(type, {
-            fallback: "default",
-            directive: "doc",
-            field: "category",
-          }),
-        ).toBe("default");
-      });
+      const groupOptions = {
+        fallback: "default",
+        directive: "doc",
+        field: "category",
+      };
 
       test("returns group name if category directive", () => {
         expect.assertions(1);
         const type = schema.getType("Bird");
-        expect(
-          getGroupName(type, {
-            fallback: "default",
-            directive: "doc",
-            field: "category",
-          }),
-        ).toBe("animal");
+        expect(getGroupName(type, groupOptions)).toBe("animal");
+      });
+
+      test.each([
+        { case: "invalid type", type: {} },
+        { case: "no directive", type: schema.getType("Unicorn") },
+        { case: "no matching directive", type: schema.getType("Elf") },
+      ])("returns fallback group name if $case", ({ type }) => {
+        expect.assertions(1);
+        expect(getGroupName(type, groupOptions)).toBe("default");
       });
     });
   });
