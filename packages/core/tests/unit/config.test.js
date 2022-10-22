@@ -1,6 +1,7 @@
 const { join } = require("path");
 
 const { COMPARE_METHOD } = require("@graphql-markdown/diff");
+
 const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
 
 jest.mock("../../src/lib/group-info");

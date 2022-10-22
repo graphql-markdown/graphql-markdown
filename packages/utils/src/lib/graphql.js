@@ -40,11 +40,10 @@ const DefaultLoaders = {
 };
 
 async function loadSchema(schemaLocation, options) {
-  const rootTypes = hasProperty(options, "rootTypes")
-    ? options.rootTypes
-    : undefined;
+  let rootTypes = undefined;
 
   if (hasProperty(options, "rootTypes")) {
+    rootTypes = options.rootTypes;
     delete options["rootTypes"];
   }
 
