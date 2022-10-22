@@ -1,10 +1,48 @@
 {
   "name": "graphql-markdown",
+  "homepage": "https://graphql-markdown.github.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+  },
   "private": true,
   "version": "1.0.0",
   "workspaces": [
     "packages/*",
     "config"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "contributors": [
+    {
+      "name": "jocrau"
+    },
+    {
+      "name": "mimo84"
+    },
+    {
+      "name": "coder2034"
+    },
+    {
+      "name": "lauzierj"
+    },
+    {
+      "name": "jineshshah36"
+    },
+    {
+      "name": "GuiHash"
+    },
+    {
+      "name": "davidyaha"
+    },
+    {
+      "name": "jlndk"
+    },
+    {
+      "name": "elias-pap"
+    }
   ],
   "scripts": {
     "prepare": "husky install",

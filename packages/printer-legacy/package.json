@@ -24,35 +24,6 @@
   "author": {
     "name": "Gregory Heitz"
   },
-  "contributors": [
-    {
-      "name": "jocrau"
-    },
-    {
-      "name": "mimo84"
-    },
-    {
-      "name": "coder2034"
-    },
-    {
-      "name": "lauzierj"
-    },
-    {
-      "name": "jineshshah36"
-    },
-    {
-      "name": "GuiHash"
-    },
-    {
-      "name": "davidyaha"
-    },
-    {
-      "name": "jlndk"
-    },
-    {
-      "name": "elias-pap"
-    }
-  ],
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
