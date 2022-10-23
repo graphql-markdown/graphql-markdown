@@ -4,7 +4,7 @@ function prettify(content, parser) {
   try {
     const { format } = require("prettier");
     return format(content, { parser });
-  } catch (e) {
+  } catch (error) {
     console.debug("Prettier is not found");
   }
 }

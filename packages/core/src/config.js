@@ -32,11 +32,11 @@ const DEFAULT_OPTIONS = {
 function buildConfig(configFileOpts, cliOpts) {
   let config = DEFAULT_OPTIONS;
 
-  if (typeof configFileOpts != "undefined" && configFileOpts != null) {
+  if (typeof configFileOpts !== "undefined" && configFileOpts != null) {
     config = { ...DEFAULT_OPTIONS, ...configFileOpts };
   }
 
-  if (typeof cliOpts == "undefined" || cliOpts == null) {
+  if (typeof cliOpts === "undefined" || cliOpts == null) {
     cliOpts = {};
   }
 

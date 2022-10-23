@@ -55,6 +55,7 @@ build-docusaurus:
 
 smoke-init:
   FROM +build-docusaurus
+  WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
   COPY (+build-package/graphql-markdown-utils.tgz --package=utils) ./
   RUN npm install ./graphql-markdown-utils.tgz

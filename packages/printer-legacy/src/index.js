@@ -190,7 +190,7 @@ module.exports = class Printer {
   }
 
   printLinkAttributes(type, text) {
-    if (typeof type == "undefined") {
+    if (typeof type === "undefined") {
       return text ?? "";
     }
 
