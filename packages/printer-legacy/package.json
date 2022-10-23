@@ -22,7 +22,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "1.0.0"
+    "@graphql-markdown/utils": "1.0.1"
   },
   "directories": {
     "test": "tests"

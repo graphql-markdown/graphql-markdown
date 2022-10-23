@@ -35,7 +35,7 @@ describe("lib", () => {
           homepageLocation: "/assets/generated.md",
           diffMethod: "NONE",
           tmpDir: "/temp",
-          loaders: {},
+          loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
           printer: "@graphql-markdown/printer-legacy",
         };
 
@@ -57,6 +57,7 @@ describe("lib", () => {
           homepageLocation: "/assets/generated.md",
           diffMethod: "SCHEMA-HASH",
           tmpDir: "/temp",
+          loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
           printer: "@graphql-markdown/printer-legacy",
         };
 
@@ -79,7 +80,7 @@ describe("lib", () => {
           homepageLocation: "/assets/generated.md",
           diffMethod: "NONE",
           tmpDir: "/temp",
-          loaders: {},
+          loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
           groupByDirective: {
             directive: "doc",
             field: "category",

@@ -35,9 +35,7 @@ const OperationTypeNodes = [
   OperationTypeNode.SUBSCRIPTION,
 ];
 
-const DefaultLoaders = {
-  GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
-};
+const DefaultLoaders = {};
 
 async function loadSchema(schemaLocation, options) {
   let rootTypes = undefined;

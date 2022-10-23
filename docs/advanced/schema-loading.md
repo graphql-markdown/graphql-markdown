@@ -5,11 +5,35 @@ pagination_next: null
 
 # Schema loading
 
-By default, the `schema` default loading expects a local GraphQL schema definition file (`*.graphql`).
+GraphQL-Markdown use external loaders for loading GraphQL schemas (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
 
-Additional GraphQL document loaders can be used (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
+## Local schema (file)
 
-For example, if you want to load a schema from a URL, you first need to add the package `@graphql-tools/url-loader` to your Docusaurus project:
+Use `@graphql-tools/graphql-file-loader` if you want to load a local schema:
+
+```shell
+npm install @graphql-tools/graphql-file-loader
+```
+
+Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
+
+```js
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      // ... other options
+      loaders: {
+        GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
+      }
+    },
+  ],
+],
+```
+
+## Remote schema (url)
+
+Use `@graphql-tools/url-loader`, if you want to load a schema from a URL:
 
 ```shell
 npm install @graphql-tools/url-loader

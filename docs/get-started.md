@@ -29,6 +29,10 @@ You can type this command into Command Prompt, Powershell, Terminal, or any othe
 
 The command also installs all necessary dependencies you need to run Docusaurus.
 
+### Add a GraphQL schema loader
+
+See [schema loading](/docs/advanced/schema-loading)).
+
 ### Start your site
 
 Run the development server:
@@ -65,6 +69,10 @@ npm install @graphql-markdown/docusaurus graphql
 :::info
 The `graphql` package is a peer-dependency, and it should be installed if not yet present.
 :::
+
+### Add a GraphQL schema loader
+
+See [schema loading](/docs/advanced/schema-loading)).
 
 ### Configure the plugin
 
