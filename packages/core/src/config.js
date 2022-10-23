@@ -25,6 +25,7 @@ const DEFAULT_OPTIONS = {
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
+    printer: "@graphql-markdown/printer-legacy",
   },
 };
 
@@ -76,6 +77,7 @@ function gePrintTypeOptions(cliOpts, configOptions) {
     relatedTypeSection:
       !cliOpts.noRelatedType && configOptions.relatedTypeSection,
     typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
+    printer: configOptions.printer,
   };
 }
 

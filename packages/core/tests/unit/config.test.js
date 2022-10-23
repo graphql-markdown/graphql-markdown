@@ -65,6 +65,7 @@ describe("config", () => {
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
+          printer: DEFAULT_OPTIONS.printer,
         },
       };
 

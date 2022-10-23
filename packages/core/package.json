@@ -29,14 +29,17 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/printer-legacy": "^1.0.0",
     "@graphql-markdown/utils": "^1.0.0"
   },
   "peerDependencies": {
+    "@graphql-markdown/printer-legacy": "^1.0.0",
     "@graphql-markdown/diff": "^1.0.0",
     "prettier": "^2.5"
   },
   "peerDependenciesMeta": {
+    "@graphql-markdown/printer-legacy": {
+      "optional": true
+    },
     "@graphql-markdown/diff": {
       "optional": true
     },

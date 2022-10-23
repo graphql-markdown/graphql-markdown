@@ -2,7 +2,6 @@ const { getSchemaMap, loadSchema, getDocumentLoaders } =
   require("@graphql-markdown/utils").graphql;
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
-const Printer = require("@graphql-markdown/printer-legacy");
 
 const time = process.hrtime();
 
@@ -19,6 +18,26 @@ const hasChanges = async (schema, tmpDir, diffMethod) => {
   }
 
   return false;
+};
+
+const getPrinter = (schema, baseURL, linkRoot, groups, printTypeOptions) => {
+  if (typeof printTypeOptions.printer != "string") {
+    throw new Error(
+      "Invalid printer module name in printTypeOptions settings.",
+    );
+  }
+
+  try {
+    const Printer = require(printTypeOptions.printer);
+    return Printer(schema, baseURL, linkRoot, {
+      groups,
+      printTypeOptions,
+    });
+  } catch (e) {
+    throw new Error(
+      `${printTypeOptions.printer} not found\nCheck printTypeOptions settings.`,
+    );
+  }
 };
 
 module.exports = async function generateDocFromSchema({
@@ -45,11 +64,15 @@ module.exports = async function generateDocFromSchema({
   if (await hasChanges((schema, tmpDir, diffMethod))) {
     const rootTypes = getSchemaMap(schema);
     const groups = new getGroups(rootTypes, groupByDirective);
+    const printer = getPrinter(
+      schema,
+      baseURL,
+      linkRoot,
+      groups,
+      printTypeOptions,
+    );
     const renderer = new Renderer(
-      new Printer(schema, baseURL, linkRoot, {
-        groups,
-        printTypeOptions,
-      }),
+      printer,
       outputDir,
       baseURL,
       groups,
