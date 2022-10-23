@@ -14,7 +14,7 @@ const config = {
       collectCoverage: false,
       notify: false,
       reporters: [],
-      verbose: true,
+      verbose: false,
       testMatch: ["<rootDir>/tests/unit/**/?(*.)+(spec|test).js"], // unit tests only
     },
     projectType: "custom",
