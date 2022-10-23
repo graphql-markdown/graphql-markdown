@@ -114,16 +114,6 @@ build-docs:
   COPY --dir docs ./docs
   COPY +build-examples/examples ./examples
   RUN npm install
-  COPY (+build-package/graphql-markdown-utils.tgz --package=utils) ./
-  RUN npm install ./graphql-markdown-utils.tgz
-  COPY (+build-package/graphql-markdown-printer-legacy.tgz --package=printer-legacy) ./
-  RUN npm install ./graphql-markdown-printer-legacy.tgz
-  COPY (+build-package/graphql-markdown-diff.tgz --package=diff) ./
-  RUN npm install ./graphql-markdown-diff.tgz
-  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
-  RUN npm install ./graphql-markdown-core.tgz
-  COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
-  RUN npm install ./graphql-markdown-docusaurus.tgz
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
