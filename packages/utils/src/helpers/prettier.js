@@ -1,21 +1,12 @@
 /* istanbul ignore file */
-let prettier;
-
-try {
-  prettier = require("prettier");
-} catch (e) {
-  console.debug("Prettier is not found");
-}
-
-function hasPrettierModule() {
-  return typeof prettier !== "undefined";
-}
 
 function prettify(content, parser) {
-  if (!hasPrettierModule()) {
-    return content;
+  try {
+    const { format } = require("prettier");
+    return format(content, { parser });
+  } catch (e) {
+    console.debug("Prettier is not found");
   }
-  return prettier.format(content, { parser });
 }
 
 function prettifyMarkdown(content) {
@@ -26,4 +17,4 @@ function prettifyJavascript(content) {
   return prettify(content, "babel");
 }
 
-module.exports = { hasPrettierModule, prettifyMarkdown, prettifyJavascript };
+module.exports = { prettifyMarkdown, prettifyJavascript };

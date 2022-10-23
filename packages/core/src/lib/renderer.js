@@ -8,7 +8,7 @@ const {
 } = require("@graphql-markdown/utils").scalars;
 
 const {
-  prettier: { hasPrettierModule, prettifyJavascript, prettifyMarkdown },
+  prettier: { prettifyJavascript, prettifyMarkdown },
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
 } = require("@graphql-markdown/utils").helpers;
 
@@ -25,7 +25,7 @@ module.exports = class Renderer {
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
-    this.prettify = prettify && hasPrettierModule();
+    this.prettify = prettify;
     this.options = docOptions;
   }
 
