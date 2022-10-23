@@ -32,8 +32,8 @@
     "@graphql-markdown/utils": "^1.0.1"
   },
   "peerDependencies": {
-    "@graphql-markdown/printer-legacy": "^1.0.0",
-    "@graphql-markdown/diff": "^1.0.0",
+    "@graphql-markdown/printer-legacy": "^1.0.1",
+    "@graphql-markdown/diff": "^1.0.1",
     "prettier": "^2.5"
   },
   "peerDependenciesMeta": {
