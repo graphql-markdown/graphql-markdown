@@ -1,21 +1,26 @@
-module.exports = {
+// @ts-check
+/**
+ * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
+ */
+
+const config = {
   inPlace: false,
-  logLevel: "error",
+  ignoreStatic: true,
   coverageAnalysis: "perTest",
   jest: {
     config: {
+      projects: [],
       bail: false,
       collectCoverage: false,
       notify: false,
       reporters: [],
-      verbose: false,
-      testMatch: ["**/tests/unit/**/*.test.js"], // unit tests only
+      verbose: true,
+      testMatch: ["<rootDir>/tests/unit/**/?(*.)+(spec|test).js"], // unit tests only
     },
-    configFile: "jest.config",
     projectType: "custom",
     enableFindRelatedTests: true,
   },
-  mutate: ["src/**/*.js", "!src/**/index.js", "!src/**/prettier.js"],
+  mutate: ["src/**/*.js", "!src/**/prettier.js"],
   packageManager: "npm",
   reporters: ["html"],
   testRunner: "jest",
@@ -24,3 +29,5 @@ module.exports = {
   symlinkNodeModules: true,
   dashboard: {},
 };
+
+module.exports = config;

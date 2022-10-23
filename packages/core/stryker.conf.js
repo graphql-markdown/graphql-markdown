@@ -1,5 +1,8 @@
+// @ts-check
+/**
+ * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
+ */
+
 const config = require("@graphql-markdown/tools-config").stryker;
 
-config.dashboard.module = "core";
-
-module.exports = config;
+module.exports = { ...config, dashboard: { module: "core" } };

@@ -4,4 +4,4 @@ module.exports = {
   nyc: require("./nyc.config"),
   eslint: require("./.eslintrc"),
   prettier: require("./.prettierrc"),
-}
+};

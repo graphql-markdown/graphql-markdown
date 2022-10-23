@@ -21,8 +21,9 @@ jobs:
     name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        package: ['@graphql-markdown/docusaurus']
+        package: ['core', 'diff', 'docusaurus', 'printer-legacy', 'utils']
 
     steps:
     - name: Checkout Code Base
@@ -32,4 +33,6 @@ jobs:
       run: npm ci
 
     - name: Run Mutations Tests
-      run: npm run stryker -w ${{matrix.package}} -- --reporters dashboard
+      run: |
+        [ $(npm test -- --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).js" | grep -i "test.js" | wc -l) = "0" ] && exit 0
+        npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard
