@@ -63,8 +63,9 @@ const config = {
           sidebarPath: "sidebars.js",
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css")
-        }
+          // eslint-disable-next-line node/no-missing-require
+          customCss: require.resolve("./src/css/custom.css"),
+        },
       },
     ],
   ],

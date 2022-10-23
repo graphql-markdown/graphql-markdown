@@ -5,7 +5,7 @@ jest.mock("@graphql-markdown/printer-legacy");
 jest.mock("@graphql-markdown/diff");
 const diff = require("@graphql-markdown/diff");
 
-const generateDocFromSchema = require("../../../src/lib/generator");
+const { generateDocFromSchema } = require("../../../src/lib/generator");
 
 describe("lib", () => {
   describe("renderer", () => {
@@ -36,6 +36,7 @@ describe("lib", () => {
           diffMethod: "NONE",
           tmpDir: "/temp",
           loaders: {},
+          printer: "@graphql-markdown/printer-legacy",
         };
 
         await generateDocFromSchema(config);
@@ -56,7 +57,7 @@ describe("lib", () => {
           homepageLocation: "/assets/generated.md",
           diffMethod: "SCHEMA-HASH",
           tmpDir: "/temp",
-          loaders: {},
+          printer: "@graphql-markdown/printer-legacy",
         };
 
         jest.spyOn(diff, "checkSchemaChanges").mockReturnValue(false);
@@ -84,6 +85,7 @@ describe("lib", () => {
             field: "category",
             fallback: "misc",
           },
+          printer: "@graphql-markdown/printer-legacy",
         };
 
         await generateDocFromSchema(config);

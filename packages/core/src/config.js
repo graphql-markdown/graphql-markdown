@@ -16,6 +16,7 @@ const DEFAULT_OPTIONS = {
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   loaders: {},
   pretty: false,
+  printer: "@graphql-markdown/printer-legacy",
   docOptions: {
     pagination: true,
     toc: true,
@@ -25,7 +26,6 @@ const DEFAULT_OPTIONS = {
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
-    printer: "@graphql-markdown/printer-legacy",
   },
 };
 
@@ -56,6 +56,7 @@ function buildConfig(configFileOpts, cliOpts) {
     prettify: cliOpts.pretty ?? config.pretty,
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
+    printer: config.printer,
   };
 }
 
@@ -77,7 +78,6 @@ function gePrintTypeOptions(cliOpts, configOptions) {
     relatedTypeSection:
       !cliOpts.noRelatedType && configOptions.relatedTypeSection,
     typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
-    printer: configOptions.printer,
   };
 }
 

@@ -32,6 +32,7 @@ describe("config", () => {
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
           docOptions: DEFAULT_OPTIONS.docOptions,
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          printer: DEFAULT_OPTIONS.printer,
         }),
       );
     });
@@ -65,7 +66,6 @@ describe("config", () => {
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
-          printer: DEFAULT_OPTIONS.printer,
         },
       };
 
@@ -84,6 +84,7 @@ describe("config", () => {
         tmpDir: configFileOpts.tmpDir,
         docOptions: configFileOpts.docOptions,
         printTypeOptions: configFileOpts.printTypeOptions,
+        printer: DEFAULT_OPTIONS.printer,
       });
     });
 
@@ -149,6 +150,7 @@ describe("config", () => {
           index: cliOpts.index,
         },
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printer: DEFAULT_OPTIONS.printer,
       });
     });
 
@@ -176,6 +178,7 @@ describe("config", () => {
         prettify: cliOpts.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printer: DEFAULT_OPTIONS.printer,
       });
     });
 
@@ -199,6 +202,7 @@ describe("config", () => {
         prettify: DEFAULT_OPTIONS.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printer: DEFAULT_OPTIONS.printer,
       });
     });
   });
