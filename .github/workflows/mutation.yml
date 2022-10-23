@@ -34,5 +34,5 @@ jobs:
 
     - name: Run Mutations Tests
       run: |
-        [ $(npm test -- --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).js" | grep -i "test.js" | wc -l) = "0" ] && exit 0
+        [ $(npm test -w @graphql-markdown/${{matrix.package}} -- --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).js" | grep -i "test.js" | wc -l) = "0" ] && exit 0
         npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard
