@@ -1,9 +1,7 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-const {
-  fs: { ensureDir, fileExists, saveFile },
-} = require("../../../src/helpers/fs");
+const { ensureDir, fileExists, saveFile } = require("../../../src/helpers/fs");
 
 describe("helpers", () => {
   describe("fs", () => {
