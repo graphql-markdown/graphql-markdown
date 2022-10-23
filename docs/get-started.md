@@ -31,7 +31,7 @@ The command also installs all necessary dependencies you need to run Docusaurus.
 
 ### Add a GraphQL schema loader
 
-See [schema loading](/docs/advanced/schema-loading)).
+See [schema loading](/docs/advanced/schema-loading).
 
 :::tip
 The template comes by default with `@graphql-tools/url-loader` for remote schemas.
