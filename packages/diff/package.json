@@ -12,14 +12,6 @@
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
-  "keywords": [
-    "graphql",
-    "graphql-schema",
-    "documentation",
-    "plugin",
-    "markdown",
-    "graphql-markdown"
-  ],
   "author": {
     "name": "Gregory Heitz"
   },
@@ -31,7 +23,7 @@
   },
   "dependencies": {
     "@graphql-inspector/core": "^3.4.0",
-    "@graphql-markdown/utils": "file:../utils",
+    "@graphql-markdown/utils": "^1.0.0",
     "@graphql-tools/graphql-file-loader": "^7.5.5",
     "@graphql-tools/load": "^7.7.7"
   },

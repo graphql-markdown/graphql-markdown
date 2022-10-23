@@ -5,22 +5,13 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.14.0",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
-  "keywords": [
-    "docusaurus",
-    "graphql",
-    "graphql-schema",
-    "documentation",
-    "plugin",
-    "markdown",
-    "graphql-markdown"
-  ],
   "author": {
     "name": "Gregory Heitz"
   },
