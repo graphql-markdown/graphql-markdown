@@ -3,7 +3,7 @@ jest.mock("fs");
 
 const {
   fs: { ensureDir, fileExists, saveFile },
-} = require("@graphql-markdown/utils").helpers;
+} = require("../../../src/helpers/fs");
 
 describe("helpers", () => {
   describe("fs", () => {
