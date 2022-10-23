@@ -69,6 +69,9 @@ plugins: [
           toc: false, // disable page table of content, same as CLI flag --noToc
           index: true, // enable generated index pages, same as CLI flag --index
         },
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        },
       },
     ],
   ],
@@ -142,6 +145,9 @@ plugins: [
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
         },
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
       },
     ],
   ],

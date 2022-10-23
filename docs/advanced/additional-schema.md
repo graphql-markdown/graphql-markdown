@@ -19,6 +19,9 @@ plugins: [
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
       },
     ],
     [
@@ -29,6 +32,9 @@ plugins: [
         rootPath: "./docs", // docs will be generated under './docs/admin' (rootPath/baseURL)
         baseURL: "admin",
         homepage: "./docs/admin.md",
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
       },
     ],
   ],

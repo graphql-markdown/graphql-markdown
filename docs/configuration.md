@@ -19,7 +19,7 @@ module.exports = {
         homepage: "./docs/swapi.md",
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
-        }
+        },
       },
     ],
   ],
