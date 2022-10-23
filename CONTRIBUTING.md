@@ -99,16 +99,18 @@ You should edit the documentation, or add new documentation files, directly in y
 
 ### Code
 
+> We are using a monorepo, so you might want to [read about monorepo](https://monorepo.tools/) before jumping into the code.
+
 The code base is full Javascript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
 
 When making your changes, remember to check your code by running:
 
-* `npm run lint` checks that the code respects Javascript standards.
-* `npm test -ws` runs the test suites.
+* `npm run lint` checks that the code respects Javascript standards
+* `npm test -ws` runs the test suites
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `npm run lint` and `npm test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `npm run lint` and `npm test -ws` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
@@ -123,19 +125,22 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 The quickest way to understand the code structure is to look at the folder structure:
 
 * `packages` contains packages sources
-  * `docusaurus` contains source for the @graphql-markdown/docusaurus packages
-    * `src` contains all JS files used by the plugin.
-      * `index.js` is the plugin entrypoint.
-      * `lib` contains all classes used for reading schema and generating markdown.
-        * `generator.js` is controlling the logic, sequencing the calls to other classes.
-        * `printer.js` is the class transforming GraphQL nodes into Markdown.
-        * `renderer.js` is responsible for generating Markdown file structure, and other Docusaurus files.
-        * `diff.js` contains methods for identifying schema changes.
-        * `config.js` manages the config settings (CLI flags and JS).
-      * `utils` contains some utilities for manipulating basic structures such as `object`, `array`, `string` and `url` , and some helpers for `diff` and `prettier`.
+  * `docusaurus` contains Docusaurus plugin | `@graphql-markdown/docusaurus`
+    * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
+  * `core` contains core logic | `@graphql-markdown/core`
     * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
-* `scripts` folder contains a few scripts used by Github Actions and Docker.
+    * `src` contains all JS files used by the package.
+    * `tests` folder contains all tests needed (see [tests](#tests) section).
+  * `utils` contains shared libraries | `@graphql-markdown/utils`
+    * `src` contains all JS files used by the package.
+    * `tests` folder contains all tests needed (see [tests](#tests) section).
+  * `printer-legacy` contains legacy code for exporting markdown | `@graphql-markdown/printer-legacy`
+    * `src` contains all JS files used by the package.
+    * `tests` folder contains all tests needed (see [tests](#tests) section).
+  * `diff` contains diff methods (optional) | `@graphql-markdown/utils`
+    * `src` contains all JS files used by the package.
+    * `tests` folder contains all tests needed (see [tests](#tests) section).
 * `config` folder configuration files for development tools.
 * `docs` folder contains online documentation.
 * `website` folder contains Docusaurus file for generating website.
