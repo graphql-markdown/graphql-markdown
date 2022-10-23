@@ -22,4 +22,5 @@ module.exports = {
   testRunnerNodeArgs: ["--experimental-vm-modules"],
   thresholds: { high: 85, low: 75, break: 70 },
   symlinkNodeModules: true,
+  dashboard: {},
 };

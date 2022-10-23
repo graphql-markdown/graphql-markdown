@@ -4,6 +4,7 @@ const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
 const pluginGroupConfigFilename =
   "docusaurus2-graphql-doc-generator-groups.config.js";
 
+// eslint-disable-next-line node/no-missing-require
 const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
 
 const config = {
@@ -62,8 +63,9 @@ const config = {
           sidebarPath: "sidebars.js",
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css")
-        }
+          // eslint-disable-next-line node/no-missing-require
+          customCss: require.resolve("./src/css/custom.css"),
+        },
       },
     ],
   ],

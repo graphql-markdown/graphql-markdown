@@ -1,0 +1,59 @@
+{
+  "name": "@graphql-markdown/core",
+  "homepage": "https://graphql-markdown.github.io",
+  "description": "GraphQL-Markdown core package for generating Markdown documentation from a GraphQL schema.",
+  "bugs": {
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
+  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "markdown",
+    "graphql-markdown"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "scripts": {
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "test": "jest",
+    "stryker": "stryker run"
+  },
+  "dependencies": {
+    "@graphql-markdown/utils": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@graphql-markdown/printer-legacy": "^1.0.0",
+    "@graphql-markdown/diff": "^1.0.0",
+    "prettier": "^2.5"
+  },
+  "peerDependenciesMeta": {
+    "@graphql-markdown/printer-legacy": {
+      "optional": true
+    },
+    "@graphql-markdown/diff": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "engines": {
+    "node": ">=16.14"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

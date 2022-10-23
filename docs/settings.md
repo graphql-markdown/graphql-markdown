@@ -16,22 +16,28 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 
 ## `diffMethod`
 
+:::info
+The package `@graphql-markdown/diff` is required for using `diffMethod`.
+If the package is missing, then the change detection will be skipped.
+
+```shell
+npm install @graphql-markdown/diff
+```
+
+:::
+
 The method to be used for identifying changes in the schema for triggering the documentation generation.
 
 The possible values are:
 
+- `FORCE`: skip diff, always generate documentation, same as CLI flag `-f` or `--force`.
+- `NONE`: skip diff (same as `FORCE`)
 - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) for identifying changes in the schema (including description)
 - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)
 
 | Setting      | CLI flag                  | Default       |
 | ------------ | ------------------------- | ------------- |
-| `diffMethod` | `-d, --diff <diffMethod>` | `SCHEMA-DIFF` |
-
-<br/>
-
-:::info
-Use any other value to disable the change detection to force documentation generation, same as CLI flag `-f` or `--force`.
-:::
+| `diffMethod` | `-d, --diff <diffMethod>` | `NONE`        |
 
 ## `docOptions`
 
@@ -102,9 +108,9 @@ The root for links in documentation. It depends on the entry for the schema main
 
 GraphQL schema loader to be used (see [schema loading](/docs/advanced/schema-loading)).
 
-| Setting   | CLI flag        | Default                                                     |
-| --------- | --------------- | ----------------------------------------------------------- |
-| `loaders` | _not supported_ | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` |
+| Setting   | CLI flag        | Default                                                      |
+| --------- | --------------- | ------------------------------------------------------------ |
+| `loaders` | _not supported_ | `{ GraphQLFileLoader: "@graphql-tools/graphql-file-loader" }` |
 
 ## `printTypeOptions`
 

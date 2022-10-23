@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "echo nothing to do",
-    "prepack": "echo nothing to do",
-    "postpack": "echo nothing to do",
-    "test:coverage": "echo nothing to do",
-    "stryker": "echo nothing to do",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",

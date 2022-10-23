@@ -1,11 +1,6 @@
 {
-  "name": "@graphql-markdown/config",
+  "name": "@graphql-markdown/tools-config",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo nothing to do"
-  },
-  "author": "",
-  "license": "ISC"
+  "private": true
 }

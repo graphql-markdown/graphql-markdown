@@ -1,6 +1,5 @@
 /* istanbul ignore file */
-const { buildConfig } = require("./config.js");
-const generateDocFromSchema = require("./lib/generator");
+const { generateDocFromSchema, config } = require("@graphql-markdown/core");
 
 const NAME = "docusaurus-graphql-doc-generator";
 const COMMAND = "graphql-to-doc";
@@ -44,7 +43,9 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         )
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
-          await generateDocFromSchema(buildConfig(configOptions, cliOptions));
+          await generateDocFromSchema(
+            config.buildConfig(configOptions, cliOptions),
+          );
         });
     },
   };
