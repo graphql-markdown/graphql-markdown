@@ -2,7 +2,6 @@ const { join } = require("path");
 const { tmpdir } = require("os");
 
 const { parseGroupByOption } = require("./lib/group-info");
-const { COMPARE_METHOD } = require("@graphql-markdown/diff");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
@@ -13,7 +12,7 @@ const DEFAULT_OPTIONS = {
   baseURL: "schema",
   linkRoot: "/",
   homepage: join(ASSETS_LOCATION, "generated.md"),
-  diffMethod: COMPARE_METHOD.DIFF,
+  diffMethod: undefined,
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   loaders: {},
   pretty: false,
@@ -60,7 +59,7 @@ function buildConfig(configFileOpts, cliOpts) {
 }
 
 function getDiffMethod(diff, force) {
-  return force ? COMPARE_METHOD.FORCE : diff;
+  return force ? "FORCE" : diff;
 }
 
 function getDocOptions(cliOpts, configOptions) {

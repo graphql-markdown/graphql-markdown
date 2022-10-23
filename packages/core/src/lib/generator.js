@@ -3,9 +3,23 @@ const { getSchemaMap, loadSchema, getDocumentLoaders } =
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 const Printer = require("@graphql-markdown/printer-legacy");
-const { checkSchemaChanges } = require("@graphql-markdown/diff");
 
 const time = process.hrtime();
+
+const hasChanges = async (schema, tmpDir, diffMethod) => {
+  if (typeof diffMethod == "undefined" || diffMethod == null) {
+    return false;
+  }
+
+  try {
+    const { checkSchemaChanges } = require("@graphql-markdown/diff");
+    return await checkSchemaChanges(schema, tmpDir, diffMethod);
+  } catch (e) {
+    console.warn(e.message ?? "@graphql-markdown/diff not found");
+  }
+
+  return false;
+};
 
 module.exports = async function generateDocFromSchema({
   baseURL,
@@ -28,9 +42,7 @@ module.exports = async function generateDocFromSchema({
     ...loaderOptions,
   });
 
-  const hasChanged = await checkSchemaChanges(schema, tmpDir, diffMethod);
-
-  if (hasChanged) {
+  if (await hasChanges((schema, tmpDir, diffMethod))) {
     const rootTypes = getSchemaMap(schema);
     const groups = new getGroups(rootTypes, groupByDirective);
     const renderer = new Renderer(
@@ -44,12 +56,15 @@ module.exports = async function generateDocFromSchema({
       prettify,
       docOptions,
     );
+
     const pages = await Promise.all(
       Object.keys(rootTypes).map((typeName) =>
         renderer.renderRootTypes(typeName, rootTypes[typeName]),
       ),
     );
+
     await renderer.renderHomepage(homepageLocation);
+
     const sidebarPath = await renderer.renderSidebar();
 
     const [sec, msec] = process.hrtime(time);
