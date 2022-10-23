@@ -5,6 +5,7 @@ module.exports = {
   baseURL: ".",
   linkRoot: "/schema",
   diffMethod: "SCHEMA-HASH",
+  loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
   groupByDirective: {
     directive: "doc",
     field: "category",

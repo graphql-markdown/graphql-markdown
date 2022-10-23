@@ -11,14 +11,14 @@ const hasChanges = async (
   diffMethod,
   diffModule = "@graphql-markdown/diff",
 ) => {
-  if (typeof diffMethod == "undefined" || diffMethod == null) {
+  if (typeof diffMethod === "undefined" || diffMethod == null) {
     return true;
   }
 
   try {
     const { checkSchemaChanges } = require(diffModule);
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
-  } catch (e) {
+  } catch (error) {
     console.warn(
       `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
     );
@@ -35,7 +35,7 @@ const getPrinter = (
   printTypeOptions,
   printerModule,
 ) => {
-  if (typeof printerModule != "string") {
+  if (typeof printerModule !== "string") {
     throw new Error(
       "Invalid printer module name in printTypeOptions settings.",
     );
@@ -47,7 +47,7 @@ const getPrinter = (
       groups,
       printTypeOptions,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(
       `Cannot find module '${printerModule}' from @graphql-markdown/core in printTypeOptions settings.`,
     );
@@ -62,14 +62,15 @@ const generateDocFromSchema = async ({
   homepageLocation,
   diffMethod,
   tmpDir,
-  loaders,
+  loaders: loadersList,
   groupByDirective,
   prettify,
   docOptions,
   printTypeOptions,
   printer: printerModule,
 }) => {
-  const schema = await loadSchema(schemaLocation, getDocumentLoaders(loaders));
+  const loaders = getDocumentLoaders(loadersList);
+  const schema = await loadSchema(schemaLocation, loaders);
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
   if (!changed) {

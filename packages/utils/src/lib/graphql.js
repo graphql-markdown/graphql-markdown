@@ -35,10 +35,6 @@ const OperationTypeNodes = [
   OperationTypeNode.SUBSCRIPTION,
 ];
 
-const DefaultLoaders = {
-  GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
-};
-
 async function loadSchema(schemaLocation, options) {
   let rootTypes = undefined;
 
@@ -63,36 +59,32 @@ async function loadSchema(schemaLocation, options) {
   return new GraphQLSchema(config);
 }
 
-function getDocumentLoaders(extraLoaders = {}) {
-  const loadersList = { ...DefaultLoaders, ...extraLoaders };
-
+function getDocumentLoaders(loadersList = {}) {
   const loaders = [];
   const loaderOptions = {};
 
   Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
-    try {
-      if (typeof graphqlDocumentLoader === "string") {
-        const { [className]: Loader } = require(graphqlDocumentLoader);
-        loaders.push(new Loader());
-      } else {
-        if (!graphqlDocumentLoader.module) {
-          throw new Error(
-            `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
-          );
-        }
-        const { [className]: Loader } = require(graphqlDocumentLoader.module);
-        loaders.push(new Loader());
-        Object.assign(loaderOptions, graphqlDocumentLoader.options);
+    if (typeof graphqlDocumentLoader === "string") {
+      const { [className]: Loader } = require(graphqlDocumentLoader);
+      loaders.push(new Loader());
+    } else {
+      if (
+        typeof graphqlDocumentLoader.module !== "string" ||
+        graphqlDocumentLoader.module == null
+      ) {
+        throw new Error(
+          `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
+        );
       }
-    } catch (error) {
-      console.warn(graphqlDocumentLoader, error.message);
+      const { [className]: Loader } = require(graphqlDocumentLoader.module);
+      loaders.push(new Loader());
+      Object.assign(loaderOptions, graphqlDocumentLoader.options);
     }
   });
 
   if (loaders.length < 1) {
     throw new Error("No GraphQL document loaders available.");
   }
-
   return { loaders, loaderOptions };
 }
 
@@ -107,7 +99,7 @@ function getListDefaultValues(type, value) {
 }
 
 function getDefaultValue({ type, defaultValue }) {
-  if (defaultValue === null || typeof defaultValue === "undefined") {
+  if (typeof defaultValue === "undefined" || defaultValue === null) {
     return undefined;
   }
 
@@ -137,7 +129,7 @@ function formatDefaultValue(type, defaultValue) {
 }
 
 function getTypeFromSchema(schema, type) {
-  if (typeof schema == "undefined" || schema == null) {
+  if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
 
@@ -165,7 +157,7 @@ function getTypeFromSchema(schema, type) {
 
 function getIntrospectionFieldsList(queryType) {
   if (
-    typeof queryType == "undefined" ||
+    typeof queryType === "undefined" ||
     queryType == null ||
     !hasMethod(queryType, "getFields")
   ) {

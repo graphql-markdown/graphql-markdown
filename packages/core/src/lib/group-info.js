@@ -13,7 +13,7 @@ function parseGroupByOption(groupOptions) {
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions == "undefined" || parsedOptions == null) {
+  if (typeof parsedOptions === "undefined" || parsedOptions == null) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
@@ -24,7 +24,7 @@ function parseGroupByOption(groupOptions) {
 function getGroups(rootTypes, groupByDirective) {
   let groups = {};
 
-  if (typeof groupByDirective == "undefined" || groupByDirective == null) {
+  if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
 
@@ -47,7 +47,7 @@ function getGroups(rootTypes, groupByDirective) {
 function getGroupName(type, groupByDirective) {
   let group = groupByDirective.fallback; // default value is fallback, and it will be only overridden if a group is found
 
-  if (typeof type.astNode == "undefined" || type.astNode == null) {
+  if (typeof type.astNode === "undefined" || type.astNode == null) {
     return group;
   }
 

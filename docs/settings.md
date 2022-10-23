@@ -106,11 +106,11 @@ The root for links in documentation. It depends on the entry for the schema main
 
 ## `loaders`
 
-GraphQL schema loader to be used (see [schema loading](/docs/advanced/schema-loading)).
+GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loading)).
 
-| Setting   | CLI flag        | Default                                                      |
-| --------- | --------------- | ------------------------------------------------------------ |
-| `loaders` | _not supported_ | `{ GraphQLFileLoader: "@graphql-tools/graphql-file-loader" }` |
+| Setting   | CLI flag        | Default   |
+| --------- | --------------- | --------- |
+| `loaders` | _not supported_ | `{ }`     |
 
 ## `printTypeOptions`
 
