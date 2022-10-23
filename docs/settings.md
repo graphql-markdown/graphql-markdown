@@ -16,7 +16,7 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 
 ## `diffMethod`
 
-:::warn
+:::info
 The package `@graphql-markdown/diff` is required for using `diffMethod`.
 If the package is missing, then the change detection will be skipped.
 
@@ -108,9 +108,9 @@ The root for links in documentation. It depends on the entry for the schema main
 
 GraphQL schema loader to be used (see [schema loading](/docs/advanced/schema-loading)).
 
-| Setting   | CLI flag        | Default                                                     |
-| --------- | --------------- | ----------------------------------------------------------- |
-| `loaders` | _not supported_ | `{GraphQLFileLoader: "@graphql-tools/graphql-file-loader"}` |
+| Setting   | CLI flag        | Default                                                      |
+| --------- | --------------- | ------------------------------------------------------------ |
+| `loaders` | _not supported_ | `{ GraphQLFileLoader: "@graphql-tools/graphql-file-loader" }` |
 
 ## `printTypeOptions`
 
