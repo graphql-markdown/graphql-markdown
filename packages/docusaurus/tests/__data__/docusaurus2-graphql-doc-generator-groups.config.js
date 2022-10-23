@@ -4,6 +4,7 @@ module.exports = {
   rootPath: "./docs",
   baseURL: ".",
   linkRoot: "/schema",
+  diffMethod: "SCHEMA-HASH",
   groupByDirective: {
     directive: "doc",
     field: "category",

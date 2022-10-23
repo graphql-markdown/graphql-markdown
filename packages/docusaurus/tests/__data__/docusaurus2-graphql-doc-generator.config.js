@@ -3,6 +3,7 @@ module.exports = {
   rootPath: "./docs",
   baseURL: ".",
   linkRoot: "/group-by",
+  diffMethod: "SCHEMA-DIFF",
   loaders: {
     UrlLoader: {
       module: "@graphql-tools/url-loader",
