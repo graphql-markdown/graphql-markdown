@@ -1,6 +1,6 @@
 const {
   parseGroupByOption,
-  // getGroups,
+  getGroups,
   getGroupName,
 } = require("../../../src/lib/group-info");
 
@@ -35,23 +35,31 @@ describe("lib", () => {
     }
   `);
 
+    const groupOptions = {
+      fallback: "common",
+      directive: "doc",
+      field: "category",
+    };
+
     describe("parseGroupByOption()", () => {
       test("returns object with groupBy config", () => {
-        expect.hasAssertions();
+        expect.assertions(3);
 
-        const groupOptions = "@doc(category|=Common)";
-
-        const { directive, field, fallback } = parseGroupByOption(groupOptions);
+        const groupOptionsFlag = "@doc(category|=common)";
+        const { directive, field, fallback } =
+          parseGroupByOption(groupOptionsFlag);
 
         expect(directive).toBe("doc");
         expect(field).toBe("category");
-        expect(fallback).toBe("Common");
+        expect(fallback).toBe("common");
       });
 
       test("returns object with default fallback if not set", () => {
-        const groupOptions = "@doc(category)";
+        expect.assertions(3);
 
-        const { directive, field, fallback } = parseGroupByOption(groupOptions);
+        const groupOptionsFlag = "@doc(category)";
+        const { directive, field, fallback } =
+          parseGroupByOption(groupOptionsFlag);
 
         expect(directive).toBe("doc");
         expect(field).toBe("category");
@@ -59,13 +67,13 @@ describe("lib", () => {
       });
 
       test("throws an error if string format is invalid", () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
-        const groupOptions = "@doc(category|=)";
+        const groupOptionsFlag = "@doc(category|=)";
 
         expect(() => {
-          parseGroupByOption(groupOptions);
-        }).toThrow(`Invalid "${groupOptions}"`);
+          parseGroupByOption(groupOptionsFlag);
+        }).toThrow(`Invalid "${groupOptionsFlag}"`);
       });
 
       test.each([
@@ -85,19 +93,46 @@ describe("lib", () => {
     });
 
     describe("getGroups()", () => {
-      test("returns object", () => {});
+      const schemaMap = {
+        objects: schema.getTypeMap(),
+      };
+
+      test("returns undefined if groupByDirective not defined", () => {
+        expect.assertions(1);
+
+        expect(getGroups(schemaMap, undefined)).toBeUndefined();
+      });
+
+      test("returns group for each types in schema", () => {
+        expect.assertions(1);
+
+        expect(getGroups(schemaMap, groupOptions)).toMatchInlineSnapshot(`
+          {
+            "Bird": "animal",
+            "Boolean": "common",
+            "Elf": "common",
+            "Fish": "common",
+            "String": "common",
+            "Unicorn": "common",
+            "__Directive": "common",
+            "__DirectiveLocation": "common",
+            "__EnumValue": "common",
+            "__Field": "common",
+            "__InputValue": "common",
+            "__Schema": "common",
+            "__Type": "common",
+            "__TypeKind": "common",
+          }
+        `);
+      });
     });
 
     describe("getGroupName()", () => {
-      const groupOptions = {
-        fallback: "default",
-        directive: "doc",
-        field: "category",
-      };
-
       test("returns group name if category directive", () => {
         expect.assertions(1);
+
         const type = schema.getType("Bird");
+
         expect(getGroupName(type, groupOptions)).toBe("animal");
       });
 
@@ -107,7 +142,8 @@ describe("lib", () => {
         { case: "no matching directive", type: schema.getType("Elf") },
       ])("returns fallback group name if $case", ({ type }) => {
         expect.assertions(1);
-        expect(getGroupName(type, groupOptions)).toBe("default");
+
+        expect(getGroupName(type, groupOptions)).toBe("common");
       });
     });
   });
