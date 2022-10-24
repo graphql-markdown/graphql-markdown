@@ -378,6 +378,20 @@ describe("lib", () => {
         expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
       });
 
+      test("returns schema types map without excluding directive", () => {
+        expect.hasAssertions();
+
+        const schemaTypeMap = getSchemaMap(schema, ["noDoc"]);
+
+        expect(Object.keys(schemaTypeMap.interfaces)).not.toEqual(
+          expect.arrayContaining(["Node"]),
+        );
+        expect(Object.keys(schemaTypeMap.mutations)).not.toEqual(
+          expect.arrayContaining(["deleteTweet"]),
+        );
+        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+      });
+
       test("returns schema types map with custom root types", async () => {
         expect.hasAssertions();
 
@@ -592,11 +606,10 @@ describe("lib", () => {
         }
       `);
       });
-    });
 
-    describe("getRelationOfReturn", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        const schema = buildSchema(`
+      describe("getRelationOfReturn", () => {
+        test("returns queries, subscriptions and mutations using a type", () => {
+          const schema = buildSchema(`
         type StudyItem {
           id: ID!
           subject: String!
@@ -617,17 +630,17 @@ describe("lib", () => {
         }
       `);
 
-        const compositeType = schema.getType("StudyItem");
+          const compositeType = schema.getType("StudyItem");
 
-        const relations = getRelationOfReturn(compositeType, schema);
+          const relations = getRelationOfReturn(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
+          expect(relations).toMatchSnapshot();
+        });
       });
-    });
 
-    describe("getRelationOfField", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        const schema = buildSchema(`
+      describe("getRelationOfField", () => {
+        test("returns queries, subscriptions and mutations using a type", () => {
+          const schema = buildSchema(`
         interface Record {
           id: String!
         }
@@ -652,11 +665,12 @@ describe("lib", () => {
         }
       `);
 
-        const compositeType = schema.getType("String");
+          const compositeType = schema.getType("String");
 
-        const relations = getRelationOfField(compositeType, schema);
+          const relations = getRelationOfField(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
+          expect(relations).toMatchSnapshot();
+        });
       });
     });
   });

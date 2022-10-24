@@ -1,6 +1,8 @@
+directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
+
 scalar SRI @specifiedBy(url: "https://www.w3.org/TR/SRI")
 
-interface Node {
+interface Node @noDoc {
   id: ID!
 }
 
@@ -75,7 +77,7 @@ type Mutation {
         input: TweetContent @deprecated(reason: "Use `content`.")
         content: TweetContent
     ): Tweet
-    deleteTweet(id: ID!): Tweet
+    deleteTweet(id: ID!): Tweet @noDoc
     markTweetRead(id: ID!): Boolean
 }
 

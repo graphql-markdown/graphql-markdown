@@ -128,7 +128,7 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getTypeFromSchema(schema, type) {
+function getTypeFromSchema(schema, type, excludeByDirectives = []) {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -151,11 +151,30 @@ function getTypeFromSchema(schema, type) {
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
+    .filter((key) => !hasOneOfDirective(typeMap[key], excludeByDirectives))
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function getIntrospectionFieldsList(queryType) {
+function hasOneOfDirective(type, directives = []) {
+  if (typeof type.astNode === "undefined" || type.astNode == null) {
+    return false;
+  }
+
+  const directiveList = Array.isArray(directives) ? directives : [directives];
+
+  if (directiveList.length === 0) {
+    return false;
+  }
+
+  return (
+    type.astNode.directives.findIndex((directive) =>
+      directiveList.includes(directive.name.value),
+    ) > -1
+  );
+}
+
+function getIntrospectionFieldsList(queryType, excludeByDirectives = []) {
   if (
     typeof queryType === "undefined" ||
     queryType == null ||
@@ -163,7 +182,12 @@ function getIntrospectionFieldsList(queryType) {
   ) {
     return undefined;
   }
-  return queryType.getFields();
+
+  const typeMap = queryType.getFields();
+
+  return Object.keys(typeMap)
+    .filter((key) => !hasOneOfDirective(typeMap[key], excludeByDirectives))
+    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
 function getFields(type) {
@@ -187,24 +211,35 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getSchemaMap(schema) {
+function getSchemaMap(schema, excludeDirectives = []) {
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
+      excludeDirectives,
     ),
     mutations: getIntrospectionFieldsList(
       schema.getMutationType && schema.getMutationType(),
+      excludeDirectives,
     ),
     subscriptions: getIntrospectionFieldsList(
       schema.getSubscriptionType && schema.getSubscriptionType(),
+      excludeDirectives,
     ),
     directives: schema.getDirectives(),
-    objects: getTypeFromSchema(schema, GraphQLObjectType),
-    unions: getTypeFromSchema(schema, GraphQLUnionType),
-    interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
-    enums: getTypeFromSchema(schema, GraphQLEnumType),
-    inputs: getTypeFromSchema(schema, GraphQLInputObjectType),
-    scalars: getTypeFromSchema(schema, GraphQLScalarType),
+    objects: getTypeFromSchema(schema, GraphQLObjectType, excludeDirectives),
+    unions: getTypeFromSchema(schema, GraphQLUnionType, excludeDirectives),
+    interfaces: getTypeFromSchema(
+      schema,
+      GraphQLInterfaceType,
+      excludeDirectives,
+    ),
+    enums: getTypeFromSchema(schema, GraphQLEnumType, excludeDirectives),
+    inputs: getTypeFromSchema(
+      schema,
+      GraphQLInputObjectType,
+      excludeDirectives,
+    ),
+    scalars: getTypeFromSchema(schema, GraphQLScalarType, excludeDirectives),
   };
 }
 
