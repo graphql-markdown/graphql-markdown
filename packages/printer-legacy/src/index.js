@@ -386,7 +386,12 @@ module.exports = class Printer {
     }
 
     let code = ` on `;
-    code += type.locations.join("\n  | ").trim();
+    const separator = `${MARKDOWN_EOP}  | `;
+    if (type.locations.length > 1) {
+      code += separator;
+    }
+    code += type.locations.join(separator).trim();
+
     return code;
   }
 
