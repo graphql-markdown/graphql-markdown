@@ -386,7 +386,7 @@ module.exports = class Printer {
     }
 
     let code = ` on `;
-    const separator = `${MARKDOWN_EOP}  | `;
+    const separator = `\r\n  | `;
     if (type.locations.length > 1) {
       code += separator;
     }

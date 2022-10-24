@@ -89,9 +89,7 @@ exports[`lib printer class Printer printCodeDirective() returns a directive with
 "directive @FooBar(
   ArgFooBar: Boolean
 ) on 
-
   | QUERY
-
   | FIELD"
 `;
 
