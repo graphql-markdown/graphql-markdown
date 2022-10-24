@@ -85,6 +85,20 @@ exports[`lib printer class Printer printCodeDirective() returns a directive with
 )"
 `;
 
+exports[`lib printer class Printer printCodeDirective() returns a directive with multiple locations 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+) on 
+  | QUERY
+  | FIELD"
+`;
+
+exports[`lib printer class Printer printCodeDirective() returns a directive with single location 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+) on QUERY"
+`;
+
 exports[`lib printer class Printer printCodeEnum() returns enum code structure 1`] = `
 "enum EnumTypeName {
   one

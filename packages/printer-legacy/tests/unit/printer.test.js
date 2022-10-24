@@ -12,6 +12,7 @@ const {
   GraphQLString,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
+  DirectiveLocation,
 } = require("graphql");
 
 const graphqlLib = require("@graphql-markdown/utils").graphql;
@@ -536,6 +537,31 @@ describe("lib", () => {
             name: "FooBar",
             type: GraphQLString,
             locations: [],
+            args: {
+              ArgFooBar: {
+                type: GraphQLBoolean,
+              },
+            },
+          });
+
+          const code = printerInstance.printCodeDirective(type);
+
+          expect(code).toMatchSnapshot();
+        });
+
+        test.each([
+          {
+            case: "multiple locations",
+            locations: [DirectiveLocation.QUERY, DirectiveLocation.FIELD],
+          },
+          { case: "single location", locations: [DirectiveLocation.QUERY] },
+        ])("returns a directive with $case", ({ locations }) => {
+          expect.hasAssertions();
+
+          const type = new GraphQLDirective({
+            name: "FooBar",
+            type: GraphQLString,
+            locations: locations,
             args: {
               ArgFooBar: {
                 type: GraphQLBoolean,
