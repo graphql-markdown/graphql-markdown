@@ -376,9 +376,24 @@ module.exports = class Printer {
     return code;
   }
 
+  printCodeDirectiveLocation(type) {
+    if (
+      typeof type.locations === "undefined" ||
+      type.locations == null ||
+      type.locations.length === 0
+    ) {
+      return "";
+    }
+
+    let code = ` on `;
+    code += type.locations.join("\n  | ").trim();
+    return code;
+  }
+
   printCodeDirective(type) {
     let code = `directive @${getTypeName(type)}`;
     code += this.printCodeArguments(type);
+    code += this.printCodeDirectiveLocation(type);
 
     return code;
   }
@@ -479,6 +494,7 @@ module.exports = class Printer {
 
   printTypeMetadata(type) {
     let metadata;
+
     switch (true) {
       case isScalarType(type):
         return this.printSpecification(type);
@@ -490,7 +506,7 @@ module.exports = class Printer {
         return this.printSection(type.getTypes(), "Possible types");
       case isObjectType(type):
       case isInterfaceType(type):
-      case isInputType(type):
+      case isInputType(type): {
         metadata = this.printSection(getFields(type), "Fields", {
           parentType: type.name,
         });
@@ -498,22 +514,25 @@ module.exports = class Printer {
           metadata += this.printSection(type.getInterfaces(), "Interfaces");
         }
         return metadata;
-      case isDirectiveType(type):
-      case isOperation(type):
+      }
+      case isDirectiveType(type): {
         metadata = this.printSection(type.args, "Arguments", {
           parentType: type.name,
         });
+        return metadata;
+      }
+      case isOperation(type): {
+        metadata = this.printSection(type.args, "Arguments", {
+          parentType: type.name,
+        });
+        const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+        metadata += this.printSection([this.schema.getType(queryType)], "Type");
 
-        if (isOperation(type)) {
-          const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-          metadata += this.printSection(
-            [this.schema.getType(queryType)],
-            "Type",
-          );
-        }
+        return metadata;
+      }
+      default:
         return metadata;
     }
-    return metadata;
   }
 
   printRelations(type) {
