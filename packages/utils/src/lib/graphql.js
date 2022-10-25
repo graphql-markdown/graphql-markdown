@@ -128,7 +128,7 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getTypeFromSchema(schema, type, excludeByDirectives = []) {
+function getTypeFromSchema(schema, type, skipDocDirective = undefined) {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -151,30 +151,28 @@ function getTypeFromSchema(schema, type, excludeByDirectives = []) {
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => !hasOneOfDirective(typeMap[key], excludeByDirectives))
+    .filter((key) => !hasDirective(typeMap[key], skipDocDirective))
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function hasOneOfDirective(type, directives = []) {
-  if (typeof type.astNode === "undefined" || type.astNode == null) {
-    return false;
-  }
-
-  const directiveList = Array.isArray(directives) ? directives : [directives];
-
-  if (directiveList.length === 0) {
+function hasDirective(type, directiveName) {
+  if (
+    typeof type.astNode === "undefined" ||
+    type.astNode == null ||
+    typeof directiveName !== "string"
+  ) {
     return false;
   }
 
   return (
-    type.astNode.directives.findIndex((directive) =>
-      directiveList.includes(directive.name.value),
+    type.astNode.directives.findIndex(
+      (directive) => directive.name.value === directiveName,
     ) > -1
   );
 }
 
-function getIntrospectionFieldsList(queryType, excludeByDirectives = []) {
+function getIntrospectionFieldsList(queryType, skipDocDirective) {
   if (
     typeof queryType === "undefined" ||
     queryType == null ||
@@ -186,7 +184,7 @@ function getIntrospectionFieldsList(queryType, excludeByDirectives = []) {
   const typeMap = queryType.getFields();
 
   return Object.keys(typeMap)
-    .filter((key) => !hasOneOfDirective(typeMap[key], excludeByDirectives))
+    .filter((key) => !hasDirective(typeMap[key], skipDocDirective))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -211,35 +209,31 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getSchemaMap(schema, excludeDirectives = []) {
+function getSchemaMap(schema, skipDocDirective = undefined) {
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
-      excludeDirectives,
+      skipDocDirective,
     ),
     mutations: getIntrospectionFieldsList(
       schema.getMutationType && schema.getMutationType(),
-      excludeDirectives,
+      skipDocDirective,
     ),
     subscriptions: getIntrospectionFieldsList(
       schema.getSubscriptionType && schema.getSubscriptionType(),
-      excludeDirectives,
+      skipDocDirective,
     ),
     directives: schema.getDirectives(),
-    objects: getTypeFromSchema(schema, GraphQLObjectType, excludeDirectives),
-    unions: getTypeFromSchema(schema, GraphQLUnionType, excludeDirectives),
+    objects: getTypeFromSchema(schema, GraphQLObjectType, skipDocDirective),
+    unions: getTypeFromSchema(schema, GraphQLUnionType, skipDocDirective),
     interfaces: getTypeFromSchema(
       schema,
       GraphQLInterfaceType,
-      excludeDirectives,
+      skipDocDirective,
     ),
-    enums: getTypeFromSchema(schema, GraphQLEnumType, excludeDirectives),
-    inputs: getTypeFromSchema(
-      schema,
-      GraphQLInputObjectType,
-      excludeDirectives,
-    ),
-    scalars: getTypeFromSchema(schema, GraphQLScalarType, excludeDirectives),
+    enums: getTypeFromSchema(schema, GraphQLEnumType, skipDocDirective),
+    inputs: getTypeFromSchema(schema, GraphQLInputObjectType, skipDocDirective),
+    scalars: getTypeFromSchema(schema, GraphQLScalarType, skipDocDirective),
   };
 }
 

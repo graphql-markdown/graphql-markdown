@@ -381,7 +381,7 @@ describe("lib", () => {
       test("returns schema types map without excluding directive", () => {
         expect.hasAssertions();
 
-        const schemaTypeMap = getSchemaMap(schema, ["noDoc"]);
+        const schemaTypeMap = getSchemaMap(schema, "noDoc");
 
         expect(Object.keys(schemaTypeMap.interfaces)).not.toEqual(
           expect.arrayContaining(["Node"]),
