@@ -183,6 +183,14 @@ The GraphQL schema location.
 | -------- | ----------------------- | ------------------ |
 | `schema` | `-s, --schema <schema>` | `./schema.graphql` |
 
+## `skipDocDirective`
+
+The schema directive used for skipping types from documentation.
+
+| Setting            | CLI flag              | Default |
+| ------------------ | --------------------- | ------- |
+| `skipDocDirective` | `--skip <@directive>` | -       |
+
 ## `tmpDir`
 
 The folder used for storing schema copy and signature used by [`diffMethod`](#diffmethod) setting.
