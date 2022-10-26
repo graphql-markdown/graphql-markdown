@@ -1,7 +1,7 @@
+const { hasDirective } = require("@graphql-markdown/utils/src/lib/graphql");
 const path = require("path");
 
 const {
-  array: { convertArrayToObject },
   object: { hasProperty },
   string: { toSlug, startCase },
   url: { pathUrl },
@@ -20,13 +20,22 @@ const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
 
 module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
+  constructor(
+    printer,
+    outputDir,
+    baseURL,
+    group,
+    prettify,
+    docOptions,
+    skipDocDirective,
+  ) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
     this.prettify = prettify;
     this.options = docOptions;
+    this.skipDocDirective = skipDocDirective;
   }
 
   async generateCategoryMetafile(category, dirPath) {
@@ -48,33 +57,35 @@ module.exports = class Renderer {
   }
 
   async renderRootTypes(rootTypeName, type) {
-    if (typeof type === "undefined" || type === null) {
+    if (typeof type !== "object" || type === null) {
       return undefined;
     }
 
-    if (Array.isArray(type)) {
-      type = convertArrayToObject(type);
-    }
-
     return Promise.all(
-      Object.keys(type).map(async (name) => {
-        let dirPath = this.outputDir;
+      Object.keys(type)
+        .map(async (name) => {
+          let dirPath = this.outputDir;
 
-        if (hasProperty(this.group, name)) {
-          dirPath = path.join(dirPath, toSlug(this.group[name]));
-          await this.generateCategoryMetafile(this.group[name], dirPath);
-        }
+          if (hasProperty(this.group, name)) {
+            dirPath = path.join(dirPath, toSlug(this.group[name]));
+            await this.generateCategoryMetafile(this.group[name], dirPath);
+          }
 
-        dirPath = path.join(dirPath, toSlug(rootTypeName));
-        await this.generateCategoryMetafile(rootTypeName, dirPath);
+          dirPath = path.join(dirPath, toSlug(rootTypeName));
+          await this.generateCategoryMetafile(rootTypeName, dirPath);
 
-        return this.renderTypeEntities(dirPath, name, type[name]);
-      }),
+          return this.renderTypeEntities(dirPath, name, type[name]);
+        })
+        .filter((res) => typeof res !== "undefined"),
     );
   }
 
   async renderTypeEntities(dirPath, name, type) {
-    if (typeof type === "undefined" || type === null) {
+    if (
+      typeof type === "undefined" ||
+      type === null ||
+      hasDirective(type, this.skipDocDirective)
+    ) {
       return undefined;
     }
 

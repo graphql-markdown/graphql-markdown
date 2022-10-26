@@ -592,11 +592,10 @@ describe("lib", () => {
         }
       `);
       });
-    });
 
-    describe("getRelationOfReturn", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        const schema = buildSchema(`
+      describe("getRelationOfReturn", () => {
+        test("returns queries, subscriptions and mutations using a type", () => {
+          const schema = buildSchema(`
         type StudyItem {
           id: ID!
           subject: String!
@@ -617,17 +616,17 @@ describe("lib", () => {
         }
       `);
 
-        const compositeType = schema.getType("StudyItem");
+          const compositeType = schema.getType("StudyItem");
 
-        const relations = getRelationOfReturn(compositeType, schema);
+          const relations = getRelationOfReturn(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
+          expect(relations).toMatchSnapshot();
+        });
       });
-    });
 
-    describe("getRelationOfField", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        const schema = buildSchema(`
+      describe("getRelationOfField", () => {
+        test("returns queries, subscriptions and mutations using a type", () => {
+          const schema = buildSchema(`
         interface Record {
           id: String!
         }
@@ -652,11 +651,12 @@ describe("lib", () => {
         }
       `);
 
-        const compositeType = schema.getType("String");
+          const compositeType = schema.getType("String");
 
-        const relations = getRelationOfField(compositeType, schema);
+          const relations = getRelationOfField(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
+          expect(relations).toMatchSnapshot();
+        });
       });
     });
   });

@@ -27,6 +27,7 @@ const {
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
+const { convertArrayToObject } = require("../scalars/array");
 const { hasMethod, hasProperty } = require("../scalars/object");
 
 const OperationTypeNodes = [
@@ -155,6 +156,23 @@ function getTypeFromSchema(schema, type) {
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
+function hasDirective(type, directiveName) {
+  if (
+    typeof type.astNode === "undefined" ||
+    type.astNode == null ||
+    typeof directiveName !== "string" ||
+    !Array.isArray(type.astNode.directives)
+  ) {
+    return false;
+  }
+
+  return (
+    type.astNode.directives.findIndex(
+      (directive) => directive.name.value === directiveName,
+    ) > -1
+  );
+}
+
 function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
@@ -163,7 +181,13 @@ function getIntrospectionFieldsList(queryType) {
   ) {
     return undefined;
   }
-  return queryType.getFields();
+
+  const typeMap = queryType.getFields();
+
+  return Object.keys(typeMap).reduce(
+    (res, key) => ({ ...res, [key]: typeMap[key] }),
+    {},
+  );
 }
 
 function getFields(type) {
@@ -198,7 +222,7 @@ function getSchemaMap(schema) {
     subscriptions: getIntrospectionFieldsList(
       schema.getSubscriptionType && schema.getSubscriptionType(),
     ),
-    directives: schema.getDirectives(),
+    directives: convertArrayToObject(schema.getDirectives()),
     objects: getTypeFromSchema(schema, GraphQLObjectType),
     unions: getTypeFromSchema(schema, GraphQLUnionType),
     interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
@@ -346,6 +370,7 @@ module.exports = {
   isParametrizedField,
   getFields,
   getDefaultValue,
+  hasDirective,
   isOperation,
   isInterfaceType,
   isInputType,

@@ -18,6 +18,7 @@ const {
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfImplementation,
+  hasDirective,
 } = require("@graphql-markdown/utils").graphql;
 
 const {
@@ -42,9 +43,10 @@ module.exports = class Printer {
     schema,
     baseURL,
     linkRoot = "/",
-    { groups, printTypeOptions } = {
+    { groups, printTypeOptions, skipDocDirective } = {
       groups: undefined,
       printTypeOptions: undefined,
+      skipDocDirective: undefined,
     },
   ) {
     this.schema = schema;
@@ -54,6 +56,7 @@ module.exports = class Printer {
     this.parentTypePrefix = printTypeOptions?.parentTypePrefix ?? true;
     this.relatedTypeSection = printTypeOptions?.relatedTypeSection ?? true;
     this.typeBadges = printTypeOptions?.typeBadges ?? true;
+    this.skipDocDirective = skipDocDirective ?? undefined;
   }
 
   getRootTypeLocaleFromString(text) {
@@ -103,6 +106,10 @@ module.exports = class Printer {
       text: name,
       url: "#",
     };
+
+    if (hasDirective(type, this.skipDocDirective)) {
+      return fallback;
+    }
 
     const graphLQLNamedType = getNamedType(type);
 

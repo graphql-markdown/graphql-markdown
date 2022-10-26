@@ -12,6 +12,7 @@ jest.mock("@graphql-markdown/printer-legacy");
 const Printer = require("@graphql-markdown/printer-legacy");
 
 const Renderer = require("../../../src/lib/renderer");
+const { GraphQLObjectType } = require("graphql");
 
 describe("lib", () => {
   describe("renderer", () => {
@@ -99,10 +100,10 @@ describe("lib", () => {
           jest
             .spyOn(printerInstance, "printType")
             .mockImplementation(() => "content");
-          await rendererInstance.renderRootTypes("Object", [
-            { name: "foo" },
-            { name: "bar" },
-          ]);
+          await rendererInstance.renderRootTypes("Object", {
+            foo: new GraphQLObjectType({ name: "foo", astNode: {} }),
+            bar: new GraphQLObjectType({ name: "bar", astNode: {} }),
+          });
 
           expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
         });

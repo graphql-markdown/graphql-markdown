@@ -27,6 +27,7 @@ const DEFAULT_OPTIONS = {
     relatedTypeSection: true,
     typeBadges: true,
   },
+  skipDocDirective: undefined,
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -57,6 +58,9 @@ function buildConfig(configFileOpts, cliOpts) {
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
+    skipDocDirective: getSkipDocDirective(
+      cliOpts.skip ?? config.skipDocDirective,
+    ),
   };
 }
 
@@ -79,6 +83,22 @@ function gePrintTypeOptions(cliOpts, configOptions) {
       !cliOpts.noRelatedType && configOptions.relatedTypeSection,
     typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
   };
+}
+
+function getSkipDocDirective(option) {
+  const OPTION_REGEX = /^@(?<directive>\w+)$/;
+
+  if (typeof option !== "string") {
+    return undefined;
+  }
+
+  const parsedOption = OPTION_REGEX.exec(option);
+
+  if (typeof parsedOption === "undefined" || parsedOption == null) {
+    throw new Error(`Invalid "${option}"`);
+  }
+
+  return parsedOption.groups.directive;
 }
 
 module.exports = { buildConfig, DEFAULT_OPTIONS, ASSETS_LOCATION };

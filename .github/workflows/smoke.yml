@@ -43,4 +43,4 @@ jobs:
       - name: Docusaurus Production Smoke Build with groupByDirective option
         run: earthly --ci --build-arg OPTIONS="$OPTIONS" github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
         env:
-          OPTIONS: '--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by'
+          OPTIONS: '--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc'

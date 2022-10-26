@@ -34,6 +34,7 @@ const getPrinter = (
   groups,
   printTypeOptions,
   printerModule,
+  skipDocDirective,
 ) => {
   if (typeof printerModule !== "string") {
     throw new Error(
@@ -46,6 +47,7 @@ const getPrinter = (
     return new Printer(schema, baseURL, linkRoot, {
       groups,
       printTypeOptions,
+      skipDocDirective,
     });
   } catch (error) {
     throw new Error(
@@ -68,6 +70,7 @@ const generateDocFromSchema = async ({
   docOptions,
   printTypeOptions,
   printer: printerModule,
+  skipDocDirective,
 }) => {
   const loaders = getDocumentLoaders(loadersList);
   const schema = await loadSchema(schemaLocation, loaders);
@@ -86,6 +89,7 @@ const generateDocFromSchema = async ({
     groups,
     printTypeOptions,
     printerModule,
+    skipDocDirective,
   );
   const renderer = new Renderer(
     printer,
@@ -94,6 +98,7 @@ const generateDocFromSchema = async ({
     groups,
     prettify,
     docOptions,
+    skipDocDirective,
   );
 
   const pages = await Promise.all(

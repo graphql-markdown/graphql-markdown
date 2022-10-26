@@ -33,6 +33,7 @@ describe("config", () => {
           docOptions: DEFAULT_OPTIONS.docOptions,
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
           printer: DEFAULT_OPTIONS.printer,
+          skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         }),
       );
     });
@@ -67,6 +68,7 @@ describe("config", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
+        skipDocDirective: "@noDoc",
       };
 
       const config = buildConfig(configFileOpts);
@@ -85,6 +87,7 @@ describe("config", () => {
         docOptions: configFileOpts.docOptions,
         printTypeOptions: configFileOpts.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
+        skipDocDirective: "noDoc",
       });
     });
 
@@ -125,6 +128,7 @@ describe("config", () => {
         noToc: true,
         noPagination: true,
         index: true,
+        skip: "@noDoc",
       };
 
       jest
@@ -151,6 +155,7 @@ describe("config", () => {
         },
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
+        skipDocDirective: "noDoc",
       });
     });
 
@@ -179,6 +184,7 @@ describe("config", () => {
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
       });
     });
 
@@ -203,6 +209,7 @@ describe("config", () => {
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
       });
     });
   });

@@ -179,13 +179,17 @@ The output root path for the generated documentation, relative to the current wo
 
 The GraphQL schema location.
 
-:::info
-By default, the schema default loading expects a local schema definition file (\*.graphql). But additional GraphQL document loaders can be used (see [schema loading](/docs/advanced/schema-loading)).
-:::
-
 | Setting  | CLI flag                | Default            |
 | -------- | ----------------------- | ------------------ |
 | `schema` | `-s, --schema <schema>` | `./schema.graphql` |
+
+## `skipDocDirective`
+
+The schema directive used for skipping types from documentation.
+
+| Setting            | CLI flag              | Default |
+| ------------------ | --------------------- | ------- |
+| `skipDocDirective` | `--skip <@directive>` | -       |
 
 ## `tmpDir`
 

@@ -61,6 +61,7 @@ describe("lib", () => {
             "parentTypePrefix": true,
             "relatedTypeSection": true,
             "schema": {},
+            "skipDocDirective": undefined,
             "typeBadges": true,
           }
         `);

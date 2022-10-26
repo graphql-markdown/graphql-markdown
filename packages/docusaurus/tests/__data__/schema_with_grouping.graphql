@@ -1,3 +1,5 @@
+directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
+
 directive @doc(
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
@@ -40,6 +42,10 @@ type Query {
   mathCourses: [String]  @doc(category: "Course") 
   scienceCourses: [String]  @doc(category: "Course") 
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
+}
+
+type UnusedType implements Record @noDoc {
+  id: ID!
 }
 
 interface Record {
