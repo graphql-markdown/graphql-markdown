@@ -68,6 +68,7 @@ const generateDocFromSchema = async ({
   docOptions,
   printTypeOptions,
   printer: printerModule,
+  skipDocDirective,
 }) => {
   const loaders = getDocumentLoaders(loadersList);
   const schema = await loadSchema(schemaLocation, loaders);
@@ -77,7 +78,7 @@ const generateDocFromSchema = async ({
     console.info(`No changes detected in schema "${schemaLocation}".`);
   }
 
-  const rootTypes = getSchemaMap(schema);
+  const rootTypes = getSchemaMap(schema, skipDocDirective);
   const groups = new getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
     schema,
