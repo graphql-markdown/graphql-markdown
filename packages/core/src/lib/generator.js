@@ -34,6 +34,7 @@ const getPrinter = (
   groups,
   printTypeOptions,
   printerModule,
+  skipDocDirective,
 ) => {
   if (typeof printerModule !== "string") {
     throw new Error(
@@ -46,6 +47,7 @@ const getPrinter = (
     return new Printer(schema, baseURL, linkRoot, {
       groups,
       printTypeOptions,
+      skipDocDirective,
     });
   } catch (error) {
     throw new Error(
@@ -78,7 +80,7 @@ const generateDocFromSchema = async ({
     console.info(`No changes detected in schema "${schemaLocation}".`);
   }
 
-  const rootTypes = getSchemaMap(schema, skipDocDirective);
+  const rootTypes = getSchemaMap(schema);
   const groups = new getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
     schema,
@@ -87,6 +89,7 @@ const generateDocFromSchema = async ({
     groups,
     printTypeOptions,
     printerModule,
+    skipDocDirective,
   );
   const renderer = new Renderer(
     printer,
@@ -95,6 +98,7 @@ const generateDocFromSchema = async ({
     groups,
     prettify,
     docOptions,
+    skipDocDirective,
   );
 
   const pages = await Promise.all(

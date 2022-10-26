@@ -378,20 +378,6 @@ describe("lib", () => {
         expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
       });
 
-      test("returns schema types map without excluding directive", () => {
-        expect.hasAssertions();
-
-        const schemaTypeMap = getSchemaMap(schema, "noDoc");
-
-        expect(Object.keys(schemaTypeMap.interfaces)).not.toEqual(
-          expect.arrayContaining(["Node"]),
-        );
-        expect(Object.keys(schemaTypeMap.mutations)).not.toEqual(
-          expect.arrayContaining(["deleteTweet"]),
-        );
-        expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
-      });
-
       test("returns schema types map with custom root types", async () => {
         expect.hasAssertions();
 

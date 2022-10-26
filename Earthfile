@@ -104,7 +104,7 @@ build-examples:
   RUN npm run clear
   RUN mv docs ./examples/schema
   RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --index --noTypeBadges --noParentType --noRelatedType --force
+  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --skip "@noDoc" --index --noTypeBadges --noParentType --noRelatedType --force
   RUN npm run build
   RUN npm run clear
   RUN mv docs ./examples/group-by

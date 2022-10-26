@@ -27,6 +27,7 @@ const {
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
+const { convertArrayToObject } = require("../scalars/array");
 const { hasMethod, hasProperty } = require("../scalars/object");
 
 const OperationTypeNodes = [
@@ -128,7 +129,7 @@ function formatDefaultValue(type, defaultValue) {
   }
 }
 
-function getTypeFromSchema(schema, type, skipDocDirective = undefined) {
+function getTypeFromSchema(schema, type) {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -151,7 +152,6 @@ function getTypeFromSchema(schema, type, skipDocDirective = undefined) {
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => !hasDirective(typeMap[key], skipDocDirective))
     .filter((key) => typeMap[key] instanceof type)
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
@@ -160,7 +160,8 @@ function hasDirective(type, directiveName) {
   if (
     typeof type.astNode === "undefined" ||
     type.astNode == null ||
-    typeof directiveName !== "string"
+    typeof directiveName !== "string" ||
+    !Array.isArray(type.astNode.directives)
   ) {
     return false;
   }
@@ -172,7 +173,7 @@ function hasDirective(type, directiveName) {
   );
 }
 
-function getIntrospectionFieldsList(queryType, skipDocDirective) {
+function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
     queryType == null ||
@@ -183,9 +184,10 @@ function getIntrospectionFieldsList(queryType, skipDocDirective) {
 
   const typeMap = queryType.getFields();
 
-  return Object.keys(typeMap)
-    .filter((key) => !hasDirective(typeMap[key], skipDocDirective))
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
+  return Object.keys(typeMap).reduce(
+    (res, key) => ({ ...res, [key]: typeMap[key] }),
+    {},
+  );
 }
 
 function getFields(type) {
@@ -209,31 +211,24 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getSchemaMap(schema, skipDocDirective = undefined) {
+function getSchemaMap(schema) {
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),
-      skipDocDirective,
     ),
     mutations: getIntrospectionFieldsList(
       schema.getMutationType && schema.getMutationType(),
-      skipDocDirective,
     ),
     subscriptions: getIntrospectionFieldsList(
       schema.getSubscriptionType && schema.getSubscriptionType(),
-      skipDocDirective,
     ),
-    directives: schema.getDirectives(),
-    objects: getTypeFromSchema(schema, GraphQLObjectType, skipDocDirective),
-    unions: getTypeFromSchema(schema, GraphQLUnionType, skipDocDirective),
-    interfaces: getTypeFromSchema(
-      schema,
-      GraphQLInterfaceType,
-      skipDocDirective,
-    ),
-    enums: getTypeFromSchema(schema, GraphQLEnumType, skipDocDirective),
-    inputs: getTypeFromSchema(schema, GraphQLInputObjectType, skipDocDirective),
-    scalars: getTypeFromSchema(schema, GraphQLScalarType, skipDocDirective),
+    directives: convertArrayToObject(schema.getDirectives()),
+    objects: getTypeFromSchema(schema, GraphQLObjectType),
+    unions: getTypeFromSchema(schema, GraphQLUnionType),
+    interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
+    enums: getTypeFromSchema(schema, GraphQLEnumType),
+    inputs: getTypeFromSchema(schema, GraphQLInputObjectType),
+    scalars: getTypeFromSchema(schema, GraphQLScalarType),
   };
 }
 
@@ -375,6 +370,7 @@ module.exports = {
   isParametrizedField,
   getFields,
   getDefaultValue,
+  hasDirective,
   isOperation,
   isInterfaceType,
   isInputType,
