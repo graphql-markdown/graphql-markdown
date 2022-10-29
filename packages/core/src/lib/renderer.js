@@ -1,16 +1,13 @@
-const { hasDirective } = require("@graphql-markdown/utils/src/lib/graphql");
 const path = require("path");
 
 const {
   object: { hasProperty },
   string: { toSlug, startCase },
   url: { pathUrl },
-} = require("@graphql-markdown/utils").scalars;
-
-const {
+  graphql: { hasDirective },
   prettier: { prettifyJavascript, prettifyMarkdown },
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
-} = require("@graphql-markdown/utils").helpers;
+} = require("@graphql-markdown/utils");
 
 const { ASSETS_LOCATION } = require("../config");
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);

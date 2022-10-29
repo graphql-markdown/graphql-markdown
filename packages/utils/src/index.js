@@ -1,13 +1,9 @@
 module.exports = {
-  helpers: {
-    fs: require("./helpers/fs"),
-    prettier: require("./helpers/prettier"),
-  },
-  scalars: {
-    array: require("./scalars/array"),
-    object: require("./scalars/object"),
-    string: require("./scalars/string"),
-    url: require("./scalars/url"),
-  },
-  graphql: require("./lib/graphql"),
+  fs: require("./fs"),
+  prettier: require("./prettier"),
+  array: require("./array"),
+  object: require("./object"),
+  string: require("./string"),
+  url: require("./url"),
+  graphql: require("./graphql"),
 };

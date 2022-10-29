@@ -4,9 +4,7 @@ jest.mock("fs");
 const path = require("path");
 const fs = require("fs");
 
-const {
-  fs: { ensureDir },
-} = require("@graphql-markdown/utils").helpers;
+const { ensureDir } = require("@graphql-markdown/utils").fs;
 
 jest.mock("@graphql-markdown/printer-legacy");
 const Printer = require("@graphql-markdown/printer-legacy");
