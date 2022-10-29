@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`lib renderer class Renderer generateCategoryMetafile() generate _category_.yml file 1`] = `
+exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file 1`] = `
 {
   "docs/_category_.yml": "label: Foobar
 link: null
@@ -8,7 +8,7 @@ link: null
 }
 `;
 
-exports[`lib renderer class Renderer generateCategoryMetafile() generate _category_.yml file with generated index 1`] = `
+exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with generated index 1`] = `
 {
   "docs/_category_.yml": "label: Foobar
 link: 
@@ -19,13 +19,13 @@ link:
 }
 `;
 
-exports[`lib renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
+exports[`renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
 {
   "generated.md": "Test Homepage",
 }
 `;
 
-exports[`lib renderer class Renderer renderRootTypes() render root type 1`] = `
+exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
   "object/_category_.yml": "label: Object
 link: null
@@ -35,7 +35,7 @@ link: null
 }
 `;
 
-exports[`lib renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder 1`] = `
+exports[`renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder 1`] = `
 {
   "": "
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -52,7 +52,7 @@ module.exports = {
 }
 `;
 
-exports[`lib renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
+exports[`renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
 {
   "foobar/foo-bar.mdx": "Lorem ipsum",
 }
