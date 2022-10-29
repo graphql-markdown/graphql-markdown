@@ -2,7 +2,7 @@ const {
   parseGroupByOption,
   getGroups,
   getGroupName,
-} = require("../../../src/lib/group-info");
+} = require("../../src/group-info");
 
 const { buildSchema } = require("graphql");
 

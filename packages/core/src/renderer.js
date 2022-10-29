@@ -9,7 +9,7 @@ const {
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
 } = require("@graphql-markdown/utils");
 
-const { ASSETS_LOCATION } = require("../config");
+const { ASSETS_LOCATION } = require("./config");
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
 const SIDEBAR = "sidebar-schema.js";

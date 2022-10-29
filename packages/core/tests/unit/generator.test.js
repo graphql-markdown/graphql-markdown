@@ -1,4 +1,4 @@
-const { hasChanges, getPrinter } = require("../../../src/lib/generator");
+const { hasChanges, getPrinter } = require("../../src/generator");
 
 describe("lib", () => {
   describe("generator", () => {

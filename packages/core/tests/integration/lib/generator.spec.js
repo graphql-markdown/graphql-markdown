@@ -5,7 +5,7 @@ jest.mock("@graphql-markdown/printer-legacy");
 jest.mock("@graphql-markdown/diff");
 const diff = require("@graphql-markdown/diff");
 
-const { generateDocFromSchema } = require("../../../src/lib/generator");
+const { generateDocFromSchema } = require("../../../src/generator");
 
 describe("lib", () => {
   describe("renderer", () => {
