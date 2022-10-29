@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`lib getRelationOfInterface() getRelationOfImplementation getRelationOfField returns queries, subscriptions and mutations using a type 1`] = `
+exports[`getRelationOfInterface() getRelationOfImplementation getRelationOfField returns queries, subscriptions and mutations using a type 1`] = `
 {
   "directives": [
     "@deprecated",
@@ -508,7 +508,7 @@ exports[`lib getRelationOfInterface() getRelationOfImplementation getRelationOfF
 }
 `;
 
-exports[`lib getRelationOfInterface() getRelationOfImplementation getRelationOfReturn returns queries, subscriptions and mutations using a type 1`] = `
+exports[`getRelationOfInterface() getRelationOfImplementation getRelationOfReturn returns queries, subscriptions and mutations using a type 1`] = `
 {
   "mutations": [
     {
@@ -1063,7 +1063,7 @@ exports[`lib getRelationOfInterface() getRelationOfImplementation getRelationOfR
 }
 `;
 
-exports[`lib graphql getFields() returns list of type fields 1`] = `
+exports[`graphql getFields() returns list of type fields 1`] = `
 "[
   {
     "name": "createTweet",
@@ -1586,7 +1586,7 @@ exports[`lib graphql getFields() returns list of type fields 1`] = `
 ]"
 `;
 
-exports[`lib graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
+exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
 "{
   "createTweet": {
     "name": "createTweet",
@@ -2109,7 +2109,7 @@ exports[`lib graphql getIntrospectionFieldsList() returns list of mutations 1`] 
 }"
 `;
 
-exports[`lib graphql getIntrospectionFieldsList() returns list of queries 1`] = `
+exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
 "{
   "Tweet": {
     "name": "Tweet",
@@ -3049,7 +3049,7 @@ exports[`lib graphql getIntrospectionFieldsList() returns list of queries 1`] = 
 }"
 `;
 
-exports[`lib graphql getIntrospectionFieldsList() returns list of subscriptions 1`] = `
+exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] = `
 "{
   "Notifications": {
     "name": "Notifications",
@@ -3175,7 +3175,7 @@ exports[`lib graphql getIntrospectionFieldsList() returns list of subscriptions 
 }"
 `;
 
-exports[`lib graphql getSchemaMap() returns schema types map 1`] = `
+exports[`graphql getSchemaMap() returns schema types map 1`] = `
 "{
   "queries": {
     "Tweet": {
@@ -4794,7 +4794,7 @@ exports[`lib graphql getSchemaMap() returns schema types map 1`] = `
 }"
 `;
 
-exports[`lib graphql getSchemaMap() returns schema types map with custom root types 1`] = `
+exports[`graphql getSchemaMap() returns schema types map with custom root types 1`] = `
 "{
   "queries": {
     "allSubscription": {
@@ -5242,25 +5242,25 @@ exports[`lib graphql getSchemaMap() returns schema types map with custom root ty
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLEnumType 1`] = `
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLEnumType 1`] = `
 "{
   "MediaType": "MediaType"
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLInputObjectType 1`] = `
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLInputObjectType 1`] = `
 "{
   "TweetContent": "TweetContent"
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLInterfaceType 1`] = `
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLInterfaceType 1`] = `
 "{
   "Node": "Node"
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLObjectType 1`] = `
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLObjectType 1`] = `
 "{
   "Media": "Media",
   "Tweet": "Tweet",
@@ -5271,7 +5271,7 @@ exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQ
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLScalarType 1`] = `
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLScalarType 1`] = `
 "{
   "SRI": "SRI",
   "ID": "ID",
@@ -5283,4 +5283,4 @@ exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQ
 }"
 `;
 
-exports[`lib graphql getTypeFromSchema() returns a filter map filtered by GraphQLUnionType 1`] = `"{}"`;
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLUnionType 1`] = `"{}"`;

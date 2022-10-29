@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`lib renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
 {
   "course/_category_.yml": "label: Course
 link: null
@@ -86,9 +86,9 @@ module.exports = {
 }
 `;
 
-exports[`lib renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 2`] = `{}`;
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 2`] = `{}`;
 
-exports[`lib renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+exports[`renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
 {
   "directives/_category_.yml": "label: Directives
 link: null
