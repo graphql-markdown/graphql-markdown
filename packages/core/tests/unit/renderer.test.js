@@ -9,7 +9,7 @@ const { ensureDir } = require("@graphql-markdown/utils").fs;
 jest.mock("@graphql-markdown/printer-legacy");
 const Printer = require("@graphql-markdown/printer-legacy");
 
-const Renderer = require("../../../src/lib/renderer");
+const Renderer = require("../../src/renderer");
 const { GraphQLObjectType } = require("graphql");
 
 describe("lib", () => {

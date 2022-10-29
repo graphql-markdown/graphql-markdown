@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 module.exports = {
-  generateDocFromSchema: require("./lib/generator").generateDocFromSchema,
-  groupInfo: require("./lib/group-info"),
+  generateDocFromSchema: require("./generator").generateDocFromSchema,
+  groupInfo: require("./group-info"),
   config: require("./config"),
 };

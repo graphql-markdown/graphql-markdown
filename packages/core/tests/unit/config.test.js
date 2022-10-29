@@ -4,8 +4,8 @@ const { COMPARE_METHOD } = require("@graphql-markdown/diff");
 
 const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
 
-jest.mock("../../src/lib/group-info");
-const groupInfo = require("../../src/lib/group-info");
+jest.mock("../../src/group-info");
+const groupInfo = require("../../src/group-info");
 
 describe("config", () => {
   afterEach(() => {

@@ -1,7 +1,7 @@
 const { join } = require("path");
 const { tmpdir } = require("os");
 
-const { parseGroupByOption } = require("./lib/group-info");
+const { parseGroupByOption } = require("./group-info");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
