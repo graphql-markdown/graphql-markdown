@@ -5,10 +5,10 @@ const { loadSchema } = require("@graphql-tools/load");
 const { diff } = require("@graphql-inspector/core");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
-const { printSchema } = require("@graphql-markdown/utils").graphql;
 const {
   fs: { fileExists, readFile, saveFile },
-} = require("@graphql-markdown/utils").helpers;
+  graphql: { printSchema },
+} = require("@graphql-markdown/utils");
 
 const SCHEMA_HASH_FILE = ".schema";
 const SCHEMA_REF = "schema.graphql";

@@ -32,11 +32,11 @@ const {
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfImplementation,
-} = require("../../../src/lib/graphql");
+} = require("../../src/graphql");
 
-const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../../__data__/schema_with_custom_root_types.graphql",
+  "../__data__/schema_with_custom_root_types.graphql",
 );
 
 describe("lib", () => {

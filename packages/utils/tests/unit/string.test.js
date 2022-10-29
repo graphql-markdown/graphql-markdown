@@ -4,7 +4,7 @@ const {
   stringCaseBuilder,
   prune,
   capitalize,
-} = require("../../../src/scalars/string");
+} = require("../../src/string");
 
 describe("utils", () => {
   describe("string", () => {
