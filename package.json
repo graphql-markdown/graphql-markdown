@@ -129,7 +129,7 @@
     }
   },
   "devDependencies": {
-    "@graphql-tools/graphql-file-loader": "7.5.7",
+    "@graphql-tools/graphql-file-loader": "7.5.8",
     "@stryker-mutator/core": "6.3.0",
     "@stryker-mutator/jest-runner": "6.3.0",
     "commitizen": "4.2.5",
