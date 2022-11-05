@@ -16,6 +16,7 @@
     "name": "Gregory Heitz"
   },
   "scripts": {
+    "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "jest",

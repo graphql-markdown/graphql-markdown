@@ -1,4 +1,4 @@
-const {
+import {
   GraphQLEnumType,
   GraphQLUnionType,
   GraphQLScalarType,
@@ -11,24 +11,27 @@ const {
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
-  isDirective: isDirectiveType,
+  isDirective as isDirectiveType,
   getNamedType,
   isScalarType,
   isEnumType,
   isUnionType,
   isInterfaceType,
   isObjectType,
-  isInputObjectType: isInputType,
+  isInputObjectType as isInputType,
   isNonNullType,
   isLeafType,
   printSchema,
   GraphQLSchema,
   OperationTypeNode,
-} = require("graphql");
-const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
+  GraphQLSchemaConfig,
+} from "graphql";
+import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
+import { Loader } from '@graphql-tools/utils';
 
-const { convertArrayToObject } = require("./array");
-const { hasMethod, hasProperty } = require("./object");
+import { convertArrayToObject } from "./array";
+import { hasMethod, hasProperty } from "./object";
+import { Maybe } from "graphql/jsutils/Maybe";
 
 const OperationTypeNodes = [
   OperationTypeNode.QUERY,
@@ -36,7 +39,22 @@ const OperationTypeNodes = [
   OperationTypeNode.SUBSCRIPTION,
 ];
 
-async function loadSchema(schemaLocation, options) {
+type ClassName = string & {_opaque: ClassName};
+
+type ModuleName = string & {_opaque: ModuleName};
+type RootTypes = { query?: string, mutation?: string, subscription?: string };
+type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
+
+type ModuleType = { 
+  module: ModuleName, 
+  options: ModuleOptions | undefined 
+}
+
+type LoadersType = {
+  [className: ClassName]: ModuleName | ModuleType
+}
+
+async function loadSchema(schemaLocation: string, options: ModuleOptions) {
   let rootTypes = undefined;
 
   if (hasProperty(options, "rootTypes")) {
@@ -44,25 +62,25 @@ async function loadSchema(schemaLocation, options) {
     delete options["rootTypes"];
   }
 
-  const schema = await asyncLoadSchema(schemaLocation, options);
+  const schema = await asyncLoadSchema(schemaLocation, options as LoadSchemaOptions);
 
   if (typeof rootTypes === "undefined") {
     return schema;
   }
 
-  const config = {
+  const config: Readonly<GraphQLSchemaConfig> = {
     ...schema.toConfig(),
-    query: schema.getType(rootTypes.query ?? "Query"),
-    mutation: schema.getType(rootTypes.mutation ?? "Mutation"),
-    subscription: schema.getType(rootTypes.subscription ?? "Subscription"),
+    query: schema.getType(rootTypes.query ?? "Query") as Maybe<GraphQLObjectType<any, any>>,
+    mutation: schema.getType(rootTypes.mutation ?? "Mutation") as Maybe<GraphQLObjectType<any, any>>,
+    subscription: schema.getType(rootTypes.subscription ?? "Subscription") as Maybe<GraphQLObjectType<any, any>>,
   };
 
   return new GraphQLSchema(config);
 }
 
-function getDocumentLoaders(loadersList = {}) {
-  const loaders = [];
-  const loaderOptions = {};
+function getDocumentLoaders(loadersList: LoadersType): { loaders: Loader[], loaderOptions: ModuleOptions} {
+  const loaders: Loader[] = [];
+  const loaderOptions: ModuleOptions = {} as ModuleOptions;
 
   Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
     if (typeof graphqlDocumentLoader === "string") {
@@ -211,7 +229,7 @@ function getTypeName(type, defaultName = "") {
   }
 }
 
-function getSchemaMap(schema) {
+function getSchemaMap(schema: GraphQLSchema) {
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType && schema.getQueryType(),

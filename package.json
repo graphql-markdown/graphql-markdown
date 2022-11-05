@@ -159,6 +159,7 @@
     "@graphql-markdown/docusaurus": "file:packages/docusaurus",
     "@graphql-markdown/printer-legacy": "file:packages/printer-legacy",
     "@graphql-markdown/tools-config": "file:config",
-    "@graphql-markdown/utils": "file:packages/utils"
+    "@graphql-markdown/utils": "file:packages/utils",
+    "typescript": "^4.8.4"
   }
 }
