@@ -3,4 +3,4 @@
  * Path functions
  */
 
-export {posix as pathUrl} from "node:path";
+export { posix as pathUrl } from "node:path";

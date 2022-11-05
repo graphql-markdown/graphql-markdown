@@ -11,10 +11,56 @@ import {
   GraphQLObjectType,
   GraphQLInterfaceType,
   GraphQLInputObjectType,
-  isDirective as isDirectiveType,
   getNamedType,
-  isScalarType,
   isEnumType,
+  GraphQLSchema,
+  OperationTypeNode,
+  GraphQLSchemaConfig,
+  GraphQLType,
+  isType,
+  GraphQLDirective,
+  GraphQLField,
+  GraphQLInputField,
+  isIntrospectionType,
+  GraphQLNamedType,
+} from "graphql";
+import {
+  loadSchema as asyncLoadSchema,
+  LoadSchemaOptions,
+} from "@graphql-tools/load";
+import { Loader } from "@graphql-tools/utils";
+
+import { Maybe } from "graphql/jsutils/Maybe";
+import { keyValMap } from "graphql/jsutils/keyValMap";
+import { ObjMap } from "graphql/jsutils/ObjMap";
+
+export {
+  GraphQLEnumType,
+  GraphQLUnionType,
+  GraphQLScalarType,
+  isListType,
+  GraphQLBoolean,
+  GraphQLInt,
+  GraphQLFloat,
+  GraphQLID,
+  GraphQLString,
+  GraphQLObjectType,
+  GraphQLInterfaceType,
+  GraphQLInputObjectType,
+  getNamedType,
+  isEnumType,
+  GraphQLSchema,
+  OperationTypeNode,
+  GraphQLSchemaConfig,
+  GraphQLType,
+  isType,
+  GraphQLDirective,
+  GraphQLField,
+  GraphQLInputField,
+  isIntrospectionType,
+  GraphQLNamedType,
+  isDirective as isDirectiveType,
+  isScalarType,
   isUnionType,
   isInterfaceType,
   isObjectType,
@@ -22,16 +68,7 @@ import {
   isNonNullType,
   isLeafType,
   printSchema,
-  GraphQLSchema,
-  OperationTypeNode,
-  GraphQLSchemaConfig,
 } from "graphql";
-import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
-import { Loader } from '@graphql-tools/utils';
-
-import { convertArrayToObject } from "./array";
-import { hasMethod, hasProperty } from "./object";
-import { Maybe } from "graphql/jsutils/Maybe";
 
 const OperationTypeNodes = [
   OperationTypeNode.QUERY,
@@ -39,30 +76,37 @@ const OperationTypeNodes = [
   OperationTypeNode.SUBSCRIPTION,
 ];
 
-type ClassName = string & {_opaque: ClassName};
+type ClassName = string & { _opaque: ClassName };
 
-type ModuleName = string & {_opaque: ModuleName};
-type RootTypes = { query?: string, mutation?: string, subscription?: string };
+type ModuleName = string & { _opaque: ModuleName };
+type RootTypes = { query?: string; mutation?: string; subscription?: string };
 type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
 
-type ModuleType = { 
-  module: ModuleName, 
-  options: ModuleOptions | undefined 
-}
+type ModuleType = {
+  module: ModuleName;
+  options: ModuleOptions | undefined;
+};
 
 type LoadersType = {
-  [className: ClassName]: ModuleName | ModuleType
-}
+  [className: ClassName]: ModuleName | ModuleType;
+};
+type DocumentLoaders = { loaders: Loader[]; loaderOptions: ModuleOptions };
 
-async function loadSchema(schemaLocation: string, options: ModuleOptions) {
+export const loadSchema = async (
+  schemaLocation: string,
+  options: ModuleOptions
+): Promise<GraphQLSchema> => {
   let rootTypes = undefined;
 
-  if (hasProperty(options, "rootTypes")) {
+  if ("rootTypes" in options) {
     rootTypes = options.rootTypes;
     delete options["rootTypes"];
   }
 
-  const schema = await asyncLoadSchema(schemaLocation, options as LoadSchemaOptions);
+  const schema = await asyncLoadSchema(
+    schemaLocation,
+    options as LoadSchemaOptions
+  );
 
   if (typeof rootTypes === "undefined") {
     return schema;
@@ -70,15 +114,23 @@ async function loadSchema(schemaLocation: string, options: ModuleOptions) {
 
   const config: Readonly<GraphQLSchemaConfig> = {
     ...schema.toConfig(),
-    query: schema.getType(rootTypes.query ?? "Query") as Maybe<GraphQLObjectType<any, any>>,
-    mutation: schema.getType(rootTypes.mutation ?? "Mutation") as Maybe<GraphQLObjectType<any, any>>,
-    subscription: schema.getType(rootTypes.subscription ?? "Subscription") as Maybe<GraphQLObjectType<any, any>>,
+    query: schema.getType(rootTypes.query ?? "Query") as Maybe<
+      GraphQLObjectType<any, any>
+    >,
+    mutation: schema.getType(rootTypes.mutation ?? "Mutation") as Maybe<
+      GraphQLObjectType<any, any>
+    >,
+    subscription: schema.getType(
+      rootTypes.subscription ?? "Subscription"
+    ) as Maybe<GraphQLObjectType<any, any>>,
   };
 
   return new GraphQLSchema(config);
-}
+};
 
-function getDocumentLoaders(loadersList: LoadersType): { loaders: Loader[], loaderOptions: ModuleOptions} {
+export const getDocumentLoaders = (
+  loadersList: LoadersType
+): DocumentLoaders => {
   const loaders: Loader[] = [];
   const loaderOptions: ModuleOptions = {} as ModuleOptions;
 
@@ -92,7 +144,7 @@ function getDocumentLoaders(loadersList: LoadersType): { loaders: Loader[], load
         graphqlDocumentLoader.module == null
       ) {
         throw new Error(
-          `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
+          `Wrong format for plugin loader "${className}", expected {module: String, options?: Object}`
         );
       }
       const { [className]: Loader } = require(graphqlDocumentLoader.module);
@@ -105,19 +157,25 @@ function getDocumentLoaders(loadersList: LoadersType): { loaders: Loader[], load
     throw new Error("No GraphQL document loaders available.");
   }
   return { loaders, loaderOptions };
-}
+};
 
-function getListDefaultValues(type, value) {
+export const getListDefaultValues = (
+  type: GraphQLType,
+  value: Maybe<string | boolean | number | null>
+): Maybe<string> => {
   const defaultValues = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
-    getDefaultValue({ type, defaultValue }),
+    getDefaultValue(type, defaultValue)
   );
 
   return `[${defaultValuesString.join(", ")}]`;
-}
+};
 
-function getDefaultValue({ type, defaultValue }) {
+export const getDefaultValue = (
+  type: GraphQLType,
+  defaultValue: Maybe<string | boolean | number | null>
+): Maybe<string | boolean | number | null> => {
   if (typeof defaultValue === "undefined" || defaultValue === null) {
     return undefined;
   }
@@ -127,9 +185,12 @@ function getDefaultValue({ type, defaultValue }) {
   }
 
   return formatDefaultValue(type, defaultValue);
-}
+};
 
-function formatDefaultValue(type, defaultValue) {
+export const formatDefaultValue = (
+  type: GraphQLType,
+  defaultValue: Maybe<string | boolean | number | null>
+): Maybe<string | boolean | number | null> => {
   if (isEnumType(type)) {
     return defaultValue;
   }
@@ -145,17 +206,16 @@ function formatDefaultValue(type, defaultValue) {
     default:
       return defaultValue;
   }
-}
+};
 
-function getTypeFromSchema(schema, type) {
-  if (typeof schema === "undefined" || schema == null) {
-    return undefined;
-  }
-
-  const operationKinds = [];
+export const getTypeFromSchema = <T extends GraphQLNamedType>(
+  schema: GraphQLSchema,
+  type: T
+): ObjMap<T> => {
+  const operationKinds: string[] = [];
   OperationTypeNodes.forEach((operationTypeNode) => {
     const operationType = schema.getRootType(operationTypeNode);
-    if (typeof operationType !== "undefined") {
+    if (isType(operationType)) {
       operationKinds.push(operationType.name);
     }
   });
@@ -163,84 +223,116 @@ function getTypeFromSchema(schema, type) {
   const filterOperationFragmentRegExp =
     operationKinds.length > 0 ? [...operationKinds, ""].join("$|") : "";
   const excludeListRegExp = new RegExp(
-    `^(?!${filterOperationFragmentRegExp}__.+$).*$`,
+    `^(?!${filterOperationFragmentRegExp}$).*$`
   );
 
   const typeMap = schema.getTypeMap();
 
-  return Object.keys(typeMap)
+  const filteredType = Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => typeMap[key] instanceof type)
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
-}
+    .filter((key) => !isIntrospectionType(typeMap[key] as GraphQLNamedType))
+    .filter((key) => typeMap[key] instanceof type);
 
-function hasDirective(type, directiveName) {
-  if (
-    typeof type.astNode === "undefined" ||
-    type.astNode == null ||
-    typeof directiveName !== "string" ||
-    !Array.isArray(type.astNode.directives)
-  ) {
+  return keyValMap(
+    filteredType,
+    (key) => key,
+    (key) => typeMap[key] as T
+  );
+};
+
+export const hasDirective = (
+  type: GraphQLNamedType,
+  directiveName: string
+): boolean => {
+  if (type.astNode == null || !Array.isArray(type.astNode.directives)) {
     return false;
   }
 
   return (
     type.astNode.directives.findIndex(
-      (directive) => directive.name.value === directiveName,
+      (directive) => directive.name.value === directiveName
     ) > -1
   );
-}
+};
 
-function getIntrospectionFieldsList(queryType) {
-  if (
-    typeof queryType === "undefined" ||
-    queryType == null ||
-    !hasMethod(queryType, "getFields")
-  ) {
+export const getIntrospectionFieldsList = (
+  queryType: Maybe<GraphQLObjectType>
+) => {
+  if (typeof queryType === "undefined" || queryType == null) {
     return undefined;
   }
 
   const typeMap = queryType.getFields();
 
-  return Object.keys(typeMap).reduce(
-    (res, key) => ({ ...res, [key]: typeMap[key] }),
-    {},
+  // return Object.keys(typeMap).reduce(
+  //   (res, key) => ({ ...res, [key]: typeMap[key] }),
+  //   {},
+  // );
+  return keyValMap(
+    Object.keys(typeMap),
+    (key) => key,
+    (key) => typeMap[key] as GraphQLField<unknown, unknown, unknown>
   );
-}
+};
 
-function getFields(type) {
-  if (!hasMethod(type, "getFields")) {
+export const getFields = (
+  type: GraphQLType
+): Maybe<GraphQLField<unknown, unknown, unknown> | GraphQLInputField>[] => {
+  if (!("getFields" in type)) {
     return [];
   }
   const fieldMap = type.getFields();
   return Object.keys(fieldMap).map((name) => fieldMap[name]);
-}
+};
 
-function getTypeName(type, defaultName = "") {
+export const getTypeName = (type: GraphQLNamedType, defaultName?: string) => {
   switch (true) {
-    case hasProperty(type, "name"):
+    case "name" in type:
       return type.name;
-    case hasMethod(type, "toString"):
+    case "toString" in type:
       return type.toString();
     case typeof type === "undefined":
     case type == null:
     default:
-      return defaultName;
+      return defaultName ?? "";
   }
-}
+};
 
-function getSchemaMap(schema: GraphQLSchema) {
+type RelationType =
+  | "objects"
+  | "interfaces"
+  | "unions"
+  | "queries"
+  | "mutations"
+  | "subscriptions"
+  | "inputs"
+  | "directives"
+  | "enums"
+  | "scalars";
+type RelationOf = {
+  [relationType in RelationType]: readonly Maybe<GraphQLType>[];
+};
+
+type SchemaMap = {
+  [relationType in RelationType]: Maybe<ObjMap<unknown>>;
+};
+
+export const getSchemaMap = (schema: GraphQLSchema): SchemaMap => {
   return {
     queries: getIntrospectionFieldsList(
-      schema.getQueryType && schema.getQueryType(),
+      schema.getQueryType && schema.getQueryType()
     ),
     mutations: getIntrospectionFieldsList(
-      schema.getMutationType && schema.getMutationType(),
+      schema.getMutationType && schema.getMutationType()
     ),
     subscriptions: getIntrospectionFieldsList(
-      schema.getSubscriptionType && schema.getSubscriptionType(),
+      schema.getSubscriptionType && schema.getSubscriptionType()
     ),
-    directives: convertArrayToObject(schema.getDirectives()),
+    directives: keyValMap(
+      schema.getDirectives(),
+      (entry) => entry.name,
+      (entry) => entry
+    ),
     objects: getTypeFromSchema(schema, GraphQLObjectType),
     unions: getTypeFromSchema(schema, GraphQLUnionType),
     interfaces: getTypeFromSchema(schema, GraphQLInterfaceType),
@@ -248,18 +340,24 @@ function getSchemaMap(schema: GraphQLSchema) {
     inputs: getTypeFromSchema(schema, GraphQLInputObjectType),
     scalars: getTypeFromSchema(schema, GraphQLScalarType),
   };
-}
+};
 
-function mapRelationOf(relations, schema, callback) {
+const mapRelationOf = (
+  relations: Partial<RelationOf>,
+  schema: GraphQLSchema,
+  callback: Function
+) => {
   const schemaMap = getSchemaMap(schema);
 
-  for (const relation of Object.keys(relations)) {
-    const entity = schemaMap[relation];
+  for (const relation of Object.keys(relations) as RelationType[]) {
+    const entity: ObjMap<GraphQLType> = schemaMap[
+      relation
+    ] as ObjMap<GraphQLType>;
     if (typeof entity === "undefined") {
       continue;
     }
 
-    let results = [];
+    let results: GraphQLType[] = [];
     for (const [relationName, relationType] of Object.entries(entity)) {
       results = callback(relationName, relationType, results);
     }
@@ -267,27 +365,41 @@ function mapRelationOf(relations, schema, callback) {
   }
 
   return relations;
-}
+};
 
-function getRelationOfReturn(type, schema) {
-  const relations = { queries: [], mutations: [], subscriptions: [] };
+export const getRelationOfReturn = (
+  type: GraphQLNamedType,
+  schema: GraphQLSchema
+) => {
+  const relations: Partial<RelationOf> = {
+    queries: [],
+    mutations: [],
+    subscriptions: [],
+  };
 
   return mapRelationOf(
     relations,
     schema,
-    (relationName, relationType, results) => {
+    (
+      relationName: string,
+      relationType: GraphQLNamedType,
+      results: GraphQLNamedType[]
+    ) => {
       if (getNamedType(relationType.type).name === type.name) {
-        if (!results.find((r) => r.name === relationName)) {
+        if (!results.find((r) => "name" in r && r.name === relationName)) {
           results.push(relationType);
         }
       }
       return results;
-    },
+    }
   );
-}
+};
 
-function getRelationOfField(type, schema) {
-  const relations = {
+export const getRelationOfField = (
+  type: GraphQLNamedType,
+  schema: GraphQLSchema
+) => {
+  const relations: Partial<RelationOf> = {
     queries: [],
     mutations: [],
     subscriptions: [],
@@ -300,107 +412,110 @@ function getRelationOfField(type, schema) {
   return mapRelationOf(
     relations,
     schema,
-    (relationName, relationType, results) => {
-      // directives are handled as flat array instead of map
-      const key = isDirectiveType(relationType)
-        ? relationType.name
-        : relationName;
-
+    (
+      relationName: string,
+      relationType: GraphQLNamedType | GraphQLDirective,
+      results: (GraphQLDirective | GraphQLNamedType)[]
+    ) => {
       const fields = Object.assign(
         {},
-        relationType.args ?? {},
-        relationType._fields ?? {},
+        ("args" in relationType && relationType.args) ?? {},
+        ("getFields" in relationType && relationType.getFields()) ?? {}
       );
-      for (const fieldDef of Object.values(fields)) {
-        if (getNamedType(fieldDef.type).name === type.name) {
-          if (!results.find((r) => r === key || r.name === key)) {
+      for (const fieldDef of Object.values(fields) as Maybe<
+        GraphQLField<unknown, unknown>
+      >[]) {
+        if (fieldDef && getNamedType(fieldDef.type).name === type.name) {
+          if (
+            !results.find(
+              (r) => r.toString() === relationName || r.name === relationName
+            )
+          ) {
             results.push(relationType);
           }
         }
       }
       return results;
-    },
+    }
   );
-}
+};
 
-function getRelationOfUnion(type, schema) {
-  const relations = { unions: [] };
+export const getRelationOfUnion = (
+  type: GraphQLNamedType,
+  schema: GraphQLSchema
+) => {
+  const relations: Partial<RelationOf> = { unions: [] };
 
   return mapRelationOf(
     relations,
     schema,
-    (relationName, relationType, results) => {
-      if (relationType._types.find((subType) => subType.name === type.name)) {
-        if (!results.find((r) => r.name === relationName)) {
-          results.push(relationType);
-        }
-      }
-      return results;
-    },
-  );
-}
-
-function getRelationOfInterface(type, schema) {
-  const relations = { objects: [], interfaces: [] };
-
-  return mapRelationOf(
-    relations,
-    schema,
-    (relationName, relationType, results) => {
+    (
+      relationName: string,
+      relationType: GraphQLUnionType,
+      results: GraphQLNamedType[]
+    ) => {
       if (
-        relationType._interfaces.find((subType) => subType.name === type.name)
+        relationType
+          .getTypes()
+          .find((subType: GraphQLNamedType) => subType.name === type.name)
       ) {
         if (!results.find((r) => r.name === relationName)) {
           results.push(relationType);
         }
       }
       return results;
-    },
+    }
   );
-}
+};
 
-function getRelationOfImplementation(type, schema) {
+export const getRelationOfInterface = (
+  type: GraphQLNamedType,
+  schema: GraphQLSchema
+) => {
+  const relations: Partial<RelationOf> = { objects: [], interfaces: [] };
+
+  return mapRelationOf(
+    relations,
+    schema,
+    (
+      relationName: string,
+      relationType: GraphQLInterfaceType,
+      results: GraphQLNamedType[]
+    ) => {
+      if (
+        relationType
+          .getInterfaces()
+          .find((subType: GraphQLInterfaceType) => subType.name === type.name)
+      ) {
+        if (!results.find((r) => r.name === relationName)) {
+          results.push(relationType);
+        }
+      }
+      return results;
+    }
+  );
+};
+
+export const getRelationOfImplementation = (
+  type: GraphQLNamedType,
+  schema: GraphQLSchema
+) => {
   return {
     ...getRelationOfInterface(type, schema),
     ...getRelationOfUnion(type, schema),
   };
-}
+};
 
-function isParametrizedField(type) {
-  return hasProperty(type, "args") && type.args.length > 0;
-}
+export const isParametrizedField = (
+  type: GraphQLType | GraphQLDirective
+): boolean => {
+  if (!("args" in type)) {
+    return false;
+  }
 
-function isOperation(type) {
-  return hasProperty(type, "type");
-}
+  return type.args.length > 0;
+};
 
-module.exports = {
-  loadSchema,
-  getDocumentLoaders,
-  isDirectiveType,
-  isObjectType,
-  getNamedType,
-  isScalarType,
-  isEnumType,
-  isUnionType,
-  getSchemaMap,
-  getTypeName,
-  isParametrizedField,
-  getFields,
-  getDefaultValue,
-  hasDirective,
-  isOperation,
-  isInterfaceType,
-  isInputType,
-  isNonNullType,
-  isLeafType,
-  isListType,
-  printSchema,
-  getIntrospectionFieldsList,
-  getTypeFromSchema,
-  getRelationOfReturn,
-  getRelationOfField,
-  getRelationOfUnion,
-  getRelationOfInterface,
-  getRelationOfImplementation,
+export const isOperation = (type: GraphQLType): type is GraphQLObjectType => {
+  return "type" in type;
 };

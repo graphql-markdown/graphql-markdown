@@ -2,7 +2,11 @@
  * String functions
  */
 
-export const stringCaseBuilder = (str: string, transformation: Function, separator: string): string => {
+export const stringCaseBuilder = (
+  str: string,
+  transformation: Function,
+  separator: string
+): string => {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -12,7 +16,7 @@ export const stringCaseBuilder = (str: string, transformation: Function, separat
     .map((word: string) => (hasTransformation ? transformation(word) : word))
     .join(separator);
   return prune(stringCase, separator);
-}
+};
 
 export const prune = (str: string, char: string): string => {
   let res = str;
@@ -28,30 +32,30 @@ export const prune = (str: string, char: string): string => {
   }
 
   return res;
-}
+};
 
 export const toSlug = (str: string): string => {
   return kebabCase(str);
-}
+};
 
 export const toHTMLUnicode = (char: string): string => {
   const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
   return `&#x${unicodeChar.toUpperCase()};`;
-}
+};
 
 export const escapeMDX = (str: string): string => {
   return str.replace(/[<>{}]/g, toHTMLUnicode);
-}
+};
 
 export const firstUppercase = (word: string): string => {
   const sliceUppercase = word.slice(0, 1).toUpperCase();
   const sliceDefaultCase = word.slice(1);
   return `${sliceUppercase}${sliceDefaultCase}`;
-}
+};
 
-export const capitalize = (word:string): string => {
+export const capitalize = (word: string): string => {
   return firstUppercase(word.toLowerCase());
-}
+};
 
 // from https://stackoverflow.com/a/37511463
 export const replaceDiacritics = (str: string): string => {
@@ -59,12 +63,12 @@ export const replaceDiacritics = (str: string): string => {
     .toString()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
-}
+};
 
 export const startCase = (str: string): string => {
   return stringCaseBuilder(str, firstUppercase, " ");
-}
+};
 
 export const kebabCase = (str: string): string => {
   return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
-}
+};
