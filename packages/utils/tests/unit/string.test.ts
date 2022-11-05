@@ -1,17 +1,17 @@
-const {
+import {
   toSlug,
   escapeMDX,
   stringCaseBuilder,
   prune,
   capitalize,
-} = require("../../src/string");
+} from "../../src/string";
 
 describe("string", () => {
   describe("stringCaseBuilder()", () => {
-    test("applies no transformation if one is not given", () => {
-      const text = "This is Not Transformed to lowercase.";
-      const expected = "This is Not Transformed to lowercase";
-      expect(stringCaseBuilder(text, undefined, " ")).toBe(expected);
+    test("applies transformation if one is given", () => {
+      const text = "TO LOWERCASE";
+      const expected = "to lowercase";
+      expect(stringCaseBuilder(text, (input: any) => String(input).toLowerCase(), " ")).toBe(expected);
     });
   });
 

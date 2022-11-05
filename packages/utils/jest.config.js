@@ -1,1 +1,5 @@
-module.exports = require("@graphql-markdown/tools-config").jest;
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+};

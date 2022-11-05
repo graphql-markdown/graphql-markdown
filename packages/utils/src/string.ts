@@ -7,13 +7,12 @@ export const stringCaseBuilder = (
   transformation: Function,
   separator: string
 ): string => {
-  const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
     .replace(/([a-z]+)(\d)/g, "$1 $2")
     .replace(/(\d+)([a-z])/g, "$1 $2")
     .split(/[^0-9A-Za-z]+/g)
-    .map((word: string) => (hasTransformation ? transformation(word) : word))
+    .map((word: string) => transformation(word))
     .join(separator);
   return prune(stringCase, separator);
 };
@@ -43,8 +42,11 @@ export const toHTMLUnicode = (char: string): string => {
   return `&#x${unicodeChar.toUpperCase()};`;
 };
 
-export const escapeMDX = (str: string): string => {
-  return str.replace(/[<>{}]/g, toHTMLUnicode);
+export const escapeMDX = <T extends unknown>(input: T): T | string => {
+  if (typeof input !== "string") {
+    return input;
+  }
+  return input.replace(/[<>{}]/g, toHTMLUnicode);
 };
 
 export const firstUppercase = (word: string): string => {

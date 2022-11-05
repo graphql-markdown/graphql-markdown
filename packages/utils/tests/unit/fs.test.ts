@@ -1,4 +1,4 @@
-const { vol } = require("memfs");
+import { vol } from "memfs";
 jest.mock("fs");
 
 const { ensureDir, fileExists, saveFile } = require("../../src/fs");
@@ -6,7 +6,7 @@ const { ensureDir, fileExists, saveFile } = require("../../src/fs");
 describe("fs", () => {
   beforeEach(() => {
     vol.fromJSON({
-      "/testFolder": {},
+      "/testFolder": "",
       "/testFolder/testFile": "just a test",
     });
   });
