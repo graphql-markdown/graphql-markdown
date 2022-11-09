@@ -1,7 +1,7 @@
 import { vol } from "memfs";
 jest.mock("fs");
 
-const { ensureDir, fileExists, saveFile } = require("../../src/fs");
+import { ensureDir, fileExists, saveFile } from "../../src/fs";
 
 describe("fs", () => {
   beforeEach(() => {

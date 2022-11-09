@@ -1,17 +1,17 @@
-import fs from "node:fs/promises";
+import { stat, mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 export { readFile, copyFile } from "node:fs/promises";
 
 export const ensureDir = async (dirPath: string): Promise<void> => {
   if (!(await fileExists(dirPath))) {
-    await fs.mkdir(dirPath, { recursive: true });
+    await mkdir(dirPath, { recursive: true });
   }
 };
 
 export const fileExists = async (filePath: string): Promise<boolean> => {
   try {
-    await fs.stat(filePath);
+    await stat(filePath);
     return true;
   } catch (error) {
     return false;
@@ -23,5 +23,5 @@ export const saveFile = async (
   data: string | Uint8Array
 ): Promise<void> => {
   await ensureDir(dirname(filePath));
-  await fs.writeFile(filePath, data, "utf8");
+  await writeFile(filePath, data, "utf8");
 };
