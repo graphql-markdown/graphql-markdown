@@ -21,10 +21,10 @@ type Mutation{
 }
 ```
 
-It can be set either with the command line flag `-groupByDirective`:
+It can be set either with the command line flag `--groupByDirective`:
 
 ```shell
-npx docusaurus graphql-to-doc -groupByDirective "@doc(category|=Common)"
+npx docusaurus graphql-to-doc --groupByDirective "@doc(category|=Common)"
 ```
 
 or the plugin configuration `groupByDirective`:
