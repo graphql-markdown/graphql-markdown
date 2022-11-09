@@ -42,7 +42,7 @@ describe("fs", () => {
         expect.assertions(1);
 
         await expect(fileExists(path)).resolves.toBe(expected);
-      },
+      }
     );
   });
 

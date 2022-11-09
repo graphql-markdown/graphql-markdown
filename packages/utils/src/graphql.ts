@@ -23,6 +23,7 @@ import {
   GraphQLInputField,
   isIntrospectionType,
   GraphQLNamedType,
+  GraphQLInputType,
 } from "graphql";
 import {
   loadSchema as asyncLoadSchema,
@@ -91,7 +92,10 @@ type LoadersType = {
   [className: ClassName]: ModuleName | ModuleType;
 };
 
-type DocumentLoaders = { loaders: readonly Loader[]; loaderOptions: ModuleOptions };
+type DocumentLoaders = {
+  loaders: readonly Loader[];
+  loaderOptions: ModuleOptions;
+};
 
 type RelationType =
   | "objects"
@@ -181,7 +185,7 @@ export const getDocumentLoaders = (
 };
 
 export const getListDefaultValues = (
-  type: GraphQLType,
+  type: GraphQLInputType,
   value?: Maybe<string | boolean | number | null>
 ): Maybe<string> => {
   const defaultValues = Array.isArray(value) ? value : [value];
@@ -194,7 +198,7 @@ export const getListDefaultValues = (
 };
 
 export const getDefaultValue = (
-  type: GraphQLType,
+  type: GraphQLInputType,
   defaultValue?: Maybe<string | boolean | number | null>
 ): Maybe<string | boolean | number | null> => {
   if (typeof defaultValue === "undefined" || defaultValue === null) {
@@ -209,7 +213,7 @@ export const getDefaultValue = (
 };
 
 export const formatDefaultValue = (
-  type: GraphQLType,
+  type: GraphQLInputType,
   defaultValue?: Maybe<string | boolean | number | null>
 ): Maybe<string | boolean | number | null> => {
   if (isEnumType(type)) {
@@ -252,7 +256,7 @@ export const getTypeFromSchema = <T extends unknown>(
   const filteredType = Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
     .filter((key) => !isIntrospectionType(typeMap[key] as GraphQLNamedType))
-    .filter((key) => typeMap[key] instanceof (type as Function));
+    .filter((key) => (typeMap[key] instanceof (type as any)) ?? false);
 
   return keyValMap(
     filteredType,
@@ -387,7 +391,7 @@ export const getRelationOfReturn = (
       relationType: GraphQLField<unknown, unknown, unknown>,
       results: GraphQLField<unknown, unknown, unknown>[]
     ) => {
-      const subType = (relationType.type) as GraphQLNamedType;
+      const subType = relationType.type as GraphQLNamedType;
       if (getNamedType(subType).name === type.name) {
         if (!results.find((r) => "name" in r && r.name === relationName)) {
           results.push(relationType);
@@ -519,6 +523,8 @@ export const isParametrizedField = (
   return (type as any).args.length > 0;
 };
 
-export const isOperation = (type: unknown): type is GraphQLObjectType<unknown, unknown> => {
+export const isOperation = (
+  type: unknown
+): type is GraphQLObjectType<unknown, unknown> => {
   return "type" in (type as any);
 };

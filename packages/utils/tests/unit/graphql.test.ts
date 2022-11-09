@@ -18,8 +18,8 @@ import {
   GraphQLNamedType,
   GraphQLType,
   GraphQLField,
-  GraphQLArgument,
-  GraphQLArgumentConfig,
+  GraphQLInputObjectTypeConfig,
+  GraphQLInputFieldConfig,
 } from "graphql";
 
 import {
@@ -43,7 +43,7 @@ import { ObjMap } from "graphql/jsutils/ObjMap";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../__data__/schema_with_custom_root_types.graphql",
+  "../__data__/schema_with_custom_root_types.graphql"
 );
 
 describe("graphql", () => {
@@ -118,14 +118,15 @@ describe("graphql", () => {
     ])("returns $value value as default for $type", ({ type, value }) => {
       expect.hasAssertions();
 
-      const argument = {
+      const argument = new GraphQLInputObjectType({
         name: "foobar",
         description: undefined,
-        type: type,
-        defaultValue: value
-      };
+        defaultValue: value,
+        type,
+        fields: {} as ObjMap<GraphQLInputFieldConfig>,
+      } as GraphQLInputObjectTypeConfig);
 
-      expect(getDefaultValue(argument).toEqual(value);
+      expect(getDefaultValue(argument)).toEqual(value);
     });
 
     test.each([
@@ -140,16 +141,17 @@ describe("graphql", () => {
       ({ type }) => {
         expect.hasAssertions();
 
-        const argument = {
+        const argument = new GraphQLInputObjectType({
           name: "foobar",
           description: undefined,
           type: type,
           defaultValue: undefined,
           extensions: undefined,
-        };
+          fields: {} as ObjMap<GraphQLInputFieldConfig>,
+        } as GraphQLInputObjectTypeConfig);
 
         expect(getDefaultValue(argument)).toBeUndefined();
-      },
+      }
     );
 
     test.each([
@@ -168,15 +170,16 @@ describe("graphql", () => {
       ({ type, defaultValue, expected }) => {
         expect.hasAssertions();
 
-        const argument: GraphQLArgument = {
+        const argument = new GraphQLInputObjectType({
           name: "id",
           description: undefined,
           type,
-          defaultValue
-        };
+          defaultValue,
+          fields: {} as ObjMap<GraphQLInputFieldConfig>,
+        } as GraphQLInputObjectTypeConfig);
 
         expect(getDefaultValue(argument)).toBe(expected);
-      },
+      }
     );
 
     test("returns unformatted default value for type GraphQLEnum", () => {
@@ -191,13 +194,14 @@ describe("graphql", () => {
         },
       });
 
-      const argument = {
+      const argument = new GraphQLInputObjectType({
         name: "color",
         description: undefined,
         type: enumType,
         defaultValue: "RED",
         extensions: undefined,
-      };
+        fields: {} as ObjMap<GraphQLInputFieldConfig>,
+      } as GraphQLInputObjectTypeConfig);
 
       expect(getDefaultValue(argument)).toBe("RED");
     });
@@ -214,13 +218,14 @@ describe("graphql", () => {
         },
       });
 
-      const argument = {
+      const argument = new GraphQLInputObjectType({
         name: "color",
         description: undefined,
         type: new GraphQLList(enumType),
         defaultValue: ["RED"],
         extensions: undefined,
-      };
+        fields: {} as ObjMap<GraphQLInputFieldConfig>,
+      } as GraphQLInputObjectTypeConfig);
 
       expect(getDefaultValue(argument)).toBe("[RED]");
     });
@@ -389,7 +394,9 @@ describe("graphql", () => {
     test("returns true if type is parametrized", () => {
       expect.hasAssertions();
 
-      const mutations = getIntrospectionFieldsList(schema.getMutationType()) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
+      const mutations = getIntrospectionFieldsList(
+        schema.getMutationType()
+      ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
       const res = isParametrizedField(mutations["createTweet"]);
 
       expect(res).toBeTruthy();
@@ -398,7 +405,9 @@ describe("graphql", () => {
     test("returns false if type is not parametrized", () => {
       expect.hasAssertions();
 
-      const queries = getIntrospectionFieldsList(schema.getQueryType()) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
+      const queries = getIntrospectionFieldsList(
+        schema.getQueryType()
+      ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
       const res = isParametrizedField(queries["TweetsMeta"]);
 
       expect(res).toBeFalsy();
@@ -409,7 +418,9 @@ describe("graphql", () => {
     test("returns true if type is mutation", () => {
       expect.hasAssertions();
 
-      const mutations = getIntrospectionFieldsList(schema.getMutationType()) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
+      const mutations = getIntrospectionFieldsList(
+        schema.getMutationType()
+      ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
       const res = isOperation(mutations["createTweet"]);
 
       expect(res).toBeTruthy();
@@ -418,7 +429,9 @@ describe("graphql", () => {
     test("returns true if type is query", () => {
       expect.hasAssertions();
 
-      const queries = getIntrospectionFieldsList(schema.getQueryType()) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
+      const queries = getIntrospectionFieldsList(
+        schema.getQueryType()
+      ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
       const res = isOperation(queries["Tweets"]);
 
       expect(res).toBeTruthy();
@@ -428,7 +441,7 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       const subscriptions = getIntrospectionFieldsList(
-        schema.getSubscriptionType(),
+        schema.getSubscriptionType()
       ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
       const res = isOperation(subscriptions["Notifications"]);
 

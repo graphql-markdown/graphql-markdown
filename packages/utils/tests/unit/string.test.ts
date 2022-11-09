@@ -11,7 +11,13 @@ describe("string", () => {
     test("applies transformation if one is given", () => {
       const text = "TO LOWERCASE";
       const expected = "to lowercase";
-      expect(stringCaseBuilder(text, (input: any) => String(input).toLowerCase(), " ")).toBe(expected);
+      expect(
+        stringCaseBuilder(
+          text,
+          (input: any) => String(input).toLowerCase(),
+          " "
+        )
+      ).toBe(expected);
     });
   });
 
@@ -46,7 +52,7 @@ describe("string", () => {
   describe("escapeMDX()", () => {
     test("returns string with HTML &#x0000; format for MDX special characters", () => {
       expect(escapeMDX("{MDX} <special> characters")).toBe(
-        "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters",
+        "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters"
       );
     });
 
@@ -70,7 +76,7 @@ describe("string", () => {
       "returns capitalized string: first letter uppercase, rest lowercase",
       (input, expected) => {
         expect(capitalize(input)).toBe(expected);
-      },
+      }
     );
   });
 });
