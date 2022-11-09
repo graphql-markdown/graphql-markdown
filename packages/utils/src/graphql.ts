@@ -282,7 +282,7 @@ export const hasDirective = (
 
 export const getIntrospectionFieldsList = (
   queryType: Maybe<GraphQLObjectType>
-) => {
+): Maybe<ObjMap<GraphQLField<unknown, unknown, unknown>>> => {
   if (typeof queryType === "undefined" || queryType == null) {
     return undefined;
   }
@@ -310,17 +310,8 @@ export const getFields = (
   return Object.keys(fieldMap).map((name) => fieldMap[name]);
 };
 
-export const getTypeName = (type: GraphQLNamedType, defaultName?: string) => {
-  switch (true) {
-    case "name" in type:
-      return type.name;
-    case "toString" in type:
-      return type.toString();
-    case typeof type === "undefined":
-    case type == null:
-    default:
-      return defaultName ?? "";
-  }
+export const getTypeName = (type: GraphQLNamedType, defaultName?: string): string => {
+  return type?.name ?? type?.toString() ?? defaultName ?? "";
 };
 
 export const getSchemaMap = (schema: GraphQLSchema): SchemaMap => {
@@ -352,7 +343,7 @@ const mapRelationOf = (
   relations: Partial<RelationOf>,
   schema: GraphQLSchema,
   callback: Function
-) => {
+): Partial<RelationOf> => {
   const schemaMap = getSchemaMap(schema);
 
   for (const relation of Object.keys(relations) as RelationType[]) {
@@ -450,7 +441,7 @@ export const getRelationOfField = (
 export const getRelationOfUnion = (
   type: GraphQLNamedType,
   schema: GraphQLSchema
-) => {
+): Partial<RelationOf> => {
   const relations: Partial<RelationOf> = { unions: [] };
 
   return mapRelationOf(
@@ -478,7 +469,7 @@ export const getRelationOfUnion = (
 export const getRelationOfInterface = (
   type: GraphQLNamedType,
   schema: GraphQLSchema
-) => {
+): Partial<RelationOf> => {
   const relations: Partial<RelationOf> = { objects: [], interfaces: [] };
 
   return mapRelationOf(
@@ -506,7 +497,7 @@ export const getRelationOfInterface = (
 export const getRelationOfImplementation = (
   type: GraphQLNamedType,
   schema: GraphQLSchema
-) => {
+): Partial<RelationOf> => {
   return {
     ...getRelationOfInterface(type, schema),
     ...getRelationOfUnion(type, schema),

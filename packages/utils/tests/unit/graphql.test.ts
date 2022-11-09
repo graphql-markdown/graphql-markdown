@@ -311,7 +311,7 @@ describe("graphql", () => {
     test("returns default name for unknown", () => {
       expect.hasAssertions();
 
-      const name = getTypeName({} as GraphQLNamedType, "FooBar");
+      const name = getTypeName(undefined as any, "FooBar");
 
       expect(name).toBe("FooBar");
     });
