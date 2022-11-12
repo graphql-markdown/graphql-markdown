@@ -6,47 +6,47 @@ import { fileURLToPath } from "node:url";
 import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import {
-GraphQLEnumType,
-GraphQLUnionType,
-GraphQLScalarType,
-GraphQLObjectType,
-GraphQLInterfaceType,
-GraphQLInputObjectType,
-GraphQLInt,
-GraphQLID,
-GraphQLFloat,
-GraphQLString,
-GraphQLList,
-GraphQLBoolean,
-buildSchema,
-GraphQLSchema,
-GraphQLNamedType,
-GraphQLType,
-GraphQLField,
-GraphQLInputObjectTypeConfig,
-GraphQLInputFieldConfig,
+  GraphQLEnumType,
+  GraphQLUnionType,
+  GraphQLScalarType,
+  GraphQLObjectType,
+  GraphQLInterfaceType,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLID,
+  GraphQLFloat,
+  GraphQLString,
+  GraphQLList,
+  GraphQLBoolean,
+  buildSchema,
+  GraphQLSchema,
+  GraphQLNamedType,
+  GraphQLType,
+  GraphQLField,
+  GraphQLInputObjectTypeConfig,
+  GraphQLInputFieldConfig,
 } from "graphql";
 
 import {
-getDefaultValue,
-getIntrospectionFieldsList,
-getFields,
-getTypeName,
-getTypeFromSchema,
-getSchemaMap,
-loadSchema,
-isParametrizedField,
-isOperation,
-getDocumentLoaders,
-getRelationOfInterface,
-getRelationOfUnion,
-getRelationOfReturn,
-getRelationOfField,
-getRelationOfImplementation,
-getLoader,
-ModuleName,
-ClassName,
-LoadersType,
+  getDefaultValue,
+  getIntrospectionFieldsList,
+  getFields,
+  getTypeName,
+  getTypeFromSchema,
+  getSchemaMap,
+  loadSchema,
+  isParametrizedField,
+  isOperation,
+  getDocumentLoaders,
+  getRelationOfInterface,
+  getRelationOfUnion,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfImplementation,
+  getLoader,
+  ModuleName,
+  ClassName,
+  LoadersType,
 } from "../../src/graphql";
 import { ObjMap } from "graphql/jsutils/ObjMap";
 
@@ -55,8 +55,8 @@ const __dirname = path.dirname(__filename);
 
 const SCHEMA_FILE = path.resolve(__dirname, "../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
-__dirname,
-"../__data__/schema_with_custom_root_types.graphql"
+  __dirname,
+  "../__data__/schema_with_custom_root_types.graphql"
 );
 
 let schema: GraphQLSchema;
@@ -85,8 +85,6 @@ t.test("loadSchema()", async () => {
     t.equal(testSchema.getMutationType(), undefined);
     t.equal(testSchema.getSubscriptionType(), undefined);
   });
-
-  t.end();
 });
 
 t.test("getLoader()", async () => {
@@ -137,8 +135,6 @@ t.test("getDocumentLoaders()", async () => {
       });
     }
   );
-
-  t.end();
 });
 
 // covers printDefaultValue()
@@ -173,22 +169,25 @@ t.test("getDefaultValue()", async () => {
   ];
 
   data.forEach(async ({ type, defaultValue, expected }) =>
-    t.test(`returns ${expected} value as default for ${type}`, async () => {
-      const argument = new GraphQLInputObjectType({
-        name: "foobar",
-        description: undefined,
-        defaultValue,
-        type,
-        fields: {} as ObjMap<GraphQLInputFieldConfig>,
-      } as GraphQLInputObjectTypeConfig);
+    t.test(
+      `returns ${expected} value as default for ${type}`,
+      async ({ equal }) => {
+        const argument = new GraphQLInputObjectType({
+          name: "foobar",
+          description: undefined,
+          defaultValue,
+          type,
+          fields: {} as ObjMap<GraphQLInputFieldConfig>,
+        } as GraphQLInputObjectTypeConfig);
 
-      t.equal(getDefaultValue(argument), expected);
-    })
+        equal(getDefaultValue(argument), expected);
+      }
+    )
   );
 
   t.test(
     "returns unformatted default value for type GraphQLEnum",
-    async () => {
+    async ({ equal }) => {
       const enumType = new GraphQLEnumType({
         name: "RGB",
         values: {
@@ -207,13 +206,13 @@ t.test("getDefaultValue()", async () => {
         fields: {} as ObjMap<GraphQLInputFieldConfig>,
       } as GraphQLInputObjectTypeConfig);
 
-      t.equal(getDefaultValue(argument), "RED");
+      equal(getDefaultValue(argument), "RED");
     }
   );
 
   t.test(
     "returns array default value unformatted for type GraphQLList(GraphQLEnum)",
-    async () => {
+    async ({ equal }) => {
       const enumType = new GraphQLEnumType({
         name: "RGB",
         values: {
@@ -232,215 +231,211 @@ t.test("getDefaultValue()", async () => {
         fields: {} as ObjMap<GraphQLInputFieldConfig>,
       } as GraphQLInputObjectTypeConfig);
 
-      t.equal(getDefaultValue(argument), "[RED]");
+      equal(getDefaultValue(argument), "[RED]");
     }
   );
-
-  t.end();
 });
 
 t.test("getIntrospectionFieldsList()", async () => {
-  t.test("returns list of queries", async () => {
+  t.test("returns list of queries", async ({ matchSnapshot }) => {
     const list = getIntrospectionFieldsList(schema.getQueryType());
 
-    t.matchSnapshot(JSON.stringify(list, null, 2));
+    matchSnapshot(JSON.stringify(list, null, 2));
   });
 
-  t.test("returns list of mutations", async () => {
+  t.test("returns list of mutations", async ({ matchSnapshot }) => {
     const list = getIntrospectionFieldsList(schema.getMutationType());
 
-    t.matchSnapshot(JSON.stringify(list, null, 2));
+    matchSnapshot(JSON.stringify(list, null, 2));
   });
 
-  t.test("returns list of subscriptions", async () => {
+  t.test("returns list of subscriptions", async ({ matchSnapshot }) => {
     const list = getIntrospectionFieldsList(schema.getSubscriptionType());
 
-    t.matchSnapshot(JSON.stringify(list, null, 2));
+    matchSnapshot(JSON.stringify(list, null, 2));
   });
 
-  t.test("returns undefined if null", async () => {
+  t.test("returns undefined if null", async ({ equal }) => {
     const list = getIntrospectionFieldsList(null);
 
-    t.equal(list, undefined);
+    equal(list, undefined);
   });
-
-  t.end();
 });
 
 t.test("getFields()", async () => {
-  t.test("returns list of type fields", async () => {
+  t.test("returns list of type fields", async ({ matchSnapshot }) => {
     const fields = getFields(schema.getMutationType() as GraphQLType);
 
-    t.matchSnapshot(JSON.stringify(fields, null, 2));
+    matchSnapshot(JSON.stringify(fields, null, 2));
   });
 
-  t.test("returns empty list if getFields not supported", async () => {
-    const fields = getFields({} as GraphQLType);
+  t.test(
+    "returns empty list if getFields not supported",
+    async ({ strictSame }) => {
+      const fields = getFields({} as GraphQLType);
 
-    t.strictSame(fields, []);
-  });
-
-  t.end();
+      strictSame(fields, []);
+    }
+  );
 });
 
 t.test("getTypeName()", async () => {
-  t.test("returns type name for object", async () => {
+  t.test("returns type name for object", async ({ equal }) => {
     const name = getTypeName(schema.getType("Tweet") as GraphQLNamedType);
 
-    t.equal(name, "Tweet");
+    equal(name, "Tweet");
   });
 
-  t.test("returns type name for interface", async () => {
+  t.test("returns type name for interface", async ({ equal }) => {
     const name = getTypeName(schema.getType("Node") as GraphQLNamedType);
 
-    t.equal(name, "Node");
+    equal(name, "Node");
   });
 
-  t.test("returns type name for scalar", async () => {
+  t.test("returns type name for scalar", async ({ equal }) => {
     const name = getTypeName(schema.getType("ID") as GraphQLNamedType);
 
-    t.equal(name, "ID");
+    equal(name, "ID");
   });
 
-  t.test("returns default name for unknown", async () => {
+  t.test("returns default name for unknown", async ({ equal }) => {
     const name = getTypeName(undefined as any, "FooBar");
 
-    t.equal(name, "FooBar");
+    equal(name, "FooBar");
   });
-
-  t.end();
 });
 
 t.test("getTypeFromSchema()", async () => {
-  t.test("returns a filter map filtered by GraphQLObjectType", async () => {
-    const map = getTypeFromSchema(schema, GraphQLObjectType);
+  t.test(
+    "returns a filter map filtered by GraphQLObjectType",
+    async ({ matchSnapshot }) => {
+      const map = getTypeFromSchema(schema, GraphQLObjectType);
 
-    t.matchSnapshot(JSON.stringify(map, null, 2));
-  });
+      matchSnapshot(JSON.stringify(map, null, 2));
+    }
+  );
 
-  t.test("returns a filter map filtered by GraphQLUnionType", async () => {
-    const map = getTypeFromSchema(schema, GraphQLUnionType);
+  t.test(
+    "returns a filter map filtered by GraphQLUnionType",
+    async ({ matchSnapshot }) => {
+      const map = getTypeFromSchema(schema, GraphQLUnionType);
 
-    t.matchSnapshot(JSON.stringify(map, null, 2));
-  });
+      matchSnapshot(JSON.stringify(map, null, 2));
+    }
+  );
 
   t.test(
     "returns a filter map filtered by GraphQLInterfaceType",
-    async () => {
+    async ({ matchSnapshot }) => {
       const map = getTypeFromSchema(schema, GraphQLInterfaceType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      matchSnapshot(JSON.stringify(map, null, 2));
     }
   );
 
-  t.test("returns a filter map filtered by GraphQLEnumType", async () => {
-    const map = getTypeFromSchema(schema, GraphQLEnumType);
+  t.test(
+    "returns a filter map filtered by GraphQLEnumType",
+    async ({ matchSnapshot }) => {
+      const map = getTypeFromSchema(schema, GraphQLEnumType);
 
-    t.matchSnapshot(JSON.stringify(map, null, 2));
-  });
+      matchSnapshot(JSON.stringify(map, null, 2));
+    }
+  );
 
   t.test(
     "returns a filter map filtered by GraphQLInputObjectType",
-    async () => {
+    async ({ matchSnapshot }) => {
       const map = getTypeFromSchema(schema, GraphQLInputObjectType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      matchSnapshot(JSON.stringify(map, null, 2));
     }
   );
 
-  t.test("returns a filter map filtered by GraphQLScalarType", async () => {
-    const map = getTypeFromSchema(schema, GraphQLScalarType);
+  t.test(
+    "returns a filter map filtered by GraphQLScalarType",
+    async ({ matchSnapshot }) => {
+      const map = getTypeFromSchema(schema, GraphQLScalarType);
 
-    t.matchSnapshot(JSON.stringify(map, null, 2));
-  });
-
-  t.end();
+      matchSnapshot(JSON.stringify(map, null, 2));
+    }
+  );
 });
 
 t.test("getSchemaMap()", async () => {
-  t.test("returns schema types map", async () => {
+  t.test("returns schema types map", async ({ matchSnapshot }) => {
     const schemaTypeMap = getSchemaMap(schema);
 
-    t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
+    matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
   });
 
-  t.test("returns schema types map with custom root types", async () => {
-    const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
-      loaders: [new GraphQLFileLoader()],
-      rootTypes: { query: "Root", subscription: "" },
-    });
+  t.test(
+    "returns schema types map with custom root types",
+    async ({ matchSnapshot }) => {
+      const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
+        loaders: [new GraphQLFileLoader()],
+        rootTypes: { query: "Root", subscription: "" },
+      });
 
-    const schemaTypeMap = getSchemaMap(testSchema);
+      const schemaTypeMap = getSchemaMap(testSchema);
 
-    t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
-  });
-
-  t.end();
+      matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
+    }
+  );
 });
 
 t.test("isParametrizedField()", async () => {
-  t.test("returns true if type is parametrized", async () => {
+  t.test("returns true if type is parametrized", async ({ ok }) => {
     const mutations = getIntrospectionFieldsList(
       schema.getMutationType()
     ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
-    const res = isParametrizedField(mutations["createTweet"]);
 
-    t.ok(res);
+    ok(isParametrizedField(mutations["createTweet"]));
   });
 
-  t.test("returns false if type is not parametrized", async () => {
-    const queries = getIntrospectionFieldsList(
-      schema.getQueryType()
-    ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
-    const res = isParametrizedField(queries["TweetsMeta"]);
+  t.test("returns false if type is not parametrized", async ({ notOk }) => {
+    const queries = getIntrospectionFieldsList(schema.getQueryType()) as ObjMap<
+      GraphQLField<unknown, unknown, unknown>
+    >;
 
-    t.notOk(res);
+    notOk(isParametrizedField(queries["TweetsMeta"]));
   });
-
-  t.end();
 });
 
 t.test("isOperation()", async () => {
-  t.test("returns true if type is mutation", async () => {
+  t.test("returns true if type is mutation", async ({ ok }) => {
     const mutations = getIntrospectionFieldsList(
       schema.getMutationType()
     ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
-    const res = isOperation(mutations["createTweet"]);
-
-    t.ok(res);
+    ok(isOperation(mutations["createTweet"]));
   });
 
-  t.test("returns true if type is query", async () => {
-    const queries = getIntrospectionFieldsList(
-      schema.getQueryType()
-    ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
-    const res = isOperation(queries["Tweets"]);
-
-    t.ok(res);
+  t.test("returns true if type is query", async ({ ok }) => {
+    const queries = getIntrospectionFieldsList(schema.getQueryType()) as ObjMap<
+      GraphQLField<unknown, unknown, unknown>
+    >;
+    ok(isOperation(queries["Tweets"]));
   });
 
-  t.test("returns true if type is subscription", async () => {
+  t.test("returns true if type is subscription", async ({ ok }) => {
     const subscriptions = getIntrospectionFieldsList(
       schema.getSubscriptionType()
     ) as ObjMap<GraphQLField<unknown, unknown, unknown>>;
-    const res = isOperation(subscriptions["Notifications"]);
 
-    t.ok(res);
+    ok(isOperation(subscriptions["Notifications"]));
   });
 
-  t.test("returns false if type is not an operation", async () => {
+  t.test("returns false if type is not an operation", async ({ notOk }) => {
     const objects = getTypeFromSchema(schema, GraphQLObjectType);
-    const res = isOperation(objects["Tweet"]);
 
-    t.notOk(res);
+    notOk(isOperation(objects["Tweet"]));
   });
-
-  t.end();
 });
 
 t.test("getRelationOfInterface()", async () => {
-  t.test("returns types and interfaces extending an interface", async () => {
-    const schema = buildSchema(`
+  t.test(
+    "returns types and interfaces extending an interface",
+    async ({ same }) => {
+      const schema = buildSchema(`
       interface Being {
         name(surname: Boolean): String
       }
@@ -468,21 +463,20 @@ t.test("getRelationOfInterface()", async () => {
       }
     `);
 
-    const interfaceType = schema.getType("Mammal") as GraphQLNamedType;
+      const interfaceType = schema.getType("Mammal") as GraphQLNamedType;
 
-    const relations = getRelationOfInterface(interfaceType, schema);
+      const relations = getRelationOfInterface(interfaceType, schema);
 
-    t.same(relations, {
-      interfaces: ["Canine"],
-      objects: ["Dog"],
-    });
-  });
-
-  t.end();
+      same(relations, {
+        interfaces: ["Canine"],
+        objects: ["Dog"],
+      });
+    }
+  );
 });
 
 t.test("getRelationOfUnion", async () => {
-  t.test("returns unions using a type", async () => {
+  t.test("returns unions using a type", async ({ same }) => {
     const schema = buildSchema(`
     type StudyItem {
       id: ID!
@@ -510,16 +504,14 @@ t.test("getRelationOfUnion", async () => {
 
     const relations = getRelationOfUnion(compositeType, schema);
 
-    t.same(relations, {
+    same(relations, {
       unions: ["Task"],
     });
   });
-
-  t.end();
 });
 
 t.test("getRelationOfImplementation", async () => {
-  t.test("returns implementations compatible with type", async () => {
+  t.test("returns implementations compatible with type", async ({ same }) => {
     const schema = buildSchema(`
     interface Being {
       name(surname: Boolean): String
@@ -557,20 +549,18 @@ t.test("getRelationOfImplementation", async () => {
 
     const relations = getRelationOfImplementation(compositeType, schema);
 
-    t.same(relations, {
+    same(relations, {
       interfaces: ["Canine"],
       objects: ["Dog", "Cat"],
       unions: ["Pet"],
     });
   });
-
-  t.end();
 });
 
 t.test("getRelationOfReturn", async () => {
   t.test(
     "returns queries, subscriptions and mutations using a type",
-    async () => {
+    async ({ matchSnapshot }) => {
       const schema = buildSchema(`
   type StudyItem {
     id: ID!
@@ -596,17 +586,15 @@ t.test("getRelationOfReturn", async () => {
 
       const relations = getRelationOfReturn(compositeType, schema);
 
-      t.matchSnapshot(relations);
+      matchSnapshot(relations);
     }
   );
-
-  t.end();
 });
 
 t.test("getRelationOfField", async () => {
   t.test(
     "returns queries, subscriptions and mutations using a type",
-    async () => {
+    async ({ matchSnapshot }) => {
       const schema = buildSchema(`
   interface Record {
     id: String!
@@ -636,9 +624,7 @@ t.test("getRelationOfField", async () => {
 
       const relations = getRelationOfField(compositeType, schema);
 
-      t.matchSnapshot(relations);
+      matchSnapshot(relations);
     }
   );
-
-  t.end();
 });

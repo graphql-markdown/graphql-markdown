@@ -16,7 +16,12 @@ t.afterEach(() => {
 });
 
 t.test("fileExists()", async () => {
-  const data: {type: string, path:string, expected: boolean, desc: string}[] = [
+  const data: {
+    type: string;
+    path: string;
+    expected: boolean;
+    desc: string;
+  }[] = [
     {
       type: "file",
       path: "/testFolder/testFile",
@@ -38,45 +43,43 @@ t.test("fileExists()", async () => {
     },
   ];
 
-  data.forEach(async ({ type, path, expected, desc }) => t.test(
-    `return $expected if ${type} '${path}' ${desc}`,
-    async () => {
-      t.resolveMatch(fileExists(path), expected);
-    }
-  ));
-
-  t.end();
+  data.forEach(async ({ type, path, expected, desc }) =>
+    t.test(
+      `return $expected if ${type} '${path}' ${desc}`,
+      async ({ resolveMatch }) => {
+        resolveMatch(fileExists(path), expected);
+      }
+    )
+  );
 });
 
 t.test("ensureDir()", async () => {
-  const data: {path: string, exists: boolean, desc: string}[]  = [
+  const data: { path: string; exists: boolean; desc: string }[] = [
     { path: "/testFolder", exists: true, desc: "not created if present" },
     {
       path: "/testNewFolder",
       exists: false,
       desc: "created if not present",
     },
-  ]
+  ];
 
-  data.forEach(async ({ path, exists, desc }) => t.test(`folder is ${desc}`, async () => {
-    t.resolveMatch(fileExists(path), exists);
+  data.forEach(async ({ path, exists, desc }) =>
+    t.test(`folder is ${desc}`, async ({ resolveMatch }) => {
+      resolveMatch(fileExists(path), exists);
 
-    await ensureDir(path);
+      await ensureDir(path);
 
-    t.resolveMatch(fileExists(path), true);
-  }));
-
-  t.end();
+      resolveMatch(fileExists(path), true);
+    })
+  );
 });
 
 t.test("saveFile()", async () => {
-  t.test("create file and folders", async () => {
+  t.test("create file and folders", async ({ same }) => {
     await saveFile("/foo/bar/test/foobar.test", "foobar file for t.test");
 
-    t.same(vol.toJSON("/foo/bar/test/foobar.test"),
-        {
-          "/foo/bar/test/foobar.test": "foobar file for t.test",
-        }
-      );
+    same(vol.toJSON("/foo/bar/test/foobar.test"), {
+      "/foo/bar/test/foobar.test": "foobar file for t.test",
+    });
   });
 });

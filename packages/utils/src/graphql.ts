@@ -80,7 +80,11 @@ export const OperationTypeNodes: readonly OperationTypeNode[] = [
 export type ClassName = string & { _opaque: ClassName };
 
 export type ModuleName = string & { _opaque: ModuleName };
-export type RootTypes = { query?: string; mutation?: string; subscription?: string };
+export type RootTypes = {
+  query?: string;
+  mutation?: string;
+  subscription?: string;
+};
 export type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
 
 export type ModuleType = {
@@ -159,13 +163,16 @@ export const getDocumentLoaders = async (
   const loaders: Loader[] = [];
   const loaderOptions: ModuleOptions = {} as ModuleOptions;
 
-  await Promise.all(Object.keys(loadersList).map(async (className) => {
-    const { loader, options } = await getLoader(className as ClassName, 
-      loadersList[className as ClassName] as ModuleName | ModuleType
-    );
-    loaders.push(loader);
-    Object.assign(loaderOptions, options);
-  }));
+  await Promise.all(
+    Object.keys(loadersList).map(async (className) => {
+      const { loader, options } = await getLoader(
+        className as ClassName,
+        loadersList[className as ClassName] as ModuleName | ModuleType
+      );
+      loaders.push(loader);
+      Object.assign(loaderOptions, options);
+    })
+  );
 
   if (loaders.length === 0) {
     throw new Error("No GraphQL document loaders available.");
@@ -174,7 +181,8 @@ export const getDocumentLoaders = async (
   return { loaders, loaderOptions };
 };
 
-export const getLoader = async (className : ClassName,
+export const getLoader = async (
+  className: ClassName,
   graphqlDocumentLoader: ModuleName | ModuleType
 ): Promise<{
   loader: Loader;
@@ -189,7 +197,7 @@ export const getLoader = async (className : ClassName,
     loader: new Loader(),
     options:
       typeof graphqlDocumentLoader !== "string" &&
-        "options" in graphqlDocumentLoader
+      "options" in graphqlDocumentLoader
         ? graphqlDocumentLoader.options
         : undefined,
   };
