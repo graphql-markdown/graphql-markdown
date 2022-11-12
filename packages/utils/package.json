@@ -7,6 +7,7 @@
   },
   "version": "1.0.1",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
@@ -19,7 +20,8 @@
     "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "jest",
+    "test": "tap --ts --node-arg=--loader=ts-node/esm",
+    "snap": "tap --ts --node-arg=--loader=ts-node/esm",
     "stryker": "stryker run"
   },
   "dependencies": {

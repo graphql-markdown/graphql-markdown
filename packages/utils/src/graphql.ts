@@ -71,28 +71,28 @@ export {
   printSchema,
 } from "graphql";
 
-const OperationTypeNodes = [
+export const OperationTypeNodes: readonly OperationTypeNode[] = [
   OperationTypeNode.QUERY,
   OperationTypeNode.MUTATION,
   OperationTypeNode.SUBSCRIPTION,
 ];
 
-type ClassName = string & { _opaque: ClassName };
+export type ClassName = string & { _opaque: ClassName };
 
-type ModuleName = string & { _opaque: ModuleName };
-type RootTypes = { query?: string; mutation?: string; subscription?: string };
-type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
+export type ModuleName = string & { _opaque: ModuleName };
+export type RootTypes = { query?: string; mutation?: string; subscription?: string };
+export type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
 
-type ModuleType = {
+export type ModuleType = {
   module: ModuleName;
   options: ModuleOptions | undefined;
 };
 
-type LoadersType = {
+export type LoadersType = {
   [className: ClassName]: ModuleName | ModuleType;
 };
 
-type DocumentLoaders = {
+export type DocumentLoaders = {
   loaders: readonly Loader[];
   loaderOptions: ModuleOptions;
 };
@@ -153,35 +153,46 @@ export const loadSchema = async (
   return new GraphQLSchema(config);
 };
 
-export const getDocumentLoaders = (
+export const getDocumentLoaders = async (
   loadersList: LoadersType
-): DocumentLoaders => {
+): Promise<DocumentLoaders> => {
   const loaders: Loader[] = [];
   const loaderOptions: ModuleOptions = {} as ModuleOptions;
 
-  Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
-    if (typeof graphqlDocumentLoader === "string") {
-      const { [className]: Loader } = require(graphqlDocumentLoader);
-      loaders.push(new Loader());
-    } else {
-      if (
-        typeof graphqlDocumentLoader.module !== "string" ||
-        graphqlDocumentLoader.module == null
-      ) {
-        throw new Error(
-          `Wrong format for plugin loader "${className}", expected {module: String, options?: Object}`
-        );
-      }
-      const { [className]: Loader } = require(graphqlDocumentLoader.module);
-      loaders.push(new Loader());
-      Object.assign(loaderOptions, graphqlDocumentLoader.options);
-    }
-  });
+  await Promise.all(Object.keys(loadersList).map(async (className) => {
+    const { loader, options } = await getLoader(className as ClassName, 
+      loadersList[className as ClassName] as ModuleName | ModuleType
+    );
+    loaders.push(loader);
+    Object.assign(loaderOptions, options);
+  }));
 
-  if (loaders.length < 1) {
+  if (loaders.length === 0) {
     throw new Error("No GraphQL document loaders available.");
   }
+
   return { loaders, loaderOptions };
+};
+
+export const getLoader = async (className : ClassName,
+  graphqlDocumentLoader: ModuleName | ModuleType
+): Promise<{
+  loader: Loader;
+  options: Maybe<ModuleOptions>;
+}> => {
+  const loaderPackage =
+    typeof graphqlDocumentLoader === "string"
+      ? graphqlDocumentLoader
+      : graphqlDocumentLoader?.module;
+  const { [className]: Loader } = await import(loaderPackage as string);
+  return {
+    loader: new Loader(),
+    options:
+      typeof graphqlDocumentLoader !== "string" &&
+        "options" in graphqlDocumentLoader
+        ? graphqlDocumentLoader.options
+        : undefined,
+  };
 };
 
 export const getListDefaultValues = (
@@ -256,7 +267,7 @@ export const getTypeFromSchema = <T extends unknown>(
   const filteredType = Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
     .filter((key) => !isIntrospectionType(typeMap[key] as GraphQLNamedType))
-    .filter((key) => (typeMap[key] instanceof (type as any)) ?? false);
+    .filter((key) => typeMap[key] instanceof (type as any) ?? false);
 
   return keyValMap(
     filteredType,
@@ -310,7 +321,10 @@ export const getFields = (
   return Object.keys(fieldMap).map((name) => fieldMap[name]);
 };
 
-export const getTypeName = (type: GraphQLNamedType, defaultName?: string): string => {
+export const getTypeName = (
+  type: GraphQLNamedType,
+  defaultName?: string
+): string => {
   return type?.name ?? type?.toString() ?? defaultName ?? "";
 };
 

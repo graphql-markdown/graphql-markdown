@@ -1,31 +1,35 @@
+import t from "tap";
+
 import { hasProperty, hasMethod } from "../../src/object";
 
-describe("object", () => {
-  describe("hasProperty()", () => {
-    test("returns true if object has property", () => {
-      expect(hasProperty({ foo: "test" }, "foo")).toBeTruthy();
-    });
-
-    test("returns false if object has not property", () => {
-      expect(hasProperty({ foo: "test" }, "bar")).toBeFalsy();
-    });
-
-    test("returns false if not an object", () => {
-      expect(hasProperty("test", "bar")).toBeFalsy();
-    });
-
-    test("returns false if null", () => {
-      expect(hasProperty(null, "bar")).toBeFalsy();
-    });
+t.test("hasProperty()", async () => {
+  t.test("returns true if object has property", async () => {
+    t.ok(hasProperty({ foo: "t.test" }, "foo"));
   });
 
-  describe("hasMethod()", () => {
-    test("returns true if object has method", () => {
-      expect(hasMethod({ foo: () => ({}) }, "foo")).toBeTruthy();
-    });
-
-    test("returns false if object has not method", () => {
-      expect(hasMethod({ foo: "test" }, "foo")).toBeFalsy();
-    });
+  t.test("returns false if object has not property", async () => {
+    t.notOk(hasProperty({ foo: "t.test" }, "bar"));
   });
+
+  t.test("returns false if not an object", async () => {
+    t.notOk(hasProperty("t.test", "bar"));
+  });
+
+  t.test("returns false if null", async () => {
+    t.notOk(hasProperty(null, "bar"));
+  });
+
+  t.end();
+});
+
+t.test("hasMethod()", async () => {
+  t.test("returns true if object has method", async () => {
+    t.ok(hasMethod({ foo: () => ({}) }, "foo"));
+  });
+
+  t.test("returns false if object has not method", async () => {
+    t.notOk(hasMethod({ foo: "t.test" }, "foo"));
+  });
+
+  t.end();
 });
