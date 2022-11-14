@@ -11,6 +11,8 @@ updates:
     commit-message:
       prefix: "📦 npm"
       include: "scope"
+    ignore:
+      - dependency-name: "@graphql-markdown/*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
