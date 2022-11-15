@@ -1,0 +1,5 @@
+node-arg :
+  - "--loader=ts-node/esm"
+  - "--loader=esmock"
+coverage: false,
+ts: false

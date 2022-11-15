@@ -20,8 +20,8 @@
     "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "tap --ts --node-arg=--loader=ts-node/esm",
-    "snap": "tap --ts --node-arg=--loader=ts-node/esm",
+    "test": "tap",
+    "snap": "tap -S",
     "stryker": "stryker run"
   },
   "dependencies": {

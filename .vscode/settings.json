@@ -15,6 +15,7 @@
     "Earthfile",
     "earthlyignore",
     "edno",
+    "esmock",
     "GraphQLID",
     "Grégory",
     "groupbydirective",
@@ -52,5 +53,5 @@
     "Treeware",
     "unionfs",
     "Yavin"
-  ]
+]
 }
