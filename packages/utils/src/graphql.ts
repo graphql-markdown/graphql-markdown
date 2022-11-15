@@ -114,7 +114,7 @@ type RelationType =
   | "scalars";
 
 type RelationOf = {
-  [relationType in RelationType]: readonly Maybe<GraphQLType>[];
+  [relationType in RelationType]: readonly Maybe<unknown>[];
 };
 
 type SchemaMap = {
@@ -301,7 +301,7 @@ export const hasDirective = (
 
 export const getIntrospectionFieldsList = (
   queryType: Maybe<GraphQLObjectType>
-): Maybe<ObjMap<GraphQLField<unknown, unknown, unknown>>> => {
+): Maybe<ObjMap<GraphQLField<unknown, unknown>>> => {
   if (typeof queryType === "undefined" || queryType == null) {
     return undefined;
   }
@@ -364,19 +364,17 @@ export const getSchemaMap = (schema: GraphQLSchema): SchemaMap => {
 const mapRelationOf = (
   relations: Partial<RelationOf>,
   schema: GraphQLSchema,
-  callback: Function
+  callback: <T>(relationName: string, relationType: T, results: T[]) => T[]
 ): Partial<RelationOf> => {
   const schemaMap = getSchemaMap(schema);
 
   for (const relation of Object.keys(relations) as RelationType[]) {
-    const entity: ObjMap<GraphQLType> = schemaMap[
-      relation
-    ] as ObjMap<GraphQLType>;
+    const entity: ObjMap<unknown> = schemaMap[relation] as ObjMap<unknown>;
     if (typeof entity === "undefined") {
       continue;
     }
 
-    let results: GraphQLType[] = [];
+    let results = [] as ReturnType<typeof callback>;
     for (const [relationName, relationType] of Object.entries(entity)) {
       results = callback(relationName, relationType, results);
     }
@@ -400,10 +398,10 @@ export const getRelationOfReturn = (
     relations,
     schema,
     (
-      relationName: string,
+      relationName,
       relationType: GraphQLField<unknown, unknown, unknown>,
       results: GraphQLField<unknown, unknown, unknown>[]
-    ) => {
+    ): GraphQLField<unknown, unknown, unknown>[] => {
       const subType = relationType.type as GraphQLNamedType;
       if (getNamedType(subType).name === type.name) {
         if (!results.find((r) => "name" in r && r.name === relationName)) {

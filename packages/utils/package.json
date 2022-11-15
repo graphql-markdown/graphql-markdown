@@ -21,7 +21,7 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",
-    "snap": "tap -S",
+    "snap": "tap",
     "stryker": "stryker run"
   },
   "dependencies": {

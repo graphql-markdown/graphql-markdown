@@ -1,18 +1,23 @@
 import t from "tap";
-import esmock from 'esmock';
+import esmock from "esmock";
 
 import { fs, vol } from "memfs";
 
-const { ensureDir, fileExists, saveFile }  = await esmock("../../src/fs", import.meta.url, {
-    "fs/promises": fs.promises
-    }
+const { ensureDir, fileExists, saveFile } = await esmock(
+  "../../src/fs",
+  import.meta.url,
+  {
+    "fs/promises": fs.promises,
+  }
 );
 
-
 t.beforeEach(() => {
-  vol.fromJSON({
-    "./testFile": "just a t.test",
-  }, "/testFolder");
+  vol.fromJSON(
+    {
+      "./testFile": "just a t.test",
+    },
+    "/testFolder"
+  );
 });
 
 t.afterEach(() => {
@@ -48,13 +53,10 @@ t.test("fileExists()", async () => {
   ];
 
   data.forEach(async ({ type, path, expected, desc }) =>
-    t.test(
-      `return $expected if ${type} '${path}' ${desc}`,
-      async () => {
-        const res = await fileExists(path);
-        t.equal(res, expected);
-      }
-    )
+    t.test(`return $expected if ${type} '${path}' ${desc}`, async () => {
+      const res = await fileExists(path);
+      t.equal(res, expected);
+    })
   );
 });
 
@@ -71,12 +73,12 @@ t.test("ensureDir()", async () => {
   data.forEach(async ({ path, exists, desc }) =>
     t.test(`folder is ${desc}`, async () => {
       const before = await fileExists(path);
-      t.equal(before, exists)
+      t.equal(before, exists);
 
       await ensureDir(path);
 
       const after = await fileExists(path);
-      t.ok(after)
+      t.ok(after);
     })
   );
 });
