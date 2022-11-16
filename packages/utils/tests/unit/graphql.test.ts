@@ -561,7 +561,7 @@ t.test("graphql", async () => {
 
   t.test("getRelationOfField", async () => {
     t.test(
-      "returns queries, subscriptions and mutations using a type",
+      "returns queries, subscriptions and mutations using a type as field",
       async () => {
         const schema = buildSchema(`
     interface Record {
@@ -591,7 +591,7 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("String") as GraphQLNamedType;
         const relations = getRelationOfField(compositeType, schema);
 
-        t.matchSnapshot(JSON.stringify(relations, null, 2), "returns queries, subscriptions and mutations using a type");
+        t.matchSnapshot(JSON.stringify(relations, null, 2), "returns queries, subscriptions and mutations using a type as field");
       }
     );
   });

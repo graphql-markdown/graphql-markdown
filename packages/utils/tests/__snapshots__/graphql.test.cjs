@@ -2684,7 +2684,7 @@ exports[`tests/unit/graphql.test.ts TAP > returns queries, subscriptions and mut
 }
 `
 
-exports[`tests/unit/graphql.test.ts TAP > returns queries, subscriptions and mutations using a type 2`] = `
+exports[`tests/unit/graphql.test.ts TAP > returns queries, subscriptions and mutations using a type as field 1`] = `
 {
   "queries": [
     {
