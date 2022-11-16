@@ -205,50 +205,52 @@ export const getLoader = async (
 
 export const getListDefaultValues = (
   type: GraphQLInputType,
-  value?: Maybe<string | boolean | number | null>
+  value?: unknown
 ): Maybe<string> => {
   const defaultValues = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
-    getDefaultValue(type, defaultValue)
+    getDefaultValue({type, defaultValue} as GraphQLInputField)
   );
 
   return `[${defaultValuesString.join(", ")}]`;
 };
 
 export const getDefaultValue = (
-  type: GraphQLInputType,
-  defaultValue?: Maybe<string | boolean | number | null>
-): Maybe<string | boolean | number | null> => {
+field: GraphQLInputField
+): Maybe<string | boolean | number> => {
+  const {type, defaultValue} = field;
+
   if (typeof defaultValue === "undefined" || defaultValue === null) {
-    return undefined;
+    return defaultValue;
   }
 
   if (isListType(type)) {
     return getListDefaultValues(getNamedType(type), defaultValue);
   }
 
-  return formatDefaultValue(type, defaultValue);
+  return formatDefaultValue(field);
 };
 
 export const formatDefaultValue = (
-  type: GraphQLInputType,
-  defaultValue?: Maybe<string | boolean | number | null>
-): Maybe<string | boolean | number | null> => {
+{type, defaultValue}: GraphQLInputField
+): Maybe<string | boolean | number> => {
+  const value = defaultValue as Maybe<string | boolean | number>
+
   if (isEnumType(type)) {
-    return defaultValue;
+    return value;
   }
 
   switch (type) {
     case GraphQLInt:
     case GraphQLFloat:
     case GraphQLBoolean:
-      return defaultValue;
+      return value;
     case GraphQLID:
     case GraphQLString:
-      return `"${defaultValue}"`;
+      return `"${value}"`;
     default:
-      return defaultValue;
+      return value;
   }
 };
 

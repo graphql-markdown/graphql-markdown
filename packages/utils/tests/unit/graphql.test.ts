@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import {
+  GraphQLInputField,
   GraphQLEnumType,
   GraphQLUnionType,
   GraphQLScalarType,
@@ -23,8 +24,8 @@ import {
   GraphQLNamedType,
   GraphQLType,
   GraphQLField,
-  GraphQLInputObjectTypeConfig,
-  GraphQLInputFieldConfig,
+  // GraphQLInputObjectTypeConfig,
+  // GraphQLInputFieldConfig,
 } from "graphql";
 
 import {
@@ -61,13 +62,14 @@ const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
 
 (t as any).snapshotFile = path.resolve(
   __dirname,
+  "..",
   "__snapshots__",
   "graphql.test.cjs"
 );
 
 t.test("graphql", async () => {
   let schema: GraphQLSchema;
-  const fileLoader = new GraphQLFileLoader()
+  const fileLoader = new GraphQLFileLoader();
 
   t.beforeEach(async () => {
     schema = await gqlToolsLoadSchema(SCHEMA_FILE, {
@@ -103,8 +105,8 @@ t.test("graphql", async () => {
         documentLoader
       );
 
-      t.equal(loader, fileLoader);
-      t.equal(options, undefined);
+      t.same(loader, fileLoader);
+      t.same(options, undefined);
     });
   });
 
@@ -118,8 +120,8 @@ t.test("graphql", async () => {
         const { loaders: documentLoaders, loaderOptions } =
           await getDocumentLoaders(loaders);
 
-        t.equal(documentLoaders, [fileLoader]);
-        t.equal(loaderOptions, {});
+        t.same(documentLoaders, [fileLoader]);
+        t.same(loaderOptions, {});
       }
     );
 
@@ -137,8 +139,8 @@ t.test("graphql", async () => {
         const { loaders: documentLoaders, loaderOptions } =
           await getDocumentLoaders(loaders);
 
-        t.equal(documentLoaders, [fileLoader]);
-        t.equal(loaderOptions, {
+        t.same(documentLoaders, [fileLoader]);
+        t.same(loaderOptions, {
           option1: true,
         });
       }
@@ -178,13 +180,11 @@ t.test("graphql", async () => {
 
     data.map(async ({ type, defaultValue, expected }) =>
       t.test(`returns ${expected} value as default for ${type}`, async () => {
-        const argument = new GraphQLInputObjectType({
-          name: "foobar",
-          description: undefined,
-          defaultValue,
-          type,
-          fields: {} as ObjMap<GraphQLInputFieldConfig>,
-        } as GraphQLInputObjectTypeConfig);
+        const argument = {
+              description: undefined,
+              defaultValue,
+              type,
+            } as GraphQLInputField;
 
         t.equal(getDefaultValue(argument), expected);
       })
@@ -202,14 +202,11 @@ t.test("graphql", async () => {
           },
         });
 
-        const argument = new GraphQLInputObjectType({
-          name: "color",
+        const argument = {
           description: undefined,
           type: enumType,
-          defaultValue: "RED",
-          extensions: undefined,
-          fields: {} as ObjMap<GraphQLInputFieldConfig>,
-        } as GraphQLInputObjectTypeConfig);
+          defaultValue: "RED"
+        }  as GraphQLInputField;
 
         t.equal(getDefaultValue(argument), "RED");
       }
@@ -227,14 +224,11 @@ t.test("graphql", async () => {
           },
         });
 
-        const argument = new GraphQLInputObjectType({
-          name: "color",
+        const argument = {
           description: undefined,
           type: new GraphQLList(enumType),
           defaultValue: ["RED"],
-          extensions: undefined,
-          fields: {} as ObjMap<GraphQLInputFieldConfig>,
-        } as GraphQLInputObjectTypeConfig);
+        } as GraphQLInputField;
 
         t.equal(getDefaultValue(argument), "[RED]");
       }
@@ -245,19 +239,19 @@ t.test("graphql", async () => {
     t.test("returns list of queries", async () => {
       const list = getIntrospectionFieldsList(schema.getQueryType());
 
-      t.matchSnapshot(JSON.stringify(list, null, 2));
+      t.matchSnapshot(JSON.stringify(list, null, 2), "returns list of queries");
     });
 
     t.test("returns list of mutations", async () => {
       const list = getIntrospectionFieldsList(schema.getMutationType());
 
-      t.matchSnapshot(JSON.stringify(list, null, 2));
+      t.matchSnapshot(JSON.stringify(list, null, 2), "returns list of mutations");
     });
 
     t.test("returns list of subscriptions", async () => {
       const list = getIntrospectionFieldsList(schema.getSubscriptionType());
 
-      t.matchSnapshot(JSON.stringify(list, null, 2));
+      t.matchSnapshot(JSON.stringify(list, null, 2), "returns list of subscriptions");
     });
 
     t.test("returns undefined if null", async () => {
@@ -271,7 +265,7 @@ t.test("graphql", async () => {
     t.test("returns list of type fields", async () => {
       const fields = getFields(schema.getMutationType() as GraphQLType);
 
-      t.matchSnapshot(JSON.stringify(fields, null, 2));
+      t.matchSnapshot(JSON.stringify(fields, null, 2), "returns list of type fields");
     });
 
     t.test("returns empty list if getFields not supported", async () => {
@@ -311,13 +305,13 @@ t.test("graphql", async () => {
     t.test("returns a filter map filtered by GraphQLObjectType", async () => {
       const map = getTypeFromSchema(schema, GraphQLObjectType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLObjectType");
     });
 
     t.test("returns a filter map filtered by GraphQLUnionType", async () => {
       const map = getTypeFromSchema(schema, GraphQLUnionType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLUnionType");
     });
 
     t.test(
@@ -325,14 +319,14 @@ t.test("graphql", async () => {
       async () => {
         const map = getTypeFromSchema(schema, GraphQLInterfaceType);
 
-        t.matchSnapshot(JSON.stringify(map, null, 2));
+        t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLInterfaceType");
       }
     );
 
     t.test("returns a filter map filtered by GraphQLEnumType", async () => {
       const map = getTypeFromSchema(schema, GraphQLEnumType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLEnumType");
     });
 
     t.test(
@@ -340,14 +334,14 @@ t.test("graphql", async () => {
       async () => {
         const map = getTypeFromSchema(schema, GraphQLInputObjectType);
 
-        t.matchSnapshot(JSON.stringify(map, null, 2));
+        t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLInputObjectType");
       }
     );
 
     t.test("returns a filter map filtered by GraphQLScalarType", async () => {
       const map = getTypeFromSchema(schema, GraphQLScalarType);
 
-      t.matchSnapshot(JSON.stringify(map, null, 2));
+      t.matchSnapshot(JSON.stringify(map, null, 2), "returns a filter map filtered by GraphQLScalarType");
     });
   });
 
@@ -355,7 +349,7 @@ t.test("graphql", async () => {
     t.test("returns schema types map", async () => {
       const schemaTypeMap = getSchemaMap(schema);
 
-      t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
+      t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2), "returns schema types map");
     });
 
     t.test("returns schema types map with custom root types", async () => {
@@ -366,7 +360,7 @@ t.test("graphql", async () => {
 
       const schemaTypeMap = getSchemaMap(testSchema);
 
-      t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2));
+      t.matchSnapshot(JSON.stringify(schemaTypeMap, null, 2), "returns schema types map with custom root types");
     });
   });
 
@@ -424,7 +418,7 @@ t.test("graphql", async () => {
       interface Being {
         name(surname: Boolean): String
       }
-      
+
       interface Mammal {
         mother: Mammal
         father: Mammal
@@ -433,13 +427,13 @@ t.test("graphql", async () => {
       interface Pet implements Being {
         name(surname: Boolean): String
       }
-      
+
       interface Canine implements Mammal & Being {
         name(surname: Boolean): String
         mother: Canine
         father: Canine
       }
-      
+
       type Dog implements Being & Pet & Mammal & Canine {
         name(surname: Boolean): String
         nickname: String
@@ -452,7 +446,7 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfInterface(interfaceType, schema);
 
-      t.matchSnapshot(JSON.stringify(relations, null, 2));
+      t.matchSnapshot(JSON.stringify(relations, null, 2), "returns types and interfaces extending an interface");
     });
   });
 
