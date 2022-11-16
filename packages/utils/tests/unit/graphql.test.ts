@@ -67,24 +67,25 @@ const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
 
 t.test("graphql", async () => {
   let schema: GraphQLSchema;
+  const fileLoader = new GraphQLFileLoader()
 
   t.beforeEach(async () => {
     schema = await gqlToolsLoadSchema(SCHEMA_FILE, {
-      loaders: [new GraphQLFileLoader()],
+      loaders: [fileLoader],
     });
   });
 
   t.test("loadSchema()", async () => {
     t.test("returns valid schema", async () => {
       const testSchema = await loadSchema(SCHEMA_FILE, {
-        loaders: [new GraphQLFileLoader()],
+        loaders: [fileLoader],
       });
       t.equal(JSON.stringify(testSchema), JSON.stringify(schema));
     });
 
     t.test("returns valid schema with custom root type", async () => {
       const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
-        loaders: [new GraphQLFileLoader()],
+        loaders: [fileLoader],
         rootTypes: { query: "Root", subscription: "" },
       });
 
@@ -102,8 +103,8 @@ t.test("graphql", async () => {
         documentLoader
       );
 
-      t.same(loader, [new GraphQLFileLoader()]);
-      t.same(options, undefined);
+      t.equal(loader, fileLoader);
+      t.equal(options, undefined);
     });
   });
 
@@ -117,8 +118,8 @@ t.test("graphql", async () => {
         const { loaders: documentLoaders, loaderOptions } =
           await getDocumentLoaders(loaders);
 
-        t.same(documentLoaders, [new GraphQLFileLoader()]);
-        t.same(loaderOptions, {});
+        t.equal(documentLoaders, [fileLoader]);
+        t.equal(loaderOptions, {});
       }
     );
 
@@ -136,8 +137,8 @@ t.test("graphql", async () => {
         const { loaders: documentLoaders, loaderOptions } =
           await getDocumentLoaders(loaders);
 
-        t.same(documentLoaders, [new GraphQLFileLoader()]);
-        t.same(loaderOptions, {
+        t.equal(documentLoaders, [fileLoader]);
+        t.equal(loaderOptions, {
           option1: true,
         });
       }
