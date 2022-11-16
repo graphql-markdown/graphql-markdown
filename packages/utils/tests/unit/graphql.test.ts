@@ -554,7 +554,7 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("StudyItem") as GraphQLNamedType;
         const relations = getRelationOfReturn(compositeType, schema);
 
-        t.matchSnapshot(relations);
+        t.matchSnapshot(JSON.stringify(relations, null, 2), "getRelationOfReturn");
       }
     );
   });
@@ -591,7 +591,7 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("String") as GraphQLNamedType;
         const relations = getRelationOfField(compositeType, schema);
 
-        t.matchSnapshot(relations);
+        t.matchSnapshot(JSON.stringify(relations, null, 2), "getRelationOfField");
       }
     );
   });
