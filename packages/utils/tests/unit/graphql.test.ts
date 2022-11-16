@@ -58,7 +58,7 @@ const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
   "../__data__/schema_with_custom_root_types.graphql"
 );
 
-t.formatSnapshot = object => JSON.stringify(object, null, 2);
+t.formatSnapshot = (object) => JSON.stringify(object, null, 2);
 
 t.test("graphql", async () => {
   let schema: GraphQLSchema;
@@ -174,10 +174,10 @@ t.test("graphql", async () => {
     data.map(async ({ type, defaultValue, expected }) =>
       t.test(`returns ${expected} value as default for ${type}`, async () => {
         const argument = {
-              description: undefined,
-              defaultValue,
-              type,
-            } as GraphQLInputField;
+          description: undefined,
+          defaultValue,
+          type,
+        } as GraphQLInputField;
 
         t.equal(getDefaultValue(argument), expected);
       })
@@ -198,8 +198,8 @@ t.test("graphql", async () => {
         const argument = {
           description: undefined,
           type: enumType,
-          defaultValue: "RED"
-        }  as GraphQLInputField;
+          defaultValue: "RED",
+        } as GraphQLInputField;
 
         t.equal(getDefaultValue(argument), "RED");
       }
@@ -298,7 +298,10 @@ t.test("graphql", async () => {
     t.test("returns a filter map filtered by GraphQLObjectType", async () => {
       const map = getTypeFromSchema(schema, GraphQLObjectType);
 
-      t.matchSnapshot(map, "returns a filter map filtered by GraphQLObjectType");
+      t.matchSnapshot(
+        map,
+        "returns a filter map filtered by GraphQLObjectType"
+      );
     });
 
     t.test("returns a filter map filtered by GraphQLUnionType", async () => {
@@ -312,7 +315,10 @@ t.test("graphql", async () => {
       async () => {
         const map = getTypeFromSchema(schema, GraphQLInterfaceType);
 
-        t.matchSnapshot(map, "returns a filter map filtered by GraphQLInterfaceType");
+        t.matchSnapshot(
+          map,
+          "returns a filter map filtered by GraphQLInterfaceType"
+        );
       }
     );
 
@@ -327,14 +333,20 @@ t.test("graphql", async () => {
       async () => {
         const map = getTypeFromSchema(schema, GraphQLInputObjectType);
 
-        t.matchSnapshot(map, "returns a filter map filtered by GraphQLInputObjectType");
+        t.matchSnapshot(
+          map,
+          "returns a filter map filtered by GraphQLInputObjectType"
+        );
       }
     );
 
     t.test("returns a filter map filtered by GraphQLScalarType", async () => {
       const map = getTypeFromSchema(schema, GraphQLScalarType);
 
-      t.matchSnapshot(map, "returns a filter map filtered by GraphQLScalarType");
+      t.matchSnapshot(
+        map,
+        "returns a filter map filtered by GraphQLScalarType"
+      );
     });
   });
 
@@ -353,7 +365,10 @@ t.test("graphql", async () => {
 
       const schemaTypeMap = getSchemaMap(testSchema);
 
-      t.matchSnapshot(schemaTypeMap, "returns schema types map with custom root types");
+      t.matchSnapshot(
+        schemaTypeMap,
+        "returns schema types map with custom root types"
+      );
     });
   });
 
@@ -439,7 +454,10 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfInterface(interfaceType, schema);
 
-      t.matchSnapshot(relations, "returns types and interfaces extending an interface");
+      t.matchSnapshot(
+        relations,
+        "returns types and interfaces extending an interface"
+      );
     });
   });
 
@@ -515,7 +533,10 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfImplementation(compositeType, schema);
 
-      t.matchSnapshot(relations, "returns implementations compatible with type");
+      t.matchSnapshot(
+        relations,
+        "returns implementations compatible with type"
+      );
     });
   });
 
@@ -547,7 +568,10 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("StudyItem") as GraphQLNamedType;
         const relations = getRelationOfReturn(compositeType, schema);
 
-        t.matchSnapshot(relations, "returns queries, subscriptions and mutations using a type");
+        t.matchSnapshot(
+          relations,
+          "returns queries, subscriptions and mutations using a type"
+        );
       }
     );
   });
@@ -584,7 +608,10 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("String") as GraphQLNamedType;
         const relations = getRelationOfField(compositeType, schema);
 
-        t.matchSnapshot(relations, "returns queries, subscriptions and mutations using a type as field");
+        t.matchSnapshot(
+          relations,
+          "returns queries, subscriptions and mutations using a type as field"
+        );
       }
     );
   });

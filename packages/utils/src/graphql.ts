@@ -210,16 +210,16 @@ export const getListDefaultValues = (
   const defaultValues = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
-    getDefaultValue({type, defaultValue} as GraphQLInputField)
+    getDefaultValue({ type, defaultValue } as GraphQLInputField)
   );
 
   return `[${defaultValuesString.join(", ")}]`;
 };
 
 export const getDefaultValue = (
-field: GraphQLInputField
+  field: GraphQLInputField
 ): Maybe<string | boolean | number> => {
-  const {type, defaultValue} = field;
+  const { type, defaultValue } = field;
 
   if (typeof defaultValue === "undefined" || defaultValue === null) {
     return defaultValue;
@@ -232,10 +232,11 @@ field: GraphQLInputField
   return formatDefaultValue(field);
 };
 
-export const formatDefaultValue = (
-{type, defaultValue}: GraphQLInputField
-): Maybe<string | boolean | number> => {
-  const value = defaultValue as Maybe<string | boolean | number>
+export const formatDefaultValue = ({
+  type,
+  defaultValue,
+}: GraphQLInputField): Maybe<string | boolean | number> => {
+  const value = defaultValue as Maybe<string | boolean | number>;
 
   if (isEnumType(type)) {
     return value;
