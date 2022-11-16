@@ -479,7 +479,7 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfUnion(compositeType, schema);
 
-      t.matchSnapshot(JSON.stringify(relations, null, 2));
+      t.matchSnapshot(JSON.stringify(relations, null, 2), "returns unions using a type");
     });
   });
 
@@ -522,7 +522,7 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfImplementation(compositeType, schema);
 
-      t.matchSnapshot(JSON.stringify(relations, null, 2));
+      t.matchSnapshot(JSON.stringify(relations, null, 2), "returns implementations compatible with type");
     });
   });
 
@@ -554,7 +554,7 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("StudyItem") as GraphQLNamedType;
         const relations = getRelationOfReturn(compositeType, schema);
 
-        t.matchSnapshot(JSON.stringify(relations, null, 2), "getRelationOfReturn");
+        t.matchSnapshot(JSON.stringify(relations, null, 2), "returns queries, subscriptions and mutations using a type");
       }
     );
   });
@@ -591,7 +591,7 @@ t.test("graphql", async () => {
         const compositeType = schema.getType("String") as GraphQLNamedType;
         const relations = getRelationOfField(compositeType, schema);
 
-        t.matchSnapshot(JSON.stringify(relations, null, 2), "getRelationOfField");
+        t.matchSnapshot(JSON.stringify(relations, null, 2), "returns queries, subscriptions and mutations using a type");
       }
     );
   });

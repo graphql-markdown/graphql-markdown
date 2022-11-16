@@ -5,1001 +5,6 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/graphql.test.ts TAP > getRelationOfField 1`] = `
-{
-  "queries": [
-    {
-      "name": "getStudyItems",
-      "type": "[StudyItem!]",
-      "args": [
-        {
-          "name": "subject",
-          "type": "String",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 194,
-                "end": 201
-              }
-            },
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "String",
-                "loc": {
-                  "start": 203,
-                  "end": 209
-                }
-              },
-              "loc": {
-                "start": 203,
-                "end": 209
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 194,
-              "end": 209
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "getStudyItems",
-          "loc": {
-            "start": 180,
-            "end": 193
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 194,
-                "end": 201
-              }
-            },
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "String",
-                "loc": {
-                  "start": 203,
-                  "end": 209
-                }
-              },
-              "loc": {
-                "start": 203,
-                "end": 209
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 194,
-              "end": 209
-            }
-          }
-        ],
-        "type": {
-          "kind": "ListType",
-          "type": {
-            "kind": "NonNullType",
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "StudyItem",
-                "loc": {
-                  "start": 213,
-                  "end": 222
-                }
-              },
-              "loc": {
-                "start": 213,
-                "end": 222
-              }
-            },
-            "loc": {
-              "start": 213,
-              "end": 223
-            }
-          },
-          "loc": {
-            "start": 212,
-            "end": 224
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 180,
-          "end": 224
-        }
-      }
-    },
-    {
-      "name": "getStudyItem",
-      "type": "StudyItem",
-      "args": [
-        {
-          "name": "id",
-          "type": "String!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "id",
-              "loc": {
-                "start": 244,
-                "end": 246
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 248,
-                    "end": 254
-                  }
-                },
-                "loc": {
-                  "start": 248,
-                  "end": 254
-                }
-              },
-              "loc": {
-                "start": 248,
-                "end": 255
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 244,
-              "end": 255
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "getStudyItem",
-          "loc": {
-            "start": 231,
-            "end": 243
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "id",
-              "loc": {
-                "start": 244,
-                "end": 246
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 248,
-                    "end": 254
-                  }
-                },
-                "loc": {
-                  "start": 248,
-                  "end": 254
-                }
-              },
-              "loc": {
-                "start": 248,
-                "end": 255
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 244,
-              "end": 255
-            }
-          }
-        ],
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "StudyItem",
-            "loc": {
-              "start": 258,
-              "end": 267
-            }
-          },
-          "loc": {
-            "start": 258,
-            "end": 267
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 231,
-          "end": 267
-        }
-      }
-    }
-  ],
-  "mutations": [
-    {
-      "name": "addStudyItem",
-      "type": "StudyItem",
-      "args": [
-        {
-          "name": "subject",
-          "type": "String!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 314,
-                "end": 321
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 323,
-                    "end": 329
-                  }
-                },
-                "loc": {
-                  "start": 323,
-                  "end": 329
-                }
-              },
-              "loc": {
-                "start": 323,
-                "end": 330
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 314,
-              "end": 330
-            }
-          }
-        },
-        {
-          "name": "duration",
-          "type": "Int!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "duration",
-              "loc": {
-                "start": 332,
-                "end": 340
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "Int",
-                  "loc": {
-                    "start": 342,
-                    "end": 345
-                  }
-                },
-                "loc": {
-                  "start": 342,
-                  "end": 345
-                }
-              },
-              "loc": {
-                "start": 342,
-                "end": 346
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 332,
-              "end": 346
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "addStudyItem",
-          "loc": {
-            "start": 301,
-            "end": 313
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 314,
-                "end": 321
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 323,
-                    "end": 329
-                  }
-                },
-                "loc": {
-                  "start": 323,
-                  "end": 329
-                }
-              },
-              "loc": {
-                "start": 323,
-                "end": 330
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 314,
-              "end": 330
-            }
-          },
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "duration",
-              "loc": {
-                "start": 332,
-                "end": 340
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "Int",
-                  "loc": {
-                    "start": 342,
-                    "end": 345
-                  }
-                },
-                "loc": {
-                  "start": 342,
-                  "end": 345
-                }
-              },
-              "loc": {
-                "start": 342,
-                "end": 346
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 332,
-              "end": 346
-            }
-          }
-        ],
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "StudyItem",
-            "loc": {
-              "start": 349,
-              "end": 358
-            }
-          },
-          "loc": {
-            "start": 349,
-            "end": 358
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 301,
-          "end": 358
-        }
-      }
-    }
-  ],
-  "subscriptions": [],
-  "objects": [
-    "StudyItem"
-  ],
-  "interfaces": [
-    "Record"
-  ],
-  "inputs": [],
-  "directives": [
-    "@deprecated",
-    "@specifiedBy"
-  ]
-}
-`
-
-exports[`tests/unit/graphql.test.ts TAP > getRelationOfReturn 1`] = `
-{
-  "queries": [
-    {
-      "name": "getStudyItems",
-      "type": "[StudyItem!]",
-      "args": [
-        {
-          "name": "subject",
-          "type": "String",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 124,
-                "end": 131
-              }
-            },
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "String",
-                "loc": {
-                  "start": 133,
-                  "end": 139
-                }
-              },
-              "loc": {
-                "start": 133,
-                "end": 139
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 124,
-              "end": 139
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "getStudyItems",
-          "loc": {
-            "start": 110,
-            "end": 123
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 124,
-                "end": 131
-              }
-            },
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "String",
-                "loc": {
-                  "start": 133,
-                  "end": 139
-                }
-              },
-              "loc": {
-                "start": 133,
-                "end": 139
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 124,
-              "end": 139
-            }
-          }
-        ],
-        "type": {
-          "kind": "ListType",
-          "type": {
-            "kind": "NonNullType",
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "StudyItem",
-                "loc": {
-                  "start": 143,
-                  "end": 152
-                }
-              },
-              "loc": {
-                "start": 143,
-                "end": 152
-              }
-            },
-            "loc": {
-              "start": 143,
-              "end": 153
-            }
-          },
-          "loc": {
-            "start": 142,
-            "end": 154
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 110,
-          "end": 154
-        }
-      }
-    },
-    {
-      "name": "getStudyItem",
-      "type": "StudyItem",
-      "args": [
-        {
-          "name": "id",
-          "type": "ID!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "id",
-              "loc": {
-                "start": 174,
-                "end": 176
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "ID",
-                  "loc": {
-                    "start": 178,
-                    "end": 180
-                  }
-                },
-                "loc": {
-                  "start": 178,
-                  "end": 180
-                }
-              },
-              "loc": {
-                "start": 178,
-                "end": 181
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 174,
-              "end": 181
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "getStudyItem",
-          "loc": {
-            "start": 161,
-            "end": 173
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "id",
-              "loc": {
-                "start": 174,
-                "end": 176
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "ID",
-                  "loc": {
-                    "start": 178,
-                    "end": 180
-                  }
-                },
-                "loc": {
-                  "start": 178,
-                  "end": 180
-                }
-              },
-              "loc": {
-                "start": 178,
-                "end": 181
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 174,
-              "end": 181
-            }
-          }
-        ],
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "StudyItem",
-            "loc": {
-              "start": 184,
-              "end": 193
-            }
-          },
-          "loc": {
-            "start": 184,
-            "end": 193
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 161,
-          "end": 193
-        }
-      }
-    }
-  ],
-  "mutations": [
-    {
-      "name": "addStudyItem",
-      "type": "StudyItem",
-      "args": [
-        {
-          "name": "subject",
-          "type": "String!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 240,
-                "end": 247
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 249,
-                    "end": 255
-                  }
-                },
-                "loc": {
-                  "start": 249,
-                  "end": 255
-                }
-              },
-              "loc": {
-                "start": 249,
-                "end": 256
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 240,
-              "end": 256
-            }
-          }
-        },
-        {
-          "name": "duration",
-          "type": "Int!",
-          "extensions": {},
-          "astNode": {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "duration",
-              "loc": {
-                "start": 258,
-                "end": 266
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "Int",
-                  "loc": {
-                    "start": 268,
-                    "end": 271
-                  }
-                },
-                "loc": {
-                  "start": 268,
-                  "end": 271
-                }
-              },
-              "loc": {
-                "start": 268,
-                "end": 272
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 258,
-              "end": 272
-            }
-          }
-        }
-      ],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "addStudyItem",
-          "loc": {
-            "start": 227,
-            "end": 239
-          }
-        },
-        "arguments": [
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "subject",
-              "loc": {
-                "start": 240,
-                "end": 247
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "String",
-                  "loc": {
-                    "start": 249,
-                    "end": 255
-                  }
-                },
-                "loc": {
-                  "start": 249,
-                  "end": 255
-                }
-              },
-              "loc": {
-                "start": 249,
-                "end": 256
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 240,
-              "end": 256
-            }
-          },
-          {
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": "duration",
-              "loc": {
-                "start": 258,
-                "end": 266
-              }
-            },
-            "type": {
-              "kind": "NonNullType",
-              "type": {
-                "kind": "NamedType",
-                "name": {
-                  "kind": "Name",
-                  "value": "Int",
-                  "loc": {
-                    "start": 268,
-                    "end": 271
-                  }
-                },
-                "loc": {
-                  "start": 268,
-                  "end": 271
-                }
-              },
-              "loc": {
-                "start": 268,
-                "end": 272
-              }
-            },
-            "directives": [],
-            "loc": {
-              "start": 258,
-              "end": 272
-            }
-          }
-        ],
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "StudyItem",
-            "loc": {
-              "start": 275,
-              "end": 284
-            }
-          },
-          "loc": {
-            "start": 275,
-            "end": 284
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 227,
-          "end": 284
-        }
-      }
-    }
-  ],
-  "subscriptions": [
-    {
-      "name": "listStudyItems",
-      "type": "[StudyItem!]",
-      "args": [],
-      "extensions": {},
-      "astNode": {
-        "kind": "FieldDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "listStudyItems",
-          "loc": {
-            "start": 322,
-            "end": 336
-          }
-        },
-        "arguments": [],
-        "type": {
-          "kind": "ListType",
-          "type": {
-            "kind": "NonNullType",
-            "type": {
-              "kind": "NamedType",
-              "name": {
-                "kind": "Name",
-                "value": "StudyItem",
-                "loc": {
-                  "start": 339,
-                  "end": 348
-                }
-              },
-              "loc": {
-                "start": 339,
-                "end": 348
-              }
-            },
-            "loc": {
-              "start": 339,
-              "end": 349
-            }
-          },
-          "loc": {
-            "start": 338,
-            "end": 350
-          }
-        },
-        "directives": [],
-        "loc": {
-          "start": 322,
-          "end": 350
-        }
-      }
-    }
-  ]
-}
-`
-
-exports[`tests/unit/graphql.test.ts TAP > must match snapshot 1`] = `
-{
-  "unions": [
-    "Task"
-  ]
-}
-`
-
-exports[`tests/unit/graphql.test.ts TAP > must match snapshot 2`] = `
-{
-  "objects": [
-    "Dog",
-    "Cat"
-  ],
-  "interfaces": [
-    "Canine"
-  ],
-  "unions": [
-    "Pet"
-  ]
-}
-`
-
 exports[`tests/unit/graphql.test.ts TAP > returns a filter map filtered by GraphQLEnumType 1`] = `
 {
   "MediaType": "MediaType"
@@ -1043,6 +48,21 @@ exports[`tests/unit/graphql.test.ts TAP > returns a filter map filtered by Graph
 
 exports[`tests/unit/graphql.test.ts TAP > returns a filter map filtered by GraphQLUnionType 1`] = `
 {}
+`
+
+exports[`tests/unit/graphql.test.ts TAP > returns implementations compatible with type 1`] = `
+{
+  "objects": [
+    "Dog",
+    "Cat"
+  ],
+  "interfaces": [
+    "Canine"
+  ],
+  "unions": [
+    "Pet"
+  ]
+}
 `
 
 exports[`tests/unit/graphql.test.ts TAP > returns list of mutations 1`] = `
@@ -3157,6 +2177,978 @@ exports[`tests/unit/graphql.test.ts TAP > returns list of type fields 1`] = `
 ]
 `
 
+exports[`tests/unit/graphql.test.ts TAP > returns queries, subscriptions and mutations using a type 1`] = `
+{
+  "queries": [
+    {
+      "name": "getStudyItems",
+      "type": "[StudyItem!]",
+      "args": [
+        {
+          "name": "subject",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 124,
+                "end": 131
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 133,
+                  "end": 139
+                }
+              },
+              "loc": {
+                "start": 133,
+                "end": 139
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 124,
+              "end": 139
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "getStudyItems",
+          "loc": {
+            "start": 110,
+            "end": 123
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 124,
+                "end": 131
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 133,
+                  "end": 139
+                }
+              },
+              "loc": {
+                "start": 133,
+                "end": 139
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 124,
+              "end": 139
+            }
+          }
+        ],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "StudyItem",
+                "loc": {
+                  "start": 143,
+                  "end": 152
+                }
+              },
+              "loc": {
+                "start": 143,
+                "end": 152
+              }
+            },
+            "loc": {
+              "start": 143,
+              "end": 153
+            }
+          },
+          "loc": {
+            "start": 142,
+            "end": 154
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 110,
+          "end": 154
+        }
+      }
+    },
+    {
+      "name": "getStudyItem",
+      "type": "StudyItem",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 174,
+                "end": 176
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 178,
+                    "end": 180
+                  }
+                },
+                "loc": {
+                  "start": 178,
+                  "end": 180
+                }
+              },
+              "loc": {
+                "start": 178,
+                "end": 181
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 174,
+              "end": 181
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "getStudyItem",
+          "loc": {
+            "start": 161,
+            "end": 173
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 174,
+                "end": 176
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 178,
+                    "end": 180
+                  }
+                },
+                "loc": {
+                  "start": 178,
+                  "end": 180
+                }
+              },
+              "loc": {
+                "start": 178,
+                "end": 181
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 174,
+              "end": 181
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "StudyItem",
+            "loc": {
+              "start": 184,
+              "end": 193
+            }
+          },
+          "loc": {
+            "start": 184,
+            "end": 193
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 161,
+          "end": 193
+        }
+      }
+    }
+  ],
+  "mutations": [
+    {
+      "name": "addStudyItem",
+      "type": "StudyItem",
+      "args": [
+        {
+          "name": "subject",
+          "type": "String!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 240,
+                "end": 247
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 249,
+                    "end": 255
+                  }
+                },
+                "loc": {
+                  "start": 249,
+                  "end": 255
+                }
+              },
+              "loc": {
+                "start": 249,
+                "end": 256
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 240,
+              "end": 256
+            }
+          }
+        },
+        {
+          "name": "duration",
+          "type": "Int!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "duration",
+              "loc": {
+                "start": 258,
+                "end": 266
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "Int",
+                  "loc": {
+                    "start": 268,
+                    "end": 271
+                  }
+                },
+                "loc": {
+                  "start": 268,
+                  "end": 271
+                }
+              },
+              "loc": {
+                "start": 268,
+                "end": 272
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 258,
+              "end": 272
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "addStudyItem",
+          "loc": {
+            "start": 227,
+            "end": 239
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 240,
+                "end": 247
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 249,
+                    "end": 255
+                  }
+                },
+                "loc": {
+                  "start": 249,
+                  "end": 255
+                }
+              },
+              "loc": {
+                "start": 249,
+                "end": 256
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 240,
+              "end": 256
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "duration",
+              "loc": {
+                "start": 258,
+                "end": 266
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "Int",
+                  "loc": {
+                    "start": 268,
+                    "end": 271
+                  }
+                },
+                "loc": {
+                  "start": 268,
+                  "end": 271
+                }
+              },
+              "loc": {
+                "start": 268,
+                "end": 272
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 258,
+              "end": 272
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "StudyItem",
+            "loc": {
+              "start": 275,
+              "end": 284
+            }
+          },
+          "loc": {
+            "start": 275,
+            "end": 284
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 227,
+          "end": 284
+        }
+      }
+    }
+  ],
+  "subscriptions": [
+    {
+      "name": "listStudyItems",
+      "type": "[StudyItem!]",
+      "args": [],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "listStudyItems",
+          "loc": {
+            "start": 322,
+            "end": 336
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "StudyItem",
+                "loc": {
+                  "start": 339,
+                  "end": 348
+                }
+              },
+              "loc": {
+                "start": 339,
+                "end": 348
+              }
+            },
+            "loc": {
+              "start": 339,
+              "end": 349
+            }
+          },
+          "loc": {
+            "start": 338,
+            "end": 350
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 322,
+          "end": 350
+        }
+      }
+    }
+  ]
+}
+`
+
+exports[`tests/unit/graphql.test.ts TAP > returns queries, subscriptions and mutations using a type 2`] = `
+{
+  "queries": [
+    {
+      "name": "getStudyItems",
+      "type": "[StudyItem!]",
+      "args": [
+        {
+          "name": "subject",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 194,
+                "end": 201
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 203,
+                  "end": 209
+                }
+              },
+              "loc": {
+                "start": 203,
+                "end": 209
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 194,
+              "end": 209
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "getStudyItems",
+          "loc": {
+            "start": 180,
+            "end": 193
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 194,
+                "end": 201
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 203,
+                  "end": 209
+                }
+              },
+              "loc": {
+                "start": 203,
+                "end": 209
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 194,
+              "end": 209
+            }
+          }
+        ],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "StudyItem",
+                "loc": {
+                  "start": 213,
+                  "end": 222
+                }
+              },
+              "loc": {
+                "start": 213,
+                "end": 222
+              }
+            },
+            "loc": {
+              "start": 213,
+              "end": 223
+            }
+          },
+          "loc": {
+            "start": 212,
+            "end": 224
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 180,
+          "end": 224
+        }
+      }
+    },
+    {
+      "name": "getStudyItem",
+      "type": "StudyItem",
+      "args": [
+        {
+          "name": "id",
+          "type": "String!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 244,
+                "end": 246
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 248,
+                    "end": 254
+                  }
+                },
+                "loc": {
+                  "start": 248,
+                  "end": 254
+                }
+              },
+              "loc": {
+                "start": 248,
+                "end": 255
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 244,
+              "end": 255
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "getStudyItem",
+          "loc": {
+            "start": 231,
+            "end": 243
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 244,
+                "end": 246
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 248,
+                    "end": 254
+                  }
+                },
+                "loc": {
+                  "start": 248,
+                  "end": 254
+                }
+              },
+              "loc": {
+                "start": 248,
+                "end": 255
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 244,
+              "end": 255
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "StudyItem",
+            "loc": {
+              "start": 258,
+              "end": 267
+            }
+          },
+          "loc": {
+            "start": 258,
+            "end": 267
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 231,
+          "end": 267
+        }
+      }
+    }
+  ],
+  "mutations": [
+    {
+      "name": "addStudyItem",
+      "type": "StudyItem",
+      "args": [
+        {
+          "name": "subject",
+          "type": "String!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 314,
+                "end": 321
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 323,
+                    "end": 329
+                  }
+                },
+                "loc": {
+                  "start": 323,
+                  "end": 329
+                }
+              },
+              "loc": {
+                "start": 323,
+                "end": 330
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 314,
+              "end": 330
+            }
+          }
+        },
+        {
+          "name": "duration",
+          "type": "Int!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "duration",
+              "loc": {
+                "start": 332,
+                "end": 340
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "Int",
+                  "loc": {
+                    "start": 342,
+                    "end": 345
+                  }
+                },
+                "loc": {
+                  "start": 342,
+                  "end": 345
+                }
+              },
+              "loc": {
+                "start": 342,
+                "end": 346
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 332,
+              "end": 346
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "addStudyItem",
+          "loc": {
+            "start": 301,
+            "end": 313
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "subject",
+              "loc": {
+                "start": 314,
+                "end": 321
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "String",
+                  "loc": {
+                    "start": 323,
+                    "end": 329
+                  }
+                },
+                "loc": {
+                  "start": 323,
+                  "end": 329
+                }
+              },
+              "loc": {
+                "start": 323,
+                "end": 330
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 314,
+              "end": 330
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "duration",
+              "loc": {
+                "start": 332,
+                "end": 340
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "Int",
+                  "loc": {
+                    "start": 342,
+                    "end": 345
+                  }
+                },
+                "loc": {
+                  "start": 342,
+                  "end": 345
+                }
+              },
+              "loc": {
+                "start": 342,
+                "end": 346
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 332,
+              "end": 346
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "StudyItem",
+            "loc": {
+              "start": 349,
+              "end": 358
+            }
+          },
+          "loc": {
+            "start": 349,
+            "end": 358
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 301,
+          "end": 358
+        }
+      }
+    }
+  ],
+  "subscriptions": [],
+  "objects": [
+    "StudyItem"
+  ],
+  "interfaces": [
+    "Record"
+  ],
+  "inputs": [],
+  "directives": [
+    "@deprecated",
+    "@specifiedBy"
+  ]
+}
+`
+
 exports[`tests/unit/graphql.test.ts TAP > returns schema types map 1`] = `
 {
   "queries": {
@@ -5231,6 +5223,14 @@ exports[`tests/unit/graphql.test.ts TAP > returns types and interfaces extending
   ],
   "interfaces": [
     "Canine"
+  ]
+}
+`
+
+exports[`tests/unit/graphql.test.ts TAP > returns unions using a type 1`] = `
+{
+  "unions": [
+    "Task"
   ]
 }
 `
