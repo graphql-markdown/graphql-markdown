@@ -60,12 +60,6 @@ const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
   "../__data__/schema_with_custom_root_types.graphql"
 );
 
-(t as any).snapshotFile = path.resolve(
-  __dirname,
-  "__snapshots__",
-  "graphql.test.cjs"
-);
-
 t.test("graphql", async () => {
   let schema: GraphQLSchema;
   const fileLoader = new GraphQLFileLoader();
