@@ -4,3 +4,4 @@ node-arg :
   - "--no-warnings"
 coverage: false,
 ts: false
+test-ignore: .*__snapshots__.*
