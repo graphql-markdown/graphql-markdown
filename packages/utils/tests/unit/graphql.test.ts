@@ -24,8 +24,6 @@ import {
   GraphQLNamedType,
   GraphQLType,
   GraphQLField,
-  // GraphQLInputObjectTypeConfig,
-  // GraphQLInputFieldConfig,
 } from "graphql";
 
 import {
