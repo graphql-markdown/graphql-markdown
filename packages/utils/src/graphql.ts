@@ -364,24 +364,25 @@ export const getSchemaMap = (schema: GraphQLSchema): SchemaMap => {
 const mapRelationOf = (
   relations: Partial<RelationOf>,
   schema: GraphQLSchema,
-  callback: <T>(relationName: string, relationType: T, results: T[]) => T[]
+  //   callback: <T>(relationName: string, relationType: T, results: T[]) => T[]
+  callback: Function
 ): Partial<RelationOf> => {
   const schemaMap = getSchemaMap(schema);
+  const res = Object.assign(relations);
 
   for (const relation of Object.keys(relations) as RelationType[]) {
-    const entity: ObjMap<unknown> = schemaMap[relation] as ObjMap<unknown>;
-    if (typeof entity === "undefined") {
+    if (typeof schemaMap[relation] === "undefined") {
       continue;
     }
 
-    let results = [] as ReturnType<typeof callback>;
+    const entity = schemaMap[relation] as ObjMap<unknown>;
+    let results = [] as any; // as ReturnType<typeof callback>;
     for (const [relationName, relationType] of Object.entries(entity)) {
       results = callback(relationName, relationType, results);
     }
-    relations[relation] = results;
+    res[relation] = results;
   }
-
-  return relations;
+  return res;
 };
 
 export const getRelationOfReturn = (
@@ -398,7 +399,7 @@ export const getRelationOfReturn = (
     relations,
     schema,
     (
-      relationName,
+      relationName: string,
       relationType: GraphQLField<unknown, unknown, unknown>,
       results: GraphQLField<unknown, unknown, unknown>[]
     ): GraphQLField<unknown, unknown, unknown>[] => {
@@ -499,13 +500,16 @@ export const getRelationOfInterface = (
       relationName: string,
       relationType: GraphQLInterfaceType,
       results: GraphQLNamedType[]
-    ) => {
+    ): GraphQLNamedType[] => {
+      const interfaces = relationType.getInterfaces();
       if (
-        relationType
-          .getInterfaces()
-          .find((subType: GraphQLInterfaceType) => subType.name === type.name)
+        typeof interfaces.find(
+          (subType: GraphQLInterfaceType) => subType.name === type.name
+        ) !== "undefined"
       ) {
-        if (!results.find((r) => r.name === relationName)) {
+        if (
+          typeof results.find((r) => r.name === relationName) === "undefined"
+        ) {
           results.push(relationType);
         }
       }

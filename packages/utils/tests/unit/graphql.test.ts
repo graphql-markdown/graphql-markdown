@@ -39,10 +39,10 @@ import {
   isOperation,
   getDocumentLoaders,
   getRelationOfInterface,
-  // getRelationOfUnion,
-  // getRelationOfReturn,
-  // getRelationOfField,
-  // getRelationOfImplementation,
+  getRelationOfUnion,
+  getRelationOfReturn,
+  getRelationOfField,
+  getRelationOfImplementation,
   getLoader,
   ModuleName,
   ClassName,
@@ -451,162 +451,153 @@ t.test("graphql", async () => {
 
       const relations = getRelationOfInterface(interfaceType, schema);
 
-      t.equal(relations, {
-        interfaces: ["Canine"],
-        objects: ["Dog"],
-      });
+      t.matchSnapshot(JSON.stringify(relations, null, 2));
     });
   });
 
-  // t.test("getRelationOfUnion", async () => {
-  //   t.test("returns unions using a type", async () => {
-  //     const schema = buildSchema(`
-  //   type StudyItem {
-  //     id: ID!
-  //     subject: String!
-  //     duration: Int!
-  //   }
+  t.test("getRelationOfUnion", async () => {
+    t.test("returns unions using a type", async () => {
+      const schema = buildSchema(`
+    type StudyItem {
+      id: ID!
+      subject: String!
+      duration: Int!
+    }
 
-  //   type Meeting {
-  //     id: ID!
-  //     topic: String!
-  //   }
+    type Meeting {
+      id: ID!
+      topic: String!
+    }
 
-  //   type Shopping {
-  //     id: ID!
-  //   }
+    type Shopping {
+      id: ID!
+    }
 
-  //   union Task = StudyItem | Meeting | Shopping
+    union Task = StudyItem | Meeting | Shopping
 
-  //   type Schedule {
-  //     task: Task
-  //   }
-  // `);
+    type Schedule {
+      task: Task
+    }
+  `);
 
-  //     const compositeType = schema.getType("Meeting") as GraphQLNamedType;
+      const compositeType = schema.getType("Meeting") as GraphQLNamedType;
 
-  //     const relations = getRelationOfUnion(compositeType, schema);
+      const relations = getRelationOfUnion(compositeType, schema);
 
-  //     t.same(relations, {
-  //       unions: ["Task"],
-  //     });
-  //   });
-  // });
+      t.matchSnapshot(JSON.stringify(relations, null, 2));
+    });
+  });
 
-  // t.test("getRelationOfImplementation", async () => {
-  //   t.test("returns implementations compatible with type", async ({ same }) => {
-  //     const schema = buildSchema(`
-  //   interface Being {
-  //     name(surname: Boolean): String
-  //   }
+  t.test("getRelationOfImplementation", async () => {
+    t.test("returns implementations compatible with type", async () => {
+      const schema = buildSchema(`
+    interface Being {
+      name(surname: Boolean): String
+    }
 
-  //   interface Mammal {
-  //     mother: Mammal
-  //     father: Mammal
-  //   }
+    interface Mammal {
+      mother: Mammal
+      father: Mammal
+    }
 
-  //   interface Canine implements Mammal & Being {
-  //     name(surname: Boolean): String
-  //     mother: Canine
-  //     father: Canine
-  //   }
+    interface Canine implements Mammal & Being {
+      name(surname: Boolean): String
+      mother: Canine
+      father: Canine
+    }
 
-  //   type Dog implements Being & Mammal & Canine {
-  //     name(surname: Boolean): String
-  //     nickname: String
-  //     mother: Dog
-  //     father: Dog
-  //   }
+    type Dog implements Being & Mammal & Canine {
+      name(surname: Boolean): String
+      nickname: String
+      mother: Dog
+      father: Dog
+    }
 
-  //   type Cat implements Being & Mammal {
-  //     name(surname: Boolean): String
-  //     nickname: String
-  //     mother: Dog
-  //     father: Dog
-  //   }
+    type Cat implements Being & Mammal {
+      name(surname: Boolean): String
+      nickname: String
+      mother: Dog
+      father: Dog
+    }
 
-  //   union Pet = Dog | Cat | Being
-  // `);
+    union Pet = Dog | Cat | Being
+  `);
 
-  //     const compositeType = schema.getType("Being") as GraphQLNamedType;
+      const compositeType = schema.getType("Being") as GraphQLNamedType;
 
-  //     const relations = getRelationOfImplementation(compositeType, schema);
+      const relations = getRelationOfImplementation(compositeType, schema);
 
-  //     same(relations, {
-  //       interfaces: ["Canine"],
-  //       objects: ["Dog", "Cat"],
-  //       unions: ["Pet"],
-  //     });
-  //   });
-  // });
+      t.matchSnapshot(JSON.stringify(relations, null, 2));
+    });
+  });
 
-  //   t.test("getRelationOfReturn", async () => {
-  //     t.test(
-  //       "returns queries, subscriptions and mutations using a type",
-  //       async () => {
-  //         const schema = buildSchema(`
-  //   type StudyItem {
-  //     id: ID!
-  //     subject: String!
-  //     duration: Int!
-  //   }
+  t.test("getRelationOfReturn", async () => {
+    t.test(
+      "returns queries, subscriptions and mutations using a type",
+      async () => {
+        const schema = buildSchema(`
+    type StudyItem {
+      id: ID!
+      subject: String!
+      duration: Int!
+    }
 
-  //   type Query {
-  //     getStudyItems(subject: String): [StudyItem!]
-  //     getStudyItem(id: ID!): StudyItem
-  //   }
+    type Query {
+      getStudyItems(subject: String): [StudyItem!]
+      getStudyItem(id: ID!): StudyItem
+    }
 
-  //   type Mutation {
-  //     addStudyItem(subject: String!, duration: Int!): StudyItem
-  //   }
+    type Mutation {
+      addStudyItem(subject: String!, duration: Int!): StudyItem
+    }
 
-  //   type Subscription {
-  //     listStudyItems: [StudyItem!]
-  //   }
-  // `);
+    type Subscription {
+      listStudyItems: [StudyItem!]
+    }
+  `);
 
-  //         const compositeType = schema.getType("StudyItem") as GraphQLNamedType;
-  //         const relations = getRelationOfReturn(compositeType, schema);
+        const compositeType = schema.getType("StudyItem") as GraphQLNamedType;
+        const relations = getRelationOfReturn(compositeType, schema);
 
-  //         t.matchSnapshot(relations);
-  //       }
-  //     );
-  //   });
+        t.matchSnapshot(relations);
+      }
+    );
+  });
 
-  //   t.test("getRelationOfField", async () => {
-  //     t.test(
-  //       "returns queries, subscriptions and mutations using a type",
-  //       async () => {
-  //         const schema = buildSchema(`
-  //   interface Record {
-  //     id: String!
-  //   }
+  t.test("getRelationOfField", async () => {
+    t.test(
+      "returns queries, subscriptions and mutations using a type",
+      async () => {
+        const schema = buildSchema(`
+    interface Record {
+      id: String!
+    }
 
-  //   type StudyItem implements Record {
-  //     id: String!
-  //     subject: String!
-  //     duration: Int!
-  //   }
+    type StudyItem implements Record {
+      id: String!
+      subject: String!
+      duration: Int!
+    }
 
-  //   type Query {
-  //     getStudyItems(subject: String): [StudyItem!]
-  //     getStudyItem(id: String!): StudyItem
-  //   }
+    type Query {
+      getStudyItems(subject: String): [StudyItem!]
+      getStudyItem(id: String!): StudyItem
+    }
 
-  //   type Mutation {
-  //     addStudyItem(subject: String!, duration: Int!): StudyItem
-  //   }
+    type Mutation {
+      addStudyItem(subject: String!, duration: Int!): StudyItem
+    }
 
-  //   type Subscription {
-  //     listStudyItems: [StudyItem!]
-  //   }
-  // `);
+    type Subscription {
+      listStudyItems: [StudyItem!]
+    }
+  `);
 
-  //         const compositeType = schema.getType("String") as GraphQLNamedType;
-  //         const relations = getRelationOfField(compositeType, schema);
+        const compositeType = schema.getType("String") as GraphQLNamedType;
+        const relations = getRelationOfField(compositeType, schema);
 
-  //         t.matchSnapshot(relations);
-  //       }
-  //     );
-  //   });
+        t.matchSnapshot(relations);
+      }
+    );
+  });
 });
