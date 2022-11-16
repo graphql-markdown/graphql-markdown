@@ -62,7 +62,6 @@ const SCHEMA_CUSTOM_ROOT_FILE = path.resolve(
 
 (t as any).snapshotFile = path.resolve(
   __dirname,
-  "..",
   "__snapshots__",
   "graphql.test.cjs"
 );

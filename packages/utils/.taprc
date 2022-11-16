@@ -4,4 +4,4 @@ node-arg :
   - "--no-warnings"
 coverage: false,
 ts: false
-test-ignore: .*__snapshots__.*
+test-regex: (\/|^)tests\/.*\.(test|spec)\.ts$
