@@ -14,3 +14,5 @@ nyc.config.js
 stryker.conf.js
 .eslintrc.js   
 .prettierrc.js
+
+tsconfig.tsbuildinfo

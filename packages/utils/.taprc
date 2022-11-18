@@ -4,4 +4,3 @@ node-arg :
   - "--no-warnings"
 coverage: false,
 ts: false
-test-regex: (\/|^)tests\/.*\.(test|spec)\.ts$
