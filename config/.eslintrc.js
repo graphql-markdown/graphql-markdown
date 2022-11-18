@@ -33,8 +33,6 @@ module.exports = {
         "eslint:recommended",
         "plugin:prettier/recommended",
         "prettier",
-        "plugin:jest/recommended",
-        "plugin:jest/style",
       ],
     },
   ],

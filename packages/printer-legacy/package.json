@@ -18,7 +18,8 @@
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "jest",
+    "test": "tap",
+    "snap": "tap",
     "stryker": "stryker run"
   },
   "dependencies": {

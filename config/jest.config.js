@@ -1,4 +1,5 @@
 module.exports = {
+  transformIgnorePatterns: ["/workspaces/graphql-markdown/packages/utils/"],
   extensionsToTreatAsEsm: [".ts"],
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],

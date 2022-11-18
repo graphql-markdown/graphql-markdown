@@ -14,26 +14,26 @@
   "author": {
     "name": "Gregory Heitz"
   },
-  "type": "module",
+  "type": "commonjs",
   "exports": {
     ".": "./dist/index.js",
-    "./array": "./build/array.js",
-    "./fs": "./build/fs.js",
-    "./graphql": "./build/graphql.js",
-    "./object": "./build/object.js",
-    "./prettier": "./build/prettier.js",
-    "./string": "./build/string.js",
-    "./url": "./build/url.js"
+    "./array": "./dist/array.js",
+    "./fs": "./dist/fs.js",
+    "./graphql": "./dist/graphql.js",
+    "./object": "./dist/object.js",
+    "./prettier": "./dist/prettier.js",
+    "./string": "./dist/string.js",
+    "./url": "./dist/url.js"
   },
   "typesVersions": {
     "*": {
-      "array": ["build/array.d.ts"],
-      "fs": ["build/fs.d.ts"],
-      "graphql": ["build/graphql.ts"],
-      "object": ["build/object.ts"],
-      "prettier": ["build/prettier.d.ts"],
-      "string": ["build/string.d.ts"],
-      "url": ["build/url.d.ts"]
+      "array": ["dist/array.d.ts"],
+      "fs": ["dist/fs.d.ts"],
+      "graphql": ["dist/graphql.ts"],
+      "object": ["dist/object.ts"],
+      "prettier": ["dist/prettier.d.ts"],
+      "string": ["dist/string.d.ts"],
+      "url": ["dist/url.d.ts"]
     }
   },
   "scripts": {

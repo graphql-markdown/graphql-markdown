@@ -544,5 +544,5 @@ export const isParametrizedField = (
 export const isOperation = (
   type: unknown
 ): type is GraphQLObjectType<unknown, unknown> => {
-  return "type" in (type as any);
+  return typeof type === "object" && "type" in (type as any);
 };
