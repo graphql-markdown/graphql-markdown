@@ -100,7 +100,7 @@ export type LoadersType = {
 };
 
 export type DocumentLoaders = {
-  loaders: readonly Loader[];
+  loaders: Loader[];
   loaderOptions: ModuleOptions;
 };
 

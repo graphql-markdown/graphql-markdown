@@ -7,7 +7,6 @@
   },
   "version": "1.15.2",
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
@@ -23,6 +22,10 @@
   ],
   "author": {
     "name": "Gregory Heitz"
+  },
+  "type": "commonjs",
+  "exports": {
+    ".": "./dist/index.js"
   },
   "scripts": {
     "prepack": "pinst --disable",

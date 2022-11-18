@@ -1,25 +1,32 @@
-const {
+import {
   getSchemaMap,
   loadSchema,
   getDocumentLoaders,
-} = require("@graphql-markdown/utils/graphql");
-const { getGroups } = require("./group-info");
-const Renderer = require("./renderer");
+  GraphQLSchema,
+} from "@graphql-markdown/utils/graphql";
+
+import { getGroups  }from "./groupInfo";
+import Renderer from "./renderer";
+import { ConfigOptions, IPrinter, PrintTypeOptions } from "./type";
 
 const time = process.hrtime();
 
-const hasChanges = async (
-  schema,
-  tmpDir,
-  diffMethod,
-  diffModule = "@graphql-markdown/diff",
-) => {
-  if (typeof diffMethod === "undefined" || diffMethod == null) {
+export const hasChanges = async (
+  schema: GraphQLSchema,
+  tmpDir: string,
+  diffMethod?: string,
+  diffModule?: string,
+): Promise<boolean> => {
+  if (typeof diffMethod === "undefined" || diffMethod === null) {
+    return true;
+  }
+
+  if (typeof diffModule !== "string") {
     return true;
   }
 
   try {
-    const { checkSchemaChanges } = require(diffModule);
+    const { checkSchemaChanges } = await import(diffModule);
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch (error) {
     console.warn(
@@ -30,23 +37,17 @@ const hasChanges = async (
   return true;
 };
 
-const getPrinter = (
-  schema,
-  baseURL,
-  linkRoot,
-  groups,
-  printTypeOptions,
-  printerModule,
-  skipDocDirective,
-) => {
-  if (typeof printerModule !== "string") {
-    throw new Error(
-      "Invalid printer module name in printTypeOptions settings.",
-    );
-  }
-
+export const getPrinter = async (
+  schema: GraphQLSchema,
+  baseURL: string,
+  linkRoot: string,
+  groups: Record<string, unknown> | undefined,
+  printTypeOptions: PrintTypeOptions,
+  printerModule: string,
+  skipDocDirective: string | undefined,
+): Promise<IPrinter> => {
   try {
-    const Printer = require(printerModule);
+    const Printer = await import(printerModule);
     return new Printer(schema, baseURL, linkRoot, {
       groups,
       printTypeOptions,
@@ -59,24 +60,24 @@ const getPrinter = (
   }
 };
 
-const generateDocFromSchema = async ({
+export const generateDocFromSchema = async ({
   baseURL,
-  schemaLocation,
+  schema: schemaLocation,
   outputDir,
   linkRoot,
-  homepageLocation,
+  homepage: homepageLocation,
   diffMethod,
   tmpDir,
   loaders: loadersList,
   groupByDirective,
-  prettify,
+  pretty: prettify,
   docOptions,
   printTypeOptions,
   printer: printerModule,
   skipDocDirective,
-}) => {
-  const loaders = getDocumentLoaders(loadersList);
-  const schema = await loadSchema(schemaLocation, loaders);
+}: ConfigOptions): Promise<void> => {
+  const { loaders, loaderOptions } = await getDocumentLoaders(loadersList);
+  const schema = await loadSchema(schemaLocation, { ...loaderOptions, loaders });
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
   if (!changed) {
@@ -84,7 +85,7 @@ const generateDocFromSchema = async ({
   }
 
   const rootTypes = getSchemaMap(schema);
-  const groups = new getGroups(rootTypes, groupByDirective);
+  const groups = getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
     schema,
     baseURL,
@@ -129,4 +130,4 @@ const generateDocFromSchema = async ({
   );
 };
 
-module.exports = { getPrinter, hasChanges, generateDocFromSchema };
+export default generateDocFromSchema;

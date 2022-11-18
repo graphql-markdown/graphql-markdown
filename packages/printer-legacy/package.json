@@ -7,13 +7,16 @@
   },
   "version": "1.1.0",
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
   "author": {
     "name": "Gregory Heitz"
+  },
+  "type": "commonjs",
+  "exports": {
+    ".": "./dist/printer.js"
   },
   "scripts": {
     "build": "tsc --build --clean && tsc",
@@ -24,6 +27,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
+    "@graphql-markdown/core": "^1.1.0",
     "@graphql-markdown/utils": "^1.1.0"
   },
   "directories": {

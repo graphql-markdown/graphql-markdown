@@ -1,22 +1,25 @@
 /* istanbul ignore file */
-const { generateDocFromSchema, config } = require("@graphql-markdown/core");
+import type { LoadContext } from '@docusaurus/types';
+import type { Command } from 'commander';
 
-const NAME = "docusaurus-graphql-doc-generator";
-const COMMAND = "graphql-to-doc";
-const DESCRIPTION = "Generate GraphQL Schema Documentation";
-const DEFAULT_ID = "default";
+import { generateDocFromSchema, config } from "@graphql-markdown/core";
 
-module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
-  const isDefaultId = configOptions.id === DEFAULT_ID;
+const NAME: string = "docusaurus-graphql-doc-generator";
+const COMMAND: string = "graphql-to-doc";
+const DESCRIPTION: string = "Generate GraphQL Schema Documentation";
+const DEFAULT_ID: string = "default";
 
-  const command = isDefaultId ? COMMAND : `${COMMAND}:${configOptions.id}`;
-  const description = isDefaultId
+export default (_: LoadContext, configOptions: any) => {
+  const isDefaultId: boolean = configOptions.id === DEFAULT_ID;
+
+  const command: string = isDefaultId ? COMMAND : `${COMMAND}:${configOptions.id}`;
+  const description: string = isDefaultId
     ? DESCRIPTION
     : `${DESCRIPTION} for configuration with id ${configOptions.id}`;
 
   return {
     name: NAME,
-    extendCli(cli) {
+    extendCli(cli: Command) {
       cli
         .command(command)
         .description(description)

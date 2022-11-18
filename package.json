@@ -129,6 +129,7 @@
     }
   },
   "devDependencies": {
+    "@docusaurus/types": "^2.2.0",
     "@graphql-tools/graphql-file-loader": "7.5.10",
     "@graphql-tools/load": "7.8.4",
     "@stryker-mutator/core": "6.3.0",

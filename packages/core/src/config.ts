@@ -1,20 +1,22 @@
-const { join } = require("node:path");
-const { tmpdir } = require("node:os");
+import { join } from "node:path";
+import { tmpdir }  from "node:os";
 
-const { parseGroupByOption } = require("./group-info");
+import { DocumentLoaders } from "@graphql-markdown/utils/graphql";
 
-const PACKAGE_NAME = "@graphql-markdown/docusaurus";
-const ASSETS_LOCATION = join(__dirname, "../assets/");
+import { parseGroupByOption }  from "./groupInfo";
+import { DocOptions, PluginOptions, PrintTypeOptions, CliOptions, ConfigOptions, CliPrintTypeOptions, CliDocOptions } from "./type";
 
-const DEFAULT_OPTIONS = {
+export const PACKAGE_NAME: string = "@graphql-markdown/docusaurus";
+export const ASSETS_LOCATION: string = join(__dirname, "../assets/");
+
+export const DEFAULT_OPTIONS: PluginOptions = {
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "schema",
   linkRoot: "/",
   homepage: join(ASSETS_LOCATION, "generated.md"),
-  diffMethod: undefined,
   tmpDir: join(tmpdir(), PACKAGE_NAME),
-  loaders: {},
+  loaders: {} as DocumentLoaders,
   pretty: false,
   printer: "@graphql-markdown/printer-legacy",
   docOptions: {
@@ -26,35 +28,32 @@ const DEFAULT_OPTIONS = {
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
-  },
-  skipDocDirective: undefined,
+  }
 };
 
-function buildConfig(configFileOpts, cliOpts) {
-  let config = DEFAULT_OPTIONS;
+export const buildConfig = (cliOpts: CliOptions, configFileOpts?: PluginOptions): ConfigOptions => {
+  let config: PluginOptions = DEFAULT_OPTIONS;
 
-  if (typeof configFileOpts !== "undefined" && configFileOpts != null) {
+  if (typeof configFileOpts !== "undefined" && configFileOpts !== null) {
     config = { ...DEFAULT_OPTIONS, ...configFileOpts };
   }
 
-  if (typeof cliOpts === "undefined" || cliOpts == null) {
-    cliOpts = {};
-  }
-
-  const baseURL = cliOpts.base ?? config.baseURL;
+  const baseURL: string = cliOpts.base ?? config.baseURL;
+  const rootPath: string = cliOpts.root ?? config.rootPath;
 
   return {
     baseURL,
-    schemaLocation: cliOpts.schema ?? config.schema,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
+    rootPath,
+    schema: cliOpts.schema ?? config.schema,
+    outputDir: join(rootPath, baseURL),
     linkRoot: cliOpts.link ?? config.linkRoot,
-    homepageLocation: cliOpts.homepage ?? config.homepage,
+    homepage: cliOpts.homepage ?? config.homepage,
     diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
     tmpDir: cliOpts.tmp ?? config.tmpDir,
     loaders: config.loaders,
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
-    prettify: cliOpts.pretty ?? config.pretty,
+    pretty: cliOpts.pretty ?? config.pretty,
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
@@ -64,11 +63,11 @@ function buildConfig(configFileOpts, cliOpts) {
   };
 }
 
-function getDiffMethod(diff, force) {
+const getDiffMethod = (diff: string | undefined, force: boolean): string | undefined => {
   return force ? "FORCE" : diff;
 }
 
-function getDocOptions(cliOpts, configOptions) {
+const getDocOptions = (cliOpts: CliDocOptions, configOptions: DocOptions): DocOptions => {
   return {
     pagination: !cliOpts.noPagination && configOptions.pagination,
     toc: !cliOpts.noToc && configOptions.toc,
@@ -76,7 +75,7 @@ function getDocOptions(cliOpts, configOptions) {
   };
 }
 
-function gePrintTypeOptions(cliOpts, configOptions) {
+function gePrintTypeOptions(cliOpts: CliPrintTypeOptions, configOptions: PrintTypeOptions): PrintTypeOptions {
   return {
     parentTypePrefix: !cliOpts.noParentType && configOptions.parentTypePrefix,
     relatedTypeSection:
@@ -85,7 +84,7 @@ function gePrintTypeOptions(cliOpts, configOptions) {
   };
 }
 
-function getSkipDocDirective(option) {
+function getSkipDocDirective(option: string | undefined): string | undefined {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
   if (typeof option !== "string") {
@@ -94,11 +93,10 @@ function getSkipDocDirective(option) {
 
   const parsedOption = OPTION_REGEX.exec(option);
 
-  if (typeof parsedOption === "undefined" || parsedOption == null) {
+  if (typeof parsedOption === "undefined" || parsedOption == null || typeof parsedOption.groups === "undefined") {
     throw new Error(`Invalid "${option}"`);
   }
 
-  return parsedOption.groups.directive;
+  return parsedOption.groups['directive'];
 }
 
-module.exports = { buildConfig, DEFAULT_OPTIONS, ASSETS_LOCATION };

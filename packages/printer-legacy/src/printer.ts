@@ -1,5 +1,6 @@
 import { Maybe } from "graphql/jsutils/Maybe";
 
+import { IPrinter } from "@graphql-markdown/core/type";
 import { toSlug, escapeMDX } from "@graphql-markdown/utils/string";
 import { pathUrl } from "@graphql-markdown/utils/url";
 import {
@@ -54,15 +55,15 @@ type SectionLevel = {
   parentType?: string;
 };
 
-export class Printer {
-  readonly schema: GraphQLSchema;
-  readonly baseURL: string;
-  readonly linkRoot: string;
-  readonly groups: any;
-  readonly parentTypePrefix: boolean;
-  readonly relatedTypeSection: boolean;
-  readonly typeBadges: boolean;
-  readonly skipDocDirective: any;
+export class Printer implements IPrinter {
+  schema: GraphQLSchema;
+  baseURL: string;
+  linkRoot: string;
+  groups: any;
+  parentTypePrefix: boolean;
+  relatedTypeSection: boolean;
+  typeBadges: boolean;
+  skipDocDirective: any;
 
   constructor(
     schema: GraphQLSchema,
@@ -87,6 +88,7 @@ export class Printer {
     this.typeBadges = printTypeOptions?.typeBadges ?? true;
     this.skipDocDirective = skipDocDirective ?? undefined;
   }
+
 
   getRootTypeLocaleFromString(text: string): Maybe<TypeLocale> {
     for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {

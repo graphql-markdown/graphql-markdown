@@ -1,37 +1,47 @@
-const path = require("node:path");
+import path from "node:path";
 
-const { hasProperty } = require("@graphql-markdown/utils/object");
-const { toSlug, startCase } = require("@graphql-markdown/utils/string");
-const { pathUrl } = require("@graphql-markdown/utils/url");
-const { hasDirective } = require("@graphql-markdown/utils/graphql");
-const {
+import { hasProperty } from "@graphql-markdown/utils/object";
+import { toSlug, startCase } from "@graphql-markdown/utils/string";
+import { pathUrl } from "@graphql-markdown/utils/url";
+import { hasDirective } from "@graphql-markdown/utils/graphql";
+import {
   prettifyJavascript,
   prettifyMarkdown,
-} = require("@graphql-markdown/utils/prettier");
-const {
+} from "@graphql-markdown/utils/prettier";
+import {
   saveFile,
   ensureDir,
   copyFile,
   readFile,
   fileExists,
-} = require("@graphql-markdown/utils/fs");
+} from "@graphql-markdown/utils/fs";
 
-const { ASSETS_LOCATION } = require("./config");
+import { ASSETS_LOCATION } from "./config";
+import { DocOptions, IPrinter } from "./type";
+import { GraphQLNamedType } from "graphql/type/definition";
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
 
-module.exports = class Renderer {
+export default class {
+    readonly printer: IPrinter;
+    readonly outputDir: string;
+    readonly baseURL: string;
+    readonly group: any;
+    readonly prettify: boolean;
+    readonly options: DocOptions;
+    readonly skipDocDirective: string;
+
   constructor(
-    printer,
-    outputDir,
-    baseURL,
-    group,
-    prettify,
-    docOptions,
-    skipDocDirective,
+    printer: IPrinter,
+    outputDir: string,
+    baseURL: string,
+    group: any,
+    prettify: boolean,
+    docOptions: DocOptions,
+    skipDocDirective: string,
   ) {
     this.group = group;
     this.outputDir = outputDir;
@@ -42,10 +52,11 @@ module.exports = class Renderer {
     this.skipDocDirective = skipDocDirective;
   }
 
-  async generateCategoryMetafile(category, dirPath) {
+  async generateCategoryMetafile(category: string, dirPath: string): Promise<void> {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
-    if (await fileExists(filePath)) {
+    const metafileExists = await fileExists(filePath)
+    if (metafileExists) {
       return;
     }
 
@@ -60,7 +71,7 @@ module.exports = class Renderer {
     await saveFile(filePath, `label: ${label}\nlink: ${link}\n`);
   }
 
-  async renderRootTypes(rootTypeName, type) {
+  async renderRootTypes(rootTypeName: string, type: GraphQLNamedType) {
     if (typeof type !== "object" || type === null) {
       return undefined;
     }
@@ -78,13 +89,13 @@ module.exports = class Renderer {
           dirPath = path.join(dirPath, toSlug(rootTypeName));
           await this.generateCategoryMetafile(rootTypeName, dirPath);
 
-          return this.renderTypeEntities(dirPath, name, type[name]);
+          return this.renderTypeEntities(dirPath, name, (type as any)[name]);
         })
         .filter((res) => typeof res !== "undefined"),
     );
   }
 
-  async renderTypeEntities(dirPath, name, type) {
+  async renderTypeEntities(dirPath: string, name: string, type: GraphQLNamedType) {
     if (
       typeof type === "undefined" ||
       type === null ||
@@ -111,9 +122,9 @@ module.exports = class Renderer {
     return { category: startCase(page.groups.category), slug: slug };
   }
 
-  async renderSidebar() {
+  async renderSidebar(): Promise<string> {
     const sidebar = {
-      schemaSidebar: schemaSidebar.map((entry) => {
+      schemaSidebar: schemaSidebar.map((entry: any) => {
         switch (entry.type) {
           case "doc":
             entry.id = pathUrl.join(this.baseURL, HOMEPAGE_ID);
@@ -142,7 +153,7 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
     return path.relative("./", filePath);
   }
 
-  async renderHomepage(homepageLocation) {
+  async renderHomepage(homepageLocation: string): Promise<void> {
     const homePage = path.basename(homepageLocation);
     const destLocation = path.join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);

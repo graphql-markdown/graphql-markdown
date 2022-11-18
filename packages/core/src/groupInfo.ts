@@ -1,30 +1,31 @@
-const { convertArrayToObject } = require("@graphql-markdown/utils/array");
+import { convertArrayToObject } from "@graphql-markdown/utils/array";
+import { GroupByDirective } from "./type";
 
-const DEFAULT_GROUP = "Miscellaneous";
-const OPTION_REGEX =
+const DEFAULT_GROUP: string = "Miscellaneous";
+const OPTION_REGEX: RegExp =
   /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
 
-function parseGroupByOption(groupOptions) {
-  if (typeof groupOptions !== "string") {
+export const parseGroupByOption = (groupOptions?: string): GroupByDirective | undefined => {
+  if (typeof groupOptions !== "string" || groupOptions === null) {
     return undefined;
   }
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions === "undefined" || parsedOptions == null) {
+  if (typeof parsedOptions === "undefined" || parsedOptions === null || typeof parsedOptions.groups === undefined) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
-  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups;
+  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups as GroupByDirective;
   return { directive, field, fallback };
 }
 
-function getGroups(rootTypes, groupByDirective) {
-  let groups = {};
-
+export const getGroups = (rootTypes: any, groupByDirective: GroupByDirective | undefined): Record<string, unknown> | undefined => {
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
+
+  let groups: Record<string, unknown> = {};
 
   Object.keys(rootTypes).forEach((typeName) => {
     let rootType = rootTypes[typeName];
@@ -42,8 +43,8 @@ function getGroups(rootTypes, groupByDirective) {
   return groups;
 }
 
-function getGroupName(type, groupByDirective) {
-  let group = groupByDirective.fallback; // default value is fallback, and it will be only overridden if a group is found
+export const getGroupName = (type: any, groupByDirective: GroupByDirective): string => {
+  let group: string = groupByDirective.fallback as string; // default value is fallback, and it will be only overridden if a group is found
 
   if (typeof type.astNode === "undefined" || type.astNode == null) {
     return group;
@@ -60,12 +61,10 @@ function getGroupName(type, groupByDirective) {
       continue;
     }
     const field = directive.arguments.find(
-      ({ name }) => name.value === groupByDirective.field,
+      ({ name }: any) => name.value === groupByDirective.field,
     );
     return field.value.value;
   }
 
   return group;
 }
-
-module.exports = { getGroupName, getGroups, parseGroupByOption };
