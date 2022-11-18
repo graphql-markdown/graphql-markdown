@@ -534,7 +534,7 @@ export const getRelationOfImplementation = (
 export const isParametrizedField = (
   type: unknown
 ): type is GraphQLDirective | GraphQLField<unknown, unknown, unknown> => {
-  if (!("args" in (type as any))) {
+  if (typeof type !== "object" || !("args" in (type as any))) {
     return false;
   }
 
