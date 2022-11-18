@@ -1,49 +1,50 @@
-const path = require("node:path");
-const crypto = require("node:crypto");
+import path  from "node:path";
+import crypto from "node:crypto";
 
-const { diff } = require("@graphql-inspector/core");
-const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
+import { Change, diff } from "@graphql-inspector/core";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { GraphQLSchema } from "graphql/type/schema";
 
-const { printSchema, loadSchema } = require("@graphql-markdown/utils/graphql");
-const {
+import { printSchema, loadSchema } from "@graphql-markdown/utils/graphql";
+import {
   fileExists,
   readFile,
   saveFile,
-} = require("@graphql-markdown/utils/fs");
+}  from "@graphql-markdown/utils/fs";
 
-const SCHEMA_HASH_FILE = ".schema";
-const SCHEMA_REF = "schema.graphql";
-const COMPARE_METHOD = {
-  DIFF: "SCHEMA-DIFF",
-  HASH: "SCHEMA-HASH",
-  FORCE: "FORCE",
-  NONE: "NONE",
+export const SCHEMA_HASH_FILE = ".schema";
+export const SCHEMA_REF = "schema.graphql";
+export enum COMPARE_METHOD {
+  DIFF = "SCHEMA-DIFF",
+  HASH = "SCHEMA-HASH",
+  FORCE =  "FORCE",
+  NONE = "NONE",
 };
 
-function getSchemaHash(schema) {
-  const printedSchema = printSchema(schema, { commentDescriptions: true });
+const getSchemaHash = (schema: GraphQLSchema): string => {
+  const printedSchema = printSchema(schema);
   return crypto.createHash("sha256").update(printedSchema).digest("hex");
 }
 
-async function getDiff(schemaNew, schemaOldLocation) {
+const getDiff = async(schemaNew: GraphQLSchema, schemaOldLocation: string): Promise<Change[]> => {
   const schemaOld = await loadSchema(schemaOldLocation, {
     loaders: [new GraphQLFileLoader()],
   });
   return diff(schemaOld, schemaNew);
 }
 
-async function checkSchemaChanges(
-  schema,
-  outputDir,
+export const checkSchemaChanges = async (
+  schema: GraphQLSchema,
+  outputDir: string,
   method = COMPARE_METHOD.DIFF,
-) {
+): Promise<boolean> => {
   if (method === COMPARE_METHOD.DIFF) {
     const schemaRef = path.join(outputDir, SCHEMA_REF);
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
       return schemaDiff.length > 0;
     }
-    const schemaPrint = printSchema(schema);
+    const schemaPrint: string = printSchema(schema);
     await saveFile(schemaRef, schemaPrint);
   }
 
@@ -59,10 +60,3 @@ async function checkSchemaChanges(
 
   return true;
 }
-
-module.exports = {
-  checkSchemaChanges,
-  COMPARE_METHOD,
-  SCHEMA_HASH_FILE,
-  SCHEMA_REF,
-};

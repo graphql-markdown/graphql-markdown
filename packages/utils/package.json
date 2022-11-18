@@ -28,8 +28,8 @@
     "*": {
       "array": ["dist/array.d.ts"],
       "fs": ["dist/fs.d.ts"],
-      "graphql": ["dist/graphql.ts"],
-      "object": ["dist/object.ts"],
+      "graphql": ["dist/graphql.d.ts"],
+      "object": ["dist/object.d.ts"],
       "prettier": ["dist/prettier.d.ts"],
       "string": ["dist/string.d.ts"],
       "url": ["dist/url.d.ts"]

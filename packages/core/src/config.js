@@ -1,5 +1,5 @@
-const { join } = require("path");
-const { tmpdir } = require("os");
+const { join } = require("node:path");
+const { tmpdir } = require("node:os");
 
 const { parseGroupByOption } = require("./group-info");
 

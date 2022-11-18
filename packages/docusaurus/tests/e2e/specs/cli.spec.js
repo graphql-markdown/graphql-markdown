@@ -1,5 +1,5 @@
-const path = require("path");
-const { promises: fs } = require("fs");
+const path = require("node:path");
+const fs = require("node:fs/promises");
 
 const cli = require("../../helpers/cli");
 

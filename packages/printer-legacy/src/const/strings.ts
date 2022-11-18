@@ -1,4 +1,6 @@
-const ROOT_TYPE_LOCALE = {
+export type TypeLocale = { singular: string, plural: string}
+
+export const ROOT_TYPE_LOCALE: Record<string, TypeLocale> = {
   QUERY: { singular: "query", plural: "queries" },
   MUTATION: { singular: "mutation", plural: "mutations" },
   SUBSCRIPTION: { singular: "subscription", plural: "subscriptions" },
@@ -12,19 +14,10 @@ const ROOT_TYPE_LOCALE = {
   INPUT: { singular: "input", plural: "inputs" },
 };
 
-const HEADER_SECTION_LEVEL = "###";
-const HEADER_SECTION_SUB_LEVEL = "####";
-const HEADER_SECTION_ITEM_LEVEL = "#####";
-const NO_DESCRIPTION_TEXT = "No description";
-const MARKDOWN_EOL = "\n";
-const MARKDOWN_EOP = "\n\n";
+export const HEADER_SECTION_LEVEL: string = "###";
+export const HEADER_SECTION_SUB_LEVEL: string = "####";
+export const HEADER_SECTION_ITEM_LEVEL: string = "#####";
+export const NO_DESCRIPTION_TEXT: string = "No description";
+export const MARKDOWN_EOL : string= "\n";
+export const MARKDOWN_EOP: string = "\n\n";
 
-module.exports = {
-  ROOT_TYPE_LOCALE,
-  HEADER_SECTION_LEVEL,
-  HEADER_SECTION_SUB_LEVEL,
-  HEADER_SECTION_ITEM_LEVEL,
-  NO_DESCRIPTION_TEXT,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-};

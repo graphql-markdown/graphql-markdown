@@ -5,9 +5,8 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
@@ -15,7 +14,12 @@
   "author": {
     "name": "Gregory Heitz"
   },
+  "type": "commonjs",
+  "exports": {
+    ".": "./dist/diff.js"
+  },
   "scripts": {
+    "build": "tsc --build --clean && tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",

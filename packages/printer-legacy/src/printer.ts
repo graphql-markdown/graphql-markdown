@@ -1,7 +1,8 @@
-const { toSlug, escapeMDX } = require("@graphql-markdown/utils/string");
-const { hasProperty, hasMethod } = require("@graphql-markdown/utils/object");
-const { pathUrl } = require("@graphql-markdown/utils/url");
-const {
+import { Maybe } from "graphql/jsutils/Maybe";
+
+import { toSlug, escapeMDX } from "@graphql-markdown/utils/string";
+import { pathUrl } from "@graphql-markdown/utils/url";
+import {
   isEnumType,
   isUnionType,
   isObjectType,
@@ -17,14 +18,21 @@ const {
   isInputType,
   isListType,
   isNonNullType,
-  isLeafType,
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfImplementation,
   hasDirective,
-} = require("@graphql-markdown/utils/graphql");
+  GraphQLSchema,
+  GraphQLNamedType,
+  GraphQLEnumType,
+  GraphQLUnionType,
+  GraphQLScalarType,
+  RelationOf,
+  RelationTypeList,
+  GraphQLDirective,
+} from "@graphql-markdown/utils/graphql";
 
-const {
+import {
   ROOT_TYPE_LOCALE,
   HEADER_SECTION_LEVEL,
   HEADER_SECTION_SUB_LEVEL,
@@ -32,19 +40,43 @@ const {
   NO_DESCRIPTION_TEXT,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-} = require("./const/strings");
-const mdx = require("./const/mdx");
+  TypeLocale,
+} from "./const/strings";
+import mdx from "./const/mdx";
 
-module.exports = class Printer {
+type Link = {
+  text: string;
+  url: string;
+};
+
+type SectionLevel = {
+  level?: string;
+  parentType?: string;
+};
+
+export class Printer {
+  readonly schema: GraphQLSchema;
+  readonly baseURL: string;
+  readonly linkRoot: string;
+  readonly groups: any;
+  readonly parentTypePrefix: boolean;
+  readonly relatedTypeSection: boolean;
+  readonly typeBadges: boolean;
+  readonly skipDocDirective: any;
+
   constructor(
-    schema,
-    baseURL,
+    schema: GraphQLSchema,
+    baseURL: string,
     linkRoot = "/",
-    { groups, printTypeOptions, skipDocDirective } = {
-      groups: undefined,
-      printTypeOptions: undefined,
-      skipDocDirective: undefined,
-    },
+    {
+      groups,
+      printTypeOptions,
+      skipDocDirective,
+    }: {
+      groups?: any;
+      printTypeOptions?: any;
+      skipDocDirective?: any;
+    }
   ) {
     this.schema = schema;
     this.baseURL = baseURL;
@@ -56,7 +88,7 @@ module.exports = class Printer {
     this.skipDocDirective = skipDocDirective ?? undefined;
   }
 
-  getRootTypeLocaleFromString(text) {
+  getRootTypeLocaleFromString(text: string): Maybe<TypeLocale> {
     for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
       if (Object.values(props).includes(text)) {
         return ROOT_TYPE_LOCALE[type];
@@ -65,41 +97,42 @@ module.exports = class Printer {
     return undefined;
   }
 
-  getLinkCategory(graphLQLNamedType) {
+  getLinkCategory(graphLQLNamedType: GraphQLNamedType): Maybe<TypeLocale> {
     switch (true) {
       case isEnumType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.ENUM;
+        return ROOT_TYPE_LOCALE["ENUM"];
       case isUnionType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.UNION;
+        return ROOT_TYPE_LOCALE["UNION"];
       case isInterfaceType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.INTERFACE;
+        return ROOT_TYPE_LOCALE["INTERFACE"];
       case isObjectType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.TYPE;
+        return ROOT_TYPE_LOCALE["TYPE"];
       case isInputType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.INPUT;
+        return ROOT_TYPE_LOCALE["INPUT"];
       case isScalarType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.SCALAR;
+        return ROOT_TYPE_LOCALE["SCALAR"];
       case isDirectiveType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.DIRECTIVE;
+        return ROOT_TYPE_LOCALE["DIRECTIVE"];
       case isOperation(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.OPERATION;
+        return ROOT_TYPE_LOCALE["OPERATION"];
     }
     return undefined;
   }
 
-  getGroup(type) {
+  getGroup(type: GraphQLNamedType): string {
     if (typeof this.groups === "undefined") {
       return "";
     }
-    const graphLQLNamedType = getNamedType(type);
-    const typeName = graphLQLNamedType.name || graphLQLNamedType;
-    return hasProperty(this.groups, typeName)
+    const graphLQLNamedType: GraphQLNamedType = getNamedType(type);
+    const typeName: string =
+      graphLQLNamedType.name || graphLQLNamedType.toString();
+    return typeName in this.groups
       ? toSlug(this.groups[typeName])
       : "";
   }
 
-  toLink(type, name, operation) {
-    const fallback = {
+  toLink(type: GraphQLNamedType, name: string, operation?: TypeLocale): Link {
+    const fallback: Link = {
       text: name,
       url: "#",
     };
@@ -108,12 +141,13 @@ module.exports = class Printer {
       return fallback;
     }
 
-    const graphLQLNamedType = getNamedType(type);
+    const graphLQLNamedType: GraphQLNamedType = getNamedType(type);
 
-    let category = this.getLinkCategory(graphLQLNamedType);
+    let category: Maybe<TypeLocale> = this.getLinkCategory(graphLQLNamedType);
 
     if (
       typeof category === "undefined" ||
+      category === null ||
       typeof graphLQLNamedType === "undefined" ||
       graphLQLNamedType === null
     ) {
@@ -121,44 +155,44 @@ module.exports = class Printer {
     }
 
     // special case for support relation map
-    if (category === ROOT_TYPE_LOCALE.OPERATION) {
+    if (category === ROOT_TYPE_LOCALE["OPERATION"]) {
       if (typeof operation === "undefined") {
         return fallback;
       }
       category = operation;
     }
 
-    const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = this.getGroup(type);
-    const url = pathUrl.join(
+    const text: string = graphLQLNamedType.name || graphLQLNamedType.toString();
+    const group: string = this.getGroup(type);
+    const url: string = pathUrl.join(
       this.linkRoot,
       this.baseURL,
       group,
       category.plural,
-      toSlug(text),
+      toSlug(text)
     );
 
     return {
       text: text,
       url: url,
-    };
+    } as Link;
   }
 
-  getRelationLink(category, type) {
+  getRelationLink(category: TypeLocale, type: GraphQLNamedType) {
     if (typeof category === "undefined") {
       return "";
     }
-    const link = this.toLink(type, type.name, category);
+    const link: Link = this.toLink(type, type.name, category);
     return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
   }
 
   printSection(
-    values,
-    section,
-    { level, parentType } = {
-      level: HEADER_SECTION_LEVEL,
-      parentType: undefined,
-    },
+    values: GraphQLNamedType[],
+    section: string,
+    {
+      level,
+      parentType,
+    }: SectionLevel
   ) {
     if (values.length === 0) {
       return "";
@@ -174,12 +208,9 @@ module.exports = class Printer {
   }
 
   printSectionItems(
-    values,
-    { level, parentType } = {
-      level: HEADER_SECTION_SUB_LEVEL,
-      parentType: undefined,
-    },
-  ) {
+    values: GraphQLNamedType[],
+    { level, parentType }: SectionLevel
+  ): string {
     if (!Array.isArray(values)) {
       return "";
     }
@@ -193,14 +224,11 @@ module.exports = class Printer {
       .join(MARKDOWN_EOP);
   }
 
-  printLinkAttributes(type, text) {
+  printLinkAttributes(type: GraphQLNamedType, text: string): string {
     if (typeof type === "undefined") {
       return text ?? "";
     }
 
-    if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
-      text = this.printLinkAttributes(type.ofType, text);
-    }
 
     if (isListType(type)) {
       return `[${text}]`;
@@ -213,27 +241,27 @@ module.exports = class Printer {
     return text;
   }
 
-  printLink(type, withAttributes = false, parentType = undefined) {
-    const link = this.toLink(type, getTypeName(type));
+  printLink(type: GraphQLNamedType, withAttributes: boolean = false, parentType?: string): string {
+    const link: Link = this.toLink(type, getTypeName(type));
 
     if (!withAttributes) {
-      const printParentType =
+      const printParentType: boolean =
         this.parentTypePrefix && typeof parentType !== "undefined";
-      const text = printParentType
+      const text: string= printParentType
         ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
         : `\`${link.text}\``;
       return `[${text}](${link.url})`;
     }
 
-    const text = this.printLinkAttributes(type, link.text);
+    const text: string = this.printLinkAttributes(type, link.text);
 
     return `[\`${text}\`](${link.url})`;
   }
 
-  getTypeBadges(type) {
-    const rootType = hasProperty(type, "type") ? type.type : type;
+  getTypeBadges(type): string[] {
+    const rootType: GraphQLNamedType = "type" in type ? type.type : type;
 
-    const badges = [];
+    const badges: string[] = [];
 
     if (type.isDeprecated) {
       badges.push("deprecated");
@@ -248,8 +276,8 @@ module.exports = class Printer {
     }
 
     const category = this.getLinkCategory(getNamedType(rootType));
-    if (typeof category !== "undefined") {
-      badges.push(category);
+    if (typeof category !== "undefined" && category !== null) {
+      badges.push(category.singular);
     }
 
     const group = this.getGroup(rootType);
@@ -260,12 +288,12 @@ module.exports = class Printer {
     return badges;
   }
 
-  printBadges(type) {
-    if (!this.typeBadges) {
+  printBadges(type: GraphQLNamedType): string {
+    if (typeof this.typeBadges === "undefined") {
       return "";
     }
 
-    const badges = this.getTypeBadges(type);
+    const badges: string[] = this.getTypeBadges(type);
 
     if (badges.length === 0) {
       return "";
@@ -274,38 +302,31 @@ module.exports = class Printer {
     return badges
       .map(
         (badge) =>
-          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
+          `<Badge class="secondary" text="${badge}"/>`
       )
       .join(" ");
   }
 
-  printParentLink(type) {
-    return hasProperty(type, "type")
+  printParentLink(type: GraphQLNamedType): string {
+    return "type" in type
       ? `<Bullet />${this.printLink(type.type, true)}`
       : "";
   }
 
   printSectionItem(
-    type,
-    { level, parentType } = {
-      level: HEADER_SECTION_SUB_LEVEL,
-      parentType: undefined,
-    },
-  ) {
-    if (typeof type === "undefined" || type === null) {
-      return "";
-    }
-
+    type: GraphQLNamedType,
+    { level, parentType }: SectionLevel
+  ): string {
     if (typeof level === "undefined") {
       level = HEADER_SECTION_SUB_LEVEL;
     }
 
-    const typeNameLink = this.printLink(type, false, parentType);
-    const description = this.printDescription(type, "");
-    const badges = this.printBadges(type);
-    const parentTypeLink = this.printParentLink(type);
+    const typeNameLink: string = this.printLink(type, false, parentType);
+    const description: string = this.printDescription(type, "");
+    const badges: string = this.printBadges(type);
+    const parentTypeLink: String = this.printParentLink(type);
 
-    let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+    let section: string = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
       section += this.printSectionItems(type.args, {
         level: HEADER_SECTION_ITEM_LEVEL,
@@ -319,27 +340,19 @@ module.exports = class Printer {
     return section;
   }
 
-  printCodeEnum(type) {
-    if (!isEnumType(type)) {
-      return "";
-    }
-
-    let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
+  printCodeEnum(type: GraphQLEnumType): string {
+    let code: string = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
     code += type
       .getValues()
-      .map((v) => `  ${getTypeName(v)}`)
+      .map((v: any) => `  ${getTypeName(v)}`)
       .join(MARKDOWN_EOL);
     code += `${MARKDOWN_EOL}}`;
 
     return code;
   }
 
-  printCodeUnion(type) {
-    if (!isUnionType(type)) {
-      return "";
-    }
-
-    let code = `union ${getTypeName(type)} = `;
+  printCodeUnion(type: GraphQLUnionType): string {
+    let code: string = `union ${getTypeName(type)} = `;
     code += type
       .getTypes()
       .map((v) => getTypeName(v))
@@ -348,16 +361,16 @@ module.exports = class Printer {
     return code;
   }
 
-  printCodeScalar(type) {
+  printCodeScalar(type: GraphQLScalarType): string {
     return `scalar ${getTypeName(type)}`;
   }
 
-  printCodeArguments(type) {
-    if (!hasProperty(type, "args") || type.args.length === 0) {
+  printCodeArguments(type: any): string {
+    if (!("args" in type) || type.args.length === 0) {
       return "";
     }
 
-    let code = `(${MARKDOWN_EOL}`;
+    let code: string = `(${MARKDOWN_EOL}`;
     code += type.args.reduce((r, v) => {
       const defaultValue = getDefaultValue(v);
       const hasDefaultValue =
@@ -372,15 +385,15 @@ module.exports = class Printer {
     return code;
   }
 
-  printCodeField(type) {
-    let code = `${getTypeName(type)}`;
+  printCodeField(type: GraphQLNamedType): string {
+    let code: string = `${getTypeName(type)}`;
     code += this.printCodeArguments(type);
     code += `: ${getTypeName(type.type)}${MARKDOWN_EOL}`;
 
     return code;
   }
 
-  printCodeDirectiveLocation(type) {
+  printCodeDirectiveLocation(type: GraphQLDirective): string {
     if (
       typeof type.locations === "undefined" ||
       type.locations == null ||
@@ -389,8 +402,8 @@ module.exports = class Printer {
       return "";
     }
 
-    let code = ` on `;
-    const separator = `\r\n  | `;
+    let code: string = ` on `;
+    const separator: string = `\r\n  | `;
     if (type.locations.length > 1) {
       code += separator;
     }
@@ -399,16 +412,16 @@ module.exports = class Printer {
     return code;
   }
 
-  printCodeDirective(type) {
-    let code = `directive @${getTypeName(type)}`;
+  printCodeDirective(type: GraphQLDirective): string {
+    let code: string = `directive @${getTypeName(type)}`;
     code += this.printCodeArguments(type);
     code += this.printCodeDirectiveLocation(type);
 
     return code;
   }
 
-  printCodeType(type) {
-    let entity;
+  printCodeType(type: GraphQLNamedType | GraphQLDirective) {
+    let entity: string;
 
     switch (true) {
       case isInputType(type):
@@ -421,59 +434,59 @@ module.exports = class Printer {
         entity = "type";
     }
 
-    const name = getTypeName(type);
-    const extendsInterface =
-      hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
+    const name: string = getTypeName(type);
+    const extendsInterface: string = (isObjectType(type) || isInterfaceType(type)) && type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
             .map((field) => getTypeName(field))
             .join(", ")}`
         : "";
-    const typeFields = getFields(type)
-      .map((v) => `  ${this.printCodeField(v)}`)
+    const typeFields: string = getFields(type)
+      .map((v: any[]) => `  ${this.printCodeField(v)}`)
       .join("");
 
     return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
   }
 
-  printHeader(id, title, options) {
-    const { toc, pagination } = { toc: true, pagination: true, ...options };
-    const pagination_buttons = pagination
+  printHeader(id: string, title: string, options: any) {
+    const { toc, pagination }: { toc: boolean, pagination: boolean } = { toc: true, pagination: true, ...options };
+    const pagination_buttons: string = pagination
       ? ""
       : `pagination_next: null${MARKDOWN_EOL}pagination_prev: null${MARKDOWN_EOL}`;
     return `---${MARKDOWN_EOL}id: ${id}${MARKDOWN_EOL}title: ${title}\nhide_table_of_contents: ${!toc}${MARKDOWN_EOL}${pagination_buttons}---${MARKDOWN_EOL}`;
   }
 
-  printDeprecation(type) {
-    if (!type.isDeprecated) {
+  printDeprecation(type: GraphQLNamedType): string {
+    if (!("isDeprecated" in type) || !type.isDeprecated) {
       return "";
     }
 
-    const reason = type.deprecationReason
+    const reason = "deprecationReason" in type && typeof type.deprecationReason !== "undefined"
       ? ": " + escapeMDX(type.deprecationReason)
       : "";
     return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
-  printDescription(type, noText = NO_DESCRIPTION_TEXT) {
-    const description =
-      hasProperty(type, "description") && escapeMDX(type.description);
+  printDescription(type: GraphQLNamedType, noText: string = NO_DESCRIPTION_TEXT): string {
+    const description: string =
+      "description" in type && escapeMDX(type.description);
     return `${this.printDeprecation(type)}${description || noText}`;
   }
 
-  printSpecification(type) {
-    if (!type.specifiedByURL && !type.specifiedByUrl) {
+  printSpecification(type: GraphQLNamedType): string {
+    if (!("specifiedByURL" in type) && !("specifiedByUrl" in type)) {
       return "";
     }
 
-    const url = type.specifiedByURL || type.specifiedByUrl;
+    const url: string = type.specifiedByURL || type.specifiedByUrl;
 
     // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
     return `${HEADER_SECTION_LEVEL} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}`;
   }
 
-  printCode(type) {
-    let code = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
+  printCode(type: GraphQLNamedType | GraphQLDirective) {
+    let code: string = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
+
     switch (true) {
       case isOperation(type):
         code += this.printCodeField(type);
@@ -501,8 +514,8 @@ module.exports = class Printer {
     return code.trim() + `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
   }
 
-  printTypeMetadata(type) {
-    let metadata;
+  printTypeMetadata(type: GraphQLNamedType | GraphQLDirective): string {
+    let metadata: string = "";
 
     switch (true) {
       case isScalarType(type):
@@ -512,15 +525,15 @@ module.exports = class Printer {
           parentType: type.name,
         });
       case isUnionType(type):
-        return this.printSection(type.getTypes(), "Possible types");
+        return this.printSection(type.getTypes(), "Possible types", {});
       case isObjectType(type):
       case isInterfaceType(type):
       case isInputType(type): {
         metadata = this.printSection(getFields(type), "Fields", {
           parentType: type.name,
         });
-        if (hasMethod(type, "getInterfaces")) {
-          metadata += this.printSection(type.getInterfaces(), "Interfaces");
+        if ("getInterfaces" in type) {
+          metadata += this.printSection(type.getInterfaces(), "Interfaces", {});
         }
         return metadata;
       }
@@ -535,7 +548,7 @@ module.exports = class Printer {
           parentType: type.name,
         });
         const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-        metadata += this.printSection([this.schema.getType(queryType)], "Type");
+        metadata += this.printSection([this.schema.getType(queryType)], "Type", {});
 
         return metadata;
       }
@@ -544,14 +557,14 @@ module.exports = class Printer {
     }
   }
 
-  printRelations(type) {
-    const relations = {
+  printRelations(type: GraphQLNamedType): string {
+    const relations: Record<string, Function> = {
       "Returned by": getRelationOfReturn,
       "Member of": getRelationOfField,
       "Implemented by": getRelationOfImplementation,
     };
 
-    let data = "";
+    let data: string = "";
     for (const [section, getRelation] of Object.entries(relations)) {
       data += this.printRelationOf(type, section, getRelation);
     }
@@ -559,7 +572,7 @@ module.exports = class Printer {
     return data;
   }
 
-  printRelationOf(type, section, getRelation) {
+  printRelationOf(type: GraphQLNamedType, section: string, getRelation: Function): string {
     if (
       typeof type === "undefined" ||
       typeof getRelation !== "function" ||
@@ -568,19 +581,19 @@ module.exports = class Printer {
       return "";
     }
 
-    const relations = getRelation(type, this.schema);
+    const relations: Partial<RelationOf> = getRelation(type, this.schema);
 
     if (typeof relations === "undefined") {
       return "";
     }
 
-    let data = [];
-    for (const [relation, types] of Object.entries(relations)) {
+    let data: string[] = [];
+    for (const [relation, types] of Object.entries(relations) as RelationTypeList) {
       if (types.length === 0) {
         continue;
       }
 
-      const category = this.getRootTypeLocaleFromString(relation);
+      const category = this.getRootTypeLocaleFromString(relation) as TypeLocale;
       data = data.concat(types.map((t) => this.getRelationLink(category, t)));
     }
 
@@ -589,23 +602,23 @@ module.exports = class Printer {
     }
 
     const content = [...data]
-      .sort((a, b) => a.localeCompare(b))
+      .sort((a: string, b: string) => a.localeCompare(b))
       .join("<Bullet />");
 
     return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
   }
 
-  printType(name, type, options) {
+  printType(name: string, type: GraphQLNamedType, options: any): string {
     if (typeof type === "undefined" || type === null) {
       return "";
     }
 
-    const header = this.printHeader(name, getTypeName(type), options);
-    const description = this.printDescription(type);
-    const code = this.printCode(type);
-    const metadata = this.printTypeMetadata(type);
-    const relations = this.relatedTypeSection ? this.printRelations(type) : "";
+    const header: string = this.printHeader(name, getTypeName(type), options);
+    const description: string = this.printDescription(type);
+    const code: string = this.printCode(type);
+    const metadata: string = this.printTypeMetadata(type);
+    const relations: string = this.relatedTypeSection ? this.printRelations(type) : "";
 
     return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
-};
+}

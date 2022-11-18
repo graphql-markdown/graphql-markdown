@@ -24,6 +24,7 @@ import {
   isIntrospectionType,
   GraphQLNamedType,
   GraphQLInputType,
+  GraphQLFieldMap,
 } from "graphql";
 import {
   loadSchema as asyncLoadSchema,
@@ -103,7 +104,7 @@ export type DocumentLoaders = {
   loaderOptions: ModuleOptions;
 };
 
-type RelationType =
+export type RelationType =
   | "objects"
   | "interfaces"
   | "unions"
@@ -115,11 +116,13 @@ type RelationType =
   | "enums"
   | "scalars";
 
-type RelationOf = {
-  [relationType in RelationType]: readonly Maybe<unknown>[];
+export type RelationTypeList = readonly Maybe<GraphQLNamedType>[]
+
+export type RelationOf = {
+  [relationType in RelationType]: RelationTypeList;
 };
 
-type SchemaMap = {
+export type SchemaMap = {
   [relationType in RelationType]: Maybe<ObjMap<unknown>>;
 };
 
@@ -311,7 +314,7 @@ export const getIntrospectionFieldsList = (
     return undefined;
   }
 
-  const typeMap = queryType.getFields();
+  const typeMap: GraphQLFieldMap<any, any> = queryType.getFields();
 
   return keyValMap(
     Object.keys(typeMap),
@@ -331,7 +334,7 @@ export const getFields = (
 };
 
 export const getTypeName = (
-  type: GraphQLNamedType,
+  type: GraphQLNamedType | GraphQLDirective,
   defaultName?: string
 ): string => {
   return type?.name ?? type?.toString() ?? defaultName ?? "";

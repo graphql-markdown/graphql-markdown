@@ -1,13 +1,20 @@
-const path = require("path");
+const path = require("node:path");
 
+const { hasProperty } = require("@graphql-markdown/utils/object");
+const { toSlug, startCase } = require("@graphql-markdown/utils/string");
+const { pathUrl } = require("@graphql-markdown/utils/url");
+const { hasDirective } = require("@graphql-markdown/utils/graphql");
 const {
-  object: { hasProperty },
-  string: { toSlug, startCase },
-  url: { pathUrl },
-  graphql: { hasDirective },
-  prettier: { prettifyJavascript, prettifyMarkdown },
-  fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
-} = require("@graphql-markdown/utils");
+  prettifyJavascript,
+  prettifyMarkdown,
+} = require("@graphql-markdown/utils/prettier");
+const {
+  saveFile,
+  ensureDir,
+  copyFile,
+  readFile,
+  fileExists,
+} = require("@graphql-markdown/utils/fs");
 
 const { ASSETS_LOCATION } = require("./config");
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
