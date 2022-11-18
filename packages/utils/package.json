@@ -16,7 +16,6 @@
   },
   "type": "commonjs",
   "exports": {
-    ".": "./dist/index.js",
     "./array": "./dist/array.js",
     "./fs": "./dist/fs.js",
     "./graphql": "./dist/graphql.js",
