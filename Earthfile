@@ -51,7 +51,7 @@ build-docusaurus:
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN npm ci
-  RUN npm upgrade @docusaurus/core@latest @docusaurus/preset-classic@latest
+  RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
 
 smoke-init:
   FROM +build-docusaurus

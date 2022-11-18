@@ -3,6 +3,10 @@
   "semanticCommits": "enabled",
   "packageRules": [
     {
+      "matchPackagePatterns": ["^@graphql-markdown"],
+      "enabled": false
+    },
+    {
       "matchPaths": ["website/**"],
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["main"],
