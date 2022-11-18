@@ -8,7 +8,7 @@ export const toArray = <T extends {}>(param: Record<string, T>): Maybe<T>[] => {
   return Object.keys(param).map((key) => param[key]);
 };
 
-export const convertArrayToObject = <T extends {} & { name: string }>(
+export const convertArrayToObject = <T extends unknown & { name: string }>(
   typeArray: T[]
 ): Record<string, T> => {
   const output: Record<string, T> = {};
