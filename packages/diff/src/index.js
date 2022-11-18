@@ -1,14 +1,15 @@
-const path = require("path");
-const crypto = require("crypto");
+const path = require("node:path");
+const crypto = require("node:crypto");
 
-const { loadSchema } = require("@graphql-tools/load");
 const { diff } = require("@graphql-inspector/core");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
+const { printSchema, loadSchema } = require("@graphql-markdown/utils/graphql");
 const {
-  fs: { fileExists, readFile, saveFile },
-  graphql: { printSchema },
-} = require("@graphql-markdown/utils");
+  fileExists,
+  readFile,
+  saveFile,
+} = require("@graphql-markdown/utils/fs");
 
 const SCHEMA_HASH_FILE = ".schema";
 const SCHEMA_REF = "schema.graphql";
