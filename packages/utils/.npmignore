@@ -4,6 +4,8 @@ output
 reports
 coverage
 build
+src
+tap-snapshots
 .nyc_output
 
 .dccache
@@ -12,7 +14,9 @@ jest.config.js
 jest.setup.js
 nyc.config.js
 stryker.conf.js
-.eslintrc.js   
+.eslintrc.js
 .prettierrc.js
+.taprc
 
+tsconfig.json
 tsconfig.tsbuildinfo

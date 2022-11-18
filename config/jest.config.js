@@ -1,4 +1,5 @@
 module.exports = {
+  extensionsToTreatAsEsm: [".ts"],
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.js"],
   coverageReporters: ["json"],

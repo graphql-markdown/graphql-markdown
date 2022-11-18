@@ -25,6 +25,17 @@
     "./string": "./build/string.js",
     "./url": "./build/url.js"
   },
+  "typesVersions": {
+    "*": {
+      "array": ["build/array.d.ts"],
+      "fs": ["build/fs.d.ts"],
+      "graphql": ["build/graphql.ts"],
+      "object": ["build/object.ts"],
+      "prettier": ["build/prettier.d.ts"],
+      "string": ["build/string.d.ts"],
+      "url": ["build/url.d.ts"]
+    }
+  },
   "scripts": {
     "build": "tsc --build --clean && tsc",
     "prepack": "pinst --disable",
