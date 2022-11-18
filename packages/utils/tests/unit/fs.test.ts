@@ -7,7 +7,7 @@ const { ensureDir, fileExists, saveFile } = await esmock(
   "../../src/fs",
   import.meta.url,
   {
-    "fs/promises": fs.promises,
+    "node:fs/promises": fs.promises,
   }
 );
 

@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import { dirname } from "path";
+import fs from "node:fs/promises";
+import { dirname } from "node:path";
 
 export const readFile = fs.readFile;
 export const copyFile = fs.copyFile;
