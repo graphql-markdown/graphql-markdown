@@ -106,7 +106,7 @@ t.test("printCode()", async () => {
     sandbox.restore();
   });
 
-  types.map(({ name, type, spyOn }) =>
+  types.forEach(({ name, type, spyOn }) =>
     t.test(
       `returns a Markdown graphql codeblock with type ${name}`,
       async () => {

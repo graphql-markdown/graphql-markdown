@@ -127,7 +127,7 @@ t.test("printType()", async () => {
     sandbox.restore();
   });
 
-  types.map(({ name, type }) => {
+  types.forEach(({ name, type }) => {
     t.test(
       `returns a Markdown formatted Docusaurus content for type ${name}`,
       async () => {
@@ -149,7 +149,7 @@ t.test("printType()", async () => {
     );
   });
 
-  typesWithInterface.map(({ name, type }) => {
+  typesWithInterface.forEach(({ name, type }) => {
     t.test(
       `returns a Markdown formatted Docusaurus content for ${name} implementing interface`,
       async () => {

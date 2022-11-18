@@ -171,7 +171,7 @@ t.test("graphql", async () => {
       },
     ];
 
-    data.map(async ({ type, defaultValue, expected }) =>
+    data.forEach(async ({ type, defaultValue, expected }) =>
       t.test(`returns ${expected} value as default for ${type}`, async () => {
         const argument = {
           description: undefined,

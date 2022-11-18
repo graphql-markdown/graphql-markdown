@@ -70,7 +70,7 @@ t.test("printCodeDirective()", async () => {
       locations: [DirectiveLocation.QUERY, DirectiveLocation.FIELD],
     },
     { testCase: "single location", locations: [DirectiveLocation.QUERY] },
-  ].map(({ testCase, locations }) => {
+  ].forEach(({ testCase, locations }) => {
     t.test(`returns a directive with ${testCase}`, async () => {
       const type = new GraphQLDirective({
         name: "FooBar",
