@@ -77,6 +77,8 @@ export const OperationTypeNodes: readonly OperationTypeNode[] = [
   OperationTypeNode.SUBSCRIPTION,
 ];
 
+type Scalar = string | boolean | number;
+
 export type ClassName = string & { _opaque: ClassName };
 
 export type ModuleName = string & { _opaque: ModuleName };
@@ -218,7 +220,7 @@ export const getListDefaultValues = (
 
 export const getDefaultValue = (
   field: GraphQLInputField
-): Maybe<string | boolean | number> => {
+): Maybe<Scalar> => {
   const { type, defaultValue } = field;
 
   if (typeof defaultValue === "undefined" || defaultValue === null) {
@@ -235,8 +237,8 @@ export const getDefaultValue = (
 export const formatDefaultValue = ({
   type,
   defaultValue,
-}: GraphQLInputField): Maybe<string | boolean | number> => {
-  const value = defaultValue as Maybe<string | boolean | number>;
+}: GraphQLInputField): Maybe<Scalar> => {
+  const value = defaultValue as Maybe<Scalar>;
 
   if (isEnumType(type)) {
     return value;
@@ -311,10 +313,6 @@ export const getIntrospectionFieldsList = (
 
   const typeMap = queryType.getFields();
 
-  // return Object.keys(typeMap).reduce(
-  //   (res, key) => ({ ...res, [key]: typeMap[key] }),
-  //   {},
-  // );
   return keyValMap(
     Object.keys(typeMap),
     (key) => key,
@@ -367,7 +365,6 @@ export const getSchemaMap = (schema: GraphQLSchema): SchemaMap => {
 const mapRelationOf = (
   relations: Partial<RelationOf>,
   schema: GraphQLSchema,
-  //   callback: <T>(relationName: string, relationType: T, results: T[]) => T[]
   callback: Function
 ): Partial<RelationOf> => {
   const schemaMap = getSchemaMap(schema);
@@ -441,13 +438,11 @@ export const getRelationOfField = (
     ) => {
       const fields = Object.assign(
         {},
-        ("args" in relationType && relationType.args) ?? {},
-        ("getFields" in relationType && relationType.getFields()) ?? {}
+        ("args" in relationType && relationType.args) ? relationType.args : {},
+        ("getFields" in relationType && relationType.getFields()) ? relationType.getFields() : {}
       );
-      for (const fieldDef of Object.values(fields) as Maybe<
-        GraphQLField<unknown, unknown>
-      >[]) {
-        if (fieldDef && getNamedType(fieldDef.type).name === type.name) {
+      for (const fieldDef of Object.values(fields)) {
+        if (typeof fieldDef !== "undefined" && getNamedType(fieldDef.type as GraphQLType).name === type.name) {
           if (
             !results.find(
               (r) => r.toString() === relationName || r.name === relationName
