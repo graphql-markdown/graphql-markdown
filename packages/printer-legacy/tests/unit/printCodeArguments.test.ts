@@ -1,9 +1,9 @@
-const t = require("tap");
-const sinon = require("sinon");
+import t from "tap";
+import sinon from "sinon";
 
-const { GraphQLDirective } = require("graphql");
+import { GraphQLDirective, GraphQLScalarType, GraphQLSchema } from "graphql";
 
-const Printer = require("../../src/index");
+import Printer from "../../src/printer";
 
 t.formatSnapshot = (object) => JSON.stringify(object, null, 2);
 
@@ -12,19 +12,10 @@ t.test("printCodeArguments()", async () => {
 
   const baseURL = "graphql";
   const root = "docs";
-  const schema = {
-    toString: () => "SCHEMA",
-    getType: (type) => type,
-    getTypeMap: () => {},
-    getDirectives: () => {},
-    getImplementations: () => {},
-    getRootType: () => undefined,
-    getQueryType: () => undefined,
-    getMutationType: () => undefined,
-    getSubscriptionType: () => undefined,
-  };
+  const schema = sinon.createStubInstance(GraphQLSchema);
+  schema.getType.returnsArg(0);
 
-  const printerInstance = new Printer(schema, baseURL, root);
+  const printerInstance = new Printer(schema, baseURL, root, {});
 
   t.afterEach(() => {
     sandbox.restore();
@@ -38,12 +29,12 @@ t.test("printCodeArguments()", async () => {
         locations: [],
         args: {
           ParamWithDefault: {
-            type: "string",
+            type: new GraphQLScalarType<string, string>({name: "string"}),
             defaultValue: "defaultValue",
           },
-          ParamNoDefault: { type: "any" },
-          ParamIntZero: { type: "int", defaultValue: 0 },
-          ParamIntNoDefault: { type: "int" },
+          ParamNoDefault: { type: new GraphQLScalarType<any, any>({name: "any"}) },
+          ParamIntZero: { type: new GraphQLScalarType<number, number>({name: "int"}), defaultValue: 0 },
+          ParamIntNoDefault: { type: new GraphQLScalarType<number, number>({name: "int"}) },
         },
       });
 

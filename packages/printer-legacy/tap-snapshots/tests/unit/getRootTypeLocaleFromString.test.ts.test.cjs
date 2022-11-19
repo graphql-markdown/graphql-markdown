@@ -4,15 +4,12 @@
  * Re-generate by setting TAP_SNAPSHOT=1 and running tests.
  * Make sure to inspect the output below.  Do not ignore changes!
  */
-'use strict'
-exports[`tests/unit/printCodeField.test.js TAP > returns a field with its type 1`] = `
-FooBar: string
-
-`
-
-exports[`tests/unit/printCodeField.test.js TAP > returns a field with its type and arguments 1`] = `
-TypeFooBar(
-  ArgFooBar: String
-): String
-
-`
+"use strict";
+exports[
+  `tests/unit/getRootTypeLocaleFromString.test.ts TAP > returns object of local strings from root type string 1`
+] = `
+{
+  "singular": "query",
+  "plural": "queries"
+}
+`;

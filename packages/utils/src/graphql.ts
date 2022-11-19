@@ -25,6 +25,9 @@ import {
   GraphQLNamedType,
   GraphQLInputType,
   GraphQLFieldMap,
+  GraphQLList,
+  GraphQLEnumValue,
+  GraphQLArgument,
 } from "graphql";
 import {
   loadSchema as asyncLoadSchema,
@@ -35,42 +38,6 @@ import { Loader } from "@graphql-tools/utils";
 import { Maybe } from "graphql/jsutils/Maybe";
 import { keyValMap } from "graphql/jsutils/keyValMap";
 import { ObjMap } from "graphql/jsutils/ObjMap";
-
-export {
-  GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-  isListType,
-  GraphQLBoolean,
-  GraphQLInt,
-  GraphQLFloat,
-  GraphQLID,
-  GraphQLString,
-  GraphQLObjectType,
-  GraphQLInterfaceType,
-  GraphQLInputObjectType,
-  getNamedType,
-  isEnumType,
-  GraphQLSchema,
-  OperationTypeNode,
-  GraphQLSchemaConfig,
-  GraphQLType,
-  isType,
-  GraphQLDirective,
-  GraphQLField,
-  GraphQLInputField,
-  isIntrospectionType,
-  GraphQLNamedType,
-  isDirective as isDirectiveType,
-  isScalarType,
-  isUnionType,
-  isInterfaceType,
-  isObjectType,
-  isInputObjectType as isInputType,
-  isNonNullType,
-  isLeafType,
-  printSchema,
-} from "graphql";
 
 export const OperationTypeNodes: readonly OperationTypeNode[] = [
   OperationTypeNode.QUERY,
@@ -291,7 +258,7 @@ export const getTypeFromSchema = <T extends unknown>(
 };
 
 export const hasDirective = (
-  type: GraphQLNamedType,
+  type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
   directiveName: string
 ): boolean => {
   if (type.astNode == null || !Array.isArray(type.astNode.directives)) {
@@ -332,9 +299,12 @@ export const getFields = (
 };
 
 export const getTypeName = (
-  type: GraphQLNamedType | GraphQLDirective,
+  type:GraphQLType | GraphQLField<unknown, unknown, unknown> | GraphQLList<GraphQLType> | GraphQLDirective | GraphQLInputField | GraphQLEnumValue,
   defaultName?: string
 ): string => {
+  if(isListType(type)) {
+    return defaultName ?? "";
+  }
   return type?.name ?? type?.toString() ?? defaultName ?? "";
 };
 
@@ -418,7 +388,7 @@ export const getRelationOfReturn = (
 export const getRelationOfField = (
   type: GraphQLNamedType,
   schema: GraphQLSchema
-) => {
+): Partial<RelationOf> => {
   const relations: Partial<RelationOf> = {
     queries: [],
     mutations: [],

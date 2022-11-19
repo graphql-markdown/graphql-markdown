@@ -3,9 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "include": ["./src"],
+  "include": ["./src/**/*.ts"],
   "ts-node": {
     "files": true,
     "esm": true,
@@ -13,6 +13,10 @@
     "compilerOptions": {
       "module": "ES2022"
     },
+    "ignore": [
+      "(?:^|/)node_modules/",
+      "(?:^|/)../"
+    ],
     "moduleTypes": {
       "src/**/*": "esm",
       "tests/**/*": "esm"

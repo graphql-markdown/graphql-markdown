@@ -4,12 +4,14 @@
  * Re-generate by setting TAP_SNAPSHOT=1 and running tests.
  * Make sure to inspect the output below.  Do not ignore changes!
  */
-'use strict'
-exports[`tests/unit/printCodeArguments.test.js TAP > returns a Markdown one line per formatted argument with default value surrounded by () 1`] = `
+"use strict";
+exports[
+  `tests/unit/printCodeArguments.test.ts TAP > returns a Markdown one line per formatted argument with default value surrounded by () 1`
+] = `
 (
   ParamWithDefault: string = defaultValue
   ParamNoDefault: any
   ParamIntZero: int = 0
   ParamIntNoDefault: int
 )
-`
+`;

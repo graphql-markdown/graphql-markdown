@@ -5,6 +5,14 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/printCodeUnion.test.js TAP > returns union code structure 1`] = `
-union UnionTypeName = one | two
+exports[`tests/unit/printCodeField.test.ts TAP > returns a field with its type 1`] = `
+FooBar: String
+
+`
+
+exports[`tests/unit/printCodeField.test.ts TAP > returns a field with its type and arguments 1`] = `
+TypeFooBar(
+  ArgFooBar: String
+): String
+
 `

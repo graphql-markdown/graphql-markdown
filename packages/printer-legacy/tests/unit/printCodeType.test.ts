@@ -1,36 +1,28 @@
-const t = require("tap");
-const sinon = require("sinon");
+import t from "tap";
+import sinon from "sinon";
 
-const {
+import {
   GraphQLObjectType,
   GraphQLBoolean,
   GraphQLString,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
-} = require("graphql");
+  GraphQLSchema,
+} from "graphql";
 
-const Printer = require("../../src/index");
+import Printer from "../../src/printer";
 
-t.formatSnapshot = (object) => JSON.stringify(object, null, 2);
+t.formatSnapshot = (object: any) => JSON.stringify(object, null, 2);
 
 t.test("printCodeType()", async () => {
   const sandbox = sinon.createSandbox();
 
   const baseURL = "graphql";
   const root = "docs";
-  const schema = {
-    toString: () => "SCHEMA",
-    getType: (type) => type,
-    getTypeMap: () => {},
-    getDirectives: () => {},
-    getImplementations: () => {},
-    getRootType: () => undefined,
-    getQueryType: () => undefined,
-    getMutationType: () => undefined,
-    getSubscriptionType: () => undefined,
-  };
+  const schema = sinon.createStubInstance(GraphQLSchema);
+  schema.getType.returnsArg(0);
 
-  const printerInstance = new Printer(schema, baseURL, root);
+  const printerInstance = new Printer(schema, baseURL, root, {});
 
   t.afterEach(() => {
     sandbox.restore();
@@ -58,7 +50,7 @@ t.test("printCodeType()", async () => {
         two: { type: GraphQLBoolean },
       },
       interfaces: () => [
-        new GraphQLInterfaceType({ name: "TestInterfaceName" }),
+        new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} }),
       ],
     });
 

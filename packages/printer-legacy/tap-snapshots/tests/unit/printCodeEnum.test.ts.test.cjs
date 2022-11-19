@@ -5,9 +5,9 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/getRootTypeLocaleFromString.test.js TAP > returns object of local strings from root type string 1`] = `
-{
-  "singular": "query",
-  "plural": "queries"
+exports[`tests/unit/printCodeEnum.test.ts TAP > returns enum code structure 1`] = `
+enum EnumTypeName {
+  one
+  two
 }
 `

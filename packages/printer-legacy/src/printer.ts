@@ -4,33 +4,17 @@ import { IPrinter } from "@graphql-markdown/core/type";
 import { toSlug, escapeMDX } from "@graphql-markdown/utils/string";
 import { pathUrl } from "@graphql-markdown/utils/url";
 import {
-  isEnumType,
-  isUnionType,
-  isObjectType,
-  isScalarType,
+  isParametrizedField,
   isOperation,
   getDefaultValue,
   getTypeName,
   getFields,
-  isDirectiveType,
-  isParametrizedField,
-  isInterfaceType,
-  getNamedType,
-  isInputType,
-  isListType,
-  isNonNullType,
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfImplementation,
   hasDirective,
-  GraphQLSchema,
-  GraphQLNamedType,
-  GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
   RelationOf,
   RelationTypeList,
-  GraphQLDirective,
 } from "@graphql-markdown/utils/graphql";
 
 import {
@@ -43,6 +27,30 @@ import {
   MARKDOWN_EOP,
   TypeLocale,
 } from "./const/strings";
+import {
+  GraphQLArgument,
+  GraphQLDirective,
+  GraphQLEnumValue,
+  GraphQLField,
+  GraphQLInputField,
+  GraphQLInputType,
+  GraphQLInterfaceType,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  getNamedType,
+  isDirective,
+  isEnumType,
+  isInputType,
+  isInterfaceType,
+  isListType,
+  isNonNullType,
+  isObjectType,
+  isScalarType,
+  isUnionType,
+  GraphQLType,
+} from "graphql/type";
 import mdx from "./const/mdx";
 
 type Link = {
@@ -51,8 +59,8 @@ type Link = {
 };
 
 type SectionLevel = {
-  level?: string;
-  parentType?: string;
+  level?: Maybe<string>;
+  parentType?: Maybe<string>;
 };
 
 export class Printer implements IPrinter {
@@ -112,7 +120,7 @@ export class Printer implements IPrinter {
         return ROOT_TYPE_LOCALE["INPUT"];
       case isScalarType(graphLQLNamedType):
         return ROOT_TYPE_LOCALE["SCALAR"];
-      case isDirectiveType(graphLQLNamedType):
+      case isDirective(graphLQLNamedType):
         return ROOT_TYPE_LOCALE["DIRECTIVE"];
       case isOperation(graphLQLNamedType):
         return ROOT_TYPE_LOCALE["OPERATION"];
@@ -120,17 +128,25 @@ export class Printer implements IPrinter {
     return undefined;
   }
 
-  getGroup(type: GraphQLNamedType): string {
+  getGroup(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument
+  ): string {
     if (typeof this.groups === "undefined") {
       return "";
     }
-    const graphLQLNamedType: GraphQLNamedType = getNamedType(type);
+    const graphLQLNamedType: GraphQLNamedType = getNamedType(
+      type as GraphQLType
+    );
     const typeName: string =
       graphLQLNamedType.name || graphLQLNamedType.toString();
     return typeName in this.groups ? toSlug(this.groups[typeName]) : "";
   }
 
-  toLink(type: GraphQLNamedType, name: string, operation?: TypeLocale): Link {
+  toLink(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
+    name: string,
+    operation?: TypeLocale
+  ): Link {
     const fallback: Link = {
       text: name,
       url: "#",
@@ -140,7 +156,9 @@ export class Printer implements IPrinter {
       return fallback;
     }
 
-    const graphLQLNamedType: GraphQLNamedType = getNamedType(type);
+    const graphLQLNamedType: GraphQLNamedType = getNamedType(
+      type as GraphQLType
+    );
 
     let category: Maybe<TypeLocale> = this.getLinkCategory(graphLQLNamedType);
 
@@ -177,8 +195,12 @@ export class Printer implements IPrinter {
     } as Link;
   }
 
-  getRelationLink(category: TypeLocale, type: GraphQLNamedType) {
-    if (typeof category === "undefined") {
+  getRelationLink(category: TypeLocale, type: Maybe<GraphQLNamedType>) {
+    if (
+      typeof category === "undefined" ||
+      typeof type === "undefined" ||
+      type === null
+    ) {
       return "";
     }
     const link: Link = this.toLink(type, type.name, category);
@@ -186,7 +208,7 @@ export class Printer implements IPrinter {
   }
 
   printSection(
-    values: GraphQLNamedType[],
+    values: GraphQLNamedType[] | GraphQLEnumValue[] | GraphQLArgument[],
     section: string,
     { level, parentType }: SectionLevel
   ) {
@@ -200,11 +222,12 @@ export class Printer implements IPrinter {
 
     return `${level} ${section}${MARKDOWN_EOP}${this.printSectionItems(values, {
       parentType,
+      level: undefined,
     })}${MARKDOWN_EOP}`;
   }
 
   printSectionItems(
-    values: GraphQLNamedType[],
+    values: GraphQLNamedType[] | GraphQLEnumValue[] | GraphQLArgument[],
     { level, parentType }: SectionLevel
   ): string {
     if (!Array.isArray(values)) {
@@ -220,7 +243,10 @@ export class Printer implements IPrinter {
       .join(MARKDOWN_EOP);
   }
 
-  printLinkAttributes(type: GraphQLNamedType, text: string): string {
+  printLinkAttributes(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
+    text: string
+  ): string {
     if (typeof type === "undefined") {
       return text ?? "";
     }
@@ -237,9 +263,9 @@ export class Printer implements IPrinter {
   }
 
   printLink(
-    type: GraphQLNamedType,
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
     withAttributes: boolean = false,
-    parentType?: string
+    parentType?: Maybe<string>
   ): string {
     const link: Link = this.toLink(type, getTypeName(type));
 
@@ -257,12 +283,16 @@ export class Printer implements IPrinter {
     return `[\`${text}\`](${link.url})`;
   }
 
-  getTypeBadges(type): string[] {
-    const rootType: GraphQLNamedType = "type" in type ? type.type : type;
+  getTypeBadges(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument
+  ): string[] {
+    const rootType = (
+      "type" in type ? (type.type as GraphQLNamedType) : type
+    ) as GraphQLNamedType;
 
     const badges: string[] = [];
 
-    if (type.isDeprecated) {
+    if ("deprecationReason" in type && type.deprecationReason) {
       badges.push("deprecated");
     }
 
@@ -287,7 +317,9 @@ export class Printer implements IPrinter {
     return badges;
   }
 
-  printBadges(type: GraphQLNamedType): string {
+  printBadges(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument
+  ): string {
     if (typeof this.typeBadges === "undefined") {
       return "";
     }
@@ -303,12 +335,16 @@ export class Printer implements IPrinter {
       .join(" ");
   }
 
-  printParentLink(type: GraphQLNamedType): string {
-    return "type" in type ? `<Bullet />${this.printLink(type.type, true)}` : "";
+  printParentLink(
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument
+  ): string {
+    return "type" in type
+      ? `<Bullet />${this.printLink(type.type as GraphQLNamedType, true)}`
+      : "";
   }
 
   printSectionItem(
-    type: GraphQLNamedType,
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
     { level, parentType }: SectionLevel
   ): string {
     if (typeof level === "undefined") {
@@ -322,19 +358,26 @@ export class Printer implements IPrinter {
 
     let section: string = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
     if (isParametrizedField(type)) {
-      section += this.printSectionItems(type.args, {
-        level: HEADER_SECTION_ITEM_LEVEL,
-        parentType:
-          typeof parentType === "undefined"
-            ? undefined
-            : `${parentType}.${type.name}`,
-      });
+      section += this.printSectionItems(
+        (type as any).args as unknown as GraphQLNamedType[],
+        {
+          level: HEADER_SECTION_ITEM_LEVEL,
+          parentType:
+            typeof parentType === "undefined"
+              ? undefined
+              : `${parentType}.${type.name}`,
+        }
+      );
     }
 
     return section;
   }
 
-  printCodeEnum(type: GraphQLEnumType): string {
+  printCodeEnum(type: unknown): string {
+    if (!isEnumType(type)) {
+      return "";
+    }
+
     let code: string = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
     code += type
       .getValues()
@@ -345,11 +388,15 @@ export class Printer implements IPrinter {
     return code;
   }
 
-  printCodeUnion(type: GraphQLUnionType): string {
+  printCodeUnion(type: unknown): string {
+    if (!isUnionType(type)) {
+      return "";
+    }
+
     let code: string = `union ${getTypeName(type)} = `;
     code += type
       .getTypes()
-      .map((v) => getTypeName(v))
+      .map((v: GraphQLNamedType) => getTypeName(v))
       .join(" | ");
 
     return code;
@@ -365,7 +412,7 @@ export class Printer implements IPrinter {
     }
 
     let code: string = `(${MARKDOWN_EOL}`;
-    code += type.args.reduce((r, v) => {
+    code += type.args.reduce((r: string, v: GraphQLInputField) => {
       const defaultValue = getDefaultValue(v);
       const hasDefaultValue =
         typeof defaultValue !== "undefined" && defaultValue !== null;
@@ -379,10 +426,17 @@ export class Printer implements IPrinter {
     return code;
   }
 
-  printCodeField(type: GraphQLNamedType): string {
+  printCodeField(
+    type:
+      | GraphQLField<unknown, unknown, unknown>
+      | GraphQLInputField
+      | GraphQLObjectType<unknown, unknown>
+  ): string {
     let code: string = `${getTypeName(type)}`;
     code += this.printCodeArguments(type);
-    code += `: ${getTypeName(type.type)}${MARKDOWN_EOL}`;
+    code += `: ${getTypeName(
+      (type as any).type as GraphQLNamedType
+    )}${MARKDOWN_EOL}`;
 
     return code;
   }
@@ -414,7 +468,14 @@ export class Printer implements IPrinter {
     return code;
   }
 
-  printCodeType(type: GraphQLNamedType | GraphQLDirective) {
+  printCodeType(
+    type:
+      | GraphQLNamedType
+      | GraphQLDirective
+      | GraphQLInterfaceType
+      | GraphQLObjectType<any, any>
+      | GraphQLInputType
+  ) {
     let entity: string;
 
     switch (true) {
@@ -434,11 +495,15 @@ export class Printer implements IPrinter {
       type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
-            .map((field) => getTypeName(field))
+            .map((field: GraphQLInterfaceType) => getTypeName(field))
             .join(", ")}`
         : "";
-    const typeFields: string = getFields(type)
-      .map((v: any[]) => `  ${this.printCodeField(v)}`)
+    const typeFields: string = getFields(type as GraphQLNamedType)
+      .map(
+        (
+          v: Maybe<GraphQLField<unknown, unknown, unknown> | GraphQLInputField>
+        ) => (v ? `  ${this.printCodeField(v)}` : "")
+      )
       .join("");
 
     return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
@@ -456,114 +521,139 @@ export class Printer implements IPrinter {
     return `---${MARKDOWN_EOL}id: ${id}${MARKDOWN_EOL}title: ${title}\nhide_table_of_contents: ${!toc}${MARKDOWN_EOL}${pagination_buttons}---${MARKDOWN_EOL}`;
   }
 
-  printDeprecation(type: GraphQLNamedType): string {
-    if (!("isDeprecated" in type) || !type.isDeprecated) {
+  printDeprecation(
+    type: unknown
+  ): string {
+    if (!("isDeprecated" in (type as any)) || !(type as any).isDeprecated) {
       return "";
     }
 
     const reason =
-      "deprecationReason" in type &&
-      typeof type.deprecationReason !== "undefined"
-        ? ": " + escapeMDX(type.deprecationReason)
-        : "";
+      typeof (type as any).deprecationReason !== "string"
+        ? ""
+        : ": " + escapeMDX((type as any).deprecationReason);
     return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
   printDescription(
-    type: GraphQLNamedType,
+    type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument,
     noText: string = NO_DESCRIPTION_TEXT
   ): string {
-    const description: string =
-      "description" in type && escapeMDX(type.description);
+    const description = ("description" in type &&
+      escapeMDX(type.description)) as string;
     return `${this.printDeprecation(type)}${description || noText}`;
   }
 
   printSpecification(type: GraphQLNamedType): string {
-    if (!("specifiedByURL" in type) && !("specifiedByUrl" in type)) {
+    if (!("specifiedByURL" in type)) {
       return "";
     }
 
-    const url: string = type.specifiedByURL || type.specifiedByUrl;
+    const url = ("specifiedByURL" in type && type.specifiedByURL) as string;
 
     // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
     return `${HEADER_SECTION_LEVEL} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}`;
   }
 
-  printCode(type: GraphQLNamedType | GraphQLDirective) {
+  printCode(type: unknown) {
     let code: string = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
 
-    switch (true) {
-      case isOperation(type):
-        code += this.printCodeField(type);
-        break;
-      case isEnumType(type):
-        code += this.printCodeEnum(type);
-        break;
-      case isUnionType(type):
-        code += this.printCodeUnion(type);
-        break;
-      case isInterfaceType(type):
-      case isObjectType(type):
-      case isInputType(type):
-        code += this.printCodeType(type);
-        break;
-      case isScalarType(type):
-        code += this.printCodeScalar(type);
-        break;
-      case isDirectiveType(type):
-        code += this.printCodeDirective(type);
-        break;
-      default:
-        code += `"${getTypeName(type)}" not supported`;
+    if (isOperation(type)) {
+      code += this.printCodeField(type as any);
+    } else if (isEnumType(type)) {
+      code += this.printCodeEnum(type);
+    } else if (isUnionType(type)) {
+      code += this.printCodeUnion(type);
+    } else if (isScalarType(type)) {
+      code += this.printCodeScalar(type);
+    } else if (
+      isInterfaceType(type) ||
+      isObjectType(type) ||
+      isInputType(type)
+    ) {
+      code += this.printCodeType(type);
+    } else if (isDirective(type)) {
+      code += this.printCodeDirective(type);
+    } else {
+      code += `"${type}" not supported`;
     }
     return code.trim() + `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
   }
 
-  printTypeMetadata(type: GraphQLNamedType | GraphQLDirective): string {
+  printTypeMetadata(type: unknown): string {
     let metadata: string = "";
 
-    switch (true) {
-      case isScalarType(type):
-        return this.printSpecification(type);
-      case isEnumType(type):
-        return this.printSection(type.getValues(), "Values", {
+    if (isScalarType(type)) {
+      return this.printSpecification(type);
+    }
+    if (isEnumType(type)) {
+      return this.printSection(
+        type.getValues() as unknown as GraphQLEnumValue[],
+        "Values",
+        {
           parentType: type.name,
-        });
-      case isUnionType(type):
-        return this.printSection(type.getTypes(), "Possible types", {});
-      case isObjectType(type):
-      case isInterfaceType(type):
-      case isInputType(type): {
-        metadata = this.printSection(getFields(type), "Fields", {
-          parentType: type.name,
-        });
-        if ("getInterfaces" in type) {
-          metadata += this.printSection(type.getInterfaces(), "Interfaces", {});
+          level: undefined,
         }
-        return metadata;
-      }
-      case isDirectiveType(type): {
-        metadata = this.printSection(type.args, "Arguments", {
-          parentType: type.name,
-        });
-        return metadata;
-      }
-      case isOperation(type): {
-        metadata = this.printSection(type.args, "Arguments", {
-          parentType: type.name,
-        });
-        const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+      );
+    }
+    if (isUnionType(type)) {
+      return this.printSection(
+        type.getTypes() as unknown as GraphQLObjectType<any, any>[],
+        "Possible types",
+        {}
+      );
+    }
+    if (isObjectType(type) || isInterfaceType(type) || isInputType(type)) {
+      metadata = this.printSection(
+        getFields(type) as GraphQLInputField[],
+        "Fields",
+        {
+          parentType: "name" in type ? type.name : undefined,
+        }
+      );
+      if ("getInterfaces" in type) {
         metadata += this.printSection(
-          [this.schema.getType(queryType)],
-          "Type",
+          type.getInterfaces() as unknown as GraphQLInterfaceType[],
+          "Interfaces",
           {}
         );
-
-        return metadata;
       }
-      default:
-        return metadata;
+      return metadata;
     }
+    if (isDirective(type)) {
+      metadata = this.printSection(
+        type.args as unknown as GraphQLArgument[],
+        "Arguments",
+        {
+          parentType: type.name,
+        }
+      );
+      return metadata;
+    }
+    if (isOperation(type)) {
+      if ("args" in <any>type) {
+        metadata = this.printSection(
+          (type as any).args as unknown as GraphQLNamedType[],
+          "Arguments",
+          {
+            parentType:
+              "name" in <any>type ? ((type as any).name as string) : undefined,
+          }
+        );
+      }
+      const queryType = getTypeName(
+        (type as any).type as GraphQLNamedType
+      ).replace(/[![\]]*/g, "");
+      metadata += this.printSection(
+        [this.schema.getType(queryType) as GraphQLNamedType],
+        "Type",
+        {}
+      );
+
+      return metadata;
+    }
+
+    return metadata;
   }
 
   printRelations(type: GraphQLNamedType): string {
@@ -601,15 +691,20 @@ export class Printer implements IPrinter {
     }
 
     let data: string[] = [];
-    for (const [relation, types] of Object.entries(
-      relations
-    ) as RelationTypeList) {
+    for (const [relation, types] of Object.entries(relations) as [
+      string,
+      RelationTypeList
+    ][]) {
       if (types.length === 0) {
         continue;
       }
 
       const category = this.getRootTypeLocaleFromString(relation) as TypeLocale;
-      data = data.concat(types.map((t) => this.getRelationLink(category, t)));
+      data = data.concat(
+        types.map((t: Maybe<GraphQLNamedType>) =>
+          this.getRelationLink(category, t)
+        )
+      );
     }
 
     if (data.length === 0) {
@@ -639,3 +734,5 @@ export class Printer implements IPrinter {
     return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }
 }
+
+export default Printer;

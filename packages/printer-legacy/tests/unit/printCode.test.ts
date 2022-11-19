@@ -1,7 +1,7 @@
-const t = require("tap");
-const sinon = require("sinon");
+import t  from "tap";
+import sinon from "sinon";
 
-const {
+import {
   GraphQLEnumType,
   GraphQLScalarType,
   GraphQLUnionType,
@@ -10,30 +10,25 @@ const {
   GraphQLObjectType,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
-} = require("graphql");
+  GraphQLSchema,
+} from "graphql";
 
-const Printer = require("../../src/index");
+import Printer from "../../src/printer";
 
-t.formatSnapshot = (object) => JSON.stringify(object, null, 2);
+t.formatSnapshot = (object: any) => JSON.stringify(object, null, 2);
 
 t.test("printCode()", async () => {
-  const sandbox = sinon.createSandbox();
-
   const baseURL = "graphql";
   const root = "docs";
-  const schema = {
-    toString: () => "SCHEMA",
-    getType: (type) => type,
-    getTypeMap: () => {},
-    getDirectives: () => {},
-    getImplementations: () => {},
-    getRootType: () => undefined,
-    getQueryType: () => undefined,
-    getMutationType: () => undefined,
-    getSubscriptionType: () => undefined,
-  };
+  
+  const sandbox = sinon.createSandbox();
+  const schema = sinon.createStubInstance(GraphQLSchema);
 
-  const printerInstance = new Printer(schema, baseURL, root);
+  t.beforeEach( () => {
+    schema.getType.returnsArg(0);
+  })
+
+  const printerInstance = new Printer(schema, baseURL, root, {});
 
   const types = [
     {
@@ -79,7 +74,7 @@ t.test("printCode()", async () => {
     {
       name: "Scalar",
       spyOn: "printCodeScalar",
-      type: new GraphQLScalarType({
+      type: new GraphQLScalarType<string, string>({
         name: "TestScalar",
       }),
     },
@@ -110,11 +105,11 @@ t.test("printCode()", async () => {
     t.test(
       `returns a Markdown graphql codeblock with type ${name}`,
       async () => {
-        const spy = sandbox.spy(printerInstance, spyOn);
+        const spy = sandbox.spy(printerInstance, spyOn as keyof Printer);
 
         const code = printerInstance.printCode(type);
 
-        t.ok(spy.calledWith(type));
+        t.ok(spy.calledWith(type), `returns a Markdown graphql codeblock with type ${name}`);
 
         t.matchSnapshot(
           code,
@@ -129,7 +124,7 @@ t.test("printCode()", async () => {
     async () => {
       const type = "TestFooBarType";
 
-      const code = printerInstance.printCode(type);
+      const code = printerInstance.printCode(type as any);
 
       t.matchSnapshot(code);
     },

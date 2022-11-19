@@ -5,9 +5,6 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/printCodeEnum.test.js TAP > returns enum code structure 1`] = `
-enum EnumTypeName {
-  one
-  two
-}
+exports[`tests/unit/printCodeScalar.test.ts TAP > returns scalar code structure 1`] = `
+scalar ScalarTypeName
 `

@@ -5,21 +5,21 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/printCodeType.test.js TAP > returns an input with its fields 1`] = `
+exports[`tests/unit/printCodeType.test.ts TAP > returns an input with its fields 1`] = `
 input TestName {
   one: String
   two: Boolean
 }
 `
 
-exports[`tests/unit/printCodeType.test.js TAP > returns an interface with its fields 1`] = `
+exports[`tests/unit/printCodeType.test.ts TAP > returns an interface with its fields 1`] = `
 interface TestInterfaceName {
   one: String
   two: Boolean
 }
 `
 
-exports[`tests/unit/printCodeType.test.js TAP > returns an object with its fields and interfaces 1`] = `
+exports[`tests/unit/printCodeType.test.ts TAP > returns an object with its fields and interfaces 1`] = `
 type TestName implements TestInterfaceName {
   one: String
   two: Boolean

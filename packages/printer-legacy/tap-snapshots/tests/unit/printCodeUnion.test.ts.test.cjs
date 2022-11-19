@@ -5,6 +5,6 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/printCodeScalar.test.js TAP > returns scalar code structure 1`] = `
-scalar ScalarTypeName
+exports[`tests/unit/printCodeUnion.test.ts TAP > returns union code structure 1`] = `
+union UnionTypeName = one | two
 `

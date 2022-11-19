@@ -5,17 +5,17 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/unit/printCodeDirective.test.js TAP > returns a directive 1`] = `
+exports[`tests/unit/printCodeDirective.test.ts TAP > returns a directive 1`] = `
 directive @FooBar
 `
 
-exports[`tests/unit/printCodeDirective.test.js TAP > returns a directive with its arguments 1`] = `
+exports[`tests/unit/printCodeDirective.test.ts TAP > returns a directive with its arguments 1`] = `
 directive @FooBar(
   ArgFooBar: Boolean
 )
 `
 
-exports[`tests/unit/printCodeDirective.test.js TAP > returns a directive with multiple locations 1`] = `
+exports[`tests/unit/printCodeDirective.test.ts TAP > returns a directive with multiple locations 1`] = `
 directive @FooBar(
   ArgFooBar: Boolean
 ) on 
@@ -23,7 +23,7 @@ directive @FooBar(
   | FIELD
 `
 
-exports[`tests/unit/printCodeDirective.test.js TAP > returns a directive with single location 1`] = `
+exports[`tests/unit/printCodeDirective.test.ts TAP > returns a directive with single location 1`] = `
 directive @FooBar(
   ArgFooBar: Boolean
 ) on QUERY
