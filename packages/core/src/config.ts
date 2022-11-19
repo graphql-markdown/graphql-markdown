@@ -12,10 +12,24 @@ import {
   ConfigOptions,
   CliPrintTypeOptions,
   CliDocOptions,
+  DiffMethodType,
+  DiffMethods,
+  GetDiffMethod,
 } from "./type";
 
 export const PACKAGE_NAME: string = "@graphql-markdown/docusaurus";
 export const ASSETS_LOCATION: string = join(__dirname, "../assets/");
+
+export const COMPARE_METHOD_DEFAULT: DiffMethods = {
+  FORCE: {
+    toString: () => "FORCE",
+    diff: () => Promise.resolve(true),
+  },
+  NONE: {
+    toString: () => "NONE",
+    diff: () => Promise.resolve(true),
+  },
+};
 
 export const DEFAULT_OPTIONS: PluginOptions = {
   schema: "./schema.graphql",
@@ -37,12 +51,14 @@ export const DEFAULT_OPTIONS: PluginOptions = {
     relatedTypeSection: true,
     typeBadges: true,
   },
+  groupByDirective: undefined,
+  skipDocDirective: undefined
 };
 
-export const buildConfig = (
+export const buildConfig = async (
   cliOpts: CliOptions,
   configFileOpts?: PluginOptions
-): ConfigOptions => {
+): Promise<ConfigOptions> => {
   let config: PluginOptions = DEFAULT_OPTIONS;
 
   if (typeof configFileOpts !== "undefined" && configFileOpts !== null) {
@@ -51,17 +67,18 @@ export const buildConfig = (
 
   const baseURL: string = cliOpts.base ?? config.baseURL;
   const rootPath: string = cliOpts.root ?? config.rootPath;
+  const schemaDiff: DiffMethodType = await getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force);
 
   return {
     baseURL,
     rootPath,
+    schemaDiff,
+    loaders: config.loaders,
     schema: cliOpts.schema ?? config.schema,
     outputDir: join(rootPath, baseURL),
     linkRoot: cliOpts.link ?? config.linkRoot,
     homepage: cliOpts.homepage ?? config.homepage,
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
     tmpDir: cliOpts.tmp ?? config.tmpDir,
-    loaders: config.loaders,
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
     pretty: cliOpts.pretty ?? config.pretty,
@@ -74,11 +91,28 @@ export const buildConfig = (
   };
 };
 
-const getDiffMethod = (
-  diff: string | undefined,
-  force: boolean
-): string | undefined => {
-  return force ? "FORCE" : diff;
+const getDiffMethod = async (
+  method: string | undefined,
+  force: boolean,
+  module: string = "@graphql-markdown/diff"
+): Promise<DiffMethodType> => {
+  if (force) {
+    return COMPARE_METHOD_DEFAULT['FORCE'] as DiffMethodType;
+  }
+
+  const diffModule = await import(module);
+  if (typeof diffModule === "undefined") {
+    return COMPARE_METHOD_DEFAULT['NONE'] as DiffMethodType;
+  }
+
+  const getDiffMethod: GetDiffMethod = diffModule.getDiffMethod;
+
+  const diffMethod = getDiffMethod(method);
+  if (typeof diffMethod === "undefined") {
+    return COMPARE_METHOD_DEFAULT['NONE'] as DiffMethodType;
+  }
+
+  return diffMethod;
 };
 
 const getDocOptions = (

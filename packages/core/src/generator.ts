@@ -7,34 +7,16 @@ import {
 
 import { getGroups } from "./groupInfo";
 import Renderer from "./renderer";
-import { ConfigOptions, IPrinter, PrintTypeOptions } from "./type";
+import { ConfigOptions, DiffMethodType, IPrinter, PrintTypeOptions } from "./type";
 
 const time = process.hrtime();
 
 export const hasChanges = async (
   schema: GraphQLSchema,
   tmpDir: string,
-  diffMethod?: string,
-  diffModule?: string
+  schemaDiff: DiffMethodType
 ): Promise<boolean> => {
-  if (typeof diffMethod === "undefined" || diffMethod === null) {
-    return true;
-  }
-
-  if (typeof diffModule !== "string") {
-    return true;
-  }
-
-  try {
-    const { checkSchemaChanges } = await import(diffModule);
-    return await checkSchemaChanges(schema, tmpDir, diffMethod);
-  } catch (error) {
-    console.warn(
-      `Cannot find module '${diffModule}' from @graphql-markdown/core!`
-    );
-  }
-
-  return true;
+  return await schemaDiff.diff(schema, tmpDir);
 };
 
 export const getPrinter = async (
@@ -66,7 +48,7 @@ export const generateDocFromSchema = async ({
   outputDir,
   linkRoot,
   homepage: homepageLocation,
-  diffMethod,
+  schemaDiff,
   tmpDir,
   loaders: loadersList,
   groupByDirective,
@@ -82,7 +64,7 @@ export const generateDocFromSchema = async ({
     loaders,
   });
 
-  const changed = await hasChanges(schema, tmpDir, diffMethod);
+  const changed = await hasChanges(schema, tmpDir, schemaDiff);
   if (!changed) {
     console.info(`No changes detected in schema "${schemaLocation}".`);
   }

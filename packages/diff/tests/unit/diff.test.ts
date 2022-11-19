@@ -1,14 +1,28 @@
 import t from "tap";
 import esmock from "esmock";
-import { fs, vol } from "memfs";
+
+// import { vol } from "memfs";
+
+const mocks = {
+  "@graphql-markdown/utils/graphql": {
+    printSchema: (schema: any) => schema,
+    loadSchema: async () => ({}),
+  },
+  "@graphql-markdown/utils/fs": {
+    fileExists: async () => false,
+  },
+  "@graphql-inspector/core": {
+    diff: () => [],
+  },
+};
 
 t.test("diff", async () => {
   t.beforeEach(() => {
-    vol.fromJSON({}, "/output");
+    // vol.fromJSON({}, "/output");
   });
 
   t.afterEach(() => {
-    vol.reset();
+    // vol.reset();
   });
 
   t.test("checkSchemaChanges()", async () => {
@@ -18,14 +32,7 @@ t.test("diff", async () => {
         const { checkSchemaChanges } = await esmock(
           "../../src/diff",
           import.meta.url,
-          {
-            "@graphql-markdown/utils/graphql": {
-              printSchema: (schema: any) => schema,
-            },
-            "@graphql-markdown/utils/fs": {
-              "node:fs/promises": fs.promises,
-            },
-          }
+          mocks
         );
 
         const check = await checkSchemaChanges("schema", "/output", "FOOBAR");
@@ -37,24 +44,12 @@ t.test("diff", async () => {
     t.test(
       "returns true if COMPARE_METHOD.HASH comparison differs",
       async () => {
-        const { checkSchemaChanges, SCHEMA_HASH_FILE, COMPARE_METHOD } =
-          await esmock("../../src/diff", import.meta.url, {
-            "@graphql-markdown/utils/graphql": {
-              printSchema: (schema: any) => schema,
-            },
-            "@graphql-markdown/utils/fs": {
-              "node:fs/promises": fs.promises,
-            },
-          });
-
-        vol.fromJSON(
-          {
-            [SCHEMA_HASH_FILE]: "",
-          },
-          "/output"
+        const { checkSchemaChanges, COMPARE_METHOD } = await esmock(
+          "../../src/diff",
+          import.meta.url,
+          mocks
         );
 
-        // printSchema.callsFake(() => "schema-new");
         const check = await checkSchemaChanges(
           "schema-new",
           "/output",

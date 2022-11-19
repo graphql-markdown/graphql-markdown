@@ -32,12 +32,12 @@ export type PluginOptions = {
   printer: string;
   docOptions: DocOptions;
   printTypeOptions: PrintTypeOptions;
-  groupByDirective?: GroupByDirective | undefined;
-  skipDocDirective?: string | undefined;
-  diffMethod?: string | undefined;
+  groupByDirective: GroupByDirective | undefined;
+  skipDocDirective: string | undefined;
+  diffMethod?: string;
 };
 
-export type ConfigOptions = PluginOptions & { outputDir: string };
+export type ConfigOptions = PluginOptions & { outputDir: string, schemaDiff: DiffMethodType };
 
 export type CliDocOptions = {
   noPagination: boolean;
@@ -78,3 +78,21 @@ export interface IPrinter {
 
   printType(name: string, type: GraphQLNamedType, options: any): string;
 }
+
+export type CheckSchemaChanges = (
+  method: string,
+  schema: GraphQLSchema,
+  outputDir: string
+) => Promise<boolean>;
+
+export type DiffMethodType = {
+  toString: () => string;
+  diff: (...args: any) => Promise<boolean>;
+};
+
+export type GetDiffMethod = (method: string | undefined) => DiffMethodType | undefined;
+
+export type DiffMethods = {
+  [key: string]: DiffMethodType;
+};
+
