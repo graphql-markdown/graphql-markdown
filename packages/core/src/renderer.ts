@@ -32,7 +32,7 @@ export default class {
   readonly group: any;
   readonly prettify: boolean;
   readonly options: DocOptions;
-  readonly skipDocDirective: string;
+  readonly skipDocDirective: string | undefined;
 
   constructor(
     printer: IPrinter,
@@ -41,7 +41,7 @@ export default class {
     group: any,
     prettify: boolean,
     docOptions: DocOptions,
-    skipDocDirective: string
+    skipDocDirective: string | undefined
   ) {
     this.group = group;
     this.outputDir = outputDir;

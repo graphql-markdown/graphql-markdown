@@ -71,7 +71,7 @@ export const generateDocFromSchema = async ({
 
   const rootTypes = getSchemaMap(schema);
   const groups = getGroups(rootTypes, groupByDirective);
-  const printer = getPrinter(
+  const printer = await getPrinter(
     schema,
     baseURL,
     linkRoot,
