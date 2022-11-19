@@ -4,5 +4,17 @@
     "rootDir": "./src",
     "outDir": "./dist",
   },
-  "include": ["./src"]
+  "include": ["./src"],
+  "ts-node": {
+    "files": true,
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "compilerOptions": {
+      "module": "ES2022"
+    },
+    "moduleTypes": {
+      "src/**/*": "esm",
+      "tests/**/*": "esm"
+    }
+  }
 }
