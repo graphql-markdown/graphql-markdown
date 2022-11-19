@@ -29,7 +29,7 @@ jobs:
       run: npm ci
       
     - name: Build packages
-      run: npm run build -ws
+      run: tsc
 
     - name: Run Unit Tests
       run: |
