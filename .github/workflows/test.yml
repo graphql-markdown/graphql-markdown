@@ -28,8 +28,8 @@ jobs:
     - name: Install modules
       run: npm ci
       
-    - name: Build package
-      run: npm run build -w @graphql-markdown/${{matrix.package}}
+    - name: Build packages
+      run: npm run build -ws
 
     - name: Run Unit Tests
       run: |
