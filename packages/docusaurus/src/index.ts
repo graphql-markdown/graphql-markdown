@@ -1,6 +1,6 @@
 /* istanbul ignore file */
-import type { LoadContext } from '@docusaurus/types';
-import type { Command } from 'commander';
+import type { LoadContext } from "@docusaurus/types";
+import type { Command } from "commander";
 
 import { generateDocFromSchema, config } from "@graphql-markdown/core";
 
@@ -12,7 +12,9 @@ const DEFAULT_ID: string = "default";
 export default (_: LoadContext, configOptions: any) => {
   const isDefaultId: boolean = configOptions.id === DEFAULT_ID;
 
-  const command: string = isDefaultId ? COMMAND : `${COMMAND}:${configOptions.id}`;
+  const command: string = isDefaultId
+    ? COMMAND
+    : `${COMMAND}:${configOptions.id}`;
   const description: string = isDefaultId
     ? DESCRIPTION
     : `${DESCRIPTION} for configuration with id ${configOptions.id}`;
@@ -29,7 +31,7 @@ export default (_: LoadContext, configOptions: any) => {
         .option("-l, --link <linkRoot>", "Root for links in documentation")
         .option(
           "-h, --homepage <homepage>",
-          "File location for doc landing page",
+          "File location for doc landing page"
         )
         .option("--noPagination", "Disable page navigation buttons")
         .option("--noParentType", "Disable parent type name as field prefix")
@@ -42,13 +44,13 @@ export default (_: LoadContext, configOptions: any) => {
         .option("-t, --tmp <tmpDir>", "Set temp dir for schema diff")
         .option(
           "-gbd, --groupByDirective <@directive(field|=fallback)>",
-          "Group documentation by directive",
+          "Group documentation by directive"
         )
         .option("--skip <@directive>", "Skip type with matching directive")
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
           await generateDocFromSchema(
-            config.buildConfig(configOptions, cliOptions),
+            config.buildConfig(configOptions, cliOptions)
           );
         });
     },

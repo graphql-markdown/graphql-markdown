@@ -89,7 +89,6 @@ export class Printer implements IPrinter {
     this.skipDocDirective = skipDocDirective ?? undefined;
   }
 
-
   getRootTypeLocaleFromString(text: string): Maybe<TypeLocale> {
     for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
       if (Object.values(props).includes(text)) {
@@ -128,9 +127,7 @@ export class Printer implements IPrinter {
     const graphLQLNamedType: GraphQLNamedType = getNamedType(type);
     const typeName: string =
       graphLQLNamedType.name || graphLQLNamedType.toString();
-    return typeName in this.groups
-      ? toSlug(this.groups[typeName])
-      : "";
+    return typeName in this.groups ? toSlug(this.groups[typeName]) : "";
   }
 
   toLink(type: GraphQLNamedType, name: string, operation?: TypeLocale): Link {
@@ -191,10 +188,7 @@ export class Printer implements IPrinter {
   printSection(
     values: GraphQLNamedType[],
     section: string,
-    {
-      level,
-      parentType,
-    }: SectionLevel
+    { level, parentType }: SectionLevel
   ) {
     if (values.length === 0) {
       return "";
@@ -231,7 +225,6 @@ export class Printer implements IPrinter {
       return text ?? "";
     }
 
-
     if (isListType(type)) {
       return `[${text}]`;
     }
@@ -243,13 +236,17 @@ export class Printer implements IPrinter {
     return text;
   }
 
-  printLink(type: GraphQLNamedType, withAttributes: boolean = false, parentType?: string): string {
+  printLink(
+    type: GraphQLNamedType,
+    withAttributes: boolean = false,
+    parentType?: string
+  ): string {
     const link: Link = this.toLink(type, getTypeName(type));
 
     if (!withAttributes) {
       const printParentType: boolean =
         this.parentTypePrefix && typeof parentType !== "undefined";
-      const text: string= printParentType
+      const text: string = printParentType
         ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
         : `\`${link.text}\``;
       return `[${text}](${link.url})`;
@@ -302,17 +299,12 @@ export class Printer implements IPrinter {
     }
 
     return badges
-      .map(
-        (badge) =>
-          `<Badge class="secondary" text="${badge}"/>`
-      )
+      .map((badge) => `<Badge class="secondary" text="${badge}"/>`)
       .join(" ");
   }
 
   printParentLink(type: GraphQLNamedType): string {
-    return "type" in type
-      ? `<Bullet />${this.printLink(type.type, true)}`
-      : "";
+    return "type" in type ? `<Bullet />${this.printLink(type.type, true)}` : "";
   }
 
   printSectionItem(
@@ -437,7 +429,9 @@ export class Printer implements IPrinter {
     }
 
     const name: string = getTypeName(type);
-    const extendsInterface: string = (isObjectType(type) || isInterfaceType(type)) && type.getInterfaces().length > 0
+    const extendsInterface: string =
+      (isObjectType(type) || isInterfaceType(type)) &&
+      type.getInterfaces().length > 0
         ? ` implements ${type
             .getInterfaces()
             .map((field) => getTypeName(field))
@@ -451,7 +445,11 @@ export class Printer implements IPrinter {
   }
 
   printHeader(id: string, title: string, options: any) {
-    const { toc, pagination }: { toc: boolean, pagination: boolean } = { toc: true, pagination: true, ...options };
+    const { toc, pagination }: { toc: boolean; pagination: boolean } = {
+      toc: true,
+      pagination: true,
+      ...options,
+    };
     const pagination_buttons: string = pagination
       ? ""
       : `pagination_next: null${MARKDOWN_EOL}pagination_prev: null${MARKDOWN_EOL}`;
@@ -463,13 +461,18 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    const reason = "deprecationReason" in type && typeof type.deprecationReason !== "undefined"
-      ? ": " + escapeMDX(type.deprecationReason)
-      : "";
+    const reason =
+      "deprecationReason" in type &&
+      typeof type.deprecationReason !== "undefined"
+        ? ": " + escapeMDX(type.deprecationReason)
+        : "";
     return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
-  printDescription(type: GraphQLNamedType, noText: string = NO_DESCRIPTION_TEXT): string {
+  printDescription(
+    type: GraphQLNamedType,
+    noText: string = NO_DESCRIPTION_TEXT
+  ): string {
     const description: string =
       "description" in type && escapeMDX(type.description);
     return `${this.printDeprecation(type)}${description || noText}`;
@@ -550,7 +553,11 @@ export class Printer implements IPrinter {
           parentType: type.name,
         });
         const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-        metadata += this.printSection([this.schema.getType(queryType)], "Type", {});
+        metadata += this.printSection(
+          [this.schema.getType(queryType)],
+          "Type",
+          {}
+        );
 
         return metadata;
       }
@@ -574,7 +581,11 @@ export class Printer implements IPrinter {
     return data;
   }
 
-  printRelationOf(type: GraphQLNamedType, section: string, getRelation: Function): string {
+  printRelationOf(
+    type: GraphQLNamedType,
+    section: string,
+    getRelation: Function
+  ): string {
     if (
       typeof type === "undefined" ||
       typeof getRelation !== "function" ||
@@ -590,7 +601,9 @@ export class Printer implements IPrinter {
     }
 
     let data: string[] = [];
-    for (const [relation, types] of Object.entries(relations) as RelationTypeList) {
+    for (const [relation, types] of Object.entries(
+      relations
+    ) as RelationTypeList) {
       if (types.length === 0) {
         continue;
       }
@@ -619,7 +632,9 @@ export class Printer implements IPrinter {
     const description: string = this.printDescription(type);
     const code: string = this.printCode(type);
     const metadata: string = this.printTypeMetadata(type);
-    const relations: string = this.relatedTypeSection ? this.printRelations(type) : "";
+    const relations: string = this.relatedTypeSection
+      ? this.printRelations(type)
+      : "";
 
     return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
   }

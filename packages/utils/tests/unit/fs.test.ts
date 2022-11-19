@@ -14,7 +14,7 @@ const { ensureDir, fileExists, saveFile } = await esmock(
 t.beforeEach(() => {
   vol.fromJSON(
     {
-      "./testFile": "just a t.test",
+      testFile: "just a test",
     },
     "/testFolder"
   );

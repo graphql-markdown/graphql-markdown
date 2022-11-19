@@ -26,13 +26,13 @@ const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
 
 export default class {
-    readonly printer: IPrinter;
-    readonly outputDir: string;
-    readonly baseURL: string;
-    readonly group: any;
-    readonly prettify: boolean;
-    readonly options: DocOptions;
-    readonly skipDocDirective: string;
+  readonly printer: IPrinter;
+  readonly outputDir: string;
+  readonly baseURL: string;
+  readonly group: any;
+  readonly prettify: boolean;
+  readonly options: DocOptions;
+  readonly skipDocDirective: string;
 
   constructor(
     printer: IPrinter,
@@ -41,7 +41,7 @@ export default class {
     group: any,
     prettify: boolean,
     docOptions: DocOptions,
-    skipDocDirective: string,
+    skipDocDirective: string
   ) {
     this.group = group;
     this.outputDir = outputDir;
@@ -52,10 +52,13 @@ export default class {
     this.skipDocDirective = skipDocDirective;
   }
 
-  async generateCategoryMetafile(category: string, dirPath: string): Promise<void> {
+  async generateCategoryMetafile(
+    category: string,
+    dirPath: string
+  ): Promise<void> {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
-    const metafileExists = await fileExists(filePath)
+    const metafileExists = await fileExists(filePath);
     if (metafileExists) {
       return;
     }
@@ -91,11 +94,15 @@ export default class {
 
           return this.renderTypeEntities(dirPath, name, (type as any)[name]);
         })
-        .filter((res) => typeof res !== "undefined"),
+        .filter((res) => typeof res !== "undefined")
     );
   }
 
-  async renderTypeEntities(dirPath: string, name: string, type: GraphQLNamedType) {
+  async renderTypeEntities(
+    dirPath: string,
+    name: string,
+    type: GraphQLNamedType
+  ) {
     if (
       typeof type === "undefined" ||
       type === null ||
@@ -110,12 +117,12 @@ export default class {
     const content = this.printer.printType(fileName, type, this.options);
     await saveFile(
       filePath,
-      this.prettify ? prettifyMarkdown(content) : content,
+      this.prettify ? prettifyMarkdown(content) : content
     );
 
     const pagePath = path.relative(this.outputDir, filePath);
     const page = pagePath.match(
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
     );
     const slug = pathUrl.join(page.groups.category, page.groups.pageId);
 
@@ -147,7 +154,7 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
     const filePath = path.join(this.outputDir, SIDEBAR);
     await saveFile(
       filePath,
-      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar,
+      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar
     );
 
     return path.relative("./", filePath);
@@ -168,4 +175,4 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
       .replace(/##generated-date-time##/gm, new Date().toLocaleString());
     await saveFile(destLocation, data);
   }
-};
+}

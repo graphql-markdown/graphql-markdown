@@ -5,22 +5,35 @@ const DEFAULT_GROUP: string = "Miscellaneous";
 const OPTION_REGEX: RegExp =
   /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
 
-export const parseGroupByOption = (groupOptions?: string): GroupByDirective | undefined => {
+export const parseGroupByOption = (
+  groupOptions?: string
+): GroupByDirective | undefined => {
   if (typeof groupOptions !== "string" || groupOptions === null) {
     return undefined;
   }
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions === "undefined" || parsedOptions === null || typeof parsedOptions.groups === undefined) {
+  if (
+    typeof parsedOptions === "undefined" ||
+    parsedOptions === null ||
+    typeof parsedOptions.groups === undefined
+  ) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
-  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups as GroupByDirective;
+  const {
+    directive,
+    field,
+    fallback = DEFAULT_GROUP,
+  } = parsedOptions.groups as GroupByDirective;
   return { directive, field, fallback };
-}
+};
 
-export const getGroups = (rootTypes: any, groupByDirective: GroupByDirective | undefined): Record<string, unknown> | undefined => {
+export const getGroups = (
+  rootTypes: any,
+  groupByDirective: GroupByDirective | undefined
+): Record<string, unknown> | undefined => {
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
@@ -41,9 +54,12 @@ export const getGroups = (rootTypes: any, groupByDirective: GroupByDirective | u
   });
 
   return groups;
-}
+};
 
-export const getGroupName = (type: any, groupByDirective: GroupByDirective): string => {
+export const getGroupName = (
+  type: any,
+  groupByDirective: GroupByDirective
+): string => {
   let group: string = groupByDirective.fallback as string; // default value is fallback, and it will be only overridden if a group is found
 
   if (typeof type.astNode === "undefined" || type.astNode == null) {
@@ -61,10 +77,10 @@ export const getGroupName = (type: any, groupByDirective: GroupByDirective): str
       continue;
     }
     const field = directive.arguments.find(
-      ({ name }: any) => name.value === groupByDirective.field,
+      ({ name }: any) => name.value === groupByDirective.field
     );
     return field.value.value;
   }
 
   return group;
-}
+};

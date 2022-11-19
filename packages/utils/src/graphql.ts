@@ -116,7 +116,7 @@ export type RelationType =
   | "enums"
   | "scalars";
 
-export type RelationTypeList = readonly Maybe<GraphQLNamedType>[]
+export type RelationTypeList = readonly Maybe<GraphQLNamedType>[];
 
 export type RelationOf = {
   [relationType in RelationType]: RelationTypeList;
@@ -221,9 +221,7 @@ export const getListDefaultValues = (
   return `[${defaultValuesString.join(", ")}]`;
 };
 
-export const getDefaultValue = (
-  field: GraphQLInputField
-): Maybe<Scalar> => {
+export const getDefaultValue = (field: GraphQLInputField): Maybe<Scalar> => {
   const { type, defaultValue } = field;
 
   if (typeof defaultValue === "undefined" || defaultValue === null) {
@@ -441,11 +439,16 @@ export const getRelationOfField = (
     ) => {
       const fields = Object.assign(
         {},
-        ("args" in relationType && relationType.args) ? relationType.args : {},
-        ("getFields" in relationType && relationType.getFields()) ? relationType.getFields() : {}
+        "args" in relationType && relationType.args ? relationType.args : {},
+        "getFields" in relationType && relationType.getFields()
+          ? relationType.getFields()
+          : {}
       );
       for (const fieldDef of Object.values(fields)) {
-        if (typeof fieldDef !== "undefined" && getNamedType(fieldDef.type as GraphQLType).name === type.name) {
+        if (
+          typeof fieldDef !== "undefined" &&
+          getNamedType(fieldDef.type as GraphQLType).name === type.name
+        ) {
           if (
             !results.find(
               (r) => r.toString() === relationName || r.name === relationName

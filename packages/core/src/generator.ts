@@ -5,7 +5,7 @@ import {
   GraphQLSchema,
 } from "@graphql-markdown/utils/graphql";
 
-import { getGroups  }from "./groupInfo";
+import { getGroups } from "./groupInfo";
 import Renderer from "./renderer";
 import { ConfigOptions, IPrinter, PrintTypeOptions } from "./type";
 
@@ -15,7 +15,7 @@ export const hasChanges = async (
   schema: GraphQLSchema,
   tmpDir: string,
   diffMethod?: string,
-  diffModule?: string,
+  diffModule?: string
 ): Promise<boolean> => {
   if (typeof diffMethod === "undefined" || diffMethod === null) {
     return true;
@@ -30,7 +30,7 @@ export const hasChanges = async (
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch (error) {
     console.warn(
-      `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
+      `Cannot find module '${diffModule}' from @graphql-markdown/core!`
     );
   }
 
@@ -44,7 +44,7 @@ export const getPrinter = async (
   groups: Record<string, unknown> | undefined,
   printTypeOptions: PrintTypeOptions,
   printerModule: string,
-  skipDocDirective: string | undefined,
+  skipDocDirective: string | undefined
 ): Promise<IPrinter> => {
   try {
     const Printer = await import(printerModule);
@@ -55,7 +55,7 @@ export const getPrinter = async (
     });
   } catch (error) {
     throw new Error(
-      `Cannot find module '${printerModule}' from @graphql-markdown/core in printTypeOptions settings.`,
+      `Cannot find module '${printerModule}' from @graphql-markdown/core in printTypeOptions settings.`
     );
   }
 };
@@ -77,7 +77,10 @@ export const generateDocFromSchema = async ({
   skipDocDirective,
 }: ConfigOptions): Promise<void> => {
   const { loaders, loaderOptions } = await getDocumentLoaders(loadersList);
-  const schema = await loadSchema(schemaLocation, { ...loaderOptions, loaders });
+  const schema = await loadSchema(schemaLocation, {
+    ...loaderOptions,
+    loaders,
+  });
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
   if (!changed) {
@@ -93,7 +96,7 @@ export const generateDocFromSchema = async ({
     groups,
     printTypeOptions,
     printerModule,
-    skipDocDirective,
+    skipDocDirective
   );
   const renderer = new Renderer(
     printer,
@@ -102,13 +105,13 @@ export const generateDocFromSchema = async ({
     groups,
     prettify,
     docOptions,
-    skipDocDirective,
+    skipDocDirective
   );
 
   const pages = await Promise.all(
     Object.keys(rootTypes).map((typeName) =>
-      renderer.renderRootTypes(typeName, rootTypes[typeName]),
-    ),
+      renderer.renderRootTypes(typeName, rootTypes[typeName])
+    )
   );
 
   await renderer.renderHomepage(homepageLocation);
@@ -118,15 +121,15 @@ export const generateDocFromSchema = async ({
   const [sec, msec] = process.hrtime(time);
   const duration = (sec + msec / 1e9).toFixed(3);
   console.info(
-    `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+    `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`
   );
   console.log(
     `${
       pages.flat().length
-    } pages generated in ${duration}s from schema "${schemaLocation}".`,
+    } pages generated in ${duration}s from schema "${schemaLocation}".`
   );
   console.info(
-    `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
+    `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`
   );
 };
 
