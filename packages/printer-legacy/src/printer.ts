@@ -521,9 +521,7 @@ export class Printer implements IPrinter {
     return `---${MARKDOWN_EOL}id: ${id}${MARKDOWN_EOL}title: ${title}\nhide_table_of_contents: ${!toc}${MARKDOWN_EOL}${pagination_buttons}---${MARKDOWN_EOL}`;
   }
 
-  printDeprecation(
-    type: unknown
-  ): string {
+  printDeprecation(type: unknown): string {
     if (!("isDeprecated" in (type as any)) || !(type as any).isDeprecated) {
       return "";
     }

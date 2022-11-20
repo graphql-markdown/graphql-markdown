@@ -31,7 +31,7 @@ t.test("printHeader()", async () => {
   t.test("returns a Docusaurus document header", async () => {
     const header = printerInstance.printHeader(
       "an-object-type-name",
-      "An Object Type Name",
+      "An Object Type Name"
     );
 
     t.matchSnapshot(header, "returns a Docusaurus document header");
@@ -41,12 +41,12 @@ t.test("printHeader()", async () => {
     const header = printerInstance.printHeader(
       "an-object-type-name",
       "An Object Type Name",
-      { toc: false },
+      { toc: false }
     );
 
     t.matchSnapshot(
       header,
-      "returns a Docusaurus document header with ToC disabled",
+      "returns a Docusaurus document header with ToC disabled"
     );
   });
 
@@ -56,13 +56,13 @@ t.test("printHeader()", async () => {
       const header = printerInstance.printHeader(
         "an-object-type-name",
         "An Object Type Name",
-        { pagination: false },
+        { pagination: false }
       );
 
       t.matchSnapshot(
         header,
-        "returns a Docusaurus document header with pagination disabled",
+        "returns a Docusaurus document header with pagination disabled"
       );
-    },
+    }
   );
 });

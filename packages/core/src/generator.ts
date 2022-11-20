@@ -8,7 +8,12 @@ import {
 
 import { getGroups } from "./groupInfo";
 import Renderer from "./renderer";
-import { ConfigOptions, DiffMethodType, IPrinter, PrintTypeOptions } from "./type";
+import {
+  ConfigOptions,
+  DiffMethodType,
+  IPrinter,
+  PrintTypeOptions,
+} from "./type";
 
 const time = process.hrtime();
 

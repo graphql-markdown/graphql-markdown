@@ -22,7 +22,7 @@ t.test("printCodeScalar()", async () => {
   });
 
   const type = new GraphQLScalarType<number, number>({
-    name: "ScalarTypeName"
+    name: "ScalarTypeName",
   });
 
   t.test("returns scalar code structure", async () => {

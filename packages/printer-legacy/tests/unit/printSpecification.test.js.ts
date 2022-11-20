@@ -43,9 +43,9 @@ t.test("printSpecification()", async () => {
 
       t.matchSnapshot(
         deprecation,
-        "prints specification link if directive specified by is present",
+        "prints specification link if directive specified by is present"
       );
-    },
+    }
   );
 
   t.test(
@@ -59,6 +59,6 @@ t.test("printSpecification()", async () => {
       const deprecation = printerInstance.printSpecification(type);
 
       t.equal(deprecation, "");
-    },
+    }
   );
 });

@@ -13,10 +13,7 @@
     "compilerOptions": {
       "module": "ES2022"
     },
-    "ignore": [
-      "(?:^|/)node_modules/",
-      "(?:^|/)../"
-    ],
+    "ignore": ["(?:^|/)node_modules/", "(?:^|/)../"],
     "moduleTypes": {
       "src/**/*": "esm",
       "tests/**/*": "esm"

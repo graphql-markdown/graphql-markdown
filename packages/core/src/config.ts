@@ -52,7 +52,7 @@ export const DEFAULT_OPTIONS: PluginOptions = {
     typeBadges: true,
   },
   groupByDirective: undefined,
-  skipDocDirective: undefined
+  skipDocDirective: undefined,
 };
 
 export const buildConfig = async (
@@ -67,7 +67,10 @@ export const buildConfig = async (
 
   const baseURL: string = cliOpts.base ?? config.baseURL;
   const rootPath: string = cliOpts.root ?? config.rootPath;
-  const schemaDiff: DiffMethodType = await getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force);
+  const schemaDiff: DiffMethodType = await getDiffMethod(
+    cliOpts.diff ?? config.diffMethod,
+    cliOpts.force
+  );
 
   return {
     baseURL,
@@ -97,19 +100,19 @@ const getDiffMethod = async (
   module: string = "@graphql-markdown/diff"
 ): Promise<DiffMethodType> => {
   if (force) {
-    return COMPARE_METHOD_DEFAULT['FORCE'] as DiffMethodType;
+    return COMPARE_METHOD_DEFAULT["FORCE"] as DiffMethodType;
   }
 
   const diffModule = await import(module);
   if (typeof diffModule === "undefined") {
-    return COMPARE_METHOD_DEFAULT['NONE'] as DiffMethodType;
+    return COMPARE_METHOD_DEFAULT["NONE"] as DiffMethodType;
   }
 
   const getDiffMethod: GetDiffMethod = diffModule.getDiffMethod;
 
   const diffMethod = getDiffMethod(method);
   if (typeof diffMethod === "undefined") {
-    return COMPARE_METHOD_DEFAULT['NONE'] as DiffMethodType;
+    return COMPARE_METHOD_DEFAULT["NONE"] as DiffMethodType;
   }
 
   return diffMethod;

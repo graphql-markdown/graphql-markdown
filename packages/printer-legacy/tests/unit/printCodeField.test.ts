@@ -1,11 +1,7 @@
 import t from "tap";
 import sinon from "sinon";
 
-import {
-  GraphQLInputField,
-  GraphQLSchema,
-  GraphQLString,
-} from "graphql";
+import { GraphQLInputField, GraphQLSchema, GraphQLString } from "graphql";
 
 import Printer from "../../src/printer";
 

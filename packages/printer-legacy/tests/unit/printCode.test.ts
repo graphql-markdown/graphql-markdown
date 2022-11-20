@@ -1,4 +1,4 @@
-import t  from "tap";
+import t from "tap";
 import sinon from "sinon";
 
 import {
@@ -20,13 +20,13 @@ t.formatSnapshot = (object: any) => JSON.stringify(object, null, 2);
 t.test("printCode()", async () => {
   const baseURL = "graphql";
   const root = "docs";
-  
+
   const sandbox = sinon.createSandbox();
   const schema = sinon.createStubInstance(GraphQLSchema);
 
-  t.beforeEach( () => {
+  t.beforeEach(() => {
     schema.getType.returnsArg(0);
-  })
+  });
 
   const printerInstance = new Printer(schema, baseURL, root, {});
 
@@ -109,14 +109,17 @@ t.test("printCode()", async () => {
 
         const code = printerInstance.printCode(type);
 
-        t.ok(spy.calledWith(type), `returns a Markdown graphql codeblock with type ${name}`);
+        t.ok(
+          spy.calledWith(type),
+          `returns a Markdown graphql codeblock with type ${name}`
+        );
 
         t.matchSnapshot(
           code,
-          `returns a Markdown graphql codeblock with type ${name}`,
+          `returns a Markdown graphql codeblock with type ${name}`
         );
-      },
-    ),
+      }
+    )
   );
 
   t.test(
@@ -127,6 +130,6 @@ t.test("printCode()", async () => {
       const code = printerInstance.printCode(type as any);
 
       t.matchSnapshot(code);
-    },
+    }
   );
 });

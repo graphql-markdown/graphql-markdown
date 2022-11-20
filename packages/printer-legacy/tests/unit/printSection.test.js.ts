@@ -41,7 +41,7 @@ t.test("printSection()", async () => {
     t.ok(
       spy.calledWith(content, {
         parentType: undefined,
-      }),
+      })
     );
 
     t.matchSnapshot(section, "returns Markdown ### section by default");

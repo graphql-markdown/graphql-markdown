@@ -26,7 +26,9 @@ export type DiffMethodType = {
   diff: (...args: any) => Promise<boolean>;
 };
 
-export type GetDiffMethod = (method: string | undefined) => DiffMethodType | undefined;
+export type GetDiffMethod = (
+  method: string | undefined
+) => DiffMethodType | undefined;
 
 export const getDiffMethod: GetDiffMethod = (
   method: string | undefined
@@ -89,7 +91,7 @@ export const checkSchemaChanges = async (
   schema: GraphQLSchema,
   outputDir: string
 ): Promise<boolean> => {
-  const diffMethod = getDiffMethod(method)
+  const diffMethod = getDiffMethod(method);
 
   if (typeof diffMethod === "undefined") {
     return true;
@@ -106,5 +108,5 @@ export const COMPARE_METHOD: DiffMethods = {
   HASH: {
     toString: () => "SCHEMA-HASH",
     diff: checkSchemaHash,
-  }
+  },
 };

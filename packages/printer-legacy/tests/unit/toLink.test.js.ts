@@ -42,16 +42,16 @@ t.test("toLink()", async () => {
       const type = new GraphQLList(
         new GraphQLObjectType({
           name: entityName,
-        }),
+        })
       );
 
       const link = printerInstance.toLink(type, entityName);
 
       t.matchSnapshot(
         link,
-        "returns markdown link surrounded by [] for GraphQL list/array",
+        "returns markdown link surrounded by [] for GraphQL list/array"
       );
-    },
+    }
   );
 
   t.test("returns plain text for unknown entities", async () => {

@@ -1,7 +1,12 @@
 import t from "tap";
 import sinon from "sinon";
 
-import { GraphQLScalarType, GraphQLSchema, GraphQLObjectType, GraphQLUnionType } from "graphql";
+import {
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLUnionType,
+} from "graphql";
 
 import Printer from "../../src/printer";
 
@@ -24,7 +29,18 @@ t.test("printCodeUnion()", async () => {
   t.test("returns union code structure", async () => {
     const type = new GraphQLUnionType({
       name: "UnionTypeName",
-      types: [new GraphQLObjectType({ name: "one", description: undefined, fields: {}}), new GraphQLObjectType({ name: "two", description: undefined, fields: {}})],
+      types: [
+        new GraphQLObjectType({
+          name: "one",
+          description: undefined,
+          fields: {},
+        }),
+        new GraphQLObjectType({
+          name: "two",
+          description: undefined,
+          fields: {},
+        }),
+      ],
     });
 
     const code = printerInstance.printCodeUnion(type);

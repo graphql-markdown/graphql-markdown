@@ -29,12 +29,19 @@ t.test("printCodeArguments()", async () => {
         locations: [],
         args: {
           ParamWithDefault: {
-            type: new GraphQLScalarType<string, string>({name: "string"}),
+            type: new GraphQLScalarType<string, string>({ name: "string" }),
             defaultValue: "defaultValue",
           },
-          ParamNoDefault: { type: new GraphQLScalarType<any, any>({name: "any"}) },
-          ParamIntZero: { type: new GraphQLScalarType<number, number>({name: "int"}), defaultValue: 0 },
-          ParamIntNoDefault: { type: new GraphQLScalarType<number, number>({name: "int"}) },
+          ParamNoDefault: {
+            type: new GraphQLScalarType<any, any>({ name: "any" }),
+          },
+          ParamIntZero: {
+            type: new GraphQLScalarType<number, number>({ name: "int" }),
+            defaultValue: 0,
+          },
+          ParamIntNoDefault: {
+            type: new GraphQLScalarType<number, number>({ name: "int" }),
+          },
         },
       });
 
@@ -42,9 +49,9 @@ t.test("printCodeArguments()", async () => {
 
       t.matchSnapshot(
         code,
-        "returns a Markdown one line per formatted argument with default value surrounded by ()",
+        "returns a Markdown one line per formatted argument with default value surrounded by ()"
       );
-    },
+    }
   );
 
   t.test("returns an empty string if args list empty", async () => {

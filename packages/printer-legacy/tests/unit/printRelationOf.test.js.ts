@@ -47,7 +47,7 @@ t.test("printRelationOf()", async () => {
     const deprecation = printerInstance.printRelationOf(
       type,
       "RelationOf",
-      graphqlLib.getRelationOfReturn,
+      graphqlLib.getRelationOfReturn
     );
 
     t.matchSnapshot(deprecation, "prints type relations");

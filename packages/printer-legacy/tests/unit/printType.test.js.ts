@@ -143,9 +143,9 @@ t.test("printType()", async () => {
 
         t.matchSnapshot(
           printedType,
-          `returns a Markdown formatted Docusaurus content for type ${name}`,
+          `returns a Markdown formatted Docusaurus content for type ${name}`
         );
-      },
+      }
     );
   });
 
@@ -165,9 +165,9 @@ t.test("printType()", async () => {
 
         t.matchSnapshot(
           printedType,
-          `returns a Markdown formatted Docusaurus content for ${name} implementing interface`,
+          `returns a Markdown formatted Docusaurus content for ${name} implementing interface`
         );
-      },
+      }
     );
   });
 
@@ -195,8 +195,8 @@ t.test("printType()", async () => {
 
       t.matchSnapshot(
         printedType,
-        "prints a specification section if scalar as directive @specifiedBy",
+        "prints a specification section if scalar as directive @specifiedBy"
       );
-    },
+    }
   );
 });

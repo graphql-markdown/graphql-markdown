@@ -37,7 +37,10 @@ export type PluginOptions = {
   diffMethod?: string;
 };
 
-export type ConfigOptions = PluginOptions & { outputDir: string, schemaDiff: DiffMethodType };
+export type ConfigOptions = PluginOptions & {
+  outputDir: string;
+  schemaDiff: DiffMethodType;
+};
 
 export type CliDocOptions = {
   noPagination: boolean;
@@ -90,9 +93,10 @@ export type DiffMethodType = {
   diff: (...args: any) => Promise<boolean>;
 };
 
-export type GetDiffMethod = (method: string | undefined) => DiffMethodType | undefined;
+export type GetDiffMethod = (
+  method: string | undefined
+) => DiffMethodType | undefined;
 
 export type DiffMethods = {
   [key: string]: DiffMethodType;
 };
-

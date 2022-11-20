@@ -54,9 +54,9 @@ export type ClassName = string & { _opaque: ClassName };
 export type ModuleName = string & { _opaque: ModuleName };
 
 export type RootTypes = {
-  "query"?: string;
-  "mutation"?: string;
-  "subscription"?: string;
+  query?: string;
+  mutation?: string;
+  subscription?: string;
 };
 export type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
 

@@ -46,7 +46,7 @@ t.test("printSectionItem()", async () => {
 
     t.matchSnapshot(
       section,
-      "returns Markdown #### link section with description",
+      "returns Markdown #### link section with description"
     );
   });
 
@@ -58,7 +58,7 @@ t.test("printSectionItem()", async () => {
         type: new GraphQLNonNull(
           new GraphQLObjectType({
             name: "NonNullableObjectType",
-          }),
+          })
         ),
       };
 
@@ -66,9 +66,9 @@ t.test("printSectionItem()", async () => {
 
       t.matchSnapshot(
         section,
-        "returns Markdown #### link section with sub type is non-nullable",
+        "returns Markdown #### link section with sub type is non-nullable"
       );
-    },
+    }
   );
 
   t.test(
@@ -80,8 +80,8 @@ t.test("printSectionItem()", async () => {
           new GraphQLList(
             new GraphQLObjectType({
               name: "NonNullableObjectType",
-            }),
-          ),
+            })
+          )
         ),
       };
 
@@ -89,9 +89,9 @@ t.test("printSectionItem()", async () => {
 
       t.matchSnapshot(
         section,
-        "returns Markdown #### link section with sub type list and non-nullable",
+        "returns Markdown #### link section with sub type list and non-nullable"
       );
-    },
+    }
   );
 
   t.test(
@@ -115,13 +115,13 @@ t.test("printSectionItem()", async () => {
         spy.calledWith(type.args, {
           level: "#####",
           parentType: undefined,
-        }),
+        })
       );
       t.matchSnapshot(
         section,
-        "returns Markdown #### link section with field parameters",
+        "returns Markdown #### link section with field parameters"
       );
-    },
+    }
   );
 
   t.test(
@@ -136,9 +136,9 @@ t.test("printSectionItem()", async () => {
 
       t.matchSnapshot(
         section,
-        "returns Markdown #### link section with non empty nullable list [!]",
+        "returns Markdown #### link section with non empty nullable list [!]"
       );
-    },
+    }
   );
 
   t.test(
@@ -147,7 +147,7 @@ t.test("printSectionItem()", async () => {
       const type = {
         name: "EntityTypeNameList",
         type: new GraphQLNonNull(
-          new GraphQLList(new GraphQLNonNull(GraphQLInt)),
+          new GraphQLList(new GraphQLNonNull(GraphQLInt))
         ),
       };
 
@@ -155,8 +155,8 @@ t.test("printSectionItem()", async () => {
 
       t.matchSnapshot(
         section,
-        "returns Markdown #### link section with non empty no nullable list [!]!",
+        "returns Markdown #### link section with non empty no nullable list [!]!"
       );
-    },
+    }
   );
 });
