@@ -1,11 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist/"
   },
+  "references": [
+    { "path": "../utils" }
+  ],
   "include": ["src/**/*.ts"],
-  "exclude": ["**/*.cjs", "dist"],
   "ts-node": {
     "files": true,
     "esm": true,

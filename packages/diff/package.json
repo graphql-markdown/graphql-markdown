@@ -16,9 +16,10 @@
   },
   "type": "commonjs",
   "exports": {
-    ".": "./dist/diff.js"
+    ".": "./dist/src/diff.js"
   },
   "scripts": {
+    "build": "rm -rf dist/* && tsc -p tsconfig.json",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",

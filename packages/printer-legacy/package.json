@@ -16,9 +16,10 @@
   },
   "type": "commonjs",
   "exports": {
-    ".": "./dist/printer.js"
+    ".": "./dist/src/printer.js"
   },
   "scripts": {
+    "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",

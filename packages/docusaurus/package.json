@@ -25,9 +25,10 @@
   },
   "type": "commonjs",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/src/index.js"
   },
   "scripts": {
+    "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "jest",

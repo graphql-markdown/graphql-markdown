@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "es2022",
+    "moduleResolution": "node",
+    "paths": {
+      "@graphql-markdown/core/*": ["packages/core/src/*"],
+      "@graphql-markdown/diff": ["packages/diff/src"],
+      "@graphql-markdown/docusaurus": ["packages/docusaurus/src"],
+      "@graphql-markdown/printer-legacy": ["packages/printer-legacy/src"],
+      "@graphql-markdown/utils/*": ["packages/utils/src/*"]
+    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext"
+  },
+  "exclude": ["node_modules", "packages/*/dist", "packages/*/tests"]
+}

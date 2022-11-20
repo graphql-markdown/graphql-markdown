@@ -23,22 +23,23 @@
   },
   "type": "commonjs",
   "exports": {
-    "./config": "./dist/config.js",
-    "./generator": "./dist/generator.js",
-    "./groupInfo": "./dist/groupInfo.js",
-    "./renderer": "./dist/renderer.js",
-    "./type": "./dist/type.js"
+    "./config": "./dist/src/config.js",
+    "./generator": "./dist/src/generator.js",
+    "./groupInfo": "./dist/src/groupInfo.js",
+    "./renderer": "./dist/src/renderer.js",
+    "./type": "./dist/src/type.js"
   },
   "typesVersions": {
     "*": {
-      "config": ["dist/config.d.ts"],
-      "generator": ["dist/generator.d.ts"],
-      "groupInfo": ["dist/groupInfo.d.ts"],
-      "renderer": ["dist/renderer.d.ts"],
-      "type": ["dist/type.d.ts"]
+      "config": ["dist/src/config.d.ts"],
+      "generator": ["dist/src/generator.d.ts"],
+      "groupInfo": ["dist/src/groupInfo.d.ts"],
+      "renderer": ["dist/src/renderer.d.ts"],
+      "type": ["dist/src/type.d.ts"]
     }
   },
   "scripts": {
+    "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",

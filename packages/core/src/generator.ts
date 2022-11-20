@@ -3,6 +3,7 @@ import {
   loadSchema,
   getDocumentLoaders,
   GraphQLSchema,
+  RelationType,
 } from "@graphql-markdown/utils/graphql";
 
 import { getGroups } from "./groupInfo";
@@ -91,7 +92,7 @@ export const generateDocFromSchema = async ({
   );
 
   const pages = await Promise.all(
-    Object.keys(rootTypes).map((typeName) =>
+    (Object.keys(rootTypes) as RelationType[]).map((typeName) =>
       renderer.renderRootTypes(typeName, rootTypes[typeName])
     )
   );

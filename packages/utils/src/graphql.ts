@@ -39,6 +39,8 @@ import { Maybe } from "graphql/jsutils/Maybe";
 import { keyValMap } from "graphql/jsutils/keyValMap";
 import { ObjMap } from "graphql/jsutils/ObjMap";
 
+export { printSchema, GraphQLSchema } from "graphql";
+
 export const OperationTypeNodes: readonly OperationTypeNode[] = [
   OperationTypeNode.QUERY,
   OperationTypeNode.MUTATION,
@@ -50,10 +52,11 @@ type Scalar = string | boolean | number;
 export type ClassName = string & { _opaque: ClassName };
 
 export type ModuleName = string & { _opaque: ModuleName };
+
 export type RootTypes = {
-  query?: string;
-  mutation?: string;
-  subscription?: string;
+  "query"?: string;
+  "mutation"?: string;
+  "subscription"?: string;
 };
 export type ModuleOptions = LoadSchemaOptions & { rootTypes?: RootTypes };
 
@@ -192,7 +195,7 @@ export const getDefaultValue = (field: GraphQLInputField): Maybe<Scalar> => {
   const { type, defaultValue } = field;
 
   if (typeof defaultValue === "undefined" || defaultValue === null) {
-    return defaultValue;
+    return undefined;
   }
 
   if (isListType(type)) {
@@ -299,10 +302,16 @@ export const getFields = (
 };
 
 export const getTypeName = (
-  type:GraphQLType | GraphQLField<unknown, unknown, unknown> | GraphQLList<GraphQLType> | GraphQLDirective | GraphQLInputField | GraphQLEnumValue,
+  type:
+    | GraphQLType
+    | GraphQLField<unknown, unknown, unknown>
+    | GraphQLList<GraphQLType>
+    | GraphQLDirective
+    | GraphQLInputField
+    | GraphQLEnumValue,
   defaultName?: string
 ): string => {
-  if(isListType(type)) {
+  if (isListType(type)) {
     return defaultName ?? "";
   }
   return type?.name ?? type?.toString() ?? defaultName ?? "";

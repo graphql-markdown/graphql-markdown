@@ -16,26 +16,27 @@
   },
   "type": "commonjs",
   "exports": {
-    "./array": "./dist/array.js",
-    "./fs": "./dist/fs.js",
-    "./graphql": "./dist/graphql.js",
-    "./object": "./dist/object.js",
-    "./prettier": "./dist/prettier.js",
-    "./string": "./dist/string.js",
-    "./url": "./dist/url.js"
+    "./array": "./dist/src/array.js",
+    "./fs": "./dist/src/fs.js",
+    "./graphql": "./dist/src/graphql.js",
+    "./object": "./dist/src/object.js",
+    "./prettier": "./dist/src/prettier.js",
+    "./string": "./dist/src/string.js",
+    "./url": "./dist/src/url.js"
   },
   "typesVersions": {
     "*": {
-      "array": ["dist/array.d.ts"],
-      "fs": ["dist/fs.d.ts"],
+      "array": ["dist/src/array.d.ts"],
+      "fs": ["dist/src/fs.d.ts"],
       "graphql": ["dist/graphql.d.ts"],
-      "object": ["dist/object.d.ts"],
-      "prettier": ["dist/prettier.d.ts"],
-      "string": ["dist/string.d.ts"],
-      "url": ["dist/url.d.ts"]
+      "object": ["dist/src/object.d.ts"],
+      "prettier": ["dist/src/prettier.d.ts"],
+      "string": ["dist/src/string.d.ts"],
+      "url": ["dist/src/url.d.ts"]
     }
   },
   "scripts": {
+    "build": "tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",

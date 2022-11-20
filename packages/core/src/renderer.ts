@@ -19,6 +19,8 @@ import {
 import { ASSETS_LOCATION } from "./config";
 import { DocOptions, IPrinter } from "./type";
 import { GraphQLNamedType } from "graphql/type/definition";
+import { Maybe } from "graphql/jsutils/Maybe";
+import { ObjMap } from "graphql/jsutils/ObjMap";
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
 const SIDEBAR = "sidebar-schema.js";
@@ -74,7 +76,7 @@ export default class {
     await saveFile(filePath, `label: ${label}\nlink: ${link}\n`);
   }
 
-  async renderRootTypes(rootTypeName: string, type: GraphQLNamedType) {
+  async renderRootTypes(rootTypeName: string, type: Maybe<ObjMap<unknown>>) {
     if (typeof type !== "object" || type === null) {
       return undefined;
     }
@@ -106,7 +108,7 @@ export default class {
     if (
       typeof type === "undefined" ||
       type === null ||
-      hasDirective(type, this.skipDocDirective)
+      this.skipDocDirective && hasDirective(type, this.skipDocDirective)
     ) {
       return undefined;
     }
@@ -115,18 +117,24 @@ export default class {
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
 
     const content = this.printer.printType(fileName, type, this.options);
+    const prettified = await (this.prettify ? prettifyMarkdown(content) : content);
     await saveFile(
       filePath,
-      this.prettify ? prettifyMarkdown(content) : content
+      prettified
     );
 
     const pagePath = path.relative(this.outputDir, filePath);
-    const page = pagePath.match(
+    const groups = pagePath.match(
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
-    );
-    const slug = pathUrl.join(page.groups.category, page.groups.pageId);
+    )?.groups;
 
-    return { category: startCase(page.groups.category), slug: slug };
+    if (typeof groups === "undefined"  ||  groups === null) {
+      return undefined;
+    }
+    
+    const slug = pathUrl.join(groups['category'], groups['pageId']);
+  
+    return { category: startCase(groups['category']), slug: slug };
   }
 
   async renderSidebar(): Promise<string> {
@@ -152,9 +160,10 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
 `;
 
     const filePath = path.join(this.outputDir, SIDEBAR);
+    const content  = await (this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar);
     await saveFile(
       filePath,
-      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar
+      content
     );
 
     return path.relative("./", filePath);

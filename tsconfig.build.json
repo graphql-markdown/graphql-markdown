@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+  {
+    "path": "./packages/core"
+  },
+  {
+    "path": "./packages/diff"
+  },
+  {
+    "path": "./packages/docusaurus"
+  },
+  {
+    "path": "./packages/printer-legacy"
+  },
+  {
+    "path": "./packages/utils"
+  }
+ ]
+}

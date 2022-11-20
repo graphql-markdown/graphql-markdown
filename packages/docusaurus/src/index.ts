@@ -2,14 +2,15 @@
 import type { LoadContext } from "@docusaurus/types";
 import type { Command } from "commander";
 
-import { generateDocFromSchema, config } from "@graphql-markdown/core";
+import { generateDocFromSchema } from "@graphql-markdown/core/generator";
+import { buildConfig } from "@graphql-markdown/core/config";
 
 const NAME: string = "docusaurus-graphql-doc-generator";
 const COMMAND: string = "graphql-to-doc";
 const DESCRIPTION: string = "Generate GraphQL Schema Documentation";
 const DEFAULT_ID: string = "default";
 
-export default (_: LoadContext, configOptions: any) => {
+export default async (_: LoadContext, configOptions: any) => {
   const isDefaultId: boolean = configOptions.id === DEFAULT_ID;
 
   const command: string = isDefaultId
@@ -50,7 +51,7 @@ export default (_: LoadContext, configOptions: any) => {
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
           await generateDocFromSchema(
-            config.buildConfig(configOptions, cliOptions)
+            await buildConfig(configOptions, cliOptions)
           );
         });
     },
