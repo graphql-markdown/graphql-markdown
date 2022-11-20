@@ -19,7 +19,6 @@
     ".": "./dist/diff.js"
   },
   "scripts": {
-    "build": "tsc --build --clean && tsc",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "tap",
