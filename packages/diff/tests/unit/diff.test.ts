@@ -1,21 +1,6 @@
 import t from "tap";
 import esmock from "esmock";
 
-// import { vol } from "memfs";
-
-const mocks = {
-  "@graphql-markdown/utils/graphql": {
-    printSchema: (schema: any) => schema,
-    loadSchema: async () => ({}),
-  },
-  "@graphql-markdown/utils/fs": {
-    fileExists: async () => false,
-  },
-  "@graphql-inspector/core": {
-    diff: () => [],
-  },
-};
-
 t.test("diff", async () => {
   t.beforeEach(() => {
     // vol.fromJSON({}, "/output");
@@ -32,7 +17,7 @@ t.test("diff", async () => {
         const { checkSchemaChanges } = await esmock(
           "../../src/diff",
           import.meta.url,
-          mocks
+          // mocks
         );
 
         const check = await checkSchemaChanges("schema", "/output", "FOOBAR");
@@ -47,7 +32,14 @@ t.test("diff", async () => {
         const { checkSchemaChanges, COMPARE_METHOD } = await esmock(
           "../../src/diff",
           import.meta.url,
-          mocks
+          // {
+          //   ...mocks,
+          //   "@graphql-markdown/utils/fs": {
+          //     fileExists: async () => Promise.resolve(true),
+          //     readFile: async () =>
+          //       Promise.resolve("df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4"),
+          //   },
+          // }
         );
 
         const check = await checkSchemaChanges(
@@ -60,25 +52,31 @@ t.test("diff", async () => {
       }
     );
 
-    //   t.test(
-    //     "returns false if COMPARE_METHOD.HASH comparison is equals",
-    //     async () => {
-    //       sandbox.stub(graphql, "printSchema").callsFake(() => "schema");
+    t.test(
+      "returns false if COMPARE_METHOD.HASH comparison is equals",
+      async () => {
+        const { checkSchemaChanges, COMPARE_METHOD } = await esmock(
+          "../../src/diff",
+          import.meta.url,
+          // {
+          //   ...mocks,
+          //   "@graphql-markdown/utils/fs": {
+          //     fileExists: async () => Promise.resolve(true),
+          //     readFile: async () =>
+          //       Promise.resolve("df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4"),
+          //   },
+          // }
+        );
 
-    //       vol.fromJSON({
-    //         [`${"/output"}/${SCHEMA_HASH_FILE}`]:
-    //           "df0ad6e43880f09c90ebf95f19110178aba6890df0010ebda7485029e2b543b4",
-    //       });
+        const check = await checkSchemaChanges(
+          "schema",
+          "/output",
+          COMPARE_METHOD.HASH
+        );
 
-    //       const check = await checkSchemaChanges(
-    //         "schema",
-    //         "/output",
-    //         COMPARE_METHOD.HASH
-    //       );
-
-    //       t.notOk(check);
-    //     }
-    //   );
+        t.notOk(check);
+      }
+    );
 
     //   t.test(
     //     "returns true if COMPARE_METHOD.HASH comparison has no reference hash file",

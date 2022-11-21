@@ -12,7 +12,7 @@
     "esm": true,
     "experimentalSpecifierResolution": "node",
     "compilerOptions": {
-      "module": "ES2022"
+      "module": "ES2022",
     },
     "ignore": ["(?:^|/)node_modules/", "(?:^|/).*/dist/"],
     "moduleTypes": {

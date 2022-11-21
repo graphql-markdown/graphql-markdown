@@ -28,7 +28,7 @@
     ".": "./dist/src/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist/* && tsc -p tsconfig.json",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "jest",

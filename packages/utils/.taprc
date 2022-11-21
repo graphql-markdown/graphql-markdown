@@ -3,4 +3,4 @@ node-arg :
   - "--loader=esmock"
   - "--no-warnings"
 coverage: false,
-ts: false
+ts: true

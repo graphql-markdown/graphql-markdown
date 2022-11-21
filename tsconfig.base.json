@@ -6,8 +6,9 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "es2022",
+    "module": "CommonJS",
     "moduleResolution": "node",
+    "noImplicitAny": true,
     "paths": {
       "@graphql-markdown/core/*": ["packages/core/src/*"],
       "@graphql-markdown/diff": ["packages/diff/src"],
