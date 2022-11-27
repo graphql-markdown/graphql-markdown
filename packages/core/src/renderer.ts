@@ -124,7 +124,7 @@ export default class {
 
     const pagePath = path.relative(this.outputDir, filePath);
     const groups = pagePath.match(
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+)\.mdx?$/
     )?.groups;
 
     if (typeof groups === "undefined" || groups === null) {
