@@ -1,5 +1,6 @@
-const { getSchemaMap, loadSchema, getDocumentLoaders } =
-  require("@graphql-markdown/utils").graphql;
+const {
+  graphql: { getSchemaMap, loadSchema, getDocumentLoaders },
+} = require("@graphql-markdown/utils");
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 
