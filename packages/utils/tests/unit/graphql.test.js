@@ -32,6 +32,7 @@ const {
   getRelationOfReturn,
   getRelationOfField,
   getRelationOfImplementation,
+  hasDirective,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -96,6 +97,13 @@ describe("graphql", () => {
       expect(loaderOptions).toMatchObject({
         option1: true,
       });
+    });
+
+    test("throw an error when loader list is invalid", () => {
+      const loaders = { GraphQLFileLoader: {} };
+      expect(() => {
+        getDocumentLoaders(loaders);
+      }).toThrow(Error);
     });
   });
 
@@ -655,6 +663,53 @@ describe("getRelationOfInterface()", () => {
         const relations = getRelationOfField(compositeType, schema);
 
         expect(relations).toMatchSnapshot();
+      });
+    });
+
+    describe("hasDirective", () => {
+      const schema = buildSchema(`
+        directive @foobaz on OBJECT
+
+        interface Record {
+          id: String!
+        }
+
+        type StudyItem implements Record @foobaz {
+          id: String!
+          subject: String!
+          duration: Int!
+        }
+        
+        type Query {
+          getStudyItems(subject: String): [StudyItem!]
+          getStudyItem(id: String!): StudyItem
+        }
+
+        type Mutation {
+          addStudyItem(subject: String!, duration: Int!): StudyItem
+        }
+    
+        type Subscription {
+          listStudyItems: [StudyItem!]
+        }
+      `);
+
+      test("return false is the type has no directive", () => {
+        const type = schema.getType("Subscription");
+
+        expect(hasDirective(type, "foobar")).toBeFalsy();
+      });
+
+      test("return false is the type has no matching directive", () => {
+        const type = schema.getType("StudyItem");
+
+        expect(hasDirective(type, "foobar")).toBeFalsy();
+      });
+
+      test("return true is the type has matching directive", () => {
+        const type = schema.getType("StudyItem");
+
+        expect(hasDirective(type, "foobaz")).toBeTruthy();
       });
     });
   });
