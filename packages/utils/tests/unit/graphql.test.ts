@@ -46,6 +46,7 @@ import {
   ModuleName,
   ClassName,
   LoadersType,
+  hasDirective,
 } from "../../src/graphql";
 import { ObjMap } from "graphql/jsutils/ObjMap";
 
@@ -614,5 +615,52 @@ t.test("graphql", async () => {
         );
       }
     );
+  });
+
+  t.test("hasDirective", async () => {
+    const schema = buildSchema(`
+        directive @foobaz on OBJECT
+
+        interface Record {
+          id: String!
+        }
+
+        type StudyItem implements Record @foobaz {
+          id: String!
+          subject: String!
+          duration: Int!
+        }
+        
+        type Query {
+          getStudyItems(subject: String): [StudyItem!]
+          getStudyItem(id: String!): StudyItem
+        }
+
+        type Mutation {
+          addStudyItem(subject: String!, duration: Int!): StudyItem
+        }
+    
+        type Subscription {
+          listStudyItems: [StudyItem!]
+        }
+      `);
+
+    t.test("return false is the type has no directive", async () => {
+      const type = schema.getType("Subscription") as GraphQLNamedType;
+
+      expect(hasDirective(type, "foobar")).toBeFalsy();
+    });
+
+    t.test("return false is the type has no matching directive", async () => {
+      const type = schema.getType("StudyItem") as GraphQLNamedType;
+
+      expect(hasDirective(type, "foobar")).toBeFalsy();
+    });
+
+    t.test("return true is the type has matching directive", async () => {
+      const type = schema.getType("StudyItem") as GraphQLNamedType;
+
+      expect(hasDirective(type, "foobaz")).toBeTruthy();
+    });
   });
 });
