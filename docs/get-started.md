@@ -22,7 +22,7 @@ Generate a new Docusaurus site using the [GraphQL-Markdown template](https://git
 The template will automatically be added to your project after you run the command:
 
 ```bash
-npm init docusaurus@latest my-website https://github.com/graphql-markdown/template.git
+npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 ```
 
 You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.

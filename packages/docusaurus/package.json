@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.16.0",
+  "version": "1.16.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -35,8 +35,8 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "^1.1.0",
-    "@graphql-markdown/printer-legacy": "^1.1.0"
+    "@graphql-markdown/core": "^1.1.1",
+    "@graphql-markdown/printer-legacy": "^1.1.1"
   },
   "directories": {
     "test": "tests"
