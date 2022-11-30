@@ -16,7 +16,7 @@ t.test("diff", async () => {
       async () => {
         const { checkSchemaChanges } = await esmock(
           "../../src/diff",
-          import.meta.url,
+          import.meta.url
           // mocks
         );
 
@@ -31,7 +31,7 @@ t.test("diff", async () => {
       async () => {
         const { checkSchemaChanges, COMPARE_METHOD } = await esmock(
           "../../src/diff",
-          import.meta.url,
+          import.meta.url
           // {
           //   ...mocks,
           //   "@graphql-markdown/utils/fs": {
@@ -57,7 +57,7 @@ t.test("diff", async () => {
       async () => {
         const { checkSchemaChanges, COMPARE_METHOD } = await esmock(
           "../../src/diff",
-          import.meta.url,
+          import.meta.url
           // {
           //   ...mocks,
           //   "@graphql-markdown/utils/fs": {

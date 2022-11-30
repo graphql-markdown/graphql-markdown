@@ -4,7 +4,11 @@ import { createHash } from "node:crypto";
 import { Change, diff } from "@graphql-inspector/core";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-import { GraphQLSchema, printSchema, loadSchema } from "@graphql-markdown/utils/graphql";
+import {
+  GraphQLSchema,
+  printSchema,
+  loadSchema,
+} from "@graphql-markdown/utils/graphql";
 import { fileExists, readFile, saveFile } from "@graphql-markdown/utils/fs";
 
 export const SCHEMA_HASH_FILE: string = ".schema";
