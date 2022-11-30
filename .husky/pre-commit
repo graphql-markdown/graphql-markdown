@@ -4,3 +4,4 @@
 npm run lint
 npm run prettier -- --check
 npm test --workspaces --if-present -- --passWithNoTests
+npm run check

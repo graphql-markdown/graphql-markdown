@@ -48,6 +48,7 @@
     "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
     "lint": "eslint \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
     "build": "tsc --build tsconfig.build.json"
+    "check": "node ./scripts/dep-checks.js"
   },
   "prettier": "./config/.prettierrc.js",
   "eslintConfig": {
