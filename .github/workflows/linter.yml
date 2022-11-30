@@ -29,3 +29,6 @@ jobs:
 
     - name: Run ESLint
       run: npm run lint
+
+    - name: Run Workspace dependencies check
+      run: npm run check
