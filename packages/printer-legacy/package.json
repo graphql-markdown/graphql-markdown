@@ -27,7 +27,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "^1.1.0",
+    "@graphql-markdown/core": "^1.1.1",
     "@graphql-markdown/utils": "^1.1.0"
   },
   "directories": {
