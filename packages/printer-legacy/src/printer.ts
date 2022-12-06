@@ -129,7 +129,7 @@ export class Printer implements IPrinter {
   getGroup(
     type: GraphQLNamedType | GraphQLEnumValue | GraphQLArgument
   ): string {
-    if (typeof this.groups === "undefined") {
+    if (typeof this.groups === "undefined" || this.groups === null) {
       return "";
     }
     const graphLQLNamedType: GraphQLNamedType = getNamedType(
