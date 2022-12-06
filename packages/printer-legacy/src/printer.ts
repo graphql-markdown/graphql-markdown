@@ -1,6 +1,6 @@
 import { Maybe } from "graphql/jsutils/Maybe";
 
-import { IPrinter } from "@graphql-markdown/core/type";
+import { IPrinter, PrintTypeOptions } from "@graphql-markdown/core/type";
 import { toSlug, escapeMDX } from "@graphql-markdown/utils/string";
 import { pathUrl } from "@graphql-markdown/utils/url";
 import {
@@ -63,38 +63,36 @@ type SectionLevel = {
   parentType?: Maybe<string>;
 };
 
+type ExtraOptions = {
+  groups?: Maybe<Record<string, unknown>>;
+  printTypeOptions?: Maybe<PrintTypeOptions>;
+  skipDocDirective?: Maybe<string>;
+};
+
 export class Printer implements IPrinter {
   schema: GraphQLSchema;
   baseURL: string;
   linkRoot: string;
-  groups: any;
+  groups: Maybe<Record<string, unknown>>;
   parentTypePrefix: boolean;
   relatedTypeSection: boolean;
   typeBadges: boolean;
-  skipDocDirective: any;
+  skipDocDirective: Maybe<string>;
 
   constructor(
     schema: GraphQLSchema,
     baseURL: string,
-    linkRoot = "/",
-    {
-      groups,
-      printTypeOptions,
-      skipDocDirective,
-    }: {
-      groups?: any;
-      printTypeOptions?: any;
-      skipDocDirective?: any;
-    }
+    linkRoot?: string,
+    extraOptions?: Maybe<ExtraOptions>
   ) {
     this.schema = schema;
     this.baseURL = baseURL;
-    this.linkRoot = linkRoot;
-    this.groups = groups;
-    this.parentTypePrefix = printTypeOptions?.parentTypePrefix ?? true;
-    this.relatedTypeSection = printTypeOptions?.relatedTypeSection ?? true;
-    this.typeBadges = printTypeOptions?.typeBadges ?? true;
-    this.skipDocDirective = skipDocDirective ?? undefined;
+    this.linkRoot = linkRoot ?? "/";
+    this.groups = extraOptions?.groups;
+    this.parentTypePrefix = extraOptions?.printTypeOptions?.parentTypePrefix ?? true;
+    this.relatedTypeSection = extraOptions?.printTypeOptions?.relatedTypeSection ?? true;
+    this.typeBadges = extraOptions?.printTypeOptions?.typeBadges ?? true;
+    this.skipDocDirective = extraOptions?.skipDocDirective;
   }
 
   getRootTypeLocaleFromString(text: string): Maybe<TypeLocale> {
