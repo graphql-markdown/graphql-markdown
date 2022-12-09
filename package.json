@@ -152,7 +152,7 @@
     "unionfs": "4.4.0"
   },
   "resolutions": {
-    "chalk": "5.1.2"
+    "chalk": "5.2.0"
   },
   "dependencies": {
     "@graphql-markdown/core": "file:packages/core",
