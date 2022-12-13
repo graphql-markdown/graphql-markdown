@@ -25,7 +25,7 @@
     "@graphql-inspector/core": "^3.4.0",
     "@graphql-markdown/utils": "^1.1.0",
     "@graphql-tools/graphql-file-loader": "^7.5.11",
-    "@graphql-tools/load": "^7.8.6"
+    "@graphql-tools/load": "^7.8.8"
   },
   "directories": {
     "test": "tests"
