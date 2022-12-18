@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import styles from './styles.module.css';
 
 const FeatureList = [
@@ -38,7 +39,7 @@ const FeatureList = [
 function Feature({Svg, title, description}) {
   return (
     <>
-    <div className='row margin-vert--lg padding-vert--lg'>
+    <div className={clsx('row margin-vert--lg padding-vert--lg', styles.heroButton, styles.feature)}>
       <div className='col col--2 col--offset-2'>
         <Svg className={styles.featureSvg} role='img' />
       </div>

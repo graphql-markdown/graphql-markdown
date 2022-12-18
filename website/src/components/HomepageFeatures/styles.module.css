@@ -9,3 +9,13 @@
   height: 200px;
   width: 200px;
 }
+
+@media screen and (max-width: 996px) {
+  .features {
+    padding: 2rem;
+    justify-content: center;
+  }
+  .feature {
+    text-align: center;
+  }
+}
