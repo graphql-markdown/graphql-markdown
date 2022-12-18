@@ -11,7 +11,7 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--secondary', styles.heroBanner)}>
       <div className="container">
-        <img src='/img/preview.svg' style={{height: "200px", width: "800px", objectFit: "cover"}} className="margin-bottom--lg" />
+        <img className={clsx('hero', styles.heroImage)}src='/img/preview.svg' />
         <p className="hero__subtitle">
            <span style={{color: '#36c46f'}}>Flexible</span> documentation for <a target="_blank" rel="noopener noreferrer" href="https://graphql.org/"><span style={{color: "#e535ab"}}>GraphQL</span></a> schemas.
         </p>

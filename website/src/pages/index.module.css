@@ -11,22 +11,20 @@
   border-bottom: 1px solid lightgrey;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroImage {
+  height: 300px;
+  width: 800px;
+  object-fit: cover;
+  text-align: center;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-@media screen and (max-width: 996px) {
-  .heroImage {
-    padding: 2rem;
-  }
 }
 
 .heroButton {
@@ -57,7 +55,20 @@
 }
 
 @media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+  .heroImage {
+    padding: 0;
+    height: auto;
+    width: auto;
+    object-fit: fill;
+  }
+  .buttons {
+    flex-direction: column;
+  }
   .heroButton {
-    width: 150px;
+    width: 80%;
+    margin-top: 1rem;
   }
 }
