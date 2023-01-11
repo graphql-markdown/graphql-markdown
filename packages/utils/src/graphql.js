@@ -137,7 +137,7 @@ function getTypeFromSchema(schema, type) {
   const operationKinds = [];
   OperationTypeNodes.forEach((operationTypeNode) => {
     const operationType = schema.getRootType(operationTypeNode);
-    if (typeof operationType !== "undefined") {
+    if (typeof operationType !== "undefined" && operationType !== null) {
       operationKinds.push(operationType.name);
     }
   });
