@@ -1,4 +1,5 @@
 const { loadSchema: gqlToolsLoadSchema } = require("@graphql-tools/load");
+const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 const {
   GraphQLEnumType,
@@ -38,6 +39,9 @@ const {
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
   "../__data__/schema_with_custom_root_types.graphql",
+);
+const INTROSPECTION_SCHEMA_FILE = require.resolve(
+  "../__data__/introspection.json",
 );
 
 describe("graphql", () => {
@@ -361,6 +365,14 @@ describe("graphql", () => {
 
       const map = getTypeFromSchema(schema, GraphQLScalarType);
 
+      expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
+    });
+
+    test("handles null types from introspection JSON", async () => {
+      const schema = await gqlToolsLoadSchema(INTROSPECTION_SCHEMA_FILE, {
+        loaders: [new JsonFileLoader()],
+      });
+      const map = getTypeFromSchema(schema, GraphQLScalarType);
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
 

@@ -5242,6 +5242,15 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
 }"
 `;
 
+exports[`graphql getTypeFromSchema() handles null types from introspection JSON 1`] = `
+"{
+  "ID": "ID",
+  "String": "String",
+  "Int": "Int",
+  "Boolean": "Boolean"
+}"
+`;
+
 exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLEnumType 1`] = `
 "{
   "MediaType": "MediaType"
