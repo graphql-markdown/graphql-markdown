@@ -50,6 +50,7 @@ build-docusaurus:
   RUN npx --quiet create-docusaurus@latest docusaurus2 classic
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+  RUN npm cache clean --force; rm -rf node_modules
   RUN npm ci
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
 
