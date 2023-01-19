@@ -2,6 +2,9 @@ const {
   graphql: { isEnumType, getTypeName },
 } = require("@graphql-markdown/utils");
 
+const { printSection } = require("./section");
+const { MARKDOWN_EOL } = require("./const/strings");
+
 const printCodeEnum = (type) => {
   if (!isEnumType(type)) {
     return "";
@@ -17,9 +20,10 @@ const printCodeEnum = (type) => {
   return code;
 };
 
-const printEnumMetadata = (type) => {
+const printEnumMetadata = (type, options) => {
   return printSection(type.getValues(), "Values", {
     parentType: type.name,
+    parentTypePrefix: options.parentTypePrefix,
   });
 };
 

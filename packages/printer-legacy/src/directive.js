@@ -2,19 +2,9 @@ const {
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const printDirectiveMetadata = (type) => {
-  return printSection(type.args, "Arguments", {
-    parentType: type.name,
-  });
-};
+const { printSection } = require("./section");
+const { printCodeArguments } = require("./code");
 
-const printCodeDirective = (type) => {
-  let code = `directive @${getTypeName(type)}`;
-  code += printCodeArguments(type);
-  code += printCodeDirectiveLocation(type);
-
-  return code;
-};
 const printCodeDirectiveLocation = (type) => {
   if (
     typeof type.locations === "undefined" ||
@@ -30,6 +20,21 @@ const printCodeDirectiveLocation = (type) => {
     code += separator;
   }
   code += type.locations.join(separator).trim();
+
+  return code;
+};
+
+const printDirectiveMetadata = (type, options) => {
+  return printSection(type.args, "Arguments", {
+    parentType: type.name,
+    parentTypePrefix: options.parentTypePrefix,
+  });
+};
+
+const printCodeDirective = (type) => {
+  let code = `directive @${getTypeName(type)}`;
+  code += printCodeArguments(type);
+  code += printCodeDirectiveLocation(type);
 
   return code;
 };

@@ -3,19 +3,24 @@ const {
   graphql: { getTypeName, getFields },
 } = require("@graphql-markdown/utils");
 
-const printObjectMetadata = (type) => {
+const { printSection } = require("./section");
+const { printCodeField } = require("./code");
+const { MARKDOWN_EOL } = require("./const/strings");
+
+const printObjectMetadata = (type, options) => {
   let metadata = printSection(getFields(type), "Fields", {
     parentType: type.name,
+    parentTypePrefix: options.parentTypePrefix,
   });
   if (hasMethod(type, "getInterfaces")) {
-    metadata += printSection(type.getInterfaces(), "Interfaces");
+    metadata += printSection(type.getInterfaces(), "Interfaces", {
+      parentTypePrefix: options.parentTypePrefix,
+    });
   }
   return metadata;
 };
 
 const printCodeType = (type, entity) => {
-  let entity;
-
   const name = getTypeName(type);
   const extendsInterface =
     hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0

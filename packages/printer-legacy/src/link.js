@@ -1,7 +1,7 @@
 const {
   string: { toSlug },
-  object: { hasProperty },
   url: { pathUrl },
+  object: { hasProperty },
   graphql: {
     isEnumType,
     isUnionType,
@@ -13,19 +13,15 @@ const {
     getNamedType,
     isInputType,
     hasDirective,
+    getTypeName,
+    isListType,
+    isNonNullType,
+    isLeafType,
   },
 } = require("@graphql-markdown/utils");
 
+const { getGroup } = require("./group");
 const { ROOT_TYPE_LOCALE } = require("./const/strings");
-
-const getRootTypeLocaleFromString = (text) => {
-  for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
-    if (Object.values(props).includes(text)) {
-      return ROOT_TYPE_LOCALE[type];
-    }
-  }
-  return undefined;
-};
 
 const getLinkCategory = (graphLQLNamedType) => {
   switch (true) {
@@ -49,32 +45,21 @@ const getLinkCategory = (graphLQLNamedType) => {
   return undefined;
 };
 
-const getGroup = (type) => {
-  if (typeof this.groups === "undefined") {
-    return "";
-  }
-  const graphLQLNamedType = getNamedType(type);
-  const typeName = graphLQLNamedType.name || graphLQLNamedType;
-  return hasProperty(this.groups, typeName)
-    ? toSlug(this.groups[typeName])
-    : "";
-};
-
 const getRelationLink = (category, type) => {
   if (typeof category === "undefined") {
     return "";
   }
-  const link = this.toLink(type, type.name, category);
+  const link = toLink(type, type.name, category);
   return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
 };
 
-const toLink = (type, name, operation) => {
+const toLink = (type, name, operation, linkRoot, baseURL, options) => {
   const fallback = {
     text: name,
     url: "#",
   };
 
-  if (hasDirective(type, this.skipDocDirective)) {
+  if (hasDirective(type, options.skipDocDirective ?? null)) {
     return fallback;
   }
 
@@ -101,8 +86,8 @@ const toLink = (type, name, operation) => {
   const text = graphLQLNamedType.name || graphLQLNamedType;
   const group = getGroup(type);
   const url = pathUrl.join(
-    this.linkRoot,
-    this.baseURL,
+    linkRoot,
+    baseURL,
     group,
     category.plural,
     toSlug(text),
@@ -114,41 +99,59 @@ const toLink = (type, name, operation) => {
   };
 };
 
-const getTypeBadges = (type) => {
-  const rootType = hasProperty(type, "type") ? type.type : type;
+const printParentLink = (type, parentTypePrefix) => {
+  return hasProperty(type, "type")
+    ? `<Bullet />${printLink(type.type, true, undefined, parentTypePrefix)}`
+    : "";
+};
 
-  const badges = [];
+const printLink = (
+  type,
+  withAttributes = false,
+  parentType = undefined,
+  parentTypePrefix,
+) => {
+  const link = toLink(type, getTypeName(type));
 
-  if (type.isDeprecated) {
-    badges.push("deprecated");
+  if (!withAttributes) {
+    const printParentType =
+      parentTypePrefix && typeof parentType !== "undefined";
+    const text = printParentType
+      ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
+      : `\`${link.text}\``;
+    return `[${text}](${link.url})`;
   }
 
-  if (isNonNullType(rootType)) {
-    badges.push("non-null");
+  const text = printLinkAttributes(type, link.text);
+
+  return `[\`${text}\`](${link.url})`;
+};
+
+const printLinkAttributes = (type, text) => {
+  if (typeof type === "undefined") {
+    return text ?? "";
   }
 
-  if (isListType(rootType)) {
-    badges.push("list");
+  if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
+    text = printLinkAttributes(type.ofType, text);
   }
 
-  const category = getLinkCategory(getNamedType(rootType));
-  if (typeof category !== "undefined") {
-    badges.push(category);
+  if (isListType(type)) {
+    return `[${text}]`;
   }
 
-  const group = getGroup(rootType);
-  if (group !== "") {
-    badges.push(group);
+  if (isNonNullType(type)) {
+    return `${text}!`;
   }
 
-  return badges;
+  return text;
 };
 
 module.exports = {
-  getRootTypeLocaleFromString,
   getLinkCategory,
-  getGroup,
   getRelationLink,
   toLink,
-  getTypeBadges,
+  printParentLink,
+  printLink,
+  printLinkAttributes,
 };
