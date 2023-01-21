@@ -18,6 +18,9 @@ const HEADER_SECTION_ITEM_LEVEL = "#####";
 const NO_DESCRIPTION_TEXT = "No description";
 const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
+const MARKDOWN_SOC = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
+const MARKDOWN_EOC = `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
+const FRONT_MATTER = "---";
 
 module.exports = {
   ROOT_TYPE_LOCALE,
@@ -27,4 +30,7 @@ module.exports = {
   NO_DESCRIPTION_TEXT,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
+  MARKDOWN_SOC,
+  MARKDOWN_EOC,
+  FRONT_MATTER,
 };

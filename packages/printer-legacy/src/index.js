@@ -23,7 +23,12 @@ const { printCodeObject, printObjectMetadata } = require("./object");
 const { printCodeInput, printInputMetadata } = require("./input");
 const { printCodeScalar, printScalarMetadata } = require("./scalar");
 const { printCodeDirective, printDirectiveMetadata } = require("./directive");
-const { MARKDOWN_EOP, MARKDOWN_EOL } = require("./const/strings");
+const {
+  MARKDOWN_EOP,
+  MARKDOWN_EOL,
+  MARKDOWN_SOC,
+  MARKDOWN_EOC,
+} = require("./const/strings");
 const mdx = require("./const/mdx");
 
 module.exports = class Printer {
@@ -58,15 +63,22 @@ module.exports = class Printer {
       ...options.header,
     };
     const pagination_buttons = pagination
-      ? ""
-      : `pagination_next: null${MARKDOWN_EOL}pagination_prev: null${MARKDOWN_EOL}`;
-    return `---${MARKDOWN_EOL}id: ${id}${MARKDOWN_EOL}title: ${title}\nhide_table_of_contents: ${!toc}${MARKDOWN_EOL}${pagination_buttons}---${MARKDOWN_EOL}`;
+      ? []
+      : ["pagination_next: null", "pagination_prev: null"];
+    return [
+      FRONT_MATTER,
+      `id: ${id}`,
+      `title: ${title}`,
+      `hide_table_of_contents: ${!toc}`,
+      ...pagination_buttons,
+      FRONT_MATTER,
+    ].join(MARKDOWN_EOL);
   };
 
   static printDescription = printDescription;
 
   static printCode = (type) => {
-    let code = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
+    let code = MARKDOWN_SOC;
 
     switch (true) {
       case isOperation(type):
@@ -97,7 +109,7 @@ module.exports = class Printer {
         code += `"${getTypeName(type)}" not supported`;
     }
 
-    return code.trim() + `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
+    return code.trim() + MARKDOWN_EOC;
   };
 
   static printTypeMetadata = (type, options) => {
@@ -141,6 +153,8 @@ module.exports = class Printer {
     const metadata = Printer.printTypeMetadata(type, this.options);
     const relations = Printer.printRelations(type, this.options);
 
-    return `${header}${MARKDOWN_EOP}${mdx}${MARKDOWN_EOP}${description}${MARKDOWN_EOP}${code}${MARKDOWN_EOP}${metadata}${MARKDOWN_EOP}${relations}${MARKDOWN_EOP}`;
+    return [header, mdx, description, code, metadata, relations].join(
+      MARKDOWN_EOP,
+    );
   };
 };
