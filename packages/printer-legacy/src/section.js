@@ -19,10 +19,10 @@ const printSection = (
   { level, parentType, parentTypePrefix } = {
     level: HEADER_SECTION_LEVEL,
     parentType: undefined,
-    parentTypePrefix: undefined,
+    parentTypePrefix: true,
   },
 ) => {
-  if (values.length === 0) {
+  if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
 
@@ -41,10 +41,10 @@ const printSectionItems = (
   { level, parentType, parentTypePrefix } = {
     level: HEADER_SECTION_SUB_LEVEL,
     parentType: undefined,
-    parentTypePrefix: undefined,
+    parentTypePrefix: true,
   },
 ) => {
-  if (!Array.isArray(values)) {
+  if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
 
@@ -64,7 +64,7 @@ const printSectionItem = (
   { level, parentType, parentTypePrefix } = {
     level: HEADER_SECTION_SUB_LEVEL,
     parentType: undefined,
-    parentTypePrefix: undefined,
+    parentTypePrefix: true,
   },
 ) => {
   if (typeof type === "undefined" || type === null) {
@@ -77,8 +77,8 @@ const printSectionItem = (
 
   const typeNameLink = printLink(type, false, parentType, parentTypePrefix);
   const description = printDescription(type, "");
-  const badges = printBadges(type);
-  const parentTypeLink = printParentLink(type);
+  const badges = printBadges(type, options);
+  const parentTypeLink = printParentLink(type, linkRoot, baseURL, options);
 
   let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
   if (isParametrizedField(type)) {

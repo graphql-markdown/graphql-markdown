@@ -37,7 +37,11 @@ const getTypeBadges = (type) => {
 };
 
 const printBadges = (type, options) => {
-  if (!options.typeBadges) {
+  if (
+    !hasProperty(options, "typeBadges") ||
+    typeof options.typeBadges === "undefined" ||
+    options.typeBadges !== true
+  ) {
     return "";
   }
 

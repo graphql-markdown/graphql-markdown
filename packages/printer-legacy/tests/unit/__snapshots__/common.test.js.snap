@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`printer printDescription() return DEPRECATED tag if deprecated 1`] = `
+"<Badge class="warning" text="DEPRECATED: Foobar"/>
+
+Lorem ipsum"
+`;
+
+exports[`printer printDescription() returns the default text if no description 1`] = `"No description"`;
+
+exports[`printer printDescription() returns the type description text 1`] = `"Lorem ipsum"`;

@@ -59,8 +59,14 @@ const toLink = (type, name, operation, linkRoot, baseURL, options) => {
     url: "#",
   };
 
-  if (hasDirective(type, options.skipDocDirective ?? null)) {
+  if (typeof type === "undefined") {
     return fallback;
+  }
+
+  if (hasProperty(options, "skipDocDirective")) {
+    if (hasDirective(type, options.skipDocDirective)) {
+      return fallback;
+    }
   }
 
   const graphLQLNamedType = getNamedType(type);
@@ -99,25 +105,27 @@ const toLink = (type, name, operation, linkRoot, baseURL, options) => {
   };
 };
 
-const printParentLink = (type, parentTypePrefix) => {
+const printParentLink = (type, linkRoot, baseURL, options) => {
   return hasProperty(type, "type")
-    ? `<Bullet />${printLink(type.type, true, undefined, parentTypePrefix)}`
+    ? `<Bullet />${printLink(type.type, linkRoot, baseURL, {
+        withAttributes: true,
+        parentType: undefined,
+        parentTypePrefix: false,
+        ...options,
+      })}`
     : "";
 };
 
-const printLink = (
-  type,
-  withAttributes = false,
-  parentType = undefined,
-  parentTypePrefix,
-) => {
-  const link = toLink(type, getTypeName(type));
+const printLink = (type, linkRoot, baseURL, options) => {
+  const link = toLink(type, getTypeName(type), linkRoot, baseURL, options);
 
-  if (!withAttributes) {
+  if (options.withAttributes === false) {
     const printParentType =
-      parentTypePrefix && typeof parentType !== "undefined";
+      hasProperty(options, "parentTypePrefix") &&
+      hasProperty(options, "parentType") &&
+      options.parentType !== null;
     const text = printParentType
-      ? `<code style={{ fontWeight: 'normal' }}>${parentType}.<b>${link.text}</b></code>`
+      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
       : `\`${link.text}\``;
     return `[${text}](${link.url})`;
   }
@@ -128,7 +136,7 @@ const printLink = (
 };
 
 const printLinkAttributes = (type, text) => {
-  if (typeof type === "undefined") {
+  if (typeof type === "undefined" || type === null) {
     return text ?? "";
   }
 
