@@ -78,7 +78,7 @@ module.exports = class Printer {
   static printDescription = printDescription;
 
   static printCode = (type) => {
-    let code = MARKDOWN_SOC;
+    let code = "";
 
     switch (true) {
       case isOperation(type):
@@ -109,7 +109,7 @@ module.exports = class Printer {
         code += `"${getTypeName(type)}" not supported`;
     }
 
-    return code.trim() + MARKDOWN_EOC;
+    return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
 
   static printTypeMetadata = (type, options) => {
