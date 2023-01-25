@@ -12,6 +12,10 @@ const {
   },
 } = require("@graphql-markdown/utils");
 
+const {
+  url: { pathUrl },
+} = require("@graphql-markdown/utils");
+
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
 const { printCodeField } = require("./code");
@@ -31,7 +35,17 @@ const {
 } = require("./const/strings");
 const mdx = require("./const/mdx");
 
-module.exports = class Printer {
+const DEFAULT_OPTION = {
+  schema: undefined,
+  basePath: "/",
+  groups: {},
+  parentTypePrefix: true,
+  relatedTypeSection: true,
+  typeBadges: true,
+  skipDocDirective: undefined,
+};
+
+class Printer {
   static options;
 
   constructor(
@@ -45,9 +59,9 @@ module.exports = class Printer {
     },
   ) {
     this.options = {
+      ...DEFAULT_OPTION,
       schema,
-      baseURL,
-      linkRoot,
+      basePath: pathUrl.join(linkRoot, baseURL),
       groups,
       parentTypePrefix: printTypeOptions?.parentTypePrefix ?? true,
       relatedTypeSection: printTypeOptions?.relatedTypeSection ?? true,
@@ -157,4 +171,6 @@ module.exports = class Printer {
       MARKDOWN_EOP,
     );
   };
-};
+}
+
+module.exports = { Printer, DEFAULT_OPTION };

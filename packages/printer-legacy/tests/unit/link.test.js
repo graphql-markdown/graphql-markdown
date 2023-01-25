@@ -1,10 +1,10 @@
 const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
 
+const { DEFAULT_OPTION } = require("../../src");
 const { toLink } = require("../../src/link");
 
-describe("printer", () => {
-  const baseURL = "graphql";
-  const root = "docs";
+describe("link()", () => {
+  const basePath = "docs/graphql";
 
   describe("toLink()", () => {
     test("returns markdown link for GraphQL directive", () => {
@@ -16,7 +16,10 @@ describe("printer", () => {
         locations: [],
       });
 
-      const link = toLink(type, entityName, undefined, root, baseURL);
+      const link = toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTION,
+        basePath,
+      });
 
       expect(JSON.stringify(link)).toMatchSnapshot();
     });
@@ -31,7 +34,10 @@ describe("printer", () => {
         }),
       );
 
-      const link = toLink(type, entityName, undefined, root, baseURL);
+      const link = toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTION,
+        basePath,
+      });
 
       expect(JSON.stringify(link)).toMatchSnapshot();
     });
@@ -42,7 +48,10 @@ describe("printer", () => {
       const type = "any";
       const entityName = "fooBar";
 
-      const link = toLink(type, entityName, undefined, root, baseURL);
+      const link = toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTION,
+        basePath,
+      });
 
       expect(JSON.stringify(link)).toMatchSnapshot();
     });

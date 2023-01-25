@@ -12,46 +12,49 @@ const {
   printSectionItems,
 } = require("../../src/section");
 
-describe("printer", () => {
+const { DEFAULT_OPTION } = require("../../src/index");
+
+describe("section", () => {
   describe("printSection()", () => {
     test("returns Markdown ### section by default", () => {
       expect.hasAssertions();
 
       const title = "section title";
-      const content = ["content"];
+      const content = ["section content"];
 
-      const section = printSection(content, title);
+      const section = printSection(content, title, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-            "### section title
+        "### section title
 
-            #### [\`content\`](#) 
-            > 
-            > 
+        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>section content</b></code>](#) 
+        > 
+        > 
 
-            "
-          `);
+        "
+      `);
     });
 
     test("returns Markdown custom section level", () => {
       expect.hasAssertions();
 
       const title = "section title";
-      const content = ["content"];
+      const content = ["section content"];
 
       const section = printSection(content, title, {
         level: "#",
+        ...DEFAULT_OPTION,
       });
 
       expect(section).toMatchInlineSnapshot(`
-            "# section title
+        "# section title
 
-            #### [\`content\`](#) 
-            > 
-            > 
+        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>section content</b></code>](#) 
+        > 
+        > 
 
-            "
-          `);
+        "
+      `);
     });
 
     test("returns empty string if content is empty", () => {
@@ -60,7 +63,7 @@ describe("printer", () => {
       const title = "section title";
       const content = [];
 
-      const section = printSection(content, title);
+      const section = printSection(content, title, DEFAULT_OPTION);
 
       expect(section).toBe("");
     });
@@ -72,18 +75,18 @@ describe("printer", () => {
 
       const itemList = ["one", "two", "three"];
 
-      const section = printSectionItems(itemList);
+      const section = printSectionItems(itemList, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`one\`](#) 
+        "#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>one</b></code>](#) 
         > 
         > 
 
-        #### [\`two\`](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>two</b></code>](#) 
         > 
         > 
 
-        #### [\`three\`](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>three</b></code>](#) 
         > 
         > "
       `);
@@ -94,7 +97,7 @@ describe("printer", () => {
 
       const itemList = "list";
 
-      const section = printSectionItems(itemList);
+      const section = printSectionItems(itemList, DEFAULT_OPTION);
 
       expect(section).toMatch("");
     });
@@ -109,10 +112,10 @@ describe("printer", () => {
         description: "Lorem ipsum",
       });
 
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) 
+        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
         > Lorem ipsum
         > "
       `);
@@ -130,10 +133,10 @@ describe("printer", () => {
         ),
       };
 
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](#) 
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
         > 
         > "
       `);
@@ -153,10 +156,10 @@ describe("printer", () => {
         ),
       };
 
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](#) 
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
         > 
         > "
       `);
@@ -174,13 +177,12 @@ describe("printer", () => {
           },
         ],
       };
-
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#) 
         > 
-        > ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](#) 
+        > ##### [<code style={{ fontWeight: 'normal' }}>undefined.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > "
       `);
@@ -194,10 +196,10 @@ describe("printer", () => {
         type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       };
 
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](#) 
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
         > 
         > "
       `);
@@ -213,10 +215,10 @@ describe("printer", () => {
         ),
       };
 
-      const section = printSectionItem(type);
+      const section = printSectionItem(type, DEFAULT_OPTION);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](#) 
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
         > 
         > "
       `);

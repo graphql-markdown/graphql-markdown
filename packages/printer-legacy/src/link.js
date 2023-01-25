@@ -53,7 +53,7 @@ const getRelationLink = (category, type) => {
   return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
 };
 
-const toLink = (type, name, operation, linkRoot, baseURL, options) => {
+const toLink = (type, name, operation, options) => {
   const fallback = {
     text: name,
     url: "#",
@@ -92,8 +92,7 @@ const toLink = (type, name, operation, linkRoot, baseURL, options) => {
   const text = graphLQLNamedType.name || graphLQLNamedType;
   const group = getGroup(type);
   const url = pathUrl.join(
-    linkRoot,
-    baseURL,
+    options.basePath,
     group,
     category.plural,
     toSlug(text),
@@ -105,9 +104,9 @@ const toLink = (type, name, operation, linkRoot, baseURL, options) => {
   };
 };
 
-const printParentLink = (type, linkRoot, baseURL, options) => {
+const printParentLink = (type, options) => {
   return hasProperty(type, "type")
-    ? `<Bullet />${printLink(type.type, linkRoot, baseURL, {
+    ? `<Bullet />${printLink(type.type, {
         withAttributes: true,
         parentType: undefined,
         parentTypePrefix: false,
@@ -116,8 +115,8 @@ const printParentLink = (type, linkRoot, baseURL, options) => {
     : "";
 };
 
-const printLink = (type, linkRoot, baseURL, options) => {
-  const link = toLink(type, getTypeName(type), linkRoot, baseURL, options);
+const printLink = (type, options) => {
+  const link = toLink(type, getTypeName(type), undefined, options);
 
   if (options.withAttributes === false) {
     const printParentType =

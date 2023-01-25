@@ -12,83 +12,94 @@ const {
 const { printDescription } = require("./common");
 const { printBadges } = require("./badge");
 const { printLink, printParentLink } = require("./link");
+const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
-const printSection = (
-  values,
-  section,
-  { level, parentType, parentTypePrefix } = {
-    level: HEADER_SECTION_LEVEL,
-    parentType: undefined,
-    parentTypePrefix: true,
-  },
-) => {
+const sectionLevels = [
+  HEADER_SECTION_LEVEL,
+  HEADER_SECTION_SUB_LEVEL,
+  HEADER_SECTION_ITEM_LEVEL,
+];
+
+const printSection = (values, section, options) => {
+  const level =
+    hasProperty(options, "level") &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
+      ? options.level
+      : HEADER_SECTION_LEVEL;
+
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
 
-  if (typeof level === "undefined") {
-    level = HEADER_SECTION_LEVEL;
+  const levelPosition = sectionLevels.indexOf(level);
+  let subLevel = undefined;
+  if (levelPosition > -1) {
+    subLevel = sectionLevels[levelPosition + 1];
   }
 
   return `${level} ${section}${MARKDOWN_EOP}${printSectionItems(values, {
-    parentType,
-    parentTypePrefix,
+    parentType: undefined,
+    parentTypePrefix: true,
+    ...options,
+    level: subLevel,
   })}${MARKDOWN_EOP}`;
 };
 
-const printSectionItems = (
-  values,
-  { level, parentType, parentTypePrefix } = {
-    level: HEADER_SECTION_SUB_LEVEL,
-    parentType: undefined,
-    parentTypePrefix: true,
-  },
-) => {
+const printSectionItems = (values, options) => {
+  const level =
+    hasProperty(options, "level") &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
+      ? options.level
+      : HEADER_SECTION_SUB_LEVEL;
+
   if (!Array.isArray(values) || values.length === 0) {
     return "";
-  }
-
-  if (typeof level === "undefined") {
-    level = HEADER_SECTION_SUB_LEVEL;
   }
 
   return values
     .map(
-      (v) => v && printSectionItem(v, { level, parentType, parentTypePrefix }),
+      (v) =>
+        v &&
+        printSectionItem(v, {
+          parentType: undefined,
+          parentTypePrefix: true,
+          ...options,
+          level,
+        }),
     )
     .join(MARKDOWN_EOP);
 };
 
-const printSectionItem = (
-  type,
-  { level, parentType, parentTypePrefix } = {
-    level: HEADER_SECTION_SUB_LEVEL,
-    parentType: undefined,
-    parentTypePrefix: true,
-  },
-) => {
+const printSectionItem = (type, options) => {
+  const level =
+    hasProperty(options, "level") &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
+      ? options.level
+      : HEADER_SECTION_SUB_LEVEL;
+
+  const { parentType } = options;
+
   if (typeof type === "undefined" || type === null) {
     return "";
   }
 
-  if (typeof level === "undefined") {
-    level = HEADER_SECTION_SUB_LEVEL;
-  }
-
-  const typeNameLink = printLink(type, false, parentType, parentTypePrefix);
+  const typeNameLink = printLink(type, { withAttributes: false, ...options });
   const description = printDescription(type, "");
   const badges = printBadges(type, options);
-  const parentTypeLink = printParentLink(type, linkRoot, baseURL, options);
+  const parentTypeLink = printParentLink(type, options);
 
   let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
   if (isParametrizedField(type)) {
     section += printSectionItems(type.args, {
+      ...options,
       level: HEADER_SECTION_ITEM_LEVEL,
       parentType:
         typeof parentType === "undefined"
           ? undefined
           : `${parentType}.${type.name}`,
-      parentTypePrefix,
     });
   }
 

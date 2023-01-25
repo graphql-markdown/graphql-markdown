@@ -1,5 +1,144 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`class Printer printCodeArguments() returns a Markdown one line per formatted argument with default value surrounded by () 1`] = `
+"(
+  ParamWithDefault: string = defaultValue
+  ParamNoDefault: any
+  ParamIntZero: int = 0
+  ParamIntNoDefault: int
+)"
+`;
+
+exports[`class Printer printCodeDirective() returns a directive 1`] = `"directive @FooBar"`;
+
+exports[`class Printer printCodeDirective() returns a directive with its arguments 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+)"
+`;
+
+exports[`class Printer printCodeDirective() returns a directive with multiple locations 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+) on 
+  | QUERY
+  | FIELD"
+`;
+
+exports[`class Printer printCodeDirective() returns a directive with single location 1`] = `
+"directive @FooBar(
+  ArgFooBar: Boolean
+) on QUERY"
+`;
+
+exports[`class Printer printCodeEnum() returns enum code structure 1`] = `
+"enum EnumTypeName {
+  one
+  two
+}"
+`;
+
+exports[`class Printer printCodeField() returns a field with its type 1`] = `
+"FooBar: string
+"
+`;
+
+exports[`class Printer printCodeField() returns a field with its type and arguments 1`] = `
+"TypeFooBar(
+  ArgFooBar: String
+): String
+"
+`;
+
+exports[`class Printer printCodeScalar() returns scalar code structure 1`] = `"scalar ScalarTypeName"`;
+
+exports[`class Printer printCodeType() returns an input with its fields 1`] = `
+"undefined TestName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`class Printer printCodeType() returns an interface with its fields 1`] = `
+"undefined TestInterfaceName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`class Printer printCodeType() returns an object with its fields and interfaces 1`] = `
+"undefined TestName implements TestInterfaceName {
+  one: String
+  two: Boolean
+}"
+`;
+
+exports[`class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
+
+exports[`class Printer printSection() returns Markdown ### section by default 1`] = `
+"### section title
+
+#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>section content</b></code>](#) 
+> 
+> 
+
+"
+`;
+
+exports[`class Printer printSection() returns Markdown custom section level 1`] = `""`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with description 1`] = `
+"#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
+> Lorem ipsum
+> "
+`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with field parameters 1`] = `
+"#### [\`EntityTypeName\`](#) 
+> 
+> ##### [<code style={{ fontWeight: 'normal' }}>undefined.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with non empty no nullable list [!]! 1`] = `
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with non empty nullable list [!] 1`] = `
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
+> 
+> "
+`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with sub type is non-nullable 1`] = `
+"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+> 
+> "
+`;
+
+exports[`class Printer printSectionItem() returns Markdown #### link section with sub type list and non-nullable 1`] = `
+"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+> 
+> "
+`;
+
+exports[`class Printer printSectionItems() returns Markdown one line per item 1`] = `
+"#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>one</b></code>](#) 
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>two</b></code>](#) 
+> 
+> 
+
+#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>three</b></code>](#) 
+> 
+> "
+`;
+
 exports[`lib printer class Printer printCode() returns a Markdown codeblock with non supported message for unsupported type 1`] = `
 "\`\`\`graphql
 "TestFooBarType" not supported

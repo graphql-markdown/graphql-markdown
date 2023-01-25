@@ -15,7 +15,14 @@ const {
 
 const graphqlLib = require("@graphql-markdown/utils").graphql;
 
-const Printer = require("../../src/index");
+const { Printer, DEFAULT_OPTION } = require("../../src/index");
+
+const { printCodeEnum } = require("../../src/enum");
+const { printCodeUnion } = require("../../src/union");
+const { printCodeScalar } = require("../../src/scalar");
+const { printCodeArguments, printCodeField } = require("../../src/code");
+const { printCodeDirective } = require("../../src/directive");
+const { printCodeType } = require("../../src/object");
 
 describe("lib", () => {
   describe("printer", () => {
@@ -39,7 +46,6 @@ describe("lib", () => {
       const types = [
         {
           name: "Directive",
-          spyOn: "printCodeDirective",
           type: new GraphQLDirective({
             name: "TestDirective",
             locations: [],
@@ -47,7 +53,6 @@ describe("lib", () => {
         },
         {
           name: "Enum",
-          spyOn: "printCodeEnum",
           type: new GraphQLEnumType({
             name: "TestEnum",
             values: {},
@@ -55,7 +60,6 @@ describe("lib", () => {
         },
         {
           name: "Input",
-          spyOn: "printCodeType",
           type: new GraphQLInputObjectType({
             name: "TestInput",
             fields: {},
@@ -63,7 +67,6 @@ describe("lib", () => {
         },
         {
           name: "Interface",
-          spyOn: "printCodeType",
           type: new GraphQLInterfaceType({
             name: "TestInterface",
             fields: {},
@@ -71,7 +74,6 @@ describe("lib", () => {
         },
         {
           name: "Object",
-          spyOn: "printCodeType",
           type: new GraphQLObjectType({
             name: "TestObject",
             fields: {},
@@ -79,14 +81,12 @@ describe("lib", () => {
         },
         {
           name: "Scalar",
-          spyOn: "printCodeScalar",
           type: new GraphQLScalarType({
             name: "TestScalar",
           }),
         },
         {
           name: "Union",
-          spyOn: "printCodeUnion",
           type: new GraphQLUnionType({
             name: "TestUnion",
             types: [],
@@ -94,7 +94,6 @@ describe("lib", () => {
         },
         {
           name: "Query",
-          spyOn: "printCodeField",
           type: {
             name: "TestQuery",
             type: GraphQLID,
@@ -132,7 +131,7 @@ describe("lib", () => {
         jest.resetAllMocks();
       });
 
-      describe.skip("printCodeEnum()", () => {
+      describe("printCodeEnum()", () => {
         test("returns enum code structure", () => {
           expect.hasAssertions();
 
@@ -144,7 +143,7 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeEnum(type);
+          const code = printCodeEnum(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -157,13 +156,13 @@ describe("lib", () => {
             type: GraphQLInt,
           });
 
-          const code = printerInstance.printCodeEnum(type);
+          const code = printCodeEnum(type);
 
           expect(code).toBe("");
         });
       });
 
-      describe.skip("printCodeUnion()", () => {
+      describe("printCodeUnion()", () => {
         test("returns union code structure", () => {
           expect.hasAssertions();
 
@@ -172,7 +171,7 @@ describe("lib", () => {
             types: [{ name: "one" }, { name: "two" }],
           });
 
-          const code = printerInstance.printCodeUnion(type);
+          const code = printCodeUnion(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -185,13 +184,13 @@ describe("lib", () => {
             type: GraphQLInt,
           });
 
-          const code = printerInstance.printCodeUnion(type);
+          const code = printCodeUnion(type);
 
           expect(code).toBe("");
         });
       });
 
-      describe.skip("printCodeScalar()", () => {
+      describe("printCodeScalar()", () => {
         const type = new GraphQLScalarType({
           name: "ScalarTypeName",
           type: GraphQLInt,
@@ -200,13 +199,13 @@ describe("lib", () => {
         test("returns scalar code structure", () => {
           expect.hasAssertions();
 
-          const code = printerInstance.printCodeScalar(type);
+          const code = printCodeScalar(type);
 
           expect(code).toMatchSnapshot();
         });
       });
 
-      describe.skip("printCodeArguments()", () => {
+      describe("printCodeArguments()", () => {
         test("returns a Markdown one line per formatted argument with default value surrounded by ()", () => {
           expect.hasAssertions();
 
@@ -224,7 +223,7 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeArguments(type);
+          const code = printCodeArguments(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -237,7 +236,7 @@ describe("lib", () => {
             args: [],
           };
 
-          const code = printerInstance.printCodeArguments(type);
+          const code = printCodeArguments(type);
 
           expect(code).toBe("");
         });
@@ -249,19 +248,19 @@ describe("lib", () => {
             name: "OperationName",
           };
 
-          const code = printerInstance.printCodeArguments(type);
+          const code = printCodeArguments(type);
 
           expect(code).toBe("");
         });
       });
 
-      describe.skip("printCodeField()", () => {
+      describe("printCodeField()", () => {
         test("returns a field with its type", () => {
           expect.hasAssertions();
 
           const type = { name: "FooBar", type: "string" };
 
-          const code = printerInstance.printCodeField(type);
+          const code = printCodeField(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -280,13 +279,13 @@ describe("lib", () => {
             ],
           };
 
-          const code = printerInstance.printCodeField(type);
+          const code = printCodeField(type);
 
           expect(code).toMatchSnapshot();
         });
       });
 
-      describe.skip("printCodeDirective()", () => {
+      describe("printCodeDirective()", () => {
         test("returns a directive", () => {
           expect.hasAssertions();
 
@@ -296,7 +295,7 @@ describe("lib", () => {
             locations: [],
           });
 
-          const code = printerInstance.printCodeDirective(type);
+          const code = printCodeDirective(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -315,7 +314,7 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeDirective(type);
+          const code = printCodeDirective(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -340,13 +339,13 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeDirective(type);
+          const code = printCodeDirective(type);
 
           expect(code).toMatchSnapshot();
         });
       });
 
-      describe.skip("printCodeType()", () => {
+      describe("printCodeType()", () => {
         test("returns an interface with its fields", () => {
           expect.hasAssertions();
 
@@ -358,7 +357,7 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeType(type);
+          const code = printCodeType(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -377,7 +376,7 @@ describe("lib", () => {
             ],
           });
 
-          const code = printerInstance.printCodeType(type);
+          const code = printCodeType(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -393,17 +392,17 @@ describe("lib", () => {
             },
           });
 
-          const code = printerInstance.printCodeType(type);
+          const code = printCodeType(type);
 
           expect(code).toMatchSnapshot();
         });
       });
 
-      describe.skip("printHeader()", () => {
+      describe("printHeader()", () => {
         test("returns a Docusaurus document header", () => {
           expect.hasAssertions();
 
-          const header = printerInstance.printHeader(
+          const header = Printer.printHeader(
             "an-object-type-name",
             "An Object Type Name",
           );
@@ -414,10 +413,12 @@ describe("lib", () => {
         test("returns a Docusaurus document header with ToC disabled", () => {
           expect.hasAssertions();
 
-          const header = printerInstance.printHeader(
+          const header = printHeader(
             "an-object-type-name",
             "An Object Type Name",
-            { toc: false },
+            {
+              toc: false,
+            },
           );
 
           expect(header).toMatchSnapshot();
@@ -426,27 +427,25 @@ describe("lib", () => {
         test("returns a Docusaurus document header with pagination disabled", () => {
           expect.hasAssertions();
 
-          const header = printerInstance.printHeader(
+          const header = Printer.printHeader(
             "an-object-type-name",
             "An Object Type Name",
-            { pagination: false },
+            {
+              pagination: false,
+            },
           );
 
           expect(header).toMatchSnapshot();
         });
       });
 
-      describe.skip("printCode()", () => {
+      describe("printCode()", () => {
         test.each(types)(
           "returns a Markdown graphql codeblock with type $name",
-          ({ type, spyOn }) => {
+          ({ type }) => {
             expect.hasAssertions();
 
-            const printCode = jest.spyOn(printerInstance, spyOn);
-
-            const code = printerInstance.printCode(type);
-
-            expect(printCode).toHaveBeenCalledWith(type);
+            const code = Printer.printCode(type);
 
             expect(code).toMatchSnapshot();
           },
@@ -457,7 +456,7 @@ describe("lib", () => {
 
           const type = "TestFooBarType";
 
-          const code = printerInstance.printCode(type);
+          const code = printCode(type);
 
           expect(code).toMatchSnapshot();
         });
@@ -479,7 +478,7 @@ describe("lib", () => {
               .spyOn(printerInstance, "printRelations")
               .mockImplementation(() => "");
 
-            const printedType = printerInstance.printType(name, type);
+            const printedType = printType(name, type);
 
             expect(printedType).toMatchSnapshot();
           },
@@ -500,7 +499,7 @@ describe("lib", () => {
               .spyOn(printerInstance, "printRelations")
               .mockImplementation(() => "");
 
-            const printedType = printerInstance.printType(name, type);
+            const printedType = printType(name, type);
 
             expect(printedType).toMatchSnapshot();
           },
@@ -509,7 +508,7 @@ describe("lib", () => {
         test("returns an empty string if no type", () => {
           expect.hasAssertions();
 
-          const printedType = printerInstance.printType("any", null);
+          const printedType = printType("any", null);
 
           expect(printedType).toBe("");
         });
@@ -530,7 +529,7 @@ describe("lib", () => {
             .spyOn(printerInstance, "printRelations")
             .mockImplementation(() => "");
 
-          const printedType = printerInstance.printType("scalar", scalarType);
+          const printedType = printType("scalar", scalarType);
 
           expect(printedType).toMatchSnapshot();
         });
@@ -546,7 +545,7 @@ describe("lib", () => {
             specifiedByURL: "https://lorem.ipsum",
           });
 
-          const deprecation = printerInstance.printSpecification(type);
+          const deprecation = printSpecification(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
             "### <SpecifiedBy url="https://lorem.ipsum"/>
@@ -563,7 +562,7 @@ describe("lib", () => {
             description: "Lorem Ipsum",
           });
 
-          const deprecation = printerInstance.printSpecification(type);
+          const deprecation = printSpecification(type);
 
           expect(deprecation).toBe("");
         });
@@ -594,7 +593,7 @@ describe("lib", () => {
               subscriptions: [{ name: "Baz" }],
             }));
 
-          const deprecation = printerInstance.printRelationOf(
+          const deprecation = printRelationOf(
             type,
             "RelationOf",
             graphqlLib.getRelationOfReturn,
@@ -614,8 +613,7 @@ describe("lib", () => {
         test("returns object of local strings from root type string", () => {
           expect.hasAssertions();
 
-          const deprecation =
-            printerInstance.getRootTypeLocaleFromString("queries");
+          const deprecation = getRootTypeLocaleFromString("queries");
 
           expect(deprecation).toMatchInlineSnapshot(`
             {

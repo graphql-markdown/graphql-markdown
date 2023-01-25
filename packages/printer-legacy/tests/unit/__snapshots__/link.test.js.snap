@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`link() toLink() returns markdown link for GraphQL directive 1`] = `"{"text":"TestDirective","url":"docs/graphql/directives/test-directive"}"`;
+
+exports[`link() toLink() returns markdown link surrounded by [] for GraphQL list/array 1`] = `"{"text":"TestObjectList","url":"docs/graphql/objects/test-object-list"}"`;
+
+exports[`link() toLink() returns plain text for unknown entities 1`] = `"{"text":"fooBar","url":"#"}"`;
+
 exports[`printer toLink() returns markdown link for GraphQL directive 1`] = `"{"text":"TestDirective","url":"docs/graphql/directives/test-directive"}"`;
 
 exports[`printer toLink() returns markdown link surrounded by [] for GraphQL list/array 1`] = `"{"text":"TestObjectList","url":"docs/graphql/objects/test-object-list"}"`;
