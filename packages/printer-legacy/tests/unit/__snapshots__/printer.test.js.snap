@@ -144,7 +144,7 @@ exports[`lib printer class Printer printCodeType() returns an object with its fi
 exports[`lib printer class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
 
 exports[`lib printer class Printer printDescription() return DEPRECATED tag if deprecated 1`] = `
-"<Badge class="warning" text="DEPRECATED: Foobar"/>
+"<Badge className="warning" text="DEPRECATED: Foobar"/>
 
 Lorem ipsum"
 `;
@@ -199,7 +199,7 @@ section content
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with description 1`] = `
-"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) <Badge class="secondary" text="object"/>
+"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) <Badge className="secondary" text="object"/>
 > Lorem ipsum
 > "
 `;
@@ -207,31 +207,31 @@ exports[`lib printer class Printer printSectionItem() returns Markdown #### link
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with field parameters 1`] = `
 "#### [\`EntityTypeName\`](#) 
 > 
-> ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+> ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge className="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty no nullable list [!]! 1`] = `
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](docs/graphql/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](docs/graphql/scalars/int) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty nullable list [!] 1`] = `
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](docs/graphql/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](docs/graphql/scalars/int) <Badge className="secondary" text="list"/> <Badge className="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type is non-nullable 1`] = `
-"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](docs/graphql/objects/non-nullable-object-type) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="object"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type list and non-nullable 1`] = `
-"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](docs/graphql/objects/non-nullable-object-type) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="object"/>
 > 
 > "
 `;
@@ -252,7 +252,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Lorem Ipsum
@@ -279,7 +279,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test TestInterfaceType
@@ -311,7 +311,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test TestObject
@@ -343,7 +343,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Directive
@@ -368,7 +368,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Enum
@@ -395,7 +395,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Input
@@ -421,7 +421,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Interface
@@ -447,7 +447,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Object
@@ -473,7 +473,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Query
@@ -504,7 +504,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Scalar
@@ -529,7 +529,7 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 export const SpecifiedBy = (props) => <>Specification<a className="link" style={{ fontSize:'1.5em', paddingLeft:'4px' }} target="_blank" href={props.url} title={'Specified by ' + props.url}>⎘</a></>
 
-export const Badge = (props) => <><span class={'badge badge--' + props.class}>{props.text}</span></>
+export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
 
 Test Union
