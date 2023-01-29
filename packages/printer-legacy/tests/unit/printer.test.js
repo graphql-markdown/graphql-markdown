@@ -9,7 +9,7 @@ const {
   GraphQLInterfaceType,
 } = require("graphql");
 
-const { Printer, DEFAULT_OPTIONS } = require("../../src/index");
+const { Printer, DEFAULT_OPTIONS } = require("../../src/printer");
 
 describe("Printer", () => {
   const types = [

@@ -1,7 +1,12 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-jest.mock("@graphql-markdown/printer-legacy");
+jest.mock("@graphql-markdown/printer-legacy", () => {
+  return {
+    printType: jest.fn(),
+    init: jest.fn(),
+  };
+});
 jest.mock("@graphql-markdown/diff");
 const diff = require("@graphql-markdown/diff");
 

@@ -12,7 +12,7 @@ const {
   printSectionItems,
 } = require("../../src/section");
 
-const { DEFAULT_OPTIONS } = require("../../src/index");
+const { DEFAULT_OPTIONS } = require("../../src/printer");
 
 describe("section", () => {
   describe("printSection()", () => {

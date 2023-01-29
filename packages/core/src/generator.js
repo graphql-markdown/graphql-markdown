@@ -44,7 +44,7 @@ const getPrinter = (
   }
 
   try {
-    const { Printer } = require(printerModule);
+    const Printer = require(printerModule);
     Printer.init(schema, baseURL, linkRoot, {
       groups,
       printTypeOptions,

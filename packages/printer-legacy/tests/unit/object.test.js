@@ -4,7 +4,7 @@ const {
   GraphQLString,
   GraphQLInterfaceType,
 } = require("graphql");
-const { DEFAULT_OPTIONS } = require("../../src");
+const { DEFAULT_OPTIONS } = require("../../src/printer");
 
 const { printCodeObject, printObjectMetadata } = require("../../src/object");
 

@@ -8,12 +8,11 @@ const { ensureDir } = require("@graphql-markdown/utils").fs;
 
 jest.mock("@graphql-markdown/printer-legacy", () => {
   return {
-    Printer: {
-      printType: jest.fn(),
-    },
+    printType: jest.fn(),
+    init: jest.fn(),
   };
 });
-const { Printer } = require("@graphql-markdown/printer-legacy");
+const Printer = require("@graphql-markdown/printer-legacy");
 
 const Renderer = require("../../src/renderer");
 const { GraphQLObjectType } = require("graphql");

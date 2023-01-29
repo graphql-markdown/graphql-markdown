@@ -1,6 +1,6 @@
 const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
 
-const { DEFAULT_OPTIONS } = require("../../src");
+const { DEFAULT_OPTIONS } = require("../../src/printer");
 const { toLink } = require("../../src/link");
 
 describe("link", () => {
