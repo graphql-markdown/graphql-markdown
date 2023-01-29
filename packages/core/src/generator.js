@@ -44,15 +44,16 @@ const getPrinter = (
   }
 
   try {
-    const Printer = require(printerModule);
-    return new Printer(schema, baseURL, linkRoot, {
+    const { Printer } = require(printerModule);
+    Printer.init(schema, baseURL, linkRoot, {
       groups,
       printTypeOptions,
       skipDocDirective,
     });
+    return Printer;
   } catch (error) {
     throw new Error(
-      `Cannot find module '${printerModule}' from @graphql-markdown/core in printTypeOptions settings.`,
+      `Cannot find module '${printerModule}' for @graphql-markdown/core in printTypeOptions settings.`,
     );
   }
 };

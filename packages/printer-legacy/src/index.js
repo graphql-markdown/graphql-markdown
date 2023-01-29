@@ -49,7 +49,7 @@ const DEFAULT_OPTIONS = {
 class Printer {
   static options;
 
-  constructor(
+  static init = (
     schema,
     baseURL,
     linkRoot = "/",
@@ -58,7 +58,11 @@ class Printer {
       printTypeOptions: undefined,
       skipDocDirective: undefined,
     },
-  ) {
+  ) => {
+    if (typeof this.options !== "undefined") {
+      return;
+    }
+
     this.options = {
       ...DEFAULT_OPTIONS,
       schema,
@@ -69,7 +73,7 @@ class Printer {
       typeBadges: printTypeOptions?.typeBadges ?? true,
       skipDocDirective: skipDocDirective ?? undefined,
     };
-  }
+  };
 
   static printHeader = (id, title, options) => {
     const { toc, pagination } = {

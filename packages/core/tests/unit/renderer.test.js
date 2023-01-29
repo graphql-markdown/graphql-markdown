@@ -6,8 +6,14 @@ const fs = require("fs");
 
 const { ensureDir } = require("@graphql-markdown/utils").fs;
 
-jest.mock("@graphql-markdown/printer-legacy");
-const Printer = require("@graphql-markdown/printer-legacy");
+jest.mock("@graphql-markdown/printer-legacy", () => {
+  return {
+    Printer: {
+      printType: jest.fn(),
+    },
+  };
+});
+const { Printer } = require("@graphql-markdown/printer-legacy");
 
 const Renderer = require("../../src/renderer");
 const { GraphQLObjectType } = require("graphql");
@@ -16,10 +22,9 @@ describe("renderer", () => {
   describe("class Renderer", () => {
     let rendererInstance;
     let baseURL = "graphql";
-    let printerInstance;
 
     beforeEach(() => {
-      jest.resetModules();
+      // jest.resetModules();
 
       vol.fromJSON({
         "/output": {},
@@ -27,8 +32,7 @@ describe("renderer", () => {
         "/assets/generated.md": "Test Homepage",
       });
 
-      printerInstance = new Printer("SCHEMA", baseURL, "root");
-      rendererInstance = new Renderer(printerInstance, "/output", baseURL);
+      rendererInstance = new Renderer(Printer, "/output", baseURL);
     });
 
     afterEach(() => {
@@ -39,7 +43,7 @@ describe("renderer", () => {
       test("creates entity page into output folder", async () => {
         expect.assertions(2);
 
-        jest.spyOn(printerInstance, "printType").mockReturnValue("Lorem ipsum");
+        jest.spyOn(Printer, "printType").mockReturnValue("Lorem ipsum");
         const output = "/output/foobar";
 
         const meta = await rendererInstance.renderTypeEntities(
@@ -92,9 +96,7 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(printerInstance, "printType")
-          .mockImplementation(() => "content");
+        jest.spyOn(Printer, "printType").mockImplementation(() => "content");
         await rendererInstance.renderRootTypes("Object", {
           foo: new GraphQLObjectType({ name: "foo", astNode: {} }),
           bar: new GraphQLObjectType({ name: "bar", astNode: {} }),
