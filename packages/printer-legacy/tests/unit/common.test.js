@@ -2,7 +2,7 @@ const { GraphQLScalarType } = require("graphql");
 
 const { printDescription, printDeprecation } = require("../../src/common");
 
-describe("printer", () => {
+describe("common", () => {
   describe("printDescription()", () => {
     test("returns the type description text", () => {
       expect.hasAssertions();
@@ -10,7 +10,7 @@ describe("printer", () => {
       const type = { description: "Lorem ipsum" };
       const description = printDescription(type);
 
-      expect(description).toMatchSnapshot();
+      expect(description).toMatchInlineSnapshot(`"Lorem ipsum"`);
     });
 
     test("returns the default text if no description", () => {
@@ -19,7 +19,7 @@ describe("printer", () => {
       const type = {};
       const description = printDescription(type);
 
-      expect(description).toMatchSnapshot();
+      expect(description).toMatchInlineSnapshot(`"No description"`);
     });
 
     test("return DEPRECATED tag if deprecated", () => {
@@ -30,7 +30,11 @@ describe("printer", () => {
       };
       const description = printDescription(type);
 
-      expect(description).toMatchSnapshot();
+      expect(description).toMatchInlineSnapshot(`
+        "<Badge class="warning" text="DEPRECATED: Foobar"/>
+
+        Lorem ipsum"
+      `);
     });
   });
 

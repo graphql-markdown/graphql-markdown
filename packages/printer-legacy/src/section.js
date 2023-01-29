@@ -1,6 +1,7 @@
 const {
   graphql: { isParametrizedField },
 } = require("@graphql-markdown/utils");
+const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
 const {
   HEADER_SECTION_LEVEL,
@@ -12,7 +13,6 @@ const {
 const { printDescription } = require("./common");
 const { printBadges } = require("./badge");
 const { printLink, printParentLink } = require("./link");
-const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
 const sectionLevels = [
   HEADER_SECTION_LEVEL,
@@ -80,8 +80,6 @@ const printSectionItem = (type, options) => {
       ? options.level
       : HEADER_SECTION_SUB_LEVEL;
 
-  const { parentType } = options;
-
   if (typeof type === "undefined" || type === null) {
     return "";
   }
@@ -97,9 +95,9 @@ const printSectionItem = (type, options) => {
       ...options,
       level: HEADER_SECTION_ITEM_LEVEL,
       parentType:
-        typeof parentType === "undefined"
+        typeof options.parentType === "undefined"
           ? undefined
-          : `${parentType}.${type.name}`,
+          : `${options.parentType}.${type.name}`,
     });
   }
 

@@ -12,7 +12,7 @@ const {
   printSectionItems,
 } = require("../../src/section");
 
-const { DEFAULT_OPTION } = require("../../src/index");
+const { DEFAULT_OPTIONS } = require("../../src/index");
 
 describe("section", () => {
   describe("printSection()", () => {
@@ -22,7 +22,7 @@ describe("section", () => {
       const title = "section title";
       const content = ["section content"];
 
-      const section = printSection(content, title, DEFAULT_OPTION);
+      const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "### section title
@@ -43,7 +43,7 @@ describe("section", () => {
 
       const section = printSection(content, title, {
         level: "#",
-        ...DEFAULT_OPTION,
+        ...DEFAULT_OPTIONS,
       });
 
       expect(section).toMatchInlineSnapshot(`
@@ -63,7 +63,7 @@ describe("section", () => {
       const title = "section title";
       const content = [];
 
-      const section = printSection(content, title, DEFAULT_OPTION);
+      const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toBe("");
     });
@@ -75,7 +75,7 @@ describe("section", () => {
 
       const itemList = ["one", "two", "three"];
 
-      const section = printSectionItems(itemList, DEFAULT_OPTION);
+      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>one</b></code>](#) 
@@ -97,7 +97,7 @@ describe("section", () => {
 
       const itemList = "list";
 
-      const section = printSectionItems(itemList, DEFAULT_OPTION);
+      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatch("");
     });
@@ -112,7 +112,7 @@ describe("section", () => {
         description: "Lorem ipsum",
       });
 
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
@@ -133,7 +133,7 @@ describe("section", () => {
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
@@ -156,7 +156,7 @@ describe("section", () => {
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
@@ -177,7 +177,7 @@ describe("section", () => {
           },
         ],
       };
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#) 
@@ -196,7 +196,7 @@ describe("section", () => {
         type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
@@ -215,7 +215,7 @@ describe("section", () => {
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTION);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>

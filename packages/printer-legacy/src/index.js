@@ -32,10 +32,11 @@ const {
   MARKDOWN_EOL,
   MARKDOWN_SOC,
   MARKDOWN_EOC,
+  FRONT_MATTER,
 } = require("./const/strings");
 const mdx = require("./const/mdx");
 
-const DEFAULT_OPTION = {
+const DEFAULT_OPTIONS = {
   schema: undefined,
   basePath: "/",
   groups: {},
@@ -59,7 +60,7 @@ class Printer {
     },
   ) {
     this.options = {
-      ...DEFAULT_OPTION,
+      ...DEFAULT_OPTIONS,
       schema,
       basePath: pathUrl.join(linkRoot, baseURL),
       groups,
@@ -74,19 +75,22 @@ class Printer {
     const { toc, pagination } = {
       toc: true,
       pagination: true,
-      ...options.header,
+      ...(options.header ?? undefined),
     };
     const pagination_buttons = pagination
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
-    return [
+
+    const header = [
       FRONT_MATTER,
       `id: ${id}`,
       `title: ${title}`,
       `hide_table_of_contents: ${!toc}`,
       ...pagination_buttons,
       FRONT_MATTER,
-    ].join(MARKDOWN_EOL);
+    ];
+
+    return header.join(MARKDOWN_EOL);
   };
 
   static printDescription = printDescription;
@@ -173,4 +177,4 @@ class Printer {
   };
 }
 
-module.exports = { Printer, DEFAULT_OPTION };
+module.exports = { Printer, DEFAULT_OPTIONS };

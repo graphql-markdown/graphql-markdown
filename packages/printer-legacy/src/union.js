@@ -6,7 +6,9 @@ const { printSection } = require("./section");
 
 const printUnionMetadata = (type, options) => {
   return printSection(type.getTypes(), "Possible types", {
-    parentTypePrefix: options.parentTypePrefix,
+    parentType: type.name,
+    parentTypePrefix:
+      typeof options !== "undefined" && options.parentTypePrefix,
   });
 };
 

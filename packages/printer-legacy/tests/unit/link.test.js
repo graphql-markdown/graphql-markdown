@@ -1,9 +1,9 @@
 const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
 
-const { DEFAULT_OPTION } = require("../../src");
+const { DEFAULT_OPTIONS } = require("../../src");
 const { toLink } = require("../../src/link");
 
-describe("link()", () => {
+describe("link", () => {
   const basePath = "docs/graphql";
 
   describe("toLink()", () => {
@@ -17,11 +17,16 @@ describe("link()", () => {
       });
 
       const link = toLink(type, entityName, undefined, {
-        ...DEFAULT_OPTION,
+        ...DEFAULT_OPTIONS,
         basePath,
       });
 
-      expect(JSON.stringify(link)).toMatchSnapshot();
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestDirective",
+          "url": "docs/graphql/directives/test-directive",
+        }
+      `);
     });
 
     test("returns markdown link surrounded by [] for GraphQL list/array", () => {
@@ -35,11 +40,16 @@ describe("link()", () => {
       );
 
       const link = toLink(type, entityName, undefined, {
-        ...DEFAULT_OPTION,
+        ...DEFAULT_OPTIONS,
         basePath,
       });
 
-      expect(JSON.stringify(link)).toMatchSnapshot();
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestObjectList",
+          "url": "docs/graphql/objects/test-object-list",
+        }
+      `);
     });
 
     test("returns plain text for unknown entities", () => {
@@ -49,11 +59,16 @@ describe("link()", () => {
       const entityName = "fooBar";
 
       const link = toLink(type, entityName, undefined, {
-        ...DEFAULT_OPTION,
+        ...DEFAULT_OPTIONS,
         basePath,
       });
 
-      expect(JSON.stringify(link)).toMatchSnapshot();
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "fooBar",
+          "url": "#",
+        }
+      `);
     });
   });
 });

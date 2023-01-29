@@ -23,7 +23,8 @@ const printCodeEnum = (type) => {
 const printEnumMetadata = (type, options) => {
   return printSection(type.getValues(), "Values", {
     parentType: type.name,
-    parentTypePrefix: options.parentTypePrefix,
+    parentTypePrefix:
+      typeof options !== "undefined" && options.parentTypePrefix,
   });
 };
 
