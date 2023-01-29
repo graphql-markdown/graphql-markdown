@@ -24,7 +24,7 @@ describe("renderer", () => {
     let baseURL = "graphql";
 
     beforeEach(() => {
-      // jest.resetModules();
+      jest.resetModules();
 
       vol.fromJSON({
         "/output": {},
