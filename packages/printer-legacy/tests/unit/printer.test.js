@@ -12,20 +12,6 @@ const {
 const { Printer, DEFAULT_OPTIONS } = require("../../src/index");
 
 describe("Printer", () => {
-  const baseURL = "graphql";
-  const root = "docs";
-  const schema = {
-    toString: () => "SCHEMA",
-    getType: (type) => type,
-    getTypeMap: () => {},
-    getDirectives: () => {},
-    getImplementations: () => {},
-    getRootType: () => undefined,
-    getQueryType: () => undefined,
-    getMutationType: () => undefined,
-    getSubscriptionType: () => undefined,
-  };
-
   const types = [
     {
       name: "Directive",
@@ -84,10 +70,6 @@ describe("Printer", () => {
       },
     },
   ];
-
-  beforeEach(() => {
-    printerInstance = new Printer(schema, baseURL, root);
-  });
 
   afterEach(() => {
     jest.resetAllMocks();
