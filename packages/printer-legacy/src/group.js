@@ -5,7 +5,7 @@ const {
 } = require("@graphql-markdown/utils");
 
 const getGroup = (type, groups) => {
-  if (typeof groups === "undefined") {
+  if (typeof groups !== "object" || groups === null) {
     return "";
   }
   const graphLQLNamedType = getNamedType(type);

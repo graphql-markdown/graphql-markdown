@@ -6,11 +6,13 @@ const { printSection } = require("./section");
 
 const printOperationMetadata = (type, options) => {
   let metadata = printSection(type.args, "Arguments", {
+    ...options,
     parentType: type.name,
-    parentTypePrefix: options.parentTypePrefix,
+    parentTypePrefix: true,
   });
+
   const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-  metadata += printSection([options.schema.getType(queryType)], "Type");
+  metadata += printSection([options.schema.getType(queryType)], "Type", { ...options, parentTypePrefix: false});
 
   return metadata;
 };
