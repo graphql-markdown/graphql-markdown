@@ -807,7 +807,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED"/>
+            "<Badge className="warning" text="DEPRECATED"/>
 
             "
           `);
@@ -824,7 +824,7 @@ describe("lib", () => {
           const deprecation = printerInstance.printDeprecation(type);
 
           expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED: foobar"/>
+            "<Badge className="warning" text="DEPRECATED: foobar"/>
 
             "
           `);
@@ -912,7 +912,7 @@ describe("lib", () => {
           expect(deprecation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <Badge class="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="secondary" text="query"/>
+            [\`Bar\`](#)  <Badge className="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge className="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge className="secondary" text="query"/>
 
             "
           `);
