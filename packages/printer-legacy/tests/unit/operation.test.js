@@ -7,7 +7,7 @@ const { printOperationMetadata } = require("../../src/operation");
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
-    test("returns operation metadata ", () => {
+    test("returns operation metadata", () => {
       expect.hasAssertions();
 
       jest.spyOn(Utils.graphql, "getTypeName").mockReturnValue("Test");
@@ -21,9 +21,10 @@ describe("operation", () => {
         {
           ...DEFAULT_OPTIONS,
           schema: {
-            getType: () => new GraphQLObjectType({
-              name: "Test",
-            }),
+            getType: () =>
+              new GraphQLObjectType({
+                name: "Test",
+              }),
           },
         },
       );

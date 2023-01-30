@@ -12,7 +12,10 @@ const printOperationMetadata = (type, options) => {
   });
 
   const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-  metadata += printSection([options.schema.getType(queryType)], "Type", { ...options, parentTypePrefix: false});
+  metadata += printSection([options.schema.getType(queryType)], "Type", {
+    ...options,
+    parentTypePrefix: false,
+  });
 
   return metadata;
 };
