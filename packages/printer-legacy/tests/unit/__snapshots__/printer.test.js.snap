@@ -199,7 +199,7 @@ section content
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with description 1`] = `
-"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) <Badge className="secondary" text="object"/>
+"#### [\`EntityTypeName\`](docs/graphql/objects/entity-type-name) <Badge class="secondary" text="object"/>
 > Lorem ipsum
 > "
 `;
@@ -207,31 +207,31 @@ exports[`lib printer class Printer printSectionItem() returns Markdown #### link
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with field parameters 1`] = `
 "#### [\`EntityTypeName\`](#) 
 > 
-> ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge className="secondary" text="scalar"/>
+> ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty no nullable list [!]! 1`] = `
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](docs/graphql/scalars/int) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="scalar"/>
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](docs/graphql/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with non empty nullable list [!] 1`] = `
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](docs/graphql/scalars/int) <Badge className="secondary" text="list"/> <Badge className="secondary" text="scalar"/>
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](docs/graphql/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type is non-nullable 1`] = `
-"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](docs/graphql/objects/non-nullable-object-type) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="object"/>
+"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
 > 
 > "
 `;
 
 exports[`lib printer class Printer printSectionItem() returns Markdown #### link section with sub type list and non-nullable 1`] = `
-"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](docs/graphql/objects/non-nullable-object-type) <Badge className="secondary" text="non-null"/> <Badge className="secondary" text="object"/>
+"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](docs/graphql/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
 > 
 > "
 `;

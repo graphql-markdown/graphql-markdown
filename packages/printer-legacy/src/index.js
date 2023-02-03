@@ -276,7 +276,7 @@ module.exports = class Printer {
     return badges
       .map(
         (badge) =>
-          `<Badge className="secondary" text="${badge.singular ?? badge}"/>`,
+          `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
       )
       .join(" ");
   }
