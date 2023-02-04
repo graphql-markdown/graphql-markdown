@@ -25,24 +25,24 @@ describe("object", () => {
       const metadata = printObjectMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
-      "### Fields
+        "### Fields
 
-      #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
-      > 
-      > 
+        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
 
-      #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
-      > 
-      > 
+        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
 
-      ### Interfaces
+        ### Interfaces
 
-      #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>TestInterfaceName</b></code>](/interfaces/test-interface-name) <Badge class="secondary" text="interface"/>
-      > 
-      > 
+        #### [\`TestInterfaceName\`](/interfaces/test-interface-name) <Badge class="secondary" text="interface"/>
+        > 
+        > 
 
-      "
-    `);
+        "
+      `);
     });
   });
 

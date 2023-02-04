@@ -39,8 +39,6 @@ const printSection = (values, section, options) => {
   }
 
   return `${level} ${section}${MARKDOWN_EOP}${printSectionItems(values, {
-    parentType: undefined,
-    parentTypePrefix: true,
     ...options,
     level: subLevel,
   })}${MARKDOWN_EOP}`;
@@ -63,8 +61,6 @@ const printSectionItems = (values, options) => {
       (v) =>
         v &&
         printSectionItem(v, {
-          parentType: undefined,
-          parentTypePrefix: true,
           ...options,
           level,
         }),

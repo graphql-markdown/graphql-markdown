@@ -27,7 +27,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         "### section title
 
-        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>section content</b></code>](#) 
+        #### [\`section content\`](#) 
         > 
         > 
 
@@ -49,7 +49,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         "# section title
 
-        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>section content</b></code>](#) 
+        #### [\`section content\`](#) 
         > 
         > 
 
@@ -78,15 +78,15 @@ describe("section", () => {
       const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [<code style={{ fontWeight: 'normal' }}>undefined.<b>one</b></code>](#) 
+        "#### [\`one\`](#) 
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>two</b></code>](#) 
+        #### [\`two\`](#) 
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>undefined.<b>three</b></code>](#) 
+        #### [\`three\`](#) 
         > 
         > "
       `);

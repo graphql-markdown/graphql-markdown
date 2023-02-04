@@ -108,8 +108,6 @@ const printParentLink = (type, options) => {
   return hasProperty(type, "type")
     ? `<Bullet />${printLink(type.type, {
         withAttributes: true,
-        parentType: undefined,
-        parentTypePrefix: false,
         ...options,
       })}`
     : "";
