@@ -63,5 +63,3 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
     <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" />
   </a>
 </p>
-
-Made with [contributors-img](https://contrib.rocks).
