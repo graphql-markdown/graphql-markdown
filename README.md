@@ -58,8 +58,10 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
 
 [Contributions](https://github.com/graphql-markdown/graphql-markdown/blob/main/CONTRIBUTING.md), issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
 
-<a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=6" />
-</a>
+<p align="center">
+  <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" />
+  </a>
+</p>
 
 Made with [contributors-img](https://contrib.rocks).
