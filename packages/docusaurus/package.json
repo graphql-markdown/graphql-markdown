@@ -31,8 +31,8 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "^1.1.4",
-    "@graphql-markdown/printer-legacy": "^1.1.4"
+    "@graphql-markdown/core": "^1.1.5",
+    "@graphql-markdown/printer-legacy": "^1.1.5"
   },
   "directories": {
     "test": "tests"
