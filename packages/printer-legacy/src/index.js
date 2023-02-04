@@ -151,7 +151,7 @@ module.exports = class Printer {
       return "";
     }
     const link = this.toLink(type, type.name, category);
-    return `[\`${link.text}\`](${link.url})  <Badge className="secondary" text="${category.singular}"/>`;
+    return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
   }
 
   printSection(
@@ -454,7 +454,7 @@ module.exports = class Printer {
     const reason = type.deprecationReason
       ? ": " + escapeMDX(type.deprecationReason)
       : "";
-    return `<Badge className="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
+    return `<Badge class="warning" text="DEPRECATED${reason}"/>${MARKDOWN_EOP}`;
   }
 
   printDescription(type, noText = NO_DESCRIPTION_TEXT) {

@@ -144,7 +144,7 @@ exports[`lib printer class Printer printCodeType() returns an object with its fi
 exports[`lib printer class Printer printCodeUnion() returns union code structure 1`] = `"union UnionTypeName = one | two"`;
 
 exports[`lib printer class Printer printDescription() return DEPRECATED tag if deprecated 1`] = `
-"<Badge className="warning" text="DEPRECATED: Foobar"/>
+"<Badge class="warning" text="DEPRECATED: Foobar"/>
 
 Lorem ipsum"
 `;
