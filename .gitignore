@@ -25,3 +25,4 @@ dist
 *.tgz
 
 bin
+graphql-markdown.code-workspace
