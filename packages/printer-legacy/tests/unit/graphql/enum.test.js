@@ -1,6 +1,9 @@
 const { GraphQLInt, GraphQLEnumType, GraphQLScalarType } = require("graphql");
 
-const { printCodeEnum, printEnumMetadata } = require("../../src/enum");
+const {
+  printCodeEnum,
+  printEnumMetadata,
+} = require("../../../src/graphql/enum");
 
 describe("enum", () => {
   const type = new GraphQLEnumType({

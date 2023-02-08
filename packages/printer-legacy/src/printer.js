@@ -18,15 +18,24 @@ const {
 
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
-const { printCodeField } = require("./code");
-const { printOperationMetadata } = require("./operation");
-const { printCodeEnum, printEnumMetadata } = require("./enum");
-const { printCodeUnion, printUnionMetadata } = require("./union");
-const { printCodeInterface, printInterfaceMetadata } = require("./interface");
-const { printCodeObject, printObjectMetadata } = require("./object");
-const { printCodeInput, printInputMetadata } = require("./input");
-const { printCodeScalar, printScalarMetadata } = require("./scalar");
-const { printCodeDirective, printDirectiveMetadata } = require("./directive");
+const {
+  printOperationMetadata,
+  printCodeOperation,
+  printCodeEnum,
+  printEnumMetadata,
+  printCodeUnion,
+  printUnionMetadata,
+  printCodeInterface,
+  printInterfaceMetadata,
+  printCodeObject,
+  printObjectMetadata,
+  printCodeInput,
+  printInputMetadata,
+  printCodeScalar,
+  printScalarMetadata,
+  printCodeDirective,
+  printDirectiveMetadata,
+} = require("./graphql");
 const {
   MARKDOWN_EOP,
   MARKDOWN_EOL,
@@ -104,7 +113,7 @@ class Printer {
 
     switch (true) {
       case isOperation(type):
-        code += printCodeField(type);
+        code += printCodeOperation(type);
         break;
       case isEnumType(type):
         code += printCodeEnum(type);

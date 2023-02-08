@@ -2,8 +2,8 @@ const {
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("./section");
-const { printCodeArguments } = require("./code");
+const { printSection } = require("../section");
+const { printCodeArguments } = require("../code");
 
 const printCodeDirectiveLocation = (type) => {
   if (

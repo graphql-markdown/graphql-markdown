@@ -3,9 +3,9 @@ const {
   graphql: { getTypeName, getFields },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("./section");
-const { printCodeField } = require("./code");
-const { MARKDOWN_EOL } = require("./const/strings");
+const { printSection } = require("../section");
+const { printCodeField } = require("../code");
+const { MARKDOWN_EOL } = require("../const/strings");
 
 const printObjectMetadata = (type, options) => {
   let metadata = printSection(getFields(type), "Fields", {

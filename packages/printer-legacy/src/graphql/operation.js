@@ -2,7 +2,8 @@ const {
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("./section");
+const { printSection } = require("../section");
+const { printCodeField } = require("../code");
 
 const printOperationMetadata = (type, options) => {
   let metadata = printSection(type.args, "Arguments", {
@@ -20,6 +21,9 @@ const printOperationMetadata = (type, options) => {
   return metadata;
 };
 
+const printCodeOperation = printCodeField;
+
 module.exports = {
   printOperationMetadata,
+  printCodeOperation,
 };

@@ -11,6 +11,8 @@ const {
 
 const { Printer, DEFAULT_OPTIONS } = require("../../src/printer");
 
+const GraphQLPrinter = require("../../src/graphql");
+
 describe("Printer", () => {
   const types = [
     {
@@ -62,7 +64,7 @@ describe("Printer", () => {
       }),
     },
     {
-      name: "Query",
+      name: "Operation",
       type: {
         name: "TestQuery",
         type: GraphQLID,
@@ -142,8 +144,17 @@ describe("Printer", () => {
   describe("printCode()", () => {
     test.each(types)(
       "returns a Markdown graphql codeblock with type $name",
-      ({ type }) => {
+      ({ type, name }) => {
         expect.hasAssertions();
+
+        jest.spyOn(GraphQLPrinter, `printCode${name}`).mockReturnValue(name);
+
+        [
+          "printHeader",
+          "printTypeMetadata",
+          "printDescription",
+          "printRelations",
+        ].map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
 
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 

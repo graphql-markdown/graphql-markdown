@@ -4,7 +4,7 @@ const {
   printCodeScalar,
   printScalarMetadata,
   printSpecification,
-} = require("../../src/scalar");
+} = require("../../../src/graphql/scalar");
 
 describe("scalar", () => {
   const type = new GraphQLScalarType({

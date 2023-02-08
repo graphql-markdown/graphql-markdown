@@ -53,7 +53,7 @@ type TestObject {
 "
 `;
 
-exports[`Printer printCode() returns a Markdown graphql codeblock with type Query 1`] = `
+exports[`Printer printCode() returns a Markdown graphql codeblock with type Operation 1`] = `
 "
 \`\`\`graphql
 TestQuery: ID

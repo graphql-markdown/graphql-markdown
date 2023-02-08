@@ -2,7 +2,7 @@ const {
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { HEADER_SECTION_LEVEL, MARKDOWN_EOP } = require("./const/strings");
+const { HEADER_SECTION_LEVEL, MARKDOWN_EOP } = require("../const/strings");
 
 const printSpecification = (type) => {
   if (!type.specifiedByURL && !type.specifiedByUrl) {

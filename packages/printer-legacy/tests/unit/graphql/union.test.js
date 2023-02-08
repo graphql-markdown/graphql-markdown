@@ -1,6 +1,9 @@
 const { GraphQLInt, GraphQLScalarType, GraphQLUnionType } = require("graphql");
 
-const { printCodeUnion, printUnionMetadata } = require("../../src/union");
+const {
+  printCodeUnion,
+  printUnionMetadata,
+} = require("../../../src/graphql/union");
 
 describe("union", () => {
   const type = new GraphQLUnionType({

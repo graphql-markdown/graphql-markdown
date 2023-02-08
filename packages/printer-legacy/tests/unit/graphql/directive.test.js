@@ -4,12 +4,12 @@ const {
   GraphQLString,
   DirectiveLocation,
 } = require("graphql");
-const { DEFAULT_OPTIONS } = require("../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../../src/printer");
 
 const {
   printCodeDirective,
   printDirectiveMetadata,
-} = require("../../src/directive");
+} = require("../../../src/graphql/directive");
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {

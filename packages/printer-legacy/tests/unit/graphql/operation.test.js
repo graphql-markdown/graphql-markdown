@@ -2,8 +2,8 @@ const { GraphQLID, GraphQLObjectType, GraphQLString } = require("graphql");
 
 const Utils = require("@graphql-markdown/utils");
 
-const { DEFAULT_OPTIONS } = require("../../src/printer");
-const { printOperationMetadata } = require("../../src/operation");
+const { DEFAULT_OPTIONS } = require("../../../src/printer");
+const { printOperationMetadata } = require("../../../src/graphql/operation");
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {

@@ -2,8 +2,8 @@ const {
   graphql: { isEnumType, getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("./section");
-const { MARKDOWN_EOL } = require("./const/strings");
+const { printSection } = require("../section");
+const { MARKDOWN_EOL } = require("../const/strings");
 
 const printCodeEnum = (type) => {
   if (!isEnumType(type)) {

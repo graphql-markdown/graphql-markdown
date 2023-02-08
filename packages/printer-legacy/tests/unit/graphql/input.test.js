@@ -3,9 +3,12 @@ const {
   GraphQLString,
   GraphQLInputObjectType,
 } = require("graphql");
-const { DEFAULT_OPTIONS } = require("../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../../src/printer");
 
-const { printCodeInput, printInputMetadata } = require("../../src/input");
+const {
+  printCodeInput,
+  printInputMetadata,
+} = require("../../../src/graphql/input");
 
 describe("input", () => {
   const type = new GraphQLInputObjectType({
