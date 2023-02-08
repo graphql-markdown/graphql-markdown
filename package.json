@@ -130,8 +130,8 @@
     }
   },
   "devDependencies": {
-    "@graphql-tools/graphql-file-loader": "7.5.15",
-    "@graphql-tools/json-file-loader": "7.4.16",
+    "@graphql-tools/graphql-file-loader": "7.5.16",
+    "@graphql-tools/json-file-loader": "7.4.17",
     "@stryker-mutator/core": "6.3.1",
     "@stryker-mutator/jest-runner": "6.3.1",
     "commitizen": "4.3.0",
@@ -145,11 +145,11 @@
     "eslint-plugin-prettier": "4.2.1",
     "graphql": "16.6.0",
     "husky": "8.0.3",
-    "jest": "29.4.1",
+    "jest": "29.4.2",
     "lodash.filter": "4.6.0",
     "memfs": "3.4.13",
     "pinst": "3.0.0",
-    "prettier": "2.8.3",
+    "prettier": "2.8.4",
     "unionfs": "4.4.0"
   },
   "resolutions": {
