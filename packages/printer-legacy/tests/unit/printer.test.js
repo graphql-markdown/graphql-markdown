@@ -154,7 +154,7 @@ describe("Printer", () => {
           "printTypeMetadata",
           "printDescription",
           "printRelations",
-        ].map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
+        ].forEach((method) => jest.spyOn(Printer, method).mockReturnValue(""));
 
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
