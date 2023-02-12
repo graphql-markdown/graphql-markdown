@@ -294,7 +294,11 @@ module.exports = class Printer {
       parentType: undefined,
     },
   ) {
-    if (typeof type === "undefined" || type === null) {
+    if (
+      typeof type === "undefined" ||
+      type === null ||
+      hasDirective(type, this.skipDocDirective)
+    ) {
       return "";
     }
 
