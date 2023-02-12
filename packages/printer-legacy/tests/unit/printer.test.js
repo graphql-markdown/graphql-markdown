@@ -359,6 +359,58 @@ describe("lib", () => {
 
           expect(section).toMatchSnapshot();
         });
+
+        test("returns no section if item matches skipDocDirective", () => {
+          expect.hasAssertions();
+
+          printerInstance.skipDocDirective = "@noDoc";
+
+          const type = {
+            name: "EntityTypeNameList",
+            astNode: {
+              directives: [{ name: { value: "@noDoc" } }],
+            },
+          };
+
+          const section = printerInstance.printSectionItem(type);
+
+          expect(section).toBe("");
+        });
+
+        test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
+          expect.hasAssertions();
+
+          printerInstance.skipDocDirective = "@noDoc";
+
+          const type = {
+            name: "EntityTypeName",
+            args: [
+              {
+                name: "ParameterTypeName",
+                type: GraphQLString,
+              },
+              {
+                name: "ParameterSkipDoc",
+                type: GraphQLString,
+                astNode: {
+                  directives: [{ name: { value: "@noDoc" } }],
+                },
+              },
+            ],
+          };
+
+          const section = printerInstance.printSectionItem(type);
+
+          expect(section).toMatchInlineSnapshot(`
+            "#### [\`EntityTypeName\`](#) 
+            > 
+            > ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+            > 
+            > 
+
+            "
+          `);
+        });
       });
 
       describe("printCodeEnum()", () => {
