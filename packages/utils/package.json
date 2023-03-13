@@ -22,7 +22,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-tools/load": "^7.8.12"
+    "@graphql-tools/load": "^7.8.13"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0"
