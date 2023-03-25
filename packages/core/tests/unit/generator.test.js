@@ -6,14 +6,29 @@ describe("generator", () => {
       jest.restoreAllMocks();
     });
 
-    test("returns true if diffMethod not set", async () => {
-      expect.assertions(2);
+    test.each([[undefined], [null]])(
+      "returns true if diffMethod not set",
+      async (value) => {
+        expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
+        const logSpy = jest.spyOn(console, "warn");
 
-      await expect(hasChanges({}, "", undefined)).resolves.toBeTruthy();
-      expect(logSpy).not.toHaveBeenCalled();
-    });
+        await expect(hasChanges({}, "", value)).resolves.toBeTruthy();
+        expect(logSpy).not.toHaveBeenCalled();
+      },
+    );
+
+    test.each([[undefined], [null]])(
+      "returns true if diffModule not set",
+      async (value) => {
+        expect.assertions(2);
+
+        const logSpy = jest.spyOn(console, "warn");
+
+        await expect(hasChanges({}, "", "NONE", value)).resolves.toBeTruthy();
+        expect(logSpy).not.toHaveBeenCalled();
+      },
+    );
 
     test("returns true if diff module package not resolved", async () => {
       expect.assertions(2);

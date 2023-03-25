@@ -21,10 +21,6 @@ const hasChanges = async (
     return true;
   }
 
-  if (typeof diffModule !== "string") {
-    throw new Error("Invalid diff module name in settings.");
-  }
-
   try {
     const { checkSchemaChanges } = require(diffModule);
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
