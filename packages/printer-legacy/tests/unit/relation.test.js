@@ -1,6 +1,25 @@
 const { GraphQLScalarType } = require("graphql");
 
-const graphqlLib = require("@graphql-markdown/utils").graphql;
+jest.mock("@graphql-markdown/utils", () => {
+  return {
+    string: { toSlug: jest.fn() },
+    url: { pathUrl: jest.fn() },
+    object: { hasProperty: jest.fn() },
+    graphql: {
+      getRelationOfReturn: jest.fn(),
+      getNamedType: jest.fn(),
+      isOperation: jest.fn(),
+      isEnumType: jest.fn(),
+      isUnionType: jest.fn(),
+      isInterfaceType: jest.fn(),
+      isObjectType: jest.fn(),
+      isInputType: jest.fn(),
+      isScalarType: jest.fn(),
+      isDirectiveType: jest.fn(),
+    },
+  };
+});
+const Utils = require("@graphql-markdown/utils");
 
 const {
   printRelationOf,
@@ -25,25 +44,105 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      jest.spyOn(graphqlLib, "getRelationOfReturn").mockImplementation(() => ({
-        queries: [{ name: "Foo" }],
-        interfaces: [{ name: "Bar" }],
-        subscriptions: [{ name: "Baz" }],
-      }));
+      jest
+        .spyOn(Utils.graphql, "getRelationOfReturn")
+        .mockImplementation(() => ({
+          queries: [{ name: "Foo" }],
+          interfaces: [{ name: "Bar" }],
+          subscriptions: [{ name: "Baz" }],
+        }));
 
-      const deprecation = printRelationOf(
+      const relation = printRelationOf(
         type,
         "RelationOf",
-        graphqlLib.getRelationOfReturn,
+        Utils.graphql.getRelationOfReturn,
       );
 
-      expect(deprecation).toMatchInlineSnapshot(`
+      expect(relation).toMatchInlineSnapshot(`
             "### RelationOf
 
             [\`Bar\`](#)  <Badge class="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="secondary" text="query"/>
 
             "
           `);
+    });
+
+    test("returns empty string if type is undefined", () => {
+      expect.hasAssertions();
+
+      const relation = printRelationOf(
+        undefined,
+        "RelationOf",
+        Utils.graphql.getRelationOfReturn,
+      );
+
+      expect(relation).toBe("");
+    });
+
+    test("returns empty string if type is operation", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      jest.spyOn(Utils.graphql, "isOperation").mockImplementation(() => true);
+
+      const relation = printRelationOf(
+        type,
+        "RelationOf",
+        Utils.graphql.getRelationOfReturn,
+      );
+
+      expect(relation).toBe("");
+    });
+
+    test("returns empty string if getRelation is not a function", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      const relation = printRelationOf(type, "RelationOf", undefined);
+
+      expect(relation).toBe("");
+    });
+
+    test("returns empty string if getRelation returns undefined", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      const relation = printRelationOf(
+        type,
+        "RelationOf",
+        jest.fn().mockReturnValue(undefined),
+      );
+
+      expect(relation).toBe("");
+    });
+
+    test("returns empty string if getRelation returns empty list", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      const relation = printRelationOf(
+        type,
+        "RelationOf",
+        jest.fn().mockReturnValue([]),
+      );
+
+      expect(relation).toBe("");
     });
   });
 
