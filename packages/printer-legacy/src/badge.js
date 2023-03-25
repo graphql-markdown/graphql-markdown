@@ -11,7 +11,7 @@ const getTypeBadges = (type) => {
 
   const badges = [];
 
-  if (type.isDeprecated) {
+  if (hasProperty(type, "isDeprecated") && type.isDeprecated) {
     badges.push("deprecated");
   }
 
@@ -29,7 +29,7 @@ const getTypeBadges = (type) => {
   }
 
   const group = getGroup(rootType);
-  if (group !== "") {
+  if (typeof group !== "undefined" && group !== "") {
     badges.push(group);
   }
 
@@ -37,11 +37,7 @@ const getTypeBadges = (type) => {
 };
 
 const printBadges = (type, options) => {
-  if (
-    !hasProperty(options, "typeBadges") ||
-    typeof options.typeBadges === "undefined" ||
-    options.typeBadges !== true
-  ) {
+  if (!hasProperty(options, "typeBadges") || options.typeBadges !== true) {
     return "";
   }
 
@@ -53,7 +49,10 @@ const printBadges = (type, options) => {
 
   return badges
     .map(
-      (badge) => `<Badge class="secondary" text="${badge.singular ?? badge}"/>`,
+      (badge) =>
+        `<Badge class="secondary" text="${
+          hasProperty(badge, "singular") ? badge.singular : badge
+        }"/>`,
     )
     .join(" ");
 };
