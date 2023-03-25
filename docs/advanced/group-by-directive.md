@@ -13,11 +13,11 @@ We can accomplish this by adding a directive called `doc` with a field `category
 
 ```graphql
 type Mutation{
-  AddCourse(input: String): String  @doc(category: "Course") 
+  AddCourse(input: String): String @doc(category: "Course") 
 }
 
 type Mutation{
-  DropCourse(input: String): String  @doc(category: "Course") 
+  DropCourse(input: String): String @doc(category: "Course") 
 }
 ```
 

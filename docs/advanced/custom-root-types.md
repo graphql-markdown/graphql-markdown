@@ -8,7 +8,7 @@ pagination_next: null
 For custom operation root types (queries not of type `Query`, or root type name used for other purpose), use the loader option `rootTypes`:
 
 ```ts
-type rootTypes = { query?: string, mutation?: string, subscription?: string};
+type rootTypes = { query?: string, mutation?: string, subscription?: string };
 ```
 
 - use a custom type name to override standard type

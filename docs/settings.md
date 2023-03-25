@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Settings
 
-By default, the plugin will use the options as defined in the plugin's [configuration](/docs/configuration), but they can be overridden using CLI flags.
+By default, the plugin will use the options as defined in the [configuration](/docs/configuration), and they can be overridden using CLI flags.
 
 ## `baseURL`
 
@@ -16,16 +16,6 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 
 ## `diffMethod`
 
-:::info
-The package `@graphql-markdown/diff` is required for using `diffMethod`.
-If the package is missing, then the change detection will be skipped.
-
-```shell
-npm install @graphql-markdown/diff
-```
-
-:::
-
 The method to be used for identifying changes in the schema for triggering the documentation generation.
 
 The possible values are:
@@ -35,9 +25,21 @@ The possible values are:
 - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) for identifying changes in the schema (including description)
 - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)
 
-| Setting      | CLI flag                  | Default       |
-| ------------ | ------------------------- | ------------- |
-| `diffMethod` | `-d, --diff <diffMethod>` | `NONE`        |
+| Setting      | CLI flag                  | Default |
+| ------------ | ------------------------- | ------- |
+| `diffMethod` | `-d, --diff <diffMethod>` | `NONE`  |
+
+<br/>
+
+:::info
+The package `@graphql-markdown/diff` is required for using `diffMethod`.
+If the package is missing, then the change detection will be skipped.
+
+```shell
+npm install @graphql-markdown/diff
+```
+
+:::
 
 ## `docOptions`
 
@@ -94,6 +96,8 @@ The plugin provides a default page in `assets/generated`.
 | Setting    | CLI flag                    | Default        |
 | ---------- | --------------------------- | -------------- |
 | `homepage` | `-h, --homepage <homepage>` | `generated.md` |
+
+<br/>
 
 :::info
 The GraphQL-Markdown template for Docusaurus provides a customized homepage located at `static/index.md`.
