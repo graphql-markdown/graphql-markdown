@@ -57,7 +57,7 @@ describe("generator", () => {
 
       expect(() => {
         getPrinter({}, "/", "root", {}, {}, undefined);
-      }).toThrow("Invalid printer module name in printTypeOptions settings.");
+      }).toThrow(`Invalid printer module name in "printTypeOptions" settings.`);
     });
 
     test("throws exception if no printer module not found", () => {
@@ -66,7 +66,7 @@ describe("generator", () => {
       expect(() => {
         getPrinter({}, "/", "root", {}, {}, "foobar");
       }).toThrow(
-        "Cannot find module 'foobar' for @graphql-markdown/core in printTypeOptions settings.",
+        `Cannot find module 'foobar' for @graphql-markdown/core in "printTypeOptions" settings.`,
       );
     });
   });
