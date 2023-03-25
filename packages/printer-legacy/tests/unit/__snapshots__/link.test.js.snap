@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Directive 1`] = `
+{
+  "plural": "directives",
+  "singular": "directive",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Enum 1`] = `
+{
+  "plural": "enums",
+  "singular": "enum",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Input 1`] = `
+{
+  "plural": "inputs",
+  "singular": "input",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Interface 1`] = `
+{
+  "plural": "interfaces",
+  "singular": "interface",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Object 1`] = `
+{
+  "plural": "objects",
+  "singular": "object",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Operation 1`] = `
+{
+  "plural": "operations",
+  "singular": "operation",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Scalar 1`] = `
+{
+  "plural": "scalars",
+  "singular": "scalar",
+}
+`;
+
+exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Union 1`] = `
+{
+  "plural": "unions",
+  "singular": "union",
+}
+`;
