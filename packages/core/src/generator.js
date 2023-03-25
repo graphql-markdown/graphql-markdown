@@ -115,7 +115,6 @@ const generateDocFromSchema = async ({
     groups,
     prettify,
     docOptions,
-    skipDocDirective,
   );
 
   const pages = await Promise.all(
@@ -131,6 +130,7 @@ const generateDocFromSchema = async ({
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(3);
+
   console.info(
     `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
   );

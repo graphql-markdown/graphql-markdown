@@ -9,6 +9,7 @@ const {
     isInputType,
     isScalarType,
     isDirectiveType,
+    hasDirective,
   },
 } = require("@graphql-markdown/utils");
 
@@ -173,8 +174,14 @@ class Printer {
     : () => "";
 
   static printType = (name, type, options) => {
-    if (typeof type === "undefined" || type === null) {
-      return "";
+    if (
+      typeof type === "undefined" ||
+      type === null ||
+      typeof name === "undefined" ||
+      name === null ||
+      hasDirective(type, Printer.skipDocDirective)
+    ) {
+      return undefined;
     }
 
     const header = Printer.printHeader(name, getTypeName(type), {

@@ -23,8 +23,6 @@ describe("renderer", () => {
     let baseURL = "graphql";
 
     beforeEach(() => {
-      jest.resetModules();
-
       vol.fromJSON({
         "/output": {},
         "/temp": {},
@@ -36,6 +34,7 @@ describe("renderer", () => {
 
     afterEach(() => {
       vol.reset();
+      jest.restoreAllMocks();
     });
 
     describe("renderTypeEntities()", () => {
@@ -55,18 +54,16 @@ describe("renderer", () => {
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
       });
 
-      test.each([[undefined, null]])(
-        "do nothing if type is not defined",
-        async (type) => {
-          expect.assertions(1);
-          const meta = await rendererInstance.renderTypeEntities(
-            "test",
-            "FooBar",
-            type,
-          );
-          expect(meta).toBeUndefined();
-        },
-      );
+      test("do nothing if type is not defined", async () => {
+        expect.assertions(1);
+        jest.spyOn(Printer, "printType").mockReturnValue(undefined);
+        const meta = await rendererInstance.renderTypeEntities(
+          "test",
+          "FooBar",
+          null,
+        );
+        expect(meta).toBeUndefined();
+      });
     });
 
     describe("renderSidebar()", () => {

@@ -4,7 +4,6 @@ const {
   object: { hasProperty },
   string: { toSlug, startCase },
   url: { pathUrl },
-  graphql: { hasDirective },
   prettier: { prettifyJavascript, prettifyMarkdown },
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
 } = require("@graphql-markdown/utils");
@@ -17,22 +16,13 @@ const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
 
 module.exports = class Renderer {
-  constructor(
-    printer,
-    outputDir,
-    baseURL,
-    group,
-    prettify,
-    docOptions,
-    skipDocDirective,
-  ) {
+  constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
     this.printer = printer;
     this.prettify = prettify;
     this.options = docOptions;
-    this.skipDocDirective = skipDocDirective;
   }
 
   async generateCategoryMetafile(category, dirPath) {
@@ -78,18 +68,20 @@ module.exports = class Renderer {
   }
 
   async renderTypeEntities(dirPath, name, type) {
-    if (
-      typeof type === "undefined" ||
-      type === null ||
-      hasDirective(type, this.skipDocDirective)
-    ) {
-      return undefined;
-    }
-
     const fileName = toSlug(name);
     const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
 
-    const content = this.printer.printType(fileName, type, this.options);
+    let content;
+    try {
+      content = this.printer.printType(fileName, type, this.options);
+      if (typeof content === "undefined") {
+        return undefined;
+      }
+    } catch (error) {
+      console.log(`An error occurred while processing "${fileName}"`);
+      return undefined;
+    }
+
     await saveFile(
       filePath,
       this.prettify ? prettifyMarkdown(content) : content,

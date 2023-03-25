@@ -7,6 +7,8 @@ jest.mock("@graphql-markdown/printer-legacy", () => {
     init: jest.fn(),
   };
 });
+const Printer = require("@graphql-markdown/printer-legacy");
+
 jest.mock("@graphql-markdown/diff");
 const diff = require("@graphql-markdown/diff");
 
@@ -14,7 +16,7 @@ const { generateDocFromSchema } = require("../../src/generator");
 
 describe("renderer", () => {
   beforeEach(() => {
-    jest.resetModules();
+    jest.spyOn(Printer, "printType").mockImplementation((value) => value);
 
     vol.fromJSON({
       "/output": {},
@@ -25,6 +27,7 @@ describe("renderer", () => {
 
   afterEach(() => {
     vol.reset();
+    jest.restoreAllMocks();
   });
 
   describe("generateDocFromSchema()", () => {

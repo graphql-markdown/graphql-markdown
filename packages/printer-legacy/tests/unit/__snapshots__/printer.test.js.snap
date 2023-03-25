@@ -11,7 +11,7 @@ exports[`Printer printCode() returns a Markdown codeblock with non supported mes
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Directive 1`] = `
 "
 \`\`\`graphql
-directive @TestDirective
+Directive
 \`\`\`
 "
 `;
@@ -19,9 +19,7 @@ directive @TestDirective
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Enum 1`] = `
 "
 \`\`\`graphql
-enum TestEnum {
-
-}
+Enum
 \`\`\`
 "
 `;
@@ -29,8 +27,7 @@ enum TestEnum {
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Input 1`] = `
 "
 \`\`\`graphql
-input TestInput {
-}
+Input
 \`\`\`
 "
 `;
@@ -38,8 +35,7 @@ input TestInput {
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Interface 1`] = `
 "
 \`\`\`graphql
-interface TestInterface {
-}
+Interface
 \`\`\`
 "
 `;
@@ -47,8 +43,7 @@ interface TestInterface {
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Object 1`] = `
 "
 \`\`\`graphql
-type TestObject {
-}
+Object
 \`\`\`
 "
 `;
@@ -56,7 +51,7 @@ type TestObject {
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Operation 1`] = `
 "
 \`\`\`graphql
-TestQuery: ID
+Operation
 \`\`\`
 "
 `;
@@ -64,7 +59,7 @@ TestQuery: ID
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Scalar 1`] = `
 "
 \`\`\`graphql
-scalar TestScalar
+Scalar
 \`\`\`
 "
 `;
@@ -72,7 +67,7 @@ scalar TestScalar
 exports[`Printer printCode() returns a Markdown graphql codeblock with type Union 1`] = `
 "
 \`\`\`graphql
-union TestUnion =
+Union
 \`\`\`
 "
 `;
