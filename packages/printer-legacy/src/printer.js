@@ -68,11 +68,11 @@ class Printer {
       skipDocDirective: undefined,
     },
   ) => {
-    if (typeof this.options !== "undefined") {
+    if (typeof Printer.options !== "undefined" && Printer.options !== null) {
       return;
     }
 
-    this.options = {
+    Printer.options = {
       ...DEFAULT_OPTIONS,
       schema,
       basePath: pathUrl.join(linkRoot, baseURL),
@@ -168,7 +168,9 @@ class Printer {
     }
   };
 
-  static printRelations = this.relatedTypeSection ? printRelations : () => "";
+  static printRelations = Printer.relatedTypeSection
+    ? printRelations
+    : () => "";
 
   static printType = (name, type, options) => {
     if (typeof type === "undefined" || type === null) {
@@ -176,13 +178,13 @@ class Printer {
     }
 
     const header = Printer.printHeader(name, getTypeName(type), {
-      ...this.options,
+      ...Printer.options,
       header: options,
     });
-    const description = Printer.printDescription(type, this.options);
-    const code = Printer.printCode(type, this.options);
-    const metadata = Printer.printTypeMetadata(type, this.options);
-    const relations = Printer.printRelations(type, this.options);
+    const description = Printer.printDescription(type, Printer.options);
+    const code = Printer.printCode(type, Printer.options);
+    const metadata = Printer.printTypeMetadata(type, Printer.options);
+    const relations = Printer.printRelations(type, Printer.options);
 
     return [header, mdx, description, code, metadata, relations].join(
       MARKDOWN_EOP,
