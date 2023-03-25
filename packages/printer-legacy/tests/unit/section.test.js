@@ -268,13 +268,14 @@ describe("section", () => {
       });
 
       expect(section).toMatchInlineSnapshot(`
-            "#### [\`EntityTypeName\`](#) 
-            > 
-            > ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
-            > 
-            > 
-            "
-          `);
+        "#### [\`EntityTypeName\`](#) 
+        > 
+        > ##### [<code style={{ fontWeight: 'normal' }}>undefined.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
+
+        "
+      `);
     });
   });
 });
