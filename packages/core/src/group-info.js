@@ -1,7 +1,3 @@
-const {
-  array: { convertArrayToObject },
-} = require("@graphql-markdown/utils");
-
 const DEFAULT_GROUP = "Miscellaneous";
 const OPTION_REGEX =
   /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
@@ -31,10 +27,6 @@ function getGroups(rootTypes, groupByDirective) {
   Object.keys(rootTypes).forEach((typeName) => {
     let rootType = rootTypes[typeName];
     if (typeof rootType != "undefined" && rootType != null) {
-      if (Array.isArray(rootType)) {
-        rootType = convertArrayToObject(rootType);
-      }
-
       Object.keys(rootType).forEach((type) => {
         groups[type] = getGroupName(rootType[type], groupByDirective);
       });

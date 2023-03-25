@@ -135,6 +135,10 @@ describe("group-info", () => {
     test.each([
       { case: "invalid type", type: {} },
       { case: "no directive", type: schema.getType("Unicorn") },
+      {
+        case: "no directives array",
+        type: { ...schema.getType("Unicorn"), astNode: { directives: "" } },
+      },
       { case: "no matching directive", type: schema.getType("Elf") },
     ])("returns fallback group name if $case", ({ type }) => {
       expect.assertions(1);
