@@ -1,5 +1,5 @@
 const {
-  graphql: { isParametrizedField },
+  graphql: { isParametrizedField, hasDirective },
 } = require("@graphql-markdown/utils");
 const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
@@ -76,7 +76,11 @@ const printSectionItem = (type, options) => {
       ? options.level
       : HEADER_SECTION_SUB_LEVEL;
 
-  if (typeof type === "undefined" || type === null) {
+  if (
+    typeof type === "undefined" ||
+    type === null ||
+    hasDirective(type, options.skipDocDirective)
+  ) {
     return "";
   }
 

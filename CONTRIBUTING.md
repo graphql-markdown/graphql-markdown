@@ -125,20 +125,20 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 The quickest way to understand the code structure is to look at the folder structure:
 
 * `packages` contains packages sources
-  * `docusaurus` contains Docusaurus plugin | `@graphql-markdown/docusaurus`
+  * `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `core` contains core logic | `@graphql-markdown/core`
+  * `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
     * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `utils` contains shared libraries | `@graphql-markdown/utils`
+  * `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `printer-legacy` contains legacy code for exporting markdown | `@graphql-markdown/printer-legacy`
+  * `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `diff` contains diff methods (optional) | `@graphql-markdown/utils`
+  * `diff` contains diff methods (optional) 📦 [`@graphql-markdown/diff`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/diff)
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
 * `config` folder configuration files for development tools.

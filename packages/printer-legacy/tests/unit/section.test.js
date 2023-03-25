@@ -223,5 +223,58 @@ describe("section", () => {
         > "
       `);
     });
+
+    test("returns no section if item matches skipDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "EntityTypeNameList",
+        astNode: {
+          directives: [{ name: { value: "@noDoc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        skipDocDirective: "@noDoc",
+      });
+
+      expect(section).toBe("");
+    });
+
+    test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "EntityTypeName",
+        args: [
+          {
+            name: "ParameterTypeName",
+            type: GraphQLString,
+          },
+          {
+            name: "ParameterSkipDoc",
+            type: GraphQLString,
+            astNode: {
+              directives: [{ name: { value: "@noDoc" } }],
+            },
+          },
+        ],
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        skipDocDirective: "@noDoc",
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+            "#### [\`EntityTypeName\`](#) 
+            > 
+            > ##### [\`ParameterTypeName\`](#)<Bullet />[\`String\`](docs/graphql/scalars/string) <Badge class="secondary" text="scalar"/>
+            > 
+            > 
+            "
+          `);
+    });
   });
 });
