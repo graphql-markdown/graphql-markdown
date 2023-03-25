@@ -12,8 +12,17 @@ const hasChanges = async (
   diffMethod,
   diffModule = "@graphql-markdown/diff",
 ) => {
-  if (typeof diffMethod === "undefined" || diffMethod == null) {
+  if (
+    typeof diffMethod === "undefined" ||
+    diffMethod == null ||
+    typeof diffModule === "undefined" ||
+    diffModule == null
+  ) {
     return true;
+  }
+
+  if (typeof diffModule !== "string") {
+    throw new Error("Invalid diff module name in settings.");
   }
 
   try {
