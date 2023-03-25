@@ -12,7 +12,7 @@ const {
 jest.mock("@graphql-markdown/utils", () => {
   return {
     string: { toSlug: jest.fn() },
-    url: { pathUrl: jest.fn() },
+    url: { pathUrl: { join: jest.fn() } },
     object: { hasProperty: jest.fn() },
     graphql: {
       hasDirective: jest.fn(),
@@ -113,6 +113,66 @@ describe("Printer", () => {
     jest.restoreAllMocks();
   });
 
+  describe("init()", () => {
+    test("sets Printer instance with default options", () => {
+      expect.hasAssertions();
+
+      expect(Printer.options).toMatchInlineSnapshot(`undefined`);
+
+      Printer.init();
+
+      expect(Printer.options).toMatchInlineSnapshot(`
+        {
+          "basePath": undefined,
+          "groups": undefined,
+          "parentTypePrefix": true,
+          "relatedTypeSection": true,
+          "schema": undefined,
+          "skipDocDirective": undefined,
+          "typeBadges": true,
+        }
+      `);
+    });
+
+    test("does nothing is options is defined", () => {
+      expect.hasAssertions();
+
+      Printer.options = {};
+
+      Printer.init();
+
+      expect(Printer.options).toMatchInlineSnapshot(`{}`);
+    });
+
+    test("override values on init when options is undefined", () => {
+      expect.hasAssertions();
+
+      Printer.options = undefined;
+
+      Printer.init({}, "test", "/", {
+        groups: {},
+        printTypeOptions: {
+          parentTypePrefix: false,
+          relatedTypeSection: false,
+          typeBadges: false,
+        },
+        skipDocDirective: false,
+      });
+
+      expect(Printer.options).toMatchInlineSnapshot(`
+        {
+          "basePath": undefined,
+          "groups": {},
+          "parentTypePrefix": false,
+          "relatedTypeSection": false,
+          "schema": {},
+          "skipDocDirective": false,
+          "typeBadges": false,
+        }
+      `);
+    });
+  });
+
   describe("printHeader()", () => {
     test("returns a Docusaurus document header", () => {
       expect.hasAssertions();
@@ -207,6 +267,34 @@ describe("Printer", () => {
       const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchSnapshot();
+    });
+  });
+
+  describe("printTypeMetadata()", () => {
+    test.each(types)(
+      "returns a Markdown graphql codeblock with type $name",
+      ({ type, name, guard }) => {
+        expect.hasAssertions();
+
+        jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
+        const spy = jest
+          .spyOn(GraphQLPrinter, `print${name}Metadata`)
+          .mockReturnValue(name);
+
+        Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
+
+        expect(spy).toHaveBeenCalledWith(type, DEFAULT_OPTIONS);
+      },
+    );
+
+    test("returns undefined with non supported message for unsupported type", () => {
+      expect.hasAssertions();
+
+      const type = "TestFooBarType";
+
+      const code = Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
+
+      expect(code).toBeUndefined();
     });
   });
 
