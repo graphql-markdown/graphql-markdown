@@ -37,6 +37,8 @@ const getPrinter = (
   printerModule,
   skipDocDirective,
 ) => {
+  let Printer = undefined;
+
   if (typeof printerModule !== "string") {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',
@@ -44,18 +46,20 @@ const getPrinter = (
   }
 
   try {
-    const Printer = require(printerModule);
-    Printer.init(schema, baseURL, linkRoot, {
-      groups,
-      printTypeOptions,
-      skipDocDirective,
-    });
-    return Printer;
+    Printer = require(printerModule);
   } catch (error) {
     throw new Error(
       `Cannot find module '${printerModule}' for @graphql-markdown/core in "printTypeOptions" settings.`,
     );
   }
+
+  Printer.init(schema, baseURL, linkRoot, {
+    groups,
+    printTypeOptions,
+    skipDocDirective,
+  });
+
+  return Printer;
 };
 
 const generateDocFromSchema = async ({
