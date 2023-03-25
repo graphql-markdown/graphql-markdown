@@ -1,6 +1,6 @@
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn((name) => name) },
+    string: { toSlug: jest.fn() },
     object: { hasProperty: jest.fn() },
     graphql: { getNamedType: jest.fn() },
   };
@@ -11,6 +11,10 @@ const Utils = require("@graphql-markdown/utils");
 const { getGroup } = require("../../src/group");
 
 describe("group", () => {
+  beforeEach(() => {
+    jest.spyOn(Utils.string, "toSlug").mockImplementationOnce((name) => name);
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
