@@ -1,4 +1,4 @@
-const { GraphQLScalarType } = require("graphql");
+const { GraphQLScalarType, GraphQLDirective } = require("graphql");
 
 const { printDescription, printDeprecation } = require("../../src/common");
 
@@ -7,19 +7,39 @@ describe("common", () => {
     test("returns the type description text", () => {
       expect.hasAssertions();
 
-      const type = { description: "Lorem ipsum" };
+      const type = new GraphQLDirective({
+        name: "TestDirective",
+        locations: [],
+        description: "Lorem ipsum",
+      });
       const description = printDescription(type);
 
-      expect(description).toMatchInlineSnapshot(`"Lorem ipsum"`);
+      expect(description).toBe("Lorem ipsum");
     });
 
     test("returns the default text if no description", () => {
       expect.hasAssertions();
 
-      const type = {};
+      const type = new GraphQLDirective({
+        name: "TestDirective",
+        locations: [],
+      });
       const description = printDescription(type);
 
-      expect(description).toMatchInlineSnapshot(`"No description"`);
+      expect(description).toBe("No description");
+    });
+
+    test("returns the default text if description is undefined", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLDirective({
+        name: "TestDirective",
+        locations: [],
+        description: undefined,
+      });
+      const description = printDescription(type);
+
+      expect(description).toBe("No description");
     });
 
     test("return DEPRECATED tag if deprecated", () => {
