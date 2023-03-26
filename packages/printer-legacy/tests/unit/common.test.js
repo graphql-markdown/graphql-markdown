@@ -29,6 +29,18 @@ describe("common", () => {
       expect(description).toBe("No description");
     });
 
+    test("returns the defined text if no description", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLDirective({
+        name: "TestDirective",
+        locations: [],
+      });
+      const description = printDescription(type, "");
+
+      expect(description).toBe("");
+    });
+
     test("returns the default text if description is undefined", () => {
       expect.hasAssertions();
 
@@ -38,6 +50,19 @@ describe("common", () => {
         description: undefined,
       });
       const description = printDescription(type);
+
+      expect(description).toBe("No description");
+    });
+
+    test("returns the default text if noText is not a string", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLDirective({
+        name: "TestDirective",
+        locations: [],
+        description: undefined,
+      });
+      const description = printDescription(type, { text: "Not a string" });
 
       expect(description).toBe("No description");
     });

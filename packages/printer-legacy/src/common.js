@@ -25,6 +25,8 @@ const printDescription = (type, noText = NO_DESCRIPTION_TEXT) => {
   const description =
     hasProperty(type, "description") && typeof type.description === "string"
       ? escapeMDX(type.description)
+      : typeof noText !== "string"
+      ? NO_DESCRIPTION_TEXT
       : noText;
   const deprecation = printDeprecation(type);
   return `${deprecation}${description}`;
