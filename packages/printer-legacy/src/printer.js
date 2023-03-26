@@ -194,10 +194,10 @@ class Printer {
       ...printTypeOptions,
       header: options,
     });
-    const description = Printer.printDescription(type, printTypeOptions);
-    const code = Printer.printCode(type, printTypeOptions);
+    const description = Printer.printDescription(type);
+    const code = Printer.printCode(type);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
-    const relations = Printer.printRelations(type, printTypeOptions);
+    const relations = Printer.printRelations(type, printTypeOptions.schema);
 
     return [header, mdx, description, code, metadata, relations].join(
       MARKDOWN_EOP,
