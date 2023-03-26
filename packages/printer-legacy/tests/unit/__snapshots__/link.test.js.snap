@@ -55,3 +55,59 @@ exports[`link getLinkCategory() returns a category object matching the graphLQLN
   "singular": "union",
 }
 `;
+
+exports[`link toLink() returns markdown link for GraphQL Directive 1`] = `
+{
+  "text": "TestDirective",
+  "url": "docs/graphql/directives/test-directive",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Enum 1`] = `
+{
+  "text": "TestEnum",
+  "url": "docs/graphql/enums/test-enum",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Input 1`] = `
+{
+  "text": "TestInput",
+  "url": "docs/graphql/inputs/test-input",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Interface 1`] = `
+{
+  "text": "TestInterface",
+  "url": "docs/graphql/interfaces/test-interface",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Object 1`] = `
+{
+  "text": "TestObject",
+  "url": "docs/graphql/objects/test-object",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Operation 1`] = `
+{
+  "text": "TestOperation",
+  "url": "docs/graphql/queries/test-operation",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Scalar 1`] = `
+{
+  "text": "TestScalar",
+  "url": "docs/graphql/scalars/test-scalar",
+}
+`;
+
+exports[`link toLink() returns markdown link for GraphQL Union 1`] = `
+{
+  "text": "TestUnion",
+  "url": "docs/graphql/unions/test-union",
+}
+`;

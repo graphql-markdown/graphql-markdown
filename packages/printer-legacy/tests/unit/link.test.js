@@ -1,3 +1,5 @@
+const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
+
 jest.mock("@graphql-markdown/utils", () => {
   return {
     string: { toSlug: jest.fn() },
@@ -28,55 +30,53 @@ jest.mock("../../src/group", () => {
 });
 const Group = require("../../src/group");
 
-const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
-
 const { DEFAULT_OPTIONS } = require("../../src/printer");
-
 const Link = require("../../src/link");
 
 describe("link", () => {
   const basePath = "docs/graphql";
+
+  const types = [
+    {
+      name: "Directive",
+      guard: "isDirectiveType",
+    },
+    {
+      name: "Enum",
+      guard: "isEnumType",
+    },
+    {
+      name: "Input",
+      guard: "isInputType",
+    },
+    {
+      name: "Interface",
+      guard: "isInterfaceType",
+    },
+    {
+      name: "Object",
+      guard: "isObjectType",
+    },
+    {
+      name: "Scalar",
+      guard: "isScalarType",
+    },
+    {
+      name: "Union",
+      guard: "isUnionType",
+    },
+    {
+      name: "Operation",
+      guard: "isOperation",
+      operation: { plural: "queries" },
+    },
+  ];
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
   describe("getLinkCategory()", () => {
-    const types = [
-      {
-        name: "Directive",
-        guard: "isDirectiveType",
-      },
-      {
-        name: "Enum",
-        guard: "isEnumType",
-      },
-      {
-        name: "Input",
-        guard: "isInputType",
-      },
-      {
-        name: "Interface",
-        guard: "isInterfaceType",
-      },
-      {
-        name: "Object",
-        guard: "isObjectType",
-      },
-      {
-        name: "Scalar",
-        guard: "isScalarType",
-      },
-      {
-        name: "Union",
-        guard: "isUnionType",
-      },
-      {
-        name: "Operation",
-        guard: "isOperation",
-      },
-    ];
-
     test.each(types)(
       "returns a category object matching the graphLQLNamedType $name",
       ({ guard }) => {
@@ -100,32 +100,30 @@ describe("link", () => {
       jest.spyOn(Group, "getGroup").mockReturnValue("");
     });
 
-    test("returns markdown link for GraphQL directive", () => {
-      expect.hasAssertions();
+    test.each(types)(
+      "returns markdown link for GraphQL $name",
+      ({ name, guard, operation }) => {
+        expect.hasAssertions();
 
-      const entityName = "TestDirective";
-      const slug = "test-directive";
-      const type = new GraphQLDirective({
-        name: entityName,
-        locations: [],
-      });
+        const entityName = `Test${name}`;
+        const slug = `test-${name.toLowerCase()}`;
+        const type = new GraphQLDirective({
+          name: entityName,
+          locations: [],
+        });
 
-      jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
-      jest.spyOn(Utils.graphql, "isDirectiveType").mockReturnValue(true);
-      jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
+        jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
+        jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
+        jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
 
-      const link = Link.toLink(type, entityName, undefined, {
-        ...DEFAULT_OPTIONS,
-        basePath,
-      });
+        const link = Link.toLink(type, entityName, operation, {
+          ...DEFAULT_OPTIONS,
+          basePath,
+        });
 
-      expect(link).toMatchInlineSnapshot(`
-        {
-          "text": "TestDirective",
-          "url": "docs/graphql/directives/test-directive",
-        }
-      `);
-    });
+        expect(link).toMatchSnapshot();
+      },
+    );
 
     test("returns markdown link surrounded by [] for GraphQL list/array", () => {
       expect.hasAssertions();
@@ -236,7 +234,153 @@ describe("link", () => {
     });
   });
 
-  describe("printLink()", () => {});
+  describe("printLink()", () => {
+    test("returns formatted markdown link", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
+      jest.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
+      jest.spyOn(Link, "hasOptionParentType").mockReturnValue(false);
+
+      const result = Link.printLink({});
+
+      expect(result).toBe("[`foo`](/bar)");
+    });
+
+    test("returns formatted markdown link parentType", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
+      jest.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
+      jest.spyOn(Link, "hasOptionParentType").mockReturnValue(true);
+
+      const result = Link.printLink(
+        {},
+        { parentTypePrefix: true, parentType: "baz" },
+      );
+
+      expect(result).toBe(
+        "[<code style={{ fontWeight: 'normal' }}>baz.<b>foo</b></code>](/bar)",
+      );
+    });
+
+    test("returns formatted markdown link withAttributes", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
+      jest.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(true);
+      jest.spyOn(Link, "printLinkAttributes").mockReturnValue("barfoo");
+
+      const result = Link.printLink({}, { withAttributes: true });
+
+      expect(result).toBe("[`barfoo`](/bar)");
+    });
+  });
+
+  describe("hasOptionWithAttributes()", () => {
+    test("returns false when options has no prop withAttributes", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(false);
+
+      expect(Link.hasOptionWithAttributes({})).toBeFalsy();
+    });
+
+    test("returns false when options withAttributes is false", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(
+        Link.hasOptionWithAttributes({ withAttributes: false }),
+      ).toBeFalsy();
+    });
+
+    test("returns true when options withAttributes is true", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(
+        Link.hasOptionWithAttributes({ withAttributes: true }),
+      ).toBeTruthy();
+    });
+  });
+
+  describe("hasOptionParentType()", () => {
+    test("returns false when options has no prop parentTypePrefix", () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(Utils.object, "hasProperty")
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true);
+
+      expect(Link.hasOptionParentType({})).toBeFalsy();
+    });
+
+    test("returns false when options parentTypePrefix is false", () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(Utils.object, "hasProperty")
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true);
+
+      expect(
+        Link.hasOptionParentType({
+          parentTypePrefix: false,
+          parentType: "not null",
+        }),
+      ).toBeFalsy();
+    });
+
+    test("returns false when options has no prop parentType", () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(Utils.object, "hasProperty")
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
+
+      expect(Link.hasOptionParentType({ parentTypePrefix: true })).toBeFalsy();
+    });
+
+    test.each([[undefined], [null]])(
+      "returns false when options parentType is %p",
+      (value) => {
+        expect.hasAssertions();
+
+        jest
+          .spyOn(Utils.object, "hasProperty")
+          .mockReturnValueOnce(true)
+          .mockReturnValueOnce(true);
+
+        expect(
+          Link.hasOptionParentType({
+            parentTypePrefix: true,
+            parentType: value,
+          }),
+        ).toBeFalsy();
+      },
+    );
+
+    test("returns true when options parentTypePrefix is true with parentType defined", () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(Utils.object, "hasProperty")
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(true);
+
+      expect(
+        Link.hasOptionParentType({
+          parentTypePrefix: true,
+          parentType: "not null",
+        }),
+      ).toBeTruthy();
+    });
+  });
 
   describe("printParentLink()", () => {});
 });
