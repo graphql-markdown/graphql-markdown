@@ -22,12 +22,11 @@ const printDeprecation = (type) => {
 };
 
 const printDescription = (type, noText = NO_DESCRIPTION_TEXT) => {
+  const replacement = typeof noText === "string" ? noText : NO_DESCRIPTION_TEXT;
   const description =
     hasProperty(type, "description") && typeof type.description === "string"
       ? escapeMDX(type.description)
-      : typeof noText !== "string"
-      ? NO_DESCRIPTION_TEXT
-      : noText;
+      : replacement;
   const deprecation = printDeprecation(type);
   return `${deprecation}${description}`;
 };
