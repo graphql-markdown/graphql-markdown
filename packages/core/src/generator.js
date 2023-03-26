@@ -4,7 +4,7 @@ const {
 const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 
-const time = process.hrtime();
+const NS_PER_SEC = 1e9;
 
 const hasChanges = async (
   schema,
@@ -12,7 +12,12 @@ const hasChanges = async (
   diffMethod,
   diffModule = "@graphql-markdown/diff",
 ) => {
-  if (typeof diffMethod === "undefined" || diffMethod == null) {
+  if (
+    typeof diffMethod === "undefined" ||
+    diffMethod == null ||
+    typeof diffModule === "undefined" ||
+    diffModule == null
+  ) {
     return true;
   }
 
@@ -37,24 +42,29 @@ const getPrinter = (
   printerModule,
   skipDocDirective,
 ) => {
+  let Printer = undefined;
+
   if (typeof printerModule !== "string") {
     throw new Error(
-      "Invalid printer module name in printTypeOptions settings.",
+      'Invalid printer module name in "printTypeOptions" settings.',
     );
   }
 
   try {
-    const Printer = require(printerModule);
-    return new Printer(schema, baseURL, linkRoot, {
-      groups,
-      printTypeOptions,
-      skipDocDirective,
-    });
+    Printer = require(printerModule);
   } catch (error) {
     throw new Error(
-      `Cannot find module '${printerModule}' from @graphql-markdown/core in printTypeOptions settings.`,
+      `Cannot find module '${printerModule}' for @graphql-markdown/core in "printTypeOptions" settings.`,
     );
   }
+
+  Printer.init(schema, baseURL, linkRoot, {
+    groups,
+    printTypeOptions,
+    skipDocDirective,
+  });
+
+  return Printer;
 };
 
 const generateDocFromSchema = async ({
@@ -73,6 +83,8 @@ const generateDocFromSchema = async ({
   printer: printerModule,
   skipDocDirective,
 }) => {
+  const start = process.hrtime.bigint();
+
   const loaders = getDocumentLoaders(loadersList);
   const schema = await loadSchema(schemaLocation, loaders);
 
@@ -99,7 +111,6 @@ const generateDocFromSchema = async ({
     groups,
     prettify,
     docOptions,
-    skipDocDirective,
   );
 
   const pages = await Promise.all(
@@ -112,8 +123,10 @@ const generateDocFromSchema = async ({
 
   const sidebarPath = await renderer.renderSidebar();
 
-  const [sec, msec] = process.hrtime(time);
-  const duration = (sec + msec / 1e9).toFixed(3);
+  const duration = (
+    Number(process.hrtime.bigint() - start) / NS_PER_SEC
+  ).toFixed(3);
+
   console.info(
     `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
   );

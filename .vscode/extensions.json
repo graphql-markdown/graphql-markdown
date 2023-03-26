@@ -7,6 +7,7 @@
     "knisterpeter.vscode-commitizen",
     "snyk-security.snyk-vulnerability-scanner",
     "graphql.vscode-graphql",
-    "EditorConfig.EditorConfig"
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode"
   ]
 }

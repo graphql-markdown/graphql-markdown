@@ -40,10 +40,7 @@ function toHTMLUnicode(char) {
 }
 
 function escapeMDX(str) {
-  if (typeof str === "string") {
-    return str.replace(/[<>{}]/g, toHTMLUnicode);
-  }
-  return str;
+  return `${str}`.replace(/[<>{}]/g, toHTMLUnicode);
 }
 
 function firstUppercase(word) {
@@ -58,6 +55,9 @@ function capitalize(word) {
 
 // from https://stackoverflow.com/a/37511463
 function replaceDiacritics(str) {
+  if (typeof str !== "string") {
+    return "";
+  }
   return str
     .toString()
     .normalize("NFD")

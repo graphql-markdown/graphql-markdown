@@ -6,7 +6,12 @@ const fs = require("fs");
 
 const { ensureDir } = require("@graphql-markdown/utils").fs;
 
-jest.mock("@graphql-markdown/printer-legacy");
+jest.mock("@graphql-markdown/printer-legacy", () => {
+  return {
+    printType: jest.fn(),
+    init: jest.fn(),
+  };
+});
 const Printer = require("@graphql-markdown/printer-legacy");
 
 const Renderer = require("../../src/renderer");
@@ -16,30 +21,27 @@ describe("renderer", () => {
   describe("class Renderer", () => {
     let rendererInstance;
     let baseURL = "graphql";
-    let printerInstance;
 
     beforeEach(() => {
-      jest.resetModules();
-
       vol.fromJSON({
         "/output": {},
         "/temp": {},
         "/assets/generated.md": "Test Homepage",
       });
 
-      printerInstance = new Printer("SCHEMA", baseURL, "root");
-      rendererInstance = new Renderer(printerInstance, "/output", baseURL);
+      rendererInstance = new Renderer(Printer, "/output", baseURL);
     });
 
     afterEach(() => {
       vol.reset();
+      jest.restoreAllMocks();
     });
 
     describe("renderTypeEntities()", () => {
       test("creates entity page into output folder", async () => {
         expect.assertions(2);
 
-        jest.spyOn(printerInstance, "printType").mockReturnValue("Lorem ipsum");
+        jest.spyOn(Printer, "printType").mockReturnValue("Lorem ipsum");
         const output = "/output/foobar";
 
         const meta = await rendererInstance.renderTypeEntities(
@@ -52,18 +54,16 @@ describe("renderer", () => {
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
       });
 
-      test.each([[undefined, null]])(
-        "do nothing if type is not defined",
-        async (type) => {
-          expect.assertions(1);
-          const meta = await rendererInstance.renderTypeEntities(
-            "test",
-            "FooBar",
-            type,
-          );
-          expect(meta).toBeUndefined();
-        },
-      );
+      test("do nothing if type is not defined", async () => {
+        expect.assertions(1);
+        jest.spyOn(Printer, "printType").mockReturnValue(undefined);
+        const meta = await rendererInstance.renderTypeEntities(
+          "test",
+          "FooBar",
+          null,
+        );
+        expect(meta).toBeUndefined();
+      });
     });
 
     describe("renderSidebar()", () => {
@@ -92,9 +92,7 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(printerInstance, "printType")
-          .mockImplementation(() => "content");
+        jest.spyOn(Printer, "printType").mockImplementation(() => "content");
         await rendererInstance.renderRootTypes("Object", {
           foo: new GraphQLObjectType({ name: "foo", astNode: {} }),
           bar: new GraphQLObjectType({ name: "bar", astNode: {} }),

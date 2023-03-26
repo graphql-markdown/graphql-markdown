@@ -55,6 +55,8 @@ describe("graphql", () => {
 
   describe("loadSchema()", () => {
     test("returns valid schema", async () => {
+      expect.hasAssertions();
+
       const testSchema = await loadSchema(SCHEMA_FILE, {
         loaders: [new GraphQLFileLoader()],
       });
@@ -62,6 +64,8 @@ describe("graphql", () => {
     });
 
     test("returns valid schema with custom root type", async () => {
+      expect.hasAssertions();
+
       const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
         loaders: [new GraphQLFileLoader()],
         rootTypes: { query: "Root", subscription: "" },
@@ -75,6 +79,8 @@ describe("graphql", () => {
 
   describe("getDocumentLoaders()", () => {
     test("returns loaders when plugin config loaders format is a string", () => {
+      expect.hasAssertions();
+
       const loaders = {
         GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
       };
@@ -86,6 +92,8 @@ describe("graphql", () => {
     });
 
     test("returns loaders and configuration when plugin config loaders format is an object", () => {
+      expect.hasAssertions();
+
       const loaders = {
         GraphQLFileLoader: {
           module: "@graphql-tools/graphql-file-loader",
@@ -104,6 +112,8 @@ describe("graphql", () => {
     });
 
     test("throw an error when loader list is invalid", () => {
+      expect.hasAssertions();
+
       const loaders = { GraphQLFileLoader: {} };
       expect(() => {
         getDocumentLoaders(loaders);
@@ -474,6 +484,8 @@ describe("graphql", () => {
 
 describe("getRelationOfInterface()", () => {
   test("returns types and interfaces extending an interface", () => {
+    expect.hasAssertions();
+
     const schema = buildSchema(`
         interface Being {
           name(surname: Boolean): String
@@ -520,6 +532,8 @@ describe("getRelationOfInterface()", () => {
 
   describe("getRelationOfUnion", () => {
     test("returns unions using a type", () => {
+      expect.hasAssertions();
+
       const schema = buildSchema(`
         type StudyItem {
           id: ID!
@@ -559,6 +573,8 @@ describe("getRelationOfInterface()", () => {
 
   describe("getRelationOfImplementation", () => {
     test("returns implementations compatible with type", () => {
+      expect.hasAssertions();
+
       const schema = buildSchema(`
         interface Being {
           name(surname: Boolean): String
@@ -614,6 +630,8 @@ describe("getRelationOfInterface()", () => {
 
     describe("getRelationOfReturn", () => {
       test("returns queries, subscriptions and mutations using a type", () => {
+        expect.hasAssertions();
+
         const schema = buildSchema(`
         type StudyItem {
           id: ID!
@@ -645,6 +663,8 @@ describe("getRelationOfInterface()", () => {
 
     describe("getRelationOfField", () => {
       test("returns queries, subscriptions and mutations using a type", () => {
+        expect.hasAssertions();
+
         const schema = buildSchema(`
         interface Record {
           id: String!
@@ -707,18 +727,24 @@ describe("getRelationOfInterface()", () => {
       `);
 
       test("return false is the type has no directive", () => {
+        expect.hasAssertions();
+
         const type = schema.getType("Subscription");
 
         expect(hasDirective(type, "foobar")).toBeFalsy();
       });
 
       test("return false is the type has no matching directive", () => {
+        expect.hasAssertions();
+
         const type = schema.getType("StudyItem");
 
         expect(hasDirective(type, "foobar")).toBeFalsy();
       });
 
       test("return true is the type has matching directive", () => {
+        expect.hasAssertions();
+
         const type = schema.getType("StudyItem");
 
         expect(hasDirective(type, "foobaz")).toBeTruthy();

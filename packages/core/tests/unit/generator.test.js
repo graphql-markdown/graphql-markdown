@@ -3,17 +3,32 @@ const { hasChanges, getPrinter } = require("../../src/generator");
 describe("generator", () => {
   describe("hasChanges()", () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      jest.restoreAllMocks();
     });
 
-    test("returns true if diffMethod not set", async () => {
-      expect.assertions(2);
+    test.each([[undefined], [null]])(
+      "returns true if diffMethod not set",
+      async (value) => {
+        expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
+        const logSpy = jest.spyOn(console, "warn");
 
-      await expect(hasChanges({}, "", undefined)).resolves.toBeTruthy();
-      expect(logSpy).not.toHaveBeenCalled();
-    });
+        await expect(hasChanges({}, "", value)).resolves.toBeTruthy();
+        expect(logSpy).not.toHaveBeenCalled();
+      },
+    );
+
+    test.each([[undefined], [null]])(
+      "returns true if diffModule not set",
+      async (value) => {
+        expect.assertions(2);
+
+        const logSpy = jest.spyOn(console, "warn");
+
+        await expect(hasChanges({}, "", "NONE", value)).resolves.toBeTruthy();
+        expect(logSpy).not.toHaveBeenCalled();
+      },
+    );
 
     test("returns true if diff module package not resolved", async () => {
       expect.assertions(2);
@@ -41,20 +56,15 @@ describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", () => {
       expect.assertions(1);
-      expect(
-        getPrinter({}, "/", "root", {}, {}, "@graphql-markdown/printer-legacy"),
-      ).toMatchInlineSnapshot(`
-          Printer {
-            "baseURL": "/",
-            "groups": {},
-            "linkRoot": "root",
-            "parentTypePrefix": true,
-            "relatedTypeSection": true,
-            "schema": {},
-            "skipDocDirective": undefined,
-            "typeBadges": true,
-          }
-        `);
+      const printer = getPrinter(
+        {},
+        "/",
+        "root",
+        {},
+        {},
+        "@graphql-markdown/printer-legacy",
+      );
+      expect(printer).toBeDefined();
     });
 
     test("throws exception if no printer module set", () => {
@@ -62,7 +72,7 @@ describe("generator", () => {
 
       expect(() => {
         getPrinter({}, "/", "root", {}, {}, undefined);
-      }).toThrow("Invalid printer module name in printTypeOptions settings.");
+      }).toThrow(`Invalid printer module name in "printTypeOptions" settings.`);
     });
 
     test("throws exception if no printer module not found", () => {
@@ -71,7 +81,7 @@ describe("generator", () => {
       expect(() => {
         getPrinter({}, "/", "root", {}, {}, "foobar");
       }).toThrow(
-        "Cannot find module 'foobar' from @graphql-markdown/core in printTypeOptions settings.",
+        `Cannot find module 'foobar' for @graphql-markdown/core in "printTypeOptions" settings.`,
       );
     });
   });
