@@ -171,6 +171,34 @@ describe("link", () => {
         }
       `);
     });
+
+    test("returns markdown link for with group in path", () => {
+      expect.hasAssertions();
+
+      const entityName = `TestDirective`;
+      const slug = `test-directive`;
+      const type = new GraphQLDirective({
+        name: entityName,
+        locations: [],
+      });
+
+      jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
+      jest.spyOn(Utils.graphql, "isDirectiveType").mockReturnValue(true);
+      jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
+      jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+      });
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestDirective",
+          "url": "docs/graphql/group/directives/test-directive",
+        }
+      `);
+    });
   });
 
   describe("printLinkAttributes()", () => {

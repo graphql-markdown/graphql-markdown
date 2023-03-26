@@ -83,7 +83,7 @@ class Link {
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = getGroup(type);
+    const group = getGroup(type, options.groups);
     const url = pathUrl.join(
       options.basePath,
       group,
