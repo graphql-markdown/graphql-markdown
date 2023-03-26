@@ -169,9 +169,12 @@ class Printer {
     }
   };
 
-  static printRelations = Printer.relatedTypeSection
-    ? printRelations
-    : () => "";
+  static printRelations = (type, options) => {
+    if (Printer.options.relatedTypeSection !== true) {
+      return "";
+    }
+    return printRelations(type, options);
+  };
 
   static printType = (name, type, options) => {
     if (
@@ -179,7 +182,7 @@ class Printer {
       type === null ||
       typeof name === "undefined" ||
       name === null ||
-      hasDirective(type, Printer.skipDocDirective)
+      hasDirective(type, Printer.options.skipDocDirective)
     ) {
       return undefined;
     }
@@ -197,7 +200,7 @@ class Printer {
     const description = Printer.printDescription(type);
     const code = Printer.printCode(type);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
-    const relations = Printer.printRelations(type, printTypeOptions.schema);
+    const relations = Printer.printRelations(type, printTypeOptions);
 
     return [header, mdx, description, code, metadata, relations].join(
       MARKDOWN_EOP,

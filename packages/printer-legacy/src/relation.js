@@ -23,16 +23,17 @@ const getRootTypeLocaleFromString = (text) => {
   return undefined;
 };
 
-const printRelationOf = (type, section, getRelation, schema) => {
+const printRelationOf = (type, section, getRelation, options) => {
   if (
     typeof type === "undefined" ||
     typeof getRelation !== "function" ||
+    typeof options === "undefined" ||
     isOperation(type)
   ) {
     return "";
   }
 
-  const relations = getRelation(type, schema);
+  const relations = getRelation(type, options.schema);
 
   if (typeof relations === "undefined") {
     return "";
@@ -45,7 +46,7 @@ const printRelationOf = (type, section, getRelation, schema) => {
     }
 
     const category = getRootTypeLocaleFromString(relation);
-    data = data.concat(types.map((t) => getRelationLink(category, t)));
+    data = data.concat(types.map((t) => getRelationLink(category, t, options)));
   }
 
   if (data.length === 0) {
@@ -59,7 +60,7 @@ const printRelationOf = (type, section, getRelation, schema) => {
   return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 };
 
-const printRelations = (type, schema) => {
+const printRelations = (type, options) => {
   const relations = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,
@@ -68,7 +69,7 @@ const printRelations = (type, schema) => {
 
   let data = "";
   for (const [section, getRelation] of Object.entries(relations)) {
-    data += printRelationOf(type, section, getRelation, schema);
+    data += printRelationOf(type, section, getRelation, options);
   }
 
   return data;

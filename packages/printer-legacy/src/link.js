@@ -97,11 +97,11 @@ class Link {
     };
   };
 
-  static getRelationLink = (category, type) => {
+  static getRelationLink = (category, type, options) => {
     if (typeof category === "undefined") {
       return "";
     }
-    const link = Link.toLink(type, type.name, category);
+    const link = Link.toLink(type, type.name, category, options);
     return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
   };
 

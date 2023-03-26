@@ -33,7 +33,7 @@ describe("relation", () => {
     });
 
     afterEach(() => {
-      jest.resetAllMocks();
+      jest.restoreAllMocks();
     });
 
     test("prints type relations", () => {
@@ -56,6 +56,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         Utils.graphql.getRelationOfReturn,
+        {},
       );
 
       expect(relation).toMatchInlineSnapshot(`
