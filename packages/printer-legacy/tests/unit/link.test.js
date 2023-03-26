@@ -382,5 +382,24 @@ describe("link", () => {
     });
   });
 
-  describe("printParentLink()", () => {});
+  describe("printParentLink()", () => {
+    test("returns a MDX Bullet component with parent link if type defined", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(true);
+      jest.spyOn(Link, "printLink").mockReturnValueOnce("[`foo`](/bar)");
+
+      expect(Link.printParentLink({})).toMatchInlineSnapshot(
+        `"<Bullet />[\`foo\`](/bar)"`,
+      );
+    });
+
+    test("returns an empty string if parent link undefined", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(false);
+
+      expect(Link.printParentLink({})).toBe("");
+    });
+  });
 });
