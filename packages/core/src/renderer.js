@@ -78,7 +78,8 @@ module.exports = class Renderer {
         return undefined;
       }
     } catch (error) {
-      console.log(`An error occurred while processing "${fileName}"`);
+      console.log(`An error occurred while processing "${type}"`);
+      console.debug(error);
       return undefined;
     }
 

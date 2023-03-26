@@ -1,5 +1,4 @@
 const {
-  object: { hasProperty },
   graphql: { isUnionType, getTypeName },
 } = require("@graphql-markdown/utils");
 
@@ -7,9 +6,8 @@ const { printSection } = require("../section");
 
 const printUnionMetadata = (type, options) => {
   return printSection(type.getTypes(), "Possible types", {
+    ...options,
     parentType: type.name,
-    parentTypePrefix:
-      hasProperty(options, "parentTypePrefix") && options.parentTypePrefix,
   });
 };
 

@@ -26,8 +26,8 @@ const printCodeDirectiveLocation = (type) => {
 
 const printDirectiveMetadata = (type, options) => {
   return printSection(type.args, "Arguments", {
+    ...options,
     parentType: type.name,
-    parentTypePrefix: options.parentTypePrefix,
   });
 };
 

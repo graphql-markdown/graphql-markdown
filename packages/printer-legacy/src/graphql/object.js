@@ -9,8 +9,8 @@ const { MARKDOWN_EOL } = require("../const/strings");
 
 const printObjectMetadata = (type, options) => {
   let metadata = printSection(getFields(type), "Fields", {
-    parentType: type.name,
     ...options,
+    parentType: type.name,
   });
   if (hasMethod(type, "getInterfaces")) {
     metadata += printSection(type.getInterfaces(), "Interfaces", options);

@@ -1,5 +1,4 @@
 const {
-  object: { hasProperty },
   graphql: { isEnumType, getTypeName },
 } = require("@graphql-markdown/utils");
 
@@ -9,9 +8,8 @@ const { printSection } = require("../section");
 
 const printEnumMetadata = (type, options) => {
   return printSection(type.getValues(), "Values", {
+    ...options,
     parentType: type.name,
-    parentTypePrefix:
-      hasProperty(options, "parentTypePrefix") && options.parentTypePrefix,
   });
 };
 
