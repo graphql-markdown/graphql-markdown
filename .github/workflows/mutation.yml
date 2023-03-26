@@ -17,7 +17,6 @@ env:
 jobs:
   mutation:
     name: Mutation tests package ${{matrix.package}}
-    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
