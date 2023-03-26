@@ -84,7 +84,7 @@ const printSectionItem = (type, options) => {
     return "";
   }
 
-  const typeNameLink = printLink(type, { withAttributes: false, ...options });
+  const typeNameLink = printLink(type, { ...options, withAttributes: false });
   const description = printDescription(type, "");
   const badges = printBadges(type, options);
   const parentTypeLink = printParentLink(type, options);
@@ -96,7 +96,7 @@ const printSectionItem = (type, options) => {
       level: HEADER_SECTION_ITEM_LEVEL,
       parentType:
         typeof options.parentType === "undefined"
-          ? undefined
+          ? type.name
           : `${options.parentType}.${type.name}`,
     });
   }

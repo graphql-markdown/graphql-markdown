@@ -5,6 +5,8 @@ const {
   printEnumMetadata,
 } = require("../../../src/graphql/enum");
 
+const { DEFAULT_OPTIONS } = require("../../../src/printer");
+
 describe("enum", () => {
   const type = new GraphQLEnumType({
     name: "EnumTypeName",
@@ -18,7 +20,7 @@ describe("enum", () => {
     test("returns enum metadata", () => {
       expect.hasAssertions();
 
-      const metadata = printEnumMetadata(type);
+      const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
         "### Values

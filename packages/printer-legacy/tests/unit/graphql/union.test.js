@@ -5,6 +5,8 @@ const {
   printUnionMetadata,
 } = require("../../../src/graphql/union");
 
+const { DEFAULT_OPTIONS } = require("../../../src/printer");
+
 describe("union", () => {
   const type = new GraphQLUnionType({
     name: "UnionTypeName",
@@ -15,7 +17,7 @@ describe("union", () => {
     test("returns union metadata", () => {
       expect.hasAssertions();
 
-      const code = printUnionMetadata(type);
+      const code = printUnionMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`
         "### Possible types

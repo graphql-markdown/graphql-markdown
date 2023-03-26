@@ -165,6 +165,25 @@ describe("section", () => {
       `);
     });
 
+    test("returns Markdown #### link section with parent type prefix", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "EntityTypeName",
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        parentType: "parentTypePrefix",
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<code style={{ fontWeight: 'normal' }}>parentTypePrefix.<b>EntityTypeName</b></code>](#) 
+        > 
+        > "
+      `);
+    });
+
     test("returns Markdown #### link section with field parameters", () => {
       expect.hasAssertions();
 
@@ -182,7 +201,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#) 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>undefined.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > "
       `);
@@ -270,7 +289,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#) 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>undefined.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > 
 
