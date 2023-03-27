@@ -38,18 +38,18 @@ describe("section", () => {
     test("returns Markdown ### section with collapsible content", () => {
       expect.hasAssertions();
 
-      const title = "section title";
       const content = ["section content"];
 
-      const section = printSection(content, title, {
+      const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
+        level: "",
         collapsible: true,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "### section title
+        " 
 
-        <Details summary="Show deprecated">
+        <Details dataOpen="Hide deprecated" dataClose="Show deprecated">
 
         #### [\`section content\`](#) 
         > 

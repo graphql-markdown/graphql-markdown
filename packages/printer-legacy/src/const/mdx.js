@@ -5,6 +5,25 @@ export const SpecifiedBy = (props) => <>Specification<a className="link" style={
 
 export const Badge = (props) => <><span className={'badge badge--' + props.class}>{props.text}</span></>
 
-import Details from '@theme/MDXComponents/Details';
+import { useState } from 'react';
+
+export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
+  const [open, setOpen] = useState(startOpen);
+  return (
+    <details {...(open ? { open: true } : {})} style={{ border:'none', boxShadow:'none', background:'var(--aa-background-color-rgb)' }}>
+      <summary
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen((open) => !open);
+        }}
+        style={{ listStyle:'none' }}
+      >
+      {open ? dataOpen : dataClose}&nbsp;<Badge text="deprecated" class="warning"/>
+      </summary>
+      {open && children}
+    </details>
+  );
+};
+
 
 `;

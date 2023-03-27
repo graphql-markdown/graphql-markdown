@@ -40,7 +40,7 @@ const printSection = (values, section, options) => {
 
   const openSection =
     hasProperty(options, "collapsible") && options.collapsible === true
-      ? `${MARKDOWN_EOP}<Details summary="Show deprecated">${MARKDOWN_EOP}`
+      ? `${MARKDOWN_EOP}<Details dataOpen="Hide deprecated" dataClose="Show deprecated">${MARKDOWN_EOP}`
       : MARKDOWN_EOP;
   const closeSection =
     hasProperty(options, "collapsible") && options.collapsible === true
