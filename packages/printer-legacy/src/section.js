@@ -20,6 +20,11 @@ const sectionLevels = [
   HEADER_SECTION_ITEM_LEVEL,
 ];
 
+const SHOW_DEPRECATED =
+  '<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
+const HIDE_DEPRECATED =
+  '<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
+
 const printSection = (values, section, options) => {
   const level =
     hasProperty(options, "level") &&
@@ -33,25 +38,24 @@ const printSection = (values, section, options) => {
   }
 
   const levelPosition = sectionLevels.indexOf(level);
-  let subLevel = undefined;
-  if (levelPosition > -1) {
-    subLevel = sectionLevels[levelPosition + 1];
-  }
 
-  const openSection =
-    hasProperty(options, "collapsible") && options.collapsible === true
-      ? `${MARKDOWN_EOP}<Details dataOpen="Hide deprecated" dataClose="Show deprecated">${MARKDOWN_EOP}`
-      : MARKDOWN_EOP;
-  const closeSection =
-    hasProperty(options, "collapsible") && options.collapsible === true
-      ? `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}`
-      : MARKDOWN_EOP;
+  const [openSection, closeSection] = (() => {
+    if (hasProperty(options, "collapsible") && options.collapsible === true) {
+      return [
+        `${MARKDOWN_EOP}<Details dataOpen={${HIDE_DEPRECATED}} dataClose={${SHOW_DEPRECATED}}>${MARKDOWN_EOP}`,
+        `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}`,
+      ];
+    }
+    return [MARKDOWN_EOP, MARKDOWN_EOP];
+  })();
 
-  return `${level} ${section}${openSection}${printSectionItems(values, {
+  const items = printSectionItems(values, {
     ...options,
     collapsible: false, // do not propagate collapsible
-    level: subLevel,
-  })}${closeSection}`;
+    level: levelPosition > -1 ? sectionLevels[levelPosition + 1] : undefined,
+  });
+
+  return `${level} ${section}${openSection}${items}${closeSection}`;
 };
 
 const printSectionItems = (values, options) => {

@@ -18,7 +18,7 @@ export const Details = ({ dataOpen, dataClose, children, startOpen = false }) =>
         }}
         style={{ listStyle:'none' }}
       >
-      {open ? dataOpen : dataClose}&nbsp;<Badge text="deprecated" class="warning"/>
+      {open ? dataOpen : dataClose}
       </summary>
       {open && children}
     </details>
