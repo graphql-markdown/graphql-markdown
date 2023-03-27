@@ -38,10 +38,20 @@ const printSection = (values, section, options) => {
     subLevel = sectionLevels[levelPosition + 1];
   }
 
-  return `${level} ${section}${MARKDOWN_EOP}${printSectionItems(values, {
+  const openSection =
+    hasProperty(options, "collapsible") && options.collapsible === true
+      ? `${MARKDOWN_EOP}<Details summary="Show deprecated">${MARKDOWN_EOP}`
+      : MARKDOWN_EOP;
+  const closeSection =
+    hasProperty(options, "collapsible") && options.collapsible === true
+      ? `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}`
+      : MARKDOWN_EOP;
+
+  return `${level} ${section}${openSection}${printSectionItems(values, {
     ...options,
+    collapsible: false, // do not propagate collapsible
     level: subLevel,
-  })}${MARKDOWN_EOP}`;
+  })}${closeSection}`;
 };
 
 const printSectionItems = (values, options) => {
@@ -79,7 +89,10 @@ const printSectionItem = (type, options) => {
   if (
     typeof type === "undefined" ||
     type === null ||
-    hasDirective(type, options.skipDocDirective)
+    (hasProperty(options, "skipDocDirective") &&
+      hasDirective(type, options.skipDocDirective) === true) ||
+    (hasProperty(options, "onlyDocDirective") &&
+      hasDirective(type, options.onlyDocDirective) === false)
   ) {
     return "";
   }

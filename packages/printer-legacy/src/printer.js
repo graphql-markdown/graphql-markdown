@@ -54,6 +54,7 @@ const DEFAULT_OPTIONS = {
   relatedTypeSection: true,
   typeBadges: true,
   skipDocDirective: undefined,
+  collapsible: true,
 };
 
 class Printer {

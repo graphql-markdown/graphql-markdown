@@ -35,6 +35,32 @@ describe("section", () => {
       `);
     });
 
+    test("returns Markdown ### section with collapsible content", () => {
+      expect.hasAssertions();
+
+      const title = "section title";
+      const content = ["section content"];
+
+      const section = printSection(content, title, {
+        ...DEFAULT_OPTIONS,
+        collapsible: true,
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+        "### section title
+
+        <Details summary="Show deprecated">
+
+        #### [\`section content\`](#) 
+        > 
+        > 
+
+        </Details>
+
+        "
+      `);
+    });
+
     test("returns Markdown custom section level", () => {
       expect.hasAssertions();
 
@@ -270,6 +296,9 @@ describe("section", () => {
           {
             name: "ParameterTypeName",
             type: GraphQLString,
+            astNode: {
+              directives: [{ name: { value: "@doc" } }],
+            },
           },
           {
             name: "ParameterSkipDoc",
@@ -295,6 +324,48 @@ describe("section", () => {
 
         "
       `);
+    });
+
+    test("returns Markdown #### link section with only type matching onlyDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "ParameterOnlyDoc",
+        type: GraphQLString,
+        astNode: {
+          directives: [{ name: { value: "@doc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        onlyDocDirective: "@doc",
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+        "#### [\`ParameterOnlyDoc\`](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > "
+      `);
+    });
+
+    test("returns Markdown #### link section empty if type does not match onlyDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "ParameterOnlyDoc",
+        type: GraphQLString,
+        astNode: {
+          directives: [{ name: { value: "@noDoc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        onlyDocDirective: "@doc",
+      });
+
+      expect(section).toMatchInlineSnapshot(`""`);
     });
   });
 });
