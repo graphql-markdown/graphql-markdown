@@ -334,7 +334,7 @@ describe("Printer", () => {
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if matches skipDirective", () => {
+    test("returns undefined if matches skipDocDirective", () => {
       expect.hasAssertions();
       jest.spyOn(Utils.graphql, "hasDirective").mockReturnValue(true);
       const printedType = Printer.printType("any", null);
