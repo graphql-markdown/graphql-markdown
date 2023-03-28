@@ -179,9 +179,9 @@ function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
     queryType == null ||
-    !hasMethod(queryType, "getFields")
+    hasMethod(queryType, "getFields") === false
   ) {
-    return undefined;
+    return {};
   }
 
   const typeMap = queryType.getFields();

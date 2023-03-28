@@ -43,6 +43,7 @@ const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
 const INTROSPECTION_SCHEMA_FILE = require.resolve(
   "../__data__/introspection.json",
 );
+const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
 
 describe("graphql", () => {
   let schema;
@@ -268,12 +269,12 @@ describe("graphql", () => {
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
 
-    test("returns undefined if null", () => {
+    test("returns {} if null", () => {
       expect.hasAssertions();
 
       const list = getIntrospectionFieldsList(null);
 
-      expect(list).toBeUndefined();
+      expect(list).toMatchObject({});
     });
   });
 
@@ -403,6 +404,18 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       const schemaTypeMap = getSchemaMap(schema);
+
+      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+    });
+
+    test("returns {} if root type no declared (issue #802)", async () => {
+      expect.hasAssertions();
+
+      const schema802 = await gqlToolsLoadSchema(SCHEMA_ISSUE_802_FILE, {
+        loaders: [new GraphQLFileLoader()],
+      });
+
+      const schemaTypeMap = getSchemaMap(schema802);
 
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
     });
