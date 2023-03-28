@@ -3175,6 +3175,222 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
 }"
 `;
 
+exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802) 1`] = `
+"{
+  "queries": {
+    "posts": {
+      "name": "posts",
+      "description": "Fetch all posts without any arguments. Default order is funky.",
+      "type": "[Post]",
+      "args": [],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "description": {
+          "kind": "StringValue",
+          "value": "Fetch all posts without any arguments. Default order is funky.",
+          "block": false,
+          "loc": {
+            "start": 1002,
+            "end": 1066
+          }
+        },
+        "name": {
+          "kind": "Name",
+          "value": "posts",
+          "loc": {
+            "start": 1071,
+            "end": 1076
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Post",
+              "loc": {
+                "start": 1079,
+                "end": 1083
+              }
+            },
+            "loc": {
+              "start": 1079,
+              "end": 1083
+            }
+          },
+          "loc": {
+            "start": 1078,
+            "end": 1084
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1002,
+          "end": 1084
+        }
+      }
+    }
+  },
+  "mutations": {
+    "upvotePost": {
+      "name": "upvotePost",
+      "description": "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore.",
+      "type": "Post",
+      "args": [
+        {
+          "name": "postId",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "postId",
+              "loc": {
+                "start": 1257,
+                "end": 1263
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1265,
+                    "end": 1267
+                  }
+                },
+                "loc": {
+                  "start": 1265,
+                  "end": 1267
+                }
+              },
+              "loc": {
+                "start": 1265,
+                "end": 1268
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1257,
+              "end": 1268
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "description": {
+          "kind": "StringValue",
+          "value": "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore.",
+          "block": false,
+          "loc": {
+            "start": 1159,
+            "end": 1241
+          }
+        },
+        "name": {
+          "kind": "Name",
+          "value": "upvotePost",
+          "loc": {
+            "start": 1246,
+            "end": 1256
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "postId",
+              "loc": {
+                "start": 1257,
+                "end": 1263
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1265,
+                    "end": 1267
+                  }
+                },
+                "loc": {
+                  "start": 1265,
+                  "end": 1267
+                }
+              },
+              "loc": {
+                "start": 1265,
+                "end": 1268
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1257,
+              "end": 1268
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Post",
+            "loc": {
+              "start": 1271,
+              "end": 1275
+            }
+          },
+          "loc": {
+            "start": 1271,
+            "end": 1275
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1159,
+          "end": 1275
+        }
+      }
+    }
+  },
+  "subscriptions": {},
+  "directives": {
+    "include": "@include",
+    "skip": "@skip",
+    "deprecated": "@deprecated",
+    "specifiedBy": "@specifiedBy"
+  },
+  "objects": {
+    "Author": "Author",
+    "Post": "Post"
+  },
+  "unions": {},
+  "interfaces": {},
+  "enums": {},
+  "inputs": {},
+  "scalars": {
+    "ID": "ID",
+    "String": "String",
+    "Int": "Int",
+    "Boolean": "Boolean"
+  }
+}"
+`;
+
 exports[`graphql getSchemaMap() returns schema types map 1`] = `
 "{
   "queries": {
@@ -5220,6 +5436,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
       }
     }
   },
+  "mutations": {},
+  "subscriptions": {},
   "directives": {
     "include": "@include",
     "skip": "@skip",
