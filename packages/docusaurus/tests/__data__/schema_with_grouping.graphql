@@ -11,6 +11,11 @@ Example of custom directive for `groupByDirective`
 See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
 """
 directive @doc(
+  """
+  Category name for `skipDocDirective`
+  
+  See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
+  """
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
