@@ -1,5 +1,15 @@
+"""
+Example of custom directive for `skipDocDirective`
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
+"""
 directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
 
+"""
+Example of custom directive for `groupByDirective`
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
+"""
 directive @doc(
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION

@@ -121,6 +121,41 @@ describe("section", () => {
       `);
     });
 
+    test("returns Markdown #### link section with multi-lines description", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLObjectType({
+        name: "EntityTypeName",
+        description: `Lorem ipsum dolor sit amet, 
+consectetur adipiscing elit, 
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+
+Ut enim ad minim veniam, 
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+Excepteur sint occaecat cupidatat non proident, 
+sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+      });
+
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
+
+      expect(section).toMatchInlineSnapshot(`
+        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
+        > Lorem ipsum dolor sit amet, 
+        > consectetur adipiscing elit, 
+        > sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        > 
+        > Ut enim ad minim veniam, 
+        > quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        > Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        > 
+        > Excepteur sint occaecat cupidatat non proident, 
+        > sunt in culpa qui officia deserunt mollit anim id est laborum.
+        > "
+      `);
+    });
+
     test("returns Markdown #### link section with sub type is non-nullable", () => {
       expect.hasAssertions();
 
