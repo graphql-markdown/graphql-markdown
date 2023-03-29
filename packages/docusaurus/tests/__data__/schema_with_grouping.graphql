@@ -1,14 +1,14 @@
 """
-  Example of custom directive for `skipDocDirective`
-  
-  See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
+Example of custom directive for `skipDocDirective`
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
 """
 directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
 
 """
-  Example of custom directive for `groupByDirective`
-  
-  See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
+Example of custom directive for `groupByDirective`
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
 """
 directive @doc(
   category: String
