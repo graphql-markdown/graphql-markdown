@@ -85,7 +85,10 @@ const printSectionItem = (type, options) => {
   }
 
   const typeNameLink = printLink(type, { ...options, withAttributes: false });
-  const description = printDescription(type, "");
+  const description = printDescription(type, "").replaceAll(
+    "\n",
+    `${MARKDOWN_EOL}> `,
+  );
   const badges = printBadges(type, options);
   const parentTypeLink = printParentLink(type, options);
 
