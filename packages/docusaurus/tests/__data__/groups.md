@@ -31,7 +31,7 @@ This is an example of documentation grouping with GraphQL directive using the `g
     "relatedTypeSection": false,
     "typeBadges": false
   },
-  "skipDocDirective": "@noDoc"
+  "skipDocDirective": ["@noDoc"]
 }
 ```
 

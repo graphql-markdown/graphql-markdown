@@ -27,7 +27,7 @@ const DEFAULT_OPTIONS = {
     relatedTypeSection: true,
     typeBadges: true,
   },
-  skipDocDirective: undefined,
+  skipDocDirective: [],
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -58,7 +58,7 @@ function buildConfig(configFileOpts, cliOpts) {
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
-    skipDocDirective: getSkipDocDirective(
+    skipDocDirective: getSkipDocDirectives(
       cliOpts.skip ?? config.skipDocDirective,
     ),
   };
@@ -85,11 +85,21 @@ function gePrintTypeOptions(cliOpts, configOptions) {
   };
 }
 
+function getSkipDocDirectives(options) {
+  const directiveList = Array.isArray(options) ? options : [options];
+
+  const skipDirectives = directiveList.map((option) =>
+    getSkipDocDirective(option),
+  );
+
+  return skipDirectives;
+}
+
 function getSkipDocDirective(option) {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
   if (typeof option !== "string") {
-    return undefined;
+    throw new Error(`Invalid "${option}"`);
   }
 
   const parsedOption = OPTION_REGEX.exec(option);
@@ -101,4 +111,10 @@ function getSkipDocDirective(option) {
   return parsedOption.groups.directive;
 }
 
-module.exports = { buildConfig, DEFAULT_OPTIONS, ASSETS_LOCATION };
+module.exports = {
+  buildConfig,
+  getSkipDocDirectives,
+  getSkipDocDirective,
+  DEFAULT_OPTIONS,
+  ASSETS_LOCATION,
+};

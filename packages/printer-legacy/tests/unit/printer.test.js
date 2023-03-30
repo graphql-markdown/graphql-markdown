@@ -156,7 +156,7 @@ describe("Printer", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: "test",
+        skipDocDirective: ["test"],
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
@@ -166,7 +166,9 @@ describe("Printer", () => {
           "parentTypePrefix": false,
           "relatedTypeSection": false,
           "schema": {},
-          "skipDocDirective": "test",
+          "skipDocDirective": [
+            "test",
+          ],
           "typeBadges": false,
         }
       `);
