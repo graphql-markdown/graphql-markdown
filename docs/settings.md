@@ -189,11 +189,13 @@ The GraphQL schema location.
 
 ## `skipDocDirective`
 
-The schema directive used for skipping types from documentation.
+The schema directive/s used for skipping types from documentation.
 
-| Setting            | CLI flag              | Default |
-| ------------------ | --------------------- | ------- |
-| `skipDocDirective` | `--skip <@directive>` | -       |
+The option supports multiple values, eg `--skipDocDirective @noDoc @deprecated`.
+
+| Setting            | CLI flag                 | Default |
+| ------------------ | ------------------------ | ------- |
+| `skipDocDirective` | `--skip <@directive...>` | -       |
 
 ## `tmpDir`
 
