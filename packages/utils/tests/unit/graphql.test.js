@@ -763,12 +763,12 @@ describe("getRelationOfInterface()", () => {
         expect(hasDirective(type, "foobaz")).toBeTruthy();
       });
 
-      test("return true is the type has one of the directives", () => {
+      test("return true is the type has one matching directive", () => {
         expect.hasAssertions();
 
         const type = schema.getType("StudyItem");
 
-        expect(hasDirective(type, ["foobaz", "foobar"])).toBeTruthy();
+        expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
       });
     });
   });

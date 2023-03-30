@@ -2,7 +2,12 @@ const { join } = require("path");
 
 const { COMPARE_METHOD } = require("@graphql-markdown/diff");
 
-const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
+const {
+  buildConfig,
+  getSkipDocDirectives,
+  getSkipDocDirective,
+  DEFAULT_OPTIONS,
+} = require("../../src/config");
 
 jest.mock("../../src/group-info");
 const groupInfo = require("../../src/group-info");
@@ -12,8 +17,47 @@ describe("config", () => {
     jest.resetAllMocks();
   });
 
+  describe("getSkipDocDirectives", () => {
+    test("returns a list of directive names", () => {
+      expect.hasAssertions();
+
+      expect(getSkipDocDirectives(["@noDoc", "@deprecated"])).toStrictEqual([
+        "noDoc",
+        "deprecated",
+      ]);
+    });
+
+    test("supports string as input", () => {
+      expect.hasAssertions();
+
+      expect(getSkipDocDirectives("@noDoc")).toStrictEqual(["noDoc"]);
+    });
+  });
+
+  describe("getSkipDocDirective", () => {
+    test("returns a directive name", () => {
+      expect.hasAssertions();
+
+      expect(getSkipDocDirective("@noDoc")).toBe("noDoc");
+    });
+
+    test("throws an error if not a string", () => {
+      expect.hasAssertions();
+
+      expect(() => getSkipDocDirective("+NotADirective@")).toThrow(Error);
+    });
+
+    test("throws an error if format is not a directive", () => {
+      expect.hasAssertions();
+
+      expect(() => getSkipDocDirective("+NotADirective@")).toThrow(Error);
+    });
+  });
+
   describe("buildConfig()", () => {
     test("returns default options is no config set", () => {
+      expect.hasAssertions();
+
       jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
 
       const config = buildConfig();
@@ -39,6 +83,8 @@ describe("config", () => {
     });
 
     test("override default options is config set in docusaurus", () => {
+      expect.hasAssertions();
+
       jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
@@ -68,7 +114,7 @@ describe("config", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: "@noDoc",
+        skipDocDirective: ["@noDoc"],
       };
 
       const config = buildConfig(configFileOpts);
@@ -87,11 +133,13 @@ describe("config", () => {
         docOptions: configFileOpts.docOptions,
         printTypeOptions: configFileOpts.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: "noDoc",
+        skipDocDirective: ["noDoc"],
       });
     });
 
     test("override config set in docusaurus if cli options set", () => {
+      expect.hasAssertions();
+
       const configFileOpts = {
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
@@ -155,11 +203,13 @@ describe("config", () => {
         },
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: "noDoc",
+        skipDocDirective: ["noDoc"],
       });
     });
 
     test("schema option from CLI overrides that of config file", () => {
+      expect.hasAssertions();
+
       jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
@@ -189,6 +239,8 @@ describe("config", () => {
     });
 
     test("force flag from CLI switches diff method to FORCE", () => {
+      expect.hasAssertions();
+
       jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
 
       const cliOpts = { force: true };

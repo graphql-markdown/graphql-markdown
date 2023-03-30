@@ -41,7 +41,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           "-gbd, --groupByDirective <@directive(field|=fallback)>",
           "Group documentation by directive",
         )
-        .option("--skip <@directive>", "Skip type with matching directive")
+        .option("--skip <@directive...>", "Skip type with matching directive")
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
           await generateDocFromSchema(

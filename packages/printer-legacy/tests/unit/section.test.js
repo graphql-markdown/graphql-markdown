@@ -316,7 +316,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: "@noDoc",
+        skipDocDirective: ["@noDoc"],
       });
 
       expect(section).toBe("");
@@ -347,7 +347,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: "@noDoc",
+        skipDocDirective: ["@noDoc"],
       });
 
       expect(section).toMatchInlineSnapshot(`
