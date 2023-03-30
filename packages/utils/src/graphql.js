@@ -156,19 +156,21 @@ function getTypeFromSchema(schema, type) {
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function hasDirective(type, directiveName) {
+function hasDirective(type, directives) {
   if (
     typeof type.astNode === "undefined" ||
     type.astNode == null ||
-    typeof directiveName !== "string" ||
+    typeof directives === "undefined" ||
     !Array.isArray(type.astNode.directives)
   ) {
     return false;
   }
 
+  const directiveList = Array.isArray(directives) ? directives : [directives];
+
   return (
-    type.astNode.directives.findIndex(
-      (directive) => directive.name.value === directiveName,
+    type.astNode.directives.findIndex((directive) =>
+      directiveList.includes(directive.name.value),
     ) > -1
   );
 }
