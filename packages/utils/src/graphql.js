@@ -166,7 +166,7 @@ function hasDirective(type, directives) {
     return false;
   }
 
-  const directiveList = Array.isArray(directives) ? directives : [directives];
+  const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return (
     type.astNode.directives.findIndex((directive) =>

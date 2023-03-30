@@ -86,7 +86,7 @@ function gePrintTypeOptions(cliOpts, configOptions) {
 }
 
 function getSkipDocDirectives(options) {
-  const directiveList = Array.isArray(options) ? options : [options];
+  const directiveList = Array.isArray(options) ? options : [options]; //backward_compatibily
 
   const skipDirectives = directiveList.map((option) =>
     getSkipDocDirective(option),
