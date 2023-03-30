@@ -191,7 +191,7 @@ The GraphQL schema location.
 
 The schema directive/s used for skipping types from documentation.
 
-The option supports multiple values, eg `--skipDocDirective @noDoc @deprecated`.
+The option supports multiple values separated by a space character, eg `--skipDocDirective @noDoc @deprecated`.
 
 | Setting            | CLI flag                 | Default |
 | ------------------ | ------------------------ | ------- |
