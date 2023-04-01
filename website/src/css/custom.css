@@ -1,5 +1,5 @@
-:root {
-  --ifm-link-color: #e535ab;
+:root, .details {
+  --ifm-link-color: #e535ab !important;
   --ifm-global-spacing: 0.4rem;
   --ifm-font-family-base: "Jost","Segoe UI","Roboto","Ubuntu","Cantarell","Noto Sans",sans-serif;
   --ifm-font-family-monospace: "Victor Mono","SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New",monospace;
@@ -12,12 +12,27 @@
   --ifm-color-primary-lightest: #485e58;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-details-decoration-color: var(--ifm-color-primary);
+  --ifm-code-background: #f6f7f8 !important;  
   --aa-primary-color-rgb: var(--ifm-color-primary) !important;
   --aa-muted-color-rgb: var(--ifm-color-primary) !important;
   --aa-muted-color-alpha: var(--ifm-color-primary) !important;
   --aa-input-background-color-rgb: var(--ifm-background-color) !important;
   --aa-input-background-color-alpha: var(--ifm-background-color) !important;
   --aa-selected-color-rgb: 72, 94, 88 !important;
+}
+
+.details a {
+  color: var(--ifm-link-color) !important;
+  text-decoration: none !important;
+}
+
+details a:hover {
+  text-decoration: var(--ifm-link-decoration) !important;
+}
+
+.details code {
+  --ifm-code-background: #f6f7f8 !important;
 }
 
 [data-theme='dark'] {

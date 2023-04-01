@@ -10,7 +10,7 @@ import { useState } from 'react';
 export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
   const [open, setOpen] = useState(startOpen);
   return (
-    <details {...(open ? { open: true } : {})} style={{ border:'none', boxShadow:'none', background:'var(--aa-background-color-rgb)' }}>
+    <details {...(open ? { open: true } : {})} className="details" style={{ border:'none', boxShadow:'none', background:'var(--ifm-background-color)' }}>
       <summary
         onClick={(e) => {
           e.preventDefault();
