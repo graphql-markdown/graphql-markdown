@@ -24,6 +24,9 @@ This documentation has been automatically generated using [AniList APIv2](https:
       "options": { "method": "POST" }
     }
   },
+  "printTypeOptions": {
+    "deprecated": "group"
+  },
   "docOptions": {
     "pagination": false,
     "toc": false

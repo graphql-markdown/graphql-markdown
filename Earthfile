@@ -101,13 +101,13 @@ build-examples:
   RUN npm install prettier
   RUN mkdir examples
   RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/  --link "/schema" --force --pretty --noPagination --noToc 2>&1 | tee ./run.log
+  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/  --link "/schema" --force --pretty --noPagination --deprecated group --noToc 2>&1 | tee ./run.log
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
   RUN npm run build
   RUN npm run clear
   RUN mv docs ./examples/schema
   RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --skip "@noDoc" --index --noTypeBadges --noParentType --noRelatedType --force 2>&1 | tee ./run.log
+  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --skip "@noDoc" --index --noTypeBadges --noParentType --noRelatedType --deprecated group --force 2>&1 | tee ./run.log
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
   RUN npm run build
   RUN npm run clear

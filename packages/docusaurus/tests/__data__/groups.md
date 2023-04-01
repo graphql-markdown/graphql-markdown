@@ -29,7 +29,8 @@ This is an example of documentation grouping with GraphQL directive using the `g
   "printTypeOptions": {
     "parentTypePrefix": false,
     "relatedTypeSection": false,
-    "typeBadges": false
+    "typeBadges": false,
+    "deprecated": "group"
   },
   "skipDocDirective": ["@noDoc"]
 }
