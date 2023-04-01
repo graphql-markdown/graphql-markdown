@@ -39,10 +39,10 @@ module.exports = class Renderer {
     const link =
       typeof this.options === "undefined" || !this.options.index
         ? "null"
-        : `\n  type: generated-index\n  title: '${label} overview'\n`;
+        : `\n  type: generated-index\n  title: '${label} overview'`;
     await saveFile(
       filePath,
-      `label: ${label}\nlink: ${link}\nposition: ${sidebarPosition}\n`,
+      `label: ${label}\nposition: ${sidebarPosition}\nlink: ${link}\n`,
     );
   }
 

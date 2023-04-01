@@ -3,8 +3,8 @@
 exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file 1`] = `
 {
   "docs/_category_.yml": "label: Foobar
-link: null
 position: 1
+link: null
 ",
 }
 `;
@@ -12,11 +12,10 @@ position: 1
 exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with generated index 1`] = `
 {
   "docs/_category_.yml": "label: Foobar
+position: 1
 link: 
   type: generated-index
   title: 'Foobar overview'
-
-position: 1
 ",
 }
 `;
@@ -30,8 +29,8 @@ exports[`renderer class Renderer renderHomepage() copies default homepage into o
 exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
   "object/_category_.yml": "label: Object
-link: null
 position: 1
+link: null
 ",
   "object/bar.mdx": "content",
   "object/foo.mdx": "content",

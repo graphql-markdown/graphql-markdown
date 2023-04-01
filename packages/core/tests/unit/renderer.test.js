@@ -119,8 +119,8 @@ describe("renderer", () => {
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
         expect(content).toMatchInlineSnapshot(`
           "label: Foobar
-          link: null
           position: 1
+          link: null
           "
         `);
       });
@@ -143,11 +143,10 @@ describe("renderer", () => {
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
         expect(content).toMatchInlineSnapshot(`
           "label: Foobar
+          position: 1
           link: 
             type: generated-index
             title: 'Foobar overview'
-
-          position: 1
           "
         `);
       });
