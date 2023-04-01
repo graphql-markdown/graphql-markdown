@@ -40,11 +40,10 @@ module.exports = class Renderer {
       typeof this.options === "undefined" || !this.options.index
         ? "null"
         : `\n  type: generated-index\n  title: '${label} overview'\n`;
-    const position =
-      typeof sidebarPosition === "number"
-        ? `"position": ${sidebarPosition}\n`
-        : "";
-    await saveFile(filePath, `label: ${label}\nlink: ${link}\n${position}`);
+    await saveFile(
+      filePath,
+      `label: ${label}\nlink: ${link}\nposition: ${sidebarPosition}\n`,
+    );
   }
 
   async renderRootTypes(rootTypeName, type) {

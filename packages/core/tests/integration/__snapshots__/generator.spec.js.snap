@@ -4,17 +4,17 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 {
   "course/_category_.yml": "label: Course
 link: null
-"position": 1
+position: 1
 ",
   "course/mutations/_category_.yml": "label: Mutations
 link: null
-"position": 1
+position: 1
 ",
   "course/mutations/add-course.mdx": "add-course",
   "course/mutations/drop-course.mdx": "drop-course",
   "course/queries/_category_.yml": "label: Queries
 link: null
-"position": 1
+position: 1
 ",
   "course/queries/all-courses.mdx": "all-courses",
   "course/queries/math-courses.mdx": "math-courses",
@@ -22,28 +22,28 @@ link: null
   "generated.md": "Dummy homepage for tweet.graphql",
   "grade/_category_.yml": "label: Grade
 link: null
-"position": 1
+position: 1
 ",
   "grade/mutations/_category_.yml": "label: Mutations
 link: null
-"position": 1
+position: 1
 ",
   "grade/mutations/update-gpa.mdx": "update-gpa",
   "grade/mutations/update-grade.mdx": "update-grade",
   "grade/queries/_category_.yml": "label: Queries
 link: null
-"position": 1
+position: 1
 ",
   "grade/queries/gpa.mdx": "gpa",
   "grade/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
   "grade/queries/weighted-gpa.mdx": "weighted-gpa",
   "misc/_category_.yml": "label: Misc
 link: null
-"position": 1
+position: 1
 ",
   "misc/directives/_category_.yml": "label: Directives
 link: null
-"position": 1
+position: 1
 ",
   "misc/directives/deprecated.mdx": "deprecated",
   "misc/directives/doc.mdx": "doc",
@@ -52,28 +52,28 @@ link: null
   "misc/directives/specified-by.mdx": "specified-by",
   "misc/enums/_category_.yml": "label: Enums
 link: null
-"position": 1
+position: 1
 ",
   "misc/enums/roles.mdx": "roles",
   "misc/interfaces/_category_.yml": "label: Interfaces
 link: null
-"position": 1
+position: 1
 ",
   "misc/interfaces/record.mdx": "record",
   "misc/objects/_category_.yml": "label: Objects
 link: null
-"position": 1
+position: 1
 ",
   "misc/objects/department-information.mdx": "department-information",
   "misc/objects/semester.mdx": "semester",
   "misc/queries/_category_.yml": "label: Queries
 link: null
-"position": 1
+position: 1
 ",
   "misc/queries/search-role.mdx": "search-role",
   "misc/scalars/_category_.yml": "label: Scalars
 link: null
-"position": 1
+position: 1
 ",
   "misc/scalars/boolean.mdx": "boolean",
   "misc/scalars/date.mdx": "date",
@@ -105,7 +105,7 @@ exports[`renderer generateDocFromSchema() generates Markdown document structure 
 {
   "directives/_category_.yml": "label: Directives
 link: null
-"position": 1
+position: 1
 ",
   "directives/deprecated.mdx": "deprecated",
   "directives/include.mdx": "include",
@@ -113,30 +113,30 @@ link: null
   "directives/specified-by.mdx": "specified-by",
   "enums/_category_.yml": "label: Enums
 link: null
-"position": 1
+position: 1
 ",
   "enums/media-type.mdx": "media-type",
   "generated.md": "Dummy homepage for tweet.graphql",
   "inputs/_category_.yml": "label: Inputs
 link: null
-"position": 1
+position: 1
 ",
   "inputs/tweet-content.mdx": "tweet-content",
   "interfaces/_category_.yml": "label: Interfaces
 link: null
-"position": 1
+position: 1
 ",
   "interfaces/node.mdx": "node",
   "mutations/_category_.yml": "label: Mutations
 link: null
-"position": 1
+position: 1
 ",
   "mutations/create-tweet.mdx": "create-tweet",
   "mutations/delete-tweet.mdx": "delete-tweet",
   "mutations/mark-tweet-read.mdx": "mark-tweet-read",
   "objects/_category_.yml": "label: Objects
 link: null
-"position": 1
+position: 1
 ",
   "objects/media.mdx": "media",
   "objects/meta.mdx": "meta",
@@ -146,7 +146,7 @@ link: null
   "objects/user.mdx": "user",
   "queries/_category_.yml": "label: Queries
 link: null
-"position": 1
+position: 1
 ",
   "queries/notifications-meta.mdx": "notifications-meta",
   "queries/tweet.mdx": "tweet",
@@ -156,7 +156,7 @@ link: null
   "queries/users.mdx": "users",
   "scalars/_category_.yml": "label: Scalars
 link: null
-"position": 1
+position: 1
 ",
   "scalars/boolean.mdx": "boolean",
   "scalars/date.mdx": "date",
@@ -179,7 +179,7 @@ module.exports = {
 ",
   "subscriptions/_category_.yml": "label: Subscriptions
 link: null
-"position": 1
+position: 1
 ",
   "subscriptions/notifications.mdx": "notifications",
 }

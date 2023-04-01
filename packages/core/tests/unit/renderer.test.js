@@ -120,7 +120,7 @@ describe("renderer", () => {
         expect(content).toMatchInlineSnapshot(`
           "label: Foobar
           link: null
-          "position": 1
+          position: 1
           "
         `);
       });
@@ -147,7 +147,7 @@ describe("renderer", () => {
             type: generated-index
             title: 'Foobar overview'
 
-          "position": 1
+          position: 1
           "
         `);
       });
