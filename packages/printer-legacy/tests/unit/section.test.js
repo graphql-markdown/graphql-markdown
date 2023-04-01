@@ -10,6 +10,8 @@ const {
   printSection,
   printSectionItem,
   printSectionItems,
+  SHOW_DEPRECATED,
+  HIDE_DEPRECATED,
 } = require("../../src/section");
 
 const { DEFAULT_OPTIONS } = require("../../src/const/options");
@@ -43,7 +45,10 @@ describe("section", () => {
       const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
         level: "",
-        collapsible: true,
+        collapsible: {
+          dataOpen: HIDE_DEPRECATED,
+          dataClose: SHOW_DEPRECATED,
+        },
       });
 
       expect(section).toMatchInlineSnapshot(`

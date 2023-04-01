@@ -40,9 +40,13 @@ const printSection = (values, section, options) => {
   const levelPosition = sectionLevels.indexOf(level);
 
   const [openSection, closeSection] = (() => {
-    if (hasProperty(options, "collapsible") && options.collapsible === true) {
+    if (
+      hasProperty(options, "collapsible") &&
+      hasProperty(options.collapsible, "dataOpen") &&
+      hasProperty(options.collapsible, "dataClose")
+    ) {
       return [
-        `${MARKDOWN_EOP}<Details dataOpen={${HIDE_DEPRECATED}} dataClose={${SHOW_DEPRECATED}}>${MARKDOWN_EOP}`,
+        `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}`,
         `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}`,
       ];
     }
@@ -51,7 +55,7 @@ const printSection = (values, section, options) => {
 
   const items = printSectionItems(values, {
     ...options,
-    collapsible: false, // do not propagate collapsible
+    collapsible: undefined, // do not propagate collapsible
     level: levelPosition > -1 ? sectionLevels[levelPosition + 1] : undefined,
   });
 
@@ -128,4 +132,6 @@ module.exports = {
   printSection,
   printSectionItem,
   printSectionItems,
+  SHOW_DEPRECATED,
+  HIDE_DEPRECATED,
 };
