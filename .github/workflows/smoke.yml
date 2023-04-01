@@ -26,6 +26,7 @@ jobs:
         uses: earthly/actions-setup@v1
         with:
           version: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Smoke Tests
         run: earthly --ci github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
