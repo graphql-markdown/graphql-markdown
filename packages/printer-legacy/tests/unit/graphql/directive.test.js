@@ -5,7 +5,10 @@ const {
   DirectiveLocation,
 } = require("graphql");
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+const {
+  DEFAULT_OPTIONS,
+  OPTION_DEPRECATED,
+} = require("../../../src/const/options");
 
 const {
   printCodeDirective,
@@ -14,7 +17,7 @@ const {
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {
-    test("returns directive metadata", () => {
+    test("returns directive metadata without params", () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -26,6 +29,77 @@ describe("directive", () => {
       const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`""`);
+    });
+
+    test("returns directive metadata", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLDirective({
+        name: "FooBar",
+        locations: [],
+        args: {
+          ArgFooBar: {
+            type: GraphQLBoolean,
+          },
+        },
+      });
+
+      const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
+
+      expect(code).toMatchInlineSnapshot(`
+        "### Arguments
+
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>ArgFooBar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
+
+        "
+      `);
+    });
+
+    test("returns directive metadata with grouped deprecated", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLDirective({
+        name: "FooBar",
+        locations: [],
+        args: {
+          Foo: {
+            type: GraphQLBoolean,
+          },
+          Bar: {
+            type: GraphQLBoolean,
+            deprecationReason: "Deprecated",
+          },
+        },
+      });
+
+      const code = printDirectiveMetadata(type, {
+        ...DEFAULT_OPTIONS,
+        printDeprecated: OPTION_DEPRECATED.GROUP,
+      });
+
+      expect(code).toMatchInlineSnapshot(`
+        "### Arguments
+
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Foo</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
+
+         
+
+        <Details dataOpen={<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>} dataClose={<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>}>
+
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Bar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="deprecated"/> <Badge class="secondary" text="scalar"/>
+        > <Badge class="warning" text="DEPRECATED: Deprecated"/>
+        > 
+        > 
+        > 
+
+        </Details>
+
+        "
+      `);
     });
   });
 

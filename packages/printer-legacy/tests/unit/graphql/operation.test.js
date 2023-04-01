@@ -2,7 +2,10 @@ const { GraphQLID, GraphQLObjectType, GraphQLString } = require("graphql");
 
 const Utils = require("@graphql-markdown/utils");
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+const {
+  DEFAULT_OPTIONS,
+  OPTION_DEPRECATED,
+} = require("../../../src/const/options");
 const { printOperationMetadata } = require("../../../src/graphql/operation");
 
 describe("operation", () => {
@@ -71,6 +74,67 @@ describe("operation", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > 
+
+        ### Type
+
+        #### [\`Test\`](/objects/test) <Badge class="secondary" text="object"/>
+        > 
+        > 
+
+        "
+      `);
+    });
+
+    test("returns operation metadata with arguments with grouped deprecated", () => {
+      expect.hasAssertions();
+
+      const operation = {
+        name: "TestQuery",
+        type: GraphQLID,
+        args: [
+          {
+            name: "Foo",
+            type: GraphQLString,
+          },
+          {
+            name: "Bar",
+            type: GraphQLString,
+            deprecationReason: "Deprecated",
+          },
+        ],
+      };
+
+      jest.spyOn(Utils.graphql, "getTypeName").mockReturnValue("Test");
+
+      const metadata = printOperationMetadata(operation, {
+        ...DEFAULT_OPTIONS,
+        printDeprecated: OPTION_DEPRECATED.GROUP,
+        schema: {
+          getType: () =>
+            new GraphQLObjectType({
+              name: "Test",
+            }),
+        },
+      });
+
+      expect(metadata).toMatchInlineSnapshot(`
+        "### Arguments
+
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
+
+         
+
+        <Details dataOpen={<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>} dataClose={<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>}>
+
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="deprecated"/> <Badge class="secondary" text="scalar"/>
+        > <Badge class="warning" text="DEPRECATED: Deprecated"/>
+        > 
+        > 
+        > 
+
+        </Details>
 
         ### Type
 
