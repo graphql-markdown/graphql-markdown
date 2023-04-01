@@ -42,6 +42,11 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           "Group documentation by directive",
         )
         .option("--skip <@directive...>", "Skip type with matching directive")
+        .option(
+          "--deprecated <option>",
+          "Option for printing deprecated entities",
+        )
+        .choices(["default", "group", "skip"])
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
           await generateDocFromSchema(
