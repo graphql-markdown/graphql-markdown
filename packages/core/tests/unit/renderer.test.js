@@ -118,10 +118,11 @@ describe("renderer", () => {
 
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
         expect(content).toMatchInlineSnapshot(`
-            "label: Foobar
-            link: null
-            "
-          `);
+          "label: Foobar
+          link: null
+          "position": 1
+          "
+        `);
       });
 
       test("generate _category_.yml file with generated index", async () => {
@@ -141,13 +142,14 @@ describe("renderer", () => {
 
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
         expect(content).toMatchInlineSnapshot(`
-            "label: Foobar
-            link: 
-              type: generated-index
-              title: 'Foobar overview'
+          "label: Foobar
+          link: 
+            type: generated-index
+            title: 'Foobar overview'
 
-            "
-          `);
+          "position": 1
+          "
+        `);
       });
 
       test("do not generate _category_.yml file if it exists", async () => {

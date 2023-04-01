@@ -6,6 +6,7 @@ const {
   url: { pathUrl },
   prettier: { prettifyJavascript, prettifyMarkdown },
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
+  graphql: { isDeprecated },
 } = require("@graphql-markdown/utils");
 
 const { ASSETS_LOCATION } = require("./config");
@@ -25,7 +26,7 @@ module.exports = class Renderer {
     this.options = docOptions;
   }
 
-  async generateCategoryMetafile(category, dirPath) {
+  async generateCategoryMetafile(category, dirPath, sidebarPosition = 1) {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
@@ -39,8 +40,11 @@ module.exports = class Renderer {
       typeof this.options === "undefined" || !this.options.index
         ? "null"
         : `\n  type: generated-index\n  title: '${label} overview'\n`;
-
-    await saveFile(filePath, `label: ${label}\nlink: ${link}\n`);
+    const position =
+      typeof sidebarPosition === "number"
+        ? `"position": ${sidebarPosition}\n`
+        : "";
+    await saveFile(filePath, `label: ${label}\nlink: ${link}\n${position}`);
   }
 
   async renderRootTypes(rootTypeName, type) {
@@ -52,6 +56,15 @@ module.exports = class Renderer {
       Object.keys(type)
         .map(async (name) => {
           let dirPath = this.outputDir;
+
+          if (
+            hasProperty(this.options, "deprecated") &&
+            this.options.deprecated === "group" &&
+            isDeprecated(type[name])
+          ) {
+            dirPath = path.join(dirPath, toSlug("deprecated"));
+            await this.generateCategoryMetafile("deprecated", dirPath, 99);
+          }
 
           if (hasProperty(this.group, name)) {
             dirPath = path.join(dirPath, toSlug(this.group[name]));
@@ -79,7 +92,6 @@ module.exports = class Renderer {
       }
     } catch (error) {
       console.log(`An error occurred while processing "${type}"`);
-      console.debug(error);
       return undefined;
     }
 

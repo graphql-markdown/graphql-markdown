@@ -44,6 +44,9 @@ describe("renderer", () => {
         tmpDir: "/temp",
         loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
         printer: "@graphql-markdown/printer-legacy",
+        printTypeOptions: {
+          deprecated: "default",
+        },
       };
 
       await generateDocFromSchema(config);
@@ -66,6 +69,9 @@ describe("renderer", () => {
         tmpDir: "/temp",
         loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
         printer: "@graphql-markdown/printer-legacy",
+        printTypeOptions: {
+          deprecated: "default",
+        },
       };
 
       jest.spyOn(diff, "checkSchemaChanges").mockReturnValue(false);
@@ -94,6 +100,9 @@ describe("renderer", () => {
           fallback: "misc",
         },
         printer: "@graphql-markdown/printer-legacy",
+        printTypeOptions: {
+          deprecated: "default",
+        },
       };
 
       await generateDocFromSchema(config);

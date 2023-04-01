@@ -4,6 +4,7 @@ exports[`renderer class Renderer generateCategoryMetafile() generate _category_.
 {
   "docs/_category_.yml": "label: Foobar
 link: null
+"position": 1
 ",
 }
 `;
@@ -15,6 +16,7 @@ link:
   type: generated-index
   title: 'Foobar overview'
 
+"position": 1
 ",
 }
 `;
@@ -29,6 +31,7 @@ exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
   "object/_category_.yml": "label: Object
 link: null
+"position": 1
 ",
   "object/bar.mdx": "content",
   "object/foo.mdx": "content",

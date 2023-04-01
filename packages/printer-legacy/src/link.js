@@ -17,11 +17,13 @@ const {
     isListType,
     isNonNullType,
     isLeafType,
+    isDeprecated,
   },
 } = require("@graphql-markdown/utils");
 
 const { getGroup } = require("./group");
-const { ROOT_TYPE_LOCALE } = require("./const/strings");
+const { ROOT_TYPE_LOCALE, DEPRECATED } = require("./const/strings");
+const { OPTION_DEPRECATED } = require("./const/options");
 
 class Link {
   static getLinkCategory = (graphLQLNamedType) => {
@@ -83,11 +85,18 @@ class Link {
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
+    const deprecated =
+      hasProperty(options, "printDeprecated") &&
+      options.printDeprecated === OPTION_DEPRECATED.GROUP &&
+      isDeprecated(type)
+        ? DEPRECATED
+        : "";
     const group = hasProperty(options, "groups")
       ? getGroup(type, options.groups)
       : "";
     const url = pathUrl.join(
       options.basePath,
+      deprecated,
       group,
       category.plural,
       toSlug(text),
