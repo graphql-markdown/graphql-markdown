@@ -5,7 +5,7 @@ const {
   printEnumMetadata,
 } = require("../../../src/graphql/enum");
 
-const { DEFAULT_OPTIONS } = require("../../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../../src/const/options");
 
 describe("enum", () => {
   const type = new GraphQLEnumType({

@@ -1,15 +1,13 @@
 const {
   string: { escapeMDX },
   object: { hasProperty },
+  graphql: { isDeprecated },
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
 
 const printDeprecation = (type) => {
-  if (
-    hasProperty(type, "isDeprecated") === false ||
-    type.isDeprecated === false
-  ) {
+  if (isDeprecated(type) === false) {
     return "";
   }
 

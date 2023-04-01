@@ -5,7 +5,7 @@ const {
   printUnionMetadata,
 } = require("../../../src/graphql/union");
 
-const { DEFAULT_OPTIONS } = require("../../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../../src/const/options");
 
 describe("union", () => {
   const type = new GraphQLUnionType({

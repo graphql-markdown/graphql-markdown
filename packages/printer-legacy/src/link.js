@@ -74,7 +74,7 @@ class Link {
       return fallback;
     }
 
-    // special case for support relation map
+    // special case for relation map
     if (category === ROOT_TYPE_LOCALE.OPERATION) {
       if (typeof operation === "undefined") {
         return fallback;
@@ -83,7 +83,9 @@ class Link {
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType;
-    const group = getGroup(type, options.groups);
+    const group = hasProperty(options, "groups")
+      ? getGroup(type, options.groups)
+      : "";
     const url = pathUrl.join(
       options.basePath,
       group,

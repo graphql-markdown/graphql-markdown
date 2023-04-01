@@ -30,7 +30,7 @@ jest.mock("../../src/group", () => {
 });
 const Group = require("../../src/group");
 
-const { DEFAULT_OPTIONS } = require("../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../src/const/options");
 const Link = require("../../src/link");
 
 describe("link", () => {
@@ -186,6 +186,7 @@ describe("link", () => {
       jest.spyOn(Utils.graphql, "isDirectiveType").mockReturnValue(true);
       jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
       jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,

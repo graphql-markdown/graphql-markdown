@@ -126,6 +126,7 @@ describe("Printer", () => {
           "basePath": undefined,
           "groups": undefined,
           "parentTypePrefix": true,
+          "printDeprecated": "default",
           "relatedTypeSection": true,
           "schema": undefined,
           "skipDocDirective": undefined,
@@ -164,6 +165,7 @@ describe("Printer", () => {
           "basePath": undefined,
           "groups": {},
           "parentTypePrefix": false,
+          "printDeprecated": "default",
           "relatedTypeSection": false,
           "schema": {},
           "skipDocDirective": [

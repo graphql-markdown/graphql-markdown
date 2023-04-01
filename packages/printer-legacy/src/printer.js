@@ -46,15 +46,7 @@ const {
 } = require("./const/strings");
 const mdx = require("./const/mdx");
 
-const DEFAULT_OPTIONS = {
-  schema: undefined,
-  basePath: "/",
-  groups: {},
-  parentTypePrefix: true,
-  relatedTypeSection: true,
-  typeBadges: true,
-  skipDocDirective: undefined,
-};
+const { DEFAULT_OPTIONS } = require("./const/options");
 
 class Printer {
   static options;
