@@ -74,7 +74,8 @@ class Printer {
       relatedTypeSection: printTypeOptions?.relatedTypeSection ?? true,
       typeBadges: printTypeOptions?.typeBadges ?? true,
       skipDocDirective: skipDocDirective ?? undefined,
-      printDeprecated: printTypeOptions?.deprecated ?? OPTION_DEPRECATED.DEFAULT,
+      printDeprecated:
+        printTypeOptions?.deprecated ?? OPTION_DEPRECATED.DEFAULT,
     };
   };
 
