@@ -34,7 +34,7 @@ module.exports = class Renderer {
     category,
     dirPath,
     sidebarPosition = SIDEBAR_POSITION.FIRST,
-    styleClass,
+    styleClass = undefined,
   ) {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
