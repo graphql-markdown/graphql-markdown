@@ -3,14 +3,17 @@
 exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
 {
   "course/_category_.yml": "label: Course
+position: 1
 link: null
 ",
   "course/mutations/_category_.yml": "label: Mutations
+position: 1
 link: null
 ",
   "course/mutations/add-course.mdx": "add-course",
   "course/mutations/drop-course.mdx": "drop-course",
   "course/queries/_category_.yml": "label: Queries
+position: 1
 link: null
 ",
   "course/queries/all-courses.mdx": "all-courses",
@@ -18,23 +21,28 @@ link: null
   "course/queries/science-courses.mdx": "science-courses",
   "generated.md": "Dummy homepage for tweet.graphql",
   "grade/_category_.yml": "label: Grade
+position: 1
 link: null
 ",
   "grade/mutations/_category_.yml": "label: Mutations
+position: 1
 link: null
 ",
   "grade/mutations/update-gpa.mdx": "update-gpa",
   "grade/mutations/update-grade.mdx": "update-grade",
   "grade/queries/_category_.yml": "label: Queries
+position: 1
 link: null
 ",
   "grade/queries/gpa.mdx": "gpa",
   "grade/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
   "grade/queries/weighted-gpa.mdx": "weighted-gpa",
   "misc/_category_.yml": "label: Misc
+position: 1
 link: null
 ",
   "misc/directives/_category_.yml": "label: Directives
+position: 1
 link: null
 ",
   "misc/directives/deprecated.mdx": "deprecated",
@@ -43,23 +51,28 @@ link: null
   "misc/directives/skip.mdx": "skip",
   "misc/directives/specified-by.mdx": "specified-by",
   "misc/enums/_category_.yml": "label: Enums
+position: 1
 link: null
 ",
   "misc/enums/roles.mdx": "roles",
   "misc/interfaces/_category_.yml": "label: Interfaces
+position: 1
 link: null
 ",
   "misc/interfaces/record.mdx": "record",
   "misc/objects/_category_.yml": "label: Objects
+position: 1
 link: null
 ",
   "misc/objects/department-information.mdx": "department-information",
   "misc/objects/semester.mdx": "semester",
   "misc/queries/_category_.yml": "label: Queries
+position: 1
 link: null
 ",
   "misc/queries/search-role.mdx": "search-role",
   "misc/scalars/_category_.yml": "label: Scalars
+position: 1
 link: null
 ",
   "misc/scalars/boolean.mdx": "boolean",
@@ -91,6 +104,7 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 exports[`renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
 {
   "directives/_category_.yml": "label: Directives
+position: 1
 link: null
 ",
   "directives/deprecated.mdx": "deprecated",
@@ -98,25 +112,30 @@ link: null
   "directives/skip.mdx": "skip",
   "directives/specified-by.mdx": "specified-by",
   "enums/_category_.yml": "label: Enums
+position: 1
 link: null
 ",
   "enums/media-type.mdx": "media-type",
   "generated.md": "Dummy homepage for tweet.graphql",
   "inputs/_category_.yml": "label: Inputs
+position: 1
 link: null
 ",
   "inputs/tweet-content.mdx": "tweet-content",
   "interfaces/_category_.yml": "label: Interfaces
+position: 1
 link: null
 ",
   "interfaces/node.mdx": "node",
   "mutations/_category_.yml": "label: Mutations
+position: 1
 link: null
 ",
   "mutations/create-tweet.mdx": "create-tweet",
   "mutations/delete-tweet.mdx": "delete-tweet",
   "mutations/mark-tweet-read.mdx": "mark-tweet-read",
   "objects/_category_.yml": "label: Objects
+position: 1
 link: null
 ",
   "objects/media.mdx": "media",
@@ -126,6 +145,7 @@ link: null
   "objects/tweet.mdx": "tweet",
   "objects/user.mdx": "user",
   "queries/_category_.yml": "label: Queries
+position: 1
 link: null
 ",
   "queries/notifications-meta.mdx": "notifications-meta",
@@ -135,6 +155,7 @@ link: null
   "queries/user.mdx": "user",
   "queries/users.mdx": "users",
   "scalars/_category_.yml": "label: Scalars
+position: 1
 link: null
 ",
   "scalars/boolean.mdx": "boolean",
@@ -157,6 +178,7 @@ module.exports = {
 };
 ",
   "subscriptions/_category_.yml": "label: Subscriptions
+position: 1
 link: null
 ",
   "subscriptions/notifications.mdx": "notifications",

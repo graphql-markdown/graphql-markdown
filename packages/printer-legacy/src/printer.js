@@ -46,15 +46,7 @@ const {
 } = require("./const/strings");
 const mdx = require("./const/mdx");
 
-const DEFAULT_OPTIONS = {
-  schema: undefined,
-  basePath: "/",
-  groups: {},
-  parentTypePrefix: true,
-  relatedTypeSection: true,
-  typeBadges: true,
-  skipDocDirective: undefined,
-};
+const { DEFAULT_OPTIONS, OPTION_DEPRECATED } = require("./const/options");
 
 class Printer {
   static options;
@@ -82,6 +74,8 @@ class Printer {
       relatedTypeSection: printTypeOptions?.relatedTypeSection ?? true,
       typeBadges: printTypeOptions?.typeBadges ?? true,
       skipDocDirective: skipDocDirective ?? undefined,
+      printDeprecated:
+        printTypeOptions?.deprecated ?? OPTION_DEPRECATED.DEFAULT,
     };
   };
 

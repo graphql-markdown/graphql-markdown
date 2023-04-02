@@ -113,6 +113,7 @@ describe("config", () => {
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
+          deprecated: "group",
         },
         skipDocDirective: ["@noDoc"],
       };
@@ -177,6 +178,7 @@ describe("config", () => {
         noPagination: true,
         index: true,
         skip: "@noDoc",
+        deprecated: "group",
       };
 
       jest
@@ -201,7 +203,10 @@ describe("config", () => {
           toc: !cliOpts.noToc,
           index: cliOpts.index,
         },
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: "group",
+        },
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
       });

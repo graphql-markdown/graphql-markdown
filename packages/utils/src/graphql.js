@@ -358,6 +358,14 @@ function isOperation(type) {
   return hasProperty(type, "type");
 }
 
+function isDeprecated(type) {
+  return (
+    (hasProperty(type, "isDeprecated") && type.isDeprecated === true) ||
+    (hasProperty(type, "deprecationReason") &&
+      typeof type.deprecationReason === "string")
+  );
+}
+
 module.exports = {
   loadSchema,
   getDocumentLoaders,
@@ -379,6 +387,7 @@ module.exports = {
   isNonNullType,
   isLeafType,
   isListType,
+  isDeprecated,
   printSchema,
   getIntrospectionFieldsList,
   getTypeFromSchema,

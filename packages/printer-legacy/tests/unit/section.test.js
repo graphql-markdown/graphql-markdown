@@ -10,9 +10,11 @@ const {
   printSection,
   printSectionItem,
   printSectionItems,
+  SHOW_DEPRECATED,
+  HIDE_DEPRECATED,
 } = require("../../src/section");
 
-const { DEFAULT_OPTIONS } = require("../../src/printer");
+const { DEFAULT_OPTIONS } = require("../../src/const/options");
 
 describe("section", () => {
   describe("printSection()", () => {
@@ -30,6 +32,35 @@ describe("section", () => {
         #### [\`section content\`](#) 
         > 
         > 
+
+        "
+      `);
+    });
+
+    test("returns Markdown ### section with collapsible content", () => {
+      expect.hasAssertions();
+
+      const content = ["section content"];
+
+      const section = printSection(content, "", {
+        ...DEFAULT_OPTIONS,
+        level: "",
+        collapsible: {
+          dataOpen: HIDE_DEPRECATED,
+          dataClose: SHOW_DEPRECATED,
+        },
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+        " 
+
+        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+
+        #### [\`section content\`](#) 
+        > 
+        > 
+
+        </Details>
 
         "
       `);
@@ -305,6 +336,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
           {
             name: "ParameterTypeName",
             type: GraphQLString,
+            astNode: {
+              directives: [{ name: { value: "@doc" } }],
+            },
           },
           {
             name: "ParameterSkipDoc",
@@ -330,6 +364,48 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
         "
       `);
+    });
+
+    test("returns Markdown #### link section with only type matching onlyDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "ParameterOnlyDoc",
+        type: GraphQLString,
+        astNode: {
+          directives: [{ name: { value: "@doc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        onlyDocDirective: "@doc",
+      });
+
+      expect(section).toMatchInlineSnapshot(`
+        "#### [\`ParameterOnlyDoc\`](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > "
+      `);
+    });
+
+    test("returns Markdown #### link section empty if type does not match onlyDocDirective", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "ParameterOnlyDoc",
+        type: GraphQLString,
+        astNode: {
+          directives: [{ name: { value: "@noDoc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        onlyDocDirective: "@doc",
+      });
+
+      expect(section).toMatchInlineSnapshot(`""`);
     });
   });
 });

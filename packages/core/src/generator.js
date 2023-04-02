@@ -5,6 +5,7 @@ const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 
 const NS_PER_SEC = 1e9;
+const SEC_DECIMALS = 3;
 
 const hasChanges = async (
   schema,
@@ -104,14 +105,10 @@ const generateDocFromSchema = async ({
     printerModule,
     skipDocDirective,
   );
-  const renderer = new Renderer(
-    printer,
-    outputDir,
-    baseURL,
-    groups,
-    prettify,
-    docOptions,
-  );
+  const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
+    ...docOptions,
+    deprecated: printTypeOptions.deprecated,
+  });
 
   const pages = await Promise.all(
     Object.keys(rootTypes).map((typeName) =>
@@ -125,7 +122,7 @@ const generateDocFromSchema = async ({
 
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
-  ).toFixed(3);
+  ).toFixed(SEC_DECIMALS);
 
   console.info(
     `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,

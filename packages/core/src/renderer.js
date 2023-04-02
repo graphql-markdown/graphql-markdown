@@ -6,6 +6,7 @@ const {
   url: { pathUrl },
   prettier: { prettifyJavascript, prettifyMarkdown },
   fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
+  graphql: { isDeprecated },
 } = require("@graphql-markdown/utils");
 
 const { ASSETS_LOCATION } = require("./config");
@@ -14,6 +15,10 @@ const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
+const SIDEBAR_POSITION = {
+  FIRST: 1,
+  LAST: 999,
+};
 
 module.exports = class Renderer {
   constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
@@ -25,7 +30,12 @@ module.exports = class Renderer {
     this.options = docOptions;
   }
 
-  async generateCategoryMetafile(category, dirPath) {
+  async generateCategoryMetafile(
+    category,
+    dirPath,
+    sidebarPosition = SIDEBAR_POSITION.FIRST,
+    styleClass = undefined,
+  ) {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
@@ -38,9 +48,41 @@ module.exports = class Renderer {
     const link =
       typeof this.options === "undefined" || !this.options.index
         ? "null"
-        : `\n  type: generated-index\n  title: '${label} overview'\n`;
+        : `\n  type: generated-index\n  title: '${label} overview'`;
+    const className =
+      typeof styleClass === "string" ? `className: ${styleClass}\n` : "";
+    await saveFile(
+      filePath,
+      `label: ${label}\nposition: ${sidebarPosition}\n${className}link: ${link}\n`,
+    );
+  }
 
-    await saveFile(filePath, `label: ${label}\nlink: ${link}\n`);
+  async generateCategoryMetafileType(type, name, rootTypeName) {
+    let dirPath = this.outputDir;
+
+    if (
+      hasProperty(this.options, "deprecated") &&
+      this.options.deprecated === "group" &&
+      isDeprecated(type)
+    ) {
+      dirPath = path.join(dirPath, toSlug("deprecated"));
+      await this.generateCategoryMetafile(
+        "deprecated",
+        dirPath,
+        SIDEBAR_POSITION.LAST,
+        "deprecated",
+      );
+    }
+
+    if (hasProperty(this.group, name)) {
+      dirPath = path.join(dirPath, toSlug(this.group[name]));
+      await this.generateCategoryMetafile(this.group[name], dirPath);
+    }
+
+    dirPath = path.join(dirPath, toSlug(rootTypeName));
+    await this.generateCategoryMetafile(rootTypeName, dirPath);
+
+    return dirPath;
   }
 
   async renderRootTypes(rootTypeName, type) {
@@ -51,15 +93,11 @@ module.exports = class Renderer {
     return Promise.all(
       Object.keys(type)
         .map(async (name) => {
-          let dirPath = this.outputDir;
-
-          if (hasProperty(this.group, name)) {
-            dirPath = path.join(dirPath, toSlug(this.group[name]));
-            await this.generateCategoryMetafile(this.group[name], dirPath);
-          }
-
-          dirPath = path.join(dirPath, toSlug(rootTypeName));
-          await this.generateCategoryMetafile(rootTypeName, dirPath);
+          const dirPath = await this.generateCategoryMetafileType(
+            type[name],
+            name,
+            rootTypeName,
+          );
 
           return this.renderTypeEntities(dirPath, name, type[name]);
         })
@@ -79,7 +117,6 @@ module.exports = class Renderer {
       }
     } catch (error) {
       console.log(`An error occurred while processing "${type}"`);
-      console.debug(error);
       return undefined;
     }
 

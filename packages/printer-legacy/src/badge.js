@@ -1,6 +1,6 @@
 const {
   object: { hasProperty },
-  graphql: { isNonNullType, isListType, getNamedType },
+  graphql: { isNonNullType, isListType, isDeprecated, getNamedType },
 } = require("@graphql-markdown/utils");
 
 const { getLinkCategory } = require("./link");
@@ -11,15 +11,15 @@ const getTypeBadges = (type) => {
 
   const badges = [];
 
-  if (hasProperty(type, "isDeprecated") && type.isDeprecated) {
+  if (isDeprecated(type) === true) {
     badges.push("deprecated");
   }
 
-  if (isNonNullType(rootType)) {
+  if (isNonNullType(rootType) === true) {
     badges.push("non-null");
   }
 
-  if (isListType(rootType)) {
+  if (isListType(rootType) === true) {
     badges.push("list");
   }
 

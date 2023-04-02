@@ -5,14 +5,17 @@ const {
   printEnumMetadata,
 } = require("../../../src/graphql/enum");
 
-const { DEFAULT_OPTIONS } = require("../../../src/printer");
+const {
+  DEFAULT_OPTIONS,
+  OPTION_DEPRECATED,
+} = require("../../../src/const/options");
 
 describe("enum", () => {
   const type = new GraphQLEnumType({
     name: "EnumTypeName",
     values: {
       one: { value: "one" },
-      two: { value: "two" },
+      two: { value: "two", deprecationReason: "Deprecated" },
     },
   });
 
@@ -29,9 +32,42 @@ describe("enum", () => {
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="secondary" text="deprecated"/>
+        > <Badge class="warning" text="DEPRECATED: Deprecated"/>
         > 
         > 
+        > 
+
+        "
+      `);
+    });
+
+    test("returns enum metadata with grouped deprecated", () => {
+      expect.hasAssertions();
+
+      const metadata = printEnumMetadata(type, {
+        ...DEFAULT_OPTIONS,
+        printDeprecated: OPTION_DEPRECATED.GROUP,
+      });
+
+      expect(metadata).toMatchInlineSnapshot(`
+        "### Values
+
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#) 
+        > 
+        > 
+
+         
+
+        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="secondary" text="deprecated"/>
+        > <Badge class="warning" text="DEPRECATED: Deprecated"/>
+        > 
+        > 
+        > 
+
+        </Details>
 
         "
       `);

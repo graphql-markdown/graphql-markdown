@@ -2,7 +2,8 @@
 
 exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file 1`] = `
 {
-  "docs/_category_.yml": "label: Foobar
+  "docs/_category_.yml": "label: foobar
+position: 1
 link: null
 ",
 }
@@ -10,11 +11,20 @@ link: null
 
 exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with generated index 1`] = `
 {
-  "docs/_category_.yml": "label: Foobar
+  "docs/_category_.yml": "label: foobar
+position: 1
 link: 
   type: generated-index
-  title: 'Foobar overview'
+  title: 'foobar overview'
+",
+}
+`;
 
+exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with sidebar position 1`] = `
+{
+  "docs/_category_.yml": "label: foobar
+position: 42
+link: null
 ",
 }
 `;
@@ -28,6 +38,7 @@ exports[`renderer class Renderer renderHomepage() copies default homepage into o
 exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
   "object/_category_.yml": "label: Object
+position: 1
 link: null
 ",
   "object/bar.mdx": "content",
@@ -54,6 +65,6 @@ module.exports = {
 
 exports[`renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
 {
-  "foobar/foo-bar.mdx": "Lorem ipsum",
+  "foobar/foobar.mdx": "Lorem ipsum",
 }
 `;

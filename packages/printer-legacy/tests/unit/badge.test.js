@@ -14,6 +14,7 @@ jest.mock("@graphql-markdown/utils", () => {
       isInputType: jest.fn(),
       isScalarType: jest.fn(),
       isDirectiveType: jest.fn(),
+      isDeprecated: jest.fn(),
       getNamedType: jest.fn(),
     },
   };
@@ -90,7 +91,7 @@ describe("badge", () => {
     test("return deprecated badge is type is deprecated", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+      jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
       const type = { isDeprecated: true };
 
       const badges = Badge.getTypeBadges(type);

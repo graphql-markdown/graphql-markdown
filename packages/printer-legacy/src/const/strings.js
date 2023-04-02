@@ -22,6 +22,8 @@ const MARKDOWN_SOC = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
 const MARKDOWN_EOC = `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
 const FRONT_MATTER = "---";
 
+const DEPRECATED = "deprecated";
+
 module.exports = {
   ROOT_TYPE_LOCALE,
   HEADER_SECTION_LEVEL,
@@ -33,4 +35,5 @@ module.exports = {
   MARKDOWN_SOC,
   MARKDOWN_EOC,
   FRONT_MATTER,
+  DEPRECATED,
 };

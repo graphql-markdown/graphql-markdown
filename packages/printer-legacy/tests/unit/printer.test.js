@@ -126,6 +126,7 @@ describe("Printer", () => {
           "basePath": undefined,
           "groups": undefined,
           "parentTypePrefix": true,
+          "printDeprecated": "default",
           "relatedTypeSection": true,
           "schema": undefined,
           "skipDocDirective": undefined,
@@ -164,6 +165,7 @@ describe("Printer", () => {
           "basePath": undefined,
           "groups": {},
           "parentTypePrefix": false,
+          "printDeprecated": "default",
           "relatedTypeSection": false,
           "schema": {},
           "skipDocDirective": [
@@ -336,7 +338,7 @@ describe("Printer", () => {
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if matches skipDirective", () => {
+    test("returns undefined if matches skipDocDirective", () => {
       expect.hasAssertions();
       jest.spyOn(Utils.graphql, "hasDirective").mockReturnValue(true);
       const printedType = Printer.printType("any", null);

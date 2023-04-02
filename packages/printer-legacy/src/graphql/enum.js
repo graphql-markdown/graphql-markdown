@@ -3,14 +3,10 @@ const {
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOL } = require("../const/strings");
-
-const { printSection } = require("../section");
+const { printMetadataSection } = require("../section");
 
 const printEnumMetadata = (type, options) => {
-  return printSection(type.getValues(), "Values", {
-    ...options,
-    parentType: type.name,
-  });
+  return printMetadataSection(type, type.getValues(), "Values", options);
 };
 
 const printCodeEnum = (type) => {

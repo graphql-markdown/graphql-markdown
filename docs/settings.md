@@ -126,12 +126,17 @@ Use these options to toggle type information rendered on pages:
 - `parentTypePrefix`: prefix field names with parent type name
 - `relatedTypeSection`: display related type sections
 - `typeBadges`: add field type attributes badges
+- `deprecated`: set display of deprecated entities (fields, values, operations)
+  - `default`: deprecated entities are displayed with other entities
+  - `group`: deprecated entities are grouped together
+  - `skip`: deprecated entities are not displayed
 
-| Setting                               | CLI flag          | Default |
-| ------------------------------------- | ----------------- | ------- |
-| `printTypeOptions.parentTypePrefix`   | `--noParentType`  | `true`  |
-| `printTypeOptions.relatedTypeSection` | `--noRelatedType` | `true`  |
-| `printTypeOptions.typeBadges`         | `--noTypeBadges`  | `true`  |
+| Setting                               | CLI flag          | Default   |
+| ------------------------------------- | ----------------- | --------- |
+| `printTypeOptions.parentTypePrefix`   | `--noParentType`  | `true`    |
+| `printTypeOptions.relatedTypeSection` | `--noRelatedType` | `true`    |
+| `printTypeOptions.typeBadges`         | `--noTypeBadges`  | `true`    |
+| `printTypeOptions.deprecated`         | `--deprecated`    | `default` |
 
 <br/>
 
@@ -148,6 +153,7 @@ plugins: [
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
+          deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
         },
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
@@ -156,6 +162,10 @@ plugins: [
     ],
   ],
 ```
+
+:::info
+See [customize deprecated groups](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
+:::
 
 ## `pretty`
 

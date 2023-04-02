@@ -27,6 +27,7 @@ const {
   loadSchema,
   isParametrizedField,
   isOperation,
+  isDeprecated,
   getDocumentLoaders,
   getRelationOfInterface,
   getRelationOfUnion,
@@ -493,13 +494,12 @@ describe("graphql", () => {
       expect(res).toBeFalsy();
     });
   });
-});
 
-describe("getRelationOfInterface()", () => {
-  test("returns types and interfaces extending an interface", () => {
-    expect.hasAssertions();
+  describe("getRelationOfInterface()", () => {
+    test("returns types and interfaces extending an interface", () => {
+      expect.hasAssertions();
 
-    const schema = buildSchema(`
+      const schema = buildSchema(`
         interface Being {
           name(surname: Boolean): String
         }
@@ -527,11 +527,11 @@ describe("getRelationOfInterface()", () => {
         }
       `);
 
-    const interfaceType = schema.getType("Mammal");
+      const interfaceType = schema.getType("Mammal");
 
-    const relations = getRelationOfInterface(interfaceType, schema);
+      const relations = getRelationOfInterface(interfaceType, schema);
 
-    expect(relations).toMatchInlineSnapshot(`
+      expect(relations).toMatchInlineSnapshot(`
         {
           "interfaces": [
             "Canine",
@@ -541,6 +541,7 @@ describe("getRelationOfInterface()", () => {
           ],
         }
       `);
+    });
   });
 
   describe("getRelationOfUnion", () => {
@@ -640,12 +641,13 @@ describe("getRelationOfInterface()", () => {
         }
       `);
     });
+  });
 
-    describe("getRelationOfReturn", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        expect.hasAssertions();
+  describe("getRelationOfReturn", () => {
+    test("returns queries, subscriptions and mutations using a type", () => {
+      expect.hasAssertions();
 
-        const schema = buildSchema(`
+      const schema = buildSchema(`
         type StudyItem {
           id: ID!
           subject: String!
@@ -666,19 +668,19 @@ describe("getRelationOfInterface()", () => {
         }
       `);
 
-        const compositeType = schema.getType("StudyItem");
+      const compositeType = schema.getType("StudyItem");
 
-        const relations = getRelationOfReturn(compositeType, schema);
+      const relations = getRelationOfReturn(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
-      });
+      expect(relations).toMatchSnapshot();
     });
+  });
 
-    describe("getRelationOfField", () => {
-      test("returns queries, subscriptions and mutations using a type", () => {
-        expect.hasAssertions();
+  describe("getRelationOfField", () => {
+    test("returns queries, subscriptions and mutations using a type", () => {
+      expect.hasAssertions();
 
-        const schema = buildSchema(`
+      const schema = buildSchema(`
         interface Record {
           id: String!
         }
@@ -703,16 +705,16 @@ describe("getRelationOfInterface()", () => {
         }
       `);
 
-        const compositeType = schema.getType("String");
+      const compositeType = schema.getType("String");
 
-        const relations = getRelationOfField(compositeType, schema);
+      const relations = getRelationOfField(compositeType, schema);
 
-        expect(relations).toMatchSnapshot();
-      });
+      expect(relations).toMatchSnapshot();
     });
+  });
 
-    describe("hasDirective", () => {
-      const schema = buildSchema(`
+  describe("hasDirective", () => {
+    const schema = buildSchema(`
         directive @foobaz on OBJECT
 
         interface Record {
@@ -739,37 +741,79 @@ describe("getRelationOfInterface()", () => {
         }
       `);
 
-      test("return false is the type has no directive", () => {
-        expect.hasAssertions();
+    test("return false is the type has no directive", () => {
+      expect.hasAssertions();
 
-        const type = schema.getType("Subscription");
+      const type = schema.getType("Subscription");
 
-        expect(hasDirective(type, "foobar")).toBeFalsy();
-      });
+      expect(hasDirective(type, "foobar")).toBeFalsy();
+    });
 
-      test("return false is the type has no matching directive", () => {
-        expect.hasAssertions();
+    test("return false is the type has no matching directive", () => {
+      expect.hasAssertions();
 
-        const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem");
 
-        expect(hasDirective(type, "foobar")).toBeFalsy();
-      });
+      expect(hasDirective(type, "foobar")).toBeFalsy();
+    });
 
-      test("return true is the type has matching directive", () => {
-        expect.hasAssertions();
+    test("return true is the type has matching directive", () => {
+      expect.hasAssertions();
 
-        const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem");
 
-        expect(hasDirective(type, "foobaz")).toBeTruthy();
-      });
+      expect(hasDirective(type, "foobaz")).toBeTruthy();
+    });
 
-      test("return true is the type has one matching directive", () => {
-        expect.hasAssertions();
+    test("return true is the type has one matching directive", () => {
+      expect.hasAssertions();
 
-        const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem");
 
-        expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
-      });
+      expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
+    });
+  });
+
+  describe("isDeprecated", () => {
+    const schema = buildSchema(`
+        interface Record {
+          id: String!
+        }
+
+        type StudyItem implements Record {
+          id: String!
+          subject: String!
+          duration: Int!
+        }
+        
+        type Query {
+          getStudyItems(subject: String): [StudyItem!]
+          getStudyItem(id: String!): StudyItem @deprecated
+        }
+
+        type Mutation {
+          addStudyItem(subject: String!, duration: Int!): StudyItem
+        }
+    
+        type Subscription {
+          listStudyItems: [StudyItem!]
+        }
+      `);
+
+    test("return false is the type is not deprecated", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Query").getFields();
+
+      expect(isDeprecated(type.getStudyItems)).toBeFalsy();
+    });
+
+    test("return true is the type is deprecated", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Query").getFields();
+
+      expect(isDeprecated(type.getStudyItem)).toBeTruthy();
     });
   });
 });

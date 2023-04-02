@@ -26,6 +26,7 @@ const DEFAULT_OPTIONS = {
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
+    deprecated: "default",
   },
   skipDocDirective: [],
 };
@@ -82,11 +83,15 @@ function gePrintTypeOptions(cliOpts, configOptions) {
     relatedTypeSection:
       !cliOpts.noRelatedType && configOptions.relatedTypeSection,
     typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
+    deprecated:
+      cliOpts.deprecated ??
+      configOptions.deprecated ??
+      DEFAULT_OPTIONS.printTypeOptions.deprecated,
   };
 }
 
 function getSkipDocDirectives(options) {
-  const directiveList = Array.isArray(options) ? options : [options]; //backward_compatibily
+  const directiveList = Array.isArray(options) ? options : [options]; //backward_compatibility
 
   const skipDirectives = directiveList.map((option) =>
     getSkipDocDirective(option),

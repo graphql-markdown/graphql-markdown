@@ -2,23 +2,22 @@ const {
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("../section");
+const { printSection, printMetadataSection } = require("../section");
 const { printCodeField } = require("../code");
 
-const printOperationMetadata = (type, options) => {
-  let metadata = printSection(type.args, "Arguments", {
-    ...options,
-    parentType: type.name,
-    parentTypePrefix: true,
-  });
-
+const printOperationType = (type, options) => {
   const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-  metadata += printSection([options.schema.getType(queryType)], "Type", {
+  return printSection([options.schema.getType(queryType)], "Type", {
     ...options,
     parentTypePrefix: false,
   });
+};
 
-  return metadata;
+const printOperationMetadata = (type, options) => {
+  const response = printOperationType(type, options);
+  const metadata = printMetadataSection(type, type.args, "Arguments", options);
+
+  return `${metadata}${response}`;
 };
 
 const printCodeOperation = printCodeField;

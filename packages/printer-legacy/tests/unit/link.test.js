@@ -20,6 +20,7 @@ jest.mock("@graphql-markdown/utils", () => {
       isLeafType: jest.fn(),
       isListType: jest.fn(),
       isNonNullType: jest.fn(),
+      isDeprecated: jest.fn(),
     },
   };
 });
@@ -30,7 +31,10 @@ jest.mock("../../src/group", () => {
 });
 const Group = require("../../src/group");
 
-const { DEFAULT_OPTIONS } = require("../../src/printer");
+const {
+  DEFAULT_OPTIONS,
+  OPTION_DEPRECATED,
+} = require("../../src/const/options");
 const Link = require("../../src/link");
 
 describe("link", () => {
@@ -172,7 +176,7 @@ describe("link", () => {
       `);
     });
 
-    test("returns markdown link for with group in path", () => {
+    test("returns markdown link with group in path", () => {
       expect.hasAssertions();
 
       const entityName = `TestDirective`;
@@ -186,6 +190,7 @@ describe("link", () => {
       jest.spyOn(Utils.graphql, "isDirectiveType").mockReturnValue(true);
       jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
       jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -196,6 +201,36 @@ describe("link", () => {
         {
           "text": "TestDirective",
           "url": "docs/graphql/group/directives/test-directive",
+        }
+      `);
+    });
+
+    test("returns markdown link with deprecated in path", () => {
+      expect.hasAssertions();
+
+      const entityName = `TestDirective`;
+      const slug = `test-directive`;
+      const type = new GraphQLDirective({
+        name: entityName,
+        locations: [],
+      });
+
+      jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
+      jest.spyOn(Utils.graphql, "isDirectiveType").mockReturnValue(true);
+      jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
+      jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        printDeprecated: OPTION_DEPRECATED.GROUP,
+        basePath,
+      });
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestDirective",
+          "url": "docs/graphql/deprecated/directives/test-directive",
         }
       `);
     });

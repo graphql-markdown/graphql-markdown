@@ -1,8 +1,9 @@
 const {
+  object: { hasProperty },
   graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const { printSection } = require("../section");
+const { printMetadataSection } = require("../section");
 const { printCodeArguments } = require("../code");
 
 const printCodeDirectiveLocation = (type) => {
@@ -25,10 +26,11 @@ const printCodeDirectiveLocation = (type) => {
 };
 
 const printDirectiveMetadata = (type, options) => {
-  return printSection(type.args, "Arguments", {
-    ...options,
-    parentType: type.name,
-  });
+  if (hasProperty(type, "args") === false) {
+    return "";
+  }
+
+  return printMetadataSection(type, type.args, "Arguments", options);
 };
 
 const printCodeDirective = (type) => {
