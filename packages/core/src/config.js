@@ -1,6 +1,10 @@
 const { join } = require("path");
 const { tmpdir } = require("os");
 
+const {
+  object: { hasProperty },
+} = require("@graphql-markdown/utils");
+
 const { parseGroupByOption } = require("./group-info");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
@@ -42,6 +46,14 @@ function buildConfig(configFileOpts, cliOpts) {
     cliOpts = {};
   }
 
+  if (
+    (hasProperty(config, "printTypeOptions") &&
+      config.printTypeOptions.deprecated === "skip") ||
+    (hasProperty(cliOpts, "deprecated") && cliOpts.deprecated === "skip")
+  ) {
+    config.skipDocDirective.push("@deprecated");
+  }
+
   const baseURL = cliOpts.base ?? config.baseURL;
 
   return {
@@ -60,7 +72,8 @@ function buildConfig(configFileOpts, cliOpts) {
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
     skipDocDirective: getSkipDocDirectives(
-      cliOpts.skip ?? config.skipDocDirective,
+      cliOpts.skip,
+      config.skipDocDirective,
     ),
   };
 }
@@ -90,8 +103,8 @@ function gePrintTypeOptions(cliOpts, configOptions) {
   };
 }
 
-function getSkipDocDirectives(options) {
-  const directiveList = Array.isArray(options) ? options : [options]; //backward_compatibility
+function getSkipDocDirectives(cliOpts, configFileOpts) {
+  const directiveList = [].concat(cliOpts ?? [], configFileOpts ?? []);
 
   const skipDirectives = directiveList.map((option) =>
     getSkipDocDirective(option),

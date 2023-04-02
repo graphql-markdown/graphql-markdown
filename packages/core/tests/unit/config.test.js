@@ -21,7 +21,7 @@ describe("config", () => {
     test("returns a list of directive names", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirectives(["@noDoc", "@deprecated"])).toStrictEqual([
+      expect(getSkipDocDirectives(["@noDoc"], ["@deprecated"])).toStrictEqual([
         "noDoc",
         "deprecated",
       ]);
