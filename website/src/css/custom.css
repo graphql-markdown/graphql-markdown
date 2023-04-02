@@ -70,7 +70,7 @@ details a:hover {
   padding-top: 1rem;
 }
 
-.deprecated a::after, span.deprecated {
+.deprecated a::after, span.deprecated::after {
   content: '⚠️';
   padding-left: 4px !important;
   transform: none !important;
