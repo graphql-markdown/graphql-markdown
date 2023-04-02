@@ -163,6 +163,10 @@ plugins: [
   ],
 ```
 
+:::info
+See [customize deprecated groups](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
+:::
+
 ## `pretty`
 
 Use [`prettier`](https://prettier.io) to format generated files.
