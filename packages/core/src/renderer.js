@@ -15,6 +15,10 @@ const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
+const SIDEBAR_POSITION = {
+  FIRST: 1,
+  LAST: 999,
+};
 
 module.exports = class Renderer {
   constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
@@ -26,7 +30,11 @@ module.exports = class Renderer {
     this.options = docOptions;
   }
 
-  async generateCategoryMetafile(category, dirPath, sidebarPosition = 1) {
+  async generateCategoryMetafile(
+    category,
+    dirPath,
+    sidebarPosition = SIDEBAR_POSITION.FIRST,
+  ) {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
@@ -46,6 +54,33 @@ module.exports = class Renderer {
     );
   }
 
+  async generateCategoryMetafileType(type, name, rootTypeName) {
+    let dirPath = this.outputDir;
+
+    if (
+      hasProperty(this.options, "deprecated") &&
+      this.options.deprecated === "group" &&
+      isDeprecated(type)
+    ) {
+      dirPath = path.join(dirPath, toSlug("deprecated"));
+      await this.generateCategoryMetafile(
+        "deprecated",
+        dirPath,
+        SIDEBAR_POSITION.LAST,
+      );
+    }
+
+    if (hasProperty(this.group, name)) {
+      dirPath = path.join(dirPath, toSlug(this.group[name]));
+      await this.generateCategoryMetafile(this.group[name], dirPath);
+    }
+
+    dirPath = path.join(dirPath, toSlug(rootTypeName));
+    await this.generateCategoryMetafile(rootTypeName, dirPath);
+
+    return dirPath;
+  }
+
   async renderRootTypes(rootTypeName, type) {
     if (typeof type !== "object" || type === null) {
       return undefined;
@@ -54,24 +89,11 @@ module.exports = class Renderer {
     return Promise.all(
       Object.keys(type)
         .map(async (name) => {
-          let dirPath = this.outputDir;
-
-          if (
-            hasProperty(this.options, "deprecated") &&
-            this.options.deprecated === "group" &&
-            isDeprecated(type[name])
-          ) {
-            dirPath = path.join(dirPath, toSlug("deprecated"));
-            await this.generateCategoryMetafile("deprecated", dirPath, 99);
-          }
-
-          if (hasProperty(this.group, name)) {
-            dirPath = path.join(dirPath, toSlug(this.group[name]));
-            await this.generateCategoryMetafile(this.group[name], dirPath);
-          }
-
-          dirPath = path.join(dirPath, toSlug(rootTypeName));
-          await this.generateCategoryMetafile(rootTypeName, dirPath);
+          const dirPath = await this.generateCategoryMetafileType(
+            type[name],
+            name,
+            rootTypeName,
+          );
 
           return this.renderTypeEntities(dirPath, name, type[name]);
         })
