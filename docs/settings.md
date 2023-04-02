@@ -140,7 +140,7 @@ Use these options to toggle type information rendered on pages:
 
 <br/>
 
-```js {9-13}
+```js {9-14}
 plugins: [
     [
       "@graphql-markdown/docusaurus",
@@ -166,7 +166,7 @@ plugins: [
 <br/>
 
 :::info
-See [customize deprecated groups](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
+See [customize deprecated sections](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
 :::
 
 ## `pretty`

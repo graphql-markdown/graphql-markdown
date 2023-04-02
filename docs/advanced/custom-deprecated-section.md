@@ -3,9 +3,9 @@ pagination_prev: null
 pagination_next: null
 ---
 
-# Customize deprecated groups
+# Customize deprecated sections
 
-When using the option `printTypeOptions.deprecated` with `group`, the display can be customized through the CSS class `.deprecated`.
+When using the option [`printTypeOptions.deprecated`](/docs/settings#printtypeoptions) set to `group`, the rendering can be customized using the CSS class `.deprecated`.
 
 Adding a `warning` emoji ⚠️ is done with a quick tweak of [Docusaurus CSS](https://docusaurus.io/docs/styling-layout).
 
@@ -21,6 +21,6 @@ Adding a `warning` emoji ⚠️ is done with a quick tweak of [Docusaurus CSS](h
 }
 ```
 
-The above CSS will render deprecated group as following
+The above CSS will render the deprecated sections as following
 
 ![custom-deprecated-section](/img/docs/custom-deprecated-section.png)
