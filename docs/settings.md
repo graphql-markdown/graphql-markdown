@@ -129,7 +129,7 @@ Use these options to toggle type information rendered on pages:
 - `deprecated`: set display of deprecated entities (fields, values, operations)
   - `default`: deprecated entities are displayed with other entities
   - `group`: deprecated entities are grouped together
-  - `skip`: deprecated entities are not displayed
+  - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective))
 
 | Setting                               | CLI flag          | Default   |
 | ------------------------------------- | ----------------- | --------- |
@@ -162,6 +162,8 @@ plugins: [
     ],
   ],
 ```
+
+<br/>
 
 :::info
 See [customize deprecated groups](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
@@ -206,6 +208,12 @@ The option supports multiple values separated by a space character, eg `--skipDo
 | Setting            | CLI flag                 | Default |
 | ------------------ | ------------------------ | ------- |
 | `skipDocDirective` | `--skip <@directive...>` | -       |
+
+<br/>
+
+:::info
+Types with `@deprecated` directive can also be skipped by setting [`printTypeOptions.deprecated`](#printtypeoptions) to `skip`.
+:::
 
 ## `tmpDir`
 
