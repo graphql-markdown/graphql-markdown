@@ -126,7 +126,7 @@ describe("operation", () => {
 
          
 
-        <Details dataOpen={<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>} dataClose={<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>}>
+        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
         #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="deprecated"/> <Badge class="secondary" text="scalar"/>
         > <Badge class="warning" text="DEPRECATED: Deprecated"/>

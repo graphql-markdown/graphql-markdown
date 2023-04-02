@@ -34,6 +34,7 @@ module.exports = class Renderer {
     category,
     dirPath,
     sidebarPosition = SIDEBAR_POSITION.FIRST,
+    styleClass,
   ) {
     const filePath = path.join(dirPath, CATEGORY_YAML);
 
@@ -48,9 +49,11 @@ module.exports = class Renderer {
       typeof this.options === "undefined" || !this.options.index
         ? "null"
         : `\n  type: generated-index\n  title: '${label} overview'`;
+    const className =
+      typeof styleClass === "string" ? `className: ${styleClass}\n` : "";
     await saveFile(
       filePath,
-      `label: ${label}\nposition: ${sidebarPosition}\nlink: ${link}\n`,
+      `label: ${label}\nposition: ${sidebarPosition}\n${className}link: ${link}\n`,
     );
   }
 
@@ -67,6 +70,7 @@ module.exports = class Renderer {
         "deprecated",
         dirPath,
         SIDEBAR_POSITION.LAST,
+        "deprecated",
       );
     }
 

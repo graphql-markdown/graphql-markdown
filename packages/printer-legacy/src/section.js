@@ -21,10 +21,8 @@ const sectionLevels = [
   HEADER_SECTION_ITEM_LEVEL,
 ];
 
-const SHOW_DEPRECATED =
-  '<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
-const HIDE_DEPRECATED =
-  '<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
+const SHOW_DEPRECATED = `<><span className="deprecated">Show deprecated</span></>`;
+const HIDE_DEPRECATED = `<><span className="deprecated">Hide deprecated</span></>`;
 
 const printMetadataSection = (type, values, section, options) => {
   switch (options.printDeprecated) {

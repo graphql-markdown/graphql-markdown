@@ -54,7 +54,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         " 
 
-        <Details dataOpen={<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>} dataClose={<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>}>
+        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
         #### [\`section content\`](#) 
         > 
