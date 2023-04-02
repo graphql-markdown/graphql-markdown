@@ -21,16 +21,28 @@ describe("config", () => {
     test("returns a list of directive names", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirectives(["@noDoc"], ["@deprecated"])).toStrictEqual([
-        "noDoc",
-        "deprecated",
-      ]);
+      expect(
+        getSkipDocDirectives(
+          { skip: ["@noDoc"] },
+          { skipDocDirective: ["@deprecated"] },
+        ),
+      ).toStrictEqual(["noDoc", "deprecated"]);
     });
 
     test("supports string as input", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirectives("@noDoc")).toStrictEqual(["noDoc"]);
+      expect(getSkipDocDirectives({ skip: "@noDoc" })).toStrictEqual(["noDoc"]);
+    });
+
+    test("supports deprecated skip option", () => {
+      expect.hasAssertions();
+
+      expect(
+        getSkipDocDirectives(undefined, {
+          printTypeOptions: { deprecated: "skip" },
+        }),
+      ).toStrictEqual(["deprecated"]);
     });
   });
 

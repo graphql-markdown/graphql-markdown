@@ -46,14 +46,6 @@ function buildConfig(configFileOpts, cliOpts) {
     cliOpts = {};
   }
 
-  if (
-    (hasProperty(config, "printTypeOptions") &&
-      config.printTypeOptions.deprecated === "skip") ||
-    (hasProperty(cliOpts, "deprecated") && cliOpts.deprecated === "skip")
-  ) {
-    config.skipDocDirective.push("@deprecated");
-  }
-
   const baseURL = cliOpts.base ?? config.baseURL;
 
   return {
@@ -71,10 +63,7 @@ function buildConfig(configFileOpts, cliOpts) {
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
-    skipDocDirective: getSkipDocDirectives(
-      cliOpts.skip,
-      config.skipDocDirective,
-    ),
+    skipDocDirective: getSkipDocDirectives(cliOpts, config),
   };
 }
 
@@ -103,12 +92,23 @@ function gePrintTypeOptions(cliOpts, configOptions) {
   };
 }
 
-function getSkipDocDirectives(cliOpts, configFileOpts) {
-  const directiveList = [].concat(cliOpts ?? [], configFileOpts ?? []);
+function getSkipDocDirectives(cliOpts = {}, configFileOpts = {}) {
+  const directiveList = [].concat(
+    cliOpts.skip ?? [],
+    configFileOpts.skipDocDirective ?? [],
+  );
 
   const skipDirectives = directiveList.map((option) =>
     getSkipDocDirective(option),
   );
+
+  if (
+    (hasProperty(configFileOpts, "printTypeOptions") &&
+      configFileOpts.printTypeOptions.deprecated === "skip") ||
+    (hasProperty(cliOpts, "deprecated") && cliOpts.deprecated === "skip")
+  ) {
+    skipDirectives.push("deprecated");
+  }
 
   return skipDirectives;
 }
