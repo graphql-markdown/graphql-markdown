@@ -18,7 +18,8 @@ jobs:
     - name: Install Earthly
       uses: earthly/actions-setup@v1
       with:
-        version: "latest"
+        version: latest
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker login # to avoid dockerhub rate-limiting
       run: docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
