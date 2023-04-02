@@ -365,47 +365,5 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         "
       `);
     });
-
-    test("returns Markdown #### link section with only type matching onlyDocDirective", () => {
-      expect.hasAssertions();
-
-      const type = {
-        name: "ParameterOnlyDoc",
-        type: GraphQLString,
-        astNode: {
-          directives: [{ name: { value: "@doc" } }],
-        },
-      };
-
-      const section = printSectionItem(type, {
-        ...DEFAULT_OPTIONS,
-        onlyDocDirective: "@doc",
-      });
-
-      expect(section).toMatchInlineSnapshot(`
-        "#### [\`ParameterOnlyDoc\`](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
-        > 
-        > "
-      `);
-    });
-
-    test("returns Markdown #### link section empty if type does not match onlyDocDirective", () => {
-      expect.hasAssertions();
-
-      const type = {
-        name: "ParameterOnlyDoc",
-        type: GraphQLString,
-        astNode: {
-          directives: [{ name: { value: "@noDoc" } }],
-        },
-      };
-
-      const section = printSectionItem(type, {
-        ...DEFAULT_OPTIONS,
-        onlyDocDirective: "@doc",
-      });
-
-      expect(section).toMatchInlineSnapshot(`""`);
-    });
   });
 });

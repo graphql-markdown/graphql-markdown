@@ -95,6 +95,10 @@ const printSection = (values, section, options) => {
     level: levelPosition > -1 ? sectionLevels[levelPosition + 1] : undefined,
   });
 
+  if (items === "") {
+    return ""; // do not print section is no items printed
+  }
+
   return `${level} ${section}${openSection}${items}${closeSection}`;
 };
 
@@ -134,9 +138,7 @@ const printSectionItem = (type, options) => {
     typeof type === "undefined" ||
     type === null ||
     (hasProperty(options, "skipDocDirective") &&
-      hasDirective(type, options.skipDocDirective) === true) ||
-    (hasProperty(options, "onlyDocDirective") &&
-      hasDirective(type, options.onlyDocDirective) === false)
+      hasDirective(type, options.skipDocDirective) === true)
   ) {
     return "";
   }
