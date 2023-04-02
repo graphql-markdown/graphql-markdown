@@ -30,7 +30,7 @@ jest.mock("@graphql-markdown/utils", () => {
 const Utils = require("@graphql-markdown/utils");
 
 const Renderer = require("../../src/renderer");
-const { GraphQLObjectType, graphql } = require("graphql");
+const { GraphQLObjectType } = require("graphql");
 
 describe("renderer", () => {
   describe("class Renderer", () => {
