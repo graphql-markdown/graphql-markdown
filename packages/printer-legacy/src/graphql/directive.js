@@ -1,15 +1,10 @@
 const {
   object: { hasProperty },
-  graphql: { getTypeName, isDeprecated },
+  graphql: { getTypeName },
 } = require("@graphql-markdown/utils");
 
-const {
-  printSection,
-  HIDE_DEPRECATED,
-  SHOW_DEPRECATED,
-} = require("../section");
+const { printMetadataSection } = require("../section");
 const { printCodeArguments } = require("../code");
-const { OPTION_DEPRECATED } = require("../const/options");
 
 const printCodeDirectiveLocation = (type) => {
   if (
@@ -35,40 +30,7 @@ const printDirectiveMetadata = (type, options) => {
     return "";
   }
 
-  switch (options.printDeprecated) {
-    case OPTION_DEPRECATED.GROUP: {
-      const { fields, deprecated } = type.args.reduce(
-        (res, arg) => {
-          isDeprecated(arg) ? res.deprecated.push(arg) : res.fields.push(arg);
-          return res;
-        },
-        { fields: [], deprecated: [] },
-      );
-
-      const meta = printSection(fields, "Arguments", {
-        ...options,
-        parentType: type.name,
-      });
-      const deprecatedMeta = printSection(deprecated, "", {
-        ...options,
-        parentType: type.name,
-        level: "",
-        collapsible: {
-          dataOpen: HIDE_DEPRECATED,
-          dataClose: SHOW_DEPRECATED,
-        },
-      });
-
-      return `${meta}${deprecatedMeta}`;
-    }
-
-    case OPTION_DEPRECATED.DEFAULT:
-    default:
-      return printSection(type.args, "Arguments", {
-        ...options,
-        parentType: type.name,
-      });
-  }
+  return printMetadataSection(type, type.args, "Arguments", options);
 };
 
 const printCodeDirective = (type) => {

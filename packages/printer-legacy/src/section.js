@@ -1,5 +1,5 @@
 const {
-  graphql: { isParametrizedField, hasDirective },
+  graphql: { isParametrizedField, hasDirective, isDeprecated },
 } = require("@graphql-markdown/utils");
 const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
@@ -13,6 +13,7 @@ const {
 const { printDescription } = require("./common");
 const { printBadges } = require("./badge");
 const { printLink, printParentLink } = require("./link");
+const { OPTION_DEPRECATED } = require("./const/options");
 
 const sectionLevels = [
   HEADER_SECTION_LEVEL,
@@ -24,6 +25,43 @@ const SHOW_DEPRECATED =
   '<><span>Show deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
 const HIDE_DEPRECATED =
   '<><span>Hide deprecated&nbsp;<Badge text="deprecated" class="warning"/></span></>';
+
+const printMetadataSection = (type, values, section, options) => {
+  switch (options.printDeprecated) {
+    case OPTION_DEPRECATED.GROUP: {
+      const { fields, deprecated } = values.reduce(
+        (res, arg) => {
+          isDeprecated(arg) ? res.deprecated.push(arg) : res.fields.push(arg);
+          return res;
+        },
+        { fields: [], deprecated: [] },
+      );
+
+      const meta = printSection(fields, section, {
+        ...options,
+        parentType: type.name,
+      });
+      const deprecatedMeta = printSection(deprecated, "", {
+        ...options,
+        parentType: type.name,
+        level: "",
+        collapsible: {
+          dataOpen: HIDE_DEPRECATED,
+          dataClose: SHOW_DEPRECATED,
+        },
+      });
+
+      return `${meta}${deprecatedMeta}`;
+    }
+
+    case OPTION_DEPRECATED.DEFAULT:
+    default:
+      return printSection(values, section, {
+        ...options,
+        parentType: type.name,
+      });
+  }
+};
 
 const printSection = (values, section, options) => {
   const level =
@@ -132,6 +170,7 @@ module.exports = {
   printSection,
   printSectionItem,
   printSectionItems,
+  printMetadataSection,
   SHOW_DEPRECATED,
   HIDE_DEPRECATED,
 };
