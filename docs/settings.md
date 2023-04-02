@@ -126,17 +126,17 @@ Use these options to toggle type information rendered on pages:
 - `parentTypePrefix`: prefix field names with parent type name
 - `relatedTypeSection`: display related type sections
 - `typeBadges`: add field type attributes badges
-- `deprecated`: set display of deprecated entities (fields, values, operations)
+- `deprecated`: option for displaying deprecated entities (fields, values, operations)
   - `default`: deprecated entities are displayed with other entities
   - `group`: deprecated entities are grouped together
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective))
 
-| Setting                               | CLI flag          | Default   |
-| ------------------------------------- | ----------------- | --------- |
-| `printTypeOptions.parentTypePrefix`   | `--noParentType`  | `true`    |
-| `printTypeOptions.relatedTypeSection` | `--noRelatedType` | `true`    |
-| `printTypeOptions.typeBadges`         | `--noTypeBadges`  | `true`    |
-| `printTypeOptions.deprecated`         | `--deprecated`    | `default` |
+| Setting                               | CLI flag                | Default   |
+| ------------------------------------- | ----------------------- | --------- |
+| `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
+| `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
+| `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
+| `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
 
 <br/>
 
