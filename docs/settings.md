@@ -127,7 +127,7 @@ Use these options to toggle type information rendered on pages:
 - `relatedTypeSection`: display related type sections
 - `typeBadges`: add field type attributes badges
 - `deprecated`: set display of deprecated entities (fields, values, operations)
-  - `default`: deprecated entities are displayed likes others
+  - `default`: deprecated entities are displayed with other entities
   - `group`: deprecated entities are grouped together
   - `skip`: deprecated entities are not displayed
 
