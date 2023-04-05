@@ -86,7 +86,7 @@ function getDocumentLoaders(loadersList = {}) {
   if (loaders.length < 1) {
     throw new Error("No GraphQL document loaders available.");
   }
-  return { loaders, loaderOptions };
+  return { ...loaderOptions, loaders };
 }
 
 function getListDefaultValues(type, value) {
