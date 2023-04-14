@@ -240,10 +240,12 @@ describe("renderer", () => {
         const [type, name, root, group] = [{}, "Foo", "Baz", "lorem"];
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
-        jest.replaceProperty(rendererInstance, "group", { [name]: group });
+        jest.replaceProperty(rendererInstance, "group", {
+          [root]: { [name]: group },
+        });
         jest
           .spyOn(Utils.object, "hasProperty")
-          .mockImplementation((_, prop) => prop === name);
+          .mockImplementation((_, prop) => prop === root || prop === name);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -312,7 +314,9 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
         });
-        jest.replaceProperty(rendererInstance, "group", { [name]: group });
+        jest.replaceProperty(rendererInstance, "group", {
+          [root]: { [name]: group },
+        });
         jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
         jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
 

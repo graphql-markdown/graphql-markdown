@@ -109,22 +109,26 @@ describe("group-info", () => {
 
       expect(getGroups(schemaMap, groupOptions)).toMatchInlineSnapshot(`
         {
-          "Bird": "animal",
-          "Boolean": "common",
-          "Elf": "common",
-          "Fish": "common",
-          "Query": "common",
-          "String": "common",
-          "Unicorn": "common",
-          "__Directive": "common",
-          "__DirectiveLocation": "common",
-          "__EnumValue": "common",
-          "__Field": "common",
-          "__InputValue": "common",
-          "__Schema": "common",
-          "__Type": "common",
-          "__TypeKind": "common",
-          "birds": "animal",
+          "objects": {
+            "Bird": "animal",
+            "Boolean": "common",
+            "Elf": "common",
+            "Fish": "common",
+            "Query": "common",
+            "String": "common",
+            "Unicorn": "common",
+            "__Directive": "common",
+            "__DirectiveLocation": "common",
+            "__EnumValue": "common",
+            "__Field": "common",
+            "__InputValue": "common",
+            "__Schema": "common",
+            "__Type": "common",
+            "__TypeKind": "common",
+          },
+          "queries": {
+            "birds": "animal",
+          },
         }
       `);
     });

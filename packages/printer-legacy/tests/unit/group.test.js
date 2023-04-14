@@ -21,26 +21,34 @@ describe("group", () => {
 
   describe("getGroup()", () => {
     test("returns empty string if groups not defined", () => {
-      const group = getGroup({ name: "FooBaz" }, undefined);
+      const group = getGroup({ name: "FooBaz" }, undefined, undefined);
       expect(group).toBe("");
     });
 
     test("returns empty string if groups is null", () => {
-      const group = getGroup({ name: "FooBaz" }, null);
+      const group = getGroup({ name: "FooBaz" }, null, undefined);
       expect(group).toBe("");
     });
 
     test("returns group name string if type has group", () => {
       jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue("FooBaz");
       jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
-      const group = getGroup({ name: "FooBaz" }, { FooBaz: "Group Test" });
+      const group = getGroup(
+        { name: "FooBaz" },
+        { objects: { FooBaz: "Group Test" } },
+        "objects",
+      );
       expect(group).toBe("Group Test");
     });
 
     test("returns empty string if type not in group", () => {
       jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue("FooBaz");
       jest.spyOn(Utils.object, "hasProperty").mockReturnValue(false);
-      const group = getGroup({ name: "FooBar" }, { FooBaz: "Group Test" });
+      const group = getGroup(
+        { name: "FooBar" },
+        { objects: { FooBaz: "Group Test" } },
+        "objects",
+      );
       expect(group).toBe("");
     });
   });

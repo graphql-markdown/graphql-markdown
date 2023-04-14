@@ -74,9 +74,15 @@ module.exports = class Renderer {
       );
     }
 
-    if (hasProperty(this.group, name)) {
-      dirPath = path.join(dirPath, toSlug(this.group[name]));
-      await this.generateCategoryMetafile(this.group[name], dirPath);
+    if (
+      hasProperty(this.group, rootTypeName) &&
+      hasProperty(this.group[rootTypeName], name)
+    ) {
+      dirPath = path.join(dirPath, toSlug(this.group[rootTypeName][name]));
+      await this.generateCategoryMetafile(
+        this.group[rootTypeName][name],
+        dirPath,
+      );
     }
 
     dirPath = path.join(dirPath, toSlug(rootTypeName));

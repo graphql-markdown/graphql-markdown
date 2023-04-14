@@ -27,8 +27,11 @@ function getGroups(rootTypes, groupByDirective) {
   Object.keys(rootTypes).forEach((typeName) => {
     let rootType = rootTypes[typeName];
     if (typeof rootType != "undefined" && rootType != null) {
+      if (typeof groups[typeName] == "undefined") {
+        groups[typeName] = {};
+      }
       Object.keys(rootType).forEach((type) => {
-        groups[type] = getGroupName(rootType[type], groupByDirective);
+        groups[typeName][type] = getGroupName(rootType[type], groupByDirective);
       });
     }
   });
