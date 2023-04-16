@@ -138,7 +138,10 @@ const printSectionItem = (type, options) => {
     typeof type === "undefined" ||
     type === null ||
     (hasProperty(options, "skipDocDirective") &&
-      hasDirective(type, options.skipDocDirective) === true)
+      hasDirective(type, options.skipDocDirective) === true) ||
+    (hasProperty(options, "printDeprecated") &&
+      options.printDeprecated === OPTION_DEPRECATED.SKIP &&
+      isDeprecated(type))
   ) {
     return "";
   }

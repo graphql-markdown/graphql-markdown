@@ -2,7 +2,7 @@ const { printObjectMetadata, printCodeType } = require("./object");
 
 const printInputMetadata = printObjectMetadata;
 
-const printCodeInput = (type) => printCodeType(type, "input");
+const printCodeInput = (type, options) => printCodeType(type, "input", options);
 
 module.exports = {
   printInputMetadata,

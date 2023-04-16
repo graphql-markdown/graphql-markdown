@@ -100,5 +100,25 @@ describe("code", () => {
         "
       `);
     });
+
+    test("returns an empty string in @deprecated and SKIP", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "TypeFooBar",
+        type: GraphQLString,
+        isDeprecated: true,
+        args: [
+          {
+            name: "ArgFooBar",
+            type: GraphQLString,
+          },
+        ],
+      };
+
+      const code = printCodeField(type, { printDeprecated: "skip" });
+
+      expect(code).toBe("");
+    });
   });
 });

@@ -327,6 +327,26 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       expect(section).toBe("");
     });
 
+    test("returns no section if item deprecated and SKIP", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "EntityTypeNameList",
+        isDeprecated: true,
+        astNode: {
+          directives: [{ name: { value: "@noDoc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        skipDocDirective: ["@noDoc"],
+        printDeprecated: "skip",
+      });
+
+      expect(section).toBe("");
+    });
+
     test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
       expect.hasAssertions();
 
