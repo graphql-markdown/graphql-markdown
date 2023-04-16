@@ -1,17 +1,20 @@
 const {
   object: { hasProperty },
-  graphql: { getDefaultValue, getTypeName, isDeprecated },
+  graphql: { getDefaultValue, getTypeName, isDeprecated, hasDirective },
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOL, DEPRECATED } = require("./const/strings");
 const { OPTION_DEPRECATED } = require("./const/options");
 
 const printCodeField = (type, options = {}) => {
-  if (
+  const skipDirective =
+    hasProperty(options, "skipDocDirective") &&
+    hasDirective(type, options.skipDocDirective) === true;
+  const skipDeprecated =
     hasProperty(options, "printDeprecated") &&
     options.printDeprecated === OPTION_DEPRECATED.SKIP &&
-    isDeprecated(type)
-  ) {
+    isDeprecated(type) === true;
+  if (skipDirective === true || skipDeprecated === true) {
     return "";
   }
 

@@ -1,6 +1,6 @@
 const {
   object: { hasProperty },
-  graphql: { isEnumType, getTypeName, isDeprecated },
+  graphql: { isEnumType, getTypeName, isDeprecated, hasDirective },
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOL, DEPRECATED } = require("../const/strings");
@@ -20,15 +20,18 @@ const printCodeEnum = (type, options) => {
   code += type
     .getValues()
     .map((value) => {
-      if (
+      const skipDirective =
+        hasProperty(options, "skipDocDirective") &&
+        hasDirective(value, options.skipDocDirective) === true;
+      const skipDeprecated =
         hasProperty(options, "printDeprecated") &&
         options.printDeprecated === OPTION_DEPRECATED.SKIP &&
-        isDeprecated(value)
-      ) {
+        isDeprecated(value) === true;
+      if (skipDirective === true || skipDeprecated === true) {
         return "";
       }
       const v = getTypeName(value);
-      const d = isDeprecated(value) ? ` @${DEPRECATED}` : "";
+      const d = isDeprecated(value) === true ? ` @${DEPRECATED}` : "";
       return `  ${v}${d}`;
     })
     .filter((value) => value.length > 0)

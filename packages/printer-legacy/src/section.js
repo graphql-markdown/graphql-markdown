@@ -134,14 +134,19 @@ const printSectionItem = (type, options) => {
       ? options.level
       : HEADER_SECTION_SUB_LEVEL;
 
+  const skipDirective =
+    hasProperty(options, "skipDocDirective") &&
+    hasDirective(type, options.skipDocDirective) === true;
+  const skipDeprecated =
+    hasProperty(options, "printDeprecated") &&
+    options.printDeprecated === OPTION_DEPRECATED.SKIP &&
+    isDeprecated(type) === true;
+
   if (
     typeof type === "undefined" ||
     type === null ||
-    (hasProperty(options, "skipDocDirective") &&
-      hasDirective(type, options.skipDocDirective) === true) ||
-    (hasProperty(options, "printDeprecated") &&
-      options.printDeprecated === OPTION_DEPRECATED.SKIP &&
-      isDeprecated(type))
+    skipDirective === true ||
+    skipDeprecated === true
   ) {
     return "";
   }

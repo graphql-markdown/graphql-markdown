@@ -352,6 +352,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const type = {
         name: "EntityTypeName",
+        isDeprecated: true,
         args: [
           {
             name: "ParameterTypeName",
@@ -376,7 +377,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) 
+        "#### [\`EntityTypeName\`](#) <Badge class="secondary" text="deprecated"/>
+        > <Badge class="warning" text="DEPRECATED"/>
+        > 
         > 
         > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
