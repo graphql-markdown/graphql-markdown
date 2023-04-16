@@ -101,7 +101,19 @@ describe("object", () => {
       expect(code).toMatchInlineSnapshot(`
         "type TestName implements TestInterfaceName {
           one: String
-          two: Boolean
+          two: Boolean @deprecated
+        }"
+      `);
+    });
+
+    test("returns an object with no deprecated fields if SKIP", () => {
+      expect.hasAssertions();
+
+      const code = printCodeObject(type, { printDeprecated: "skip" });
+
+      expect(code).toMatchInlineSnapshot(`
+        "type TestName implements TestInterfaceName {
+          one: String
         }"
       `);
     });

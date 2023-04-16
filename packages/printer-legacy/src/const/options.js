@@ -1,6 +1,7 @@
 const OPTION_DEPRECATED = {
   DEFAULT: "default",
   GROUP: "group",
+  SKIP: "skip",
 };
 
 const DEFAULT_OPTIONS = {

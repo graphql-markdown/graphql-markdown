@@ -83,7 +83,19 @@ describe("enum", () => {
       expect(code).toMatchInlineSnapshot(`
         "enum EnumTypeName {
           one
-          two
+          two @deprecated
+        }"
+      `);
+    });
+
+    test("returns enum code structure without deprecated if SKIP", () => {
+      expect.hasAssertions();
+
+      const code = printCodeEnum(type, { printDeprecated: "skip" });
+
+      expect(code).toMatchInlineSnapshot(`
+        "enum EnumTypeName {
+          one
         }"
       `);
     });
