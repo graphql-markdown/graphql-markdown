@@ -1,12 +1,11 @@
 const {
   object: { hasProperty },
-  graphql: { isEnumType, getTypeName },
+  graphql: { isEnumType, getTypeName, isDeprecated },
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOL, DEPRECATED } = require("../const/strings");
 const { OPTION_DEPRECATED } = require("../const/options");
 const { printMetadataSection } = require("../section");
-const { isDeprecated } = require("@graphql-markdown/utils/src/graphql");
 
 const printEnumMetadata = (type, options) => {
   return printMetadataSection(type, type.getValues(), "Values", options);
