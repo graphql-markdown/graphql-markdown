@@ -11,7 +11,6 @@ const DANGER_FILE = "dangerfile.js";
 const JEST_SNAPSHOT = /^.+\.snap$/;
 
 const packageLock = danger.git.fileMatch(PACKAGE_LOCK);
-// const packageJson = danger.git.fileMatch(PACKAGE_JSON);
 const yarnLock = danger.git.fileMatch(YARN_LOCK);
 const licenseFile = danger.git.fileMatch(LICENSE_FILE);
 const readmeFile = danger.git.fileMatch(README_FILE);
