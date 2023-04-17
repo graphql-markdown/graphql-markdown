@@ -86,7 +86,7 @@ describe("graphql", () => {
       const loaders = {
         GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
       };
-      const { loaders: documentLoaders, loaderOptions } =
+      const { loaders: documentLoaders, ...loaderOptions } =
         getDocumentLoaders(loaders);
 
       expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
@@ -104,7 +104,7 @@ describe("graphql", () => {
           },
         },
       };
-      const { loaders: documentLoaders, loaderOptions } =
+      const { loaders: documentLoaders, ...loaderOptions } =
         getDocumentLoaders(loaders);
 
       expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
