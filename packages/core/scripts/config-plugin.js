@@ -62,8 +62,8 @@ const config = {
           sidebarPath: "sidebars.js",
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css")
-        }
+          customCss: require.resolve("./src/css/custom.css"),
+        },
       },
     ],
   ],

@@ -53,13 +53,10 @@ const config = {
           customCss: require.resolve("./src/css/custom.css"),
         },
         sitemap: {
-          changefreq: 'monthly',
+          changefreq: "monthly",
           priority: 0.5,
-          ignorePatterns: [
-            '/schema/**',
-            '/group-by/**'
-          ],
-          filename: 'sitemap.xml',
+          ignorePatterns: ["/schema/**", "/group-by/**"],
+          filename: "sitemap.xml",
         },
       }),
     ],
