@@ -27,7 +27,7 @@ const printObjectMetadata = (type, options) => {
   return `${metadata}${interfaceMeta}`;
 };
 
-const printCodeType = (type, entity) => {
+const printCodeType = (type, entity, options) => {
   const name = getTypeName(type);
   const extendsInterface =
     hasMethod(type, "getInterfaces") && type.getInterfaces().length > 0
@@ -37,13 +37,17 @@ const printCodeType = (type, entity) => {
           .join(", ")}`
       : "";
   const typeFields = getFields(type)
-    .map((v) => `  ${printCodeField(v)}`)
+    .map((field) => {
+      const f = printCodeField(field, options);
+      return f.length > 0 ? `  ${f}` : "";
+    })
+    .filter((field) => field.length > 0)
     .join("");
 
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
 };
 
-const printCodeObject = (type) => printCodeType(type, "type");
+const printCodeObject = (type, options) => printCodeType(type, "type", options);
 
 module.exports = {
   printObjectMetadata,

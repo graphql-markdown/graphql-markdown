@@ -327,11 +327,32 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       expect(section).toBe("");
     });
 
+    test("returns no section if item deprecated and SKIP", () => {
+      expect.hasAssertions();
+
+      const type = {
+        name: "EntityTypeNameList",
+        isDeprecated: true,
+        astNode: {
+          directives: [{ name: { value: "@noDoc" } }],
+        },
+      };
+
+      const section = printSectionItem(type, {
+        ...DEFAULT_OPTIONS,
+        skipDocDirective: ["@noDoc"],
+        printDeprecated: "skip",
+      });
+
+      expect(section).toBe("");
+    });
+
     test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
       expect.hasAssertions();
 
       const type = {
         name: "EntityTypeName",
+        isDeprecated: true,
         args: [
           {
             name: "ParameterTypeName",
@@ -356,7 +377,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) 
+        "#### [\`EntityTypeName\`](#) <Badge class="secondary" text="deprecated"/>
+        > <Badge class="warning" text="DEPRECATED"/>
+        > 
         > 
         > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 

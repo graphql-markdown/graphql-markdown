@@ -103,33 +103,33 @@ class Printer {
 
   static printDescription = printDescription;
 
-  static printCode = (type) => {
+  static printCode = (type, options) => {
     let code = "";
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(type);
+        code += printCodeOperation(type, options);
         break;
       case isEnumType(type):
-        code += printCodeEnum(type);
+        code += printCodeEnum(type, options);
         break;
-      case isUnionType(type):
-        code += printCodeUnion(type);
+      case isUnionType(type, options):
+        code += printCodeUnion(type, options);
         break;
-      case isInterfaceType(type):
-        code += printCodeInterface(type);
+      case isInterfaceType(type, options):
+        code += printCodeInterface(type, options);
         break;
       case isObjectType(type):
-        code += printCodeObject(type);
+        code += printCodeObject(type, options);
         break;
       case isInputType(type):
-        code += printCodeInput(type);
+        code += printCodeInput(type, options);
         break;
       case isScalarType(type):
-        code += printCodeScalar(type);
+        code += printCodeScalar(type, options);
         break;
       case isDirectiveType(type):
-        code += printCodeDirective(type);
+        code += printCodeDirective(type, options);
         break;
       default:
         code += `"${getTypeName(type)}" not supported`;
@@ -192,7 +192,7 @@ class Printer {
       header: options,
     });
     const description = Printer.printDescription(type);
-    const code = Printer.printCode(type);
+    const code = Printer.printCode(type, printTypeOptions);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
     const relations = Printer.printRelations(type, printTypeOptions);
 
