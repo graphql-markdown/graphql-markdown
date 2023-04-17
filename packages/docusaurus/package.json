@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.17.1",
+  "version": "1.17.2",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
@@ -31,8 +31,8 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/core": "^1.2.1",
-    "@graphql-markdown/printer-legacy": "^1.2.1"
+    "@graphql-markdown/core": "^1.2.2",
+    "@graphql-markdown/printer-legacy": "^1.2.2"
   },
   "directories": {
     "test": "tests"
