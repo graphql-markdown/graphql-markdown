@@ -91,9 +91,9 @@ build-examples:
   WORKDIR /docusaurus2
   RUN npm install prettier
   RUN mkdir examples
-  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/  --link '/schema' --force --pretty --noPagination --deprecated group"
+  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --link /schema --force --pretty --noPagination --deprecated group"
   RUN mv docs ./examples/schema
-  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common)  --link /group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
+  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --link /group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
   RUN mv docs ./examples/group-by
   SAVE ARTIFACT ./examples
 
