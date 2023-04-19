@@ -32,6 +32,10 @@ describe("group-info", () => {
     type Elf @tag(category: "fantasy") {
       name: String!
     }
+
+    type Query {
+      Fish: [Fish!]! @doc(category: "animal")
+    }
   `);
 
   const groupOptions = {
@@ -91,6 +95,7 @@ describe("group-info", () => {
   describe("getGroups()", () => {
     const schemaMap = {
       objects: schema.getTypeMap(),
+      queries: schema.getQueryType().getFields(),
     };
 
     test("returns undefined if groupByDirective not defined", () => {
@@ -103,11 +108,13 @@ describe("group-info", () => {
       expect.assertions(1);
 
       expect(getGroups(schemaMap, groupOptions)).toMatchInlineSnapshot(`
-          {
+        {
+          "objects": {
             "Bird": "animal",
             "Boolean": "common",
             "Elf": "common",
             "Fish": "common",
+            "Query": "common",
             "String": "common",
             "Unicorn": "common",
             "__Directive": "common",
@@ -118,18 +125,24 @@ describe("group-info", () => {
             "__Schema": "common",
             "__Type": "common",
             "__TypeKind": "common",
-          }
-        `);
+          },
+          "queries": {
+            "Fish": "animal",
+          },
+        }
+      `);
     });
   });
 
   describe("getGroupName()", () => {
     test("returns group name if category directive", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       const type = schema.getType("Bird");
+      const queryType = schema.getQueryType().getFields()["Fish"];
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
+      expect(getGroupName(queryType, groupOptions)).toBe("animal");
     });
 
     test.each([
