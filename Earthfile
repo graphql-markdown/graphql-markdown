@@ -58,16 +58,10 @@ smoke-init:
   FROM +build-docusaurus
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  COPY (+build-package/graphql-markdown-utils.tgz --package=utils) ./
-  RUN npm install ./graphql-markdown-utils.tgz
-  COPY (+build-package/graphql-markdown-printer-legacy.tgz --package=printer-legacy) ./
-  RUN npm install ./graphql-markdown-printer-legacy.tgz
-  COPY (+build-package/graphql-markdown-diff.tgz --package=diff) ./
-  RUN npm install ./graphql-markdown-diff.tgz
-  COPY (+build-package/graphql-markdown-core.tgz --package=core) ./
-  RUN npm install ./graphql-markdown-core.tgz
-  COPY (+build-package/graphql-markdown-docusaurus.tgz --package=docusaurus) ./
-  RUN npm install ./graphql-markdown-docusaurus.tgz
+  FOR package IN utils printer-legacy diff core docusaurus
+    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
+    RUN npm install ./graphql-markdown-${package}.tgz
+  END
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
@@ -90,27 +84,16 @@ smoke-run:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc $OPTIONS 2>&1 | tee ./run.log
-  RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
-  RUN npm run build
-  RUN npm run clear
+  DO +GQLMD --options=$OPTIONS
 
 build-examples:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm install prettier
   RUN mkdir examples
-  RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc --homepage data/anilist.md --schema https://graphql.anilist.co/  --link "/schema" --force --pretty --noPagination --deprecated group --noToc 2>&1 | tee ./run.log
-  RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
-  RUN npm run build
-  RUN npm run clear
+  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/  --link '/schema' --force --pretty --noPagination --deprecated group"
   RUN mv docs ./examples/schema
-  RUN mkdir docs
-  RUN npx docusaurus graphql-to-doc --homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective "@doc(category|=Common)"  --link "/group-by" --skip "@noDoc" --index --noTypeBadges --noParentType --noRelatedType --deprecated group --force 2>&1 | tee ./run.log
-  RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
-  RUN npm run build
-  RUN npm run clear
+  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common)  --link /group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
   RUN mv docs ./examples/group-by
   SAVE ARTIFACT ./examples
 
@@ -133,3 +116,14 @@ all:
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test
+
+# --- UDCs ---
+
+GQLMD:
+  COMMAND
+  ARG options
+  RUN mkdir docs
+  RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
+  RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
+  RUN npm run build
+  RUN npm run clear
