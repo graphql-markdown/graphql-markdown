@@ -34,7 +34,7 @@ describe("group-info", () => {
     }
 
     type Query {
-      birds: [Bird!]! @doc(category: "animal")
+      Fish: [Fish!]! @doc(category: "animal")
     }
   `);
 
@@ -127,7 +127,7 @@ describe("group-info", () => {
             "__TypeKind": "common",
           },
           "queries": {
-            "birds": "animal",
+            "Fish": "animal",
           },
         }
       `);
@@ -139,7 +139,7 @@ describe("group-info", () => {
       expect.assertions(2);
 
       const type = schema.getType("Bird");
-      const queryType = schema.getQueryType().getFields()["birds"];
+      const queryType = schema.getQueryType().getFields()["Fish"];
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
       expect(getGroupName(queryType, groupOptions)).toBe("animal");
