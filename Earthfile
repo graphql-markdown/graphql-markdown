@@ -83,7 +83,6 @@ smoke-run:
   ARG OPTIONS=
   FROM +smoke-init
   WORKDIR /docusaurus2
-  RUN mkdir docs
   DO +GQLMD --options=$OPTIONS
 
 build-examples:
