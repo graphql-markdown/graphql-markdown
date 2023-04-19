@@ -17,6 +17,7 @@ position: 1
 link: null
 ",
   "course/queries/all-courses.mdx": "all-courses",
+  "course/queries/course.mdx": "course",
   "course/queries/math-courses.mdx": "math-courses",
   "course/queries/science-courses.mdx": "science-courses",
   "generated.md": "Dummy homepage for tweet.graphql",
@@ -64,6 +65,7 @@ link: null
 position: 1
 link: null
 ",
+  "misc/objects/course.mdx": "course",
   "misc/objects/department-information.mdx": "department-information",
   "misc/objects/semester.mdx": "semester",
   "misc/queries/_category_.yml": "label: Queries

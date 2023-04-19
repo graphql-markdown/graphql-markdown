@@ -92,7 +92,7 @@ class Link {
         ? DEPRECATED
         : "";
     const group = hasProperty(options, "groups")
-      ? getGroup(type, options.groups)
+      ? getGroup(type, options.groups, category.plural)
       : "";
     const url = pathUrl.join(
       options.basePath,
