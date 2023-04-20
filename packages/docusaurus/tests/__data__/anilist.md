@@ -1,6 +1,6 @@
 ---
 id: schema
-slug: /schema
+slug: /
 title: Schema Documentation
 sidebar_position: 1
 hide_table_of_contents: true

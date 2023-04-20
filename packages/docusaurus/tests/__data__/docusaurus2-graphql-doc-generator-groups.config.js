@@ -2,8 +2,7 @@ module.exports = {
   id: "schema_with_grouping",
   schema: "data/schema_with_grouping.graphql",
   rootPath: "./docs",
-  baseURL: ".",
-  linkRoot: "/schema",
+  baseURL: "examples/default",
   diffMethod: "SCHEMA-HASH",
   loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
   groupByDirective: {

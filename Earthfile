@@ -84,22 +84,25 @@ smoke-run:
   FROM +smoke-init
   WORKDIR /docusaurus2
   DO +GQLMD --options=$OPTIONS
+  RUN npm run build
+  RUN npm run clear
 
 build-examples:
+  ARG TARGET=examples
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm install prettier
-  RUN mkdir examples
-  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --link /schema --force --pretty --noPagination --deprecated group"
-  RUN mv docs ./examples/schema
-  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --link /group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
-  RUN mv docs ./examples/group-by
-  SAVE ARTIFACT ./examples
+  RUN mkdir $TARGET
+  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${TARGET}/default --force --pretty --noPagination --deprecated group"
+  RUN mv docs ./$TARGET/default
+  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
+  RUN mv docs ./$TARGET/group-by
+  SAVE ARTIFACT ./$TARGET
 
 build-docs:
   COPY ./website ./
-  COPY --dir docs ./docs
   COPY +build-examples/examples ./examples
+  COPY --dir docs .
   RUN npm install
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
@@ -121,8 +124,6 @@ all:
 GQLMD:
   COMMAND
   ARG options
-  RUN mkdir docs
+  RUN mkdir -p docs
   RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
-  RUN npm run build
-  RUN npm run clear
