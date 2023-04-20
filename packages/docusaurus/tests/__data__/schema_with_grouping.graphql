@@ -49,7 +49,8 @@ enum Roles {
 type Query {
   GPA(skip: Int = 0): Int  @doc(category: "Grade") 
   WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
-  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
+  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade")
+  Course(skip: Int = 0): Course @doc(category: "Course")
 }
 
 type Query {
