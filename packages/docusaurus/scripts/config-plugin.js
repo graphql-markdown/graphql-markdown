@@ -74,6 +74,8 @@ const config = {
 };
 
 const configExportString = `
+const path = require("path");
+
 module.exports = ${JSON.stringify(config)};\n`
   .replace(
     `"@config1@"`,
