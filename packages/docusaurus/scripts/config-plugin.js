@@ -5,7 +5,7 @@ const pluginGroupConfigFilename =
   "docusaurus2-graphql-doc-generator-groups.config.js";
 
 // eslint-disable-next-line node/no-missing-require
-const docusaurusConfig = require.resolve(`./docusaurus.config.js`);
+const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
 const config = {
   url: "https://graphql-markdown.github.io",
@@ -30,14 +30,12 @@ const config = {
       },
       items: [
         {
-          to: "/schema",
-          label: "Demo 1",
-          position: "left",
+          to: "/examples/default",
+          label: "Schema",
         },
         {
-          to: "/group-by",
-          label: "Demo 2",
-          position: "left",
+          to: "/examples/group-by",
+          label: "Group by directive",
         },
         {
           href: "https://github.com/graphql-markdown/graphql-markdown/releases",
@@ -75,7 +73,9 @@ const config = {
   ],
 };
 
-const configExportString = `const path = require("path");
+const configExportString = `
+const path = require("path");
+
 module.exports = ${JSON.stringify(config)};\n`
   .replace(
     `"@config1@"`,
@@ -86,11 +86,11 @@ module.exports = ${JSON.stringify(config)};\n`
     `require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"))`,
   );
 
-fs.writeFile(docusaurusConfig, configExportString, (err) => {
+fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
   if (err) {
-    console.log(`Error updating '${docusaurusConfig}'`, err);
+    console.log(`Error updating '${docusaurusConfigFilepath}'`, err);
   } else {
-    console.log(`Successfully updated '${docusaurusConfig}'`);
+    console.log(`Successfully updated '${docusaurusConfigFilepath}'`);
   }
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable node/no-missing-require */
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
@@ -25,17 +26,17 @@ const config = {
       "@docusaurus/plugin-content-docs",
       {
         id: "example-default",
-        path: "examples/schema",
-        routeBasePath: "schema",
-        sidebarPath: require.resolve("./examples/schema/sidebar-schema.js"),
+        path: "./examples/default",
+        routeBasePath: "examples/default",
+        sidebarPath: require.resolve("./examples/default/sidebar-schema.js"),
       },
     ],
     [
       "@docusaurus/plugin-content-docs",
       {
         id: "example-group-by",
-        path: "examples/group-by",
-        routeBasePath: "group-by",
+        path: "./examples/group-by",
+        routeBasePath: "examples/group-by",
         sidebarPath: require.resolve("./examples/group-by/sidebar-schema.js"),
       },
     ],
@@ -50,12 +51,12 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: [require.resolve("./src/css/custom.css")],
         },
         sitemap: {
           changefreq: "monthly",
           priority: 0.5,
-          ignorePatterns: ["/schema/**", "/group-by/**"],
+          ignorePatterns: ["/examples/default/**", "/examples/group-by/**"],
           filename: "sitemap.xml",
         },
       }),
@@ -91,11 +92,11 @@ const config = {
             label: "Examples",
             items: [
               {
-                to: "schema/schema",
+                to: "/examples/default",
                 label: "Default",
               },
               {
-                to: "group-by/group-by",
+                to: "/examples/group-by",
                 label: "Group by directive",
               },
             ],

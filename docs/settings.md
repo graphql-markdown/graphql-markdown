@@ -47,7 +47,7 @@ Use these options to tweak some of the Docusaurus documentation features:
 
 - `pagination`: page buttons `Previous` and `Next`
 - `toc`: page table of content
-- `index`: generate index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page)
+- `index`: index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page)
 
 | Setting                 | CLI flag         | Default |
 | ----------------------- | ---------------- | ------- |
