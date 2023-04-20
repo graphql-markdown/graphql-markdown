@@ -1,7 +1,7 @@
 const {
   graphql: { getSchemaMap, loadSchema, getDocumentLoaders },
+  group: { getGroups },
 } = require("@graphql-markdown/utils");
-const { getGroups } = require("./group-info");
 const Renderer = require("./renderer");
 
 const NS_PER_SEC = 1e9;

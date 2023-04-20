@@ -82,3 +82,8 @@ type DepartmentInformation implements Record {
   departmentCloseTime: Time
   website: URL
 }
+
+type Course {
+  id: ID!
+  title: String!
+} 
