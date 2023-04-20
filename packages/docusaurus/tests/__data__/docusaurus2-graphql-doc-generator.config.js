@@ -1,7 +1,8 @@
 module.exports = {
   schema: "data/tweet.graphql",
   rootPath: "./docs",
-  baseURL: "examples/group-by",
+  linkRoot: "/examples/group-by",
+  baseURL: ".",
   diffMethod: "SCHEMA-DIFF",
   loaders: {
     GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
