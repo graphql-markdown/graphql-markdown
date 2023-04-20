@@ -5,7 +5,9 @@ const {
   object: { hasProperty },
 } = require("@graphql-markdown/utils");
 
-const { parseGroupByOption } = require("./group-info");
+const {
+  group: { parseGroupByOption },
+} = require("@graphql-markdown/utils");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
@@ -103,9 +105,10 @@ function getSkipDocDirectives(cliOpts = {}, configFileOpts = {}) {
   );
 
   if (
-    (hasProperty(configFileOpts, "printTypeOptions") &&
+    (hasProperty(configFileOpts, "printTypeOptions") === true &&
       configFileOpts.printTypeOptions.deprecated === "skip") ||
-    (hasProperty(cliOpts, "deprecated") && cliOpts.deprecated === "skip")
+    (hasProperty(cliOpts, "deprecated") === true &&
+      cliOpts.deprecated === "skip")
   ) {
     skipDirectives.push("deprecated");
   }

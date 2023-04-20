@@ -9,8 +9,8 @@ const {
   DEFAULT_OPTIONS,
 } = require("../../src/config");
 
-jest.mock("../../src/group-info");
-const groupInfo = require("../../src/group-info");
+jest.mock("@graphql-markdown/utils");
+const utils = require("@graphql-markdown/utils");
 
 describe("config", () => {
   afterEach(() => {
@@ -37,6 +37,8 @@ describe("config", () => {
 
     test("supports deprecated skip option", () => {
       expect.hasAssertions();
+
+      jest.spyOn(utils.object, "hasProperty").mockReturnValue(true);
 
       expect(
         getSkipDocDirectives(undefined, {
@@ -70,7 +72,7 @@ describe("config", () => {
     test("returns default options is no config set", () => {
       expect.hasAssertions();
 
-      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const config = buildConfig();
 
@@ -97,7 +99,7 @@ describe("config", () => {
     test("override default options is config set in docusaurus", () => {
       expect.hasAssertions();
 
-      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
         baseURL: "docs/schema",
@@ -194,7 +196,7 @@ describe("config", () => {
       };
 
       jest
-        .spyOn(groupInfo, "parseGroupByOption")
+        .spyOn(utils.group, "parseGroupByOption")
         .mockReturnValue(cliOpts.groupByDirective);
 
       const config = buildConfig(configFileOpts, cliOpts);
@@ -227,7 +229,7 @@ describe("config", () => {
     test("schema option from CLI overrides that of config file", () => {
       expect.hasAssertions();
 
-      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
         baseURL: "base-from-config-file",
@@ -258,7 +260,7 @@ describe("config", () => {
     test("force flag from CLI switches diff method to FORCE", () => {
       expect.hasAssertions();
 
-      jest.spyOn(groupInfo, "parseGroupByOption").mockReturnValue(undefined);
+      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const cliOpts = { force: true };
 

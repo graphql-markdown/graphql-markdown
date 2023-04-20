@@ -6,4 +6,5 @@ module.exports = {
   string: require("./string"),
   url: require("./url"),
   graphql: require("./graphql"),
+  group: require("./group"),
 };
