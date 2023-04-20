@@ -3,9 +3,6 @@ const { tmpdir } = require("os");
 
 const {
   object: { hasProperty },
-} = require("@graphql-markdown/utils");
-
-const {
   group: { parseGroupByOption },
 } = require("@graphql-markdown/utils");
 
