@@ -1,4 +1,21 @@
+"""
+Example of custom directive for `skipDocDirective`.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
+"""
+directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
+
+"""
+Example of custom directive for `groupByDirective`.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
+"""
 directive @doc(
+  """
+  Category name for `groupByDirective`.
+  
+  See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
+  """
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
@@ -10,8 +27,17 @@ scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
   UpdateGrade(input: String): String  @doc(category: "Grade") 
+}
+
+type Mutation{
   UpdateGPA(input: Int): Int @doc(category: "Grade") 
+}
+
+type Mutation{
   AddCourse(input: String): String  @doc(category: "Course") 
+}
+
+type Mutation{
   DropCourse(input: String): String  @doc(category: "Course") 
 }
 
@@ -29,9 +55,13 @@ type Query {
 
 type Query {
   allCourses: [String]  @doc(category: "Course") 
-  mathCourses: [String]  @doc(category: "Course") 
-  scienceCourses: [String]  @doc(category: "Course") 
+  mathCourses: [String]  @doc(category: "Course") @deprecated
+  scienceCourses: [String]  @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
+}
+
+type UnusedType implements Record @noDoc {
+  id: ID!
 }
 
 interface Record {
@@ -41,7 +71,7 @@ interface Record {
 type Semester implements Record {
   id: ID!
   startDate: Date
-  withdrawDate: Date
+  withdrawDate: Date @deprecated
   endDate: Date
 }
 

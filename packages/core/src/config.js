@@ -5,8 +5,6 @@ const {
   object: { hasProperty },
 } = require("@graphql-markdown/utils");
 
-const { parseGroupByOption } = require("./group-info");
-
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
 
@@ -103,9 +101,10 @@ function getSkipDocDirectives(cliOpts = {}, configFileOpts = {}) {
   );
 
   if (
-    (hasProperty(configFileOpts, "printTypeOptions") &&
+    (hasProperty(configFileOpts, "printTypeOptions") === true &&
       configFileOpts.printTypeOptions.deprecated === "skip") ||
-    (hasProperty(cliOpts, "deprecated") && cliOpts.deprecated === "skip")
+    (hasProperty(cliOpts, "deprecated") === true &&
+      cliOpts.deprecated === "skip")
   ) {
     skipDirectives.push("deprecated");
   }
@@ -129,10 +128,30 @@ function getSkipDocDirective(option) {
   return parsedOption.groups.directive;
 }
 
+function parseGroupByOption(groupOptions) {
+  const DEFAULT_GROUP = "Miscellaneous";
+  const OPTION_REGEX =
+    /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+
+  if (typeof groupOptions !== "string") {
+    return undefined;
+  }
+
+  const parsedOptions = OPTION_REGEX.exec(groupOptions);
+
+  if (typeof parsedOptions === "undefined" || parsedOptions == null) {
+    throw new Error(`Invalid "${groupOptions}"`);
+  }
+
+  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups;
+  return { directive, field, fallback };
+}
+
 module.exports = {
   buildConfig,
   getSkipDocDirectives,
   getSkipDocDirective,
+  parseGroupByOption,
   DEFAULT_OPTIONS,
   ASSETS_LOCATION,
 };

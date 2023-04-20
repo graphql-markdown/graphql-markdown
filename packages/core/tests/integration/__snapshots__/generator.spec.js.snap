@@ -49,6 +49,7 @@ link: null
   "misc/directives/deprecated.mdx": "deprecated",
   "misc/directives/doc.mdx": "doc",
   "misc/directives/include.mdx": "include",
+  "misc/directives/no-doc.mdx": "no-doc",
   "misc/directives/skip.mdx": "skip",
   "misc/directives/specified-by.mdx": "specified-by",
   "misc/enums/_category_.yml": "label: Enums
@@ -68,6 +69,7 @@ link: null
   "misc/objects/course.mdx": "course",
   "misc/objects/department-information.mdx": "department-information",
   "misc/objects/semester.mdx": "semester",
+  "misc/objects/unused-type.mdx": "unused-type",
   "misc/queries/_category_.yml": "label: Queries
 position: 1
 link: null
