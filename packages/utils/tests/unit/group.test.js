@@ -1,8 +1,4 @@
-const {
-  parseGroupByOption,
-  getGroups,
-  getGroupName,
-} = require("../../src/group");
+const { getGroups, getGroupName } = require("../../src/group");
 
 const { buildSchema } = require("graphql");
 
@@ -43,54 +39,6 @@ describe("group-info", () => {
     directive: "doc",
     field: "category",
   };
-
-  describe("parseGroupByOption()", () => {
-    test("returns object with groupBy config", () => {
-      expect.assertions(3);
-
-      const groupOptionsFlag = "@doc(category|=common)";
-      const { directive, field, fallback } =
-        parseGroupByOption(groupOptionsFlag);
-
-      expect(directive).toBe("doc");
-      expect(field).toBe("category");
-      expect(fallback).toBe("common");
-    });
-
-    test("returns object with default fallback if not set", () => {
-      expect.assertions(3);
-
-      const groupOptionsFlag = "@doc(category)";
-      const { directive, field, fallback } =
-        parseGroupByOption(groupOptionsFlag);
-
-      expect(directive).toBe("doc");
-      expect(field).toBe("category");
-      expect(fallback).toBe("Miscellaneous");
-    });
-
-    test("throws an error if string format is invalid", () => {
-      expect.assertions(1);
-
-      const groupOptionsFlag = "@doc(category|=)";
-
-      expect(() => {
-        parseGroupByOption(groupOptionsFlag);
-      }).toThrow(`Invalid "${groupOptionsFlag}"`);
-    });
-
-    test.each([
-      [undefined],
-      [null],
-      [1],
-      [["foobar"]],
-      [{ groupOptions: "foobar" }],
-    ])("returns undefined if groupOptions is not a string", (groupOptions) => {
-      expect.hasAssertions();
-
-      expect(parseGroupByOption(groupOptions)).toBeUndefined();
-    });
-  });
 
   describe("getGroups()", () => {
     const schemaMap = {

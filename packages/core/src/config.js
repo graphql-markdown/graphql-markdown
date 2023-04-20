@@ -3,7 +3,6 @@ const { tmpdir } = require("os");
 
 const {
   object: { hasProperty },
-  group: { parseGroupByOption },
 } = require("@graphql-markdown/utils");
 
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
@@ -129,10 +128,30 @@ function getSkipDocDirective(option) {
   return parsedOption.groups.directive;
 }
 
+function parseGroupByOption(groupOptions) {
+  const DEFAULT_GROUP = "Miscellaneous";
+  const OPTION_REGEX =
+    /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+
+  if (typeof groupOptions !== "string") {
+    return undefined;
+  }
+
+  const parsedOptions = OPTION_REGEX.exec(groupOptions);
+
+  if (typeof parsedOptions === "undefined" || parsedOptions == null) {
+    throw new Error(`Invalid "${groupOptions}"`);
+  }
+
+  const { directive, field, fallback = DEFAULT_GROUP } = parsedOptions.groups;
+  return { directive, field, fallback };
+}
+
 module.exports = {
   buildConfig,
   getSkipDocDirectives,
   getSkipDocDirective,
+  parseGroupByOption,
   DEFAULT_OPTIONS,
   ASSETS_LOCATION,
 };

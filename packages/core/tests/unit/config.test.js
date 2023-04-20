@@ -2,12 +2,14 @@ const { join } = require("path");
 
 const { COMPARE_METHOD } = require("@graphql-markdown/diff");
 
+const config = require("../../src/config");
 const {
   buildConfig,
   getSkipDocDirectives,
   getSkipDocDirective,
+  parseGroupByOption,
   DEFAULT_OPTIONS,
-} = require("../../src/config");
+} = config;
 
 jest.mock("@graphql-markdown/utils");
 const utils = require("@graphql-markdown/utils");
@@ -72,8 +74,6 @@ describe("config", () => {
     test("returns default options is no config set", () => {
       expect.hasAssertions();
 
-      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
-
       const config = buildConfig();
 
       expect(config).toEqual(
@@ -98,8 +98,6 @@ describe("config", () => {
 
     test("override default options is config set in docusaurus", () => {
       expect.hasAssertions();
-
-      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
         baseURL: "docs/schema",
@@ -195,16 +193,16 @@ describe("config", () => {
         deprecated: "group",
       };
 
-      jest
-        .spyOn(utils.group, "parseGroupByOption")
-        .mockReturnValue(cliOpts.groupByDirective);
-
       const config = buildConfig(configFileOpts, cliOpts);
 
       expect(config).toStrictEqual({
         baseURL: cliOpts.base,
         diffMethod: cliOpts.diff,
-        groupByDirective: cliOpts.groupByDirective,
+        groupByDirective: {
+          directive: "group",
+          fallback: "misc",
+          field: "name",
+        },
         homepageLocation: cliOpts.homepage,
         linkRoot: cliOpts.link,
         loaders: configFileOpts.loaders,
@@ -228,8 +226,6 @@ describe("config", () => {
 
     test("schema option from CLI overrides that of config file", () => {
       expect.hasAssertions();
-
-      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
 
       const configFileOpts = {
         baseURL: "base-from-config-file",
@@ -260,8 +256,6 @@ describe("config", () => {
     test("force flag from CLI switches diff method to FORCE", () => {
       expect.hasAssertions();
 
-      jest.spyOn(utils.group, "parseGroupByOption").mockReturnValue(undefined);
-
       const cliOpts = { force: true };
 
       const input = buildConfig({}, cliOpts);
@@ -282,6 +276,54 @@ describe("config", () => {
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
       });
+    });
+  });
+
+  describe("parseGroupByOption()", () => {
+    test("returns object with groupBy config", () => {
+      expect.assertions(3);
+
+      const groupOptionsFlag = "@doc(category|=common)";
+      const { directive, field, fallback } =
+        parseGroupByOption(groupOptionsFlag);
+
+      expect(directive).toBe("doc");
+      expect(field).toBe("category");
+      expect(fallback).toBe("common");
+    });
+
+    test("returns object with default fallback if not set", () => {
+      expect.assertions(3);
+
+      const groupOptionsFlag = "@doc(category)";
+      const { directive, field, fallback } =
+        parseGroupByOption(groupOptionsFlag);
+
+      expect(directive).toBe("doc");
+      expect(field).toBe("category");
+      expect(fallback).toBe("Miscellaneous");
+    });
+
+    test("throws an error if string format is invalid", () => {
+      expect.assertions(1);
+
+      const groupOptionsFlag = "@doc(category|=)";
+
+      expect(() => {
+        parseGroupByOption(groupOptionsFlag);
+      }).toThrow(`Invalid "${groupOptionsFlag}"`);
+    });
+
+    test.each([
+      [undefined],
+      [null],
+      [1],
+      [["foobar"]],
+      [{ groupOptions: "foobar" }],
+    ])("returns undefined if groupOptions is not a string", (groupOptions) => {
+      expect.hasAssertions();
+
+      expect(parseGroupByOption(groupOptions)).toBeUndefined();
     });
   });
 });
