@@ -18,16 +18,16 @@ function parseGroupByOption(groupOptions) {
 }
 
 function getGroups(rootTypes, groupByDirective) {
-  let groups = {};
+  const groups = {};
 
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
 
   Object.keys(rootTypes).forEach((typeName) => {
-    let rootType = rootTypes[typeName];
-    if (typeof rootType != "undefined" && rootType != null) {
-      if (typeof groups[typeName] == "undefined") {
+    const rootType = rootTypes[typeName];
+    if (typeof rootType !== "undefined" && rootType !== null) {
+      if (typeof groups[typeName] === "undefined") {
         groups[typeName] = {};
       }
       Object.keys(rootType).forEach((type) => {
@@ -40,16 +40,14 @@ function getGroups(rootTypes, groupByDirective) {
 }
 
 function getGroupName(type, groupByDirective) {
-  let group = groupByDirective.fallback; // default value is fallback, and it will be only overridden if a group is found
-
   if (typeof type.astNode === "undefined" || type.astNode == null) {
-    return group;
+    return groupByDirective.fallback;
   }
 
   const allDirectives = type.astNode.directives;
 
   if (!Array.isArray(allDirectives)) {
-    return group;
+    return groupByDirective.fallback;
   }
 
   for (const directive of allDirectives) {
@@ -62,7 +60,7 @@ function getGroupName(type, groupByDirective) {
     return field.value.value;
   }
 
-  return group;
+  return groupByDirective.fallback;
 }
 
 module.exports = { getGroupName, getGroups, parseGroupByOption };
