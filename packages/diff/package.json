@@ -22,7 +22,7 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^4.0.3",
+    "@graphql-inspector/core": "^4.2.1",
     "@graphql-markdown/utils": "^1.3.0",
     "@graphql-tools/graphql-file-loader": "^7.5.15",
     "@graphql-tools/load": "^7.8.14"
