@@ -175,6 +175,23 @@ function hasDirective(type, directives) {
   );
 }
 
+function getDirective(type, directives) {
+  if (
+    typeof type.astNode === "undefined" ||
+    type.astNode == null ||
+    typeof directives === "undefined" ||
+    !Array.isArray(type.astNode.directives)
+  ) {
+    return [];
+  }
+
+  const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
+
+  return type.astNode.directives.filter((directive) =>
+    directiveList.includes(directive.name.value),
+  );
+}
+
 function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
@@ -381,6 +398,7 @@ module.exports = {
   getFields,
   getDefaultValue,
   hasDirective,
+  getDirective,
   isOperation,
   isInterfaceType,
   isInputType,

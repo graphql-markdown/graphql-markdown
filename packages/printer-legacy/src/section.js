@@ -152,7 +152,7 @@ const printSectionItem = (type, options) => {
   }
 
   const typeNameLink = printLink(type, { ...options, withAttributes: false });
-  const description = printDescription(type, "").replaceAll(
+  const description = printDescription(type, "", options).replaceAll(
     "\n",
     `${MARKDOWN_EOL}> `,
   );

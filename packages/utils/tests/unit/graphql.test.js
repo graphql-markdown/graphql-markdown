@@ -35,6 +35,7 @@ const {
   getRelationOfField,
   getRelationOfImplementation,
   hasDirective,
+  getDirective,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -771,6 +772,71 @@ describe("graphql", () => {
       const type = schema.getType("StudyItem");
 
       expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
+    });
+  });
+
+  describe("getDirective", () => {
+    const schema = buildSchema(`
+      directive @foobaz on OBJECT
+
+      interface Record {
+        id: String!
+      }
+
+      type StudyItem implements Record @foobaz {
+        id: String!
+        subject: String!
+        duration: Int!
+      }
+      
+      type Query {
+        getStudyItems(subject: String): [StudyItem!]
+        getStudyItem(id: String!): StudyItem
+      }
+
+      type Mutation {
+        addStudyItem(subject: String!, duration: Int!): StudyItem
+      }
+  
+      type Subscription {
+        listStudyItems: [StudyItem!]
+      }
+    `);
+
+    test("return empty list if the type has no directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Subscription");
+      const actual = getDirective(type, "foobar");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return empty list if the type has no matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, "foobar");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return list if the type has matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, "foobaz");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return list if the type has one matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, ["foobar", "foobaz"]);
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
     });
   });
 

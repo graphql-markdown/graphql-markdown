@@ -1,6 +1,14 @@
-const { GraphQLScalarType, GraphQLDirective } = require("graphql");
+const {
+  GraphQLScalarType,
+  GraphQLDirective,
+  DirectiveLocation,
+} = require("graphql");
 
-const { printDescription, printDeprecation } = require("../../src/common");
+const {
+  printDescription,
+  printDeprecation,
+  printCustomDirectives,
+} = require("../../src/common");
 
 describe("common", () => {
   describe("printDescription()", () => {
@@ -81,6 +89,45 @@ describe("common", () => {
         Lorem ipsum"
       `);
     });
+
+    test("return custom directive description if applied", () => {
+      const directiveType = new GraphQLDirective({
+        name: "testDirective",
+        locations: [DirectiveLocation.OBJECT],
+      });
+
+      const type = {
+        name: "TestType",
+        description: "Lorem ipsum",
+        astNode: {
+          directives: [
+            {
+              name: {
+                value: "testDirective",
+              },
+            },
+          ],
+        },
+      };
+
+      const options = {
+        customDirectives: {
+          testDirective: {
+            type: directiveType,
+            descriptor: (dirType, constDirNode) =>
+              `Test${constDirNode.name.value}`,
+          },
+        },
+      };
+
+      const description = printDescription(type, undefined, options);
+
+      expect(description).toMatchInlineSnapshot(`
+        "TesttestDirective
+
+        Lorem ipsum"
+      `);
+    });
   });
 
   describe("printDeprecation()", () => {
@@ -129,6 +176,55 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toBe("");
+    });
+  });
+
+  describe("printCustomDirectives()", () => {
+    const directiveType = new GraphQLDirective({
+      name: "testDirective",
+      locations: [DirectiveLocation.OBJECT],
+    });
+    const type = {
+      name: "TestType",
+      astNode: {
+        directives: [
+          {
+            name: {
+              value: "testDirective",
+            },
+          },
+        ],
+      },
+    };
+
+    test("does not print directive description if type has not directive", () => {
+      expect.hasAssertions();
+
+      const description = printCustomDirectives(type, {});
+
+      expect(description).toBe("");
+    });
+
+    test("prints directive description", () => {
+      expect.hasAssertions();
+
+      const options = {
+        customDirectives: {
+          testDirective: {
+            type: directiveType,
+            descriptor: (dirType, constDirNode) =>
+              `Test${constDirNode.name.value}`,
+          },
+        },
+      };
+
+      const description = printCustomDirectives(type, options);
+
+      expect(description).toMatchInlineSnapshot(`
+        "TesttestDirective
+
+        "
+      `);
     });
   });
 });

@@ -31,6 +31,7 @@ const DEFAULT_OPTIONS = {
     deprecated: "default",
   },
   skipDocDirective: [],
+  customDirective: {},
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -45,6 +46,7 @@ function buildConfig(configFileOpts, cliOpts) {
   }
 
   const baseURL = cliOpts.base ?? config.baseURL;
+  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
   return {
     baseURL,
@@ -61,8 +63,36 @@ function buildConfig(configFileOpts, cliOpts) {
     docOptions: getDocOptions(cliOpts, config.docOptions),
     printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
     printer: config.printer,
-    skipDocDirective: getSkipDocDirectives(cliOpts, config),
+    skipDocDirective,
+    customDirective: getCustomDirectives(
+      config.customDirective,
+      skipDocDirective,
+    ),
   };
+}
+
+function getCustomDirectives(
+  customDirectiveOptions = {},
+  skipDocDirective = [],
+) {
+  if (Object.keys(customDirectiveOptions).length == 0) {
+    return customDirectiveOptions;
+  }
+
+  Object.keys(customDirectiveOptions).map((name) => {
+    if (skipDocDirective.includes(name)) {
+      delete customDirectiveOptions[name];
+    } else if (
+      hasProperty(customDirectiveOptions[name], "descriptor") === false ||
+      typeof customDirectiveOptions[name].descriptor !== "function"
+    ) {
+      throw new Error(
+        `Wrong format for plugin custom directive "${name}", it should be {descriptor: (directiveType, constDirectiveType) => String}`,
+      );
+    }
+  });
+
+  return customDirectiveOptions;
 }
 
 function getDiffMethod(diff, force) {
@@ -152,6 +182,7 @@ module.exports = {
   getSkipDocDirectives,
   getSkipDocDirective,
   parseGroupByOption,
+  getCustomDirectives,
   DEFAULT_OPTIONS,
   ASSETS_LOCATION,
 };

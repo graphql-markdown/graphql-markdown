@@ -28,6 +28,13 @@ jest.mock("../../src/link", () => {
 });
 const Link = require("../../src/link");
 
+jest.mock("../../src/directive", () => {
+  return {
+    getConstDirectiveMap: jest.fn(),
+  };
+});
+const Directive = require("../../src/directive");
+
 jest.mock("../../src/group", () => {
   return {
     getGroup: jest.fn(),
@@ -145,6 +152,21 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual(["foobaz"]);
+    });
+
+    test("return directive names as badge if type has directives applied", () => {
+      expect.assertions(1);
+
+      jest
+        .spyOn(Directive, "getConstDirectiveMap")
+        .mockReturnValueOnce({ foo: {} });
+
+      const type = {};
+      const options = {};
+
+      const badges = Badge.getTypeBadges(type, options);
+
+      expect(badges).toStrictEqual(["foo"]);
     });
   });
 });

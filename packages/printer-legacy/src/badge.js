@@ -5,8 +5,9 @@ const {
 
 const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
+const { getConstDirectiveMap } = require("./directive");
 
-const getTypeBadges = (type) => {
+const getTypeBadges = (type, options) => {
   const rootType = hasProperty(type, "type") ? type.type : type;
 
   const badges = [];
@@ -33,6 +34,11 @@ const getTypeBadges = (type) => {
     badges.push(group);
   }
 
+  const constDirectiveMap = getConstDirectiveMap(type, options);
+  if (typeof constDirectiveMap !== "undefined") {
+    badges.push(...Object.keys(constDirectiveMap));
+  }
+
   return badges;
 };
 
@@ -41,7 +47,7 @@ const printBadges = (type, options) => {
     return "";
   }
 
-  const badges = getTypeBadges(type);
+  const badges = getTypeBadges(type, options);
 
   if (badges.length === 0) {
     return "";

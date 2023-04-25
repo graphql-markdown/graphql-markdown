@@ -1,6 +1,7 @@
 const {
   graphql: { getSchemaMap, loadSchema, getDocumentLoaders },
   group: { getGroups },
+  directive: { getCustomDirectives },
 } = require("@graphql-markdown/utils");
 const Renderer = require("./renderer");
 
@@ -42,6 +43,7 @@ const getPrinter = (
   printTypeOptions,
   printerModule,
   skipDocDirective,
+  customDirectives,
 ) => {
   let Printer = undefined;
 
@@ -63,6 +65,7 @@ const getPrinter = (
     groups,
     printTypeOptions,
     skipDocDirective,
+    customDirectives,
   });
 
   return Printer;
@@ -83,6 +86,7 @@ const generateDocFromSchema = async ({
   printTypeOptions,
   printer: printerModule,
   skipDocDirective,
+  customDirective,
 }) => {
   const start = process.hrtime.bigint();
 
@@ -95,6 +99,7 @@ const generateDocFromSchema = async ({
   }
 
   const rootTypes = getSchemaMap(schema);
+  const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = new getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
     schema,
@@ -104,6 +109,7 @@ const generateDocFromSchema = async ({
     printTypeOptions,
     printerModule,
     skipDocDirective,
+    customDirectives,
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
     ...docOptions,

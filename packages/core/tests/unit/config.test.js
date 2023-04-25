@@ -8,6 +8,7 @@ const {
   getSkipDocDirectives,
   getSkipDocDirective,
   parseGroupByOption,
+  getCustomDirectives,
   DEFAULT_OPTIONS,
 } = config;
 
@@ -92,6 +93,7 @@ describe("config", () => {
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
           printer: DEFAULT_OPTIONS.printer,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+          customDirective: DEFAULT_OPTIONS.customDirective,
         }),
       );
     });
@@ -128,6 +130,12 @@ describe("config", () => {
           deprecated: "group",
         },
         skipDocDirective: ["@noDoc"],
+        customDirective: {
+          test: {
+            descriptor: (directiveType, constDirectiveType) =>
+              `Test${constDirectiveType.name.value}`,
+          },
+        },
       };
 
       const config = buildConfig(configFileOpts);
@@ -147,6 +155,7 @@ describe("config", () => {
         printTypeOptions: configFileOpts.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
+        customDirective: configFileOpts.customDirective,
       });
     });
 
@@ -221,6 +230,7 @@ describe("config", () => {
         },
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
+        customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
 
@@ -250,6 +260,7 @@ describe("config", () => {
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
 
@@ -275,6 +286,7 @@ describe("config", () => {
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
   });
@@ -324,6 +336,51 @@ describe("config", () => {
       expect.hasAssertions();
 
       expect(parseGroupByOption(groupOptions)).toBeUndefined();
+    });
+  });
+
+  describe("getCustomDirectives", () => {
+    test("returns empty object if not configured", () => {
+      expect.hasAssertions();
+
+      expect(getCustomDirectives()).toStrictEqual({});
+    });
+
+    test("returns empty object if specified directives are skipped", () => {
+      expect.hasAssertions();
+
+      const options = {
+        test: {},
+      };
+
+      expect(getCustomDirectives(options, ["test"])).toStrictEqual({});
+    });
+
+    test("throws an error if descriptor format is invalid", () => {
+      expect.assertions(1);
+
+      const options = {
+        test: {},
+      };
+
+      expect(() => {
+        getCustomDirectives(options);
+      }).toThrow(
+        `Wrong format for plugin custom directive "test", it should be {descriptor: (directiveType, constDirectiveType) => String}`,
+      );
+    });
+
+    test("returns custom directive maps", () => {
+      expect.hasAssertions();
+
+      const descriptor = (directiveType, constDirectiveType) =>
+        `Test${constDirectiveType.name.value}`;
+      const options = {
+        testA: { descriptor },
+        testB: { descriptor },
+      };
+
+      expect(getCustomDirectives(options, ["testB"])).toMatchSnapshot();
     });
   });
 });

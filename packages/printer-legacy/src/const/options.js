@@ -13,6 +13,7 @@ const DEFAULT_OPTIONS = {
   typeBadges: true,
   skipDocDirective: undefined,
   printDeprecated: OPTION_DEPRECATED.DEFAULT,
+  customDirectives: {},
 };
 
 module.exports = {

@@ -19,6 +19,7 @@ const {
 
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
+const { printConstDirectives } = require("./directive");
 const {
   printOperationMetadata,
   printCodeOperation,
@@ -55,10 +56,11 @@ class Printer {
     schema,
     baseURL,
     linkRoot = "/",
-    { groups, printTypeOptions, skipDocDirective } = {
+    { groups, printTypeOptions, skipDocDirective, customDirectives } = {
       groups: undefined,
       printTypeOptions: undefined,
       skipDocDirective: undefined,
+      customDirectives: undefined,
     },
   ) => {
     if (typeof Printer.options !== "undefined" && Printer.options !== null) {
@@ -76,6 +78,7 @@ class Printer {
       skipDocDirective: skipDocDirective ?? undefined,
       printDeprecated:
         printTypeOptions?.deprecated ?? OPTION_DEPRECATED.DEFAULT,
+      customDirectives,
     };
   };
 
@@ -138,6 +141,8 @@ class Printer {
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
 
+  static printConstDirectives = printConstDirectives;
+
   static printTypeMetadata = (type, options) => {
     let metadata;
 
@@ -193,12 +198,22 @@ class Printer {
     });
     const description = Printer.printDescription(type);
     const code = Printer.printCode(type, printTypeOptions);
+    const constDirectives = Printer.printConstDirectives(
+      type,
+      printTypeOptions,
+    );
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
     const relations = Printer.printRelations(type, printTypeOptions);
 
-    return [header, mdx, description, code, metadata, relations].join(
-      MARKDOWN_EOP,
-    );
+    return [
+      header,
+      mdx,
+      description,
+      code,
+      constDirectives,
+      metadata,
+      relations,
+    ].join(MARKDOWN_EOP);
   };
 }
 
