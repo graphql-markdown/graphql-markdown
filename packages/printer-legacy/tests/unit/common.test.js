@@ -44,7 +44,7 @@ describe("common", () => {
         name: "TestDirective",
         locations: [],
       });
-      const description = printDescription(type, "");
+      const description = printDescription(type, undefined, "");
 
       expect(description).toBe("");
     });
@@ -70,7 +70,9 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type, { text: "Not a string" });
+      const description = printDescription(type, undefined, {
+        text: "Not a string",
+      });
 
       expect(description).toBe("No description");
     });
@@ -120,7 +122,7 @@ describe("common", () => {
         },
       };
 
-      const description = printDescription(type, undefined, options);
+      const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
         "TesttestDirective

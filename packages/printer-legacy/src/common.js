@@ -42,7 +42,7 @@ const printCustomDirectives = (type, options) => {
   return `${content}${MARKDOWN_EOP}`;
 };
 
-const printDescription = (type, noText = NO_DESCRIPTION_TEXT, options) => {
+const printDescription = (type, options, noText = NO_DESCRIPTION_TEXT) => {
   const replacement = typeof noText === "string" ? noText : NO_DESCRIPTION_TEXT;
   const description =
     hasProperty(type, "description") && typeof type.description === "string"
