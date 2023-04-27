@@ -56,14 +56,14 @@ describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", () => {
       expect.assertions(1);
-      const printer = getPrinter(
-        {},
-        "/",
-        "root",
-        {},
-        {},
-        "@graphql-markdown/printer-legacy",
-      );
+      const printer = getPrinter({
+        schema: {},
+        baseURL: "/",
+        linkRoot: "root",
+        groups: {},
+        printTypeOptions: {},
+        printerModule: "@graphql-markdown/printer-legacy",
+      });
       expect(printer).toBeDefined();
     });
 
@@ -71,7 +71,14 @@ describe("generator", () => {
       expect.assertions(1);
 
       expect(() => {
-        getPrinter({}, "/", "root", {}, {}, undefined);
+        getPrinter({
+          schema: {},
+          baseURL: "/",
+          linkRoot: "root",
+          groups: {},
+          printTypeOptions: {},
+          printerModule: undefined,
+        });
       }).toThrow(`Invalid printer module name in "printTypeOptions" settings.`);
     });
 
@@ -79,7 +86,14 @@ describe("generator", () => {
       expect.assertions(1);
 
       expect(() => {
-        getPrinter({}, "/", "root", {}, {}, "foobar");
+        getPrinter({
+          schema: {},
+          baseURL: "/",
+          linkRoot: "root",
+          groups: {},
+          printTypeOptions: {},
+          printerModule: "foobar",
+        });
       }).toThrow(
         `Cannot find module 'foobar' for @graphql-markdown/core in "printTypeOptions" settings.`,
       );

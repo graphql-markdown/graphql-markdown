@@ -35,7 +35,7 @@ const hasChanges = async (
   return true;
 };
 
-const getPrinter = (
+const getPrinter = ({
   schema,
   baseURL,
   linkRoot,
@@ -44,7 +44,7 @@ const getPrinter = (
   printerModule,
   skipDocDirective,
   customDirectives,
-) => {
+}) => {
   let Printer = undefined;
 
   if (typeof printerModule !== "string") {
@@ -101,7 +101,7 @@ const generateDocFromSchema = async ({
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = new getGroups(rootTypes, groupByDirective);
-  const printer = getPrinter(
+  const printer = getPrinter({
     schema,
     baseURL,
     linkRoot,
@@ -110,7 +110,7 @@ const generateDocFromSchema = async ({
     printerModule,
     skipDocDirective,
     customDirectives,
-  );
+  });
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
     ...docOptions,
     deprecated: printTypeOptions.deprecated,
