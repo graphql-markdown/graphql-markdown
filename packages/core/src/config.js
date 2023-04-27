@@ -79,18 +79,18 @@ function getCustomDirectives(
     return customDirectiveOptions;
   }
 
-  Object.keys(customDirectiveOptions).map((name) => {
+  for (const [name, option] of Object.entries(customDirectiveOptions)) {
     if (skipDocDirective.includes(name)) {
       delete customDirectiveOptions[name];
     } else if (
-      hasProperty(customDirectiveOptions[name], "descriptor") === false ||
-      typeof customDirectiveOptions[name].descriptor !== "function"
+      hasProperty(option, "descriptor") === false ||
+      typeof option.descriptor !== "function"
     ) {
       throw new Error(
         `Wrong format for plugin custom directive "${name}", it should be {descriptor: (directiveType, constDirectiveType) => String}`,
       );
     }
-  });
+  }
 
   return customDirectiveOptions;
 }
