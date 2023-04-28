@@ -20,7 +20,7 @@ Use these options to render custom directive information for types (see [custom 
 
 | Setting   | CLI flag        | Default   |
 | --------- | --------------- | --------- |
-| `customDirective` | _not supported_ | `{ }`     |
+| `customDirective` | - | `undefined`     |
 
 ## `diffMethod`
 
