@@ -56,14 +56,18 @@ describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", () => {
       expect.assertions(1);
-      const printer = getPrinter({
-        schema: {},
-        baseURL: "/",
-        linkRoot: "root",
-        groups: {},
-        printTypeOptions: {},
-        printerModule: "@graphql-markdown/printer-legacy",
-      });
+      const printer = getPrinter(
+        "@graphql-markdown/printer-legacy",
+        {
+          schema: {},
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: {},
+        },
+      );
       expect(printer).toBeDefined();
     });
 
@@ -71,14 +75,18 @@ describe("generator", () => {
       expect.assertions(1);
 
       expect(() => {
-        getPrinter({
-          schema: {},
-          baseURL: "/",
-          linkRoot: "root",
-          groups: {},
-          printTypeOptions: {},
-          printerModule: undefined,
-        });
+        getPrinter(
+          undefined,
+          {
+            schema: {},
+            baseURL: "/",
+            linkRoot: "root",
+          },
+          {
+            groups: {},
+            printTypeOptions: {},
+          },
+        );
       }).toThrow(`Invalid printer module name in "printTypeOptions" settings.`);
     });
 
@@ -86,14 +94,18 @@ describe("generator", () => {
       expect.assertions(1);
 
       expect(() => {
-        getPrinter({
-          schema: {},
-          baseURL: "/",
-          linkRoot: "root",
-          groups: {},
-          printTypeOptions: {},
-          printerModule: "foobar",
-        });
+        getPrinter(
+          "foobar",
+          {
+            schema: {},
+            baseURL: "/",
+            linkRoot: "root",
+          },
+          {
+            groups: {},
+            printTypeOptions: {},
+          },
+        );
       }).toThrow(
         `Cannot find module 'foobar' for @graphql-markdown/core in "printTypeOptions" settings.`,
       );

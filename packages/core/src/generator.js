@@ -35,16 +35,7 @@ const hasChanges = async (
   return true;
 };
 
-const getPrinter = ({
-  schema,
-  baseURL,
-  linkRoot,
-  groups,
-  printTypeOptions,
-  printerModule,
-  skipDocDirective,
-  customDirectives,
-}) => {
+const getPrinter = (printerModule, config, options) => {
   let Printer = undefined;
 
   if (typeof printerModule !== "string") {
@@ -61,12 +52,8 @@ const getPrinter = ({
     );
   }
 
-  Printer.init(schema, baseURL, linkRoot, {
-    groups,
-    printTypeOptions,
-    skipDocDirective,
-    customDirectives,
-  });
+  const { schema, baseURL, linkRoot } = config;
+  Printer.init(schema, baseURL, linkRoot, { ...options });
 
   return Printer;
 };
@@ -101,16 +88,25 @@ const generateDocFromSchema = async ({
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = new getGroups(rootTypes, groupByDirective);
-  const printer = getPrinter({
-    schema,
-    baseURL,
-    linkRoot,
-    groups,
-    printTypeOptions,
+  const printer = getPrinter(
+    // module mandatory
     printerModule,
-    skipDocDirective,
-    customDirectives,
-  });
+
+    // config mandatory
+    {
+      schema,
+      baseURL,
+      linkRoot,
+    },
+
+    // options
+    {
+      groups,
+      printTypeOptions,
+      skipDocDirective,
+      customDirectives,
+    },
+  );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
     ...docOptions,
     deprecated: printTypeOptions.deprecated,
