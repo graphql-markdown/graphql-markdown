@@ -1,14 +1,11 @@
 const {
   string: { escapeMDX },
   object: { hasProperty },
-  graphql: { isDeprecated },
+  graphql: { isDeprecated, getConstDirectiveMap },
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
-const {
-  getConstDirectiveMap,
-  getConstDirectiveDescription,
-} = require("./directive");
+const { getConstDirectiveDescription } = require("./directive");
 
 const printDeprecation = (type) => {
   if (isDeprecated(type) === false) {

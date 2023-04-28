@@ -36,6 +36,7 @@ const {
   getRelationOfImplementation,
   hasDirective,
   getDirective,
+  getConstDirectiveMap,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -837,6 +838,72 @@ describe("graphql", () => {
       const actual = getDirective(type, ["foobar", "foobaz"]);
 
       expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+  });
+
+  describe("getConstDirectiveMap", () => {
+    const schema = buildSchema(`
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"])
+      }
+
+      type TestWithoutDirective {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+    const typeWithoutDirective = schema.getType("TestWithoutDirective");
+    const descriptor = (directiveType, constDirectiveType) =>
+      `Test${constDirectiveType.name.value}`;
+    const options = {
+      customDirectives: {
+        testA: {
+          type: schema.getDirective("testA"),
+          descriptor,
+        },
+        nonExist: {
+          type: undefined,
+          descriptor,
+        },
+      },
+    };
+
+    test("returns undefined when config is not set", () => {
+      expect.assertions(1);
+
+      expect(getConstDirectiveMap(type, {})).toBeUndefined();
+    });
+
+    test("returns undefined when config custom directive does not exist", () => {
+      expect.assertions(1);
+
+      expect(
+        getConstDirectiveMap(typeWithoutDirective, options),
+      ).toBeUndefined();
+    });
+
+    test("returns custom directives map", () => {
+      expect.assertions(1);
+
+      expect(getConstDirectiveMap(type, options)).toMatchSnapshot();
     });
   });
 

@@ -1,6 +1,5 @@
 const {
-  graphql: { getDirective },
-  object: { hasProperty },
+  graphql: { getConstDirectiveMap },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
@@ -9,34 +8,6 @@ const {
   MARKDOWN_EOL,
 } = require("./const/strings");
 const { printLink } = require("./link");
-
-function getConstDirectiveMap(type, options) {
-  if (
-    !hasProperty(options, "customDirectives") ||
-    typeof options.customDirectives !== "object" ||
-    !Object.keys(options.customDirectives).length
-  ) {
-    return undefined;
-  }
-
-  const constDirectives = getDirective(
-    type,
-    Object.keys(options.customDirectives),
-  );
-  if (!constDirectives.length) {
-    return undefined;
-  }
-
-  return constDirectives.reduce((res, constDirective) => {
-    const constDirectiveName = constDirective.name.value;
-    const customDirectiveOption = options.customDirectives[constDirectiveName];
-    res[constDirectiveName] = {
-      ...customDirectiveOption,
-      constDirective,
-    };
-    return res;
-  }, {});
-}
 
 function printConstDirectives(type, options) {
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -78,7 +49,6 @@ function getConstDirectiveDescription(constDirectiveOption) {
 }
 
 module.exports = {
-  getConstDirectiveMap,
   printConstDirectives,
   printConstDirective,
   getConstDirectiveDescription,

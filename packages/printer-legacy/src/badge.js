@@ -1,11 +1,16 @@
 const {
   object: { hasProperty },
-  graphql: { isNonNullType, isListType, isDeprecated, getNamedType },
+  graphql: {
+    isNonNullType,
+    isListType,
+    isDeprecated,
+    getNamedType,
+    getConstDirectiveMap,
+  },
 } = require("@graphql-markdown/utils");
 
 const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
-const { getConstDirectiveMap } = require("./directive");
 
 const getTypeBadges = (type, options) => {
   const rootType = hasProperty(type, "type") ? type.type : type;

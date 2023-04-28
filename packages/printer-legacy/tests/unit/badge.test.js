@@ -16,6 +16,7 @@ jest.mock("@graphql-markdown/utils", () => {
       isDirectiveType: jest.fn(),
       isDeprecated: jest.fn(),
       getNamedType: jest.fn(),
+      getConstDirectiveMap: jest.fn(),
     },
   };
 });
@@ -27,13 +28,6 @@ jest.mock("../../src/link", () => {
   };
 });
 const Link = require("../../src/link");
-
-jest.mock("../../src/directive", () => {
-  return {
-    getConstDirectiveMap: jest.fn(),
-  };
-});
-const Directive = require("../../src/directive");
 
 jest.mock("../../src/group", () => {
   return {
@@ -158,7 +152,7 @@ describe("badge", () => {
       expect.assertions(1);
 
       jest
-        .spyOn(Directive, "getConstDirectiveMap")
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
         .mockReturnValueOnce({ foo: {} });
 
       const type = {};

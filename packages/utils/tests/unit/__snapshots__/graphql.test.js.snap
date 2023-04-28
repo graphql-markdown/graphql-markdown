@@ -1,5 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`graphql getConstDirectiveMap returns custom directives map 1`] = `
+{
+  "testA": {
+    "constDirective": {
+      "arguments": [],
+      "kind": "Directive",
+      "loc": {
+        "end": 280,
+        "start": 274,
+      },
+      "name": {
+        "kind": "Name",
+        "loc": {
+          "end": 280,
+          "start": 275,
+        },
+        "value": "testA",
+      },
+    },
+    "descriptor": [Function],
+    "type": "@testA",
+  },
+}
+`;
+
 exports[`graphql getDirective return empty list if the type has no directive 1`] = `"[]"`;
 
 exports[`graphql getDirective return empty list if the type has no matching directive 1`] = `"[]"`;

@@ -192,6 +192,34 @@ function getDirective(type, directives) {
   );
 }
 
+function getConstDirectiveMap(type, options) {
+  if (
+    !hasProperty(options, "customDirectives") ||
+    typeof options.customDirectives !== "object" ||
+    Object.keys(options.customDirectives).length === 0
+  ) {
+    return undefined;
+  }
+
+  const constDirectives = getDirective(
+    type,
+    Object.keys(options.customDirectives),
+  );
+  if (!constDirectives.length) {
+    return undefined;
+  }
+
+  return constDirectives.reduce((res, constDirective) => {
+    const constDirectiveName = constDirective.name.value;
+    const customDirectiveOption = options.customDirectives[constDirectiveName];
+    res[constDirectiveName] = {
+      ...customDirectiveOption,
+      constDirective,
+    };
+    return res;
+  }, {});
+}
+
 function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
@@ -399,6 +427,7 @@ module.exports = {
   getDefaultValue,
   hasDirective,
   getDirective,
+  getConstDirectiveMap,
   isOperation,
   isInterfaceType,
   isInputType,
