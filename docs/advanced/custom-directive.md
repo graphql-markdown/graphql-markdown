@@ -3,7 +3,7 @@ pagination_prev: null
 pagination_next: null
 ---
 
-# Custom custom directives
+# Custom directives
 
 For custom directives, you can select which ones to be rendered for the types or in the locations they are declared. Information about the custom directives includes a custom description.
 

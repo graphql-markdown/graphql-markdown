@@ -205,7 +205,7 @@ function getConstDirectiveMap(type, options) {
     type,
     Object.keys(options.customDirectives),
   );
-  if (!constDirectives.length) {
+  if (constDirectives.length === 0) {
     return undefined;
   }
 
