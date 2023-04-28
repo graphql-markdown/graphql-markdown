@@ -313,7 +313,7 @@ describe("Printer", () => {
         const spies = [
           "printHeader",
           "printCode",
-          "printConstDirectives",
+          "printCustomDirectives",
           "printTypeMetadata",
           "printDescription",
           "printRelations",

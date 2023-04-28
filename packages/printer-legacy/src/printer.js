@@ -19,7 +19,7 @@ const {
 
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
-const { printConstDirectives } = require("./directive");
+const { printCustomDirectives } = require("./directive");
 const {
   printOperationMetadata,
   printCodeOperation,
@@ -141,7 +141,7 @@ class Printer {
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
 
-  static printConstDirectives = printConstDirectives;
+  static printCustomDirectives = printCustomDirectives;
 
   static printTypeMetadata = (type, options) => {
     let metadata;
@@ -198,7 +198,7 @@ class Printer {
     });
     const description = Printer.printDescription(type);
     const code = Printer.printCode(type, printTypeOptions);
-    const constDirectives = Printer.printConstDirectives(
+    const customDirectives = Printer.printCustomDirectives(
       type,
       printTypeOptions,
     );
@@ -210,7 +210,7 @@ class Printer {
       mdx,
       description,
       code,
-      constDirectives,
+      customDirectives,
       metadata,
       relations,
     ].join(MARKDOWN_EOP);

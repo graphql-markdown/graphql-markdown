@@ -9,7 +9,7 @@ const {
 } = require("./const/strings");
 const { printLink } = require("./link");
 
-function printConstDirectives(type, options) {
+function printCustomDirectives(type, options) {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
@@ -21,24 +21,24 @@ function printConstDirectives(type, options) {
 
   const content = Object.values(constDirectiveMap)
     .map((constDirectiveOption) =>
-      printConstDirective(type, constDirectiveOption, options),
+      printCustomDirective(type, constDirectiveOption, options),
     )
     .join(MARKDOWN_EOP);
 
-  return `${HEADER_SECTION_LEVEL} Type Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 }
 
-function printConstDirective(type, constDirectiveOption, options) {
+function printCustomDirective(type, constDirectiveOption, options) {
   const typeNameLink = printLink(constDirectiveOption.type, {
     ...options,
     withAttributes: false,
   });
-  const description = getConstDirectiveDescription(constDirectiveOption);
+  const description = getCustomDirectiveDescription(constDirectiveOption);
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
-function getConstDirectiveDescription(constDirectiveOption) {
+function getCustomDirectiveDescription(constDirectiveOption) {
   const {
     type: customDirectiveType,
     constDirective: constDirectiveType,
@@ -49,7 +49,7 @@ function getConstDirectiveDescription(constDirectiveOption) {
 }
 
 module.exports = {
-  printConstDirectives,
-  printConstDirective,
-  getConstDirectiveDescription,
+  printCustomDirectives,
+  printCustomDirective,
+  getCustomDirectiveDescription,
 };

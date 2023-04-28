@@ -5,7 +5,7 @@ const {
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
-const { getConstDirectiveDescription } = require("./directive");
+const { getCustomDirectiveDescription } = require("./directive");
 
 const printDeprecation = (type) => {
   if (isDeprecated(type) === false) {
@@ -32,7 +32,7 @@ const printCustomDirectives = (type, options) => {
 
   const content = Object.values(constDirectiveMap)
     .map((constDirectiveOption) =>
-      getConstDirectiveDescription(constDirectiveOption),
+      getCustomDirectiveDescription(constDirectiveOption),
     )
     .join(MARKDOWN_EOP);
 
