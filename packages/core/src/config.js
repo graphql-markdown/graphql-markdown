@@ -31,7 +31,7 @@ const DEFAULT_OPTIONS = {
     deprecated: "default",
   },
   skipDocDirective: [],
-  customDirective: {},
+  customDirective: undefined,
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -71,12 +71,13 @@ function buildConfig(configFileOpts, cliOpts) {
   };
 }
 
-function getCustomDirectives(
-  customDirectiveOptions = {},
-  skipDocDirective = [],
-) {
-  if (Object.keys(customDirectiveOptions).length == 0) {
-    return customDirectiveOptions;
+function getCustomDirectives(customDirectiveOptions, skipDocDirective = []) {
+  if (
+    typeof customDirectiveOptions === "undefined" ||
+    (typeof customDirectiveOptions === "object" &&
+      Object.keys(customDirectiveOptions).length == 0)
+  ) {
+    return undefined;
   }
 
   for (const [name, option] of Object.entries(customDirectiveOptions)) {
@@ -92,7 +93,9 @@ function getCustomDirectives(
     }
   }
 
-  return customDirectiveOptions;
+  return Object.keys(customDirectiveOptions).length === 0
+    ? undefined
+    : customDirectiveOptions;
 }
 
 function getDiffMethod(diff, force) {

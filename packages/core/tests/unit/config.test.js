@@ -340,20 +340,20 @@ describe("config", () => {
   });
 
   describe("getCustomDirectives", () => {
-    test("returns empty object if not configured", () => {
+    test("returns undefined if not configured", () => {
       expect.hasAssertions();
 
-      expect(getCustomDirectives()).toStrictEqual({});
+      expect(getCustomDirectives()).toBeUndefined();
     });
 
-    test("returns empty object if specified directives are skipped", () => {
+    test("returns undefined if specified directives are skipped", () => {
       expect.hasAssertions();
 
       const options = {
         test: {},
       };
 
-      expect(getCustomDirectives(options, ["test"])).toStrictEqual({});
+      expect(getCustomDirectives(options, ["test"])).toBeUndefined();
     });
 
     test("throws an error if descriptor format is invalid", () => {
