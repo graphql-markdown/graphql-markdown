@@ -37,6 +37,7 @@ const {
   hasDirective,
   getDirective,
   getConstDirectiveMap,
+  getDirectiveArgValue,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -904,6 +905,124 @@ describe("graphql", () => {
       expect.assertions(1);
 
       expect(getConstDirectiveMap(type, options)).toMatchSnapshot();
+    });
+  });
+
+  describe("getDirectiveArgValue", () => {
+    const schema = buildSchema(`
+      directive @dirWithoutArg on OBJECT
+
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+        argC: TestInput
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA @dirWithoutArg {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"], argC: { id: "input-id" })
+      }
+
+      input TestInput {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+
+    test("throws an error if argument does not exist", () => {
+      expect.assertions(1);
+
+      const directiveName = "dirWithoutArg";
+      const directiveType = schema.getDirective(directiveName);
+      const constDirectiveType = type.astNode.directives.find(
+        (node) => node.name.value === directiveName,
+      );
+      const argName = "fooBar";
+
+      expect(() => {
+        getDirectiveArgValue(directiveType, constDirectiveType, argName);
+      }).toThrow(`Argument by name ${argName} is not found!`);
+    });
+
+    test("returns fields value if argument is of input type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const constDirectiveType = typeFieldNode.directives.find(
+        (node) => node.name.value === directiveName,
+      );
+      const argName = "argC";
+
+      expect(
+        getDirectiveArgValue(directiveType, constDirectiveType, argName),
+      ).toMatchSnapshot();
+    });
+
+    test("returns values if argument is of list type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const constDirectiveType = typeFieldNode.directives.find(
+        (node) => node.name.value === directiveName,
+      );
+      const argName = "argB";
+
+      expect(
+        getDirectiveArgValue(directiveType, constDirectiveType, argName),
+      ).toMatchSnapshot();
+    });
+
+    test("returns value if argument is of a type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const constDirectiveType = typeFieldNode.directives.find(
+        (node) => node.name.value === directiveName,
+      );
+      const argName = "argA";
+
+      expect(
+        getDirectiveArgValue(directiveType, constDirectiveType, argName),
+      ).toMatchInlineSnapshot(`"10"`);
+    });
+
+    test("returns default value if argument is optional and not set", () => {
+      expect.assertions(1);
+
+      const directiveName = "testA";
+      const directiveType = schema.getDirective(directiveName);
+      const constDirectiveType = type.astNode.directives.find(
+        (node) => node.name.value === directiveName,
+      );
+      const argName = "arg";
+
+      expect(
+        getDirectiveArgValue(directiveType, constDirectiveType, argName),
+      ).toMatchInlineSnapshot(`"ARGA"`);
     });
   });
 

@@ -220,6 +220,27 @@ function getConstDirectiveMap(type, options) {
   }, {});
 }
 
+function getDirectiveArgValue(directiveType, constDirectiveType, argName) {
+  const args = constDirectiveType.arguments ?? [];
+
+  // get argument in the declared directive node
+  const constArg = args.find((arg) => arg.name.value === argName);
+  if (constArg) {
+    return (
+      constArg.value.fields ?? constArg.value.values ?? constArg.value.value
+    );
+  }
+
+  // fallback to the argument default value in the defined directive type.
+  const defArg = directiveType.args.find((arg) => arg.name === argName);
+  if (defArg) {
+    return defArg.defaultValue || undefined;
+  }
+
+  // expect the argument by name to exist.
+  throw new Error(`Argument by name ${argName} is not found!`);
+}
+
 function getIntrospectionFieldsList(queryType) {
   if (
     typeof queryType === "undefined" ||
@@ -428,6 +449,7 @@ module.exports = {
   hasDirective,
   getDirective,
   getConstDirectiveMap,
+  getDirectiveArgValue,
   isOperation,
   isInterfaceType,
   isInputType,

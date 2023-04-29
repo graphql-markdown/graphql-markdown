@@ -1,18 +1,6 @@
-function getDirectiveArgValue(directiveType, constDirectiveType, argName) {
-  const args = constDirectiveType.arguments ?? [];
-  const constArg = args.find((arg) => arg.name.value === argName);
-  if (constArg) {
-    return (
-      constArg.value.fields ?? constArg.value.values ?? constArg.value.value
-    );
-  }
-  const defArg = directiveType.args.find((arg) => arg.name === argName);
-  if (defArg) {
-    return defArg.defaultValue || undefined;
-  }
-
-  throw new Error(`Argument by name ${argName} is not found!`);
-}
+const {
+  graphql: { getDirectiveArgValue },
+} = require("@graphql-markdown/utils");
 
 module.exports = {
   id: "schema_with_grouping",
