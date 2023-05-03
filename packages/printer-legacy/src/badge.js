@@ -41,7 +41,7 @@ const getTypeBadges = (type, options) => {
 
   const constDirectiveMap = getConstDirectiveMap(type, options);
   if (typeof constDirectiveMap !== "undefined") {
-    badges.push(...Object.keys(constDirectiveMap));
+    badges.push(...Object.keys(constDirectiveMap).map((badge) => `@${badge}`));
   }
 
   return badges;

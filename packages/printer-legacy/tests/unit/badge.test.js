@@ -160,7 +160,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type, options);
 
-      expect(badges).toStrictEqual(["foo"]);
+      expect(badges).toStrictEqual(["@foo"]);
     });
   });
 });
