@@ -18,9 +18,9 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 
 Use these options to render custom directive information for types (see [custom directive](/docs/advanced/custom-directive)).
 
-| Setting   | CLI flag        | Default   |
-| --------- | --------------- | --------- |
-| `customDirective` | - | `undefined`     |
+| Setting           | CLI flag        | Default     |
+| ----------------- | --------------- | ----------- |
+| `customDirective` | _not supported_ | `undefined` |
 
 ## `diffMethod`
 
