@@ -1,30 +1,30 @@
 const {
-  GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-  isListType,
+  getDirectiveValues,
+  getNamedType,
   GraphQLBoolean,
-  GraphQLInt,
+  GraphQLEnumType,
   GraphQLFloat,
   GraphQLID,
-  GraphQLString,
-  GraphQLObjectType,
-  GraphQLInterfaceType,
   GraphQLInputObjectType,
-  isDirective: isDirectiveType,
-  getNamedType,
-  isScalarType,
-  isEnumType,
-  isUnionType,
-  isInterfaceType,
-  isObjectType,
-  isInputObjectType: isInputType,
-  isNonNullType,
-  isLeafType,
-  printSchema,
+  GraphQLInt,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
   GraphQLSchema,
+  GraphQLString,
+  GraphQLUnionType,
+  isDirective: isDirectiveType,
+  isEnumType,
+  isInputObjectType: isInputType,
+  isInterfaceType,
+  isLeafType,
+  isListType,
+  isNonNullType,
+  isObjectType,
+  isScalarType,
+  isUnionType,
   OperationTypeNode,
-  getDirectiveValues,
+  printSchema,
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
@@ -213,14 +213,21 @@ function getConstDirectiveMap(
   }, {});
 }
 
-function getDirectiveArgValue(directive, astNode, argName) {
-  const args = getDirectiveValues(directive, astNode);
+function getDirectiveArgValue(directiveType, astNode, argName) {
+  const args = getTypeDirectiveValues(directiveType, astNode);
 
   if (typeof args === "undefined" || typeof args[argName] === "undefined") {
     throw new Error(`Directive argument '${argName}' not found!`);
   }
 
   return args[argName];
+}
+
+function getTypeDirectiveValues(directiveType, type) {
+  if (hasProperty(type, "astNode")) {
+    return getDirectiveValues(directiveType, type.astNode);
+  }
+  return getDirectiveValues(directiveType, type);
 }
 
 function getIntrospectionFieldsList(queryType) {
@@ -419,7 +426,6 @@ module.exports = {
   getDefaultValue,
   getDirective,
   getDirectiveArgValue,
-  getDirectiveValues,
   getDocumentLoaders,
   getFields,
   getIntrospectionFieldsList,
@@ -430,6 +436,7 @@ module.exports = {
   getRelationOfReturn,
   getRelationOfUnion,
   getSchemaMap,
+  getTypeDirectiveValues,
   getTypeFromSchema,
   getTypeName,
   hasDirective,

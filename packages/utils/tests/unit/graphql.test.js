@@ -1,43 +1,55 @@
 const { loadSchema: gqlToolsLoadSchema } = require("@graphql-tools/load");
 const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
+
+jest.mock("graphql", () => {
+  const graphql = jest.requireActual("graphql");
+  return {
+    ...graphql,
+    getDirectiveValues: jest.fn((...args) =>
+      graphql.getDirectiveValues(...args),
+    ),
+  };
+});
 const {
+  buildSchema,
+  getDirectiveValues,
+  GraphQLBoolean,
   GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-  GraphQLObjectType,
-  GraphQLInterfaceType,
+  GraphQLFloat,
+  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInt,
-  GraphQLID,
-  GraphQLFloat,
-  GraphQLString,
+  GraphQLInterfaceType,
   GraphQLList,
-  GraphQLBoolean,
-  buildSchema,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLString,
+  GraphQLUnionType,
 } = require("graphql");
 
 const {
+  getConstDirectiveMap,
   getDefaultValue,
-  getIntrospectionFieldsList,
-  getFields,
-  getTypeName,
-  getTypeFromSchema,
-  getSchemaMap,
-  loadSchema,
-  isParametrizedField,
-  isOperation,
-  isDeprecated,
+  getDirective,
+  getDirectiveArgValue,
   getDocumentLoaders,
-  getRelationOfInterface,
-  getRelationOfUnion,
-  getRelationOfReturn,
+  getFields,
+  getIntrospectionFieldsList,
   getRelationOfField,
   getRelationOfImplementation,
+  getRelationOfInterface,
+  getRelationOfReturn,
+  getRelationOfUnion,
+  getSchemaMap,
+  getTypeDirectiveValues,
+  getTypeFromSchema,
+  getTypeName,
   hasDirective,
-  getDirective,
-  getConstDirectiveMap,
-  getDirectiveArgValue,
+  isDeprecated,
+  isOperation,
+  isParametrizedField,
+  loadSchema,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -1012,8 +1024,77 @@ describe("graphql", () => {
       const argName = "arg";
 
       expect(
+        getDirectiveArgValue(directiveType, type, argName),
+      ).toMatchInlineSnapshot(`"ARGA"`);
+    });
+
+    test("returns value if type is astNode", () => {
+      expect.assertions(1);
+
+      const directiveName = "testA";
+      const directiveType = schema.getDirective(directiveName);
+      const argName = "arg";
+
+      expect(
         getDirectiveArgValue(directiveType, type.astNode, argName),
       ).toMatchInlineSnapshot(`"ARGA"`);
+    });
+  });
+
+  describe("getTypeDirectiveValues", () => {
+    const schema = buildSchema(`
+      directive @dirWithoutArg on OBJECT
+
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+        argC: TestInput
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA @dirWithoutArg {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"], argC: { id: "input-id" })
+      }
+
+      input TestInput {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+    const directiveType = schema.getDirective("testA");
+
+    test("converts type to astNode", () => {
+      expect.assertions(1);
+
+      getTypeDirectiveValues(directiveType, type);
+
+      expect(getDirectiveValues).toHaveBeenCalledWith(
+        directiveType,
+        type.astNode,
+      );
+    });
+
+    test("does not convert astNode", () => {
+      expect.assertions(1);
+
+      getTypeDirectiveValues(directiveType, type.astNode);
+
+      expect(getDirectiveValues).toHaveBeenCalledWith(
+        directiveType,
+        type.astNode,
+      );
     });
   });
 
