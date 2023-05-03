@@ -213,7 +213,7 @@ function getConstDirectiveMap(
   }, {});
 }
 
-function getDirectiveArgValue(directiveType, astNode, argName) {
+function getTypeDirectiveArgValue(directiveType, astNode, argName) {
   const args = getTypeDirectiveValues(directiveType, astNode);
 
   if (typeof args === "undefined" || typeof args[argName] === "undefined") {
@@ -425,7 +425,7 @@ module.exports = {
   getConstDirectiveMap,
   getDefaultValue,
   getDirective,
-  getDirectiveArgValue,
+  getTypeDirectiveArgValue,
   getDocumentLoaders,
   getFields,
   getIntrospectionFieldsList,

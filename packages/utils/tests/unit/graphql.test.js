@@ -32,7 +32,7 @@ const {
   getConstDirectiveMap,
   getDefaultValue,
   getDirective,
-  getDirectiveArgValue,
+  getTypeDirectiveArgValue,
   getDocumentLoaders,
   getFields,
   getIntrospectionFieldsList,
@@ -920,7 +920,7 @@ describe("graphql", () => {
     });
   });
 
-  describe("getDirectiveArgValue", () => {
+  describe("getTypeDirectiveArgValue", () => {
     const schema = buildSchema(`
       directive @dirWithoutArg on OBJECT
 
@@ -961,7 +961,7 @@ describe("graphql", () => {
       const argName = "fooBar";
 
       expect(() => {
-        getDirectiveArgValue(directiveType, type.astNode, argName);
+        getTypeDirectiveArgValue(directiveType, type.astNode, argName);
       }).toThrow(`Directive argument '${argName}' not found!`);
     });
 
@@ -975,7 +975,7 @@ describe("graphql", () => {
       );
       const argName = "argC";
 
-      expect(getDirectiveArgValue(directiveType, typeFieldNode, argName))
+      expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
         .toMatchInlineSnapshot(`
         {
           "id": "input-id",
@@ -993,7 +993,7 @@ describe("graphql", () => {
       );
       const argName = "argB";
 
-      expect(getDirectiveArgValue(directiveType, typeFieldNode, argName))
+      expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
         .toMatchInlineSnapshot(`
         [
           "testArgB",
@@ -1012,7 +1012,7 @@ describe("graphql", () => {
       const argName = "argA";
 
       expect(
-        getDirectiveArgValue(directiveType, typeFieldNode, argName),
+        getTypeDirectiveArgValue(directiveType, typeFieldNode, argName),
       ).toMatchInlineSnapshot(`10`);
     });
 
@@ -1024,7 +1024,7 @@ describe("graphql", () => {
       const argName = "arg";
 
       expect(
-        getDirectiveArgValue(directiveType, type, argName),
+        getTypeDirectiveArgValue(directiveType, type, argName),
       ).toMatchInlineSnapshot(`"ARGA"`);
     });
 
@@ -1036,7 +1036,7 @@ describe("graphql", () => {
       const argName = "arg";
 
       expect(
-        getDirectiveArgValue(directiveType, type.astNode, argName),
+        getTypeDirectiveArgValue(directiveType, type.astNode, argName),
       ).toMatchInlineSnapshot(`"ARGA"`);
     });
   });
