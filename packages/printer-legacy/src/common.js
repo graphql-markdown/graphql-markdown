@@ -1,11 +1,12 @@
 const {
   string: { escapeMDX },
-  object: { hasProperty },
+  object: { hasProperty, isEmpty },
   graphql: { isDeprecated, getConstDirectiveMap },
 } = require("@graphql-markdown/utils");
 
-const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
 const { getCustomDirectiveDescription } = require("./directive");
+
+const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
 
 const printDeprecation = (type) => {
   if (isDeprecated(type) === false) {
@@ -23,16 +24,13 @@ const printDeprecation = (type) => {
 const printCustomDirectives = (type, options) => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
-  if (
-    typeof constDirectiveMap !== "object" ||
-    !Object.keys(constDirectiveMap).length
-  ) {
+  if (typeof constDirectiveMap !== "object" || isEmpty(constDirectiveMap)) {
     return "";
   }
 
   const content = Object.values(constDirectiveMap)
     .map((constDirectiveOption) =>
-      getCustomDirectiveDescription(constDirectiveOption),
+      getCustomDirectiveDescription(type, constDirectiveOption),
     )
     .join(MARKDOWN_EOP);
 

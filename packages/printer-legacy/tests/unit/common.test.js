@@ -116,8 +116,7 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (dirType, constDirNode) =>
-              `Test${constDirNode.name.value}`,
+            descriptor: (directive) => `Test ${directive.name}`,
           },
         },
       };
@@ -125,7 +124,7 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "TesttestDirective
+        "Test testDirective
 
         Lorem ipsum"
       `);
@@ -214,8 +213,7 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (dirType, constDirNode) =>
-              `Test${constDirNode.name.value}`,
+            descriptor: (directive) => `Test ${directive.name}`,
           },
         },
       };
@@ -223,7 +221,7 @@ describe("common", () => {
       const description = printCustomDirectives(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "TesttestDirective
+        "Test testDirective
 
         "
       `);

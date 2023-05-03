@@ -1,5 +1,6 @@
 const {
   graphql: { getConstDirectiveMap },
+  object: { hasProperty },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
@@ -33,19 +34,21 @@ function printCustomDirective(type, constDirectiveOption, options) {
     ...options,
     withAttributes: false,
   });
-  const description = getCustomDirectiveDescription(constDirectiveOption);
+  const description = getCustomDirectiveDescription(type, constDirectiveOption);
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
-function getCustomDirectiveDescription(constDirectiveOption) {
-  const {
-    type: customDirectiveType,
-    constDirective: constDirectiveType,
-    descriptor,
-  } = constDirectiveOption;
+function getCustomDirectiveDescription(type, constDirectiveOption) {
+  if (
+    typeof constDirectiveOption === "undefined" ||
+    !hasProperty(constDirectiveOption, "descriptor") ||
+    typeof constDirectiveOption.descriptor !== "function"
+  ) {
+    return "";
+  }
 
-  return descriptor(customDirectiveType, constDirectiveType);
+  return constDirectiveOption.descriptor(constDirectiveOption.type, type);
 }
 
 module.exports = {
