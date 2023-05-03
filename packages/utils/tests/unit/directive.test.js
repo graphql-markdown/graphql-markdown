@@ -58,5 +58,11 @@ describe("directive", () => {
         getCustomDirectives(schemaMap, customDirectiveOptions),
       ).toMatchSnapshot();
     });
+
+    test("returns undefined if no match", () => {
+      expect.assertions(1);
+
+      expect(getCustomDirectives(schemaMap, {})).toBeUndefined();
+    });
   });
 });

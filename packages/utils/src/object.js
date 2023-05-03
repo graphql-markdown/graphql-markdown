@@ -13,4 +13,8 @@ function hasMethod(obj, prop) {
   return hasProperty(obj, prop) && typeof obj[prop] === "function";
 }
 
-module.exports = { hasMethod, hasProperty };
+function isEmpty(obj) {
+  return typeof obj !== "object" || Object.keys(obj).length === 0;
+}
+
+module.exports = { hasMethod, hasProperty, isEmpty };
