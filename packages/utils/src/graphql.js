@@ -24,11 +24,12 @@ const {
   printSchema,
   GraphQLSchema,
   OperationTypeNode,
+  getDirectiveValues,
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
 const { convertArrayToObject } = require("./array");
-const { hasMethod, hasProperty } = require("./object");
+const { hasMethod, hasProperty, isEmpty } = require("./object");
 
 const OperationTypeNodes = [
   OperationTypeNode.QUERY,
@@ -192,53 +193,34 @@ function getDirective(type, directives) {
   );
 }
 
-function getConstDirectiveMap(type, options) {
-  if (
-    !hasProperty(options, "customDirectives") ||
-    typeof options.customDirectives !== "object" ||
-    Object.keys(options.customDirectives).length === 0
-  ) {
+function getConstDirectiveMap(
+  type,
+  { customDirectives } = { customDirectives: undefined },
+) {
+  if (isEmpty(customDirectives)) {
     return undefined;
   }
 
-  const constDirectives = getDirective(
-    type,
-    Object.keys(options.customDirectives),
-  );
+  const constDirectives = getDirective(type, Object.keys(customDirectives));
   if (constDirectives.length === 0) {
     return undefined;
   }
 
-  return constDirectives.reduce((res, constDirective) => {
-    const constDirectiveName = constDirective.name.value;
-    const customDirectiveOption = options.customDirectives[constDirectiveName];
-    res[constDirectiveName] = {
-      ...customDirectiveOption,
-      constDirective,
-    };
-    return res;
+  return constDirectives.reduce((directiveMap, constDirective) => {
+    const name = constDirective.name.value;
+    directiveMap[name] = customDirectives[name];
+    return directiveMap;
   }, {});
 }
 
-function getDirectiveArgValue(directiveType, constDirectiveType, argName) {
-  const args = constDirectiveType.arguments ?? [];
+function getDirectiveArgValue(directive, astNode, argName) {
+  const args = getDirectiveValues(directive, astNode);
 
-  // get argument in the declared directive node
-  const constArg = args.find((arg) => arg.name.value === argName);
-  if (constArg) {
-    return (
-      constArg.value.fields ?? constArg.value.values ?? constArg.value.value
-    );
+  if (typeof args === "undefined" || typeof args[argName] === "undefined") {
+    throw new Error(`Directive argument '${argName}' not found!`);
   }
 
-  // fallback to the argument default value in the defined directive type.
-  const defArg = directiveType.args.find((arg) => arg.name === argName);
-  if (defArg) {
-    return defArg.defaultValue || undefined;
-  }
-
-  // expect the argument by name to exist.
-  throw new Error(`Argument by name ${argName} is not found!`);
+  return args[argName];
 }
 
 function getIntrospectionFieldsList(queryType) {
@@ -433,36 +415,37 @@ function isDeprecated(type) {
 }
 
 module.exports = {
-  loadSchema,
-  getDocumentLoaders,
-  isDirectiveType,
-  isObjectType,
-  getNamedType,
-  isScalarType,
-  isEnumType,
-  isUnionType,
-  getSchemaMap,
-  getTypeName,
-  isParametrizedField,
-  getFields,
-  getDefaultValue,
-  hasDirective,
-  getDirective,
   getConstDirectiveMap,
+  getDefaultValue,
+  getDirective,
   getDirectiveArgValue,
-  isOperation,
-  isInterfaceType,
+  getDirectiveValues,
+  getDocumentLoaders,
+  getFields,
+  getIntrospectionFieldsList,
+  getNamedType,
+  getRelationOfField,
+  getRelationOfImplementation,
+  getRelationOfInterface,
+  getRelationOfReturn,
+  getRelationOfUnion,
+  getSchemaMap,
+  getTypeFromSchema,
+  getTypeName,
+  hasDirective,
+  isDeprecated,
+  isDirectiveType,
+  isEnumType,
   isInputType,
-  isNonNullType,
+  isInterfaceType,
   isLeafType,
   isListType,
-  isDeprecated,
+  isNonNullType,
+  isObjectType,
+  isOperation,
+  isParametrizedField,
+  isScalarType,
+  isUnionType,
+  loadSchema,
   printSchema,
-  getIntrospectionFieldsList,
-  getTypeFromSchema,
-  getRelationOfReturn,
-  getRelationOfField,
-  getRelationOfUnion,
-  getRelationOfInterface,
-  getRelationOfImplementation,
 };

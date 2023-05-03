@@ -3,22 +3,6 @@
 exports[`graphql getConstDirectiveMap returns custom directives map 1`] = `
 {
   "testA": {
-    "constDirective": {
-      "arguments": [],
-      "kind": "Directive",
-      "loc": {
-        "end": 280,
-        "start": 274,
-      },
-      "name": {
-        "kind": "Name",
-        "loc": {
-          "end": 280,
-          "start": 275,
-        },
-        "value": "testA",
-      },
-    },
     "descriptor": [Function],
     "type": "@testA",
   },
@@ -69,49 +53,6 @@ exports[`graphql getDirective return list if the type has one matching directive
     }
   }
 ]"
-`;
-
-exports[`graphql getDirectiveArgValue returns fields value if argument is of input type 1`] = `
-[
-  {
-    "kind": "ObjectField",
-    "loc": {
-      "end": 505,
-      "start": 491,
-    },
-    "name": {
-      "kind": "Name",
-      "loc": {
-        "end": 493,
-        "start": 491,
-      },
-      "value": "id",
-    },
-    "value": {
-      "block": false,
-      "kind": "StringValue",
-      "loc": {
-        "end": 505,
-        "start": 495,
-      },
-      "value": "input-id",
-    },
-  },
-]
-`;
-
-exports[`graphql getDirectiveArgValue returns values if argument is of list type 1`] = `
-[
-  {
-    "block": false,
-    "kind": "StringValue",
-    "loc": {
-      "end": 480,
-      "start": 470,
-    },
-    "value": "testArgB",
-  },
-]
 `;
 
 exports[`graphql getFields() returns list of type fields 1`] = `
