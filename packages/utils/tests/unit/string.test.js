@@ -1,10 +1,11 @@
 const {
-  toSlug,
-  escapeMDX,
-  stringCaseBuilder,
-  prune,
   capitalize,
+  escapeMDX,
+  interpolate,
+  prune,
   replaceDiacritics,
+  stringCaseBuilder,
+  toSlug,
 } = require("../../src/string");
 
 describe("string", () => {
@@ -110,5 +111,27 @@ describe("string", () => {
         expect(capitalize(input)).toBe(expected);
       },
     );
+  });
+
+  describe("interpolate()", () => {
+    test("returns an interpolated string with replaced values", () => {
+      expect.hasAssertions();
+
+      const values = { foo: 42, bar: { value: "test" } };
+      const template = "${foo} is not ${bar.value}";
+
+      expect(interpolate(template, values)).toBe("42 is not test");
+    });
+
+    test("returns an interpolated string with fallback values when not found", () => {
+      expect.hasAssertions();
+
+      const values = { foo: 42, bar: { value: "test" } };
+      const template = "${foo} is not ${bar.notfoung}";
+
+      expect(interpolate(template, values, "fallback")).toBe(
+        "42 is not fallback",
+      );
+    });
   });
 });

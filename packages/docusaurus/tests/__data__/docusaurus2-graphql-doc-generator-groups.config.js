@@ -1,5 +1,6 @@
 const {
-  graphql: { getDirectiveArgValue },
+  graphql: { getTypeDirectiveValues },
+  helper: { directiveDescriptor },
 } = require("@graphql-markdown/utils");
 
 module.exports = {
@@ -26,32 +27,20 @@ module.exports = {
   },
   customDirective: {
     auth: {
-      descriptor: (directiveType, constDirectiveType) => {
-        const value = getDirectiveArgValue(
-          directiveType,
-          constDirectiveType,
-          "requires",
+      descriptor: (directive, type) => {
+        return directiveDescriptor(
+          directive,
+          type,
+          "This requires the current user to be in ${requires} role.",
         );
-        return `This requires the current user to be in ${value} role.`;
       },
     },
     complexity: {
-      descriptor: (directiveType, constDirectiveType) => {
-        const value = getDirectiveArgValue(
-          directiveType,
-          constDirectiveType,
-          "value",
-        );
-        const multipliers = getDirectiveArgValue(
-          directiveType,
-          constDirectiveType,
-          "multipliers",
-        );
+      descriptor: (directive, type) => {
+        const { value, multipliers } = getTypeDirectiveValues(directive, type);
         const multiplierDescription =
           typeof multipliers !== "undefined"
-            ? ` mutiplied by parameters ${multipliers.map(
-                (valNode) => valNode.value,
-              )}`
+            ? ` multiplied by parameters ${multipliers.map((value) => value)}`
             : "";
         return `This has an additional cost of ${value} points${multiplierDescription}.`;
       },

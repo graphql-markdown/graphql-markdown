@@ -17,4 +17,13 @@ function isEmpty(obj) {
   return typeof obj !== "object" || Object.keys(obj).length === 0;
 }
 
-module.exports = { hasMethod, hasProperty, isEmpty };
+// get the specified property or nested property of an object
+function getObjPath(path, obj, fallback = "") {
+  if (typeof obj !== "object" || typeof path !== "string") {
+    return fallback;
+  }
+
+  return path.split(".").reduce((res, key) => res[key] || fallback, obj);
+}
+
+module.exports = { hasMethod, hasProperty, isEmpty, getObjPath };

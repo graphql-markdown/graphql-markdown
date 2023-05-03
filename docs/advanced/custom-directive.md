@@ -36,14 +36,13 @@ plugins: [
       // ... other options
       customDirective: {
         auth: {
-          descriptor: (directiveType, constDirectiveType) => {
+          descriptor: (directive, type) => {
             // get value for argument "requires"
-            const value = getDirectiveArgValue(
-              directiveType,
-              constDirectiveType,
-              "requires",
+            const value = directiveDescriptor(
+              directive,
+              type,
+              "This requires the current user to be in ${requires} role."
             );
-            return `This requires the current user to be in ${value} role.`;
           },
         },
         // ... other custom directive options
@@ -56,5 +55,5 @@ plugins: [
 Use a helper function to get argument value for a directive. You can create one by yourself or you might import an existing helper function available in `@graphql-markdown/utils` package like below:
 
 ```js
-const { graphql: { getDirectiveArgValue } } = require("@graphql-markdown/utils");
+const { helper: { directiveDescriptor } } = require("@graphql-markdown/utils");
 ```
