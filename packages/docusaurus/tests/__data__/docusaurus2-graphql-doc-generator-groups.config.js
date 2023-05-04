@@ -27,13 +27,12 @@ module.exports = {
   },
   customDirective: {
     auth: {
-      descriptor: (directive, type) => {
-        return directiveDescriptor(
+      descriptor: (directive, type) =>
+        directiveDescriptor(
           directive,
           type,
           "This requires the current user to be in ${requires} role.",
-        );
-      },
+        ),
     },
     complexity: {
       descriptor: (directive, type) => {
