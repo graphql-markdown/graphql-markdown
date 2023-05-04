@@ -1,6 +1,14 @@
-const { GraphQLScalarType, GraphQLDirective } = require("graphql");
+const {
+  GraphQLScalarType,
+  GraphQLDirective,
+  DirectiveLocation,
+} = require("graphql");
 
-const { printDescription, printDeprecation } = require("../../src/common");
+const {
+  printDescription,
+  printDeprecation,
+  printCustomDirectives,
+} = require("../../src/common");
 
 describe("common", () => {
   describe("printDescription()", () => {
@@ -36,7 +44,7 @@ describe("common", () => {
         name: "TestDirective",
         locations: [],
       });
-      const description = printDescription(type, "");
+      const description = printDescription(type, undefined, "");
 
       expect(description).toBe("");
     });
@@ -62,7 +70,9 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type, { text: "Not a string" });
+      const description = printDescription(type, undefined, {
+        text: "Not a string",
+      });
 
       expect(description).toBe("No description");
     });
@@ -77,6 +87,44 @@ describe("common", () => {
 
       expect(description).toMatchInlineSnapshot(`
         "<Badge class="warning" text="DEPRECATED: Foobar"/>
+
+        Lorem ipsum"
+      `);
+    });
+
+    test("return custom directive description if applied", () => {
+      const directiveType = new GraphQLDirective({
+        name: "testDirective",
+        locations: [DirectiveLocation.OBJECT],
+      });
+
+      const type = {
+        name: "TestType",
+        description: "Lorem ipsum",
+        astNode: {
+          directives: [
+            {
+              name: {
+                value: "testDirective",
+              },
+            },
+          ],
+        },
+      };
+
+      const options = {
+        customDirectives: {
+          testDirective: {
+            type: directiveType,
+            descriptor: (directive) => `Test ${directive.name}`,
+          },
+        },
+      };
+
+      const description = printDescription(type, options);
+
+      expect(description).toMatchInlineSnapshot(`
+        "Test testDirective
 
         Lorem ipsum"
       `);
@@ -129,6 +177,54 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toBe("");
+    });
+  });
+
+  describe("printCustomDirectives()", () => {
+    const directiveType = new GraphQLDirective({
+      name: "testDirective",
+      locations: [DirectiveLocation.OBJECT],
+    });
+    const type = {
+      name: "TestType",
+      astNode: {
+        directives: [
+          {
+            name: {
+              value: "testDirective",
+            },
+          },
+        ],
+      },
+    };
+
+    test("does not print directive description if type has not directive", () => {
+      expect.hasAssertions();
+
+      const description = printCustomDirectives(type, {});
+
+      expect(description).toBe("");
+    });
+
+    test("prints directive description", () => {
+      expect.hasAssertions();
+
+      const options = {
+        customDirectives: {
+          testDirective: {
+            type: directiveType,
+            descriptor: (directive) => `Test ${directive.name}`,
+          },
+        },
+      };
+
+      const description = printCustomDirectives(type, options);
+
+      expect(description).toMatchInlineSnapshot(`
+        "Test testDirective
+
+        "
+      `);
     });
   });
 });

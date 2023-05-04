@@ -1,34 +1,35 @@
 const {
-  GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-  isListType,
+  getDirectiveValues,
+  getNamedType,
   GraphQLBoolean,
-  GraphQLInt,
+  GraphQLEnumType,
   GraphQLFloat,
   GraphQLID,
-  GraphQLString,
-  GraphQLObjectType,
-  GraphQLInterfaceType,
   GraphQLInputObjectType,
-  isDirective: isDirectiveType,
-  getNamedType,
-  isScalarType,
-  isEnumType,
-  isUnionType,
-  isInterfaceType,
-  isObjectType,
-  isInputObjectType: isInputType,
-  isNonNullType,
-  isLeafType,
-  printSchema,
+  GraphQLInt,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
   GraphQLSchema,
+  GraphQLString,
+  GraphQLUnionType,
+  isDirective: isDirectiveType,
+  isEnumType,
+  isInputObjectType: isInputType,
+  isInterfaceType,
+  isLeafType,
+  isListType,
+  isNonNullType,
+  isObjectType,
+  isScalarType,
+  isUnionType,
   OperationTypeNode,
+  printSchema,
 } = require("graphql");
 const { loadSchema: asyncLoadSchema } = require("@graphql-tools/load");
 
 const { convertArrayToObject } = require("./array");
-const { hasMethod, hasProperty } = require("./object");
+const { hasMethod, hasProperty, isEmpty } = require("./object");
 
 const OperationTypeNodes = [
   OperationTypeNode.QUERY,
@@ -173,6 +174,60 @@ function hasDirective(type, directives) {
       directiveList.includes(directive.name.value),
     ) > -1
   );
+}
+
+function getDirective(type, directives) {
+  if (
+    typeof type.astNode === "undefined" ||
+    type.astNode == null ||
+    typeof directives === "undefined" ||
+    !Array.isArray(type.astNode.directives)
+  ) {
+    return [];
+  }
+
+  const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
+
+  return type.astNode.directives.filter((directive) =>
+    directiveList.includes(directive.name.value),
+  );
+}
+
+function getConstDirectiveMap(
+  type,
+  { customDirectives } = { customDirectives: undefined },
+) {
+  if (isEmpty(customDirectives)) {
+    return undefined;
+  }
+
+  const constDirectives = getDirective(type, Object.keys(customDirectives));
+  if (constDirectives.length === 0) {
+    return undefined;
+  }
+
+  return constDirectives.reduce((directiveMap, constDirective) => {
+    const name = constDirective.name.value;
+    directiveMap[name] = customDirectives[name];
+    return directiveMap;
+  }, {});
+}
+
+function getTypeDirectiveArgValue(directiveType, astNode, argName) {
+  const args = getTypeDirectiveValues(directiveType, astNode);
+
+  if (typeof args === "undefined" || typeof args[argName] === "undefined") {
+    throw new Error(`Directive argument '${argName}' not found!`);
+  }
+
+  return args[argName];
+}
+
+function getTypeDirectiveValues(directiveType, type) {
+  if (hasProperty(type, "astNode")) {
+    return getDirectiveValues(directiveType, type.astNode);
+  }
+  return getDirectiveValues(directiveType, type);
 }
 
 function getIntrospectionFieldsList(queryType) {
@@ -367,33 +422,37 @@ function isDeprecated(type) {
 }
 
 module.exports = {
-  loadSchema,
-  getDocumentLoaders,
-  isDirectiveType,
-  isObjectType,
-  getNamedType,
-  isScalarType,
-  isEnumType,
-  isUnionType,
-  getSchemaMap,
-  getTypeName,
-  isParametrizedField,
-  getFields,
+  getConstDirectiveMap,
   getDefaultValue,
+  getDirective,
+  getTypeDirectiveArgValue,
+  getDocumentLoaders,
+  getFields,
+  getIntrospectionFieldsList,
+  getNamedType,
+  getRelationOfField,
+  getRelationOfImplementation,
+  getRelationOfInterface,
+  getRelationOfReturn,
+  getRelationOfUnion,
+  getSchemaMap,
+  getTypeDirectiveValues,
+  getTypeFromSchema,
+  getTypeName,
   hasDirective,
-  isOperation,
-  isInterfaceType,
+  isDeprecated,
+  isDirectiveType,
+  isEnumType,
   isInputType,
-  isNonNullType,
+  isInterfaceType,
   isLeafType,
   isListType,
-  isDeprecated,
+  isNonNullType,
+  isObjectType,
+  isOperation,
+  isParametrizedField,
+  isScalarType,
+  isUnionType,
+  loadSchema,
   printSchema,
-  getIntrospectionFieldsList,
-  getTypeFromSchema,
-  getRelationOfReturn,
-  getRelationOfField,
-  getRelationOfUnion,
-  getRelationOfInterface,
-  getRelationOfImplementation,
 };

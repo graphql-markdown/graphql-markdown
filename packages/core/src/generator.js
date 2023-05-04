@@ -1,6 +1,7 @@
 const {
   graphql: { getSchemaMap, loadSchema, getDocumentLoaders },
   group: { getGroups },
+  directive: { getCustomDirectives },
 } = require("@graphql-markdown/utils");
 const Renderer = require("./renderer");
 
@@ -34,15 +35,7 @@ const hasChanges = async (
   return true;
 };
 
-const getPrinter = (
-  schema,
-  baseURL,
-  linkRoot,
-  groups,
-  printTypeOptions,
-  printerModule,
-  skipDocDirective,
-) => {
+const getPrinter = (printerModule, config, options) => {
   let Printer = undefined;
 
   if (typeof printerModule !== "string") {
@@ -59,11 +52,8 @@ const getPrinter = (
     );
   }
 
-  Printer.init(schema, baseURL, linkRoot, {
-    groups,
-    printTypeOptions,
-    skipDocDirective,
-  });
+  const { schema, baseURL, linkRoot } = config;
+  Printer.init(schema, baseURL, linkRoot, { ...options });
 
   return Printer;
 };
@@ -83,6 +73,7 @@ const generateDocFromSchema = async ({
   printTypeOptions,
   printer: printerModule,
   skipDocDirective,
+  customDirective,
 }) => {
   const start = process.hrtime.bigint();
 
@@ -95,15 +86,26 @@ const generateDocFromSchema = async ({
   }
 
   const rootTypes = getSchemaMap(schema);
+  const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = new getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
-    schema,
-    baseURL,
-    linkRoot,
-    groups,
-    printTypeOptions,
+    // module mandatory
     printerModule,
-    skipDocDirective,
+
+    // config mandatory
+    {
+      schema,
+      baseURL,
+      linkRoot,
+    },
+
+    // options
+    {
+      groups,
+      printTypeOptions,
+      skipDocDirective,
+      customDirectives,
+    },
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
     ...docOptions,

@@ -124,6 +124,7 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
         {
           "basePath": undefined,
+          "customDirectives": undefined,
           "groups": undefined,
           "parentTypePrefix": true,
           "printDeprecated": "default",
@@ -163,6 +164,7 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
         {
           "basePath": undefined,
+          "customDirectives": undefined,
           "groups": {},
           "parentTypePrefix": false,
           "printDeprecated": "default",
@@ -311,6 +313,7 @@ describe("Printer", () => {
         const spies = [
           "printHeader",
           "printCode",
+          "printCustomDirectives",
           "printTypeMetadata",
           "printDescription",
           "printRelations",

@@ -95,7 +95,7 @@ build-examples:
   RUN mkdir $TARGET
   DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${TARGET}/default --force --pretty --noPagination --deprecated group"
   RUN mv docs ./$TARGET/default
-  DO +GQLMD --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noTypeBadges --noParentType --noRelatedType --deprecated group"
+  DO +GQLMD --id="schema_with_grouping" --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noParentType --noRelatedType --deprecated group"
   RUN mv docs ./$TARGET/group-by
   SAVE ARTIFACT ./$TARGET
 
@@ -123,7 +123,12 @@ all:
 
 GQLMD:
   COMMAND
+  ARG id
   ARG options
   RUN mkdir -p docs
-  RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
+  IF [ ! $id ]
+    RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
+  ELSE
+    RUN npx docusaurus graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+  END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 

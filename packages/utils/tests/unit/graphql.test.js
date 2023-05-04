@@ -1,40 +1,55 @@
 const { loadSchema: gqlToolsLoadSchema } = require("@graphql-tools/load");
 const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
 const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
+
+jest.mock("graphql", () => {
+  const graphql = jest.requireActual("graphql");
+  return {
+    ...graphql,
+    getDirectiveValues: jest.fn((...args) =>
+      graphql.getDirectiveValues(...args),
+    ),
+  };
+});
 const {
+  buildSchema,
+  getDirectiveValues,
+  GraphQLBoolean,
   GraphQLEnumType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-  GraphQLObjectType,
-  GraphQLInterfaceType,
+  GraphQLFloat,
+  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInt,
-  GraphQLID,
-  GraphQLFloat,
-  GraphQLString,
+  GraphQLInterfaceType,
   GraphQLList,
-  GraphQLBoolean,
-  buildSchema,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLString,
+  GraphQLUnionType,
 } = require("graphql");
 
 const {
+  getConstDirectiveMap,
   getDefaultValue,
-  getIntrospectionFieldsList,
-  getFields,
-  getTypeName,
-  getTypeFromSchema,
-  getSchemaMap,
-  loadSchema,
-  isParametrizedField,
-  isOperation,
-  isDeprecated,
+  getDirective,
+  getTypeDirectiveArgValue,
   getDocumentLoaders,
-  getRelationOfInterface,
-  getRelationOfUnion,
-  getRelationOfReturn,
+  getFields,
+  getIntrospectionFieldsList,
   getRelationOfField,
   getRelationOfImplementation,
+  getRelationOfInterface,
+  getRelationOfReturn,
+  getRelationOfUnion,
+  getSchemaMap,
+  getTypeDirectiveValues,
+  getTypeFromSchema,
+  getTypeName,
   hasDirective,
+  isDeprecated,
+  isOperation,
+  isParametrizedField,
+  loadSchema,
 } = require("../../src/graphql");
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -771,6 +786,315 @@ describe("graphql", () => {
       const type = schema.getType("StudyItem");
 
       expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
+    });
+  });
+
+  describe("getDirective", () => {
+    const schema = buildSchema(`
+      directive @foobaz on OBJECT
+
+      interface Record {
+        id: String!
+      }
+
+      type StudyItem implements Record @foobaz {
+        id: String!
+        subject: String!
+        duration: Int!
+      }
+      
+      type Query {
+        getStudyItems(subject: String): [StudyItem!]
+        getStudyItem(id: String!): StudyItem
+      }
+
+      type Mutation {
+        addStudyItem(subject: String!, duration: Int!): StudyItem
+      }
+  
+      type Subscription {
+        listStudyItems: [StudyItem!]
+      }
+    `);
+
+    test("return empty list if the type has no directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Subscription");
+      const actual = getDirective(type, "foobar");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return empty list if the type has no matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, "foobar");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return list if the type has matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, "foobaz");
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+
+    test("return list if the type has one matching directive", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("StudyItem");
+      const actual = getDirective(type, ["foobar", "foobaz"]);
+
+      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+    });
+  });
+
+  describe("getConstDirectiveMap", () => {
+    const schema = buildSchema(`
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"])
+      }
+
+      type TestWithoutDirective {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+    const typeWithoutDirective = schema.getType("TestWithoutDirective");
+    const descriptor = (directiveType, constDirectiveType) =>
+      `Test${constDirectiveType.name.value}`;
+    const options = {
+      customDirectives: {
+        testA: {
+          type: schema.getDirective("testA"),
+          descriptor,
+        },
+        nonExist: {
+          type: undefined,
+          descriptor,
+        },
+      },
+    };
+
+    test("returns undefined when config is not set", () => {
+      expect.assertions(1);
+
+      expect(getConstDirectiveMap(type, undefined)).toBeUndefined();
+    });
+
+    test("returns undefined when config custom directive does not exist", () => {
+      expect.assertions(1);
+
+      expect(
+        getConstDirectiveMap(typeWithoutDirective, options),
+      ).toBeUndefined();
+    });
+
+    test("returns custom directives map", () => {
+      expect.assertions(1);
+
+      expect(getConstDirectiveMap(type, options)).toMatchSnapshot();
+    });
+  });
+
+  describe("getTypeDirectiveArgValue", () => {
+    const schema = buildSchema(`
+      directive @dirWithoutArg on OBJECT
+
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+        argC: TestInput
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA @dirWithoutArg {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"], argC: { id: "input-id" })
+      }
+
+      input TestInput {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+
+    test("throws an error if argument does not exist", () => {
+      expect.assertions(1);
+
+      const directiveName = "dirWithoutArg";
+      const directiveType = schema.getDirective(directiveName);
+      const argName = "fooBar";
+
+      expect(() => {
+        getTypeDirectiveArgValue(directiveType, type.astNode, argName);
+      }).toThrow(`Directive argument '${argName}' not found!`);
+    });
+
+    test("returns fields value if argument is of input type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const argName = "argC";
+
+      expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
+        .toMatchInlineSnapshot(`
+        {
+          "id": "input-id",
+        }
+      `);
+    });
+
+    test("returns values if argument is of list type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const argName = "argB";
+
+      expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
+        .toMatchInlineSnapshot(`
+        [
+          "testArgB",
+        ]
+      `);
+    });
+
+    test("returns value if argument is of a type", () => {
+      expect.assertions(1);
+
+      const directiveName = "testB";
+      const directiveType = schema.getDirective(directiveName);
+      const typeFieldNode = type.astNode.fields.find(
+        (field) => field.name.value === "fieldA",
+      );
+      const argName = "argA";
+
+      expect(
+        getTypeDirectiveArgValue(directiveType, typeFieldNode, argName),
+      ).toMatchInlineSnapshot(`10`);
+    });
+
+    test("returns default value if argument is optional and not set", () => {
+      expect.assertions(1);
+
+      const directiveName = "testA";
+      const directiveType = schema.getDirective(directiveName);
+      const argName = "arg";
+
+      expect(
+        getTypeDirectiveArgValue(directiveType, type, argName),
+      ).toMatchInlineSnapshot(`"ARGA"`);
+    });
+
+    test("returns value if type is astNode", () => {
+      expect.assertions(1);
+
+      const directiveName = "testA";
+      const directiveType = schema.getDirective(directiveName);
+      const argName = "arg";
+
+      expect(
+        getTypeDirectiveArgValue(directiveType, type.astNode, argName),
+      ).toMatchInlineSnapshot(`"ARGA"`);
+    });
+  });
+
+  describe("getTypeDirectiveValues", () => {
+    const schema = buildSchema(`
+      directive @dirWithoutArg on OBJECT
+
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+        argC: TestInput
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA @dirWithoutArg {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"], argC: { id: "input-id" })
+      }
+
+      input TestInput {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test");
+    const directiveType = schema.getDirective("testA");
+
+    test("converts type to astNode", () => {
+      expect.assertions(1);
+
+      getTypeDirectiveValues(directiveType, type);
+
+      expect(getDirectiveValues).toHaveBeenCalledWith(
+        directiveType,
+        type.astNode,
+      );
+    });
+
+    test("does not convert astNode", () => {
+      expect.assertions(1);
+
+      getTypeDirectiveValues(directiveType, type.astNode);
+
+      expect(getDirectiveValues).toHaveBeenCalledWith(
+        directiveType,
+        type.astNode,
+      );
     });
   });
 

@@ -7,4 +7,6 @@ module.exports = {
   url: require("./url"),
   graphql: require("./graphql"),
   group: require("./group"),
+  directive: require("./directive"),
+  helper: require("./helper"),
 };

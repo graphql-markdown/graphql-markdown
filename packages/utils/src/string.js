@@ -2,6 +2,8 @@
  * String functions
  */
 
+const { getObjPath } = require("./object");
+
 function stringCaseBuilder(str, transformation, separator) {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
@@ -72,10 +74,20 @@ function kebabCase(str) {
   return stringCaseBuilder(str, (word) => word.toLowerCase(), "-");
 }
 
+function interpolate(template, variables, fallback) {
+  const regex = /\${[^{]+}/g;
+
+  return template.replace(regex, (match) => {
+    const objPath = match.slice(2, -1).trim();
+    return getObjPath(objPath, variables, fallback);
+  });
+}
+
 module.exports = {
   capitalize,
   escapeMDX,
   firstUppercase,
+  interpolate,
   kebabCase,
   prune,
   replaceDiacritics,

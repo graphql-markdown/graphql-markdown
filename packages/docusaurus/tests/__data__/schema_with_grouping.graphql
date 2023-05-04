@@ -19,6 +19,38 @@ directive @doc(
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
+"""
+Example of custom directive for `customDirective`.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#customDirective)
+"""
+directive @complexity(
+  """
+  The level of complexity to resolve the current field.
+
+  If the field needs to call an expensive service to resolve itself, then the complexity should be at a high level but if the field is easy to resolve and not an expensive operation, the complexity should be at a low level.
+  """
+  value: Int!
+  """
+  An array containing names of parameters present in the GraphQL field.
+  
+  Use parameters values to compute the field's cost dynamically. If the parameter is an array, its multiplier value will be the length of the array.
+  """
+  multipliers: [String!]
+) on FIELD_DEFINITION
+
+"""
+Example of custom directive for `customDirective`.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#customDirective)
+"""
+directive @auth(
+  """
+  User role required for access. Default to `ADMIN`.
+  """
+  requires: Roles = ADMIN
+) on OBJECT | FIELD_DEFINITION
+
 scalar Date
 scalar EmailAddress
 scalar PhoneNumber
@@ -26,19 +58,27 @@ scalar Time
 scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
-  UpdateGrade(input: String): String  @doc(category: "Grade") 
+  UpdateGrade(input: String): String 
+    @doc(category: "Grade") 
+    @auth
 }
 
 type Mutation{
-  UpdateGPA(input: Int): Int @doc(category: "Grade") 
+  UpdateGPA(input: Int): Int 
+    @doc(category: "Grade") 
+    @auth
 }
 
 type Mutation{
-  AddCourse(input: String): String  @doc(category: "Course") 
+  AddCourse(input: String): String 
+    @doc(category: "Course") 
+    @auth
 }
 
 type Mutation{
-  DropCourse(input: String): String  @doc(category: "Course") 
+  DropCourse(input: String): String 
+    @doc(category: "Course") 
+    @auth
 }
 
 enum Roles {
@@ -48,8 +88,12 @@ enum Roles {
 
 type Query {
   GPA(skip: Int = 0): Int  @doc(category: "Grade") 
-  WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
-  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade")
+  WeightedGPA(input: String, skip: Int!): Int 
+    @doc(category: "Grade") 
+    @complexity(value: 3)
+  UnWeightedGPA(input: String, skip: Int!): Int 
+    @doc(category: "Grade")
+    @complexity(value: 3)
   Course(skip: Int = 0): Course @doc(category: "Course")
 }
 
@@ -58,6 +102,8 @@ type Query {
   mathCourses: [String]  @doc(category: "Course") @deprecated
   scienceCourses: [String]  @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
+    @auth
+    @complexity(value: 2, multipliers: ["roles"])
 }
 
 type UnusedType implements Record @noDoc {
@@ -73,9 +119,13 @@ type Semester implements Record {
   startDate: Date
   withdrawDate: Date @deprecated
   endDate: Date
+  """
+  Courses for the semester.
+  """
+  courses: [Course!]! @auth @complexity(value: 2)
 }
 
-type DepartmentInformation implements Record {
+type DepartmentInformation implements Record @auth {
   id: ID!
   email: EmailAddress
   number: PhoneNumber

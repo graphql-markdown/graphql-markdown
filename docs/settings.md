@@ -14,6 +14,14 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 | --------- | ---------------------- | -------- |
 | `baseURL` | `-b, --base <baseURL>` | `schema` |
 
+## `customDirective`
+
+Use these options to render custom directive information for types (see [custom directive](/docs/advanced/custom-directive)).
+
+| Setting           | CLI flag        | Default     |
+| ----------------- | --------------- | ----------- |
+| `customDirective` | _not supported_ | `undefined` |
+
 ## `diffMethod`
 
 The method to be used for identifying changes in the schema for triggering the documentation generation.

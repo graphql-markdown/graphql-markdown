@@ -1,3 +1,8 @@
+const {
+  graphql: { getTypeDirectiveValues },
+  helper: { directiveDescriptor },
+} = require("@graphql-markdown/utils");
+
 module.exports = {
   id: "schema_with_grouping",
   schema: "data/schema_with_grouping.graphql",
@@ -18,6 +23,26 @@ module.exports = {
   printTypeOptions: {
     parentTypePrefix: false,
     relatedTypeSection: false,
-    typeBadges: false,
+    typeBadges: true,
+  },
+  customDirective: {
+    auth: {
+      descriptor: (directive, type) =>
+        directiveDescriptor(
+          directive,
+          type,
+          "This requires the current user to be in ${requires} role.",
+        ),
+    },
+    complexity: {
+      descriptor: (directive, type) => {
+        const { value, multipliers } = getTypeDirectiveValues(directive, type);
+        const multiplierDescription =
+          typeof multipliers !== "undefined"
+            ? ` multiplied by parameters ${multipliers.map((value) => value)}`
+            : "";
+        return `This has an additional cost of ${value} points${multiplierDescription}.`;
+      },
+    },
   },
 };
