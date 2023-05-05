@@ -41,7 +41,7 @@ plugins: [
             directiveDescriptor(
               directive,
               type,
-              "This requires the current user to be in ${requires} role.",
+              "This requires the current user to be in `${requires}` role.",
             ),
         },
         // ... other custom directive options
