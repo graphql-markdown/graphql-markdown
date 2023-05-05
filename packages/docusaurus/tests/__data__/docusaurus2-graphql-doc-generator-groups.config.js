@@ -31,17 +31,16 @@ module.exports = {
         directiveDescriptor(
           directive,
           type,
-          "This requires the current user to be in ${requires} role.",
+          "This requires the current user to be in `${requires}` role.",
         ),
     },
     complexity: {
       descriptor: (directive, type) => {
         const { value, multipliers } = getTypeDirectiveValues(directive, type);
-        const multiplierDescription =
-          typeof multipliers !== "undefined"
-            ? ` multiplied by parameters ${multipliers.map((value) => value)}`
-            : "";
-        return `This has an additional cost of ${value} points${multiplierDescription}.`;
+        const multiplierDescription = multipliers
+          ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`
+          : "";
+        return `This has an additional cost of \`${value}\` points${multiplierDescription}.`;
       },
     },
   },
