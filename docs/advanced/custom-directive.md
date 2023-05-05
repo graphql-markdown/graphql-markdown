@@ -27,7 +27,7 @@ type Query {
 }
 ```
 
-Add the option `customDirective` to the `docusaurus2-graphql-doc-generator` configuration.
+Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
 
 ```js {6-19}
 plugins: [

@@ -15,7 +15,7 @@ type rootTypes = { query?: string, mutation?: string, subscription?: string };
 - use a empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
 
-Add the option `rootTypes` to the loader options under `docusaurus2-graphql-doc-generator` configuration (see also [schema loading](/docs/advanced/schema-loading)):
+Add the option `rootTypes` to the loader options under `@graphql-markdown/docusaurus` configuration (see also [schema loading](/docs/advanced/schema-loading)):
 
 ```js
 plugins: [
