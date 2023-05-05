@@ -22,7 +22,7 @@ directive @doc(
 """
 Example of custom directive for `customDirective`.
 
-See [documentation](https://graphql-markdown.github.io/docs/settings#customDirective)
+See [documentation](https://graphql-markdown.github.io/docs/settings#customdirective)
 """
 directive @complexity(
   """
@@ -42,7 +42,7 @@ directive @complexity(
 """
 Example of custom directive for `customDirective`.
 
-See [documentation](https://graphql-markdown.github.io/docs/settings#customDirective)
+See [documentation](https://graphql-markdown.github.io/docs/settings#customdirective)
 """
 directive @auth(
   """
