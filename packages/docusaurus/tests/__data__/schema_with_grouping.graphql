@@ -132,6 +132,7 @@ type DepartmentInformation implements Record @auth {
   departmentOpenTime: Time
   departmentCloseTime: Time
   website: URL
+  employees(skip: Int): [String!]!
 }
 
 type Course {
