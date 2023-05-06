@@ -6,7 +6,10 @@ const {
   DEFAULT_OPTIONS,
   OPTION_DEPRECATED,
 } = require("../../../src/const/options");
-const { printOperationMetadata } = require("../../../src/graphql/operation");
+const {
+  printOperationMetadata,
+  printCodeOperation,
+} = require("../../../src/graphql/operation");
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
@@ -142,6 +145,32 @@ describe("operation", () => {
         > 
         > 
 
+        "
+      `);
+    });
+  });
+
+  describe("printCodeOperation()", () => {
+    test("returns an operation with its fields", () => {
+      expect.hasAssertions();
+
+      const operation = {
+        name: "TestQuery",
+        type: GraphQLID,
+        args: [
+          {
+            name: "ArgFooBar",
+            type: GraphQLString,
+          },
+        ],
+      };
+
+      const code = printCodeOperation(operation);
+
+      expect(code).toMatchInlineSnapshot(`
+        "TestQuery(
+          ArgFooBar: String
+        ): ID
         "
       `);
     });

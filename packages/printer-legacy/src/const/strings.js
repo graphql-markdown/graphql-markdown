@@ -20,6 +20,7 @@ const MARKDOWN_EOL = "\n";
 const MARKDOWN_EOP = "\n\n";
 const MARKDOWN_SOC = `${MARKDOWN_EOL}\`\`\`graphql${MARKDOWN_EOL}`;
 const MARKDOWN_EOC = `${MARKDOWN_EOL}\`\`\`${MARKDOWN_EOL}`;
+const MARKDOWN_CODE_INDENTATION = "  ";
 const FRONT_MATTER = "---";
 
 const DEPRECATED = "deprecated";
@@ -34,6 +35,7 @@ module.exports = {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
   MARKDOWN_EOC,
+  MARKDOWN_CODE_INDENTATION,
   FRONT_MATTER,
   DEPRECATED,
 };

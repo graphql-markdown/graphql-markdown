@@ -5,7 +5,7 @@ const {
 
 const { printSection, printMetadataSection } = require("../section");
 const { printCodeField } = require("../code");
-const { MARKDOWN_EOL } = require("../const/strings");
+const { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } = require("../const/strings");
 
 const printInterfaceMetadata = (type, options) => {
   if (hasMethod(type, "getInterfaces") === false) {
@@ -38,8 +38,8 @@ const printCodeType = (type, entity, options) => {
       : "";
   const typeFields = getFields(type)
     .map((field) => {
-      const f = printCodeField(field, options);
-      return f.length > 0 ? `  ${f}` : "";
+      const f = printCodeField(field, options, 1);
+      return f.length > 0 ? `${MARKDOWN_CODE_INDENTATION}${f}` : "";
     })
     .filter((field) => field.length > 0)
     .join("");

@@ -21,6 +21,14 @@ describe("object", () => {
     fields: {
       one: { type: GraphQLString },
       two: { type: GraphQLBoolean, deprecationReason: "Deprecated" },
+      three: {
+        type: GraphQLString,
+        args: {
+          four: {
+            type: GraphQLString,
+          },
+        },
+      },
     },
     interfaces: () => [new GraphQLInterfaceType({ name: "TestInterfaceName" })],
   });
@@ -41,6 +49,12 @@ describe("object", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="deprecated"/> <Badge class="secondary" text="scalar"/>
         > <Badge class="warning" text="DEPRECATED: Deprecated"/>
         > 
+        > 
+        > 
+
+        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > ##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > 
 
@@ -66,6 +80,12 @@ describe("object", () => {
         "### Fields
 
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > 
+
+        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > 
+        > ##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
         > 
         > 
 
@@ -102,6 +122,9 @@ describe("object", () => {
         "type TestName implements TestInterfaceName {
           one: String
           two: Boolean @deprecated
+          three(
+            four: String
+          ): String
         }"
       `);
     });
@@ -114,6 +137,9 @@ describe("object", () => {
       expect(code).toMatchInlineSnapshot(`
         "type TestName implements TestInterfaceName {
           one: String
+          three(
+            four: String
+          ): String
         }"
       `);
     });

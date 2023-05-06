@@ -3,10 +3,14 @@ const {
   graphql: { getDefaultValue, getTypeName, isDeprecated, hasDirective },
 } = require("@graphql-markdown/utils");
 
-const { MARKDOWN_EOL, DEPRECATED } = require("./const/strings");
+const {
+  MARKDOWN_EOL,
+  DEPRECATED,
+  MARKDOWN_CODE_INDENTATION,
+} = require("./const/strings");
 const { OPTION_DEPRECATED } = require("./const/options");
 
-const printCodeField = (type, options = {}) => {
+const printCodeField = (type, options = {}, indentationLevel = 0) => {
   const skipDirective =
     hasProperty(options, "skipDocDirective") &&
     hasDirective(type, options.skipDocDirective) === true;
@@ -19,7 +23,7 @@ const printCodeField = (type, options = {}) => {
   }
 
   let code = `${getTypeName(type)}`;
-  code += printCodeArguments(type);
+  code += printCodeArguments(type, indentationLevel + 1);
   code += `: ${getTypeName(type.type)}`;
   code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
   code += MARKDOWN_EOL;
@@ -27,11 +31,14 @@ const printCodeField = (type, options = {}) => {
   return code;
 };
 
-const printCodeArguments = (type) => {
+const printCodeArguments = (type, indentationLevel = 1) => {
   if (!hasProperty(type, "args") || type.args.length === 0) {
     return "";
   }
 
+  const argIndentation = MARKDOWN_CODE_INDENTATION.repeat(indentationLevel);
+  const parentIndentation =
+    indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
   let code = `(${MARKDOWN_EOL}`;
   code += type.args.reduce((r, v) => {
     const defaultValue = getDefaultValue(v);
@@ -40,9 +47,9 @@ const printCodeArguments = (type) => {
     const printedDefault = hasDefaultValue ? ` = ${getDefaultValue(v)}` : "";
     const propType = v.type.toString();
     const propName = v.name.toString();
-    return `${r}  ${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
+    return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
   }, "");
-  code += `)`;
+  code += `${parentIndentation})`;
 
   return code;
 };
