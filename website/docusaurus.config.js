@@ -49,6 +49,8 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
+          editUrl:
+            "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
         },
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
