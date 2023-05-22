@@ -123,7 +123,7 @@ const config = {
       },
       footer: {
         style: "light",
-        copyright: `Copyright © ${new Date().getFullYear()} Grégory Heitz. Built with Docusaurus.`,
+        copyright: `Copyright © 2020-${new Date().getFullYear()} Grégory Heitz. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
