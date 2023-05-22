@@ -128,6 +128,7 @@ The quickest way to understand the code structure is to look at the folder struc
   * `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
     * `src` contains all JS files used by the package.
     * `tests` folder contains all tests needed (see [tests](#tests) section).
+    * `scripts` contains scripts used for running smoke tests.
   * `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
     * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
     * `src` contains all JS files used by the package.
@@ -143,6 +144,7 @@ The quickest way to understand the code structure is to look at the folder struc
     * `tests` folder contains all tests needed (see [tests](#tests) section).
 * `config` folder configuration files for development tools.
 * `docs` folder contains online documentation.
+* `scripts` folder contains scripts for monorepo (eg. packages version check).
 * `website` folder contains Docusaurus file for generating website.
 
 > The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
@@ -163,7 +165,7 @@ When choosing an external package, always look at the following:
 
 There are a lot of ways to test your code, and you should always add tests when making changes into the code.
 
-There are 3 types of tests used in this project, all based on Jest:
+There are 3 types of tests used in this project, all based on [Jest](https://jestjs.io/):
 
 * `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils` then this is likely where you should add your tests.
 
@@ -176,6 +178,21 @@ There are 3 types of tests used in this project, all based on Jest:
 * `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
 
   > The tests run within a Docker container using Earthly.
+
+
+#### Mutation testing
+
+The project uses [Stryker Mutator](https://stryker-mutator.io/docs/stryker-js/introduction/) for mutation testing against unit tests. The purpose is to ensure that unit tests are able to capture changes in the code, i.e. not just "always pass".
+
+As a contributor, you do not need to do anything. However, if the mutation testing score falls below a certain threshold when running mutations tests against your PR, this likely means that you need to improve your tests (even if the test coverage is good).
+
+Mutation testing can be run locally with the command:
+
+```shell
+earthly +mutation-test
+```
+
+You can read more about [mutation testing here](https://stryker-mutator.io/docs/).
 
 ### Build documentation
 
