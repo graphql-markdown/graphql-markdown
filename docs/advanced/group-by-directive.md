@@ -9,7 +9,19 @@ You can group the documentation to provide for an easier user experience to navi
 
 For example, we have two mutations called `addCourse` and `dropCourse`, and we want to group them under a category called `Courses`.
 
-We can accomplish this by adding a directive called `doc` with a field `category` to each mutation. Also, we can add a fallback option called `Common` which is for types that we don't explicitly add a directive to.
+```graphql
+type Mutation{
+  AddCourse(input: String): String
+}
+
+type Mutation{
+  DropCourse(input: String): String
+}
+```
+
+## Usage
+
+We can accomplish this by adding a directive called `doc` with a field `category` to each mutation. 
 
 ```graphql
 type Mutation{
@@ -20,6 +32,8 @@ type Mutation{
   DropCourse(input: String): String @doc(category: "Course") 
 }
 ```
+
+We can add a fallback option called `Common` which is for types that we don't explicitly add a directive to.
 
 It can be set either with the command line flag `--groupByDirective`:
 

@@ -27,9 +27,11 @@ type Query {
 }
 ```
 
+## Usage
+
 Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
 
-```js {6-19}
+```js {6-15}
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -55,8 +57,9 @@ The `descriptor` helper receives 2 arguments:
 - `directive` of type [`GraphQLDirective`](https://github.com/graphql/graphql-js/blob/main/src/type/directives.ts)
 - `type` of type [`GraphQLNamedType`](https://github.com/graphql/graphql-js/blob/main/src/type/definition.ts) or [`ASTNode`](https://github.com/graphql/graphql-js/blob/main/src/language/ast.ts)
 
-:::info
-The package `@graphql-markdown/utils` provides some functions to quick start:
+## Helpers
+The package `@graphql-markdown/utils` provides few helper functions to quick start:
+
 ```js
 const { 
   helper: { directiveDescriptor }, 
@@ -64,8 +67,11 @@ const {
 } = require("@graphql-markdown/utils");
 ```
 
-- [`helper.directiveDescriptor(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode, template: String): String`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
-- `graphql.getTypeDirectiveArgValue(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode, arg: String): Any` returns the value of a specific directive argument by name
-- `graphql.getTypeDirectiveValues(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode): { [arg: string]: Any }` returns a map of directive arguments and their values
+### `directiveDescriptor`
+[`helper.directiveDescriptor(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode, template: String): String`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
 
-:::
+### `getTypeDirectiveArgValue`
+`graphql.getTypeDirectiveArgValue(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode, arg: String): Any` returns the value of a specific directive argument by name.
+
+### `getTypeDirectiveValues`
+`graphql.getTypeDirectiveValues(directive: GraphQLDirective, type: GraphQLNamedType | ASTNode): { [arg: string]: Any }` returns a map of directive arguments and their values.
