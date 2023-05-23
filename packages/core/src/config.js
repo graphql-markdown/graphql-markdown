@@ -9,29 +9,30 @@ const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 const DEFAULT_OPTIONS = {
-  schema: "./schema.graphql",
-  rootPath: "./docs",
   baseURL: "schema",
-  linkRoot: "/",
-  homepage: join(ASSETS_LOCATION, "generated.md"),
+  customDirective: undefined,
   diffMethod: undefined,
-  tmpDir: join(tmpdir(), PACKAGE_NAME),
+  docOptions: {
+    index: false,
+    pagination: true,
+    toc: true,
+  },
+  groupByDirective: undefined,
+  homepage: join(ASSETS_LOCATION, "generated.md"),
+  linkRoot: "/",
   loaders: {},
   pretty: false,
   printer: "@graphql-markdown/printer-legacy",
-  docOptions: {
-    pagination: true,
-    toc: true,
-    index: false,
-  },
   printTypeOptions: {
+    deprecated: "default",
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
-    deprecated: "default",
   },
+  rootPath: "./docs",
+  schema: "./schema.graphql",
+  tmpDir: join(tmpdir(), PACKAGE_NAME),
   skipDocDirective: [],
-  customDirective: undefined,
 };
 
 function buildConfig(configFileOpts, cliOpts) {
@@ -50,24 +51,24 @@ function buildConfig(configFileOpts, cliOpts) {
 
   return {
     baseURL,
-    schemaLocation: cliOpts.schema ?? config.schema,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
-    linkRoot: cliOpts.link ?? config.linkRoot,
-    homepageLocation: cliOpts.homepage ?? config.homepage,
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
-    tmpDir: cliOpts.tmp ?? config.tmpDir,
-    loaders: config.loaders,
-    groupByDirective:
-      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
-    prettify: cliOpts.pretty ?? config.pretty,
-    docOptions: getDocOptions(cliOpts, config.docOptions),
-    printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
-    printer: config.printer,
-    skipDocDirective,
     customDirective: getCustomDirectives(
       config.customDirective,
       skipDocDirective,
     ),
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
+    docOptions: getDocOptions(cliOpts, config.docOptions),
+    groupByDirective:
+      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+    homepageLocation: cliOpts.homepage ?? config.homepage,
+    linkRoot: cliOpts.link ?? config.linkRoot,
+    loaders: config.loaders,
+    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
+    prettify: cliOpts.pretty ?? config.pretty,
+    printer: config.printer,
+    printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
+    schemaLocation: cliOpts.schema ?? config.schema,
+    skipDocDirective,
+    tmpDir: cliOpts.tmp ?? config.tmpDir,
   };
 }
 
@@ -181,11 +182,11 @@ function parseGroupByOption(groupOptions) {
 }
 
 module.exports = {
-  buildConfig,
-  getSkipDocDirectives,
-  getSkipDocDirective,
-  parseGroupByOption,
-  getCustomDirectives,
-  DEFAULT_OPTIONS,
   ASSETS_LOCATION,
+  buildConfig,
+  DEFAULT_OPTIONS,
+  getCustomDirectives,
+  getSkipDocDirective,
+  getSkipDocDirectives,
+  parseGroupByOption,
 };
