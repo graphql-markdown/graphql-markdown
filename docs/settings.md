@@ -16,7 +16,7 @@ The base URL to be used by Docusaurus. It will also be used as folder name under
 
 ## `customDirective`
 
-Use these options to render custom directive information for types (see [custom directive](/docs/advanced/custom-directive)).
+Use this option to render directive information for types (see [custom directive](/docs/advanced/custom-directive)).
 
 | Setting           | CLI flag        | Default     |
 | ----------------- | --------------- | ----------- |
@@ -91,9 +91,9 @@ plugins: [
 
 Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/advanced/group-by-directive)).
 
-| Setting            | CLI flag                                                                 | Default |
-| ------------------ | ------------------------------------------------------------------------ | ------- |
-| `groupByDirective` | <code>-gdb, --groupByDirective <@directive(field&#124;=fallback)></code> | -       |
+| Setting            | CLI flag                                                                 | Default     |
+| ------------------ | ------------------------------------------------------------------------ | ----------- |
+| `groupByDirective` | <code>-gdb, --groupByDirective <@directive(field&#124;=fallback)></code> | `undefined` |
 
 ## `homepage`
 
@@ -215,7 +215,7 @@ The option supports multiple values separated by a space character, eg `--skipDo
 
 | Setting            | CLI flag                 | Default |
 | ------------------ | ------------------------ | ------- |
-| `skipDocDirective` | `--skip <@directive...>` | -       |
+| `skipDocDirective` | `--skip <@directive...>` | `[]`    |
 
 <br/>
 
