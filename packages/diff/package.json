@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@graphql-inspector/core": "^4.2.1",
-    "@graphql-markdown/utils": "^1.4.0",
+    "@graphql-markdown/utils": "^1.4.1",
     "@graphql-tools/graphql-file-loader": "^8.0.0",
     "@graphql-tools/load": "^8.0.0"
   },
