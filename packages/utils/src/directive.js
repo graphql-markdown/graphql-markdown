@@ -1,5 +1,7 @@
 const { hasProperty, isEmpty } = require("./object");
 
+const WILDCARD_DIRECTIVE = "*";
+
 function getCustomDirectives(
   { directives: schemaDirectives } = { directives: undefined },
   customDirectiveOptions,
@@ -15,19 +17,37 @@ function getCustomDirectives(
 
   for (const schemaDirectiveName in schemaDirectives) {
     if (
-      hasProperty(schemaDirectives, schemaDirectiveName) &&
-      hasProperty(customDirectiveOptions, schemaDirectiveName) === false
+      isCustomDirective(schemaDirectiveName, customDirectiveOptions) === false
     ) {
       continue;
     }
 
     customDirectives[schemaDirectiveName] = {
       type: schemaDirectives[schemaDirectiveName],
-      descriptor: customDirectiveOptions[schemaDirectiveName].descriptor,
+      descriptor: getDescriptor(schemaDirectiveName, customDirectiveOptions),
     };
   }
 
   return isEmpty(customDirectives) === true ? undefined : customDirectives;
 }
 
-module.exports = { getCustomDirectives };
+function getDescriptor(schemaDirectiveName, customDirectiveOptions) {
+  if (hasProperty(customDirectiveOptions, schemaDirectiveName) === true) {
+    return customDirectiveOptions[schemaDirectiveName].descriptor;
+  }
+
+  if (hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true) {
+    return customDirectiveOptions[WILDCARD_DIRECTIVE].descriptor;
+  }
+
+  return undefined;
+}
+
+function isCustomDirective(schemaDirectiveName, customDirectiveOptions) {
+  return (
+    hasProperty(customDirectiveOptions, schemaDirectiveName) === true ||
+    hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true
+  );
+}
+
+module.exports = { getCustomDirectives, getDescriptor, isCustomDirective };

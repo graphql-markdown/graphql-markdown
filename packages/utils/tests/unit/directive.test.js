@@ -1,6 +1,10 @@
-const { getCustomDirectives } = require("../../src/directive");
-
 const { buildSchema } = require("graphql");
+
+const {
+  getCustomDirectives,
+  getDescriptor,
+  isCustomDirective,
+} = require("../../src/directive");
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -21,7 +25,9 @@ describe("directive", () => {
   `);
 
   const descriptor = (directiveType, constDirectiveType) =>
-    `Test${constDirectiveType.name.value}`;
+    `Test ${constDirectiveType.name}`;
+  const wildcard = (directiveType, constDirectiveType) =>
+    `TestWildcard ${constDirectiveType.name}`;
   const customDirectiveOptions = {
     testA: {
       descriptor,
@@ -31,14 +37,72 @@ describe("directive", () => {
     },
   };
 
-  describe("getCustomDirectives()", () => {
-    const schemaMap = {
-      directives: {
-        testA: schema.getDirective("testA"),
-        testB: schema.getDirective("testB"),
-      },
-    };
+  const schemaMap = {
+    directives: {
+      testA: schema.getDirective("testA"),
+      testB: schema.getDirective("testB"),
+    },
+  };
 
+  describe("isCustomDirective()", () => {
+    test("returns true if directive name listed in customDirectives", () => {
+      expect.assertions(1);
+
+      expect(isCustomDirective("testA", customDirectiveOptions)).toBeTruthy();
+    });
+
+    test("returns true if customDirective has wildcard", () => {
+      expect.assertions(1);
+
+      expect(isCustomDirective("testB", { "*": {} })).toBeTruthy();
+    });
+
+    test("returns false if no match", () => {
+      expect.assertions(1);
+
+      expect(isCustomDirective("testC", customDirectiveOptions)).toBeFalsy();
+    });
+  });
+
+  describe("getDescriptor()", () => {
+    test("returns specific description if match", () => {
+      expect.assertions(2);
+
+      const descriptorDirective = getDescriptor("testA", {
+        "*": { descriptor: wildcard },
+        ...customDirectiveOptions,
+      });
+
+      expect(descriptorDirective).toBeDefined();
+
+      expect(descriptorDirective(undefined, schemaMap.directives.testA)).toBe(
+        "Test testA",
+      );
+    });
+
+    test("returns wildcard description if wildcard match", () => {
+      expect.assertions(2);
+
+      const descriptorDirective = getDescriptor("testB", {
+        "*": { descriptor: wildcard },
+        ...customDirectiveOptions,
+      });
+
+      expect(descriptorDirective).toBeDefined();
+
+      expect(descriptorDirective(undefined, schemaMap.directives.testB)).toBe(
+        "TestWildcard testB",
+      );
+    });
+
+    test("returns undefined if no match", () => {
+      expect.assertions(1);
+
+      expect(getDescriptor("testC", customDirectiveOptions)).toBeUndefined();
+    });
+  });
+
+  describe("getCustomDirectives()", () => {
     test("returns undefined if customDirectiveOptions not defined", () => {
       expect.assertions(1);
 
@@ -52,17 +116,76 @@ describe("directive", () => {
     });
 
     test("returns matching custom directives in schema", () => {
-      expect.assertions(1);
+      expect.assertions(2);
+
+      const customDirectives = getCustomDirectives(
+        schemaMap,
+        customDirectiveOptions,
+      );
+
+      expect(customDirectives).toMatchSnapshot();
 
       expect(
-        getCustomDirectives(schemaMap, customDirectiveOptions),
-      ).toMatchSnapshot();
+        customDirectives["testA"].descriptor(
+          undefined,
+          schemaMap.directives.testA,
+        ),
+      ).toBe("Test testA");
     });
 
     test("returns undefined if no match", () => {
       expect.assertions(1);
 
       expect(getCustomDirectives(schemaMap, {})).toBeUndefined();
+    });
+
+    test("returns all directives if wildcard", () => {
+      expect.assertions(3);
+
+      const customDirectives = getCustomDirectives(schemaMap, {
+        "*": { descriptor: wildcard },
+      });
+
+      expect(customDirectives).toMatchSnapshot();
+
+      expect(
+        customDirectives["testA"].descriptor(
+          undefined,
+          schemaMap.directives.testA,
+        ),
+      ).toBe("TestWildcard testA");
+
+      expect(
+        customDirectives["testB"].descriptor(
+          undefined,
+          schemaMap.directives.testB,
+        ),
+      ).toBe("TestWildcard testB");
+    });
+
+    test("returns all directives if wildcard without overriding specifics", () => {
+      expect.assertions(3);
+
+      const customDirectives = getCustomDirectives(schemaMap, {
+        "*": { descriptor: wildcard },
+        ...customDirectiveOptions,
+      });
+
+      expect(customDirectives).toMatchSnapshot();
+
+      expect(
+        customDirectives["testA"].descriptor(
+          undefined,
+          schemaMap.directives.testA,
+        ),
+      ).toBe("Test testA");
+
+      expect(
+        customDirectives["testB"].descriptor(
+          undefined,
+          schemaMap.directives.testB,
+        ),
+      ).toBe("TestWildcard testB");
     });
   });
 });
