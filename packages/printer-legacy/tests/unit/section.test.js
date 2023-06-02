@@ -146,7 +146,7 @@ describe("section", () => {
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
+        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/>
         > Lorem ipsum
         > "
       `);
@@ -172,7 +172,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="secondary" text="object"/>
+        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/>
         > Lorem ipsum dolor sit amet, 
         > consectetur adipiscing elit, 
         > sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -202,7 +202,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/>
         > 
         > "
       `);
@@ -225,7 +225,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="object"/>
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/>
         > 
         > "
       `);
@@ -267,7 +267,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](#) 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > "
       `);
@@ -284,7 +284,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="secondary" text="list"/> <Badge class="secondary" text="scalar"/>
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > "
       `);
@@ -303,7 +303,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="secondary" text="non-null"/> <Badge class="secondary" text="scalar"/>
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > "
       `);
@@ -377,11 +377,11 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) <Badge class="secondary" text="deprecated"/>
-        > <Badge class="warning" text="DEPRECATED"/>
+        "#### [\`EntityTypeName\`](#) <Badge class="badge badge--secondary" text="deprecated"/>
+        > <Badge class="badge badge--warning" text="DEPRECATED"/>
         > 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="secondary" text="scalar"/>
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
 

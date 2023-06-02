@@ -10,6 +10,7 @@ const {
 
 const {
   printCustomDirectives,
+  printCustomTags,
   printDeprecation,
   printDescription,
 } = require("../../src/common");
@@ -90,7 +91,7 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "<Badge class="warning" text="DEPRECATED: Foobar"/>
+        "<Badge class="badge badge--warning" text="DEPRECATED: Foobar"/>
 
         Lorem ipsum"
       `);
@@ -128,7 +129,9 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "Test testDirective
+        "
+
+        Test testDirective
 
         Lorem ipsum"
       `);
@@ -145,9 +148,11 @@ describe("common", () => {
       };
       const deprecation = printDeprecation(type);
 
-      expect(deprecation).toMatchInlineSnapshot(
-        `"<Badge class="warning" text="DEPRECATED"/>"`,
-      );
+      expect(deprecation).toMatchInlineSnapshot(`
+        "<Badge class="badge badge--warning" text="DEPRECATED"/>
+
+        "
+      `);
     });
 
     test("prints deprecation reason if type is deprecated with reason", () => {
@@ -160,9 +165,11 @@ describe("common", () => {
       };
       const deprecation = printDeprecation(type);
 
-      expect(deprecation).toMatchInlineSnapshot(
-        `"<Badge class="warning" text="DEPRECATED: foobar"/>"`,
-      );
+      expect(deprecation).toMatchInlineSnapshot(`
+        "<Badge class="badge badge--warning" text="DEPRECATED: foobar"/>
+
+        "
+      `);
     });
 
     test("does not print deprecated badge if type is not deprecated", () => {
@@ -198,7 +205,7 @@ describe("common", () => {
       },
     };
 
-    test("does not print directive description if type has not directive", () => {
+    test("does not print directive description if type has no directive", () => {
       expect.hasAssertions();
 
       const description = printCustomDirectives(type, {});
@@ -220,7 +227,62 @@ describe("common", () => {
       const constDirectiveMap = getConstDirectiveMap(type, options);
       const description = printCustomDirectives(type, constDirectiveMap);
 
-      expect(description).toMatchInlineSnapshot(`"Test testDirective"`);
+      expect(description).toMatchInlineSnapshot(`
+        "Test testDirective
+
+        "
+      `);
+    });
+  });
+
+  describe("printCustomTags()", () => {
+    const directiveType = new GraphQLDirective({
+      name: "testDirective",
+      locations: [DirectiveLocation.OBJECT],
+    });
+    const type = {
+      name: "TestType",
+      astNode: {
+        directives: [
+          {
+            name: {
+              value: "testDirective",
+            },
+          },
+        ],
+      },
+    };
+
+    test("does not print tags if type has no matching directive", () => {
+      expect.hasAssertions();
+
+      const description = printCustomTags(type, {});
+
+      expect(description).toBe("");
+    });
+
+    test("prints tags", () => {
+      expect.hasAssertions();
+
+      const options = {
+        customDirectives: {
+          testDirective: {
+            type: directiveType,
+            tag: (directive) => ({
+              text: directive.name,
+              classname: "warning",
+            }),
+          },
+        },
+      };
+      const constDirectiveMap = getConstDirectiveMap(type, options);
+      const description = printCustomTags(type, constDirectiveMap);
+
+      expect(description).toMatchInlineSnapshot(`
+        "<Badge class="badge badge--tag warning " text="testDirective"/>
+
+        "
+      `);
     });
   });
 });

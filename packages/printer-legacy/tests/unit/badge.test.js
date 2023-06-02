@@ -56,7 +56,7 @@ describe("badge", () => {
       const badges = Badge.printBadges({}, { typeBadges: true });
 
       expect(badges).toMatchInlineSnapshot(
-        `"<Badge class="secondary" text="non-null"/>"`,
+        `"<Badge class="badge badge--secondary" text="non-null"/>"`,
       );
     });
 
@@ -101,7 +101,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "deprecated", classname: "secondary" },
+        { text: "deprecated", classname: "badge badge--secondary" },
       ]);
     });
 
@@ -115,7 +115,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "non-null", classname: "secondary" },
+        { text: "non-null", classname: "badge badge--secondary" },
       ]);
     });
 
@@ -128,7 +128,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual([{ text: "list", classname: "secondary" }]);
+      expect(badges).toStrictEqual([
+        { text: "list", classname: "badge badge--secondary" },
+      ]);
     });
 
     test("return category name as badge is type is subtype", () => {
@@ -141,7 +143,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "foobar", classname: "secondary" },
+        { text: "foobar", classname: "badge badge--secondary" },
       ]);
     });
 
@@ -155,7 +157,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "foobaz", classname: "secondary" },
+        { text: "foobaz", classname: "badge badge--secondary" },
       ]);
     });
 
@@ -171,7 +173,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type, options);
 
-      expect(badges).toStrictEqual([{ text: "@foo", classname: "secondary" }]);
+      expect(badges).toStrictEqual([
+        { text: "@foo", classname: "badge badge--secondary" },
+      ]);
     });
   });
 });

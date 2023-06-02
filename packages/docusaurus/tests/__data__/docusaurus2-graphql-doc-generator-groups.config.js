@@ -1,5 +1,5 @@
 const {
-  graphql: { getTypeDirectiveValues },
+  graphql: { getTypeDirectiveValues, getTypeDirectiveArgValue },
   helper: { directiveDescriptor },
 } = require("@graphql-markdown/utils");
 
@@ -33,6 +33,13 @@ module.exports = {
           type,
           "This requires the current user to be in `${requires}` role.",
         ),
+      tag: (directive, type) => {
+        const text = getTypeDirectiveArgValue(directive, type, "requires");
+        return {
+          text: `@${directive.name}: ${text}`,
+          classname: "badge--danger",
+        };
+      },
     },
     complexity: {
       descriptor: (directive, type) => {

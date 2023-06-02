@@ -13,31 +13,33 @@ const {
 const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
 
+const DEFAULT_CSS_CLASSNAME = "badge badge--secondary";
+
 const getTypeBadges = (type, options) => {
   const rootType = hasProperty(type, "type") ? type.type : type;
 
   const badges = [];
 
   if (isDeprecated(type) === true) {
-    badges.push({ text: "deprecated", classname: "secondary" });
+    badges.push({ text: "deprecated", classname: DEFAULT_CSS_CLASSNAME });
   }
 
   if (isNonNullType(rootType) === true) {
-    badges.push({ text: "non-null", classname: "secondary" });
+    badges.push({ text: "non-null", classname: DEFAULT_CSS_CLASSNAME });
   }
 
   if (isListType(rootType) === true) {
-    badges.push({ text: "list", classname: "secondary" });
+    badges.push({ text: "list", classname: DEFAULT_CSS_CLASSNAME });
   }
 
   const category = getLinkCategory(getNamedType(rootType));
   if (typeof category !== "undefined") {
-    badges.push({ text: category, classname: "secondary" });
+    badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME });
   }
 
   const group = getGroup(rootType);
   if (typeof group !== "undefined" && group !== "") {
-    badges.push({ text: group, classname: "secondary" });
+    badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME });
   }
 
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -45,7 +47,7 @@ const getTypeBadges = (type, options) => {
     badges.push(
       ...Object.keys(constDirectiveMap).map((badge) => ({
         text: `@${badge}`,
-        classname: "secondary",
+        classname: DEFAULT_CSS_CLASSNAME,
       })),
     );
   }
