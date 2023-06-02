@@ -20,11 +20,17 @@ function printCustomDirectives(type, options) {
     return "";
   }
 
-  const content = Object.values(constDirectiveMap)
+  const directives = Object.values(constDirectiveMap)
     .map((constDirectiveOption) =>
       printCustomDirective(type, constDirectiveOption, options),
     )
-    .join(MARKDOWN_EOP);
+    .filter((value) => typeof value !== "undefined");
+
+  if (directives.length === 0) {
+    return "";
+  }
+
+  const content = directives.join(MARKDOWN_EOP);
 
   return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 }
@@ -38,8 +44,11 @@ function printCustomDirective(type, constDirectiveOption, options) {
     "descriptor",
     type,
     constDirectiveOption,
-    "",
   );
+
+  if (typeof description === "undefined") {
+    return undefined;
+  }
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
@@ -61,6 +70,16 @@ function getCustomTags(type, options) {
     .filter((value) => typeof value !== "undefined");
 }
 
+const printCustomTags = (type, options) => {
+  const badges = getCustomTags(type, options);
+
+  if (badges.length === 0) {
+    return "";
+  }
+
+  return badges.map((badge) => printBadge(badge)).join(" ");
+};
+
 function getCustomDirectiveResolver(
   resolver,
   type,
@@ -76,16 +95,6 @@ function getCustomDirectiveResolver(
 
   return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
-
-const printCustomTags = (type, options) => {
-  const badges = getCustomTags(type, options);
-
-  if (badges.length === 0) {
-    return "";
-  }
-
-  return badges.map((badge) => printBadge(badge)).join(" ");
-};
 
 module.exports = {
   getCustomDirectiveResolver,

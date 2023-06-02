@@ -64,6 +64,9 @@ describe("directive", () => {
         type: undefined,
         descriptor,
       },
+      noDescriptor: {
+        type: undefined,
+      },
     },
   };
 
@@ -86,6 +89,19 @@ describe("directive", () => {
         > Test testA
         > "
       `);
+    });
+
+    test("returns undefined if no descriptor exists", () => {
+      expect.assertions(1);
+
+      const constDirectiveOption = options.customDirectives.noDescriptor;
+
+      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(
+        printCustomDirective(type, constDirectiveOption, options),
+      ).toBeUndefined();
     });
   });
 
@@ -122,6 +138,21 @@ describe("directive", () => {
 
         "
       `);
+    });
+
+    test("exclude undefined description", () => {
+      expect.assertions(1);
+
+      const mockConstDirectiveMap = {
+        testA: options.customDirectives.noDescriptor,
+      };
+      jest
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(printCustomDirectives(type, options)).toBe("");
     });
   });
 
