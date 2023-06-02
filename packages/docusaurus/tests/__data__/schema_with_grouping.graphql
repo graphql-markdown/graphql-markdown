@@ -40,7 +40,7 @@ directive @complexity(
 ) on FIELD_DEFINITION
 
 """
-Example of custom directive for `customDirective`.
+Example of custom directive for `customDirective` descriptor.
 
 See [documentation](https://graphql-markdown.github.io/docs/settings#customdirective)
 """
@@ -50,6 +50,14 @@ directive @auth(
   """
   requires: Roles = ADMIN
 ) on OBJECT | FIELD_DEFINITION
+
+
+"""
+Example of custom directive for `customDirective` tag.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
+"""
+directive @beta on OBJECT | INTERFACE | FIELD_DEFINITION
 
 scalar Date
 scalar EmailAddress
@@ -87,7 +95,9 @@ enum Roles {
 }
 
 type Query {
-  GPA(skip: Int = 0): Int  @doc(category: "Grade") 
+  GPA(skip: Int = 0): Int 
+    @doc(category: "Grade")
+    @beta
   WeightedGPA(input: String, skip: Int!): Int 
     @doc(category: "Grade") 
     @complexity(value: 3)
@@ -102,6 +112,7 @@ type Query {
   mathCourses: [String]  @doc(category: "Course") @deprecated
   scienceCourses: [String]  @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
+    @beta
     @auth
     @complexity(value: 2, multipliers: ["roles"])
 }

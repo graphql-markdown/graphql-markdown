@@ -1,6 +1,6 @@
 const {
-  graphql: { getTypeDirectiveValues, directiveTag },
-  helper: { directiveDescriptor },
+  graphql: { getTypeDirectiveValues },
+  helper: { directiveDescriptor, directiveTag },
 } = require("@graphql-markdown/utils");
 
 module.exports = {
@@ -26,6 +26,9 @@ module.exports = {
     typeBadges: true,
   },
   customDirective: {
+    beta: {
+      tag: (directive, type) => directiveTag(directive, type, "badge--danger"),
+    },
     auth: {
       descriptor: (directive, type) =>
         directiveDescriptor(
