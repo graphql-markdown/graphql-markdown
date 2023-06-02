@@ -43,16 +43,6 @@ const getTypeBadges = (type) => {
   return badges;
 };
 
-const printCustomTags = (type, options) => {
-  const badges = getCustomTags(type, options);
-
-  if (badges.length === 0) {
-    return "";
-  }
-
-  return badges.map((badge) => printBadge(badge)).join(" ");
-};
-
 const printBadges = (type, options) => {
   if (!hasProperty(options, "typeBadges") || options.typeBadges !== true) {
     return "";
@@ -78,5 +68,4 @@ module.exports = {
   getCustomTags,
   printBadge,
   printBadges,
-  printCustomTags,
 };

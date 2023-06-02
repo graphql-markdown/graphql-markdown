@@ -16,7 +16,7 @@ function hasMethod(obj, prop) {
 }
 
 function isEmpty(obj) {
-  return typeof obj !== "object" || Object.keys(obj).length === 0;
+  return typeof obj !== "object" || !Object.keys(obj).length;
 }
 
 // get the specified property or nested property of an object

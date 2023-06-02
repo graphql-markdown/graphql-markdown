@@ -4,6 +4,7 @@ jest.mock("@graphql-markdown/utils", () => {
   return {
     object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
     graphql: { getConstDirectiveMap: jest.fn() },
+    string: { escapeMDX: jest.fn((t) => t) },
   };
 });
 const Utils = require("@graphql-markdown/utils");

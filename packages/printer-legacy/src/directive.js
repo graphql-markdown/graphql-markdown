@@ -1,6 +1,5 @@
 const {
   graphql: { getConstDirectiveMap },
-  object: { isEmpty },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
@@ -9,6 +8,7 @@ const {
   MARKDOWN_EOP,
 } = require("./const/strings");
 const { printLink } = require("./link");
+const { printBadge } = require("./badge");
 
 function printCustomDirectives(type, options) {
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -44,6 +44,23 @@ function printCustomDirective(type, constDirectiveOption, options) {
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
+function getCustomTags(type, options) {
+  const constDirectiveMap = getConstDirectiveMap(type, options);
+
+  if (
+    typeof constDirectiveMap !== "object" ||
+    !Object.keys(constDirectiveMap).length
+  ) {
+    return [];
+  }
+
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption) =>
+      getCustomDirectiveResolver("tag", type, constDirectiveOption),
+    )
+    .filter((value) => typeof value !== "undefined");
+}
+
 function getCustomDirectiveResolver(
   resolver,
   type,
@@ -60,18 +77,14 @@ function getCustomDirectiveResolver(
   return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
 
-const getCustomTags = (type, options) => {
-  const constDirectiveMap = getConstDirectiveMap(type, options);
+const printCustomTags = (type, options) => {
+  const badges = getCustomTags(type, options);
 
-  if (isEmpty(constDirectiveMap) === true) {
-    return [];
+  if (badges.length === 0) {
+    return "";
   }
 
-  return Object.values(constDirectiveMap)
-    .map((constDirectiveOption) =>
-      getCustomDirectiveResolver("tag", type, constDirectiveOption),
-    )
-    .filter((value) => typeof value !== "undefined");
+  return badges.map((badge) => printBadge(badge)).join(" ");
 };
 
 module.exports = {
@@ -79,4 +92,5 @@ module.exports = {
   getCustomTags,
   printCustomDirective,
   printCustomDirectives,
+  printCustomTags,
 };
