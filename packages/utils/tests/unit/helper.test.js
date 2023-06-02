@@ -1,4 +1,4 @@
-const { directiveDescriptor } = require("../../src/helper");
+const { directiveDescriptor, directiveTag } = require("../../src/helper");
 
 jest.mock("graphql");
 const graphql = require("graphql");
@@ -35,6 +35,25 @@ describe("helper", () => {
       graphql.getDirectiveValues.mockReturnValue({ value: 42 });
 
       expect(directiveDescriptor({}, {})).toBe("");
+    });
+  });
+  describe("directiveTag", () => {
+    test("returns a tag object for the directive with custom classname", () => {
+      expect.hasAssertions();
+
+      expect(directiveTag({ name: "dummy" }, {}, "warning")).toStrictEqual({
+        text: "@dummy",
+        classname: "warning",
+      });
+    });
+
+    test("returns a tag object for the directive with default classname", () => {
+      expect.hasAssertions();
+
+      expect(directiveTag({ name: "dummy" }, {})).toStrictEqual({
+        text: "@dummy",
+        classname: "badge badge--secondary",
+      });
     });
   });
 });

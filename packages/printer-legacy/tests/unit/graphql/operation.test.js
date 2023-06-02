@@ -40,6 +40,8 @@ describe("operation", () => {
         #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
         > 
         > 
+        > 
+        > 
 
         "
       `);
@@ -77,10 +79,14 @@ describe("operation", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
         ### Type
 
         #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
+        > 
+        > 
         > 
         > 
 
@@ -126,6 +132,8 @@ describe("operation", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
          
 
@@ -136,12 +144,16 @@ describe("operation", () => {
         > 
         > 
         > 
+        > 
+        > 
 
         </Details>
 
         ### Type
 
         #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
+        > 
+        > 
         > 
         > 
 

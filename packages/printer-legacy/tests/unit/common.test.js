@@ -10,7 +10,6 @@ const {
 
 const {
   printCustomDirectives,
-  printCustomTags,
   printDeprecation,
   printDescription,
 } = require("../../src/common");
@@ -27,7 +26,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("Lorem ipsum");
+      expect(description).toMatchInlineSnapshot(`
+        "Lorem ipsum
+
+        "
+      `);
     });
 
     test("returns the default text if no description", () => {
@@ -39,7 +42,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "No description
+
+        "
+      `);
     });
 
     test("returns the defined text if no description", () => {
@@ -51,7 +58,11 @@ describe("common", () => {
       });
       const description = printDescription(type, undefined, "");
 
-      expect(description).toBe("");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        "
+      `);
     });
 
     test("returns the default text if description is undefined", () => {
@@ -64,7 +75,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "No description
+
+        "
+      `);
     });
 
     test("returns the default text if noText is not a string", () => {
@@ -79,7 +94,11 @@ describe("common", () => {
         text: "Not a string",
       });
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "No description
+
+        "
+      `);
     });
 
     test("return DEPRECATED tag if deprecated", () => {
@@ -93,7 +112,9 @@ describe("common", () => {
       expect(description).toMatchInlineSnapshot(`
         "<Badge class="badge badge--warning" text="DEPRECATED: Foobar"/>
 
-        Lorem ipsum"
+        Lorem ipsum
+
+        "
       `);
     });
 
@@ -129,7 +150,9 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "Lorem ipsumTest testDirective
+        "Lorem ipsum
+
+        Test testDirective
 
         "
       `);
@@ -225,62 +248,7 @@ describe("common", () => {
       const constDirectiveMap = getConstDirectiveMap(type, options);
       const description = printCustomDirectives(type, constDirectiveMap);
 
-      expect(description).toMatchInlineSnapshot(`
-        "Test testDirective
-
-        "
-      `);
-    });
-  });
-
-  describe("printCustomTags()", () => {
-    const directiveType = new GraphQLDirective({
-      name: "testDirective",
-      locations: [DirectiveLocation.OBJECT],
-    });
-    const type = {
-      name: "TestType",
-      astNode: {
-        directives: [
-          {
-            name: {
-              value: "testDirective",
-            },
-          },
-        ],
-      },
-    };
-
-    test("does not print tags if type has no matching directive", () => {
-      expect.hasAssertions();
-
-      const description = printCustomTags(type, {});
-
-      expect(description).toBe("");
-    });
-
-    test("prints tags", () => {
-      expect.hasAssertions();
-
-      const options = {
-        customDirectives: {
-          testDirective: {
-            type: directiveType,
-            tag: (directive) => ({
-              text: directive.name,
-              classname: "warning",
-            }),
-          },
-        },
-      };
-      const constDirectiveMap = getConstDirectiveMap(type, options);
-      const description = printCustomTags(type, constDirectiveMap);
-
-      expect(description).toMatchInlineSnapshot(`
-        "<Badge class="badge badge--tag warning " text="testDirective"/>
-
-        "
-      `);
+      expect(description).toMatchInlineSnapshot(`""`);
     });
   });
 });

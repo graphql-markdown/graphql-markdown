@@ -32,8 +32,12 @@ describe("input", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/>
+        > 
+        > 
         > 
         > 
 

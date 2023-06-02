@@ -25,8 +25,12 @@ describe("union", () => {
         #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](#) 
         > 
         > 
+        > 
+        > 
 
         #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](#) 
+        > 
+        > 
         > 
         > 
 

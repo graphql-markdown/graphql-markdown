@@ -40,14 +40,22 @@ describe("interface", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestInterfaceName.<b>one</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
         #### [<code style={{ fontWeight: 'normal' }}>TestInterfaceName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/>
+        > 
+        > 
         > 
         > 
 
         #### [<code style={{ fontWeight: 'normal' }}>TestInterfaceName.<b>three</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
         > 
+        > 
+        > 
         > ##### [<code style={{ fontWeight: 'normal' }}>TestInterfaceName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
+        > 
+        > 
         > 
         > 
 

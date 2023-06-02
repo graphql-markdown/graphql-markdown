@@ -52,6 +52,8 @@ describe("directive", () => {
         #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>ArgFooBar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
         "
       `);
@@ -85,6 +87,8 @@ describe("directive", () => {
         #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Foo</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/>
         > 
         > 
+        > 
+        > 
 
          
 
@@ -92,6 +96,8 @@ describe("directive", () => {
 
         #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Bar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/>
         > <Badge class="badge badge--warning" text="DEPRECATED: Deprecated"/>
+        > 
+        > 
         > 
         > 
         > 

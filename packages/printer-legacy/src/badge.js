@@ -6,16 +6,17 @@ const {
     isListType,
     isNonNullType,
   },
-  object: { hasProperty },
+  object: { hasProperty, isEmpty },
   string: { escapeMDX },
 } = require("@graphql-markdown/utils");
 
 const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
+const { getCustomDirectiveResolver } = require("./directive");
 
 const DEFAULT_CSS_CLASSNAME = "badge badge--secondary";
 
-const getTypeBadges = (type, options) => {
+const getTypeBadges = (type) => {
   const rootType = hasProperty(type, "type") ? type.type : type;
 
   const badges = [];
@@ -42,17 +43,19 @@ const getTypeBadges = (type, options) => {
     badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME });
   }
 
+  return badges;
+};
+
+const getCustomTags = (type, options) => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
-  if (typeof constDirectiveMap !== "undefined") {
-    badges.push(
-      ...Object.keys(constDirectiveMap).map((badge) => ({
-        text: `@${badge}`,
-        classname: DEFAULT_CSS_CLASSNAME,
-      })),
-    );
+
+  if (isEmpty(constDirectiveMap)) {
+    return [];
   }
 
-  return badges;
+  return Object.values(constDirectiveMap).map((constDirectiveOption) =>
+    getCustomDirectiveResolver("tag", type, constDirectiveOption),
+  );
 };
 
 const printBadges = (type, options) => {
@@ -60,7 +63,7 @@ const printBadges = (type, options) => {
     return "";
   }
 
-  const badges = getTypeBadges(type, options);
+  const badges = [].concat(getTypeBadges(type), getCustomTags(type, options));
 
   if (badges.length === 0) {
     return "";
@@ -77,6 +80,7 @@ function printBadge({ text, classname }) {
 
 module.exports = {
   getTypeBadges,
+  getCustomTags,
   printBadge,
   printBadges,
 };

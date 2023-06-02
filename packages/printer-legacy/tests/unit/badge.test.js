@@ -1,3 +1,5 @@
+const { DirectiveLocation, GraphQLDirective } = require("graphql");
+
 jest.mock("@graphql-markdown/utils", () => {
   return {
     string: {
@@ -5,7 +7,7 @@ jest.mock("@graphql-markdown/utils", () => {
       escapeMDX: jest.fn((t) => t),
     },
     url: { pathUrl: jest.fn() },
-    object: { hasProperty: jest.fn() },
+    object: { hasProperty: jest.fn(), isEmpty: jest.fn(() => false) },
     graphql: {
       isNonNullType: jest.fn(),
       isListType: jest.fn(),
@@ -52,6 +54,7 @@ describe("badge", () => {
 
       jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(true);
       jest.spyOn(Utils.graphql, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValueOnce(true);
 
       const badges = Badge.printBadges({}, { typeBadges: true });
 
@@ -160,21 +163,63 @@ describe("badge", () => {
         { text: "foobaz", classname: "badge badge--secondary" },
       ]);
     });
+  });
 
-    test("return directive names as badge if type has directives applied", () => {
-      expect.assertions(1);
+  describe("getCustomTags()", () => {
+    const directiveType = new GraphQLDirective({
+      name: "testDirective",
+      locations: [DirectiveLocation.OBJECT],
+    });
+    const type = {
+      name: "TestType",
+      astNode: {
+        directives: [
+          {
+            name: {
+              value: "testDirective",
+            },
+          },
+        ],
+      },
+    };
+
+    const options = {
+      customDirectives: {
+        testDirective: {
+          type: directiveType,
+          tag: (directive) => ({
+            text: directive.name,
+            classname: "warning",
+          }),
+        },
+      },
+    };
+
+    const mockConstDirectiveMap = {
+      testA: options.customDirectives.testDirective,
+    };
+
+    test("does not print tags if type has no matching directive", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.graphql, "getConstDirectiveMap").mockReturnValueOnce({});
+
+      const tags = Badge.getCustomTags(type, options);
+
+      expect(tags).toStrictEqual([]);
+    });
+
+    test("prints tags", () => {
+      expect.hasAssertions();
 
       jest
         .spyOn(Utils.graphql, "getConstDirectiveMap")
-        .mockReturnValueOnce({ foo: {} });
+        .mockReturnValueOnce(mockConstDirectiveMap);
 
-      const type = {};
-      const options = {};
+      const tags = Badge.getCustomTags(type, options);
 
-      const badges = Badge.getTypeBadges(type, options);
-
-      expect(badges).toStrictEqual([
-        { text: "@foo", classname: "badge badge--secondary" },
+      expect(tags).toStrictEqual([
+        { text: "testDirective", classname: "warning" },
       ]);
     });
   });
