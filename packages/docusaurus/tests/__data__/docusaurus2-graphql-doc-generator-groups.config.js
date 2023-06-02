@@ -27,7 +27,10 @@ module.exports = {
   },
   customDirective: {
     beta: {
-      tag: (directive, type) => directiveTag(directive, type, "badge--danger"),
+      tag: (directive) => ({
+        text: directive?.name?.toUpperCase(),
+        classname: "badge--danger",
+      }),
     },
     auth: {
       descriptor: (directive, type) =>
