@@ -2,7 +2,7 @@ const { buildSchema } = require("graphql");
 
 const {
   getCustomDirectives,
-  getDescriptor,
+  getCustomDirectiveOptions,
   isCustomDirective,
 } = require("../../src/directive");
 
@@ -64,41 +64,46 @@ describe("directive", () => {
     });
   });
 
-  describe("getDescriptor()", () => {
+  describe("getCustomDirectiveOptions()", () => {
     test("returns specific description if match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getDescriptor("testA", {
+      const descriptorDirective = getCustomDirectiveOptions("testA", {
         "*": { descriptor: wildcard },
         ...customDirectiveOptions,
       });
 
-      expect(descriptorDirective).toBeDefined();
+      expect(descriptorDirective.descriptor).toBeDefined();
 
-      expect(descriptorDirective(undefined, schemaMap.directives.testA)).toBe(
-        "Test testA",
-      );
+      expect(
+        descriptorDirective.descriptor(undefined, schemaMap.directives.testA),
+      ).toBe("Test testA");
     });
 
     test("returns wildcard description if wildcard match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getDescriptor("testB", {
+      const descriptorDirective = getCustomDirectiveOptions("testB", {
         "*": { descriptor: wildcard },
         ...customDirectiveOptions,
       });
 
-      expect(descriptorDirective).toBeDefined();
+      expect(descriptorDirective.descriptor).toBeDefined();
 
-      expect(descriptorDirective(undefined, schemaMap.directives.testB)).toBe(
-        "TestWildcard testB",
-      );
+      expect(
+        descriptorDirective.descriptor(undefined, schemaMap.directives.testB),
+      ).toBe("TestWildcard testB");
     });
 
     test("returns undefined if no match", () => {
       expect.assertions(1);
 
-      expect(getDescriptor("testC", customDirectiveOptions)).toBeUndefined();
+      const descriptorDirective = getCustomDirectiveOptions(
+        "testC",
+        customDirectiveOptions,
+      );
+
+      expect(descriptorDirective.descriptor).toBeUndefined();
     });
   });
 
