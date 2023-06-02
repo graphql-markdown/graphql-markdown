@@ -7,7 +7,10 @@ jest.mock("@graphql-markdown/utils", () => {
       escapeMDX: jest.fn((t) => t),
     },
     url: { pathUrl: jest.fn() },
-    object: { hasProperty: jest.fn(), isEmpty: jest.fn(() => false) },
+    object: {
+      hasProperty: jest.fn(),
+      isEmpty: jest.fn(() => false),
+    },
     graphql: {
       isNonNullType: jest.fn(),
       isListType: jest.fn(),
@@ -95,19 +98,6 @@ describe("badge", () => {
   });
 
   describe("getTypeBadges", () => {
-    test("return deprecated badge is type is deprecated", () => {
-      expect.assertions(1);
-
-      jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
-      const type = { isDeprecated: true };
-
-      const badges = Badge.getTypeBadges(type);
-
-      expect(badges).toStrictEqual([
-        { text: "deprecated", classname: "badge badge--secondary" },
-      ]);
-    });
-
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
 
@@ -118,7 +108,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "non-null", classname: "badge badge--secondary" },
+        { text: "non-null", classname: "badge--secondary" },
       ]);
     });
 
@@ -132,7 +122,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "list", classname: "badge badge--secondary" },
+        { text: "list", classname: "badge--secondary" },
       ]);
     });
 
@@ -146,7 +136,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "foobar", classname: "badge badge--secondary" },
+        { text: "foobar", classname: "badge--secondary" },
       ]);
     });
 
@@ -160,7 +150,7 @@ describe("badge", () => {
       const badges = Badge.getTypeBadges(type);
 
       expect(badges).toStrictEqual([
-        { text: "foobaz", classname: "badge badge--secondary" },
+        { text: "foobaz", classname: "badge--secondary" },
       ]);
     });
   });

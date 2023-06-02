@@ -14,7 +14,7 @@ const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
 const { getCustomDirectiveResolver } = require("./directive");
 
-const DEFAULT_CSS_CLASSNAME = "badge badge--secondary";
+const DEFAULT_CSS_CLASSNAME = "badge--secondary";
 
 const getTypeBadges = (type) => {
   const rootType = hasProperty(type, "type") ? type.type : type;
@@ -22,7 +22,10 @@ const getTypeBadges = (type) => {
   const badges = [];
 
   if (isDeprecated(type) === true) {
-    badges.push({ text: "deprecated", classname: DEFAULT_CSS_CLASSNAME });
+    badges.push({
+      text: "deprecated",
+      classname: "badge--deprecated badge--secondary",
+    });
   }
 
   if (isNonNullType(rootType) === true) {
@@ -53,9 +56,11 @@ const getCustomTags = (type, options) => {
     return [];
   }
 
-  return Object.values(constDirectiveMap).map((constDirectiveOption) =>
-    getCustomDirectiveResolver("tag", type, constDirectiveOption),
-  );
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption) =>
+      getCustomDirectiveResolver("tag", type, constDirectiveOption),
+    )
+    .filter((value) => typeof value !== "undefined");
 };
 
 const printBadges = (type, options) => {
@@ -75,7 +80,7 @@ const printBadges = (type, options) => {
 function printBadge({ text, classname }) {
   const textString = hasProperty(text, "singular") ? text.singular : text;
   const formattedText = escapeMDX(textString);
-  return `<Badge class="${classname}" text="${formattedText}"/>`;
+  return `<Badge class="badge ${classname}" text="${formattedText}"/>`;
 }
 
 module.exports = {

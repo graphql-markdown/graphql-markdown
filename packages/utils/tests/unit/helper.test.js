@@ -52,7 +52,7 @@ describe("helper", () => {
 
       expect(directiveTag({ name: "dummy" }, {})).toStrictEqual({
         text: "@dummy",
-        classname: "badge badge--secondary",
+        classname: "badge--secondary",
       });
     });
   });

@@ -13,11 +13,7 @@ function directiveDescriptor(
   return interpolate(descriptionTemplate, values);
 }
 
-function directiveTag(
-  directiveType,
-  type,
-  classname = "badge badge--secondary",
-) {
+function directiveTag(directiveType, type, classname = "badge--secondary") {
   return {
     text: `@${directiveType.name}`,
     classname: classname,
