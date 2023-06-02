@@ -37,7 +37,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
+        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -76,7 +76,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -84,7 +84,7 @@ describe("operation", () => {
 
         ### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
+        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -129,7 +129,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -139,7 +139,7 @@ describe("operation", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/>
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > :::caution DEPRECATED
@@ -153,7 +153,7 @@ describe("operation", () => {
 
         ### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/>
+        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 

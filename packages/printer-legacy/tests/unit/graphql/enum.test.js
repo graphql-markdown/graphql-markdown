@@ -28,13 +28,13 @@ describe("enum", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Values
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
         > 
         > 
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/>
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
         > 
         > 
         > :::caution DEPRECATED
@@ -59,7 +59,7 @@ describe("enum", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Values
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
         > 
         > 
         > 
@@ -69,7 +69,7 @@ describe("enum", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/>
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
         > 
         > 
         > :::caution DEPRECATED

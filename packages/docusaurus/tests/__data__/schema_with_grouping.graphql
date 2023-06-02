@@ -138,6 +138,7 @@ type Semester implements Record {
 
 type DepartmentInformation implements Record @auth {
   id: ID!
+  uuid: String @beta
   email: EmailAddress
   number: PhoneNumber
   departmentOpenTime: Time
