@@ -38,8 +38,8 @@ type descriptorFunction = (directive: GraphQLDirective, node: GraphQLNamedType |
 type tagFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => tag;
 
 type customDirectiveOptions = { 
-  descriptor: descriptorFunction
-  tag: tagFunction
+  descriptor: descriptorFunction?
+  tag: tagFunction?
 }
 
 type customDirective = {
