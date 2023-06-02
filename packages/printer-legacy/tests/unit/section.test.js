@@ -159,9 +159,9 @@ describe("section", () => {
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/>
+        > 
+        > 
         > Lorem ipsum
-        > 
-        > 
         > "
       `);
     });
@@ -187,6 +187,8 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       expect(section).toMatchInlineSnapshot(`
         "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/>
+        > 
+        > 
         > Lorem ipsum dolor sit amet, 
         > consectetur adipiscing elit, 
         > sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -197,8 +199,6 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         > 
         > Excepteur sint occaecat cupidatat non proident, 
         > sunt in culpa qui officia deserunt mollit anim id est laborum.
-        > 
-        > 
         > "
       `);
     });
@@ -407,10 +407,11 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) <Badge class="badge badge--secondary" text="deprecated"/>
-        > <Badge class="badge badge--warning" text="DEPRECATED"/>
+        "#### [\`EntityTypeName\`](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/>
         > 
         > 
+        > :::caution DEPRECATED
+        > :::
         > 
         > 
         > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/>

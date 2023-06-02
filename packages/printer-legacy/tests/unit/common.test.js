@@ -27,9 +27,9 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "Lorem ipsum
-
         "
+
+        Lorem ipsum"
       `);
     });
 
@@ -43,9 +43,9 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "No description
-
         "
+
+        No description"
       `);
     });
 
@@ -76,9 +76,9 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "No description
-
         "
+
+        No description"
       `);
     });
 
@@ -95,9 +95,9 @@ describe("common", () => {
       });
 
       expect(description).toMatchInlineSnapshot(`
-        "No description
-
         "
+
+        No description"
       `);
     });
 
@@ -110,11 +110,13 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "<Badge class="badge badge--warning" text="DEPRECATED: Foobar"/>
-
-        Lorem ipsum
-
         "
+
+        :::caution DEPRECATED
+        Foobar
+        :::
+
+        Lorem ipsum"
       `);
     });
 
@@ -150,11 +152,11 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "Lorem ipsum
-
-        Test testDirective
-
         "
+
+        Lorem ipsum
+
+        Test testDirective"
       `);
     });
   });
@@ -170,9 +172,10 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toMatchInlineSnapshot(`
-        "<Badge class="badge badge--warning" text="DEPRECATED"/>
-
         "
+
+        :::caution DEPRECATED
+        :::"
       `);
     });
 
@@ -187,9 +190,11 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toMatchInlineSnapshot(`
-        "<Badge class="badge badge--warning" text="DEPRECATED: foobar"/>
-
         "
+
+        :::caution DEPRECATED
+        foobar
+        :::"
       `);
     });
 

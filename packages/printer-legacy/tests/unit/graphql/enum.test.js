@@ -34,10 +34,12 @@ describe("enum", () => {
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--secondary" text="deprecated"/>
-        > <Badge class="badge badge--warning" text="DEPRECATED: Deprecated"/>
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/>
         > 
         > 
+        > :::caution DEPRECATED
+        > Deprecated
+        > :::
         > 
         > 
         > 
@@ -67,10 +69,12 @@ describe("enum", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--secondary" text="deprecated"/>
-        > <Badge class="badge badge--warning" text="DEPRECATED: Deprecated"/>
+        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/>
         > 
         > 
+        > :::caution DEPRECATED
+        > Deprecated
+        > :::
         > 
         > 
         > 

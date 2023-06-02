@@ -4,27 +4,14 @@ const {
   string: { escapeMDX },
 } = require("@graphql-markdown/utils");
 
-const { printBadge } = require("./badge");
 const { getCustomDirectiveResolver } = require("./directive");
 
-const { MARKDOWN_EOP, NO_DESCRIPTION_TEXT } = require("./const/strings");
-
-const printDeprecation = (type) => {
-  if (isDeprecated(type) === false) {
-    return "";
-  }
-
-  const reason =
-    typeof type.deprecationReason === "string"
-      ? ": " + type.deprecationReason
-      : "";
-  return (
-    printBadge({
-      text: `DEPRECATED${reason}`,
-      classname: "badge badge--warning",
-    }) + MARKDOWN_EOP
-  );
-};
+const {
+  DEPRECATED,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+  NO_DESCRIPTION_TEXT,
+} = require("./const/strings");
 
 const printCustomDirectives = (type, options) => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -40,7 +27,7 @@ const printCustomDirectives = (type, options) => {
     .filter((text) => text.length > 0)
     .join(MARKDOWN_EOP);
 
-  return `${content}${MARKDOWN_EOP}`;
+  return `${MARKDOWN_EOP}${content}`;
 };
 
 const formatDescription = (type, noText = NO_DESCRIPTION_TEXT) => {
@@ -49,13 +36,26 @@ const formatDescription = (type, noText = NO_DESCRIPTION_TEXT) => {
     hasProperty(type, "description") && typeof type.description === "string"
       ? escapeMDX(type.description)
       : replacement;
-  return `${description}${MARKDOWN_EOP}`;
+  return `${MARKDOWN_EOP}${description}`;
+};
+
+const printDeprecation = (type) => {
+  if (isDeprecated(type) === false) {
+    return "";
+  }
+
+  const reason =
+    typeof type.deprecationReason === "string"
+      ? type.deprecationReason + MARKDOWN_EOL
+      : "";
+
+  return `${MARKDOWN_EOP}:::caution ${DEPRECATED.toUpperCase()}${MARKDOWN_EOL}${reason}:::`;
 };
 
 const printDescription = (type, options, noText) => {
   const description = formatDescription(type, noText);
-  const deprecation = printDeprecation(type);
   const customDirectives = printCustomDirectives(type, options);
+  const deprecation = printDeprecation(type);
   return `${deprecation}${description}${customDirectives}`;
 };
 
