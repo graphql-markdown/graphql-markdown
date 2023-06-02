@@ -1,12 +1,25 @@
-const {
-  GraphQLDirective,
+const { GraphQLDirective, GraphQLString } = require("graphql");
 
-  GraphQLString,
-} = require("graphql");
+jest.mock("@graphql-markdown/utils", () => {
+  return {
+    object: { hasProperty: jest.fn(() => true) },
+    graphql: {
+      getDefaultValue: jest.fn((type) => type?.defaultValue),
+      getTypeName: jest.fn((t) => t.name ?? t.toString()),
+      hasDirective: jest.fn(),
+      isDeprecated: jest.fn((t) => t.isDeprecated || false),
+    },
+  };
+});
+const Utils = require("@graphql-markdown/utils");
 
 const { printCodeArguments, printCodeField } = require("../../src/code");
 
 describe("code", () => {
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   describe("printCodeArguments()", () => {
     test("returns a Markdown one line per formatted argument with default value surrounded by ()", () => {
       expect.hasAssertions();
@@ -57,6 +70,8 @@ describe("code", () => {
         name: "OperationName",
       };
 
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(false);
+
       const code = printCodeArguments(type);
 
       expect(code).toBe("");
@@ -68,6 +83,8 @@ describe("code", () => {
       expect.hasAssertions();
 
       const type = { name: "FooBar", type: "string" };
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(false);
 
       const code = printCodeField(type);
 
@@ -90,6 +107,8 @@ describe("code", () => {
           },
         ],
       };
+
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       const code = printCodeField(type);
 

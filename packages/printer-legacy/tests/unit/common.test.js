@@ -1,13 +1,17 @@
 const {
-  GraphQLScalarType,
-  GraphQLDirective,
   DirectiveLocation,
+  GraphQLDirective,
+  GraphQLScalarType,
 } = require("graphql");
 
 const {
-  printDescription,
-  printDeprecation,
+  graphql: { getConstDirectiveMap },
+} = require("@graphql-markdown/utils");
+
+const {
   printCustomDirectives,
+  printDeprecation,
+  printDescription,
 } = require("../../src/common");
 
 describe("common", () => {
@@ -141,11 +145,9 @@ describe("common", () => {
       };
       const deprecation = printDeprecation(type);
 
-      expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED"/>
-
-            "
-          `);
+      expect(deprecation).toMatchInlineSnapshot(
+        `"<Badge class="warning" text="DEPRECATED"/>"`,
+      );
     });
 
     test("prints deprecation reason if type is deprecated with reason", () => {
@@ -158,11 +160,9 @@ describe("common", () => {
       };
       const deprecation = printDeprecation(type);
 
-      expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED: foobar"/>
-
-            "
-          `);
+      expect(deprecation).toMatchInlineSnapshot(
+        `"<Badge class="warning" text="DEPRECATED: foobar"/>"`,
+      );
     });
 
     test("does not print deprecated badge if type is not deprecated", () => {
@@ -217,14 +217,10 @@ describe("common", () => {
           },
         },
       };
+      const constDirectiveMap = getConstDirectiveMap(type, options);
+      const description = printCustomDirectives(type, constDirectiveMap);
 
-      const description = printCustomDirectives(type, options);
-
-      expect(description).toMatchInlineSnapshot(`
-        "Test testDirective
-
-        "
-      `);
+      expect(description).toMatchInlineSnapshot(`"Test testDirective"`);
     });
   });
 });

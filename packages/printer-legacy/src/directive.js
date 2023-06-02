@@ -1,12 +1,11 @@
 const {
   graphql: { getConstDirectiveMap },
-  object: { hasProperty },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
   HEADER_SECTION_SUB_LEVEL,
-  MARKDOWN_EOP,
   MARKDOWN_EOL,
+  MARKDOWN_EOP,
 } = require("./const/strings");
 const { printLink } = require("./link");
 
@@ -34,25 +33,34 @@ function printCustomDirective(type, constDirectiveOption, options) {
     ...options,
     withAttributes: false,
   });
-  const description = getCustomDirectiveDescription(type, constDirectiveOption);
+  const description = getCustomDirectiveResolver(
+    "descriptor",
+    type,
+    constDirectiveOption,
+    "",
+  );
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
-function getCustomDirectiveDescription(type, constDirectiveOption) {
+function getCustomDirectiveResolver(
+  resolver,
+  type,
+  constDirectiveOption,
+  fallback = undefined,
+) {
   if (
     typeof constDirectiveOption === "undefined" ||
-    !hasProperty(constDirectiveOption, "descriptor") ||
-    typeof constDirectiveOption.descriptor !== "function"
+    typeof constDirectiveOption[resolver] !== "function"
   ) {
-    return "";
+    return fallback;
   }
 
-  return constDirectiveOption.descriptor(constDirectiveOption.type, type);
+  return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
 
 module.exports = {
-  printCustomDirectives,
+  getCustomDirectiveResolver,
   printCustomDirective,
-  getCustomDirectiveDescription,
+  printCustomDirectives,
 };

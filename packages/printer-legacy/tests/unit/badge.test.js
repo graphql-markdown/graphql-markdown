@@ -1,6 +1,9 @@
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
+    string: {
+      toSlug: jest.fn(),
+      escapeMDX: jest.fn((t) => t),
+    },
     url: { pathUrl: jest.fn() },
     object: { hasProperty: jest.fn() },
     graphql: {
@@ -97,7 +100,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["deprecated"]);
+      expect(badges).toStrictEqual([
+        { text: "deprecated", classname: "secondary" },
+      ]);
     });
 
     test("return non-null badge is type is non-null", () => {
@@ -109,7 +114,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["non-null"]);
+      expect(badges).toStrictEqual([
+        { text: "non-null", classname: "secondary" },
+      ]);
     });
 
     test("return list badge is type is list", () => {
@@ -121,7 +128,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["list"]);
+      expect(badges).toStrictEqual([{ text: "list", classname: "secondary" }]);
     });
 
     test("return category name as badge is type is subtype", () => {
@@ -133,7 +140,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["foobar"]);
+      expect(badges).toStrictEqual([
+        { text: "foobar", classname: "secondary" },
+      ]);
     });
 
     test("return group name as badge is type has group", () => {
@@ -145,7 +154,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["foobaz"]);
+      expect(badges).toStrictEqual([
+        { text: "foobaz", classname: "secondary" },
+      ]);
     });
 
     test("return directive names as badge if type has directives applied", () => {
@@ -160,7 +171,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type, options);
 
-      expect(badges).toStrictEqual(["@foo"]);
+      expect(badges).toStrictEqual([{ text: "@foo", classname: "secondary" }]);
     });
   });
 });
