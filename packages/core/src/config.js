@@ -85,11 +85,12 @@ function getCustomDirectives(customDirectiveOptions, skipDocDirective = []) {
     if (skipDocDirective.includes(name)) {
       delete customDirectiveOptions[name];
     } else if (
-      hasProperty(option, "descriptor") === false ||
-      typeof option.descriptor !== "function"
+      (hasProperty(option, "descriptor") === false ||
+        typeof option.descriptor !== "function") &&
+      (hasProperty(option, "tag") === false || typeof option.tag !== "function")
     ) {
       throw new Error(
-        `Wrong format for plugin custom directive "${name}", it should be {descriptor: (directiveType, constDirectiveType) => String}`,
+        `Wrong format for plugin custom directive "${name}".\nPlease refer to https://graphql-markdown.github.io/docs/advanced/custom-directive`,
       );
     }
   }

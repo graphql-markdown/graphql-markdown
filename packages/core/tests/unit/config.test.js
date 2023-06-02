@@ -366,7 +366,7 @@ describe("config", () => {
       expect(() => {
         getCustomDirectives(options);
       }).toThrow(
-        `Wrong format for plugin custom directive "test", it should be {descriptor: (directiveType, constDirectiveType) => String}`,
+        `Wrong format for plugin custom directive "test".\nPlease refer to https://graphql-markdown.github.io/docs/advanced/custom-directive`,
       );
     });
 
