@@ -74,8 +74,7 @@ const printDescription = (type, options, noText = NO_DESCRIPTION_TEXT) => {
       : replacement;
   const deprecation = printDeprecation(type);
   const customDirectives = printCustomDirectives(type, constDirectiveMap);
-  const customTags = printCustomTags(type, constDirectiveMap);
-  return `${deprecation}${customTags}${customDirectives}${description}`;
+  return `${deprecation}${description}${customDirectives}`;
 };
 
 module.exports = {

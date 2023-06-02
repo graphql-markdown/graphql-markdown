@@ -129,11 +129,9 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
+        "Lorem ipsumTest testDirective
+
         "
-
-        Test testDirective
-
-        Lorem ipsum"
       `);
     });
   });
