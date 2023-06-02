@@ -4,7 +4,7 @@ jest.mock("@graphql-markdown/utils", () => {
   return {
     object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
     graphql: { getConstDirectiveMap: jest.fn() },
-    string: { escapeMDX: jest.fn((t) => t) },
+    string: { escapeMDX: jest.fn() },
   };
 });
 const Utils = require("@graphql-markdown/utils");
@@ -20,6 +20,7 @@ const {
   getCustomTags,
   printCustomDirectives,
   printCustomDirective,
+  printCustomTags,
 } = require("../../src/directive");
 
 describe("directive", () => {
@@ -49,7 +50,7 @@ describe("directive", () => {
   const type = schema.getType("Test");
   const descriptor = (directive) => `Test ${directive.name}`;
   const tag = (directive) => ({
-    text: directive.name,
+    text: directive.toString(),
     classname: "warning",
   });
   const options = {
@@ -125,7 +126,7 @@ describe("directive", () => {
   });
 
   describe("getCustomTags()", () => {
-    test("does not print tags if type has no matching directive", () => {
+    test("does not return tags if type has no matching directive", () => {
       expect.hasAssertions();
 
       jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
@@ -135,7 +136,7 @@ describe("directive", () => {
       expect(tags).toStrictEqual([]);
     });
 
-    test("prints tags", () => {
+    test("return tags matching directives", () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
@@ -149,7 +150,36 @@ describe("directive", () => {
 
       const tags = getCustomTags(type, options);
 
-      expect(tags).toStrictEqual([{ text: "testA", classname: "warning" }]);
+      expect(tags).toStrictEqual([{ text: "@testA", classname: "warning" }]);
+    });
+  });
+
+  describe("printCustomTags()", () => {
+    test("prints empty string if type has no matching directive", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
+
+      const tags = printCustomTags(type, options);
+
+      expect(tags).toBe("");
+    });
+    test("prints MDX badge for tags matching directives", () => {
+      expect.hasAssertions();
+
+      const mockConstDirectiveMap = {
+        testA: options.customDirectives.testA,
+      };
+      jest
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(false);
+      jest.spyOn(Utils.string, "escapeMDX").mockImplementation((text) => text);
+
+      const tags = printCustomTags(type, options);
+
+      expect(tags).toBe(`<Badge class="badge warning" text="@testA"/>`);
     });
   });
 });
