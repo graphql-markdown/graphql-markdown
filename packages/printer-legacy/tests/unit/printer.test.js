@@ -13,7 +13,7 @@ jest.mock("@graphql-markdown/utils", () => {
   return {
     string: { toSlug: jest.fn() },
     url: { pathUrl: { join: jest.fn() } },
-    object: { hasProperty: jest.fn() },
+    object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
     graphql: {
       hasDirective: jest.fn(),
       getTypeName: jest.fn(),
@@ -25,6 +25,7 @@ jest.mock("@graphql-markdown/utils", () => {
       isInputType: jest.fn(),
       isScalarType: jest.fn(),
       isDirectiveType: jest.fn(),
+      getConstDirectiveMap: jest.fn(),
     },
   };
 });

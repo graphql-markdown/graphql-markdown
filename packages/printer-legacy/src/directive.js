@@ -1,5 +1,6 @@
 const {
   graphql: { getConstDirectiveMap },
+  object: { isEmpty },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
@@ -59,8 +60,23 @@ function getCustomDirectiveResolver(
   return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
 
+const getCustomTags = (type, options) => {
+  const constDirectiveMap = getConstDirectiveMap(type, options);
+
+  if (isEmpty(constDirectiveMap) === true) {
+    return [];
+  }
+
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption) =>
+      getCustomDirectiveResolver("tag", type, constDirectiveOption),
+    )
+    .filter((value) => typeof value !== "undefined");
+};
+
 module.exports = {
   getCustomDirectiveResolver,
+  getCustomTags,
   printCustomDirective,
   printCustomDirectives,
 };

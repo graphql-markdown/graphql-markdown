@@ -20,6 +20,7 @@ const {
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
 const { printCustomDirectives } = require("./directive");
+const { printCustomTags } = require("./badge");
 const {
   printOperationMetadata,
   printCodeOperation,
@@ -143,6 +144,8 @@ class Printer {
 
   static printCustomDirectives = printCustomDirectives;
 
+  static printBadges = printCustomTags;
+
   static printTypeMetadata = (type, options) => {
     let metadata;
 
@@ -202,12 +205,14 @@ class Printer {
       type,
       printTypeOptions,
     );
+    // const badges = Printer.printBadges(type, printTypeOptions);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
     const relations = Printer.printRelations(type, printTypeOptions);
 
     return [
       header,
       mdx,
+      // badges,
       description,
       code,
       customDirectives,
