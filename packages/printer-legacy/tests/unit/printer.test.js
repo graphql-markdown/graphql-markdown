@@ -253,13 +253,6 @@ describe("Printer", () => {
         jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
         jest.spyOn(GraphQLPrinter, `printCode${name}`).mockReturnValue(name);
 
-        [
-          "printHeader",
-          "printTypeMetadata",
-          "printDescription",
-          "printRelations",
-        ].forEach((method) => jest.spyOn(Printer, method).mockReturnValue(""));
-
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
         expect(code).toMatchSnapshot();
@@ -315,6 +308,7 @@ describe("Printer", () => {
           "printHeader",
           "printCode",
           "printCustomDirectives",
+          "printCustomTags",
           "printTypeMetadata",
           "printDescription",
           "printRelations",
