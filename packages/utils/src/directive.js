@@ -22,25 +22,33 @@ function getCustomDirectives(
       continue;
     }
 
+    const directiveOptions = getCustomDirectiveOptions(
+      schemaDirectiveName,
+      customDirectiveOptions,
+    );
+
     customDirectives[schemaDirectiveName] = {
       type: schemaDirectives[schemaDirectiveName],
-      descriptor: getDescriptor(schemaDirectiveName, customDirectiveOptions),
+      ...directiveOptions,
     };
   }
 
   return isEmpty(customDirectives) === true ? undefined : customDirectives;
 }
 
-function getDescriptor(schemaDirectiveName, customDirectiveOptions) {
+function getCustomDirectiveOptions(
+  schemaDirectiveName,
+  customDirectiveOptions,
+) {
   if (hasProperty(customDirectiveOptions, schemaDirectiveName) === true) {
-    return customDirectiveOptions[schemaDirectiveName].descriptor;
+    return customDirectiveOptions[schemaDirectiveName];
   }
 
   if (hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true) {
-    return customDirectiveOptions[WILDCARD_DIRECTIVE].descriptor;
+    return customDirectiveOptions[WILDCARD_DIRECTIVE];
   }
 
-  return undefined;
+  return {};
 }
 
 function isCustomDirective(schemaDirectiveName, customDirectiveOptions) {
@@ -50,4 +58,8 @@ function isCustomDirective(schemaDirectiveName, customDirectiveOptions) {
   );
 }
 
-module.exports = { getCustomDirectives, getDescriptor, isCustomDirective };
+module.exports = {
+  getCustomDirectives,
+  getCustomDirectiveOptions,
+  isCustomDirective,
+};

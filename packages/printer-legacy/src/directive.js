@@ -1,14 +1,14 @@
 const {
   graphql: { getConstDirectiveMap },
-  object: { hasProperty },
 } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
   HEADER_SECTION_SUB_LEVEL,
-  MARKDOWN_EOP,
   MARKDOWN_EOL,
+  MARKDOWN_EOP,
 } = require("./const/strings");
 const { printLink } = require("./link");
+const { printBadge } = require("./badge");
 
 function printCustomDirectives(type, options) {
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -20,11 +20,17 @@ function printCustomDirectives(type, options) {
     return "";
   }
 
-  const content = Object.values(constDirectiveMap)
+  const directives = Object.values(constDirectiveMap)
     .map((constDirectiveOption) =>
       printCustomDirective(type, constDirectiveOption, options),
     )
-    .join(MARKDOWN_EOP);
+    .filter((value) => typeof value !== "undefined");
+
+  if (directives.length === 0) {
+    return "";
+  }
+
+  const content = directives.join(MARKDOWN_EOP);
 
   return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 }
@@ -34,25 +40,66 @@ function printCustomDirective(type, constDirectiveOption, options) {
     ...options,
     withAttributes: false,
   });
-  const description = getCustomDirectiveDescription(type, constDirectiveOption);
+  const description = getCustomDirectiveResolver(
+    "descriptor",
+    type,
+    constDirectiveOption,
+  );
+
+  if (typeof description === "undefined") {
+    return undefined;
+  }
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
-function getCustomDirectiveDescription(type, constDirectiveOption) {
+function getCustomTags(type, options) {
+  const constDirectiveMap = getConstDirectiveMap(type, options);
+
   if (
-    typeof constDirectiveOption === "undefined" ||
-    !hasProperty(constDirectiveOption, "descriptor") ||
-    typeof constDirectiveOption.descriptor !== "function"
+    typeof constDirectiveMap !== "object" ||
+    !Object.keys(constDirectiveMap).length
   ) {
+    return [];
+  }
+
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption) =>
+      getCustomDirectiveResolver("tag", type, constDirectiveOption),
+    )
+    .filter((value) => typeof value !== "undefined");
+}
+
+const printCustomTags = (type, options) => {
+  const badges = getCustomTags(type, options);
+
+  if (badges.length === 0) {
     return "";
   }
 
-  return constDirectiveOption.descriptor(constDirectiveOption.type, type);
+  return badges.map((badge) => printBadge(badge)).join(" ");
+};
+
+function getCustomDirectiveResolver(
+  resolver,
+  type,
+  constDirectiveOption,
+  fallback = undefined,
+) {
+  if (
+    typeof constDirectiveOption === "undefined" ||
+    typeof constDirectiveOption[resolver] !== "function"
+  ) {
+    return fallback;
+  }
+
+  return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
 
 module.exports = {
-  printCustomDirectives,
+  getCustomDirectiveResolver,
+  getCustomTags,
   printCustomDirective,
-  getCustomDirectiveDescription,
+  printCustomDirectives,
+  printCustomTags,
 };

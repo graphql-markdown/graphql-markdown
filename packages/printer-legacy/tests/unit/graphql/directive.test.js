@@ -49,7 +49,9 @@ describe("directive", () => {
       expect(code).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>ArgFooBar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>ArgFooBar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/> 
+        > 
+        > 
         > 
         > 
 
@@ -82,7 +84,9 @@ describe("directive", () => {
       expect(code).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Foo</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="scalar"/>
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Foo</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/> 
+        > 
+        > 
         > 
         > 
 
@@ -90,8 +94,12 @@ describe("directive", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Bar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="secondary" text="deprecated"/> <Badge class="secondary" text="scalar"/>
-        > <Badge class="warning" text="DEPRECATED: Deprecated"/>
+        #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Bar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+        > 
+        > 
+        > :::caution DEPRECATED
+        > Deprecated
+        > :::
         > 
         > 
         > 

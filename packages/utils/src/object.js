@@ -4,8 +4,10 @@
 
 function hasProperty(obj, prop) {
   return (
-    !!(obj && obj[prop]) ||
-    (obj instanceof Object && Object.prototype.hasOwnProperty.call(obj, prop))
+    typeof obj === "object" &&
+    (!!(obj && obj[prop]) ||
+      (obj instanceof Object &&
+        Object.prototype.hasOwnProperty.call(obj, prop)))
   );
 }
 
@@ -14,7 +16,7 @@ function hasMethod(obj, prop) {
 }
 
 function isEmpty(obj) {
-  return typeof obj !== "object" || Object.keys(obj).length === 0;
+  return typeof obj !== "object" || !Object.keys(obj).length;
 }
 
 // get the specified property or nested property of an object
@@ -26,4 +28,9 @@ function getObjPath(path, obj, fallback = "") {
   return path.split(".").reduce((res, key) => res[key] || fallback, obj);
 }
 
-module.exports = { hasMethod, hasProperty, isEmpty, getObjPath };
+module.exports = {
+  getObjPath,
+  hasMethod,
+  hasProperty,
+  isEmpty,
+};

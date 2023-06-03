@@ -2,8 +2,9 @@ const { buildSchema } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    object: { hasProperty: jest.fn() },
+    object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
     graphql: { getConstDirectiveMap: jest.fn() },
+    string: { escapeMDX: jest.fn() },
   };
 });
 const Utils = require("@graphql-markdown/utils");
@@ -16,8 +17,10 @@ jest.mock("../../src/link", () => {
 const Link = require("../../src/link");
 
 const {
+  getCustomTags,
   printCustomDirectives,
   printCustomDirective,
+  printCustomTags,
 } = require("../../src/directive");
 
 describe("directive", () => {
@@ -46,15 +49,23 @@ describe("directive", () => {
   `);
   const type = schema.getType("Test");
   const descriptor = (directive) => `Test ${directive.name}`;
+  const tag = (directive) => ({
+    text: directive.toString(),
+    classname: "warning",
+  });
   const options = {
     customDirectives: {
       testA: {
         type: schema.getDirective("testA"),
         descriptor,
+        tag,
       },
       nonExist: {
         type: undefined,
         descriptor,
+      },
+      noDescriptor: {
+        type: undefined,
       },
     },
   };
@@ -78,6 +89,19 @@ describe("directive", () => {
         > Test testA
         > "
       `);
+    });
+
+    test("returns undefined if no descriptor exists", () => {
+      expect.assertions(1);
+
+      const constDirectiveOption = options.customDirectives.noDescriptor;
+
+      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(
+        printCustomDirective(type, constDirectiveOption, options),
+      ).toBeUndefined();
     });
   });
 
@@ -114,6 +138,79 @@ describe("directive", () => {
 
         "
       `);
+    });
+
+    test("exclude undefined description", () => {
+      expect.assertions(1);
+
+      const mockConstDirectiveMap = {
+        testA: options.customDirectives.noDescriptor,
+      };
+      jest
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+
+      expect(printCustomDirectives(type, options)).toBe("");
+    });
+  });
+
+  describe("getCustomTags()", () => {
+    test("does not return tags if type has no matching directive", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
+
+      const tags = getCustomTags(type, options);
+
+      expect(tags).toStrictEqual([]);
+    });
+
+    test("return tags matching directives", () => {
+      expect.hasAssertions();
+
+      const mockConstDirectiveMap = {
+        testA: options.customDirectives.testA,
+      };
+      jest
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(false);
+
+      const tags = getCustomTags(type, options);
+
+      expect(tags).toStrictEqual([{ text: "@testA", classname: "warning" }]);
+    });
+  });
+
+  describe("printCustomTags()", () => {
+    test("prints empty string if type has no matching directive", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
+
+      const tags = printCustomTags(type, options);
+
+      expect(tags).toBe("");
+    });
+    test("prints MDX badge for tags matching directives", () => {
+      expect.hasAssertions();
+
+      const mockConstDirectiveMap = {
+        testA: options.customDirectives.testA,
+      };
+      jest
+        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(false);
+      jest.spyOn(Utils.string, "escapeMDX").mockImplementation((text) => text);
+
+      const tags = printCustomTags(type, options);
+
+      expect(tags).toBe(`<Badge class="badge warning" text="@testA"/>`);
     });
   });
 });

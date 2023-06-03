@@ -22,11 +22,15 @@ describe("union", () => {
       expect(code).toMatchInlineSnapshot(`
         "### Possible types
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](#)  
+        > 
+        > 
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](#) 
+        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](#)  
+        > 
+        > 
         > 
         > 
 

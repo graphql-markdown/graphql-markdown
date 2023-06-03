@@ -1,30 +1,31 @@
 const {
-  GraphQLEnumType,
-  GraphQLScalarType,
-  GraphQLUnionType,
-  GraphQLID,
   GraphQLDirective,
-  GraphQLObjectType,
+  GraphQLEnumType,
+  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLUnionType,
 } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
+    string: { toSlug: jest.fn(), escapeMDX: jest.fn() },
     url: { pathUrl: { join: jest.fn() } },
-    object: { hasProperty: jest.fn() },
+    object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
     graphql: {
-      hasDirective: jest.fn(),
+      getConstDirectiveMap: jest.fn(),
       getTypeName: jest.fn(),
-      isOperation: jest.fn(),
+      hasDirective: jest.fn(),
+      isDirectiveType: jest.fn(),
       isEnumType: jest.fn(),
-      isUnionType: jest.fn(),
+      isInputType: jest.fn(),
       isInterfaceType: jest.fn(),
       isObjectType: jest.fn(),
-      isInputType: jest.fn(),
+      isOperation: jest.fn(),
       isScalarType: jest.fn(),
-      isDirectiveType: jest.fn(),
+      isUnionType: jest.fn(),
     },
   };
 });
@@ -252,13 +253,6 @@ describe("Printer", () => {
         jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
         jest.spyOn(GraphQLPrinter, `printCode${name}`).mockReturnValue(name);
 
-        [
-          "printHeader",
-          "printTypeMetadata",
-          "printDescription",
-          "printRelations",
-        ].forEach((method) => jest.spyOn(Printer, method).mockReturnValue(""));
-
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
         expect(code).toMatchSnapshot();
@@ -311,12 +305,13 @@ describe("Printer", () => {
         expect.hasAssertions();
 
         const spies = [
-          "printHeader",
           "printCode",
           "printCustomDirectives",
-          "printTypeMetadata",
+          "printCustomTags",
           "printDescription",
+          "printHeader",
           "printRelations",
+          "printTypeMetadata",
         ].map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
 
         Printer.printType(name, type, DEFAULT_OPTIONS);

@@ -32,10 +32,14 @@ type Query {
 Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
 
 ```ts
+type tag = { text: string, classname: string };
+
 type descriptorFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => string;
+type tagFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => tag;
 
 type customDirectiveOptions = { 
-  descriptor: descriptorFunction
+  descriptor: descriptorFunction?
+  tag: tagFunction?
 }
 
 type customDirective = {
@@ -43,7 +47,7 @@ type customDirective = {
 }
 ```
 
-The `descriptor` function receives 2 arguments:
+The `descriptor` and `tag` functions receives 2 arguments:
 - `directive` of type [`GraphQLDirective`](https://github.com/graphql/graphql-js/blob/main/src/type/directives.ts)
 - `node` of type [`GraphQLNamedType`](https://github.com/graphql/graphql-js/blob/main/src/type/definition.ts) or [`ASTNode`](https://github.com/graphql/graphql-js/blob/main/src/language/ast.ts)
 
@@ -62,6 +66,9 @@ plugins: [
               "This requires the current user to be in `${requires}` role.",
             ),
         },
+        beta: {
+          tag: (directive, node) => ({ text: directive.name, classname: "badge--info" }),
+        }
         // ... other custom directive options
       },
     },
@@ -70,9 +77,9 @@ plugins: [
 ```
 
 :::tip
-You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard descriptor.
+You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard descriptor and/or tag.
 
-```js {11-13}
+```js {11-14}
 const { helper } = require("@graphql-markdown/utils");
 
 //...//
@@ -85,6 +92,7 @@ plugins: [
       customDirective: {
         "*": {
           descriptor: helper.directiveDescriptor,
+          tag: helper.tagDescriptor,
         },
         // ... optionally specific custom directive options
       },
@@ -100,13 +108,16 @@ The package `@graphql-markdown/utils` provides few helper functions to quick sta
 
 ```js
 const { 
-  helper: { directiveDescriptor },
+  helper: { directiveDescriptor, tagDescriptor },
   graphql: { getTypeDirectiveArgValue, getTypeDirectiveValues } 
 } = require("@graphql-markdown/utils");
 ```
 
 ### `directiveDescriptor`
-[`helper.directiveDescriptor(directive: GraphQLDirective, node: GraphQLNamedType | ASTNode, template: String): String`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
+[`helper.directiveDescriptor(directive: GraphQLDirective, node: GraphQLNamedType | ASTNode, template: String?): String`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
+
+### `tagDescriptor`
+[`helper.tagDescriptor(directive: GraphQLDirective, node: GraphQLNamedType | ASTNode, classname: String?): String`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) returns the directive name, with `classname` defaulted to `badge--secondary`.
 
 ### `getTypeDirectiveArgValue`
 `graphql.getTypeDirectiveArgValue(directive: GraphQLDirective, node: GraphQLNamedType | ASTNode, arg: String): Any` returns the value of a specific directive argument by name.

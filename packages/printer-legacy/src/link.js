@@ -1,24 +1,24 @@
 const {
-  string: { toSlug },
-  url: { pathUrl },
-  object: { hasProperty },
   graphql: {
-    isEnumType,
-    isUnionType,
-    isObjectType,
-    isScalarType,
-    isOperation,
-    isDirectiveType,
-    isInterfaceType,
     getNamedType,
-    isInputType,
-    hasDirective,
     getTypeName,
+    hasDirective,
+    isDeprecated,
+    isDirectiveType,
+    isEnumType,
+    isInputType,
+    isInterfaceType,
+    isLeafType,
     isListType,
     isNonNullType,
-    isLeafType,
-    isDeprecated,
+    isObjectType,
+    isOperation,
+    isScalarType,
+    isUnionType,
   },
+  object: { hasProperty },
+  string: { toSlug },
+  url: { pathUrl },
 } = require("@graphql-markdown/utils");
 
 const { getGroup } = require("./group");
@@ -139,7 +139,12 @@ class Link {
   static printLink = (type, options) => {
     let text;
 
-    const link = Link.toLink(type, getTypeName(type), undefined, options);
+    const link = Link.toLink(
+      type,
+      getTypeName(type, type.toString()),
+      undefined,
+      options,
+    );
 
     if (Link.hasOptionWithAttributes(options) === false) {
       text =

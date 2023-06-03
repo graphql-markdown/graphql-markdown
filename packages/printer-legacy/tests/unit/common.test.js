@@ -1,13 +1,17 @@
 const {
-  GraphQLScalarType,
-  GraphQLDirective,
   DirectiveLocation,
+  GraphQLDirective,
+  GraphQLScalarType,
 } = require("graphql");
 
 const {
-  printDescription,
-  printDeprecation,
+  graphql: { getConstDirectiveMap },
+} = require("@graphql-markdown/utils");
+
+const {
   printCustomDirectives,
+  printDeprecation,
+  printDescription,
 } = require("../../src/common");
 
 describe("common", () => {
@@ -22,7 +26,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("Lorem ipsum");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        Lorem ipsum"
+      `);
     });
 
     test("returns the default text if no description", () => {
@@ -34,7 +42,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        No description"
+      `);
     });
 
     test("returns the defined text if no description", () => {
@@ -46,7 +58,11 @@ describe("common", () => {
       });
       const description = printDescription(type, undefined, "");
 
-      expect(description).toBe("");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        "
+      `);
     });
 
     test("returns the default text if description is undefined", () => {
@@ -59,7 +75,11 @@ describe("common", () => {
       });
       const description = printDescription(type);
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        No description"
+      `);
     });
 
     test("returns the default text if noText is not a string", () => {
@@ -74,7 +94,11 @@ describe("common", () => {
         text: "Not a string",
       });
 
-      expect(description).toBe("No description");
+      expect(description).toMatchInlineSnapshot(`
+        "
+
+        No description"
+      `);
     });
 
     test("return DEPRECATED tag if deprecated", () => {
@@ -86,7 +110,11 @@ describe("common", () => {
       const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
-        "<Badge class="warning" text="DEPRECATED: Foobar"/>
+        "
+
+        :::caution DEPRECATED
+        Foobar
+        :::
 
         Lorem ipsum"
       `);
@@ -124,9 +152,11 @@ describe("common", () => {
       const description = printDescription(type, options);
 
       expect(description).toMatchInlineSnapshot(`
-        "Test testDirective
+        "
 
-        Lorem ipsum"
+        Lorem ipsum
+
+        Test testDirective"
       `);
     });
   });
@@ -142,10 +172,11 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED"/>
+        "
 
-            "
-          `);
+        :::caution DEPRECATED
+        :::"
+      `);
     });
 
     test("prints deprecation reason if type is deprecated with reason", () => {
@@ -159,10 +190,12 @@ describe("common", () => {
       const deprecation = printDeprecation(type);
 
       expect(deprecation).toMatchInlineSnapshot(`
-            "<Badge class="warning" text="DEPRECATED: foobar"/>
+        "
 
-            "
-          `);
+        :::caution DEPRECATED
+        foobar
+        :::"
+      `);
     });
 
     test("does not print deprecated badge if type is not deprecated", () => {
@@ -198,7 +231,7 @@ describe("common", () => {
       },
     };
 
-    test("does not print directive description if type has not directive", () => {
+    test("does not print directive description if type has no directive", () => {
       expect.hasAssertions();
 
       const description = printCustomDirectives(type, {});
@@ -217,14 +250,10 @@ describe("common", () => {
           },
         },
       };
+      const constDirectiveMap = getConstDirectiveMap(type, options);
+      const description = printCustomDirectives(type, constDirectiveMap);
 
-      const description = printCustomDirectives(type, options);
-
-      expect(description).toMatchInlineSnapshot(`
-        "Test testDirective
-
-        "
-      `);
+      expect(description).toMatchInlineSnapshot(`""`);
     });
   });
 });

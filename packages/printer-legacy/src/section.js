@@ -3,16 +3,21 @@ const {
 } = require("@graphql-markdown/utils");
 const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
-const {
-  HEADER_SECTION_LEVEL,
-  HEADER_SECTION_SUB_LEVEL,
-  HEADER_SECTION_ITEM_LEVEL,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-} = require("./const/strings");
 const { printDescription } = require("./common");
 const { printBadges } = require("./badge");
 const { printLink, printParentLink } = require("./link");
+const { printCustomTags } = require("./directive");
+
+const {
+  HEADER_SECTION_ITEM_LEVEL,
+  HEADER_SECTION_LEVEL,
+  HEADER_SECTION_SUB_LEVEL,
+  HIDE_DEPRECATED,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+  SHOW_DEPRECATED,
+} = require("./const/strings");
+
 const { OPTION_DEPRECATED } = require("./const/options");
 
 const sectionLevels = [
@@ -20,9 +25,6 @@ const sectionLevels = [
   HEADER_SECTION_SUB_LEVEL,
   HEADER_SECTION_ITEM_LEVEL,
 ];
-
-const SHOW_DEPRECATED = `<><span className="deprecated">Show deprecated</span></>`;
-const HIDE_DEPRECATED = `<><span className="deprecated">Hide deprecated</span></>`;
 
 const printMetadataSection = (type, values, section, options) => {
   switch (options.printDeprecated) {
@@ -157,9 +159,10 @@ const printSectionItem = (type, options) => {
     `${MARKDOWN_EOL}> `,
   );
   const badges = printBadges(type, options);
+  const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
 
-  let section = `${level} ${typeNameLink}${parentTypeLink} ${badges}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+  let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
   if (isParametrizedField(type)) {
     section += printSectionItems(type.args, {
       ...options,
@@ -179,6 +182,4 @@ module.exports = {
   printSectionItem,
   printSectionItems,
   printMetadataSection,
-  SHOW_DEPRECATED,
-  HIDE_DEPRECATED,
 };

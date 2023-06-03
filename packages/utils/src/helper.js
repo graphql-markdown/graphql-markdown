@@ -13,4 +13,11 @@ function directiveDescriptor(
   return interpolate(descriptionTemplate, values);
 }
 
-module.exports = { directiveDescriptor };
+function directiveTag(directiveType, type, classname = "badge--secondary") {
+  return {
+    text: `@${directiveType.name}`,
+    classname: classname,
+  };
+}
+
+module.exports = { directiveDescriptor, directiveTag };

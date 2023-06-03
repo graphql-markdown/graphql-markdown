@@ -19,7 +19,7 @@ const {
 
 const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
-const { printCustomDirectives } = require("./directive");
+const { printCustomDirectives, printCustomTags } = require("./directive");
 const {
   printOperationMetadata,
   printCodeOperation,
@@ -143,6 +143,8 @@ class Printer {
 
   static printCustomDirectives = printCustomDirectives;
 
+  static printCustomTags = printCustomTags;
+
   static printTypeMetadata = (type, options) => {
     let metadata;
 
@@ -202,12 +204,14 @@ class Printer {
       type,
       printTypeOptions,
     );
+    const tags = Printer.printCustomTags(type, printTypeOptions);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
     const relations = Printer.printRelations(type, printTypeOptions);
 
     return [
       header,
       mdx,
+      tags,
       description,
       code,
       customDirectives,

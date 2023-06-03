@@ -1,8 +1,14 @@
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
+    string: {
+      toSlug: jest.fn(),
+      escapeMDX: jest.fn((t) => t),
+    },
     url: { pathUrl: jest.fn() },
-    object: { hasProperty: jest.fn() },
+    object: {
+      hasProperty: jest.fn(),
+      isEmpty: jest.fn(() => false),
+    },
     graphql: {
       isNonNullType: jest.fn(),
       isListType: jest.fn(),
@@ -49,11 +55,12 @@ describe("badge", () => {
 
       jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(true);
       jest.spyOn(Utils.graphql, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(Utils.object, "isEmpty").mockReturnValueOnce(true);
 
       const badges = Badge.printBadges({}, { typeBadges: true });
 
       expect(badges).toMatchInlineSnapshot(
-        `"<Badge class="secondary" text="non-null"/>"`,
+        `"<Badge class="badge badge--secondary" text="non-null"/>"`,
       );
     });
 
@@ -89,17 +96,6 @@ describe("badge", () => {
   });
 
   describe("getTypeBadges", () => {
-    test("return deprecated badge is type is deprecated", () => {
-      expect.assertions(1);
-
-      jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
-      const type = { isDeprecated: true };
-
-      const badges = Badge.getTypeBadges(type);
-
-      expect(badges).toStrictEqual(["deprecated"]);
-    });
-
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
 
@@ -109,7 +105,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["non-null"]);
+      expect(badges).toStrictEqual([
+        { text: "non-null", classname: "badge--secondary" },
+      ]);
     });
 
     test("return list badge is type is list", () => {
@@ -121,7 +119,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["list"]);
+      expect(badges).toStrictEqual([
+        { text: "list", classname: "badge--secondary" },
+      ]);
     });
 
     test("return category name as badge is type is subtype", () => {
@@ -133,7 +133,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["foobar"]);
+      expect(badges).toStrictEqual([
+        { text: "foobar", classname: "badge--secondary" },
+      ]);
     });
 
     test("return group name as badge is type has group", () => {
@@ -145,22 +147,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual(["foobaz"]);
-    });
-
-    test("return directive names as badge if type has directives applied", () => {
-      expect.assertions(1);
-
-      jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
-        .mockReturnValueOnce({ foo: {} });
-
-      const type = {};
-      const options = {};
-
-      const badges = Badge.getTypeBadges(type, options);
-
-      expect(badges).toStrictEqual(["@foo"]);
+      expect(badges).toStrictEqual([
+        { text: "foobaz", classname: "badge--secondary" },
+      ]);
     });
   });
 });
