@@ -162,7 +162,7 @@
     "memfs": "3.5.2",
     "pinst": "3.0.0",
     "prettier": "2.8.8",
-    "unionfs": "4.4.0"
+    "unionfs": "4.5.1"
   },
   "resolutions": {
     "chalk": "5.2.0"
