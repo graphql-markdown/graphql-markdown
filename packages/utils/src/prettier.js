@@ -1,11 +1,13 @@
 /* istanbul ignore file */
 
+const logger = require("./logger").getInstance();
+
 function prettify(content, parser) {
   try {
     const { format } = require("prettier");
     return format(content, { parser });
   } catch (error) {
-    console.debug("Prettier is not found");
+    logger.warn("Prettier is not found");
   }
 }
 

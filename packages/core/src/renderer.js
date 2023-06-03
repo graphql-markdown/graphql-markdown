@@ -9,6 +9,8 @@ const {
   graphql: { isDeprecated },
 } = require("@graphql-markdown/utils");
 
+const logger = require("@graphql-markdown/utils").logger.getInstance();
+
 const { ASSETS_LOCATION } = require("./config");
 const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
 
@@ -122,7 +124,7 @@ module.exports = class Renderer {
         return undefined;
       }
     } catch (error) {
-      console.log(`An error occurred while processing "${type}"`);
+      logger.warn(`An error occurred while processing "${type}"`);
       return undefined;
     }
 

@@ -3,60 +3,14 @@ const {
   group: { getGroups },
   directive: { getCustomDirectives },
 } = require("@graphql-markdown/utils");
+
+const { logger: Logger } = require("@graphql-markdown/utils");
 const Renderer = require("./renderer");
+const { hasChanges } = require("./diff");
+const { getPrinter } = require("./printer");
 
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;
-
-const hasChanges = async (
-  schema,
-  tmpDir,
-  diffMethod,
-  diffModule = "@graphql-markdown/diff",
-) => {
-  if (
-    typeof diffMethod === "undefined" ||
-    diffMethod == null ||
-    typeof diffModule === "undefined" ||
-    diffModule == null
-  ) {
-    return true;
-  }
-
-  try {
-    const { checkSchemaChanges } = require(diffModule);
-    return await checkSchemaChanges(schema, tmpDir, diffMethod);
-  } catch (error) {
-    console.warn(
-      `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
-    );
-  }
-
-  return true;
-};
-
-const getPrinter = (printerModule, config, options) => {
-  let Printer = undefined;
-
-  if (typeof printerModule !== "string") {
-    throw new Error(
-      'Invalid printer module name in "printTypeOptions" settings.',
-    );
-  }
-
-  try {
-    Printer = require(printerModule);
-  } catch (error) {
-    throw new Error(
-      `Cannot find module '${printerModule}' for @graphql-markdown/core in "printTypeOptions" settings.`,
-    );
-  }
-
-  const { schema, baseURL, linkRoot } = config;
-  Printer.init(schema, baseURL, linkRoot, { ...options });
-
-  return Printer;
-};
 
 const generateDocFromSchema = async ({
   baseURL,
@@ -74,15 +28,18 @@ const generateDocFromSchema = async ({
   printer: printerModule,
   skipDocDirective,
   customDirective,
+  loggerModule,
 }) => {
   const start = process.hrtime.bigint();
+
+  const logger = Logger.setInstance(loggerModule);
 
   const loaders = getDocumentLoaders(loadersList);
   const schema = await loadSchema(schemaLocation, loaders);
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
   if (!changed) {
-    console.info(`No changes detected in schema "${schemaLocation}".`);
+    logger.info(`No changes detected in schema "${schemaLocation}".`);
   }
 
   const rootTypes = getSchemaMap(schema);
@@ -126,17 +83,17 @@ const generateDocFromSchema = async ({
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(SEC_DECIMALS);
 
-  console.info(
+  logger.success(
     `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
   );
-  console.log(
+  logger.info(
     `${
       pages.flat().length
     } pages generated in ${duration}s from schema "${schemaLocation}".`,
   );
-  console.info(
+  logger.info(
     `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
   );
 };
 
-module.exports = { getPrinter, hasChanges, generateDocFromSchema };
+module.exports = { generateDocFromSchema };
