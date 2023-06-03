@@ -9,4 +9,5 @@ module.exports = {
   group: require("./group"),
   directive: require("./directive"),
   helper: require("./helper"),
+  logger: require("./logger"),
 };

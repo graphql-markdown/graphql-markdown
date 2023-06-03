@@ -48,9 +48,11 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
         )
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions) => {
-          await generateDocFromSchema(
-            config.buildConfig(configOptions, cliOptions),
-          );
+          const options = config.buildConfig(configOptions, cliOptions);
+          await generateDocFromSchema({
+            ...options,
+            loggerModule: "@docusaurus/logger",
+          });
         });
     },
   };
