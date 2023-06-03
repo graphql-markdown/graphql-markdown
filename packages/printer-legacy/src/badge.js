@@ -6,7 +6,6 @@ const {
 
 const { getLinkCategory } = require("./link");
 const { getGroup } = require("./group");
-const { getCustomTags } = require("./directive");
 
 const DEFAULT_CSS_CLASSNAME = "badge--secondary";
 
@@ -65,7 +64,6 @@ function printBadge({ text, classname }) {
 
 module.exports = {
   getTypeBadges,
-  getCustomTags,
   printBadge,
   printBadges,
 };
