@@ -31,27 +31,32 @@ type Query {
 
 Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
 
-```ts
-type tag = { text: string, classname: string };
-
-type descriptorFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => string;
-type tagFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => tag;
-
-type customDirectiveOptions = { 
-  descriptor: descriptorFunction?
-  tag: tagFunction?
-}
-
-type customDirective = {
-  [name: string | "*"]: customDirectiveOptions | undefined
-}
-```
-
 The `descriptor` and `tag` functions receives 2 arguments:
 - `directive` of type [`GraphQLDirective`](https://github.com/graphql/graphql-js/blob/main/src/type/directives.ts)
 - `node` of type [`GraphQLNamedType`](https://github.com/graphql/graphql-js/blob/main/src/type/definition.ts) or [`ASTNode`](https://github.com/graphql/graphql-js/blob/main/src/language/ast.ts)
 
-```js {6-15}
+```ts
+type CustomDirective = {
+  [name: string | "*"]: CustomDirectiveOptions | undefined
+}
+
+type CustomDirectiveOptions = { 
+  descriptor: DescriptorFunction?
+  tag: TagFunction?
+}
+
+type DescriptorFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => string;
+
+type tagFunction = (directive: GraphQLDirective, node: GraphQLNamedType | ASTNode) => Tag;
+
+type Tag = { text: string, classname: string };
+```
+
+### `descriptor`
+
+The `descriptor` allows rendering custom directive description applicable to entities.
+
+```js {8-13}
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -65,7 +70,25 @@ plugins: [
               node,
               "This requires the current user to be in `${requires}` role.",
             ),
-        },
+        }
+        // ... other custom directive options
+      },
+    },
+  ],
+],
+```
+
+### `tag`
+
+The `tag` allows rendering custom badges (tags) based on custom directive applicable to entities.
+
+```js {8}
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      // ... other options
+      customDirective: {
         beta: {
           tag: (directive, node) => ({ text: directive.name, classname: "badge--info" }),
         }
@@ -76,8 +99,9 @@ plugins: [
 ],
 ```
 
-:::tip
-You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard descriptor and/or tag.
+### Wildcard
+
+You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
 ```js {11-14}
 const { helper } = require("@graphql-markdown/utils");
@@ -100,8 +124,6 @@ plugins: [
   ],
 ],
 ```
-
-:::
 
 ## Helpers
 The package `@graphql-markdown/utils` provides few helper functions to quick start:
