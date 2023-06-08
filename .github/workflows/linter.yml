@@ -12,6 +12,8 @@ on:
       - '*.json'
       - '.github/workflows/linter.yml'
 
+permissions: read-all
+
 jobs:
   lint:
     name: Lint

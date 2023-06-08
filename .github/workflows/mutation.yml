@@ -11,6 +11,8 @@ on:
       - 'packages/**/tests/**/*'
       - '.github/workflows/mutation.yml'
 
+permissions: read-all
+
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 

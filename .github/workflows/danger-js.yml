@@ -1,5 +1,8 @@
 name: "Danger JS"
+
 on: pull_request
+
+permissions: read-all
 
 jobs:
   danger-js:

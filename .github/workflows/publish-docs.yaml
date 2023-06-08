@@ -5,6 +5,8 @@ on:
   release:
     types: [published]
 
+permissions: read-all
+
 concurrency:
   group: publish-docs
   cancel-in-progress: true

@@ -12,6 +12,8 @@ on:
       - '*.json'
       - '.github/workflows/test.yml'
 
+permissions: read-all
+
 jobs:
   test:
     name: Test ${{matrix.package}}
