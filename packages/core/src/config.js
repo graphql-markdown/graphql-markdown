@@ -48,34 +48,40 @@ function buildConfig(configFileOpts, cliOpts) {
     cliOpts = {};
   }
 
-  const baseURL = cliOpts.base ?? config.baseURL;
-  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
+  const graphqlConfig = loadConfiguration();
+  const mergedConfig = { ...graphqlConfig, ...config };
 
-  const mergedConfig = {
+  const baseURL = cliOpts.base ?? mergedConfig.baseURL;
+  const skipDocDirective = getSkipDocDirectives(cliOpts, mergedConfig);
+
+  return {
     baseURL,
     customDirective: getCustomDirectives(
-      config.customDirective,
+      mergedConfig.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
-    docOptions: getDocOptions(cliOpts, config.docOptions),
+    diffMethod: getDiffMethod(
+      cliOpts.diff ?? mergedConfig.diffMethod,
+      cliOpts.force,
+    ),
+    docOptions: getDocOptions(cliOpts, mergedConfig.docOptions),
     groupByDirective:
-      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
-    homepageLocation: cliOpts.homepage ?? config.homepage,
-    linkRoot: cliOpts.link ?? config.linkRoot,
-    loaders: config.loaders,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
-    prettify: cliOpts.pretty ?? config.pretty,
-    printer: config.printer,
-    printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
-    schemaLocation: cliOpts.schema ?? config.schema,
+      parseGroupByOption(cliOpts.groupByDirective) ||
+      mergedConfig.groupByDirective,
+    homepageLocation: cliOpts.homepage ?? mergedConfig.homepage,
+    linkRoot: cliOpts.link ?? mergedConfig.linkRoot,
+    loaders: mergedConfig.loaders,
+    outputDir: join(cliOpts.root ?? mergedConfig.rootPath, baseURL),
+    prettify: cliOpts.pretty ?? mergedConfig.pretty,
+    printer: mergedConfig.printer,
+    printTypeOptions: gePrintTypeOptions(
+      cliOpts,
+      mergedConfig.printTypeOptions,
+    ),
+    schemaLocation: cliOpts.schema ?? mergedConfig.schema,
     skipDocDirective,
-    tmpDir: cliOpts.tmp ?? config.tmpDir,
+    tmpDir: cliOpts.tmp ?? mergedConfig.tmpDir,
   };
-
-  const graphqlConfig = loadConfiguration();
-
-  return { ...graphqlConfig, ...mergedConfig };
 }
 
 function getCustomDirectives(customDirectiveOptions, skipDocDirective = []) {
