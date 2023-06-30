@@ -5,6 +5,8 @@ const {
   object: { hasProperty },
 } = require("@graphql-markdown/utils");
 
+const { loadConfiguration } = require("./graphql-config");
+
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
 
@@ -49,7 +51,7 @@ function buildConfig(configFileOpts, cliOpts) {
   const baseURL = cliOpts.base ?? config.baseURL;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
-  return {
+  const mergedConfig = {
     baseURL,
     customDirective: getCustomDirectives(
       config.customDirective,
@@ -70,6 +72,10 @@ function buildConfig(configFileOpts, cliOpts) {
     skipDocDirective,
     tmpDir: cliOpts.tmp ?? config.tmpDir,
   };
+
+  const graphqlConfig = loadConfiguration();
+
+  return { ...graphqlConfig, ...mergedConfig };
 }
 
 function getCustomDirectives(customDirectiveOptions, skipDocDirective = []) {

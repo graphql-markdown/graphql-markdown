@@ -373,7 +373,7 @@ describe("config", () => {
     test("returns custom directive maps", () => {
       expect.hasAssertions();
 
-      const descriptor = (directiveType, constDirectiveType) =>
+      const descriptor = (_, constDirectiveType) =>
         `Test${constDirectiveType.name.value}`;
       const options = {
         testA: { descriptor },
