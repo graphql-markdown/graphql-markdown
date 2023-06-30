@@ -123,13 +123,6 @@ if (existsSync(groupBySidebarFile)) {
   sidebar = { ...sidebar, group: schemaSidebar };
 }
 
-const groupSchema = require(path.resolve(__dirname, "data/${pluginGraphqlrcConfigFilename}"));
-const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
-if (existsSync(groupBySidebarFile)) {
-  const { schemaSidebar } = require(groupBySidebarFile);
-  sidebar = { ...sidebar, group: schemaSidebar };
-}
-
 module.exports = sidebar;
 \n`;
 
