@@ -1,9 +1,10 @@
 const { vol } = require("memfs");
 jest.mock("fs");
 
-const path = require("path");
+const { join } = require("path");
 
 const { loadConfiguration } = require("../../src/graphql-config");
+const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
 
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
@@ -40,7 +41,7 @@ describe("graphql-config", () => {
         },
       };
 
-      const filePath = path.join(process.cwd(), ".graphqlrc");
+      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
@@ -70,12 +71,52 @@ describe("graphql-config", () => {
 
       const logSpy = jest.spyOn(global.logger, "warn");
 
-      vol.fromJSON({
-        "/.graphqlrc": "",
-      });
-
       expect(loadConfiguration()).toBeUndefined();
       expect(logSpy).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("config", () => {
+  describe("buildConfig()", () => {
+    test("returns .graphqlrc options set", () => {
+      expect.hasAssertions();
+
+      const graphqlConfig = {
+        schema: "assets/my-schema.graphql",
+        extensions: {
+          "graphql-markdown": {
+            baseURL: "test",
+          },
+        },
+      };
+
+      const filePath = join(process.cwd(), ".graphqlrc");
+      vol.fromJSON({
+        [filePath]: JSON.stringify(graphqlConfig),
+      });
+
+      const config = buildConfig();
+
+      expect(config).toEqual(
+        expect.objectContaining({
+          baseURL: "test",
+          diffMethod: DEFAULT_OPTIONS.diffMethod,
+          groupByDirective: DEFAULT_OPTIONS.groupByDirective,
+          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
+          linkRoot: DEFAULT_OPTIONS.linkRoot,
+          loaders: DEFAULT_OPTIONS.loaders,
+          outputDir: join(DEFAULT_OPTIONS.rootPath, "test"),
+          prettify: DEFAULT_OPTIONS.pretty,
+          schemaLocation: "assets/my-schema.graphql",
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
+          docOptions: DEFAULT_OPTIONS.docOptions,
+          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          printer: DEFAULT_OPTIONS.printer,
+          skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+          customDirective: DEFAULT_OPTIONS.customDirective,
+        }),
+      );
     });
   });
 });

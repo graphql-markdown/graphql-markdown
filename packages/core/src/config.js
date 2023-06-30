@@ -38,49 +38,36 @@ const DEFAULT_OPTIONS = {
 };
 
 function buildConfig(configFileOpts, cliOpts) {
-  let config = DEFAULT_OPTIONS;
-
-  if (typeof configFileOpts !== "undefined" && configFileOpts != null) {
-    config = { ...DEFAULT_OPTIONS, ...configFileOpts };
-  }
-
-  if (typeof cliOpts === "undefined" || cliOpts == null) {
+  if (typeof cliOpts === "undefined" || cliOpts === null) {
     cliOpts = {};
   }
 
   const graphqlConfig = loadConfiguration();
-  const mergedConfig = { ...graphqlConfig, ...config };
+  const config = { ...DEFAULT_OPTIONS, ...graphqlConfig, ...configFileOpts };
 
-  const baseURL = cliOpts.base ?? mergedConfig.baseURL;
-  const skipDocDirective = getSkipDocDirectives(cliOpts, mergedConfig);
+  const baseURL = cliOpts.base ?? config.baseURL;
+  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
   return {
     baseURL,
     customDirective: getCustomDirectives(
-      mergedConfig.customDirective,
+      config.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(
-      cliOpts.diff ?? mergedConfig.diffMethod,
-      cliOpts.force,
-    ),
-    docOptions: getDocOptions(cliOpts, mergedConfig.docOptions),
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
+    docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
-      parseGroupByOption(cliOpts.groupByDirective) ||
-      mergedConfig.groupByDirective,
-    homepageLocation: cliOpts.homepage ?? mergedConfig.homepage,
-    linkRoot: cliOpts.link ?? mergedConfig.linkRoot,
-    loaders: mergedConfig.loaders,
-    outputDir: join(cliOpts.root ?? mergedConfig.rootPath, baseURL),
-    prettify: cliOpts.pretty ?? mergedConfig.pretty,
-    printer: mergedConfig.printer,
-    printTypeOptions: gePrintTypeOptions(
-      cliOpts,
-      mergedConfig.printTypeOptions,
-    ),
-    schemaLocation: cliOpts.schema ?? mergedConfig.schema,
+      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+    homepageLocation: cliOpts.homepage ?? config.homepage,
+    linkRoot: cliOpts.link ?? config.linkRoot,
+    loaders: config.loaders,
+    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
+    prettify: cliOpts.pretty ?? config.pretty,
+    printer: config.printer,
+    printTypeOptions: gePrintTypeOptions(cliOpts, config.printTypeOptions),
+    schemaLocation: cliOpts.schema ?? config.schema,
     skipDocDirective,
-    tmpDir: cliOpts.tmp ?? mergedConfig.tmpDir,
+    tmpDir: cliOpts.tmp ?? config.tmpDir,
   };
 }
 
