@@ -13,7 +13,7 @@ const loadConfiguration = (
   try {
     GraphQLConfig = require("graphql-config");
   } catch (error) {
-    logger.info(error.message);
+    logger.info("Cannot find module 'graphql-config'");
     return undefined;
   }
 
