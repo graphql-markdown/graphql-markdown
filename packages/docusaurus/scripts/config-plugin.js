@@ -3,6 +3,8 @@ const fs = require("fs");
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
 const pluginGroupConfigFilename =
   "docusaurus2-graphql-doc-generator-groups.config.js";
+const pluginGraphqlrcConfigFilename =
+  "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js";
 
 // eslint-disable-next-line node/no-missing-require
 const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
@@ -70,6 +72,7 @@ const config = {
   plugins: [
     ["@graphql-markdown/docusaurus", "@config1@"],
     ["@graphql-markdown/docusaurus", "@config2@"],
+    ["@graphql-markdown/docusaurus", "@config3@"],
   ],
 };
 
@@ -84,6 +87,10 @@ module.exports = ${JSON.stringify(config)};\n`
   .replace(
     `"@config2@"`,
     `require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"))`,
+  )
+  .replace(
+    `"@config3@"`,
+    `require(path.resolve(__dirname, "data/${pluginGraphqlrcConfigFilename}"))`,
   );
 
 fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
@@ -110,6 +117,13 @@ if (existsSync(basicSidebarFile)) {
 }
 
 const groupSchema = require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"));
+const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
+if (existsSync(groupBySidebarFile)) {
+  const { schemaSidebar } = require(groupBySidebarFile);
+  sidebar = { ...sidebar, group: schemaSidebar };
+}
+
+const groupSchema = require(path.resolve(__dirname, "data/${pluginGraphqlrcConfigFilename}"));
 const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
 if (existsSync(groupBySidebarFile)) {
   const { schemaSidebar } = require(groupBySidebarFile);
