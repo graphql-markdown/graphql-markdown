@@ -1,10 +1,16 @@
 /* istanbul ignore file */
 const { generateDocFromSchema, config } = require("@graphql-markdown/core");
+const { logger: Logger } = require("@graphql-markdown/utils");
 
 const NAME = "docusaurus-graphql-doc-generator";
 const COMMAND = "graphql-to-doc";
 const DESCRIPTION = "Generate GraphQL Schema Documentation";
 const DEFAULT_ID = "default";
+
+// eslint-disable-next-line node/no-missing-require
+const LOGGER_MODULE = require.resolve("@docusaurus/logger");
+
+Logger.setInstance(LOGGER_MODULE);
 
 module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
   const isDefaultId = configOptions.id === DEFAULT_ID;
@@ -51,7 +57,7 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           const options = config.buildConfig(configOptions, cliOptions);
           await generateDocFromSchema({
             ...options,
-            loggerModule: "@docusaurus/logger",
+            loggerModule: LOGGER_MODULE,
           });
         });
     },
