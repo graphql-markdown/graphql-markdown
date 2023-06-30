@@ -13,7 +13,7 @@ const loadConfiguration = (
   try {
     GraphQLConfig = require("graphql-config");
   } catch (error) {
-    logger.warn(error.message);
+    logger.info(error.message);
     return undefined;
   }
 
