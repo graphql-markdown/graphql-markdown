@@ -11,9 +11,10 @@ const loadConfiguration = (
 ) => {
   let GraphQLConfig;
   try {
+    // eslint-disable-next-line node/no-missing-require
     GraphQLConfig = require("graphql-config");
   } catch (error) {
-    logger.info("Cannot find module 'graphql-config'");
+    logger.log("Cannot find module 'graphql-config'!");
     return undefined;
   }
 
