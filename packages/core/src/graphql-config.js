@@ -32,7 +32,18 @@ const loadConfiguration = (
     return undefined;
   }
 
-  return config.getDefault().extension(EXTENSION_NAME);
+  const defaultConfig = config.getDefault().extension(EXTENSION_NAME);
+
+  if (typeof defaultConfig?.schema !== "string") {
+    const schema = defaultConfig?.schema[0];
+    if (typeof schema === "string") {
+      defaultConfig.schema = schema;
+    } else {
+      defaultConfig.schema = Object.keys(schema)[0];
+    }
+  }
+
+  return defaultConfig;
 };
 
 module.exports = { loadConfiguration, EXTENSION_NAME };

@@ -29,11 +29,29 @@ describe("graphql-config", () => {
       expect(loadConfiguration()).toBeUndefined();
     });
 
-    test("return config if graphql-config valid", () => {
+    test.each([
+      ["http://localhost:4000/graphql"],
+      [
+        [
+          {
+            "http://localhost:4000/graphql": {
+              headers: { Authorization: true },
+            },
+          },
+        ],
+      ],
+      [["http://localhost:4000/graphql"]],
+    ])("return config if graphql-config valid", () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
-        schema: "assets/my-schema.graphql",
+        schema: [
+          {
+            "http://localhost:4000/graphql": {
+              headers: { Authorization: true },
+            },
+          },
+        ],
         extensions: {
           "graphql-markdown": {
             baseURL: "test",
@@ -51,15 +69,13 @@ describe("graphql-config", () => {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
-      ).toMatchInlineSnapshot(`
-        {
-          "baseURL": "test",
-          "documents": undefined,
-          "exclude": undefined,
-          "include": undefined,
-          "schema": "assets/my-schema.graphql",
-        }
-      `);
+      ).toStrictEqual({
+        baseURL: "test",
+        documents: undefined,
+        exclude: undefined,
+        include: undefined,
+        schema: "http://localhost:4000/graphql",
+      });
     });
   });
 });
