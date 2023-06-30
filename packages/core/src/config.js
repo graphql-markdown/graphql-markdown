@@ -5,6 +5,8 @@ const {
   object: { hasProperty },
 } = require("@graphql-markdown/utils");
 
+const { loadConfiguration } = require("./graphql-config");
+
 const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 const ASSETS_LOCATION = join(__dirname, "../assets/");
 
@@ -36,15 +38,12 @@ const DEFAULT_OPTIONS = {
 };
 
 function buildConfig(configFileOpts, cliOpts) {
-  let config = DEFAULT_OPTIONS;
-
-  if (typeof configFileOpts !== "undefined" && configFileOpts != null) {
-    config = { ...DEFAULT_OPTIONS, ...configFileOpts };
-  }
-
-  if (typeof cliOpts === "undefined" || cliOpts == null) {
+  if (typeof cliOpts === "undefined" || cliOpts === null) {
     cliOpts = {};
   }
+
+  const graphqlConfig = loadConfiguration();
+  const config = { ...DEFAULT_OPTIONS, ...graphqlConfig, ...configFileOpts };
 
   const baseURL = cliOpts.base ?? config.baseURL;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);

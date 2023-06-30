@@ -11,6 +11,10 @@ const docsDirs = [];
 const messagesGenerated = [];
 
 for (const pluginConfig of pluginConfigs) {
+  if (!pluginConfig.schema) {
+    // if schema not test then assume .graphqlrc
+    continue;
+  }
   docsDirs.push(
     path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
   );
@@ -86,6 +90,11 @@ describe("graphql-to-doc", () => {
 
   test("should return 0 with generated message when completed with force flag (multi-instance)", async () => {
     for (const [index, pluginConfig] of pluginConfigs.entries()) {
+      if (!pluginConfig.schema) {
+        // if schema not test then assume .graphqlrc
+        continue;
+      }
+
       const generateOutput = await cli({
         commandID: pluginConfig.id,
         args: ["--force"],
@@ -107,5 +116,19 @@ describe("graphql-to-doc", () => {
         expect(stdout).toMatch(message),
       );
     }
+  }, 60000);
+
+  test("should return 0 when using .graphqlrc config", async () => {
+    const generateOutput = await cli({ commandID: "schema_tweets" });
+    expect(generateOutput).toMatchObject({
+      code: 0,
+      error: null,
+      stderr: "",
+      stdout: expect.any(String),
+    });
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+    expect(stdout).toMatch(
+      `{Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
+    );
   }, 60000);
 });

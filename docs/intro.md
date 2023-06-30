@@ -15,3 +15,4 @@ The `@graphql-markdown/docusaurus` package extends the Docusaurus CLI with comma
 - MDX generated are fully compatible with `plugin-content-docs`
 - Use any schema loader compatible with `@graphql-tools/load`
 - Group types into categories using directives
+- Support of GraphQL config (beta)

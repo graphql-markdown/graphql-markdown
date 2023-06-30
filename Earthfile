@@ -65,6 +65,7 @@ smoke-init:
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
+  COPY ./packages/docusaurus/tests/__data__/.graphqlrc ./.graphqlrc
   COPY ./website/static/img ./static/img
   RUN node config-plugin.js
 
@@ -72,7 +73,8 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm config set update-notifier false
-  RUN npm install -g fs-extra jest
+  RUN npm install -g fs-extra jest 
+  RUN npm install graphql-config
   COPY --dir ./packages/docusaurus/tests/e2e/specs ./__tests__/e2e/specs
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
   COPY ./packages/docusaurus/tests/e2e/jest.config.js ./jest.config.js
