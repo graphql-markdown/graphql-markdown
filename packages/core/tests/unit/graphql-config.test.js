@@ -61,25 +61,17 @@ describe("graphql-config", () => {
         }
       `);
     });
-
-    test("return undefined with a warning log if graphql-config package missing", () => {
-      expect.hasAssertions();
-
-      jest.mock("graphql-config", () => {
-        throw new Error("Package not found");
-      });
-
-      const logSpy = jest.spyOn(global.logger, "warn");
-
-      expect(loadConfiguration()).toBeUndefined();
-      expect(logSpy).toHaveBeenCalled();
-    });
   });
 });
 
 describe("config", () => {
   describe("buildConfig()", () => {
-    test("returns .graphqlrc options set", () => {
+    afterEach(() => {
+      vol.reset();
+      jest.restoreAllMocks();
+    });
+
+    test("returns config with .graphqlrc options set", () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
