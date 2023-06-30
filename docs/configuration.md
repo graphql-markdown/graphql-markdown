@@ -80,6 +80,13 @@ For more details about `navbar`, please refer to Docusaurus [documentation](http
 
 Instead of defining the configuration alongside the Docusaurus config file, you can use a [GraphQL Config](https://the-guild.dev/graphql/config/docs/user/usage) file (multiple formats supported).
 
+You need to install the package `graphql-config`.
+
+```bash
+npm install graphql-config
+```
+
+
 ```js title="docusaurus.config.js"
 module.exports = {
   // ...
