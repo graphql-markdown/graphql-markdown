@@ -29,12 +29,12 @@
     "stryker": "stryker run"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "^1.5.0",
-    "graphql-config": "^5.0.2"
+    "@graphql-markdown/utils": "^1.5.0"
   },
   "peerDependencies": {
     "@graphql-markdown/diff": "^1.0.12",
     "@graphql-markdown/printer-legacy": "^1.4.0",
+    "graphql-config": "^5.0.2",
     "prettier": "^2.8"
   },
   "peerDependenciesMeta": {
@@ -42,6 +42,9 @@
       "optional": true
     },
     "@graphql-markdown/diff": {
+      "optional": true
+    },
+    "graphql-config": {
       "optional": true
     },
     "prettier": {

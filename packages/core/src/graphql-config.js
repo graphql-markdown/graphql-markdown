@@ -1,4 +1,4 @@
-const { loadConfigSync } = require("graphql-config");
+const logger = require("@graphql-markdown/utils").logger.getInstance();
 
 const EXTENSION_NAME = "graphql-markdown";
 
@@ -9,7 +9,15 @@ const loadConfiguration = (
     throwOnEmpty: false,
   },
 ) => {
-  const config = loadConfigSync({
+  let GraphQLConfig;
+  try {
+    GraphQLConfig = require("graphql-config");
+  } catch (error) {
+    logger.warn(error.message);
+    return undefined;
+  }
+
+  const config = GraphQLConfig.loadConfigSync({
     ...options,
     extensions: [() => ({ name: EXTENSION_NAME })],
     throwOnMissing: throwOnMissing || false,
