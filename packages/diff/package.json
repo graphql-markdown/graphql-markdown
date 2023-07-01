@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.0.12",
+  "version": "1.0.13",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
