@@ -3,6 +3,7 @@ const logger = require("@graphql-markdown/utils").logger.getInstance();
 const EXTENSION_NAME = "graphql-markdown";
 
 const loadConfiguration = (
+  id = undefined,
   options = undefined,
   { throwOnMissing, throwOnEmpty } = {
     throwOnMissing: false,
@@ -27,23 +28,23 @@ const loadConfiguration = (
 
   if (
     typeof config === "undefined" ||
-    typeof config.getDefault() === "undefined"
+    typeof config.getProject(id) === "undefined"
   ) {
     return undefined;
   }
 
-  const defaultConfig = config.getDefault().extension(EXTENSION_NAME);
+  const projectConfig = config.getProject(id).extension(EXTENSION_NAME);
 
-  if (typeof defaultConfig?.schema !== "string") {
-    const schema = defaultConfig?.schema[0];
+  if (typeof projectConfig?.schema !== "string") {
+    const schema = projectConfig?.schema[0];
     if (typeof schema === "string") {
-      defaultConfig.schema = schema;
+      projectConfig.schema = schema;
     } else {
-      defaultConfig.schema = Object.keys(schema)[0];
+      projectConfig.schema = Object.keys(schema)[0];
     }
   }
 
-  return defaultConfig;
+  return projectConfig;
 };
 
 module.exports = { loadConfiguration, EXTENSION_NAME };
