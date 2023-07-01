@@ -41,7 +41,7 @@ Command line options are described in the [documentation settings](https://graph
 
 ## Configuration
 
-See [documentation settings](https://graphql-markdown.github.io/docs/settings) page.
+See [documentation configuration](https://graphql-markdown.github.io/docs/configuration) page.
 
 ## Troubleshooting
 
