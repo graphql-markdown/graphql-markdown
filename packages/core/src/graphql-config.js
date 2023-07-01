@@ -22,18 +22,11 @@ const loadConfiguration = (
   const config = GraphQLConfig.loadConfigSync({
     ...options,
     extensions: [() => ({ name: EXTENSION_NAME })],
-    throwOnMissing: throwOnMissing || false,
-    throwOnEmpty: throwOnEmpty || false,
+    throwOnMissing,
+    throwOnEmpty,
   });
 
   try {
-    if (
-      typeof config === "undefined" ||
-      typeof config.getProject(id) === "undefined"
-    ) {
-      return undefined;
-    }
-
     const projectConfig = config.getProject(id).extension(EXTENSION_NAME);
 
     if (typeof projectConfig?.schema !== "string") {

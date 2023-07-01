@@ -40,7 +40,7 @@ describe("graphql-config", () => {
           },
         ],
       ],
-      [["http://localhost:4000/graphql"]],
+      [["http://localhost:4000/graphql", "./packages/bar/schema.graphql"]],
     ])("returns config if graphql-config valid", () => {
       expect.hasAssertions();
 
@@ -185,7 +185,7 @@ describe("graphql-config", () => {
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(loadConfiguration("baz", undefined)).toBeUndefined();
+      expect(loadConfiguration("baz")).toBeUndefined();
     });
   });
 });
