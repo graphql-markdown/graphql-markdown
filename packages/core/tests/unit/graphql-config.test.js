@@ -13,13 +13,13 @@ describe("graphql-config", () => {
       jest.restoreAllMocks();
     });
 
-    test("return undefined if not graphql-config found", () => {
+    test("returns undefined if not graphql-config found", () => {
       expect.hasAssertions();
 
       expect(loadConfiguration()).toBeUndefined();
     });
 
-    test("return undefined if graphql-config empty", () => {
+    test("returns undefined if graphql-config empty", () => {
       expect.hasAssertions();
 
       vol.fromJSON({
@@ -40,8 +40,8 @@ describe("graphql-config", () => {
           },
         ],
       ],
-      [["http://localhost:4000/graphql"]],
-    ])("return config if graphql-config valid", () => {
+      [["http://localhost:4000/graphql", "./packages/bar/schema.graphql"]],
+    ])("returns config if graphql-config valid", () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -65,7 +65,7 @@ describe("graphql-config", () => {
       });
 
       expect(
-        loadConfiguration(undefined, {
+        loadConfiguration(undefined, undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
@@ -76,6 +76,116 @@ describe("graphql-config", () => {
         include: undefined,
         schema: "http://localhost:4000/graphql",
       });
+    });
+
+    test("returns default config", () => {
+      expect.hasAssertions();
+
+      const graphqlConfig = {
+        schema: [
+          {
+            "http://localhost:4000/graphql": {
+              headers: { Authorization: true },
+            },
+          },
+        ],
+        extensions: {
+          "graphql-markdown": {
+            baseURL: "default",
+          },
+        },
+      };
+
+      const filePath = join(process.cwd(), ".graphqlrc");
+      vol.fromJSON({
+        [filePath]: JSON.stringify(graphqlConfig),
+      });
+
+      expect(
+        loadConfiguration("default", undefined, {
+          throwOnMissing: true,
+          throwOnEmpty: true,
+        }),
+      ).toStrictEqual({
+        baseURL: "default",
+        documents: undefined,
+        exclude: undefined,
+        include: undefined,
+        schema: "http://localhost:4000/graphql",
+      });
+    });
+
+    test("returns project config", () => {
+      expect.hasAssertions();
+
+      const graphqlConfig = {
+        projects: {
+          foo: {
+            schema: [
+              {
+                "http://localhost:4000/graphql": {
+                  headers: { Authorization: true },
+                },
+              },
+            ],
+            extensions: {
+              "graphql-markdown": {
+                baseURL: "foo",
+              },
+            },
+          },
+          bar: { schema: "./packages/bar/schema.graphql" },
+        },
+      };
+
+      const filePath = join(process.cwd(), ".graphqlrc");
+      vol.fromJSON({
+        [filePath]: JSON.stringify(graphqlConfig),
+      });
+
+      expect(
+        loadConfiguration("foo", undefined, {
+          throwOnMissing: true,
+          throwOnEmpty: true,
+        }),
+      ).toStrictEqual({
+        baseURL: "foo",
+        documents: undefined,
+        exclude: undefined,
+        include: undefined,
+        schema: "http://localhost:4000/graphql",
+      });
+    });
+
+    test("returns undefined if project id does not exist", () => {
+      expect.hasAssertions();
+
+      const graphqlConfig = {
+        projects: {
+          foo: {
+            schema: [
+              {
+                "http://localhost:4000/graphql": {
+                  headers: { Authorization: true },
+                },
+              },
+            ],
+            extensions: {
+              "graphql-markdown": {
+                baseURL: "test",
+              },
+            },
+          },
+          bar: { schema: "./packages/bar/schema.graphql" },
+        },
+      };
+
+      const filePath = join(process.cwd(), ".graphqlrc");
+      vol.fromJSON({
+        [filePath]: JSON.stringify(graphqlConfig),
+      });
+
+      expect(loadConfiguration("baz")).toBeUndefined();
     });
   });
 });

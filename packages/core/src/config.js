@@ -37,12 +37,12 @@ const DEFAULT_OPTIONS = {
   skipDocDirective: [],
 };
 
-function buildConfig(configFileOpts, cliOpts) {
+function buildConfig(configFileOpts, cliOpts, id = undefined) {
   if (typeof cliOpts === "undefined" || cliOpts === null) {
     cliOpts = {};
   }
 
-  const graphqlConfig = loadConfiguration();
+  const graphqlConfig = loadConfiguration(id);
   const config = { ...DEFAULT_OPTIONS, ...graphqlConfig, ...configFileOpts };
 
   const baseURL = cliOpts.base ?? config.baseURL;

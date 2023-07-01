@@ -26,7 +26,7 @@ module.exports = {
 };
 ```
 
-All settings are described in the page [settings](/docs/settings).
+All settings are described in the page **[settings](/docs/settings)**.
 
 :::tip
 If you want to use several GraphQL schemas, read our guide for **[additional schema](/docs/advanced/additional-schema)**.
@@ -52,7 +52,7 @@ For example, if your `sidebars.js` is located under `./src` folder, then you nee
 :::
 
 :::tip
-See [docs multi-instance](/docs/advanced/docs-multi-instance) for sidebar settings when using multiple sets of documentation.
+See **[docs multi-instance](/docs/advanced/docs-multi-instance)** for sidebar settings when using multiple sets of documentation.
 :::
 
 ## Site Settings
@@ -90,11 +90,7 @@ npm install graphql-config
 ```js title="docusaurus.config.js"
 module.exports = {
   // ...
-  plugins: [
-    [
-      "@graphql-markdown/docusaurus",
-    ],
-  ],
+  plugins: ["@graphql-markdown/docusaurus"],
 };
 ```
 
@@ -124,7 +120,5 @@ Note that **`schema` is not part of the extension configuration**, but part of t
 **Current limitations:**
 
 * single schema only, no schema stitching
-* projects are not supported, only default
 * `include`, `exclude`, `documents` and glob pattern are not supported
 * schema options (eg headers) are not supported, instead use [loaders options](/docs/advanced/schema-loading)
-* not compatible with [multiple schemas](/docs/advanced/additional-schema)
