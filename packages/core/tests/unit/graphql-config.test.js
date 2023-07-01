@@ -74,6 +74,7 @@ describe("graphql-config", () => {
         documents: undefined,
         exclude: undefined,
         include: undefined,
+        loaders: undefined,
         schema: "http://localhost:4000/graphql",
       });
     });
@@ -92,6 +93,14 @@ describe("graphql-config", () => {
         extensions: {
           "graphql-markdown": {
             baseURL: "default",
+            loaders: {
+              UrlLoader: {
+                module: "@graphql-tools/url-loader",
+                options: {
+                  method: "POST",
+                },
+              },
+            },
           },
         },
       };
@@ -111,6 +120,17 @@ describe("graphql-config", () => {
         documents: undefined,
         exclude: undefined,
         include: undefined,
+        loaders: {
+          UrlLoader: {
+            module: "@graphql-tools/url-loader",
+            options: {
+              method: "POST",
+              headers: {
+                Authorization: true,
+              },
+            },
+          },
+        },
         schema: "http://localhost:4000/graphql",
       });
     });
@@ -131,6 +151,7 @@ describe("graphql-config", () => {
             extensions: {
               "graphql-markdown": {
                 baseURL: "foo",
+                loaders: { UrlLoader: "@graphql-tools/url-loader" },
               },
             },
           },
@@ -153,6 +174,16 @@ describe("graphql-config", () => {
         documents: undefined,
         exclude: undefined,
         include: undefined,
+        loaders: {
+          UrlLoader: {
+            module: "@graphql-tools/url-loader",
+            options: {
+              headers: {
+                Authorization: true,
+              },
+            },
+          },
+        },
         schema: "http://localhost:4000/graphql",
       });
     });

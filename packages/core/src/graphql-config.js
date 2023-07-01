@@ -35,12 +35,27 @@ const loadConfiguration = (
         projectConfig.schema = schema;
       } else {
         projectConfig.schema = Object.keys(schema)[0];
+        projectConfig.loaders = setLoaderOptions(
+          projectConfig.loaders,
+          Object.values(schema)[0],
+        );
       }
     }
     return projectConfig;
   } catch (error) {
     return undefined;
   }
+};
+
+const setLoaderOptions = (loaders, options) => {
+  for (const loader in loaders) {
+    if (typeof loaders[loader] === "string") {
+      loaders[loader] = { module: loaders[loader], options };
+    } else {
+      loaders[loader].options = { ...options, ...loaders[loader].options };
+    }
+  }
+  return loaders;
 };
 
 module.exports = { loadConfiguration, EXTENSION_NAME };
