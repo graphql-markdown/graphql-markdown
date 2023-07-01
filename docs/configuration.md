@@ -121,4 +121,3 @@ Note that **`schema` is not part of the extension configuration**, but part of t
 
 * single schema only, no schema stitching
 * `include`, `exclude`, `documents` and glob pattern are not supported
-* schema options (eg headers) are not supported, instead use [loaders options](/docs/advanced/schema-loading)
