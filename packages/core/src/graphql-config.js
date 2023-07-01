@@ -26,25 +26,28 @@ const loadConfiguration = (
     throwOnEmpty: throwOnEmpty || false,
   });
 
-  if (
-    typeof config === "undefined" ||
-    typeof config.getProject(id) === "undefined"
-  ) {
+  try {
+    if (
+      typeof config === "undefined" ||
+      typeof config.getProject(id) === "undefined"
+    ) {
+      return undefined;
+    }
+
+    const projectConfig = config.getProject(id).extension(EXTENSION_NAME);
+
+    if (typeof projectConfig?.schema !== "string") {
+      const schema = projectConfig?.schema[0];
+      if (typeof schema === "string") {
+        projectConfig.schema = schema;
+      } else {
+        projectConfig.schema = Object.keys(schema)[0];
+      }
+    }
+    return projectConfig;
+  } catch (error) {
     return undefined;
   }
-
-  const projectConfig = config.getProject(id).extension(EXTENSION_NAME);
-
-  if (typeof projectConfig?.schema !== "string") {
-    const schema = projectConfig?.schema[0];
-    if (typeof schema === "string") {
-      projectConfig.schema = schema;
-    } else {
-      projectConfig.schema = Object.keys(schema)[0];
-    }
-  }
-
-  return projectConfig;
 };
 
 module.exports = { loadConfiguration, EXTENSION_NAME };

@@ -157,7 +157,7 @@ describe("graphql-config", () => {
       });
     });
 
-    test("throw an error if project id does not exist", () => {
+    test("returns undefined if project id does not exist", () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -185,12 +185,7 @@ describe("graphql-config", () => {
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(() => {
-        loadConfiguration("baz", undefined, {
-          throwOnMissing: true,
-          throwOnEmpty: true,
-        });
-      }).toThrow("Project 'baz' not found");
+      expect(loadConfiguration("baz", undefined)).toBeUndefined();
     });
   });
 });
