@@ -43,13 +43,17 @@ Run the development server:
 
 ```bash
 cd my-website
-npm run docusaurus graphql-to-doc
+npm run doc
 npm start
 ```
 
 The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 
-The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema using the [settings](/docs/settings) from `graphql-markdown.config.js`.
+The `npm run doc` command generates MDX files locally from your GraphQL schema using the [settings](/docs/settings) from `.graphqlrc`.
+
+:::tip
+The `npm run doc` is a template shortcut for `npm run docusaurus graphql-to-doc`.
+:::
 
 The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
 
@@ -91,7 +95,3 @@ npm run docusaurus graphql-to-doc
 ```
 
 The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command's flags are documented in [settings](/docs/settings).
-
-:::tip
-The GraphQL-Markdown template provides a short command `npm run doc`.
-:::
