@@ -161,7 +161,7 @@
     "lodash.filter": "4.6.0",
     "memfs": "4.2.0",
     "pinst": "3.0.0",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "unionfs": "4.5.1"
   },
   "resolutions": {
