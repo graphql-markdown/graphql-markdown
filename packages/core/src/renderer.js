@@ -130,7 +130,8 @@ module.exports = class Renderer {
 
     await saveFile(
       filePath,
-      this.prettify ? prettifyMarkdown(content) : content,
+      content,
+      this.prettify ? prettifyMarkdown : undefined,
     );
 
     const pagePath = path.relative(this.outputDir, filePath);
@@ -167,7 +168,8 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
     const filePath = path.join(this.outputDir, SIDEBAR);
     await saveFile(
       filePath,
-      this.prettify ? prettifyJavascript(jsonSidebar) : jsonSidebar,
+      jsonSidebar,
+      this.prettify ? prettifyJavascript : undefined,
     );
 
     return path.relative("./", filePath);

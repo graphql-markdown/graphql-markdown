@@ -78,4 +78,37 @@ describe("saveFile()", () => {
         }
       `);
   });
+
+  test("run prettify function if valid", async () => {
+    expect.assertions(1);
+
+    await saveFile(
+      "/foo/bar/test/prettify.test",
+      "foobar file for test",
+      () => "prettify hello",
+    );
+
+    expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
+        {
+          "/foo/bar/test/prettify.test": "prettify hello",
+        }
+      `);
+  });
+
+  test("skip prettify function if not valid", async () => {
+    expect.assertions(1);
+
+    await saveFile(
+      "/foo/bar/test/not_prettify.test",
+      "foobar file for test",
+      "prettify hello",
+    );
+
+    expect(vol.toJSON("/foo/bar/test/not_prettify.test"))
+      .toMatchInlineSnapshot(`
+        {
+          "/foo/bar/test/not_prettify.test": "foobar file for test",
+        }
+      `);
+  });
 });
