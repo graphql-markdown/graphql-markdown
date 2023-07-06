@@ -34,8 +34,7 @@
   "peerDependencies": {
     "@graphql-markdown/diff": "^1.0.13",
     "@graphql-markdown/printer-legacy": "^1.4.0",
-    "graphql-config": "^5.0.2",
-    "prettier": "^2.8"
+    "graphql-config": "^5.0.2"
   },
   "peerDependenciesMeta": {
     "@graphql-markdown/printer-legacy": {
@@ -45,9 +44,6 @@
       "optional": true
     },
     "graphql-config": {
-      "optional": true
-    },
-    "prettier": {
       "optional": true
     }
   },

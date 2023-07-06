@@ -14,7 +14,7 @@ module.exports = {
     "plugin:node/recommended",
     "plugin:import/recommended",
   ],
-  plugins: ["jest"],
+  plugins: ["jest", "prettier"],
   settings: {
     "import/resolver": {
       node: {
@@ -39,10 +39,11 @@ module.exports = {
     },
   ],
   rules: {
-    "node/no-extraneous-require": 0,
-    "node/no-deprecated-api": 2,
+    "prettier/prettier": "error",
+    "node/no-extraneous-require": "off",
+    "node/no-deprecated-api": "error",
     "brace-style": [
-      2,
+      "error",
       "1tbs",
       {
         allowSingleLine: false,

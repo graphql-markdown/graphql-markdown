@@ -19,7 +19,10 @@ async function fileExists(filePath) {
   }
 }
 
-async function saveFile(filePath, data) {
+async function saveFile(filePath, data, prettify = undefined) {
+  if (typeof prettify === "function") {
+    data = await prettify(data);
+  }
   await ensureDir(dirname(filePath));
   await fs.writeFile(filePath, data, "utf8");
 }
