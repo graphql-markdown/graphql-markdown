@@ -1,0 +1,26 @@
+name: Post release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+concurrency:
+  group: update-changelog
+  cancel-in-progress: false
+
+jobs:
+  changelog:
+    name: Update changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.BOT_PAT }}
+
+      - uses: rhysd/changelog-from-release/action@v3
+        with:
+          file: CHANGELOG.md
+          github_token: ${{ secrets.BOT_PAT }}
+          commit_summary_template: 'update changelog for %s changes'
