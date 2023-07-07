@@ -114,20 +114,21 @@ describe("config", () => {
         },
         groupByDirective: {
           directive: "doc",
-          field: "category",
           fallback: "Common",
+          field: "category",
         },
         pretty: true,
         docOptions: {
+          index: false,
           pagination: false,
           toc: false,
-          index: false,
         },
         printTypeOptions: {
+          codeSection: false,
+          deprecated: "group",
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
-          deprecated: "group",
         },
         skipDocDirective: ["@noDoc"],
         customDirective: {
@@ -187,19 +188,20 @@ describe("config", () => {
 
       const cliOpts = {
         base: "cli/schema",
-        schema: "cli/my-schema.graphql",
-        root: "cli",
-        link: "/cli",
-        homepage: "cli/my-homepage.md",
-        diff: "CLI",
-        tmp: "./cli",
-        groupByDirective: "@group(name|=misc)",
-        pretty: true,
-        noToc: true,
-        noPagination: true,
-        index: true,
-        skip: "@noDoc",
         deprecated: "group",
+        diff: "CLI",
+        groupByDirective: "@group(name|=misc)",
+        homepage: "cli/my-homepage.md",
+        index: true,
+        link: "/cli",
+        noCode: true,
+        noPagination: true,
+        noToc: true,
+        pretty: true,
+        root: "cli",
+        schema: "cli/my-schema.graphql",
+        skip: "@noDoc",
+        tmp: "./cli",
       };
 
       const config = buildConfig(configFileOpts, cliOpts);
@@ -226,6 +228,7 @@ describe("config", () => {
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
+          codeSection: false,
           deprecated: "group",
         },
         printer: DEFAULT_OPTIONS.printer,

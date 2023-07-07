@@ -41,7 +41,7 @@ The possible values are:
 
 :::info
 The package `@graphql-markdown/diff` is required for using `diffMethod`.
-If the package is missing, then the change detection will be skipped.
+If the package is missing, then the change detection is always skipped.
 
 ```shell
 npm install @graphql-markdown/diff
@@ -65,7 +65,7 @@ Use these options to tweak some of the Docusaurus documentation features:
 
 <br/>
 
-```js {9-13}
+```js title="docusaurus.config.js"
 plugins: [
     [
       "@graphql-markdown/docusaurus",
@@ -74,11 +74,13 @@ plugins: [
         rootPath: "./docs",
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
+        // highlight-start
         docOptions: {
           pagination: false, // disable buttons previous and next, same as CLI flag --noPagination
           toc: false, // disable page table of content, same as CLI flag --noToc
           index: true, // enable generated index pages, same as CLI flag --index
         },
+        // highlight-end
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
         },
@@ -131,6 +133,7 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 Use these options to toggle type information rendered on pages:
 
+- `codeSection`: display type code section
 - `parentTypePrefix`: prefix field names with parent type name
 - `relatedTypeSection`: display related type sections
 - `typeBadges`: add field type attributes badges
@@ -141,6 +144,7 @@ Use these options to toggle type information rendered on pages:
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
+| `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
@@ -148,7 +152,7 @@ Use these options to toggle type information rendered on pages:
 
 <br/>
 
-```js {9-14}
+```js title="docusaurus.config.js"
 plugins: [
     [
       "@graphql-markdown/docusaurus",
@@ -157,12 +161,15 @@ plugins: [
         rootPath: "./docs",
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
+        // highlight-start
         printTypeOptions: {
+          codeSection: false, // disable code section, same as CLI flag --noCode
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
           deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
         },
+        // highlight-end
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
         }
@@ -174,7 +181,7 @@ plugins: [
 <br/>
 
 :::info
-See [customize deprecated sections](/docs/advanced/custom-deprecated-section) to customize the rendering of `printTypeOptions.deprecated: "group"`.
+See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
 :::
 
 ## `pretty`
@@ -193,7 +200,8 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `rootPath`
 
-The output root path for the generated documentation, relative to the current workspace. The final path will be `rootPath/baseURL`.
+The output root path for the generated documentation, relative to the current workspace. 
+It works in relation with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
 
 | Setting    | CLI flag                | Default  |
 | ---------- | ----------------------- | -------- |
@@ -211,7 +219,7 @@ The GraphQL schema location.
 
 The schema directive/s used for skipping types from documentation.
 
-The option supports multiple values separated by a space character, eg `--skipDocDirective @noDoc @deprecated`.
+The CLI flag supports multiple values separated by a space character, eg `--skip @noDoc @deprecated`.
 
 | Setting            | CLI flag                 | Default |
 | ------------------ | ------------------------ | ------- |
@@ -220,7 +228,7 @@ The option supports multiple values separated by a space character, eg `--skipDo
 <br/>
 
 :::info
-Types with `@deprecated` directive can also be skipped by setting [`printTypeOptions.deprecated`](#printtypeoptions) to `skip`.
+Types with `@deprecated` directive can also be skipped using the setting **[`printTypeOptions.deprecated: "skip"`](#printtypeoptions)** or the flag `--deprecated skip`.
 :::
 
 ## `tmpDir`
