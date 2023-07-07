@@ -24,3 +24,4 @@ jobs:
           file: CHANGELOG.md
           github_token: ${{ secrets.BOT_PAT }}
           commit_summary_template: 'update changelog for %s changes'
+          pull_request: true
