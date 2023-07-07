@@ -1,15 +1,15 @@
 const {
   graphql: {
     getTypeName,
-    isOperation,
+    hasDirective,
+    isDirectiveType,
     isEnumType,
-    isUnionType,
+    isInputType,
     isInterfaceType,
     isObjectType,
-    isInputType,
+    isOperation,
     isScalarType,
-    isDirectiveType,
-    hasDirective,
+    isUnionType,
   },
 } = require("@graphql-markdown/utils");
 
@@ -21,33 +21,36 @@ const { printRelations } = require("./relation");
 const { printDescription } = require("./common");
 const { printCustomDirectives, printCustomTags } = require("./directive");
 const {
-  printOperationMetadata,
-  printCodeOperation,
-  printCodeEnum,
-  printEnumMetadata,
-  printCodeUnion,
-  printUnionMetadata,
-  printCodeInterface,
-  printInterfaceMetadata,
-  printCodeObject,
-  printObjectMetadata,
-  printCodeInput,
-  printInputMetadata,
-  printCodeScalar,
-  printScalarMetadata,
   printCodeDirective,
+  printCodeEnum,
+  printCodeInput,
+  printCodeInterface,
+  printCodeObject,
+  printCodeOperation,
+  printCodeScalar,
+  printCodeUnion,
   printDirectiveMetadata,
+  printEnumMetadata,
+  printInputMetadata,
+  printInterfaceMetadata,
+  printObjectMetadata,
+  printOperationMetadata,
+  printScalarMetadata,
+  printUnionMetadata,
 } = require("./graphql");
 const {
-  MARKDOWN_EOP,
-  MARKDOWN_EOL,
-  MARKDOWN_SOC,
-  MARKDOWN_EOC,
   FRONT_MATTER,
+  MARKDOWN_EOC,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+  MARKDOWN_SOC,
 } = require("./const/strings");
 const mdx = require("./const/mdx");
 
-const { DEFAULT_OPTIONS, OPTION_DEPRECATED } = require("./const/options");
+const {
+  DEFAULT_OPTIONS,
+  PRINT_TYPE_DEFAULT_OPTIONS,
+} = require("./const/options");
 
 class Printer {
   static options;
@@ -56,11 +59,11 @@ class Printer {
     schema,
     baseURL,
     linkRoot = "/",
-    { groups, printTypeOptions, skipDocDirective, customDirectives } = {
-      groups: undefined,
-      printTypeOptions: undefined,
-      skipDocDirective: undefined,
+    { customDirectives, groups, printTypeOptions, skipDocDirective } = {
       customDirectives: undefined,
+      groups: undefined,
+      printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
+      skipDocDirective: undefined,
     },
   ) => {
     if (typeof Printer.options !== "undefined" && Printer.options !== null) {
@@ -69,16 +72,24 @@ class Printer {
 
     Printer.options = {
       ...DEFAULT_OPTIONS,
-      schema,
       basePath: pathUrl.join(linkRoot, baseURL),
-      groups,
-      parentTypePrefix: printTypeOptions?.parentTypePrefix ?? true,
-      relatedTypeSection: printTypeOptions?.relatedTypeSection ?? true,
-      typeBadges: printTypeOptions?.typeBadges ?? true,
-      skipDocDirective: skipDocDirective ?? undefined,
-      printDeprecated:
-        printTypeOptions?.deprecated ?? OPTION_DEPRECATED.DEFAULT,
+      codeSection:
+        printTypeOptions?.codeSection ?? PRINT_TYPE_DEFAULT_OPTIONS.codeSection,
       customDirectives,
+      groups,
+      parentTypePrefix:
+        printTypeOptions?.parentTypePrefix ??
+        PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
+      printDeprecated:
+        printTypeOptions?.deprecated ??
+        PRINT_TYPE_DEFAULT_OPTIONS.printDeprecated,
+      relatedTypeSection:
+        printTypeOptions?.relatedTypeSection ??
+        PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
+      schema,
+      skipDocDirective: skipDocDirective ?? undefined,
+      typeBadges:
+        printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
     };
   };
 
@@ -108,6 +119,13 @@ class Printer {
 
   static printCode = (type, options) => {
     let code = "";
+
+    if (
+      typeof options?.codeSection === "undefined" ||
+      options.codeSection !== true
+    ) {
+      return code;
+    }
 
     switch (true) {
       case isOperation(type):
