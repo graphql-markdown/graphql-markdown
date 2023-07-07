@@ -4,19 +4,25 @@ const OPTION_DEPRECATED = {
   SKIP: "skip",
 };
 
-const DEFAULT_OPTIONS = {
-  schema: undefined,
-  basePath: "/",
-  groups: {},
+const PRINT_TYPE_DEFAULT_OPTIONS = {
   parentTypePrefix: true,
+  printDeprecated: OPTION_DEPRECATED.DEFAULT,
+  codeSection: true,
   relatedTypeSection: true,
   typeBadges: true,
-  skipDocDirective: undefined,
-  printDeprecated: OPTION_DEPRECATED.DEFAULT,
+};
+
+const DEFAULT_OPTIONS = {
+  ...PRINT_TYPE_DEFAULT_OPTIONS,
+  basePath: "/",
   customDirectives: {},
+  groups: {},
+  schema: undefined,
+  skipDocDirective: undefined,
 };
 
 module.exports = {
-  OPTION_DEPRECATED,
   DEFAULT_OPTIONS,
+  OPTION_DEPRECATED,
+  PRINT_TYPE_DEFAULT_OPTIONS,
 };

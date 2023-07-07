@@ -125,6 +125,7 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
         {
           "basePath": undefined,
+          "codeSection": true,
           "customDirectives": undefined,
           "groups": undefined,
           "parentTypePrefix": true,
@@ -155,6 +156,7 @@ describe("Printer", () => {
       Printer.init({}, "test", "/", {
         groups: {},
         printTypeOptions: {
+          codeSection: false,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
@@ -165,6 +167,7 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
         {
           "basePath": undefined,
+          "codeSection": false,
           "customDirectives": undefined,
           "groups": {},
           "parentTypePrefix": false,
@@ -267,6 +270,19 @@ describe("Printer", () => {
       const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchSnapshot();
+    });
+
+    test("returns an empty string if printTypeOptions.code is false", () => {
+      expect.hasAssertions();
+
+      const type = "TestFooBarType";
+
+      const code = Printer.printCode(type, {
+        ...DEFAULT_OPTIONS,
+        codeSection: false,
+      });
+
+      expect(code).toBe("");
     });
   });
 

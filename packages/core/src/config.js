@@ -26,6 +26,7 @@ const DEFAULT_OPTIONS = {
   pretty: false,
   printer: "@graphql-markdown/printer-legacy",
   printTypeOptions: {
+    codeSection: true,
     deprecated: "default",
     parentTypePrefix: true,
     relatedTypeSection: true,
@@ -113,14 +114,15 @@ function getDocOptions(cliOpts, configOptions) {
 
 function gePrintTypeOptions(cliOpts, configOptions) {
   return {
-    parentTypePrefix: !cliOpts.noParentType && configOptions.parentTypePrefix,
-    relatedTypeSection:
-      !cliOpts.noRelatedType && configOptions.relatedTypeSection,
-    typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
+    codeSection: !cliOpts.noCode && configOptions.codeSection,
     deprecated:
       cliOpts.deprecated ??
       configOptions.deprecated ??
       DEFAULT_OPTIONS.printTypeOptions.deprecated,
+    parentTypePrefix: !cliOpts.noParentType && configOptions.parentTypePrefix,
+    relatedTypeSection:
+      !cliOpts.noRelatedType && configOptions.relatedTypeSection,
+    typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
   };
 }
 
