@@ -54,7 +54,7 @@ const printRelationOf = (type, section, getRelation, options) => {
     data = data.concat(
       types.map((t) => {
         const link = getRelationLink(category, t, options);
-        return `[\`${link.text}\`](${link.url})  ${badge}`;
+        return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
     );
   }

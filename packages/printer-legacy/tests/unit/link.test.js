@@ -1,4 +1,9 @@
-const { GraphQLList, GraphQLDirective, GraphQLObjectType } = require("graphql");
+const {
+  GraphQLList,
+  GraphQLDirective,
+  GraphQLObjectType,
+  GraphQLScalarType,
+} = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -463,6 +468,53 @@ describe("link", () => {
       jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(false);
 
       expect(Link.printParentLink({})).toBe("");
+    });
+  });
+
+  describe("getRelationLink()", () => {
+    test("returns a link object from a relation type", () => {
+      expect.hasAssertions();
+
+      const entityName = "TestScalar";
+      const slug = "test-scalar";
+      const type = new GraphQLScalarType({
+        name: entityName,
+      });
+
+      jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
+      jest.spyOn(Utils.graphql, "isScalarType").mockReturnValue(true);
+      jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
+
+      const link = Link.getRelationLink("foo", type, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+      });
+
+      expect(link).toStrictEqual({
+        text: "TestScalar",
+        url: "docs/graphql/scalars/test-scalar",
+      });
+    });
+
+    test("returns undefined if category not defined", () => {
+      expect.hasAssertions();
+
+      const entityName = "TestScalar";
+      const slug = "test-scalar";
+      const type = new GraphQLScalarType({
+        name: entityName,
+      });
+
+      jest.spyOn(Utils.graphql, "getNamedType").mockReturnValue(entityName);
+      jest.spyOn(Utils.graphql, "isScalarType").mockReturnValue(true);
+      jest.spyOn(Utils.string, "toSlug").mockReturnValueOnce(slug);
+
+      const link = Link.getRelationLink(undefined, type, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+      });
+
+      expect(link).toBeUndefined();
     });
   });
 });

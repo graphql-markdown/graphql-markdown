@@ -110,7 +110,7 @@ class Link {
 
   static getRelationLink = (category, type, options) => {
     if (typeof category === "undefined") {
-      return "";
+      return undefined;
     }
     return Link.toLink(type, type.name, category, options);
   };
