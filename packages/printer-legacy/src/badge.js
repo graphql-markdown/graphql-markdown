@@ -63,6 +63,7 @@ function printBadge({ text, classname }) {
 }
 
 module.exports = {
+  DEFAULT_CSS_CLASSNAME,
   getTypeBadges,
   printBadge,
   printBadges,

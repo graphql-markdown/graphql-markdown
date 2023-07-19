@@ -2,21 +2,24 @@ const { GraphQLScalarType } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
-    url: { pathUrl: jest.fn() },
-    object: { hasProperty: jest.fn() },
     graphql: {
-      getRelationOfReturn: jest.fn(),
       getNamedType: jest.fn(),
-      isOperation: jest.fn(),
+      getRelationOfReturn: jest.fn(),
+      isDirectiveType: jest.fn(),
       isEnumType: jest.fn(),
-      isUnionType: jest.fn(),
+      isInputType: jest.fn(),
       isInterfaceType: jest.fn(),
       isObjectType: jest.fn(),
-      isInputType: jest.fn(),
+      isOperation: jest.fn(),
       isScalarType: jest.fn(),
-      isDirectiveType: jest.fn(),
+      isUnionType: jest.fn(),
     },
+    object: { hasProperty: jest.fn() },
+    string: {
+      escapeMDX: jest.fn((s) => s),
+      toSlug: jest.fn(),
+    },
+    url: { pathUrl: jest.fn() },
   };
 });
 const Utils = require("@graphql-markdown/utils");
@@ -62,7 +65,7 @@ describe("relation", () => {
       expect(relation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <Badge class="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="secondary" text="query"/>
+            [\`Bar\`](#)  <Badge class="badge badge--secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="badge badge--secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="badge badge--secondary" text="query"/>
 
             "
           `);

@@ -22,28 +22,28 @@ const {
 } = require("@graphql-markdown/utils");
 
 const { getGroup } = require("./group");
-const { ROOT_TYPE_LOCALE, DEPRECATED } = require("./const/strings");
+const { DEPRECATED, ROOT_TYPE_LOCALE } = require("./const/strings");
 const { OPTION_DEPRECATED } = require("./const/options");
 
 class Link {
   static getLinkCategory = (graphLQLNamedType) => {
     switch (true) {
+      case isDirectiveType(graphLQLNamedType):
+        return ROOT_TYPE_LOCALE.DIRECTIVE;
       case isEnumType(graphLQLNamedType):
         return ROOT_TYPE_LOCALE.ENUM;
-      case isUnionType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.UNION;
+      case isInputType(graphLQLNamedType):
+        return ROOT_TYPE_LOCALE.INPUT;
       case isInterfaceType(graphLQLNamedType):
         return ROOT_TYPE_LOCALE.INTERFACE;
       case isObjectType(graphLQLNamedType):
         return ROOT_TYPE_LOCALE.TYPE;
-      case isInputType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.INPUT;
-      case isScalarType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.SCALAR;
-      case isDirectiveType(graphLQLNamedType):
-        return ROOT_TYPE_LOCALE.DIRECTIVE;
       case isOperation(graphLQLNamedType):
         return ROOT_TYPE_LOCALE.OPERATION;
+      case isScalarType(graphLQLNamedType):
+        return ROOT_TYPE_LOCALE.SCALAR;
+      case isUnionType(graphLQLNamedType):
+        return ROOT_TYPE_LOCALE.UNION;
     }
     return undefined;
   };
@@ -110,10 +110,9 @@ class Link {
 
   static getRelationLink = (category, type, options) => {
     if (typeof category === "undefined") {
-      return "";
+      return undefined;
     }
-    const link = Link.toLink(type, type.name, category, options);
-    return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
+    return Link.toLink(type, type.name, category, options);
   };
 
   static printParentLink = (type, options) => {

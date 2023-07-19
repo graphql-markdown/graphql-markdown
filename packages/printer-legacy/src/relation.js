@@ -1,17 +1,18 @@
 const {
   graphql: {
-    isOperation,
-    getRelationOfReturn,
     getRelationOfField,
     getRelationOfImplementation,
+    getRelationOfReturn,
+    isOperation,
   },
 } = require("@graphql-markdown/utils");
 
 const { getRelationLink } = require("./link");
+const { DEFAULT_CSS_CLASSNAME, printBadge } = require("./badge");
 const {
-  ROOT_TYPE_LOCALE,
   HEADER_SECTION_LEVEL,
   MARKDOWN_EOP,
+  ROOT_TYPE_LOCALE,
 } = require("./const/strings");
 
 const getRootTypeLocaleFromString = (text) => {
@@ -46,7 +47,16 @@ const printRelationOf = (type, section, getRelation, options) => {
     }
 
     const category = getRootTypeLocaleFromString(relation);
-    data = data.concat(types.map((t) => getRelationLink(category, t, options)));
+    const badge = printBadge({
+      text: category.singular,
+      classname: DEFAULT_CSS_CLASSNAME,
+    });
+    data = data.concat(
+      types.map((t) => {
+        const link = getRelationLink(category, t, options);
+        return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
+      }),
+    );
   }
 
   if (data.length === 0) {
