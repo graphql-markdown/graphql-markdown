@@ -2,7 +2,7 @@ const { GraphQLScalarType } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
+    string: { toSlug: jest.fn(), escapeMDX: jest.fn((s) => s) },
     url: { pathUrl: jest.fn() },
     object: { hasProperty: jest.fn() },
     graphql: {
@@ -62,7 +62,7 @@ describe("relation", () => {
       expect(relation).toMatchInlineSnapshot(`
             "### RelationOf
 
-            [\`Bar\`](#)  <Badge class="secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="secondary" text="query"/>
+            [\`Bar\`](#)  <Badge class="badge badge--secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="badge badge--secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="badge badge--secondary" text="query"/>
 
             "
           `);

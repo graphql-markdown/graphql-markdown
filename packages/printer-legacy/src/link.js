@@ -112,8 +112,7 @@ class Link {
     if (typeof category === "undefined") {
       return "";
     }
-    const link = Link.toLink(type, type.name, category, options);
-    return `[\`${link.text}\`](${link.url})  <Badge class="secondary" text="${category.singular}"/>`;
+    return Link.toLink(type, type.name, category, options);
   };
 
   static printParentLink = (type, options) => {
