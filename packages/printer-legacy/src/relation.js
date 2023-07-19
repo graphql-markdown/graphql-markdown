@@ -1,18 +1,18 @@
 const {
   graphql: {
-    isOperation,
-    getRelationOfReturn,
     getRelationOfField,
     getRelationOfImplementation,
+    getRelationOfReturn,
+    isOperation,
   },
 } = require("@graphql-markdown/utils");
 
 const { getRelationLink } = require("./link");
-const { printBadge, DEFAULT_CSS_CLASSNAME } = require("./badge");
+const { DEFAULT_CSS_CLASSNAME, printBadge } = require("./badge");
 const {
-  ROOT_TYPE_LOCALE,
   HEADER_SECTION_LEVEL,
   MARKDOWN_EOP,
+  ROOT_TYPE_LOCALE,
 } = require("./const/strings");
 
 const getRootTypeLocaleFromString = (text) => {
