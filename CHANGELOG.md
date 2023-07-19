@@ -1,7 +1,35 @@
+<a name="1.20.3"></a>
+# [1.20.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.3) - 19 Jul 2023
+
+:bug: Fix the CSS issue for type badges in *related type* sections (see option [`printTypeOptions.relatedTypeSection`](https://graphql-markdown.github.io/docs/settings#printtypeoptions)).
+
+* **Before fix**
+  ![Screenshot 2023-07-19 at 14-22-28 Deleted GraphQL-Markdown](https://github.com/graphql-markdown/graphql-markdown/assets/324670/185015cc-a811-47ba-9564-69b65049d11f)
+
+* **After fix**
+  ![Screenshot 2023-07-19 at 14-30-46 Deleted GraphQL-Markdown](https://github.com/graphql-markdown/graphql-markdown/assets/324670/05a2d2ac-a6f4-4a8b-8bfd-15a0e19aab4e)
+
+## What's Changed
+
+### @graphql-markdown/docusaurus@1.20.3
+* :package: bump dependency @graphql-markdown/core to 1.6.3
+ * :package: bump dependency @graphql-markdown/printer-legacy to 1.4.3
+
+### @graphql-markdown/core@1.6.3
+* :package: bump peerDependency @graphql-markdown/printer-legacy to 1.4.3
+
+### @graphql-markdown/printer-legacy@1.4.3
+* :bug: fix badge css for relation of type sections by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/908
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.2...1.20.3
+
+[Changes][1.20.3]
+
+
 <a name="1.20.2"></a>
 # [1.20.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.2) - 07 Jul 2023
 
-:see_no_evil: New option `printTypeOptions.codeSection` and CLI flag `--noCode` for hiding the codeblock section, based on an initial request from [@ris314](https://github.com/ris314) in https://github.com/graphql-markdown/graphql-markdown/issues/895, see [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions) for more information.
+:see_no_evil: New option `printTypeOptions.codeSection` and CLI flag `--noCode` for hiding the codeblock section, based on an initial request from [@ris314](https://github.com/ris314) in https://github.com/graphql-markdown/graphql-markdown/issues/895. See [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions) for more information.
 
 ![Screenshot 2023-07-07 at 16-28-08 AddCourse GraphQL-Markdown](https://github.com/graphql-markdown/graphql-markdown/assets/324670/4a3ceb99-266d-4bd4-846b-65ba448f8077)
 
@@ -1444,6 +1472,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.20.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.2...1.20.3
 [1.20.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.1...1.20.2
 [1.20.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.0...1.20.1
 [1.20.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.19.0...1.20.0
