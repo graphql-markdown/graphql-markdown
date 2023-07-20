@@ -9,6 +9,10 @@ const { dependencies: packages } = require(`${rootDir}/package.json`);
 const getWorkspacePackagesMap = () => {
   const map = {};
   Object.entries(packages).forEach(([packageName, packagePath]) => {
+    if (!packageName.startsWith("@graphql-markdown")) {
+      return;
+    }
+
     const packageJson =
       packagePath.replace("file:", `${rootDir}/`) + "/package.json";
     const { version, dependencies, peerDependencies } = require(packageJson);

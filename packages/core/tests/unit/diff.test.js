@@ -1,3 +1,6 @@
+jest.mock("@graphql-markdown/diff");
+const diff = require("@graphql-markdown/diff");
+
 const { hasChanges } = require("../../src/diff");
 
 describe("diff", () => {
@@ -24,6 +27,7 @@ describe("diff", () => {
         expect.assertions(2);
 
         const logSpy = jest.spyOn(global.logger, "warn");
+        jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
 
         await expect(hasChanges({}, "", "NONE", value)).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
@@ -34,6 +38,7 @@ describe("diff", () => {
       expect.assertions(2);
 
       const logSpy = jest.spyOn(global.logger, "warn");
+      jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
 
       await expect(hasChanges({}, "", "NONE", "foobar")).resolves.toBeTruthy();
       expect(logSpy).toHaveBeenCalledWith(
@@ -45,6 +50,7 @@ describe("diff", () => {
       expect.assertions(2);
 
       const logSpy = jest.spyOn(global.logger, "warn");
+      jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
 
       const result = await hasChanges({}, "", "FORCE");
 

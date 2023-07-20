@@ -1,27 +1,28 @@
-const { vol } = require("memfs");
+import { vol } from "memfs";
 jest.mock("fs");
 
 jest.mock("graphql");
-const graphql = require("graphql");
+import * as graphql from "graphql";
 
 jest.mock("@graphql-tools/load");
-const graphqlLoad = require("@graphql-tools/load");
+import * as graphqlLoad from "@graphql-tools/load";
 
 jest.mock("@graphql-inspector/core");
-const inspector = require("@graphql-inspector/core");
+import * as inspector from "@graphql-inspector/core";
+import type { Change } from "@graphql-inspector/core";
 
-const {
+import {
   checkSchemaChanges,
   COMPARE_METHOD,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,
-} = require("../../src/index");
+} from "../../src/index";
 
 describe("lib", () => {
   describe("diff", () => {
     beforeEach(() => {
       vol.fromJSON({
-        "/output": {},
+        "/output": null,
       });
     });
 
@@ -37,7 +38,7 @@ describe("lib", () => {
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        const check = await checkSchemaChanges("schema", "/output", "FOOBAR");
+        const check = await checkSchemaChanges(new graphql.GraphQLSchema({}), "/output", "FOOBAR");
 
         expect(check).toBeTruthy();
       });
@@ -54,7 +55,7 @@ describe("lib", () => {
 
         printSchema.mockImplementationOnce(() => "schema-new");
         const check = await checkSchemaChanges(
-          "schema-new",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.HASH,
         );
@@ -73,7 +74,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          "schema",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.HASH,
         );
@@ -91,7 +92,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          "schema",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.HASH,
         );
@@ -107,17 +108,19 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() => ({}));
+          .mockImplementationOnce(() =>  Promise.resolve(new graphql.GraphQLSchema({})));
+        const changes: Change[] = []
+        changes.push({ message: "", type: "", meta: "", criticality: { level: inspector.CriticalityLevel.Breaking} });
         jest
           .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([1]));
+          .mockImplementationOnce(() => Promise.resolve(changes));
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
         });
 
         const check = await checkSchemaChanges(
-          "schema-new",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.DIFF,
         );
@@ -133,7 +136,7 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() => ({}));
+          .mockImplementationOnce(() => Promise.resolve(new graphql.GraphQLSchema({})));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
@@ -143,7 +146,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          "schema",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.DIFF,
         );
@@ -159,13 +162,13 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() => ({}));
+          .mockImplementationOnce(() => Promise.resolve(new graphql.GraphQLSchema({})));
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
 
         const check = await checkSchemaChanges(
-          "schema",
+          new graphql.GraphQLSchema({}),
           "/output",
           COMPARE_METHOD.DIFF,
         );

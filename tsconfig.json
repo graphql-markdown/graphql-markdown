@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.build.json",
+
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "baseUrl": "./packages",
+
+    "paths": {
+      "@graphql-markdown/*": [
+        "*/src/index.ts",
+        "*/src/index.js"
+      ]
+    }
+  },
+
+  "exclude": ["**/node_modules", "**/test"]
+}

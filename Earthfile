@@ -6,7 +6,7 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY package.json package-lock.json ./
+  COPY package.json package-lock.json tsconfig.json tsconfig.build.json ./
   COPY --dir config packages ./
   RUN npm config set update-notifier false
   RUN npm ci
@@ -42,7 +42,8 @@ mutation-test:
 build-package:
   FROM +deps
   ARG --required package
-  RUN npm pack -w @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
+  RUN npm run build --if-present --workspace @graphql-markdown/$package
+  RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus:
