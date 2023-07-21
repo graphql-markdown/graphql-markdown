@@ -8,12 +8,7 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
 import type { GraphQLSchema } from "graphql/type/schema";
 
-import Utils from "@graphql-markdown/utils";
-
-const {
-  fs: { fileExists, readFile, saveFile },
-  graphql: { printSchema },
-} = Utils;
+import { fileExists, readFile, saveFile, printSchema } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema";
 export const SCHEMA_REF = "schema.graphql";

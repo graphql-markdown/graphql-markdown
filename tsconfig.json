@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+
   "extends": "./tsconfig.build.json",
 
   "compilerOptions": {
@@ -18,7 +19,5 @@
         "*/src/index.js"
       ]
     }
-  },
-
-  "exclude": ["**/node_modules", "**/test"]
+  }
 }
