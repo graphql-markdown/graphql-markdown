@@ -1,31 +1,34 @@
-import {
+import type {
   ASTNode,
   DirectiveNode,
-  getDirectiveValues,
-  getNamedType,
-  GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLField,
-  GraphQLFloat,
-  GraphQLID,
   GraphQLInputObjectType,
-  GraphQLInt,
   GraphQLInterfaceType,
   GraphQLNamedType,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLSchema,
   GraphQLSchemaConfig,
-  GraphQLString,
   GraphQLType,
   GraphQLUnionType,
+  ObjectTypeDefinitionNode,
+} from "graphql";
+
+import {  
+  getDirectiveValues,
+  getNamedType, 
+  GraphQLBoolean,
+  GraphQLFloat,
+  GraphQLID,
+  GraphQLInt,
+  GraphQLSchema,
+  GraphQLString,
   isDirective as isDirectiveType,
   isEnumType,
   isListType,
   isNamedType,
-  ObjectTypeDefinitionNode,
-  OperationTypeNode,
+  OperationTypeNode
 } from "graphql";
 import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
 
@@ -433,8 +436,6 @@ export function isDeprecated(type: unknown) {
 }
 
 export {
-  GraphQLDirective,
-  GraphQLNamedType,
   getDirectiveValues,
   getNamedType,
   isDirective as isDirectiveType,
