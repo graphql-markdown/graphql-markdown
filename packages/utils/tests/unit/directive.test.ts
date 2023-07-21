@@ -1,10 +1,11 @@
-const { buildSchema } = require("graphql");
+import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+import { buildSchema } from "graphql";
 
-const {
+import {
   getCustomDirectives,
   getCustomDirectiveOptions,
   isCustomDirective,
-} = require("../../src/directive");
+} from "../../src/directive";
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -24,9 +25,9 @@ describe("directive", () => {
     }
   `);
 
-  const descriptor = (directiveType, constDirectiveType) =>
+  const descriptor = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
     `Test ${constDirectiveType.name}`;
-  const wildcard = (directiveType, constDirectiveType) =>
+  const wildcard = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
     `TestWildcard ${constDirectiveType.name}`;
   const customDirectiveOptions = {
     testA: {
@@ -73,10 +74,10 @@ describe("directive", () => {
         ...customDirectiveOptions,
       });
 
-      expect(descriptorDirective.descriptor).toBeDefined();
+      expect(descriptorDirective!.descriptor).toBeDefined();
 
       expect(
-        descriptorDirective.descriptor(undefined, schemaMap.directives.testA),
+        descriptorDirective!.descriptor(undefined, schemaMap.directives.testA),
       ).toBe("Test testA");
     });
 
@@ -88,10 +89,10 @@ describe("directive", () => {
         ...customDirectiveOptions,
       });
 
-      expect(descriptorDirective.descriptor).toBeDefined();
+      expect(descriptorDirective!.descriptor).toBeDefined();
 
       expect(
-        descriptorDirective.descriptor(undefined, schemaMap.directives.testB),
+        descriptorDirective!.descriptor(undefined, schemaMap.directives.testB),
       ).toBe("TestWildcard testB");
     });
 
@@ -103,7 +104,7 @@ describe("directive", () => {
         customDirectiveOptions,
       );
 
-      expect(descriptorDirective.descriptor).toBeUndefined();
+      expect(descriptorDirective).toBeUndefined();
     });
   });
 
@@ -131,7 +132,7 @@ describe("directive", () => {
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives["testA"].descriptor(
+        customDirectives!["testA"].descriptor(
           undefined,
           schemaMap.directives.testA,
         ),
@@ -154,14 +155,14 @@ describe("directive", () => {
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives["testA"].descriptor(
+        customDirectives!["testA"].descriptor(
           undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("TestWildcard testA");
 
       expect(
-        customDirectives["testB"].descriptor(
+        customDirectives!["testB"].descriptor(
           undefined,
           schemaMap.directives.testB,
         ),
@@ -179,14 +180,14 @@ describe("directive", () => {
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives["testA"].descriptor(
+        customDirectives!["testA"].descriptor(
           undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("Test testA");
 
       expect(
-        customDirectives["testB"].descriptor(
+        customDirectives!["testB"].descriptor(
           undefined,
           schemaMap.directives.testB,
         ),

@@ -1,4 +1,4 @@
-const { toArray, convertArrayToObject } = require("../../src/array");
+import { toArray, convertArrayToObject } from "../../src/array";
 
 describe("array", () => {
   describe("toArray()", () => {

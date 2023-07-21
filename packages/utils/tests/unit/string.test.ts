@@ -1,4 +1,4 @@
-const {
+import {
   capitalize,
   escapeMDX,
   interpolate,
@@ -6,7 +6,7 @@ const {
   replaceDiacritics,
   stringCaseBuilder,
   toSlug,
-} = require("../../src/string");
+} from "../../src/string";
 
 describe("string", () => {
   describe("stringCaseBuilder()", () => {
@@ -26,15 +26,6 @@ describe("string", () => {
 
       const text = "Âéêś";
       const expected = "Aees";
-
-      expect(replaceDiacritics(text)).toBe(expected);
-    });
-
-    test("returns empty string is parameter is not a string", () => {
-      expect.hasAssertions();
-
-      const text = {};
-      const expected = "";
 
       expect(replaceDiacritics(text)).toBe(expected);
     });
@@ -127,7 +118,7 @@ describe("string", () => {
       expect.hasAssertions();
 
       const values = { foo: 42, bar: { value: "test" } };
-      const template = "${foo} is not ${bar.notfoung}";
+      const template = "${foo} is not ${bar.notfound}";
 
       expect(interpolate(template, values, "fallback")).toBe(
         "42 is not fallback",

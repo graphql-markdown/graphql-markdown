@@ -1,9 +1,21 @@
-const Logger = {
-  setInstance: (module) => {
+declare global {
+  var logger: LoggerType | undefined;
+}
+type LoggerType = {
+  debug: Function,
+  error: Function,
+  info: Function,
+  log: Function,
+  success: Function,
+  warn: Function,
+}
+
+export const Logger = {
+  setInstance: (module?: string): LoggerType => {
     if (typeof module !== "string") {
-      global.logger = global.console;
+      global.logger = global.console as unknown as LoggerType;
     } else {
-      global.logger = require(module);
+      global.logger = require(module) as unknown as LoggerType;
     }
 
     if (typeof global.logger.log === "undefined") {
@@ -20,7 +32,7 @@ const Logger = {
 
     return global.logger;
   },
-  getInstance: (module) => {
+  getInstance: (module?: string): LoggerType => {
     if (typeof global.logger === "undefined") {
       return Logger.setInstance(module);
     }
@@ -28,4 +40,4 @@ const Logger = {
   },
 };
 
-module.exports = Logger;
+export default Logger;

@@ -1,9 +1,9 @@
-const {
+import {
   getObjPath,
   hasMethod,
   hasProperty,
   isEmpty,
-} = require("../../src/object");
+} from "../../src/object";
 
 describe("object", () => {
   describe("hasProperty()", () => {
@@ -17,18 +17,6 @@ describe("object", () => {
       expect.hasAssertions();
 
       expect(hasProperty({ foo: "test" }, "bar")).toBeFalsy();
-    });
-
-    test("returns false if not an object", () => {
-      expect.hasAssertions();
-
-      expect(hasProperty("test", "bar")).toBeFalsy();
-    });
-
-    test("returns false if null", () => {
-      expect.hasAssertions();
-
-      expect(hasProperty(null, "bar")).toBeFalsy();
     });
   });
 
@@ -57,12 +45,6 @@ describe("object", () => {
       expect.hasAssertions();
 
       expect(isEmpty({ foo: "test" })).toBeFalsy();
-    });
-
-    test("returns true if not an object", () => {
-      expect.hasAssertions();
-
-      expect(isEmpty(42)).toBeTruthy();
     });
   });
 

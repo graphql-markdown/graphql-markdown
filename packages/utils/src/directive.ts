@@ -1,12 +1,12 @@
-const { hasProperty, isEmpty } = require("./object");
+import { hasProperty, isEmpty } from "./object";
 
 const WILDCARD_DIRECTIVE = "*";
 
-function getCustomDirectives(
-  { directives: schemaDirectives } = { directives: undefined },
-  customDirectiveOptions,
-) {
-  const customDirectives = {};
+export function getCustomDirectives(
+  { directives: schemaDirectives }: { directives?: Record<string, any> },
+  customDirectiveOptions?: Record<string, any>,
+): Record<string, any> | undefined {
+  const customDirectives: Record<string, any> = {};
 
   if (
     typeof schemaDirectives !== "object" ||
@@ -27,6 +27,10 @@ function getCustomDirectives(
       customDirectiveOptions,
     );
 
+    if (typeof directiveOptions === "undefined") {
+      continue;
+    }
+
     customDirectives[schemaDirectiveName] = {
       type: schemaDirectives[schemaDirectiveName],
       ...directiveOptions,
@@ -36,10 +40,10 @@ function getCustomDirectives(
   return isEmpty(customDirectives) === true ? undefined : customDirectives;
 }
 
-function getCustomDirectiveOptions(
-  schemaDirectiveName,
-  customDirectiveOptions,
-) {
+export function getCustomDirectiveOptions(
+  schemaDirectiveName: string,
+  customDirectiveOptions: Record<string, any>,
+): Record<string, any> | undefined {
   if (hasProperty(customDirectiveOptions, schemaDirectiveName) === true) {
     return customDirectiveOptions[schemaDirectiveName];
   }
@@ -48,18 +52,12 @@ function getCustomDirectiveOptions(
     return customDirectiveOptions[WILDCARD_DIRECTIVE];
   }
 
-  return {};
+  return undefined;
 }
 
-function isCustomDirective(schemaDirectiveName, customDirectiveOptions) {
+export function isCustomDirective(schemaDirectiveName: string, customDirectiveOptions: Record<string, any>): boolean {
   return (
     hasProperty(customDirectiveOptions, schemaDirectiveName) === true ||
     hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true
   );
 }
-
-module.exports = {
-  getCustomDirectives,
-  getCustomDirectiveOptions,
-  isCustomDirective,
-};

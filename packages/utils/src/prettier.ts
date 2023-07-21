@@ -1,8 +1,10 @@
 /* istanbul ignore file */
 
-const logger = require("./logger").getInstance();
+import { Logger } from "./logger"
 
-async function prettify(content, parser) {
+const logger = Logger.getInstance();
+
+export async function prettify(content: string, parser: string) {
   try {
     const { format } = require("prettier");
     return await format(content, { parser });
@@ -11,11 +13,11 @@ async function prettify(content, parser) {
   }
 }
 
-async function prettifyMarkdown(content) {
+export async function prettifyMarkdown(content: string) {
   return await prettify(content, "markdown");
 }
 
-async function prettifyJavascript(content) {
+export async function prettifyJavascript(content: string) {
   return await prettify(content, "babel");
 }
 

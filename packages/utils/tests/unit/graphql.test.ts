@@ -1,6 +1,6 @@
-const { loadSchema: gqlToolsLoadSchema } = require("@graphql-tools/load");
-const { JsonFileLoader } = require("@graphql-tools/json-file-loader");
-const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
+import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
+import { JsonFileLoader } from "@graphql-tools/json-file-loader";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
@@ -11,24 +11,30 @@ jest.mock("graphql", () => {
     ),
   };
 });
-const {
+import {
   buildSchema,
   getDirectiveValues,
   GraphQLBoolean,
+  GraphQLDirective,
   GraphQLEnumType,
+  GraphQLField,
+  GraphQLFieldMap,
   GraphQLFloat,
   GraphQLID,
   GraphQLInputObjectType,
   GraphQLInt,
   GraphQLInterfaceType,
   GraphQLList,
+  GraphQLNamedType,
   GraphQLObjectType,
   GraphQLScalarType,
+  GraphQLSchema,
   GraphQLString,
   GraphQLUnionType,
-} = require("graphql");
+  ObjectTypeDefinitionNode,
+} from "graphql";
 
-const {
+import  {
   getConstDirectiveMap,
   getDefaultValue,
   getDirective,
@@ -50,7 +56,7 @@ const {
   isOperation,
   isParametrizedField,
   loadSchema,
-} = require("../../src/graphql");
+} from "../../src/graphql";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
@@ -62,7 +68,7 @@ const INTROSPECTION_SCHEMA_FILE = require.resolve(
 const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
 
 describe("graphql", () => {
-  let schema;
+  let schema: GraphQLSchema;
 
   beforeAll(async () => {
     schema = await gqlToolsLoadSchema(SCHEMA_FILE, {
@@ -88,7 +94,7 @@ describe("graphql", () => {
         rootTypes: { query: "Root", subscription: "" },
       });
 
-      expect(testSchema.getQueryType().name).toBe("Root");
+      expect(testSchema.getQueryType()!.name).toBe("Root");
       expect(testSchema.getMutationType()).toBeUndefined();
       expect(testSchema.getSubscriptionType()).toBeUndefined();
     });
@@ -264,7 +270,7 @@ describe("graphql", () => {
     test("returns list of queries", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getQueryType());
+      const list = getIntrospectionFieldsList(schema.getQueryType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -272,7 +278,7 @@ describe("graphql", () => {
     test("returns list of mutations", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getMutationType());
+      const list = getIntrospectionFieldsList(schema.getMutationType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -280,7 +286,7 @@ describe("graphql", () => {
     test("returns list of subscriptions", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getSubscriptionType());
+      const list = getIntrospectionFieldsList(schema.getSubscriptionType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -298,7 +304,7 @@ describe("graphql", () => {
     test("returns list of type fields", () => {
       expect.hasAssertions();
 
-      const fields = getFields(schema.getMutationType());
+      const fields = getFields(schema.getMutationType()!);
 
       expect(JSON.stringify(fields, null, 2)).toMatchSnapshot();
     });
@@ -316,7 +322,7 @@ describe("graphql", () => {
     test("returns type name for object", () => {
       expect.hasAssertions();
 
-      const name = getTypeName(schema.getType("Tweet"));
+      const name = getTypeName(schema.getType("Tweet")!);
 
       expect(name).toBe("Tweet");
     });
@@ -324,7 +330,7 @@ describe("graphql", () => {
     test("returns type name for interface", () => {
       expect.hasAssertions();
 
-      const name = getTypeName(schema.getType("Node"));
+      const name = getTypeName(schema.getType("Node")!);
 
       expect(name).toBe("Node");
     });
@@ -332,7 +338,7 @@ describe("graphql", () => {
     test("returns type name for scalar", () => {
       expect.hasAssertions();
 
-      const name = getTypeName(schema.getType("ID"));
+      const name = getTypeName(schema.getType("ID")!);
 
       expect(name).toBe("ID");
     });
@@ -350,7 +356,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLObjectType);
+      const map = getTypeFromSchema<GraphQLObjectType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -358,7 +364,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLUnionType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLUnionType);
+      const map = getTypeFromSchema<GraphQLUnionType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -366,7 +372,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInterfaceType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLInterfaceType);
+      const map = getTypeFromSchema<GraphQLInterfaceType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -374,7 +380,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLEnumType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLEnumType);
+      const map = getTypeFromSchema<GraphQLEnumType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -382,7 +388,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInputObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLInputObjectType);
+      const map = getTypeFromSchema<GraphQLInputObjectType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -390,7 +396,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLScalarType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema(schema, GraphQLScalarType);
+      const map = getTypeFromSchema<GraphQLScalarType>(schema);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -399,16 +405,16 @@ describe("graphql", () => {
       const schema = await gqlToolsLoadSchema(INTROSPECTION_SCHEMA_FILE, {
         loaders: [new JsonFileLoader()],
       });
-      const map = getTypeFromSchema(schema, GraphQLScalarType);
+      const map = getTypeFromSchema<GraphQLScalarType>(schema);
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
 
     test.each([[null], [undefined]])(
-      "returns undefined it typeMap is not defined",
-      (typeMap) => {
+      "returns undefined if schema is not defined",
+      (schema) => {
         expect.hasAssertions();
 
-        const map = getTypeFromSchema(typeMap, GraphQLScalarType);
+        const map = getTypeFromSchema<GraphQLScalarType>(schema);
 
         expect(map).toBeUndefined();
       },
@@ -503,7 +509,7 @@ describe("graphql", () => {
     test("returns false if type is not an operation", () => {
       expect.hasAssertions();
 
-      const objects = getTypeFromSchema(schema, GraphQLObjectType);
+      const objects = getTypeFromSchema<GraphQLObjectType>(schema)!;
       const res = isOperation(objects["Tweet"]);
 
       expect(res).toBeFalsy();
@@ -759,7 +765,7 @@ describe("graphql", () => {
     test("return false is the type has no directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("Subscription");
+      const type = schema.getType("Subscription")!;
 
       expect(hasDirective(type, "foobar")).toBeFalsy();
     });
@@ -767,7 +773,7 @@ describe("graphql", () => {
     test("return false is the type has no matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
 
       expect(hasDirective(type, "foobar")).toBeFalsy();
     });
@@ -775,7 +781,7 @@ describe("graphql", () => {
     test("return true is the type has matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
 
       expect(hasDirective(type, "foobaz")).toBeTruthy();
     });
@@ -783,7 +789,7 @@ describe("graphql", () => {
     test("return true is the type has one matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
 
       expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
     });
@@ -820,7 +826,7 @@ describe("graphql", () => {
     test("return empty list if the type has no directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("Subscription");
+      const type = schema.getType("Subscription")!;
       const actual = getDirective(type, "foobar");
 
       expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
@@ -829,7 +835,7 @@ describe("graphql", () => {
     test("return empty list if the type has no matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, "foobar");
 
       expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
@@ -838,7 +844,7 @@ describe("graphql", () => {
     test("return list if the type has matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, "foobaz");
 
       expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
@@ -847,7 +853,7 @@ describe("graphql", () => {
     test("return list if the type has one matching directive", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("StudyItem");
+      const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, ["foobar", "foobaz"]);
 
       expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
@@ -882,10 +888,10 @@ describe("graphql", () => {
         id: ID!
       }
     `);
-    const type = schema.getType("Test");
-    const typeWithoutDirective = schema.getType("TestWithoutDirective");
-    const descriptor = (directiveType, constDirectiveType) =>
-      `Test${constDirectiveType.name.value}`;
+    const type = schema.getType("Test")!;
+    const typeWithoutDirective = schema.getType("TestWithoutDirective")!;
+    const descriptor = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
+      `Test${constDirectiveType.name}`;
     const options = {
       customDirectives: {
         testA: {
@@ -902,7 +908,7 @@ describe("graphql", () => {
     test("returns undefined when config is not set", () => {
       expect.assertions(1);
 
-      expect(getConstDirectiveMap(type, undefined)).toBeUndefined();
+      expect(getConstDirectiveMap(type, { customDirectives: undefined })).toBeUndefined();
     });
 
     test("returns undefined when config custom directive does not exist", () => {
@@ -951,17 +957,17 @@ describe("graphql", () => {
         id: ID!
       }
     `);
-    const type = schema.getType("Test");
+    const type = schema.getType("Test")!;
 
     test("throws an error if argument does not exist", () => {
       expect.assertions(1);
 
       const directiveName = "dirWithoutArg";
-      const directiveType = schema.getDirective(directiveName);
+      const directiveType = schema.getDirective(directiveName)!;
       const argName = "fooBar";
 
       expect(() => {
-        getTypeDirectiveArgValue(directiveType, type.astNode, argName);
+        getTypeDirectiveArgValue(directiveType, type.astNode!, argName);
       }).toThrow(`Directive argument '${argName}' not found!`);
     });
 
@@ -969,10 +975,10 @@ describe("graphql", () => {
       expect.assertions(1);
 
       const directiveName = "testB";
-      const directiveType = schema.getDirective(directiveName);
-      const typeFieldNode = type.astNode.fields.find(
+      const directiveType = schema.getDirective(directiveName)!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
         (field) => field.name.value === "fieldA",
-      );
+      )!;
       const argName = "argC";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -987,10 +993,10 @@ describe("graphql", () => {
       expect.assertions(1);
 
       const directiveName = "testB";
-      const directiveType = schema.getDirective(directiveName);
-      const typeFieldNode = type.astNode.fields.find(
+      const directiveType = schema.getDirective(directiveName)!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
         (field) => field.name.value === "fieldA",
-      );
+      )!;
       const argName = "argB";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -1005,10 +1011,10 @@ describe("graphql", () => {
       expect.assertions(1);
 
       const directiveName = "testB";
-      const directiveType = schema.getDirective(directiveName);
-      const typeFieldNode = type.astNode.fields.find(
+      const directiveType = schema.getDirective(directiveName)!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
         (field) => field.name.value === "fieldA",
-      );
+      )!;
       const argName = "argA";
 
       expect(
@@ -1020,7 +1026,7 @@ describe("graphql", () => {
       expect.assertions(1);
 
       const directiveName = "testA";
-      const directiveType = schema.getDirective(directiveName);
+      const directiveType = schema.getDirective(directiveName)!;
       const argName = "arg";
 
       expect(
@@ -1032,11 +1038,11 @@ describe("graphql", () => {
       expect.assertions(1);
 
       const directiveName = "testA";
-      const directiveType = schema.getDirective(directiveName);
+      const directiveType = schema.getDirective(directiveName)!;
       const argName = "arg";
 
       expect(
-        getTypeDirectiveArgValue(directiveType, type.astNode, argName),
+        getTypeDirectiveArgValue(directiveType, type.astNode!, argName),
       ).toMatchInlineSnapshot(`"ARGA"`);
     });
   });
@@ -1072,8 +1078,8 @@ describe("graphql", () => {
         id: ID!
       }
     `);
-    const type = schema.getType("Test");
-    const directiveType = schema.getDirective("testA");
+    const type = schema.getType("Test")!;
+    const directiveType = schema.getDirective("testA")!;
 
     test("converts type to astNode", () => {
       expect.assertions(1);
@@ -1089,7 +1095,7 @@ describe("graphql", () => {
     test("does not convert astNode", () => {
       expect.assertions(1);
 
-      getTypeDirectiveValues(directiveType, type.astNode);
+      getTypeDirectiveValues(directiveType as GraphQLDirective, type.astNode!);
 
       expect(getDirectiveValues).toHaveBeenCalledWith(
         directiveType,
@@ -1127,7 +1133,7 @@ describe("graphql", () => {
     test("return false is the type is not deprecated", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("Query").getFields();
+      const type = schema.getQueryType()!.getFields();
 
       expect(isDeprecated(type.getStudyItems)).toBeFalsy();
     });
@@ -1135,7 +1141,7 @@ describe("graphql", () => {
     test("return true is the type is deprecated", () => {
       expect.hasAssertions();
 
-      const type = schema.getType("Query").getFields();
+      const type = schema.getQueryType()!.getFields();
 
       expect(isDeprecated(type.getStudyItem)).toBeTruthy();
     });

@@ -1,12 +1,12 @@
-const { vol } = require("memfs");
-jest.mock("fs");
+import { vol } from "memfs";
+jest.mock("node:fs");
 
-const { ensureDir, fileExists, saveFile } = require("../../src/fs");
+import { ensureDir, fileExists, saveFile } from "../../src/fs";
 
 describe("fs", () => {
   beforeEach(() => {
     vol.fromJSON({
-      "/testFolder": {},
+      "/testFolder": null,
       "/testFolder/testFile": "just a test",
     });
   });
@@ -91,23 +91,6 @@ describe("saveFile()", () => {
     expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
         {
           "/foo/bar/test/prettify.test": "prettify hello",
-        }
-      `);
-  });
-
-  test("skip prettify function if not valid", async () => {
-    expect.assertions(1);
-
-    await saveFile(
-      "/foo/bar/test/not_prettify.test",
-      "foobar file for test",
-      "prettify hello",
-    );
-
-    expect(vol.toJSON("/foo/bar/test/not_prettify.test"))
-      .toMatchInlineSnapshot(`
-        {
-          "/foo/bar/test/not_prettify.test": "foobar file for test",
         }
       `);
   });

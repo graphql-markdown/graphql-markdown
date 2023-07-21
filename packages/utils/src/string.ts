@@ -2,9 +2,9 @@
  * String functions
  */
 
-const { getObjPath } = require("./object");
+import { getObjPath } from "./object";
 
-function stringCaseBuilder(str, transformation, separator) {
+export function stringCaseBuilder(str: string, transformation?: Function, separator?: string): string {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -16,7 +16,7 @@ function stringCaseBuilder(str, transformation, separator) {
   return prune(stringCase, separator);
 }
 
-function prune(str, char) {
+export function prune(str: string, char: string = ""): string {
   let res = str;
 
   if (res[0] === char) {
@@ -32,31 +32,31 @@ function prune(str, char) {
   return res;
 }
 
-function toSlug(str) {
+export function toSlug(str: string): string {
   return kebabCase(str);
 }
 
-function toHTMLUnicode(char) {
+export function toHTMLUnicode(char: string): string {
   const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
   return `&#x${unicodeChar.toUpperCase()};`;
 }
 
-function escapeMDX(str) {
+export function escapeMDX(str: any): string {
   return `${str}`.replace(/[<>{}]/g, toHTMLUnicode);
 }
 
-function firstUppercase(word) {
+export function firstUppercase(word: string): string {
   const sliceUppercase = word.slice(0, 1).toUpperCase();
   const sliceDefaultCase = word.slice(1);
   return `${sliceUppercase}${sliceDefaultCase}`;
 }
 
-function capitalize(word) {
+export function capitalize(word: string): string {
   return firstUppercase(word.toLowerCase());
 }
 
 // from https://stackoverflow.com/a/37511463
-function replaceDiacritics(str) {
+export function replaceDiacritics(str: string): string {
   if (typeof str !== "string") {
     return "";
   }
@@ -66,15 +66,15 @@ function replaceDiacritics(str) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-function startCase(str) {
+export function startCase(str: string): string {
   return stringCaseBuilder(str, firstUppercase, " ");
 }
 
-function kebabCase(str) {
-  return stringCaseBuilder(str, (word) => word.toLowerCase(), "-");
+export function kebabCase(str: string): string {
+  return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
 }
 
-function interpolate(template, variables, fallback) {
+export function interpolate(template: string, variables?: Record<string, any>, fallback?: string) {
   const regex = /\${[^{]+}/g;
 
   return template.replace(regex, (match) => {
@@ -82,17 +82,3 @@ function interpolate(template, variables, fallback) {
     return getObjPath(objPath, variables, fallback);
   });
 }
-
-module.exports = {
-  capitalize,
-  escapeMDX,
-  firstUppercase,
-  interpolate,
-  kebabCase,
-  prune,
-  replaceDiacritics,
-  startCase,
-  stringCaseBuilder,
-  toHTMLUnicode,
-  toSlug,
-};

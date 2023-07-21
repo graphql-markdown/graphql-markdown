@@ -1,6 +1,6 @@
-const { getGroups, getGroupName } = require("../../src/group");
+import { GraphQLNamedType, buildSchema } from "graphql";
 
-const { buildSchema } = require("graphql");
+import { getGroups, getGroupName } from "../../src/group";
 
 describe("group-info", () => {
   const schema = buildSchema(`
@@ -43,7 +43,7 @@ describe("group-info", () => {
   describe("getGroups()", () => {
     const schemaMap = {
       objects: schema.getTypeMap(),
-      queries: schema.getQueryType().getFields(),
+      queries: schema?.getQueryType()?.getFields(),
     };
 
     test("returns undefined if groupByDirective not defined", () => {
@@ -86,8 +86,8 @@ describe("group-info", () => {
     test("returns group name if category directive", () => {
       expect.assertions(2);
 
-      const type = schema.getType("Bird");
-      const queryType = schema.getQueryType().getFields()["Fish"];
+      const type = schema.getType("Bird")!;
+      const queryType = schema!.getQueryType()!.getFields()!["Fish"];
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
       expect(getGroupName(queryType, groupOptions)).toBe("animal");
@@ -104,7 +104,7 @@ describe("group-info", () => {
     ])("returns fallback group name if $case", ({ type }) => {
       expect.assertions(1);
 
-      expect(getGroupName(type, groupOptions)).toBe("common");
+      expect(getGroupName(type as unknown as GraphQLNamedType, groupOptions)).toBe("common");
     });
   });
 });

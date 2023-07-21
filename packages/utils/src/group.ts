@@ -1,5 +1,7 @@
-function getGroups(rootTypes, groupByDirective) {
-  const groups = {};
+import type { GraphQLField, GraphQLNamedType } from "graphql";
+
+export function getGroups(rootTypes: Record<string, any>, groupByDirective?: Record<string, any>): Record<string, any> | undefined {
+  const groups: Record<string, any> = {};
 
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
@@ -20,7 +22,11 @@ function getGroups(rootTypes, groupByDirective) {
   return groups;
 }
 
-function getGroupName(type, groupByDirective) {
+export function getGroupName(type: GraphQLNamedType | GraphQLField<any, any, any>, groupByDirective?: Record<string, any>): string | undefined {
+  if (typeof groupByDirective === "undefined" || groupByDirective == null) {
+    return undefined;
+  }
+
   if (typeof type.astNode === "undefined" || type.astNode == null) {
     return groupByDirective.fallback;
   }
@@ -36,12 +42,10 @@ function getGroupName(type, groupByDirective) {
       continue;
     }
     const field = directive.arguments.find(
-      ({ name }) => name.value === groupByDirective.field,
+      ({ name }: {name: Record<string, string>}) => name.value === groupByDirective.field,
     );
     return field.value.value;
   }
 
   return groupByDirective.fallback;
 }
-
-module.exports = { getGroupName, getGroups };

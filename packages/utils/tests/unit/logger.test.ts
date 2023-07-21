@@ -1,3 +1,5 @@
+import Logger from "../../src/logger";
+
 describe("logger", () => {
   afterEach(() => {
     jest.restoreAllMocks();
@@ -5,24 +7,20 @@ describe("logger", () => {
   });
 
   describe("setInstance()", () => {
-    test("returns a NodeJS.console object is no module passed", () => {
+    test("returns a NodeJS.console object is no module passed", async () => {
       expect.hasAssertions();
 
       jest
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      const Logger = require("../../src/logger").setInstance();
-
-      expect(Logger.info()).toBe("Mocked Console");
+      expect(Logger.setInstance().info()).toBe("Mocked Console");
     });
 
     test("returns logger with aliased methods", () => {
       expect.hasAssertions();
 
-      const Logger = require("../../src/logger").setInstance();
-
-      expect(Logger).toEqual(
+      expect(Logger.setInstance()).toEqual(
         expect.objectContaining({
           debug: expect.any(Function),
           error: expect.any(Function),
@@ -37,11 +35,11 @@ describe("logger", () => {
     test("returns module passed as logger", () => {
       expect.hasAssertions();
 
-      const Logger = require("../../src/logger").setInstance(
+      const logger = Logger.setInstance(
         require.resolve("../__data__/dummy_logger"),
       );
 
-      expect(Logger.info()).toBe("Dummy logger");
+      expect(logger.info()).toBe("Dummy logger");
     });
   });
 
@@ -49,7 +47,6 @@ describe("logger", () => {
     test("returns module passed as logger", () => {
       expect.hasAssertions();
 
-      const Logger = require("../../src/logger");
       Logger.setInstance(require.resolve("../__data__/dummy_logger"));
 
       expect(Logger.getInstance().info()).toBe("Dummy logger");
@@ -61,8 +58,6 @@ describe("logger", () => {
       jest
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
-
-      const Logger = require("../../src/logger");
 
       expect(Logger.getInstance().info()).toBe("Mocked Console");
     });
