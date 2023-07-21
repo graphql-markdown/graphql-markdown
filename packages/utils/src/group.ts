@@ -1,5 +1,7 @@
 import type { GraphQLField, GraphQLNamedType } from "graphql";
 
+import { hasAstNode } from "./graphql";
+
 export function getGroups(rootTypes: Record<string, any>, groupByDirective?: Record<string, any>): Record<string, any> | undefined {
   const groups: Record<string, any> = {};
 
@@ -27,7 +29,7 @@ export function getGroupName(type: GraphQLNamedType | GraphQLField<any, any, any
     return undefined;
   }
 
-  if (typeof type.astNode === "undefined" || type.astNode == null) {
+  if (!hasAstNode(type)) {
     return groupByDirective.fallback;
   }
 

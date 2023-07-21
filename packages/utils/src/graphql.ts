@@ -161,7 +161,7 @@ export function getTypeFromSchema<T extends GraphQLType>(schema: GraphQLSchema |
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-function hasAstNode<T extends Record<any, any>>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
+export function hasAstNode<T extends Record<any, any>>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
   return typeof node["astNode"] === "object";
 }
 
