@@ -1,22 +1,29 @@
-import type { GraphQLField, GraphQLNamedType } from "graphql";
+import { SchemaEntities, SchemaMap, hasAstNode } from "./graphql";
+import { DirectiveName } from "./directive";
 
-import { hasAstNode } from "./graphql";
+export type GroupByDirectiveOptions = {
+  directive: DirectiveName
+  field: string,
+  fallback?: string,
+}
 
-export function getGroups(rootTypes: Record<string, any>, groupByDirective?: Record<string, any>): Record<string, any> | undefined {
-  const groups: Record<string, any> = {};
+export type SchemaEntitiesGroupMap = Partial<Record<SchemaEntities, Record<string, string | undefined>>>
+
+export function getGroups(rootTypes: SchemaMap, groupByDirective?: GroupByDirectiveOptions): SchemaEntitiesGroupMap | undefined {
+  const groups: SchemaEntitiesGroupMap = {};
 
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
 
   Object.keys(rootTypes).forEach((typeName) => {
-    const rootType = rootTypes[typeName];
+    const rootType = rootTypes[typeName as SchemaEntities];
     if (typeof rootType !== "undefined" && rootType !== null) {
-      if (typeof groups[typeName] === "undefined") {
-        groups[typeName] = {};
+      if (typeof groups[typeName as SchemaEntities] === "undefined") {
+        groups[typeName as SchemaEntities] = {};
       }
       Object.keys(rootType).forEach((type) => {
-        groups[typeName][type] = getGroupName(rootType[type], groupByDirective);
+        groups[typeName as SchemaEntities]![type] = getGroupName(rootType[type], groupByDirective);
       });
     }
   });
@@ -24,7 +31,7 @@ export function getGroups(rootTypes: Record<string, any>, groupByDirective?: Rec
   return groups;
 }
 
-export function getGroupName(type: GraphQLNamedType | GraphQLField<any, any, any>, groupByDirective?: Record<string, any>): string | undefined {
+export function getGroupName(type: unknown, groupByDirective?: GroupByDirectiveOptions): string | undefined {
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }

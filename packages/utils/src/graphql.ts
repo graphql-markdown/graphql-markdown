@@ -160,7 +160,7 @@ export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, t
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-export function hasAstNode<T extends Record<any, any>>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
+export function hasAstNode<T extends unknown extends Record<any, any>>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
   return typeof node["astNode"] === "object";
 }
 
@@ -296,7 +296,9 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 }
 
-export type SchemaMap = { 
+export type SchemaEntities = "queries" | "mutations" | "subscriptions" | "directives" | "objects" | "unions" | "interfaces" | "enums" | "inputs" | "scalars"
+
+export type SchemaMap = {
   queries: Record<string, GraphQLObjectType<any, any>>
   mutations: Record<string, GraphQLObjectType<any, any>>
   subscriptions: Record<string, GraphQLObjectType<any, any>>
