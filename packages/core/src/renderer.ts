@@ -1,29 +1,43 @@
-const path = require("path");
+import { basename, join, relative, normalize } from "node:path";
 
-const {
-  object: { hasProperty },
-  string: { toSlug, startCase },
-  url: { pathUrl },
-  prettier: { prettifyJavascript, prettifyMarkdown },
-  fs: { saveFile, ensureDir, copyFile, readFile, fileExists },
-  graphql: { isDeprecated },
-} = require("@graphql-markdown/utils");
+import {
+  hasProperty ,
+  toSlug, startCase ,
+  pathUrl ,
+  prettifyJavascript, prettifyMarkdown ,
+  saveFile, ensureDir, copyFile, readFile, fileExists ,
+  isDeprecated, 
+  SchemaEntitiesGroupMap,
+  SchemaEntities,
+  Logger
+} from "@graphql-markdown/utils";
 
-const logger = require("@graphql-markdown/utils").logger.getInstance();
+import { Printer } from "./printer";
+import { ASSETS_LOCATION, ConfigDocOptions, TypeDeprecatedOption } from "./config";
 
-const { ASSETS_LOCATION } = require("./config");
-const { schemaSidebar } = require(`${ASSETS_LOCATION}/sidebar.json`);
+
+const logger = Logger.getInstance();
 
 const SIDEBAR = "sidebar-schema.js";
 const HOMEPAGE_ID = "schema";
 const CATEGORY_YAML = "_category_.yml";
-const SIDEBAR_POSITION = {
-  FIRST: 1,
-  LAST: 999,
+
+enum SIDEBAR_POSITION {
+  FIRST = 1,
+  LAST = 999,
 };
 
-module.exports = class Renderer {
-  constructor(printer, outputDir, baseURL, group, prettify, docOptions) {
+export type Category = { category: string, slug: string };
+
+export class Renderer {
+  group: SchemaEntitiesGroupMap | undefined;
+  outputDir: string;
+  baseURL: string;
+  printer: Printer;
+  prettify: boolean;
+  options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
+
+  constructor(printer: Printer, outputDir: string, baseURL: string, group: SchemaEntitiesGroupMap | undefined, prettify: boolean, docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption }) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
@@ -33,12 +47,12 @@ module.exports = class Renderer {
   }
 
   async generateCategoryMetafile(
-    category,
-    dirPath,
-    sidebarPosition = SIDEBAR_POSITION.FIRST,
-    styleClass = undefined,
+    category: string,
+    dirPath: string,
+    sidebarPosition: number = SIDEBAR_POSITION.FIRST,
+    styleClass?: string,
   ) {
-    const filePath = path.join(dirPath, CATEGORY_YAML);
+    const filePath = join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
       return;
@@ -59,7 +73,7 @@ module.exports = class Renderer {
     );
   }
 
-  async generateCategoryMetafileType(type, name, rootTypeName) {
+  async generateCategoryMetafileType(type: unknown, name: string, rootTypeName: SchemaEntities): Promise<string> {
     let dirPath = this.outputDir;
 
     if (
@@ -67,7 +81,7 @@ module.exports = class Renderer {
       this.options.deprecated === "group" &&
       isDeprecated(type)
     ) {
-      dirPath = path.join(dirPath, toSlug("deprecated"));
+      dirPath = join(dirPath, toSlug("deprecated"));
       await this.generateCategoryMetafile(
         "deprecated",
         dirPath,
@@ -78,22 +92,22 @@ module.exports = class Renderer {
 
     if (
       hasProperty(this.group, rootTypeName) &&
-      hasProperty(this.group[rootTypeName], name)
+      hasProperty(this.group![rootTypeName as SchemaEntities], name)
     ) {
-      dirPath = path.join(dirPath, toSlug(this.group[rootTypeName][name]));
+      dirPath = join(dirPath, toSlug(this.group![rootTypeName as SchemaEntities]![name] ?? ""));
       await this.generateCategoryMetafile(
-        this.group[rootTypeName][name],
+        this.group![rootTypeName as SchemaEntities]![name] ?? "",
         dirPath,
       );
     }
 
-    dirPath = path.join(dirPath, toSlug(rootTypeName));
+    dirPath = join(dirPath, toSlug(rootTypeName));
     await this.generateCategoryMetafile(rootTypeName, dirPath);
 
     return dirPath;
   }
 
-  async renderRootTypes(rootTypeName, type) {
+  async renderRootTypes(rootTypeName: SchemaEntities, type: unknown) {
     if (typeof type !== "object" || type === null) {
       return undefined;
     }
@@ -102,20 +116,20 @@ module.exports = class Renderer {
       Object.keys(type)
         .map(async (name) => {
           const dirPath = await this.generateCategoryMetafileType(
-            type[name],
+            (type as Record<string, any>)[name],
             name,
             rootTypeName,
           );
 
-          return this.renderTypeEntities(dirPath, name, type[name]);
+          return this.renderTypeEntities(dirPath, name, (type as Record<string, any>)[name]);
         })
         .filter((res) => typeof res !== "undefined"),
     );
   }
 
-  async renderTypeEntities(dirPath, name, type) {
+  async renderTypeEntities(dirPath: string, name: string, type: unknown): Promise<Category | undefined> {
     const fileName = toSlug(name);
-    const filePath = path.join(path.normalize(dirPath), `${fileName}.mdx`);
+    const filePath = join(normalize(dirPath), `${fileName}.mdx`);
 
     let content;
     try {
@@ -134,18 +148,26 @@ module.exports = class Renderer {
       this.prettify ? prettifyMarkdown : undefined,
     );
 
-    const pagePath = path.relative(this.outputDir, filePath);
+    const pagePath = relative(this.outputDir, filePath);
     const page = pagePath.match(
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
     );
-    const slug = pathUrl.join(page.groups.category, page.groups.pageId);
 
-    return { category: startCase(page.groups.category), slug: slug };
+    if (typeof page === "undefined" || typeof page?.groups === "undefined") {
+      logger.warn(`An error occurred while processing file $filePath for type "${type}"`);
+      return undefined;
+    }
+
+    const slug = pathUrl.join(page.groups.category ?? "", page.groups.pageId);
+
+    return { category: startCase(page.groups.category), slug: slug } as Category;
   }
 
-  async renderSidebar() {
+  async renderSidebar(): Promise<string> {
+    const { schemaSidebar } = await import(`${ASSETS_LOCATION}/sidebar.json`);
+
     const sidebar = {
-      schemaSidebar: schemaSidebar.map((entry) => {
+      schemaSidebar: schemaSidebar.map((entry: any) => {
         switch (entry.type) {
           case "doc":
             entry.id = pathUrl.join(this.baseURL, HOMEPAGE_ID);
@@ -165,19 +187,19 @@ module.exports = class Renderer {
 module.exports = ${JSON.stringify(sidebar, null, 2)};
 `;
 
-    const filePath = path.join(this.outputDir, SIDEBAR);
+    const filePath = join(this.outputDir, SIDEBAR);
     await saveFile(
       filePath,
       jsonSidebar,
       this.prettify ? prettifyJavascript : undefined,
     );
 
-    return path.relative("./", filePath);
+    return relative("./", filePath);
   }
 
-  async renderHomepage(homepageLocation) {
-    const homePage = path.basename(homepageLocation);
-    const destLocation = path.join(this.outputDir, homePage);
+  async renderHomepage(homepageLocation: string): Promise<void> {
+    const homePage = basename(homepageLocation);
+    const destLocation = join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
 
     await copyFile(homepageLocation, destLocation);

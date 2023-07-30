@@ -1,20 +1,22 @@
-const {
+import {
   getSchemaMap,
   loadSchema,
   getDocumentLoaders,
   getGroups,
   getCustomDirectives,
-  logger: Logger,
-} = require("@graphql-markdown/utils");
+  Logger,
+  SchemaEntities,
+} from "@graphql-markdown/utils";
 
-const Renderer = require("./renderer");
-const { hasChanges } = require("./diff");
-const { getPrinter } = require("./printer");
+import { Renderer } from "./renderer";
+import { hasChanges } from "./diff";
+import { getPrinter } from "./printer";
+import { Options } from "./config";
 
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;
 
-const generateDocFromSchema = async ({
+export const generateDocFromSchema = async ({
   baseURL,
   schemaLocation,
   outputDir,
@@ -31,12 +33,12 @@ const generateDocFromSchema = async ({
   skipDocDirective,
   customDirective,
   loggerModule,
-}) => {
+}: Options & {loggerModule?: string }): Promise<void> => {
   const start = process.hrtime.bigint();
 
   const logger = Logger.setInstance(loggerModule);
 
-  const loaders = getDocumentLoaders(loadersList);
+  const loaders = await getDocumentLoaders(loadersList);
   const schema = await loadSchema(schemaLocation, loaders);
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
@@ -46,10 +48,10 @@ const generateDocFromSchema = async ({
 
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
-  const groups = new getGroups(rootTypes, groupByDirective);
-  const printer = getPrinter(
+  const groups = getGroups(rootTypes, groupByDirective);
+  const printer = await getPrinter(
     // module mandatory
-    printerModule,
+    printerModule!,
 
     // config mandatory
     {
@@ -73,7 +75,7 @@ const generateDocFromSchema = async ({
 
   const pages = await Promise.all(
     Object.keys(rootTypes).map((typeName) =>
-      renderer.renderRootTypes(typeName, rootTypes[typeName]),
+      renderer.renderRootTypes(typeName as SchemaEntities, rootTypes[typeName as SchemaEntities]),
     ),
   );
 
@@ -97,5 +99,3 @@ const generateDocFromSchema = async ({
     `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
   );
 };
-
-module.exports = { generateDocFromSchema };

@@ -5,9 +5,19 @@
     "target": "es2021",
     "module": "commonjs",
     "moduleResolution": "node",
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": ".",
+    "rootDir": "packages"
+  },
+
+  "paths": {
+    "@graphql-markdown/core": ["packages/core/src/index.ts"],
+    "@graphql-markdown/docusaurus": ["packages/docusaurus/src/index.ts"],
+    "@graphql-markdown/diff": ["packages/diff/src/index.ts"],
+    "@graphql-markdown/printer-legacy": ["packages/printer-legacy/src/index.ts"],
+    "@graphql-inspector/utils": ["packages/utils/src/index.ts"]
   },
 
   "include": ["packages"],
-  "exclude": ["**/node_modules", "**/dist", "**/test-files"]
+  "exclude": ["**/node_modules", "**/dist", "**/tests"]
 }

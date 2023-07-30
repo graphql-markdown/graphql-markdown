@@ -26,7 +26,11 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test": "jest",
-    "stryker": "stryker run"
+    "stryker": "stryker run",
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "ts:check": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
     "@graphql-markdown/utils": "^1.5.1"
