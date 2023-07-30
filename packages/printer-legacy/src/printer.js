@@ -1,20 +1,15 @@
 const {
-  graphql: {
-    getTypeName,
-    hasDirective,
-    isDirectiveType,
-    isEnumType,
-    isInputType,
-    isInterfaceType,
-    isObjectType,
-    isOperation,
-    isScalarType,
-    isUnionType,
-  },
-} = require("@graphql-markdown/utils");
-
-const {
-  url: { pathUrl },
+  getTypeName,
+  hasDirective,
+  isDirectiveType,
+  isEnumType,
+  isInputType,
+  isInterfaceType,
+  isObjectType,
+  isOperation,
+  isScalarType,
+  isUnionType,
+  pathUrl,
 } = require("@graphql-markdown/utils");
 
 const { printRelations } = require("./relation");

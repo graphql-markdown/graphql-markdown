@@ -1,6 +1,7 @@
 const {
-  object: { hasMethod },
-  graphql: { getTypeName, getFields },
+  hasMethod,
+  getTypeName,
+  getFields,
 } = require("@graphql-markdown/utils");
 
 const { printSection, printMetadataSection } = require("../section");

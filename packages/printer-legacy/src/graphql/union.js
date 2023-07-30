@@ -1,6 +1,4 @@
-const {
-  graphql: { isUnionType, getTypeName },
-} = require("@graphql-markdown/utils");
+const { isUnionType, getTypeName } = require("@graphql-markdown/utils");
 
 const { printSection } = require("../section");
 

@@ -2,9 +2,10 @@ const { buildSchema } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
-    graphql: { getConstDirectiveMap: jest.fn() },
-    string: { escapeMDX: jest.fn() },
+    hasProperty: jest.fn(),
+    isEmpty: jest.fn(),
+    getConstDirectiveMap: jest.fn(),
+    escapeMDX: jest.fn(),
   };
 });
 const Utils = require("@graphql-markdown/utils");

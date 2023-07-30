@@ -1,8 +1,8 @@
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn() },
-    object: { hasProperty: jest.fn() },
-    graphql: { getNamedType: jest.fn() },
+    toSlug: jest.fn(),
+    hasProperty: jest.fn(),
+    getNamedType: jest.fn(),
   };
 });
 

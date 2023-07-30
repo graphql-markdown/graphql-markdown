@@ -1,4 +1,6 @@
-const logger = require("@graphql-markdown/utils").logger.getInstance();
+const { logger: Logger } = require("@graphql-markdown/utils");
+
+const logger = Logger.getInstance();
 
 const hasChanges = async (
   schema,

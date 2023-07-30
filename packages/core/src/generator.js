@@ -1,10 +1,12 @@
 const {
-  graphql: { getSchemaMap, loadSchema, getDocumentLoaders },
-  group: { getGroups },
-  directive: { getCustomDirectives },
+  getSchemaMap,
+  loadSchema,
+  getDocumentLoaders,
+  getGroups,
+  getCustomDirectives,
+  logger: Logger,
 } = require("@graphql-markdown/utils");
 
-const { logger: Logger } = require("@graphql-markdown/utils");
 const Renderer = require("./renderer");
 const { hasChanges } = require("./diff");
 const { getPrinter } = require("./printer");

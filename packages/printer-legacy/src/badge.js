@@ -1,7 +1,10 @@
 const {
-  graphql: { getNamedType, isDeprecated, isListType, isNonNullType },
-  object: { hasProperty },
-  string: { escapeMDX },
+  getNamedType,
+  isDeprecated,
+  isListType,
+  isNonNullType,
+  hasProperty,
+  escapeMDX,
 } = require("@graphql-markdown/utils");
 
 const { getLinkCategory } = require("./link");

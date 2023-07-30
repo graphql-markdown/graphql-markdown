@@ -1,7 +1,9 @@
 const {
-  graphql: { isDeprecated, getConstDirectiveMap },
-  object: { hasProperty, isEmpty },
-  string: { escapeMDX },
+  isDeprecated,
+  getConstDirectiveMap,
+  hasProperty,
+  isEmpty,
+  escapeMDX,
 } = require("@graphql-markdown/utils");
 
 const { getCustomDirectiveResolver } = require("./directive");

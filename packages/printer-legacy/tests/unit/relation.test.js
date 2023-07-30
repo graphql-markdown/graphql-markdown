@@ -2,24 +2,20 @@ const { GraphQLScalarType } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    graphql: {
-      getNamedType: jest.fn(),
-      getRelationOfReturn: jest.fn(),
-      isDirectiveType: jest.fn(),
-      isEnumType: jest.fn(),
-      isInputType: jest.fn(),
-      isInterfaceType: jest.fn(),
-      isObjectType: jest.fn(),
-      isOperation: jest.fn(),
-      isScalarType: jest.fn(),
-      isUnionType: jest.fn(),
-    },
-    object: { hasProperty: jest.fn() },
-    string: {
-      escapeMDX: jest.fn((s) => s),
-      toSlug: jest.fn(),
-    },
-    url: { pathUrl: jest.fn() },
+    getNamedType: jest.fn(),
+    getRelationOfReturn: jest.fn(),
+    isDirectiveType: jest.fn(),
+    isEnumType: jest.fn(),
+    isInputType: jest.fn(),
+    isInterfaceType: jest.fn(),
+    isObjectType: jest.fn(),
+    isOperation: jest.fn(),
+    isScalarType: jest.fn(),
+    isUnionType: jest.fn(),
+    hasProperty: jest.fn(),
+    escapeMDX: jest.fn((s) => s),
+    toSlug: jest.fn(),
+    pathUrl: jest.fn(),
   };
 });
 const Utils = require("@graphql-markdown/utils");

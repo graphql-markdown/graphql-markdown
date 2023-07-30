@@ -11,22 +11,22 @@ const {
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: { toSlug: jest.fn(), escapeMDX: jest.fn() },
-    url: { pathUrl: { join: jest.fn() } },
-    object: { hasProperty: jest.fn(), isEmpty: jest.fn() },
-    graphql: {
-      getConstDirectiveMap: jest.fn(),
-      getTypeName: jest.fn(),
-      hasDirective: jest.fn(),
-      isDirectiveType: jest.fn(),
-      isEnumType: jest.fn(),
-      isInputType: jest.fn(),
-      isInterfaceType: jest.fn(),
-      isObjectType: jest.fn(),
-      isOperation: jest.fn(),
-      isScalarType: jest.fn(),
-      isUnionType: jest.fn(),
-    },
+    toSlug: jest.fn(),
+    escapeMDX: jest.fn(),
+    pathUrl: { join: jest.fn() },
+    hasProperty: jest.fn(),
+    isEmpty: jest.fn(),
+    getConstDirectiveMap: jest.fn(),
+    getTypeName: jest.fn(),
+    hasDirective: jest.fn(),
+    isDirectiveType: jest.fn(),
+    isEnumType: jest.fn(),
+    isInputType: jest.fn(),
+    isInterfaceType: jest.fn(),
+    isObjectType: jest.fn(),
+    isOperation: jest.fn(),
+    isScalarType: jest.fn(),
+    isUnionType: jest.fn(),
   };
 });
 const Utils = require("@graphql-markdown/utils");

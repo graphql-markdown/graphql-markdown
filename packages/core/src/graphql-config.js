@@ -1,6 +1,8 @@
-const logger = require("@graphql-markdown/utils").logger.getInstance();
+const { logger: Logger } = require("@graphql-markdown/utils");
 
 const EXTENSION_NAME = "graphql-markdown";
+
+const logger = Logger.getInstance();
 
 const loadConfiguration = (
   id = undefined,
@@ -11,6 +13,7 @@ const loadConfiguration = (
   },
 ) => {
   let GraphQLConfig;
+
   try {
     // eslint-disable-next-line node/no-missing-require
     GraphQLConfig = require("graphql-config");

@@ -1,6 +1,9 @@
 const {
-  object: { hasProperty },
-  graphql: { isEnumType, getTypeName, isDeprecated, hasDirective },
+  hasProperty,
+  isEnumType,
+  getTypeName,
+  isDeprecated,
+  hasDirective,
 } = require("@graphql-markdown/utils");
 
 const { MARKDOWN_EOL, DEPRECATED } = require("../const/strings");

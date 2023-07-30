@@ -1,7 +1,7 @@
 const {
-  string: { toSlug },
-  object: { hasProperty },
-  graphql: { getNamedType },
+  toSlug,
+  hasProperty,
+  getNamedType,
 } = require("@graphql-markdown/utils");
 
 const getGroup = (type, groups, typeCategory) => {

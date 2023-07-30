@@ -1,9 +1,7 @@
 const { join } = require("path");
 const { tmpdir } = require("os");
 
-const {
-  object: { hasProperty },
-} = require("@graphql-markdown/utils");
+const { hasProperty } = require("@graphql-markdown/utils");
 
 const { loadConfiguration } = require("./graphql-config");
 

@@ -9,7 +9,7 @@ import * as graphqlLoad from "@graphql-tools/load";
 
 jest.mock("@graphql-inspector/core");
 import * as inspector from "@graphql-inspector/core";
-import type { Change } from "@graphql-inspector/core";
+import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
 
 import {
   checkSchemaChanges,

@@ -1,6 +1,4 @@
-const {
-  graphql: { getTypeName },
-} = require("@graphql-markdown/utils");
+const { getTypeName } = require("@graphql-markdown/utils");
 
 const { printSection, printMetadataSection } = require("../section");
 const { printCodeField } = require("../code");

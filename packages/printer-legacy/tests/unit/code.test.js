@@ -2,13 +2,11 @@ const { GraphQLDirective, GraphQLString } = require("graphql");
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    object: { hasProperty: jest.fn(() => true) },
-    graphql: {
-      getDefaultValue: jest.fn((type) => type?.defaultValue),
-      getTypeName: jest.fn((t) => t.name ?? t.toString()),
-      hasDirective: jest.fn(),
-      isDeprecated: jest.fn((t) => t.isDeprecated || false),
-    },
+    hasProperty: jest.fn(() => true),
+    getDefaultValue: jest.fn((type) => type?.defaultValue),
+    getTypeName: jest.fn((t) => t.name ?? t.toString()),
+    hasDirective: jest.fn(),
+    isDeprecated: jest.fn((t) => t.isDeprecated || false),
   };
 });
 const Utils = require("@graphql-markdown/utils");

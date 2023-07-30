@@ -1,6 +1,9 @@
 const {
-  object: { hasProperty },
-  graphql: { getDefaultValue, getTypeName, isDeprecated, hasDirective },
+  hasProperty,
+  getDefaultValue,
+  getTypeName,
+  isDeprecated,
+  hasDirective,
 } = require("@graphql-markdown/utils");
 
 const {

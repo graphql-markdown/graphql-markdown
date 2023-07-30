@@ -1,7 +1,9 @@
 const {
-  graphql: { isParametrizedField, hasDirective, isDeprecated },
+  hasProperty,
+  isParametrizedField,
+  hasDirective,
+  isDeprecated,
 } = require("@graphql-markdown/utils");
-const { hasProperty } = require("@graphql-markdown/utils/src/object");
 
 const { printDescription } = require("./common");
 const { printBadges } = require("./badge");

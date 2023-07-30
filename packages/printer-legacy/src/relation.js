@@ -1,10 +1,8 @@
 const {
-  graphql: {
-    getRelationOfField,
-    getRelationOfImplementation,
-    getRelationOfReturn,
-    isOperation,
-  },
+  getRelationOfField,
+  getRelationOfImplementation,
+  getRelationOfReturn,
+  isOperation,
 } = require("@graphql-markdown/utils");
 
 const { getRelationLink } = require("./link");

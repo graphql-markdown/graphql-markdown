@@ -5,7 +5,7 @@ const {
 } = require("graphql");
 
 const {
-  graphql: { getConstDirectiveMap },
+  getConstDirectiveMap,
 } = require("@graphql-markdown/utils");
 
 const {

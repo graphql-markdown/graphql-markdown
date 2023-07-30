@@ -1,29 +1,23 @@
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    string: {
-      toSlug: jest.fn(),
-      escapeMDX: jest.fn((t) => t),
-    },
-    url: { pathUrl: jest.fn() },
-    object: {
-      hasProperty: jest.fn(),
-      isEmpty: jest.fn(() => false),
-    },
-    graphql: {
-      isNonNullType: jest.fn(),
-      isListType: jest.fn(),
-      isOperation: jest.fn(),
-      isEnumType: jest.fn(),
-      isUnionType: jest.fn(),
-      isInterfaceType: jest.fn(),
-      isObjectType: jest.fn(),
-      isInputType: jest.fn(),
-      isScalarType: jest.fn(),
-      isDirectiveType: jest.fn(),
-      isDeprecated: jest.fn(),
-      getNamedType: jest.fn(),
-      getConstDirectiveMap: jest.fn(),
-    },
+    toSlug: jest.fn(),
+    escapeMDX: jest.fn((t) => t),
+    pathUrl: jest.fn(),
+    hasProperty: jest.fn(),
+    isEmpty: jest.fn(() => false),
+    isNonNullType: jest.fn(),
+    isListType: jest.fn(),
+    isOperation: jest.fn(),
+    isEnumType: jest.fn(),
+    isUnionType: jest.fn(),
+    isInterfaceType: jest.fn(),
+    isObjectType: jest.fn(),
+    isInputType: jest.fn(),
+    isScalarType: jest.fn(),
+    isDirectiveType: jest.fn(),
+    isDeprecated: jest.fn(),
+    getNamedType: jest.fn(),
+    getConstDirectiveMap: jest.fn(),
   };
 });
 const Utils = require("@graphql-markdown/utils");

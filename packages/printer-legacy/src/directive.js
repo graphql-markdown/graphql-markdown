@@ -1,6 +1,4 @@
-const {
-  graphql: { getConstDirectiveMap },
-} = require("@graphql-markdown/utils");
+const { getConstDirectiveMap } = require("@graphql-markdown/utils");
 const {
   HEADER_SECTION_LEVEL,
   HEADER_SECTION_SUB_LEVEL,

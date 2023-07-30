@@ -1,6 +1,4 @@
-const {
-  graphql: { getTypeName },
-} = require("@graphql-markdown/utils");
+const { getTypeName } = require("@graphql-markdown/utils");
 
 const { HEADER_SECTION_LEVEL, MARKDOWN_EOP } = require("../const/strings");
 
