@@ -9,52 +9,6 @@ exports[`graphql getConstDirectiveMap returns custom directives map 1`] = `
 }
 `;
 
-exports[`graphql getDirective return empty list if the type has no directive 1`] = `"[]"`;
-
-exports[`graphql getDirective return empty list if the type has no matching directive 1`] = `"[]"`;
-
-exports[`graphql getDirective return list if the type has matching directive 1`] = `
-"[
-  {
-    "kind": "Directive",
-    "name": {
-      "kind": "Name",
-      "value": "foobaz",
-      "loc": {
-        "start": 130,
-        "end": 136
-      }
-    },
-    "arguments": [],
-    "loc": {
-      "start": 129,
-      "end": 136
-    }
-  }
-]"
-`;
-
-exports[`graphql getDirective return list if the type has one matching directive 1`] = `
-"[
-  {
-    "kind": "Directive",
-    "name": {
-      "kind": "Name",
-      "value": "foobaz",
-      "loc": {
-        "start": 130,
-        "end": 136
-      }
-    },
-    "arguments": [],
-    "loc": {
-      "start": 129,
-      "end": 136
-    }
-  }
-]"
-`;
-
 exports[`graphql getFields() returns list of type fields 1`] = `
 "[
   {
