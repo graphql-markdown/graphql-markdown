@@ -17,8 +17,6 @@ import {
   GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
-  GraphQLField,
-  GraphQLFieldMap,
   GraphQLFloat,
   GraphQLID,
   GraphQLInputObjectType,
