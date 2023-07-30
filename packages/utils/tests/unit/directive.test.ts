@@ -5,6 +5,8 @@ import {
   getCustomDirectives,
   getCustomDirectiveOptions,
   isCustomDirective,
+  DirectiveName,
+  CustomDirective,
 } from "../../src/directive";
 
 describe("directive", () => {
@@ -49,19 +51,19 @@ describe("directive", () => {
     test("returns true if directive name listed in customDirectives", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testA", customDirectiveOptions)).toBeTruthy();
+      expect(isCustomDirective("testA" as DirectiveName, customDirectiveOptions)).toBeTruthy();
     });
 
     test("returns true if customDirective has wildcard", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testB", { "*": {} })).toBeTruthy();
+      expect(isCustomDirective("testB" as DirectiveName, { ["*" as DirectiveName]: {} })).toBeTruthy();
     });
 
     test("returns false if no match", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testC", customDirectiveOptions)).toBeFalsy();
+      expect(isCustomDirective("testC" as DirectiveName, customDirectiveOptions)).toBeFalsy();
     });
   });
 
@@ -69,30 +71,30 @@ describe("directive", () => {
     test("returns specific description if match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getCustomDirectiveOptions("testA", {
-        "*": { descriptor: wildcard },
+      const descriptorDirective = getCustomDirectiveOptions("testA" as DirectiveName, {
+        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
         ...customDirectiveOptions,
-      });
+      })!;
 
-      expect(descriptorDirective!.descriptor).toBeDefined();
+      expect(descriptorDirective.descriptor).toBeDefined();
 
       expect(
-        descriptorDirective!.descriptor(undefined, schemaMap.directives.testA),
+        descriptorDirective.descriptor!(undefined, schemaMap.directives.testA),
       ).toBe("Test testA");
     });
 
     test("returns wildcard description if wildcard match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getCustomDirectiveOptions("testB", {
-        "*": { descriptor: wildcard },
+      const descriptorDirective = getCustomDirectiveOptions("testB" as DirectiveName, {
+        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
         ...customDirectiveOptions,
-      });
+      })!;
 
-      expect(descriptorDirective!.descriptor).toBeDefined();
+      expect(descriptorDirective.descriptor).toBeDefined();
 
       expect(
-        descriptorDirective!.descriptor(undefined, schemaMap.directives.testB),
+        descriptorDirective.descriptor!(undefined, schemaMap.directives.testB),
       ).toBe("TestWildcard testB");
     });
 
@@ -100,7 +102,7 @@ describe("directive", () => {
       expect.assertions(1);
 
       const descriptorDirective = getCustomDirectiveOptions(
-        "testC",
+        "testC" as DirectiveName,
         customDirectiveOptions,
       );
 
@@ -127,12 +129,12 @@ describe("directive", () => {
       const customDirectives = getCustomDirectives(
         schemaMap,
         customDirectiveOptions,
-      );
+      )!;
 
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives!["testA"].descriptor(
+        customDirectives["testA" as DirectiveName].descriptor!(
           undefined,
           schemaMap.directives.testA,
         ),
@@ -149,20 +151,20 @@ describe("directive", () => {
       expect.assertions(3);
 
       const customDirectives = getCustomDirectives(schemaMap, {
-        "*": { descriptor: wildcard },
-      });
+        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
+      })!;
 
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives!["testA"].descriptor(
+        customDirectives["testA" as DirectiveName].descriptor!(
           undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("TestWildcard testA");
 
       expect(
-        customDirectives!["testB"].descriptor(
+        customDirectives["testB" as DirectiveName].descriptor!(
           undefined,
           schemaMap.directives.testB,
         ),
@@ -173,21 +175,21 @@ describe("directive", () => {
       expect.assertions(3);
 
       const customDirectives = getCustomDirectives(schemaMap, {
-        "*": { descriptor: wildcard },
+        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
         ...customDirectiveOptions,
-      });
+      })!;
 
       expect(customDirectives).toMatchSnapshot();
 
       expect(
-        customDirectives!["testA"].descriptor(
+        customDirectives["testA" as DirectiveName].descriptor!(
           undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("Test testA");
 
       expect(
-        customDirectives!["testB"].descriptor(
+        customDirectives["testB" as DirectiveName].descriptor!(
           undefined,
           schemaMap.directives.testB,
         ),

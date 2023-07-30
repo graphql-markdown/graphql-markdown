@@ -160,8 +160,8 @@ export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, t
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
-export function hasAstNode<T extends unknown extends Record<any, any>>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
-  return typeof node["astNode"] === "object";
+export function hasAstNode<T extends unknown>(node: T): node is T & Required<{ astNode: ObjectTypeDefinitionNode }> {
+  return typeof (node as Record<string, any>)["astNode"] === "object";
 }
 
 function instanceOf<T extends Object>(obj: unknown, type: { new(): T }): obj is T {
@@ -298,17 +298,17 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
 
 export type SchemaEntities = "queries" | "mutations" | "subscriptions" | "directives" | "objects" | "unions" | "interfaces" | "enums" | "inputs" | "scalars"
 
-export type SchemaMap = {
-  queries: Record<string, GraphQLObjectType<any, any>>
-  mutations: Record<string, GraphQLObjectType<any, any>>
-  subscriptions: Record<string, GraphQLObjectType<any, any>>
+export type SchemaMap = Partial<{
+  queries: Record<string, GraphQLField<any, any>>
+  mutations: Record<string, GraphQLField<any, any>>
+  subscriptions: Record<string, GraphQLField<any, any>>
   directives: Record<string, GraphQLDirective>
   objects: Record<string, GraphQLObjectType<any, any>> | undefined
   unions: Record<string, GraphQLUnionType> | undefined
   interfaces: Record<string, GraphQLInterfaceType> | undefined
   enums: Record<string, GraphQLEnumType> | undefined
   inputs: Record<string, GraphQLInputObjectType> | undefined
-  scalars: Record<string, GraphQLScalarType<unknown, unknown>> | undefined; }
+  scalars: Record<string, GraphQLScalarType<unknown, unknown>> | undefined; }>
 
 export function getSchemaMap(schema: GraphQLSchema): SchemaMap {
   return {

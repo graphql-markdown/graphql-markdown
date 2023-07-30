@@ -1,26 +1,27 @@
-import type { ASTNode, GraphQLDirective, GraphQLNamedType } from "graphql";
+import type { GraphQLDirective } from "graphql";
 
 import { hasProperty, isEmpty } from "./object";
 
 export const WILDCARD_DIRECTIVE = "*";
 
 export interface CustomDirectiveFunction {
-  directive: GraphQLDirective
-  node: GraphQLNamedType | ASTNode
+  (directive?: GraphQLDirective, node?: any): any
+}
+
+export type CustomDirectiveOptions = {  
+  descriptor?: CustomDirectiveFunction
+  tag?: CustomDirectiveFunction
 }
 
 export type CustomDirective = {
-  [name: DirectiveName] : {  
-    descriptor?: CustomDirectiveFunction
-    tag?: CustomDirectiveFunction
-  }
+  [name: DirectiveName] : CustomDirectiveOptions
 }
 
 export type DirectiveName = string & {_opaque: typeof DirectiveName};
 declare const DirectiveName: unique symbol;
 
 export type CustomDirectiveMap = {
-  [name: DirectiveName]: { type: GraphQLDirective } & CustomDirective
+  [name: DirectiveName]: { type: GraphQLDirective } & CustomDirectiveOptions
 }
 
 export function getCustomDirectives(
@@ -64,7 +65,7 @@ export function getCustomDirectives(
 export function getCustomDirectiveOptions(
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
-): CustomDirective | undefined {
+): CustomDirectiveOptions | undefined {
   if (hasProperty(customDirectiveOptions, schemaDirectiveName) === true) {
     return customDirectiveOptions[schemaDirectiveName];
   }

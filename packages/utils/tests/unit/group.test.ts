@@ -1,6 +1,8 @@
-import { GraphQLNamedType, buildSchema } from "graphql";
+import { GraphQLFieldMap, GraphQLNamedType, GraphQLObjectType, buildSchema } from "graphql";
 
-import { getGroups, getGroupName } from "../../src/group";
+import { getGroups, getGroupName, GroupByDirectiveOptions } from "../../src/group";
+import { DirectiveName } from "../../src/directive";
+import { SchemaMap } from "../../src/graphql";
 
 describe("group-info", () => {
   const schema = buildSchema(`
@@ -34,16 +36,16 @@ describe("group-info", () => {
     }
   `);
 
-  const groupOptions = {
+  const groupOptions: GroupByDirectiveOptions = {
     fallback: "common",
-    directive: "doc",
+    directive: "doc" as DirectiveName,
     field: "category",
   };
 
   describe("getGroups()", () => {
-    const schemaMap = {
-      objects: schema.getTypeMap(),
-      queries: schema?.getQueryType()?.getFields(),
+    const schemaMap: SchemaMap = {
+      objects: schema.getTypeMap() as Record<string, GraphQLObjectType<any, any>>,
+      queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<any, any>,
     };
 
     test("returns undefined if groupByDirective not defined", () => {

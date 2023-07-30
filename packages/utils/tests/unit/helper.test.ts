@@ -8,7 +8,6 @@ jest.mock("graphql", () => {
   };
 });
 import graphql from "graphql";
-
 import type { GraphQLDirective, GraphQLNamedType } from "graphql";
 
 import { directiveDescriptor, directiveTag } from "../../src/helper";
