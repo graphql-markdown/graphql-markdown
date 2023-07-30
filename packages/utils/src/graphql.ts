@@ -378,7 +378,7 @@ export function getRelationOfField(type: unknown, schema: GraphQLSchema): Record
       const fields = Object.assign(
         {},
         (isParametrizedField(relationType) && relationType.args) ?? {},
-        (!isDirectiveType(relationType) && relationType.getFields() )?? {},
+        (!isDirectiveType(relationType) && 'getFields' in relationType && relationType.getFields() ) ?? {},
       );
       for (const fieldDef of Object.values(fields) as any) {
         if (isNamedType(type) && getNamedType(fieldDef.type as GraphQLType).name === type.name) {
