@@ -32,6 +32,7 @@ import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools
 
 import { convertArrayToObject } from "./array";
 import { hasMethod, hasProperty, isEmpty } from "./object";
+import { Loader } from "graphql-config";
 
 enum OperationTypeNodeName {
   query = OperationTypeNode.QUERY,
@@ -63,8 +64,8 @@ export async function loadSchema(schemaLocation: string, options: LoadSchemaOpti
   return new GraphQLSchema(config);
 }
 
-export async function getDocumentLoaders(loadersList: Record<string, any>): Promise<Record<string, any>> {
-  const loaders: unknown[] = [];
+export async function getDocumentLoaders(loadersList: Record<string, any>): Promise<LoadSchemaOptions> {
+  const loaders: Loader[] = [];
   const loaderOptions: Record<string, any> = {};
 
   Object.entries(loadersList).forEach(async ([className, graphqlDocumentLoader]) => {
@@ -295,7 +296,19 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 }
 
-export function getSchemaMap(schema: GraphQLSchema) {
+export type SchemaMap = { 
+  queries: Record<string, GraphQLObjectType<any, any>>
+  mutations: Record<string, GraphQLObjectType<any, any>>
+  subscriptions: Record<string, GraphQLObjectType<any, any>>
+  directives: Record<string, GraphQLDirective>
+  objects: Record<string, GraphQLObjectType<any, any>> | undefined
+  unions: Record<string, GraphQLUnionType> | undefined
+  interfaces: Record<string, GraphQLInterfaceType> | undefined
+  enums: Record<string, GraphQLEnumType> | undefined
+  inputs: Record<string, GraphQLInputObjectType> | undefined
+  scalars: Record<string, GraphQLScalarType<unknown, unknown>> | undefined; }
+
+export function getSchemaMap(schema: GraphQLSchema): SchemaMap {
   return {
     queries: getIntrospectionFieldsList(
       schema.getQueryType() ?? undefined
