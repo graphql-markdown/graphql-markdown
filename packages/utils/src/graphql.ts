@@ -1,6 +1,5 @@
 import {
   ASTNode,
-  ConstDirectiveNode,
   DirectiveDefinitionNode,
   DirectiveNode,
   GraphQLDirective,
@@ -30,8 +29,7 @@ import {
   isEnumType,
   isListType,
   isNamedType,
-  OperationTypeNode,
-  typeFromAST
+  OperationTypeNode
 } from "graphql";
 import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
 
@@ -39,9 +37,9 @@ import { convertArrayToObject } from "./array";
 import { hasMethod, hasProperty, isEmpty } from "./object";
 
 enum OperationTypeNodeName {
-  Query = OperationTypeNode.QUERY,
-  Mutation = OperationTypeNode.MUTATION,
-  Subscription = OperationTypeNode.SUBSCRIPTION,
+  query = OperationTypeNode.QUERY,
+  mutation = OperationTypeNode.MUTATION,
+  subscription = OperationTypeNode.SUBSCRIPTION,
 };
 
 export async function loadSchema(schemaLocation: string, options: LoadSchemaOptions & { rootTypes?: Partial<Record<OperationTypeNodeName, string>> }) {
@@ -137,7 +135,7 @@ function formatDefaultValue(type: GraphQLType, defaultValue: unknown): unknown |
   }
 }
 
-export function getTypeFromSchema<T extends GraphQLType>(schema: GraphQLSchema | undefined | null): Record<string, T> | undefined {
+export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, type: any): Record<string, T> | undefined {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -160,7 +158,7 @@ export function getTypeFromSchema<T extends GraphQLType>(schema: GraphQLSchema |
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => instanceOf<T>(typeMap[key]))
+    .filter((key) => instanceOf(typeMap[key], type))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -168,8 +166,13 @@ export function hasAstNode<T extends Record<any, any>>(node: T): node is T & Req
   return typeof node["astNode"] === "object";
 }
 
-function instanceOf<T extends Partial<{ new(): T }>>(obj: Object): obj is T {
-  return obj.constructor.name == (<T> new Object()).constructor.name
+function instanceOf<T extends Object>(obj: unknown, type: { new(): T }): obj is T {
+  try {
+    const expect = type.name;
+    return (obj as Object).constructor.name == expect 
+  } catch (_) {
+    return false;
+  }
 }
 
 export function hasDirective(node: GraphQLType, directives?: string[] | string): boolean {
@@ -307,12 +310,12 @@ export function getSchemaMap(schema: GraphQLSchema) {
       schema.getSubscriptionType() ?? undefined,
     ),
     directives: convertArrayToObject<GraphQLDirective>(schema.getDirectives() as GraphQLDirective[]),
-    objects: getTypeFromSchema<GraphQLObjectType>(schema),
-    unions: getTypeFromSchema<GraphQLUnionType>(schema),
-    interfaces: getTypeFromSchema<GraphQLInterfaceType>(schema),
-    enums: getTypeFromSchema<GraphQLEnumType>(schema),
-    inputs: getTypeFromSchema<GraphQLInputObjectType>(schema),
-    scalars: getTypeFromSchema<GraphQLScalarType>(schema),
+    objects: getTypeFromSchema<GraphQLObjectType>(schema, GraphQLObjectType),
+    unions: getTypeFromSchema<GraphQLUnionType>(schema, GraphQLUnionType),
+    interfaces: getTypeFromSchema<GraphQLInterfaceType>(schema, GraphQLInterfaceType),
+    enums: getTypeFromSchema<GraphQLEnumType>(schema, GraphQLEnumType),
+    inputs: getTypeFromSchema<GraphQLInputObjectType>(schema, GraphQLInputObjectType),
+    scalars: getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType),
   };
 }
 

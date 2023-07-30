@@ -357,7 +357,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLObjectType>(schema);
+      const map = getTypeFromSchema<GraphQLObjectType>(schema, GraphQLObjectType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -365,7 +365,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLUnionType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLUnionType>(schema);
+      const map = getTypeFromSchema<GraphQLUnionType>(schema, GraphQLUnionType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -373,7 +373,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInterfaceType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLInterfaceType>(schema);
+      const map = getTypeFromSchema<GraphQLInterfaceType>(schema, GraphQLInterfaceType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -381,7 +381,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLEnumType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLEnumType>(schema);
+      const map = getTypeFromSchema<GraphQLEnumType>(schema, GraphQLEnumType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -389,7 +389,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInputObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLInputObjectType>(schema);
+      const map = getTypeFromSchema<GraphQLInputObjectType>(schema, GraphQLInputObjectType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -397,7 +397,7 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLScalarType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLScalarType>(schema);
+      const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -406,7 +406,7 @@ describe("graphql", () => {
       const schema = await gqlToolsLoadSchema(INTROSPECTION_SCHEMA_FILE, {
         loaders: [new JsonFileLoader()],
       });
-      const map = getTypeFromSchema<GraphQLScalarType>(schema);
+      const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
 
@@ -415,7 +415,7 @@ describe("graphql", () => {
       (schema) => {
         expect.hasAssertions();
 
-        const map = getTypeFromSchema<GraphQLScalarType>(schema);
+        const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
 
         expect(map).toBeUndefined();
       },
@@ -510,7 +510,7 @@ describe("graphql", () => {
     test("returns false if type is not an operation", () => {
       expect.hasAssertions();
 
-      const objects = getTypeFromSchema<GraphQLObjectType>(schema)!;
+      const objects = getTypeFromSchema<GraphQLObjectType>(schema, GraphQLObjectType)!;
       const res = isOperation(objects["Tweet"]);
 
       expect(res).toBeFalsy();
