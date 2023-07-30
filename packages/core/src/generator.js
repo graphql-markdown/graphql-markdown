@@ -44,7 +44,7 @@ const generateDocFromSchema = async ({
 
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
-  const groups = new getGroups(rootTypes, groupByDirective);
+  const groups = getGroups(rootTypes, groupByDirective);
   const printer = getPrinter(
     // module mandatory
     printerModule,
