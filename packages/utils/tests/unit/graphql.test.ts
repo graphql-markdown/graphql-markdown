@@ -31,6 +31,7 @@ import {
   GraphQLSchema,
   GraphQLString,
   GraphQLUnionType,
+  isDirective,
   ObjectTypeDefinitionNode,
 } from "graphql";
 
@@ -829,7 +830,7 @@ describe("graphql", () => {
       const type = schema.getType("Subscription")!;
       const actual = getDirective(type, "foobar");
 
-      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+      expect(actual).toHaveLength(0);
     });
 
     test("return empty list if the type has no matching directive", () => {
@@ -838,7 +839,7 @@ describe("graphql", () => {
       const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, "foobar");
 
-      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+      expect(actual).toHaveLength(0);
     });
 
     test("return list if the type has matching directive", () => {
@@ -847,7 +848,9 @@ describe("graphql", () => {
       const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, "foobaz");
 
-      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+      expect(actual).toHaveLength(1);
+      expect(actual[0].toString()).toBe("@foobaz");
+      expect(isDirective(actual[0])).toBeTruthy();
     });
 
     test("return list if the type has one matching directive", () => {
@@ -856,7 +859,9 @@ describe("graphql", () => {
       const type = schema.getType("StudyItem")!;
       const actual = getDirective(type, ["foobar", "foobaz"]);
 
-      expect(JSON.stringify(actual, null, 2)).toMatchSnapshot();
+      expect(actual).toHaveLength(1);
+      expect(actual[0].toString()).toBe("@foobaz");
+      expect(isDirective(actual[0])).toBeTruthy();
     });
   });
 
@@ -908,21 +913,27 @@ describe("graphql", () => {
     test("returns undefined when config is not set", () => {
       expect.assertions(1);
 
-      expect(getConstDirectiveMap(type, { customDirectives: undefined })).toBeUndefined();
+      const map = getConstDirectiveMap(type, { customDirectives: undefined });
+
+      expect(map).toBeUndefined();
     });
 
     test("returns undefined when config custom directive does not exist", () => {
       expect.assertions(1);
 
+      const map = getConstDirectiveMap(typeWithoutDirective, options);
+
       expect(
-        getConstDirectiveMap(typeWithoutDirective, options),
+        map
       ).toBeUndefined();
     });
 
     test("returns custom directives map", () => {
       expect.assertions(1);
 
-      expect(getConstDirectiveMap(type, options)).toMatchSnapshot();
+      const map = getConstDirectiveMap(type, options);
+
+      expect(map).toMatchSnapshot();
     });
   });
 

@@ -1,5 +1,7 @@
-import type {
+import {
   ASTNode,
+  ConstDirectiveNode,
+  DirectiveDefinitionNode,
   DirectiveNode,
   GraphQLDirective,
   GraphQLEnumType,
@@ -28,7 +30,8 @@ import {
   isEnumType,
   isListType,
   isNamedType,
-  OperationTypeNode
+  OperationTypeNode,
+  typeFromAST
 } from "graphql";
 import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
 
@@ -181,8 +184,8 @@ export function hasDirective(node: GraphQLType, directives?: string[] | string):
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return (
-    node.astNode.directives.findIndex((directive: GraphQLDirective) =>
-      directiveList.includes(directive.name),
+    node.astNode.directives.findIndex((directiveNode: DirectiveNode) =>
+    directiveList.includes(directiveNode.name.value),
     ) > -1
   );
 }
@@ -198,27 +201,37 @@ export function getDirective(node: GraphQLType, directives?: string[] | string):
 
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
-  return node.astNode.directives.filter((directive: GraphQLDirective) =>
-    directiveList.includes(directive.name),
+  return node.astNode.directives
+  .filter((directiveNode: DirectiveDefinitionNode) =>
+    directiveList.includes(directiveNode.name.value),
+  )
+  .map((directiveNode: DirectiveDefinitionNode) => 
+    new GraphQLDirective ({
+      name: directiveNode.name.value,
+      description: directiveNode.description?.value,
+      locations: [],
+      extensions: undefined,
+      astNode: directiveNode
+    })
   );
 }
 
 export function getConstDirectiveMap(
   node: GraphQLNamedType,
-  { customDirectives }: Record<string, any> & { customDirectives: Record<string, any> | undefined },
+  options: Record<string, any> & { customDirectives: Record<string, any> | undefined },
 ): Record<string,any> | undefined {
-  if (typeof customDirectives === "undefined" || isEmpty(customDirectives)) {
+  if (typeof options.customDirectives === "undefined" || isEmpty(options.customDirectives)) {
     return undefined;
   }
 
-  const constDirectives = getDirective(node, Object.keys(customDirectives));
+  const constDirectives = getDirective(node, Object.keys(options.customDirectives));
   if (constDirectives.length === 0) {
     return undefined;
   }
 
   return constDirectives.reduce((directiveMap, constDirective) => {
     const name = constDirective.name;
-    directiveMap[name] = customDirectives[name];
+    directiveMap[name] = options.customDirectives![name];
     return directiveMap;
   }, {} as Record<string,any>);
 }
