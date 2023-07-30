@@ -100,20 +100,20 @@ describe("graphql", () => {
   });
 
   describe("getDocumentLoaders()", () => {
-    test("returns loaders when plugin config loaders format is a string", () => {
+    test("returns loaders when plugin config loaders format is a string", async () => {
       expect.hasAssertions();
 
       const loaders = {
         GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
       };
       const { loaders: documentLoaders, ...loaderOptions } =
-        getDocumentLoaders(loaders);
+        await getDocumentLoaders(loaders);
 
       expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
       expect(loaderOptions).toMatchObject({});
     });
 
-    test("returns loaders and configuration when plugin config loaders format is an object", () => {
+    test("returns loaders and configuration when plugin config loaders format is an object", async () => {
       expect.hasAssertions();
 
       const loaders = {
@@ -125,7 +125,7 @@ describe("graphql", () => {
         },
       };
       const { loaders: documentLoaders, ...loaderOptions } =
-        getDocumentLoaders(loaders);
+        await getDocumentLoaders(loaders);
 
       expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
       expect(loaderOptions).toMatchObject({

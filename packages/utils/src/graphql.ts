@@ -63,13 +63,13 @@ export async function loadSchema(schemaLocation: string, options: LoadSchemaOpti
   return new GraphQLSchema(config);
 }
 
-export function getDocumentLoaders(loadersList: Record<string, any>): Record<string, any> {
+export async function getDocumentLoaders(loadersList: Record<string, any>): Promise<Record<string, any>> {
   const loaders: unknown[] = [];
   const loaderOptions: Record<string, any> = {};
 
-  Object.entries(loadersList).forEach(([className, graphqlDocumentLoader]) => {
+  Object.entries(loadersList).forEach(async ([className, graphqlDocumentLoader]) => {
     if (typeof graphqlDocumentLoader === "string") {
-      const { [className]: Loader } = require(graphqlDocumentLoader);
+      const { [className]: Loader } = await import(graphqlDocumentLoader);
       loaders.push(new Loader());
     } else {
       if (
@@ -80,7 +80,7 @@ export function getDocumentLoaders(loadersList: Record<string, any>): Record<str
           `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
         );
       }
-      const { [className]: Loader } = require(graphqlDocumentLoader.module);
+      const { [className]: Loader } = await import(graphqlDocumentLoader.module);
       loaders.push(new Loader());
       Object.assign(loaderOptions, graphqlDocumentLoader.options);
     }
