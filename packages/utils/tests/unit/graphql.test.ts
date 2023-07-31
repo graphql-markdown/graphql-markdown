@@ -55,6 +55,7 @@ import  {
   isOperation,
   isParametrizedField,
   loadSchema,
+  LoaderOption,
 } from "../../src/graphql";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -104,8 +105,8 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       const loaders = {
-        GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
-      };
+        "GraphQLFileLoader": "@graphql-tools/graphql-file-loader",
+      } as LoaderOption;
       const { loaders: documentLoaders, ...loaderOptions } =
         await getDocumentLoaders(loaders);
 
@@ -123,7 +124,7 @@ describe("graphql", () => {
             option1: true,
           },
         },
-      };
+      } as LoaderOption;
       const { loaders: documentLoaders, ...loaderOptions } =
         await getDocumentLoaders(loaders);
 
@@ -133,13 +134,11 @@ describe("graphql", () => {
       });
     });
 
-    test("throw an error when loader list is invalid", () => {
+    test("throw an error when loader list is invalid", async () => {
       expect.hasAssertions();
 
-      const loaders = { GraphQLFileLoader: {} };
-      expect(() => {
-        getDocumentLoaders(loaders);
-      }).toThrow(Error);
+      const loaders = { "GraphQLFileLoader" : {} } as LoaderOption;
+      await expect(getDocumentLoaders(loaders)).rejects.toThrow(`Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`);
     });
   });
 

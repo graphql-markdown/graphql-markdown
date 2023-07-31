@@ -87,15 +87,15 @@ export async function loadSchema(schemaLocation: string, options: LoadSchemaOpti
 
 export async function getDocumentLoaders(loadersList: LoaderOption): Promise<LoadSchemaOptions> {
   const loaders: Loader[] = [];
-  const loaderOptions: Record<string, any> = {};
+  const loaderOptions: PackageOptionsConfig = {};
 
-  Object.entries(loadersList).forEach(async ([className, graphqlDocumentLoader]) => {
+  for (const [className, graphqlDocumentLoader] of Object.entries(loadersList)) {
     if (typeof graphqlDocumentLoader === "string") {
       const { [className]: Loader } = await import(graphqlDocumentLoader);
       loaders.push(new Loader());
     } else {
       if (
-        typeof graphqlDocumentLoader.module !== "string" ||
+        typeof graphqlDocumentLoader.module === "undefined" ||
         graphqlDocumentLoader.module == null
       ) {
         throw new Error(
@@ -106,7 +106,7 @@ export async function getDocumentLoaders(loadersList: LoaderOption): Promise<Loa
       loaders.push(new Loader());
       Object.assign(loaderOptions, graphqlDocumentLoader.options);
     }
-  });
+  }
 
   if (loaders.length < 1) {
     throw new Error("No GraphQL document loaders available.");
