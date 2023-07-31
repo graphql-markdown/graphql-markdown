@@ -12,7 +12,7 @@ import {
   Logger
 } from "@graphql-markdown/utils";
 
-import { Printer } from "./printer";
+import { IPrinter } from "./printer";
 import { ASSETS_LOCATION, ConfigDocOptions, TypeDeprecatedOption } from "./config";
 
 
@@ -33,11 +33,11 @@ export class Renderer {
   group: SchemaEntitiesGroupMap | undefined;
   outputDir: string;
   baseURL: string;
-  printer: Printer;
+  printer: IPrinter;
   prettify: boolean;
   options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
 
-  constructor(printer: Printer, outputDir: string, baseURL: string, group: SchemaEntitiesGroupMap | undefined, prettify: boolean, docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption }) {
+  constructor(printer: IPrinter, outputDir: string, baseURL: string, group: SchemaEntitiesGroupMap | undefined, prettify: boolean, docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption }) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;

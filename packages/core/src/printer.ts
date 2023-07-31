@@ -4,16 +4,16 @@ import type { DirectiveName, CustomDirectiveMap, PackageName } from "@graphql-ma
 
 import type { ConfigPrintTypeOptions, TypeDeprecatedOption } from "./config";
 
-export interface Printer {
-  init: (schema: GraphQLSchema, baseURL: string, linkRoot: string, options: PrinterOptions) => void
-  printHeader: (id: string, title: string, options: PrinterOptions) => string
-  printDescription: (type: unknown, options: PrinterOptions, noText: string) => string
-  printCode: (type: unknown, options: PrinterOptions) => string
-  printCustomDirectives: (type: unknown, options: PrinterOptions) => string
-  printCustomTags: (type: unknown, options: PrinterOptions) => string
-  printTypeMetadata: (type: unknown, options: PrinterOptions) => string
-  printRelations: (type: unknown, options: PrinterOptions) => string
-  printType: (name: string, type: unknown, options: PrinterOptions) => string
+export abstract class IPrinter {
+  abstract init(schema: GraphQLSchema, baseURL: string, linkRoot: string, options: PrinterOptions): void
+  abstract printHeader(id: string, title: string, options: PrinterOptions): string
+  abstract printDescription(type: unknown, options: PrinterOptions, noText: string): string
+  abstract printCode(type: unknown, options: PrinterOptions): string
+  abstract printCustomDirectives(type: unknown, options: PrinterOptions): string
+  abstract printCustomTags(type: unknown, options: PrinterOptions): string
+  abstract printTypeMetadata(type: unknown, options: PrinterOptions): string
+  abstract printRelations(type: unknown, options: PrinterOptions): string
+  abstract printType(name: string, type: unknown, options: PrinterOptions): string
 }
 
 export type PrinterConfig = {
@@ -30,9 +30,7 @@ export type PrinterOptions = {
   deprecated?: TypeDeprecatedOption
 }
 
-export const getPrinter = async (printerModule?: PackageName, config?: PrinterConfig, options?: PrinterOptions): Promise<Printer> => {
-  let Printer: Printer;
-
+export const getPrinter = async (printerModule?: PackageName, config?: PrinterConfig, options?: PrinterOptions): Promise<IPrinter> => {
   if (typeof printerModule !== "string") {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',
@@ -46,15 +44,16 @@ export const getPrinter = async (printerModule?: PackageName, config?: PrinterCo
   }
 
   try {
-    Printer = await import (printerModule);
-  } catch (error) {
+    const Printer = await import(printerModule);
+
+    const { schema, baseURL, linkRoot } = config;
+    Printer.init(schema, baseURL, linkRoot, { ...options });
+
+    return Printer;
+  } catch(error) {
     throw new Error(
-      `Cannot find module '${printerModule}' for @graphql-markdown/core in "printTypeOptions" settings.`,
+      `Cannot find module '${printerModule}' defined in "printTypeOptions" settings.`,
     );
   }
 
-  const { schema, baseURL, linkRoot } = config;
-  Printer.init(schema, baseURL, linkRoot, { ...options });
-
-  return Printer;
-};
+}

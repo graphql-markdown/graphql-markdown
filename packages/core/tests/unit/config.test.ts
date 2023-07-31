@@ -366,7 +366,7 @@ describe("config", () => {
       expect(getCustomDirectives(options, ["test" as DirectiveName])).toBeUndefined();
     });
 
-    test.only("throws an error if descriptor format is invalid", () => {
+    test("throws an error if descriptor format is invalid", () => {
       expect.assertions(1);
 
       const options = {
