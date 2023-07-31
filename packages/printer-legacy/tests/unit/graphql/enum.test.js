@@ -5,10 +5,9 @@ const {
   printEnumMetadata,
 } = require("../../../src/graphql/enum");
 
-const {
-  DEFAULT_OPTIONS,
-  OPTION_DEPRECATED,
-} = require("../../../src/const/options");
+const { DeprecatedOption } = require("core/src/config");
+
+const { DEFAULT_OPTIONS } = require("../../../src/const/options");
 
 describe("enum", () => {
   const type = new GraphQLEnumType({
@@ -53,7 +52,7 @@ describe("enum", () => {
 
       const metadata = printEnumMetadata(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: OPTION_DEPRECATED.GROUP,
+        printDeprecated: DeprecatedOption.GROUP,
       });
 
       expect(metadata).toMatchInlineSnapshot(`

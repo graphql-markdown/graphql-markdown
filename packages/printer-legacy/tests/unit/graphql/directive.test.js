@@ -5,9 +5,10 @@ const {
   DirectiveLocation,
 } = require("graphql");
 
+const { DeprecatedOption } = require("core/src/config");
+
 const {
   DEFAULT_OPTIONS,
-  OPTION_DEPRECATED,
 } = require("../../../src/const/options");
 
 const {
@@ -78,7 +79,7 @@ describe("directive", () => {
 
       const code = printDirectiveMetadata(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: OPTION_DEPRECATED.GROUP,
+        printDeprecated: DeprecatedOption.GROUP,
       });
 
       expect(code).toMatchInlineSnapshot(`

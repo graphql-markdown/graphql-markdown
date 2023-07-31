@@ -1,19 +1,23 @@
-const { getConstDirectiveMap } = require("@graphql-markdown/utils");
-const {
+import { getConstDirectiveMap } from "@graphql-markdown/utils";
+
+import {
   HEADER_SECTION_LEVEL,
   HEADER_SECTION_SUB_LEVEL,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-} = require("./const/strings");
-const { printLink } = require("./link");
-const { printBadge } = require("./badge");
+} from "./const/strings";
+import { Link } from "./link";
+import { Badge, printBadge } from "./badge";
+import { GraphQLArgument, GraphQLEnumValue, GraphQLField, GraphQLNamedType } from "graphql";
+import { Options } from "./const/options";
+import { MDXString } from "./const/mdx";
 
-function printCustomDirectives(type, options) {
+export const printCustomDirectives = (type: GraphQLNamedType, options: Options) => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
-    typeof constDirectiveMap !== "object" ||
-    !Object.keys(constDirectiveMap).length
+    typeof constDirectiveMap === "undefined" ||
+    Object.keys(constDirectiveMap).length < 1
   ) {
     return "";
   }
@@ -33,8 +37,8 @@ function printCustomDirectives(type, options) {
   return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 }
 
-function printCustomDirective(type, constDirectiveOption, options) {
-  const typeNameLink = printLink(constDirectiveOption.type, {
+export const printCustomDirective = (type: GraphQLNamedType, constDirectiveOption: { type: GraphQLNamedType } & Record<string, Function>, options: Options): string | undefined => {
+  const typeNameLink = Link.printLink(constDirectiveOption.type, {
     ...options,
     withAttributes: false,
   });
@@ -51,7 +55,7 @@ function printCustomDirective(type, constDirectiveOption, options) {
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 }
 
-function getCustomTags(type, options) {
+export const getCustomTags = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, options: Options): Badge[] => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
@@ -65,25 +69,25 @@ function getCustomTags(type, options) {
     .map((constDirectiveOption) =>
       getCustomDirectiveResolver("tag", type, constDirectiveOption),
     )
-    .filter((value) => typeof value !== "undefined");
+    .filter((value) => typeof value !== "undefined") as unknown as Badge[];
 }
 
-const printCustomTags = (type, options) => {
+export const printCustomTags = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, options: Options): string | MDXString => {
   const badges = getCustomTags(type, options);
 
   if (badges.length === 0) {
     return "";
   }
 
-  return badges.map((badge) => printBadge(badge)).join(" ");
+  return badges.map((badge) => printBadge(badge)).join(" ") as MDXString;
 };
 
-function getCustomDirectiveResolver(
-  resolver,
-  type,
-  constDirectiveOption,
-  fallback = undefined,
-) {
+export const getCustomDirectiveResolver = (
+  resolver: string,
+  type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue,
+  constDirectiveOption: { type: GraphQLNamedType } & Record<string, Function>,
+  fallback: string | undefined = undefined,
+): string | undefined => {
   if (
     typeof constDirectiveOption === "undefined" ||
     typeof constDirectiveOption[resolver] !== "function"
@@ -93,11 +97,3 @@ function getCustomDirectiveResolver(
 
   return constDirectiveOption[resolver](constDirectiveOption.type, type);
 }
-
-module.exports = {
-  getCustomDirectiveResolver,
-  getCustomTags,
-  printCustomDirective,
-  printCustomDirectives,
-  printCustomTags,
-};

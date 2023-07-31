@@ -1,4 +1,6 @@
-const {
+import { GraphQLArgument, GraphQLEnumValue, GraphQLField, GraphQLInterfaceType, GraphQLNamedType, GraphQLType } from "graphql/type/definition";
+
+import {
   getNamedType,
   getTypeName,
   hasDirective,
@@ -17,14 +19,21 @@ const {
   hasProperty,
   toSlug,
   pathUrl,
-} = require("@graphql-markdown/utils");
+  SchemaEntities,
+} from "@graphql-markdown/utils";
 
-const { getGroup } = require("./group");
-const { DEPRECATED, ROOT_TYPE_LOCALE } = require("./const/strings");
-const { OPTION_DEPRECATED } = require("./const/options");
+import { getGroup } from "./group";
+import { DEPRECATED, ROOT_TYPE_LOCALE, TypeLocale } from "./const/strings";
+import { Options,DeprecatedOption } from "./const/options";
+import { MDXString } from "./const/mdx";
 
-class Link {
-  static getLinkCategory = (graphLQLNamedType) => {
+export type TypeLink = {
+  text: string,
+  url: string,
+}
+
+export class Link {
+  static getLinkCategory = (graphLQLNamedType: GraphQLNamedType): TypeLocale | undefined => {
     switch (true) {
       case isDirectiveType(graphLQLNamedType):
         return ROOT_TYPE_LOCALE.DIRECTIVE;
@@ -46,8 +55,8 @@ class Link {
     return undefined;
   };
 
-  static toLink = (type, name, operation, options) => {
-    const fallback = {
+  static toLink = (type: GraphQLEnumValue | GraphQLNamedType | GraphQLArgument, name: string, operation?: TypeLocale, options?: Options): TypeLink => {
+    const fallback: TypeLink = {
       text: name,
       url: "#",
     };
@@ -56,13 +65,13 @@ class Link {
       return fallback;
     }
 
-    if (hasProperty(options, "skipDocDirective")) {
+    if (typeof options !== "undefined" && "skipDocDirective" in options) {
       if (hasDirective(type, options.skipDocDirective)) {
         return fallback;
       }
     }
 
-    const graphLQLNamedType = getNamedType(type);
+    const graphLQLNamedType = getNamedType(type as unknown as GraphQLType); // TODO: REVIEW
 
     let category = Link.getLinkCategory(graphLQLNamedType);
 
@@ -82,18 +91,18 @@ class Link {
       category = operation;
     }
 
-    const text = graphLQLNamedType.name || graphLQLNamedType;
+    const text = graphLQLNamedType.name || graphLQLNamedType.toString();
     const deprecated =
-      hasProperty(options, "printDeprecated") &&
-      options.printDeprecated === OPTION_DEPRECATED.GROUP &&
+    typeof options !== "undefined" && "deprecated" in options &&
+      options.deprecated === DeprecatedOption.GROUP &&
       isDeprecated(type)
         ? DEPRECATED
         : "";
-    const group = hasProperty(options, "groups")
-      ? getGroup(type, options.groups, category.plural)
+    const group = typeof options !== "undefined" && "groups" in options && typeof options.groups !== "undefined"
+      ? getGroup(type, options.groups, category.plural as SchemaEntities)
       : "";
     const url = pathUrl.join(
-      options.basePath,
+      options!.basePath,
       deprecated,
       group,
       category.plural,
@@ -103,37 +112,37 @@ class Link {
     return {
       text: text,
       url: url,
-    };
+    } as TypeLink;
   };
 
-  static getRelationLink = (category, type, options) => {
+  static getRelationLink = (category: TypeLocale, type: GraphQLNamedType, options: Options): TypeLink | undefined => {
     if (typeof category === "undefined") {
       return undefined;
     }
     return Link.toLink(type, type.name, category, options);
   };
 
-  static printParentLink = (type, options) => {
-    return hasProperty(type, "type")
-      ? `<Bullet />${Link.printLink(type.type, {
+  static printParentLink = (type: GraphQLNamedType | GraphQLArgument | GraphQLEnumValue | GraphQLInterfaceType | GraphQLField<any, any, any>, options: Options): string | MDXString => {
+    return "type" in type
+      ? `<Bullet />${Link.printLink(type.type as GraphQLNamedType, {
+        ...options,
           withAttributes: true,
-          ...options,
-        })}`
+        })}` as MDXString
       : "";
   };
 
-  static hasOptionWithAttributes = (options) =>
+  static hasOptionWithAttributes = (options: Options): boolean =>
     hasProperty(options, "withAttributes") === true &&
     options.withAttributes === true;
 
-  static hasOptionParentType = (options) =>
+  static hasOptionParentType = (options: Options): boolean =>
     hasProperty(options, "parentTypePrefix") &&
     options.parentTypePrefix === true &&
     hasProperty(options, "parentType") &&
     typeof options.parentType !== "undefined" &&
     options.parentType !== null;
 
-  static printLink = (type, options) => {
+  static printLink = (type: GraphQLEnumValue | GraphQLNamedType | GraphQLArgument | GraphQLInterfaceType | GraphQLField<any, any, any>, options: Options) => {
     let text;
 
     const link = Link.toLink(
@@ -156,13 +165,13 @@ class Link {
     return `[\`${text}\`](${link.url})`;
   };
 
-  static printLinkAttributes = (type, text) => {
+  static printLinkAttributes = (type: GraphQLEnumValue | GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any>, text: string) => {
     if (typeof type === "undefined" || type === null) {
       return text ?? "";
     }
 
-    if (!isLeafType(type, text) && typeof type.ofType != "undefined") {
-      text = Link.printLinkAttributes(type.ofType, text);
+    if (!isLeafType(type) && "ofType" in type && typeof type.ofType != "undefined") {
+      text = Link.printLinkAttributes(type.ofType as GraphQLNamedType, text);
     }
 
     if (isListType(type)) {
@@ -176,5 +185,3 @@ class Link {
     return text;
   };
 }
-
-module.exports = Link;

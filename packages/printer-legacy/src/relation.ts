@@ -1,33 +1,38 @@
-const {
+import { GraphQLNamedType, GraphQLSchema } from "graphql";
+
+import {
   getRelationOfField,
   getRelationOfImplementation,
   getRelationOfReturn,
   isOperation,
-} = require("@graphql-markdown/utils");
+} from "@graphql-markdown/utils";
 
-const { getRelationLink } = require("./link");
-const { DEFAULT_CSS_CLASSNAME, printBadge } = require("./badge");
-const {
+import { Link } from "./link";
+import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
+import {
   HEADER_SECTION_LEVEL,
   MARKDOWN_EOP,
   ROOT_TYPE_LOCALE,
-} = require("./const/strings");
+  RootTypeName,
+  TypeLocale,
+} from "./const/strings";
+import { Options } from "./const/options";
+import { MDXString } from "./const/mdx";
 
-const getRootTypeLocaleFromString = (text) => {
+export type IGetRelation = (type: GraphQLNamedType, schema: GraphQLSchema) => Record<string, GraphQLNamedType[]> | undefined;
+
+export const getRootTypeLocaleFromString = (text: string): TypeLocale | undefined => {
   for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
     if (Object.values(props).includes(text)) {
-      return ROOT_TYPE_LOCALE[type];
+      return ROOT_TYPE_LOCALE[type as RootTypeName];
     }
   }
   return undefined;
 };
 
-const printRelationOf = (type, section, getRelation, options) => {
+export const printRelationOf = (type: GraphQLNamedType, section: unknown, getRelation: IGetRelation, options: Options): string | MDXString => {
   if (
-    typeof type === "undefined" ||
-    typeof getRelation !== "function" ||
-    typeof options === "undefined" ||
-    isOperation(type)
+    isOperation(type) || typeof options.schema === "undefined"
   ) {
     return "";
   }
@@ -38,20 +43,20 @@ const printRelationOf = (type, section, getRelation, options) => {
     return "";
   }
 
-  let data = [];
+  let data: string[] = [];
   for (const [relation, types] of Object.entries(relations)) {
     if (types.length === 0) {
       continue;
     }
 
-    const category = getRootTypeLocaleFromString(relation);
+    const category = getRootTypeLocaleFromString(relation)!;
     const badge = printBadge({
       text: category.singular,
       classname: DEFAULT_CSS_CLASSNAME,
     });
     data = data.concat(
       types.map((t) => {
-        const link = getRelationLink(category, t, options);
+        const link = Link.getRelationLink(category, t, options);
         return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
     );
@@ -65,10 +70,10 @@ const printRelationOf = (type, section, getRelation, options) => {
     .sort((a, b) => a.localeCompare(b))
     .join("<Bullet />");
 
-  return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
-const printRelations = (type, options) => {
+export const printRelations = (type: GraphQLNamedType, options: Options): string | MDXString => {
   const relations = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,
@@ -80,11 +85,5 @@ const printRelations = (type, options) => {
     data += printRelationOf(type, section, getRelation, options);
   }
 
-  return data;
-};
-
-module.exports = {
-  getRootTypeLocaleFromString,
-  printRelationOf,
-  printRelations,
+  return data as MDXString;
 };

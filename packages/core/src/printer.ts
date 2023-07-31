@@ -1,19 +1,19 @@
 import type { GraphQLSchema } from "graphql/type/schema";
 
-import type { DirectiveName, CustomDirectiveMap, PackageName } from "@graphql-markdown/utils";
+import type { DirectiveName, CustomDirectiveMap, PackageName, SchemaEntitiesGroupMap } from "@graphql-markdown/utils";
 
 import type { ConfigPrintTypeOptions, TypeDeprecatedOption } from "./config";
 
-export abstract class IPrinter {
-  abstract init(schema: GraphQLSchema, baseURL: string, linkRoot: string, options: PrinterOptions): void
-  abstract printHeader(id: string, title: string, options: PrinterOptions): string
-  abstract printDescription(type: unknown, options: PrinterOptions, noText: string): string
-  abstract printCode(type: unknown, options: PrinterOptions): string
-  abstract printCustomDirectives(type: unknown, options: PrinterOptions): string
-  abstract printCustomTags(type: unknown, options: PrinterOptions): string
-  abstract printTypeMetadata(type: unknown, options: PrinterOptions): string
-  abstract printRelations(type: unknown, options: PrinterOptions): string
-  abstract printType(name: string, type: unknown, options: PrinterOptions): string
+export interface IPrinter {
+  init(schema: GraphQLSchema, baseURL: string, linkRoot: string, options: PrinterOptions): void
+  printHeader(id: string, title: string, options: PrinterOptions & PrinterConfig): string
+  printDescription(type: unknown, options: PrinterOptions & PrinterConfig, noText: string): string
+  printCode(type: unknown, options: PrinterOptions & PrinterConfig): string
+  printCustomDirectives(type: unknown, options: PrinterOptions & PrinterConfig): string
+  printCustomTags(type: unknown, options: PrinterOptions & PrinterConfig): string
+  printTypeMetadata(type: unknown, options: PrinterOptions & PrinterConfig): string
+  printRelations(type: unknown, options: PrinterOptions & PrinterConfig): string
+  printType(name: string, type: unknown, options: PrinterOptions & PrinterConfig): string
 }
 
 export type PrinterConfig = {
@@ -23,11 +23,11 @@ export type PrinterConfig = {
 }
 
 export type PrinterOptions = {
-  groups?: Record<string, any>,
-  printTypeOptions?: ConfigPrintTypeOptions
-  skipDocDirective?: DirectiveName[]
   customDirectives?: CustomDirectiveMap,
   deprecated?: TypeDeprecatedOption
+  groups?: SchemaEntitiesGroupMap,
+  printTypeOptions?: ConfigPrintTypeOptions
+  skipDocDirective?: DirectiveName[]
 }
 
 export const getPrinter = async (printerModule?: PackageName, config?: PrinterConfig, options?: PrinterOptions): Promise<IPrinter> => {

@@ -2,10 +2,9 @@ const { GraphQLID, GraphQLObjectType, GraphQLString } = require("graphql");
 
 const Utils = require("@graphql-markdown/utils");
 
-const {
-  DEFAULT_OPTIONS,
-  OPTION_DEPRECATED,
-} = require("../../../src/const/options");
+const { DeprecatedOption } = require("core/src/config");
+
+const { DEFAULT_OPTIONS } = require("../../../src/const/options");
 const {
   printOperationMetadata,
   printCodeOperation,
@@ -117,7 +116,7 @@ describe("operation", () => {
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: OPTION_DEPRECATED.GROUP,
+        printDeprecated: DeprecatedOption.GROUP,
         schema: {
           getType: () =>
             new GraphQLObjectType({

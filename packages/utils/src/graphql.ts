@@ -4,9 +4,11 @@ import {
   DirectiveNode,
   getDirectiveValues,
   getNamedType, 
+  GraphQLArgument, 
   GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
+  GraphQLEnumValue,
   GraphQLField,
   GraphQLFloat,
   GraphQLID,
@@ -194,7 +196,7 @@ function instanceOf<T extends Object>(obj: unknown, type: { new(): T }): obj is 
   }
 }
 
-export function hasDirective(node: GraphQLType, directives?: string[] | string): boolean {
+export function hasDirective(node: unknown, directives?: string[] | string): boolean {
   if (
     !hasAstNode(node) ||
     typeof directives === "undefined" ||
@@ -212,7 +214,7 @@ export function hasDirective(node: GraphQLType, directives?: string[] | string):
   );
 }
 
-export function getDirective(node: GraphQLType, directives?: string[] | string): GraphQLDirective[] {
+export function getDirective(node: GraphQLDirective | GraphQLType | GraphQLArgument | GraphQLEnumValue | GraphQLField<any, any, any>, directives?: string[] | string): GraphQLDirective[] {
   if (
     !hasAstNode(node) ||
     typeof directives === "undefined" ||
@@ -239,8 +241,8 @@ export function getDirective(node: GraphQLType, directives?: string[] | string):
 }
 
 export function getConstDirectiveMap(
-  node: GraphQLNamedType,
-  options: Record<string, any> & { customDirectives: Record<string, any> | undefined },
+  node: GraphQLNamedType | GraphQLArgument | GraphQLDirective | GraphQLField<any, any, any> | GraphQLEnumValue,
+  options: Record<string, any> & { customDirectives?: Record<string, any> },
 ): Record<string,any> | undefined {
   if (typeof options.customDirectives === "undefined" || isEmpty(options.customDirectives)) {
     return undefined;
@@ -476,7 +478,7 @@ export function isOperation(type: unknown): boolean {
   return hasProperty(type, "type");
 }
 
-export function isDeprecated(type: unknown) {
+export function isDeprecated<T>(type: T): type is T & Partial<{deprecationReason: string, isDeprecated: boolean}> {
   return (
     (hasProperty(type, "isDeprecated") && (<any>type).isDeprecated === true) ||
     (hasProperty(type, "deprecationReason") &&

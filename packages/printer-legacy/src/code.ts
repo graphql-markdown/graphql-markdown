@@ -1,25 +1,27 @@
-const {
+import { GraphQLDirective, GraphQLField, GraphQLNamedType } from "graphql";
+
+import {
   hasProperty,
   getDefaultValue,
   getTypeName,
   isDeprecated,
   hasDirective,
-} = require("@graphql-markdown/utils");
+} from "@graphql-markdown/utils";
 
-const {
+import {
   MARKDOWN_EOL,
   DEPRECATED,
   MARKDOWN_CODE_INDENTATION,
-} = require("./const/strings");
-const { OPTION_DEPRECATED } = require("./const/options");
+} from "./const/strings";
+import { Options, DeprecatedOption } from "./const/options";
 
-const printCodeField = (type, options = {}, indentationLevel = 0) => {
+export const printCodeField = (type: GraphQLField<any, any, any> | GraphQLDirective, options: Options, indentationLevel: number = 0) => {
   const skipDirective =
     hasProperty(options, "skipDocDirective") &&
     hasDirective(type, options.skipDocDirective) === true;
   const skipDeprecated =
     hasProperty(options, "printDeprecated") &&
-    options.printDeprecated === OPTION_DEPRECATED.SKIP &&
+    options.deprecated === DeprecatedOption.SKIP &&
     isDeprecated(type) === true;
   if (skipDirective === true || skipDeprecated === true) {
     return "";
@@ -27,15 +29,15 @@ const printCodeField = (type, options = {}, indentationLevel = 0) => {
 
   let code = `${getTypeName(type)}`;
   code += printCodeArguments(type, indentationLevel + 1);
-  code += `: ${getTypeName(type.type)}`;
+  code += `: ${getTypeName(type.type as GraphQLNamedType)}`;
   code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
   code += MARKDOWN_EOL;
 
   return code;
 };
 
-const printCodeArguments = (type, indentationLevel = 1) => {
-  if (!hasProperty(type, "args") || type.args.length === 0) {
+export const printCodeArguments = (type: GraphQLField<any, any, any> | GraphQLDirective, indentationLevel: number = 1) => {
+  if (!("args" in type) || type.args.length === 0) {
     return "";
   }
 
@@ -55,9 +57,4 @@ const printCodeArguments = (type, indentationLevel = 1) => {
   code += `${parentIndentation})`;
 
   return code;
-};
-
-module.exports = {
-  printCodeField,
-  printCodeArguments,
 };

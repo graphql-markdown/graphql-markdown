@@ -29,15 +29,14 @@ jest.mock("@graphql-markdown/utils", () => {
 });
 const Utils = require("@graphql-markdown/utils");
 
+const { DeprecatedOption } = require("core/src/config");
+
 jest.mock("../../src/group", () => {
   return { getGroup: jest.fn() };
 });
 const Group = require("../../src/group");
 
-const {
-  DEFAULT_OPTIONS,
-  OPTION_DEPRECATED,
-} = require("../../src/const/options");
+const { DEFAULT_OPTIONS } = require("../../src/const/options");
 const Link = require("../../src/link");
 
 describe("link", () => {
@@ -226,7 +225,7 @@ describe("link", () => {
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: OPTION_DEPRECATED.GROUP,
+        printDeprecated: DeprecatedOption.GROUP,
         basePath,
       });
 

@@ -1,4 +1,9 @@
-const {
+import { GraphQLDirective, GraphQLEnumType, GraphQLField, GraphQLInputObjectType, GraphQLInterfaceType, GraphQLNamedType, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLUnionType } from "graphql";
+
+import {
+  CustomDirectiveMap,
+  DirectiveName,
+  SchemaEntitiesGroupMap,
   getTypeName,
   hasDirective,
   isDirectiveType,
@@ -10,12 +15,12 @@ const {
   isScalarType,
   isUnionType,
   pathUrl,
-} = require("@graphql-markdown/utils");
+} from "@graphql-markdown/utils";
 
-const { printRelations } = require("./relation");
-const { printDescription } = require("./common");
-const { printCustomDirectives, printCustomTags } = require("./directive");
-const {
+import { printRelations } from "./relation";
+import { printDescription } from "./common";
+import { printCustomDirectives, printCustomTags } from "./directive";
+import {
   printCodeDirective,
   printCodeEnum,
   printCodeInput,
@@ -32,36 +37,45 @@ const {
   printOperationMetadata,
   printScalarMetadata,
   printUnionMetadata,
-} = require("./graphql");
-const {
+} from "./graphql";
+import {
   FRONT_MATTER,
   MARKDOWN_EOC,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   MARKDOWN_SOC,
-} = require("./const/strings");
-const mdx = require("./const/mdx");
+} from "./const/strings";
+import { MDXString, mdx } from "./const/mdx";
 
-const {
+import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
-} = require("./const/options");
+  Options,
+  ConfigPrintTypeOptions,
+  TypeDeprecatedOption
+} from "./const/options";
 
-class Printer {
-  static options;
+export class Printer {
+  static options: Options;
 
-  static init = (
-    schema,
-    baseURL,
-    linkRoot = "/",
-    { customDirectives, groups, printTypeOptions, skipDocDirective } = {
+  static init(
+    schema: GraphQLSchema,
+    baseURL: string,
+    linkRoot: string = "/",
+    { customDirectives, groups, printTypeOptions, skipDocDirective }: {
+      customDirectives?: CustomDirectiveMap,
+      deprecated?: TypeDeprecatedOption,
+      groups?: SchemaEntitiesGroupMap,
+      printTypeOptions?: ConfigPrintTypeOptions,
+      skipDocDirective?: DirectiveName[],
+    } = {
       customDirectives: undefined,
       groups: undefined,
       printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
       skipDocDirective: undefined,
     },
-  ) => {
-    if (typeof Printer.options !== "undefined" && Printer.options !== null) {
+  ): void {
+    if (typeof Printer.options !== "undefined") {
       return;
     }
 
@@ -75,9 +89,9 @@ class Printer {
       parentTypePrefix:
         printTypeOptions?.parentTypePrefix ??
         PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
-      printDeprecated:
+      deprecated:
         printTypeOptions?.deprecated ??
-        PRINT_TYPE_DEFAULT_OPTIONS.printDeprecated,
+        PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
       relatedTypeSection:
         printTypeOptions?.relatedTypeSection ??
         PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
@@ -88,12 +102,8 @@ class Printer {
     };
   };
 
-  static printHeader = (id, title, options) => {
-    const { toc, pagination } = {
-      toc: true,
-      pagination: true,
-      ...(options.header ?? undefined),
-    };
+  static printHeader = (id: string, title: string, options: Options): string => {
+    const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header;
     const pagination_buttons = pagination
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
@@ -112,7 +122,7 @@ class Printer {
 
   static printDescription = printDescription;
 
-  static printCode = (type, options) => {
+  static printCode = (type: unknown, options: Options): string => {
     let code = "";
 
     if (
@@ -124,28 +134,28 @@ class Printer {
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(type, options);
+        code += printCodeOperation(type as GraphQLField<any, any, any>, options);
         break;
       case isEnumType(type):
-        code += printCodeEnum(type, options);
+        code += printCodeEnum(type as GraphQLEnumType, options);
         break;
-      case isUnionType(type, options):
-        code += printCodeUnion(type, options);
+      case isUnionType(type):
+        code += printCodeUnion(type as GraphQLUnionType, options);
         break;
-      case isInterfaceType(type, options):
-        code += printCodeInterface(type, options);
+      case isInterfaceType(type):
+        code += printCodeInterface(type as GraphQLInterfaceType, options);
         break;
       case isObjectType(type):
-        code += printCodeObject(type, options);
+        code += printCodeObject(type as GraphQLObjectType, options);
         break;
       case isInputType(type):
-        code += printCodeInput(type, options);
+        code += printCodeInput(type as GraphQLInputObjectType, options);
         break;
       case isScalarType(type):
-        code += printCodeScalar(type, options);
+        code += printCodeScalar(type as GraphQLScalarType, options);
         break;
       case isDirectiveType(type):
-        code += printCodeDirective(type, options);
+        code += printCodeDirective(type as GraphQLDirective, options);
         break;
       default:
         code += `"${getTypeName(type)}" not supported`;
@@ -158,39 +168,37 @@ class Printer {
 
   static printCustomTags = printCustomTags;
 
-  static printTypeMetadata = (type, options) => {
-    let metadata;
-
+  static printTypeMetadata = (type: unknown, options: Options): string | MDXString => {
     switch (true) {
       case isScalarType(type):
-        return printScalarMetadata(type, options);
+        return printScalarMetadata(type as GraphQLScalarType);
       case isEnumType(type):
-        return printEnumMetadata(type, options);
+        return printEnumMetadata(type as GraphQLEnumType, options);
       case isUnionType(type):
-        return printUnionMetadata(type, options);
+        return printUnionMetadata(type as GraphQLUnionType, options);
       case isObjectType(type):
-        return printObjectMetadata(type, options);
+        return printObjectMetadata(type as GraphQLObjectType, options);
       case isInterfaceType(type):
-        return printInterfaceMetadata(type, options);
+        return printInterfaceMetadata(type as GraphQLInterfaceType, options);
       case isInputType(type):
-        return printInputMetadata(type, options);
+        return printInputMetadata(type as GraphQLInputObjectType, options);
       case isDirectiveType(type):
-        return printDirectiveMetadata(type, options);
+        return printDirectiveMetadata(type as GraphQLDirective, options);
       case isOperation(type):
-        return printOperationMetadata(type, options);
+        return printOperationMetadata(type as GraphQLField<any, any, any>, options);
       default:
-        return metadata;
+        return "";
     }
   };
 
-  static printRelations = (type, options) => {
+  static printRelations = (type: GraphQLNamedType, options: Options): string | MDXString => {
     if (Printer.options.relatedTypeSection !== true) {
       return "";
     }
     return printRelations(type, options);
   };
 
-  static printType = (name, type, options) => {
+  static printType = (name: string, type: GraphQLNamedType, options: Options): MDXString | undefined => {
     if (
       typeof type === "undefined" ||
       type === null ||
@@ -201,17 +209,14 @@ class Printer {
       return undefined;
     }
 
-    const printTypeOptions = {
+    const printTypeOptions: Options = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,
     };
 
-    const header = Printer.printHeader(name, getTypeName(type), {
-      ...printTypeOptions,
-      header: options,
-    });
-    const description = Printer.printDescription(type);
+    const header = Printer.printHeader(name, getTypeName(type), printTypeOptions);
+    const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
     const customDirectives = Printer.printCustomDirectives(
       type,
@@ -230,8 +235,6 @@ class Printer {
       customDirectives,
       metadata,
       relations,
-    ].join(MARKDOWN_EOP);
+    ].join(MARKDOWN_EOP) as MDXString;
   };
 }
-
-module.exports = { Printer, DEFAULT_OPTIONS };
