@@ -478,3 +478,7 @@ export {
   isUnionType,
   printSchema,
 } from "graphql";
+
+export type {
+  UnnormalizedTypeDefPointer
+} from "@graphql-tools/load"
