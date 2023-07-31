@@ -1,7 +1,8 @@
 jest.mock("@graphql-markdown/diff");
-const diff = require("@graphql-markdown/diff");
+import diff from "@graphql-markdown/diff";
 
-const { hasChanges } = require("../../src/diff");
+import { hasChanges } from "../../src/diff";
+import { GraphQLSchema } from "graphql";
 
 describe("diff", () => {
   describe("hasChanges()", () => {
@@ -16,7 +17,7 @@ describe("diff", () => {
 
         const logSpy = jest.spyOn(global.logger, "warn");
 
-        await expect(hasChanges({}, "", value)).resolves.toBeTruthy();
+        await expect(hasChanges(new GraphQLSchema({}), "", value)).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
       },
     );
@@ -27,9 +28,9 @@ describe("diff", () => {
         expect.assertions(2);
 
         const logSpy = jest.spyOn(global.logger, "warn");
-        jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
+        jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
-        await expect(hasChanges({}, "", "NONE", value)).resolves.toBeTruthy();
+        await expect(hasChanges(new GraphQLSchema({}), "", "NONE", value)).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
       },
     );
@@ -38,9 +39,9 @@ describe("diff", () => {
       expect.assertions(2);
 
       const logSpy = jest.spyOn(global.logger, "warn");
-      jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
+      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
-      await expect(hasChanges({}, "", "NONE", "foobar")).resolves.toBeTruthy();
+      await expect(hasChanges(new GraphQLSchema({}), "", "NONE", "foobar")).resolves.toBeTruthy();
       expect(logSpy).toHaveBeenCalledWith(
         "Cannot find module 'foobar' from @graphql-markdown/core!",
       );
@@ -50,9 +51,9 @@ describe("diff", () => {
       expect.assertions(2);
 
       const logSpy = jest.spyOn(global.logger, "warn");
-      jest.spyOn(diff, "checkSchemaChanges").mockReturnValueOnce(true);
+      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
-      const result = await hasChanges({}, "", "FORCE");
+      const result = await hasChanges(new GraphQLSchema({}), "", "FORCE");
 
       expect(typeof result === "boolean").toBeTruthy();
       expect(logSpy).not.toHaveBeenCalled();

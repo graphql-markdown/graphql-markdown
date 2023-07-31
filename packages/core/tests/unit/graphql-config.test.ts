@@ -1,10 +1,10 @@
-const { vol } = require("memfs");
-jest.mock("fs");
+import { vol } from "memfs";
+jest.mock("node:fs");
 
-const { join } = require("path");
+import { join } from "node:path";
 
-const { loadConfiguration } = require("../../src/graphql-config");
-const { buildConfig, DEFAULT_OPTIONS } = require("../../src/config");
+import { loadConfiguration } from "../../src/graphql-config";
+import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
 
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {

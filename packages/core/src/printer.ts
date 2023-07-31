@@ -1,8 +1,8 @@
 import type { GraphQLSchema } from "graphql/type/schema";
 
-import type { DirectiveName, CustomDirectiveMap } from "@graphql-markdown/utils";
+import type { DirectiveName, CustomDirectiveMap, PackageName } from "@graphql-markdown/utils";
 
-import type { ConfigPrintTypeOptions, PackageName, TypeDeprecatedOption } from "./config";
+import type { ConfigPrintTypeOptions, TypeDeprecatedOption } from "./config";
 
 export interface Printer {
   init: (schema: GraphQLSchema, baseURL: string, linkRoot: string, options: PrinterOptions) => void

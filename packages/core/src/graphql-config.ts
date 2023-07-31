@@ -2,7 +2,9 @@ import { Logger } from "@graphql-markdown/utils"
 
 import type { GraphQLProjectConfig } from "graphql-config/typings/project-config";
 
-import type { PackageOptionsConfig, ConfigOptions, Loader, ClassName, PackageConfig } from "./config";
+import type { PackageOptionsConfig, LoaderOption, ClassName, PackageConfig } from "@graphql-markdown/utils";
+
+import type { ConfigOptions } from "./config";
 
 const logger = Logger.getInstance();
 
@@ -62,7 +64,7 @@ export const loadConfiguration = async (
   }
 };
 
-const setLoaderOptions = (loaders: Loader, options: PackageOptionsConfig) => {
+const setLoaderOptions = (loaders: LoaderOption, options: PackageOptionsConfig) => {
   for(const loader in loaders) {
     if (typeof loaders[loader as ClassName] === "string") {
       loaders[loader as ClassName] = { module: loaders[loader as ClassName], options } as PackageConfig;

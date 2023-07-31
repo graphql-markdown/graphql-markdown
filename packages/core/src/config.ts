@@ -1,75 +1,62 @@
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
-import type { BaseLoaderOptions} from "@graphql-tools/utils";
-
-import { hasProperty } from "@graphql-markdown/utils";
-import type { CustomDirective, DirectiveName, GroupByDirectiveOptions } from "@graphql-markdown/utils";
+import type { CustomDirective, CustomDirectiveOptions, DirectiveName, GroupByDirectiveOptions, LoaderOption, PackageName, UnnormalizedTypeDefPointer } from "@graphql-markdown/utils";
 
 import { loadConfiguration } from "./graphql-config";
-
 export const DOCS_URL = "https://graphql-markdown.github.io/docs";
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 export const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 export type ConfigDocOptions = {
-  index: boolean
-  pagination: boolean
-  toc: boolean
+  index?: boolean
+  pagination?: boolean
+  toc?: boolean
 }
 
-export type TypeDeprecatedOption = "default" | "group" | "skip"
+export enum DeprecatedOption {
+  DEFAULT = "default",
+  GROUP = "group",
+  SKIP = "skip"
+}
+export type TypeDeprecatedOption = `${DeprecatedOption}`;
 
 export type ConfigPrintTypeOptions = {
-  codeSection: boolean
-  deprecated: TypeDeprecatedOption,
-  parentTypePrefix: boolean
-  relatedTypeSection: boolean
-  typeBadges: boolean
+  codeSection?: boolean
+  deprecated?: TypeDeprecatedOption,
+  parentTypePrefix?: boolean
+  relatedTypeSection?: boolean
+  typeBadges?: boolean
 }
 
-export type Loader = {
-  [name: ClassName]: PackageName | PackageConfig 
+export enum DiffMethod {
+  NONE = "NONE",
+  FORCE = "FORCE"
 }
+export type TypeDiffMethod = string | `${DiffMethod}`
 
-export type PackageOptionsConfig = BaseLoaderOptions & RootTypes
-
-export type PackageConfig = {
-  module: PackageName 
-  options?: PackageOptionsConfig 
-}
-
-export type RootTypes = { query?: string, mutation?: string, subscription?: string }
-
-export type PackageName = string & {_opaque: typeof PackageName};
-declare const PackageName: unique symbol;
-
-export type ClassName = string & {_opaque: typeof ClassName};
-declare const ClassName: unique symbol;
-
-
-export type DiffMethod = string | "NONE" | "FORCE"
+type Pointer = string | UnnormalizedTypeDefPointer;
 
 export type ConfigOptions = {
-  baseURL: string
+  baseURL?: string
   customDirective?: CustomDirective
-  diffMethod?: DiffMethod
-  docOptions: ConfigDocOptions
+  diffMethod?: TypeDiffMethod
+  docOptions?: ConfigDocOptions
   groupByDirective?: GroupByDirectiveOptions
-  homepage: string
-  linkRoot: string
-  loaders: Loader
-  pretty: boolean
+  homepage?: string
+  linkRoot?: string
+  loaders: LoaderOption
+  pretty?: boolean
   printer?: PackageName
-  printTypeOptions: ConfigPrintTypeOptions
-  rootPath: string
-  schema: string
-  tmpDir: string
-  skipDocDirective?: DirectiveName[]
+  printTypeOptions?: ConfigPrintTypeOptions
+  rootPath?: string
+  schema?: Pointer
+  tmpDir?: string
+  skipDocDirective?: DirectiveName[] | DirectiveName
 }
 
 export type CliOptions = {
-  schema?: string
+  schema?: Pointer
   root?: string
   base?: string
   link?: string
@@ -85,7 +72,7 @@ export type CliOptions = {
   diff?: string
   tmp?: string
   groupByDirective?: string
-  skip?: string[]
+  skip?: string[] | string
   deprecated?: TypeDeprecatedOption
   pretty?: boolean
 }
@@ -94,13 +81,20 @@ export type Options = Omit<ConfigOptions, "homepage" | "pretty" | "schema" | "ro
   homepageLocation: string, 
   outputDir: string, 
   prettify: boolean, 
-  schemaLocation: string
+  schemaLocation: Pointer,
+  printer: PackageName,
+  tmpDir: string,
+  baseURL: string,
+  linkRoot: string,
+  skipDocDirective: DirectiveName[],
+  docOptions: Required<ConfigDocOptions>,
+  printTypeOptions: Required<ConfigPrintTypeOptions>
 };
 
-export const DEFAULT_OPTIONS: ConfigOptions = {
+export const DEFAULT_OPTIONS: Required<Omit<ConfigOptions, "groupByDirective">> & { groupByDirective: GroupByDirectiveOptions | undefined } = {
   baseURL: "schema",
-  customDirective: undefined,
-  diffMethod: undefined,
+  customDirective: {},
+  diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
     index: false,
     pagination: true,
@@ -114,7 +108,7 @@ export const DEFAULT_OPTIONS: ConfigOptions = {
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
     codeSection: true,
-    deprecated: "default",
+    deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
@@ -125,15 +119,15 @@ export const DEFAULT_OPTIONS: ConfigOptions = {
   skipDocDirective: [],
 };
 
-export function buildConfig(configFileOpts: ConfigOptions, cliOpts: CliOptions, id?: string): Options {
+export async function buildConfig(configFileOpts?: ConfigOptions, cliOpts?: CliOptions, id?: string): Promise<Options> {
   if (typeof cliOpts === "undefined" || cliOpts === null) {
     cliOpts = {};
   }
 
-  const graphqlConfig = loadConfiguration(id);
-  const config = { ...DEFAULT_OPTIONS, ...graphqlConfig, ...configFileOpts };
+  const graphqlConfig = await loadConfiguration(id);
+  const config: ConfigOptions = { ...DEFAULT_OPTIONS, ...graphqlConfig, ...configFileOpts };
 
-  const baseURL = cliOpts.base ?? config.baseURL;
+  const baseURL = cliOpts.base ?? config.baseURL!;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
   return {
@@ -146,24 +140,26 @@ export function buildConfig(configFileOpts: ConfigOptions, cliOpts: CliOptions, 
     docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
-    homepageLocation: cliOpts.homepage ?? config.homepage,
-    linkRoot: cliOpts.link ?? config.linkRoot,
+    homepageLocation: cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
+    linkRoot: (cliOpts.link ?? config.linkRoot) ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
-    prettify: cliOpts.pretty ?? config.pretty,
-    printer: config.printer,
+    outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
+    prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
+    printer: (config.printer ?? DEFAULT_OPTIONS.printer!) as PackageName,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
-    schemaLocation: cliOpts.schema ?? config.schema,
+    schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
     skipDocDirective,
-    tmpDir: cliOpts.tmp ?? config.tmpDir,
+    tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
   };
 }
 
-export function getCustomDirectives(customDirectiveOptions: CustomDirective | undefined, skipDocDirective: DirectiveName[]): CustomDirective | undefined {
+export function getCustomDirectives(customDirectiveOptions?: CustomDirective, skipDocDirective?: DirectiveName[]): CustomDirective | undefined {
   if (
     typeof customDirectiveOptions === "undefined" ||
     (typeof customDirectiveOptions === "object" &&
-      Object.keys(customDirectiveOptions).length == 0)
+      Object.keys(customDirectiveOptions).length === 0) ||
+      typeof skipDocDirective === "undefined" ||
+      skipDocDirective.length === 0
   ) {
     return undefined;
   }
@@ -172,9 +168,9 @@ export function getCustomDirectives(customDirectiveOptions: CustomDirective | un
     if (skipDocDirective.includes(name as DirectiveName)) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      (hasProperty(option, "descriptor") === false ||
-        typeof option.descriptor !== "function") &&
-      (hasProperty(option, "tag") === false || typeof option.tag !== "function")
+      (!("descriptor" in (option as CustomDirectiveOptions)) ||
+        typeof (<CustomDirectiveOptions>option).descriptor !== "function") &&
+      (!("tag" in (option as CustomDirectiveOptions)) || typeof (<CustomDirectiveOptions>option).tag !== "function")
     ) {
       throw new Error(
         `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/advanced/custom-directive`,
@@ -187,33 +183,33 @@ export function getCustomDirectives(customDirectiveOptions: CustomDirective | un
     : customDirectiveOptions;
 }
 
-export function getDiffMethod(diff: DiffMethod, force: boolean = false) : DiffMethod {
-  return force ? "FORCE" : diff;
+export function getDiffMethod(diff: TypeDiffMethod, force: boolean = false) : TypeDiffMethod {
+  return force ? DiffMethod.FORCE : diff;
 }
 
-export function getDocOptions(cliOpts: CliOptions, configOptions: ConfigDocOptions): ConfigDocOptions {
+export function getDocOptions(cliOpts?: CliOptions, configOptions?: ConfigDocOptions): Required<ConfigDocOptions> {
   return {
-    pagination: !cliOpts.noPagination && configOptions.pagination,
-    toc: !cliOpts.noToc && configOptions.toc,
-    index: cliOpts.index || configOptions.index,
+    pagination: (!cliOpts?.noPagination && configOptions?.pagination) ?? DEFAULT_OPTIONS.docOptions.pagination!,
+    toc: (!cliOpts?.noToc && configOptions?.toc) ?? DEFAULT_OPTIONS.docOptions.toc!,
+    index: (cliOpts?.index || configOptions?.index) ?? DEFAULT_OPTIONS.docOptions.index!,
   };
 }
 
-export function getPrintTypeOptions(cliOpts: CliOptions, configOptions: ConfigPrintTypeOptions): ConfigPrintTypeOptions {
+export function getPrintTypeOptions(cliOpts?: CliOptions, configOptions?: ConfigPrintTypeOptions): Required<ConfigPrintTypeOptions> {
   return {
-    codeSection: !cliOpts.noCode && configOptions.codeSection,
+    codeSection: (!cliOpts?.noCode && configOptions?.codeSection) ?? DEFAULT_OPTIONS.printTypeOptions.codeSection!,
     deprecated:
-      cliOpts.deprecated ??
+      cliOpts?.deprecated ??
       configOptions?.deprecated ??
-      DEFAULT_OPTIONS.printTypeOptions.deprecated,
-    parentTypePrefix: !cliOpts.noParentType && configOptions.parentTypePrefix,
+      DEFAULT_OPTIONS.printTypeOptions.deprecated!,
+    parentTypePrefix: (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ?? DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,
     relatedTypeSection:
-      !cliOpts.noRelatedType && configOptions.relatedTypeSection,
-    typeBadges: !cliOpts.noTypeBadges && configOptions.typeBadges,
+      (!cliOpts?.noRelatedType && configOptions?.relatedTypeSection) ?? DEFAULT_OPTIONS.printTypeOptions.relatedTypeSection!,
+    typeBadges: (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ?? DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
   };
 }
 
-export function getSkipDocDirectives(cliOpts: CliOptions, configFileOpts: ConfigOptions): DirectiveName[] {
+export function getSkipDocDirectives(cliOpts?: CliOptions, configFileOpts?: Pick<ConfigOptions, "skipDocDirective" | "printTypeOptions">): DirectiveName[] {
   const directiveList: DirectiveName[] = [].concat(
     (cliOpts?.skip ?? []) as never[],
     (configFileOpts?.skipDocDirective ?? []) as never[],
@@ -224,10 +220,10 @@ export function getSkipDocDirectives(cliOpts: CliOptions, configFileOpts: Config
   );
 
   if (
-    (hasProperty(configFileOpts, "printTypeOptions") === true &&
-      configFileOpts.printTypeOptions.deprecated === "skip") ||
-    (hasProperty(cliOpts, "deprecated") === true &&
-      cliOpts.deprecated === "skip")
+    (typeof configFileOpts !== undefined && "printTypeOptions" in configFileOpts! &&
+      configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
+    (typeof cliOpts !== undefined && "deprecated" in cliOpts! &&
+      cliOpts?.deprecated === DeprecatedOption.SKIP)
   ) {
     skipDirectives.push("deprecated" as DirectiveName);
   }

@@ -12,7 +12,7 @@ export const hasChanges = async (
   schema: GraphQLSchema,
   tmpDir: string,
   diffMethod: unknown,
-  diffModule: string = "@graphql-markdown/diff",
+  diffModule: (undefined | null | string) = "@graphql-markdown/diff",
 ): Promise<boolean> => {
   if (
     typeof diffMethod === "undefined" ||

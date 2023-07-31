@@ -1,8 +1,8 @@
-const { join } = require("path");
+import { join } from "node:path";
 
-const { COMPARE_METHOD } = require("@graphql-markdown/diff");
+import { COMPARE_METHOD } from "@graphql-markdown/diff";
 
-const config = require("../../src/config");
+import * as config from "../../src/config";
 const {
   buildConfig,
   getSkipDocDirectives,
@@ -12,8 +12,13 @@ const {
   DEFAULT_OPTIONS,
 } = config;
 
+import { type ConfigOptions, type CliOptions, DiffMethod } from "../../src/config";
+
+import type { DirectiveName, ClassName, PackageName } from "@graphql-markdown/utils";
+
 jest.mock("@graphql-markdown/utils");
-const utils = require("@graphql-markdown/utils");
+import utils from "@graphql-markdown/utils";
+import { GraphQLDirective } from "graphql";
 
 describe("config", () => {
   afterEach(() => {
@@ -26,8 +31,8 @@ describe("config", () => {
 
       expect(
         getSkipDocDirectives(
-          { skip: ["@noDoc"] },
-          { skipDocDirective: ["@deprecated"] },
+          { skip: ["@noDoc" as DirectiveName] },
+          { skipDocDirective: ["@deprecated" as DirectiveName]  },
         ),
       ).toStrictEqual(["noDoc", "deprecated"]);
     });
@@ -35,13 +40,13 @@ describe("config", () => {
     test("supports string as input", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirectives({ skip: "@noDoc" })).toStrictEqual(["noDoc"]);
+      expect(getSkipDocDirectives({ skip: "@noDoc" as DirectiveName })).toStrictEqual(["noDoc"]);
     });
 
     test("supports deprecated skip option", () => {
       expect.hasAssertions();
 
-      jest.spyOn(utils.object, "hasProperty").mockReturnValue(true);
+      jest.spyOn(utils, "hasProperty").mockReturnValue(true);
 
       expect(
         getSkipDocDirectives(undefined, {
@@ -55,27 +60,27 @@ describe("config", () => {
     test("returns a directive name", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirective("@noDoc")).toBe("noDoc");
+      expect(getSkipDocDirective("@noDoc" as DirectiveName)).toBe("noDoc");
     });
 
     test("throws an error if not a string", () => {
       expect.hasAssertions();
 
-      expect(() => getSkipDocDirective("+NotADirective@")).toThrow(Error);
+      expect(() => getSkipDocDirective("+NotADirective@" as DirectiveName)).toThrow(Error);
     });
 
     test("throws an error if format is not a directive", () => {
       expect.hasAssertions();
 
-      expect(() => getSkipDocDirective("+NotADirective@")).toThrow(Error);
+      expect(() => getSkipDocDirective("+NotADirective@" as DirectiveName)).toThrow(Error);
     });
   });
 
   describe("buildConfig()", () => {
-    test("returns default options is no config set", () => {
+    test("returns default options is no config set", async () => {
       expect.hasAssertions();
 
-      const config = buildConfig();
+      const config = await buildConfig();
 
       expect(config).toEqual(
         expect.objectContaining({
@@ -85,7 +90,7 @@ describe("config", () => {
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
-          outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+          outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
           prettify: DEFAULT_OPTIONS.pretty,
           schemaLocation: DEFAULT_OPTIONS.schema,
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
@@ -98,10 +103,10 @@ describe("config", () => {
       );
     });
 
-    test("override default options is config set in docusaurus", () => {
+    test("override default options is config set in docusaurus", async () => {
       expect.hasAssertions();
 
-      const configFileOpts = {
+      const configFileOpts: ConfigOptions = {
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
         rootPath: "output",
@@ -110,10 +115,10 @@ describe("config", () => {
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
-          UrlLoader: "@graphql-tools/url-loader",
+          ["UrlLoader" as ClassName]: "@graphql-tools/url-loader" as PackageName,
         },
         groupByDirective: {
-          directive: "doc",
+          directive: "doc" as DirectiveName,
           fallback: "Common",
           field: "category",
         },
@@ -130,16 +135,16 @@ describe("config", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: ["@noDoc"],
+        skipDocDirective: ["@noDoc" as DirectiveName],
         customDirective: {
-          test: {
+          ["test" as DirectiveName]: {
             descriptor: (directiveType, constDirectiveType) =>
               `Test${constDirectiveType.name.value}`,
           },
         },
       };
 
-      const config = buildConfig(configFileOpts);
+      const config = await buildConfig(configFileOpts);
 
       expect(config).toStrictEqual({
         baseURL: configFileOpts.baseURL,
@@ -148,7 +153,7 @@ describe("config", () => {
         homepageLocation: configFileOpts.homepage,
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
-        outputDir: join(configFileOpts.rootPath, configFileOpts.baseURL),
+        outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
         prettify: configFileOpts.pretty,
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
@@ -160,10 +165,10 @@ describe("config", () => {
       });
     });
 
-    test("override config set in docusaurus if cli options set", () => {
+    test("override config set in docusaurus if cli options set", async () => {
       expect.hasAssertions();
 
-      const configFileOpts = {
+      const configFileOpts: ConfigOptions = {
         baseURL: "docs/schema",
         schema: "assets/my-schema.graphql",
         rootPath: "output",
@@ -172,10 +177,10 @@ describe("config", () => {
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
-          UrlLoader: "@graphql-tools/url-loader",
+          ["UrlLoader" as ClassName]: "@graphql-tools/url-loader" as PackageName,
         },
         groupByDirective: {
-          directive: "doc",
+          directive: "doc" as DirectiveName,
           field: "category",
           fallback: "Common",
         },
@@ -186,7 +191,7 @@ describe("config", () => {
         },
       };
 
-      const cliOpts = {
+      const cliOpts: CliOptions = {
         base: "cli/schema",
         deprecated: "group",
         diff: "CLI",
@@ -204,7 +209,7 @@ describe("config", () => {
         tmp: "./cli",
       };
 
-      const config = buildConfig(configFileOpts, cliOpts);
+      const config = await buildConfig(configFileOpts, cliOpts);
 
       expect(config).toStrictEqual({
         baseURL: cliOpts.base,
@@ -217,7 +222,7 @@ describe("config", () => {
         homepageLocation: cliOpts.homepage,
         linkRoot: cliOpts.link,
         loaders: configFileOpts.loaders,
-        outputDir: join(cliOpts.root, cliOpts.base),
+        outputDir: join(cliOpts.root!, cliOpts.base!),
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
@@ -237,21 +242,22 @@ describe("config", () => {
       });
     });
 
-    test("schema option from CLI overrides that of config file", () => {
+    test("schema option from CLI overrides that of config file", async () => {
       expect.hasAssertions();
 
-      const configFileOpts = {
+      const configFileOpts: ConfigOptions = {
         baseURL: "base-from-config-file",
         schema: "schemaFromConfigFile.graphql",
+        loaders: {}
       };
-      const cliOpts = { pretty: true, schema: "schemaFromCLI.graphql" };
+      const cliOpts: CliOptions = { pretty: true, schema: "schemaFromCLI.graphql" };
 
-      const input = buildConfig(configFileOpts, cliOpts);
+      const input = await buildConfig(configFileOpts, cliOpts);
 
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL),
+        outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
@@ -267,28 +273,28 @@ describe("config", () => {
       });
     });
 
-    test("force flag from CLI switches diff method to FORCE", () => {
+    test("force flag from CLI switches diff method to FORCE", async () => {
       expect.hasAssertions();
 
-      const cliOpts = { force: true };
+      const cliOpts: CliOptions = { force: true };
 
-      const input = buildConfig({}, cliOpts);
+      const input = await buildConfig({loaders: {}}, cliOpts);
 
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+        outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: COMPARE_METHOD.FORCE,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
         loaders: DEFAULT_OPTIONS.loaders,
-        groupByDirective: undefined,
+        groupByDirective: DEFAULT_OPTIONS.groupByDirective,
         prettify: DEFAULT_OPTIONS.pretty,
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        skipDocDirective: DiffMethod.FORCE,
         customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
@@ -300,7 +306,7 @@ describe("config", () => {
 
       const groupOptionsFlag = "@doc(category|=common)";
       const { directive, field, fallback } =
-        parseGroupByOption(groupOptionsFlag);
+        parseGroupByOption(groupOptionsFlag)!;
 
       expect(directive).toBe("doc");
       expect(field).toBe("category");
@@ -312,7 +318,7 @@ describe("config", () => {
 
       const groupOptionsFlag = "@doc(category)";
       const { directive, field, fallback } =
-        parseGroupByOption(groupOptionsFlag);
+        parseGroupByOption(groupOptionsFlag)!;
 
       expect(directive).toBe("doc");
       expect(field).toBe("category");
@@ -356,7 +362,7 @@ describe("config", () => {
         test: {},
       };
 
-      expect(getCustomDirectives(options, ["test"])).toBeUndefined();
+      expect(getCustomDirectives(options, ["test" as DirectiveName])).toBeUndefined();
     });
 
     test("throws an error if descriptor format is invalid", () => {
@@ -376,14 +382,14 @@ describe("config", () => {
     test("returns custom directive maps", () => {
       expect.hasAssertions();
 
-      const descriptor = (_, constDirectiveType) =>
-        `Test${constDirectiveType.name.value}`;
+      const descriptor = (_, constDirectiveType: GraphQLDirective) =>
+        `Test${constDirectiveType.name}`;
       const options = {
         testA: { descriptor },
         testB: { descriptor },
       };
 
-      expect(getCustomDirectives(options, ["testB"])).toMatchSnapshot();
+      expect(getCustomDirectives(options, ["testB" as DirectiveName])).toMatchSnapshot();
     });
   });
 });

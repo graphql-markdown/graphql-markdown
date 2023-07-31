@@ -38,8 +38,14 @@ export const generateDocFromSchema = async ({
 
   const logger = Logger.setInstance(loggerModule);
 
-  const loaders = await getDocumentLoaders(loadersList);
-  const schema = await loadSchema(schemaLocation, loaders);
+  const loaders = loadersList ? await getDocumentLoaders(loadersList) : undefined;
+
+  if (typeof loaders === "undefined") {
+    logger.error(`An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`);
+    return;
+  }
+
+  const schema = await loadSchema(schemaLocation as string, loaders);
 
   const changed = await hasChanges(schema, tmpDir, diffMethod);
   if (!changed) {
@@ -51,7 +57,7 @@ export const generateDocFromSchema = async ({
   const groups = getGroups(rootTypes, groupByDirective);
   const printer = await getPrinter(
     // module mandatory
-    printerModule!,
+    printerModule,
 
     // config mandatory
     {

@@ -1,8 +1,10 @@
-const { vol } = require("memfs");
-jest.mock("fs");
+import { vol } from "memfs";
+jest.mock("node:fs");
 
-const path = require("path");
-const fs = require("fs");
+import { join } from "node:path";
+import fs from "node:fs";
+
+import { Kind } from "graphql/language/kinds";
 
 jest.mock("@graphql-markdown/printer-legacy", () => {
   return {
@@ -10,27 +12,22 @@ jest.mock("@graphql-markdown/printer-legacy", () => {
     init: jest.fn(),
   };
 });
-const Printer = require("@graphql-markdown/printer-legacy");
+import * as Printer from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
     ...jest.requireActual("@graphql-markdown/utils"),
-    object: {
       hasProperty: jest.fn(),
-    },
-    graphql: {
       isDeprecated: jest.fn(),
-    },
-    string: {
-      toSlug: (value) => value.toLowerCase(),
-      startCase: (value) => value,
-    },
+      toSlug: (value: string) => value.toLowerCase(),
+      startCase: (value: string) => value,
   };
 });
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
-const Renderer = require("../../src/renderer");
-const { GraphQLObjectType } = require("graphql");
+import { Renderer } from "../../src/renderer";
+import { GraphQLScalarType } from "graphql/type/definition";
+import { DEFAULT_OPTIONS, TypeDeprecatedOption } from "../../src/config";
 
 describe("renderer", () => {
   describe("class Renderer", () => {
@@ -39,12 +36,12 @@ describe("renderer", () => {
 
     beforeEach(() => {
       vol.fromJSON({
-        "/output": {},
-        "/temp": {},
+        "/output": null,
+        "/temp": null,
         "/assets/generated.md": "Test Homepage",
       });
 
-      rendererInstance = new Renderer(Printer, "/output", baseURL);
+      rendererInstance = new Renderer(Printer, "/output", baseURL, undefined, DEFAULT_OPTIONS.pretty, { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption});
     });
 
     afterEach(() => {
@@ -109,8 +106,8 @@ describe("renderer", () => {
 
         jest.spyOn(Printer, "printType").mockImplementation(() => "content");
         await rendererInstance.renderRootTypes("Object", {
-          foo: new GraphQLObjectType({ name: "foo", astNode: {} }),
-          bar: new GraphQLObjectType({ name: "bar", astNode: {} }),
+          foo: new GraphQLScalarType({ name: "foo", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
+          bar: new GraphQLScalarType({ name: "bar", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
         });
 
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
@@ -127,7 +124,7 @@ describe("renderer", () => {
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
         const content = fs.readFileSync(
-          path.join(outputPath, "_category_.yml"),
+          join(outputPath, "_category_.yml"),
           "utf-8",
         );
 
@@ -151,7 +148,7 @@ describe("renderer", () => {
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
         const content = fs.readFileSync(
-          path.join(outputPath, "_category_.yml"),
+          join(outputPath, "_category_.yml"),
           "utf-8",
         );
 
@@ -174,9 +171,9 @@ describe("renderer", () => {
 
         const data = "The quick brown fox jumps over the lazy dog";
 
-        await Utils.fs.ensureDir(outputPath);
+        await Utils.ensureDir(outputPath);
         fs.writeFileSync(
-          path.join(outputPath, "_category_.yml"),
+          join(outputPath, "_category_.yml"),
           data,
           "utf-8",
         );
@@ -184,7 +181,7 @@ describe("renderer", () => {
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
         const content = fs.readFileSync(
-          path.join(outputPath, "_category_.yml"),
+          join(outputPath, "_category_.yml"),
           "utf-8",
         );
 
@@ -204,7 +201,7 @@ describe("renderer", () => {
         );
 
         const content = fs.readFileSync(
-          path.join(outputPath, "_category_.yml"),
+          join(outputPath, "_category_.yml"),
           "utf-8",
         );
 
@@ -244,7 +241,7 @@ describe("renderer", () => {
           [root]: { [name]: group },
         });
         jest
-          .spyOn(Utils.object, "hasProperty")
+          .spyOn(Utils, "hasProperty")
           .mockImplementation((_, prop) => prop === root || prop === name);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
@@ -267,9 +264,9 @@ describe("renderer", () => {
           deprecated: "group",
         });
         jest
-          .spyOn(Utils.object, "hasProperty")
+          .spyOn(Utils, "hasProperty")
           .mockImplementation((_, prop) => prop === "deprecated");
-        jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -291,9 +288,9 @@ describe("renderer", () => {
           deprecated: "group",
         });
         jest
-          .spyOn(Utils.object, "hasProperty")
+          .spyOn(Utils, "hasProperty")
           .mockImplementation((_, prop) => prop === "deprecated");
-        jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(false);
+        jest.spyOn(Utils, "isDeprecated").mockReturnValue(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -317,8 +314,8 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
-        jest.spyOn(Utils.graphql, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
+        jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
