@@ -30,7 +30,6 @@ export const hasChanges = async (
     logger.warn(
       `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
     );
+    return true;
   }
-
-  return true;
 };
