@@ -30,12 +30,18 @@ export type PrinterOptions = {
   deprecated?: TypeDeprecatedOption
 }
 
-export const getPrinter = async (printerModule: PackageName, config: PrinterConfig, options: PrinterOptions): Promise<Printer> => {
-  let Printer = undefined;
+export const getPrinter = async (printerModule?: PackageName, config?: PrinterConfig, options?: PrinterOptions): Promise<Printer> => {
+  let Printer: Printer;
 
   if (typeof printerModule !== "string") {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',
+    );
+  }
+
+  if (typeof config === "undefined") {
+    throw new Error(
+      'Invalid printer config in "printTypeOptions" settings.',
     );
   }
 
