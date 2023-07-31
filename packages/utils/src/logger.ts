@@ -1,7 +1,7 @@
 declare global {
   var logger: LoggerType | undefined;
 }
-type LoggerType = {
+export type LoggerType = {
   debug: Function,
   error: Function,
   info: Function,
