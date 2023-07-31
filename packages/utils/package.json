@@ -9,13 +9,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphql-markdown/graphql-markdown.git",
+    "url": "graphql-markdown/graphql-markdown",
     "directory": "packages/utils"
   },
   "author": {
     "name": "Gregory Heitz"
   },
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
@@ -34,16 +34,16 @@
     },
     "./*": {
       "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       },
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       },
       "default": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       }
     },
     "./package.json": "./package.json"

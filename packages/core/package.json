@@ -7,10 +7,13 @@
   },
   "version": "1.6.3",
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+    "url": "graphql-markdown/graphql-markdown",
+    "directory": "packages/core"
+  },
+  "author": {
+    "name": "Gregory Heitz"
   },
   "keywords": [
     "graphql",
@@ -19,8 +22,38 @@
     "markdown",
     "graphql-markdown"
   ],
-  "author": {
-    "name": "Gregory Heitz"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./*": {
+      "require": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      },
+      "import": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      },
+      "default": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "prepack": "pinst --disable",
