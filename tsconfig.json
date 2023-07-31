@@ -13,14 +13,7 @@
 
     "noEmit": true,
 
-    "baseUrl": "./packages",
-
-    "paths": {
-      "@graphql-markdown/*": [
-        "*/src/index.ts",
-        "*/src/index.js"
-      ]
-    }
+    "baseUrl": "./packages"
   },
 
   "exclude": ["**/node_modules", "**/dist"]

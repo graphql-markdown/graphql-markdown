@@ -6,9 +6,19 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": true,
+
+    "types": ["node"],
+
     "baseUrl": ".",
     "rootDir": "packages",
-    "types": ["node"]
+
+    "paths": {
+      "@graphql-markdown/*": [
+        "*/src/index.ts",
+        "*/src/index.js",
+        "*/dist/index.js"
+      ]
+    }
   },
 
   "include": ["packages"],
