@@ -91,9 +91,9 @@ export type Options = Omit<ConfigOptions, "homepage" | "pretty" | "schema" | "ro
   printTypeOptions: Required<ConfigPrintTypeOptions>
 };
 
-export const DEFAULT_OPTIONS: Required<Omit<ConfigOptions, "groupByDirective">> & { groupByDirective: GroupByDirectiveOptions | undefined } = {
+export const DEFAULT_OPTIONS: Required<Omit<ConfigOptions, "groupByDirective" | "customDirective" | "loaders">> & { groupByDirective: GroupByDirectiveOptions | undefined, customDirective: CustomDirective | undefined, loaders: LoaderOption | undefined } = {
   baseURL: "schema",
-  customDirective: {},
+  customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
     index: false,
@@ -103,7 +103,7 @@ export const DEFAULT_OPTIONS: Required<Omit<ConfigOptions, "groupByDirective">> 
   groupByDirective: undefined,
   homepage: join(ASSETS_LOCATION, "generated.md"),
   linkRoot: "/",
-  loaders: {},
+  loaders: undefined,
   pretty: false,
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {

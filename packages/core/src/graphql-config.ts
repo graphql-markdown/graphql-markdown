@@ -47,7 +47,7 @@ export const loadConfiguration = async (
     return undefined;
   }
 
-  const config = GraphQLConfig.loadConfigSync({
+  const config = await GraphQLConfig.loadConfig({
     ...options,
     extensions: [() => ({ name: EXTENSION_NAME })],
     throwOnMissing,
@@ -55,7 +55,7 @@ export const loadConfiguration = async (
   });
 
   try {
-    const projectConfig = config.getProject(id).extension(EXTENSION_NAME) as ExtensionProjectConfig;
+    const projectConfig = config!.getProject(id).extension(EXTENSION_NAME) as ExtensionProjectConfig;
 
     if (Array.isArray(projectConfig?.schema)) {
       const schema = projectConfig?.schema[0];

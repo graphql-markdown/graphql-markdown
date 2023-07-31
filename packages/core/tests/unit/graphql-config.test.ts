@@ -1,10 +1,15 @@
 import { vol } from "memfs";
-jest.mock("node:fs");
+
+jest.mock("node:fs"); // used for @graphql-markdown
+jest.mock("fs"); // used for graphql-config
 
 import { join } from "node:path";
 
 import { loadConfiguration } from "../../src/graphql-config";
 import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
+
+      // const filePath = join(process.cwd(), ".graphqlrc");
+      const filePath = join(__dirname, "..", "..", ".graphqlrc");
 
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
@@ -13,20 +18,20 @@ describe("graphql-config", () => {
       jest.restoreAllMocks();
     });
 
-    test("returns undefined if not graphql-config found", () => {
+    test("returns undefined if not graphql-config found", async () => {
       expect.hasAssertions();
 
-      expect(loadConfiguration()).toBeUndefined();
+      await expect(loadConfiguration()).resolves.toBeUndefined();
     });
 
-    test("returns undefined if graphql-config empty", () => {
+    test("returns undefined if graphql-config empty", async () => {
       expect.hasAssertions();
 
       vol.fromJSON({
-        "/.graphqlrc": "",
+        [filePath]: "",
       });
 
-      expect(loadConfiguration()).toBeUndefined();
+      await expect(loadConfiguration()).resolves.toBeUndefined();
     });
 
     test.each([
@@ -41,7 +46,7 @@ describe("graphql-config", () => {
         ],
       ],
       [["http://localhost:4000/graphql", "./packages/bar/schema.graphql"]],
-    ])("returns config if graphql-config valid", () => {
+    ])("returns config if graphql-config valid", async () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -59,27 +64,25 @@ describe("graphql-config", () => {
         },
       };
 
-      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(
+      await expect(
         loadConfiguration(undefined, undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
-      ).toStrictEqual({
+      ).resolves.toStrictEqual({
         baseURL: "test",
         documents: undefined,
         exclude: undefined,
         include: undefined,
-        loaders: undefined,
         schema: "http://localhost:4000/graphql",
       });
     });
 
-    test("returns default config", () => {
+    test("returns default config", async () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -105,17 +108,16 @@ describe("graphql-config", () => {
         },
       };
 
-      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(
+      await expect(
         loadConfiguration("default", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
-      ).toStrictEqual({
+      ).resolves.toStrictEqual({
         baseURL: "default",
         documents: undefined,
         exclude: undefined,
@@ -135,7 +137,7 @@ describe("graphql-config", () => {
       });
     });
 
-    test("returns project config", () => {
+    test("returns project config", async () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -159,17 +161,16 @@ describe("graphql-config", () => {
         },
       };
 
-      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(
+      await expect(
         loadConfiguration("foo", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
-      ).toStrictEqual({
+      ).resolves.toStrictEqual({
         baseURL: "foo",
         documents: undefined,
         exclude: undefined,
@@ -188,7 +189,7 @@ describe("graphql-config", () => {
       });
     });
 
-    test("returns undefined if project id does not exist", () => {
+    test("returns undefined if project id does not exist", async () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -211,12 +212,11 @@ describe("graphql-config", () => {
         },
       };
 
-      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      expect(loadConfiguration("baz")).toBeUndefined();
+      await expect(loadConfiguration("baz")).resolves.toBeUndefined();
     });
   });
 });
@@ -228,7 +228,7 @@ describe("config", () => {
       jest.restoreAllMocks();
     });
 
-    test("returns config with .graphqlrc options set", () => {
+    test("returns config with .graphqlrc options set", async () => {
       expect.hasAssertions();
 
       const graphqlConfig = {
@@ -240,30 +240,29 @@ describe("config", () => {
         },
       };
 
-      const filePath = join(process.cwd(), ".graphqlrc");
       vol.fromJSON({
         [filePath]: JSON.stringify(graphqlConfig),
       });
 
-      const config = buildConfig();
+      const config = await buildConfig();
 
       expect(config).toEqual(
         expect.objectContaining({
-          baseURL: "test",
+          baseURL: graphqlConfig.extensions["graphql-markdown"].baseURL,
+          customDirective: DEFAULT_OPTIONS.customDirective,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
+          docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
-          outputDir: join(DEFAULT_OPTIONS.rootPath, "test"),
+          outputDir: join(DEFAULT_OPTIONS.rootPath, graphqlConfig.extensions["graphql-markdown"].baseURL),
           prettify: DEFAULT_OPTIONS.pretty,
-          schemaLocation: "assets/my-schema.graphql",
-          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
-          docOptions: DEFAULT_OPTIONS.docOptions,
-          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
           printer: DEFAULT_OPTIONS.printer,
+          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          schemaLocation: graphqlConfig.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
-          customDirective: DEFAULT_OPTIONS.customDirective,
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
         }),
       );
     });
