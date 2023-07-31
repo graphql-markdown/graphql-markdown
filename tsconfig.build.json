@@ -8,7 +8,7 @@
     "allowJs": true,
     "baseUrl": ".",
     "rootDir": "packages",
-    "types": []
+    "types": ["node"]
   },
 
   "include": ["packages"],
