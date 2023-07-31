@@ -11,6 +11,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
+    "noEmit": true,
+
     "baseUrl": "./packages",
 
     "paths": {
@@ -19,5 +21,7 @@
         "*/src/index.js"
       ]
     }
-  }
+  },
+
+  "exclude": ["**/node_modules", "**/dist"]
 }

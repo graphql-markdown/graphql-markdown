@@ -8,6 +8,10 @@
     "rootDir": "./src"
   },
 
+  "references": [{
+    "path": "../utils/tsconfig.build.json"
+  }],
+
   "include": [
     "src/**/*"
   ]
