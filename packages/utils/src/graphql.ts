@@ -30,6 +30,8 @@ import {
 } from "graphql";
 import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools/load";
 
+import type { BaseLoaderOptions } from "@graphql-tools/utils";
+
 import { convertArrayToObject } from "./array";
 import { hasMethod, hasProperty, isEmpty } from "./object";
 import { Loader } from "graphql-config";
@@ -40,10 +42,29 @@ enum OperationTypeNodeName {
   subscription = OperationTypeNode.SUBSCRIPTION,
 };
 
+export type LoaderOption = {
+  [name: ClassName]: PackageName | PackageConfig 
+}
+
+export type PackageOptionsConfig = BaseLoaderOptions & RootTypes
+
+export type PackageConfig = {
+  module: PackageName 
+  options?: PackageOptionsConfig 
+}
+
+export type RootTypes = { query?: string, mutation?: string, subscription?: string }
+
+export type PackageName = string & {_opaque: typeof PackageName};
+declare const PackageName: unique symbol;
+
+export type ClassName = string & {_opaque: typeof ClassName};
+declare const ClassName: unique symbol;
+
 export async function loadSchema(schemaLocation: string, options: LoadSchemaOptions & { rootTypes?: Partial<Record<OperationTypeNodeName, string>> }) {
   let rootTypes = undefined;
 
-  if (hasProperty(options, "rootTypes")) {
+  if (typeof options !== "undefined" && "rootTypes" in options) {
     rootTypes = options.rootTypes;
     delete options["rootTypes"];
   }
@@ -64,7 +85,7 @@ export async function loadSchema(schemaLocation: string, options: LoadSchemaOpti
   return new GraphQLSchema(config);
 }
 
-export async function getDocumentLoaders(loadersList: Record<string, any>): Promise<LoadSchemaOptions> {
+export async function getDocumentLoaders(loadersList: LoaderOption): Promise<LoadSchemaOptions> {
   const loaders: Loader[] = [];
   const loaderOptions: Record<string, any> = {};
 

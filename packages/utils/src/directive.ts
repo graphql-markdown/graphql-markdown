@@ -1,6 +1,6 @@
 import type { GraphQLDirective } from "graphql";
 
-import { hasProperty, isEmpty } from "./object";
+import { isEmpty } from "./object";
 
 export const WILDCARD_DIRECTIVE = "*";
 
@@ -66,11 +66,11 @@ export function getCustomDirectiveOptions(
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
 ): CustomDirectiveOptions | undefined {
-  if (hasProperty(customDirectiveOptions, schemaDirectiveName) === true) {
+  if (schemaDirectiveName in customDirectiveOptions) {
     return customDirectiveOptions[schemaDirectiveName];
   }
 
-  if (hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true) {
+  if (WILDCARD_DIRECTIVE in customDirectiveOptions) {
     return customDirectiveOptions[WILDCARD_DIRECTIVE as DirectiveName];
   }
 
@@ -79,7 +79,7 @@ export function getCustomDirectiveOptions(
 
 export function isCustomDirective(schemaDirectiveName: DirectiveName, customDirectiveOptions: CustomDirective): boolean {
   return (
-    hasProperty(customDirectiveOptions, schemaDirectiveName) === true ||
-    hasProperty(customDirectiveOptions, WILDCARD_DIRECTIVE) === true
+    schemaDirectiveName in customDirectiveOptions ||
+    WILDCARD_DIRECTIVE in customDirectiveOptions
   );
 }
