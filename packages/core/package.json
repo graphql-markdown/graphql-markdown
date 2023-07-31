@@ -91,6 +91,13 @@
     "node": ">=16.14"
   },
   "publishConfig": {
+    "directory": "dist",
     "access": "public"
-  }
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "files": [
+    "dist"
+  ]
 }
