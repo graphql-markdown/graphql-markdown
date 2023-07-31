@@ -6,8 +6,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
 
-    "types": ["node"],
+    "types": ["node", "@types/jest"],
 
     "baseUrl": ".",
     "rootDir": "packages",
