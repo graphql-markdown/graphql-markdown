@@ -11,7 +11,7 @@ import {
 import { Renderer } from "./renderer";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { Options } from "./config";
+import { DiffMethod, Options } from "./config";
 
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;
@@ -49,9 +49,11 @@ export const generateDocFromSchema = async ({
 
   const schema = await loadSchema(schemaLocation as string, loaders);
 
-  const changed = await hasChanges(schema, tmpDir, diffMethod);
-  if (!changed) {
-    logger.info(`No changes detected in schema "${schemaLocation}".`);
+  if (diffMethod !== DiffMethod.NONE) {
+    const changed = await hasChanges(schema, tmpDir, diffMethod);
+    if (!changed) {
+      logger.info(`No changes detected in schema "${schemaLocation}".`);
+    }
   }
 
   const rootTypes = getSchemaMap(schema);

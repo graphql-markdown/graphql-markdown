@@ -9,7 +9,6 @@ import Printer from "@graphql-markdown/printer-legacy";
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
-
 import { GeneratorOptions, generateDocFromSchema } from "../../src/generator";
 import { DEFAULT_OPTIONS, DeprecatedOption, DiffMethod } from "../../src/config";
 
