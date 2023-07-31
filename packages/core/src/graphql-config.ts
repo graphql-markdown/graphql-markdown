@@ -18,6 +18,17 @@ type ThrowOptions = {
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> & Omit<ConfigOptions, "schema">
 
+const setLoaderOptions = (loaders: LoaderOption, options: PackageOptionsConfig) => {
+  for(const loader in loaders) {
+    if (typeof loaders[loader as ClassName] === "string") {
+      loaders[loader as ClassName] = { module: loaders[loader as ClassName], options } as PackageConfig;
+    } else {
+      (loaders[loader as ClassName] as PackageConfig).options = { ...options, ...(loaders[loader as ClassName] as PackageConfig).options } as PackageOptionsConfig;
+    }
+  }
+  return loaders;
+};
+
 export const loadConfiguration = async (
   id?: string,
   options?: PackageOptionsConfig,
@@ -52,25 +63,16 @@ export const loadConfiguration = async (
         projectConfig.schema = schema;
       } else {
         projectConfig.schema = Object.keys(schema)[0];
-        projectConfig.loaders = setLoaderOptions(
-          projectConfig.loaders,
-          Object.values(schema)[0] as PackageOptionsConfig,
-        );
+        if (typeof projectConfig.loaders !== "undefined") {
+          projectConfig.loaders = setLoaderOptions(
+            projectConfig.loaders,
+            Object.values(schema)[0] as PackageOptionsConfig,
+          );
+        }
       }
     }
     return projectConfig as Readonly<ExtensionProjectConfig>;
   } catch (error) {
     return undefined;
   }
-};
-
-const setLoaderOptions = (loaders: LoaderOption, options: PackageOptionsConfig) => {
-  for(const loader in loaders) {
-    if (typeof loaders[loader as ClassName] === "string") {
-      loaders[loader as ClassName] = { module: loaders[loader as ClassName], options } as PackageConfig;
-    } else {
-      (loaders[loader as ClassName] as PackageConfig).options = { ...options, ...(loaders[loader as ClassName] as PackageConfig).options } as PackageOptionsConfig;
-    }
-  }
-  return loaders;
 };

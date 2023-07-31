@@ -45,7 +45,7 @@ export type ConfigOptions = {
   groupByDirective?: GroupByDirectiveOptions
   homepage?: string
   linkRoot?: string
-  loaders: LoaderOption
+  loaders?: LoaderOption
   pretty?: boolean
   printer?: PackageName
   printTypeOptions?: ConfigPrintTypeOptions
