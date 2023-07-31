@@ -156,8 +156,7 @@ export async function buildConfig(configFileOpts?: ConfigOptions, cliOpts?: CliO
 export function getCustomDirectives(customDirectiveOptions?: CustomDirective, skipDocDirective?: DirectiveName[]): CustomDirective | undefined {
   if (
     typeof customDirectiveOptions === "undefined" ||
-    (typeof customDirectiveOptions === "object" &&
-      Object.keys(customDirectiveOptions).length === 0) ||
+      Object.keys(customDirectiveOptions).length === 0 ||
       typeof skipDocDirective === "undefined" ||
       skipDocDirective.length === 0
   ) {

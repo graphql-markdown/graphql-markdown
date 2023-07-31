@@ -16,6 +16,8 @@ import { Options } from "./config";
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;
 
+export type GeneratorOptions =  Options & {loggerModule?: string };
+
 export const generateDocFromSchema = async ({
   baseURL,
   schemaLocation,
@@ -33,7 +35,7 @@ export const generateDocFromSchema = async ({
   skipDocDirective,
   customDirective,
   loggerModule,
-}: Options & {loggerModule?: string }): Promise<void> => {
+}: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
   const logger = Logger.setInstance(loggerModule);

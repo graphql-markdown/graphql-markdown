@@ -1,26 +1,25 @@
-const { vol } = require("memfs");
-jest.mock("fs");
+import { vol } from "memfs";
+jest.mock("node:fs");
 
-jest.mock("@graphql-markdown/printer-legacy", () => {
-  return {
-    printType: jest.fn(),
-    init: jest.fn(),
-  };
-});
-const Printer = require("@graphql-markdown/printer-legacy");
+import { ClassName } from "@graphql-markdown/utils";
+
+jest.mock("@graphql-markdown/printer-legacy");
+import Printer from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/diff");
-const diff = require("@graphql-markdown/diff");
+import * as diff from "@graphql-markdown/diff";
 
-const { generateDocFromSchema } = require("../../src/generator");
+
+import { GeneratorOptions, generateDocFromSchema } from "../../src/generator";
+import { DEFAULT_OPTIONS, DeprecatedOption, DiffMethod } from "../../src/config";
 
 describe("renderer", () => {
   beforeEach(() => {
     jest.spyOn(Printer, "printType").mockImplementation((value) => value);
 
     vol.fromJSON({
-      "/output": {},
-      "/temp_test": {},
+      "/output": null,
+      "/temp_test": null,
       "/assets/generated.md": "Dummy homepage for tweet.graphql",
     });
   });
@@ -34,20 +33,21 @@ describe("renderer", () => {
     test("generates Markdown document structure from GraphQL schema", async () => {
       expect.assertions(1);
 
-      const config = {
+      const config: GeneratorOptions = {
         baseURL: "graphql",
         schemaLocation: "tests/__data__/tweet.graphql",
         outputDir: "/output",
         linkRoot: "docs",
         homepageLocation: "/assets/generated.md",
-        diffMethod: "NONE",
+        diffMethod: DiffMethod.NONE,
         tmpDir: "/temp",
-        loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
+        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
         printer: "@graphql-markdown/printer-legacy",
         printTypeOptions: {
-          deprecated: "default",
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.DEFAULT,
         },
-      };
+      } as GeneratorOptions;
 
       await generateDocFromSchema(config);
 
@@ -59,7 +59,7 @@ describe("renderer", () => {
 
       const logSpy = jest.spyOn(console, "info");
 
-      const config = {
+      const config: GeneratorOptions = {
         baseURL: "graphql",
         schemaLocation: "tests/__data__/tweet.graphql",
         outputDir: "/output",
@@ -67,14 +67,15 @@ describe("renderer", () => {
         homepageLocation: "/assets/generated.md",
         diffMethod: "SCHEMA-HASH",
         tmpDir: "/temp",
-        loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
+        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
         printer: "@graphql-markdown/printer-legacy",
         printTypeOptions: {
-          deprecated: "default",
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.DEFAULT,
         },
-      };
+      } as GeneratorOptions;
 
-      jest.spyOn(diff, "checkSchemaChanges").mockReturnValue(false);
+      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValue(false);
       await generateDocFromSchema(config);
 
       expect(logSpy).toHaveBeenCalledWith(
@@ -85,15 +86,15 @@ describe("renderer", () => {
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
       expect.assertions(2);
 
-      const config = {
+      const config: GeneratorOptions = {
         baseURL: "graphql",
         schemaLocation: "tests/__data__/schema_with_grouping.graphql",
         outputDir: "/output",
         linkRoot: "docs",
         homepageLocation: "/assets/generated.md",
-        diffMethod: "NONE",
+        diffMethod: DiffMethod.NONE,
         tmpDir: "/temp",
-        loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
+        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
         groupByDirective: {
           directive: "doc",
           field: "category",
@@ -101,9 +102,10 @@ describe("renderer", () => {
         },
         printer: "@graphql-markdown/printer-legacy",
         printTypeOptions: {
-          deprecated: "default",
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.DEFAULT,
         },
-      };
+      } as GeneratorOptions;
 
       await generateDocFromSchema(config);
 

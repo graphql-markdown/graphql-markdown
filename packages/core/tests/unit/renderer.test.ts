@@ -6,13 +6,8 @@ import fs from "node:fs";
 
 import { Kind } from "graphql/language/kinds";
 
-jest.mock("@graphql-markdown/printer-legacy", () => {
-  return {
-    printType: jest.fn(),
-    init: jest.fn(),
-  };
-});
-import * as Printer from "@graphql-markdown/printer-legacy";
+jest.mock("@graphql-markdown/printer-legacy");
+import Printer from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -29,10 +24,12 @@ import { Renderer } from "../../src/renderer";
 import { GraphQLScalarType } from "graphql/type/definition";
 import { DEFAULT_OPTIONS, TypeDeprecatedOption } from "../../src/config";
 
+const DEFAULT_RENDERER_OPTIONS = { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption };
+
 describe("renderer", () => {
   describe("class Renderer", () => {
-    let rendererInstance;
-    let baseURL = "graphql";
+    let rendererInstance: Renderer;
+    let baseURL: string = "graphql";
 
     beforeEach(() => {
       vol.fromJSON({
@@ -41,7 +38,7 @@ describe("renderer", () => {
         "/assets/generated.md": "Test Homepage",
       });
 
-      rendererInstance = new Renderer(Printer, "/output", baseURL, undefined, DEFAULT_OPTIONS.pretty, { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption});
+      rendererInstance = new Renderer(new Printer(), "/output", baseURL, undefined, DEFAULT_OPTIONS.pretty, { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption});
     });
 
     afterEach(() => {
@@ -105,7 +102,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         jest.spyOn(Printer, "printType").mockImplementation(() => "content");
-        await rendererInstance.renderRootTypes("Object", {
+        await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({ name: "foo", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
           bar: new GraphQLScalarType({ name: "bar", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
         });
@@ -143,7 +140,7 @@ describe("renderer", () => {
         const category = "foobar";
         const outputPath = "/output/docs";
 
-        rendererInstance.options = { index: true };
+        rendererInstance.options = { index: true, ...DEFAULT_RENDERER_OPTIONS };
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
@@ -224,7 +221,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
           "Foo",
-          "Baz",
+          "objects",
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
@@ -234,7 +231,7 @@ describe("renderer", () => {
       test("generate group _category_.yml file", async () => {
         expect.assertions(2);
 
-        const [type, name, root, group] = [{}, "Foo", "Baz", "lorem"];
+        const [type, name, root, group] = [{}, "Foo", "objects", "lorem"];
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "group", {
@@ -247,7 +244,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root,
+          root as Utils.SchemaEntities,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -271,7 +268,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root,
+          root as Utils.SchemaEntities,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -295,7 +292,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root,
+          root as Utils.SchemaEntities,
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
@@ -320,7 +317,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root,
+          root as Utils.SchemaEntities,
         );
 
         expect(spy).toHaveBeenCalledTimes(3);

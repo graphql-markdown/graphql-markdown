@@ -1,5 +1,5 @@
 jest.mock("@graphql-markdown/diff");
-import diff from "@graphql-markdown/diff";
+import * as diff from "@graphql-markdown/diff";
 
 import { hasChanges } from "../../src/diff";
 import { GraphQLSchema } from "graphql";

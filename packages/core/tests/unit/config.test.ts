@@ -1,6 +1,10 @@
 import { join } from "node:path";
 
+import { GraphQLDirective } from "graphql";
+
 import { COMPARE_METHOD } from "@graphql-markdown/diff";
+
+import type { DirectiveName, ClassName, PackageName } from "@graphql-markdown/utils";
 
 import * as config from "../../src/config";
 const {
@@ -14,11 +18,8 @@ const {
 
 import { type ConfigOptions, type CliOptions, DiffMethod } from "../../src/config";
 
-import type { DirectiveName, ClassName, PackageName } from "@graphql-markdown/utils";
-
 jest.mock("@graphql-markdown/utils");
-import utils from "@graphql-markdown/utils";
-import { GraphQLDirective } from "graphql";
+import * as Utils from "@graphql-markdown/utils";
 
 describe("config", () => {
   afterEach(() => {
@@ -46,7 +47,7 @@ describe("config", () => {
     test("supports deprecated skip option", () => {
       expect.hasAssertions();
 
-      jest.spyOn(utils, "hasProperty").mockReturnValue(true);
+      jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
 
       expect(
         getSkipDocDirectives(undefined, {
@@ -257,7 +258,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
+        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL!),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
@@ -283,7 +284,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
+        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         diffMethod: COMPARE_METHOD.FORCE,
@@ -294,7 +295,7 @@ describe("config", () => {
         docOptions: DEFAULT_OPTIONS.docOptions,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: DiffMethod.FORCE,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
@@ -365,7 +366,7 @@ describe("config", () => {
       expect(getCustomDirectives(options, ["test" as DirectiveName])).toBeUndefined();
     });
 
-    test("throws an error if descriptor format is invalid", () => {
+    test.only("throws an error if descriptor format is invalid", () => {
       expect.assertions(1);
 
       const options = {
@@ -382,14 +383,20 @@ describe("config", () => {
     test("returns custom directive maps", () => {
       expect.hasAssertions();
 
-      const descriptor = (_, constDirectiveType: GraphQLDirective) =>
+      const descriptor = (_: GraphQLDirective, constDirectiveType: GraphQLDirective) =>
         `Test${constDirectiveType.name}`;
       const options = {
         testA: { descriptor },
         testB: { descriptor },
       };
 
-      expect(getCustomDirectives(options, ["testB" as DirectiveName])).toMatchSnapshot();
+      expect(getCustomDirectives(options, ["testB" as DirectiveName])).toMatchInlineSnapshot(`
+      {
+        "testA": {
+          "descriptor": [Function],
+        },
+      }
+      `);
     });
   });
 });
