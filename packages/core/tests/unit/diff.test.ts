@@ -1,11 +1,13 @@
+import { GraphQLSchema } from "graphql";
+
+import { hasChanges } from "../../src/diff";
+
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
-import { hasChanges } from "../../src/diff";
-import { GraphQLSchema } from "graphql";
-
 describe("diff", () => {
   describe("hasChanges()", () => {
+
     afterEach(() => {
       jest.restoreAllMocks();
     });
@@ -15,7 +17,7 @@ describe("diff", () => {
       async (value) => {
         expect.assertions(2);
 
-        const logSpy = jest.spyOn(global.logger, "warn");
+        const logSpy = jest.spyOn(console, "warn");
 
         await expect(hasChanges(new GraphQLSchema({}), "", value)).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
@@ -27,7 +29,8 @@ describe("diff", () => {
       async (value) => {
         expect.assertions(2);
 
-        const logSpy = jest.spyOn(global.logger, "warn");
+        const logSpy = jest.spyOn(console, "warn");
+
         jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
         await expect(hasChanges(new GraphQLSchema({}), "", "NONE", value)).resolves.toBeTruthy();
@@ -38,7 +41,8 @@ describe("diff", () => {
     test("returns true if diff module package not resolved", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(global.logger, "warn");
+      const logSpy = jest.spyOn(console, "warn");
+
       jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
       await expect(hasChanges(new GraphQLSchema({}), "", "NONE", "foobar")).resolves.toBeTruthy();
@@ -50,7 +54,8 @@ describe("diff", () => {
     test("returns boolean if diff module package resolved", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(global.logger, "warn");
+      const logSpy = jest.spyOn(console, "warn");
+
       jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
       const result = await hasChanges(new GraphQLSchema({}), "", "FORCE");
