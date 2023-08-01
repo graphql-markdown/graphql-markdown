@@ -15,7 +15,6 @@ jest.mock("@graphql-markdown/utils", () => {
     toSlug: jest.fn(),
     escapeMDX: jest.fn(),
     pathUrl: { join: jest.fn() },
-    hasProperty: jest.fn(),
     isEmpty: jest.fn(),
     getConstDirectiveMap: jest.fn(),
     getTypeName: jest.fn(),

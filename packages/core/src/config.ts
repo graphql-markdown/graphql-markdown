@@ -3,7 +3,6 @@ import { tmpdir } from "node:os";
 
 import type {
   CustomDirective,
-  CustomDirectiveOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,

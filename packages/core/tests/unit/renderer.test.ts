@@ -7,12 +7,11 @@ import fs from "node:fs";
 import { Kind } from "graphql/language/kinds";
 
 jest.mock("@graphql-markdown/printer-legacy");
-import Printer from "@graphql-markdown/printer-legacy";
+import { Printer } from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
     ...jest.requireActual("@graphql-markdown/utils"),
-    hasProperty: jest.fn(),
     isDeprecated: jest.fn(),
     toSlug: (value: string) => value.toLowerCase(),
     startCase: (value: string) => value,
@@ -260,9 +259,6 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest
-          .spyOn(Utils, "hasProperty")
-          .mockImplementation((_, prop) => prop === root || prop === name);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -283,9 +279,6 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
         });
-        jest
-          .spyOn(Utils, "hasProperty")
-          .mockImplementation((_, prop) => prop === "deprecated");
         jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
@@ -307,9 +300,6 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
         });
-        jest
-          .spyOn(Utils, "hasProperty")
-          .mockImplementation((_, prop) => prop === "deprecated");
         jest.spyOn(Utils, "isDeprecated").mockReturnValue(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
@@ -334,7 +324,6 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
         jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
