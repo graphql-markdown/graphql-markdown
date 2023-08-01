@@ -1,15 +1,15 @@
-const {
+import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLInterfaceType,
-} = require("graphql");
+} from "graphql";
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
-const {
+import {
   printCodeInterface,
   printInterfaceMetadata,
-} = require("../../../src/graphql/interface");
+} from "../../../src/graphql/interface";
 
 describe("interface", () => {
   const type = new GraphQLInterfaceType({
@@ -68,7 +68,7 @@ describe("interface", () => {
     test("returns an interface with its fields", () => {
       expect.hasAssertions();
 
-      const code = printCodeInterface(type);
+      const code = printCodeInterface(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`
         "interface TestInterfaceName {

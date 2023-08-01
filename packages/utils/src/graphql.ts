@@ -4,11 +4,9 @@ import {
   DirectiveNode,
   getDirectiveValues,
   getNamedType, 
-  GraphQLArgument, 
   GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
-  GraphQLEnumValue,
   GraphQLField,
   GraphQLFloat,
   GraphQLID,
@@ -35,7 +33,7 @@ import { loadSchema as asyncLoadSchema, LoadSchemaOptions } from "@graphql-tools
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
 import { convertArrayToObject } from "./array";
-import { hasMethod, hasProperty, isEmpty } from "./object";
+import { hasMethod, isEmpty } from "./object";
 import { Loader } from "graphql-config";
 
 enum OperationTypeNodeName {
@@ -156,7 +154,7 @@ function formatDefaultValue(type: GraphQLType, defaultValue: unknown): unknown |
   }
 }
 
-export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, type: any): Record<string, T> | undefined {
+export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, type: unknown): Record<string, T> | undefined {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -179,7 +177,7 @@ export function getTypeFromSchema<T>(schema: GraphQLSchema | undefined | null, t
 
   return Object.keys(typeMap)
     .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => instanceOf(typeMap[key], type))
+    .filter((key) => instanceOf(typeMap[key], type as any))
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
@@ -214,7 +212,7 @@ export function hasDirective(node: unknown, directives?: string[] | string): boo
   );
 }
 
-export function getDirective(node: GraphQLDirective | GraphQLType | GraphQLArgument | GraphQLEnumValue | GraphQLField<any, any, any>, directives?: string[] | string): GraphQLDirective[] {
+export function getDirective(node: unknown, directives?: string[] | string): GraphQLDirective[] {
   if (
     !hasAstNode(node) ||
     typeof directives === "undefined" ||
@@ -241,10 +239,10 @@ export function getDirective(node: GraphQLDirective | GraphQLType | GraphQLArgum
 }
 
 export function getConstDirectiveMap(
-  node: GraphQLNamedType | GraphQLArgument | GraphQLDirective | GraphQLField<any, any, any> | GraphQLEnumValue,
-  options: Record<string, any> & { customDirectives?: Record<string, any> },
+  node: unknown,
+  options?: Record<string, any> & { customDirectives?: Record<string, any> },
 ): Record<string,any> | undefined {
-  if (typeof options.customDirectives === "undefined" || isEmpty(options.customDirectives)) {
+  if (typeof options === "undefined" || typeof options.customDirectives === "undefined" || isEmpty(options.customDirectives)) {
     return undefined;
   }
 
@@ -260,8 +258,8 @@ export function getConstDirectiveMap(
   }, {} as Record<string,any>);
 }
 
-export function getTypeDirectiveArgValue(directiveType: GraphQLDirective, astNode: ASTNode | GraphQLNamedType, argName: string): any {
-  const args = getTypeDirectiveValues(directiveType, astNode);
+export function getTypeDirectiveArgValue(directiveType: GraphQLDirective, node: unknown, argName: string): any {
+  const args = getTypeDirectiveValues(directiveType, node);
 
   if (typeof args === "undefined" || typeof args[argName] === "undefined") {
     throw new Error(`Directive argument '${argName}' not found!`);
@@ -270,50 +268,52 @@ export function getTypeDirectiveArgValue(directiveType: GraphQLDirective, astNod
   return args[argName];
 }
 
-export function getTypeDirectiveValues(directiveType: GraphQLDirective, type: ASTNode | GraphQLNamedType): Record<string,any> | undefined {
+export function getTypeDirectiveValues(directiveType: GraphQLDirective, type: unknown): Record<string,any> | undefined {
   if (hasAstNode(type)) {
     return getDirectiveValues(directiveType, (<GraphQLNamedType>type).astNode as {
-      readonly directives?: readonly DirectiveNode[] | undefined;
-  });
+        readonly directives?: readonly DirectiveNode[] | undefined;
+    });
   }
   return getDirectiveValues(directiveType, <ASTNode>type as {
     readonly directives?: readonly DirectiveNode[] | undefined;
-});
+  });
+}
+
+function __getFields(type: unknown, processor: Function, fallback: unknown) {
+  if (
+    !(typeof type !== "object" ||
+    type == null || 
+    "getFields" in type)) 
+  {
+    return fallback;
+  }
+
+  const fieldMap = (<GraphQLObjectType>type).getFields();
+
+  return processor(fieldMap);
 }
 
 export function getIntrospectionFieldsList(queryType?: unknown): Record<string, any> {
-  if (
-    typeof queryType === "undefined" ||
-    queryType == null ||
-    hasMethod(queryType, "getFields") === false
-  ) {
-    return {};
-  }
-
-  const typeMap = (<GraphQLObjectType>queryType).getFields();
-
-  return Object.keys(typeMap).reduce(
-    (res, key) => ({ ...res, [key]: typeMap[key] }),
+  return __getFields(queryType, (fieldMap: any) => Object.keys(fieldMap).reduce(
+    (res, key) => ({ ...res, [key]: fieldMap[key] }),
     {} as Record<string, any>,
-  );
+  ), {});
 }
 
 export function getFields(type: unknown) {
-  if (!hasMethod(type, "getFields")) {
-    return [];
-  }
-  const fieldMap = (<GraphQLObjectType>type).getFields();
-  return Object.keys(fieldMap).map((name) => fieldMap[name]);
+  return __getFields(type, (fieldMap: any) => Object.keys(fieldMap).map((name) => fieldMap[name]), []);
 }
 
 export function getTypeName(type: unknown, defaultName: string = ""): string {
+  if(typeof type !== "object" || type === null) {
+    return defaultName;
+  }
+
   switch (true) {
-    case hasProperty(type, "name"):
+    case "name" in type:
       return (<any>type).name;
-    case hasMethod(type, "toString"):
+    case "toString" in type:
       return  (<any>type).toString();
-    case typeof type === "undefined":
-    case type == null:
     default:
       return defaultName;
   }
@@ -471,18 +471,19 @@ export function getRelationOfImplementation(type: unknown, schema: GraphQLSchema
 }
 
 export function isParametrizedField(type: unknown): type is GraphQLField<any, any, any> {
-  return hasProperty(type, "args") && (<GraphQLField<any, any, any>>type).args.length > 0;
+  return typeof type === "object" && type !== null && "args" in type && (<GraphQLField<any, any, any>>type).args.length > 0;
 }
 
 export function isOperation(type: unknown): boolean {
-  return hasProperty(type, "type");
+  return typeof type === "object" && type !== null && "type" in type;
 }
 
 export function isDeprecated<T>(type: T): type is T & Partial<{deprecationReason: string, isDeprecated: boolean}> {
   return (
-    (hasProperty(type, "isDeprecated") && (<any>type).isDeprecated === true) ||
-    (hasProperty(type, "deprecationReason") &&
-      typeof (<any>type).deprecationReason === "string")
+    (typeof type === "object" && type !== null) && (
+    ("isDeprecated" in type && type.isDeprecated === true) ||
+    ("deprecationReason" in type &&
+      typeof type.deprecationReason === "string"))
   );
 }
 
@@ -500,6 +501,7 @@ export {
   isScalarType,
   isUnionType,
   printSchema,
+  GraphQLNamedType, GraphQLSchema, isNamedType,
 } from "graphql";
 
 export type {

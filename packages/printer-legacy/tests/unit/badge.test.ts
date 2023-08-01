@@ -3,7 +3,6 @@ jest.mock("@graphql-markdown/utils", () => {
     toSlug: jest.fn(),
     escapeMDX: jest.fn((t) => t),
     pathUrl: jest.fn(),
-    hasProperty: jest.fn(),
     isEmpty: jest.fn(() => false),
     isNonNullType: jest.fn(),
     isListType: jest.fn(),
@@ -20,23 +19,25 @@ jest.mock("@graphql-markdown/utils", () => {
     getConstDirectiveMap: jest.fn(),
   };
 });
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("../../src/link", () => {
   return {
     getLinkCategory: jest.fn(),
   };
 });
-const Link = require("../../src/link");
+import { Link } from "../../src/link";
 
 jest.mock("../../src/group", () => {
   return {
     getGroup: jest.fn(),
   };
 });
-const Group = require("../../src/group");
+import * as Group from "../../src/group";
 
-const Badge = require("../../src/badge");
+import * as Badge from "../../src/badge";
+
+import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
 
 describe("badge", () => {
   afterEach(() => {
@@ -47,11 +48,10 @@ describe("badge", () => {
     test("returns a MDX string of Badge components", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(true);
-      jest.spyOn(Utils.graphql, "isNonNullType").mockReturnValueOnce(true);
-      jest.spyOn(Utils.object, "isEmpty").mockReturnValueOnce(true);
+      jest.spyOn(Utils, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
-      const badges = Badge.printBadges({}, { typeBadges: true });
+      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: true });
 
       expect(badges).toMatchInlineSnapshot(
         `"<Badge class="badge badge--secondary" text="non-null"/>"`,
@@ -61,9 +61,7 @@ describe("badge", () => {
     test("returns an empty string if typeBadges is not enabled", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(true);
-
-      const badges = Badge.printBadges({}, { typeBadges: false });
+      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: false });
 
       expect(badges).toBe("");
     });
@@ -71,9 +69,7 @@ describe("badge", () => {
     test("returns an empty string if no typeBadges option", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(false);
-
-      const badges = Badge.printBadges({}, {});
+      const badges = Badge.printBadges({}, {} as unknown as Options);
 
       expect(badges).toBe("");
     });
@@ -83,7 +79,7 @@ describe("badge", () => {
 
       jest.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
 
-      const badges = Badge.printBadges({}, { typeBadges: true });
+      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: true });
 
       expect(badges).toBe("");
     });
@@ -93,7 +89,7 @@ describe("badge", () => {
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.graphql, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(Utils, "isNonNullType").mockReturnValueOnce(true);
 
       const type = {};
 
@@ -107,7 +103,7 @@ describe("badge", () => {
     test("return list badge is type is list", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils.graphql, "isListType").mockReturnValueOnce(true);
+      jest.spyOn(Utils, "isListType").mockReturnValueOnce(true);
 
       const type = {};
 

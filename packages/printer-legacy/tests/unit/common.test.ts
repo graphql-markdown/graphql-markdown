@@ -1,18 +1,19 @@
-const {
+import {
   DirectiveLocation,
   GraphQLDirective,
   GraphQLScalarType,
-} = require("graphql");
+} from "graphql";
 
-const {
+import {
   getConstDirectiveMap,
-} = require("@graphql-markdown/utils");
+} from "@graphql-markdown/utils";
 
-const {
+import {
   printCustomDirectives,
   printDeprecation,
   printDescription,
-} = require("../../src/common");
+} from "../../src/common";
+import { DEFAULT_OPTIONS } from "printer-legacy/src/const/options";
 
 describe("common", () => {
   describe("printDescription()", () => {
@@ -90,9 +91,7 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type, undefined, {
-        text: "Not a string",
-      });
+      const description = printDescription(type, undefined, undefined);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -141,10 +140,11 @@ describe("common", () => {
       };
 
       const options = {
+        ...DEFAULT_OPTIONS,
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive) => `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective) => `Test ${directive.name}`,
           },
         },
       };
@@ -234,7 +234,7 @@ describe("common", () => {
     test("does not print directive description if type has no directive", () => {
       expect.hasAssertions();
 
-      const description = printCustomDirectives(type, {});
+      const description = printCustomDirectives(type, DEFAULT_OPTIONS);
 
       expect(description).toBe("");
     });
@@ -243,15 +243,16 @@ describe("common", () => {
       expect.hasAssertions();
 
       const options = {
+        ...DEFAULT_OPTIONS,
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive) => `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective) => `Test ${directive.name}`,
           },
         },
       };
-      const constDirectiveMap = getConstDirectiveMap(type, options);
-      const description = printCustomDirectives(type, constDirectiveMap);
+
+      const description = printCustomDirectives(type, options);
 
       expect(description).toMatchInlineSnapshot(`""`);
     });

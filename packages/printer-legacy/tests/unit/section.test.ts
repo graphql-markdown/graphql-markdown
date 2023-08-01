@@ -1,20 +1,21 @@
-const {
+import {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLList,
   GraphQLObjectType,
   GraphQLString,
-} = require("graphql");
+} from "graphql";
 
-const {
+import {
   printSection,
   printSectionItem,
   printSectionItems,
-} = require("../../src/section");
+} from "../../src/section";
 
-const { HIDE_DEPRECATED, SHOW_DEPRECATED } = require("../../src/const/strings");
+import { HIDE_DEPRECATED, SHOW_DEPRECATED } from "../../src/const/strings";
 
-const { DEFAULT_OPTIONS } = require("../../src/const/options");
+import { DEFAULT_OPTIONS, DeprecatedOption, SectionLevel } from "../../src/const/options";
+import { DirectiveName } from "@graphql-markdown/utils";
 
 describe("section", () => {
   describe("printSection()", () => {
@@ -46,7 +47,7 @@ describe("section", () => {
 
       const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
-        level: "",
+        level: SectionLevel.NONE,
         collapsible: {
           dataOpen: HIDE_DEPRECATED,
           dataClose: SHOW_DEPRECATED,
@@ -77,8 +78,8 @@ describe("section", () => {
       const content = ["section content"];
 
       const section = printSection(content, title, {
-        level: "#",
         ...DEFAULT_OPTIONS,
+        level: "#",
       });
 
       expect(section).toMatchInlineSnapshot(`
@@ -98,7 +99,7 @@ describe("section", () => {
       expect.hasAssertions();
 
       const title = "section title";
-      const content = [];
+      const content: any[] = [];
 
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
@@ -153,6 +154,7 @@ describe("section", () => {
       const type = new GraphQLObjectType({
         name: "EntityTypeName",
         description: "Lorem ipsum",
+        fields: {}
       });
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
@@ -181,6 +183,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 
 Excepteur sint occaecat cupidatat non proident, 
 sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+      fields: {}
       });
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
@@ -211,6 +214,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         type: new GraphQLNonNull(
           new GraphQLObjectType({
             name: "NonNullableObjectType",
+            fields: {}
           }),
         ),
       };
@@ -235,6 +239,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
           new GraphQLList(
             new GraphQLObjectType({
               name: "NonNullableObjectType",
+              fields: {}
             }),
           ),
         ),
@@ -351,7 +356,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc"],
+        skipDocDirective: ["@noDoc" as DirectiveName],
       });
 
       expect(section).toBe("");
@@ -370,8 +375,8 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc"],
-        printDeprecated: "skip",
+        skipDocDirective: ["@noDoc" as DirectiveName],
+        deprecated: DeprecatedOption.SKIP,
       });
 
       expect(section).toBe("");
@@ -403,7 +408,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc"],
+        skipDocDirective: ["@noDoc" as DirectiveName],
       });
 
       expect(section).toMatchInlineSnapshot(`

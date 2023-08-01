@@ -1,15 +1,15 @@
-const {
+import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLInputObjectType,
-} = require("graphql");
+} from "graphql";
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
-const {
+import {
   printCodeInput,
   printInputMetadata,
-} = require("../../../src/graphql/input");
+} from "../../../src/graphql/input";
 
 describe("input", () => {
   const type = new GraphQLInputObjectType({
@@ -50,7 +50,7 @@ describe("input", () => {
     test("returns an input with its fields", () => {
       expect.hasAssertions();
 
-      const code = printCodeInput(type);
+      const code = printCodeInput(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`
         "input TestName {

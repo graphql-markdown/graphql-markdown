@@ -1,4 +1,4 @@
-import { GraphQLArgument, GraphQLEnumValue, GraphQLField, GraphQLNamedType } from "graphql";
+import { GraphQLType } from "graphql";
 
 import {
   getNamedType,
@@ -24,10 +24,14 @@ export type Badge = {
   classname: string
 };
 
-export const getTypeBadges = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, groups?: SchemaEntitiesGroupMap): Badge[] => {
-  const rootType = ("type" in type ? type.type : type) as GraphQLNamedType;
-
+export const getTypeBadges = (type: unknown, groups?: SchemaEntitiesGroupMap): Badge[] => {
   const badges: Badge[] = [];
+
+  if (typeof type !== "object" || type === null) {
+    return badges;
+  }
+
+  const rootType = ("type" in type ? type.type : type) as GraphQLType;
 
   if (isDeprecated(type) === true) {
     badges.push({
@@ -49,15 +53,18 @@ export const getTypeBadges = (type: GraphQLNamedType | GraphQLArgument | GraphQL
     badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }
 
-  const group = getGroup(rootType, groups, category?.plural as SchemaEntities);
-  if (typeof group !== "undefined" && group !== "") {
-    badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
+  if (typeof groups !== "undefined") {
+    const typeCategory = (typeof category === "string" ? category : category?.plural) as SchemaEntities;
+    const group = getGroup(rootType, groups, typeCategory);
+    if (typeof group !== "undefined" && group !== "") {
+      badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
+    }
   }
-
+  
   return badges;
 };
 
-export const printBadges = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, options: Options): MDXString | string => {
+export const printBadges = (type: unknown, options: Options): MDXString | string => {
   if (!("typeBadges" in options) || options.typeBadges !== true) {
     return "";
   }

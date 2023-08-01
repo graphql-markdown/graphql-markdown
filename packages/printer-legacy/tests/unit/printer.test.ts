@@ -1,4 +1,4 @@
-const {
+import {
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLID,
@@ -7,7 +7,8 @@ const {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-} = require("graphql");
+  GraphQLSchema
+} from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -29,14 +30,26 @@ jest.mock("@graphql-markdown/utils", () => {
     isUnionType: jest.fn(),
   };
 });
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("../../src/graphql");
-const GraphQLPrinter = require("../../src/graphql");
+import * as GraphQLPrinter from "../../src/graphql";
 
-const { Printer, DEFAULT_OPTIONS } = require("../../src/printer");
+import { Printer } from "../../src/printer";
+import {DEFAULT_OPTIONS, Options} from "../../src/const/options";
 
 describe("Printer", () => {
+  enum TypeGuard {
+    DIRECTIVE = "isDirectiveType",
+    ENUM = "isEnumType",
+    INPUT = "isInputType",
+    INTERFACE = "isInterfaceType",
+    OBJECT = "isObjectType",
+    SCALAR = "isScalarType",
+    UNION = "isUnionType",
+    OPERATION = "isOperation"
+  }
+
   const types = [
     {
       name: "Directive",
@@ -44,7 +57,9 @@ describe("Printer", () => {
         name: "TestDirective",
         locations: [],
       }),
-      guard: "isDirectiveType",
+      guard: TypeGuard.DIRECTIVE,
+      printCode: "printCodeDirective",
+      printMeta: "printDirectiveMetadata"
     },
     {
       name: "Enum",
@@ -52,7 +67,9 @@ describe("Printer", () => {
         name: "TestEnum",
         values: {},
       }),
-      guard: "isEnumType",
+      guard: TypeGuard.ENUM,
+      printCode: "printCodeEnum",
+      printMeta: "printEnumMetadata"
     },
     {
       name: "Input",
@@ -60,7 +77,9 @@ describe("Printer", () => {
         name: "TestInput",
         fields: {},
       }),
-      guard: "isInputType",
+      guard: TypeGuard.INPUT,
+      printCode: "printCodeInput",
+      printMeta: "printInputMetadata"
     },
     {
       name: "Interface",
@@ -68,7 +87,9 @@ describe("Printer", () => {
         name: "TestInterface",
         fields: {},
       }),
-      guard: "isInterfaceType",
+      guard: TypeGuard.INTERFACE,
+      printCode: "printCodeInterface",
+      printMeta: "printInterfaceMetadata"
     },
     {
       name: "Object",
@@ -76,14 +97,18 @@ describe("Printer", () => {
         name: "TestObject",
         fields: {},
       }),
-      guard: "isObjectType",
+      guard: TypeGuard.OBJECT,
+      printCode: "printCodeObject",
+      printMeta: "printObjectMetadata"
     },
     {
       name: "Scalar",
       type: new GraphQLScalarType({
         name: "TestScalar",
       }),
-      guard: "isScalarType",
+      guard: TypeGuard.SCALAR,
+      printCode: "printCodeScalar",
+      printMeta: "printScalarMetadata"
     },
     {
       name: "Union",
@@ -91,7 +116,9 @@ describe("Printer", () => {
         name: "TestUnion",
         types: [],
       }),
-      guard: "isUnionType",
+      guard: TypeGuard.UNION,
+      printCode: "printCodeUnion",
+      printMeta: "printUnionMetadata"
     },
     {
       name: "Operation",
@@ -100,14 +127,16 @@ describe("Printer", () => {
         type: GraphQLID,
         args: [],
       },
-      guard: "isOperation",
+      guard: TypeGuard.OPERATION,
+      printCode: "printCodeOperation",
+      printMeta: "printOperationMetadata"
     },
-  ];
+  ] as const;
 
   beforeEach(() => {
     jest
-      .spyOn(Utils.graphql, "getTypeName")
-      .mockImplementation((value) => value);
+      .spyOn(Utils, "getTypeName")
+      .mockImplementation((value) => value as string);
   });
 
   afterEach(() => {
@@ -124,7 +153,7 @@ describe("Printer", () => {
 
       expect(Printer.options).toMatchInlineSnapshot(`
         {
-          "basePath": undefined,
+          "basePath": "/schema",
           "codeSection": true,
           "customDirectives": undefined,
           "groups": undefined,
@@ -141,7 +170,7 @@ describe("Printer", () => {
     test("does nothing is options is defined", () => {
       expect.hasAssertions();
 
-      Printer.options = {};
+      Printer.options = {} as Options;
 
       Printer.init();
 
@@ -153,7 +182,7 @@ describe("Printer", () => {
 
       Printer.options = undefined;
 
-      Printer.init({}, "test", "/", {
+      Printer.init(new GraphQLSchema({}), "test", "/", {
         groups: {},
         printTypeOptions: {
           codeSection: false,
@@ -161,12 +190,12 @@ describe("Printer", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: ["test"],
+        skipDocDirective: ["test" as Utils.DirectiveName],
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
         {
-          "basePath": undefined,
+          "basePath": "/test",
           "codeSection": false,
           "customDirectives": undefined,
           "groups": {},
@@ -250,11 +279,13 @@ describe("Printer", () => {
   describe("printCode()", () => {
     test.each(types)(
       "returns a Markdown graphql codeblock with type $name",
-      ({ type, name, guard }) => {
+      ({ type, printCode, name, guard }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
-        jest.spyOn(GraphQLPrinter, `printCode${name}`).mockReturnValue(name);
+        
+
+        jest.spyOn(Utils, guard).mockReturnValue(true);
+        jest.spyOn(GraphQLPrinter, printCode).mockReturnValue(name);
 
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
@@ -289,12 +320,12 @@ describe("Printer", () => {
   describe("printTypeMetadata()", () => {
     test.each(types)(
       "returns a Markdown graphql codeblock with type $name",
-      ({ type, name, guard }) => {
+      ({ type, printMeta, name, guard }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Utils.graphql, guard).mockReturnValue(true);
+        jest.spyOn(Utils, guard).mockReturnValue(true);
         const spy = jest
-          .spyOn(GraphQLPrinter, `print${name}Metadata`)
+          .spyOn(GraphQLPrinter, printMeta)
           .mockReturnValue(name);
 
         Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
@@ -315,22 +346,24 @@ describe("Printer", () => {
   });
 
   describe("printType()", () => {
+    const spies = [
+      "printCode",
+      "printCustomDirectives",
+      "printCustomTags",
+      "printDescription",
+      "printHeader",
+      "printRelations",
+      "printTypeMetadata",
+    ] as const;
+
     test.each(types)(
       "returns a Markdown formatted Docusaurus content for type $name",
       ({ name, type }) => {
         expect.hasAssertions();
 
-        const spies = [
-          "printCode",
-          "printCustomDirectives",
-          "printCustomTags",
-          "printDescription",
-          "printHeader",
-          "printRelations",
-          "printTypeMetadata",
-        ].map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
+        spies.map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
 
-        Printer.printType(name, type, DEFAULT_OPTIONS);
+        Printer.printType(name, type);
 
         spies.forEach((spy) => expect(spy).toHaveBeenCalledTimes(1));
       },
@@ -354,7 +387,7 @@ describe("Printer", () => {
 
     test("returns undefined if matches skipDocDirective", () => {
       expect.hasAssertions();
-      jest.spyOn(Utils.graphql, "hasDirective").mockReturnValue(true);
+      jest.spyOn(Utils, "hasDirective").mockReturnValue(true);
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();

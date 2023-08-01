@@ -1,20 +1,18 @@
-const {
+import {
   GraphQLDirective,
   GraphQLBoolean,
-  GraphQLString,
   DirectiveLocation,
-} = require("graphql");
+} from "graphql";
 
-const { DeprecatedOption } = require("core/src/config");
+import {
+  DEFAULT_OPTIONS, 
+  DeprecatedOption,
+} from "../../../src/const/options";
 
-const {
-  DEFAULT_OPTIONS,
-} = require("../../../src/const/options");
-
-const {
+import {
   printCodeDirective,
   printDirectiveMetadata,
-} = require("../../../src/graphql/directive");
+} from "../../../src/graphql/directive";
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {
@@ -23,8 +21,7 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        type: GraphQLString,
-        locations: [],
+        locations: []
       });
 
       const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
@@ -79,7 +76,7 @@ describe("directive", () => {
 
       const code = printDirectiveMetadata(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: DeprecatedOption.GROUP,
+        deprecated: DeprecatedOption.GROUP,
       });
 
       expect(code).toMatchInlineSnapshot(`
@@ -118,7 +115,6 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        type: GraphQLString,
         locations: [],
       });
 
@@ -132,7 +128,6 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        type: GraphQLString,
         locations: [],
         args: {
           ArgFooBar: {
@@ -155,7 +150,6 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        type: GraphQLString,
         locations: [DirectiveLocation.QUERY, DirectiveLocation.FIELD],
         args: {
           ArgFooBar: {
@@ -180,7 +174,6 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        type: GraphQLString,
         locations: [DirectiveLocation.QUERY],
         args: {
           ArgFooBar: {

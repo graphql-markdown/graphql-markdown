@@ -8,9 +8,10 @@ export interface CustomDirectiveFunction {
   (directive?: GraphQLDirective, node?: any): any
 }
 
+export type CustomDirectiveResolver = "descriptor" | "tag"
+
 export type CustomDirectiveOptions = {  
-  descriptor?: CustomDirectiveFunction
-  tag?: CustomDirectiveFunction
+  [name in CustomDirectiveResolver]?: CustomDirectiveFunction
 }
 
 export type CustomDirective = {
@@ -20,8 +21,10 @@ export type CustomDirective = {
 export type DirectiveName = string & {_opaque: typeof DirectiveName};
 declare const DirectiveName: unique symbol;
 
+export type CustomDirectiveMapItem = { type: GraphQLDirective } & CustomDirectiveOptions
+
 export type CustomDirectiveMap = {
-  [name: DirectiveName]: { type: GraphQLDirective } & CustomDirectiveOptions
+  [name: DirectiveName]: CustomDirectiveMapItem
 }
 
 export function getCustomDirectives(

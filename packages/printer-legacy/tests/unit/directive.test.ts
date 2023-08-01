@@ -1,28 +1,30 @@
-const { buildSchema } = require("graphql");
+import { GraphQLDirective, buildSchema } from "graphql";
+
+import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    hasProperty: jest.fn(),
+    ...jest.requireActual("@graphql-markdown/utils"),
     isEmpty: jest.fn(),
     getConstDirectiveMap: jest.fn(),
     escapeMDX: jest.fn(),
   };
 });
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("../../src/link", () => {
   return {
     printLink: jest.fn(),
   };
 });
-const Link = require("../../src/link");
+import {Link} from "../../src/link";
 
-const {
+import {
   getCustomTags,
   printCustomDirectives,
   printCustomDirective,
   printCustomTags,
-} = require("../../src/directive");
+} from "../../src/directive";
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -48,25 +50,30 @@ describe("directive", () => {
         @testB(argA: 10, argB: ["testArgB"])
     }
   `);
-  const type = schema.getType("Test");
-  const descriptor = (directive) => `Test ${directive.name}`;
-  const tag = (directive) => ({
-    text: directive.toString(),
+  const type = schema.getType("Test")!;
+  const descriptor = (directive?: GraphQLDirective): any => `Test ${directive!.name}`;
+  const tag = (directive?: GraphQLDirective): any => ({
+    text: directive!.toString(),
     classname: "warning",
   });
-  const options = {
+  const directiveNotDeclared = new GraphQLDirective({
+    name: "Dummy",
+    locations: [],
+  });
+  const options: Options & Required<{customDirectives: Utils.CustomDirectiveMap}> = {
+    ...DEFAULT_OPTIONS,
     customDirectives: {
-      testA: {
-        type: schema.getDirective("testA"),
+      ["testA" as Utils.DirectiveName]: {
+        type: schema.getDirective("testA")!,
         descriptor,
         tag,
       },
-      nonExist: {
-        type: undefined,
+      ["nonExist" as Utils.DirectiveName]: {
+        type: directiveNotDeclared,
         descriptor,
       },
-      noDescriptor: {
-        type: undefined,
+      ["noDescriptor" as Utils.DirectiveName]: {
+        type: directiveNotDeclared,
       },
     },
   };
@@ -79,10 +86,9 @@ describe("directive", () => {
     test("returns a MDX string of Directive component", () => {
       expect.assertions(1);
 
-      const constDirectiveOption = options.customDirectives.testA;
+      const constDirectiveOption = options.customDirectives["testA" as Utils.DirectiveName];
 
       jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       expect(printCustomDirective(type, constDirectiveOption, options))
         .toMatchInlineSnapshot(`
@@ -95,10 +101,9 @@ describe("directive", () => {
     test("returns undefined if no descriptor exists", () => {
       expect.assertions(1);
 
-      const constDirectiveOption = options.customDirectives.noDescriptor;
+      const constDirectiveOption = options.customDirectives["noDescriptor" as Utils.DirectiveName];
 
       jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       expect(
         printCustomDirective(type, constDirectiveOption, options),
@@ -111,24 +116,22 @@ describe("directive", () => {
       expect.assertions(1);
 
       jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(undefined);
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
-      expect(printCustomDirectives(type, {})).toBe("");
+      expect(printCustomDirectives(type, {} as unknown as Options)).toBe("");
     });
 
     test("returns a MDX string of Directive components", () => {
       expect.assertions(1);
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives.testA,
+        testA: options.customDirectives["testA" as Utils.DirectiveName],
       };
       jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
         "### Directives
@@ -145,13 +148,13 @@ describe("directive", () => {
       expect.assertions(1);
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives.noDescriptor,
+        testA: options.customDirectives["noDescriptor" as Utils.DirectiveName],
       };
       jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
+      jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
 
       expect(printCustomDirectives(type, options)).toBe("");
     });
@@ -161,7 +164,7 @@ describe("directive", () => {
     test("does not return tags if type has no matching directive", () => {
       expect.hasAssertions();
 
-      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
+      jest.spyOn(Utils, "isEmpty").mockReturnValue(true);
 
       const tags = getCustomTags(type, options);
 
@@ -172,13 +175,13 @@ describe("directive", () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives.testA,
+        testA: options.customDirectives["testA" as Utils.DirectiveName],
       };
-      jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
-        .mockReturnValue(mockConstDirectiveMap);
 
-      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(false);
+      jest
+        .spyOn(Utils, "getConstDirectiveMap")
+        .mockReturnValue(mockConstDirectiveMap);
+      jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
 
       const tags = getCustomTags(type, options);
 
@@ -190,7 +193,7 @@ describe("directive", () => {
     test("prints empty string if type has no matching directive", () => {
       expect.hasAssertions();
 
-      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(true);
+      jest.spyOn(Utils, "isEmpty").mockReturnValue(true);
 
       const tags = printCustomTags(type, options);
 
@@ -200,14 +203,13 @@ describe("directive", () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives.testA,
+        testA: options.customDirectives["testA" as Utils.DirectiveName],
       };
       jest
-        .spyOn(Utils.graphql, "getConstDirectiveMap")
+        .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
-
-      jest.spyOn(Utils.object, "isEmpty").mockReturnValue(false);
-      jest.spyOn(Utils.string, "escapeMDX").mockImplementation((text) => text);
+      jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
+      jest.spyOn(Utils, "escapeMDX").mockImplementation((text) => text);
 
       const tags = printCustomTags(type, options);
 

@@ -1,18 +1,16 @@
-const {
+import {
   GraphQLObjectType,
   GraphQLBoolean,
   GraphQLString,
   GraphQLInterfaceType,
-} = require("graphql");
+} from "graphql";
 
-const { DeprecatedOption } = require("core/src/config");
+import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
-
-const {
+import {
   printCodeObject,
   printObjectMetadata,
-} = require("../../../src/graphql/object");
+} from "../../../src/graphql/object";
 
 describe("object", () => {
   const type = new GraphQLObjectType({
@@ -29,7 +27,7 @@ describe("object", () => {
         },
       },
     },
-    interfaces: () => [new GraphQLInterfaceType({ name: "TestInterfaceName" })],
+    interfaces: () => [new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} })],
   });
 
   describe("printObjectMetadata", () => {
@@ -84,7 +82,7 @@ describe("object", () => {
 
       const metadata = printObjectMetadata(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: DeprecatedOption.GROUP,
+        deprecated: DeprecatedOption.GROUP,
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -139,7 +137,7 @@ describe("object", () => {
     test("returns an object with its fields and interfaces", () => {
       expect.hasAssertions();
 
-      const code = printCodeObject(type);
+      const code = printCodeObject(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`
         "type TestName implements TestInterfaceName {
@@ -155,7 +153,7 @@ describe("object", () => {
     test("returns an object with no deprecated fields if SKIP", () => {
       expect.hasAssertions();
 
-      const code = printCodeObject(type, { printDeprecated: "skip" });
+      const code = printCodeObject(type, { ...DEFAULT_OPTIONS, deprecated: DeprecatedOption.SKIP });
 
       expect(code).toMatchInlineSnapshot(`
         "type TestName implements TestInterfaceName {

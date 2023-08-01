@@ -6,6 +6,8 @@ import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
 import { Options } from "../const/options";
 
+export type PrintDirectiveOptions = Pick<Options, "basePath" | "deprecated"> & Partial<Options>
+
 const printCodeDirectiveLocation = (type: GraphQLDirective) => {
   if (
     typeof type.locations === "undefined" ||
@@ -25,7 +27,7 @@ const printCodeDirectiveLocation = (type: GraphQLDirective) => {
   return code;
 };
 
-export const printDirectiveMetadata = (type: GraphQLDirective, options: Options) => {
+export const printDirectiveMetadata = (type: GraphQLDirective, options: PrintDirectiveOptions) => {
   if ("args" in type === false) {
     return "";
   }
@@ -33,15 +35,10 @@ export const printDirectiveMetadata = (type: GraphQLDirective, options: Options)
   return printMetadataSection(type, type.args as GraphQLArgument[], "Arguments", options);
 };
 
-export const printCodeDirective = (type: GraphQLDirective, options?: Options) => {
+export const printCodeDirective = (type: GraphQLDirective, options?: PrintDirectiveOptions) => {
   let code = `directive @${getTypeName(type)}`;
   code += printCodeArguments(type);
   code += printCodeDirectiveLocation(type);
 
   return code;
-};
-
-module.exports = {
-  printDirectiveMetadata,
-  printCodeDirective,
 };

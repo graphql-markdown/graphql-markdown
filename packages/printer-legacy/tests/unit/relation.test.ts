@@ -1,4 +1,4 @@
-const { GraphQLScalarType } = require("graphql");
+import { GraphQLScalarType } from "graphql/type/definition";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -12,18 +12,18 @@ jest.mock("@graphql-markdown/utils", () => {
     isOperation: jest.fn(),
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
-    hasProperty: jest.fn(),
     escapeMDX: jest.fn((s) => s),
     toSlug: jest.fn(),
     pathUrl: jest.fn(),
   };
 });
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
-const {
+import {
   printRelationOf,
   getRootTypeLocaleFromString,
-} = require("../../src/relation");
+} from "../../src/relation";
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("relation", () => {
   describe("printRelationOf()", () => {
@@ -44,7 +44,7 @@ describe("relation", () => {
       });
 
       jest
-        .spyOn(Utils.graphql, "getRelationOfReturn")
+        .spyOn(Utils, "getRelationOfReturn")
         .mockImplementation(() => ({
           queries: [{ name: "Foo" }],
           interfaces: [{ name: "Bar" }],
@@ -54,8 +54,8 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        Utils.graphql.getRelationOfReturn,
-        {},
+        Utils.getRelationOfReturn,
+        DEFAULT_OPTIONS,
       );
 
       expect(relation).toMatchInlineSnapshot(`
@@ -73,7 +73,8 @@ describe("relation", () => {
       const relation = printRelationOf(
         undefined,
         "RelationOf",
-        Utils.graphql.getRelationOfReturn,
+        Utils.getRelationOfReturn,
+        DEFAULT_OPTIONS
       );
 
       expect(relation).toBe("");
@@ -87,12 +88,13 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      jest.spyOn(Utils.graphql, "isOperation").mockImplementation(() => true);
+      jest.spyOn(Utils, "isOperation").mockImplementation(() => true);
 
       const relation = printRelationOf(
         type,
         "RelationOf",
-        Utils.graphql.getRelationOfReturn,
+        Utils.getRelationOfReturn,
+        DEFAULT_OPTIONS
       );
 
       expect(relation).toBe("");
@@ -106,7 +108,7 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const relation = printRelationOf(type, "RelationOf", undefined);
+      const relation = printRelationOf(type, "RelationOf", undefined, DEFAULT_OPTIONS);
 
       expect(relation).toBe("");
     });
@@ -123,6 +125,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         jest.fn().mockReturnValue(undefined),
+        DEFAULT_OPTIONS
       );
 
       expect(relation).toBe("");
@@ -140,6 +143,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         jest.fn().mockReturnValue([]),
+        DEFAULT_OPTIONS
       );
 
       expect(relation).toBe("");

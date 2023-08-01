@@ -1,17 +1,16 @@
-const { GraphQLDirective, GraphQLString } = require("graphql");
+import { GraphQLDirective, GraphQLInt, GraphQLScalarType, GraphQLString } from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    hasProperty: jest.fn(() => true),
     getDefaultValue: jest.fn((type) => type?.defaultValue),
     getTypeName: jest.fn((t) => t.name ?? t.toString()),
     hasDirective: jest.fn(),
     isDeprecated: jest.fn((t) => t.isDeprecated || false),
   };
 });
-const Utils = require("@graphql-markdown/utils");
 
-const { printCodeArguments, printCodeField } = require("../../src/code");
+import { printCodeArguments, printCodeField } from "../../src/code";
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("code", () => {
   afterAll(() => {
@@ -27,12 +26,12 @@ describe("code", () => {
         locations: [],
         args: {
           ParamWithDefault: {
-            type: "string",
+            type: GraphQLString,
             defaultValue: "defaultValue",
           },
-          ParamNoDefault: { type: "any" },
-          ParamIntZero: { type: "int", defaultValue: 0 },
-          ParamIntNoDefault: { type: "int" },
+          ParamNoDefault: { type: new GraphQLScalarType<any>({ name: "Any"}) },
+          ParamIntZero: { type: GraphQLInt, defaultValue: 0 },
+          ParamIntNoDefault: { type: GraphQLInt },
         },
       });
 
@@ -68,8 +67,6 @@ describe("code", () => {
         name: "OperationName",
       };
 
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValueOnce(false);
-
       const code = printCodeArguments(type);
 
       expect(code).toBe("");
@@ -81,8 +78,6 @@ describe("code", () => {
       expect.hasAssertions();
 
       const type = { name: "FooBar", type: "string" };
-
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(false);
 
       const code = printCodeField(type);
 
@@ -105,8 +100,6 @@ describe("code", () => {
           },
         ],
       };
-
-      jest.spyOn(Utils.object, "hasProperty").mockReturnValue(true);
 
       const code = printCodeField(type);
 
@@ -133,7 +126,7 @@ describe("code", () => {
         ],
       };
 
-      const code = printCodeField(type, { printDeprecated: "skip" });
+      const code = printCodeField(type, { ...DEFAULT_OPTIONS, deprecated: "skip" });
 
       expect(code).toBe("");
     });

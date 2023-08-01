@@ -1,8 +1,4 @@
-export type RootTypeName = "DIRECTIVE" | "ENUM" | "INPUT" | "INTERFACE" | "MUTATION" | "OPERATION" | "QUERY" | "SCALAR" | "SUBSCRIPTION" | "TYPE" | "UNION"
-export type TypeLocale = { singular: string, plural: string };
-export type RootTypeLocale = {
-  [name in RootTypeName]: TypeLocale
-};
+import { RootTypeLocale } from "./options";
 
 export const ROOT_TYPE_LOCALE: RootTypeLocale = {
   DIRECTIVE: { singular: "directive", plural: "directives" },

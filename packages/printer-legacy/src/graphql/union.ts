@@ -1,18 +1,20 @@
-import { GraphQLObjectType, GraphQLUnionType } from "graphql";
-
 import { isUnionType, getTypeName } from "@graphql-markdown/utils";
 
 import { printSection } from "../section";
 import { Options } from "../const/options";
 
-export const printUnionMetadata = (type: GraphQLUnionType, options: Options) => {
-  return printSection(type.getTypes() as GraphQLObjectType<any, any>[], "Possible types", {
+export const printUnionMetadata = (type: unknown, options: Options) => {
+  if (!isUnionType(type)) {
+    return "";
+  }
+
+  return printSection(type.getTypes(), "Possible types", {
     ...options,
     parentType: type.name,
   });
 };
 
-export const printCodeUnion = (type: GraphQLUnionType, options?: Options) => {
+export const printCodeUnion = (type: unknown, options?: Options) => {
   if (!isUnionType(type)) {
     return "";
   }

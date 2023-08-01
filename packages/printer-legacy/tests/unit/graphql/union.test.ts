@@ -1,16 +1,16 @@
-const { GraphQLInt, GraphQLScalarType, GraphQLUnionType } = require("graphql");
+import { GraphQLObjectType, GraphQLScalarType, GraphQLUnionType } from "graphql";
 
-const {
+import {
   printCodeUnion,
   printUnionMetadata,
-} = require("../../../src/graphql/union");
+} from "../../../src/graphql/union";
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 describe("union", () => {
   const type = new GraphQLUnionType({
     name: "UnionTypeName",
-    types: [{ name: "one" }, { name: "two" }],
+    types: [new GraphQLObjectType<string>({ name: "one", fields: {} }), new GraphQLObjectType<string>({ name: "two", fields: {} })],
   });
 
   describe("printUnionMetadata", () => {
@@ -51,9 +51,8 @@ describe("union", () => {
     test("returns empty string if not union type", () => {
       expect.hasAssertions();
 
-      const scalarType = new GraphQLScalarType({
+      const scalarType = new GraphQLScalarType<number>({
         name: "ScalarTypeName",
-        type: GraphQLInt,
       });
 
       const code = printCodeUnion(scalarType);

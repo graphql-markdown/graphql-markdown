@@ -1,14 +1,13 @@
-const { GraphQLID, GraphQLObjectType, GraphQLString } = require("graphql");
+import { GraphQLID, GraphQLObjectType, GraphQLString, GraphQLSchema } from "graphql";
 
-const Utils = require("@graphql-markdown/utils");
+import * as Utils from "@graphql-markdown/utils";
 
-const { DeprecatedOption } = require("core/src/config");
+import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
 
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
-const {
+import {
   printOperationMetadata,
   printCodeOperation,
-} = require("../../../src/graphql/operation");
+} from "../../../src/graphql/operation";
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
@@ -21,7 +20,7 @@ describe("operation", () => {
         args: [],
       };
 
-      jest.spyOn(Utils.graphql, "getTypeName").mockReturnValue("Test");
+      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
@@ -29,8 +28,9 @@ describe("operation", () => {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
+              fields: {}
             }),
-        },
+        } as unknown as GraphQLSchema,
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -60,7 +60,7 @@ describe("operation", () => {
         ],
       };
 
-      jest.spyOn(Utils.graphql, "getTypeName").mockReturnValue("Test");
+      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
@@ -68,8 +68,9 @@ describe("operation", () => {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
+              fields: {}
             }),
-        },
+        } as unknown as GraphQLSchema,
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -112,17 +113,18 @@ describe("operation", () => {
         ],
       };
 
-      jest.spyOn(Utils.graphql, "getTypeName").mockReturnValue("Test");
+      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: DeprecatedOption.GROUP,
+        deprecated: DeprecatedOption.GROUP,
         schema: {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
+              fields: {}
             }),
-        },
+        } as unknown as GraphQLSchema,
       });
 
       expect(metadata).toMatchInlineSnapshot(`

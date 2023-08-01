@@ -56,11 +56,11 @@ import {
 } from "./const/options";
 
 export class Printer {
-  static options: Options;
+  static options: Options | undefined;
 
   static init(
-    schema: GraphQLSchema,
-    baseURL: string,
+    schema: GraphQLSchema | undefined = undefined,
+    baseURL: string = "schema",
     linkRoot: string = "/",
     { customDirectives, groups, printTypeOptions, skipDocDirective }: {
       customDirectives?: CustomDirectiveMap,
@@ -191,29 +191,28 @@ export class Printer {
     }
   };
 
-  static printRelations = (type: GraphQLNamedType, options: Options): string | MDXString => {
-    if (Printer.options.relatedTypeSection !== true) {
+  static printRelations = (type: unknown, options: Options): string | MDXString => {
+    if (options.relatedTypeSection !== true) {
       return "";
     }
     return printRelations(type, options);
   };
 
-  static printType = (name: string, type: GraphQLNamedType, options: Options): MDXString | undefined => {
-    if (
-      typeof type === "undefined" ||
-      type === null ||
-      typeof name === "undefined" ||
-      name === null ||
-      hasDirective(type, Printer.options.skipDocDirective)
-    ) {
-      return undefined;
-    }
-
+  static printType = (name: string | undefined, type: unknown, options?: Options): MDXString | undefined => {
     const printTypeOptions: Options = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,
     };
+
+    if (
+      typeof type === "undefined" ||
+      type === null ||
+      typeof name === "undefined" ||
+      hasDirective(type, printTypeOptions.skipDocDirective)
+    ) {
+      return undefined;
+    }
 
     const header = Printer.printHeader(name, getTypeName(type), printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);

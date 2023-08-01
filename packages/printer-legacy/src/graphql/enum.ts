@@ -1,5 +1,4 @@
 import {
-  hasProperty,
   isEnumType,
   getTypeName,
   isDeprecated,
@@ -8,14 +7,17 @@ import {
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
-import { Options, DeprecatedOption } from "../const/options";
-import { GraphQLEnumType, GraphQLEnumValue } from "graphql";
+import { Options,DeprecatedOption } from "../const/options";
 
-export const printEnumMetadata = (type: GraphQLEnumType, options: Options) => {
-  return printMetadataSection(type, type.getValues() as GraphQLEnumValue[], "Values", options);
+export const printEnumMetadata = (type: unknown, options: Options) => {
+  if (!isEnumType(type)) {
+    return "";
+  }
+
+  return printMetadataSection(type, type.getValues(), "Values", options);
 };
 
-export const printCodeEnum = (type: GraphQLEnumType, options: Options) => {
+export const printCodeEnum = (type: unknown, options: Options) => {
   if (!isEnumType(type)) {
     return "";
   }
@@ -25,10 +27,10 @@ export const printCodeEnum = (type: GraphQLEnumType, options: Options) => {
     .getValues()
     .map((value) => {
       const skipDirective =
-        hasProperty(options, "skipDocDirective") &&
+      "skipDocDirective" in options &&
         hasDirective(value, options.skipDocDirective) === true;
       const skipDeprecated =
-        hasProperty(options, "printDeprecated") &&
+      "printDeprecated" in options &&
         options.deprecated === DeprecatedOption.SKIP &&
         isDeprecated(value) === true;
       if (skipDirective === true || skipDeprecated === true) {

@@ -1,9 +1,10 @@
-import { GraphQLNamedType, GraphQLSchema } from "graphql";
-
 import {
   getRelationOfField,
   getRelationOfImplementation,
   getRelationOfReturn,
+  GraphQLNamedType,
+  GraphQLSchema,
+  isNamedType,
   isOperation,
 } from "@graphql-markdown/utils";
 
@@ -19,7 +20,7 @@ import {
 import { Options } from "./const/options";
 import { MDXString } from "./const/mdx";
 
-export type IGetRelation = (type: GraphQLNamedType, schema: GraphQLSchema) => Record<string, GraphQLNamedType[]> | undefined;
+export type IGetRelation = (type: unknown, schema: GraphQLSchema) => Record<string, GraphQLNamedType[]> | undefined;
 
 export const getRootTypeLocaleFromString = (text: string): TypeLocale | undefined => {
   for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
@@ -30,9 +31,9 @@ export const getRootTypeLocaleFromString = (text: string): TypeLocale | undefine
   return undefined;
 };
 
-export const printRelationOf = (type: GraphQLNamedType, section: unknown, getRelation: IGetRelation, options: Options): string | MDXString => {
+export const printRelationOf = (type: unknown, section: unknown, getRelation: IGetRelation | undefined, options: Options): string | MDXString => {
   if (
-    isOperation(type) || typeof options.schema === "undefined"
+    !isNamedType(type) || isOperation(type) || typeof options.schema === "undefined" || typeof getRelation !== "function"
   ) {
     return "";
   }
@@ -51,7 +52,7 @@ export const printRelationOf = (type: GraphQLNamedType, section: unknown, getRel
 
     const category = getRootTypeLocaleFromString(relation)!;
     const badge = printBadge({
-      text: category.singular,
+      text: typeof category === "string" ? category : category.singular,
       classname: DEFAULT_CSS_CLASSNAME,
     });
     data = data.concat(
@@ -73,7 +74,7 @@ export const printRelationOf = (type: GraphQLNamedType, section: unknown, getRel
   return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
-export const printRelations = (type: GraphQLNamedType, options: Options): string | MDXString => {
+export const printRelations = (type: unknown, options: Options): string | MDXString => {
   const relations = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,

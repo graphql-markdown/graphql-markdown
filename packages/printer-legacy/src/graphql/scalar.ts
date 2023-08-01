@@ -1,13 +1,11 @@
-import { GraphQLScalarType } from "graphql";
-
 import { getTypeName } from "@graphql-markdown/utils";
 
 import { HEADER_SECTION_LEVEL, MARKDOWN_EOP } from "../const/strings";
 import { Options } from "../const/options";
 import { MDXString } from "../const/mdx";
 
-export const printSpecification = (type: GraphQLScalarType): string | MDXString => {
-  if (!type.specifiedByURL) {
+export const printSpecification = (type: unknown): string | MDXString => {
+  if (typeof type !== "object" || type === null || !("specifiedByURL" in type) || !type.specifiedByURL) {
     return "";
   }
 
@@ -17,11 +15,11 @@ export const printSpecification = (type: GraphQLScalarType): string | MDXString 
   return `${HEADER_SECTION_LEVEL} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}` as MDXString;
 };
 
-export const printScalarMetadata = (type: GraphQLScalarType): string | MDXString => {
+export const printScalarMetadata = (type: unknown): string | MDXString => {
   return printSpecification(type);
 };
 
-export const printCodeScalar = (type: GraphQLScalarType, options?: Options): string => {
+export const printCodeScalar = (type: unknown, options?: Options): string => {
   return `scalar ${getTypeName(type)}`;
 };
 

@@ -1,15 +1,14 @@
-const { GraphQLInt, GraphQLScalarType } = require("graphql");
+import { GraphQLScalarType } from "graphql";
 
-const {
+import {
   printCodeScalar,
   printScalarMetadata,
   printSpecification,
-} = require("../../../src/graphql/scalar");
+} from "../../../src/graphql/scalar";
 
 describe("scalar", () => {
-  const type = new GraphQLScalarType({
+  const type = new GraphQLScalarType<number>({
     name: "ScalarTypeName",
-    type: GraphQLInt,
   });
 
   describe("printSpecification()", () => {
@@ -57,9 +56,8 @@ describe("scalar", () => {
     test("returns specifiedBy tag if specifiedByUrl", () => {
       expect.hasAssertions();
 
-      const typeSpecifiedBy = new GraphQLScalarType({
+      const typeSpecifiedBy = new GraphQLScalarType<number>({
         name: "ScalarTypeName",
-        type: GraphQLInt,
         specifiedByURL: "https://graphql-markdown.github.io/",
       });
 

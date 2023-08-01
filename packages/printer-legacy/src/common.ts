@@ -1,9 +1,6 @@
-import { GraphQLArgument, GraphQLEnumValue, GraphQLField, GraphQLNamedType } from "graphql";
-
 import {
   isDeprecated,
   getConstDirectiveMap,
-  hasProperty,
   isEmpty,
   escapeMDX,
 } from "@graphql-markdown/utils";
@@ -18,7 +15,7 @@ import {
 import { Options } from "./const/options";
 import { MDXString } from "./const/mdx";
 
-export const printCustomDirectives = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, options: Options): string => {
+export const printCustomDirectives = (type: unknown, options?: Options): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (typeof constDirectiveMap === "undefined" || isEmpty(constDirectiveMap)) {
@@ -35,16 +32,20 @@ export const printCustomDirectives = (type: GraphQLNamedType | GraphQLArgument |
   return `${MARKDOWN_EOP}${content}`;
 };
 
-export const formatDescription = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, replacement: string = NO_DESCRIPTION_TEXT): string | MDXString => {
+export const formatDescription = (type: unknown, replacement: string = NO_DESCRIPTION_TEXT): string | MDXString => {
+  if (typeof type !== "object" || type === null) {
+    return `${MARKDOWN_EOP}${replacement}`;
+  }
+
   const description =
-    hasProperty(type, "description") && typeof type.description === "string"
+    "description" in type && typeof type.description === "string"
       ? escapeMDX(type.description)
       : replacement;
   return `${MARKDOWN_EOP}${description}`;
 };
 
-export const printDeprecation = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue): string => {
-  if (isDeprecated(type) === false) {
+export const printDeprecation = (type: unknown): string => {
+  if (typeof type !== "object" || type === null || isDeprecated(type) === false) {
     return "";
   }
 
@@ -56,7 +57,7 @@ export const printDeprecation = (type: GraphQLNamedType | GraphQLArgument | Grap
   return `${MARKDOWN_EOP}:::caution ${DEPRECATED.toUpperCase()}${MARKDOWN_EOL}${reason}:::`;
 };
 
-export const printDescription = (type: GraphQLNamedType | GraphQLArgument | GraphQLField<any, any, any> | GraphQLEnumValue, options: Options, noText?: string): string | MDXString => {
+export const printDescription = (type: unknown, options?: Options, noText?: string): string | MDXString => {
   const description = formatDescription(type, noText);
   const customDirectives = printCustomDirectives(type, options);
   const deprecation = printDeprecation(type);

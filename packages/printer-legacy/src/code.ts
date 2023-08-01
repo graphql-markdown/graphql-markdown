@@ -1,7 +1,4 @@
-import { GraphQLDirective, GraphQLField, GraphQLNamedType } from "graphql";
-
 import {
-  hasProperty,
   getDefaultValue,
   getTypeName,
   isDeprecated,
@@ -15,29 +12,36 @@ import {
 } from "./const/strings";
 import { Options, DeprecatedOption } from "./const/options";
 
-export const printCodeField = (type: GraphQLField<any, any, any> | GraphQLDirective, options: Options, indentationLevel: number = 0) => {
+export const printCodeField = (type: unknown, options?: Options, indentationLevel: number = 0) => {
+  if (typeof type !== "object" || type === null || !("type" in type)) {
+    return "";
+  }
+
   const skipDirective =
-    hasProperty(options, "skipDocDirective") &&
+    typeof options !== "undefined" &&
+    "skipDocDirective" in options &&
     hasDirective(type, options.skipDocDirective) === true;
   const skipDeprecated =
-    hasProperty(options, "printDeprecated") &&
+    typeof options !== "undefined" &&
+    "deprecated" in options &&
     options.deprecated === DeprecatedOption.SKIP &&
     isDeprecated(type) === true;
+
   if (skipDirective === true || skipDeprecated === true) {
     return "";
   }
 
   let code = `${getTypeName(type)}`;
   code += printCodeArguments(type, indentationLevel + 1);
-  code += `: ${getTypeName(type.type as GraphQLNamedType)}`;
+  code += `: ${getTypeName(type.type)}`;
   code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
   code += MARKDOWN_EOL;
 
   return code;
 };
 
-export const printCodeArguments = (type: GraphQLField<any, any, any> | GraphQLDirective, indentationLevel: number = 1) => {
-  if (!("args" in type) || type.args.length === 0) {
+export const printCodeArguments = (type: unknown, indentationLevel: number = 1) => {
+  if (typeof type !== "object" || type === null || !("args" in type) || !Array.isArray(type.args) || type.args.length === 0) {
     return "";
   }
 
