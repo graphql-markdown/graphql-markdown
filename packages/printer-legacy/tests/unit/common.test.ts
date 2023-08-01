@@ -4,8 +4,6 @@ import {
   GraphQLScalarType,
 } from "graphql";
 
-import { getConstDirectiveMap } from "@graphql-markdown/utils";
-
 import {
   printCustomDirectives,
   printDeprecation,

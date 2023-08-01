@@ -6,13 +6,13 @@ import { diff } from "@graphql-inspector/core";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
-import type { GraphQLSchema } from "graphql/type/schema";
 
 import {
   fileExists,
   readFile,
   saveFile,
   printSchema,
+  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema";

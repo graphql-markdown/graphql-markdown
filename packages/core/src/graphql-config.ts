@@ -55,7 +55,6 @@ export const loadConfiguration = async (
   let GraphQLConfig;
 
   try {
-    // eslint-disable-next-line node/no-missing-require
     GraphQLConfig = await import("graphql-config");
   } catch (error) {
     logger.log("Cannot find module 'graphql-config'!");

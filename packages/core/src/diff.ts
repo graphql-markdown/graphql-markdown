@@ -1,6 +1,4 @@
-import { GraphQLSchema } from "graphql";
-
-import { Logger } from "@graphql-markdown/utils";
+import { Logger, GraphQLSchema } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
 

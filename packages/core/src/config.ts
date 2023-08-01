@@ -12,6 +12,7 @@ import type {
 } from "@graphql-markdown/utils";
 
 import { loadConfiguration } from "./graphql-config";
+
 export const DOCS_URL = "https://graphql-markdown.github.io/docs";
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus";
 export const ASSETS_LOCATION = join(__dirname, "../assets/");
@@ -277,10 +278,10 @@ export function getSkipDocDirectives(
   );
 
   if (
-    (typeof configFileOpts !== undefined &&
+    (typeof configFileOpts !== "undefined" &&
       "printTypeOptions" in configFileOpts! &&
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
-    (typeof cliOpts !== undefined &&
+    (typeof cliOpts !== "undefined" &&
       "deprecated" in cliOpts! &&
       cliOpts?.deprecated === DeprecatedOption.SKIP)
   ) {

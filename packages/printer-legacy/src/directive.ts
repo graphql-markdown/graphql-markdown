@@ -2,7 +2,6 @@ import {
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
   getConstDirectiveMap,
-  GraphQLNamedType,
 } from "@graphql-markdown/utils";
 
 import {

@@ -103,7 +103,7 @@ describe("section", () => {
       expect.hasAssertions();
 
       const title = "section title";
-      const content: any[] = [];
+      const content: unknown[] = [];
 
       const section = printSection(content, title, DEFAULT_OPTIONS);
 

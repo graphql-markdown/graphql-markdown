@@ -1,12 +1,17 @@
-import { GraphQLArgument, GraphQLDirective } from "graphql";
-
-import { getTypeName } from "@graphql-markdown/utils";
+import {
+  getTypeName,
+  GraphQLArgument,
+  GraphQLDirective,
+} from "@graphql-markdown/utils";
 
 import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
 import { Options } from "../const/options";
 
-export type PrintDirectiveOptions = Pick<Options, "basePath" | "deprecated"> &
+export type PrintDirectiveOptions = Pick<
+  Options,
+  "basePath" | "deprecated" | "parentTypePrefix"
+> &
   Partial<Options>;
 
 const printCodeDirectiveLocation = (type: GraphQLDirective) => {
@@ -46,6 +51,7 @@ export const printDirectiveMetadata = (
 
 export const printCodeDirective = (
   type: GraphQLDirective,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: PrintDirectiveOptions,
 ) => {
   let code = `directive @${getTypeName(type)}`;

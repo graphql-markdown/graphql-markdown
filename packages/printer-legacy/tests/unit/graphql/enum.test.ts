@@ -1,10 +1,8 @@
-import { GraphQLInt, GraphQLEnumType, GraphQLScalarType } from "graphql";
+import { GraphQLEnumType, GraphQLScalarType } from "graphql";
 
 import { printCodeEnum, printEnumMetadata } from "../../../src/graphql/enum";
 
-const { DeprecatedOption } = require("core/src/config");
-
-const { DEFAULT_OPTIONS } = require("../../../src/const/options");
+import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
 
 describe("enum", () => {
   const type = new GraphQLEnumType({
@@ -49,7 +47,7 @@ describe("enum", () => {
 
       const metadata = printEnumMetadata(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: DeprecatedOption.GROUP,
+        deprecated: DeprecatedOption.GROUP,
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -101,7 +99,7 @@ describe("enum", () => {
 
       const code = printCodeEnum(type, {
         ...DEFAULT_OPTIONS,
-        printDeprecated: "skip",
+        deprecated: DeprecatedOption.SKIP,
       });
 
       expect(code).toMatchInlineSnapshot(`
@@ -114,7 +112,7 @@ describe("enum", () => {
     test("returns empty string if not enum type", () => {
       expect.hasAssertions();
 
-      const scalarType = new GraphQLScalarType<any>({
+      const scalarType = new GraphQLScalarType<unknown>({
         name: "ScalarTypeName",
       });
 

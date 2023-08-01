@@ -1,9 +1,8 @@
-import { GraphQLSchema } from "graphql";
-
 import {
   CustomDirectiveMap,
   DirectiveName,
   SchemaEntitiesGroupMap,
+  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 import { TypeDeprecatedOption, DeprecatedOption } from "core/src/config";

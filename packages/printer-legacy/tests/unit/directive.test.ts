@@ -26,6 +26,8 @@ import {
   printCustomTags,
 } from "../../src/directive";
 
+import { Badge } from "../../src/badge";
+
 describe("directive", () => {
   const schema = buildSchema(`
     directive @testA(
@@ -51,9 +53,9 @@ describe("directive", () => {
     }
   `);
   const type = schema.getType("Test")!;
-  const descriptor = (directive?: GraphQLDirective): any =>
+  const descriptor = (directive?: GraphQLDirective): string =>
     `Test ${directive!.name}`;
-  const tag = (directive?: GraphQLDirective): any => ({
+  const tag = (directive?: GraphQLDirective): Badge => ({
     text: directive!.toString(),
     classname: "warning",
   });
@@ -156,7 +158,6 @@ describe("directive", () => {
         .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
-      jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
 
       expect(printCustomDirectives(type, options)).toBe("");
     });
@@ -211,7 +212,9 @@ describe("directive", () => {
         .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
-      jest.spyOn(Utils, "escapeMDX").mockImplementation((text) => text);
+      jest
+        .spyOn(Utils, "escapeMDX")
+        .mockImplementation((text: unknown) => text as string);
 
       const tags = printCustomTags(type, options);
 

@@ -20,11 +20,7 @@ const {
   DEFAULT_OPTIONS,
 } = config;
 
-import {
-  type ConfigOptions,
-  type CliOptions,
-  DiffMethod,
-} from "../../src/config";
+import { type ConfigOptions, type CliOptions } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
 import * as Utils from "@graphql-markdown/utils";

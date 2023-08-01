@@ -14,6 +14,7 @@ export const printUnionMetadata = (type: unknown, options: Options) => {
   });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const printCodeUnion = (type: unknown, options?: Options) => {
   if (!isUnionType(type)) {
     return "";

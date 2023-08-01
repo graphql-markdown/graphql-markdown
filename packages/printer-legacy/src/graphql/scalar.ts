@@ -24,6 +24,7 @@ export const printScalarMetadata = (type: unknown): string | MDXString => {
   return printSpecification(type);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const printCodeScalar = (type: unknown, options?: Options): string => {
   return `scalar ${getTypeName(type)}`;
 };

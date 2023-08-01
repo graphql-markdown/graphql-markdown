@@ -1,17 +1,4 @@
 import {
-  GraphQLDirective,
-  GraphQLEnumType,
-  GraphQLField,
-  GraphQLInputObjectType,
-  GraphQLInterfaceType,
-  GraphQLNamedType,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  GraphQLSchema,
-  GraphQLUnionType,
-} from "graphql";
-
-import {
   CustomDirectiveMap,
   DirectiveName,
   SchemaEntitiesGroupMap,
@@ -26,6 +13,15 @@ import {
   isScalarType,
   isUnionType,
   pathUrl,
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLInputObjectType,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLUnionType,
+  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
@@ -154,7 +150,7 @@ export class Printer {
     switch (true) {
       case isOperation(type):
         code += printCodeOperation(
-          type as GraphQLField<any, any, any>,
+          type as GraphQLField<unknown, unknown, unknown>,
           options,
         );
         break;
@@ -211,7 +207,7 @@ export class Printer {
         return printDirectiveMetadata(type as GraphQLDirective, options);
       case isOperation(type):
         return printOperationMetadata(
-          type as GraphQLField<any, any, any>,
+          type as GraphQLField<unknown, unknown, unknown>,
           options,
         );
       default:

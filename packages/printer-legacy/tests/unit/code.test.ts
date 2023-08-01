@@ -34,7 +34,9 @@ describe("code", () => {
             type: GraphQLString,
             defaultValue: "defaultValue",
           },
-          ParamNoDefault: { type: new GraphQLScalarType<any>({ name: "Any" }) },
+          ParamNoDefault: {
+            type: new GraphQLScalarType<unknown>({ name: "Any" }),
+          },
           ParamIntZero: { type: GraphQLInt, defaultValue: 0 },
           ParamIntNoDefault: { type: GraphQLInt },
         },

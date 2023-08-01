@@ -1,10 +1,9 @@
-import type { GraphQLSchema } from "graphql/type/schema";
-
 import type {
   DirectiveName,
   CustomDirectiveMap,
   PackageName,
   SchemaEntitiesGroupMap,
+  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 import type { ConfigPrintTypeOptions, TypeDeprecatedOption } from "./config";
@@ -46,7 +45,7 @@ export interface IPrinter {
   printType(
     name: string,
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: Partial<PrinterOptions & PrinterConfig>,
   ): string;
 }
 

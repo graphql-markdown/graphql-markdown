@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { generateDocFromSchema, config } = require("@graphql-markdown/core");
 const { logger: Logger } = require("@graphql-markdown/utils");
 
@@ -7,7 +8,6 @@ const COMMAND = "graphql-to-doc";
 const DESCRIPTION = "Generate GraphQL Schema Documentation";
 const DEFAULT_ID = "default";
 
-// eslint-disable-next-line node/no-missing-require
 const LOGGER_MODULE = require.resolve("@docusaurus/logger");
 
 Logger.setInstance(LOGGER_MODULE);

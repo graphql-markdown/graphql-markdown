@@ -1,5 +1,3 @@
-import { GraphQLType, GraphQLNamedType } from "graphql/type/definition";
-
 import {
   getNamedType,
   getTypeName,
@@ -19,11 +17,13 @@ import {
   toSlug,
   pathUrl,
   SchemaEntity,
+  GraphQLType,
+  GraphQLNamedType,
 } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
-import { DEPRECATED, ROOT_TYPE_LOCALE, TypeLocale } from "./const/strings";
-import { Options, DeprecatedOption } from "./const/options";
+import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
+import { Options, DeprecatedOption, TypeLocale } from "./const/options";
 import { MDXString } from "./const/mdx";
 
 export type TypeLink = {
