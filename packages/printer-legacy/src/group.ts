@@ -4,13 +4,13 @@ import {
   toSlug,
   getNamedType,
   SchemaEntitiesGroupMap,
-  SchemaEntities,
+  SchemaEntity,
 } from "@graphql-markdown/utils";
 
 export const getGroup = (
   type: unknown,
   groups: SchemaEntitiesGroupMap | undefined,
-  typeCategory: SchemaEntities | undefined,
+  typeCategory: SchemaEntity | undefined,
 ): string => {
   if (
     typeof type !== "object" ||

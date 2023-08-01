@@ -22,10 +22,10 @@ export async function fileExists(filePath: string): Promise<boolean> {
 export async function saveFile(
   filePath: string,
   data: string,
-  prettify?: Function,
-) {
+  prettify?: (text: string, options?: unknown) => Promise<string | undefined>,
+): Promise<void> {
   if (typeof prettify === "function") {
-    data = await prettify(data);
+    data = (await prettify(data)) ?? data;
   }
   await ensureDir(dirname(filePath));
   await fs.writeFile(filePath, data, "utf8");

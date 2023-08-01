@@ -7,7 +7,7 @@ import {
   isNonNullType,
   escapeMDX,
   SchemaEntitiesGroupMap,
-  SchemaEntities,
+  SchemaEntity,
 } from "@graphql-markdown/utils";
 
 import { Options } from "./const/options";
@@ -62,7 +62,7 @@ export const getTypeBadges = (
   if (typeof groups !== "undefined") {
     const typeCategory = (
       typeof category === "string" ? category : category?.plural
-    ) as SchemaEntities;
+    ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
     if (typeof group !== "undefined" && group !== "") {
       badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);

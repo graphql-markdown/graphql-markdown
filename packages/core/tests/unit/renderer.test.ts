@@ -267,7 +267,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntities,
+          root as Utils.SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -291,7 +291,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntities,
+          root as Utils.SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -315,7 +315,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntities,
+          root as Utils.SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
@@ -340,7 +340,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntities,
+          root as Utils.SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(3);

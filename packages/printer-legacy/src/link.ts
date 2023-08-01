@@ -18,7 +18,7 @@ import {
   isUnionType,
   toSlug,
   pathUrl,
-  SchemaEntities,
+  SchemaEntity,
 } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
@@ -123,7 +123,7 @@ export class Link {
       typeof options !== "undefined" &&
       "groups" in options &&
       typeof options.groups !== "undefined"
-        ? getGroup(type, options.groups, category as SchemaEntities)
+        ? getGroup(type, options.groups, category as SchemaEntity)
         : "";
     const url = pathUrl.join(
       options.basePath!,

@@ -6,7 +6,7 @@ import { getObjPath } from "./object";
 
 export function stringCaseBuilder(
   str: string,
-  transformation?: Function,
+  transformation?: (word: string) => string,
   separator?: string,
 ): string {
   const hasTransformation = typeof transformation === "function";
@@ -45,7 +45,7 @@ export function toHTMLUnicode(char: string): string {
   return `&#x${unicodeChar.toUpperCase()};`;
 }
 
-export function escapeMDX(str: any): string {
+export function escapeMDX(str: unknown): string {
   return `${str}`.replace(/[<>{}]/g, toHTMLUnicode);
 }
 
@@ -80,13 +80,13 @@ export function kebabCase(str: string): string {
 
 export function interpolate(
   template: string,
-  variables?: Record<string, any>,
+  variables?: Record<string, unknown>,
   fallback?: string,
-) {
+): string {
   const regex = /\${[^{]+}/g;
 
   return template.replace(regex, (match) => {
     const objPath = match.slice(2, -1).trim();
-    return getObjPath(objPath, variables, fallback);
+    return getObjPath(objPath, variables, fallback) as string;
   });
 }

@@ -4,21 +4,27 @@ import { Logger } from "./logger";
 
 const logger = Logger.getInstance();
 
-export async function prettify(content: string, parser: string) {
+export async function prettify(
+  content: string,
+  parser: string,
+): Promise<string | undefined> {
   try {
-    const { format } = require("prettier");
+    const { format } = await import("prettier");
     return await format(content, { parser });
-  } catch (error) {
+  } catch (error: unknown) {
     logger.warn("Prettier is not found");
+    return undefined;
   }
 }
 
-export async function prettifyMarkdown(content: string) {
+export async function prettifyMarkdown(
+  content: string,
+): Promise<string | undefined> {
   return await prettify(content, "markdown");
 }
 
-export async function prettifyJavascript(content: string) {
+export async function prettifyJavascript(
+  content: string,
+): Promise<string | undefined> {
   return await prettify(content, "babel");
 }
-
-module.exports = { prettifyMarkdown, prettifyJavascript };

@@ -1,4 +1,4 @@
-import { SchemaEntities, SchemaMap, hasAstNode } from "./graphql";
+import { SchemaEntity, SchemaMap, hasAstNode } from "./graphql";
 import { DirectiveName } from "./directive";
 
 export type GroupByDirectiveOptions = {
@@ -8,7 +8,7 @@ export type GroupByDirectiveOptions = {
 };
 
 export type SchemaEntitiesGroupMap = Partial<
-  Record<SchemaEntities, Record<string, string | undefined>>
+  Record<SchemaEntity, Record<string, string | undefined>>
 >;
 
 export function getGroups(
@@ -22,13 +22,13 @@ export function getGroups(
   }
 
   Object.keys(rootTypes).forEach((typeName) => {
-    const rootType = rootTypes[typeName as SchemaEntities];
+    const rootType = rootTypes[typeName as SchemaEntity];
     if (typeof rootType !== "undefined" && rootType !== null) {
-      if (typeof groups[typeName as SchemaEntities] === "undefined") {
-        groups[typeName as SchemaEntities] = {};
+      if (typeof groups[typeName as SchemaEntity] === "undefined") {
+        groups[typeName as SchemaEntity] = {};
       }
       Object.keys(rootType).forEach((type) => {
-        groups[typeName as SchemaEntities]![type] = getGroupName(
+        groups[typeName as SchemaEntity]![type] = getGroupName(
           rootType[type],
           groupByDirective,
         );

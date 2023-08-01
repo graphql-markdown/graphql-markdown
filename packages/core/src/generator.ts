@@ -5,7 +5,7 @@ import {
   getGroups,
   getCustomDirectives,
   Logger,
-  SchemaEntities,
+  SchemaEntity,
 } from "@graphql-markdown/utils";
 
 import { Renderer } from "./renderer";
@@ -90,8 +90,8 @@ export const generateDocFromSchema = async ({
   const pages = await Promise.all(
     Object.keys(rootTypes).map((typeName) =>
       renderer.renderRootTypes(
-        typeName as SchemaEntities,
-        rootTypes[typeName as SchemaEntities],
+        typeName as SchemaEntity,
+        rootTypes[typeName as SchemaEntity],
       ),
     ),
   );

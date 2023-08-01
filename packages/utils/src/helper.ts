@@ -1,11 +1,11 @@
-import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+import type { GraphQLDirective } from "graphql";
 
 import { getTypeDirectiveValues } from "./graphql";
 import { interpolate } from "./string";
 
 export function directiveDescriptor(
   directiveType: GraphQLDirective,
-  type: GraphQLNamedType,
+  type?: unknown,
   descriptionTemplate?: string,
 ) {
   const values = getTypeDirectiveValues(directiveType, type);
@@ -17,7 +17,7 @@ export function directiveDescriptor(
 
 export function directiveTag(
   directiveType: GraphQLDirective,
-  type: GraphQLNamedType,
+  type?: unknown,
   classname: string = "badge--secondary",
 ) {
   return {

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-var-requires, no-var */
+
 declare global {
   var logger: LoggerType | undefined;
 }
+
 export type LoggerType = {
   debug: Function;
   error: Function;

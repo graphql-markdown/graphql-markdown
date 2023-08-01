@@ -55,9 +55,12 @@ describe("group-info", () => {
     const schemaMap: SchemaMap = {
       objects: schema.getTypeMap() as Record<
         string,
-        GraphQLObjectType<any, any>
+        GraphQLObjectType<string, string>
       >,
-      queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<any, any>,
+      queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<
+        string,
+        string
+      >,
     };
 
     test("returns undefined if groupByDirective not defined", () => {

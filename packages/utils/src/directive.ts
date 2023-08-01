@@ -5,7 +5,7 @@ import { isEmpty } from "./object";
 export const WILDCARD_DIRECTIVE = "*";
 
 export interface CustomDirectiveFunction {
-  (directive?: GraphQLDirective, node?: any): any;
+  (directive?: GraphQLDirective, node?: unknown): unknown;
 }
 
 export type CustomDirectiveResolver = "descriptor" | "tag";

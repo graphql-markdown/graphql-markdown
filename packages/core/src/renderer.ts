@@ -14,7 +14,7 @@ import {
   fileExists,
   isDeprecated,
   SchemaEntitiesGroupMap,
-  SchemaEntities,
+  SchemaEntity,
   Logger,
 } from "@graphql-markdown/utils";
 
@@ -92,7 +92,7 @@ export class Renderer {
   async generateCategoryMetafileType(
     type: unknown,
     name: string,
-    rootTypeName: SchemaEntities,
+    rootTypeName: SchemaEntity,
   ): Promise<string> {
     let dirPath = this.outputDir;
 
@@ -112,14 +112,14 @@ export class Renderer {
 
     if (
       hasProperty(this.group, rootTypeName) &&
-      hasProperty(this.group![rootTypeName as SchemaEntities], name)
+      hasProperty(this.group![rootTypeName as SchemaEntity], name)
     ) {
       dirPath = join(
         dirPath,
-        toSlug(this.group![rootTypeName as SchemaEntities]![name] ?? ""),
+        toSlug(this.group![rootTypeName as SchemaEntity]![name] ?? ""),
       );
       await this.generateCategoryMetafile(
-        this.group![rootTypeName as SchemaEntities]![name] ?? "",
+        this.group![rootTypeName as SchemaEntity]![name] ?? "",
         dirPath,
       );
     }
@@ -130,7 +130,7 @@ export class Renderer {
     return dirPath;
   }
 
-  async renderRootTypes(rootTypeName: SchemaEntities, type: unknown) {
+  async renderRootTypes(rootTypeName: SchemaEntity, type: unknown) {
     if (typeof type !== "object" || type === null) {
       return undefined;
     }
