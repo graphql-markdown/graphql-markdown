@@ -27,10 +27,14 @@ describe("directive", () => {
     }
   `);
 
-  const descriptor = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
-    `Test ${constDirectiveType.name}`;
-  const wildcard = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
-    `TestWildcard ${constDirectiveType.name}`;
+  const descriptor = (
+    directiveType: GraphQLNamedType,
+    constDirectiveType: GraphQLDirective,
+  ) => `Test ${constDirectiveType.name}`;
+  const wildcard = (
+    directiveType: GraphQLNamedType,
+    constDirectiveType: GraphQLDirective,
+  ) => `TestWildcard ${constDirectiveType.name}`;
   const customDirectiveOptions = {
     testA: {
       descriptor,
@@ -51,19 +55,27 @@ describe("directive", () => {
     test("returns true if directive name listed in customDirectives", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testA" as DirectiveName, customDirectiveOptions)).toBeTruthy();
+      expect(
+        isCustomDirective("testA" as DirectiveName, customDirectiveOptions),
+      ).toBeTruthy();
     });
 
     test("returns true if customDirective has wildcard", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testB" as DirectiveName, { ["*" as DirectiveName]: {} })).toBeTruthy();
+      expect(
+        isCustomDirective("testB" as DirectiveName, {
+          ["*" as DirectiveName]: {},
+        }),
+      ).toBeTruthy();
     });
 
     test("returns false if no match", () => {
       expect.assertions(1);
 
-      expect(isCustomDirective("testC" as DirectiveName, customDirectiveOptions)).toBeFalsy();
+      expect(
+        isCustomDirective("testC" as DirectiveName, customDirectiveOptions),
+      ).toBeFalsy();
     });
   });
 
@@ -71,10 +83,13 @@ describe("directive", () => {
     test("returns specific description if match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getCustomDirectiveOptions("testA" as DirectiveName, {
-        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
-        ...customDirectiveOptions,
-      })!;
+      const descriptorDirective = getCustomDirectiveOptions(
+        "testA" as DirectiveName,
+        {
+          ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
+          ...customDirectiveOptions,
+        },
+      )!;
 
       expect(descriptorDirective.descriptor).toBeDefined();
 
@@ -86,10 +101,13 @@ describe("directive", () => {
     test("returns wildcard description if wildcard match", () => {
       expect.assertions(2);
 
-      const descriptorDirective = getCustomDirectiveOptions("testB" as DirectiveName, {
-        ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
-        ...customDirectiveOptions,
-      })!;
+      const descriptorDirective = getCustomDirectiveOptions(
+        "testB" as DirectiveName,
+        {
+          ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
+          ...customDirectiveOptions,
+        },
+      )!;
 
       expect(descriptorDirective.descriptor).toBeDefined();
 

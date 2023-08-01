@@ -4,9 +4,7 @@ import {
   GraphQLScalarType,
 } from "graphql";
 
-import {
-  getConstDirectiveMap,
-} from "@graphql-markdown/utils";
+import { getConstDirectiveMap } from "@graphql-markdown/utils";
 
 import {
   printCustomDirectives,
@@ -144,7 +142,8 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective) => `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective) =>
+              `Test ${directive.name}`,
           },
         },
       };
@@ -247,7 +246,8 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective) => `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective) =>
+              `Test ${directive.name}`,
           },
         },
       };

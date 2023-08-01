@@ -1,4 +1,9 @@
-import { GraphQLDirective, GraphQLInt, GraphQLScalarType, GraphQLString } from "graphql";
+import {
+  GraphQLDirective,
+  GraphQLInt,
+  GraphQLScalarType,
+  GraphQLString,
+} from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -29,7 +34,7 @@ describe("code", () => {
             type: GraphQLString,
             defaultValue: "defaultValue",
           },
-          ParamNoDefault: { type: new GraphQLScalarType<any>({ name: "Any"}) },
+          ParamNoDefault: { type: new GraphQLScalarType<any>({ name: "Any" }) },
           ParamIntZero: { type: GraphQLInt, defaultValue: 0 },
           ParamIntNoDefault: { type: GraphQLInt },
         },
@@ -126,7 +131,10 @@ describe("code", () => {
         ],
       };
 
-      const code = printCodeField(type, { ...DEFAULT_OPTIONS, deprecated: "skip" });
+      const code = printCodeField(type, {
+        ...DEFAULT_OPTIONS,
+        deprecated: "skip",
+      });
 
       expect(code).toBe("");
     });

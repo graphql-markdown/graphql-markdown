@@ -15,42 +15,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install Earthly
-      uses: earthly/actions-setup@v1
-      with:
-        version: latest
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Docker login # to avoid dockerhub rate-limiting
-      run: docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Docker login # to avoid dockerhub rate-limiting
+        run: docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
 
-    - name: Setup git
-      run: |
-        git config --global user.name "GraphQL-Markdown bot"
-        git config --global user.email "graphql-markdown-bot@edno.io"
+      - name: Setup git
+        run: |
+          git config --global user.name "GraphQL-Markdown bot"
+          git config --global user.email "graphql-markdown-bot@edno.io"
 
-    - name: Checkout package repo
-      uses: actions/checkout@v3
-      with:
-        path: package
-        token: ${{ secrets.BOT_PAT }}
+      - name: Checkout package repo
+        uses: actions/checkout@v3
+        with:
+          path: package
+          token: ${{ secrets.BOT_PAT }}
 
-    - name: Checkout website repo
-      uses: actions/checkout@v3
-      with:
-        repository: graphql-markdown/graphql-markdown.github.io
-        path: website
-        token: ${{ secrets.BOT_PAT }}
-            
-    - name: Build docs
-      run: |
-        cd package
-        earthly +build-docs
+      - name: Checkout website repo
+        uses: actions/checkout@v3
+        with:
+          repository: graphql-markdown/graphql-markdown.github.io
+          path: website
+          token: ${{ secrets.BOT_PAT }}
 
-    - name: Push changes to website repo
-      run: |
-        cp -Rf package/build/** website/
-        cd website
-        git add --all
-        git commit -am ":memo: update documentation ($GITHUB_SHA)"
-        git push
+      - name: Build docs
+        run: |
+          cd package
+          earthly +build-docs
+
+      - name: Push changes to website repo
+        run: |
+          cp -Rf package/build/** website/
+          cd website
+          git add --all
+          git commit -am ":memo: update documentation ($GITHUB_SHA)"
+          git push

@@ -15,7 +15,11 @@ export function directiveDescriptor(
   return interpolate(descriptionTemplate, values);
 }
 
-export function directiveTag(directiveType: GraphQLDirective, type: GraphQLNamedType, classname: string = "badge--secondary") {
+export function directiveTag(
+  directiveType: GraphQLDirective,
+  type: GraphQLNamedType,
+  classname: string = "badge--secondary",
+) {
   return {
     text: `@${directiveType.name}`,
     classname: classname,

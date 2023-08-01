@@ -4,6 +4,11 @@ type Subscription {
 }
 
 type Root {
-  allSubscription(after: String, first: Int, before: String, last: Int): [Subscription]
+  allSubscription(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): [Subscription]
   subscription(id: ID): Subscription
 }

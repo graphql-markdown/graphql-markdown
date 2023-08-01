@@ -13,7 +13,7 @@ See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydire
 directive @doc(
   """
   Category name for `groupByDirective`.
-  
+
   See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
   """
   category: String
@@ -33,7 +33,7 @@ directive @complexity(
   value: Int!
   """
   An array containing names of parameters present in the GraphQL field.
-  
+
   Use parameters values to compute the field's cost dynamically. If the parameter is an array, its multiplier value will be the length of the array.
   """
   multipliers: [String!]
@@ -51,7 +51,6 @@ directive @auth(
   requires: Roles = ADMIN
 ) on OBJECT | FIELD_DEFINITION
 
-
 """
 Example of custom directive for `customDirective` tag.
 
@@ -66,27 +65,19 @@ scalar Time
 scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
-  UpdateGrade(input: String): String 
-    @doc(category: "Grade") 
-    @auth
+  UpdateGrade(input: String): String @doc(category: "Grade") @auth
 }
 
-type Mutation{
-  UpdateGPA(input: Int): Int 
-    @doc(category: "Grade") 
-    @auth
+type Mutation {
+  UpdateGPA(input: Int): Int @doc(category: "Grade") @auth
 }
 
-type Mutation{
-  AddCourse(input: String): String 
-    @doc(category: "Course") 
-    @auth
+type Mutation {
+  AddCourse(input: String): String @doc(category: "Course") @auth
 }
 
-type Mutation{
-  DropCourse(input: String): String 
-    @doc(category: "Course") 
-    @auth
+type Mutation {
+  DropCourse(input: String): String @doc(category: "Course") @auth
 }
 
 enum Roles {
@@ -95,22 +86,20 @@ enum Roles {
 }
 
 type Query {
-  GPA(skip: Int = 0): Int 
+  GPA(skip: Int = 0): Int @doc(category: "Grade") @beta
+  WeightedGPA(input: String, skip: Int!): Int
     @doc(category: "Grade")
-    @beta
-  WeightedGPA(input: String, skip: Int!): Int 
-    @doc(category: "Grade") 
     @complexity(value: 3)
-  UnWeightedGPA(input: String, skip: Int!): Int 
+  UnWeightedGPA(input: String, skip: Int!): Int
     @doc(category: "Grade")
     @complexity(value: 3)
   Course(skip: Int = 0): Course @doc(category: "Course")
 }
 
 type Query {
-  allCourses: [String]  @doc(category: "Course") 
-  mathCourses: [String]  @doc(category: "Course") @deprecated
-  scienceCourses: [String]  @doc(category: "Course") @deprecated
+  allCourses: [String] @doc(category: "Course")
+  mathCourses: [String] @doc(category: "Course") @deprecated
+  scienceCourses: [String] @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
     @beta
     @auth
@@ -150,4 +139,4 @@ type DepartmentInformation implements Record @auth {
 type Course {
   id: ID!
   title: String!
-} 
+}

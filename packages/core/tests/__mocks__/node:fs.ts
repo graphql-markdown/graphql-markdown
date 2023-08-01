@@ -1,7 +1,7 @@
 import { vol } from "memfs";
-import { ufs } from 'unionfs';
+import { ufs } from "unionfs";
 
-import type { IFS } from 'unionfs';
+import type { IFS } from "unionfs";
 
 const fs = jest.requireActual("node:fs");
 

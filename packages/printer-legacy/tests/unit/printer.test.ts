@@ -7,7 +7,7 @@ import {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-  GraphQLSchema
+  GraphQLSchema,
 } from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
@@ -36,7 +36,7 @@ jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
 import { Printer } from "../../src/printer";
-import {DEFAULT_OPTIONS, Options} from "../../src/const/options";
+import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
 
 describe("Printer", () => {
   enum TypeGuard {
@@ -47,7 +47,7 @@ describe("Printer", () => {
     OBJECT = "isObjectType",
     SCALAR = "isScalarType",
     UNION = "isUnionType",
-    OPERATION = "isOperation"
+    OPERATION = "isOperation",
   }
 
   const types = [
@@ -59,7 +59,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.DIRECTIVE,
       printCode: "printCodeDirective",
-      printMeta: "printDirectiveMetadata"
+      printMeta: "printDirectiveMetadata",
     },
     {
       name: "Enum",
@@ -69,7 +69,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.ENUM,
       printCode: "printCodeEnum",
-      printMeta: "printEnumMetadata"
+      printMeta: "printEnumMetadata",
     },
     {
       name: "Input",
@@ -79,7 +79,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.INPUT,
       printCode: "printCodeInput",
-      printMeta: "printInputMetadata"
+      printMeta: "printInputMetadata",
     },
     {
       name: "Interface",
@@ -89,7 +89,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.INTERFACE,
       printCode: "printCodeInterface",
-      printMeta: "printInterfaceMetadata"
+      printMeta: "printInterfaceMetadata",
     },
     {
       name: "Object",
@@ -99,7 +99,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.OBJECT,
       printCode: "printCodeObject",
-      printMeta: "printObjectMetadata"
+      printMeta: "printObjectMetadata",
     },
     {
       name: "Scalar",
@@ -108,7 +108,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.SCALAR,
       printCode: "printCodeScalar",
-      printMeta: "printScalarMetadata"
+      printMeta: "printScalarMetadata",
     },
     {
       name: "Union",
@@ -118,7 +118,7 @@ describe("Printer", () => {
       }),
       guard: TypeGuard.UNION,
       printCode: "printCodeUnion",
-      printMeta: "printUnionMetadata"
+      printMeta: "printUnionMetadata",
     },
     {
       name: "Operation",
@@ -129,7 +129,7 @@ describe("Printer", () => {
       },
       guard: TypeGuard.OPERATION,
       printCode: "printCodeOperation",
-      printMeta: "printOperationMetadata"
+      printMeta: "printOperationMetadata",
     },
   ] as const;
 
@@ -282,8 +282,6 @@ describe("Printer", () => {
       ({ type, printCode, name, guard }) => {
         expect.hasAssertions();
 
-        
-
         jest.spyOn(Utils, guard).mockReturnValue(true);
         jest.spyOn(GraphQLPrinter, printCode).mockReturnValue(name);
 
@@ -324,9 +322,7 @@ describe("Printer", () => {
         expect.hasAssertions();
 
         jest.spyOn(Utils, guard).mockReturnValue(true);
-        const spy = jest
-          .spyOn(GraphQLPrinter, printMeta)
-          .mockReturnValue(name);
+        const spy = jest.spyOn(GraphQLPrinter, printMeta).mockReturnValue(name);
 
         Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
 

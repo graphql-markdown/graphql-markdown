@@ -15,7 +15,10 @@ import {
 import { Options } from "./const/options";
 import { MDXString } from "./const/mdx";
 
-export const printCustomDirectives = (type: unknown, options?: Options): string => {
+export const printCustomDirectives = (
+  type: unknown,
+  options?: Options,
+): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (typeof constDirectiveMap === "undefined" || isEmpty(constDirectiveMap)) {
@@ -32,7 +35,10 @@ export const printCustomDirectives = (type: unknown, options?: Options): string 
   return `${MARKDOWN_EOP}${content}`;
 };
 
-export const formatDescription = (type: unknown, replacement: string = NO_DESCRIPTION_TEXT): string | MDXString => {
+export const formatDescription = (
+  type: unknown,
+  replacement: string = NO_DESCRIPTION_TEXT,
+): string | MDXString => {
   if (typeof type !== "object" || type === null) {
     return `${MARKDOWN_EOP}${replacement}`;
   }
@@ -45,19 +51,27 @@ export const formatDescription = (type: unknown, replacement: string = NO_DESCRI
 };
 
 export const printDeprecation = (type: unknown): string => {
-  if (typeof type !== "object" || type === null || isDeprecated(type) === false) {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    isDeprecated(type) === false
+  ) {
     return "";
   }
 
-  const reason = "deprecationReason" in type &&
-    typeof type.deprecationReason === "string"
+  const reason =
+    "deprecationReason" in type && typeof type.deprecationReason === "string"
       ? type.deprecationReason + MARKDOWN_EOL
       : "";
 
   return `${MARKDOWN_EOP}:::caution ${DEPRECATED.toUpperCase()}${MARKDOWN_EOL}${reason}:::`;
 };
 
-export const printDescription = (type: unknown, options?: Options, noText?: string): string | MDXString => {
+export const printDescription = (
+  type: unknown,
+  options?: Options,
+  noText?: string,
+): string | MDXString => {
   const description = formatDescription(type, noText);
   const customDirectives = printCustomDirectives(type, options);
   const deprecation = printDeprecation(type);

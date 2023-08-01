@@ -2,13 +2,13 @@ declare global {
   var logger: LoggerType | undefined;
 }
 export type LoggerType = {
-  debug: Function,
-  error: Function,
-  info: Function,
-  log: Function,
-  success: Function,
-  warn: Function,
-}
+  debug: Function;
+  error: Function;
+  info: Function;
+  log: Function;
+  success: Function;
+  warn: Function;
+};
 
 export const Logger = {
   setInstance: (module?: string): LoggerType => {

@@ -1,4 +1,4 @@
-export type MDXString = string & {_opaque: typeof MDXString};
+export type MDXString = string & { _opaque: typeof MDXString };
 declare const MDXString: unique symbol;
 
 export const mdx: MDXString = `

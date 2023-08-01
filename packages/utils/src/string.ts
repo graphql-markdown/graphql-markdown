@@ -4,7 +4,11 @@
 
 import { getObjPath } from "./object";
 
-export function stringCaseBuilder(str: string, transformation?: Function, separator?: string): string {
+export function stringCaseBuilder(
+  str: string,
+  transformation?: Function,
+  separator?: string,
+): string {
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -74,7 +78,11 @@ export function kebabCase(str: string): string {
   return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
 }
 
-export function interpolate(template: string, variables?: Record<string, any>, fallback?: string) {
+export function interpolate(
+  template: string,
+  variables?: Record<string, any>,
+  fallback?: string,
+) {
   const regex = /\${[^{]+}/g;
 
   return template.replace(regex, (match) => {

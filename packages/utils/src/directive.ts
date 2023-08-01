@@ -5,30 +5,34 @@ import { isEmpty } from "./object";
 export const WILDCARD_DIRECTIVE = "*";
 
 export interface CustomDirectiveFunction {
-  (directive?: GraphQLDirective, node?: any): any
+  (directive?: GraphQLDirective, node?: any): any;
 }
 
-export type CustomDirectiveResolver = "descriptor" | "tag"
+export type CustomDirectiveResolver = "descriptor" | "tag";
 
-export type CustomDirectiveOptions = {  
-  [name in CustomDirectiveResolver]?: CustomDirectiveFunction
-}
+export type CustomDirectiveOptions = {
+  [name in CustomDirectiveResolver]?: CustomDirectiveFunction;
+};
 
 export type CustomDirective = {
-  [name: DirectiveName] : CustomDirectiveOptions
-}
+  [name: DirectiveName]: CustomDirectiveOptions;
+};
 
-export type DirectiveName = string & {_opaque: typeof DirectiveName};
+export type DirectiveName = string & { _opaque: typeof DirectiveName };
 declare const DirectiveName: unique symbol;
 
-export type CustomDirectiveMapItem = { type: GraphQLDirective } & CustomDirectiveOptions
+export type CustomDirectiveMapItem = {
+  type: GraphQLDirective;
+} & CustomDirectiveOptions;
 
 export type CustomDirectiveMap = {
-  [name: DirectiveName]: CustomDirectiveMapItem
-}
+  [name: DirectiveName]: CustomDirectiveMapItem;
+};
 
 export function getCustomDirectives(
-  { directives: schemaDirectives }: { directives?: Record<DirectiveName, GraphQLDirective> },
+  {
+    directives: schemaDirectives,
+  }: { directives?: Record<DirectiveName, GraphQLDirective> },
   customDirectiveOptions?: CustomDirective,
 ): CustomDirectiveMap | undefined {
   const customDirectives: CustomDirectiveMap = {};
@@ -42,7 +46,10 @@ export function getCustomDirectives(
 
   for (const schemaDirectiveName in schemaDirectives) {
     if (
-      isCustomDirective(schemaDirectiveName as DirectiveName, customDirectiveOptions) === false
+      isCustomDirective(
+        schemaDirectiveName as DirectiveName,
+        customDirectiveOptions,
+      ) === false
     ) {
       continue;
     }
@@ -80,7 +87,10 @@ export function getCustomDirectiveOptions(
   return undefined;
 }
 
-export function isCustomDirective(schemaDirectiveName: DirectiveName, customDirectiveOptions: CustomDirective): boolean {
+export function isCustomDirective(
+  schemaDirectiveName: DirectiveName,
+  customDirectiveOptions: CustomDirective,
+): boolean {
   return (
     schemaDirectiveName in customDirectiveOptions ||
     WILDCARD_DIRECTIVE in customDirectiveOptions

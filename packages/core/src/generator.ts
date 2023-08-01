@@ -16,7 +16,7 @@ import { DiffMethod, Options } from "./config";
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;
 
-export type GeneratorOptions =  Options & {loggerModule?: string };
+export type GeneratorOptions = Options & { loggerModule?: string };
 
 export const generateDocFromSchema = async ({
   baseURL,
@@ -40,10 +40,14 @@ export const generateDocFromSchema = async ({
 
   const logger = Logger.setInstance(loggerModule);
 
-  const loaders = loadersList ? await getDocumentLoaders(loadersList) : undefined;
+  const loaders = loadersList
+    ? await getDocumentLoaders(loadersList)
+    : undefined;
 
   if (typeof loaders === "undefined") {
-    logger.error(`An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`);
+    logger.error(
+      `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+    );
     return;
   }
 
@@ -85,7 +89,10 @@ export const generateDocFromSchema = async ({
 
   const pages = await Promise.all(
     Object.keys(rootTypes).map((typeName) =>
-      renderer.renderRootTypes(typeName as SchemaEntities, rootTypes[typeName as SchemaEntities]),
+      renderer.renderRootTypes(
+        typeName as SchemaEntities,
+        rootTypes[typeName as SchemaEntities],
+      ),
     ),
   );
 

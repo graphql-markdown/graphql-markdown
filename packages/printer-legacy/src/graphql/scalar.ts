@@ -5,7 +5,12 @@ import { Options } from "../const/options";
 import { MDXString } from "../const/mdx";
 
 export const printSpecification = (type: unknown): string | MDXString => {
-  if (typeof type !== "object" || type === null || !("specifiedByURL" in type) || !type.specifiedByURL) {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("specifiedByURL" in type) ||
+    !type.specifiedByURL
+  ) {
     return "";
   }
 
@@ -22,4 +27,3 @@ export const printScalarMetadata = (type: unknown): string | MDXString => {
 export const printCodeScalar = (type: unknown, options?: Options): string => {
   return `scalar ${getTypeName(type)}`;
 };
-

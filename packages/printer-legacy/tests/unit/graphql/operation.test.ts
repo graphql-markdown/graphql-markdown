@@ -1,4 +1,9 @@
-import { GraphQLID, GraphQLObjectType, GraphQLString, GraphQLSchema } from "graphql";
+import {
+  GraphQLID,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+} from "graphql";
 
 import * as Utils from "@graphql-markdown/utils";
 
@@ -28,7 +33,7 @@ describe("operation", () => {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
-              fields: {}
+              fields: {},
             }),
         } as unknown as GraphQLSchema,
       });
@@ -68,7 +73,7 @@ describe("operation", () => {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
-              fields: {}
+              fields: {},
             }),
         } as unknown as GraphQLSchema,
       });
@@ -122,7 +127,7 @@ describe("operation", () => {
           getType: () =>
             new GraphQLObjectType({
               name: "Test",
-              fields: {}
+              fields: {},
             }),
         } as unknown as GraphQLSchema,
       });

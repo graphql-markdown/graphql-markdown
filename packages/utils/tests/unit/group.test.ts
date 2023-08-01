@@ -1,6 +1,15 @@
-import { GraphQLFieldMap, GraphQLNamedType, GraphQLObjectType, buildSchema } from "graphql";
+import {
+  GraphQLFieldMap,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  buildSchema,
+} from "graphql";
 
-import { getGroups, getGroupName, GroupByDirectiveOptions } from "../../src/group";
+import {
+  getGroups,
+  getGroupName,
+  GroupByDirectiveOptions,
+} from "../../src/group";
 import { DirectiveName } from "../../src/directive";
 import { SchemaMap } from "../../src/graphql";
 
@@ -44,7 +53,10 @@ describe("group-info", () => {
 
   describe("getGroups()", () => {
     const schemaMap: SchemaMap = {
-      objects: schema.getTypeMap() as Record<string, GraphQLObjectType<any, any>>,
+      objects: schema.getTypeMap() as Record<
+        string,
+        GraphQLObjectType<any, any>
+      >,
       queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<any, any>,
     };
 
@@ -106,7 +118,9 @@ describe("group-info", () => {
     ])("returns fallback group name if $case", ({ type }) => {
       expect.assertions(1);
 
-      expect(getGroupName(type as unknown as GraphQLNamedType, groupOptions)).toBe("common");
+      expect(
+        getGroupName(type as unknown as GraphQLNamedType, groupOptions),
+      ).toBe("common");
     });
   });
 });

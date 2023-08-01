@@ -12,7 +12,11 @@ import {
 } from "./const/strings";
 import { Options, DeprecatedOption } from "./const/options";
 
-export const printCodeField = (type: unknown, options?: Options, indentationLevel: number = 0) => {
+export const printCodeField = (
+  type: unknown,
+  options?: Options,
+  indentationLevel: number = 0,
+) => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
@@ -40,8 +44,17 @@ export const printCodeField = (type: unknown, options?: Options, indentationLeve
   return code;
 };
 
-export const printCodeArguments = (type: unknown, indentationLevel: number = 1) => {
-  if (typeof type !== "object" || type === null || !("args" in type) || !Array.isArray(type.args) || type.args.length === 0) {
+export const printCodeArguments = (
+  type: unknown,
+  indentationLevel: number = 1,
+) => {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("args" in type) ||
+    !Array.isArray(type.args) ||
+    type.args.length === 0
+  ) {
     return "";
   }
 

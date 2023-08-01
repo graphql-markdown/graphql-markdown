@@ -1,35 +1,52 @@
-import {
-  getTypeName,
-  getFields,
-} from "@graphql-markdown/utils";
+import { getTypeName, getFields } from "@graphql-markdown/utils";
 
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";
 import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
 import { Options } from "../const/options";
 
-export const printInterfaceMetadata = (type: unknown, options: Options): string => {
-  if (typeof type !== "object" || type === null || !("getInterfaces" in type) || typeof type.getInterfaces !== "function") {
+export const printInterfaceMetadata = (
+  type: unknown,
+  options: Options,
+): string => {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("getInterfaces" in type) ||
+    typeof type.getInterfaces !== "function"
+  ) {
     return "";
   }
 
   return printSection(type.getInterfaces(), "Interfaces", options);
 };
 
-export const printObjectMetadata = (type: unknown, options: Options): string => {
+export const printObjectMetadata = (
+  type: unknown,
+  options: Options,
+): string => {
   const interfaceMeta = printInterfaceMetadata(type, options);
   const metadata = printMetadataSection(
     type,
     getFields(type),
     "Fields",
-    options
+    options,
   );
 
   return `${metadata}${interfaceMeta}`;
 };
 
-export const printCodeType = (type: unknown, entity: string, options: Options): string => {
-  if (typeof type !== "object" || type === null || !("getInterfaces" in type) || typeof type.getInterfaces !== "function") {
+export const printCodeType = (
+  type: unknown,
+  entity: string,
+  options: Options,
+): string => {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("getInterfaces" in type) ||
+    typeof type.getInterfaces !== "function"
+  ) {
     return "";
   }
 
@@ -52,4 +69,5 @@ export const printCodeType = (type: unknown, entity: string, options: Options): 
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
 };
 
-export const printCodeObject = (type: unknown, options: Options) => printCodeType(type, "type", options);
+export const printCodeObject = (type: unknown, options: Options) =>
+  printCodeType(type, "type", options);

@@ -5,9 +5,12 @@ import { printCodeField } from "../code";
 import { Options } from "../const/options";
 import { MDXString } from "../const/mdx";
 
-export const printOperationType = (type: unknown, options: Options): string | MDXString => {
+export const printOperationType = (
+  type: unknown,
+  options: Options,
+): string | MDXString => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
-    return  ""
+    return "";
   }
 
   const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
@@ -17,9 +20,12 @@ export const printOperationType = (type: unknown, options: Options): string | MD
   });
 };
 
-export const printOperationMetadata = (type: unknown, options: Options): string | MDXString => {
+export const printOperationMetadata = (
+  type: unknown,
+  options: Options,
+): string | MDXString => {
   if (typeof type !== "object" || type === null || !("args" in type)) {
-    return  ""
+    return "";
   }
 
   const response = printOperationType(type, options);

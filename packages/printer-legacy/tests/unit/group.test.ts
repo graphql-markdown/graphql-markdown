@@ -28,20 +28,24 @@ describe("group", () => {
     });
 
     test("returns group name string if type has group", () => {
-      jest.spyOn(Utils, "getNamedType").mockReturnValue("FooBaz" as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue("FooBaz" as unknown as GraphQLNamedType);
 
       const group = getGroup(
         { name: "FooBaz" },
         { objects: { FooBaz: "Group Test" } },
         "objects",
       );
-      
+
       expect(group).toBe("Group Test");
     });
 
     test("returns empty string if type not in group", () => {
-      jest.spyOn(Utils, "getNamedType").mockReturnValue("FooBaz" as unknown as GraphQLNamedType);
-      
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue("FooBaz" as unknown as GraphQLNamedType);
+
       const group = getGroup(
         { name: "FooBar" },
         { objects: { FooBaz: "Group Test" } },

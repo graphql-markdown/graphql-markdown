@@ -13,17 +13,17 @@ You can declare as many loaders as you need using the structure:
 type className = string; // UrlLoader
 
 type moduleName = string; // "@graphql-tools/url-loader"
-type rootTypes = { query?: string, mutation?: string, subscription?: string };
-type moduleOptions = { [option: string]: any, rootType?: rootTypes };
+type rootTypes = { query?: string; mutation?: string; subscription?: string };
+type moduleOptions = { [option: string]: any; rootType?: rootTypes };
 
-type module = { 
-  module: moduleName, 
-  options: moduleOptions | undefined 
-}
+type module = {
+  module: moduleName;
+  options: moduleOptions | undefined;
+};
 
 type loaders = {
-  [className: className]: moduleName | module
-}
+  [className: className]: moduleName | module;
+};
 ```
 
 ## Local schema (file)

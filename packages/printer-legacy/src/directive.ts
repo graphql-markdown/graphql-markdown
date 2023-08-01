@@ -1,4 +1,9 @@
-import { CustomDirectiveMapItem, CustomDirectiveResolver, getConstDirectiveMap, GraphQLNamedType } from "@graphql-markdown/utils";
+import {
+  CustomDirectiveMapItem,
+  CustomDirectiveResolver,
+  getConstDirectiveMap,
+  GraphQLNamedType,
+} from "@graphql-markdown/utils";
 
 import {
   HEADER_SECTION_LEVEL,
@@ -34,9 +39,13 @@ export const printCustomDirectives = (type: unknown, options: Options) => {
   const content = directives.join(MARKDOWN_EOP);
 
   return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
-}
+};
 
-export const printCustomDirective = (type: unknown, constDirectiveOption: CustomDirectiveMapItem, options: Options): string | undefined => {
+export const printCustomDirective = (
+  type: unknown,
+  constDirectiveOption: CustomDirectiveMapItem,
+  options: Options,
+): string | undefined => {
   const typeNameLink = Link.printLink(constDirectiveOption.type, {
     ...options,
     withAttributes: false,
@@ -52,7 +61,7 @@ export const printCustomDirective = (type: unknown, constDirectiveOption: Custom
   }
 
   return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
-}
+};
 
 export const getCustomTags = (type: unknown, options: Options): Badge[] => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
@@ -69,9 +78,12 @@ export const getCustomTags = (type: unknown, options: Options): Badge[] => {
       getCustomDirectiveResolver("tag", type, constDirectiveOption),
     )
     .filter((value) => typeof value !== "undefined") as unknown as Badge[];
-}
+};
 
-export const printCustomTags = (type: unknown, options: Options): string | MDXString => {
+export const printCustomTags = (
+  type: unknown,
+  options: Options,
+): string | MDXString => {
   const badges = getCustomTags(type, options);
 
   if (badges.length === 0) {
@@ -96,4 +108,4 @@ export const getCustomDirectiveResolver = (
   }
 
   return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
-}
+};

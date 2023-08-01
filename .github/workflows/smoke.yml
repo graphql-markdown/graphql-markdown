@@ -1,17 +1,17 @@
 name: Smoke Tests
 
-on: 
+on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
     branches:
       - main
     paths:
-      - 'Earthfile'
-      - 'packages/**/*'
-      - 'config/*'
-      - '*.json'      
-      - '.github/workflows/smoke.yml'
+      - "Earthfile"
+      - "packages/**/*"
+      - "config/*"
+      - "*.json"
+      - ".github/workflows/smoke.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -44,4 +44,4 @@ jobs:
       - name: Docusaurus Production Smoke Build with groupByDirective option
         run: earthly --ci --build-arg OPTIONS="$OPTIONS" github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
         env:
-          OPTIONS: '--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc'
+          OPTIONS: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"

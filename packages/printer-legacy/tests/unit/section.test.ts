@@ -14,7 +14,11 @@ import {
 
 import { HIDE_DEPRECATED, SHOW_DEPRECATED } from "../../src/const/strings";
 
-import { DEFAULT_OPTIONS, DeprecatedOption, SectionLevel } from "../../src/const/options";
+import {
+  DEFAULT_OPTIONS,
+  DeprecatedOption,
+  SectionLevel,
+} from "../../src/const/options";
 import { DirectiveName } from "@graphql-markdown/utils";
 
 describe("section", () => {
@@ -154,7 +158,7 @@ describe("section", () => {
       const type = new GraphQLObjectType({
         name: "EntityTypeName",
         description: "Lorem ipsum",
-        fields: {}
+        fields: {},
       });
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
@@ -183,7 +187,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 
 Excepteur sint occaecat cupidatat non proident, 
 sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-      fields: {}
+        fields: {},
       });
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
@@ -214,7 +218,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         type: new GraphQLNonNull(
           new GraphQLObjectType({
             name: "NonNullableObjectType",
-            fields: {}
+            fields: {},
           }),
         ),
       };
@@ -239,7 +243,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
           new GraphQLList(
             new GraphQLObjectType({
               name: "NonNullableObjectType",
-              fields: {}
+              fields: {},
             }),
           ),
         ),

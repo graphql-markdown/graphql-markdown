@@ -1,4 +1,15 @@
-import { GraphQLDirective, GraphQLEnumType, GraphQLField, GraphQLInputObjectType, GraphQLInterfaceType, GraphQLNamedType, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLUnionType } from "graphql";
+import {
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLInputObjectType,
+  GraphQLInterfaceType,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLUnionType,
+} from "graphql";
 
 import {
   CustomDirectiveMap,
@@ -52,7 +63,7 @@ import {
   PRINT_TYPE_DEFAULT_OPTIONS,
   Options,
   ConfigPrintTypeOptions,
-  TypeDeprecatedOption
+  TypeDeprecatedOption,
 } from "./const/options";
 
 export class Printer {
@@ -62,12 +73,17 @@ export class Printer {
     schema: GraphQLSchema | undefined = undefined,
     baseURL: string = "schema",
     linkRoot: string = "/",
-    { customDirectives, groups, printTypeOptions, skipDocDirective }: {
-      customDirectives?: CustomDirectiveMap,
-      deprecated?: TypeDeprecatedOption,
-      groups?: SchemaEntitiesGroupMap,
-      printTypeOptions?: ConfigPrintTypeOptions,
-      skipDocDirective?: DirectiveName[],
+    {
+      customDirectives,
+      groups,
+      printTypeOptions,
+      skipDocDirective,
+    }: {
+      customDirectives?: CustomDirectiveMap;
+      deprecated?: TypeDeprecatedOption;
+      groups?: SchemaEntitiesGroupMap;
+      printTypeOptions?: ConfigPrintTypeOptions;
+      skipDocDirective?: DirectiveName[];
     } = {
       customDirectives: undefined,
       groups: undefined,
@@ -90,8 +106,7 @@ export class Printer {
         printTypeOptions?.parentTypePrefix ??
         PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
       deprecated:
-        printTypeOptions?.deprecated ??
-        PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+        printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
       relatedTypeSection:
         printTypeOptions?.relatedTypeSection ??
         PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
@@ -100,9 +115,13 @@ export class Printer {
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
     };
-  };
+  }
 
-  static printHeader = (id: string, title: string, options: Options): string => {
+  static printHeader = (
+    id: string,
+    title: string,
+    options: Options,
+  ): string => {
     const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header;
     const pagination_buttons = pagination
       ? []
@@ -134,7 +153,10 @@ export class Printer {
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(type as GraphQLField<any, any, any>, options);
+        code += printCodeOperation(
+          type as GraphQLField<any, any, any>,
+          options,
+        );
         break;
       case isEnumType(type):
         code += printCodeEnum(type as GraphQLEnumType, options);
@@ -168,7 +190,10 @@ export class Printer {
 
   static printCustomTags = printCustomTags;
 
-  static printTypeMetadata = (type: unknown, options: Options): string | MDXString => {
+  static printTypeMetadata = (
+    type: unknown,
+    options: Options,
+  ): string | MDXString => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type as GraphQLScalarType);
@@ -185,20 +210,30 @@ export class Printer {
       case isDirectiveType(type):
         return printDirectiveMetadata(type as GraphQLDirective, options);
       case isOperation(type):
-        return printOperationMetadata(type as GraphQLField<any, any, any>, options);
+        return printOperationMetadata(
+          type as GraphQLField<any, any, any>,
+          options,
+        );
       default:
         return "";
     }
   };
 
-  static printRelations = (type: unknown, options: Options): string | MDXString => {
+  static printRelations = (
+    type: unknown,
+    options: Options,
+  ): string | MDXString => {
     if (options.relatedTypeSection !== true) {
       return "";
     }
     return printRelations(type, options);
   };
 
-  static printType = (name: string | undefined, type: unknown, options?: Options): MDXString | undefined => {
+  static printType = (
+    name: string | undefined,
+    type: unknown,
+    options?: Options,
+  ): MDXString | undefined => {
     const printTypeOptions: Options = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
@@ -214,7 +249,11 @@ export class Printer {
       return undefined;
     }
 
-    const header = Printer.printHeader(name, getTypeName(type), printTypeOptions);
+    const header = Printer.printHeader(
+      name,
+      getTypeName(type),
+      printTypeOptions,
+    );
     const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
     const customDirectives = Printer.printCustomDirectives(

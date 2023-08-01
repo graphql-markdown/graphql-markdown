@@ -6,14 +6,14 @@ jobs:
     name: Danger.js Checks
     runs-on: ubuntu-latest
 
-    steps:    
-    - name: Checkout Code Base
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v3
 
-    - name: Install modules
-      run: npm ci
+      - name: Install modules
+        run: npm ci
 
-    - name: Danger
-      run: npx danger ci -b main
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Danger
+        run: npx danger ci -b main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

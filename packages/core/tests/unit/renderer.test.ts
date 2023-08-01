@@ -12,10 +12,10 @@ import Printer from "@graphql-markdown/printer-legacy";
 jest.mock("@graphql-markdown/utils", () => {
   return {
     ...jest.requireActual("@graphql-markdown/utils"),
-      hasProperty: jest.fn(),
-      isDeprecated: jest.fn(),
-      toSlug: (value: string) => value.toLowerCase(),
-      startCase: (value: string) => value,
+    hasProperty: jest.fn(),
+    isDeprecated: jest.fn(),
+    toSlug: (value: string) => value.toLowerCase(),
+    startCase: (value: string) => value,
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -24,12 +24,16 @@ import { Renderer } from "../../src/renderer";
 import { GraphQLScalarType } from "graphql/type/definition";
 import { DEFAULT_OPTIONS, TypeDeprecatedOption } from "../../src/config";
 
-const DEFAULT_RENDERER_OPTIONS = { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption };
+const DEFAULT_RENDERER_OPTIONS = {
+  ...DEFAULT_OPTIONS.docOptions,
+  deprecated: DEFAULT_OPTIONS.printTypeOptions
+    .deprecated as TypeDeprecatedOption,
+};
 
 describe("renderer", () => {
   describe("class Renderer", () => {
     let rendererInstance: Renderer;
-    let baseURL: string = "graphql";
+    const baseURL: string = "graphql";
 
     beforeEach(() => {
       vol.fromJSON({
@@ -38,7 +42,18 @@ describe("renderer", () => {
         "/assets/generated.md": "Test Homepage",
       });
 
-      rendererInstance = new Renderer(new Printer(), "/output", baseURL, undefined, DEFAULT_OPTIONS.pretty, { ...DEFAULT_OPTIONS.docOptions, deprecated: DEFAULT_OPTIONS.printTypeOptions.deprecated as TypeDeprecatedOption});
+      rendererInstance = new Renderer(
+        new Printer(),
+        "/output",
+        baseURL,
+        undefined,
+        DEFAULT_OPTIONS.pretty,
+        {
+          ...DEFAULT_OPTIONS.docOptions,
+          deprecated: DEFAULT_OPTIONS.printTypeOptions
+            .deprecated as TypeDeprecatedOption,
+        },
+      );
     });
 
     afterEach(() => {
@@ -103,8 +118,20 @@ describe("renderer", () => {
 
         jest.spyOn(Printer, "printType").mockImplementation(() => "content");
         await rendererInstance.renderRootTypes("objects", {
-          foo: new GraphQLScalarType({ name: "foo", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
-          bar: new GraphQLScalarType({ name: "bar", astNode: {kind: Kind.SCALAR_TYPE_DEFINITION, name: { kind: Kind.NAME, value: "foo" }}}),
+          foo: new GraphQLScalarType({
+            name: "foo",
+            astNode: {
+              kind: Kind.SCALAR_TYPE_DEFINITION,
+              name: { kind: Kind.NAME, value: "foo" },
+            },
+          }),
+          bar: new GraphQLScalarType({
+            name: "bar",
+            astNode: {
+              kind: Kind.SCALAR_TYPE_DEFINITION,
+              name: { kind: Kind.NAME, value: "foo" },
+            },
+          }),
         });
 
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
@@ -169,11 +196,7 @@ describe("renderer", () => {
         const data = "The quick brown fox jumps over the lazy dog";
 
         await Utils.ensureDir(outputPath);
-        fs.writeFileSync(
-          join(outputPath, "_category_.yml"),
-          data,
-          "utf-8",
-        );
+        fs.writeFileSync(join(outputPath, "_category_.yml"), data, "utf-8");
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 

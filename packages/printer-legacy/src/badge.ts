@@ -20,11 +20,14 @@ import { MDXString } from "./const/mdx";
 export const DEFAULT_CSS_CLASSNAME = "badge--secondary";
 
 export type Badge = {
-  text: string | TypeLocale, 
-  classname: string
+  text: string | TypeLocale;
+  classname: string;
 };
 
-export const getTypeBadges = (type: unknown, groups?: SchemaEntitiesGroupMap): Badge[] => {
+export const getTypeBadges = (
+  type: unknown,
+  groups?: SchemaEntitiesGroupMap,
+): Badge[] => {
   const badges: Badge[] = [];
 
   if (typeof type !== "object" || type === null) {
@@ -41,7 +44,10 @@ export const getTypeBadges = (type: unknown, groups?: SchemaEntitiesGroupMap): B
   }
 
   if (isNonNullType(rootType) === true) {
-    badges.push({ text: "non-null", classname: DEFAULT_CSS_CLASSNAME } as Badge);
+    badges.push({
+      text: "non-null",
+      classname: DEFAULT_CSS_CLASSNAME,
+    } as Badge);
   }
 
   if (isListType(rootType) === true) {
@@ -54,17 +60,22 @@ export const getTypeBadges = (type: unknown, groups?: SchemaEntitiesGroupMap): B
   }
 
   if (typeof groups !== "undefined") {
-    const typeCategory = (typeof category === "string" ? category : category?.plural) as SchemaEntities;
+    const typeCategory = (
+      typeof category === "string" ? category : category?.plural
+    ) as SchemaEntities;
     const group = getGroup(rootType, groups, typeCategory);
     if (typeof group !== "undefined" && group !== "") {
       badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
     }
   }
-  
+
   return badges;
 };
 
-export const printBadges = (type: unknown, options: Options): MDXString | string => {
+export const printBadges = (
+  type: unknown,
+  options: Options,
+): MDXString | string => {
   if (!("typeBadges" in options) || options.typeBadges !== true) {
     return "";
   }
@@ -82,4 +93,4 @@ export const printBadge = ({ text, classname }: Badge): MDXString => {
   const textString = typeof text === "string" ? text : text.singular;
   const formattedText = escapeMDX(textString);
   return `<Badge class="badge ${classname}" text="${formattedText}"/>` as MDXString;
-}
+};

@@ -2,14 +2,19 @@ import { SchemaEntities, SchemaMap, hasAstNode } from "./graphql";
 import { DirectiveName } from "./directive";
 
 export type GroupByDirectiveOptions = {
-  directive: DirectiveName
-  field: string,
-  fallback?: string,
-}
+  directive: DirectiveName;
+  field: string;
+  fallback?: string;
+};
 
-export type SchemaEntitiesGroupMap = Partial<Record<SchemaEntities, Record<string, string | undefined>>>
+export type SchemaEntitiesGroupMap = Partial<
+  Record<SchemaEntities, Record<string, string | undefined>>
+>;
 
-export function getGroups(rootTypes: SchemaMap, groupByDirective?: GroupByDirectiveOptions): SchemaEntitiesGroupMap | undefined {
+export function getGroups(
+  rootTypes: SchemaMap,
+  groupByDirective?: GroupByDirectiveOptions,
+): SchemaEntitiesGroupMap | undefined {
   const groups: SchemaEntitiesGroupMap = {};
 
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
@@ -23,7 +28,10 @@ export function getGroups(rootTypes: SchemaMap, groupByDirective?: GroupByDirect
         groups[typeName as SchemaEntities] = {};
       }
       Object.keys(rootType).forEach((type) => {
-        groups[typeName as SchemaEntities]![type] = getGroupName(rootType[type], groupByDirective);
+        groups[typeName as SchemaEntities]![type] = getGroupName(
+          rootType[type],
+          groupByDirective,
+        );
       });
     }
   });
@@ -31,7 +39,10 @@ export function getGroups(rootTypes: SchemaMap, groupByDirective?: GroupByDirect
   return groups;
 }
 
-export function getGroupName(type: unknown, groupByDirective?: GroupByDirectiveOptions): string | undefined {
+export function getGroupName(
+  type: unknown,
+  groupByDirective?: GroupByDirectiveOptions,
+): string | undefined {
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
     return undefined;
   }
@@ -51,7 +62,8 @@ export function getGroupName(type: unknown, groupByDirective?: GroupByDirectiveO
       continue;
     }
     const field = directive.arguments.find(
-      ({ name }: {name: Record<string, string>}) => name.value === groupByDirective.field,
+      ({ name }: { name: Record<string, string> }) =>
+        name.value === groupByDirective.field,
     );
     return field.value.value;
   }

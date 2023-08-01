@@ -50,7 +50,7 @@ describe("link", () => {
     OBJECT = "isObjectType",
     SCALAR = "isScalarType",
     UNION = "isUnionType",
-    OPERATION = "isOperation"
+    OPERATION = "isOperation",
   }
 
   const types = [
@@ -99,7 +99,9 @@ describe("link", () => {
       ({ guard }) => {
         jest.spyOn(Utils, guard).mockReturnValueOnce(true);
 
-        const category = Link.getLinkCategory({} as unknown as GraphQLNamedType);
+        const category = Link.getLinkCategory(
+          {} as unknown as GraphQLNamedType,
+        );
 
         expect(category).toMatchSnapshot();
       },
@@ -129,7 +131,9 @@ describe("link", () => {
           locations: [],
         });
 
-        jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+        jest
+          .spyOn(Utils, "getNamedType")
+          .mockReturnValue(entityName as unknown as GraphQLNamedType);
         jest.spyOn(Utils, guard).mockReturnValue(true);
         jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
 
@@ -150,11 +154,13 @@ describe("link", () => {
       const type = new GraphQLList(
         new GraphQLObjectType({
           name: entityName,
-          fields: {}
+          fields: {},
         }),
       );
 
-      jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isObjectType").mockReturnValue(true);
       jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
 
@@ -200,7 +206,9 @@ describe("link", () => {
         locations: [],
       });
 
-      jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isDirectiveType").mockReturnValue(true);
       jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
       jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
@@ -228,7 +236,9 @@ describe("link", () => {
         locations: [],
       });
 
-      jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isDirectiveType").mockReturnValue(true);
       jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
       jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
@@ -346,7 +356,10 @@ describe("link", () => {
       jest.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(true);
       jest.spyOn(Link, "printLinkAttributes").mockReturnValue("barfoo");
 
-      const result = Link.printLink({}, { ...DEFAULT_OPTIONS, withAttributes: true });
+      const result = Link.printLink(
+        {},
+        { ...DEFAULT_OPTIONS, withAttributes: true },
+      );
 
       expect(result).toBe("[`barfoo`](/bar)");
     });
@@ -356,14 +369,19 @@ describe("link", () => {
     test("returns false when options has no prop withAttributes", () => {
       expect.hasAssertions();
 
-      expect(Link.hasOptionWithAttributes({} as unknown as PrintLinkOptions)).toBeFalsy();
+      expect(
+        Link.hasOptionWithAttributes({} as unknown as PrintLinkOptions),
+      ).toBeFalsy();
     });
 
     test("returns false when options withAttributes is false", () => {
       expect.hasAssertions();
 
       expect(
-        Link.hasOptionWithAttributes({ ...DEFAULT_OPTIONS, withAttributes: false }),
+        Link.hasOptionWithAttributes({
+          ...DEFAULT_OPTIONS,
+          withAttributes: false,
+        }),
       ).toBeFalsy();
     });
 
@@ -371,7 +389,10 @@ describe("link", () => {
       expect.hasAssertions();
 
       expect(
-        Link.hasOptionWithAttributes({ ...DEFAULT_OPTIONS, withAttributes: true }),
+        Link.hasOptionWithAttributes({
+          ...DEFAULT_OPTIONS,
+          withAttributes: true,
+        }),
       ).toBeTruthy();
     });
   });
@@ -380,7 +401,9 @@ describe("link", () => {
     test("returns false when options has no prop parentTypePrefix", () => {
       expect.hasAssertions();
 
-      expect(Link.hasOptionParentType({} as unknown as PrintLinkOptions)).toBeFalsy();
+      expect(
+        Link.hasOptionParentType({} as unknown as PrintLinkOptions),
+      ).toBeFalsy();
     });
 
     test("returns false when options parentTypePrefix is false", () => {
@@ -398,23 +421,24 @@ describe("link", () => {
     test("returns false when options has no prop parentType", () => {
       expect.hasAssertions();
 
-      expect(Link.hasOptionParentType({ parentTypePrefix: true } as unknown as PrintLinkOptions)).toBeFalsy();
+      expect(
+        Link.hasOptionParentType({
+          parentTypePrefix: true,
+        } as unknown as PrintLinkOptions),
+      ).toBeFalsy();
     });
 
-    test(
-      "returns false when options parentType is %p",
-      () => {
-        expect.hasAssertions();
+    test("returns false when options parentType is %p", () => {
+      expect.hasAssertions();
 
-        expect(
-          Link.hasOptionParentType({
-            ...DEFAULT_OPTIONS,
-            parentTypePrefix: true,
-            parentType: undefined,
-          }),
-        ).toBeFalsy();
-      },
-    );
+      expect(
+        Link.hasOptionParentType({
+          ...DEFAULT_OPTIONS,
+          parentTypePrefix: true,
+          parentType: undefined,
+        }),
+      ).toBeFalsy();
+    });
 
     test("returns true when options parentTypePrefix is true with parentType defined", () => {
       expect.hasAssertions();
@@ -457,7 +481,9 @@ describe("link", () => {
         name: entityName,
       });
 
-      jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isScalarType").mockReturnValue(true);
       jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
 
@@ -481,7 +507,9 @@ describe("link", () => {
         name: entityName,
       });
 
-      jest.spyOn(Utils, "getNamedType").mockReturnValue(entityName as unknown as GraphQLNamedType);
+      jest
+        .spyOn(Utils, "getNamedType")
+        .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isScalarType").mockReturnValue(true);
       jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
 

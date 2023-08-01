@@ -38,7 +38,11 @@ describe("lib", () => {
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        const check = await checkSchemaChanges(new graphql.GraphQLSchema({}), "/output", "FOOBAR");
+        const check = await checkSchemaChanges(
+          new graphql.GraphQLSchema({}),
+          "/output",
+          "FOOBAR",
+        );
 
         expect(check).toBeTruthy();
       });
@@ -108,9 +112,16 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() =>  Promise.resolve(new graphql.GraphQLSchema({})));
-        const changes: Change[] = []
-        changes.push({ message: "", type: "", meta: "", criticality: { level: inspector.CriticalityLevel.Breaking} });
+          .mockImplementationOnce(() =>
+            Promise.resolve(new graphql.GraphQLSchema({})),
+          );
+        const changes: Change[] = [];
+        changes.push({
+          message: "",
+          type: "",
+          meta: "",
+          criticality: { level: inspector.CriticalityLevel.Breaking },
+        });
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve(changes));
@@ -136,7 +147,9 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() => Promise.resolve(new graphql.GraphQLSchema({})));
+          .mockImplementationOnce(() =>
+            Promise.resolve(new graphql.GraphQLSchema({})),
+          );
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));
@@ -162,7 +175,9 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() => Promise.resolve(new graphql.GraphQLSchema({})));
+          .mockImplementationOnce(() =>
+            Promise.resolve(new graphql.GraphQLSchema({})),
+          );
         jest
           .spyOn(inspector, "diff")
           .mockImplementationOnce(() => Promise.resolve([]));

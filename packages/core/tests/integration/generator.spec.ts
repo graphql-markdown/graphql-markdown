@@ -10,7 +10,11 @@ jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
 import { GeneratorOptions, generateDocFromSchema } from "../../src/generator";
-import { DEFAULT_OPTIONS, DeprecatedOption, DiffMethod } from "../../src/config";
+import {
+  DEFAULT_OPTIONS,
+  DeprecatedOption,
+  DiffMethod,
+} from "../../src/config";
 
 describe("renderer", () => {
   beforeEach(() => {
@@ -40,7 +44,10 @@ describe("renderer", () => {
         homepageLocation: "/assets/generated.md",
         diffMethod: DiffMethod.NONE,
         tmpDir: "/temp",
-        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader",
+        },
         printer: "@graphql-markdown/printer-legacy",
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -66,7 +73,10 @@ describe("renderer", () => {
         homepageLocation: "/assets/generated.md",
         diffMethod: "SCHEMA-HASH",
         tmpDir: "/temp",
-        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader",
+        },
         printer: "@graphql-markdown/printer-legacy",
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -93,7 +103,10 @@ describe("renderer", () => {
         homepageLocation: "/assets/generated.md",
         diffMethod: DiffMethod.NONE,
         tmpDir: "/temp",
-        loaders: { ["GraphQLFileLoader" as ClassName]: "@graphql-tools/graphql-file-loader" },
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader",
+        },
         groupByDirective: {
           directive: "doc",
           field: "category",

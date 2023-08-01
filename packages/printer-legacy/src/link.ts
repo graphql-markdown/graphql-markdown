@@ -23,15 +23,25 @@ import {
 
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE, TypeLocale } from "./const/strings";
-import { Options,DeprecatedOption } from "./const/options";
+import { Options, DeprecatedOption } from "./const/options";
 import { MDXString } from "./const/mdx";
 
 export type TypeLink = {
-  text: string,
-  url: string,
-}
+  text: string;
+  url: string;
+};
 
-export type PrintLinkOptions = Pick<Options, "groups" | "parentTypePrefix" | "parentType" | "basePath" | "withAttributes" | "skipDocDirective" | "deprecated"> & Partial<Options>
+export type PrintLinkOptions = Pick<
+  Options,
+  | "groups"
+  | "parentTypePrefix"
+  | "parentType"
+  | "basePath"
+  | "withAttributes"
+  | "skipDocDirective"
+  | "deprecated"
+> &
+  Partial<Options>;
 
 export class Link {
   static getLinkCategory = (type: unknown): TypeLocale | undefined => {
@@ -56,7 +66,12 @@ export class Link {
     return undefined;
   };
 
-  static toLink = (type: unknown, name: string, operation: TypeLocale | undefined, options: PrintLinkOptions): TypeLink => {
+  static toLink = (
+    type: unknown,
+    name: string,
+    operation: TypeLocale | undefined,
+    options: PrintLinkOptions,
+  ): TypeLink => {
     const fallback: TypeLink = {
       text: name,
       url: "#",
@@ -93,19 +108,23 @@ export class Link {
     }
 
     if (typeof category === "object") {
-      category = category.plural
+      category = category.plural;
     }
 
     const text = graphLQLNamedType.name || graphLQLNamedType.toString();
     const deprecated =
-    typeof options !== "undefined" && "deprecated" in options &&
+      typeof options !== "undefined" &&
+      "deprecated" in options &&
       options.deprecated === DeprecatedOption.GROUP &&
       isDeprecated(type)
         ? DEPRECATED
         : "";
-    const group = typeof options !== "undefined" && "groups" in options && typeof options.groups !== "undefined"
-      ? getGroup(type, options.groups, category as SchemaEntities)
-      : "";
+    const group =
+      typeof options !== "undefined" &&
+      "groups" in options &&
+      typeof options.groups !== "undefined"
+        ? getGroup(type, options.groups, category as SchemaEntities)
+        : "";
     const url = pathUrl.join(
       options.basePath!,
       deprecated,
@@ -120,22 +139,34 @@ export class Link {
     } as TypeLink;
   };
 
-  static getRelationLink = (category: TypeLocale | undefined, type: unknown, options: PrintLinkOptions): TypeLink | undefined => {
-    if (typeof category === "undefined" || typeof type !== "object" || type === null || !("name" in type)) {
+  static getRelationLink = (
+    category: TypeLocale | undefined,
+    type: unknown,
+    options: PrintLinkOptions,
+  ): TypeLink | undefined => {
+    if (
+      typeof category === "undefined" ||
+      typeof type !== "object" ||
+      type === null ||
+      !("name" in type)
+    ) {
       return undefined;
     }
     return Link.toLink(type, type.name as string, category, options);
   };
 
-  static printParentLink = (type: unknown, options: PrintLinkOptions): string | MDXString => {
+  static printParentLink = (
+    type: unknown,
+    options: PrintLinkOptions,
+  ): string | MDXString => {
     if (typeof type !== "object" || type === null || !("type" in type)) {
       return "";
     }
 
     return `<Bullet />${Link.printLink(type.type, {
-        ...options,
-          withAttributes: true,
-        })}` as MDXString;
+      ...options,
+      withAttributes: true,
+    })}` as MDXString;
   };
 
   static hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
@@ -147,7 +178,7 @@ export class Link {
     "parentTypePrefix" in options &&
     options.parentTypePrefix === true &&
     "parentType" in options &&
-    typeof options.parentType !== "undefined"
+    typeof options.parentType !== "undefined";
 
   static printLink = (type: unknown, options: PrintLinkOptions) => {
     if (typeof type !== "object" || type === null) {
@@ -161,7 +192,10 @@ export class Link {
       options,
     );
 
-    if (typeof options !== "undefined" && Link.hasOptionWithAttributes(options) === false) {
+    if (
+      typeof options !== "undefined" &&
+      Link.hasOptionWithAttributes(options) === false
+    ) {
       const textWithAttribute =
         Link.hasOptionParentType(options) === true
           ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
@@ -179,7 +213,11 @@ export class Link {
       return text ?? "";
     }
 
-    if (!isLeafType(type) && "ofType" in type && typeof type.ofType != "undefined") {
+    if (
+      !isLeafType(type) &&
+      "ofType" in type &&
+      typeof type.ofType != "undefined"
+    ) {
       text = Link.printLinkAttributes(type.ofType as GraphQLNamedType, text);
     }
 

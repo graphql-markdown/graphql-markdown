@@ -10,33 +10,33 @@ Take this document as a set of guidelines, not rules, for contributing to this p
 
 ## Table of Contents
 
-* [First time contributor](#first-time-contributor)
-* [Getting started](#getting-started)
-  * [Pre-requisites](#pre-requisites)
-  * [Create a repository branch](#create-a-repository-branch)
-* [Make your changes](#make-your-changes)
-  * [Documentation](#documentation)
-  * [Code](#code)
-  * [Committing changes](#committing-changes)
-* [Coding style](#coding-style)
-  * [Code structure](#code-structure)
-  * [Dependencies](#dependencies)
-  * [Tests](#tests)
-  * [Build documentation](#build-documentation)
+- [First time contributor](#first-time-contributor)
+- [Getting started](#getting-started)
+  - [Pre-requisites](#pre-requisites)
+  - [Create a repository branch](#create-a-repository-branch)
+- [Make your changes](#make-your-changes)
+  - [Documentation](#documentation)
+  - [Code](#code)
+  - [Committing changes](#committing-changes)
+- [Coding style](#coding-style)
+  - [Code structure](#code-structure)
+  - [Dependencies](#dependencies)
+  - [Tests](#tests)
+  - [Build documentation](#build-documentation)
 
 ## First time contributor
 
 We all started somewhere. And, before getting started, you might want to be familiar with some of the basic concepts used in open source projects:
 
-* code versioning with Git
-* project forking with Github
-* pushing a pull request with Github
+- code versioning with Git
+- project forking with Github
+- pushing a pull request with Github
 
 Many people did a great job at explaining those concepts, here a few resources:
 
-* [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/): a guide to making open source contributions
-* [Hello Open Source](https://github.com/mazipan/hello-open-source): a repository to learn about open source code contributions flow
-* [First Contributions](https://github.com/firstcontributions/first-contributions): a repository to learn how to make your first contribution
+- [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/): a guide to making open source contributions
+- [Hello Open Source](https://github.com/mazipan/hello-open-source): a repository to learn about open source code contributions flow
+- [First Contributions](https://github.com/firstcontributions/first-contributions): a repository to learn how to make your first contribution
 
 You are now all set for your first contribution :tada:
 
@@ -46,45 +46,45 @@ You are now all set for your first contribution :tada:
 
 If you aim at a code contribution, you will need the following tools:
 
-* [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-* [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
-* [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)*
-* [earthly](https://earthly.dev/get-earthly)
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
+- [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)\*
+- [earthly](https://earthly.dev/get-earthly)
 
 If you do not yet have an IDE, then I recommend [VS Code](https://code.visualstudio.com/download) for this project.
 
-*\* For using `podman` with `earthly`, you need to run `earthly config global.container_frontend podman-shell` (see [earthly ticket](https://github.com/earthly/earthly/issues/760#issuecomment-932323241)).*
+_\* For using `podman` with `earthly`, you need to run `earthly config global.container_frontend podman-shell` (see [earthly ticket](https://github.com/earthly/earthly/issues/760#issuecomment-932323241))._
 
 ### Create a repository branch
 
-* Fork this repository ([doc](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
-* Create a new branch in your forked repository ([doc](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository))
-  * We are using a branch naming convention:
-    * feature: `feature/short-description-of-the-change`
-    * fix: `fix/short-description-of-the-fix` , you can also reference an existing issue, eg `fix/issue-456`
-    * documentation: `doc/short-description-of-the-change`
+- Fork this repository ([doc](https://docs.github.com/en/get-started/quickstart/fork-a-repo))
+- Create a new branch in your forked repository ([doc](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository))
+  - We are using a branch naming convention:
+    - feature: `feature/short-description-of-the-change`
+    - fix: `fix/short-description-of-the-fix` , you can also reference an existing issue, eg `fix/issue-456`
+    - documentation: `doc/short-description-of-the-change`
 
 If you aim at a code contribution, you will need to perform few additional steps:
 
-* checkout your forked repository to your computer ([doc](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)).
+- checkout your forked repository to your computer ([doc](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)).
 
-* install the node version defined in `.nvmrc` using nvm
+- install the node version defined in `.nvmrc` using nvm
 
   ```shell
   nvm install
   nvm use
   ```
 
-* from the local folder, install repository packages
+- from the local folder, install repository packages
 
   ```shell
   npm install
   ```
 
-* from the local folder, check that everything is working
+- from the local folder, check that everything is working
 
   ```shell
-  earthly +all 
+  earthly +all
   ```
 
 ## Make your changes
@@ -105,8 +105,8 @@ The code base is full Javascript using NodeJS, and Jest for tests. The codebase 
 
 When making your changes, remember to check your code by running:
 
-* `npm run lint` checks that the code respects Javascript standards
-* `npm test -ws` runs the test suites
+- `npm run lint` checks that the code respects Javascript standards
+- `npm test -ws` runs the test suites
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
@@ -124,28 +124,28 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 
 The quickest way to understand the code structure is to look at the folder structure:
 
-* `packages` contains packages sources
-  * `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
-    * `src` contains all JS files used by the package.
-    * `tests` folder contains all tests needed (see [tests](#tests) section).
-    * `scripts` contains scripts used for running smoke tests.
-  * `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
-    * `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
-    * `src` contains all JS files used by the package.
-    * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
-    * `src` contains all JS files used by the package.
-    * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
-    * `src` contains all JS files used by the package.
-    * `tests` folder contains all tests needed (see [tests](#tests) section).
-  * `diff` contains diff methods (optional) 📦 [`@graphql-markdown/diff`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/diff)
-    * `src` contains all JS files used by the package.
-    * `tests` folder contains all tests needed (see [tests](#tests) section).
-* `config` folder configuration files for development tools.
-* `docs` folder contains online documentation.
-* `scripts` folder contains scripts for monorepo (eg. packages version check).
-* `website` folder contains Docusaurus file for generating website.
+- `packages` contains packages sources
+  - `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
+    - `src` contains all JS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+    - `scripts` contains scripts used for running smoke tests.
+  - `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
+    - `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
+    - `src` contains all JS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
+    - `src` contains all JS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
+    - `src` contains all JS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `diff` contains diff methods (optional) 📦 [`@graphql-markdown/diff`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/diff)
+    - `src` contains all JS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+- `config` folder configuration files for development tools.
+- `docs` folder contains online documentation.
+- `scripts` folder contains scripts for monorepo (eg. packages version check).
+- `website` folder contains Docusaurus file for generating website.
 
 > The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
 
@@ -157,9 +157,9 @@ For example, it is very tempting to use `lodash`, but usually developers only ne
 
 When choosing an external package, always look at the following:
 
-* is it maintained? last release, last commit, last reply to an issue
-* what is the size? the smaller the better
-* how many dependencies? the lesser the merrier
+- is it maintained? last release, last commit, last reply to an issue
+- what is the size? the smaller the better
+- how many dependencies? the lesser the merrier
 
 ### Tests
 
@@ -167,18 +167,17 @@ There are a lot of ways to test your code, and you should always add tests when 
 
 There are 3 types of tests used in this project, all based on [Jest](https://jestjs.io/):
 
-* `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils` then this is likely where you should add your tests.
+- `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils` then this is likely where you should add your tests.
 
   > You should always mock external calls (see [Jest mock](https://jestjs.io/docs/mock-functions)).
 
-* `integration` for testing the logic of the main classes. If your changes are located in `src/lib`, then you will need to add your tests here.
+- `integration` for testing the logic of the main classes. If your changes are located in `src/lib`, then you will need to add your tests here.
 
-  >  If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
+  > If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
 
-* `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
+- `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
 
   > The tests run within a Docker container using Earthly.
-
 
 #### Mutation testing
 

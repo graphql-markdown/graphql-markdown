@@ -1,9 +1,4 @@
-import {
-  getObjPath,
-  hasMethod,
-  hasProperty,
-  isEmpty,
-} from "../../src/object";
+import { getObjPath, hasMethod, hasProperty, isEmpty } from "../../src/object";
 
 describe("object", () => {
   describe("hasProperty()", () => {

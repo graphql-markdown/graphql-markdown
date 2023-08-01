@@ -22,7 +22,9 @@ describe("helper", () => {
       expect(
         directiveDescriptor(
           {} as unknown as GraphQLDirective,
-          { description: "Directive description" } as unknown as GraphQLNamedType,
+          {
+            description: "Directive description",
+          } as unknown as GraphQLNamedType,
           "Directive value is ${value}",
         ),
       ).toBe("Directive value is 42");
@@ -34,7 +36,12 @@ describe("helper", () => {
       jest.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
 
       expect(
-        directiveDescriptor({ description: "Directive description" } as unknown as GraphQLDirective, {} as unknown as GraphQLNamedType),
+        directiveDescriptor(
+          {
+            description: "Directive description",
+          } as unknown as GraphQLDirective,
+          {} as unknown as GraphQLNamedType,
+        ),
       ).toBe("Directive description");
     });
 
@@ -43,14 +50,25 @@ describe("helper", () => {
 
       jest.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
 
-      expect(directiveDescriptor({} as unknown as GraphQLDirective, {} as unknown as GraphQLNamedType)).toBe("");
+      expect(
+        directiveDescriptor(
+          {} as unknown as GraphQLDirective,
+          {} as unknown as GraphQLNamedType,
+        ),
+      ).toBe("");
     });
   });
   describe("directiveTag", () => {
     test("returns a tag object for the directive with custom classname", () => {
       expect.hasAssertions();
 
-      expect(directiveTag({ name: "dummy" } as unknown as GraphQLDirective, {} as unknown as GraphQLNamedType, "warning")).toStrictEqual({
+      expect(
+        directiveTag(
+          { name: "dummy" } as unknown as GraphQLDirective,
+          {} as unknown as GraphQLNamedType,
+          "warning",
+        ),
+      ).toStrictEqual({
         text: "@dummy",
         classname: "warning",
       });
@@ -59,7 +77,12 @@ describe("helper", () => {
     test("returns a tag object for the directive with default classname", () => {
       expect.hasAssertions();
 
-      expect(directiveTag({ name: "dummy" } as unknown as GraphQLDirective, {} as unknown as GraphQLNamedType)).toStrictEqual({
+      expect(
+        directiveTag(
+          { name: "dummy" } as unknown as GraphQLDirective,
+          {} as unknown as GraphQLNamedType,
+        ),
+      ).toStrictEqual({
         text: "@dummy",
         classname: "badge--secondary",
       });

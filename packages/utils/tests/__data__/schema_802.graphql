@@ -1,44 +1,44 @@
-  "A blog author"
-  type Author {
-    "The internal identifier of the author."
-    id: ID! # the ! means that every author object _must_ have an id
-    "The first name of the author. It might not be the legal name. It's just a name mate...."
-    firstName: String
-    "The last name of the author. It might be everything as we do not run Know Your Author."
-    lastName: String
-    """
-    the list of Posts by this author
-    """
-    posts: [Post]
-  }
+"A blog author"
+type Author {
+  "The internal identifier of the author."
+  id: ID! # the ! means that every author object _must_ have an id
+  "The first name of the author. It might not be the legal name. It's just a name mate...."
+  firstName: String
+  "The last name of the author. It might be everything as we do not run Know Your Author."
+  lastName: String
+  """
+  the list of Posts by this author
+  """
+  posts: [Post]
+}
 
 "A blog post or something else like carbonara recipe."
-  type Post {
-    "The internal identifier we love to leak outside."
-    id: ID!
-    "The title of the post. There's no limit to the title, so possible the whole post content can be in the title."
-    title: String
-    "The author of the post. If not available, `John Doe` is return. If the other is really John Doe, you will never know."
-    author: Author
-    "The number of votes... do not trust this field"
-    votes: Int
-  }
+type Post {
+  "The internal identifier we love to leak outside."
+  id: ID!
+  "The title of the post. There's no limit to the title, so possible the whole post content can be in the title."
+  title: String
+  "The author of the post. If not available, `John Doe` is return. If the other is really John Doe, you will never know."
+  author: Author
+  "The number of votes... do not trust this field"
+  votes: Int
+}
 
-  # the schema allows the following query:
-  type Query {
-    "Fetch all posts without any arguments. Default order is funky."
-    posts: [Post]
-  }
+# the schema allows the following query:
+type Query {
+  "Fetch all posts without any arguments. Default order is funky."
+  posts: [Post]
+}
 
-  # this schema allows the following mutation:
-  type Mutation {
-    "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore."
-    upvotePost(postId: ID!): Post
-  }
+# this schema allows the following mutation:
+type Mutation {
+  "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore."
+  upvotePost(postId: ID!): Post
+}
 
-  # we need to tell the server which types represent the root query
-  # and root mutation types. We call them RootQuery and RootMutation by convention.
-  schema {
-    query: Query
-    mutation: Mutation
-  }
+# we need to tell the server which types represent the root query
+# and root mutation types. We call them RootQuery and RootMutation by convention.
+schema {
+  query: Query
+  mutation: Mutation
+}

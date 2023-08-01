@@ -43,13 +43,11 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      jest
-        .spyOn(Utils, "getRelationOfReturn")
-        .mockImplementation(() => ({
-          queries: [{ name: "Foo" }],
-          interfaces: [{ name: "Bar" }],
-          subscriptions: [{ name: "Baz" }],
-        }));
+      jest.spyOn(Utils, "getRelationOfReturn").mockImplementation(() => ({
+        queries: [{ name: "Foo" }],
+        interfaces: [{ name: "Bar" }],
+        subscriptions: [{ name: "Baz" }],
+      }));
 
       const relation = printRelationOf(
         type,
@@ -74,7 +72,7 @@ describe("relation", () => {
         undefined,
         "RelationOf",
         Utils.getRelationOfReturn,
-        DEFAULT_OPTIONS
+        DEFAULT_OPTIONS,
       );
 
       expect(relation).toBe("");
@@ -94,7 +92,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         Utils.getRelationOfReturn,
-        DEFAULT_OPTIONS
+        DEFAULT_OPTIONS,
       );
 
       expect(relation).toBe("");
@@ -108,7 +106,12 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const relation = printRelationOf(type, "RelationOf", undefined, DEFAULT_OPTIONS);
+      const relation = printRelationOf(
+        type,
+        "RelationOf",
+        undefined,
+        DEFAULT_OPTIONS,
+      );
 
       expect(relation).toBe("");
     });
@@ -125,7 +128,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         jest.fn().mockReturnValue(undefined),
-        DEFAULT_OPTIONS
+        DEFAULT_OPTIONS,
       );
 
       expect(relation).toBe("");
@@ -143,7 +146,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         jest.fn().mockReturnValue([]),
-        DEFAULT_OPTIONS
+        DEFAULT_OPTIONS,
       );
 
       expect(relation).toBe("");

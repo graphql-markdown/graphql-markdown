@@ -27,7 +27,9 @@ describe("object", () => {
         },
       },
     },
-    interfaces: () => [new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} })],
+    interfaces: () => [
+      new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} }),
+    ],
   });
 
   describe("printObjectMetadata", () => {
@@ -153,7 +155,10 @@ describe("object", () => {
     test("returns an object with no deprecated fields if SKIP", () => {
       expect.hasAssertions();
 
-      const code = printCodeObject(type, { ...DEFAULT_OPTIONS, deprecated: DeprecatedOption.SKIP });
+      const code = printCodeObject(type, {
+        ...DEFAULT_OPTIONS,
+        deprecated: DeprecatedOption.SKIP,
+      });
 
       expect(code).toMatchInlineSnapshot(`
         "type TestName implements TestInterfaceName {

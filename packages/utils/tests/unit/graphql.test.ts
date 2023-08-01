@@ -33,7 +33,7 @@ import {
   ObjectTypeDefinitionNode,
 } from "graphql";
 
-import  {
+import {
   getConstDirectiveMap,
   getDefaultValue,
   getDirective,
@@ -105,7 +105,7 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       const loaders = {
-        "GraphQLFileLoader": "@graphql-tools/graphql-file-loader",
+        GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
       } as LoaderOption;
       const { loaders: documentLoaders, ...loaderOptions } =
         await getDocumentLoaders(loaders);
@@ -137,8 +137,10 @@ describe("graphql", () => {
     test("throw an error when loader list is invalid", async () => {
       expect.hasAssertions();
 
-      const loaders = { "GraphQLFileLoader" : {} } as LoaderOption;
-      await expect(getDocumentLoaders(loaders)).rejects.toThrow(`Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`);
+      const loaders = { GraphQLFileLoader: {} } as LoaderOption;
+      await expect(getDocumentLoaders(loaders)).rejects.toThrow(
+        `Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`,
+      );
     });
   });
 
@@ -354,7 +356,10 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLObjectType>(schema, GraphQLObjectType);
+      const map = getTypeFromSchema<GraphQLObjectType>(
+        schema,
+        GraphQLObjectType,
+      );
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -370,7 +375,10 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInterfaceType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLInterfaceType>(schema, GraphQLInterfaceType);
+      const map = getTypeFromSchema<GraphQLInterfaceType>(
+        schema,
+        GraphQLInterfaceType,
+      );
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -386,7 +394,10 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLInputObjectType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLInputObjectType>(schema, GraphQLInputObjectType);
+      const map = getTypeFromSchema<GraphQLInputObjectType>(
+        schema,
+        GraphQLInputObjectType,
+      );
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -394,7 +405,10 @@ describe("graphql", () => {
     test("returns a filter map filtered by GraphQLScalarType", () => {
       expect.hasAssertions();
 
-      const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
+      const map = getTypeFromSchema<GraphQLScalarType>(
+        schema,
+        GraphQLScalarType,
+      );
 
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
@@ -403,7 +417,10 @@ describe("graphql", () => {
       const schema = await gqlToolsLoadSchema(INTROSPECTION_SCHEMA_FILE, {
         loaders: [new JsonFileLoader()],
       });
-      const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
+      const map = getTypeFromSchema<GraphQLScalarType>(
+        schema,
+        GraphQLScalarType,
+      );
       expect(JSON.stringify(map, null, 2)).toMatchSnapshot();
     });
 
@@ -412,7 +429,10 @@ describe("graphql", () => {
       (schema) => {
         expect.hasAssertions();
 
-        const map = getTypeFromSchema<GraphQLScalarType>(schema, GraphQLScalarType);
+        const map = getTypeFromSchema<GraphQLScalarType>(
+          schema,
+          GraphQLScalarType,
+        );
 
         expect(map).toBeUndefined();
       },
@@ -507,7 +527,10 @@ describe("graphql", () => {
     test("returns false if type is not an operation", () => {
       expect.hasAssertions();
 
-      const objects = getTypeFromSchema<GraphQLObjectType>(schema, GraphQLObjectType)!;
+      const objects = getTypeFromSchema<GraphQLObjectType>(
+        schema,
+        GraphQLObjectType,
+      )!;
       const res = isOperation(objects["Tweet"]);
 
       expect(res).toBeFalsy();
@@ -892,8 +915,10 @@ describe("graphql", () => {
     `);
     const type = schema.getType("Test")!;
     const typeWithoutDirective = schema.getType("TestWithoutDirective")!;
-    const descriptor = (directiveType: GraphQLNamedType, constDirectiveType: GraphQLDirective) =>
-      `Test${constDirectiveType.name}`;
+    const descriptor = (
+      directiveType: GraphQLNamedType,
+      constDirectiveType: GraphQLDirective,
+    ) => `Test${constDirectiveType.name}`;
     const options = {
       customDirectives: {
         testA: {
@@ -920,9 +945,7 @@ describe("graphql", () => {
 
       const map = getConstDirectiveMap(typeWithoutDirective, options);
 
-      expect(
-        map
-      ).toBeUndefined();
+      expect(map).toBeUndefined();
     });
 
     test("returns custom directives map", () => {
@@ -984,9 +1007,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
-        (field) => field.name.value === "fieldA",
-      )!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>(
+        type.astNode!
+      )).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argC";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -1002,9 +1025,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
-        (field) => field.name.value === "fieldA",
-      )!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>(
+        type.astNode!
+      )).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argB";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -1020,9 +1043,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>type.astNode!).fields!.find(
-        (field) => field.name.value === "fieldA",
-      )!;
+      const typeFieldNode = (<ObjectTypeDefinitionNode>(
+        type.astNode!
+      )).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argA";
 
       expect(

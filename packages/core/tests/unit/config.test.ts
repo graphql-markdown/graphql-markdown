@@ -4,7 +4,11 @@ import { GraphQLDirective } from "graphql";
 
 import { COMPARE_METHOD } from "@graphql-markdown/diff";
 
-import type { DirectiveName, ClassName, PackageName } from "@graphql-markdown/utils";
+import type {
+  DirectiveName,
+  ClassName,
+  PackageName,
+} from "@graphql-markdown/utils";
 
 import * as config from "../../src/config";
 const {
@@ -16,7 +20,11 @@ const {
   DEFAULT_OPTIONS,
 } = config;
 
-import { type ConfigOptions, type CliOptions, DiffMethod } from "../../src/config";
+import {
+  type ConfigOptions,
+  type CliOptions,
+  DiffMethod,
+} from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
 import * as Utils from "@graphql-markdown/utils";
@@ -33,7 +41,7 @@ describe("config", () => {
       expect(
         getSkipDocDirectives(
           { skip: ["@noDoc" as DirectiveName] },
-          { skipDocDirective: ["@deprecated" as DirectiveName]  },
+          { skipDocDirective: ["@deprecated" as DirectiveName] },
         ),
       ).toStrictEqual(["noDoc", "deprecated"]);
     });
@@ -41,7 +49,9 @@ describe("config", () => {
     test("supports string as input", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirectives({ skip: "@noDoc" as DirectiveName })).toStrictEqual(["noDoc"]);
+      expect(
+        getSkipDocDirectives({ skip: "@noDoc" as DirectiveName }),
+      ).toStrictEqual(["noDoc"]);
     });
 
     test("supports deprecated skip option", () => {
@@ -67,13 +77,17 @@ describe("config", () => {
     test("throws an error if not a string", () => {
       expect.hasAssertions();
 
-      expect(() => getSkipDocDirective("+NotADirective@" as DirectiveName)).toThrow(Error);
+      expect(() =>
+        getSkipDocDirective("+NotADirective@" as DirectiveName),
+      ).toThrow(Error);
     });
 
     test("throws an error if format is not a directive", () => {
       expect.hasAssertions();
 
-      expect(() => getSkipDocDirective("+NotADirective@" as DirectiveName)).toThrow(Error);
+      expect(() =>
+        getSkipDocDirective("+NotADirective@" as DirectiveName),
+      ).toThrow(Error);
     });
   });
 
@@ -116,7 +130,8 @@ describe("config", () => {
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
-          ["UrlLoader" as ClassName]: "@graphql-tools/url-loader" as PackageName,
+          ["UrlLoader" as ClassName]:
+            "@graphql-tools/url-loader" as PackageName,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -178,7 +193,8 @@ describe("config", () => {
         diffMethod: "NO-DIFF",
         tmpDir: "./tmp",
         loaders: {
-          ["UrlLoader" as ClassName]: "@graphql-tools/url-loader" as PackageName,
+          ["UrlLoader" as ClassName]:
+            "@graphql-tools/url-loader" as PackageName,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -249,9 +265,12 @@ describe("config", () => {
       const configFileOpts: ConfigOptions = {
         baseURL: "base-from-config-file",
         schema: "schemaFromConfigFile.graphql",
-        loaders: {}
+        loaders: {},
       };
-      const cliOpts: CliOptions = { pretty: true, schema: "schemaFromCLI.graphql" };
+      const cliOpts: CliOptions = {
+        pretty: true,
+        schema: "schemaFromCLI.graphql",
+      };
 
       const input = await buildConfig(configFileOpts, cliOpts);
 
@@ -279,7 +298,7 @@ describe("config", () => {
 
       const cliOpts: CliOptions = { force: true };
 
-      const input = await buildConfig({loaders: {}}, cliOpts);
+      const input = await buildConfig({ loaders: {} }, cliOpts);
 
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
@@ -363,7 +382,9 @@ describe("config", () => {
         test: {},
       };
 
-      expect(getCustomDirectives(options, ["test" as DirectiveName])).toBeUndefined();
+      expect(
+        getCustomDirectives(options, ["test" as DirectiveName]),
+      ).toBeUndefined();
     });
 
     test("throws an error if descriptor format is invalid", () => {
@@ -383,14 +404,17 @@ describe("config", () => {
     test("returns custom directive maps", () => {
       expect.hasAssertions();
 
-      const descriptor = (_: GraphQLDirective, constDirectiveType: GraphQLDirective) =>
-        `Test${constDirectiveType.name}`;
+      const descriptor = (
+        _: GraphQLDirective,
+        constDirectiveType: GraphQLDirective,
+      ) => `Test${constDirectiveType.name}`;
       const options = {
         testA: { descriptor },
         testB: { descriptor },
       };
 
-      expect(getCustomDirectives(options, ["testB" as DirectiveName])).toMatchInlineSnapshot(`
+      expect(getCustomDirectives(options, ["testB" as DirectiveName]))
+        .toMatchInlineSnapshot(`
       {
         "testA": {
           "descriptor": [Function],

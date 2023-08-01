@@ -1,47 +1,40 @@
+const { join } = require("path");
+
 module.exports = {
   root: true,
   env: {
     node: true,
     es6: true,
     jest: true,
-    commonjs: true,
     "jest/globals": true,
   },
   extends: [
     "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
     "plugin:prettier/recommended",
     "prettier",
-    "plugin:node/recommended",
-    "plugin:import/recommended",
   ],
-  plugins: ["jest", "prettier"],
+  plugins: ["jest", "prettier", "@typescript-eslint"],
   settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+    },
     "import/resolver": {
-      node: {
-        extensions: [".js"],
+      typescript: {
+        project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
       },
     },
   },
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2022,
-    sourceType: "module",
+    tsconfigRootDir: join(__dirname, ".."),
+    project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
   },
-  overrides: [
-    {
-      files: ["packages/**/tests/**/*.js"],
-      extends: [
-        "eslint:recommended",
-        "plugin:prettier/recommended",
-        "prettier",
-        "plugin:jest/recommended",
-        "plugin:jest/style",
-      ],
-    },
-  ],
   rules: {
     "prettier/prettier": "error",
-    "node/no-extraneous-require": "off",
-    "node/no-deprecated-api": "error",
     "brace-style": [
       "error",
       "1tbs",
@@ -49,21 +42,37 @@ module.exports = {
         allowSingleLine: false,
       },
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        devDependencies: true,
-        optionalDependencies: true,
-        peerDependencies: true,
-        packageDir: [
-          "./",
-          "packages/core",
-          "packages/diff",
-          "packages/docusaurus",
-          "packages/printer-legacy",
-          "packages/utils",
-        ],
-      },
-    ],
   },
+  overrides: [
+    {
+      files: ["**/*.mdx?"],
+      extends: ["plugin:mdx/recommended"],
+      settings: {
+        "mdx/code-blocks": true,
+        "mdx/language-mapper": {},
+      },
+    },
+    {
+      files: ["**/*.js"],
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+    },
+    {
+      files: ["**/*.json"],
+      extends: [
+        "eslint:recommended",
+        "plugin:prettier/recommended",
+        "prettier",
+        "plugin:jsonc/recommended-with-jsonc",
+      ],
+      parser: "jsonc-eslint-parser",
+    },
+    {
+      files: ["**/*.graphql"],
+      parser: "@graphql-eslint/eslint-plugin",
+      plugins: ["@graphql-eslint"],
+    },
+  ],
 };

@@ -7,7 +7,6 @@ import * as diff from "@graphql-markdown/diff";
 
 describe("diff", () => {
   describe("hasChanges()", () => {
-
     afterEach(() => {
       jest.restoreAllMocks();
     });
@@ -19,7 +18,9 @@ describe("diff", () => {
 
         const logSpy = jest.spyOn(console, "warn");
 
-        await expect(hasChanges(new GraphQLSchema({}), "", value)).resolves.toBeTruthy();
+        await expect(
+          hasChanges(new GraphQLSchema({}), "", value),
+        ).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
       },
     );
@@ -33,7 +34,9 @@ describe("diff", () => {
 
         jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
-        await expect(hasChanges(new GraphQLSchema({}), "", "NONE", value)).resolves.toBeTruthy();
+        await expect(
+          hasChanges(new GraphQLSchema({}), "", "NONE", value),
+        ).resolves.toBeTruthy();
         expect(logSpy).not.toHaveBeenCalled();
       },
     );
@@ -45,7 +48,9 @@ describe("diff", () => {
 
       jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
-      await expect(hasChanges(new GraphQLSchema({}), "", "NONE", "foobar")).resolves.toBeTruthy();
+      await expect(
+        hasChanges(new GraphQLSchema({}), "", "NONE", "foobar"),
+      ).resolves.toBeTruthy();
       expect(logSpy).toHaveBeenCalledWith(
         "Cannot find module 'foobar' from @graphql-markdown/core!",
       );

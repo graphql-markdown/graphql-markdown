@@ -2,47 +2,98 @@ schema {
   query: Root
 }
 
-"""A single film."""
+"""
+A single film.
+"""
 type Film implements Node {
-  """The title of this film."""
+  """
+  The title of this film.
+  """
   title: String
 
-  """The episode number of this film."""
+  """
+  The episode number of this film.
+  """
   episodeID: Int
 
-  """The opening paragraphs at the beginning of this film."""
+  """
+  The opening paragraphs at the beginning of this film.
+  """
   openingCrawl: String
 
-  """The name of the director of this film."""
+  """
+  The name of the director of this film.
+  """
   director: String
 
-  """The name(s) of the producer(s) of this film."""
+  """
+  The name(s) of the producer(s) of this film.
+  """
   producers: [String]
 
-  """The ISO 8601 date format of film release at original creator country."""
+  """
+  The ISO 8601 date format of film release at original creator country.
+  """
   releaseDate: String
-  speciesConnection(after: String, first: Int, before: String, last: Int): FilmSpeciesConnection
-  starshipConnection(after: String, first: Int, before: String, last: Int): FilmStarshipsConnection
-  vehicleConnection(after: String, first: Int, before: String, last: Int): FilmVehiclesConnection
-  characterConnection(after: String, first: Int, before: String, last: Int): FilmCharactersConnection
-  planetConnection(after: String, first: Int, before: String, last: Int): FilmPlanetsConnection
+  speciesConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmSpeciesConnection
+  starshipConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmStarshipsConnection
+  vehicleConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmVehiclesConnection
+  characterConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmCharactersConnection
+  planetConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmPlanetsConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmCharactersConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmCharactersEdge]
 
   """
@@ -64,21 +115,33 @@ type FilmCharactersConnection {
   characters: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmCharactersEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmPlanetsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmPlanetsEdge]
 
   """
@@ -100,21 +163,33 @@ type FilmPlanetsConnection {
   planets: [Planet]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmPlanetsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Planet
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmsEdge]
 
   """
@@ -136,21 +211,33 @@ type FilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmSpeciesConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmSpeciesEdge]
 
   """
@@ -172,21 +259,33 @@ type FilmSpeciesConnection {
   species: [Species]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmSpeciesEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Species
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmStarshipsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmStarshipsEdge]
 
   """
@@ -208,21 +307,33 @@ type FilmStarshipsConnection {
   starships: [Starship]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmStarshipsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Starship
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type FilmVehiclesConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [FilmVehiclesEdge]
 
   """
@@ -244,42 +355,68 @@ type FilmVehiclesConnection {
   vehicles: [Vehicle]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type FilmVehiclesEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Vehicle
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""An object with an ID"""
+"""
+An object with an ID
+"""
 interface Node {
-  """The id of the object."""
+  """
+  The id of the object.
+  """
   id: ID!
 }
 
-"""Information about pagination in a connection."""
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
-  """When paginating forwards, are there more items?"""
+  """
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
 
-  """When paginating backwards, are there more items?"""
+  """
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
 
-  """When paginating backwards, the cursor to continue."""
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: String
 
-  """When paginating forwards, the cursor to continue."""
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: String
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PeopleConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PeopleEdge]
 
   """
@@ -301,18 +438,28 @@ type PeopleConnection {
   people: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PeopleEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""An individual person or character within the Star Wars universe."""
+"""
+An individual person or character within the Star Wars universe.
+"""
 type Person implements Node {
-  """The name of this person."""
+  """
+  The name of this person.
+  """
   name: String
 
   """
@@ -340,40 +487,77 @@ type Person implements Node {
   """
   hairColor: String
 
-  """The height of the person in centimeters."""
+  """
+  The height of the person in centimeters.
+  """
   height: Int
 
-  """The mass of the person in kilograms."""
+  """
+  The mass of the person in kilograms.
+  """
   mass: Float
 
-  """The skin color of this person."""
+  """
+  The skin color of this person.
+  """
   skinColor: String
 
-  """A planet that this person was born on or inhabits."""
+  """
+  A planet that this person was born on or inhabits.
+  """
   homeworld: Planet
-  filmConnection(after: String, first: Int, before: String, last: Int): PersonFilmsConnection
+  filmConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PersonFilmsConnection
 
-  """The species that this person belongs to, or null if unknown."""
+  """
+  The species that this person belongs to, or null if unknown.
+  """
   species: Species
-  starshipConnection(after: String, first: Int, before: String, last: Int): PersonStarshipsConnection
-  vehicleConnection(after: String, first: Int, before: String, last: Int): PersonVehiclesConnection
+  starshipConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PersonStarshipsConnection
+  vehicleConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PersonVehiclesConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PersonFilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PersonFilmsEdge]
 
   """
@@ -395,21 +579,33 @@ type PersonFilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PersonFilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PersonStarshipsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PersonStarshipsEdge]
 
   """
@@ -431,21 +627,33 @@ type PersonStarshipsConnection {
   starships: [Starship]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PersonStarshipsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Starship
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PersonVehiclesConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PersonVehiclesEdge]
 
   """
@@ -467,12 +675,18 @@ type PersonVehiclesConnection {
   vehicles: [Vehicle]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PersonVehiclesEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Vehicle
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
@@ -481,10 +695,14 @@ A large mass, planet or planetoid in the Star Wars Universe, at the time of
 0 ABY.
 """
 type Planet implements Node {
-  """The name of this planet."""
+  """
+  The name of this planet.
+  """
   name: String
 
-  """The diameter of this planet in kilometers."""
+  """
+  The diameter of this planet in kilometers.
+  """
   diameter: Int
 
   """
@@ -505,13 +723,19 @@ type Planet implements Node {
   """
   gravity: String
 
-  """The average population of sentient beings inhabiting this planet."""
+  """
+  The average population of sentient beings inhabiting this planet.
+  """
   population: Float
 
-  """The climates of this planet."""
+  """
+  The climates of this planet.
+  """
   climates: [String]
 
-  """The terrains of this planet."""
+  """
+  The terrains of this planet.
+  """
   terrains: [String]
 
   """
@@ -519,25 +743,47 @@ type Planet implements Node {
   of water.
   """
   surfaceWater: Float
-  residentConnection(after: String, first: Int, before: String, last: Int): PlanetResidentsConnection
-  filmConnection(after: String, first: Int, before: String, last: Int): PlanetFilmsConnection
+  residentConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PlanetResidentsConnection
+  filmConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PlanetFilmsConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PlanetFilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PlanetFilmsEdge]
 
   """
@@ -559,21 +805,33 @@ type PlanetFilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PlanetFilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PlanetResidentsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PlanetResidentsEdge]
 
   """
@@ -595,21 +853,33 @@ type PlanetResidentsConnection {
   residents: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PlanetResidentsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type PlanetsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [PlanetsEdge]
 
   """
@@ -631,51 +901,103 @@ type PlanetsConnection {
   planets: [Planet]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type PlanetsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Planet
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
 type Root {
-  allFilms(after: String, first: Int, before: String, last: Int): FilmsConnection
+  allFilms(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): FilmsConnection
   film(id: ID, filmID: ID): Film
-  allPeople(after: String, first: Int, before: String, last: Int): PeopleConnection
+  allPeople(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PeopleConnection
   person(id: ID, personID: ID): Person
-  allPlanets(after: String, first: Int, before: String, last: Int): PlanetsConnection
+  allPlanets(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): PlanetsConnection
   planet(id: ID, planetID: ID): Planet
-  allSpecies(after: String, first: Int, before: String, last: Int): SpeciesConnection
+  allSpecies(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): SpeciesConnection
   species(id: ID, speciesID: ID): Species
-  allStarships(after: String, first: Int, before: String, last: Int): StarshipsConnection
+  allStarships(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): StarshipsConnection
   starship(id: ID, starshipID: ID): Starship
-  allVehicles(after: String, first: Int, before: String, last: Int): VehiclesConnection
+  allVehicles(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): VehiclesConnection
   vehicle(id: ID, vehicleID: ID): Vehicle
 
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
 }
 
-"""A type of person or character within the Star Wars Universe."""
+"""
+A type of person or character within the Star Wars Universe.
+"""
 type Species implements Node {
-  """The name of this species."""
+  """
+  The name of this species.
+  """
   name: String
 
-  """The classification of this species, such as "mammal" or "reptile"."""
+  """
+  The classification of this species, such as "mammal" or "reptile".
+  """
   classification: String
 
-  """The designation of this species, such as "sentient"."""
+  """
+  The designation of this species, such as "sentient".
+  """
   designation: String
 
-  """The average height of this species in centimeters."""
+  """
+  The average height of this species in centimeters.
+  """
   averageHeight: Float
 
-  """The average lifespan of this species in years, null if unknown."""
+  """
+  The average lifespan of this species in years, null if unknown.
+  """
   averageLifespan: Int
 
   """
@@ -696,30 +1018,56 @@ type Species implements Node {
   """
   skinColors: [String]
 
-  """The language commonly spoken by this species."""
+  """
+  The language commonly spoken by this species.
+  """
   language: String
 
-  """A planet that this species originates from."""
+  """
+  A planet that this species originates from.
+  """
   homeworld: Planet
-  personConnection(after: String, first: Int, before: String, last: Int): SpeciesPeopleConnection
-  filmConnection(after: String, first: Int, before: String, last: Int): SpeciesFilmsConnection
+  personConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): SpeciesPeopleConnection
+  filmConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): SpeciesFilmsConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type SpeciesConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [SpeciesEdge]
 
   """
@@ -741,21 +1089,33 @@ type SpeciesConnection {
   species: [Species]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type SpeciesEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Species
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type SpeciesFilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [SpeciesFilmsEdge]
 
   """
@@ -777,21 +1137,33 @@ type SpeciesFilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type SpeciesFilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type SpeciesPeopleConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [SpeciesPeopleEdge]
 
   """
@@ -813,18 +1185,28 @@ type SpeciesPeopleConnection {
   people: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type SpeciesPeopleEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A single transport craft that has hyperdrive capability."""
+"""
+A single transport craft that has hyperdrive capability.
+"""
 type Starship implements Node {
-  """The name of this starship. The common name, such as "Death Star"."""
+  """
+  The name of this starship. The common name, such as "Death Star".
+  """
   name: String
 
   """
@@ -839,19 +1221,29 @@ type Starship implements Node {
   """
   starshipClass: String
 
-  """The manufacturers of this starship."""
+  """
+  The manufacturers of this starship.
+  """
   manufacturers: [String]
 
-  """The cost of this starship new, in galactic credits."""
+  """
+  The cost of this starship new, in galactic credits.
+  """
   costInCredits: Float
 
-  """The length of this starship in meters."""
+  """
+  The length of this starship in meters.
+  """
   length: Float
 
-  """The number of personnel needed to run or pilot this starship."""
+  """
+  The number of personnel needed to run or pilot this starship.
+  """
   crew: String
 
-  """The number of non-essential people this starship can transport."""
+  """
+  The number of non-essential people this starship can transport.
+  """
   passengers: String
 
   """
@@ -860,7 +1252,9 @@ type Starship implements Node {
   """
   maxAtmosphericSpeed: Int
 
-  """The class of this starships hyperdrive."""
+  """
+  The class of this starships hyperdrive.
+  """
   hyperdriveRating: Float
 
   """
@@ -872,7 +1266,9 @@ type Starship implements Node {
   """
   MGLT: Int
 
-  """The maximum number of kilograms that this starship can transport."""
+  """
+  The maximum number of kilograms that this starship can transport.
+  """
   cargoCapacity: Float
 
   """
@@ -880,25 +1276,47 @@ type Starship implements Node {
   entire crew without having to resupply.
   """
   consumables: String
-  pilotConnection(after: String, first: Int, before: String, last: Int): StarshipPilotsConnection
-  filmConnection(after: String, first: Int, before: String, last: Int): StarshipFilmsConnection
+  pilotConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): StarshipPilotsConnection
+  filmConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): StarshipFilmsConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type StarshipFilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [StarshipFilmsEdge]
 
   """
@@ -920,21 +1338,33 @@ type StarshipFilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type StarshipFilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type StarshipPilotsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [StarshipPilotsEdge]
 
   """
@@ -956,21 +1386,33 @@ type StarshipPilotsConnection {
   pilots: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type StarshipPilotsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type StarshipsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [StarshipsEdge]
 
   """
@@ -992,16 +1434,24 @@ type StarshipsConnection {
   starships: [Starship]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type StarshipsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Starship
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A single transport craft that does not have hyperdrive capability"""
+"""
+A single transport craft that does not have hyperdrive capability
+"""
 type Vehicle implements Node {
   """
   The name of this vehicle. The common name, such as "Sand Crawler" or "Speeder
@@ -1015,28 +1465,44 @@ type Vehicle implements Node {
   """
   model: String
 
-  """The class of this vehicle, such as "Wheeled" or "Repulsorcraft"."""
+  """
+  The class of this vehicle, such as "Wheeled" or "Repulsorcraft".
+  """
   vehicleClass: String
 
-  """The manufacturers of this vehicle."""
+  """
+  The manufacturers of this vehicle.
+  """
   manufacturers: [String]
 
-  """The cost of this vehicle new, in Galactic Credits."""
+  """
+  The cost of this vehicle new, in Galactic Credits.
+  """
   costInCredits: Float
 
-  """The length of this vehicle in meters."""
+  """
+  The length of this vehicle in meters.
+  """
   length: Float
 
-  """The number of personnel needed to run or pilot this vehicle."""
+  """
+  The number of personnel needed to run or pilot this vehicle.
+  """
   crew: String
 
-  """The number of non-essential people this vehicle can transport."""
+  """
+  The number of non-essential people this vehicle can transport.
+  """
   passengers: String
 
-  """The maximum speed of this vehicle in atmosphere."""
+  """
+  The maximum speed of this vehicle in atmosphere.
+  """
   maxAtmosphericSpeed: Int
 
-  """The maximum number of kilograms that this vehicle can transport."""
+  """
+  The maximum number of kilograms that this vehicle can transport.
+  """
   cargoCapacity: Float
 
   """
@@ -1044,25 +1510,47 @@ type Vehicle implements Node {
   entire crew without having to resupply.
   """
   consumables: String
-  pilotConnection(after: String, first: Int, before: String, last: Int): VehiclePilotsConnection
-  filmConnection(after: String, first: Int, before: String, last: Int): VehicleFilmsConnection
+  pilotConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): VehiclePilotsConnection
+  filmConnection(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): VehicleFilmsConnection
 
-  """The ISO 8601 date format of the time that this resource was created."""
+  """
+  The ISO 8601 date format of the time that this resource was created.
+  """
   created: String
 
-  """The ISO 8601 date format of the time that this resource was edited."""
+  """
+  The ISO 8601 date format of the time that this resource was edited.
+  """
   edited: String
 
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type VehicleFilmsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [VehicleFilmsEdge]
 
   """
@@ -1084,21 +1572,33 @@ type VehicleFilmsConnection {
   films: [Film]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type VehicleFilmsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Film
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type VehiclePilotsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [VehiclePilotsEdge]
 
   """
@@ -1120,21 +1620,33 @@ type VehiclePilotsConnection {
   pilots: [Person]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type VehiclePilotsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Person
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type VehiclesConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [VehiclesEdge]
 
   """
@@ -1156,11 +1668,17 @@ type VehiclesConnection {
   vehicles: [Vehicle]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type VehiclesEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Vehicle
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }

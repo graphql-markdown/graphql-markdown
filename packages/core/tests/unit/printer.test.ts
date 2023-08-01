@@ -10,7 +10,7 @@ describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", async () => {
       expect.assertions(3);
-      
+
       const printer = await getPrinter(
         "@graphql-markdown/printer-legacy" as PackageName,
         {
@@ -32,7 +32,8 @@ describe("generator", () => {
     test("throws exception if no printer module set", async () => {
       expect.assertions(1);
 
-      await expect(getPrinter(
+      await expect(
+        getPrinter(
           undefined,
           {
             schema: new GraphQLSchema({}),
@@ -43,26 +44,34 @@ describe("generator", () => {
             groups: {},
             printTypeOptions: {},
           },
-        )).rejects.toThrow(`Invalid printer module name in "printTypeOptions" settings.`);
+        ),
+      ).rejects.toThrow(
+        `Invalid printer module name in "printTypeOptions" settings.`,
+      );
     });
 
     test("throws exception if no printer config set", async () => {
       expect.assertions(1);
 
-      await expect(getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
+      await expect(
+        getPrinter(
+          "@graphql-markdown/printer-legacy" as PackageName,
           undefined,
           {
             groups: {},
             printTypeOptions: {},
           },
-        )).rejects.toThrow(`Invalid printer config in "printTypeOptions" settings.`);
+        ),
+      ).rejects.toThrow(
+        `Invalid printer config in "printTypeOptions" settings.`,
+      );
     });
 
     test("throws exception if no printer module not found", async () => {
       expect.assertions(1);
 
-      await expect(getPrinter(
+      await expect(
+        getPrinter(
           "foobar" as PackageName,
           {
             schema: new GraphQLSchema({}),
@@ -73,7 +82,8 @@ describe("generator", () => {
             groups: {},
             printTypeOptions: {},
           },
-        )).rejects.toThrow(
+        ),
+      ).rejects.toThrow(
         `Cannot find module 'foobar' defined in "printTypeOptions" settings.`,
       );
     });

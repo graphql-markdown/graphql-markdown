@@ -1,9 +1,6 @@
 import { GraphQLInt, GraphQLEnumType, GraphQLScalarType } from "graphql";
 
-import {
-  printCodeEnum,
-  printEnumMetadata,
-} from "../../../src/graphql/enum";
+import { printCodeEnum, printEnumMetadata } from "../../../src/graphql/enum";
 
 const { DeprecatedOption } = require("core/src/config");
 
@@ -102,7 +99,10 @@ describe("enum", () => {
     test("returns enum code structure without deprecated if SKIP", () => {
       expect.hasAssertions();
 
-      const code = printCodeEnum(type, { ...DEFAULT_OPTIONS, printDeprecated: "skip" });
+      const code = printCodeEnum(type, {
+        ...DEFAULT_OPTIONS,
+        printDeprecated: "skip",
+      });
 
       expect(code).toMatchInlineSnapshot(`
         "enum EnumTypeName {

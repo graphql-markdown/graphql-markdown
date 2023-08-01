@@ -7,9 +7,9 @@ on:
     branches:
       - main
     paths:
-      - 'packages/**/src/**/*'
-      - 'packages/**/tests/**/*'
-      - '.github/workflows/mutation.yml'
+      - "packages/**/src/**/*"
+      - "packages/**/tests/**/*"
+      - ".github/workflows/mutation.yml"
 
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
@@ -21,16 +21,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ['core', 'diff', 'docusaurus', 'printer-legacy', 'utils']
+        package: ["core", "diff", "docusaurus", "printer-legacy", "utils"]
 
     steps:
-    - name: Checkout Code Base
-      uses: actions/checkout@v3
+      - name: Checkout Code Base
+        uses: actions/checkout@v3
 
-    - name: Install modules
-      run: npm ci
+      - name: Install modules
+        run: npm ci
 
-    - name: Run Mutations Tests
-      run: |
-        [ $(npm test -w @graphql-markdown/${{matrix.package}} -- --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).js" | grep -i "test.js" | wc -l) = "0" ] && exit 0
-        npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard
+      - name: Run Mutations Tests
+        run: |
+          [ $(npm test -w @graphql-markdown/${{matrix.package}} -- --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).js" | grep -i "test.js" | wc -l) = "0" ] && exit 0
+          npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard

@@ -19,7 +19,11 @@ export async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-export async function saveFile(filePath: string, data: string, prettify?: Function) {
+export async function saveFile(
+  filePath: string,
+  data: string,
+  prettify?: Function,
+) {
   if (typeof prettify === "function") {
     data = await prettify(data);
   }

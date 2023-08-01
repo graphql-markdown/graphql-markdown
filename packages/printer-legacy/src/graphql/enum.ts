@@ -7,7 +7,7 @@ import {
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
-import { Options,DeprecatedOption } from "../const/options";
+import { Options, DeprecatedOption } from "../const/options";
 
 export const printEnumMetadata = (type: unknown, options: Options) => {
   if (!isEnumType(type)) {
@@ -27,10 +27,10 @@ export const printCodeEnum = (type: unknown, options: Options) => {
     .getValues()
     .map((value) => {
       const skipDirective =
-      "skipDocDirective" in options &&
+        "skipDocDirective" in options &&
         hasDirective(value, options.skipDocDirective) === true;
       const skipDeprecated =
-      "printDeprecated" in options &&
+        "printDeprecated" in options &&
         options.deprecated === DeprecatedOption.SKIP &&
         isDeprecated(value) === true;
       if (skipDirective === true || skipDeprecated === true) {

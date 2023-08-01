@@ -1,20 +1,29 @@
 import { basename, join, relative, normalize } from "node:path";
 
 import {
-  hasProperty ,
-  toSlug, startCase ,
-  pathUrl ,
-  prettifyJavascript, prettifyMarkdown ,
-  saveFile, ensureDir, copyFile, readFile, fileExists ,
-  isDeprecated, 
+  hasProperty,
+  toSlug,
+  startCase,
+  pathUrl,
+  prettifyJavascript,
+  prettifyMarkdown,
+  saveFile,
+  ensureDir,
+  copyFile,
+  readFile,
+  fileExists,
+  isDeprecated,
   SchemaEntitiesGroupMap,
   SchemaEntities,
-  Logger
+  Logger,
 } from "@graphql-markdown/utils";
 
 import { IPrinter } from "./printer";
-import { ASSETS_LOCATION, ConfigDocOptions, TypeDeprecatedOption } from "./config";
-
+import {
+  ASSETS_LOCATION,
+  ConfigDocOptions,
+  TypeDeprecatedOption,
+} from "./config";
 
 const logger = Logger.getInstance();
 
@@ -25,9 +34,9 @@ const CATEGORY_YAML = "_category_.yml";
 enum SIDEBAR_POSITION {
   FIRST = 1,
   LAST = 999,
-};
+}
 
-export type Category = { category: string, slug: string };
+export type Category = { category: string; slug: string };
 
 export class Renderer {
   group: SchemaEntitiesGroupMap | undefined;
@@ -37,7 +46,14 @@ export class Renderer {
   prettify: boolean;
   options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
 
-  constructor(printer: IPrinter, outputDir: string, baseURL: string, group: SchemaEntitiesGroupMap | undefined, prettify: boolean, docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption }) {
+  constructor(
+    printer: IPrinter,
+    outputDir: string,
+    baseURL: string,
+    group: SchemaEntitiesGroupMap | undefined,
+    prettify: boolean,
+    docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption },
+  ) {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
@@ -73,7 +89,11 @@ export class Renderer {
     );
   }
 
-  async generateCategoryMetafileType(type: unknown, name: string, rootTypeName: SchemaEntities): Promise<string> {
+  async generateCategoryMetafileType(
+    type: unknown,
+    name: string,
+    rootTypeName: SchemaEntities,
+  ): Promise<string> {
     let dirPath = this.outputDir;
 
     if (
@@ -94,7 +114,10 @@ export class Renderer {
       hasProperty(this.group, rootTypeName) &&
       hasProperty(this.group![rootTypeName as SchemaEntities], name)
     ) {
-      dirPath = join(dirPath, toSlug(this.group![rootTypeName as SchemaEntities]![name] ?? ""));
+      dirPath = join(
+        dirPath,
+        toSlug(this.group![rootTypeName as SchemaEntities]![name] ?? ""),
+      );
       await this.generateCategoryMetafile(
         this.group![rootTypeName as SchemaEntities]![name] ?? "",
         dirPath,
@@ -121,13 +144,21 @@ export class Renderer {
             rootTypeName,
           );
 
-          return this.renderTypeEntities(dirPath, name, (type as Record<string, any>)[name]);
+          return this.renderTypeEntities(
+            dirPath,
+            name,
+            (type as Record<string, any>)[name],
+          );
         })
         .filter((res) => typeof res !== "undefined"),
     );
   }
 
-  async renderTypeEntities(dirPath: string, name: string, type: unknown): Promise<Category | undefined> {
+  async renderTypeEntities(
+    dirPath: string,
+    name: string,
+    type: unknown,
+  ): Promise<Category | undefined> {
     const fileName = toSlug(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
 
@@ -154,13 +185,18 @@ export class Renderer {
     );
 
     if (typeof page === "undefined" || typeof page?.groups === "undefined") {
-      logger.warn(`An error occurred while processing file $filePath for type "${type}"`);
+      logger.warn(
+        `An error occurred while processing file $filePath for type "${type}"`,
+      );
       return undefined;
     }
 
     const slug = pathUrl.join(page.groups.category ?? "", page.groups.pageId);
 
-    return { category: startCase(page.groups.category), slug: slug } as Category;
+    return {
+      category: startCase(page.groups.category),
+      slug: slug,
+    } as Category;
   }
 
   async renderSidebar(): Promise<string> {
@@ -212,4 +248,4 @@ module.exports = ${JSON.stringify(sidebar, null, 2)};
       .replace(/##generated-date-time##/gm, new Date().toLocaleString());
     await saveFile(destLocation, data);
   }
-};
+}

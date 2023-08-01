@@ -1,8 +1,13 @@
-import { Logger } from "@graphql-markdown/utils"
+import { Logger } from "@graphql-markdown/utils";
 
 import type { GraphQLProjectConfig } from "graphql-config/typings/project-config";
 
-import type { PackageOptionsConfig, LoaderOption, ClassName, PackageConfig } from "@graphql-markdown/utils";
+import type {
+  PackageOptionsConfig,
+  LoaderOption,
+  ClassName,
+  PackageConfig,
+} from "@graphql-markdown/utils";
 
 import type { ConfigOptions } from "./config";
 
@@ -10,20 +15,30 @@ const logger = Logger.getInstance();
 
 export const EXTENSION_NAME = "graphql-markdown";
 
-type ThrowOptions = { 
-  throwOnMissing: boolean, 
-  throwOnEmpty: boolean
-}
+type ThrowOptions = {
+  throwOnMissing: boolean;
+  throwOnEmpty: boolean;
+};
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> & Omit<ConfigOptions, "schema">
+export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> &
+  Omit<ConfigOptions, "schema">;
 
-const setLoaderOptions = (loaders: LoaderOption, options: PackageOptionsConfig) => {
-  for(const loader in loaders) {
+const setLoaderOptions = (
+  loaders: LoaderOption,
+  options: PackageOptionsConfig,
+) => {
+  for (const loader in loaders) {
     if (typeof loaders[loader as ClassName] === "string") {
-      loaders[loader as ClassName] = { module: loaders[loader as ClassName], options } as PackageConfig;
+      loaders[loader as ClassName] = {
+        module: loaders[loader as ClassName],
+        options,
+      } as PackageConfig;
     } else {
-      (loaders[loader as ClassName] as PackageConfig).options = { ...options, ...(loaders[loader as ClassName] as PackageConfig).options } as PackageOptionsConfig;
+      (loaders[loader as ClassName] as PackageConfig).options = {
+        ...options,
+        ...(loaders[loader as ClassName] as PackageConfig).options,
+      } as PackageOptionsConfig;
     }
   }
   return loaders;
@@ -55,7 +70,9 @@ export const loadConfiguration = async (
   });
 
   try {
-    const projectConfig = config!.getProject(id).extension(EXTENSION_NAME) as ExtensionProjectConfig;
+    const projectConfig = config!
+      .getProject(id)
+      .extension(EXTENSION_NAME) as ExtensionProjectConfig;
 
     if (Array.isArray(projectConfig?.schema)) {
       const schema = projectConfig?.schema[0];

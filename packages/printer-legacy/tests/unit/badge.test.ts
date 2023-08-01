@@ -51,7 +51,10 @@ describe("badge", () => {
       jest.spyOn(Utils, "isNonNullType").mockReturnValueOnce(true);
       jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
-      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: true });
+      const badges = Badge.printBadges(
+        {},
+        { ...DEFAULT_OPTIONS, typeBadges: true },
+      );
 
       expect(badges).toMatchInlineSnapshot(
         `"<Badge class="badge badge--secondary" text="non-null"/>"`,
@@ -61,7 +64,10 @@ describe("badge", () => {
     test("returns an empty string if typeBadges is not enabled", () => {
       expect.assertions(1);
 
-      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: false });
+      const badges = Badge.printBadges(
+        {},
+        { ...DEFAULT_OPTIONS, typeBadges: false },
+      );
 
       expect(badges).toBe("");
     });
@@ -79,7 +85,10 @@ describe("badge", () => {
 
       jest.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
 
-      const badges = Badge.printBadges({}, { ...DEFAULT_OPTIONS, typeBadges: true });
+      const badges = Badge.printBadges(
+        {},
+        { ...DEFAULT_OPTIONS, typeBadges: true },
+      );
 
       expect(badges).toBe("");
     });

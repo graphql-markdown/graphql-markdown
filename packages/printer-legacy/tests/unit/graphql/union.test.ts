@@ -1,16 +1,20 @@
-import { GraphQLObjectType, GraphQLScalarType, GraphQLUnionType } from "graphql";
-
 import {
-  printCodeUnion,
-  printUnionMetadata,
-} from "../../../src/graphql/union";
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLUnionType,
+} from "graphql";
+
+import { printCodeUnion, printUnionMetadata } from "../../../src/graphql/union";
 
 import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 describe("union", () => {
   const type = new GraphQLUnionType({
     name: "UnionTypeName",
-    types: [new GraphQLObjectType<string>({ name: "one", fields: {} }), new GraphQLObjectType<string>({ name: "two", fields: {} })],
+    types: [
+      new GraphQLObjectType<string>({ name: "one", fields: {} }),
+      new GraphQLObjectType<string>({ name: "two", fields: {} }),
+    ],
   });
 
   describe("printUnionMetadata", () => {

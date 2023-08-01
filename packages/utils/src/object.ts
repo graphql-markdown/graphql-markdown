@@ -20,7 +20,11 @@ export function isEmpty(obj: any): boolean {
 }
 
 // get the specified property or nested property of an object
-export function getObjPath(path?: string, obj?: any, fallback: any = ""): any | Record<string, any> | undefined {
+export function getObjPath(
+  path?: string,
+  obj?: any,
+  fallback: any = "",
+): any | Record<string, any> | undefined {
   if (typeof obj !== "object" || typeof path !== "string") {
     return fallback;
   }

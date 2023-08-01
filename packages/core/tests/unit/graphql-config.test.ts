@@ -8,8 +8,8 @@ import { join } from "node:path";
 import { loadConfiguration } from "../../src/graphql-config";
 import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
 
-      // const filePath = join(process.cwd(), ".graphqlrc");
-      const filePath = join(__dirname, "..", "..", ".graphqlrc");
+// const filePath = join(process.cwd(), ".graphqlrc");
+const filePath = join(__dirname, "..", "..", ".graphqlrc");
 
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
@@ -256,7 +256,10 @@ describe("config", () => {
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
-          outputDir: join(DEFAULT_OPTIONS.rootPath, graphqlConfig.extensions["graphql-markdown"].baseURL),
+          outputDir: join(
+            DEFAULT_OPTIONS.rootPath,
+            graphqlConfig.extensions["graphql-markdown"].baseURL,
+          ),
           prettify: DEFAULT_OPTIONS.pretty,
           printer: DEFAULT_OPTIONS.printer,
           printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,

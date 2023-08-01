@@ -21,11 +21,22 @@ import { MDXString } from "./const/mdx";
 export const sectionLevels: (SectionLevel | string)[] = [
   SectionLevel.LEVEL_3,
   SectionLevel.LEVEL_4,
-  SectionLevel.LEVEL_5
-]
+  SectionLevel.LEVEL_5,
+];
 
-export const printMetadataSection = (type: unknown, values: unknown, section: string, options: Options): string | MDXString => {
-  if (typeof type !== "object" || type === null || !("name" in type) || !Array.isArray(values) || values.length === 0) {
+export const printMetadataSection = (
+  type: unknown,
+  values: unknown,
+  section: string,
+  options: Options,
+): string | MDXString => {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("name" in type) ||
+    !Array.isArray(values) ||
+    values.length === 0
+  ) {
     return "";
   }
 
@@ -36,7 +47,7 @@ export const printMetadataSection = (type: unknown, values: unknown, section: st
           isDeprecated(arg) ? res.deprecated.push(arg) : res.fields.push(arg);
           return res;
         },
-      { fields: [] as unknown[], deprecated: [] as unknown[]},
+        { fields: [] as unknown[], deprecated: [] as unknown[] },
       );
 
       const meta = printSection(fields, section, {
@@ -65,14 +76,17 @@ export const printMetadataSection = (type: unknown, values: unknown, section: st
   }
 };
 
-export const printSection = (values: unknown, section: string, options: Options): string | MDXString => {
+export const printSection = (
+  values: unknown,
+  section: string,
+  options: Options,
+): string | MDXString => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
 
   const level =
-  "level" in options &&
-    typeof options.level !== "undefined"
+    "level" in options && typeof options.level !== "undefined"
       ? options.level
       : SectionLevel.LEVEL_3;
 
@@ -106,14 +120,16 @@ export const printSection = (values: unknown, section: string, options: Options)
   return `${level} ${section}${openSection}${items}${closeSection}` as MDXString;
 };
 
-export const printSectionItems = (values: unknown, options: Options): string | MDXString => {
+export const printSectionItems = (
+  values: unknown,
+  options: Options,
+): string | MDXString => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
 
   const level =
-    "level" in options &&
-    typeof options.level !== "undefined"
+    "level" in options && typeof options.level !== "undefined"
       ? options.level
       : SectionLevel.LEVEL_4;
 
@@ -129,10 +145,12 @@ export const printSectionItems = (values: unknown, options: Options): string | M
     .join(MARKDOWN_EOP) as MDXString;
 };
 
-export const printSectionItem = (type: unknown, options: Options): string | MDXString => {
+export const printSectionItem = (
+  type: unknown,
+  options: Options,
+): string | MDXString => {
   const level =
-    "level" in options &&
-    typeof options.level !== "undefined"
+    "level" in options && typeof options.level !== "undefined"
       ? options.level
       : SectionLevel.LEVEL_4;
 
@@ -153,7 +171,10 @@ export const printSectionItem = (type: unknown, options: Options): string | MDXS
     return "";
   }
 
-  const typeNameLink = Link.printLink(type, { ...options, withAttributes: false });
+  const typeNameLink = Link.printLink(type, {
+    ...options,
+    withAttributes: false,
+  });
   const description = printDescription(type, options, "").replaceAll(
     "\n",
     `${MARKDOWN_EOL}> `,

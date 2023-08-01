@@ -1,13 +1,6 @@
-import {
-  GraphQLDirective,
-  GraphQLBoolean,
-  DirectiveLocation,
-} from "graphql";
+import { GraphQLDirective, GraphQLBoolean, DirectiveLocation } from "graphql";
 
-import {
-  DEFAULT_OPTIONS, 
-  DeprecatedOption,
-} from "../../../src/const/options";
+import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
 
 import {
   printCodeDirective,
@@ -21,7 +14,7 @@ describe("directive", () => {
 
       const type = new GraphQLDirective({
         name: "FooBar",
-        locations: []
+        locations: [],
       });
 
       const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
