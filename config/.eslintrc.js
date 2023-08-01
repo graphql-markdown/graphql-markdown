@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { join } = require("path");
 
 module.exports = {
@@ -28,11 +29,6 @@ module.exports = {
       },
     },
   },
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    tsconfigRootDir: join(__dirname, ".."),
-    project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
-  },
   rules: {
     "prettier/prettier": "error",
     "brace-style": [
@@ -43,7 +39,16 @@ module.exports = {
       },
     ],
   },
+  ignorePatterns: ["**/packages/**/*.md"],
   overrides: [
+    {
+      files: ["**/*.ts"],
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        tsconfigRootDir: join(__dirname, ".."),
+        project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
+      },
+    },
     {
       files: ["**/*.mdx?"],
       extends: ["plugin:mdx/recommended"],
