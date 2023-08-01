@@ -1,18 +1,32 @@
-module.exports = {
-  collectCoverage: true,
-  collectCoverageFrom: ["<rootDir>/src/**/*.js"],
-  coverageReporters: ["json"],
+const projectConfig = (name) => ({
+  displayName: `@graphql-markdown/${name}`,
+  rootDir: `./packages/${name}`,
+  roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
   testEnvironment: "node",
-  coverageDirectory: "<rootDir>/.nyc_output",
-  roots: ["<rootDir>", "<rootDir>/src"],
+  transform: {
+    "^.+\\.ts$": "ts-jest",
+  },
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
+  coverageDirectory: "<rootDir>../../.nyc_output",
+  testMatch: ["<rootDir>/tests/(unit|integration)/?(*.)+(spec|test).ts"],
+  moduleNameMapper: {
+    "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
+  },
+});
+
+
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  rootDir: "../",
+  preset: "ts-jest",
+  collectCoverage: true,
+  coverageReporters: ["json"],
+  moduleFileExtensions: ["ts", "js"],
   projects: [
-    {
-      displayName: "unit",
-      testMatch: ["<rootDir>/tests/unit/**/?(*.)+(spec|test).js"],
-    },
-    {
-      displayName: "integration",
-      testMatch: ["<rootDir>/tests/integration/**/?(*.)+(spec|test).js"],
-    },
+    projectConfig("utils"),
+    projectConfig("core"),
+    projectConfig("printer-legacy"),
+    projectConfig("diff"),
+    projectConfig("docusaurus"),
   ],
 };

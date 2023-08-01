@@ -56,9 +56,10 @@
     }
   ],
   "scripts": {
+    "test": "jest --config=./config/jest.config.js",
     "prepare": "husky install",
     "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
-    "lint": "eslint --ext .js --ext .ts \"packages/**/{src,tests,assets}/**\"",
+    "lint": "eslint \"packages/**/{src,tests,assets}/**\"",
     "check": "node ./scripts/dep-checks.js",
     "build": "tsc --build",
     "ts:check": "tsc --noEmit"

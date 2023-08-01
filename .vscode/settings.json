@@ -6,8 +6,11 @@
     "automerge",
     "barfoo",
     "Battlestation",
+    "carolstran",
     "changefreq",
+    "chmanie",
     "classname",
+    "clsx",
     "cmfcmf",
     "codeql",
     "codesee",
@@ -34,8 +37,10 @@
     "Jost",
     "lauzierj",
     "lcov",
+    "ljiang-ti",
     "Megalight",
     "Megalights",
+    "melvey",
     "memfs",
     "Metafile",
     "MGLT",
@@ -57,5 +62,18 @@
     "Treeware",
     "unionfs",
     "Yavin"
-  ]
+  ],
+  "eslint.workingDirectories": [
+  "./config"
+  ],
+  "jest.rootPath": ".",
+  "jest.disabledWorkspaceFolders": [
+    "graphql-markdown",
+    "printer-legacy",
+    "docusaurus",
+    "utils",
+    "core",
+    "diff"
+  ],
+  "jest.jestCommandLine": "jest --config=./config/jest.config.js",
 }
