@@ -168,14 +168,14 @@ export async function buildConfig(
     ),
     docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
-      parseGroupByOption(cliOpts.groupByDirective) || config.groupByDirective,
+      parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
     homepageLocation:
       cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
     outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
     prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
-    printer: (config.printer ?? DEFAULT_OPTIONS.printer!) as PackageName,
+    printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
     schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
     skipDocDirective,
@@ -200,10 +200,8 @@ export function getCustomDirectives(
     if (skipDocDirective.includes(name as DirectiveName)) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      (!("descriptor" in (option as CustomDirectiveOptions)) ||
-        typeof (<CustomDirectiveOptions>option).descriptor !== "function") &&
-      (!("tag" in (option as CustomDirectiveOptions)) ||
-        typeof (<CustomDirectiveOptions>option).tag !== "function")
+      (!("descriptor" in option) || typeof option.descriptor !== "function") &&
+      (!("tag" in option) || typeof option.tag !== "function")
     ) {
       throw new Error(
         `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/advanced/custom-directive`,
@@ -279,10 +277,8 @@ export function getSkipDocDirectives(
 
   if (
     (typeof configFileOpts !== "undefined" &&
-      "printTypeOptions" in configFileOpts! &&
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
     (typeof cliOpts !== "undefined" &&
-      "deprecated" in cliOpts! &&
       cliOpts?.deprecated === DeprecatedOption.SKIP)
   ) {
     skipDirectives.push("deprecated" as DirectiveName);
@@ -294,17 +290,17 @@ export function getSkipDocDirectives(
 export function getSkipDocDirective(option: DirectiveName): DirectiveName {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
-  if (typeof option !== "string") {
+  if (typeof option !== "string" || !OPTION_REGEX.test(option)) {
     throw new Error(`Invalid "${option}"`);
   }
 
-  const parsedOption = OPTION_REGEX.exec(option);
+  const {
+    groups: { directive },
+  } = OPTION_REGEX.exec(option) as RegExpExecArray & {
+    groups: { directive: DirectiveName };
+  };
 
-  if (typeof parsedOption === "undefined" || parsedOption == null) {
-    throw new Error(`Invalid "${option}"`);
-  }
-
-  return parsedOption.groups?.directive as DirectiveName;
+  return directive;
 }
 
 export function parseGroupByOption(

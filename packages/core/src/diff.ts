@@ -2,13 +2,11 @@ import { Logger, GraphQLSchema } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
 
-export interface CheckSchemaChanges {
-  (
-    schema: GraphQLSchema,
-    tmpDir: string,
-    diffMethod?: unknown,
-  ): Promise<boolean>;
-}
+export type FunctionCheckSchemaChanges = (
+  schema: GraphQLSchema,
+  tmpDir: string,
+  diffMethod?: unknown,
+) => Promise<boolean>;
 
 export const hasChanges = async (
   schema: GraphQLSchema,
@@ -26,8 +24,11 @@ export const hasChanges = async (
   }
 
   try {
-    const { checkSchemaChanges }: { checkSchemaChanges: CheckSchemaChanges } =
-      await import(diffModule);
+    const {
+      checkSchemaChanges,
+    }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
+      diffModule
+    );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch (error) {
     logger.warn(

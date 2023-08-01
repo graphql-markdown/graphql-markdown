@@ -38,7 +38,7 @@ const setLoaderOptions = (
       (loaders[loader as ClassName] as PackageConfig).options = {
         ...options,
         ...(loaders[loader as ClassName] as PackageConfig).options,
-      } as PackageOptionsConfig;
+      };
     }
   }
   return loaders;
@@ -69,9 +69,9 @@ export const loadConfiguration = async (
   });
 
   try {
-    const projectConfig = config!
+    const projectConfig: ExtensionProjectConfig = config!
       .getProject(id)
-      .extension(EXTENSION_NAME) as ExtensionProjectConfig;
+      .extension(EXTENSION_NAME);
 
     if (Array.isArray(projectConfig?.schema)) {
       const schema = projectConfig?.schema[0];

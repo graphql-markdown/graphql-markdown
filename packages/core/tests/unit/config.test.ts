@@ -8,6 +8,7 @@ import type {
   DirectiveName,
   ClassName,
   PackageName,
+  CustomDirective,
 } from "@graphql-markdown/utils";
 
 import * as config from "../../src/config";
@@ -23,7 +24,6 @@ const {
 import { type ConfigOptions, type CliOptions } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
-import * as Utils from "@graphql-markdown/utils";
 
 describe("config", () => {
   afterEach(() => {
@@ -52,8 +52,6 @@ describe("config", () => {
 
     test("supports deprecated skip option", () => {
       expect.hasAssertions();
-
-      jest.spyOn(Utils, "hasProperty").mockReturnValue(true);
 
       expect(
         getSkipDocDirectives(undefined, {
@@ -101,7 +99,7 @@ describe("config", () => {
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
-          outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
+          outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
           prettify: DEFAULT_OPTIONS.pretty,
           schemaLocation: DEFAULT_OPTIONS.schema,
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
@@ -150,9 +148,11 @@ describe("config", () => {
         skipDocDirective: ["@noDoc" as DirectiveName],
         customDirective: {
           ["test" as DirectiveName]: {
-            descriptor: (directiveType, constDirectiveType) =>
-              `Test${constDirectiveType.name.value}`,
-          },
+            descriptor: (
+              directiveType?: GraphQLDirective,
+              node?: GraphQLDirective,
+            ): string => `Test${node!.name}`,
+          } as CustomDirective,
         },
       };
 

@@ -8,7 +8,6 @@ import { join } from "node:path";
 import { loadConfiguration } from "../../src/graphql-config";
 import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
 
-// const filePath = join(process.cwd(), ".graphqlrc");
 const filePath = join(__dirname, "..", "..", ".graphqlrc");
 
 describe("graphql-config", () => {

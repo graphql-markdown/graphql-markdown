@@ -9,11 +9,9 @@ import {
   GraphQLType,
 } from "@graphql-markdown/utils";
 
-import { Options } from "./const/options";
-
+import { Options, TypeLocale } from "./const/options";
 import { Link } from "./link";
 import { getGroup } from "./group";
-import { TypeLocale } from "./const/options";
 import { MDXString } from "./const/mdx";
 
 export const DEFAULT_CSS_CLASSNAME = "badge--secondary";

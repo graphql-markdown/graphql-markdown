@@ -115,16 +115,10 @@ export class Renderer {
       );
     }
 
-    if (
-      rootTypeName in this.group! &&
-      name in this.group![rootTypeName as SchemaEntity]!
-    ) {
-      dirPath = join(
-        dirPath,
-        toSlug(this.group![rootTypeName as SchemaEntity]![name] ?? ""),
-      );
+    if (rootTypeName in this.group! && name in this.group![rootTypeName]!) {
+      dirPath = join(dirPath, toSlug(this.group![rootTypeName]![name] ?? ""));
       await this.generateCategoryMetafile(
-        this.group![rootTypeName as SchemaEntity]![name] ?? "",
+        this.group![rootTypeName]![name] ?? "",
         dirPath,
       );
     }

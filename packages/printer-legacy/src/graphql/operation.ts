@@ -14,7 +14,7 @@ export const printOperationType = (
   }
 
   const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
-  return printSection([options.schema!.getType(queryType)!], "Type", {
+  return printSection([options.schema!.getType(queryType)], "Type", {
     ...options,
     parentTypePrefix: false,
   });
