@@ -402,15 +402,19 @@ export function getIntrospectionFieldsList(
         {},
       ),
     {},
-  );
+  ) as Record<string, unknown>;
 }
 
-export function getFields(type: unknown) {
+export function getFields(type: unknown): unknown[] {
   return __getFields(
     type,
-    (fieldMap) => Object.keys(fieldMap).map((name) => fieldMap[name]),
+    (fieldMap) => {
+      const res: unknown[] = [];
+      Object.keys(fieldMap).forEach((name: string) => res.push(fieldMap[name]));
+      return res;
+    },
     [],
-  );
+  ) as unknown[];
 }
 
 export function getTypeName(type: unknown, defaultName: string = ""): string {
