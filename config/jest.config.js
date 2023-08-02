@@ -8,7 +8,7 @@ const projectConfig = (name) => ({
   },
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   coverageDirectory: "<rootDir>../../.nyc_output",
-  testMatch: ["<rootDir>/tests/(unit|integration)/?(*.)+(spec|test).ts"],
+  testMatch: ["<rootDir>/tests/(unit|integration)/(*.)+(spec|test).ts"],
   moduleNameMapper: {
     "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
   },

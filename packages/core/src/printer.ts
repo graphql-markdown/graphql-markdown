@@ -21,7 +21,7 @@ export const getPrinter = async (
   }
 
   try {
-    const Printer = await import(printerModule);
+    const { Printer } = await import(printerModule);
 
     const { schema, baseURL, linkRoot } = config;
     Printer.init(schema, baseURL, linkRoot, { ...options });

@@ -3,15 +3,15 @@ jest.mock("node:fs");
 jest.mock("fs");
 
 import type {
-  GraphQLScalarType,
   TypeDeprecatedOption,
   SchemaEntity,
+  MDXString,
 } from "@graphql-markdown/types";
 
 import { join } from "node:path";
 import fs from "node:fs";
 
-import { Kind } from "graphql/language/kinds";
+import { GraphQLScalarType, Kind } from "graphql";
 
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
@@ -48,7 +48,6 @@ describe("renderer", () => {
       });
 
       rendererInstance = new Renderer(
-        new Printer(),
         "/output",
         baseURL,
         undefined,
@@ -70,7 +69,9 @@ describe("renderer", () => {
       test("creates entity page into output folder", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockReturnValue("Lorem ipsum");
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
         const output = "/output/foobar";
 
         const meta = await rendererInstance.renderTypeEntities(
@@ -121,7 +122,9 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Printer, "printType").mockImplementation(() => "content");
+        jest
+          .spyOn(Printer, "printType")
+          .mockImplementation(() => "content" as MDXString);
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
             name: "foo",
@@ -172,7 +175,10 @@ describe("renderer", () => {
         const category = "foobar";
         const outputPath = "/output/docs";
 
-        rendererInstance.options = { index: true, ...DEFAULT_RENDERER_OPTIONS };
+        rendererInstance.options = {
+          ...DEFAULT_RENDERER_OPTIONS,
+          index: true,
+        };
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
@@ -253,7 +259,7 @@ describe("renderer", () => {
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(dirPath).toBe("/output/baz");
+        expect(dirPath).toBe("/output/objects");
       });
 
       test("generate group _category_.yml file", async () => {

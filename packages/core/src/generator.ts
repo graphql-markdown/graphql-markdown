@@ -64,7 +64,7 @@ export const generateDocFromSchema = async ({
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
-  const printer = await getPrinter(
+  await getPrinter(
     // module mandatory
     printerModule,
 
@@ -83,7 +83,7 @@ export const generateDocFromSchema = async ({
       customDirectives,
     },
   );
-  const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
+  const renderer = new Renderer(outputDir, baseURL, groups, prettify, {
     ...docOptions,
     deprecated: printTypeOptions.deprecated,
   });

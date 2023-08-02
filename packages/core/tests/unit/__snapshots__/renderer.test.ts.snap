@@ -37,12 +37,12 @@ exports[`renderer class Renderer renderHomepage() copies default homepage into o
 
 exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
-  "object/_category_.yml": "label: Object
+  "objects/_category_.yml": "label: objects
 position: 1
 link: null
 ",
-  "object/bar.mdx": "content",
-  "object/foo.mdx": "content",
+  "objects/bar.mdx": "content",
+  "objects/foo.mdx": "content",
 }
 `;
 

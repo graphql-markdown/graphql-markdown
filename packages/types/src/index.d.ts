@@ -220,45 +220,48 @@ export type SchemaMap = {
   scalars?: Record<string, GraphQLScalarType<unknown, unknown>> | undefined;
 };
 
-export interface IPrinter {
-  init(
+export abstract class IPrinter {
+  static init(
     schema: GraphQLSchema,
     baseURL: string,
     linkRoot: string,
     options: PrinterOptions,
   ): void;
-  printHeader(
+  static printHeader(
     id: string,
     title: string,
     options: PrinterOptions & PrinterConfig,
   ): string;
-  printDescription(
+  static printDescription(
     type: unknown,
     options: PrinterOptions & PrinterConfig,
     noText: string,
   ): string;
-  printCode(type: unknown, options: PrinterOptions & PrinterConfig): string;
-  printCustomDirectives(
+  static printCode(
     type: unknown,
     options: PrinterOptions & PrinterConfig,
   ): string;
-  printCustomTags(
+  static printCustomDirectives(
     type: unknown,
     options: PrinterOptions & PrinterConfig,
-  ): string;
-  printTypeMetadata(
+  ): MDXString;
+  static printCustomTags(
     type: unknown,
     options: PrinterOptions & PrinterConfig,
-  ): string;
-  printRelations(
+  ): MDXString;
+  static printTypeMetadata(
     type: unknown,
     options: PrinterOptions & PrinterConfig,
-  ): string;
-  printType(
+  ): MDXString;
+  static printRelations(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): MDXString;
+  static printType(
     name: string,
     type: unknown,
     options: Partial<PrinterOptions & PrinterConfig>,
-  ): string;
+  ): MDXString;
 }
 
 export type PrinterConfig = {

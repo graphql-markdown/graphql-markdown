@@ -119,9 +119,7 @@ export function getCustomDirectives(
 ): CustomDirective | undefined {
   if (
     typeof customDirectiveOptions === "undefined" ||
-    Object.keys(customDirectiveOptions).length === 0 ||
-    typeof skipDocDirective === "undefined" ||
-    skipDocDirective.length === 0
+    Object.keys(customDirectiveOptions).length === 0
   ) {
     return undefined;
   }
@@ -129,7 +127,10 @@ export function getCustomDirectives(
   for (const [name, option] of Object.entries<CustomDirectiveOptions>(
     customDirectiveOptions,
   )) {
-    if (skipDocDirective.includes(name as DirectiveName)) {
+    if (
+      Array.isArray(skipDocDirective) &&
+      skipDocDirective.includes(name as DirectiveName)
+    ) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
       (!("descriptor" in option) || typeof option.descriptor !== "function") &&

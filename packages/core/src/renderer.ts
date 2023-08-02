@@ -3,7 +3,6 @@ import type {
   ConfigDocOptions,
   TypeDeprecatedOption,
   SchemaEntity,
-  IPrinter,
   SidebarsConfig,
 } from "@graphql-markdown/types";
 
@@ -25,6 +24,7 @@ import {
 } from "@graphql-markdown/utils";
 
 import { ASSETS_LOCATION } from "./config";
+import { Printer } from "@graphql-markdown/printer-legacy";
 const logger = Logger.getInstance();
 
 const SIDEBAR = "sidebar-schema.js";
@@ -42,12 +42,10 @@ export class Renderer {
   group: SchemaEntitiesGroupMap | undefined;
   outputDir: string;
   baseURL: string;
-  printer: IPrinter;
   prettify: boolean;
   options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
 
   constructor(
-    printer: IPrinter,
     outputDir: string,
     baseURL: string,
     group: SchemaEntitiesGroupMap | undefined,
@@ -57,7 +55,6 @@ export class Renderer {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
-    this.printer = printer;
     this.prettify = prettify;
     this.options = docOptions;
   }
@@ -78,7 +75,7 @@ export class Renderer {
 
     const label = startCase(category);
     const link =
-      typeof this.options === "undefined" || !this.options.index
+      this.options.index !== true
         ? "null"
         : `\n  type: generated-index\n  title: '${label} overview'`;
     const className =
@@ -96,11 +93,7 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (
-      "deprecated" in this.options &&
-      this.options.deprecated === "group" &&
-      isDeprecated(type)
-    ) {
+    if (this.options.deprecated === "group" && isDeprecated(type)) {
       dirPath = join(dirPath, toSlug("deprecated"));
       await this.generateCategoryMetafile(
         "deprecated",
@@ -110,7 +103,11 @@ export class Renderer {
       );
     }
 
-    if (rootTypeName in this.group! && name in this.group![rootTypeName]!) {
+    if (
+      typeof this.group !== "undefined" &&
+      rootTypeName in this.group &&
+      name in this.group![rootTypeName]!
+    ) {
       dirPath = join(dirPath, toSlug(this.group![rootTypeName]![name] ?? ""));
       await this.generateCategoryMetafile(
         this.group![rootTypeName]![name] ?? "",
@@ -158,7 +155,7 @@ export class Renderer {
 
     let content;
     try {
-      content = this.printer.printType(fileName, type, this.options);
+      content = Printer.printType(fileName, type, this.options);
       if (typeof content === "undefined") {
         return undefined;
       }

@@ -10,6 +10,7 @@ import type {
   GraphQLScalarType,
   GraphQLSchema,
   GraphQLUnionType,
+  IPrinter,
   MDXString,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
@@ -63,7 +64,7 @@ import {
 import { mdx } from "./const/mdx";
 
 import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
-export class Printer {
+export class Printer implements IPrinter {
   static options: PrintTypeOptions | undefined;
 
   static init(
@@ -229,7 +230,7 @@ export class Printer {
   static printType = (
     name: string | undefined,
     type: unknown,
-    options?: PrintTypeOptions,
+    options?: Partial<PrintTypeOptions>,
   ): MDXString | undefined => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
