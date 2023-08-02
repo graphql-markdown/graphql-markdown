@@ -44,7 +44,7 @@ describe("group", () => {
     test("returns empty string if type not in group", () => {
       jest
         .spyOn(Utils, "getNamedType")
-        .mockReturnValue("FooBaz" as unknown as GraphQLNamedType);
+        .mockReturnValue("FooBar" as unknown as GraphQLNamedType);
 
       const group = getGroup(
         { name: "FooBar" },

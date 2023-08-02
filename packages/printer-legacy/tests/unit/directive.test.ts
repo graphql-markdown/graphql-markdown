@@ -25,7 +25,7 @@ jest.mock("../../src/link", () => {
     printLink: jest.fn(),
   };
 });
-import { Link } from "../../src/link";
+import * as Link from "../../src/link";
 
 import {
   getCustomTags,

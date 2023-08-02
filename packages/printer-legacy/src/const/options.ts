@@ -4,6 +4,7 @@ import type {
   GraphQLSchema,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
+  SchemaEntitiesGroupMap,
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
@@ -26,21 +27,28 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    "schema" | "skipDocDirective" | "collapsible" | "parentType"
+    | "schema"
+    | "skipDocDirective"
+    | "collapsible"
+    | "parentType"
+    | "groups"
+    | "level"
   >
 > & {
   schema?: GraphQLSchema;
   skipDocDirective?: DirectiveName[];
   collapsible?: CollapsibleOption;
   parentType?: string;
+  groups?: SchemaEntitiesGroupMap | undefined;
+  level?: SectionLevelValue;
 } = {
   ...PRINT_TYPE_DEFAULT_OPTIONS,
   basePath: "/",
   collapsible: undefined,
   customDirectives: {},
-  groups: {},
+  groups: undefined,
   header: { toc: true, pagination: true },
-  level: SectionLevels.LEVEL_3 as SectionLevelValue,
+  level: undefined,
   parentType: undefined,
   schema: undefined,
   skipDocDirective: undefined,

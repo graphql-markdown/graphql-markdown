@@ -1,4 +1,4 @@
-import { GraphQLScalarType } from "graphql/type/definition";
+import { GraphQLScalarType, type GraphQLSchema } from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -15,6 +15,8 @@ jest.mock("@graphql-markdown/utils", () => {
     escapeMDX: jest.fn((s) => s),
     toSlug: jest.fn(),
     pathUrl: jest.fn(),
+    isNamedType: jest.fn(),
+    hasDirective: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -43,6 +45,7 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
+      jest.spyOn(Utils, "isNamedType").mockReturnValueOnce(true);
       jest.spyOn(Utils, "getRelationOfReturn").mockImplementation(() => ({
         queries: [{ name: "Foo" }],
         interfaces: [{ name: "Bar" }],
@@ -53,7 +56,7 @@ describe("relation", () => {
         type,
         "RelationOf",
         Utils.getRelationOfReturn,
-        DEFAULT_OPTIONS,
+        { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
       );
 
       expect(relation).toMatchInlineSnapshot(`

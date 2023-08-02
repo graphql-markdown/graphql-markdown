@@ -1,7 +1,4 @@
-import type {
-  PrintTypeOptions,
-  GraphQLEnumType,
-} from "@graphql-markdown/types";
+import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
   isEnumType,
@@ -13,33 +10,28 @@ import {
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
 
-export const printEnumMetadata = (type: unknown, options: PrintTypeOptions) => {
+export const printEnumMetadata = <T>(type: T, options: PrintTypeOptions) => {
   if (!isEnumType(type)) {
     return "";
   }
 
-  return printMetadataSection(
-    type,
-    (<GraphQLEnumType>(<unknown>type)).getValues(),
-    "Values",
-    options,
-  );
+  return printMetadataSection(type, type.getValues(), "Values", options);
 };
 
-export const printCodeEnum = (type: unknown, options: PrintTypeOptions) => {
+export const printCodeEnum = <T>(type: T, options: PrintTypeOptions) => {
   if (!isEnumType(type)) {
     return "";
   }
 
   let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
-  code += (<GraphQLEnumType>(<unknown>type))
+  code += type
     .getValues()
     .map((value) => {
       const skipDirective =
         "skipDocDirective" in options &&
         hasDirective(value, options.skipDocDirective) === true;
       const skipDeprecated =
-        "printDeprecated" in options &&
+        "deprecated" in options &&
         options.deprecated === "skip" &&
         isDeprecated(value) === true;
       if (skipDirective === true || skipDeprecated === true) {

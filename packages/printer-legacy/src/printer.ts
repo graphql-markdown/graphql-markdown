@@ -194,7 +194,7 @@ export class Printer implements IPrinter {
   ): string | MDXString => {
     switch (true) {
       case isScalarType(type):
-        return printScalarMetadata(type as GraphQLScalarType);
+        return printScalarMetadata(type as GraphQLScalarType, options);
       case isEnumType(type):
         return printEnumMetadata(type as GraphQLEnumType, options);
       case isUnionType(type):

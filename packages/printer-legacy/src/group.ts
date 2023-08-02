@@ -15,14 +15,16 @@ export const getGroup = (
   if (
     typeof type !== "object" ||
     typeof groups === "undefined" ||
-    typeof typeCategory == "undefined"
+    typeof typeCategory === "undefined"
   ) {
     return "";
   }
+
   const graphLQLNamedType = getNamedType(
     type as GraphQLType,
   ) as GraphQLNamedType;
   const typeName = graphLQLNamedType.name || graphLQLNamedType.toString();
+
   return typeCategory in groups &&
     typeof groups[typeCategory] !== "undefined" &&
     typeName in groups[typeCategory]! &&

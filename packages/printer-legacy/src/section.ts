@@ -14,7 +14,7 @@ import {
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";
-import { Link } from "./link";
+import { printLink, printParentLink } from "./link";
 import { printCustomTags } from "./directive";
 
 import {
@@ -182,7 +182,7 @@ export const printSectionItem = (
     return "";
   }
 
-  const typeNameLink = Link.printLink(type, {
+  const typeNameLink = printLink(type, {
     ...options,
     withAttributes: false,
   });
@@ -192,7 +192,7 @@ export const printSectionItem = (
   );
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
-  const parentTypeLink = Link.printParentLink(type, options);
+  const parentTypeLink = printParentLink(type, options);
 
   let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
   if (isParametrizedField(type)) {

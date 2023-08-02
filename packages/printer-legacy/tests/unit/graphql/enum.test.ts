@@ -2,7 +2,7 @@ import { GraphQLEnumType, GraphQLScalarType } from "graphql";
 
 import { printCodeEnum, printEnumMetadata } from "../../../src/graphql/enum";
 
-import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 describe("enum", () => {
   const type = new GraphQLEnumType({
@@ -47,7 +47,7 @@ describe("enum", () => {
 
       const metadata = printEnumMetadata(type, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.GROUP,
+        deprecated: "group",
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -99,7 +99,7 @@ describe("enum", () => {
 
       const code = printCodeEnum(type, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.SKIP,
+        deprecated: "skip",
       });
 
       expect(code).toMatchInlineSnapshot(`

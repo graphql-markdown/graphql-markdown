@@ -1,3 +1,5 @@
+import type { DirectiveName, SectionLevelValue } from "@graphql-markdown/types";
+
 import {
   GraphQLNonNull,
   GraphQLInt,
@@ -14,12 +16,7 @@ import {
 
 import { HIDE_DEPRECATED, SHOW_DEPRECATED } from "../../src/const/strings";
 
-import {
-  DEFAULT_OPTIONS,
-  DeprecatedOption,
-  SectionLevels,
-} from "../../src/const/options";
-import { DirectiveName } from "@graphql-markdown/utils";
+import { DEFAULT_OPTIONS, SectionLevels } from "../../src/const/options";
 
 describe("section", () => {
   describe("printSection()", () => {
@@ -34,7 +31,7 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
         "### section title
 
-        #### [\`section content\`](#)  
+        ####   
         > 
         > 
         > 
@@ -51,7 +48,7 @@ describe("section", () => {
 
       const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
-        level: SectionLevels.NONE,
+        level: SectionLevels.NONE as SectionLevelValue,
         collapsible: {
           dataOpen: HIDE_DEPRECATED,
           dataClose: SHOW_DEPRECATED,
@@ -63,7 +60,7 @@ describe("section", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [\`section content\`](#)  
+        ####   
         > 
         > 
         > 
@@ -83,13 +80,13 @@ describe("section", () => {
 
       const section = printSection(content, title, {
         ...DEFAULT_OPTIONS,
-        level: "#",
+        level: "#" as SectionLevelValue,
       });
 
       expect(section).toMatchInlineSnapshot(`
         "# section title
 
-        #### [\`section content\`](#)  
+        ####   
         > 
         > 
         > 
@@ -120,19 +117,19 @@ describe("section", () => {
       const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`one\`](#)  
+        "####   
         > 
         > 
         > 
         > 
 
-        #### [\`two\`](#)  
+        ####   
         > 
         > 
         > 
         > 
 
-        #### [\`three\`](#)  
+        ####   
         > 
         > 
         > 
@@ -380,7 +377,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirective: ["@noDoc" as DirectiveName],
-        deprecated: DeprecatedOption.SKIP,
+        deprecated: "skip",
       });
 
       expect(section).toBe("");

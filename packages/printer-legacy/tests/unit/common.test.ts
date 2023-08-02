@@ -9,7 +9,8 @@ import {
   printDeprecation,
   printDescription,
 } from "../../src/common";
-import { DEFAULT_OPTIONS } from "printer-legacy/src/const/options";
+
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("common", () => {
   describe("printDescription()", () => {
@@ -252,7 +253,11 @@ describe("common", () => {
 
       const description = printCustomDirectives(type, options);
 
-      expect(description).toMatchInlineSnapshot(`""`);
+      expect(description).toMatchInlineSnapshot(`
+"
+
+Test testDirective"
+`);
     });
   });
 });

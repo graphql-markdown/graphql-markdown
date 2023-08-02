@@ -2,7 +2,7 @@ import { getConstDirectiveMap } from "@graphql-markdown/utils";
 
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
-import { Link } from "./link";
+import { printLink } from "./link";
 import { printBadge } from "./badge";
 import {
   Badge,
@@ -46,7 +46,7 @@ export const printCustomDirective = (
   constDirectiveOption: CustomDirectiveMapItem,
   options: PrintTypeOptions,
 ): string | undefined => {
-  const typeNameLink = Link.printLink(constDirectiveOption.type, {
+  const typeNameLink = printLink(constDirectiveOption.type, {
     ...options,
     withAttributes: false,
   });

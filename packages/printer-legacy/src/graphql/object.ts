@@ -42,18 +42,15 @@ export const printCodeType = (
   entity: string,
   options: PrintTypeOptions,
 ): string => {
-  if (
-    typeof type !== "object" ||
-    type === null ||
-    !("getInterfaces" in type) ||
-    typeof type.getInterfaces !== "function"
-  ) {
+  if (typeof type !== "object" || type === null) {
     return "";
   }
 
   const name = getTypeName(type);
   const extendsInterface =
-    "getInterfaces" in type && type.getInterfaces().length > 0
+    "getInterfaces" in type &&
+    typeof type.getInterfaces === "function" &&
+    type.getInterfaces().length > 0
       ? ` implements ${type
           .getInterfaces()
           .map((field: unknown) => getTypeName(field))

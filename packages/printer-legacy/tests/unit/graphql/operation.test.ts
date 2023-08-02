@@ -5,9 +5,14 @@ import {
   GraphQLSchema,
 } from "graphql";
 
-import * as Utils from "@graphql-markdown/utils";
+jest.mock("@graphql-markdown/utils", () => {
+  return {
+    ...jest.requireActual("@graphql-markdown/utils"),
+    isDeprecated: jest.fn((t: any) => "deprecationReason" in t), // eslint-disable-line @typescript-eslint/no-explicit-any
+  };
+});
 
-import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 import {
   printOperationMetadata,
@@ -15,6 +20,10 @@ import {
 } from "../../../src/graphql/operation";
 
 describe("operation", () => {
+  afterEach(() => {
+    jest.restoreAllMocks;
+  });
+
   describe("printOperationMetadata()", () => {
     test("returns operation metadata", () => {
       expect.hasAssertions();
@@ -24,8 +33,6 @@ describe("operation", () => {
         type: GraphQLID,
         args: [],
       };
-
-      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
@@ -64,8 +71,6 @@ describe("operation", () => {
           },
         ],
       };
-
-      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
 
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
@@ -118,11 +123,9 @@ describe("operation", () => {
         ],
       };
 
-      jest.spyOn(Utils, "getTypeName").mockReturnValue("Test");
-
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.GROUP,
+        deprecated: "group",
         schema: {
           getType: () =>
             new GraphQLObjectType({

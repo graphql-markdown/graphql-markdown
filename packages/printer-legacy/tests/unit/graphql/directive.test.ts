@@ -1,6 +1,6 @@
 import { GraphQLDirective, GraphQLBoolean, DirectiveLocation } from "graphql";
 
-import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 import {
   printCodeDirective,
@@ -69,7 +69,7 @@ describe("directive", () => {
 
       const code = printDirectiveMetadata(type, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.GROUP,
+        deprecated: "group",
       });
 
       expect(code).toMatchInlineSnapshot(`

@@ -323,7 +323,7 @@ export type PrintTypeOptions = {
   collapsible?: CollapsibleOption;
   customDirectives?: CustomDirectiveMap;
   deprecated?: TypeDeprecatedOption;
-  groups?: SchemaEntitiesGroupMap;
+  groups?: SchemaEntitiesGroupMap | undefined;
   level?: SectionLevelValue;
   parentType?: string;
   parentTypePrefix: boolean;

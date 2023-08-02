@@ -26,13 +26,13 @@ describe("union", () => {
       expect(code).toMatchInlineSnapshot(`
         "### Possible types
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](#)  
+        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](/objects/one) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
         > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](#)  
+        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](/objects/two) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 

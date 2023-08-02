@@ -1,3 +1,5 @@
+import type { PrintTypeOptions } from "@graphql-markdown/types";
+
 jest.mock("@graphql-markdown/utils", () => {
   return {
     toSlug: jest.fn(),
@@ -26,7 +28,7 @@ jest.mock("../../src/link", () => {
     getLinkCategory: jest.fn(),
   };
 });
-import { Link } from "../../src/link";
+import * as Link from "../../src/link";
 
 jest.mock("../../src/group", () => {
   return {
@@ -37,7 +39,8 @@ import * as Group from "../../src/group";
 
 import * as Badge from "../../src/badge";
 
-import { DEFAULT_OPTIONS, PrintTypeOptions } from "../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../src/const/options";
+import { group } from "console";
 
 describe("badge", () => {
   afterEach(() => {
@@ -144,7 +147,7 @@ describe("badge", () => {
 
       const type = {};
 
-      const badges = Badge.getTypeBadges(type);
+      const badges = Badge.getTypeBadges(type, { queries: {} });
 
       expect(badges).toStrictEqual([
         { text: "foobaz", classname: "badge--secondary" },

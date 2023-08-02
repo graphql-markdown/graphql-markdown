@@ -46,10 +46,10 @@ describe("code", () => {
 
       expect(code).toMatchInlineSnapshot(`
         "(
-          ParamWithDefault: string = defaultValue
-          ParamNoDefault: any
-          ParamIntZero: int = 0
-          ParamIntNoDefault: int
+          ParamWithDefault: String = defaultValue
+          ParamNoDefault: Any
+          ParamIntZero: Int = 0
+          ParamIntNoDefault: Int
         )"
       `);
     });

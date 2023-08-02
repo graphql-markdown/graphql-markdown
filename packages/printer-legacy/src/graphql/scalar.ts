@@ -21,7 +21,10 @@ export const printSpecification = (type: unknown): string | MDXString => {
   return `${SectionLevels.LEVEL_3} <SpecifiedBy url="${url}"/>${MARKDOWN_EOP}` as MDXString;
 };
 
-export const printScalarMetadata = (type: unknown): string | MDXString => {
+export const printScalarMetadata = (
+  type: unknown,
+  options?: PrintTypeOptions, // eslint-disable-line @typescript-eslint/no-unused-vars
+): string | MDXString => {
   return printSpecification(type);
 };
 

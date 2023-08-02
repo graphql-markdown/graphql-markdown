@@ -1,3 +1,5 @@
+import { posix } from "node:path";
+
 import {
   GraphQLDirective,
   GraphQLEnumType,
@@ -10,11 +12,13 @@ import {
   GraphQLSchema,
 } from "graphql";
 
+import type { DirectiveName, PrintTypeOptions } from "@graphql-markdown/types";
+
 jest.mock("@graphql-markdown/utils", () => {
   return {
     toSlug: jest.fn(),
     escapeMDX: jest.fn(),
-    pathUrl: { join: jest.fn() },
+    pathUrl: { join: posix.join },
     isEmpty: jest.fn(),
     getConstDirectiveMap: jest.fn(),
     getTypeName: jest.fn(),
@@ -35,7 +39,7 @@ jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
 import { Printer } from "../../src/printer";
-import { DEFAULT_OPTIONS, PrintTypeOptions } from "../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("Printer", () => {
   enum TypeGuard {
@@ -146,7 +150,7 @@ describe("Printer", () => {
     test("sets Printer instance with default options", () => {
       expect.hasAssertions();
 
-      expect(Printer.options).toMatchInlineSnapshot(`undefined`);
+      expect(Printer.options).toBeUndefined();
 
       Printer.init();
 
@@ -154,14 +158,22 @@ describe("Printer", () => {
         {
           "basePath": "/schema",
           "codeSection": true,
+          "collapsible": undefined,
           "customDirectives": undefined,
+          "deprecated": "default",
           "groups": undefined,
+          "header": {
+            "pagination": true,
+            "toc": true,
+          },
+          "level": undefined,
+          "parentType": undefined,
           "parentTypePrefix": true,
-          "printDeprecated": "default",
           "relatedTypeSection": true,
           "schema": undefined,
           "skipDocDirective": undefined,
           "typeBadges": true,
+          "withAttributes": false,
         }
       `);
     });
@@ -189,23 +201,60 @@ describe("Printer", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: ["test" as Utils.DirectiveName],
+        skipDocDirective: ["test" as DirectiveName],
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
         {
           "basePath": "/test",
           "codeSection": false,
+          "collapsible": undefined,
           "customDirectives": undefined,
+          "deprecated": "default",
           "groups": {},
+          "header": {
+            "pagination": true,
+            "toc": true,
+          },
+          "level": undefined,
+          "parentType": undefined,
           "parentTypePrefix": false,
-          "printDeprecated": "default",
           "relatedTypeSection": false,
-          "schema": {},
+          "schema": GraphQLSchema {
+            "__validationErrors": undefined,
+            "_directives": [
+              "@include",
+              "@skip",
+              "@deprecated",
+              "@specifiedBy",
+            ],
+            "_implementationsMap": {},
+            "_mutationType": undefined,
+            "_queryType": undefined,
+            "_subTypeMap": {},
+            "_subscriptionType": undefined,
+            "_typeMap": {
+              "Boolean": "Boolean",
+              "String": "String",
+              "__Directive": "__Directive",
+              "__DirectiveLocation": "__DirectiveLocation",
+              "__EnumValue": "__EnumValue",
+              "__Field": "__Field",
+              "__InputValue": "__InputValue",
+              "__Schema": "__Schema",
+              "__Type": "__Type",
+              "__TypeKind": "__TypeKind",
+            },
+            "astNode": undefined,
+            "description": undefined,
+            "extensionASTNodes": [],
+            "extensions": {},
+          },
           "skipDocDirective": [
             "test",
           ],
           "typeBadges": false,
+          "withAttributes": false,
         }
       `);
     });
@@ -238,7 +287,7 @@ describe("Printer", () => {
         "An Object Type Name",
         {
           ...DEFAULT_OPTIONS,
-          header: { toc: false },
+          header: { ...DEFAULT_OPTIONS.header, toc: false },
         },
       );
 
@@ -259,7 +308,7 @@ describe("Printer", () => {
         "An Object Type Name",
         {
           ...DEFAULT_OPTIONS,
-          header: { pagination: false },
+          header: { ...DEFAULT_OPTIONS.header, pagination: false },
         },
       );
 
@@ -329,19 +378,19 @@ describe("Printer", () => {
       },
     );
 
-    test("returns undefined with non supported message for unsupported type", () => {
+    test("returns empty string with non supported message for unsupported type", () => {
       expect.hasAssertions();
 
       const type = "TestFooBarType";
 
       const code = Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toBeUndefined();
+      expect(code).toBe("");
     });
   });
 
   describe("printType()", () => {
-    const spies = [
+    const methods = [
       "printCode",
       "printCustomDirectives",
       "printCustomTags",
@@ -356,7 +405,9 @@ describe("Printer", () => {
       ({ name, type }) => {
         expect.hasAssertions();
 
-        spies.map((method) => jest.spyOn(Printer, method).mockReturnValue(""));
+        const spies = methods.map((method) =>
+          jest.spyOn(Printer, method).mockReturnValue(""),
+        );
 
         Printer.printType(name, type);
 

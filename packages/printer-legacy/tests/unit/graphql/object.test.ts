@@ -5,7 +5,7 @@ import {
   GraphQLInterfaceType,
 } from "graphql";
 
-import { DEFAULT_OPTIONS, DeprecatedOption } from "../../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 import {
   printCodeObject,
@@ -84,7 +84,7 @@ describe("object", () => {
 
       const metadata = printObjectMetadata(type, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.GROUP,
+        deprecated: "group",
       });
 
       expect(metadata).toMatchInlineSnapshot(`
@@ -157,7 +157,7 @@ describe("object", () => {
 
       const code = printCodeObject(type, {
         ...DEFAULT_OPTIONS,
-        deprecated: DeprecatedOption.SKIP,
+        deprecated: "skip",
       });
 
       expect(code).toMatchInlineSnapshot(`

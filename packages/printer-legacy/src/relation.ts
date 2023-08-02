@@ -14,7 +14,7 @@ import {
   isOperation,
 } from "@graphql-markdown/utils";
 
-import { Link } from "./link";
+import { getRelationLink } from "./link";
 import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
@@ -69,7 +69,7 @@ export const printRelationOf = (
     });
     data = data.concat(
       types.map((t) => {
-        const link = Link.getRelationLink(category, t, options);
+        const link = getRelationLink(category, t, options);
         return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
     );
