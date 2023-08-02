@@ -1,4 +1,5 @@
 import { vol } from "memfs";
+jest.mock("node:fs");
 jest.mock("fs");
 
 jest.mock("graphql");
