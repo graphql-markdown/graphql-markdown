@@ -145,14 +145,14 @@
     }
   },
   "devDependencies": {
-    "@docusaurus/plugin-content-docs": "^2.4.1",
+    "@docusaurus/plugin-content-docs": "2.4.1",
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@graphql-tools/graphql-file-loader": "8.0.0",
     "@graphql-tools/json-file-loader": "8.0.0",
     "@stryker-mutator/core": "7.1.1",
     "@stryker-mutator/jest-runner": "7.1.1",
-    "@types/jest": "^29.5.3",
-    "@types/node": "^20.4.2",
+    "@types/jest": "29.5.3",
+    "@types/node": "20.4.5",
     "@typescript-eslint/eslint-plugin": "6.2.1",
     "@typescript-eslint/parser": "6.2.1",
     "commitizen": "4.3.0",
