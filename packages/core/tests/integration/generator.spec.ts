@@ -2,10 +2,10 @@ import { vol } from "memfs";
 jest.mock("node:fs");
 jest.mock("fs");
 
-import type { ClassName } from "@graphql-markdown/types";
+import type { ClassName, MDXString } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/printer-legacy");
-import Printer from "@graphql-markdown/printer-legacy";
+import { Printer } from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
@@ -19,7 +19,9 @@ import {
 
 describe("renderer", () => {
   beforeEach(() => {
-    jest.spyOn(Printer, "printType").mockImplementation((value) => value);
+    jest
+      .spyOn(Printer, "printType")
+      .mockImplementation((value) => value as MDXString);
 
     vol.fromJSON({
       "/output": null,

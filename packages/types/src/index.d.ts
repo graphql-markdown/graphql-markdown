@@ -13,7 +13,6 @@ import type {
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
-import { type } from "os";
 
 export type {
   getDirectiveValues,
@@ -359,5 +358,11 @@ export type PrintLinkOptions = Pick<
   | "withAttributes"
   | "skipDocDirective"
   | "deprecated"
+> &
+  Partial<PrintTypeOptions>;
+
+export type PrintDirectiveOptions = Pick<
+  PrintTypeOptions,
+  "basePath" | "deprecated" | "parentTypePrefix"
 > &
   Partial<PrintTypeOptions>;

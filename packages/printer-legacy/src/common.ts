@@ -1,4 +1,8 @@
-import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
+import type {
+  PrintTypeOptions,
+  MDXString,
+  CustomDirectiveMapItem,
+} from "@graphql-markdown/types";
 
 import {
   isDeprecated,
@@ -26,7 +30,7 @@ export const printCustomDirectives = (
     return "";
   }
 
-  const content = Object.values(constDirectiveMap)
+  const content = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
     .map((constDirectiveOption) =>
       getCustomDirectiveResolver("descriptor", type, constDirectiveOption, ""),
     )

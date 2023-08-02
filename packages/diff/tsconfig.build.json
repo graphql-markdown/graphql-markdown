@@ -11,8 +11,7 @@
   },
 
   "references": [
-    { "path": "../utils/tsconfig.build.json" },
-    { "path": "../types/src" }
+    { "path": "../utils/tsconfig.build.json" }
   ],
 
   "include": []

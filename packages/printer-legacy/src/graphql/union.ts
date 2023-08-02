@@ -1,16 +1,17 @@
-import {
-  isUnionType,
-  getTypeName,
+import type {
+  PrintTypeOptions,
   GraphQLUnionType,
-} from "@graphql-markdown/utils";
+  MDXString,
+} from "@graphql-markdown/types";
+
+import { isUnionType, getTypeName } from "@graphql-markdown/utils";
 
 import { printSection } from "../section";
-import { PrintTypeOptions } from "../const/options";
 
 export const printUnionMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-) => {
+): string | MDXString => {
   if (!isUnionType(type)) {
     return "";
   }
@@ -21,8 +22,10 @@ export const printUnionMetadata = (
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const printCodeUnion = (type: unknown, options?: PrintTypeOptions) => {
+export const printCodeUnion = (
+  type: unknown,
+  options?: PrintTypeOptions, // eslint-disable-line @typescript-eslint/no-unused-vars
+): string => {
   if (!isUnionType(type)) {
     return "";
   }

@@ -1,9 +1,10 @@
+import type { PrintTypeOptions } from "@graphql-markdown/types";
+
 import { getTypeName, getFields } from "@graphql-markdown/utils";
 
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";
 import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
-import { PrintTypeOptions } from "../const/options";
 
 const printImplementedInterfaceMetadata = (
   type: unknown,
@@ -63,7 +64,7 @@ export const printCodeType = (
       const f = printCodeField(field, options, 1);
       return f.length > 0 ? `${MARKDOWN_CODE_INDENTATION}${f}` : "";
     })
-    .filter((field: unknown[]) => field.length > 0)
+    .filter((field) => field.length > 0)
     .join("");
 
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;

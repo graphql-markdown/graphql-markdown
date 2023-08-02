@@ -1,18 +1,13 @@
-import {
-  getTypeName,
-  GraphQLArgument,
+import type {
+  PrintDirectiveOptions,
   GraphQLDirective,
-} from "@graphql-markdown/utils";
+  GraphQLArgument,
+} from "@graphql-markdown/types";
+
+import { getTypeName } from "@graphql-markdown/utils";
 
 import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
-import { PrintTypeOptions } from "../const/options";
-
-export type PrintDirectiveOptions = Pick<
-  PrintTypeOptions,
-  "basePath" | "deprecated" | "parentTypePrefix"
-> &
-  Partial<PrintTypeOptions>;
 
 const printCodeDirectiveLocation = (type: GraphQLDirective) => {
   if (

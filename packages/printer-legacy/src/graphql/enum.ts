@@ -1,14 +1,17 @@
+import type {
+  PrintTypeOptions,
+  GraphQLEnumType,
+} from "@graphql-markdown/types";
+
 import {
   isEnumType,
   getTypeName,
   isDeprecated,
   hasDirective,
-  GraphQLEnumType,
 } from "@graphql-markdown/utils";
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
-import { PrintTypeOptions, DeprecatedOption } from "../const/options";
 
 export const printEnumMetadata = (type: unknown, options: PrintTypeOptions) => {
   if (!isEnumType(type)) {
@@ -37,7 +40,7 @@ export const printCodeEnum = (type: unknown, options: PrintTypeOptions) => {
         hasDirective(value, options.skipDocDirective) === true;
       const skipDeprecated =
         "printDeprecated" in options &&
-        options.deprecated === DeprecatedOption.SKIP &&
+        options.deprecated === "skip" &&
         isDeprecated(value) === true;
       if (skipDirective === true || skipDeprecated === true) {
         return "";
