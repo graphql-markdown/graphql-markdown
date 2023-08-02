@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    name: Test ${{matrix.package}}
+    name: Test ${{ matrix.package }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -30,22 +30,22 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects unit
-          [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-          mkdir packages/${{matrix.package}}/.nyc_output/unit
-          mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/unit.json
+          npm test /unit/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
+          [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && exit 0
+          mkdir packages/${{ matrix.package }}/.nyc_output/unit
+          mv packages/${{ matrix.package }}/.nyc_output/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
 
       - name: Run Integration Tests
         run: |
-          npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects integration
-          [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-          mkdir packages/${{matrix.package}}/.nyc_output/integration
-          mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration.json
+          npm test /integration/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
+          [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && exit 0
+          mkdir packages/${{ matrix.package }}/.nyc_output/integration
+          mv packages/${{ matrix.package }}/.nyc_output/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
 
       - name: Check Code Coverage
         run: |
-          [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-          cd packages/${{matrix.package}}
+          [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && exit 0
+          cd packages/${{ matrix.package }}
           npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
           npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
 
@@ -57,8 +57,8 @@ jobs:
           parallel: true
           flag-name: package-${{ matrix.package }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
-          base-path: ./packages/${{matrix.package}}
+          path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
+          base-path: ./packages/${{ matrix.package }}
 
   coverage:
     name: Report coverage
@@ -72,4 +72,3 @@ jobs:
         with:
           parallel-finished: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
