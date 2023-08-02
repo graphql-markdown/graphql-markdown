@@ -131,7 +131,7 @@ export async function getDocumentLoaders(
 
 export function getListDefaultValues(
   type: GraphQLType,
-  value: unknown | unknown[],
+  value: unknown,
 ): string {
   const defaultValues: unknown[] = Array.isArray(value) ? value : [value];
 
@@ -148,7 +148,7 @@ export function getDefaultValue({
 }: {
   type: GraphQLType;
   defaultValue: unknown;
-}): unknown | string | undefined {
+}): unknown {
   if (typeof defaultValue === "undefined" || defaultValue === null) {
     return undefined;
   }
@@ -160,10 +160,7 @@ export function getDefaultValue({
   return formatDefaultValue(type, defaultValue);
 }
 
-function formatDefaultValue(
-  type: GraphQLType,
-  defaultValue: unknown,
-): unknown | string | undefined {
+function formatDefaultValue(type: GraphQLType, defaultValue: unknown): unknown {
   if (isEnumType(type)) {
     return defaultValue;
   }
@@ -332,14 +329,14 @@ export function getTypeDirectiveValues(
     return getDirectiveValues(
       directiveType,
       (<GraphQLNamedType>type).astNode as {
-        readonly directives?: readonly DirectiveNode[] | undefined;
+        readonly directives?: readonly DirectiveNode[];
       },
     );
   }
   return getDirectiveValues(
     directiveType,
     (<ASTNode>type) as {
-      readonly directives?: readonly DirectiveNode[] | undefined;
+      readonly directives?: readonly DirectiveNode[];
     },
   );
 }

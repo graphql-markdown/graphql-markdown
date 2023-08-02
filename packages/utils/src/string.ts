@@ -23,12 +23,12 @@ export function stringCaseBuilder(
 export function prune(str: string, char: string = ""): string {
   let res = str;
 
-  if (res[0] === char) {
+  if (res.startsWith(char)) {
     // Remove first character
     res = res.slice(1);
   }
 
-  if (res[res.length - 1] === char) {
+  if (res.endsWith(char)) {
     // Remove last character
     res = res.slice(0, -1);
   }

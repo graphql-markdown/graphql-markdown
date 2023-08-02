@@ -40,7 +40,6 @@ import * as Group from "../../src/group";
 import * as Badge from "../../src/badge";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
-import { group } from "console";
 
 describe("badge", () => {
   afterEach(() => {

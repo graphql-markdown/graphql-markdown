@@ -133,7 +133,7 @@ describe("directive", () => {
     test("returns undefined if customDirectiveOptions not defined", () => {
       expect.assertions(1);
 
-      expect(getCustomDirectives(schemaMap, undefined)).toBeUndefined();
+      expect(getCustomDirectives(schemaMap)).toBeUndefined();
     });
 
     test("returns undefined if schema map contains no directive definitions", () => {

@@ -106,11 +106,11 @@ export class Renderer {
     if (
       typeof this.group !== "undefined" &&
       rootTypeName in this.group &&
-      name in this.group![rootTypeName]!
+      name in this.group[rootTypeName]!
     ) {
-      dirPath = join(dirPath, toSlug(this.group![rootTypeName]![name] ?? ""));
+      dirPath = join(dirPath, toSlug(this.group[rootTypeName]![name] ?? ""));
       await this.generateCategoryMetafile(
-        this.group![rootTypeName]![name] ?? "",
+        this.group[rootTypeName]![name] ?? "",
         dirPath,
       );
     }

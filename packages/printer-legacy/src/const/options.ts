@@ -39,7 +39,7 @@ export const DEFAULT_OPTIONS: Required<
   skipDocDirective?: DirectiveName[];
   collapsible?: CollapsibleOption;
   parentType?: string;
-  groups?: SchemaEntitiesGroupMap | undefined;
+  groups?: SchemaEntitiesGroupMap;
   level?: SectionLevelValue;
 } = {
   ...PRINT_TYPE_DEFAULT_OPTIONS,

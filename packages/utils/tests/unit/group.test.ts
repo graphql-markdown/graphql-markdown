@@ -66,7 +66,7 @@ describe("group-info", () => {
     test("returns undefined if groupByDirective not defined", () => {
       expect.assertions(1);
 
-      expect(getGroups(schemaMap, undefined)).toBeUndefined();
+      expect(getGroups(schemaMap)).toBeUndefined();
     });
 
     test("returns group for each types in schema", () => {
@@ -104,7 +104,7 @@ describe("group-info", () => {
       expect.assertions(2);
 
       const type = schema.getType("Bird")!;
-      const queryType = schema!.getQueryType()!.getFields()!["Fish"];
+      const queryType = schema.getQueryType()!.getFields()!["Fish"];
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
       expect(getGroupName(queryType, groupOptions)).toBe("animal");

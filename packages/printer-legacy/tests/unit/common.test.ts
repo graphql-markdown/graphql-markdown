@@ -88,7 +88,7 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type, undefined, undefined);
+      const description = printDescription(type);
 
       expect(description).toMatchInlineSnapshot(`
         "

@@ -15,7 +15,7 @@ export function getObjPath(
   path?: string,
   obj?: unknown,
   fallback: unknown = "",
-): unknown | Record<string, unknown> | undefined {
+): unknown {
   if (isEmpty(obj) || typeof path !== "string") {
     return fallback;
   }
