@@ -20,10 +20,6 @@ import {
 } from "../../../src/graphql/operation";
 
 describe("operation", () => {
-  afterEach(() => {
-    jest.restoreAllMocks;
-  });
-
   describe("printOperationMetadata()", () => {
     test("returns operation metadata", () => {
       expect.hasAssertions();
