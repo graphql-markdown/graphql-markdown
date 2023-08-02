@@ -1,27 +1,25 @@
-import { join } from "node:path";
-
-import { GraphQLDirective } from "graphql";
-
-import { COMPARE_METHOD } from "@graphql-markdown/diff";
-
 import type {
   DirectiveName,
+  GraphQLDirective,
+  ConfigOptions,
   ClassName,
   PackageName,
   CustomDirective,
-} from "@graphql-markdown/utils";
+  CliOptions,
+  TypeDiffMethod,
+} from "@graphql-markdown/types";
 
-import * as config from "../../src/config";
-const {
+import { join } from "node:path";
+
+import {
   buildConfig,
   getSkipDocDirectives,
   getSkipDocDirective,
   parseGroupByOption,
   getCustomDirectives,
   DEFAULT_OPTIONS,
-} = config;
-
-import { type ConfigOptions, type CliOptions } from "../../src/config";
+  DiffMethod,
+} from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
 
@@ -121,7 +119,7 @@ describe("config", () => {
         rootPath: "output",
         linkRoot: "/docs",
         homepage: "assets/my-homepage.md",
-        diffMethod: "NO-DIFF",
+        diffMethod: "NO-DIFF" as TypeDiffMethod,
         tmpDir: "./tmp",
         loaders: {
           ["UrlLoader" as ClassName]:
@@ -186,7 +184,7 @@ describe("config", () => {
         rootPath: "output",
         linkRoot: "/docs",
         homepage: "assets/my-homepage.md",
-        diffMethod: "NO-DIFF",
+        diffMethod: "NO-DIFF" as TypeDiffMethod,
         tmpDir: "./tmp",
         loaders: {
           ["UrlLoader" as ClassName]:
@@ -207,7 +205,7 @@ describe("config", () => {
       const cliOpts: CliOptions = {
         base: "cli/schema",
         deprecated: "group",
-        diff: "CLI",
+        diff: "CLI" as TypeDiffMethod,
         groupByDirective: "@group(name|=misc)",
         homepage: "cli/my-homepage.md",
         index: true,
@@ -302,7 +300,7 @@ describe("config", () => {
         outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         homepageLocation: DEFAULT_OPTIONS.homepage,
-        diffMethod: COMPARE_METHOD.FORCE,
+        diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
         loaders: DEFAULT_OPTIONS.loaders,
         groupByDirective: DEFAULT_OPTIONS.groupByDirective,

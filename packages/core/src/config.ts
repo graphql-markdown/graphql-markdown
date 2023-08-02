@@ -2,106 +2,36 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 
 import type {
+  ConfigOptions,
+  TypeDiffMethod,
+  CliOptions,
+  Options,
+  ConfigDocOptions,
+  ConfigPrintTypeOptions,
   CustomDirective,
   CustomDirectiveOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,
   PackageName,
-  UnnormalizedTypeDefPointer,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/types";
 
 import { loadConfiguration } from "./graphql-config";
 
-export const DOCS_URL = "https://graphql-markdown.github.io/docs";
-export const PACKAGE_NAME = "@graphql-markdown/docusaurus";
-export const ASSETS_LOCATION = join(__dirname, "../assets/");
-
-export type ConfigDocOptions = {
-  index?: boolean;
-  pagination?: boolean;
-  toc?: boolean;
-};
+export enum DiffMethod {
+  NONE = "NONE",
+  FORCE = "FORCE",
+}
 
 export enum DeprecatedOption {
   DEFAULT = "default",
   GROUP = "group",
   SKIP = "skip",
 }
-export type TypeDeprecatedOption = `${DeprecatedOption}`;
 
-export type ConfigPrintTypeOptions = {
-  codeSection?: boolean;
-  deprecated?: TypeDeprecatedOption;
-  parentTypePrefix?: boolean;
-  relatedTypeSection?: boolean;
-  typeBadges?: boolean;
-};
-
-export enum DiffMethod {
-  NONE = "NONE",
-  FORCE = "FORCE",
-}
-export type TypeDiffMethod = string | `${DiffMethod}`;
-
-type Pointer = string | UnnormalizedTypeDefPointer;
-
-export type ConfigOptions = {
-  baseURL?: string;
-  customDirective?: CustomDirective;
-  diffMethod?: TypeDiffMethod;
-  docOptions?: ConfigDocOptions;
-  groupByDirective?: GroupByDirectiveOptions;
-  homepage?: string;
-  linkRoot?: string;
-  loaders?: LoaderOption;
-  pretty?: boolean;
-  printer?: PackageName;
-  printTypeOptions?: ConfigPrintTypeOptions;
-  rootPath?: string;
-  schema?: Pointer;
-  tmpDir?: string;
-  skipDocDirective?: DirectiveName[] | DirectiveName;
-};
-
-export type CliOptions = {
-  schema?: Pointer;
-  root?: string;
-  base?: string;
-  link?: string;
-  homepage?: string;
-  noCode?: boolean;
-  noPagination?: boolean;
-  noParentType?: boolean;
-  noRelatedType?: boolean;
-  noToc?: boolean;
-  noTypeBadges?: boolean;
-  index?: boolean;
-  force?: boolean;
-  diff?: string;
-  tmp?: string;
-  groupByDirective?: string;
-  skip?: string[] | string;
-  deprecated?: TypeDeprecatedOption;
-  pretty?: boolean;
-};
-
-export type Options = Omit<
-  ConfigOptions,
-  "homepage" | "pretty" | "schema" | "rootPath"
-> & {
-  homepageLocation: string;
-  outputDir: string;
-  prettify: boolean;
-  schemaLocation: Pointer;
-  printer: PackageName;
-  tmpDir: string;
-  baseURL: string;
-  linkRoot: string;
-  skipDocDirective: DirectiveName[];
-  docOptions: Required<ConfigDocOptions>;
-  printTypeOptions: Required<ConfigPrintTypeOptions>;
-};
+export const DOCS_URL = "https://graphql-markdown.github.io/docs";
+export const PACKAGE_NAME = "@graphql-markdown/docusaurus";
+export const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 export const DEFAULT_OPTIONS: Required<
   Omit<ConfigOptions, "groupByDirective" | "customDirective" | "loaders">
@@ -126,7 +56,7 @@ export const DEFAULT_OPTIONS: Required<
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
     codeSection: true,
-    deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
+    deprecated: DeprecatedOption.DEFAULT,
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,

@@ -1,12 +1,11 @@
-import { Logger, type GraphQLSchema } from "@graphql-markdown/utils";
+import type {
+  FunctionCheckSchemaChanges,
+  GraphQLSchema,
+} from "@graphql-markdown/types";
+
+import { Logger } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
-
-export type FunctionCheckSchemaChanges = (
-  schema: GraphQLSchema,
-  tmpDir: string,
-  diffMethod?: unknown,
-) => Promise<boolean>;
 
 export const hasChanges = async (
   schema: GraphQLSchema,

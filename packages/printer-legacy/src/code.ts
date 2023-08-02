@@ -1,3 +1,5 @@
+import type { PrintTypeOptions } from "@graphql-markdown/types";
+
 import {
   getDefaultValue,
   getTypeName,
@@ -10,11 +12,10 @@ import {
   DEPRECATED,
   MARKDOWN_CODE_INDENTATION,
 } from "./const/strings";
-import { Options, DeprecatedOption } from "./const/options";
 
 export const printCodeField = (
   type: unknown,
-  options?: Options,
+  options?: PrintTypeOptions,
   indentationLevel: number = 0,
 ) => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
@@ -28,7 +29,7 @@ export const printCodeField = (
   const skipDeprecated =
     typeof options !== "undefined" &&
     "deprecated" in options &&
-    options.deprecated === DeprecatedOption.SKIP &&
+    options.deprecated === "skip" &&
     isDeprecated(type) === true;
 
   if (skipDirective === true || skipDeprecated === true) {

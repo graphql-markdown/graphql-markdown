@@ -13,17 +13,20 @@ export function toArray(param: unknown): unknown[] | undefined {
 
 export function convertArrayToObject<T>(typeArray: T[]): Record<string, T> {
   return typeArray.reduce(
-    function (r, o: T) {
-      if (
-        typeof o === "object" &&
-        o !== null &&
-        "name" in o &&
-        o.name &&
-        typeof o.name === "string"
-      ) {
-        r[o.name] = o;
+    (result, entry: T) => {
+      if (typeof entry === "object" && entry !== null) {
+        const key =
+          "name" in entry &&
+          entry.name !== null &&
+          typeof entry.name !== "undefined"
+            ? entry.name.toString()
+            : null;
+        if (key === null) {
+          return result;
+        }
+        result[key] = entry;
       }
-      return r;
+      return result;
     },
     {} as Record<string, T>,
   );

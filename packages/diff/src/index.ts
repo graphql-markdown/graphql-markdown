@@ -7,12 +7,16 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
 
+import type {
+  FunctionCheckSchemaChanges,
+  GraphQLSchema,
+} from "@graphql-markdown/types";
+
 import {
   fileExists,
   readFile,
   saveFile,
   printSchema,
-  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema";
@@ -24,26 +28,26 @@ export const COMPARE_METHOD = {
   NONE: "NONE",
 };
 
-function getSchemaHash(schema: GraphQLSchema): string {
+export const getSchemaHash = (schema: GraphQLSchema): string => {
   const printedSchema = printSchema(schema);
   return createHash("sha256").update(printedSchema).digest("hex");
-}
+};
 
-async function getDiff(
+export const getDiff = async (
   schemaNew: GraphQLSchema,
   schemaOldLocation: string,
-): Promise<Change[]> {
+): Promise<Change[]> => {
   const schemaOld = await loadSchema(schemaOldLocation, {
     loaders: [new GraphQLFileLoader()],
   });
   return diff(schemaOld, schemaNew);
-}
+};
 
-export async function checkSchemaChanges(
+export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   schema: GraphQLSchema,
   outputDir: string,
   method = COMPARE_METHOD.DIFF,
-): Promise<boolean> {
+): Promise<boolean> => {
   if (method === COMPARE_METHOD.DIFF) {
     const schemaRef = join(outputDir, SCHEMA_REF);
     if (await fileExists(schemaRef)) {
@@ -65,4 +69,4 @@ export async function checkSchemaChanges(
   }
 
   return true;
-}
+};

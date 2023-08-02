@@ -2,12 +2,12 @@ import { getTypeName } from "@graphql-markdown/utils";
 
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";
-import { Options } from "../const/options";
+import { PrintTypeOptions } from "../const/options";
 import { MDXString } from "../const/mdx";
 
 export const printOperationType = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | MDXString => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
@@ -22,7 +22,7 @@ export const printOperationType = (
 
 export const printOperationMetadata = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | MDXString => {
   if (typeof type !== "object" || type === null || !("args" in type)) {
     return "";

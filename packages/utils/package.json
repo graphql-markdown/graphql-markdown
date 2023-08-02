@@ -59,7 +59,8 @@
     "ts:check": "tsc -project tsconfig.build.json --noEmit"
   },
   "dependencies": {
-    "@graphql-tools/load": "^8.0.0"
+    "@graphql-tools/load": "^8.0.0",
+    "@graphql-markdown/types": "^1.0.0"
   },
   "peerDependencies": {
     "graphql": "^14.0 || ^15.0 || ^16.0",

@@ -1,11 +1,11 @@
-import {
-  toSlug,
-  getNamedType,
+import type {
   SchemaEntitiesGroupMap,
   SchemaEntity,
-  GraphQLNamedType,
   GraphQLType,
-} from "@graphql-markdown/utils";
+  GraphQLNamedType,
+} from "@graphql-markdown/types";
+
+import { toSlug, getNamedType } from "@graphql-markdown/utils";
 
 export const getGroup = (
   type: unknown,

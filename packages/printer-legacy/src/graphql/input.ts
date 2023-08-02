@@ -1,7 +1,7 @@
 import { printObjectMetadata, printCodeType } from "./object";
-import { Options } from "../const/options";
+import { PrintTypeOptions } from "../const/options";
 
 export const printInputMetadata = printObjectMetadata;
 
-export const printCodeInput = (type: unknown, options: Options) =>
+export const printCodeInput = (type: unknown, options: PrintTypeOptions) =>
   printCodeType(type, "input", options);

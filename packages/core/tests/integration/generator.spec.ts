@@ -1,7 +1,8 @@
 import { vol } from "memfs";
 jest.mock("node:fs");
+jest.mock("fs");
 
-import { ClassName } from "@graphql-markdown/utils";
+import type { ClassName } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/printer-legacy");
 import Printer from "@graphql-markdown/printer-legacy";

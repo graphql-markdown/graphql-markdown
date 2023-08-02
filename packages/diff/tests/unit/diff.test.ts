@@ -38,7 +38,7 @@ describe("lib", () => {
           .spyOn(graphql, "printSchema")
           .mockImplementationOnce(() => "schema");
 
-        const check = await checkSchemaChanges(
+        const check: boolean = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
           "FOOBAR",

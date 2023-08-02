@@ -1,6 +1,13 @@
-import { basename, join, relative, normalize } from "node:path";
+import type {
+  SchemaEntitiesGroupMap,
+  ConfigDocOptions,
+  TypeDeprecatedOption,
+  SchemaEntity,
+  IPrinter,
+  SidebarsConfig,
+} from "@graphql-markdown/types";
 
-import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
+import { basename, join, relative, normalize } from "node:path";
 
 import {
   toSlug,
@@ -14,18 +21,10 @@ import {
   readFile,
   fileExists,
   isDeprecated,
-  SchemaEntitiesGroupMap,
-  SchemaEntity,
   Logger,
 } from "@graphql-markdown/utils";
 
-import { IPrinter } from "./printer";
-import {
-  ASSETS_LOCATION,
-  ConfigDocOptions,
-  TypeDeprecatedOption,
-} from "./config";
-
+import { ASSETS_LOCATION } from "./config";
 const logger = Logger.getInstance();
 
 const SIDEBAR = "sidebar-schema.js";

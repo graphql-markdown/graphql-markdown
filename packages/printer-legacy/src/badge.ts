@@ -1,25 +1,24 @@
+import type {
+  Badge,
+  GraphQLType,
+  MDXString,
+  PrintTypeOptions,
+  SchemaEntitiesGroupMap,
+  SchemaEntity,
+} from "@graphql-markdown/types";
+
 import {
+  escapeMDX,
   getNamedType,
   isDeprecated,
   isListType,
   isNonNullType,
-  escapeMDX,
-  SchemaEntitiesGroupMap,
-  SchemaEntity,
-  GraphQLType,
 } from "@graphql-markdown/utils";
 
-import { Options, TypeLocale } from "./const/options";
 import { Link } from "./link";
 import { getGroup } from "./group";
-import { MDXString } from "./const/mdx";
 
 export const DEFAULT_CSS_CLASSNAME = "badge--secondary";
-
-export type Badge = {
-  text: string | TypeLocale;
-  classname: string;
-};
 
 export const getTypeBadges = (
   type: unknown,
@@ -71,7 +70,7 @@ export const getTypeBadges = (
 
 export const printBadges = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): MDXString | string => {
   if (!("typeBadges" in options) || options.typeBadges !== true) {
     return "";

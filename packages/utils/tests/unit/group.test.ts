@@ -5,13 +5,13 @@ import {
   buildSchema,
 } from "graphql";
 
-import {
-  getGroups,
-  getGroupName,
+import type {
   GroupByDirectiveOptions,
-} from "../../src/group";
-import { DirectiveName } from "../../src/directive";
-import { SchemaMap } from "../../src/graphql";
+  SchemaMap,
+  DirectiveName,
+} from "@graphql-markdown/types";
+
+import { getGroups, getGroupName } from "../../src/group";
 
 describe("group-info", () => {
   const schema = buildSchema(`
@@ -55,11 +55,11 @@ describe("group-info", () => {
     const schemaMap: SchemaMap = {
       objects: schema.getTypeMap() as Record<
         string,
-        GraphQLObjectType<string, string>
+        GraphQLObjectType<unknown, unknown>
       >,
       queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<
-        string,
-        string
+        unknown,
+        unknown
       >,
     };
 

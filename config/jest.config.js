@@ -14,7 +14,6 @@ const projectConfig = (name) => ({
   },
 });
 
-
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   rootDir: "../",

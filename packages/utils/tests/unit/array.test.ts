@@ -27,18 +27,21 @@ describe("array", () => {
     test("returns a k/v object from an array of objects with name property", () => {
       expect.hasAssertions();
 
-      const input = [
+      const input: Record<string, unknown>[] = [
         { name: true },
         { name: "test" },
         { name: 123 },
         { name2: 1234 },
       ];
-      const expected = {
+      const expected: Record<string, Record<string, unknown>> = {
         true: { name: true },
         test: { name: "test" },
-        123: { name: 123 },
+        "123": { name: 123 },
       };
-      expect(convertArrayToObject(input)).toStrictEqual(expected);
+
+      const actual = convertArrayToObject(input);
+
+      expect(actual).toStrictEqual(expected);
     });
   });
 });

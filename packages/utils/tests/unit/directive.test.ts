@@ -1,12 +1,13 @@
 import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+
 import { buildSchema } from "graphql";
+
+import type { DirectiveName, CustomDirective } from "@graphql-markdown/types";
 
 import {
   getCustomDirectives,
   getCustomDirectiveOptions,
   isCustomDirective,
-  DirectiveName,
-  CustomDirective,
 } from "../../src/directive";
 
 describe("directive", () => {

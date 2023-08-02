@@ -1,5 +1,12 @@
 import { vol } from "memfs";
 jest.mock("node:fs");
+jest.mock("fs");
+
+import type {
+  GraphQLScalarType,
+  TypeDeprecatedOption,
+  SchemaEntity,
+} from "@graphql-markdown/types";
 
 import { join } from "node:path";
 import fs from "node:fs";
@@ -20,8 +27,7 @@ jest.mock("@graphql-markdown/utils", () => {
 import * as Utils from "@graphql-markdown/utils";
 
 import { Renderer } from "../../src/renderer";
-import { GraphQLScalarType } from "graphql/type/definition";
-import { DEFAULT_OPTIONS, TypeDeprecatedOption } from "../../src/config";
+import { DEFAULT_OPTIONS } from "../../src/config";
 
 const DEFAULT_RENDERER_OPTIONS = {
   ...DEFAULT_OPTIONS.docOptions,
@@ -263,7 +269,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntity,
+          root as SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -284,7 +290,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntity,
+          root as SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(2);
@@ -305,7 +311,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntity,
+          root as SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
@@ -329,7 +335,7 @@ describe("renderer", () => {
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
           name,
-          root as Utils.SchemaEntity,
+          root as SchemaEntity,
         );
 
         expect(spy).toHaveBeenCalledTimes(3);

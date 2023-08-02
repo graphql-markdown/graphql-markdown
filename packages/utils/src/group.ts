@@ -1,15 +1,11 @@
-import { SchemaEntity, SchemaMap, hasAstNode } from "./graphql";
-import { DirectiveName } from "./directive";
+import type {
+  SchemaMap,
+  GroupByDirectiveOptions,
+  SchemaEntitiesGroupMap,
+  SchemaEntity,
+} from "@graphql-markdown/types";
 
-export type GroupByDirectiveOptions = {
-  directive: DirectiveName;
-  field: string;
-  fallback?: string;
-};
-
-export type SchemaEntitiesGroupMap = Partial<
-  Record<SchemaEntity, Record<string, string | undefined>>
->;
+import { hasAstNode } from "./graphql";
 
 export function getGroups(
   rootTypes: SchemaMap,

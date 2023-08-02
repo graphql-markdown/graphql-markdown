@@ -17,7 +17,7 @@ import { HIDE_DEPRECATED, SHOW_DEPRECATED } from "../../src/const/strings";
 import {
   DEFAULT_OPTIONS,
   DeprecatedOption,
-  SectionLevel,
+  SectionLevels,
 } from "../../src/const/options";
 import { DirectiveName } from "@graphql-markdown/utils";
 
@@ -51,7 +51,7 @@ describe("section", () => {
 
       const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
-        level: SectionLevel.NONE,
+        level: SectionLevels.NONE,
         collapsible: {
           dataOpen: HIDE_DEPRECATED,
           dataClose: SHOW_DEPRECATED,

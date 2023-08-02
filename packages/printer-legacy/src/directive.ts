@@ -1,21 +1,22 @@
+import { getConstDirectiveMap } from "@graphql-markdown/utils";
+
+import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
+import { SectionLevels } from "./const/options";
+import { Link } from "./link";
+import { printBadge } from "./badge";
 import {
+  Badge,
+  PrintTypeOptions,
+  MDXString,
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
-  getConstDirectiveMap,
-} from "@graphql-markdown/utils";
+  CustomDirectiveFunction,
+} from "@graphql-markdown/types";
 
-import {
-  HEADER_SECTION_LEVEL,
-  HEADER_SECTION_SUB_LEVEL,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-} from "./const/strings";
-import { Link } from "./link";
-import { Badge, printBadge } from "./badge";
-import { Options } from "./const/options";
-import { MDXString } from "./const/mdx";
-
-export const printCustomDirectives = (type: unknown, options: Options) => {
+export const printCustomDirectives = (
+  type: unknown,
+  options: PrintTypeOptions,
+) => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
@@ -37,13 +38,13 @@ export const printCustomDirectives = (type: unknown, options: Options) => {
 
   const content = directives.join(MARKDOWN_EOP);
 
-  return `${HEADER_SECTION_LEVEL} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  return `${SectionLevels.LEVEL_3} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 };
 
 export const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | undefined => {
   const typeNameLink = Link.printLink(constDirectiveOption.type, {
     ...options,
@@ -59,10 +60,13 @@ export const printCustomDirective = (
     return undefined;
   }
 
-  return `${HEADER_SECTION_SUB_LEVEL} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+  return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 };
 
-export const getCustomTags = (type: unknown, options: Options): Badge[] => {
+export const getCustomTags = (
+  type: unknown,
+  options: PrintTypeOptions,
+): Badge[] => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
@@ -81,7 +85,7 @@ export const getCustomTags = (type: unknown, options: Options): Badge[] => {
 
 export const printCustomTags = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | MDXString => {
   const badges = getCustomTags(type, options);
 
@@ -106,5 +110,8 @@ export const getCustomDirectiveResolver = (
     return fallback;
   }
 
-  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
+  return (constDirectiveOption[resolver] as CustomDirectiveFunction)!(
+    constDirectiveOption.type,
+    type,
+  );
 };

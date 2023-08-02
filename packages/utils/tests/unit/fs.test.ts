@@ -1,5 +1,6 @@
 import { vol } from "memfs";
 jest.mock("node:fs");
+jest.mock("fs");
 
 import { ensureDir, fileExists, saveFile } from "../../src/fs";
 
@@ -85,7 +86,7 @@ describe("saveFile()", () => {
     await saveFile(
       "/foo/bar/test/prettify.test",
       "foobar file for test",
-      () => "prettify hello",
+      async () => Promise.resolve("prettify hello"),
     );
 
     expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`

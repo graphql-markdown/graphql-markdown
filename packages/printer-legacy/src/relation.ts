@@ -1,29 +1,28 @@
+import type {
+  GraphQLSchema,
+  MDXString,
+  PrintTypeOptions,
+  RootTypeName,
+  TypeLocale,
+} from "@graphql-markdown/types";
+
 import {
   getRelationOfField,
   getRelationOfImplementation,
   getRelationOfReturn,
-  GraphQLNamedType,
-  GraphQLSchema,
   isNamedType,
   isOperation,
 } from "@graphql-markdown/utils";
 
 import { Link } from "./link";
 import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
-import {
-  HEADER_SECTION_LEVEL,
-  MARKDOWN_EOP,
-  ROOT_TYPE_LOCALE,
-  RootTypeName,
-  TypeLocale,
-} from "./const/strings";
-import { Options } from "./const/options";
-import { MDXString } from "./const/mdx";
+import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
+import { SectionLevels } from "./const/options";
 
 export type IGetRelation = (
   type: unknown,
   schema: GraphQLSchema,
-) => Record<string, GraphQLNamedType[]> | undefined;
+) => Record<string, unknown[]> | undefined;
 
 export const getRootTypeLocaleFromString = (
   text: string,
@@ -40,7 +39,7 @@ export const printRelationOf = (
   type: unknown,
   section: unknown,
   getRelation: IGetRelation | undefined,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | MDXString => {
   if (
     !isNamedType(type) ||
@@ -84,21 +83,23 @@ export const printRelationOf = (
     .sort((a, b) => a.localeCompare(b))
     .join("<Bullet />");
 
-  return `${HEADER_SECTION_LEVEL} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
+  return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
 export const printRelations = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string | MDXString => {
-  const relations = {
+  const relations: Record<string, IGetRelation> = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,
     "Implemented by": getRelationOfImplementation,
   };
 
   let data = "";
-  for (const [section, getRelation] of Object.entries(relations)) {
+  for (const [section, getRelation] of Object.entries<IGetRelation>(
+    relations,
+  )) {
     data += printRelationOf(type, section, getRelation, options);
   }
 

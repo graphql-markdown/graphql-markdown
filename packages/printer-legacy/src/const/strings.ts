@@ -1,4 +1,4 @@
-import { RootTypeLocale } from "./options";
+import type { RootTypeLocale } from "@graphql-markdown/types";
 
 export const ROOT_TYPE_LOCALE: RootTypeLocale = {
   DIRECTIVE: { singular: "directive", plural: "directives" },
@@ -13,10 +13,6 @@ export const ROOT_TYPE_LOCALE: RootTypeLocale = {
   TYPE: { singular: "object", plural: "objects" },
   UNION: { singular: "union", plural: "unions" },
 };
-
-export const HEADER_SECTION_ITEM_LEVEL = "#####";
-export const HEADER_SECTION_LEVEL = "###";
-export const HEADER_SECTION_SUB_LEVEL = "####";
 
 export const NO_DESCRIPTION_TEXT = "No description";
 

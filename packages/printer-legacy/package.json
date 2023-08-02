@@ -59,7 +59,8 @@
     "ts:check": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "^1.5.1"
+    "@graphql-markdown/utils": "^1.5.1",
+    "@graphql-markdown/types": "^1.0.0"
   },
   "directories": {
     "test": "tests"

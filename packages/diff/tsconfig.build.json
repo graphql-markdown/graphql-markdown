@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.build.json",
-  
+
   "compilerOptions": {
     "composite": true,
     "declaration": true,
@@ -11,7 +11,8 @@
   },
 
   "references": [
-    { "path": "../utils/tsconfig.build.json" }
+    { "path": "../utils/tsconfig.build.json" },
+    { "path": "../types/src" }
   ],
 
   "include": []

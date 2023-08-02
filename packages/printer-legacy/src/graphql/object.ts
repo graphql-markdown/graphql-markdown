@@ -3,11 +3,11 @@ import { getTypeName, getFields } from "@graphql-markdown/utils";
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";
 import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
-import { Options } from "../const/options";
+import { PrintTypeOptions } from "../const/options";
 
-export const printInterfaceMetadata = (
+const printImplementedInterfaceMetadata = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string => {
   if (
     typeof type !== "object" ||
@@ -23,9 +23,9 @@ export const printInterfaceMetadata = (
 
 export const printObjectMetadata = (
   type: unknown,
-  options: Options,
+  options: PrintTypeOptions,
 ): string => {
-  const interfaceMeta = printInterfaceMetadata(type, options);
+  const interfaceMeta = printImplementedInterfaceMetadata(type, options);
   const metadata = printMetadataSection(
     type,
     getFields(type),
@@ -39,7 +39,7 @@ export const printObjectMetadata = (
 export const printCodeType = (
   type: unknown,
   entity: string,
-  options: Options,
+  options: PrintTypeOptions,
 ): string => {
   if (
     typeof type !== "object" ||
@@ -69,5 +69,5 @@ export const printCodeType = (
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
 };
 
-export const printCodeObject = (type: unknown, options: Options) =>
+export const printCodeObject = (type: unknown, options: PrintTypeOptions) =>
   printCodeType(type, "type", options);

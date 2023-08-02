@@ -1,3 +1,5 @@
+import type { SchemaEntity, Options } from "@graphql-markdown/types";
+
 import {
   getSchemaMap,
   loadSchema,
@@ -5,13 +7,12 @@ import {
   getGroups,
   getCustomDirectives,
   Logger,
-  type SchemaEntity,
 } from "@graphql-markdown/utils";
 
 import { Renderer } from "./renderer";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { DiffMethod, type Options } from "./config";
+import { DiffMethod } from "./config";
 
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;

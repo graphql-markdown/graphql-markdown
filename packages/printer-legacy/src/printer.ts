@@ -1,7 +1,23 @@
-import {
+import type {
   CustomDirectiveMap,
   DirectiveName,
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLInputObjectType,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLUnionType,
+  MDXString,
+  PrintTypeOptions,
+  PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
+  TypeDeprecatedOption,
+} from "@graphql-markdown/types";
+
+import {
   getTypeName,
   hasDirective,
   isDirectiveType,
@@ -13,15 +29,6 @@ import {
   isScalarType,
   isUnionType,
   pathUrl,
-  GraphQLDirective,
-  GraphQLEnumType,
-  GraphQLField,
-  GraphQLInputObjectType,
-  GraphQLInterfaceType,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  GraphQLUnionType,
-  GraphQLSchema,
 } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
@@ -45,6 +52,7 @@ import {
   printScalarMetadata,
   printUnionMetadata,
 } from "./graphql";
+
 import {
   FRONT_MATTER,
   MARKDOWN_EOC,
@@ -52,18 +60,11 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { MDXString, mdx } from "./const/mdx";
+import { mdx } from "./const/mdx";
 
-import {
-  DEFAULT_OPTIONS,
-  PRINT_TYPE_DEFAULT_OPTIONS,
-  Options,
-  ConfigPrintTypeOptions,
-  TypeDeprecatedOption,
-} from "./const/options";
-
+import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
 export class Printer {
-  static options: Options | undefined;
+  static options: PrintTypeOptions | undefined;
 
   static init(
     schema: GraphQLSchema | undefined = undefined,
@@ -78,7 +79,7 @@ export class Printer {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
       groups?: SchemaEntitiesGroupMap;
-      printTypeOptions?: ConfigPrintTypeOptions;
+      printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirective?: DirectiveName[];
     } = {
       customDirectives: undefined,
@@ -116,7 +117,7 @@ export class Printer {
   static printHeader = (
     id: string,
     title: string,
-    options: Options,
+    options: PrintTypeOptions,
   ): string => {
     const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header;
     const pagination_buttons = pagination
@@ -137,7 +138,7 @@ export class Printer {
 
   static printDescription = printDescription;
 
-  static printCode = (type: unknown, options: Options): string => {
+  static printCode = (type: unknown, options: PrintTypeOptions): string => {
     let code = "";
 
     if (
@@ -188,7 +189,7 @@ export class Printer {
 
   static printTypeMetadata = (
     type: unknown,
-    options: Options,
+    options: PrintTypeOptions,
   ): string | MDXString => {
     switch (true) {
       case isScalarType(type):
@@ -217,7 +218,7 @@ export class Printer {
 
   static printRelations = (
     type: unknown,
-    options: Options,
+    options: PrintTypeOptions,
   ): string | MDXString => {
     if (options.relatedTypeSection !== true) {
       return "";
@@ -228,9 +229,9 @@ export class Printer {
   static printType = (
     name: string | undefined,
     type: unknown,
-    options?: Options,
+    options?: PrintTypeOptions,
   ): MDXString | undefined => {
-    const printTypeOptions: Options = {
+    const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,

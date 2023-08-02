@@ -1,6 +1,6 @@
 import { GraphQLSchema } from "graphql";
 
-import { PackageName } from "@graphql-markdown/utils";
+import type { PackageName } from "@graphql-markdown/types";
 
 import { getPrinter } from "../../src/printer";
 

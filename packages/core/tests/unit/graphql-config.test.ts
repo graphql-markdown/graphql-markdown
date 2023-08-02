@@ -1,5 +1,4 @@
 import { vol } from "memfs";
-
 jest.mock("node:fs"); // used for @graphql-markdown
 jest.mock("fs"); // used for graphql-config
 

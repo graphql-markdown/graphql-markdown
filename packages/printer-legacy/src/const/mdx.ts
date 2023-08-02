@@ -1,5 +1,4 @@
-export type MDXString = string & { _opaque: typeof MDXString };
-declare const MDXString: unique symbol;
+import type { MDXString } from "@graphql-markdown/types";
 
 export const mdx: MDXString = `
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>

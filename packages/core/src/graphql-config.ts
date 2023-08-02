@@ -1,15 +1,13 @@
-import { Logger } from "@graphql-markdown/utils";
-
-import type { GraphQLProjectConfig } from "graphql-config";
-
 import type {
-  PackageOptionsConfig,
+  ConfigOptions,
   LoaderOption,
+  PackageOptionsConfig,
   ClassName,
   PackageConfig,
-} from "@graphql-markdown/utils";
+  GraphQLProjectConfig,
+} from "@graphql-markdown/types";
 
-import type { ConfigOptions } from "./config";
+import { Logger } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
 

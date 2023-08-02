@@ -1,7 +1,7 @@
 import { getTypeName } from "@graphql-markdown/utils";
 
 import { HEADER_SECTION_LEVEL, MARKDOWN_EOP } from "../const/strings";
-import { Options } from "../const/options";
+import { PrintTypeOptions } from "../const/options";
 import { MDXString } from "../const/mdx";
 
 export const printSpecification = (type: unknown): string | MDXString => {
@@ -25,6 +25,9 @@ export const printScalarMetadata = (type: unknown): string | MDXString => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const printCodeScalar = (type: unknown, options?: Options): string => {
+export const printCodeScalar = (
+  type: unknown,
+  options?: PrintTypeOptions,
+): string => {
   return `scalar ${getTypeName(type)}`;
 };

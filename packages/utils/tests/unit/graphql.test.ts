@@ -2,6 +2,8 @@ import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
+import type { LoaderOption } from "@graphql-markdown/types";
+
 jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
   return {
@@ -55,7 +57,6 @@ import {
   isOperation,
   isParametrizedField,
   loadSchema,
-  LoaderOption,
 } from "../../src/graphql";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");

@@ -6,13 +6,13 @@ import {
 
 import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
-import { Options } from "../const/options";
+import { PrintTypeOptions } from "../const/options";
 
 export type PrintDirectiveOptions = Pick<
-  Options,
+  PrintTypeOptions,
   "basePath" | "deprecated" | "parentTypePrefix"
 > &
-  Partial<Options>;
+  Partial<PrintTypeOptions>;
 
 const printCodeDirectiveLocation = (type: GraphQLDirective) => {
   if (

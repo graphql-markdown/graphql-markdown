@@ -1,3 +1,5 @@
+import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
+
 import {
   isDeprecated,
   getConstDirectiveMap,
@@ -6,18 +8,17 @@ import {
 } from "@graphql-markdown/utils";
 
 import { getCustomDirectiveResolver } from "./directive";
+
 import {
   DEPRECATED,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   NO_DESCRIPTION_TEXT,
 } from "./const/strings";
-import { Options } from "./const/options";
-import { MDXString } from "./const/mdx";
 
 export const printCustomDirectives = (
   type: unknown,
-  options?: Options,
+  options?: PrintTypeOptions,
 ): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
@@ -69,7 +70,7 @@ export const printDeprecation = (type: unknown): string => {
 
 export const printDescription = (
   type: unknown,
-  options?: Options,
+  options?: PrintTypeOptions,
   noText?: string,
 ): string | MDXString => {
   const description = formatDescription(type, noText);

@@ -1,3 +1,13 @@
+import type {
+  GraphQLNamedType,
+  GraphQLType,
+  MDXString,
+  PrintLinkOptions,
+  SchemaEntity,
+  TypeLink,
+  TypeLocale,
+} from "@graphql-markdown/types";
+
 import {
   getNamedType,
   getTypeName,
@@ -16,32 +26,10 @@ import {
   isUnionType,
   toSlug,
   pathUrl,
-  SchemaEntity,
-  GraphQLType,
-  GraphQLNamedType,
 } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
-import { Options, DeprecatedOption, TypeLocale } from "./const/options";
-import { MDXString } from "./const/mdx";
-
-export type TypeLink = {
-  text: string;
-  url: string;
-};
-
-export type PrintLinkOptions = Pick<
-  Options,
-  | "groups"
-  | "parentTypePrefix"
-  | "parentType"
-  | "basePath"
-  | "withAttributes"
-  | "skipDocDirective"
-  | "deprecated"
-> &
-  Partial<Options>;
 
 export class Link {
   static getLinkCategory = (type: unknown): TypeLocale | undefined => {
@@ -115,7 +103,7 @@ export class Link {
     const deprecated =
       typeof options !== "undefined" &&
       "deprecated" in options &&
-      options.deprecated === DeprecatedOption.GROUP &&
+      options.deprecated === "group" &&
       isDeprecated(type)
         ? DEPRECATED
         : "";

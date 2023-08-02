@@ -26,8 +26,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "input",
             "loc": {
-              "start": 1407,
-              "end": 1412
+              "start": 1349,
+              "end": 1354
             }
           },
           "type": {
@@ -36,13 +36,13 @@ exports[`graphql getFields() returns list of type fields 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "loc": {
-              "start": 1414,
-              "end": 1426
+              "start": 1356,
+              "end": 1368
             }
           },
           "directives": [
@@ -52,8 +52,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "deprecated",
                 "loc": {
-                  "start": 1428,
-                  "end": 1438
+                  "start": 1370,
+                  "end": 1380
                 }
               },
               "arguments": [
@@ -63,8 +63,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                     "kind": "Name",
                     "value": "reason",
                     "loc": {
-                      "start": 1439,
-                      "end": 1445
+                      "start": 1381,
+                      "end": 1387
                     }
                   },
                   "value": {
@@ -72,25 +72,25 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                     "value": "Use \`content\`.",
                     "block": false,
                     "loc": {
-                      "start": 1447,
-                      "end": 1463
+                      "start": 1389,
+                      "end": 1405
                     }
                   },
                   "loc": {
-                    "start": 1439,
-                    "end": 1463
+                    "start": 1381,
+                    "end": 1405
                   }
                 }
               ],
               "loc": {
-                "start": 1427,
-                "end": 1464
+                "start": 1369,
+                "end": 1406
               }
             }
           ],
           "loc": {
-            "start": 1407,
-            "end": 1464
+            "start": 1349,
+            "end": 1406
           }
         }
       },
@@ -104,8 +104,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "content",
             "loc": {
-              "start": 1473,
-              "end": 1480
+              "start": 1411,
+              "end": 1418
             }
           },
           "type": {
@@ -114,19 +114,19 @@ exports[`graphql getFields() returns list of type fields 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "loc": {
-              "start": 1482,
-              "end": 1494
+              "start": 1420,
+              "end": 1432
             }
           },
           "directives": [],
           "loc": {
-            "start": 1473,
-            "end": 1494
+            "start": 1411,
+            "end": 1432
           }
         }
       }
@@ -138,8 +138,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
         "kind": "Name",
         "value": "createTweet",
         "loc": {
-          "start": 1385,
-          "end": 1396
+          "start": 1332,
+          "end": 1343
         }
       },
       "arguments": [
@@ -149,8 +149,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "input",
             "loc": {
-              "start": 1407,
-              "end": 1412
+              "start": 1349,
+              "end": 1354
             }
           },
           "type": {
@@ -159,13 +159,13 @@ exports[`graphql getFields() returns list of type fields 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "loc": {
-              "start": 1414,
-              "end": 1426
+              "start": 1356,
+              "end": 1368
             }
           },
           "directives": [
@@ -175,8 +175,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "deprecated",
                 "loc": {
-                  "start": 1428,
-                  "end": 1438
+                  "start": 1370,
+                  "end": 1380
                 }
               },
               "arguments": [
@@ -186,8 +186,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                     "kind": "Name",
                     "value": "reason",
                     "loc": {
-                      "start": 1439,
-                      "end": 1445
+                      "start": 1381,
+                      "end": 1387
                     }
                   },
                   "value": {
@@ -195,25 +195,25 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                     "value": "Use \`content\`.",
                     "block": false,
                     "loc": {
-                      "start": 1447,
-                      "end": 1463
+                      "start": 1389,
+                      "end": 1405
                     }
                   },
                   "loc": {
-                    "start": 1439,
-                    "end": 1463
+                    "start": 1381,
+                    "end": 1405
                   }
                 }
               ],
               "loc": {
-                "start": 1427,
-                "end": 1464
+                "start": 1369,
+                "end": 1406
               }
             }
           ],
           "loc": {
-            "start": 1407,
-            "end": 1464
+            "start": 1349,
+            "end": 1406
           }
         },
         {
@@ -222,8 +222,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "content",
             "loc": {
-              "start": 1473,
-              "end": 1480
+              "start": 1411,
+              "end": 1418
             }
           },
           "type": {
@@ -232,19 +232,19 @@ exports[`graphql getFields() returns list of type fields 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "loc": {
-              "start": 1482,
-              "end": 1494
+              "start": 1420,
+              "end": 1432
             }
           },
           "directives": [],
           "loc": {
-            "start": 1473,
-            "end": 1494
+            "start": 1411,
+            "end": 1432
           }
         }
       ],
@@ -254,19 +254,19 @@ exports[`graphql getFields() returns list of type fields 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1502,
-            "end": 1507
+            "start": 1438,
+            "end": 1443
           }
         },
         "loc": {
-          "start": 1502,
-          "end": 1507
+          "start": 1438,
+          "end": 1443
         }
       },
       "directives": [],
       "loc": {
-        "start": 1385,
-        "end": 1507
+        "start": 1332,
+        "end": 1443
       }
     }
   },
@@ -284,8 +284,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1524,
-              "end": 1526
+              "start": 1458,
+              "end": 1460
             }
           },
           "type": {
@@ -296,24 +296,24 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1530
+                "start": 1462,
+                "end": 1464
               }
             },
             "loc": {
-              "start": 1528,
-              "end": 1531
+              "start": 1462,
+              "end": 1465
             }
           },
           "directives": [],
           "loc": {
-            "start": 1524,
-            "end": 1531
+            "start": 1458,
+            "end": 1465
           }
         }
       }
@@ -325,8 +325,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
         "kind": "Name",
         "value": "deleteTweet",
         "loc": {
-          "start": 1512,
-          "end": 1523
+          "start": 1446,
+          "end": 1457
         }
       },
       "arguments": [
@@ -336,8 +336,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1524,
-              "end": 1526
+              "start": 1458,
+              "end": 1460
             }
           },
           "type": {
@@ -348,24 +348,24 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1530
+                "start": 1462,
+                "end": 1464
               }
             },
             "loc": {
-              "start": 1528,
-              "end": 1531
+              "start": 1462,
+              "end": 1465
             }
           },
           "directives": [],
           "loc": {
-            "start": 1524,
-            "end": 1531
+            "start": 1458,
+            "end": 1465
           }
         }
       ],
@@ -375,13 +375,13 @@ exports[`graphql getFields() returns list of type fields 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1534,
-            "end": 1539
+            "start": 1468,
+            "end": 1473
           }
         },
         "loc": {
-          "start": 1534,
-          "end": 1539
+          "start": 1468,
+          "end": 1473
         }
       },
       "directives": [
@@ -391,20 +391,20 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "noDoc",
             "loc": {
-              "start": 1541,
-              "end": 1546
+              "start": 1475,
+              "end": 1480
             }
           },
           "arguments": [],
           "loc": {
-            "start": 1540,
-            "end": 1546
+            "start": 1474,
+            "end": 1480
           }
         }
       ],
       "loc": {
-        "start": 1512,
-        "end": 1546
+        "start": 1446,
+        "end": 1480
       }
     }
   },
@@ -422,8 +422,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1565,
-              "end": 1567
+              "start": 1497,
+              "end": 1499
             }
           },
           "type": {
@@ -434,24 +434,24 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1571
+                "start": 1501,
+                "end": 1503
               }
             },
             "loc": {
-              "start": 1569,
-              "end": 1572
+              "start": 1501,
+              "end": 1504
             }
           },
           "directives": [],
           "loc": {
-            "start": 1565,
-            "end": 1572
+            "start": 1497,
+            "end": 1504
           }
         }
       }
@@ -463,8 +463,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
         "kind": "Name",
         "value": "markTweetRead",
         "loc": {
-          "start": 1551,
-          "end": 1564
+          "start": 1483,
+          "end": 1496
         }
       },
       "arguments": [
@@ -474,8 +474,8 @@ exports[`graphql getFields() returns list of type fields 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1565,
-              "end": 1567
+              "start": 1497,
+              "end": 1499
             }
           },
           "type": {
@@ -486,24 +486,24 @@ exports[`graphql getFields() returns list of type fields 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1571
+                "start": 1501,
+                "end": 1503
               }
             },
             "loc": {
-              "start": 1569,
-              "end": 1572
+              "start": 1501,
+              "end": 1504
             }
           },
           "directives": [],
           "loc": {
-            "start": 1565,
-            "end": 1572
+            "start": 1497,
+            "end": 1504
           }
         }
       ],
@@ -513,19 +513,19 @@ exports[`graphql getFields() returns list of type fields 1`] = `
           "kind": "Name",
           "value": "Boolean",
           "loc": {
-            "start": 1575,
-            "end": 1582
+            "start": 1507,
+            "end": 1514
           }
         },
         "loc": {
-          "start": 1575,
-          "end": 1582
+          "start": 1507,
+          "end": 1514
         }
       },
       "directives": [],
       "loc": {
-        "start": 1551,
-        "end": 1582
+        "start": 1483,
+        "end": 1514
       }
     }
   }
@@ -549,8 +549,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "input",
             "loc": {
-              "start": 1407,
-              "end": 1412
+              "start": 1349,
+              "end": 1354
             }
           },
           "type": {
@@ -559,13 +559,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "loc": {
-              "start": 1414,
-              "end": 1426
+              "start": 1356,
+              "end": 1368
             }
           },
           "directives": [
@@ -575,8 +575,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "deprecated",
                 "loc": {
-                  "start": 1428,
-                  "end": 1438
+                  "start": 1370,
+                  "end": 1380
                 }
               },
               "arguments": [
@@ -586,8 +586,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                     "kind": "Name",
                     "value": "reason",
                     "loc": {
-                      "start": 1439,
-                      "end": 1445
+                      "start": 1381,
+                      "end": 1387
                     }
                   },
                   "value": {
@@ -595,25 +595,25 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                     "value": "Use \`content\`.",
                     "block": false,
                     "loc": {
-                      "start": 1447,
-                      "end": 1463
+                      "start": 1389,
+                      "end": 1405
                     }
                   },
                   "loc": {
-                    "start": 1439,
-                    "end": 1463
+                    "start": 1381,
+                    "end": 1405
                   }
                 }
               ],
               "loc": {
-                "start": 1427,
-                "end": 1464
+                "start": 1369,
+                "end": 1406
               }
             }
           ],
           "loc": {
-            "start": 1407,
-            "end": 1464
+            "start": 1349,
+            "end": 1406
           }
         }
       },
@@ -627,8 +627,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "content",
             "loc": {
-              "start": 1473,
-              "end": 1480
+              "start": 1411,
+              "end": 1418
             }
           },
           "type": {
@@ -637,19 +637,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "loc": {
-              "start": 1482,
-              "end": 1494
+              "start": 1420,
+              "end": 1432
             }
           },
           "directives": [],
           "loc": {
-            "start": 1473,
-            "end": 1494
+            "start": 1411,
+            "end": 1432
           }
         }
       }
@@ -661,8 +661,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
         "kind": "Name",
         "value": "createTweet",
         "loc": {
-          "start": 1385,
-          "end": 1396
+          "start": 1332,
+          "end": 1343
         }
       },
       "arguments": [
@@ -672,8 +672,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "input",
             "loc": {
-              "start": 1407,
-              "end": 1412
+              "start": 1349,
+              "end": 1354
             }
           },
           "type": {
@@ -682,13 +682,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "loc": {
-              "start": 1414,
-              "end": 1426
+              "start": 1356,
+              "end": 1368
             }
           },
           "directives": [
@@ -698,8 +698,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "deprecated",
                 "loc": {
-                  "start": 1428,
-                  "end": 1438
+                  "start": 1370,
+                  "end": 1380
                 }
               },
               "arguments": [
@@ -709,8 +709,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                     "kind": "Name",
                     "value": "reason",
                     "loc": {
-                      "start": 1439,
-                      "end": 1445
+                      "start": 1381,
+                      "end": 1387
                     }
                   },
                   "value": {
@@ -718,25 +718,25 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                     "value": "Use \`content\`.",
                     "block": false,
                     "loc": {
-                      "start": 1447,
-                      "end": 1463
+                      "start": 1389,
+                      "end": 1405
                     }
                   },
                   "loc": {
-                    "start": 1439,
-                    "end": 1463
+                    "start": 1381,
+                    "end": 1405
                   }
                 }
               ],
               "loc": {
-                "start": 1427,
-                "end": 1464
+                "start": 1369,
+                "end": 1406
               }
             }
           ],
           "loc": {
-            "start": 1407,
-            "end": 1464
+            "start": 1349,
+            "end": 1406
           }
         },
         {
@@ -745,8 +745,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "content",
             "loc": {
-              "start": 1473,
-              "end": 1480
+              "start": 1411,
+              "end": 1418
             }
           },
           "type": {
@@ -755,19 +755,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
               "kind": "Name",
               "value": "TweetContent",
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "loc": {
-              "start": 1482,
-              "end": 1494
+              "start": 1420,
+              "end": 1432
             }
           },
           "directives": [],
           "loc": {
-            "start": 1473,
-            "end": 1494
+            "start": 1411,
+            "end": 1432
           }
         }
       ],
@@ -777,19 +777,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1502,
-            "end": 1507
+            "start": 1438,
+            "end": 1443
           }
         },
         "loc": {
-          "start": 1502,
-          "end": 1507
+          "start": 1438,
+          "end": 1443
         }
       },
       "directives": [],
       "loc": {
-        "start": 1385,
-        "end": 1507
+        "start": 1332,
+        "end": 1443
       }
     }
   },
@@ -807,8 +807,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1524,
-              "end": 1526
+              "start": 1458,
+              "end": 1460
             }
           },
           "type": {
@@ -819,24 +819,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1530
+                "start": 1462,
+                "end": 1464
               }
             },
             "loc": {
-              "start": 1528,
-              "end": 1531
+              "start": 1462,
+              "end": 1465
             }
           },
           "directives": [],
           "loc": {
-            "start": 1524,
-            "end": 1531
+            "start": 1458,
+            "end": 1465
           }
         }
       }
@@ -848,8 +848,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
         "kind": "Name",
         "value": "deleteTweet",
         "loc": {
-          "start": 1512,
-          "end": 1523
+          "start": 1446,
+          "end": 1457
         }
       },
       "arguments": [
@@ -859,8 +859,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1524,
-              "end": 1526
+              "start": 1458,
+              "end": 1460
             }
           },
           "type": {
@@ -871,24 +871,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1530
+                "start": 1462,
+                "end": 1464
               }
             },
             "loc": {
-              "start": 1528,
-              "end": 1531
+              "start": 1462,
+              "end": 1465
             }
           },
           "directives": [],
           "loc": {
-            "start": 1524,
-            "end": 1531
+            "start": 1458,
+            "end": 1465
           }
         }
       ],
@@ -898,13 +898,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1534,
-            "end": 1539
+            "start": 1468,
+            "end": 1473
           }
         },
         "loc": {
-          "start": 1534,
-          "end": 1539
+          "start": 1468,
+          "end": 1473
         }
       },
       "directives": [
@@ -914,20 +914,20 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "noDoc",
             "loc": {
-              "start": 1541,
-              "end": 1546
+              "start": 1475,
+              "end": 1480
             }
           },
           "arguments": [],
           "loc": {
-            "start": 1540,
-            "end": 1546
+            "start": 1474,
+            "end": 1480
           }
         }
       ],
       "loc": {
-        "start": 1512,
-        "end": 1546
+        "start": 1446,
+        "end": 1480
       }
     }
   },
@@ -945,8 +945,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1565,
-              "end": 1567
+              "start": 1497,
+              "end": 1499
             }
           },
           "type": {
@@ -957,24 +957,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1571
+                "start": 1501,
+                "end": 1503
               }
             },
             "loc": {
-              "start": 1569,
-              "end": 1572
+              "start": 1501,
+              "end": 1504
             }
           },
           "directives": [],
           "loc": {
-            "start": 1565,
-            "end": 1572
+            "start": 1497,
+            "end": 1504
           }
         }
       }
@@ -986,8 +986,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
         "kind": "Name",
         "value": "markTweetRead",
         "loc": {
-          "start": 1551,
-          "end": 1564
+          "start": 1483,
+          "end": 1496
         }
       },
       "arguments": [
@@ -997,8 +997,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1565,
-              "end": 1567
+              "start": 1497,
+              "end": 1499
             }
           },
           "type": {
@@ -1009,24 +1009,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1571
+                "start": 1501,
+                "end": 1503
               }
             },
             "loc": {
-              "start": 1569,
-              "end": 1572
+              "start": 1501,
+              "end": 1504
             }
           },
           "directives": [],
           "loc": {
-            "start": 1565,
-            "end": 1572
+            "start": 1497,
+            "end": 1504
           }
         }
       ],
@@ -1036,19 +1036,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
           "kind": "Name",
           "value": "Boolean",
           "loc": {
-            "start": 1575,
-            "end": 1582
+            "start": 1507,
+            "end": 1514
           }
         },
         "loc": {
-          "start": 1575,
-          "end": 1582
+          "start": 1507,
+          "end": 1514
         }
       },
       "directives": [],
       "loc": {
-        "start": 1551,
-        "end": 1582
+        "start": 1483,
+        "end": 1514
       }
     }
   }
@@ -1071,8 +1071,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1082,
-              "end": 1084
+              "start": 1024,
+              "end": 1026
             }
           },
           "type": {
@@ -1083,24 +1083,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1086,
-                  "end": 1088
+                  "start": 1028,
+                  "end": 1030
                 }
               },
               "loc": {
-                "start": 1086,
-                "end": 1088
+                "start": 1028,
+                "end": 1030
               }
             },
             "loc": {
-              "start": 1086,
-              "end": 1089
+              "start": 1028,
+              "end": 1031
             }
           },
           "directives": [],
           "loc": {
-            "start": 1082,
-            "end": 1089
+            "start": 1024,
+            "end": 1031
           }
         }
       }
@@ -1112,8 +1112,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "Tweet",
         "loc": {
-          "start": 1076,
-          "end": 1081
+          "start": 1018,
+          "end": 1023
         }
       },
       "arguments": [
@@ -1123,8 +1123,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1082,
-              "end": 1084
+              "start": 1024,
+              "end": 1026
             }
           },
           "type": {
@@ -1135,24 +1135,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1086,
-                  "end": 1088
+                  "start": 1028,
+                  "end": 1030
                 }
               },
               "loc": {
-                "start": 1086,
-                "end": 1088
+                "start": 1028,
+                "end": 1030
               }
             },
             "loc": {
-              "start": 1086,
-              "end": 1089
+              "start": 1028,
+              "end": 1031
             }
           },
           "directives": [],
           "loc": {
-            "start": 1082,
-            "end": 1089
+            "start": 1024,
+            "end": 1031
           }
         }
       ],
@@ -1162,19 +1162,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1092,
-            "end": 1097
+            "start": 1034,
+            "end": 1039
           }
         },
         "loc": {
-          "start": 1092,
-          "end": 1097
+          "start": 1034,
+          "end": 1039
         }
       },
       "directives": [],
       "loc": {
-        "start": 1076,
-        "end": 1097
+        "start": 1018,
+        "end": 1039
       }
     }
   },
@@ -1193,8 +1193,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "limit",
             "loc": {
-              "start": 1109,
-              "end": 1114
+              "start": 1054,
+              "end": 1059
             }
           },
           "type": {
@@ -1203,27 +1203,27 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1116,
-                "end": 1119
+                "start": 1061,
+                "end": 1064
               }
             },
             "loc": {
-              "start": 1116,
-              "end": 1119
+              "start": 1061,
+              "end": 1064
             }
           },
           "defaultValue": {
             "kind": "IntValue",
             "value": "5",
             "loc": {
-              "start": 1122,
-              "end": 1123
+              "start": 1067,
+              "end": 1068
             }
           },
           "directives": [],
           "loc": {
-            "start": 1109,
-            "end": 1123
+            "start": 1054,
+            "end": 1068
           }
         }
       },
@@ -1238,8 +1238,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "skip",
             "loc": {
-              "start": 1125,
-              "end": 1129
+              "start": 1073,
+              "end": 1077
             }
           },
           "type": {
@@ -1248,27 +1248,27 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1131,
-                "end": 1134
+                "start": 1079,
+                "end": 1082
               }
             },
             "loc": {
-              "start": 1131,
-              "end": 1134
+              "start": 1079,
+              "end": 1082
             }
           },
           "defaultValue": {
             "kind": "IntValue",
             "value": "0",
             "loc": {
-              "start": 1137,
-              "end": 1138
+              "start": 1085,
+              "end": 1086
             }
           },
           "directives": [],
           "loc": {
-            "start": 1125,
-            "end": 1138
+            "start": 1073,
+            "end": 1086
           }
         }
       },
@@ -1282,8 +1282,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "sort_field",
             "loc": {
-              "start": 1140,
-              "end": 1150
+              "start": 1091,
+              "end": 1101
             }
           },
           "type": {
@@ -1292,19 +1292,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "String",
               "loc": {
-                "start": 1152,
-                "end": 1158
+                "start": 1103,
+                "end": 1109
               }
             },
             "loc": {
-              "start": 1152,
-              "end": 1158
+              "start": 1103,
+              "end": 1109
             }
           },
           "directives": [],
           "loc": {
-            "start": 1140,
-            "end": 1158
+            "start": 1091,
+            "end": 1109
           }
         }
       },
@@ -1319,8 +1319,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "sort_order",
             "loc": {
-              "start": 1160,
-              "end": 1170
+              "start": 1114,
+              "end": 1124
             }
           },
           "type": {
@@ -1329,13 +1329,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "String",
               "loc": {
-                "start": 1172,
-                "end": 1178
+                "start": 1126,
+                "end": 1132
               }
             },
             "loc": {
-              "start": 1172,
-              "end": 1178
+              "start": 1126,
+              "end": 1132
             }
           },
           "defaultValue": {
@@ -1343,14 +1343,14 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "value": "ASC",
             "block": false,
             "loc": {
-              "start": 1181,
-              "end": 1186
+              "start": 1135,
+              "end": 1140
             }
           },
           "directives": [],
           "loc": {
-            "start": 1160,
-            "end": 1186
+            "start": 1114,
+            "end": 1140
           }
         }
       }
@@ -1362,8 +1362,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "Tweets",
         "loc": {
-          "start": 1102,
-          "end": 1108
+          "start": 1042,
+          "end": 1048
         }
       },
       "arguments": [
@@ -1373,8 +1373,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "limit",
             "loc": {
-              "start": 1109,
-              "end": 1114
+              "start": 1054,
+              "end": 1059
             }
           },
           "type": {
@@ -1383,27 +1383,27 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1116,
-                "end": 1119
+                "start": 1061,
+                "end": 1064
               }
             },
             "loc": {
-              "start": 1116,
-              "end": 1119
+              "start": 1061,
+              "end": 1064
             }
           },
           "defaultValue": {
             "kind": "IntValue",
             "value": "5",
             "loc": {
-              "start": 1122,
-              "end": 1123
+              "start": 1067,
+              "end": 1068
             }
           },
           "directives": [],
           "loc": {
-            "start": 1109,
-            "end": 1123
+            "start": 1054,
+            "end": 1068
           }
         },
         {
@@ -1412,8 +1412,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "skip",
             "loc": {
-              "start": 1125,
-              "end": 1129
+              "start": 1073,
+              "end": 1077
             }
           },
           "type": {
@@ -1422,27 +1422,27 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1131,
-                "end": 1134
+                "start": 1079,
+                "end": 1082
               }
             },
             "loc": {
-              "start": 1131,
-              "end": 1134
+              "start": 1079,
+              "end": 1082
             }
           },
           "defaultValue": {
             "kind": "IntValue",
             "value": "0",
             "loc": {
-              "start": 1137,
-              "end": 1138
+              "start": 1085,
+              "end": 1086
             }
           },
           "directives": [],
           "loc": {
-            "start": 1125,
-            "end": 1138
+            "start": 1073,
+            "end": 1086
           }
         },
         {
@@ -1451,8 +1451,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "sort_field",
             "loc": {
-              "start": 1140,
-              "end": 1150
+              "start": 1091,
+              "end": 1101
             }
           },
           "type": {
@@ -1461,19 +1461,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "String",
               "loc": {
-                "start": 1152,
-                "end": 1158
+                "start": 1103,
+                "end": 1109
               }
             },
             "loc": {
-              "start": 1152,
-              "end": 1158
+              "start": 1103,
+              "end": 1109
             }
           },
           "directives": [],
           "loc": {
-            "start": 1140,
-            "end": 1158
+            "start": 1091,
+            "end": 1109
           }
         },
         {
@@ -1482,8 +1482,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "sort_order",
             "loc": {
-              "start": 1160,
-              "end": 1170
+              "start": 1114,
+              "end": 1124
             }
           },
           "type": {
@@ -1492,13 +1492,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "String",
               "loc": {
-                "start": 1172,
-                "end": 1178
+                "start": 1126,
+                "end": 1132
               }
             },
             "loc": {
-              "start": 1172,
-              "end": 1178
+              "start": 1126,
+              "end": 1132
             }
           },
           "defaultValue": {
@@ -1506,14 +1506,14 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "value": "ASC",
             "block": false,
             "loc": {
-              "start": 1181,
-              "end": 1186
+              "start": 1135,
+              "end": 1140
             }
           },
           "directives": [],
           "loc": {
-            "start": 1160,
-            "end": 1186
+            "start": 1114,
+            "end": 1140
           }
         }
       ],
@@ -1527,29 +1527,29 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "Tweet",
               "loc": {
-                "start": 1190,
-                "end": 1195
+                "start": 1147,
+                "end": 1152
               }
             },
             "loc": {
-              "start": 1190,
-              "end": 1195
+              "start": 1147,
+              "end": 1152
             }
           },
           "loc": {
-            "start": 1189,
-            "end": 1196
+            "start": 1146,
+            "end": 1153
           }
         },
         "loc": {
-          "start": 1189,
-          "end": 1197
+          "start": 1146,
+          "end": 1154
         }
       },
       "directives": [],
       "loc": {
-        "start": 1102,
-        "end": 1197
+        "start": 1042,
+        "end": 1154
       }
     }
   },
@@ -1565,8 +1565,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "TweetsMeta",
         "loc": {
-          "start": 1202,
-          "end": 1212
+          "start": 1157,
+          "end": 1167
         }
       },
       "arguments": [],
@@ -1576,13 +1576,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
           "kind": "Name",
           "value": "Meta",
           "loc": {
-            "start": 1214,
-            "end": 1218
+            "start": 1169,
+            "end": 1173
           }
         },
         "loc": {
-          "start": 1214,
-          "end": 1218
+          "start": 1169,
+          "end": 1173
         }
       },
       "directives": [
@@ -1592,20 +1592,20 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "deprecated",
             "loc": {
-              "start": 1220,
-              "end": 1230
+              "start": 1175,
+              "end": 1185
             }
           },
           "arguments": [],
           "loc": {
-            "start": 1219,
-            "end": 1230
+            "start": 1174,
+            "end": 1185
           }
         }
       ],
       "loc": {
-        "start": 1202,
-        "end": 1230
+        "start": 1157,
+        "end": 1185
       }
     }
   },
@@ -1623,8 +1623,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1240,
-              "end": 1242
+              "start": 1193,
+              "end": 1195
             }
           },
           "type": {
@@ -1635,24 +1635,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1244,
-                  "end": 1246
+                  "start": 1197,
+                  "end": 1199
                 }
               },
               "loc": {
-                "start": 1244,
-                "end": 1246
+                "start": 1197,
+                "end": 1199
               }
             },
             "loc": {
-              "start": 1244,
-              "end": 1247
+              "start": 1197,
+              "end": 1200
             }
           },
           "directives": [],
           "loc": {
-            "start": 1240,
-            "end": 1247
+            "start": 1193,
+            "end": 1200
           }
         }
       }
@@ -1665,8 +1665,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "User",
         "loc": {
-          "start": 1235,
-          "end": 1239
+          "start": 1188,
+          "end": 1192
         }
       },
       "arguments": [
@@ -1676,8 +1676,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1240,
-              "end": 1242
+              "start": 1193,
+              "end": 1195
             }
           },
           "type": {
@@ -1688,24 +1688,24 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 1244,
-                  "end": 1246
+                  "start": 1197,
+                  "end": 1199
                 }
               },
               "loc": {
-                "start": 1244,
-                "end": 1246
+                "start": 1197,
+                "end": 1199
               }
             },
             "loc": {
-              "start": 1244,
-              "end": 1247
+              "start": 1197,
+              "end": 1200
             }
           },
           "directives": [],
           "loc": {
-            "start": 1240,
-            "end": 1247
+            "start": 1193,
+            "end": 1200
           }
         }
       ],
@@ -1715,13 +1715,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
           "kind": "Name",
           "value": "User",
           "loc": {
-            "start": 1250,
-            "end": 1254
+            "start": 1203,
+            "end": 1207
           }
         },
         "loc": {
-          "start": 1250,
-          "end": 1254
+          "start": 1203,
+          "end": 1207
         }
       },
       "directives": [
@@ -1731,8 +1731,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "deprecated",
             "loc": {
-              "start": 1256,
-              "end": 1266
+              "start": 1209,
+              "end": 1219
             }
           },
           "arguments": [
@@ -1742,8 +1742,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "kind": "Name",
                 "value": "reason",
                 "loc": {
-                  "start": 1267,
-                  "end": 1273
+                  "start": 1220,
+                  "end": 1226
                 }
               },
               "value": {
@@ -1751,25 +1751,25 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                 "value": "Use \`Users\`.",
                 "block": false,
                 "loc": {
-                  "start": 1275,
-                  "end": 1289
+                  "start": 1228,
+                  "end": 1242
                 }
               },
               "loc": {
-                "start": 1267,
-                "end": 1289
+                "start": 1220,
+                "end": 1242
               }
             }
           ],
           "loc": {
-            "start": 1255,
-            "end": 1290
+            "start": 1208,
+            "end": 1243
           }
         }
       ],
       "loc": {
-        "start": 1235,
-        "end": 1290
+        "start": 1188,
+        "end": 1243
       }
     }
   },
@@ -1787,8 +1787,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1301,
-              "end": 1303
+              "start": 1252,
+              "end": 1254
             }
           },
           "type": {
@@ -1803,34 +1803,34 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                     "kind": "Name",
                     "value": "ID",
                     "loc": {
-                      "start": 1306,
-                      "end": 1308
+                      "start": 1257,
+                      "end": 1259
                     }
                   },
                   "loc": {
-                    "start": 1306,
-                    "end": 1308
+                    "start": 1257,
+                    "end": 1259
                   }
                 },
                 "loc": {
-                  "start": 1306,
-                  "end": 1309
+                  "start": 1257,
+                  "end": 1260
                 }
               },
               "loc": {
-                "start": 1305,
-                "end": 1310
+                "start": 1256,
+                "end": 1261
               }
             },
             "loc": {
-              "start": 1305,
-              "end": 1311
+              "start": 1256,
+              "end": 1262
             }
           },
           "directives": [],
           "loc": {
-            "start": 1301,
-            "end": 1311
+            "start": 1252,
+            "end": 1262
           }
         }
       }
@@ -1842,8 +1842,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "Users",
         "loc": {
-          "start": 1295,
-          "end": 1300
+          "start": 1246,
+          "end": 1251
         }
       },
       "arguments": [
@@ -1853,8 +1853,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "id",
             "loc": {
-              "start": 1301,
-              "end": 1303
+              "start": 1252,
+              "end": 1254
             }
           },
           "type": {
@@ -1869,34 +1869,34 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
                     "kind": "Name",
                     "value": "ID",
                     "loc": {
-                      "start": 1306,
-                      "end": 1308
+                      "start": 1257,
+                      "end": 1259
                     }
                   },
                   "loc": {
-                    "start": 1306,
-                    "end": 1308
+                    "start": 1257,
+                    "end": 1259
                   }
                 },
                 "loc": {
-                  "start": 1306,
-                  "end": 1309
+                  "start": 1257,
+                  "end": 1260
                 }
               },
               "loc": {
-                "start": 1305,
-                "end": 1310
+                "start": 1256,
+                "end": 1261
               }
             },
             "loc": {
-              "start": 1305,
-              "end": 1311
+              "start": 1256,
+              "end": 1262
             }
           },
           "directives": [],
           "loc": {
-            "start": 1301,
-            "end": 1311
+            "start": 1252,
+            "end": 1262
           }
         }
       ],
@@ -1910,29 +1910,29 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
               "kind": "Name",
               "value": "User",
               "loc": {
-                "start": 1315,
-                "end": 1319
+                "start": 1266,
+                "end": 1270
               }
             },
             "loc": {
-              "start": 1315,
-              "end": 1319
+              "start": 1266,
+              "end": 1270
             }
           },
           "loc": {
-            "start": 1314,
-            "end": 1320
+            "start": 1265,
+            "end": 1271
           }
         },
         "loc": {
-          "start": 1314,
-          "end": 1321
+          "start": 1265,
+          "end": 1272
         }
       },
       "directives": [],
       "loc": {
-        "start": 1295,
-        "end": 1321
+        "start": 1246,
+        "end": 1272
       }
     }
   },
@@ -1948,8 +1948,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
         "kind": "Name",
         "value": "NotificationsMeta",
         "loc": {
-          "start": 1326,
-          "end": 1343
+          "start": 1275,
+          "end": 1292
         }
       },
       "arguments": [],
@@ -1959,13 +1959,13 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
           "kind": "Name",
           "value": "Meta",
           "loc": {
-            "start": 1345,
-            "end": 1349
+            "start": 1294,
+            "end": 1298
           }
         },
         "loc": {
-          "start": 1345,
-          "end": 1349
+          "start": 1294,
+          "end": 1298
         }
       },
       "directives": [
@@ -1975,20 +1975,20 @@ exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
             "kind": "Name",
             "value": "deprecated",
             "loc": {
-              "start": 1351,
-              "end": 1361
+              "start": 1300,
+              "end": 1310
             }
           },
           "arguments": [],
           "loc": {
-            "start": 1350,
-            "end": 1361
+            "start": 1299,
+            "end": 1310
           }
         }
       ],
       "loc": {
-        "start": 1326,
-        "end": 1361
+        "start": 1275,
+        "end": 1310
       }
     }
   }
@@ -2011,8 +2011,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
             "kind": "Name",
             "value": "limit",
             "loc": {
-              "start": 1716,
-              "end": 1721
+              "start": 1646,
+              "end": 1651
             }
           },
           "type": {
@@ -2021,19 +2021,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1723,
-                "end": 1726
+                "start": 1653,
+                "end": 1656
               }
             },
             "loc": {
-              "start": 1723,
-              "end": 1726
+              "start": 1653,
+              "end": 1656
             }
           },
           "directives": [],
           "loc": {
-            "start": 1716,
-            "end": 1726
+            "start": 1646,
+            "end": 1656
           }
         }
       }
@@ -2045,8 +2045,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
         "kind": "Name",
         "value": "Notifications",
         "loc": {
-          "start": 1702,
-          "end": 1715
+          "start": 1632,
+          "end": 1645
         }
       },
       "arguments": [
@@ -2056,8 +2056,8 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
             "kind": "Name",
             "value": "limit",
             "loc": {
-              "start": 1716,
-              "end": 1721
+              "start": 1646,
+              "end": 1651
             }
           },
           "type": {
@@ -2066,19 +2066,19 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
               "kind": "Name",
               "value": "Int",
               "loc": {
-                "start": 1723,
-                "end": 1726
+                "start": 1653,
+                "end": 1656
               }
             },
             "loc": {
-              "start": 1723,
-              "end": 1726
+              "start": 1653,
+              "end": 1656
             }
           },
           "directives": [],
           "loc": {
-            "start": 1716,
-            "end": 1726
+            "start": 1646,
+            "end": 1656
           }
         }
       ],
@@ -2092,29 +2092,29 @@ exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] 
               "kind": "Name",
               "value": "Notification",
               "loc": {
-                "start": 1730,
-                "end": 1742
+                "start": 1660,
+                "end": 1672
               }
             },
             "loc": {
-              "start": 1730,
-              "end": 1742
+              "start": 1660,
+              "end": 1672
             }
           },
           "loc": {
-            "start": 1729,
-            "end": 1743
+            "start": 1659,
+            "end": 1673
           }
         },
         "loc": {
-          "start": 1729,
-          "end": 1744
+          "start": 1659,
+          "end": 1674
         }
       },
       "directives": [],
       "loc": {
-        "start": 1702,
-        "end": 1744
+        "start": 1632,
+        "end": 1674
       }
     }
   }
@@ -3200,16 +3200,16 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
           "value": "Fetch all posts without any arguments. Default order is funky.",
           "block": false,
           "loc": {
-            "start": 1002,
-            "end": 1066
+            "start": 950,
+            "end": 1014
           }
         },
         "name": {
           "kind": "Name",
           "value": "posts",
           "loc": {
-            "start": 1071,
-            "end": 1076
+            "start": 1017,
+            "end": 1022
           }
         },
         "arguments": [],
@@ -3221,24 +3221,24 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
               "kind": "Name",
               "value": "Post",
               "loc": {
-                "start": 1079,
-                "end": 1083
+                "start": 1025,
+                "end": 1029
               }
             },
             "loc": {
-              "start": 1079,
-              "end": 1083
+              "start": 1025,
+              "end": 1029
             }
           },
           "loc": {
-            "start": 1078,
-            "end": 1084
+            "start": 1024,
+            "end": 1030
           }
         },
         "directives": [],
         "loc": {
-          "start": 1002,
-          "end": 1084
+          "start": 950,
+          "end": 1030
         }
       }
     }
@@ -3259,8 +3259,8 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
               "kind": "Name",
               "value": "postId",
               "loc": {
-                "start": 1257,
-                "end": 1263
+                "start": 1193,
+                "end": 1199
               }
             },
             "type": {
@@ -3271,24 +3271,24 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1265,
-                    "end": 1267
+                    "start": 1201,
+                    "end": 1203
                   }
                 },
                 "loc": {
-                  "start": 1265,
-                  "end": 1267
+                  "start": 1201,
+                  "end": 1203
                 }
               },
               "loc": {
-                "start": 1265,
-                "end": 1268
+                "start": 1201,
+                "end": 1204
               }
             },
             "directives": [],
             "loc": {
-              "start": 1257,
-              "end": 1268
+              "start": 1193,
+              "end": 1204
             }
           }
         }
@@ -3301,16 +3301,16 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
           "value": "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore.",
           "block": false,
           "loc": {
-            "start": 1159,
-            "end": 1241
+            "start": 1097,
+            "end": 1179
           }
         },
         "name": {
           "kind": "Name",
           "value": "upvotePost",
           "loc": {
-            "start": 1246,
-            "end": 1256
+            "start": 1182,
+            "end": 1192
           }
         },
         "arguments": [
@@ -3320,8 +3320,8 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
               "kind": "Name",
               "value": "postId",
               "loc": {
-                "start": 1257,
-                "end": 1263
+                "start": 1193,
+                "end": 1199
               }
             },
             "type": {
@@ -3332,24 +3332,24 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1265,
-                    "end": 1267
+                    "start": 1201,
+                    "end": 1203
                   }
                 },
                 "loc": {
-                  "start": 1265,
-                  "end": 1267
+                  "start": 1201,
+                  "end": 1203
                 }
               },
               "loc": {
-                "start": 1265,
-                "end": 1268
+                "start": 1201,
+                "end": 1204
               }
             },
             "directives": [],
             "loc": {
-              "start": 1257,
-              "end": 1268
+              "start": 1193,
+              "end": 1204
             }
           }
         ],
@@ -3359,19 +3359,19 @@ exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802)
             "kind": "Name",
             "value": "Post",
             "loc": {
-              "start": 1271,
-              "end": 1275
+              "start": 1207,
+              "end": 1211
             }
           },
           "loc": {
-            "start": 1271,
-            "end": 1275
+            "start": 1207,
+            "end": 1211
           }
         },
         "directives": [],
         "loc": {
-          "start": 1159,
-          "end": 1275
+          "start": 1097,
+          "end": 1211
         }
       }
     }
@@ -3417,8 +3417,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1082,
-                "end": 1084
+                "start": 1024,
+                "end": 1026
               }
             },
             "type": {
@@ -3429,24 +3429,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1086,
-                    "end": 1088
+                    "start": 1028,
+                    "end": 1030
                   }
                 },
                 "loc": {
-                  "start": 1086,
-                  "end": 1088
+                  "start": 1028,
+                  "end": 1030
                 }
               },
               "loc": {
-                "start": 1086,
-                "end": 1089
+                "start": 1028,
+                "end": 1031
               }
             },
             "directives": [],
             "loc": {
-              "start": 1082,
-              "end": 1089
+              "start": 1024,
+              "end": 1031
             }
           }
         }
@@ -3458,8 +3458,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "Tweet",
           "loc": {
-            "start": 1076,
-            "end": 1081
+            "start": 1018,
+            "end": 1023
           }
         },
         "arguments": [
@@ -3469,8 +3469,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1082,
-                "end": 1084
+                "start": 1024,
+                "end": 1026
               }
             },
             "type": {
@@ -3481,24 +3481,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1086,
-                    "end": 1088
+                    "start": 1028,
+                    "end": 1030
                   }
                 },
                 "loc": {
-                  "start": 1086,
-                  "end": 1088
+                  "start": 1028,
+                  "end": 1030
                 }
               },
               "loc": {
-                "start": 1086,
-                "end": 1089
+                "start": 1028,
+                "end": 1031
               }
             },
             "directives": [],
             "loc": {
-              "start": 1082,
-              "end": 1089
+              "start": 1024,
+              "end": 1031
             }
           }
         ],
@@ -3508,19 +3508,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 1092,
-              "end": 1097
+              "start": 1034,
+              "end": 1039
             }
           },
           "loc": {
-            "start": 1092,
-            "end": 1097
+            "start": 1034,
+            "end": 1039
           }
         },
         "directives": [],
         "loc": {
-          "start": 1076,
-          "end": 1097
+          "start": 1018,
+          "end": 1039
         }
       }
     },
@@ -3539,8 +3539,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1109,
-                "end": 1114
+                "start": 1054,
+                "end": 1059
               }
             },
             "type": {
@@ -3549,27 +3549,27 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1116,
-                  "end": 1119
+                  "start": 1061,
+                  "end": 1064
                 }
               },
               "loc": {
-                "start": 1116,
-                "end": 1119
+                "start": 1061,
+                "end": 1064
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "5",
               "loc": {
-                "start": 1122,
-                "end": 1123
+                "start": 1067,
+                "end": 1068
               }
             },
             "directives": [],
             "loc": {
-              "start": 1109,
-              "end": 1123
+              "start": 1054,
+              "end": 1068
             }
           }
         },
@@ -3584,8 +3584,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "skip",
               "loc": {
-                "start": 1125,
-                "end": 1129
+                "start": 1073,
+                "end": 1077
               }
             },
             "type": {
@@ -3594,27 +3594,27 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1131,
-                  "end": 1134
+                  "start": 1079,
+                  "end": 1082
                 }
               },
               "loc": {
-                "start": 1131,
-                "end": 1134
+                "start": 1079,
+                "end": 1082
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "0",
               "loc": {
-                "start": 1137,
-                "end": 1138
+                "start": 1085,
+                "end": 1086
               }
             },
             "directives": [],
             "loc": {
-              "start": 1125,
-              "end": 1138
+              "start": 1073,
+              "end": 1086
             }
           }
         },
@@ -3628,8 +3628,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "sort_field",
               "loc": {
-                "start": 1140,
-                "end": 1150
+                "start": 1091,
+                "end": 1101
               }
             },
             "type": {
@@ -3638,19 +3638,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1152,
-                  "end": 1158
+                  "start": 1103,
+                  "end": 1109
                 }
               },
               "loc": {
-                "start": 1152,
-                "end": 1158
+                "start": 1103,
+                "end": 1109
               }
             },
             "directives": [],
             "loc": {
-              "start": 1140,
-              "end": 1158
+              "start": 1091,
+              "end": 1109
             }
           }
         },
@@ -3665,8 +3665,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "sort_order",
               "loc": {
-                "start": 1160,
-                "end": 1170
+                "start": 1114,
+                "end": 1124
               }
             },
             "type": {
@@ -3675,13 +3675,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1172,
-                  "end": 1178
+                  "start": 1126,
+                  "end": 1132
                 }
               },
               "loc": {
-                "start": 1172,
-                "end": 1178
+                "start": 1126,
+                "end": 1132
               }
             },
             "defaultValue": {
@@ -3689,14 +3689,14 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "value": "ASC",
               "block": false,
               "loc": {
-                "start": 1181,
-                "end": 1186
+                "start": 1135,
+                "end": 1140
               }
             },
             "directives": [],
             "loc": {
-              "start": 1160,
-              "end": 1186
+              "start": 1114,
+              "end": 1140
             }
           }
         }
@@ -3708,8 +3708,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "Tweets",
           "loc": {
-            "start": 1102,
-            "end": 1108
+            "start": 1042,
+            "end": 1048
           }
         },
         "arguments": [
@@ -3719,8 +3719,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1109,
-                "end": 1114
+                "start": 1054,
+                "end": 1059
               }
             },
             "type": {
@@ -3729,27 +3729,27 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1116,
-                  "end": 1119
+                  "start": 1061,
+                  "end": 1064
                 }
               },
               "loc": {
-                "start": 1116,
-                "end": 1119
+                "start": 1061,
+                "end": 1064
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "5",
               "loc": {
-                "start": 1122,
-                "end": 1123
+                "start": 1067,
+                "end": 1068
               }
             },
             "directives": [],
             "loc": {
-              "start": 1109,
-              "end": 1123
+              "start": 1054,
+              "end": 1068
             }
           },
           {
@@ -3758,8 +3758,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "skip",
               "loc": {
-                "start": 1125,
-                "end": 1129
+                "start": 1073,
+                "end": 1077
               }
             },
             "type": {
@@ -3768,27 +3768,27 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1131,
-                  "end": 1134
+                  "start": 1079,
+                  "end": 1082
                 }
               },
               "loc": {
-                "start": 1131,
-                "end": 1134
+                "start": 1079,
+                "end": 1082
               }
             },
             "defaultValue": {
               "kind": "IntValue",
               "value": "0",
               "loc": {
-                "start": 1137,
-                "end": 1138
+                "start": 1085,
+                "end": 1086
               }
             },
             "directives": [],
             "loc": {
-              "start": 1125,
-              "end": 1138
+              "start": 1073,
+              "end": 1086
             }
           },
           {
@@ -3797,8 +3797,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "sort_field",
               "loc": {
-                "start": 1140,
-                "end": 1150
+                "start": 1091,
+                "end": 1101
               }
             },
             "type": {
@@ -3807,19 +3807,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1152,
-                  "end": 1158
+                  "start": 1103,
+                  "end": 1109
                 }
               },
               "loc": {
-                "start": 1152,
-                "end": 1158
+                "start": 1103,
+                "end": 1109
               }
             },
             "directives": [],
             "loc": {
-              "start": 1140,
-              "end": 1158
+              "start": 1091,
+              "end": 1109
             }
           },
           {
@@ -3828,8 +3828,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "sort_order",
               "loc": {
-                "start": 1160,
-                "end": 1170
+                "start": 1114,
+                "end": 1124
               }
             },
             "type": {
@@ -3838,13 +3838,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 1172,
-                  "end": 1178
+                  "start": 1126,
+                  "end": 1132
                 }
               },
               "loc": {
-                "start": 1172,
-                "end": 1178
+                "start": 1126,
+                "end": 1132
               }
             },
             "defaultValue": {
@@ -3852,14 +3852,14 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "value": "ASC",
               "block": false,
               "loc": {
-                "start": 1181,
-                "end": 1186
+                "start": 1135,
+                "end": 1140
               }
             },
             "directives": [],
             "loc": {
-              "start": 1160,
-              "end": 1186
+              "start": 1114,
+              "end": 1140
             }
           }
         ],
@@ -3873,29 +3873,29 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Tweet",
                 "loc": {
-                  "start": 1190,
-                  "end": 1195
+                  "start": 1147,
+                  "end": 1152
                 }
               },
               "loc": {
-                "start": 1190,
-                "end": 1195
+                "start": 1147,
+                "end": 1152
               }
             },
             "loc": {
-              "start": 1189,
-              "end": 1196
+              "start": 1146,
+              "end": 1153
             }
           },
           "loc": {
-            "start": 1189,
-            "end": 1197
+            "start": 1146,
+            "end": 1154
           }
         },
         "directives": [],
         "loc": {
-          "start": 1102,
-          "end": 1197
+          "start": 1042,
+          "end": 1154
         }
       }
     },
@@ -3911,8 +3911,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "TweetsMeta",
           "loc": {
-            "start": 1202,
-            "end": 1212
+            "start": 1157,
+            "end": 1167
           }
         },
         "arguments": [],
@@ -3922,13 +3922,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Meta",
             "loc": {
-              "start": 1214,
-              "end": 1218
+              "start": 1169,
+              "end": 1173
             }
           },
           "loc": {
-            "start": 1214,
-            "end": 1218
+            "start": 1169,
+            "end": 1173
           }
         },
         "directives": [
@@ -3938,20 +3938,20 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1220,
-                "end": 1230
+                "start": 1175,
+                "end": 1185
               }
             },
             "arguments": [],
             "loc": {
-              "start": 1219,
-              "end": 1230
+              "start": 1174,
+              "end": 1185
             }
           }
         ],
         "loc": {
-          "start": 1202,
-          "end": 1230
+          "start": 1157,
+          "end": 1185
         }
       }
     },
@@ -3969,8 +3969,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1240,
-                "end": 1242
+                "start": 1193,
+                "end": 1195
               }
             },
             "type": {
@@ -3981,24 +3981,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1244,
-                    "end": 1246
+                    "start": 1197,
+                    "end": 1199
                   }
                 },
                 "loc": {
-                  "start": 1244,
-                  "end": 1246
+                  "start": 1197,
+                  "end": 1199
                 }
               },
               "loc": {
-                "start": 1244,
-                "end": 1247
+                "start": 1197,
+                "end": 1200
               }
             },
             "directives": [],
             "loc": {
-              "start": 1240,
-              "end": 1247
+              "start": 1193,
+              "end": 1200
             }
           }
         }
@@ -4011,8 +4011,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "User",
           "loc": {
-            "start": 1235,
-            "end": 1239
+            "start": 1188,
+            "end": 1192
           }
         },
         "arguments": [
@@ -4022,8 +4022,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1240,
-                "end": 1242
+                "start": 1193,
+                "end": 1195
               }
             },
             "type": {
@@ -4034,24 +4034,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1244,
-                    "end": 1246
+                    "start": 1197,
+                    "end": 1199
                   }
                 },
                 "loc": {
-                  "start": 1244,
-                  "end": 1246
+                  "start": 1197,
+                  "end": 1199
                 }
               },
               "loc": {
-                "start": 1244,
-                "end": 1247
+                "start": 1197,
+                "end": 1200
               }
             },
             "directives": [],
             "loc": {
-              "start": 1240,
-              "end": 1247
+              "start": 1193,
+              "end": 1200
             }
           }
         ],
@@ -4061,13 +4061,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "User",
             "loc": {
-              "start": 1250,
-              "end": 1254
+              "start": 1203,
+              "end": 1207
             }
           },
           "loc": {
-            "start": 1250,
-            "end": 1254
+            "start": 1203,
+            "end": 1207
           }
         },
         "directives": [
@@ -4077,8 +4077,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1256,
-                "end": 1266
+                "start": 1209,
+                "end": 1219
               }
             },
             "arguments": [
@@ -4088,8 +4088,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "reason",
                   "loc": {
-                    "start": 1267,
-                    "end": 1273
+                    "start": 1220,
+                    "end": 1226
                   }
                 },
                 "value": {
@@ -4097,25 +4097,25 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "value": "Use \`Users\`.",
                   "block": false,
                   "loc": {
-                    "start": 1275,
-                    "end": 1289
+                    "start": 1228,
+                    "end": 1242
                   }
                 },
                 "loc": {
-                  "start": 1267,
-                  "end": 1289
+                  "start": 1220,
+                  "end": 1242
                 }
               }
             ],
             "loc": {
-              "start": 1255,
-              "end": 1290
+              "start": 1208,
+              "end": 1243
             }
           }
         ],
         "loc": {
-          "start": 1235,
-          "end": 1290
+          "start": 1188,
+          "end": 1243
         }
       }
     },
@@ -4133,8 +4133,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1301,
-                "end": 1303
+                "start": 1252,
+                "end": 1254
               }
             },
             "type": {
@@ -4149,34 +4149,34 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "kind": "Name",
                       "value": "ID",
                       "loc": {
-                        "start": 1306,
-                        "end": 1308
+                        "start": 1257,
+                        "end": 1259
                       }
                     },
                     "loc": {
-                      "start": 1306,
-                      "end": 1308
+                      "start": 1257,
+                      "end": 1259
                     }
                   },
                   "loc": {
-                    "start": 1306,
-                    "end": 1309
+                    "start": 1257,
+                    "end": 1260
                   }
                 },
                 "loc": {
-                  "start": 1305,
-                  "end": 1310
+                  "start": 1256,
+                  "end": 1261
                 }
               },
               "loc": {
-                "start": 1305,
-                "end": 1311
+                "start": 1256,
+                "end": 1262
               }
             },
             "directives": [],
             "loc": {
-              "start": 1301,
-              "end": 1311
+              "start": 1252,
+              "end": 1262
             }
           }
         }
@@ -4188,8 +4188,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "Users",
           "loc": {
-            "start": 1295,
-            "end": 1300
+            "start": 1246,
+            "end": 1251
           }
         },
         "arguments": [
@@ -4199,8 +4199,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1301,
-                "end": 1303
+                "start": 1252,
+                "end": 1254
               }
             },
             "type": {
@@ -4215,34 +4215,34 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "kind": "Name",
                       "value": "ID",
                       "loc": {
-                        "start": 1306,
-                        "end": 1308
+                        "start": 1257,
+                        "end": 1259
                       }
                     },
                     "loc": {
-                      "start": 1306,
-                      "end": 1308
+                      "start": 1257,
+                      "end": 1259
                     }
                   },
                   "loc": {
-                    "start": 1306,
-                    "end": 1309
+                    "start": 1257,
+                    "end": 1260
                   }
                 },
                 "loc": {
-                  "start": 1305,
-                  "end": 1310
+                  "start": 1256,
+                  "end": 1261
                 }
               },
               "loc": {
-                "start": 1305,
-                "end": 1311
+                "start": 1256,
+                "end": 1262
               }
             },
             "directives": [],
             "loc": {
-              "start": 1301,
-              "end": 1311
+              "start": 1252,
+              "end": 1262
             }
           }
         ],
@@ -4256,29 +4256,29 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "User",
                 "loc": {
-                  "start": 1315,
-                  "end": 1319
+                  "start": 1266,
+                  "end": 1270
                 }
               },
               "loc": {
-                "start": 1315,
-                "end": 1319
+                "start": 1266,
+                "end": 1270
               }
             },
             "loc": {
-              "start": 1314,
-              "end": 1320
+              "start": 1265,
+              "end": 1271
             }
           },
           "loc": {
-            "start": 1314,
-            "end": 1321
+            "start": 1265,
+            "end": 1272
           }
         },
         "directives": [],
         "loc": {
-          "start": 1295,
-          "end": 1321
+          "start": 1246,
+          "end": 1272
         }
       }
     },
@@ -4294,8 +4294,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "NotificationsMeta",
           "loc": {
-            "start": 1326,
-            "end": 1343
+            "start": 1275,
+            "end": 1292
           }
         },
         "arguments": [],
@@ -4305,13 +4305,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Meta",
             "loc": {
-              "start": 1345,
-              "end": 1349
+              "start": 1294,
+              "end": 1298
             }
           },
           "loc": {
-            "start": 1345,
-            "end": 1349
+            "start": 1294,
+            "end": 1298
           }
         },
         "directives": [
@@ -4321,20 +4321,20 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "deprecated",
               "loc": {
-                "start": 1351,
-                "end": 1361
+                "start": 1300,
+                "end": 1310
               }
             },
             "arguments": [],
             "loc": {
-              "start": 1350,
-              "end": 1361
+              "start": 1299,
+              "end": 1310
             }
           }
         ],
         "loc": {
-          "start": 1326,
-          "end": 1361
+          "start": 1275,
+          "end": 1310
         }
       }
     }
@@ -4355,8 +4355,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "input",
               "loc": {
-                "start": 1407,
-                "end": 1412
+                "start": 1349,
+                "end": 1354
               }
             },
             "type": {
@@ -4365,13 +4365,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1414,
-                  "end": 1426
+                  "start": 1356,
+                  "end": 1368
                 }
               },
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "directives": [
@@ -4381,8 +4381,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "deprecated",
                   "loc": {
-                    "start": 1428,
-                    "end": 1438
+                    "start": 1370,
+                    "end": 1380
                   }
                 },
                 "arguments": [
@@ -4392,8 +4392,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "kind": "Name",
                       "value": "reason",
                       "loc": {
-                        "start": 1439,
-                        "end": 1445
+                        "start": 1381,
+                        "end": 1387
                       }
                     },
                     "value": {
@@ -4401,25 +4401,25 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "value": "Use \`content\`.",
                       "block": false,
                       "loc": {
-                        "start": 1447,
-                        "end": 1463
+                        "start": 1389,
+                        "end": 1405
                       }
                     },
                     "loc": {
-                      "start": 1439,
-                      "end": 1463
+                      "start": 1381,
+                      "end": 1405
                     }
                   }
                 ],
                 "loc": {
-                  "start": 1427,
-                  "end": 1464
+                  "start": 1369,
+                  "end": 1406
                 }
               }
             ],
             "loc": {
-              "start": 1407,
-              "end": 1464
+              "start": 1349,
+              "end": 1406
             }
           }
         },
@@ -4433,8 +4433,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "content",
               "loc": {
-                "start": 1473,
-                "end": 1480
+                "start": 1411,
+                "end": 1418
               }
             },
             "type": {
@@ -4443,19 +4443,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1482,
-                  "end": 1494
+                  "start": 1420,
+                  "end": 1432
                 }
               },
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "directives": [],
             "loc": {
-              "start": 1473,
-              "end": 1494
+              "start": 1411,
+              "end": 1432
             }
           }
         }
@@ -4467,8 +4467,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "createTweet",
           "loc": {
-            "start": 1385,
-            "end": 1396
+            "start": 1332,
+            "end": 1343
           }
         },
         "arguments": [
@@ -4478,8 +4478,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "input",
               "loc": {
-                "start": 1407,
-                "end": 1412
+                "start": 1349,
+                "end": 1354
               }
             },
             "type": {
@@ -4488,13 +4488,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1414,
-                  "end": 1426
+                  "start": 1356,
+                  "end": 1368
                 }
               },
               "loc": {
-                "start": 1414,
-                "end": 1426
+                "start": 1356,
+                "end": 1368
               }
             },
             "directives": [
@@ -4504,8 +4504,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "deprecated",
                   "loc": {
-                    "start": 1428,
-                    "end": 1438
+                    "start": 1370,
+                    "end": 1380
                   }
                 },
                 "arguments": [
@@ -4515,8 +4515,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "kind": "Name",
                       "value": "reason",
                       "loc": {
-                        "start": 1439,
-                        "end": 1445
+                        "start": 1381,
+                        "end": 1387
                       }
                     },
                     "value": {
@@ -4524,25 +4524,25 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                       "value": "Use \`content\`.",
                       "block": false,
                       "loc": {
-                        "start": 1447,
-                        "end": 1463
+                        "start": 1389,
+                        "end": 1405
                       }
                     },
                     "loc": {
-                      "start": 1439,
-                      "end": 1463
+                      "start": 1381,
+                      "end": 1405
                     }
                   }
                 ],
                 "loc": {
-                  "start": 1427,
-                  "end": 1464
+                  "start": 1369,
+                  "end": 1406
                 }
               }
             ],
             "loc": {
-              "start": 1407,
-              "end": 1464
+              "start": 1349,
+              "end": 1406
             }
           },
           {
@@ -4551,8 +4551,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "content",
               "loc": {
-                "start": 1473,
-                "end": 1480
+                "start": 1411,
+                "end": 1418
               }
             },
             "type": {
@@ -4561,19 +4561,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "TweetContent",
                 "loc": {
-                  "start": 1482,
-                  "end": 1494
+                  "start": 1420,
+                  "end": 1432
                 }
               },
               "loc": {
-                "start": 1482,
-                "end": 1494
+                "start": 1420,
+                "end": 1432
               }
             },
             "directives": [],
             "loc": {
-              "start": 1473,
-              "end": 1494
+              "start": 1411,
+              "end": 1432
             }
           }
         ],
@@ -4583,19 +4583,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 1502,
-              "end": 1507
+              "start": 1438,
+              "end": 1443
             }
           },
           "loc": {
-            "start": 1502,
-            "end": 1507
+            "start": 1438,
+            "end": 1443
           }
         },
         "directives": [],
         "loc": {
-          "start": 1385,
-          "end": 1507
+          "start": 1332,
+          "end": 1443
         }
       }
     },
@@ -4613,8 +4613,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1524,
-                "end": 1526
+                "start": 1458,
+                "end": 1460
               }
             },
             "type": {
@@ -4625,24 +4625,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1528,
-                    "end": 1530
+                    "start": 1462,
+                    "end": 1464
                   }
                 },
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1531
+                "start": 1462,
+                "end": 1465
               }
             },
             "directives": [],
             "loc": {
-              "start": 1524,
-              "end": 1531
+              "start": 1458,
+              "end": 1465
             }
           }
         }
@@ -4654,8 +4654,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "deleteTweet",
           "loc": {
-            "start": 1512,
-            "end": 1523
+            "start": 1446,
+            "end": 1457
           }
         },
         "arguments": [
@@ -4665,8 +4665,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1524,
-                "end": 1526
+                "start": 1458,
+                "end": 1460
               }
             },
             "type": {
@@ -4677,24 +4677,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1528,
-                    "end": 1530
+                    "start": 1462,
+                    "end": 1464
                   }
                 },
                 "loc": {
-                  "start": 1528,
-                  "end": 1530
+                  "start": 1462,
+                  "end": 1464
                 }
               },
               "loc": {
-                "start": 1528,
-                "end": 1531
+                "start": 1462,
+                "end": 1465
               }
             },
             "directives": [],
             "loc": {
-              "start": 1524,
-              "end": 1531
+              "start": 1458,
+              "end": 1465
             }
           }
         ],
@@ -4704,13 +4704,13 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Tweet",
             "loc": {
-              "start": 1534,
-              "end": 1539
+              "start": 1468,
+              "end": 1473
             }
           },
           "loc": {
-            "start": 1534,
-            "end": 1539
+            "start": 1468,
+            "end": 1473
           }
         },
         "directives": [
@@ -4720,20 +4720,20 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "noDoc",
               "loc": {
-                "start": 1541,
-                "end": 1546
+                "start": 1475,
+                "end": 1480
               }
             },
             "arguments": [],
             "loc": {
-              "start": 1540,
-              "end": 1546
+              "start": 1474,
+              "end": 1480
             }
           }
         ],
         "loc": {
-          "start": 1512,
-          "end": 1546
+          "start": 1446,
+          "end": 1480
         }
       }
     },
@@ -4751,8 +4751,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1565,
-                "end": 1567
+                "start": 1497,
+                "end": 1499
               }
             },
             "type": {
@@ -4763,24 +4763,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1569,
-                    "end": 1571
+                    "start": 1501,
+                    "end": 1503
                   }
                 },
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1572
+                "start": 1501,
+                "end": 1504
               }
             },
             "directives": [],
             "loc": {
-              "start": 1565,
-              "end": 1572
+              "start": 1497,
+              "end": 1504
             }
           }
         }
@@ -4792,8 +4792,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "markTweetRead",
           "loc": {
-            "start": 1551,
-            "end": 1564
+            "start": 1483,
+            "end": 1496
           }
         },
         "arguments": [
@@ -4803,8 +4803,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 1565,
-                "end": 1567
+                "start": 1497,
+                "end": 1499
               }
             },
             "type": {
@@ -4815,24 +4815,24 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                   "kind": "Name",
                   "value": "ID",
                   "loc": {
-                    "start": 1569,
-                    "end": 1571
+                    "start": 1501,
+                    "end": 1503
                   }
                 },
                 "loc": {
-                  "start": 1569,
-                  "end": 1571
+                  "start": 1501,
+                  "end": 1503
                 }
               },
               "loc": {
-                "start": 1569,
-                "end": 1572
+                "start": 1501,
+                "end": 1504
               }
             },
             "directives": [],
             "loc": {
-              "start": 1565,
-              "end": 1572
+              "start": 1497,
+              "end": 1504
             }
           }
         ],
@@ -4842,19 +4842,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
             "kind": "Name",
             "value": "Boolean",
             "loc": {
-              "start": 1575,
-              "end": 1582
+              "start": 1507,
+              "end": 1514
             }
           },
           "loc": {
-            "start": 1575,
-            "end": 1582
+            "start": 1507,
+            "end": 1514
           }
         },
         "directives": [],
         "loc": {
-          "start": 1551,
-          "end": 1582
+          "start": 1483,
+          "end": 1514
         }
       }
     }
@@ -4874,8 +4874,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1716,
-                "end": 1721
+                "start": 1646,
+                "end": 1651
               }
             },
             "type": {
@@ -4884,19 +4884,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1723,
-                  "end": 1726
+                  "start": 1653,
+                  "end": 1656
                 }
               },
               "loc": {
-                "start": 1723,
-                "end": 1726
+                "start": 1653,
+                "end": 1656
               }
             },
             "directives": [],
             "loc": {
-              "start": 1716,
-              "end": 1726
+              "start": 1646,
+              "end": 1656
             }
           }
         }
@@ -4908,8 +4908,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
           "kind": "Name",
           "value": "Notifications",
           "loc": {
-            "start": 1702,
-            "end": 1715
+            "start": 1632,
+            "end": 1645
           }
         },
         "arguments": [
@@ -4919,8 +4919,8 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
               "kind": "Name",
               "value": "limit",
               "loc": {
-                "start": 1716,
-                "end": 1721
+                "start": 1646,
+                "end": 1651
               }
             },
             "type": {
@@ -4929,19 +4929,19 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 1723,
-                  "end": 1726
+                  "start": 1653,
+                  "end": 1656
                 }
               },
               "loc": {
-                "start": 1723,
-                "end": 1726
+                "start": 1653,
+                "end": 1656
               }
             },
             "directives": [],
             "loc": {
-              "start": 1716,
-              "end": 1726
+              "start": 1646,
+              "end": 1656
             }
           }
         ],
@@ -4955,29 +4955,29 @@ exports[`graphql getSchemaMap() returns schema types map 1`] = `
                 "kind": "Name",
                 "value": "Notification",
                 "loc": {
-                  "start": 1730,
-                  "end": 1742
+                  "start": 1660,
+                  "end": 1672
                 }
               },
               "loc": {
-                "start": 1730,
-                "end": 1742
+                "start": 1660,
+                "end": 1672
               }
             },
             "loc": {
-              "start": 1729,
-              "end": 1743
+              "start": 1659,
+              "end": 1673
             }
           },
           "loc": {
-            "start": 1729,
-            "end": 1744
+            "start": 1659,
+            "end": 1674
           }
         },
         "directives": [],
         "loc": {
-          "start": 1702,
-          "end": 1744
+          "start": 1632,
+          "end": 1674
         }
       }
     }
@@ -5036,8 +5036,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "after",
               "loc": {
-                "start": 86,
-                "end": 91
+                "start": 91,
+                "end": 96
               }
             },
             "type": {
@@ -5046,19 +5046,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 93,
-                  "end": 99
+                  "start": 98,
+                  "end": 104
                 }
               },
               "loc": {
-                "start": 93,
-                "end": 99
+                "start": 98,
+                "end": 104
               }
             },
             "directives": [],
             "loc": {
-              "start": 86,
-              "end": 99
+              "start": 91,
+              "end": 104
             }
           }
         },
@@ -5072,8 +5072,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "first",
               "loc": {
-                "start": 101,
-                "end": 106
+                "start": 109,
+                "end": 114
               }
             },
             "type": {
@@ -5082,19 +5082,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 108,
-                  "end": 111
+                  "start": 116,
+                  "end": 119
                 }
               },
               "loc": {
-                "start": 108,
-                "end": 111
+                "start": 116,
+                "end": 119
               }
             },
             "directives": [],
             "loc": {
-              "start": 101,
-              "end": 111
+              "start": 109,
+              "end": 119
             }
           }
         },
@@ -5108,8 +5108,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "before",
               "loc": {
-                "start": 113,
-                "end": 119
+                "start": 124,
+                "end": 130
               }
             },
             "type": {
@@ -5118,19 +5118,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 121,
-                  "end": 127
+                  "start": 132,
+                  "end": 138
                 }
               },
               "loc": {
-                "start": 121,
-                "end": 127
+                "start": 132,
+                "end": 138
               }
             },
             "directives": [],
             "loc": {
-              "start": 113,
-              "end": 127
+              "start": 124,
+              "end": 138
             }
           }
         },
@@ -5144,8 +5144,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "last",
               "loc": {
-                "start": 129,
-                "end": 133
+                "start": 143,
+                "end": 147
               }
             },
             "type": {
@@ -5154,19 +5154,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 135,
-                  "end": 138
+                  "start": 149,
+                  "end": 152
                 }
               },
               "loc": {
-                "start": 135,
-                "end": 138
+                "start": 149,
+                "end": 152
               }
             },
             "directives": [],
             "loc": {
-              "start": 129,
-              "end": 138
+              "start": 143,
+              "end": 152
             }
           }
         }
@@ -5189,8 +5189,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "after",
               "loc": {
-                "start": 86,
-                "end": 91
+                "start": 91,
+                "end": 96
               }
             },
             "type": {
@@ -5199,19 +5199,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 93,
-                  "end": 99
+                  "start": 98,
+                  "end": 104
                 }
               },
               "loc": {
-                "start": 93,
-                "end": 99
+                "start": 98,
+                "end": 104
               }
             },
             "directives": [],
             "loc": {
-              "start": 86,
-              "end": 99
+              "start": 91,
+              "end": 104
             }
           },
           {
@@ -5220,8 +5220,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "first",
               "loc": {
-                "start": 101,
-                "end": 106
+                "start": 109,
+                "end": 114
               }
             },
             "type": {
@@ -5230,19 +5230,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 108,
-                  "end": 111
+                  "start": 116,
+                  "end": 119
                 }
               },
               "loc": {
-                "start": 108,
-                "end": 111
+                "start": 116,
+                "end": 119
               }
             },
             "directives": [],
             "loc": {
-              "start": 101,
-              "end": 111
+              "start": 109,
+              "end": 119
             }
           },
           {
@@ -5251,8 +5251,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "before",
               "loc": {
-                "start": 113,
-                "end": 119
+                "start": 124,
+                "end": 130
               }
             },
             "type": {
@@ -5261,19 +5261,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "String",
                 "loc": {
-                  "start": 121,
-                  "end": 127
+                  "start": 132,
+                  "end": 138
                 }
               },
               "loc": {
-                "start": 121,
-                "end": 127
+                "start": 132,
+                "end": 138
               }
             },
             "directives": [],
             "loc": {
-              "start": 113,
-              "end": 127
+              "start": 124,
+              "end": 138
             }
           },
           {
@@ -5282,8 +5282,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "last",
               "loc": {
-                "start": 129,
-                "end": 133
+                "start": 143,
+                "end": 147
               }
             },
             "type": {
@@ -5292,19 +5292,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "Int",
                 "loc": {
-                  "start": 135,
-                  "end": 138
+                  "start": 149,
+                  "end": 152
                 }
               },
               "loc": {
-                "start": 135,
-                "end": 138
+                "start": 149,
+                "end": 152
               }
             },
             "directives": [],
             "loc": {
-              "start": 129,
-              "end": 138
+              "start": 143,
+              "end": 152
             }
           }
         ],
@@ -5316,24 +5316,24 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "Subscription",
               "loc": {
-                "start": 142,
-                "end": 154
+                "start": 159,
+                "end": 171
               }
             },
             "loc": {
-              "start": 142,
-              "end": 154
+              "start": 159,
+              "end": 171
             }
           },
           "loc": {
-            "start": 141,
-            "end": 155
+            "start": 158,
+            "end": 172
           }
         },
         "directives": [],
         "loc": {
           "start": 70,
-          "end": 155
+          "end": 172
         }
       }
     },
@@ -5351,8 +5351,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 171,
-                "end": 173
+                "start": 188,
+                "end": 190
               }
             },
             "type": {
@@ -5361,19 +5361,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 175,
-                  "end": 177
+                  "start": 192,
+                  "end": 194
                 }
               },
               "loc": {
-                "start": 175,
-                "end": 177
+                "start": 192,
+                "end": 194
               }
             },
             "directives": [],
             "loc": {
-              "start": 171,
-              "end": 177
+              "start": 188,
+              "end": 194
             }
           }
         }
@@ -5385,8 +5385,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
           "kind": "Name",
           "value": "subscription",
           "loc": {
-            "start": 158,
-            "end": 170
+            "start": 175,
+            "end": 187
           }
         },
         "arguments": [
@@ -5396,8 +5396,8 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
               "kind": "Name",
               "value": "id",
               "loc": {
-                "start": 171,
-                "end": 173
+                "start": 188,
+                "end": 190
               }
             },
             "type": {
@@ -5406,19 +5406,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
                 "kind": "Name",
                 "value": "ID",
                 "loc": {
-                  "start": 175,
-                  "end": 177
+                  "start": 192,
+                  "end": 194
                 }
               },
               "loc": {
-                "start": 175,
-                "end": 177
+                "start": 192,
+                "end": 194
               }
             },
             "directives": [],
             "loc": {
-              "start": 171,
-              "end": 177
+              "start": 188,
+              "end": 194
             }
           }
         ],
@@ -5428,19 +5428,19 @@ exports[`graphql getSchemaMap() returns schema types map with custom root types 
             "kind": "Name",
             "value": "Subscription",
             "loc": {
-              "start": 180,
-              "end": 192
+              "start": 197,
+              "end": 209
             }
           },
           "loc": {
-            "start": 180,
-            "end": 192
+            "start": 197,
+            "end": 209
           }
         },
         "directives": [],
         "loc": {
-          "start": 158,
-          "end": 192
+          "start": 175,
+          "end": 209
         }
       }
     }

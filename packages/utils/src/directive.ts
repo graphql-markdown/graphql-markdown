@@ -1,33 +1,14 @@
-import type { GraphQLDirective } from "graphql";
+import type {
+  DirectiveName,
+  CustomDirective,
+  CustomDirectiveMap,
+  CustomDirectiveOptions,
+  GraphQLDirective,
+} from "@graphql-markdown/types";
 
 import { isEmpty } from "./object";
 
 export const WILDCARD_DIRECTIVE = "*";
-
-export interface CustomDirectiveFunction {
-  (directive?: GraphQLDirective, node?: unknown): unknown;
-}
-
-export type CustomDirectiveResolver = "descriptor" | "tag";
-
-export type CustomDirectiveOptions = {
-  [name in CustomDirectiveResolver]?: CustomDirectiveFunction;
-};
-
-export type CustomDirective = {
-  [name: DirectiveName]: CustomDirectiveOptions;
-};
-
-export type DirectiveName = string & { _opaque: typeof DirectiveName };
-declare const DirectiveName: unique symbol;
-
-export type CustomDirectiveMapItem = {
-  type: GraphQLDirective;
-} & CustomDirectiveOptions;
-
-export type CustomDirectiveMap = {
-  [name: DirectiveName]: CustomDirectiveMapItem;
-};
 
 export function getCustomDirectives(
   {

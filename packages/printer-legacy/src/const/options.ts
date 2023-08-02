@@ -1,81 +1,33 @@
-import {
-  CustomDirectiveMap,
+import type {
+  CollapsibleOption,
   DirectiveName,
-  SchemaEntitiesGroupMap,
   GraphQLSchema,
-} from "@graphql-markdown/utils";
+  PrintTypeOptions,
+  PrinterConfigPrintTypeOptions,
+  SectionLevelValue,
+} from "@graphql-markdown/types";
 
-import { TypeDeprecatedOption, DeprecatedOption } from "core/src/config";
-export { TypeDeprecatedOption, DeprecatedOption } from "core/src/config";
-
-import {
-  HEADER_SECTION_ITEM_LEVEL,
-  HEADER_SECTION_LEVEL,
-  HEADER_SECTION_SUB_LEVEL,
-} from "./strings";
-
-export type RootTypeName =
-  | "DIRECTIVE"
-  | "ENUM"
-  | "INPUT"
-  | "INTERFACE"
-  | "MUTATION"
-  | "OPERATION"
-  | "QUERY"
-  | "SCALAR"
-  | "SUBSCRIPTION"
-  | "TYPE"
-  | "UNION";
-export type TypeLocale = { singular: string; plural: string } | string;
-export type RootTypeLocale = {
-  [name in RootTypeName]: TypeLocale;
-};
-
-export enum SectionLevel {
+export enum SectionLevels {
   NONE = "",
-  LEVEL_3 = HEADER_SECTION_LEVEL,
-  LEVEL_4 = HEADER_SECTION_SUB_LEVEL,
-  LEVEL_5 = HEADER_SECTION_ITEM_LEVEL,
+  LEVEL_3 = "###",
+  LEVEL_4 = "####",
+  LEVEL_5 = "#####",
 }
 
-export type ConfigPrintTypeOptions = {
-  codeSection?: boolean;
-  deprecated?: TypeDeprecatedOption;
-  parentTypePrefix?: boolean;
-  relatedTypeSection?: boolean;
-  typeBadges?: boolean;
-};
-
-export type CollapsibleOption = { dataOpen: string; dataClose: string };
-
-export type Options = {
-  basePath: string;
-  codeSection?: boolean;
-  collapsible?: CollapsibleOption;
-  customDirectives?: CustomDirectiveMap;
-  deprecated?: TypeDeprecatedOption;
-  groups?: SchemaEntitiesGroupMap;
-  level?: SectionLevel | string;
-  parentType?: string;
-  parentTypePrefix: boolean;
-  relatedTypeSection?: boolean;
-  schema?: GraphQLSchema;
-  skipDocDirective?: DirectiveName[];
-  typeBadges?: boolean;
-  withAttributes?: boolean;
-  header?: { toc?: boolean; pagination?: boolean };
-};
-
-export const PRINT_TYPE_DEFAULT_OPTIONS: Required<ConfigPrintTypeOptions> = {
-  codeSection: true,
-  deprecated: DeprecatedOption.DEFAULT,
-  parentTypePrefix: true,
-  relatedTypeSection: true,
-  typeBadges: true,
-};
+export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions> =
+  {
+    codeSection: true,
+    deprecated: "default",
+    parentTypePrefix: true,
+    relatedTypeSection: true,
+    typeBadges: true,
+  };
 
 export const DEFAULT_OPTIONS: Required<
-  Omit<Options, "schema" | "skipDocDirective" | "collapsible" | "parentType">
+  Omit<
+    PrintTypeOptions,
+    "schema" | "skipDocDirective" | "collapsible" | "parentType"
+  >
 > & {
   schema?: GraphQLSchema;
   skipDocDirective?: DirectiveName[];
@@ -88,7 +40,7 @@ export const DEFAULT_OPTIONS: Required<
   customDirectives: {},
   groups: {},
   header: { toc: true, pagination: true },
-  level: SectionLevel.LEVEL_3,
+  level: SectionLevels.LEVEL_3 as SectionLevelValue,
   parentType: undefined,
   schema: undefined,
   skipDocDirective: undefined,

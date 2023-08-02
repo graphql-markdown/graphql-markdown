@@ -37,7 +37,7 @@ import * as Group from "../../src/group";
 
 import * as Badge from "../../src/badge";
 
-import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
+import { DEFAULT_OPTIONS, PrintTypeOptions } from "../../src/const/options";
 
 describe("badge", () => {
   afterEach(() => {
@@ -75,7 +75,7 @@ describe("badge", () => {
     test("returns an empty string if no typeBadges option", () => {
       expect.assertions(1);
 
-      const badges = Badge.printBadges({}, {} as unknown as Options);
+      const badges = Badge.printBadges({}, {} as unknown as PrintTypeOptions);
 
       expect(badges).toBe("");
     });

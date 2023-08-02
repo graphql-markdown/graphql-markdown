@@ -35,7 +35,7 @@ jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
 import { Printer } from "../../src/printer";
-import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
+import { DEFAULT_OPTIONS, PrintTypeOptions } from "../../src/const/options";
 
 describe("Printer", () => {
   enum TypeGuard {
@@ -169,7 +169,7 @@ describe("Printer", () => {
     test("does nothing is options is defined", () => {
       expect.hasAssertions();
 
-      Printer.options = {} as Options;
+      Printer.options = {} as PrintTypeOptions;
 
       Printer.init();
 

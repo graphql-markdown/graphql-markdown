@@ -1,6 +1,14 @@
 import { GraphQLDirective, buildSchema } from "graphql";
 
-import { DEFAULT_OPTIONS, Options } from "../../src/const/options";
+import {
+  DirectiveName,
+  Badge,
+  PrintTypeOptions,
+  CustomDirectiveMap,
+  MDXString,
+} from "@graphql-markdown/types";
+
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -25,8 +33,6 @@ import {
   printCustomDirective,
   printCustomTags,
 } from "../../src/directive";
-
-import { Badge } from "../../src/badge";
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -63,23 +69,23 @@ describe("directive", () => {
     name: "Dummy",
     locations: [],
   });
-  const options: Options &
-    Required<{ customDirectives: Utils.CustomDirectiveMap }> = {
+  const options: PrintTypeOptions &
+    Required<{ customDirectives: CustomDirectiveMap }> = {
     ...DEFAULT_OPTIONS,
     customDirectives: {
-      ["testA" as Utils.DirectiveName]: {
+      ["testA" as DirectiveName]: {
         type: schema.getDirective("testA")!,
         descriptor,
         tag,
       },
-      ["nonExist" as Utils.DirectiveName]: {
+      ["nonExist" as DirectiveName]: {
         type: directiveNotDeclared,
         descriptor,
       },
-      ["noDescriptor" as Utils.DirectiveName]: {
+      ["noDescriptor" as DirectiveName]: {
         type: directiveNotDeclared,
       },
-    },
+    } as CustomDirectiveMap,
   };
 
   afterEach(() => {
@@ -91,9 +97,11 @@ describe("directive", () => {
       expect.assertions(1);
 
       const constDirectiveOption =
-        options.customDirectives["testA" as Utils.DirectiveName];
+        options.customDirectives["testA" as DirectiveName];
 
-      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest
+        .spyOn(Link, "printLink")
+        .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirective(type, constDirectiveOption, options))
         .toMatchInlineSnapshot(`
@@ -107,9 +115,11 @@ describe("directive", () => {
       expect.assertions(1);
 
       const constDirectiveOption =
-        options.customDirectives["noDescriptor" as Utils.DirectiveName];
+        options.customDirectives["noDescriptor" as DirectiveName];
 
-      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest
+        .spyOn(Link, "printLink")
+        .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(
         printCustomDirective(type, constDirectiveOption, options),
@@ -123,19 +133,23 @@ describe("directive", () => {
 
       jest.spyOn(Utils, "getConstDirectiveMap").mockReturnValue(undefined);
 
-      expect(printCustomDirectives(type, {} as unknown as Options)).toBe("");
+      expect(
+        printCustomDirectives(type, {} as unknown as PrintTypeOptions),
+      ).toBe("");
     });
 
     test("returns a MDX string of Directive components", () => {
       expect.assertions(1);
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as Utils.DirectiveName],
+        testA: options.customDirectives["testA" as DirectiveName],
       };
       jest
         .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
-      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest
+        .spyOn(Link, "printLink")
+        .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
         "### Directives
@@ -152,12 +166,14 @@ describe("directive", () => {
       expect.assertions(1);
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives["noDescriptor" as Utils.DirectiveName],
+        testA: options.customDirectives["noDescriptor" as DirectiveName],
       };
       jest
         .spyOn(Utils, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
-      jest.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)");
+      jest
+        .spyOn(Link, "printLink")
+        .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toBe("");
     });
@@ -178,7 +194,7 @@ describe("directive", () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as Utils.DirectiveName],
+        testA: options.customDirectives["testA" as DirectiveName],
       };
 
       jest
@@ -206,7 +222,7 @@ describe("directive", () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as Utils.DirectiveName],
+        testA: options.customDirectives["testA" as DirectiveName],
       };
       jest
         .spyOn(Utils, "getConstDirectiveMap")

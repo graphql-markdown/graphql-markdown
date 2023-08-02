@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-var-requires, no-var */
+/* eslint-disable @typescript-eslint/no-var-requires, no-var */
+
+import type { LoggerType } from "@graphql-markdown/types";
 
 declare global {
   var logger: LoggerType | undefined;
 }
-
-export type LoggerType = {
-  debug: Function;
-  error: Function;
-  info: Function;
-  log: Function;
-  success: Function;
-  warn: Function;
-};
 
 export const Logger = {
   setInstance: (module?: string): LoggerType => {
