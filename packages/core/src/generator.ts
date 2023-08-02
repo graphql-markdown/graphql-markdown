@@ -5,13 +5,13 @@ import {
   getGroups,
   getCustomDirectives,
   Logger,
-  SchemaEntity,
+  type SchemaEntity,
 } from "@graphql-markdown/utils";
 
 import { Renderer } from "./renderer";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { DiffMethod, Options } from "./config";
+import { DiffMethod, type Options } from "./config";
 
 const NS_PER_SEC = 1e9;
 const SEC_DECIMALS = 3;

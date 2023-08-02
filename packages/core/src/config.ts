@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 
 import type {
   CustomDirective,
+  CustomDirectiveOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,
@@ -195,7 +196,9 @@ export function getCustomDirectives(
     return undefined;
   }
 
-  for (const [name, option] of Object.entries(customDirectiveOptions)) {
+  for (const [name, option] of Object.entries<CustomDirectiveOptions>(
+    customDirectiveOptions,
+  )) {
     if (skipDocDirective.includes(name as DirectiveName)) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (

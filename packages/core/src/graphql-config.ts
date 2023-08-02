@@ -1,6 +1,6 @@
 import { Logger } from "@graphql-markdown/utils";
 
-import type { GraphQLProjectConfig } from "graphql-config/typings/project-config";
+import type { GraphQLProjectConfig } from "graphql-config";
 
 import type {
   PackageOptionsConfig,
