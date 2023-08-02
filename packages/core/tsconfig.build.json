@@ -4,13 +4,15 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
+
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": "."
   },
 
-  "references": [{
-    "path": "../utils/tsconfig.build.json"
-  }],
+  "references": [
+    { "path": "../utils/tsconfig.build.json" }
+  ],
 
   "include": [
     "src/**/*"

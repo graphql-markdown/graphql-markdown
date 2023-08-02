@@ -4,11 +4,11 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
+    
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": "."
   },
 
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

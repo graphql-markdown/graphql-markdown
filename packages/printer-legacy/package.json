@@ -54,7 +54,7 @@
     "test": "jest",
     "stryker": "stryker run",
     "build": "npm run clean && npm run compile",
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist && tsc --build --clean",
     "compile": "tsc -p tsconfig.build.json",
     "ts:check": "tsc -p tsconfig.build.json --noEmit"
   },

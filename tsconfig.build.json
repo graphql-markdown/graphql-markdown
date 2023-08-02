@@ -2,26 +2,24 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   
   "compilerOptions": {
-    "target": "es2021",
+    "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "removeComments": true,
 
-    "types": ["node", "@types/jest"],
+    "types": ["node"],
 
     "baseUrl": ".",
     "rootDir": "packages",
 
     "paths": {
-      "@graphql-markdown/*": [
-        "*/src/index.ts",
-        "*/src/index.js",
-        "*/dist/index.js"
-      ]
+      "@graphql-markdown/*": ["packages/*/src/index.ts"]
     }
   },
 
   "include": ["packages"],
-  "exclude": ["**/node_modules", "**/dist", "**/tests"]
+  "exclude": ["**/node_modules", "**/dist", "**/tests/*.test.ts"],
+  "files": []
 }

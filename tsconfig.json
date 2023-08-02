@@ -13,8 +13,9 @@
 
     "noEmit": true,
 
-    "baseUrl": "./packages"
+    "types": ["node", "@types/jest"],
   },
 
-  "exclude": ["**/node_modules", "**/dist"]
+  "exclude": ["**/node_modules", "**/dist"],
+  "files": []
 }
