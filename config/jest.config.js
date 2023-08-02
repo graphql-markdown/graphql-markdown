@@ -7,7 +7,6 @@ const projectConfig = (name) => ({
     "^.+\\.ts$": "ts-jest",
   },
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-  coverageDirectory: "<rootDir>../../.nyc_output",
   testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
   moduleNameMapper: {
     "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
@@ -19,7 +18,7 @@ module.exports = {
   rootDir: "../",
   preset: "ts-jest",
   collectCoverage: true,
-  coverageReporters: ["json"],
+  coverageReporters: ["json", "lcov"],
   moduleFileExtensions: ["ts", "js"],
   projects: [
     projectConfig("utils"),

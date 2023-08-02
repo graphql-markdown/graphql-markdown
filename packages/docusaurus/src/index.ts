@@ -1,24 +1,27 @@
 /* istanbul ignore file */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { generateDocFromSchema, config } = require("@graphql-markdown/core");
-const { logger: Logger } = require("@graphql-markdown/utils");
+import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
+import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
+import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
+import { Logger } from "@graphql-markdown/utils";
 
 const NAME = "docusaurus-graphql-doc-generator";
 const COMMAND = "graphql-to-doc";
 const DESCRIPTION = "Generate GraphQL Schema Documentation";
 const DEFAULT_ID = "default";
 
-const LOGGER_MODULE = require.resolve("@docusaurus/logger");
+export default function pluginGraphQLDocGenerator(
+  context: LoadContext,
+  options: PluginOptions,
+): Plugin {
+  const loggerModule = require.resolve("@docusaurus/logger");
+  Logger.setInstance(loggerModule);
 
-Logger.setInstance(LOGGER_MODULE);
+  const isDefaultId = options.id === DEFAULT_ID;
 
-module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
-  const isDefaultId = configOptions.id === DEFAULT_ID;
-
-  const command = isDefaultId ? COMMAND : `${COMMAND}:${configOptions.id}`;
+  const command = isDefaultId ? COMMAND : `${COMMAND}:${options.id}`;
   const description = isDefaultId
     ? DESCRIPTION
-    : `${DESCRIPTION} for configuration with id ${configOptions.id}`;
+    : `${DESCRIPTION} for configuration with id ${options.id}`;
 
   return {
     name: NAME,
@@ -54,17 +57,17 @@ module.exports = function pluginGraphQLDocGenerator(_, configOptions) {
           "Option for printing deprecated entities: `default`, `group` or `skip`",
         )
         .option("--pretty", "Prettify generated files")
-        .action(async (cliOptions) => {
-          const options = config.buildConfig(
-            configOptions,
+        .action(async (cliOptions: CliOptions) => {
+          const config = await buildConfig(
+            options as ConfigOptions,
             cliOptions,
-            configOptions.id,
+            options.id,
           );
           await generateDocFromSchema({
-            ...options,
-            loggerModule: LOGGER_MODULE,
+            ...config,
+            loggerModule: loggerModule,
           });
         });
     },
   };
-};
+}

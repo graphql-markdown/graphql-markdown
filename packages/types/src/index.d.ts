@@ -71,6 +71,7 @@ export type TypeDiffMethod = DiffMethodName | "NONE" | "FORCE";
 type Pointer = string | UnnormalizedTypeDefPointer;
 
 export type ConfigOptions = {
+  id?: string;
   baseURL?: string;
   customDirective?: CustomDirective;
   diffMethod?: TypeDiffMethod;

@@ -32,7 +32,9 @@
   },
   "dependencies": {
     "@graphql-markdown/core": "^1.6.3",
-    "@graphql-markdown/printer-legacy": "^1.4.3"
+    "@graphql-markdown/printer-legacy": "^1.4.3",
+    "@graphql-markdown/types": "^1.0.0",
+    "@docusaurus/types": "^2.4.1"
   },
   "peerDependencies": {
     "@docusaurus/logger": "*"
