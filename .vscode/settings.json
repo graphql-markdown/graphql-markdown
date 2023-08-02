@@ -67,13 +67,5 @@
   "./config"
   ],
   "jest.rootPath": ".",
-  "jest.disabledWorkspaceFolders": [
-    "graphql-markdown",
-    "printer-legacy",
-    "docusaurus",
-    "utils",
-    "core",
-    "diff"
-  ],
-  "jest.jestCommandLine": "jest --config=./config/jest.config.js",
+  "jest.jestCommandLine": "npm test --config=./config/jest.config.js",
 }
