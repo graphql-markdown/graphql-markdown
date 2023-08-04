@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import * as fs from "node:fs/promises";
 import { dirname } from "node:path";
 
 export const readFile = fs.readFile;

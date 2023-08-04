@@ -1,6 +1,5 @@
 import { vol } from "memfs";
-jest.mock("node:fs");
-jest.mock("fs");
+jest.mock("node:fs/promises");
 
 import { ensureDir, fileExists, saveFile } from "../../src/fs";
 
