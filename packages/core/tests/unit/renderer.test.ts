@@ -1,6 +1,9 @@
 import { vol } from "memfs";
-jest.mock("node:fs");
-jest.mock("fs");
+jest.mock("node:fs/promises");
+
+import { join } from "node:path";
+
+import { GraphQLScalarType, Kind } from "graphql";
 
 import type {
   TypeDeprecatedOption,
@@ -8,20 +11,17 @@ import type {
   MDXString,
 } from "@graphql-markdown/types";
 
-import { join } from "node:path";
-import fs from "node:fs";
-
-import { GraphQLScalarType, Kind } from "graphql";
-
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    __esModule: true,
     ...jest.requireActual("@graphql-markdown/utils"),
     isDeprecated: jest.fn(),
-    toSlug: (value: string) => value.toLowerCase(),
-    startCase: (value: string) => value,
+    ensureDir: jest.fn(),
+    fileExists: jest.fn(),
+    saveFile: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -80,7 +80,7 @@ describe("renderer", () => {
           "FooBar",
         );
 
-        expect(meta).toEqual({ category: "foobar", slug: "foobar/foobar" });
+        expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
         expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
       });
 
@@ -112,9 +112,15 @@ describe("renderer", () => {
       test("copies default homepage into output folder", async () => {
         expect.assertions(1);
 
+        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("Test Homepage");
+        const spy = jest.spyOn(Utils, "saveFile");
+
         await rendererInstance.renderHomepage("/assets/generated.md");
 
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
+        expect(spy).toHaveBeenCalledWith(
+          "/output/generated.md",
+          "Test Homepage",
+        );
       });
     });
 
@@ -148,54 +154,44 @@ describe("renderer", () => {
 
     describe("generateCategoryMetafile()", () => {
       test("generate _category_.yml file", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         const category = "foobar";
         const outputPath = "/output/docs";
+        const filePath = join(outputPath, "_category_.yml");
+
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
-        const content = fs.readFileSync(
-          join(outputPath, "_category_.yml"),
-          "utf-8",
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 1\nlink: null\n`,
         );
-
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
-        expect(content).toMatchInlineSnapshot(`
-          "label: foobar
-          position: 1
-          link: null
-          "
-        `);
       });
 
       test("generate _category_.yml file with generated index", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         const category = "foobar";
         const outputPath = "/output/docs";
+        const filePath = join(outputPath, "_category_.yml");
 
         rendererInstance.options = {
           ...DEFAULT_RENDERER_OPTIONS,
           index: true,
         };
 
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
+
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
-        const content = fs.readFileSync(
-          join(outputPath, "_category_.yml"),
-          "utf-8",
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
         );
-
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
-        expect(content).toMatchInlineSnapshot(`
-          "label: foobar
-          position: 1
-          link: 
-            type: generated-index
-            title: 'foobar overview'
-          "
-        `);
       });
 
       test("do not generate _category_.yml file if it exists", async () => {
@@ -204,26 +200,23 @@ describe("renderer", () => {
         const category = "foobar";
         const outputPath = "/output/docs";
 
-        const data = "The quick brown fox jumps over the lazy dog";
-
-        await Utils.ensureDir(outputPath);
-        fs.writeFileSync(join(outputPath, "_category_.yml"), data, "utf-8");
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
+        const spy = jest.spyOn(Utils, "saveFile");
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
-        const content = fs.readFileSync(
-          join(outputPath, "_category_.yml"),
-          "utf-8",
-        );
-
-        expect(content).toEqual(data);
+        expect(spy).not.toHaveBeenCalled();
       });
 
       test("generate _category_.yml file with sidebar position", async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         const category = "foobar";
         const outputPath = "/output/docs";
+        const filePath = join(outputPath, "_category_.yml");
+
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
 
         await rendererInstance.generateCategoryMetafile(
           category,
@@ -231,18 +224,10 @@ describe("renderer", () => {
           42,
         );
 
-        const content = fs.readFileSync(
-          join(outputPath, "_category_.yml"),
-          "utf-8",
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 42\nlink: null\n`,
         );
-
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
-        expect(content).toMatchInlineSnapshot(`
-          "label: foobar
-          position: 42
-          link: null
-          "
-        `);
       });
     });
 
