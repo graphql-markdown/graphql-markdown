@@ -91,6 +91,7 @@ describe("config", () => {
 
       expect(config).toEqual(
         expect.objectContaining({
+          id: DEFAULT_OPTIONS.id,
           baseURL: DEFAULT_OPTIONS.baseURL,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
@@ -157,6 +158,7 @@ describe("config", () => {
       const config = await buildConfig(configFileOpts);
 
       expect(config).toStrictEqual({
+        id: DEFAULT_OPTIONS.id,
         baseURL: configFileOpts.baseURL,
         diffMethod: configFileOpts.diffMethod,
         groupByDirective: configFileOpts.groupByDirective,
@@ -223,6 +225,7 @@ describe("config", () => {
       const config = await buildConfig(configFileOpts, cliOpts);
 
       expect(config).toStrictEqual({
+        id: DEFAULT_OPTIONS.id,
         baseURL: cliOpts.base,
         diffMethod: cliOpts.diff,
         groupByDirective: {
@@ -269,6 +272,7 @@ describe("config", () => {
       const input = await buildConfig(configFileOpts, cliOpts);
 
       expect(input).toStrictEqual({
+        id: DEFAULT_OPTIONS.id,
         baseURL: configFileOpts.baseURL,
         schemaLocation: cliOpts.schema,
         outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL!),
@@ -295,6 +299,7 @@ describe("config", () => {
       const input = await buildConfig({ loaders: {} }, cliOpts);
 
       expect(input).toStrictEqual({
+        id: DEFAULT_OPTIONS.id,
         baseURL: DEFAULT_OPTIONS.baseURL,
         schemaLocation: DEFAULT_OPTIONS.schema,
         outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),

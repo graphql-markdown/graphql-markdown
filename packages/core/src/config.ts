@@ -40,6 +40,7 @@ export const DEFAULT_OPTIONS: Required<
   customDirective: CustomDirective | undefined;
   loaders: LoaderOption | undefined;
 } = {
+  id: "default",
   baseURL: "schema",
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
@@ -101,6 +102,7 @@ export async function buildConfig(
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
     homepageLocation:
       cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
+    id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
     outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
