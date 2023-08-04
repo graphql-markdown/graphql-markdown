@@ -150,7 +150,8 @@ export class Renderer {
     name: string,
     type: unknown,
   ): Promise<Category | undefined> {
-    const PageRegex = /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
+    const PageRegex =
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
 
     const fileName = toSlug(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
