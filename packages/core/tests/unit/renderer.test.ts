@@ -98,13 +98,14 @@ describe("renderer", () => {
 
     describe("renderSidebar()", () => {
       test("creates Docusaurus compatible sidebar.js into output folder", async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
-        await rendererInstance.renderSidebar();
+        const spy = jest.spyOn(Utils, "saveFile");
 
-        expect(
-          vol.toJSON("/output/sidebar-schema.js", undefined, true),
-        ).toMatchSnapshot();
+        const filePath = await rendererInstance.renderSidebar();
+
+        expect(spy.mock.calls).toMatchSnapshot();
+        expect(filePath.endsWith("output/sidebar-schema.js")).toBeTruthy();
       });
     });
 
@@ -131,6 +132,7 @@ describe("renderer", () => {
         jest
           .spyOn(Printer, "printType")
           .mockImplementation(() => "content" as MDXString);
+
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
             name: "foo",

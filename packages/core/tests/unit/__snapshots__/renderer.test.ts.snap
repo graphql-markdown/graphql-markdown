@@ -47,8 +47,10 @@ link: null
 `;
 
 exports[`renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder 1`] = `
-{
-  "": "
+[
+  [
+    "/output/sidebar-schema.js",
+    "
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 
 module.exports = {
@@ -60,7 +62,9 @@ module.exports = {
   ]
 };
 ",
-}
+    undefined,
+  ],
+]
 `;
 
 exports[`renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
