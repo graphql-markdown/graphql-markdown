@@ -1,40 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file 1`] = `
-{
-  "docs/_category_.yml": "label: foobar
-position: 1
-link: null
-",
-}
-`;
-
-exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with generated index 1`] = `
-{
-  "docs/_category_.yml": "label: foobar
-position: 1
-link: 
-  type: generated-index
-  title: 'foobar overview'
-",
-}
-`;
-
-exports[`renderer class Renderer generateCategoryMetafile() generate _category_.yml file with sidebar position 1`] = `
-{
-  "docs/_category_.yml": "label: foobar
-position: 42
-link: null
-",
-}
-`;
-
-exports[`renderer class Renderer renderHomepage() copies default homepage into output folder 1`] = `
-{
-  "generated.md": "Test Homepage",
-}
-`;
-
 exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
 {
   "objects/_category_.yml": "label: objects
