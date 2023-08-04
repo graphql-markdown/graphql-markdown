@@ -1,13 +1,12 @@
 import { vol } from "memfs";
-jest.mock("node:fs"); // used for @graphql-markdown
-jest.mock("fs"); // used for graphql-config
 
 import { join } from "node:path";
 
 import { loadConfiguration } from "../../src/graphql-config";
 import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
 
-const filePath = join(__dirname, "..", "..", ".graphqlrc");
+jest.mock("graphql-config");
+import * as GraphQLConfig from "graphql-config";
 
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
@@ -25,10 +24,6 @@ describe("graphql-config", () => {
     test("returns undefined if graphql-config empty", async () => {
       expect.hasAssertions();
 
-      vol.fromJSON({
-        [filePath]: "",
-      });
-
       await expect(loadConfiguration()).resolves.toBeUndefined();
     });
 
@@ -44,17 +39,11 @@ describe("graphql-config", () => {
         ],
       ],
       [["http://localhost:4000/graphql", "./packages/bar/schema.graphql"]],
-    ])("returns config if graphql-config valid", async () => {
+    ])("returns config if graphql-config valid", async (schema) => {
       expect.hasAssertions();
 
       const graphqlConfig = {
-        schema: [
-          {
-            "http://localhost:4000/graphql": {
-              headers: { Authorization: true },
-            },
-          },
-        ],
+        schema,
         extensions: {
           "graphql-markdown": {
             baseURL: "test",
@@ -62,8 +51,16 @@ describe("graphql-config", () => {
         },
       };
 
-      vol.fromJSON({
-        [filePath]: JSON.stringify(graphqlConfig),
+      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+        getProject: jest.fn(() => ({
+          extension: jest.fn(() => ({
+            documents: undefined,
+            exclude: undefined,
+            include: undefined,
+            schema: graphqlConfig.schema,
+            ...graphqlConfig.extensions["graphql-markdown"],
+          })),
+        })),
       });
 
       await expect(
@@ -106,8 +103,16 @@ describe("graphql-config", () => {
         },
       };
 
-      vol.fromJSON({
-        [filePath]: JSON.stringify(graphqlConfig),
+      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+        getProject: jest.fn(() => ({
+          extension: jest.fn(() => ({
+            documents: undefined,
+            exclude: undefined,
+            include: undefined,
+            schema: graphqlConfig.schema,
+            ...graphqlConfig.extensions["graphql-markdown"],
+          })),
+        })),
       });
 
       await expect(
@@ -159,8 +164,16 @@ describe("graphql-config", () => {
         },
       };
 
-      vol.fromJSON({
-        [filePath]: JSON.stringify(graphqlConfig),
+      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+        getProject: jest.fn(() => ({
+          extension: jest.fn(() => ({
+            documents: undefined,
+            exclude: undefined,
+            include: undefined,
+            schema: graphqlConfig.projects.foo.schema,
+            ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
+          })),
+        })),
       });
 
       await expect(
@@ -190,28 +203,8 @@ describe("graphql-config", () => {
     test("returns undefined if project id does not exist", async () => {
       expect.hasAssertions();
 
-      const graphqlConfig = {
-        projects: {
-          foo: {
-            schema: [
-              {
-                "http://localhost:4000/graphql": {
-                  headers: { Authorization: true },
-                },
-              },
-            ],
-            extensions: {
-              "graphql-markdown": {
-                baseURL: "test",
-              },
-            },
-          },
-          bar: { schema: "./packages/bar/schema.graphql" },
-        },
-      };
-
-      vol.fromJSON({
-        [filePath]: JSON.stringify(graphqlConfig),
+      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+        getProject: jest.fn(() => undefined),
       });
 
       await expect(loadConfiguration("baz")).resolves.toBeUndefined();
@@ -238,8 +231,16 @@ describe("config", () => {
         },
       };
 
-      vol.fromJSON({
-        [filePath]: JSON.stringify(graphqlConfig),
+      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+        getProject: jest.fn(() => ({
+          extension: jest.fn(() => ({
+            documents: undefined,
+            exclude: undefined,
+            include: undefined,
+            schema: graphqlConfig.schema,
+            ...graphqlConfig.extensions["graphql-markdown"],
+          })),
+        })),
       });
 
       const config = await buildConfig();
