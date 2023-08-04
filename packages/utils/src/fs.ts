@@ -1,10 +1,10 @@
-import * as fs from "node:fs/promises";
+import fs from "node:fs/promises";
 import { dirname } from "node:path";
 
 export const readFile = fs.readFile;
 export const copyFile = fs.copyFile;
 
-export async function ensureDir(dirPath: string): Promise<undefined> {
+export async function ensureDir(dirPath: string): Promise<void> {
   if (!(await fileExists(dirPath))) {
     await fs.mkdir(dirPath, { recursive: true });
   }
@@ -12,8 +12,8 @@ export async function ensureDir(dirPath: string): Promise<undefined> {
 
 export async function fileExists(filePath: string): Promise<boolean> {
   try {
-    await fs.stat(filePath);
-    return true;
+    const stats = await fs.stat(filePath);
+    return typeof stats === "object";
   } catch (error) {
     return false;
   }
