@@ -1,16 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renderer class Renderer renderRootTypes() render root type 1`] = `
-{
-  "objects/_category_.yml": "label: objects
-position: 1
-link: null
-",
-  "objects/bar.mdx": "content",
-  "objects/foo.mdx": "content",
-}
-`;
-
 exports[`renderer class Renderer renderSidebar() creates Docusaurus compatible sidebar.js into output folder 1`] = `
 [
   [
@@ -30,10 +19,4 @@ module.exports = {
     undefined,
   ],
 ]
-`;
-
-exports[`renderer class Renderer renderTypeEntities() creates entity page into output folder 1`] = `
-{
-  "foobar/foobar.mdx": "Lorem ipsum",
-}
 `;

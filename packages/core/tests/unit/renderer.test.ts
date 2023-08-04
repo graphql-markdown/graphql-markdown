@@ -1,4 +1,3 @@
-import { vol } from "memfs";
 jest.mock("node:fs/promises");
 
 import { join } from "node:path";
@@ -41,12 +40,6 @@ describe("renderer", () => {
     const baseURL: string = "graphql";
 
     beforeEach(() => {
-      vol.fromJSON({
-        "/output": null,
-        "/temp": null,
-        "/assets/generated.md": "Test Homepage",
-      });
-
       rendererInstance = new Renderer(
         "/output",
         baseURL,
@@ -61,7 +54,6 @@ describe("renderer", () => {
     });
 
     afterEach(() => {
-      vol.reset();
       jest.restoreAllMocks();
     });
 
@@ -72,8 +64,9 @@ describe("renderer", () => {
         jest
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
-        const output = "/output/foobar";
+        const spy = jest.spyOn(Utils, "saveFile");
 
+        const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
           output,
           "FooBar",
@@ -81,17 +74,24 @@ describe("renderer", () => {
         );
 
         expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
       });
 
       test("do nothing if type is not defined", async () => {
         expect.assertions(1);
+
         jest.spyOn(Printer, "printType").mockReturnValue(undefined);
+
         const meta = await rendererInstance.renderTypeEntities(
           "test",
           "FooBar",
           null,
         );
+
         expect(meta).toBeUndefined();
       });
     });
@@ -127,11 +127,13 @@ describe("renderer", () => {
 
     describe("renderRootTypes()", () => {
       test("render root type", async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         jest
           .spyOn(Printer, "printType")
           .mockImplementation(() => "content" as MDXString);
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
+        const spy = jest.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
@@ -150,7 +152,18 @@ describe("renderer", () => {
           }),
         });
 
-        expect(vol.toJSON("/output", undefined, true)).toMatchSnapshot();
+        expect(spy).toHaveBeenNthCalledWith(
+          1,
+          "/output/objects/foo.mdx",
+          "content",
+          undefined,
+        );
+        expect(spy).toHaveBeenNthCalledWith(
+          2,
+          "/output/objects/bar.mdx",
+          "content",
+          undefined,
+        );
       });
     });
 
