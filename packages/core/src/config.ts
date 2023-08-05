@@ -29,8 +29,8 @@ export enum DeprecatedOption {
   SKIP = "skip",
 }
 
-export const DOCS_URL = "https://graphql-markdown.github.io/docs";
-export const PACKAGE_NAME = "@graphql-markdown/docusaurus";
+export const DOCS_URL = "https://graphql-markdown.github.io/docs" as const;
+export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
 export const ASSETS_LOCATION = join(__dirname, "../assets/");
 
 export const DEFAULT_OPTIONS: Required<

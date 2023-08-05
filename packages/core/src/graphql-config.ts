@@ -11,7 +11,7 @@ import { Logger } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
 
-export const EXTENSION_NAME = "graphql-markdown";
+export const EXTENSION_NAME = "graphql-markdown" as const;
 
 type ThrowOptions = {
   throwOnMissing: boolean;

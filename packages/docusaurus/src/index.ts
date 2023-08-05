@@ -4,10 +4,10 @@ import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import { Logger } from "@graphql-markdown/utils";
 
-const NAME = "docusaurus-graphql-doc-generator";
-const COMMAND = "graphql-to-doc";
-const DESCRIPTION = "Generate GraphQL Schema Documentation";
-const DEFAULT_ID = "default";
+const NAME = "docusaurus-graphql-doc-generator" as const;
+const COMMAND = "graphql-to-doc" as const;
+const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
+const DEFAULT_ID = "default" as const;
 
 export default function pluginGraphQLDocGenerator(
   context: LoadContext,

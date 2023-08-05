@@ -29,9 +29,9 @@ import {
 import { ASSETS_LOCATION } from "./config";
 const logger = Logger.getInstance();
 
-const SIDEBAR = "sidebar-schema.js";
-const HOMEPAGE_ID = "schema";
-const CATEGORY_YAML = "_category_.yml";
+const SIDEBAR = "sidebar-schema.js" as const;
+const HOMEPAGE_ID = "schema" as const;
+const CATEGORY_YAML = "_category_.yml" as const;
 
 enum SIDEBAR_POSITION {
   FIRST = 1,

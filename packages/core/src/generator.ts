@@ -14,8 +14,8 @@ import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
 import { DiffMethod } from "./config";
 
-const NS_PER_SEC = 1e9;
-const SEC_DECIMALS = 3;
+const NS_PER_SEC = 1e9 as const;
+const SEC_DECIMALS = 3 as const;
 
 export type GeneratorOptions = Options & { loggerModule?: string };
 

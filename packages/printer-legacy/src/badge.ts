@@ -18,7 +18,7 @@ import {
 import { getLinkCategory } from "./link";
 import { getGroup } from "./group";
 
-export const DEFAULT_CSS_CLASSNAME = "badge--secondary";
+export const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 export const getTypeBadges = (
   type: unknown,

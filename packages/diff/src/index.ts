@@ -18,8 +18,8 @@ import {
   printSchema,
 } from "@graphql-markdown/utils";
 
-export const SCHEMA_HASH_FILE = ".schema";
-export const SCHEMA_REF = "schema.graphql";
+export const SCHEMA_HASH_FILE = ".schema" as const;
+export const SCHEMA_REF = "schema.graphql" as const;
 export enum COMPARE_METHOD {
   DIFF = "SCHEMA-DIFF",
   HASH = "SCHEMA-HASH",
