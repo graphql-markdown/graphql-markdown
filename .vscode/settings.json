@@ -63,9 +63,7 @@
     "unionfs",
     "Yavin"
   ],
-  "eslint.workingDirectories": [
-  "./config"
-  ],
+  "eslint.workingDirectories": ["./config"],
   "jest.rootPath": ".",
-  "jest.jestCommandLine": "npm test --config=./config/jest.config.js",
+  "jest.jestCommandLine": "npm test --config=./config/jest.config.js"
 }

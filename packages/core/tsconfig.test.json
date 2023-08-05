@@ -15,5 +15,5 @@
   },
 
   "include": ["tests", "src", "assets"],
-  "exclude": ["**/data", "*.js", "**/dist"],
+  "exclude": ["**/data", "*.js", "**/dist"]
 }

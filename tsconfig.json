@@ -7,5 +7,5 @@
     { "path": "packages/diff" },
     { "path": "packages/printer-legacy" },
     { "path": "packages/docusaurus" }
-  ],
+  ]
 }

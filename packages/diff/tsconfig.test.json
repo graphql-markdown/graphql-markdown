@@ -3,7 +3,7 @@
 
   "compilerOptions": {
     "rootDir": "./",
-    
+
     "noEmit": true,
 
     "types": ["node", "@types/jest"],
@@ -13,7 +13,7 @@
       "@graphql-markdown/*": ["../*/src/index.ts"]
     }
   },
-  
+
   "include": ["tests", "src", "assets"],
   "exclude": ["**/data", "*.js", "**/dist"]
 }
