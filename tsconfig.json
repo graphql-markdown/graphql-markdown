@@ -1,21 +1,11 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  "files": [],
 
-  "extends": "./tsconfig.build.json",
-
-  "compilerOptions": {
-    "incremental": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-
-    "noEmit": true,
-
-    "types": ["node", "@types/jest"]
-  },
-
-  "exclude": ["**/node_modules", "**/dist"],
-  "files": []
+  "references": [
+    { "path": "packages/utils" },
+    { "path": "packages/core" },
+    { "path": "packages/diff" },
+    { "path": "packages/printer-legacy" },
+    { "path": "packages/docusaurus" }
+  ],
 }

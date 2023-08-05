@@ -4,7 +4,12 @@ const projectConfig = (name) => ({
   roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
   testEnvironment: "node",
   transform: {
-    "^.+\\.ts$": "ts-jest",
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        tsconfig: "<rootDir>/tsconfig.test.json",
+      },
+    ],
   },
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],

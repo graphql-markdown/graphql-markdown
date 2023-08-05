@@ -61,7 +61,9 @@
     "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
     "lint": "eslint \"packages/**/{src,tests,assets}/**\"",
     "check": "node ./scripts/dep-checks.js",
-    "build": "tsc --build",
+    "clean": "tsc --build --clean && npm run clean -ws --if-present",
+    "compile": "tsc --build",
+    "build": "npm run clean && npm run compile",
     "ts:check": "tsc --noEmit"
   },
   "prettier": "./config/.prettierrc.js",

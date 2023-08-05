@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "esnext",
+
+    "composite": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+
+    "paths": {
+      "@graphql-markdown/types": ["./packages/types/src/index.d.ts"],
+      "@graphql-markdown/*": ["./packages/*/src/index.ts"]
+    }
+  },
+
+  "include": ["packages"],
+  "exclude": ["**/tests", "**/data", "config", "*.js", "**/assets", "**/dist"]
+}

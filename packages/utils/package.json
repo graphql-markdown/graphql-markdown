@@ -51,12 +51,8 @@
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "jest",
     "stryker": "stryker run",
-    "build": "npm run clean && npm run compile",
-    "clean": "rm -rf ./dist && tsc --build --clean",
-    "compile": "tsc --project tsconfig.build.json",
-    "ts:check": "tsc -project tsconfig.build.json --noEmit"
+    "clean": "rm -rf ./dist"
   },
   "dependencies": {
     "@graphql-tools/load": "^8.0.0",

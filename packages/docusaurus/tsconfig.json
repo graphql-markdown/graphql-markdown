@@ -1,5 +1,18 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
 
-  "compilerOptions": {}
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "paths": {
+      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/*": ["../*/src/index.ts"]
+    }
+  },
+
+  "references": [
+    { "path": "../utils" }, 
+    { "path": "../core" }
+  ]
 }

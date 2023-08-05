@@ -27,8 +27,8 @@
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "jest",
-    "stryker": "stryker run"
+    "stryker": "stryker run",
+    "clean": "rm -rf ./dist"
   },
   "dependencies": {
     "@graphql-markdown/core": "^1.6.3",

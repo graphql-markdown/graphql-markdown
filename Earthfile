@@ -6,13 +6,14 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY package.json package-lock.json tsconfig.json tsconfig.build.json ./
+  COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
   COPY --dir config packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
 lint: 
   FROM +deps
+  RUN npm run ts:check
   IF [ ! $(EARTHLY_CI) ]
     RUN npm run prettier -- --write
     RUN npm run lint -- --fix
@@ -22,15 +23,19 @@ lint:
     RUN npm run lint
   END
 
+build:
+  FROM +lint
+  RUN npm run build
+
 unit-test:
-  FROM +deps
+  FROM +build
   RUN export NODE_ENV=ci
-  RUN npm test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects unit
+  RUN npm test /unit -- --runInBand
 
 integration-test:
-  FROM +deps
+  FROM +build
   RUN export NODE_ENV=ci
-  RUN npm run test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects integration
+  RUN npm run test /integration -- --runInBand
 
 mutation-test:
   FROM +deps
@@ -40,9 +45,8 @@ mutation-test:
   END
 
 build-package:
-  FROM +deps
+  FROM +build
   ARG --required package
-  RUN npm run build --if-present --workspace @graphql-markdown/$package
   RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
@@ -118,6 +122,7 @@ build-image:
 
 all:
   BUILD +lint
+  BUILD +build
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test
