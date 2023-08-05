@@ -373,3 +373,8 @@ export type PrintDirectiveOptions = Pick<
   "basePath" | "deprecated" | "parentTypePrefix"
 > &
   Partial<PrintTypeOptions>;
+
+export type IGetRelation = (
+  type: unknown,
+  schema: GraphQLSchema,
+) => Record<string, unknown[]> | undefined;

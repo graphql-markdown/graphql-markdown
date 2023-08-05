@@ -2,10 +2,8 @@ import { join } from "node:path";
 import { createHash } from "node:crypto";
 
 import { loadSchema } from "@graphql-tools/load";
-import { diff } from "@graphql-inspector/core";
+import { diff, type Change } from "@graphql-inspector/core";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-
-import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
 
 import type {
   FunctionCheckSchemaChanges,

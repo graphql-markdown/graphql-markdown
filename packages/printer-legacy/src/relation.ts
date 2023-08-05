@@ -1,5 +1,5 @@
 import type {
-  GraphQLSchema,
+  IGetRelation,
   MDXString,
   PrintTypeOptions,
   RootTypeName,
@@ -18,11 +18,6 @@ import { getRelationLink } from "./link";
 import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
-
-export type IGetRelation = (
-  type: unknown,
-  schema: GraphQLSchema,
-) => Record<string, unknown[]> | undefined;
 
 export const getRootTypeLocaleFromString = (
   text: string,
