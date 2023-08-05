@@ -1,6 +1,6 @@
 import {
-  Printer,
   PackageName,
+  Printer,
   PrinterConfig,
   PrinterOptions,
 } from "@graphql-markdown/types";

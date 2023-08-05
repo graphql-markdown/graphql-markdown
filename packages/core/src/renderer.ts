@@ -1,28 +1,29 @@
 import type {
-  SchemaEntitiesGroupMap,
+  Category,
   ConfigDocOptions,
-  TypeDeprecatedOption,
+  Printer,
+  PrintTypeOptions,
+  SchemaEntitiesGroupMap,
   SchemaEntity,
   SidebarsConfig,
-  PrintTypeOptions,
-  Printer,
+  TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
 
 import {
-  toSlug,
-  startCase,
-  pathUrl,
-  prettifyJavascript,
-  prettifyMarkdown,
-  saveFile,
-  ensureDir,
   copyFile,
-  readFile,
+  ensureDir,
   fileExists,
   isDeprecated,
   Logger,
+  pathUrl,
+  prettifyJavascript,
+  prettifyMarkdown,
+  readFile,
+  saveFile,
+  startCase,
+  toSlug,
 } from "@graphql-markdown/utils";
 
 import { ASSETS_LOCATION } from "./config";
@@ -36,8 +37,6 @@ enum SIDEBAR_POSITION {
   FIRST = 1,
   LAST = 999,
 }
-
-export type Category = { category: string; slug: string };
 
 export class Renderer {
   private printer: Printer;

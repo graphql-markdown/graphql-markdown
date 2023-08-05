@@ -1,11 +1,11 @@
 import type {
+  ClassName,
+  CliOptions,
+  ConfigOptions,
+  CustomDirective,
   DirectiveName,
   GraphQLDirective,
-  ConfigOptions,
-  ClassName,
   PackageName,
-  CustomDirective,
-  CliOptions,
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
@@ -13,12 +13,12 @@ import { join } from "node:path";
 
 import {
   buildConfig,
-  getSkipDocDirectives,
-  getSkipDocDirective,
-  parseGroupByOption,
-  getCustomDirectives,
   DEFAULT_OPTIONS,
   DiffMethod,
+  getCustomDirectives,
+  getSkipDocDirective,
+  getSkipDocDirectives,
+  parseGroupByOption,
 } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");

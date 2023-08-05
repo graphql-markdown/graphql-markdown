@@ -2,18 +2,18 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 
 import type {
-  ConfigOptions,
-  TypeDiffMethod,
   CliOptions,
-  Options,
   ConfigDocOptions,
+  ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
   CustomDirectiveOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,
+  Options,
   PackageName,
+  TypeDiffMethod,
 } from "@graphql-markdown/types";
 
 import { loadConfiguration } from "./graphql-config";

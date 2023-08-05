@@ -5,10 +5,10 @@ import { join } from "node:path";
 import { GraphQLScalarType, Kind } from "graphql";
 
 import type {
-  TypeDeprecatedOption,
-  SchemaEntity,
-  MDXString,
   IPrinter,
+  MDXString,
+  SchemaEntity,
+  TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/printer-legacy");

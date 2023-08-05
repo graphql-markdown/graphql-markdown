@@ -289,6 +289,8 @@ export type LoggerType = {
   warn: Function; // eslint-disable-line @typescript-eslint/ban-types
 };
 
+export type Category = { category: string; slug: string };
+
 // ---- //
 // @graphql-markdown/printer-legacy
 

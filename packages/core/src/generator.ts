@@ -1,11 +1,11 @@
-import type { SchemaEntity, Options } from "@graphql-markdown/types";
+import type { Options, SchemaEntity } from "@graphql-markdown/types";
 
 import {
-  getSchemaMap,
-  loadSchema,
+  getCustomDirectives,
   getDocumentLoaders,
   getGroups,
-  getCustomDirectives,
+  getSchemaMap,
+  loadSchema,
   Logger,
 } from "@graphql-markdown/utils";
 

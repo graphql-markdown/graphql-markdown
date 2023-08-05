@@ -1,10 +1,10 @@
 import type {
-  ConfigOptions,
-  LoaderOption,
-  PackageOptionsConfig,
   ClassName,
-  PackageConfig,
+  ConfigOptions,
   GraphQLProjectConfig,
+  LoaderOption,
+  PackageConfig,
+  PackageOptionsConfig,
 } from "@graphql-markdown/types";
 
 import { Logger } from "@graphql-markdown/utils";
