@@ -8,6 +8,7 @@ import type {
   TypeDeprecatedOption,
   SchemaEntity,
   MDXString,
+  IPrinter,
 } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/printer-legacy");
@@ -21,6 +22,7 @@ jest.mock("@graphql-markdown/utils", () => {
     ensureDir: jest.fn(),
     fileExists: jest.fn(),
     saveFile: jest.fn(),
+    copyFile: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -41,6 +43,7 @@ describe("renderer", () => {
 
     beforeEach(() => {
       rendererInstance = new Renderer(
+        Printer as unknown as typeof IPrinter,
         "/output",
         baseURL,
         undefined,
