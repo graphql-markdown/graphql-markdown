@@ -4,6 +4,7 @@ import type {
   TypeDeprecatedOption,
   SchemaEntity,
   SidebarsConfig,
+  PrintTypeOptions,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
@@ -158,7 +159,11 @@ export class Renderer {
 
     let content;
     try {
-      content = Printer.printType(fileName, type, this.options);
+      content = Printer.printType(
+        fileName,
+        type,
+        this.options as unknown as PrintTypeOptions,
+      );
       if (typeof content === "undefined") {
         return undefined;
       }

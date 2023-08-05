@@ -1,4 +1,5 @@
 import { vol } from "memfs";
+jest.mock("fs");
 jest.mock("node:fs/promises");
 
 import type { ClassName, MDXString } from "@graphql-markdown/types";
