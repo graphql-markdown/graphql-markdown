@@ -6,6 +6,7 @@ import { diff, type Change } from "@graphql-inspector/core";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 import type {
+  DiffMethodName,
   FunctionCheckSchemaChanges,
   GraphQLSchema,
 } from "@graphql-markdown/types";
@@ -19,12 +20,12 @@ import {
 
 export const SCHEMA_HASH_FILE = ".schema";
 export const SCHEMA_REF = "schema.graphql";
-export const COMPARE_METHOD = {
-  DIFF: "SCHEMA-DIFF",
-  HASH: "SCHEMA-HASH",
-  FORCE: "FORCE",
-  NONE: "NONE",
-};
+export enum COMPARE_METHOD {
+  DIFF = "SCHEMA-DIFF",
+  HASH = "SCHEMA-HASH",
+  FORCE = "FORCE",
+  NONE = "NONE",
+}
 
 export const getSchemaHash = (schema: GraphQLSchema): string => {
   const printedSchema = printSchema(schema);
@@ -44,7 +45,7 @@ export const getDiff = async (
 export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   schema: GraphQLSchema,
   outputDir: string,
-  method = COMPARE_METHOD.DIFF,
+  method: DiffMethodName = COMPARE_METHOD.DIFF as DiffMethodName,
 ): Promise<boolean> => {
   if (method === COMPARE_METHOD.DIFF) {
     const schemaRef = join(outputDir, SCHEMA_REF);

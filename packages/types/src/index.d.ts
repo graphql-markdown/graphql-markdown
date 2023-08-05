@@ -131,7 +131,7 @@ export type Options = Omit<
 export type FunctionCheckSchemaChanges = (
   schema: GraphQLSchema,
   tmpDir: string,
-  diffMethod?: unknown,
+  diffMethod?: DiffMethodName,
 ) => Promise<boolean>;
 
 //-----//

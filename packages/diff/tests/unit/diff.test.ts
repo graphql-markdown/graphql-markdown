@@ -1,6 +1,8 @@
 import { vol } from "memfs";
 jest.mock("node:fs/promises");
 
+import type { DiffMethodName } from "@graphql-markdown/types";
+
 jest.mock("graphql");
 import * as graphql from "graphql";
 
@@ -41,7 +43,7 @@ describe("lib", () => {
         const check: boolean = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          "FOOBAR",
+          "FOOBAR" as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
@@ -61,7 +63,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH,
+          COMPARE_METHOD.HASH as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
@@ -80,7 +82,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH,
+          COMPARE_METHOD.HASH as DiffMethodName,
         );
 
         expect(check).toBeFalsy();
@@ -98,7 +100,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH,
+          COMPARE_METHOD.HASH as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
@@ -133,7 +135,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF,
+          COMPARE_METHOD.DIFF as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
@@ -161,7 +163,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF,
+          COMPARE_METHOD.DIFF as DiffMethodName,
         );
 
         expect(check).toBeFalsy();
@@ -185,7 +187,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF,
+          COMPARE_METHOD.DIFF as DiffMethodName,
         );
 
         expect(check).toBeTruthy();

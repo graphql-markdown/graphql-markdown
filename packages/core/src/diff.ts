@@ -1,4 +1,5 @@
 import type {
+  DiffMethodName,
   FunctionCheckSchemaChanges,
   GraphQLSchema,
 } from "@graphql-markdown/types";
@@ -10,7 +11,7 @@ const logger = Logger.getInstance();
 export const hasChanges = async (
   schema: GraphQLSchema,
   tmpDir: string,
-  diffMethod: unknown,
+  diffMethod: DiffMethodName,
   diffModule: undefined | null | string = "@graphql-markdown/diff",
 ): Promise<boolean> => {
   if (
