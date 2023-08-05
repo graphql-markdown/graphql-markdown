@@ -1,5 +1,5 @@
 import {
-  IPrinter,
+  Printer,
   PackageName,
   PrinterConfig,
   PrinterOptions,
@@ -9,7 +9,7 @@ export const getPrinter = async (
   printerModule?: PackageName,
   config?: PrinterConfig,
   options?: PrinterOptions,
-): Promise<IPrinter> => {
+): Promise<Printer> => {
   if (typeof printerModule !== "string") {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',

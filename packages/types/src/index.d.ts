@@ -264,6 +264,7 @@ export abstract class IPrinter {
     options: Partial<PrinterOptions & PrinterConfig>,
   ): MDXString;
 }
+export type Printer = typeof IPrinter;
 
 export type PrinterConfig = {
   schema: GraphQLSchema;

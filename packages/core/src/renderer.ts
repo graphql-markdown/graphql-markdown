@@ -5,6 +5,7 @@ import type {
   SchemaEntity,
   SidebarsConfig,
   PrintTypeOptions,
+  Printer,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
@@ -25,7 +26,6 @@ import {
 } from "@graphql-markdown/utils";
 
 import { ASSETS_LOCATION } from "./config";
-import { Printer } from "@graphql-markdown/printer-legacy";
 const logger = Logger.getInstance();
 
 const SIDEBAR = "sidebar-schema.js";
@@ -40,6 +40,7 @@ enum SIDEBAR_POSITION {
 export type Category = { category: string; slug: string };
 
 export class Renderer {
+  private printer: Printer;
   group: SchemaEntitiesGroupMap | undefined;
   outputDir: string;
   baseURL: string;
@@ -47,12 +48,14 @@ export class Renderer {
   options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
 
   constructor(
+    printer: Printer,
     outputDir: string,
     baseURL: string,
     group: SchemaEntitiesGroupMap | undefined,
     prettify: boolean,
     docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption },
   ) {
+    this.printer = printer;
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
@@ -159,7 +162,7 @@ export class Renderer {
 
     let content;
     try {
-      content = Printer.printType(
+      content = this.printer.printType(
         fileName,
         type,
         this.options as unknown as PrintTypeOptions,
