@@ -72,3 +72,11 @@ jobs:
         with:
           parallel-finished: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+      name: Mock Build
+      runs-on: ubuntu-latest
+      needs: test
+      steps:
+        - name: TS Build
+          run: npm run build

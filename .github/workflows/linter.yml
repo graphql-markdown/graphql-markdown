@@ -24,6 +24,9 @@ jobs:
       - name: Install modules
         run: npm ci
 
+      - name: Run TS Check
+        run: npm run ts:check
+
       - name: Run Prettier
         run: npm run prettier -- --check
 
