@@ -19,6 +19,5 @@
     }
   },
 
-  "include": ["packages"],
   "exclude": ["**/tests", "**/data", "config", "*.js", "**/assets", "**/dist"]
 }
