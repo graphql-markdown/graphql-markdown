@@ -78,7 +78,7 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm config set update-notifier false
-  RUN npm install -g fs-extra jest 
+  RUN npm install -g jest 
   RUN npm install graphql-config
   COPY --dir ./packages/docusaurus/tests/e2e/specs ./__tests__/e2e/specs
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
