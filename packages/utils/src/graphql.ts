@@ -308,33 +308,33 @@ export function getConstDirectiveMap(
 }
 
 export function getTypeDirectiveArgValue(
-  directiveType: GraphQLDirective,
+  directive: GraphQLDirective,
   node: unknown,
   argName: string,
-): unknown {
-  const args = getTypeDirectiveValues(directiveType, node);
+): Record<string, unknown> | undefined {
+  const args = getTypeDirectiveValues(directive, node);
 
   if (typeof args === "undefined" || typeof args[argName] === "undefined") {
     throw new Error(`Directive argument '${argName}' not found!`);
   }
 
-  return args[argName];
+  return args[argName] as Record<string, unknown>;
 }
 
 export function getTypeDirectiveValues(
-  directiveType: GraphQLDirective,
+  directive: GraphQLDirective,
   type: unknown,
 ): Record<string, unknown> | undefined {
   if (hasAstNode(type)) {
     return getDirectiveValues(
-      directiveType,
+      directive,
       (<GraphQLNamedType>type).astNode as {
         readonly directives?: readonly DirectiveNode[];
       },
     );
   }
   return getDirectiveValues(
-    directiveType,
+    directive,
     (<ASTNode>type) as {
       readonly directives?: readonly DirectiveNode[];
     },

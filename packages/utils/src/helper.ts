@@ -4,24 +4,24 @@ import { getTypeDirectiveValues } from "./graphql";
 import { interpolate } from "./string";
 
 export function directiveDescriptor(
-  directiveType: GraphQLDirective,
+  directive: GraphQLDirective,
   type?: unknown,
   descriptionTemplate?: string,
 ) {
-  const values = getTypeDirectiveValues(directiveType, type);
+  const values = getTypeDirectiveValues(directive, type);
   if (typeof descriptionTemplate !== "string") {
-    return interpolate(directiveType.description || "", values);
+    return interpolate(directive.description ?? "", values);
   }
   return interpolate(descriptionTemplate, values);
 }
 
 export function directiveTag(
-  directiveType: GraphQLDirective,
+  directive: GraphQLDirective,
   type?: unknown,
   classname: string = "badge--secondary",
 ) {
   return {
-    text: `@${directiveType.name}`,
+    text: `@${directive.name}`,
     classname: classname,
   };
 }
