@@ -31,7 +31,11 @@ export enum DeprecatedOption {
 
 export const DOCS_URL = "https://graphql-markdown.github.io/docs" as const;
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
-export const ASSETS_LOCATION = join(__dirname, "../assets/");
+export const ASSET_HOMEPAGE_LOCATION = join(
+  require.resolve("@graphql-markdown/core"),
+  "assets",
+  "generated.md",
+);
 
 export const DEFAULT_OPTIONS: Required<
   Omit<ConfigOptions, "groupByDirective" | "customDirective" | "loaders">
@@ -50,7 +54,7 @@ export const DEFAULT_OPTIONS: Required<
     toc: true,
   },
   groupByDirective: undefined,
-  homepage: join(ASSETS_LOCATION, "generated.md"),
+  homepage: ASSET_HOMEPAGE_LOCATION,
   linkRoot: "/",
   loaders: undefined,
   pretty: false,
@@ -66,7 +70,7 @@ export const DEFAULT_OPTIONS: Required<
   schema: "./schema.graphql",
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   skipDocDirective: [],
-};
+} as const;
 
 export async function buildConfig(
   configFileOpts?: ConfigOptions,
@@ -82,7 +86,7 @@ export async function buildConfig(
     ...DEFAULT_OPTIONS,
     ...graphqlConfig,
     ...configFileOpts,
-  };
+  } as const;
 
   const baseURL = cliOpts.base ?? config.baseURL!;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);

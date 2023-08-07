@@ -11,5 +11,9 @@
     }
   },
 
-  "references": [{ "path": "../utils" }]
+  "references": [
+    { "path": "../utils" },
+    { "path": "../printer-legacy" } // needed for mutation tests only
+  ]
+  
 }

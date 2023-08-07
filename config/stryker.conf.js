@@ -32,7 +32,7 @@ const config = {
         ],
       },
       collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-      testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+      testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
     },
     enableFindRelatedTests: true,
   },
