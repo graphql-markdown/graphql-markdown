@@ -38,7 +38,7 @@ jobs:
       - name: Run Integration Tests
         run: |
           npm test /integration/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
-          [ ! -d "coverage" ] && exit 0
+          [ ! -d "./coverage/" ] && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
           mv ./coverage/* packages/${{ matrix.package }}/.nyc_output/integration/
 
@@ -57,7 +57,7 @@ jobs:
           parallel: true
           flag-name: package-${{ matrix.package }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./packages/${{ matrix.package }}/.nyc_output/lcov.info
+          path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
           base-path: ./packages/${{ matrix.package }}
 
   coverage:
