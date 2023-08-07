@@ -95,6 +95,7 @@
     "definition": "dist/index.d.ts"
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ]
 }

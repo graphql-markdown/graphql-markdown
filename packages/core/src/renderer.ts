@@ -201,7 +201,7 @@ export class Renderer {
 
   async renderSidebar(): Promise<string> {
     const { schemaSidebar }: SidebarsConfig = await import(
-      `${ASSETS_LOCATION}/sidebar.json`
+      join(ASSETS_LOCATION, "sidebar.json")
     );
 
     type SidebarItem = { type: string; id: string; dirName: string };
