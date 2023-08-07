@@ -33,14 +33,14 @@ jobs:
           npm test /unit/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/unit
-          mv ./coverage/* packages/${{ matrix.package }}/.nyc_output/unit/
+          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
 
       - name: Run Integration Tests
         run: |
           npm test /integration/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
-          mv ./coverage/* packages/${{ matrix.package }}/.nyc_output/integration/
+          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
 
       - name: Check Code Coverage
         run: |
