@@ -81,5 +81,8 @@ jobs:
       - name: Checkout Code Base
         uses: actions/checkout@v3
 
+      - name: Install modules
+        run: npm ci        
+
       - name: TS Build
         run: npm run build
