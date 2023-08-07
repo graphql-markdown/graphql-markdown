@@ -78,5 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v3
+
       - name: TS Build
         run: npm run build
