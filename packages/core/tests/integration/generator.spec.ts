@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import { vol } from "memfs";
 jest.mock("fs");
 jest.mock("node:fs/promises");
@@ -41,7 +43,7 @@ describe("renderer", () => {
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
-        schemaLocation: "tests/__data__/tweet.graphql",
+        schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         outputDir: "/output",
         linkRoot: "docs",
         homepageLocation: "/assets/generated.md",
@@ -70,7 +72,7 @@ describe("renderer", () => {
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
-        schemaLocation: "tests/__data__/tweet.graphql",
+        schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         outputDir: "/output",
         linkRoot: "docs",
         homepageLocation: "/assets/generated.md",
@@ -100,7 +102,10 @@ describe("renderer", () => {
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
-        schemaLocation: "tests/__data__/schema_with_grouping.graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
         outputDir: "/output",
         linkRoot: "docs",
         homepageLocation: "/assets/generated.md",

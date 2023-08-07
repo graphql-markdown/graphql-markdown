@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 import type {
   DiffMethodName,
   Options,
@@ -56,7 +58,11 @@ export const generateDocFromSchema = async ({
     return;
   }
 
-  const schema = await loadSchema(schemaLocation as string, loaders);
+  const schemaResolvedLocation = resolve(
+    process.cwd(),
+    schemaLocation as string,
+  );
+  const schema = await loadSchema(schemaResolvedLocation, loaders);
 
   if (diffMethod !== DiffMethod.NONE) {
     const changed = await hasChanges(
