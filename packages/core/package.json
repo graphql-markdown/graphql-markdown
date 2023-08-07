@@ -62,13 +62,15 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "^1.5.1",
-    "@graphql-markdown/types": "^1.0.0"
+    "@graphql-markdown/utils": "^1.5.1"
   },
   "peerDependencies": {
     "@graphql-markdown/diff": "^1.0.14",
     "@graphql-markdown/printer-legacy": "^1.4.3",
     "graphql-config": "^5.0.2"
+  },
+  "devDependencies": {
+    "@graphql-markdown/types": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@graphql-markdown/printer-legacy": {

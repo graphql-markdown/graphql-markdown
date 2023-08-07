@@ -55,7 +55,9 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-tools/load": "^8.0.0",
+    "@graphql-tools/load": "^8.0.0"
+  },
+  "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"
   },
   "peerDependencies": {
