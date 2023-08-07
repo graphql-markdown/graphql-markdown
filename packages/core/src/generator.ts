@@ -1,4 +1,8 @@
-import type { Options, SchemaEntity } from "@graphql-markdown/types";
+import type {
+  DiffMethodName,
+  Options,
+  SchemaEntity,
+} from "@graphql-markdown/types";
 
 import {
   getCustomDirectives,
@@ -55,7 +59,11 @@ export const generateDocFromSchema = async ({
   const schema = await loadSchema(schemaLocation as string, loaders);
 
   if (diffMethod !== DiffMethod.NONE) {
-    const changed = await hasChanges(schema, tmpDir, diffMethod);
+    const changed = await hasChanges(
+      schema,
+      tmpDir,
+      diffMethod as DiffMethodName,
+    );
     if (!changed) {
       logger.info(`No changes detected in schema "${schemaLocation}".`);
     }
