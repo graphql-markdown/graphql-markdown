@@ -50,6 +50,7 @@ If you aim at a code contribution, you will need the following tools:
 - [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
 - [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)\*
 - [earthly](https://earthly.dev/get-earthly)
+- [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 If you do not yet have an IDE, then I recommend [VS Code](https://code.visualstudio.com/download) for this project.
 
@@ -101,16 +102,17 @@ You should edit the documentation, or add new documentation files, directly in y
 
 > We are using a monorepo, so you might want to [read about monorepo](https://monorepo.tools/) before jumping into the code.
 
-The code base is full Javascript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
+The code base is full TypeScript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
 
 When making your changes, remember to check your code by running:
 
-- `npm run lint` checks that the code respects Javascript standards
-- `npm test -ws` runs the test suites
+- `npm run ts:check` checks that the code is TS compliant
+- `npm run lint` checks that the code respects coding standards
+- `npm test` runs the test suites
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `npm run lint` and `npm test -ws` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `npm run ts:check`, `npm run lint` and `npm test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
