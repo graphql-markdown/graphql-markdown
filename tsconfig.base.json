@@ -10,7 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
 
     "paths": {
