@@ -24,15 +24,16 @@ plugins: [
     {
       // ... other options
       loaders: {
-      GraphQLFileLoader: {
-        module: "@graphql-tools/graphql-file-loader",
-        options: {
-          rootTypes: {
-            query: "Root", // use custom root type Root for queries, instead of Query
-            subscription: "" // disable Subscription type
+        GraphQLFileLoader: {
+          module: "@graphql-tools/graphql-file-loader",
+          options: {
+            rootTypes: {
+              query: "Root", // use custom root type Root for queries, instead of Query
+              subscription: "" // disable Subscription type
+            },
           },
-        }
-      }
+        },
+      },
     },
   ],
 ],
