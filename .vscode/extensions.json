@@ -2,12 +2,12 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
-    "ms-azuretools.vscode-docker",
     "earthly.earthfile-syntax-highlighting",
     "knisterpeter.vscode-commitizen",
     "snyk-security.snyk-vulnerability-scanner",
     "graphql.vscode-graphql",
     "editorconfig.editorconfig",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next"
   ]
 }
