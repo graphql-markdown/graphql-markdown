@@ -36,7 +36,7 @@ const config = {
     },
     enableFindRelatedTests: true,
   },
-  mutate: ["src/**/*.ts"],
+  mutate: ["src/**/*.ts", "!src/**/prettier.ts"],
   ignorePatterns: ["dist", "coverage", "build", "docs", "config", "assets"],
   packageManager: "npm",
   reporters: ["html"],
