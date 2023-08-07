@@ -1,0 +1,5522 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`graphql getConstDirectiveMap returns custom directives map 1`] = `
+{
+  "testA": {
+    "descriptor": [Function],
+    "type": "@testA",
+  },
+}
+`;
+
+exports[`graphql getFields() returns list of type fields 1`] = `
+"[
+  {
+    "name": "createTweet",
+    "type": "Tweet",
+    "args": [
+      {
+        "name": "input",
+        "type": "TweetContent",
+        "deprecationReason": "Use \`content\`.",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "input",
+            "loc": {
+              "start": 1349,
+              "end": 1354
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "loc": {
+              "start": 1356,
+              "end": 1368
+            }
+          },
+          "directives": [
+            {
+              "kind": "Directive",
+              "name": {
+                "kind": "Name",
+                "value": "deprecated",
+                "loc": {
+                  "start": 1370,
+                  "end": 1380
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Argument",
+                  "name": {
+                    "kind": "Name",
+                    "value": "reason",
+                    "loc": {
+                      "start": 1381,
+                      "end": 1387
+                    }
+                  },
+                  "value": {
+                    "kind": "StringValue",
+                    "value": "Use \`content\`.",
+                    "block": false,
+                    "loc": {
+                      "start": 1389,
+                      "end": 1405
+                    }
+                  },
+                  "loc": {
+                    "start": 1381,
+                    "end": 1405
+                  }
+                }
+              ],
+              "loc": {
+                "start": 1369,
+                "end": 1406
+              }
+            }
+          ],
+          "loc": {
+            "start": 1349,
+            "end": 1406
+          }
+        }
+      },
+      {
+        "name": "content",
+        "type": "TweetContent",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "content",
+            "loc": {
+              "start": 1411,
+              "end": 1418
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "loc": {
+              "start": 1420,
+              "end": 1432
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1411,
+            "end": 1432
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "createTweet",
+        "loc": {
+          "start": 1332,
+          "end": 1343
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "input",
+            "loc": {
+              "start": 1349,
+              "end": 1354
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "loc": {
+              "start": 1356,
+              "end": 1368
+            }
+          },
+          "directives": [
+            {
+              "kind": "Directive",
+              "name": {
+                "kind": "Name",
+                "value": "deprecated",
+                "loc": {
+                  "start": 1370,
+                  "end": 1380
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Argument",
+                  "name": {
+                    "kind": "Name",
+                    "value": "reason",
+                    "loc": {
+                      "start": 1381,
+                      "end": 1387
+                    }
+                  },
+                  "value": {
+                    "kind": "StringValue",
+                    "value": "Use \`content\`.",
+                    "block": false,
+                    "loc": {
+                      "start": 1389,
+                      "end": 1405
+                    }
+                  },
+                  "loc": {
+                    "start": 1381,
+                    "end": 1405
+                  }
+                }
+              ],
+              "loc": {
+                "start": 1369,
+                "end": 1406
+              }
+            }
+          ],
+          "loc": {
+            "start": 1349,
+            "end": 1406
+          }
+        },
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "content",
+            "loc": {
+              "start": 1411,
+              "end": 1418
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "loc": {
+              "start": 1420,
+              "end": 1432
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1411,
+            "end": 1432
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1438,
+            "end": 1443
+          }
+        },
+        "loc": {
+          "start": 1438,
+          "end": 1443
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1332,
+        "end": 1443
+      }
+    }
+  },
+  {
+    "name": "deleteTweet",
+    "type": "Tweet",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1458,
+              "end": 1460
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1464
+              }
+            },
+            "loc": {
+              "start": 1462,
+              "end": 1465
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1458,
+            "end": 1465
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "deleteTweet",
+        "loc": {
+          "start": 1446,
+          "end": 1457
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1458,
+              "end": 1460
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1464
+              }
+            },
+            "loc": {
+              "start": 1462,
+              "end": 1465
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1458,
+            "end": 1465
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1468,
+            "end": 1473
+          }
+        },
+        "loc": {
+          "start": 1468,
+          "end": 1473
+        }
+      },
+      "directives": [
+        {
+          "kind": "Directive",
+          "name": {
+            "kind": "Name",
+            "value": "noDoc",
+            "loc": {
+              "start": 1475,
+              "end": 1480
+            }
+          },
+          "arguments": [],
+          "loc": {
+            "start": 1474,
+            "end": 1480
+          }
+        }
+      ],
+      "loc": {
+        "start": 1446,
+        "end": 1480
+      }
+    }
+  },
+  {
+    "name": "markTweetRead",
+    "type": "Boolean",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1497,
+              "end": 1499
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1503
+              }
+            },
+            "loc": {
+              "start": 1501,
+              "end": 1504
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1497,
+            "end": 1504
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "markTweetRead",
+        "loc": {
+          "start": 1483,
+          "end": 1496
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1497,
+              "end": 1499
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1503
+              }
+            },
+            "loc": {
+              "start": 1501,
+              "end": 1504
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1497,
+            "end": 1504
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Boolean",
+          "loc": {
+            "start": 1507,
+            "end": 1514
+          }
+        },
+        "loc": {
+          "start": 1507,
+          "end": 1514
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1483,
+        "end": 1514
+      }
+    }
+  }
+]"
+`;
+
+exports[`graphql getIntrospectionFieldsList() returns list of mutations 1`] = `
+"{
+  "createTweet": {
+    "name": "createTweet",
+    "type": "Tweet",
+    "args": [
+      {
+        "name": "input",
+        "type": "TweetContent",
+        "deprecationReason": "Use \`content\`.",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "input",
+            "loc": {
+              "start": 1349,
+              "end": 1354
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "loc": {
+              "start": 1356,
+              "end": 1368
+            }
+          },
+          "directives": [
+            {
+              "kind": "Directive",
+              "name": {
+                "kind": "Name",
+                "value": "deprecated",
+                "loc": {
+                  "start": 1370,
+                  "end": 1380
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Argument",
+                  "name": {
+                    "kind": "Name",
+                    "value": "reason",
+                    "loc": {
+                      "start": 1381,
+                      "end": 1387
+                    }
+                  },
+                  "value": {
+                    "kind": "StringValue",
+                    "value": "Use \`content\`.",
+                    "block": false,
+                    "loc": {
+                      "start": 1389,
+                      "end": 1405
+                    }
+                  },
+                  "loc": {
+                    "start": 1381,
+                    "end": 1405
+                  }
+                }
+              ],
+              "loc": {
+                "start": 1369,
+                "end": 1406
+              }
+            }
+          ],
+          "loc": {
+            "start": 1349,
+            "end": 1406
+          }
+        }
+      },
+      {
+        "name": "content",
+        "type": "TweetContent",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "content",
+            "loc": {
+              "start": 1411,
+              "end": 1418
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "loc": {
+              "start": 1420,
+              "end": 1432
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1411,
+            "end": 1432
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "createTweet",
+        "loc": {
+          "start": 1332,
+          "end": 1343
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "input",
+            "loc": {
+              "start": 1349,
+              "end": 1354
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "loc": {
+              "start": 1356,
+              "end": 1368
+            }
+          },
+          "directives": [
+            {
+              "kind": "Directive",
+              "name": {
+                "kind": "Name",
+                "value": "deprecated",
+                "loc": {
+                  "start": 1370,
+                  "end": 1380
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Argument",
+                  "name": {
+                    "kind": "Name",
+                    "value": "reason",
+                    "loc": {
+                      "start": 1381,
+                      "end": 1387
+                    }
+                  },
+                  "value": {
+                    "kind": "StringValue",
+                    "value": "Use \`content\`.",
+                    "block": false,
+                    "loc": {
+                      "start": 1389,
+                      "end": 1405
+                    }
+                  },
+                  "loc": {
+                    "start": 1381,
+                    "end": 1405
+                  }
+                }
+              ],
+              "loc": {
+                "start": 1369,
+                "end": 1406
+              }
+            }
+          ],
+          "loc": {
+            "start": 1349,
+            "end": 1406
+          }
+        },
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "content",
+            "loc": {
+              "start": 1411,
+              "end": 1418
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "TweetContent",
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "loc": {
+              "start": 1420,
+              "end": 1432
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1411,
+            "end": 1432
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1438,
+            "end": 1443
+          }
+        },
+        "loc": {
+          "start": 1438,
+          "end": 1443
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1332,
+        "end": 1443
+      }
+    }
+  },
+  "deleteTweet": {
+    "name": "deleteTweet",
+    "type": "Tweet",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1458,
+              "end": 1460
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1464
+              }
+            },
+            "loc": {
+              "start": 1462,
+              "end": 1465
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1458,
+            "end": 1465
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "deleteTweet",
+        "loc": {
+          "start": 1446,
+          "end": 1457
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1458,
+              "end": 1460
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1464
+              }
+            },
+            "loc": {
+              "start": 1462,
+              "end": 1465
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1458,
+            "end": 1465
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1468,
+            "end": 1473
+          }
+        },
+        "loc": {
+          "start": 1468,
+          "end": 1473
+        }
+      },
+      "directives": [
+        {
+          "kind": "Directive",
+          "name": {
+            "kind": "Name",
+            "value": "noDoc",
+            "loc": {
+              "start": 1475,
+              "end": 1480
+            }
+          },
+          "arguments": [],
+          "loc": {
+            "start": 1474,
+            "end": 1480
+          }
+        }
+      ],
+      "loc": {
+        "start": 1446,
+        "end": 1480
+      }
+    }
+  },
+  "markTweetRead": {
+    "name": "markTweetRead",
+    "type": "Boolean",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1497,
+              "end": 1499
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1503
+              }
+            },
+            "loc": {
+              "start": 1501,
+              "end": 1504
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1497,
+            "end": 1504
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "markTweetRead",
+        "loc": {
+          "start": 1483,
+          "end": 1496
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1497,
+              "end": 1499
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1503
+              }
+            },
+            "loc": {
+              "start": 1501,
+              "end": 1504
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1497,
+            "end": 1504
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Boolean",
+          "loc": {
+            "start": 1507,
+            "end": 1514
+          }
+        },
+        "loc": {
+          "start": 1507,
+          "end": 1514
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1483,
+        "end": 1514
+      }
+    }
+  }
+}"
+`;
+
+exports[`graphql getIntrospectionFieldsList() returns list of queries 1`] = `
+"{
+  "Tweet": {
+    "name": "Tweet",
+    "type": "Tweet",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1024,
+              "end": 1026
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1028,
+                  "end": 1030
+                }
+              },
+              "loc": {
+                "start": 1028,
+                "end": 1030
+              }
+            },
+            "loc": {
+              "start": 1028,
+              "end": 1031
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1024,
+            "end": 1031
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "Tweet",
+        "loc": {
+          "start": 1018,
+          "end": 1023
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1024,
+              "end": 1026
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1028,
+                  "end": 1030
+                }
+              },
+              "loc": {
+                "start": 1028,
+                "end": 1030
+              }
+            },
+            "loc": {
+              "start": 1028,
+              "end": 1031
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1024,
+            "end": 1031
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1034,
+            "end": 1039
+          }
+        },
+        "loc": {
+          "start": 1034,
+          "end": 1039
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1018,
+        "end": 1039
+      }
+    }
+  },
+  "Tweets": {
+    "name": "Tweets",
+    "type": "[Tweet]!",
+    "args": [
+      {
+        "name": "limit",
+        "type": "Int",
+        "defaultValue": 5,
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1054,
+              "end": 1059
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1061,
+                "end": 1064
+              }
+            },
+            "loc": {
+              "start": 1061,
+              "end": 1064
+            }
+          },
+          "defaultValue": {
+            "kind": "IntValue",
+            "value": "5",
+            "loc": {
+              "start": 1067,
+              "end": 1068
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1054,
+            "end": 1068
+          }
+        }
+      },
+      {
+        "name": "skip",
+        "type": "Int",
+        "defaultValue": 0,
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "skip",
+            "loc": {
+              "start": 1073,
+              "end": 1077
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1079,
+                "end": 1082
+              }
+            },
+            "loc": {
+              "start": 1079,
+              "end": 1082
+            }
+          },
+          "defaultValue": {
+            "kind": "IntValue",
+            "value": "0",
+            "loc": {
+              "start": 1085,
+              "end": 1086
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1073,
+            "end": 1086
+          }
+        }
+      },
+      {
+        "name": "sort_field",
+        "type": "String",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "sort_field",
+            "loc": {
+              "start": 1091,
+              "end": 1101
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "String",
+              "loc": {
+                "start": 1103,
+                "end": 1109
+              }
+            },
+            "loc": {
+              "start": 1103,
+              "end": 1109
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1091,
+            "end": 1109
+          }
+        }
+      },
+      {
+        "name": "sort_order",
+        "type": "String",
+        "defaultValue": "ASC",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "sort_order",
+            "loc": {
+              "start": 1114,
+              "end": 1124
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "String",
+              "loc": {
+                "start": 1126,
+                "end": 1132
+              }
+            },
+            "loc": {
+              "start": 1126,
+              "end": 1132
+            }
+          },
+          "defaultValue": {
+            "kind": "StringValue",
+            "value": "ASC",
+            "block": false,
+            "loc": {
+              "start": 1135,
+              "end": 1140
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1114,
+            "end": 1140
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "Tweets",
+        "loc": {
+          "start": 1042,
+          "end": 1048
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1054,
+              "end": 1059
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1061,
+                "end": 1064
+              }
+            },
+            "loc": {
+              "start": 1061,
+              "end": 1064
+            }
+          },
+          "defaultValue": {
+            "kind": "IntValue",
+            "value": "5",
+            "loc": {
+              "start": 1067,
+              "end": 1068
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1054,
+            "end": 1068
+          }
+        },
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "skip",
+            "loc": {
+              "start": 1073,
+              "end": 1077
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1079,
+                "end": 1082
+              }
+            },
+            "loc": {
+              "start": 1079,
+              "end": 1082
+            }
+          },
+          "defaultValue": {
+            "kind": "IntValue",
+            "value": "0",
+            "loc": {
+              "start": 1085,
+              "end": 1086
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1073,
+            "end": 1086
+          }
+        },
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "sort_field",
+            "loc": {
+              "start": 1091,
+              "end": 1101
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "String",
+              "loc": {
+                "start": 1103,
+                "end": 1109
+              }
+            },
+            "loc": {
+              "start": 1103,
+              "end": 1109
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1091,
+            "end": 1109
+          }
+        },
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "sort_order",
+            "loc": {
+              "start": 1114,
+              "end": 1124
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "String",
+              "loc": {
+                "start": 1126,
+                "end": 1132
+              }
+            },
+            "loc": {
+              "start": 1126,
+              "end": 1132
+            }
+          },
+          "defaultValue": {
+            "kind": "StringValue",
+            "value": "ASC",
+            "block": false,
+            "loc": {
+              "start": 1135,
+              "end": 1140
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1114,
+            "end": 1140
+          }
+        }
+      ],
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Tweet",
+              "loc": {
+                "start": 1147,
+                "end": 1152
+              }
+            },
+            "loc": {
+              "start": 1147,
+              "end": 1152
+            }
+          },
+          "loc": {
+            "start": 1146,
+            "end": 1153
+          }
+        },
+        "loc": {
+          "start": 1146,
+          "end": 1154
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1042,
+        "end": 1154
+      }
+    }
+  },
+  "TweetsMeta": {
+    "name": "TweetsMeta",
+    "type": "Meta",
+    "args": [],
+    "deprecationReason": "No longer supported",
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "TweetsMeta",
+        "loc": {
+          "start": 1157,
+          "end": 1167
+        }
+      },
+      "arguments": [],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Meta",
+          "loc": {
+            "start": 1169,
+            "end": 1173
+          }
+        },
+        "loc": {
+          "start": 1169,
+          "end": 1173
+        }
+      },
+      "directives": [
+        {
+          "kind": "Directive",
+          "name": {
+            "kind": "Name",
+            "value": "deprecated",
+            "loc": {
+              "start": 1175,
+              "end": 1185
+            }
+          },
+          "arguments": [],
+          "loc": {
+            "start": 1174,
+            "end": 1185
+          }
+        }
+      ],
+      "loc": {
+        "start": 1157,
+        "end": 1185
+      }
+    }
+  },
+  "User": {
+    "name": "User",
+    "type": "User",
+    "args": [
+      {
+        "name": "id",
+        "type": "ID!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1193,
+              "end": 1195
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1197,
+                  "end": 1199
+                }
+              },
+              "loc": {
+                "start": 1197,
+                "end": 1199
+              }
+            },
+            "loc": {
+              "start": 1197,
+              "end": 1200
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1193,
+            "end": 1200
+          }
+        }
+      }
+    ],
+    "deprecationReason": "Use \`Users\`.",
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "User",
+        "loc": {
+          "start": 1188,
+          "end": 1192
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1193,
+              "end": 1195
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 1197,
+                  "end": 1199
+                }
+              },
+              "loc": {
+                "start": 1197,
+                "end": 1199
+              }
+            },
+            "loc": {
+              "start": 1197,
+              "end": 1200
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1193,
+            "end": 1200
+          }
+        }
+      ],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "User",
+          "loc": {
+            "start": 1203,
+            "end": 1207
+          }
+        },
+        "loc": {
+          "start": 1203,
+          "end": 1207
+        }
+      },
+      "directives": [
+        {
+          "kind": "Directive",
+          "name": {
+            "kind": "Name",
+            "value": "deprecated",
+            "loc": {
+              "start": 1209,
+              "end": 1219
+            }
+          },
+          "arguments": [
+            {
+              "kind": "Argument",
+              "name": {
+                "kind": "Name",
+                "value": "reason",
+                "loc": {
+                  "start": 1220,
+                  "end": 1226
+                }
+              },
+              "value": {
+                "kind": "StringValue",
+                "value": "Use \`Users\`.",
+                "block": false,
+                "loc": {
+                  "start": 1228,
+                  "end": 1242
+                }
+              },
+              "loc": {
+                "start": 1220,
+                "end": 1242
+              }
+            }
+          ],
+          "loc": {
+            "start": 1208,
+            "end": 1243
+          }
+        }
+      ],
+      "loc": {
+        "start": 1188,
+        "end": 1243
+      }
+    }
+  },
+  "Users": {
+    "name": "Users",
+    "type": "[User]!",
+    "args": [
+      {
+        "name": "id",
+        "type": "[ID!]!",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1252,
+              "end": 1254
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "ListType",
+              "type": {
+                "kind": "NonNullType",
+                "type": {
+                  "kind": "NamedType",
+                  "name": {
+                    "kind": "Name",
+                    "value": "ID",
+                    "loc": {
+                      "start": 1257,
+                      "end": 1259
+                    }
+                  },
+                  "loc": {
+                    "start": 1257,
+                    "end": 1259
+                  }
+                },
+                "loc": {
+                  "start": 1257,
+                  "end": 1260
+                }
+              },
+              "loc": {
+                "start": 1256,
+                "end": 1261
+              }
+            },
+            "loc": {
+              "start": 1256,
+              "end": 1262
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1252,
+            "end": 1262
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "Users",
+        "loc": {
+          "start": 1246,
+          "end": 1251
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "id",
+            "loc": {
+              "start": 1252,
+              "end": 1254
+            }
+          },
+          "type": {
+            "kind": "NonNullType",
+            "type": {
+              "kind": "ListType",
+              "type": {
+                "kind": "NonNullType",
+                "type": {
+                  "kind": "NamedType",
+                  "name": {
+                    "kind": "Name",
+                    "value": "ID",
+                    "loc": {
+                      "start": 1257,
+                      "end": 1259
+                    }
+                  },
+                  "loc": {
+                    "start": 1257,
+                    "end": 1259
+                  }
+                },
+                "loc": {
+                  "start": 1257,
+                  "end": 1260
+                }
+              },
+              "loc": {
+                "start": 1256,
+                "end": 1261
+              }
+            },
+            "loc": {
+              "start": 1256,
+              "end": 1262
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1252,
+            "end": 1262
+          }
+        }
+      ],
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "User",
+              "loc": {
+                "start": 1266,
+                "end": 1270
+              }
+            },
+            "loc": {
+              "start": 1266,
+              "end": 1270
+            }
+          },
+          "loc": {
+            "start": 1265,
+            "end": 1271
+          }
+        },
+        "loc": {
+          "start": 1265,
+          "end": 1272
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1246,
+        "end": 1272
+      }
+    }
+  },
+  "NotificationsMeta": {
+    "name": "NotificationsMeta",
+    "type": "Meta",
+    "args": [],
+    "deprecationReason": "No longer supported",
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "NotificationsMeta",
+        "loc": {
+          "start": 1275,
+          "end": 1292
+        }
+      },
+      "arguments": [],
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Meta",
+          "loc": {
+            "start": 1294,
+            "end": 1298
+          }
+        },
+        "loc": {
+          "start": 1294,
+          "end": 1298
+        }
+      },
+      "directives": [
+        {
+          "kind": "Directive",
+          "name": {
+            "kind": "Name",
+            "value": "deprecated",
+            "loc": {
+              "start": 1300,
+              "end": 1310
+            }
+          },
+          "arguments": [],
+          "loc": {
+            "start": 1299,
+            "end": 1310
+          }
+        }
+      ],
+      "loc": {
+        "start": 1275,
+        "end": 1310
+      }
+    }
+  }
+}"
+`;
+
+exports[`graphql getIntrospectionFieldsList() returns list of subscriptions 1`] = `
+"{
+  "Notifications": {
+    "name": "Notifications",
+    "type": "[Notification]!",
+    "args": [
+      {
+        "name": "limit",
+        "type": "Int",
+        "extensions": {},
+        "astNode": {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1646,
+              "end": 1651
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1653,
+                "end": 1656
+              }
+            },
+            "loc": {
+              "start": 1653,
+              "end": 1656
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1646,
+            "end": 1656
+          }
+        }
+      }
+    ],
+    "extensions": {},
+    "astNode": {
+      "kind": "FieldDefinition",
+      "name": {
+        "kind": "Name",
+        "value": "Notifications",
+        "loc": {
+          "start": 1632,
+          "end": 1645
+        }
+      },
+      "arguments": [
+        {
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": "limit",
+            "loc": {
+              "start": 1646,
+              "end": 1651
+            }
+          },
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Int",
+              "loc": {
+                "start": 1653,
+                "end": 1656
+              }
+            },
+            "loc": {
+              "start": 1653,
+              "end": 1656
+            }
+          },
+          "directives": [],
+          "loc": {
+            "start": 1646,
+            "end": 1656
+          }
+        }
+      ],
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Notification",
+              "loc": {
+                "start": 1660,
+                "end": 1672
+              }
+            },
+            "loc": {
+              "start": 1660,
+              "end": 1672
+            }
+          },
+          "loc": {
+            "start": 1659,
+            "end": 1673
+          }
+        },
+        "loc": {
+          "start": 1659,
+          "end": 1674
+        }
+      },
+      "directives": [],
+      "loc": {
+        "start": 1632,
+        "end": 1674
+      }
+    }
+  }
+}"
+`;
+
+exports[`graphql getRelationOfField returns queries, subscriptions and mutations using a type 1`] = `
+{
+  "directives": [
+    "@deprecated",
+    "@specifiedBy",
+  ],
+  "inputs": [],
+  "interfaces": [
+    "Record",
+  ],
+  "mutations": [
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 394,
+              "start": 378,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 385,
+                "start": 378,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 394,
+                "start": 387,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 393,
+                  "start": 387,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 393,
+                    "start": 387,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "subject",
+          "type": "String!",
+        },
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 410,
+              "start": 396,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 404,
+                "start": 396,
+              },
+              "value": "duration",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 410,
+                "start": 406,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 409,
+                  "start": 406,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 409,
+                    "start": 406,
+                  },
+                  "value": "Int",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "duration",
+          "type": "Int!",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 394,
+              "start": 378,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 385,
+                "start": 378,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 394,
+                "start": 387,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 393,
+                  "start": 387,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 393,
+                    "start": 387,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 410,
+              "start": 396,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 404,
+                "start": 396,
+              },
+              "value": "duration",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 410,
+                "start": 406,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 409,
+                  "start": 406,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 409,
+                    "start": 406,
+                  },
+                  "value": "Int",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 422,
+          "start": 365,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 377,
+            "start": 365,
+          },
+          "value": "addStudyItem",
+        },
+        "type": {
+          "kind": "NamedType",
+          "loc": {
+            "end": 422,
+            "start": 413,
+          },
+          "name": {
+            "kind": "Name",
+            "loc": {
+              "end": 422,
+              "start": 413,
+            },
+            "value": "StudyItem",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "addStudyItem",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "StudyItem",
+    },
+  ],
+  "objects": [
+    "StudyItem",
+  ],
+  "queries": [
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 257,
+              "start": 242,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 249,
+                "start": 242,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 257,
+                "start": 251,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 257,
+                  "start": 251,
+                },
+                "value": "String",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "subject",
+          "type": "String",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 257,
+              "start": 242,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 249,
+                "start": 242,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 257,
+                "start": 251,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 257,
+                  "start": 251,
+                },
+                "value": "String",
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 272,
+          "start": 228,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 241,
+            "start": 228,
+          },
+          "value": "getStudyItems",
+        },
+        "type": {
+          "kind": "ListType",
+          "loc": {
+            "end": 272,
+            "start": 260,
+          },
+          "type": {
+            "kind": "NonNullType",
+            "loc": {
+              "end": 271,
+              "start": 261,
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 270,
+                "start": 261,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 270,
+                  "start": 261,
+                },
+                "value": "StudyItem",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "getStudyItems",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[StudyItem!]",
+    },
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 307,
+              "start": 296,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 298,
+                "start": 296,
+              },
+              "value": "id",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 307,
+                "start": 300,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 306,
+                  "start": 300,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 306,
+                    "start": 300,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "id",
+          "type": "String!",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 307,
+              "start": 296,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 298,
+                "start": 296,
+              },
+              "value": "id",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 307,
+                "start": 300,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 306,
+                  "start": 300,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 306,
+                    "start": 300,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 319,
+          "start": 283,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 295,
+            "start": 283,
+          },
+          "value": "getStudyItem",
+        },
+        "type": {
+          "kind": "NamedType",
+          "loc": {
+            "end": 319,
+            "start": 310,
+          },
+          "name": {
+            "kind": "Name",
+            "loc": {
+              "end": 319,
+              "start": 310,
+            },
+            "value": "StudyItem",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "getStudyItem",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "StudyItem",
+    },
+  ],
+  "subscriptions": [],
+}
+`;
+
+exports[`graphql getRelationOfReturn returns queries, subscriptions and mutations using a type 1`] = `
+{
+  "mutations": [
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 308,
+              "start": 292,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 299,
+                "start": 292,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 308,
+                "start": 301,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 307,
+                  "start": 301,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 307,
+                    "start": 301,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "subject",
+          "type": "String!",
+        },
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 324,
+              "start": 310,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 318,
+                "start": 310,
+              },
+              "value": "duration",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 324,
+                "start": 320,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 323,
+                  "start": 320,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 323,
+                    "start": 320,
+                  },
+                  "value": "Int",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "duration",
+          "type": "Int!",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 308,
+              "start": 292,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 299,
+                "start": 292,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 308,
+                "start": 301,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 307,
+                  "start": 301,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 307,
+                    "start": 301,
+                  },
+                  "value": "String",
+                },
+              },
+            },
+          },
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 324,
+              "start": 310,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 318,
+                "start": 310,
+              },
+              "value": "duration",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 324,
+                "start": 320,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 323,
+                  "start": 320,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 323,
+                    "start": 320,
+                  },
+                  "value": "Int",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 336,
+          "start": 279,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 291,
+            "start": 279,
+          },
+          "value": "addStudyItem",
+        },
+        "type": {
+          "kind": "NamedType",
+          "loc": {
+            "end": 336,
+            "start": 327,
+          },
+          "name": {
+            "kind": "Name",
+            "loc": {
+              "end": 336,
+              "start": 327,
+            },
+            "value": "StudyItem",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "addStudyItem",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "StudyItem",
+    },
+  ],
+  "queries": [
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 175,
+              "start": 160,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 167,
+                "start": 160,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 175,
+                "start": 169,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 175,
+                  "start": 169,
+                },
+                "value": "String",
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "subject",
+          "type": "String",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 175,
+              "start": 160,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 167,
+                "start": 160,
+              },
+              "value": "subject",
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 175,
+                "start": 169,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 175,
+                  "start": 169,
+                },
+                "value": "String",
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 190,
+          "start": 146,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 159,
+            "start": 146,
+          },
+          "value": "getStudyItems",
+        },
+        "type": {
+          "kind": "ListType",
+          "loc": {
+            "end": 190,
+            "start": 178,
+          },
+          "type": {
+            "kind": "NonNullType",
+            "loc": {
+              "end": 189,
+              "start": 179,
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 188,
+                "start": 179,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 188,
+                  "start": 179,
+                },
+                "value": "StudyItem",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "getStudyItems",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[StudyItem!]",
+    },
+    {
+      "args": [
+        {
+          "astNode": {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 221,
+              "start": 214,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 216,
+                "start": 214,
+              },
+              "value": "id",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 221,
+                "start": 218,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 220,
+                  "start": 218,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 220,
+                    "start": 218,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+          "defaultValue": undefined,
+          "deprecationReason": undefined,
+          "description": undefined,
+          "extensions": {},
+          "name": "id",
+          "type": "ID!",
+        },
+      ],
+      "astNode": {
+        "arguments": [
+          {
+            "defaultValue": undefined,
+            "description": undefined,
+            "directives": [],
+            "kind": "InputValueDefinition",
+            "loc": {
+              "end": 221,
+              "start": 214,
+            },
+            "name": {
+              "kind": "Name",
+              "loc": {
+                "end": 216,
+                "start": 214,
+              },
+              "value": "id",
+            },
+            "type": {
+              "kind": "NonNullType",
+              "loc": {
+                "end": 221,
+                "start": 218,
+              },
+              "type": {
+                "kind": "NamedType",
+                "loc": {
+                  "end": 220,
+                  "start": 218,
+                },
+                "name": {
+                  "kind": "Name",
+                  "loc": {
+                    "end": 220,
+                    "start": 218,
+                  },
+                  "value": "ID",
+                },
+              },
+            },
+          },
+        ],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 233,
+          "start": 201,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 213,
+            "start": 201,
+          },
+          "value": "getStudyItem",
+        },
+        "type": {
+          "kind": "NamedType",
+          "loc": {
+            "end": 233,
+            "start": 224,
+          },
+          "name": {
+            "kind": "Name",
+            "loc": {
+              "end": 233,
+              "start": 224,
+            },
+            "value": "StudyItem",
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "getStudyItem",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "StudyItem",
+    },
+  ],
+  "subscriptions": [
+    {
+      "args": [],
+      "astNode": {
+        "arguments": [],
+        "description": undefined,
+        "directives": [],
+        "kind": "FieldDefinition",
+        "loc": {
+          "end": 418,
+          "start": 390,
+        },
+        "name": {
+          "kind": "Name",
+          "loc": {
+            "end": 404,
+            "start": 390,
+          },
+          "value": "listStudyItems",
+        },
+        "type": {
+          "kind": "ListType",
+          "loc": {
+            "end": 418,
+            "start": 406,
+          },
+          "type": {
+            "kind": "NonNullType",
+            "loc": {
+              "end": 417,
+              "start": 407,
+            },
+            "type": {
+              "kind": "NamedType",
+              "loc": {
+                "end": 416,
+                "start": 407,
+              },
+              "name": {
+                "kind": "Name",
+                "loc": {
+                  "end": 416,
+                  "start": 407,
+                },
+                "value": "StudyItem",
+              },
+            },
+          },
+        },
+      },
+      "deprecationReason": undefined,
+      "description": undefined,
+      "extensions": {},
+      "name": "listStudyItems",
+      "resolve": undefined,
+      "subscribe": undefined,
+      "type": "[StudyItem!]",
+    },
+  ],
+}
+`;
+
+exports[`graphql getSchemaMap() returns {} if root type no declared (issue #802) 1`] = `
+"{
+  "queries": {
+    "posts": {
+      "name": "posts",
+      "description": "Fetch all posts without any arguments. Default order is funky.",
+      "type": "[Post]",
+      "args": [],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "description": {
+          "kind": "StringValue",
+          "value": "Fetch all posts without any arguments. Default order is funky.",
+          "block": false,
+          "loc": {
+            "start": 950,
+            "end": 1014
+          }
+        },
+        "name": {
+          "kind": "Name",
+          "value": "posts",
+          "loc": {
+            "start": 1017,
+            "end": 1022
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Post",
+              "loc": {
+                "start": 1025,
+                "end": 1029
+              }
+            },
+            "loc": {
+              "start": 1025,
+              "end": 1029
+            }
+          },
+          "loc": {
+            "start": 1024,
+            "end": 1030
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 950,
+          "end": 1030
+        }
+      }
+    }
+  },
+  "mutations": {
+    "upvotePost": {
+      "name": "upvotePost",
+      "description": "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore.",
+      "type": "Post",
+      "args": [
+        {
+          "name": "postId",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "postId",
+              "loc": {
+                "start": 1193,
+                "end": 1199
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1201,
+                    "end": 1203
+                  }
+                },
+                "loc": {
+                  "start": 1201,
+                  "end": 1203
+                }
+              },
+              "loc": {
+                "start": 1201,
+                "end": 1204
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1193,
+              "end": 1204
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "description": {
+          "kind": "StringValue",
+          "value": "Upvote a post given the identifier. Once upvoted, it can't be downvoted anymore.",
+          "block": false,
+          "loc": {
+            "start": 1097,
+            "end": 1179
+          }
+        },
+        "name": {
+          "kind": "Name",
+          "value": "upvotePost",
+          "loc": {
+            "start": 1182,
+            "end": 1192
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "postId",
+              "loc": {
+                "start": 1193,
+                "end": 1199
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1201,
+                    "end": 1203
+                  }
+                },
+                "loc": {
+                  "start": 1201,
+                  "end": 1203
+                }
+              },
+              "loc": {
+                "start": 1201,
+                "end": 1204
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1193,
+              "end": 1204
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Post",
+            "loc": {
+              "start": 1207,
+              "end": 1211
+            }
+          },
+          "loc": {
+            "start": 1207,
+            "end": 1211
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1097,
+          "end": 1211
+        }
+      }
+    }
+  },
+  "subscriptions": {},
+  "directives": {
+    "include": "@include",
+    "skip": "@skip",
+    "deprecated": "@deprecated",
+    "specifiedBy": "@specifiedBy"
+  },
+  "objects": {
+    "Author": "Author",
+    "Post": "Post"
+  },
+  "unions": {},
+  "interfaces": {},
+  "enums": {},
+  "inputs": {},
+  "scalars": {
+    "ID": "ID",
+    "String": "String",
+    "Int": "Int",
+    "Boolean": "Boolean"
+  }
+}"
+`;
+
+exports[`graphql getSchemaMap() returns schema types map 1`] = `
+"{
+  "queries": {
+    "Tweet": {
+      "name": "Tweet",
+      "type": "Tweet",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1024,
+                "end": 1026
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1028,
+                    "end": 1030
+                  }
+                },
+                "loc": {
+                  "start": 1028,
+                  "end": 1030
+                }
+              },
+              "loc": {
+                "start": 1028,
+                "end": 1031
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1024,
+              "end": 1031
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "Tweet",
+          "loc": {
+            "start": 1018,
+            "end": 1023
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1024,
+                "end": 1026
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1028,
+                    "end": 1030
+                  }
+                },
+                "loc": {
+                  "start": 1028,
+                  "end": 1030
+                }
+              },
+              "loc": {
+                "start": 1028,
+                "end": 1031
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1024,
+              "end": 1031
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Tweet",
+            "loc": {
+              "start": 1034,
+              "end": 1039
+            }
+          },
+          "loc": {
+            "start": 1034,
+            "end": 1039
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1018,
+          "end": 1039
+        }
+      }
+    },
+    "Tweets": {
+      "name": "Tweets",
+      "type": "[Tweet]!",
+      "args": [
+        {
+          "name": "limit",
+          "type": "Int",
+          "defaultValue": 5,
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "limit",
+              "loc": {
+                "start": 1054,
+                "end": 1059
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1061,
+                  "end": 1064
+                }
+              },
+              "loc": {
+                "start": 1061,
+                "end": 1064
+              }
+            },
+            "defaultValue": {
+              "kind": "IntValue",
+              "value": "5",
+              "loc": {
+                "start": 1067,
+                "end": 1068
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1054,
+              "end": 1068
+            }
+          }
+        },
+        {
+          "name": "skip",
+          "type": "Int",
+          "defaultValue": 0,
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "skip",
+              "loc": {
+                "start": 1073,
+                "end": 1077
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1079,
+                  "end": 1082
+                }
+              },
+              "loc": {
+                "start": 1079,
+                "end": 1082
+              }
+            },
+            "defaultValue": {
+              "kind": "IntValue",
+              "value": "0",
+              "loc": {
+                "start": 1085,
+                "end": 1086
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1073,
+              "end": 1086
+            }
+          }
+        },
+        {
+          "name": "sort_field",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "sort_field",
+              "loc": {
+                "start": 1091,
+                "end": 1101
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 1103,
+                  "end": 1109
+                }
+              },
+              "loc": {
+                "start": 1103,
+                "end": 1109
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1091,
+              "end": 1109
+            }
+          }
+        },
+        {
+          "name": "sort_order",
+          "type": "String",
+          "defaultValue": "ASC",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "sort_order",
+              "loc": {
+                "start": 1114,
+                "end": 1124
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 1126,
+                  "end": 1132
+                }
+              },
+              "loc": {
+                "start": 1126,
+                "end": 1132
+              }
+            },
+            "defaultValue": {
+              "kind": "StringValue",
+              "value": "ASC",
+              "block": false,
+              "loc": {
+                "start": 1135,
+                "end": 1140
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1114,
+              "end": 1140
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "Tweets",
+          "loc": {
+            "start": 1042,
+            "end": 1048
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "limit",
+              "loc": {
+                "start": 1054,
+                "end": 1059
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1061,
+                  "end": 1064
+                }
+              },
+              "loc": {
+                "start": 1061,
+                "end": 1064
+              }
+            },
+            "defaultValue": {
+              "kind": "IntValue",
+              "value": "5",
+              "loc": {
+                "start": 1067,
+                "end": 1068
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1054,
+              "end": 1068
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "skip",
+              "loc": {
+                "start": 1073,
+                "end": 1077
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1079,
+                  "end": 1082
+                }
+              },
+              "loc": {
+                "start": 1079,
+                "end": 1082
+              }
+            },
+            "defaultValue": {
+              "kind": "IntValue",
+              "value": "0",
+              "loc": {
+                "start": 1085,
+                "end": 1086
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1073,
+              "end": 1086
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "sort_field",
+              "loc": {
+                "start": 1091,
+                "end": 1101
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 1103,
+                  "end": 1109
+                }
+              },
+              "loc": {
+                "start": 1103,
+                "end": 1109
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1091,
+              "end": 1109
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "sort_order",
+              "loc": {
+                "start": 1114,
+                "end": 1124
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 1126,
+                  "end": 1132
+                }
+              },
+              "loc": {
+                "start": 1126,
+                "end": 1132
+              }
+            },
+            "defaultValue": {
+              "kind": "StringValue",
+              "value": "ASC",
+              "block": false,
+              "loc": {
+                "start": 1135,
+                "end": 1140
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1114,
+              "end": 1140
+            }
+          }
+        ],
+        "type": {
+          "kind": "NonNullType",
+          "type": {
+            "kind": "ListType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Tweet",
+                "loc": {
+                  "start": 1147,
+                  "end": 1152
+                }
+              },
+              "loc": {
+                "start": 1147,
+                "end": 1152
+              }
+            },
+            "loc": {
+              "start": 1146,
+              "end": 1153
+            }
+          },
+          "loc": {
+            "start": 1146,
+            "end": 1154
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1042,
+          "end": 1154
+        }
+      }
+    },
+    "TweetsMeta": {
+      "name": "TweetsMeta",
+      "type": "Meta",
+      "args": [],
+      "deprecationReason": "No longer supported",
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "TweetsMeta",
+          "loc": {
+            "start": 1157,
+            "end": 1167
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Meta",
+            "loc": {
+              "start": 1169,
+              "end": 1173
+            }
+          },
+          "loc": {
+            "start": 1169,
+            "end": 1173
+          }
+        },
+        "directives": [
+          {
+            "kind": "Directive",
+            "name": {
+              "kind": "Name",
+              "value": "deprecated",
+              "loc": {
+                "start": 1175,
+                "end": 1185
+              }
+            },
+            "arguments": [],
+            "loc": {
+              "start": 1174,
+              "end": 1185
+            }
+          }
+        ],
+        "loc": {
+          "start": 1157,
+          "end": 1185
+        }
+      }
+    },
+    "User": {
+      "name": "User",
+      "type": "User",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1193,
+                "end": 1195
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1197,
+                    "end": 1199
+                  }
+                },
+                "loc": {
+                  "start": 1197,
+                  "end": 1199
+                }
+              },
+              "loc": {
+                "start": 1197,
+                "end": 1200
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1193,
+              "end": 1200
+            }
+          }
+        }
+      ],
+      "deprecationReason": "Use \`Users\`.",
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "User",
+          "loc": {
+            "start": 1188,
+            "end": 1192
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1193,
+                "end": 1195
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1197,
+                    "end": 1199
+                  }
+                },
+                "loc": {
+                  "start": 1197,
+                  "end": 1199
+                }
+              },
+              "loc": {
+                "start": 1197,
+                "end": 1200
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1193,
+              "end": 1200
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "User",
+            "loc": {
+              "start": 1203,
+              "end": 1207
+            }
+          },
+          "loc": {
+            "start": 1203,
+            "end": 1207
+          }
+        },
+        "directives": [
+          {
+            "kind": "Directive",
+            "name": {
+              "kind": "Name",
+              "value": "deprecated",
+              "loc": {
+                "start": 1209,
+                "end": 1219
+              }
+            },
+            "arguments": [
+              {
+                "kind": "Argument",
+                "name": {
+                  "kind": "Name",
+                  "value": "reason",
+                  "loc": {
+                    "start": 1220,
+                    "end": 1226
+                  }
+                },
+                "value": {
+                  "kind": "StringValue",
+                  "value": "Use \`Users\`.",
+                  "block": false,
+                  "loc": {
+                    "start": 1228,
+                    "end": 1242
+                  }
+                },
+                "loc": {
+                  "start": 1220,
+                  "end": 1242
+                }
+              }
+            ],
+            "loc": {
+              "start": 1208,
+              "end": 1243
+            }
+          }
+        ],
+        "loc": {
+          "start": 1188,
+          "end": 1243
+        }
+      }
+    },
+    "Users": {
+      "name": "Users",
+      "type": "[User]!",
+      "args": [
+        {
+          "name": "id",
+          "type": "[ID!]!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1252,
+                "end": 1254
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "ListType",
+                "type": {
+                  "kind": "NonNullType",
+                  "type": {
+                    "kind": "NamedType",
+                    "name": {
+                      "kind": "Name",
+                      "value": "ID",
+                      "loc": {
+                        "start": 1257,
+                        "end": 1259
+                      }
+                    },
+                    "loc": {
+                      "start": 1257,
+                      "end": 1259
+                    }
+                  },
+                  "loc": {
+                    "start": 1257,
+                    "end": 1260
+                  }
+                },
+                "loc": {
+                  "start": 1256,
+                  "end": 1261
+                }
+              },
+              "loc": {
+                "start": 1256,
+                "end": 1262
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1252,
+              "end": 1262
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "Users",
+          "loc": {
+            "start": 1246,
+            "end": 1251
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1252,
+                "end": 1254
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "ListType",
+                "type": {
+                  "kind": "NonNullType",
+                  "type": {
+                    "kind": "NamedType",
+                    "name": {
+                      "kind": "Name",
+                      "value": "ID",
+                      "loc": {
+                        "start": 1257,
+                        "end": 1259
+                      }
+                    },
+                    "loc": {
+                      "start": 1257,
+                      "end": 1259
+                    }
+                  },
+                  "loc": {
+                    "start": 1257,
+                    "end": 1260
+                  }
+                },
+                "loc": {
+                  "start": 1256,
+                  "end": 1261
+                }
+              },
+              "loc": {
+                "start": 1256,
+                "end": 1262
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1252,
+              "end": 1262
+            }
+          }
+        ],
+        "type": {
+          "kind": "NonNullType",
+          "type": {
+            "kind": "ListType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "User",
+                "loc": {
+                  "start": 1266,
+                  "end": 1270
+                }
+              },
+              "loc": {
+                "start": 1266,
+                "end": 1270
+              }
+            },
+            "loc": {
+              "start": 1265,
+              "end": 1271
+            }
+          },
+          "loc": {
+            "start": 1265,
+            "end": 1272
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1246,
+          "end": 1272
+        }
+      }
+    },
+    "NotificationsMeta": {
+      "name": "NotificationsMeta",
+      "type": "Meta",
+      "args": [],
+      "deprecationReason": "No longer supported",
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "NotificationsMeta",
+          "loc": {
+            "start": 1275,
+            "end": 1292
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Meta",
+            "loc": {
+              "start": 1294,
+              "end": 1298
+            }
+          },
+          "loc": {
+            "start": 1294,
+            "end": 1298
+          }
+        },
+        "directives": [
+          {
+            "kind": "Directive",
+            "name": {
+              "kind": "Name",
+              "value": "deprecated",
+              "loc": {
+                "start": 1300,
+                "end": 1310
+              }
+            },
+            "arguments": [],
+            "loc": {
+              "start": 1299,
+              "end": 1310
+            }
+          }
+        ],
+        "loc": {
+          "start": 1275,
+          "end": 1310
+        }
+      }
+    }
+  },
+  "mutations": {
+    "createTweet": {
+      "name": "createTweet",
+      "type": "Tweet",
+      "args": [
+        {
+          "name": "input",
+          "type": "TweetContent",
+          "deprecationReason": "Use \`content\`.",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "input",
+              "loc": {
+                "start": 1349,
+                "end": 1354
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "TweetContent",
+                "loc": {
+                  "start": 1356,
+                  "end": 1368
+                }
+              },
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "directives": [
+              {
+                "kind": "Directive",
+                "name": {
+                  "kind": "Name",
+                  "value": "deprecated",
+                  "loc": {
+                    "start": 1370,
+                    "end": 1380
+                  }
+                },
+                "arguments": [
+                  {
+                    "kind": "Argument",
+                    "name": {
+                      "kind": "Name",
+                      "value": "reason",
+                      "loc": {
+                        "start": 1381,
+                        "end": 1387
+                      }
+                    },
+                    "value": {
+                      "kind": "StringValue",
+                      "value": "Use \`content\`.",
+                      "block": false,
+                      "loc": {
+                        "start": 1389,
+                        "end": 1405
+                      }
+                    },
+                    "loc": {
+                      "start": 1381,
+                      "end": 1405
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": 1369,
+                  "end": 1406
+                }
+              }
+            ],
+            "loc": {
+              "start": 1349,
+              "end": 1406
+            }
+          }
+        },
+        {
+          "name": "content",
+          "type": "TweetContent",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "content",
+              "loc": {
+                "start": 1411,
+                "end": 1418
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "TweetContent",
+                "loc": {
+                  "start": 1420,
+                  "end": 1432
+                }
+              },
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1411,
+              "end": 1432
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "createTweet",
+          "loc": {
+            "start": 1332,
+            "end": 1343
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "input",
+              "loc": {
+                "start": 1349,
+                "end": 1354
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "TweetContent",
+                "loc": {
+                  "start": 1356,
+                  "end": 1368
+                }
+              },
+              "loc": {
+                "start": 1356,
+                "end": 1368
+              }
+            },
+            "directives": [
+              {
+                "kind": "Directive",
+                "name": {
+                  "kind": "Name",
+                  "value": "deprecated",
+                  "loc": {
+                    "start": 1370,
+                    "end": 1380
+                  }
+                },
+                "arguments": [
+                  {
+                    "kind": "Argument",
+                    "name": {
+                      "kind": "Name",
+                      "value": "reason",
+                      "loc": {
+                        "start": 1381,
+                        "end": 1387
+                      }
+                    },
+                    "value": {
+                      "kind": "StringValue",
+                      "value": "Use \`content\`.",
+                      "block": false,
+                      "loc": {
+                        "start": 1389,
+                        "end": 1405
+                      }
+                    },
+                    "loc": {
+                      "start": 1381,
+                      "end": 1405
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": 1369,
+                  "end": 1406
+                }
+              }
+            ],
+            "loc": {
+              "start": 1349,
+              "end": 1406
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "content",
+              "loc": {
+                "start": 1411,
+                "end": 1418
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "TweetContent",
+                "loc": {
+                  "start": 1420,
+                  "end": 1432
+                }
+              },
+              "loc": {
+                "start": 1420,
+                "end": 1432
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1411,
+              "end": 1432
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Tweet",
+            "loc": {
+              "start": 1438,
+              "end": 1443
+            }
+          },
+          "loc": {
+            "start": 1438,
+            "end": 1443
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1332,
+          "end": 1443
+        }
+      }
+    },
+    "deleteTweet": {
+      "name": "deleteTweet",
+      "type": "Tweet",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1458,
+                "end": 1460
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1462,
+                    "end": 1464
+                  }
+                },
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1465
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1458,
+              "end": 1465
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "deleteTweet",
+          "loc": {
+            "start": 1446,
+            "end": 1457
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1458,
+                "end": 1460
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1462,
+                    "end": 1464
+                  }
+                },
+                "loc": {
+                  "start": 1462,
+                  "end": 1464
+                }
+              },
+              "loc": {
+                "start": 1462,
+                "end": 1465
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1458,
+              "end": 1465
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Tweet",
+            "loc": {
+              "start": 1468,
+              "end": 1473
+            }
+          },
+          "loc": {
+            "start": 1468,
+            "end": 1473
+          }
+        },
+        "directives": [
+          {
+            "kind": "Directive",
+            "name": {
+              "kind": "Name",
+              "value": "noDoc",
+              "loc": {
+                "start": 1475,
+                "end": 1480
+              }
+            },
+            "arguments": [],
+            "loc": {
+              "start": 1474,
+              "end": 1480
+            }
+          }
+        ],
+        "loc": {
+          "start": 1446,
+          "end": 1480
+        }
+      }
+    },
+    "markTweetRead": {
+      "name": "markTweetRead",
+      "type": "Boolean",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID!",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1497,
+                "end": 1499
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1501,
+                    "end": 1503
+                  }
+                },
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1504
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1497,
+              "end": 1504
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "markTweetRead",
+          "loc": {
+            "start": 1483,
+            "end": 1496
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 1497,
+                "end": 1499
+              }
+            },
+            "type": {
+              "kind": "NonNullType",
+              "type": {
+                "kind": "NamedType",
+                "name": {
+                  "kind": "Name",
+                  "value": "ID",
+                  "loc": {
+                    "start": 1501,
+                    "end": 1503
+                  }
+                },
+                "loc": {
+                  "start": 1501,
+                  "end": 1503
+                }
+              },
+              "loc": {
+                "start": 1501,
+                "end": 1504
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1497,
+              "end": 1504
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Boolean",
+            "loc": {
+              "start": 1507,
+              "end": 1514
+            }
+          },
+          "loc": {
+            "start": 1507,
+            "end": 1514
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1483,
+          "end": 1514
+        }
+      }
+    }
+  },
+  "subscriptions": {
+    "Notifications": {
+      "name": "Notifications",
+      "type": "[Notification]!",
+      "args": [
+        {
+          "name": "limit",
+          "type": "Int",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "limit",
+              "loc": {
+                "start": 1646,
+                "end": 1651
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1653,
+                  "end": 1656
+                }
+              },
+              "loc": {
+                "start": 1653,
+                "end": 1656
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1646,
+              "end": 1656
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "Notifications",
+          "loc": {
+            "start": 1632,
+            "end": 1645
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "limit",
+              "loc": {
+                "start": 1646,
+                "end": 1651
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 1653,
+                  "end": 1656
+                }
+              },
+              "loc": {
+                "start": 1653,
+                "end": 1656
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 1646,
+              "end": 1656
+            }
+          }
+        ],
+        "type": {
+          "kind": "NonNullType",
+          "type": {
+            "kind": "ListType",
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Notification",
+                "loc": {
+                  "start": 1660,
+                  "end": 1672
+                }
+              },
+              "loc": {
+                "start": 1660,
+                "end": 1672
+              }
+            },
+            "loc": {
+              "start": 1659,
+              "end": 1673
+            }
+          },
+          "loc": {
+            "start": 1659,
+            "end": 1674
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 1632,
+          "end": 1674
+        }
+      }
+    }
+  },
+  "directives": {
+    "noDoc": "@noDoc",
+    "include": "@include",
+    "skip": "@skip",
+    "deprecated": "@deprecated",
+    "specifiedBy": "@specifiedBy"
+  },
+  "objects": {
+    "Media": "Media",
+    "Tweet": "Tweet",
+    "User": "User",
+    "Stat": "Stat",
+    "Notification": "Notification",
+    "Meta": "Meta"
+  },
+  "unions": {},
+  "interfaces": {
+    "Node": "Node"
+  },
+  "enums": {
+    "MediaType": "MediaType"
+  },
+  "inputs": {
+    "TweetContent": "TweetContent"
+  },
+  "scalars": {
+    "SRI": "SRI",
+    "ID": "ID",
+    "String": "String",
+    "Int": "Int",
+    "Url": "Url",
+    "Date": "Date",
+    "Boolean": "Boolean"
+  }
+}"
+`;
+
+exports[`graphql getSchemaMap() returns schema types map with custom root types 1`] = `
+"{
+  "queries": {
+    "allSubscription": {
+      "name": "allSubscription",
+      "type": "[Subscription]",
+      "args": [
+        {
+          "name": "after",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "after",
+              "loc": {
+                "start": 91,
+                "end": 96
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 98,
+                  "end": 104
+                }
+              },
+              "loc": {
+                "start": 98,
+                "end": 104
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 91,
+              "end": 104
+            }
+          }
+        },
+        {
+          "name": "first",
+          "type": "Int",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "first",
+              "loc": {
+                "start": 109,
+                "end": 114
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 116,
+                  "end": 119
+                }
+              },
+              "loc": {
+                "start": 116,
+                "end": 119
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 109,
+              "end": 119
+            }
+          }
+        },
+        {
+          "name": "before",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "before",
+              "loc": {
+                "start": 124,
+                "end": 130
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 132,
+                  "end": 138
+                }
+              },
+              "loc": {
+                "start": 132,
+                "end": 138
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 124,
+              "end": 138
+            }
+          }
+        },
+        {
+          "name": "last",
+          "type": "Int",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "last",
+              "loc": {
+                "start": 143,
+                "end": 147
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 149,
+                  "end": 152
+                }
+              },
+              "loc": {
+                "start": 149,
+                "end": 152
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 143,
+              "end": 152
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "allSubscription",
+          "loc": {
+            "start": 70,
+            "end": 85
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "after",
+              "loc": {
+                "start": 91,
+                "end": 96
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 98,
+                  "end": 104
+                }
+              },
+              "loc": {
+                "start": 98,
+                "end": 104
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 91,
+              "end": 104
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "first",
+              "loc": {
+                "start": 109,
+                "end": 114
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 116,
+                  "end": 119
+                }
+              },
+              "loc": {
+                "start": 116,
+                "end": 119
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 109,
+              "end": 119
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "before",
+              "loc": {
+                "start": 124,
+                "end": 130
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 132,
+                  "end": 138
+                }
+              },
+              "loc": {
+                "start": 132,
+                "end": 138
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 124,
+              "end": 138
+            }
+          },
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "last",
+              "loc": {
+                "start": 143,
+                "end": 147
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "Int",
+                "loc": {
+                  "start": 149,
+                  "end": 152
+                }
+              },
+              "loc": {
+                "start": 149,
+                "end": 152
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 143,
+              "end": 152
+            }
+          }
+        ],
+        "type": {
+          "kind": "ListType",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Subscription",
+              "loc": {
+                "start": 159,
+                "end": 171
+              }
+            },
+            "loc": {
+              "start": 159,
+              "end": 171
+            }
+          },
+          "loc": {
+            "start": 158,
+            "end": 172
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 70,
+          "end": 172
+        }
+      }
+    },
+    "subscription": {
+      "name": "subscription",
+      "type": "Subscription",
+      "args": [
+        {
+          "name": "id",
+          "type": "ID",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 188,
+                "end": 190
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 192,
+                  "end": 194
+                }
+              },
+              "loc": {
+                "start": 192,
+                "end": 194
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 188,
+              "end": 194
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "subscription",
+          "loc": {
+            "start": 175,
+            "end": 187
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 188,
+                "end": 190
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "ID",
+                "loc": {
+                  "start": 192,
+                  "end": 194
+                }
+              },
+              "loc": {
+                "start": 192,
+                "end": 194
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 188,
+              "end": 194
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "Subscription",
+            "loc": {
+              "start": 197,
+              "end": 209
+            }
+          },
+          "loc": {
+            "start": 197,
+            "end": 209
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 175,
+          "end": 209
+        }
+      }
+    }
+  },
+  "mutations": {},
+  "subscriptions": {},
+  "directives": {
+    "include": "@include",
+    "skip": "@skip",
+    "deprecated": "@deprecated",
+    "specifiedBy": "@specifiedBy"
+  },
+  "objects": {
+    "Subscription": "Subscription"
+  },
+  "unions": {},
+  "interfaces": {},
+  "enums": {},
+  "inputs": {},
+  "scalars": {
+    "String": "String",
+    "ID": "ID",
+    "Int": "Int",
+    "Boolean": "Boolean"
+  }
+}"
+`;
+
+exports[`graphql getTypeFromSchema() handles null types from introspection JSON 1`] = `
+"{
+  "ID": "ID",
+  "String": "String",
+  "Int": "Int",
+  "Boolean": "Boolean"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLEnumType 1`] = `
+"{
+  "MediaType": "MediaType"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLInputObjectType 1`] = `
+"{
+  "TweetContent": "TweetContent"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLInterfaceType 1`] = `
+"{
+  "Node": "Node"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLObjectType 1`] = `
+"{
+  "Media": "Media",
+  "Tweet": "Tweet",
+  "User": "User",
+  "Stat": "Stat",
+  "Notification": "Notification",
+  "Meta": "Meta"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLScalarType 1`] = `
+"{
+  "SRI": "SRI",
+  "ID": "ID",
+  "String": "String",
+  "Int": "Int",
+  "Url": "Url",
+  "Date": "Date",
+  "Boolean": "Boolean"
+}"
+`;
+
+exports[`graphql getTypeFromSchema() returns a filter map filtered by GraphQLUnionType 1`] = `"{}"`;

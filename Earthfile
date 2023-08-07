@@ -6,13 +6,14 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY package.json package-lock.json ./
+  COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
   COPY --dir config packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
 lint: 
   FROM +deps
+  RUN npm run ts:check
   IF [ ! $(EARTHLY_CI) ]
     RUN npm run prettier -- --write
     RUN npm run lint -- --fix
@@ -22,15 +23,19 @@ lint:
     RUN npm run lint
   END
 
+build:
+  FROM +lint
+  RUN npm run build
+
 unit-test:
-  FROM +deps
+  FROM +build
   RUN export NODE_ENV=ci
-  RUN npm test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects unit
+  RUN npm test /unit -- --runInBand
 
 integration-test:
-  FROM +deps
+  FROM +build
   RUN export NODE_ENV=ci
-  RUN npm run test --workspaces --if-present -- --passWithNoTests --runInBand --selectProjects integration
+  RUN npm run test /integration -- --runInBand
 
 mutation-test:
   FROM +deps
@@ -40,9 +45,9 @@ mutation-test:
   END
 
 build-package:
-  FROM +deps
+  FROM +build
   ARG --required package
-  RUN npm pack -w @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
+  RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus:
@@ -58,7 +63,7 @@ smoke-init:
   FROM +build-docusaurus
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  FOR package IN utils printer-legacy diff core docusaurus
+  FOR package IN types utils printer-legacy diff core docusaurus
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
     RUN npm install ./graphql-markdown-${package}.tgz
   END
@@ -73,7 +78,7 @@ smoke-test:
   FROM +smoke-init
   WORKDIR /docusaurus2
   RUN npm config set update-notifier false
-  RUN npm install -g fs-extra jest 
+  RUN npm install -g jest 
   RUN npm install graphql-config
   COPY --dir ./packages/docusaurus/tests/e2e/specs ./__tests__/e2e/specs
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
@@ -117,6 +122,7 @@ build-image:
 
 all:
   BUILD +lint
+  BUILD +build
   BUILD +unit-test
   BUILD +integration-test
   BUILD +smoke-test

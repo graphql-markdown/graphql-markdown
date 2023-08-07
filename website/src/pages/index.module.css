@@ -40,11 +40,10 @@
   --ifm-button-border-color: var(--ifm-button-background-color);
 }
 
-[data-theme='dark'] .heroButton:hover {
+[data-theme="dark"] .heroButton:hover {
   --ifm-button-background-color: var(--ifm-color-primary-darkest);
   --ifm-button-border-color: var(--ifm-button-background-color);
 }
-
 
 .heroButtonSecondary {
   --ifm-button-border-color: #e535ab;

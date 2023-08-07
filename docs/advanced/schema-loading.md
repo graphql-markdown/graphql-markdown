@@ -10,20 +10,22 @@ GraphQL-Markdown use external loaders for loading GraphQL schemas (see [full lis
 You can declare as many loaders as you need using the structure:
 
 ```ts
-type className = string; // UrlLoader
+type RootTypes = { query?: string; mutation?: string; subscription?: string };
 
-type moduleName = string; // "@graphql-tools/url-loader"
-type rootTypes = { query?: string, mutation?: string, subscription?: string };
-type moduleOptions = { [option: string]: any, rootType?: rootTypes };
+type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
 
-type module = { 
-  module: moduleName, 
-  options: moduleOptions | undefined 
-}
+type PackageConfig = {
+  module: PackageName;
+  options?: PackageOptionsConfig;
+};
 
-type loaders = {
-  [className: className]: moduleName | module
-}
+type PackageName = string & { _opaque: typeof PackageName };
+
+type ClassName = string & { _opaque: typeof ClassName };
+
+type LoaderOption = {
+  [name: ClassName]: PackageName | PackageConfig;
+};
 ```
 
 ## Local schema (file)

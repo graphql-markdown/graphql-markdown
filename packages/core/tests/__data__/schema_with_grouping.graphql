@@ -13,7 +13,7 @@ See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydire
 directive @doc(
   """
   Category name for `groupByDirective`.
-  
+
   See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
   """
   category: String
@@ -26,19 +26,19 @@ scalar Time
 scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
-  UpdateGrade(input: String): String  @doc(category: "Grade") 
+  UpdateGrade(input: String): String @doc(category: "Grade")
 }
 
-type Mutation{
-  UpdateGPA(input: Int): Int @doc(category: "Grade") 
+type Mutation {
+  UpdateGPA(input: Int): Int @doc(category: "Grade")
 }
 
-type Mutation{
-  AddCourse(input: String): String  @doc(category: "Course") 
+type Mutation {
+  AddCourse(input: String): String @doc(category: "Course")
 }
 
-type Mutation{
-  DropCourse(input: String): String  @doc(category: "Course") 
+type Mutation {
+  DropCourse(input: String): String @doc(category: "Course")
 }
 
 enum Roles {
@@ -47,16 +47,16 @@ enum Roles {
 }
 
 type Query {
-  GPA(skip: Int = 0): Int  @doc(category: "Grade") 
-  WeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
-  UnWeightedGPA(input: String, skip: Int!): Int  @doc(category: "Grade") 
+  GPA(skip: Int = 0): Int @doc(category: "Grade")
+  WeightedGPA(input: String, skip: Int!): Int @doc(category: "Grade")
+  UnWeightedGPA(input: String, skip: Int!): Int @doc(category: "Grade")
   Course(skip: Int = 0): Course @doc(category: "Course")
 }
 
 type Query {
-  allCourses: [String]  @doc(category: "Course") 
-  mathCourses: [String]  @doc(category: "Course") @deprecated
-  scienceCourses: [String]  @doc(category: "Course") @deprecated
+  allCourses: [String] @doc(category: "Course")
+  mathCourses: [String] @doc(category: "Course") @deprecated
+  scienceCourses: [String] @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
 }
 
@@ -87,4 +87,4 @@ type DepartmentInformation implements Record {
 type Course {
   id: ID!
   title: String!
-} 
+}

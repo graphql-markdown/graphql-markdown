@@ -5,10 +5,10 @@ pagination_next: null
 
 # Custom root types
 
-For custom operation root types (queries not of type `Query`, or root type name used for other purpose), use the loader option `rootTypes`:
+For custom operation root types (queries not of type `Query`, or root type name used for other purpose), use the loader option `RootTypes`:
 
 ```ts
-type rootTypes = { query?: string, mutation?: string, subscription?: string };
+type RootTypes = { query?: string; mutation?: string; subscription?: string };
 ```
 
 - use a custom type name to override standard type
@@ -24,15 +24,16 @@ plugins: [
     {
       // ... other options
       loaders: {
-      GraphQLFileLoader: {
-        module: "@graphql-tools/graphql-file-loader",
-        options: { 
-          rootTypes: { 
-            query: "Root", // use custom root type Root for queries, instead of Query
-            subscription: "" // disable Subscription type
+        GraphQLFileLoader: {
+          module: "@graphql-tools/graphql-file-loader",
+          options: {
+            rootTypes: {
+              query: "Root", // use custom root type Root for queries, instead of Query
+              subscription: "" // disable Subscription type
+            },
           },
-        }
-      }
+        },
+      },
     },
   ],
 ],

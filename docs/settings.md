@@ -125,9 +125,9 @@ The root for links in documentation. It depends on the entry for the schema main
 
 GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loading)).
 
-| Setting   | CLI flag        | Default   |
-| --------- | --------------- | --------- |
-| `loaders` | _not supported_ | `{ }`     |
+| Setting   | CLI flag        | Default |
+| --------- | --------------- | ------- |
+| `loaders` | _not supported_ | `{ }`   |
 
 ## `printTypeOptions`
 
@@ -200,7 +200,7 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `rootPath`
 
-The output root path for the generated documentation, relative to the current workspace. 
+The output root path for the generated documentation, relative to the current workspace.
 It works in relation with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
 
 | Setting    | CLI flag                | Default  |

@@ -7,69 +7,82 @@ on:
     branches:
       - main
     paths:
-      - 'packages/**/*'
-      - 'config/*'
-      - '*.json'
-      - '.github/workflows/test.yml'
+      - "packages/**/*"
+      - "config/*"
+      - "*.json"
+      - ".github/workflows/test.yml"
 
 jobs:
   test:
-    name: Test ${{matrix.package}}
+    name: Test ${{ matrix.package }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        package: ['docusaurus', 'core', 'diff', 'printer-legacy', 'utils']
+        package: ["docusaurus", "core", "diff", "printer-legacy", "utils"]
 
     steps:
-    - name: Checkout Code Base
-      uses: actions/checkout@v3
+      - name: Checkout Code Base
+        uses: actions/checkout@v3
 
-    - name: Install modules
-      run: npm ci
+      - name: Install modules
+        run: npm ci
 
-    - name: Run Unit Tests
-      run: |
-        npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects unit
-        [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-        mkdir packages/${{matrix.package}}/.nyc_output/unit
-        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/unit.json
+      - name: Run Unit Tests
+        run: |
+          npm test /unit/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
+          [ ! -d "./coverage/" ] && exit 0
+          mkdir -p packages/${{ matrix.package }}/.nyc_output/unit
+          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
 
-    - name: Run Integration Tests
-      run: |
-        npm test -w @graphql-markdown/${{matrix.package}} -- --passWithNoTests --coverage --runInBand --selectProjects integration
-        [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-        mkdir packages/${{matrix.package}}/.nyc_output/integration
-        mv packages/${{matrix.package}}/.nyc_output/coverage-final.json packages/${{matrix.package}}/.nyc_output/integration.json
+      - name: Run Integration Tests
+        run: |
+          npm test /integration/ -- --passWithNoTests --coverage --runInBand --selectProjects @graphql-markdown/${{ matrix.package }}
+          [ ! -d "./coverage/" ] && exit 0
+          mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
+          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
 
-    - name: Check Code Coverage
-      run: |
-        [ ! -d "packages/${{matrix.package}}/.nyc_output" ] && exit 0
-        cd packages/${{matrix.package}}
-        npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
-        npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
+      - name: Check Code Coverage
+        run: |
+          [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && exit 0
+          cd packages/${{ matrix.package }}
+          npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
+          npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
 
-    - name: Coveralls
-      continue-on-error: true
-      if: ${{ always() }}
-      uses: coverallsapp/github-action@master
-      with:
-        parallel: true
-        flag-name: package-${{ matrix.package }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
-        base-path: ./packages/${{matrix.package}}
+      - name: Coveralls
+        continue-on-error: true
+        if: ${{ always() }}
+        uses: coverallsapp/github-action@master
+        with:
+          parallel: true
+          flag-name: package-${{ matrix.package }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
+          base-path: ./packages/${{ matrix.package }}
 
   coverage:
-      name: Report coverage
-      runs-on: ubuntu-latest
-      needs: test
-      if: ${{ always() }}
-      steps:
-        - name: Coveralls
-          continue-on-error: true
-          uses: coverallsapp/github-action@master
-          with:
-            parallel-finished: true
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            path-to-lcov: ./packages/${{matrix.package}}/coverage/lcov.info
+    name: Report coverage
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ always() }}
+    steps:
+      - name: Coveralls
+        continue-on-error: true
+        uses: coverallsapp/github-action@master
+        with:
+          parallel-finished: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Mock Build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v3
+
+      - name: Install modules
+        run: npm ci        
+
+      - name: TS Build
+        run: npm run build

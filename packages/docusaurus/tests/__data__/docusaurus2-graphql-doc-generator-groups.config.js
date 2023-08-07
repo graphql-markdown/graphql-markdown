@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const {
-  graphql: { getTypeDirectiveValues },
-  helper: { directiveDescriptor, directiveTag },
+  getTypeDirectiveValues,
+  directiveDescriptor,
+  directiveTag,
 } = require("@graphql-markdown/utils");
 
 module.exports = {

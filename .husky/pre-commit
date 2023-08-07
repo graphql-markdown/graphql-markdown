@@ -1,7 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+npm run ts:check
 npm run lint
 npm run prettier -- --check
-npm test --workspaces --if-present -- --passWithNoTests
+npm test
 npm run check

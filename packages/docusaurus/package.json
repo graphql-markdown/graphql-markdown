@@ -7,10 +7,10 @@
   },
   "version": "1.20.4",
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphql-markdown/graphql-markdown.git"
+    "url": "graphql-markdown/graphql-markdown",
+    "directory": "packages/docusaurus"
   },
   "keywords": [
     "docusaurus",
@@ -24,15 +24,38 @@
   "author": {
     "name": "Gregory Heitz"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test": "jest",
-    "stryker": "stryker run"
+    "stryker": "stryker run",
+    "clean": "rm -rf ./dist"
   },
   "dependencies": {
     "@graphql-markdown/core": "^1.6.4",
     "@graphql-markdown/printer-legacy": "^1.4.3"
+  },
+  "devDependencies": {
+    "@docusaurus/types": "^2.4.1",
+    "@graphql-markdown/types": "^1.0.0"
   },
   "peerDependencies": {
     "@docusaurus/logger": "*"
@@ -44,6 +67,13 @@
     "node": ">=16.14"
   },
   "publishConfig": {
+    "directory": "dist",
     "access": "public"
-  }
+  },
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "files": [
+    "dist"
+  ]
 }

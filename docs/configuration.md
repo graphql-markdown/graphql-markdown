@@ -18,7 +18,7 @@ module.exports = {
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
         loaders: {
-          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader", // local file schema
         },
       },
     ],
@@ -90,7 +90,6 @@ You need to install the package `graphql-config`.
 npm install graphql-config
 ```
 
-
 ```js title="docusaurus.config.js"
 module.exports = {
   // ...
@@ -108,7 +107,7 @@ extensions:
     loaders:
       UrlLoader:
         module: "@graphql-tools/url-loader"
-        options: 
+        options:
           method: "POST"
     printTypeOptions:
       deprecated: "group"
@@ -123,5 +122,5 @@ Note that **`schema` is not part of the extension configuration**, but part of t
 
 **Current limitations:**
 
-* single schema only, no schema stitching
-* `include`, `exclude`, `documents` and glob pattern are not supported
+- single schema only, no schema stitching
+- `include`, `exclude`, `documents` and glob pattern are not supported
