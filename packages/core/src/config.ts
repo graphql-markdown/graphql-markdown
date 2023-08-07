@@ -32,7 +32,8 @@ export enum DeprecatedOption {
 export const DOCS_URL = "https://graphql-markdown.github.io/docs" as const;
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
 export const ASSET_HOMEPAGE_LOCATION = join(
-  require.resolve("@graphql-markdown/core"),
+  __dirname,
+  "..",
   "assets",
   "generated.md",
 );
