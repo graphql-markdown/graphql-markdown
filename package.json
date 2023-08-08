@@ -147,8 +147,7 @@
     }
   },
   "devDependencies": {
-    "@docusaurus/plugin-content-docs": "2.4.1",
-    "@docusaurus/types": "^2.4.1",
+    "@docusaurus/types": "2.4.1",
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@graphql-tools/graphql-file-loader": "8.0.0",
     "@graphql-tools/json-file-loader": "8.0.0",
