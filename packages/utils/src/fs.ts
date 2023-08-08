@@ -1,6 +1,8 @@
 import fs from "node:fs/promises";
 import { dirname } from "node:path";
 
+import type { Maybe } from "@graphql-markdown/types";
+
 export const readFile = fs.readFile;
 export const copyFile = fs.copyFile;
 
@@ -22,7 +24,7 @@ export async function fileExists(filePath: string): Promise<boolean> {
 export async function saveFile(
   filePath: string,
   data: string,
-  prettify?: (text: string, options?: unknown) => Promise<string | undefined>,
+  prettify?: (text: string, options?: unknown) => Promise<Maybe<string>>,
 ): Promise<void> {
   if (typeof prettify === "function") {
     data = (await prettify(data)) ?? data;

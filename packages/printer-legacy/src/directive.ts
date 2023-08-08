@@ -1,26 +1,29 @@
-import { getConstDirectiveMap } from "@graphql-markdown/utils";
-
-import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
-import { SectionLevels } from "./const/options";
-import { printLink } from "./link";
-import { printBadge } from "./badge";
-import {
+import type {
   Badge,
   PrintTypeOptions,
   MDXString,
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
   CustomDirectiveFunction,
+  Maybe,
 } from "@graphql-markdown/types";
+
+import { getConstDirectiveMap } from "@graphql-markdown/utils";
+
+import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
+import { SectionLevels } from "./const/options";
+import { printLink } from "./link";
+import { printBadge } from "./badge";
 
 export const printCustomDirectives = (
   type: unknown,
   options: PrintTypeOptions,
-) => {
+): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
   if (
     typeof constDirectiveMap === "undefined" ||
+    constDirectiveMap === null ||
     Object.keys(constDirectiveMap).length < 1
   ) {
     return "";
@@ -45,7 +48,7 @@ export const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
   options: PrintTypeOptions,
-): string | undefined => {
+): Maybe<string> => {
   const typeNameLink = printLink(constDirectiveOption.type, {
     ...options,
     withAttributes: false,
@@ -71,6 +74,7 @@ export const getCustomTags = (
 
   if (
     typeof constDirectiveMap !== "object" ||
+    constDirectiveMap === null ||
     !Object.keys(constDirectiveMap).length
   ) {
     return [];
@@ -100,8 +104,8 @@ export const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
-  fallback: string | undefined = undefined,
-): string | undefined => {
+  fallback?: Maybe<string>,
+): Maybe<string> => {
   if (
     typeof constDirectiveOption === "undefined" ||
     typeof constDirectiveOption.type !== "object" ||

@@ -2,7 +2,9 @@
  * Array functions
  */
 
-export function toArray(param: unknown): unknown[] | undefined {
+import type { Maybe } from "@graphql-markdown/types";
+
+export function toArray(param: unknown): Maybe<unknown[]> {
   if (typeof param !== "object" || param === null) {
     return undefined;
   }
@@ -17,8 +19,8 @@ export function convertArrayToObject<T>(typeArray: T[]): Record<string, T> {
       if (typeof entry === "object" && entry !== null) {
         const key =
           "name" in entry &&
-          entry.name !== null &&
-          typeof entry.name !== "undefined"
+          typeof entry.name !== "undefined" &&
+          entry.name !== null
             ? entry.name.toString()
             : null;
         if (key === null) {

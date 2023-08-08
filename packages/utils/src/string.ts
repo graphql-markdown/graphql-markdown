@@ -1,15 +1,17 @@
 /**
  * String functions
  */
+import type { Maybe } from "@graphql-markdown/types";
 
 import { getObjPath } from "./object";
 
 export function stringCaseBuilder(
   str: string,
-  transformation?: (word: string) => string,
+  transformation?: Maybe<(word: string) => string>,
   separator?: string,
 ): string {
-  const hasTransformation = typeof transformation === "function";
+  const hasTransformation =
+    typeof transformation === "function" && transformation !== null;
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
     .replace(/([a-z]+)(\d)/g, "$1 $2")
@@ -80,7 +82,7 @@ export function kebabCase(str: string): string {
 
 export function interpolate(
   template: string,
-  variables?: Record<string, unknown>,
+  variables: Maybe<Record<string, unknown>>,
   fallback?: string,
 ): string {
   const regex = /\${[^{]+}/g;

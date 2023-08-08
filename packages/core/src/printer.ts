@@ -1,4 +1,6 @@
 import {
+  IPrinter,
+  Maybe,
   PackageName,
   Printer,
   PrinterConfig,
@@ -6,22 +8,24 @@ import {
 } from "@graphql-markdown/types";
 
 export const getPrinter = async (
-  printerModule?: PackageName,
-  config?: PrinterConfig,
-  options?: PrinterOptions,
+  printerModule?: Maybe<PackageName>,
+  config?: Maybe<PrinterConfig>,
+  options?: Maybe<PrinterOptions>,
 ): Promise<Printer> => {
-  if (typeof printerModule !== "string") {
+  if (typeof printerModule !== "string" || printerModule === null) {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',
     );
   }
 
-  if (typeof config === "undefined") {
+  if (typeof config === "undefined" || config === null) {
     throw new Error('Invalid printer config in "printTypeOptions" settings.');
   }
 
   try {
-    const { Printer } = await import(printerModule);
+    const { Printer }: { Printer: typeof IPrinter } = await import(
+      printerModule
+    );
 
     const { schema, baseURL, linkRoot } = config;
     Printer.init(schema, baseURL, linkRoot, { ...options });

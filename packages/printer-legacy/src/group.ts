@@ -3,19 +3,23 @@ import type {
   SchemaEntity,
   GraphQLType,
   GraphQLNamedType,
+  Maybe,
 } from "@graphql-markdown/types";
 
 import { toSlug, getNamedType } from "@graphql-markdown/utils";
 
 export const getGroup = (
   type: unknown,
-  groups: SchemaEntitiesGroupMap | undefined,
-  typeCategory: SchemaEntity | undefined,
+  groups: Maybe<SchemaEntitiesGroupMap>,
+  typeCategory: Maybe<SchemaEntity>,
 ): string => {
   if (
     typeof type !== "object" ||
+    type === null ||
     typeof groups === "undefined" ||
-    typeof typeCategory === "undefined"
+    groups === null ||
+    typeof typeCategory === "undefined" ||
+    typeCategory === null
   ) {
     return "";
   }

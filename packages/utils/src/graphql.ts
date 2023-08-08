@@ -32,7 +32,6 @@ import { Loader } from "graphql-config";
 import type {
   LoaderOption,
   PackageOptionsConfig,
-  CustomDirective,
   CustomDirectiveMap,
   DirectiveName,
   CustomDirectiveMapItem,
@@ -48,6 +47,9 @@ import type {
   GraphQLSchemaConfig,
   GraphQLType,
   ObjectTypeDefinitionNode,
+  Maybe,
+  IGetRelation,
+  PrintTypeOptions,
 } from "@graphql-markdown/types";
 
 import { convertArrayToObject } from "./array";
@@ -64,7 +66,7 @@ export async function loadSchema(
   options: LoadSchemaOptions & {
     rootTypes?: Partial<Record<OperationTypeNodeName, string>>;
   },
-) {
+): Promise<GraphQLSchema> {
   let rootTypes = undefined;
 
   if (typeof options !== "undefined" && "rootTypes" in options) {
@@ -130,9 +132,13 @@ export async function getDocumentLoaders(
 }
 
 export function getListDefaultValues(
-  type: GraphQLType,
+  type: Maybe<GraphQLType>,
   value: unknown,
 ): string {
+  if (typeof type === "undefined" || type === null) {
+    return "";
+  }
+
   const defaultValues: unknown[] = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
@@ -146,10 +152,15 @@ export function getDefaultValue({
   type,
   defaultValue,
 }: {
-  type: GraphQLType;
+  type: Maybe<GraphQLType>;
   defaultValue: unknown;
 }): unknown {
-  if (typeof defaultValue === "undefined" || defaultValue === null) {
+  if (
+    typeof type === "undefined" ||
+    type === null ||
+    typeof defaultValue === "undefined" ||
+    defaultValue === null
+  ) {
     return undefined;
   }
 
@@ -160,7 +171,10 @@ export function getDefaultValue({
   return formatDefaultValue(type, defaultValue);
 }
 
-function formatDefaultValue(type: GraphQLType, defaultValue: unknown): unknown {
+function formatDefaultValue(
+  type: Maybe<GraphQLType>,
+  defaultValue: unknown,
+): unknown {
   if (isEnumType(type)) {
     return defaultValue;
   }
@@ -179,9 +193,9 @@ function formatDefaultValue(type: GraphQLType, defaultValue: unknown): unknown {
 }
 
 export function getTypeFromSchema<T>(
-  schema: GraphQLSchema | undefined | null,
+  schema: Maybe<GraphQLSchema>,
   type: unknown,
-): Record<string, T> | undefined {
+): Maybe<Record<string, T>> {
   if (typeof schema === "undefined" || schema == null) {
     return undefined;
   }
@@ -229,11 +243,12 @@ function instanceOf<T>(obj: unknown, type: { new (): T }): obj is T {
 
 export function hasDirective(
   node: unknown,
-  directives?: string[] | string,
+  directives: Maybe<string[] | string>,
 ): boolean {
   if (
     !hasAstNode(node) ||
     typeof directives === "undefined" ||
+    directives === null ||
     !Array.isArray(node.astNode.directives)
   ) {
     return false;
@@ -250,11 +265,12 @@ export function hasDirective(
 
 export function getDirective(
   node: unknown,
-  directives?: string[] | string,
+  directives: Maybe<string[] | string>,
 ): GraphQLDirective[] {
   if (
     !hasAstNode(node) ||
     typeof directives === "undefined" ||
+    directives === null ||
     !Array.isArray(node.astNode.directives)
   ) {
     return [];
@@ -280,11 +296,14 @@ export function getDirective(
 
 export function getConstDirectiveMap(
   node: unknown,
-  options?: Record<string, unknown> & { customDirectives?: CustomDirective },
-): CustomDirectiveMap | undefined {
+  options?: Partial<PrintTypeOptions>,
+): Maybe<CustomDirectiveMap> {
   if (
     typeof options === "undefined" ||
+    options === null ||
+    !("customDirectives" in options) ||
     typeof options.customDirectives === "undefined" ||
+    options.customDirectives === null ||
     isEmpty(options.customDirectives)
   ) {
     return undefined;
@@ -311,10 +330,15 @@ export function getTypeDirectiveArgValue(
   directive: GraphQLDirective,
   node: unknown,
   argName: string,
-): Record<string, unknown> | undefined {
+): Maybe<Record<string, unknown>> {
   const args = getTypeDirectiveValues(directive, node);
 
-  if (typeof args === "undefined" || typeof args[argName] === "undefined") {
+  if (
+    typeof args === "undefined" ||
+    args === null ||
+    typeof args[argName] === "undefined" ||
+    args[argName] === null
+  ) {
     throw new Error(`Directive argument '${argName}' not found!`);
   }
 
@@ -324,7 +348,7 @@ export function getTypeDirectiveArgValue(
 export function getTypeDirectiveValues(
   directive: GraphQLDirective,
   type: unknown,
-): Record<string, unknown> | undefined {
+): Maybe<Record<string, unknown>> {
   if (hasAstNode(type)) {
     return getDirectiveValues(
       directive,
@@ -410,19 +434,19 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   return defaultName;
 }
 
-export function getSchemaMap(schema: GraphQLSchema): SchemaMap {
+export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
   return {
     ["queries" as SchemaEntity]: getIntrospectionFieldsList(
-      schema.getQueryType() ?? undefined,
+      schema?.getQueryType() ?? undefined,
     ),
     ["mutations" as SchemaEntity]: getIntrospectionFieldsList(
-      schema.getMutationType() ?? undefined,
+      schema?.getMutationType() ?? undefined,
     ),
     ["subscriptions" as SchemaEntity]: getIntrospectionFieldsList(
-      schema.getSubscriptionType() ?? undefined,
+      schema?.getSubscriptionType() ?? undefined,
     ),
     ["directives" as SchemaEntity]: convertArrayToObject<GraphQLDirective>(
-      schema.getDirectives() as GraphQLDirective[],
+      schema?.getDirectives() as GraphQLDirective[],
     ),
     ["objects" as SchemaEntity]: getTypeFromSchema<GraphQLObjectType>(
       schema,
@@ -454,7 +478,7 @@ export function getSchemaMap(schema: GraphQLSchema): SchemaMap {
 function mapRelationOf<T>(
   type: unknown,
   relations: Record<string, T[]>,
-  schema: GraphQLSchema,
+  schema: Maybe<GraphQLSchema>,
   callback: (
     type: unknown,
     relationName: string,
@@ -465,10 +489,10 @@ function mapRelationOf<T>(
   const schemaMap: SchemaMap = getSchemaMap(schema);
 
   for (const relation of Object.keys(relations)) {
-    const entity: Record<string, T> | undefined = schemaMap[
+    const entity: Maybe<Record<string, T>> = schemaMap[
       relation as SchemaEntity
-    ] as Record<string, T> | undefined;
-    if (typeof entity === "undefined") {
+    ] as Maybe<Record<string, T>>;
+    if (typeof entity === "undefined" || entity === null) {
       continue;
     }
 
@@ -482,10 +506,10 @@ function mapRelationOf<T>(
   return relations;
 }
 
-export function getRelationOfReturn(
+export const getRelationOfReturn: IGetRelation<Record<string, unknown[]>> = (
   type: unknown,
-  schema: GraphQLSchema,
-): Record<string, unknown[]> {
+  schema: Maybe<GraphQLSchema>,
+): Record<string, unknown[]> => {
   const relations: Partial<Record<SchemaEntity, unknown[]>> = {
     queries: [],
     mutations: [],
@@ -519,12 +543,14 @@ export function getRelationOfReturn(
       return results;
     },
   );
-}
+};
 
-export function getRelationOfField(
+export const getRelationOfField: IGetRelation<
+  Record<string, (GraphQLNamedType | GraphQLDirective)[]>
+> = (
   type: unknown,
-  schema: GraphQLSchema,
-): Record<string, (GraphQLNamedType | GraphQLDirective)[]> {
+  schema: Maybe<GraphQLSchema>,
+): Record<string, (GraphQLNamedType | GraphQLDirective)[]> => {
   const relations: Partial<
     Record<SchemaEntity, (GraphQLNamedType | GraphQLDirective)[]>
   > = {
@@ -575,12 +601,14 @@ export function getRelationOfField(
       return results;
     },
   );
-}
+};
 
-export function getRelationOfUnion(
+export const getRelationOfUnion: IGetRelation<
+  Record<string, GraphQLUnionType[]>
+> = (
   type: unknown,
-  schema: GraphQLSchema,
-): Record<string, GraphQLUnionType[]> {
+  schema: Maybe<GraphQLSchema>,
+): Record<string, GraphQLUnionType[]> => {
   const relations: Partial<Record<SchemaEntity, GraphQLUnionType[]>> = {
     unions: [],
   };
@@ -610,12 +638,14 @@ export function getRelationOfUnion(
       return results;
     },
   );
-}
+};
 
-export function getRelationOfInterface(
+export const getRelationOfInterface: IGetRelation<
+  Record<string, (GraphQLObjectType | GraphQLInterfaceType)[]>
+> = (
   type: unknown,
-  schema: GraphQLSchema,
-): Record<string, (GraphQLObjectType | GraphQLInterfaceType)[]> {
+  schema: Maybe<GraphQLSchema>,
+): Record<string, (GraphQLObjectType | GraphQLInterfaceType)[]> => {
   const relations: Partial<
     Record<SchemaEntity, (GraphQLObjectType | GraphQLInterfaceType)[]>
   > = {
@@ -650,20 +680,25 @@ export function getRelationOfInterface(
       return results;
     },
   );
-}
+};
 
-export function getRelationOfImplementation(
+export const getRelationOfImplementation: IGetRelation<
+  Record<
+    string,
+    (GraphQLObjectType | GraphQLInterfaceType | GraphQLUnionType)[]
+  >
+> = (
   type: unknown,
-  schema: GraphQLSchema,
+  schema: Maybe<GraphQLSchema>,
 ): Record<
   string,
   (GraphQLObjectType | GraphQLInterfaceType | GraphQLUnionType)[]
-> {
+> => {
   return {
     ...getRelationOfInterface(type, schema),
     ...getRelationOfUnion(type, schema),
   };
-}
+};
 
 export function isParametrizedField(
   type: unknown,

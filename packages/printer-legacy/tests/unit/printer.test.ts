@@ -152,7 +152,7 @@ describe("Printer", () => {
 
       expect(Printer.options).toBeUndefined();
 
-      Printer.init();
+      Printer.init(undefined);
 
       expect(Printer.options).toMatchInlineSnapshot(`
         {
@@ -183,7 +183,7 @@ describe("Printer", () => {
 
       Printer.options = {} as PrintTypeOptions;
 
-      Printer.init();
+      Printer.init(undefined);
 
       expect(Printer.options).toMatchInlineSnapshot(`{}`);
     });

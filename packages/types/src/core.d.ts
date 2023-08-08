@@ -1,6 +1,14 @@
 import type { GraphQLSchema } from "graphql";
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 
+import type {
+  CustomDirective,
+  GroupByDirectiveOptions,
+  PackageName,
+  LoaderOption,
+  DirectiveName,
+} from ".";
+
 export type ConfigDocOptions = {
   index?: boolean;
   pagination?: boolean;
@@ -24,22 +32,22 @@ export type TypeDiffMethod = DiffMethodName | "NONE" | "FORCE";
 type Pointer = string | UnnormalizedTypeDefPointer;
 
 export type ConfigOptions = {
-  id?: string;
-  baseURL?: string;
-  customDirective?: CustomDirective;
-  diffMethod?: TypeDiffMethod;
-  docOptions?: ConfigDocOptions;
-  groupByDirective?: GroupByDirectiveOptions;
-  homepage?: string;
-  linkRoot?: string;
-  loaders?: LoaderOption;
-  pretty?: boolean;
-  printer?: PackageName;
-  printTypeOptions?: ConfigPrintTypeOptions;
-  rootPath?: string;
-  schema?: Pointer;
-  tmpDir?: string;
-  skipDocDirective?: DirectiveName[] | DirectiveName;
+  id?: Maybe<string>;
+  baseURL?: Maybe<string>;
+  customDirective?: Maybe<CustomDirective>;
+  diffMethod?: Maybe<TypeDiffMethod>;
+  docOptions?: Maybe<ConfigDocOptions>;
+  groupByDirective?: Maybe<GroupByDirectiveOptions>;
+  homepage?: Maybe<string>;
+  linkRoot?: Maybe<string>;
+  loaders?: Maybe<LoaderOption>;
+  pretty?: Maybe<boolean>;
+  printer?: Maybe<PackageName>;
+  printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
+  rootPath?: Maybe<string>;
+  schema?: Maybe<Pointer>;
+  tmpDir?: Maybe<string>;
+  skipDocDirective?: Maybe<DirectiveName[] | DirectiveName>;
 };
 
 export type CliOptions = {
@@ -86,7 +94,5 @@ export type FunctionCheckSchemaChanges = (
   tmpDir: string,
   diffMethod?: DiffMethodName,
 ) => Promise<boolean>;
-
-export type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 export type { GraphQLProjectConfig } from "graphql-config";

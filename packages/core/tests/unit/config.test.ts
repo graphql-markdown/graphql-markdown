@@ -44,7 +44,7 @@ describe("config", () => {
       expect.hasAssertions();
 
       expect(
-        getSkipDocDirectives({ skip: "@noDoc" as DirectiveName }),
+        getSkipDocDirectives({ skip: "@noDoc" as DirectiveName }, undefined),
       ).toStrictEqual(["noDoc"]);
     });
 
@@ -87,7 +87,7 @@ describe("config", () => {
     test("returns default options is no config set", async () => {
       expect.hasAssertions();
 
-      const config = await buildConfig();
+      const config = await buildConfig(undefined, undefined);
 
       expect(config).toEqual(
         expect.objectContaining({
@@ -155,7 +155,7 @@ describe("config", () => {
         },
       };
 
-      const config = await buildConfig(configFileOpts);
+      const config = await buildConfig(configFileOpts, undefined);
 
       expect(config).toStrictEqual({
         id: DEFAULT_OPTIONS.id,
@@ -371,7 +371,7 @@ describe("config", () => {
     test("returns undefined if not configured", () => {
       expect.hasAssertions();
 
-      expect(getCustomDirectives()).toBeUndefined();
+      expect(getCustomDirectives(undefined, undefined)).toBeUndefined();
     });
 
     test("returns undefined if specified directives are skipped", () => {

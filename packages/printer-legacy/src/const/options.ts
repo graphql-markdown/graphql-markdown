@@ -2,6 +2,8 @@ import type {
   CollapsibleOption,
   DirectiveName,
   GraphQLSchema,
+  Maybe,
+  PrintTypeHeaderOptions,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -35,19 +37,19 @@ export const DEFAULT_OPTIONS: Required<
     | "level"
   >
 > & {
-  schema?: GraphQLSchema;
-  skipDocDirective?: DirectiveName[];
-  collapsible?: CollapsibleOption;
-  parentType?: string;
-  groups?: SchemaEntitiesGroupMap;
-  level?: SectionLevelValue;
+  schema: Maybe<GraphQLSchema>;
+  skipDocDirective: Maybe<DirectiveName[]>;
+  collapsible: Maybe<CollapsibleOption>;
+  parentType: Maybe<string>;
+  groups: Maybe<SchemaEntitiesGroupMap>;
+  level: Maybe<SectionLevelValue>;
 } = {
   ...PRINT_TYPE_DEFAULT_OPTIONS,
   basePath: "/",
   collapsible: undefined,
   customDirectives: {},
   groups: undefined,
-  header: { toc: true, pagination: true },
+  header: { toc: true, pagination: true } as Required<PrintTypeHeaderOptions>,
   level: undefined,
   parentType: undefined,
   schema: undefined,

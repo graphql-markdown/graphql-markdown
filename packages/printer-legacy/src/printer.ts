@@ -12,6 +12,7 @@ import type {
   GraphQLUnionType,
   IPrinter,
   MDXString,
+  Maybe,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -65,12 +66,12 @@ import { mdx } from "./const/mdx";
 
 import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
 export class Printer implements IPrinter {
-  static options: PrintTypeOptions | undefined;
+  static options: Maybe<PrintTypeOptions>;
 
   static init(
-    schema: GraphQLSchema | undefined = undefined,
-    baseURL: string = "schema",
-    linkRoot: string = "/",
+    schema: Maybe<GraphQLSchema>,
+    baseURL: Maybe<string> = "schema",
+    linkRoot: Maybe<string> = "/",
     {
       customDirectives,
       groups,
@@ -95,7 +96,7 @@ export class Printer implements IPrinter {
 
     Printer.options = {
       ...DEFAULT_OPTIONS,
-      basePath: pathUrl.join(linkRoot, baseURL),
+      basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
       codeSection:
         printTypeOptions?.codeSection ?? PRINT_TYPE_DEFAULT_OPTIONS.codeSection,
       customDirectives,
@@ -120,7 +121,7 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header;
+    const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header!;
     const pagination_buttons = pagination
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
@@ -228,10 +229,10 @@ export class Printer implements IPrinter {
   };
 
   static printType = (
-    name: string | undefined,
+    name: Maybe<string>,
     type: unknown,
-    options?: Partial<PrintTypeOptions>,
-  ): MDXString | undefined => {
+    options?: Maybe<Partial<PrintTypeOptions>>,
+  ): Maybe<MDXString> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
@@ -242,6 +243,7 @@ export class Printer implements IPrinter {
       typeof type === "undefined" ||
       type === null ||
       typeof name === "undefined" ||
+      name === null ||
       hasDirective(type, printTypeOptions.skipDocDirective)
     ) {
       return undefined;

@@ -2,6 +2,8 @@
  * Object functions
  */
 
+import type { Maybe } from "@graphql-markdown/types";
+
 export function isEmpty(obj: unknown): boolean {
   return !(
     typeof obj === "object" &&
@@ -12,11 +14,11 @@ export function isEmpty(obj: unknown): boolean {
 
 // get the specified property or nested property of an object
 export function getObjPath(
-  path?: string,
-  obj?: unknown,
+  path: Maybe<string>,
+  obj: unknown,
   fallback: unknown = "",
 ): unknown {
-  if (isEmpty(obj) || typeof path !== "string") {
+  if (isEmpty(obj) || typeof path !== "string" || path === null) {
     return fallback;
   }
 

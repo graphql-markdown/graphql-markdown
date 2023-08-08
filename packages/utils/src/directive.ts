@@ -4,6 +4,7 @@ import type {
   CustomDirectiveMap,
   CustomDirectiveOptions,
   GraphQLDirective,
+  Maybe,
 } from "@graphql-markdown/types";
 
 import { isEmpty } from "./object";
@@ -13,9 +14,9 @@ export const WILDCARD_DIRECTIVE = "*";
 export function getCustomDirectives(
   {
     directives: schemaDirectives,
-  }: { directives?: Record<DirectiveName, GraphQLDirective> },
+  }: { directives?: Maybe<Record<DirectiveName, GraphQLDirective>> },
   customDirectiveOptions?: CustomDirective,
-): CustomDirectiveMap | undefined {
+): Maybe<CustomDirectiveMap> {
   const customDirectives: CustomDirectiveMap = {};
 
   if (
@@ -56,7 +57,7 @@ export function getCustomDirectives(
 export function getCustomDirectiveOptions(
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
-): CustomDirectiveOptions | undefined {
+): Maybe<CustomDirectiveOptions> {
   if (schemaDirectiveName in customDirectiveOptions) {
     return customDirectiveOptions[schemaDirectiveName];
   }
