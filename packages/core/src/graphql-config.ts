@@ -3,6 +3,7 @@ import type {
   ConfigOptions,
   GraphQLProjectConfig,
   LoaderOption,
+  Maybe,
   PackageConfig,
   PackageOptionsConfig,
 } from "@graphql-markdown/types";
@@ -43,14 +44,18 @@ const setLoaderOptions = (
 };
 
 export const loadConfiguration = async (
-  id?: string,
-  options?: PackageOptionsConfig,
+  id: Maybe<string>,
+  options?: Maybe<PackageOptionsConfig>,
   { throwOnMissing, throwOnEmpty }: ThrowOptions = {
     throwOnMissing: false,
     throwOnEmpty: false,
   },
-): Promise<Readonly<ExtensionProjectConfig> | undefined> => {
+): Promise<Maybe<Readonly<ExtensionProjectConfig>>> => {
   let GraphQLConfig;
+
+  if (typeof id !== "string" || id === null) {
+    return undefined;
+  }
 
   try {
     GraphQLConfig = await import("graphql-config");

@@ -1,4 +1,12 @@
-import type { Maybe } from ".";
+import type {
+  Maybe,
+  TypeDeprecatedOption,
+  SchemaEntitiesGroupMap,
+  DirectiveName,
+  GraphQLSchema,
+  CustomDirectiveMap,
+  ConfigPrintTypeOptions,
+} from ".";
 
 export type RootTypeName =
   | "DIRECTIVE"
@@ -27,22 +35,24 @@ export type PrinterConfigPrintTypeOptions = {
 
 export type CollapsibleOption = { dataOpen: string; dataClose: string };
 
+export type PrintTypeHeaderOptions = { toc?: boolean; pagination?: boolean };
+
 export type PrintTypeOptions = {
   basePath: string;
-  codeSection?: boolean;
-  collapsible?: CollapsibleOption;
-  customDirectives?: CustomDirectiveMap;
-  deprecated?: TypeDeprecatedOption;
-  groups?: SchemaEntitiesGroupMap | undefined;
-  level?: SectionLevelValue;
-  parentType?: string;
-  parentTypePrefix: boolean;
+  codeSection?: Maybe<boolean>;
+  collapsible?: Maybe<CollapsibleOption>;
+  customDirectives?: Maybe<CustomDirectiveMap>;
+  deprecated?: Maybe<TypeDeprecatedOption>;
+  groups?: Maybe<SchemaEntitiesGroupMap>;
+  level?: Maybe<SectionLevelValue>;
+  parentType?: Maybe<string>;
+  parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
-  schema?: GraphQLSchema;
-  skipDocDirective?: DirectiveName[];
+  schema?: Maybe<GraphQLSchema>;
+  skipDocDirective?: Maybe<DirectiveName[]>;
   typeBadges?: boolean;
   withAttributes?: boolean;
-  header?: { toc?: boolean; pagination?: boolean };
+  header?: Maybe<PrintTypeHeaderOptions>;
 };
 
 export type SectionLevelValue = string & { _opaque: typeof SectionLevelValue };

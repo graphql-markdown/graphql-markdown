@@ -97,12 +97,10 @@ export type SchemaMap = {
   scalars?: Maybe<Record<string, GraphQLScalarType<unknown, unknown>>>;
 };
 
-export type IGetRelation = (
+export type IGetRelation<T> = (
   type: unknown,
-  schema: GraphQLSchema,
-) => Maybe<Record<string, unknown[]>>;
-
-
+  schema: Maybe<GraphQLSchema>,
+) => T;
 
 export type LoggerType = {
   debug: Function; // eslint-disable-line @typescript-eslint/ban-types

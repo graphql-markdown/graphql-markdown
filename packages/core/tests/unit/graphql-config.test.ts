@@ -18,13 +18,13 @@ describe("graphql-config", () => {
     test("returns undefined if not graphql-config found", async () => {
       expect.hasAssertions();
 
-      await expect(loadConfiguration()).resolves.toBeUndefined();
+      await expect(loadConfiguration("default")).resolves.toBeUndefined();
     });
 
     test("returns undefined if graphql-config empty", async () => {
       expect.hasAssertions();
 
-      await expect(loadConfiguration()).resolves.toBeUndefined();
+      await expect(loadConfiguration("default")).resolves.toBeUndefined();
     });
 
     test.each([
@@ -64,7 +64,7 @@ describe("graphql-config", () => {
       });
 
       await expect(
-        loadConfiguration(undefined, undefined, {
+        loadConfiguration("default", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
@@ -243,7 +243,7 @@ describe("config", () => {
         })),
       });
 
-      const config = await buildConfig();
+      const config = await buildConfig(undefined, undefined);
 
       expect(config).toEqual(
         expect.objectContaining({

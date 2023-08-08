@@ -1,6 +1,7 @@
 import type {
   Category,
   ConfigDocOptions,
+  Maybe,
   Printer,
   PrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -38,7 +39,7 @@ enum SIDEBAR_POSITION {
 
 export class Renderer {
   private printer: Printer;
-  group: SchemaEntitiesGroupMap | undefined;
+  group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
   baseURL: string;
   prettify: boolean;
@@ -48,7 +49,7 @@ export class Renderer {
     printer: Printer,
     outputDir: string,
     baseURL: string,
-    group: SchemaEntitiesGroupMap | undefined,
+    group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
     docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption },
   ) {
@@ -106,6 +107,7 @@ export class Renderer {
 
     if (
       typeof this.group !== "undefined" &&
+      this.group !== null &&
       rootTypeName in this.group &&
       name in this.group[rootTypeName]!
     ) {
@@ -150,7 +152,7 @@ export class Renderer {
     dirPath: string,
     name: string,
     type: unknown,
-  ): Promise<Category | undefined> {
+  ): Promise<Maybe<Category>> {
     const PageRegex =
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
 

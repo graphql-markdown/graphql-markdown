@@ -1,6 +1,14 @@
 import type { GraphQLSchema } from "graphql";
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 
+import type {
+  CustomDirective,
+  GroupByDirectiveOptions,
+  PackageName,
+  LoaderOption,
+  DirectiveName,
+} from ".";
+
 export type ConfigDocOptions = {
   index?: boolean;
   pagination?: boolean;
@@ -86,7 +94,5 @@ export type FunctionCheckSchemaChanges = (
   tmpDir: string,
   diffMethod?: DiffMethodName,
 ) => Promise<boolean>;
-
-export type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 export type { GraphQLProjectConfig } from "graphql-config";

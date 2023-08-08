@@ -32,7 +32,6 @@ import { Loader } from "graphql-config";
 import type {
   LoaderOption,
   PackageOptionsConfig,
-  CustomDirective,
   CustomDirectiveMap,
   DirectiveName,
   CustomDirectiveMapItem,
