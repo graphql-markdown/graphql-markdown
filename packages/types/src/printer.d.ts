@@ -1,3 +1,5 @@
+import type { Maybe } from ".";
+
 export type RootTypeName =
   | "DIRECTIVE"
   | "ENUM"
@@ -75,7 +77,61 @@ export type PrintDirectiveOptions = Pick<
 > &
   Partial<PrintTypeOptions>;
 
-export type IGetRelation = (
-  type: unknown,
-  schema: GraphQLSchema,
-) => Record<string, unknown[]> | undefined;
+export abstract class IPrinter {
+  static init(
+    schema: Maybe<GraphQLSchema>,
+    baseURL: string,
+    linkRoot: string,
+    options: Maybe<PrinterOptions>,
+  ): void;
+  static printHeader(
+    id: string,
+    title: string,
+    options: PrinterOptions & PrinterConfig,
+  ): string;
+  static printDescription(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+    noText: string,
+  ): string;
+  static printCode(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): string;
+  static printCustomDirectives(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): MDXString;
+  static printCustomTags(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): MDXString;
+  static printTypeMetadata(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): MDXString;
+  static printRelations(
+    type: unknown,
+    options: PrinterOptions & PrinterConfig,
+  ): MDXString;
+  static printType(
+    name: string,
+    type: unknown,
+    options: Partial<PrinterOptions & PrinterConfig>,
+  ): MDXString;
+}
+export type Printer = typeof IPrinter;
+
+export type PrinterConfig = {
+  schema: GraphQLSchema;
+  baseURL: string;
+  linkRoot: string;
+};
+
+export type PrinterOptions = {
+  customDirectives?: Maybe<CustomDirectiveMap>;
+  deprecated?: Maybe<TypeDeprecatedOption>;
+  groups?: Maybe<SchemaEntitiesGroupMap>;
+  printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
+  skipDocDirective?: Maybe<DirectiveName[]>;
+};

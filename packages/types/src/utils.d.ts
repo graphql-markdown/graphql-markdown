@@ -12,6 +12,8 @@ import type {
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
+import type { Maybe } from ".";
+
 export interface CustomDirectiveFunction {
   <T>(directive?: GraphQLDirective, node?: unknown): T;
 }
@@ -44,7 +46,7 @@ export type GroupByDirectiveOptions = {
 };
 
 export type SchemaEntitiesGroupMap = Partial<
-  Record<SchemaEntity, Record<string, string | undefined>>
+  Record<SchemaEntity, Record<string, Maybe<string>>>
 >;
 
 export type LoaderOption = {
@@ -83,76 +85,24 @@ export type SchemaEntity =
   | "scalars";
 
 export type SchemaMap = {
-  queries?: Record<string, GraphQLField<unknown, unknown>> | undefined;
-  mutations?: Record<string, GraphQLField<unknown, unknown>> | undefined;
-  subscriptions?: Record<string, GraphQLField<unknown, unknown>> | undefined;
-  directives?: Record<string, GraphQLDirective> | undefined;
-  objects?: Record<string, GraphQLObjectType<unknown, unknown>> | undefined;
-  unions?: Record<string, GraphQLUnionType> | undefined;
-  interfaces?: Record<string, GraphQLInterfaceType> | undefined;
-  enums?: Record<string, GraphQLEnumType> | undefined;
-  inputs?: Record<string, GraphQLInputObjectType> | undefined;
-  scalars?: Record<string, GraphQLScalarType<unknown, unknown>> | undefined;
+  queries?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
+  mutations?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
+  subscriptions?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
+  directives?: Maybe<Record<string, GraphQLDirective>>;
+  objects?: Maybe<Record<string, GraphQLObjectType<unknown, unknown>>>;
+  unions?: Maybe<Record<string, GraphQLUnionType>>;
+  interfaces?: Maybe<Record<string, GraphQLInterfaceType>>;
+  enums?: Maybe<Record<string, GraphQLEnumType>>;
+  inputs?: Maybe<Record<string, GraphQLInputObjectType>>;
+  scalars?: Maybe<Record<string, GraphQLScalarType<unknown, unknown>>>;
 };
 
-export abstract class IPrinter {
-  static init(
-    schema: GraphQLSchema,
-    baseURL: string,
-    linkRoot: string,
-    options: PrinterOptions,
-  ): void;
-  static printHeader(
-    id: string,
-    title: string,
-    options: PrinterOptions & PrinterConfig,
-  ): string;
-  static printDescription(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-    noText: string,
-  ): string;
-  static printCode(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-  ): string;
-  static printCustomDirectives(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-  ): MDXString;
-  static printCustomTags(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-  ): MDXString;
-  static printTypeMetadata(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-  ): MDXString;
-  static printRelations(
-    type: unknown,
-    options: PrinterOptions & PrinterConfig,
-  ): MDXString;
-  static printType(
-    name: string,
-    type: unknown,
-    options: Partial<PrinterOptions & PrinterConfig>,
-  ): MDXString;
-}
-export type Printer = typeof IPrinter;
+export type IGetRelation = (
+  type: unknown,
+  schema: GraphQLSchema,
+) => Maybe<Record<string, unknown[]>>;
 
-export type PrinterConfig = {
-  schema: GraphQLSchema;
-  baseURL: string;
-  linkRoot: string;
-};
 
-export type PrinterOptions = {
-  customDirectives?: CustomDirectiveMap;
-  deprecated?: TypeDeprecatedOption;
-  groups?: SchemaEntitiesGroupMap;
-  printTypeOptions?: ConfigPrintTypeOptions;
-  skipDocDirective?: DirectiveName[];
-};
 
 export type LoggerType = {
   debug: Function; // eslint-disable-line @typescript-eslint/ban-types

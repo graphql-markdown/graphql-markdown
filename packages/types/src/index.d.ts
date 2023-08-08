@@ -27,6 +27,8 @@ export type {
   DirectiveNode,
 } from "graphql";
 
+export type Maybe<T> = T | undefined | null;
+
 // @graphql-markdown/core
 export * from "./core";
 
