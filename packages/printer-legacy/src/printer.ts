@@ -231,7 +231,7 @@ export class Printer implements IPrinter {
   static printType = (
     name: Maybe<string>,
     type: unknown,
-    options?: Partial<PrintTypeOptions>,
+    options?: Maybe<Partial<PrintTypeOptions>>,
   ): Maybe<MDXString> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,

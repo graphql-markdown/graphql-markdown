@@ -127,13 +127,13 @@ export abstract class IPrinter {
   static printType(
     name: string,
     type: unknown,
-    options: Partial<PrinterOptions & PrinterConfig>,
+    options: Maybe<Partial<PrinterOptions & PrinterConfig>>,
   ): MDXString;
 }
 export type Printer = typeof IPrinter;
 
 export type PrinterConfig = {
-  schema: GraphQLSchema;
+  schema: Maybe<GraphQLSchema>;
   baseURL: string;
   linkRoot: string;
 };

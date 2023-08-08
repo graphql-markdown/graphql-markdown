@@ -43,7 +43,7 @@ export class Renderer {
   outputDir: string;
   baseURL: string;
   prettify: boolean;
-  options: ConfigDocOptions & { deprecated: TypeDeprecatedOption };
+  options: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>;
 
   constructor(
     printer: Printer,
@@ -51,7 +51,7 @@ export class Renderer {
     baseURL: string,
     group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
-    docOptions: ConfigDocOptions & { deprecated: TypeDeprecatedOption },
+    docOptions: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>,
   ) {
     this.printer = printer;
     this.group = group;
@@ -66,7 +66,7 @@ export class Renderer {
     dirPath: string,
     sidebarPosition: number = SIDEBAR_POSITION.FIRST,
     styleClass?: string,
-  ) {
+  ): Promise<void> {
     const filePath = join(dirPath, CATEGORY_YAML);
 
     if (await fileExists(filePath)) {
@@ -77,7 +77,7 @@ export class Renderer {
 
     const label = startCase(category);
     const link =
-      this.options.index !== true
+      this.options && this.options.index !== true
         ? "null"
         : `\n  type: generated-index\n  title: '${label} overview'`;
     const className =
@@ -95,7 +95,11 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (this.options.deprecated === "group" && isDeprecated(type)) {
+    if (
+      this.options &&
+      this.options.deprecated === "group" &&
+      isDeprecated(type)
+    ) {
       dirPath = join(dirPath, toSlug("deprecated"));
       await this.generateCategoryMetafile(
         "deprecated",
@@ -124,7 +128,10 @@ export class Renderer {
     return dirPath;
   }
 
-  async renderRootTypes(rootTypeName: SchemaEntity, type: unknown) {
+  async renderRootTypes(
+    rootTypeName: SchemaEntity,
+    type: unknown,
+  ): Promise<Maybe<Maybe<Category>[]>> {
     if (typeof type !== "object" || type === null) {
       return undefined;
     }
@@ -164,7 +171,7 @@ export class Renderer {
       content = this.printer.printType(
         fileName,
         type,
-        this.options as unknown as PrintTypeOptions,
+        this.options as PrintTypeOptions,
       );
       if (typeof content === "undefined") {
         return undefined;
