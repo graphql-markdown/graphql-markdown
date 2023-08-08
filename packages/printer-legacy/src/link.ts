@@ -2,6 +2,7 @@ import type {
   GraphQLNamedType,
   GraphQLType,
   MDXString,
+  Maybe,
   PrintLinkOptions,
   SchemaEntity,
   TypeLink,
@@ -31,7 +32,7 @@ import {
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
 
-export const getLinkCategory = (type: unknown): TypeLocale | undefined => {
+export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
     case isDirectiveType(type):
       return ROOT_TYPE_LOCALE.DIRECTIVE;
@@ -56,7 +57,7 @@ export const getLinkCategory = (type: unknown): TypeLocale | undefined => {
 export const toLink = (
   type: unknown,
   name: string,
-  operation: TypeLocale | undefined,
+  operation: Maybe<TypeLocale>,
   options: PrintLinkOptions,
 ): TypeLink => {
   const fallback: TypeLink = {
@@ -80,6 +81,7 @@ export const toLink = (
 
   if (
     typeof category === "undefined" ||
+    category === null ||
     typeof graphQLNamedType === "undefined" ||
     graphQLNamedType === null
   ) {
@@ -88,7 +90,7 @@ export const toLink = (
 
   // special case for relation map
   if (category === ROOT_TYPE_LOCALE.OPERATION) {
-    if (typeof operation === "undefined") {
+    if (typeof operation === "undefined" || operation === null) {
       return fallback;
     }
     category = operation;
@@ -115,7 +117,7 @@ export const toLink = (
     options.basePath,
     deprecated,
     group,
-    category,
+    category ?? "",
     toSlug(text),
   );
 
@@ -126,12 +128,13 @@ export const toLink = (
 };
 
 export const getRelationLink = (
-  category: TypeLocale | undefined,
+  category: Maybe<TypeLocale>,
   type: unknown,
   options: PrintLinkOptions,
-): TypeLink | undefined => {
+): Maybe<TypeLink> => {
   if (
     typeof category === "undefined" ||
+    category === null ||
     typeof type !== "object" ||
     type === null ||
     !("name" in type)
@@ -196,7 +199,7 @@ export const printLink = (type: unknown, options: PrintLinkOptions) => {
 
 export const printLinkAttributes = (
   type: unknown,
-  text: string = "",
+  text: Maybe<string> = "",
 ): string => {
   if (typeof type !== "object" || type === null) {
     return text ?? "";
@@ -218,5 +221,5 @@ export const printLinkAttributes = (
     return `${text}!`;
   }
 
-  return text;
+  return text ?? "";
 };

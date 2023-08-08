@@ -93,7 +93,9 @@ export const printSection = (
   }
 
   const level = (
-    "level" in options && typeof options.level !== "undefined"
+    "level" in options &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
       ? options.level
       : SectionLevels.LEVEL_3
   ) as SectionLevelValue;
@@ -104,8 +106,11 @@ export const printSection = (
     if (
       "collapsible" in options &&
       typeof options.collapsible !== "undefined" &&
+      options.collapsible !== null &&
       "dataOpen" in options.collapsible &&
-      "dataClose" in options.collapsible
+      typeof options.collapsible.dataOpen === "string" &&
+      "dataClose" in options.collapsible &&
+      typeof options.collapsible.dataClose === "string"
     ) {
       return [
         `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}`,
@@ -139,7 +144,9 @@ export const printSectionItems = (
   }
 
   const level = (
-    "level" in options && typeof options.level !== "undefined"
+    "level" in options &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
       ? options.level
       : SectionLevels.LEVEL_4
   ) as SectionLevelValue;
@@ -161,7 +168,9 @@ export const printSectionItem = (
   options: PrintTypeOptions,
 ): string | MDXString => {
   const level =
-    "level" in options && typeof options.level !== "undefined"
+    "level" in options &&
+    typeof options.level !== "undefined" &&
+    options.level !== null
       ? options.level
       : SectionLevels.LEVEL_4;
 

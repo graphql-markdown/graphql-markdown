@@ -1,6 +1,7 @@
 import type {
   IGetRelation,
   MDXString,
+  Maybe,
   PrintTypeOptions,
   RootTypeName,
   TypeLocale,
@@ -21,7 +22,7 @@ import { SectionLevels } from "./const/options";
 
 export const getRootTypeLocaleFromString = (
   text: string,
-): TypeLocale | undefined => {
+): Maybe<TypeLocale> => {
   for (const [type, props] of Object.entries(ROOT_TYPE_LOCALE)) {
     if (Object.values(props).includes(text)) {
       return ROOT_TYPE_LOCALE[type as RootTypeName];
@@ -30,10 +31,10 @@ export const getRootTypeLocaleFromString = (
   return undefined;
 };
 
-export const printRelationOf = (
+export const printRelationOf = <T>(
   type: unknown,
   section: unknown,
-  getRelation: IGetRelation | undefined,
+  getRelation: Maybe<IGetRelation<T>>,
   options: PrintTypeOptions,
 ): string | MDXString => {
   if (
@@ -47,7 +48,7 @@ export const printRelationOf = (
 
   const relations = getRelation(type, options.schema);
 
-  if (typeof relations === "undefined") {
+  if (typeof relations === "undefined" || relations === null) {
     return "";
   }
 
@@ -63,7 +64,7 @@ export const printRelationOf = (
       classname: DEFAULT_CSS_CLASSNAME,
     });
     data = data.concat(
-      types.map((t) => {
+      types.map((t: unknown) => {
         const link = getRelationLink(category, t, options);
         return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
@@ -85,14 +86,14 @@ export const printRelations = (
   type: unknown,
   options: PrintTypeOptions,
 ): string | MDXString => {
-  const relations: Record<string, IGetRelation> = {
+  const relations: Record<string, IGetRelation<unknown>> = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,
     "Implemented by": getRelationOfImplementation,
   };
 
   let data = "";
-  for (const [section, getRelation] of Object.entries<IGetRelation>(
+  for (const [section, getRelation] of Object.entries<IGetRelation<unknown>>(
     relations,
   )) {
     data += printRelationOf(type, section, getRelation, options);

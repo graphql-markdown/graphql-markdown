@@ -2,6 +2,7 @@ import type {
   Badge,
   GraphQLType,
   MDXString,
+  Maybe,
   PrintTypeOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
@@ -22,7 +23,7 @@ export const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 export const getTypeBadges = (
   type: unknown,
-  groups?: SchemaEntitiesGroupMap,
+  groups?: Maybe<SchemaEntitiesGroupMap>,
 ): Badge[] => {
   const badges: Badge[] = [];
 
@@ -51,16 +52,16 @@ export const getTypeBadges = (
   }
 
   const category = getLinkCategory(getNamedType(rootType));
-  if (typeof category !== "undefined") {
+  if (typeof category !== "undefined" && category !== null) {
     badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }
 
-  if (typeof groups !== "undefined") {
+  if (typeof groups !== "undefined" && groups !== null) {
     const typeCategory = (
       typeof category === "string" ? category : category?.plural
     ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
-    if (typeof group !== "undefined" && group !== "") {
+    if (typeof group !== "undefined" && group !== null && group !== "") {
       badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
     }
   }
@@ -72,7 +73,11 @@ export const printBadges = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  if (!("typeBadges" in options) || options.typeBadges !== true) {
+  if (
+    !("typeBadges" in options) ||
+    typeof options.typeBadges !== "boolean" ||
+    options.typeBadges !== true
+  ) {
     return "";
   }
 

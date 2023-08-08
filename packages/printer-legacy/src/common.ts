@@ -2,6 +2,7 @@ import type {
   PrintTypeOptions,
   MDXString,
   CustomDirectiveMapItem,
+  Maybe,
 } from "@graphql-markdown/types";
 
 import {
@@ -26,7 +27,11 @@ export const printCustomDirectives = (
 ): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
-  if (typeof constDirectiveMap === "undefined" || isEmpty(constDirectiveMap)) {
+  if (
+    typeof constDirectiveMap === "undefined" ||
+    constDirectiveMap === null ||
+    isEmpty(constDirectiveMap)
+  ) {
     return "";
   }
 
@@ -42,7 +47,7 @@ export const printCustomDirectives = (
 
 export const formatDescription = (
   type: unknown,
-  replacement: string = NO_DESCRIPTION_TEXT,
+  replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
 ): string | MDXString => {
   if (typeof type !== "object" || type === null) {
     return `${MARKDOWN_EOP}${replacement}`;
