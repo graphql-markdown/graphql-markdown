@@ -3,14 +3,15 @@ import type {
   GroupByDirectiveOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
+  Maybe,
 } from "@graphql-markdown/types";
 
 import { hasAstNode } from "./graphql";
 
 export function getGroups(
   rootTypes: SchemaMap,
-  groupByDirective?: GroupByDirectiveOptions,
-): SchemaEntitiesGroupMap | undefined {
+  groupByDirective: Maybe<GroupByDirectiveOptions>,
+): Maybe<SchemaEntitiesGroupMap> {
   const groups: SchemaEntitiesGroupMap = {};
 
   if (typeof groupByDirective === "undefined" || groupByDirective == null) {
@@ -37,9 +38,14 @@ export function getGroups(
 
 export function getGroupName(
   type: unknown,
-  groupByDirective?: GroupByDirectiveOptions,
-): string | undefined {
-  if (typeof groupByDirective === "undefined" || groupByDirective == null) {
+  groupByDirective: Maybe<GroupByDirectiveOptions>,
+): Maybe<string> {
+  if (
+    typeof type === "undefined" ||
+    type == null ||
+    typeof groupByDirective === "undefined" ||
+    groupByDirective == null
+  ) {
     return undefined;
   }
 

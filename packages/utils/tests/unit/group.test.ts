@@ -1,9 +1,4 @@
-import {
-  GraphQLFieldMap,
-  GraphQLNamedType,
-  GraphQLObjectType,
-  buildSchema,
-} from "graphql";
+import { GraphQLFieldMap, GraphQLObjectType, buildSchema } from "graphql";
 
 import type {
   GroupByDirectiveOptions,
@@ -63,11 +58,14 @@ describe("group-info", () => {
       >,
     };
 
-    test("returns undefined if groupByDirective not defined", () => {
-      expect.assertions(1);
+    test.each([[undefined], [null]])(
+      "returns undefined if groupByDirective is $value",
+      (value) => {
+        expect.assertions(1);
 
-      expect(getGroups(schemaMap)).toBeUndefined();
-    });
+        expect(getGroups(schemaMap, value)).toBeUndefined();
+      },
+    );
 
     test("returns group for each types in schema", () => {
       expect.assertions(1);
@@ -111,6 +109,26 @@ describe("group-info", () => {
     });
 
     test.each([
+      { case: "null type", type: null },
+      { case: "undefined type", type: undefined },
+    ])("returns undefined if type is $value", ({ type }) => {
+      expect.assertions(1);
+
+      expect(getGroupName(type, groupOptions)).toBeUndefined();
+    });
+
+    test.each([
+      { case: "null type", options: null },
+      { case: "undefined type", options: undefined },
+    ])("returns undefined if groupByDirective is $value", ({ options }) => {
+      expect.assertions(1);
+
+      const type = schema.getType("Bird")!;
+
+      expect(getGroupName(type, options)).toBeUndefined();
+    });
+
+    test.each([
       { case: "invalid type", type: {} },
       { case: "no directive", type: schema.getType("Unicorn") },
       {
@@ -121,9 +139,7 @@ describe("group-info", () => {
     ])("returns fallback group name if $case", ({ type }) => {
       expect.assertions(1);
 
-      expect(
-        getGroupName(type as unknown as GraphQLNamedType, groupOptions),
-      ).toBe("common");
+      expect(getGroupName(type, groupOptions)).toBe("common");
     });
   });
 });
