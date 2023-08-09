@@ -102,7 +102,7 @@ export const printSection = (
 
   const levelPosition = sectionLevels.indexOf(level);
 
-  const [openSection, closeSection] = (() => {
+  const [openSection, closeSection] = ((): string[] | MDXString[] => {
     if (
       "collapsible" in options &&
       typeof options.collapsible !== "undefined" &&
@@ -113,8 +113,8 @@ export const printSection = (
       typeof options.collapsible.dataClose === "string"
     ) {
       return [
-        `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}`,
-        `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}`,
+        `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}` as MDXString,
+        `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString,
       ];
     }
     return [MARKDOWN_EOP, MARKDOWN_EOP];

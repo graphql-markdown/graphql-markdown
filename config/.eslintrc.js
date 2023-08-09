@@ -48,6 +48,9 @@ module.exports = {
         tsconfigRootDir: join(__dirname, ".."),
         project: ["./packages/*/tsconfig.test.json"],
       },
+      rules: {
+        "@typescript-eslint/explicit-function-return-type": "error",
+      },
     },
     {
       files: ["**/*.mdx?"],

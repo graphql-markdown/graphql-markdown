@@ -1,5 +1,6 @@
 import type {
   GraphQLEnumType,
+  MDXString,
   PrintTypeOptions,
 } from "@graphql-markdown/types";
 
@@ -13,7 +14,10 @@ import {
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
 
-export const printEnumMetadata = (type: unknown, options: PrintTypeOptions) => {
+export const printEnumMetadata = (
+  type: unknown,
+  options: PrintTypeOptions,
+): string | MDXString => {
   if (!isEnumType(type)) {
     return "";
   }
@@ -26,7 +30,10 @@ export const printEnumMetadata = (type: unknown, options: PrintTypeOptions) => {
   );
 };
 
-export const printCodeEnum = (type: unknown, options: PrintTypeOptions) => {
+export const printCodeEnum = (
+  type: unknown,
+  options: PrintTypeOptions,
+): string => {
   if (!isEnumType(type)) {
     return "";
   }

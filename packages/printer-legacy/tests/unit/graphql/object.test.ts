@@ -27,7 +27,7 @@ describe("object", () => {
         },
       },
     },
-    interfaces: () => [
+    interfaces: (): GraphQLInterfaceType[] => [
       new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} }),
     ],
   });

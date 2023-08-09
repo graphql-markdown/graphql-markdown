@@ -15,17 +15,17 @@ export const Logger = {
     }
 
     if (typeof global.logger.log === "undefined") {
-      global.logger.log = (...args: unknown[]) =>
+      global.logger.log = (...args: unknown[]): void =>
         global.logger!.info.apply(null, args);
     }
 
     if (typeof global.logger.success === "undefined") {
-      global.logger.success = (...args: unknown[]) =>
+      global.logger.success = (...args: unknown[]): void =>
         global.logger!.info.apply(null, args);
     }
 
     if (typeof global.logger.debug === "undefined") {
-      global.logger.debug = (...args: unknown[]) =>
+      global.logger.debug = (...args: unknown[]): void =>
         global.logger!.info.apply(null, args);
     }
 

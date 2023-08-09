@@ -1,4 +1,4 @@
-import type { PrintTypeOptions } from "@graphql-markdown/types";
+import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
   getDefaultValue,
@@ -17,7 +17,7 @@ export const printCodeField = (
   type: unknown,
   options?: PrintTypeOptions,
   indentationLevel: number = 0,
-) => {
+): string | MDXString => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
@@ -48,7 +48,7 @@ export const printCodeField = (
 export const printCodeArguments = (
   type: unknown,
   indentationLevel: number = 1,
-) => {
+): string => {
   if (
     typeof type !== "object" ||
     type === null ||

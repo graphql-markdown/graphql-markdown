@@ -169,7 +169,7 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
   "parentType" in options &&
   typeof options.parentType !== "undefined";
 
-export const printLink = (type: unknown, options: PrintLinkOptions) => {
+export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   if (typeof type !== "object" || type === null) {
     return "";
   }
