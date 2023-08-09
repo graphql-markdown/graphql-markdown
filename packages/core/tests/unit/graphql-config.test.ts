@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vol } from "memfs";
 
 import { join } from "node:path";
 
-import { loadConfiguration } from "../../src/graphql-config";
+import * as CoreGraphQLConfig from "../../src/graphql-config";
 import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
 
 jest.mock("graphql-config");
@@ -15,16 +16,29 @@ describe("graphql-config", () => {
       jest.restoreAllMocks();
     });
 
-    test("returns undefined if not graphql-config found", async () => {
-      expect.hasAssertions();
-
-      await expect(loadConfiguration("default")).resolves.toBeUndefined();
-    });
-
     test("returns undefined if graphql-config empty", async () => {
       expect.hasAssertions();
 
-      await expect(loadConfiguration("default")).resolves.toBeUndefined();
+      await expect(
+        CoreGraphQLConfig.loadConfiguration("default"),
+      ).resolves.toBeUndefined();
+    });
+
+    test("returns undefined if an error is thrown", async () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(CoreGraphQLConfig, "setLoaderOptions")
+        .mockImplementationOnce(() => {
+          throw new Error();
+        });
+
+      await expect(
+        CoreGraphQLConfig.loadConfiguration("default", undefined, {
+          throwOnMissing: true,
+          throwOnEmpty: true,
+        }),
+      ).resolves.toBeUndefined();
     });
 
     test.each([
@@ -51,20 +65,24 @@ describe("graphql-config", () => {
         },
       };
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => ({
-          extension: jest.fn(() => ({
-            documents: undefined,
-            exclude: undefined,
-            include: undefined,
-            schema: graphqlConfig.schema,
-            ...graphqlConfig.extensions["graphql-markdown"],
-          })),
-        })),
-      });
+      const spy = jest
+        .spyOn(GraphQLConfig, "loadConfig")
+        .mockResolvedValueOnce({
+          getProject: () =>
+            ({
+              extension: (): any =>
+                ({
+                  documents: undefined,
+                  exclude: undefined,
+                  include: undefined,
+                  schema: graphqlConfig.schema,
+                  ...graphqlConfig.extensions["graphql-markdown"],
+                }) as unknown as any,
+            }) as unknown as any,
+        } as unknown as any);
 
       await expect(
-        loadConfiguration("default", undefined, {
+        CoreGraphQLConfig.loadConfiguration("default", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
@@ -74,6 +92,11 @@ describe("graphql-config", () => {
         exclude: undefined,
         include: undefined,
         schema: "http://localhost:4000/graphql",
+      });
+      expect(spy).toHaveBeenCalledWith({
+        extensions: [CoreGraphQLConfig.GraphQLConfigExtension],
+        throwOnMissing: true,
+        throwOnEmpty: true,
       });
     });
 
@@ -103,20 +126,22 @@ describe("graphql-config", () => {
         },
       };
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => ({
-          extension: jest.fn(() => ({
-            documents: undefined,
-            exclude: undefined,
-            include: undefined,
-            schema: graphqlConfig.schema,
-            ...graphqlConfig.extensions["graphql-markdown"],
-          })),
-        })),
-      });
+      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
+        getProject: () =>
+          ({
+            extension: () =>
+              ({
+                documents: undefined,
+                exclude: undefined,
+                include: undefined,
+                schema: graphqlConfig.schema,
+                ...graphqlConfig.extensions["graphql-markdown"],
+              }) as unknown as any,
+          }) as unknown as any,
+      } as unknown as any);
 
       await expect(
-        loadConfiguration("default", undefined, {
+        CoreGraphQLConfig.loadConfiguration("default", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
@@ -164,20 +189,22 @@ describe("graphql-config", () => {
         },
       };
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => ({
-          extension: jest.fn(() => ({
-            documents: undefined,
-            exclude: undefined,
-            include: undefined,
-            schema: graphqlConfig.projects.foo.schema,
-            ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
-          })),
-        })),
-      });
+      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
+        getProject: () =>
+          ({
+            extension: () =>
+              ({
+                documents: undefined,
+                exclude: undefined,
+                include: undefined,
+                schema: graphqlConfig.projects.foo.schema,
+                ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
+              }) as unknown as any,
+          }) as unknown as any,
+      } as unknown as any);
 
       await expect(
-        loadConfiguration("foo", undefined, {
+        CoreGraphQLConfig.loadConfiguration("foo", undefined, {
           throwOnMissing: true,
           throwOnEmpty: true,
         }),
@@ -207,8 +234,21 @@ describe("graphql-config", () => {
         getProject: jest.fn(() => undefined),
       });
 
-      await expect(loadConfiguration("baz")).resolves.toBeUndefined();
+      await expect(
+        CoreGraphQLConfig.loadConfiguration("baz"),
+      ).resolves.toBeUndefined();
     });
+
+    test.each([[undefined], [null]])(
+      "returns undefined if project id is %s",
+      async (value) => {
+        expect.hasAssertions();
+
+        await expect(
+          CoreGraphQLConfig.loadConfiguration(value),
+        ).resolves.toBeUndefined();
+      },
+    );
   });
 });
 
@@ -231,17 +271,19 @@ describe("config", () => {
         },
       };
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => ({
-          extension: jest.fn(() => ({
-            documents: undefined,
-            exclude: undefined,
-            include: undefined,
-            schema: graphqlConfig.schema,
-            ...graphqlConfig.extensions["graphql-markdown"],
-          })),
-        })),
-      });
+      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
+        getProject: () =>
+          ({
+            extension: () =>
+              ({
+                documents: undefined,
+                exclude: undefined,
+                include: undefined,
+                schema: graphqlConfig.schema,
+                ...graphqlConfig.extensions["graphql-markdown"],
+              }) as unknown as any,
+          }) as unknown as any,
+      } as unknown as any);
 
       const config = await buildConfig(undefined, undefined);
 
