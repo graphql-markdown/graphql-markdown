@@ -1,6 +1,7 @@
 jest.mock("node:fs/promises");
 
-import { join } from "node:path";
+import path from "node:path";
+jest.mock("node:path", () => jest.requireActual("node:path"));
 
 import { GraphQLScalarType, Kind } from "graphql";
 
@@ -97,6 +98,54 @@ describe("renderer", () => {
 
         expect(meta).toBeUndefined();
       });
+
+      test("return undefined and logs warning if an error is thrown", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(Printer, "printType").mockImplementationOnce(() => {
+          throw new Error();
+        });
+
+        const spy = jest
+          .spyOn(global.console, "warn")
+          .mockImplementationOnce(() => {});
+
+        const meta = await rendererInstance.renderTypeEntities(
+          "test",
+          "FooBar",
+          "TestType",
+        );
+
+        expect(meta).toBeUndefined();
+        expect(spy).toHaveBeenCalledWith(
+          `An error occurred while processing "TestType"`,
+        );
+      });
+
+      test("return undefined and logs warning if file path is invalid", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        jest
+          .spyOn(Utils.pathUrl, "relative")
+          .mockImplementationOnce(() => "not-valid.md");
+        const spy = jest
+          .spyOn(global.console, "warn")
+          .mockImplementationOnce(() => {});
+
+        const meta = await rendererInstance.renderTypeEntities(
+          "test",
+          "FooBar",
+          "TestType",
+        );
+
+        expect(meta).toBeUndefined();
+        expect(spy).toHaveBeenCalledWith(
+          `An error occurred while processing file test/foo-bar.mdx for type "TestType"`,
+        );
+      });
     });
 
     describe("renderSidebar()", () => {
@@ -176,7 +225,7 @@ describe("renderer", () => {
 
         const category = "foobar";
         const outputPath = "/output/docs";
-        const filePath = join(outputPath, "_category_.yml");
+        const filePath = path.join(outputPath, "_category_.yml");
 
         jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
         const spy = jest.spyOn(Utils, "saveFile");
@@ -194,7 +243,7 @@ describe("renderer", () => {
 
         const category = "foobar";
         const outputPath = "/output/docs";
-        const filePath = join(outputPath, "_category_.yml");
+        const filePath = path.join(outputPath, "_category_.yml");
 
         rendererInstance.options = {
           ...DEFAULT_RENDERER_OPTIONS,
@@ -231,7 +280,7 @@ describe("renderer", () => {
 
         const category = "foobar";
         const outputPath = "/output/docs";
-        const filePath = join(outputPath, "_category_.yml");
+        const filePath = path.join(outputPath, "_category_.yml");
 
         jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
         const spy = jest.spyOn(Utils, "saveFile");
@@ -245,6 +294,30 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           filePath,
           `label: Foobar\nposition: 42\nlink: null\n`,
+        );
+      });
+
+      test("generate _category_.yml file with classname", async () => {
+        expect.assertions(1);
+
+        const category = "foobar";
+        const outputPath = "/output/docs";
+        const filePath = path.join(outputPath, "_category_.yml");
+        const styleClass = "foo-baz";
+
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.generateCategoryMetafile(
+          category,
+          outputPath,
+          42,
+          styleClass,
+        );
+
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\n`,
         );
       });
     });
@@ -261,12 +334,12 @@ describe("renderer", () => {
           "objects",
         );
 
-        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith("objects", "/output/objects");
         expect(dirPath).toBe("/output/objects");
       });
 
       test("generate group _category_.yml file", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const [type, name, root, group] = [{}, "Foo", "objects", "lorem"];
 
@@ -281,12 +354,13 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith("lorem", "/output/lorem");
+        expect(spy).toHaveBeenCalledWith("objects", "/output/lorem/objects");
         expect(dirPath).toBe(`/output/${group}/${root.toLowerCase()}`);
       });
 
       test("generate deprecated _category_.yml file if type is deprecated", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
@@ -302,7 +376,13 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith(
+          "deprecated",
+          "/output/deprecated",
+          999,
+          "deprecated",
+        );
+        expect(spy).toHaveBeenCalledWith("Baz", "/output/deprecated/baz");
         expect(dirPath).toBe(`/output/deprecated/${root.toLowerCase()}`);
       });
 
@@ -323,7 +403,28 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith("Baz", "/output/baz");
+        expect(dirPath).toBe(`/output/${root.toLowerCase()}`);
+      });
+
+      test("generate no deprecated _category_.yml file if deprecated is not group", async () => {
+        expect.assertions(2);
+
+        const [type, name, root] = [{}, "Foo", "Baz"];
+
+        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+        });
+        jest.spyOn(Utils, "isDeprecated").mockReturnValue(false);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          type,
+          name,
+          root as SchemaEntity,
+        );
+
+        expect(spy).toHaveBeenCalledWith("Baz", "/output/baz");
         expect(dirPath).toBe(`/output/${root.toLowerCase()}`);
       });
 

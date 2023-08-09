@@ -13,6 +13,7 @@ import { Logger } from "@graphql-markdown/utils";
 const logger = Logger.getInstance();
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
+export const GraphQLConfigExtension = () => ({ name: EXTENSION_NAME }) as const;
 
 type ThrowOptions = {
   throwOnMissing: boolean;
@@ -23,7 +24,7 @@ type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> &
   Omit<ConfigOptions, "schema">;
 
-const setLoaderOptions = (
+export const setLoaderOptions = (
   loaders: LoaderOption,
   options: PackageOptionsConfig,
 ) => {
@@ -66,22 +67,29 @@ export const loadConfiguration = async (
 
   const config = await GraphQLConfig.loadConfig({
     ...options,
-    extensions: [() => ({ name: EXTENSION_NAME })],
+    extensions: [GraphQLConfigExtension],
     throwOnMissing,
     throwOnEmpty,
   });
 
+  if (typeof config === "undefined") {
+    return undefined;
+  }
+
   try {
-    const projectConfig: ExtensionProjectConfig = config!
+    const projectConfig: ExtensionProjectConfig = config
       .getProject(id)
       .extension(EXTENSION_NAME);
 
-    if (Array.isArray(projectConfig?.schema)) {
-      const schema = projectConfig?.schema[0];
+    if (Array.isArray(projectConfig.schema)) {
+      const schema = projectConfig.schema[0];
       if (typeof schema === "string") {
         projectConfig.schema = schema;
-      } else {
+      }
+
+      if (typeof projectConfig.schema === "object") {
         projectConfig.schema = Object.keys(schema)[0];
+
         if (typeof projectConfig.loaders !== "undefined") {
           projectConfig.loaders = setLoaderOptions(
             projectConfig.loaders,
@@ -90,6 +98,7 @@ export const loadConfiguration = async (
         }
       }
     }
+
     return projectConfig as Readonly<ExtensionProjectConfig>;
   } catch (error) {
     return undefined;

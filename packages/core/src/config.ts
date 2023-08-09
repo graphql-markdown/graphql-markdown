@@ -14,6 +14,7 @@ import type {
   Maybe,
   Options,
   PackageName,
+  TypeDeprecatedOption,
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
@@ -90,7 +91,7 @@ export async function buildConfig(
     ...configFileOpts,
   } as const;
 
-  const baseURL = cliOpts.base ?? config.baseURL!;
+  const baseURL: string = cliOpts.base ?? config.baseURL!;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
   return {
@@ -118,7 +119,7 @@ export async function buildConfig(
     schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
     skipDocDirective,
     tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
-  };
+  } as Options;
 }
 
 export function getCustomDirectives(
@@ -142,8 +143,9 @@ export function getCustomDirectives(
     ) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      (!("descriptor" in option) || typeof option.descriptor !== "function") &&
-      (!("tag" in option) || typeof option.tag !== "function")
+      ("descriptor" in option && typeof option.descriptor !== "function") ||
+      ("tag" in option && typeof option.tag !== "function") ||
+      !("tag" in option || "descriptor" in option)
     ) {
       throw new Error(
         `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/advanced/custom-directive`,
@@ -160,7 +162,9 @@ export function getDiffMethod(
   diff: TypeDiffMethod,
   force: boolean = false,
 ): TypeDiffMethod {
-  return force ? DiffMethod.FORCE : diff;
+  return force
+    ? DiffMethod.FORCE
+    : (diff.toLocaleUpperCase() as TypeDiffMethod);
 }
 
 export function getDocOptions(
@@ -177,7 +181,7 @@ export function getDocOptions(
     index:
       (cliOpts?.index || configOptions?.index) ??
       DEFAULT_OPTIONS.docOptions.index!,
-  };
+  } as Required<ConfigDocOptions>;
 }
 
 export function getPrintTypeOptions(
@@ -188,10 +192,11 @@ export function getPrintTypeOptions(
     codeSection:
       (!cliOpts?.noCode && configOptions?.codeSection) ??
       DEFAULT_OPTIONS.printTypeOptions.codeSection!,
-    deprecated:
-      cliOpts?.deprecated ??
-      configOptions?.deprecated ??
-      DEFAULT_OPTIONS.printTypeOptions.deprecated!,
+    deprecated: (
+      (cliOpts?.deprecated ??
+        configOptions?.deprecated ??
+        DEFAULT_OPTIONS.printTypeOptions.deprecated!) as string
+    ).toLocaleLowerCase() as TypeDeprecatedOption,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,
@@ -201,7 +206,7 @@ export function getPrintTypeOptions(
     typeBadges:
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
       DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
-  };
+  } as Required<ConfigPrintTypeOptions>;
 }
 
 export function getSkipDocDirectives(

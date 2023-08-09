@@ -59,7 +59,7 @@ describe("group-info", () => {
     };
 
     test.each([[undefined], [null]])(
-      "returns undefined if groupByDirective is $value",
+      "returns undefined if groupByDirective is %s",
       (value) => {
         expect.assertions(1);
 
@@ -111,7 +111,7 @@ describe("group-info", () => {
     test.each([
       { case: "null type", type: null },
       { case: "undefined type", type: undefined },
-    ])("returns undefined if type is $value", ({ type }) => {
+    ])("returns undefined if type is $case", ({ type }) => {
       expect.assertions(1);
 
       expect(getGroupName(type, groupOptions)).toBeUndefined();
@@ -120,7 +120,7 @@ describe("group-info", () => {
     test.each([
       { case: "null type", options: null },
       { case: "undefined type", options: undefined },
-    ])("returns undefined if groupByDirective is $value", ({ options }) => {
+    ])("returns undefined if groupByDirective is $case", ({ options }) => {
       expect.assertions(1);
 
       const type = schema.getType("Bird")!;

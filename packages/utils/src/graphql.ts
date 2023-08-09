@@ -1,6 +1,19 @@
 import {
   getDirectiveValues,
   getNamedType,
+  GraphQLBoolean,
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLFloat,
+  GraphQLID,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLString,
+  GraphQLUnionType,
   isDirective as isDirectiveType,
   isEnumType,
   isInterfaceType,
@@ -9,36 +22,16 @@ import {
   isObjectType,
   isUnionType,
   OperationTypeNode,
-  GraphQLSchema,
-  GraphQLInt,
-  GraphQLFloat,
-  GraphQLBoolean,
-  GraphQLID,
-  GraphQLString,
-  GraphQLDirective,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  GraphQLUnionType,
-  GraphQLInputObjectType,
-  GraphQLInterfaceType,
-  GraphQLEnumType,
 } from "graphql";
-import {
-  loadSchema as asyncLoadSchema,
-  LoadSchemaOptions,
-} from "@graphql-tools/load";
+import { loadSchema as asyncLoadSchema } from "@graphql-tools/load";
 import { Loader } from "graphql-config";
 
 import type {
-  LoaderOption,
-  PackageOptionsConfig,
-  CustomDirectiveMap,
-  DirectiveName,
-  CustomDirectiveMapItem,
-  SchemaMap,
-  SchemaEntity,
   ASTNode,
+  CustomDirectiveMap,
+  CustomDirectiveMapItem,
   DirectiveDefinitionNode,
+  DirectiveName,
   DirectiveNode,
   GraphQLField,
   GraphQLFieldMap,
@@ -46,10 +39,15 @@ import type {
   GraphQLNamedType,
   GraphQLSchemaConfig,
   GraphQLType,
-  ObjectTypeDefinitionNode,
-  Maybe,
   IGetRelation,
+  LoaderOption,
+  LoadSchemaOptions,
+  Maybe,
+  ObjectTypeDefinitionNode,
+  PackageOptionsConfig,
   PrintTypeOptions,
+  SchemaEntity,
+  SchemaMap,
 } from "@graphql-markdown/types";
 
 import { convertArrayToObject } from "./array";
@@ -97,10 +95,14 @@ export async function loadSchema(
 }
 
 export async function getDocumentLoaders(
-  loadersList: LoaderOption,
-): Promise<LoadSchemaOptions> {
+  loadersList: Maybe<LoaderOption>,
+): Promise<Maybe<LoadSchemaOptions>> {
   const loaders: Loader[] = [];
   const loaderOptions: PackageOptionsConfig = {};
+
+  if (typeof loadersList !== "object" || loadersList === null) {
+    return undefined;
+  }
 
   for (const [className, graphqlDocumentLoader] of Object.entries(
     loadersList,

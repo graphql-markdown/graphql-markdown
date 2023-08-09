@@ -3,10 +3,10 @@ import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 
 import type {
   CustomDirective,
-  GroupByDirectiveOptions,
-  PackageName,
-  LoaderOption,
   DirectiveName,
+  GroupByDirectiveOptions,
+  LoaderOption,
+  PackageName,
 } from ".";
 
 export type ConfigDocOptions = {
@@ -32,13 +32,13 @@ export type TypeDiffMethod = DiffMethodName | "NONE" | "FORCE";
 type Pointer = string | UnnormalizedTypeDefPointer;
 
 export type ConfigOptions = {
-  id?: Maybe<string>;
   baseURL?: Maybe<string>;
   customDirective?: Maybe<CustomDirective>;
   diffMethod?: Maybe<TypeDiffMethod>;
   docOptions?: Maybe<ConfigDocOptions>;
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
   homepage?: Maybe<string>;
+  id?: Maybe<string>;
   linkRoot?: Maybe<string>;
   loaders?: Maybe<LoaderOption>;
   pretty?: Maybe<boolean>;
@@ -46,47 +46,47 @@ export type ConfigOptions = {
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   rootPath?: Maybe<string>;
   schema?: Maybe<Pointer>;
-  tmpDir?: Maybe<string>;
   skipDocDirective?: Maybe<DirectiveName[] | DirectiveName>;
+  tmpDir?: Maybe<string>;
 };
 
 export type CliOptions = {
-  schema?: Pointer;
-  root?: string;
   base?: string;
-  link?: string;
+  deprecated?: TypeDeprecatedOption;
+  diff?: TypeDiffMethod;
+  force?: boolean;
+  groupByDirective?: string;
   homepage?: string;
+  index?: boolean;
+  link?: string;
   noCode?: boolean;
   noPagination?: boolean;
   noParentType?: boolean;
   noRelatedType?: boolean;
   noToc?: boolean;
   noTypeBadges?: boolean;
-  index?: boolean;
-  force?: boolean;
-  diff?: TypeDiffMethod;
-  tmp?: string;
-  groupByDirective?: string;
-  skip?: string[] | string;
-  deprecated?: TypeDeprecatedOption;
   pretty?: boolean;
+  root?: string;
+  schema?: Pointer;
+  skip?: string[] | string;
+  tmp?: string;
 };
 
 export type Options = Omit<
   ConfigOptions,
   "homepage" | "pretty" | "schema" | "rootPath"
 > & {
+  baseURL: string;
+  docOptions: Required<ConfigDocOptions>;
   homepageLocation: string;
+  linkRoot: string;
   outputDir: string;
   prettify: boolean;
-  schemaLocation: Pointer;
   printer: PackageName;
-  tmpDir: string;
-  baseURL: string;
-  linkRoot: string;
-  skipDocDirective: DirectiveName[];
-  docOptions: Required<ConfigDocOptions>;
   printTypeOptions: Required<ConfigPrintTypeOptions>;
+  schemaLocation: Pointer;
+  skipDocDirective: DirectiveName[];
+  tmpDir: string;
 };
 
 export type FunctionCheckSchemaChanges = (
@@ -94,5 +94,7 @@ export type FunctionCheckSchemaChanges = (
   tmpDir: string,
   diffMethod?: DiffMethodName,
 ) => Promise<boolean>;
+
+export type GeneratorOptions = Options & { loggerModule?: string };
 
 export type { GraphQLProjectConfig } from "graphql-config";

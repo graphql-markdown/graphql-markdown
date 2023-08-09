@@ -5,6 +5,7 @@ import type {
   CustomDirective,
   DirectiveName,
   GraphQLDirective,
+  Maybe,
   PackageName,
   TypeDiffMethod,
 } from "@graphql-markdown/types";
@@ -48,13 +49,33 @@ describe("config", () => {
       ).toStrictEqual(["noDoc"]);
     });
 
-    test("supports deprecated skip option", () => {
+    test.each([
+      {
+        location: "configFileOpts",
+        options: {
+          cliOpt: undefined,
+          configFileOpts: {
+            printTypeOptions: { deprecated: "skip" },
+          },
+        },
+      },
+      {
+        location: "configFileOpts",
+        options: {
+          cliOpt: { deprecated: "skip" },
+          configFileOpts: {
+            printTypeOptions: { deprecated: "group" },
+          },
+        },
+      },
+    ])("supports deprecated skip option in $location", ({ options }) => {
       expect.hasAssertions();
 
       expect(
-        getSkipDocDirectives(undefined, {
-          printTypeOptions: { deprecated: "skip" },
-        }),
+        getSkipDocDirectives(
+          options.cliOpt as CliOptions,
+          options.configFileOpts,
+        ),
       ).toStrictEqual(["deprecated"]);
     });
   });
@@ -69,9 +90,9 @@ describe("config", () => {
     test("throws an error if not a string", () => {
       expect.hasAssertions();
 
-      expect(() =>
-        getSkipDocDirective("+NotADirective@" as DirectiveName),
-      ).toThrow(Error);
+      expect(() => getSkipDocDirective({} as unknown as DirectiveName)).toThrow(
+        Error,
+      );
     });
 
     test("throws an error if format is not a directive", () => {
@@ -79,7 +100,7 @@ describe("config", () => {
 
       expect(() =>
         getSkipDocDirective("+NotADirective@" as DirectiveName),
-      ).toThrow(Error);
+      ).toThrow(`Invalid "+NotADirective@"`);
     });
   });
 
@@ -374,6 +395,12 @@ describe("config", () => {
       expect(getCustomDirectives(undefined, undefined)).toBeUndefined();
     });
 
+    test("returns undefined if empty", () => {
+      expect.hasAssertions();
+
+      expect(getCustomDirectives({}, undefined)).toBeUndefined();
+    });
+
     test("returns undefined if specified directives are skipped", () => {
       expect.hasAssertions();
 
@@ -386,15 +413,37 @@ describe("config", () => {
       ).toBeUndefined();
     });
 
-    test("throws an error if descriptor format is invalid", () => {
+    test.each([
+      {
+        case: "undefined",
+        options: {
+          test: {},
+        },
+      },
+
+      {
+        case: "descriptor is not a function",
+        options: {
+          test: {
+            descriptor: {},
+          },
+        },
+      },
+
+      {
+        case: "tag is is not a function",
+        options: {
+          test: {
+            descriptor: () => {},
+            tag: {},
+          },
+        },
+      },
+    ])("throws an error if format is $case", ({ options }) => {
       expect.assertions(1);
 
-      const options = {
-        test: {},
-      };
-
       expect(() => {
-        getCustomDirectives(options);
+        getCustomDirectives(options as Maybe<CustomDirective>);
       }).toThrow(
         `Wrong format for plugin custom directive "test".\nPlease refer to https://graphql-markdown.github.io/docs/advanced/custom-directive`,
       );
