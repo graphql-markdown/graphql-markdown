@@ -9,6 +9,11 @@ import * as diff from "@graphql-markdown/diff";
 
 describe("diff", () => {
   describe("hasChanges()", () => {
+    beforeEach(() => {
+      // silent console
+      jest.spyOn(global.console, "warn").mockImplementation(() => {});
+    });
+
     afterEach(() => {
       jest.restoreAllMocks();
     });
