@@ -105,20 +105,22 @@ describe("graphql", () => {
     test("returns loaders when plugin config loaders format is a string", async () => {
       expect.hasAssertions();
 
-      const loaders = {
+      const loaderList = {
         GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
       } as LoaderOption;
-      const { loaders: documentLoaders, ...loaderOptions } =
-        await getDocumentLoaders(loaders);
+      const documentLoaders = await getDocumentLoaders(loaderList);
 
-      expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
+      expect(documentLoaders).toBeDefined();
+      const { loaders, ...loaderOptions } = documentLoaders!;
+
+      expect(loaders).toMatchObject([new GraphQLFileLoader()]);
       expect(loaderOptions).toMatchObject({});
     });
 
     test("returns loaders and configuration when plugin config loaders format is an object", async () => {
       expect.hasAssertions();
 
-      const loaders = {
+      const loaderList = {
         GraphQLFileLoader: {
           module: "@graphql-tools/graphql-file-loader",
           options: {
@@ -126,10 +128,12 @@ describe("graphql", () => {
           },
         },
       } as LoaderOption;
-      const { loaders: documentLoaders, ...loaderOptions } =
-        await getDocumentLoaders(loaders);
+      const documentLoaders = await getDocumentLoaders(loaderList);
 
-      expect(documentLoaders).toMatchObject([new GraphQLFileLoader()]);
+      expect(documentLoaders).toBeDefined();
+      const { loaders, ...loaderOptions } = documentLoaders!;
+
+      expect(loaders).toMatchObject([new GraphQLFileLoader()]);
       expect(loaderOptions).toMatchObject({
         option1: true,
       });
@@ -138,8 +142,8 @@ describe("graphql", () => {
     test("throw an error when loader list is invalid", async () => {
       expect.hasAssertions();
 
-      const loaders = { GraphQLFileLoader: {} } as LoaderOption;
-      await expect(getDocumentLoaders(loaders)).rejects.toThrow(
+      const loaderList = { GraphQLFileLoader: {} } as LoaderOption;
+      await expect(getDocumentLoaders(loaderList)).rejects.toThrow(
         `Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`,
       );
     });

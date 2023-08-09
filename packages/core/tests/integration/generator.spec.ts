@@ -4,7 +4,11 @@ import { vol } from "memfs";
 jest.mock("fs");
 jest.mock("node:fs/promises");
 
-import type { ClassName, MDXString } from "@graphql-markdown/types";
+import type {
+  ClassName,
+  GeneratorOptions,
+  MDXString,
+} from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
@@ -12,7 +16,7 @@ import { Printer } from "@graphql-markdown/printer-legacy";
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
-import { GeneratorOptions, generateDocFromSchema } from "../../src/generator";
+import { generateDocFromSchema } from "../../src/generator";
 import {
   DEFAULT_OPTIONS,
   DeprecatedOption,

@@ -1,6 +1,6 @@
 import type {
   DiffMethodName,
-  Options,
+  GeneratorOptions,
   SchemaEntity,
 } from "@graphql-markdown/types";
 
@@ -21,35 +21,31 @@ import { DiffMethod } from "./config";
 const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
 
-export type GeneratorOptions = Options & { loggerModule?: string };
-
 export const generateDocFromSchema = async ({
   baseURL,
-  schemaLocation,
-  outputDir,
-  linkRoot,
-  homepageLocation,
-  diffMethod,
-  tmpDir,
-  loaders: loadersList,
-  groupByDirective,
-  prettify,
-  docOptions,
-  printTypeOptions,
-  printer: printerModule,
-  skipDocDirective,
   customDirective,
+  diffMethod,
+  docOptions,
+  groupByDirective,
+  homepageLocation,
+  linkRoot,
+  loaders: loadersList,
   loggerModule,
+  outputDir,
+  prettify,
+  printer: printerModule,
+  printTypeOptions,
+  schemaLocation,
+  skipDocDirective,
+  tmpDir,
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
   const logger = Logger.setInstance(loggerModule);
 
-  const loaders = loadersList
-    ? await getDocumentLoaders(loadersList)
-    : undefined;
+  const loaders = await getDocumentLoaders(loadersList);
 
-  if (typeof loaders === "undefined") {
+  if (typeof loaders === "undefined" || loaders === null) {
     logger.error(
       `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
     );
@@ -78,17 +74,17 @@ export const generateDocFromSchema = async ({
 
     // config mandatory
     {
-      schema,
       baseURL,
       linkRoot,
+      schema,
     },
 
     // options
     {
+      customDirectives,
       groups,
       printTypeOptions,
       skipDocDirective,
-      customDirectives,
     },
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
