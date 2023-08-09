@@ -95,7 +95,7 @@ describe("string", () => {
       ["42 dollars", "42 dollars"],
       ["fooBar", "Foobar"],
     ])(
-      "returns capitalized string: first letter uppercase, rest lowercase",
+      "returns capitalized string: first letter uppercase, rest lowercase - %#",
       (input, expected) => {
         expect.hasAssertions();
 

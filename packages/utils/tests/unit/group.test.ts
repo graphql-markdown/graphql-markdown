@@ -59,7 +59,7 @@ describe("group-info", () => {
     };
 
     test.each([[undefined], [null]])(
-      "returns undefined if groupByDirective is $value",
+      "returns undefined if groupByDirective is %s",
       (value) => {
         expect.assertions(1);
 

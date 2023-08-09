@@ -19,7 +19,7 @@ describe("diff", () => {
     });
 
     test.each([[undefined], [null]])(
-      "returns true if diffMethod not set",
+      "returns true if diffMethod is %s",
       async (value: unknown) => {
         expect.assertions(2);
 
@@ -33,7 +33,7 @@ describe("diff", () => {
     );
 
     test.each([[undefined], [null]])(
-      "returns true if diffModule not set",
+      "returns true if diffModule is %s",
       async (value) => {
         expect.assertions(2);
 

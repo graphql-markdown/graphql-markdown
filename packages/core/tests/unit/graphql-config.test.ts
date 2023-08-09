@@ -39,7 +39,7 @@ describe("graphql-config", () => {
         ],
       ],
       [["http://localhost:4000/graphql", "./packages/bar/schema.graphql"]],
-    ])("returns config if graphql-config valid", async (schema) => {
+    ])("returns config if graphql-config valid - %#", async (schema) => {
       expect.hasAssertions();
 
       const graphqlConfig = {

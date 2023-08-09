@@ -29,26 +29,29 @@ describe("generator", () => {
       expect(printer).toHaveProperty("printType");
     });
 
-    test("throws exception if no printer module set", async () => {
-      expect.assertions(1);
+    test.each([[undefined], [null]])(
+      "throws exception if no printer module is %s",
+      async (value) => {
+        expect.assertions(1);
 
-      await expect(
-        getPrinter(
-          undefined,
-          {
-            schema: new GraphQLSchema({}),
-            baseURL: "/",
-            linkRoot: "root",
-          },
-          {
-            groups: {},
-            printTypeOptions: {},
-          },
-        ),
-      ).rejects.toThrow(
-        `Invalid printer module name in "printTypeOptions" settings.`,
-      );
-    });
+        await expect(
+          getPrinter(
+            value,
+            {
+              schema: new GraphQLSchema({}),
+              baseURL: "/",
+              linkRoot: "root",
+            },
+            {
+              groups: {},
+              printTypeOptions: {},
+            },
+          ),
+        ).rejects.toThrow(
+          `Invalid printer module name in "printTypeOptions" settings.`,
+        );
+      },
+    );
 
     test("throws exception if no printer config set", async () => {
       expect.assertions(1);
