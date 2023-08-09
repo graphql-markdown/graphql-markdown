@@ -143,8 +143,9 @@ export function getCustomDirectives(
     ) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      (!("descriptor" in option) || typeof option.descriptor !== "function") &&
-      (!("tag" in option) || typeof option.tag !== "function")
+      ("descriptor" in option && typeof option.descriptor !== "function") ||
+      ("tag" in option && typeof option.tag !== "function") ||
+      !("tag" in option || "descriptor" in option)
     ) {
       throw new Error(
         `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/advanced/custom-directive`,
