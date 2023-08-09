@@ -4,29 +4,40 @@ import type { PackageName } from "@graphql-markdown/types";
 
 import { getPrinter } from "../../src/printer";
 
+import { Printer } from "@graphql-markdown/printer-legacy";
 jest.mock("@graphql-markdown/printer-legacy");
 
 describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
+      const spy = jest.spyOn(Printer, "init");
+
+      const printerConfig = {
+        schema: new GraphQLSchema({}),
+        baseURL: "/",
+        linkRoot: "root",
+      };
+      const printerOptions = {
+        groups: {},
+        printTypeOptions: {},
+      };
       const printer = await getPrinter(
         "@graphql-markdown/printer-legacy" as PackageName,
-        {
-          schema: new GraphQLSchema({}),
-          baseURL: "/",
-          linkRoot: "root",
-        },
-        {
-          groups: {},
-          printTypeOptions: {},
-        },
+        printerConfig,
+        printerOptions,
       );
 
       expect(printer).toBeDefined();
       expect(printer).toHaveProperty("init");
       expect(printer).toHaveProperty("printType");
+      expect(spy).toHaveBeenCalledWith(
+        printerConfig.schema,
+        printerConfig.baseURL,
+        printerConfig.linkRoot,
+        printerOptions,
+      );
     });
 
     test.each([[undefined], [null]])(
