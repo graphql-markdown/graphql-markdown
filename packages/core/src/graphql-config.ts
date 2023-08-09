@@ -27,7 +27,7 @@ export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> &
 export const setLoaderOptions = (
   loaders: LoaderOption,
   options: PackageOptionsConfig,
-) => {
+): LoaderOption => {
   for (const loader in loaders) {
     if (typeof loaders[loader as ClassName] === "string") {
       loaders[loader as ClassName] = {

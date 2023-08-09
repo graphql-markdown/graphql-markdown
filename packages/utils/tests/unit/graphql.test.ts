@@ -923,7 +923,7 @@ describe("graphql", () => {
     const descriptor = (
       directiveType: GraphQLNamedType,
       constDirectiveType: GraphQLDirective,
-    ) => `Test${constDirectiveType.name}`;
+    ): string => `Test${constDirectiveType.name}`;
     const options = {
       customDirectives: {
         testA: {

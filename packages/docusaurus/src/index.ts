@@ -25,7 +25,7 @@ export default function pluginGraphQLDocGenerator(
 
   return {
     name: NAME,
-    extendCli(cli) {
+    extendCli(cli): void {
       cli
         .command(command)
         .description(description)

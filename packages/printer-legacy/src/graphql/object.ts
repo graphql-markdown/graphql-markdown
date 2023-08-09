@@ -67,5 +67,7 @@ export const printCodeType = (
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
 };
 
-export const printCodeObject = (type: unknown, options: PrintTypeOptions) =>
-  printCodeType(type, "type", options);
+export const printCodeObject = (
+  type: unknown,
+  options: PrintTypeOptions,
+): string => printCodeType(type, "type", options);

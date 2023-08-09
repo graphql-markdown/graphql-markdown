@@ -141,7 +141,7 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective) =>
+            descriptor: (directive: GraphQLDirective): string =>
               `Test ${directive.name}`,
           },
         },
@@ -245,7 +245,7 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective) =>
+            descriptor: (directive: GraphQLDirective): string =>
               `Test ${directive.name}`,
           },
         },

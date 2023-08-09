@@ -2,6 +2,7 @@ import type {
   PrintDirectiveOptions,
   GraphQLDirective,
   GraphQLArgument,
+  MDXString,
 } from "@graphql-markdown/types";
 
 import { getTypeName } from "@graphql-markdown/utils";
@@ -9,7 +10,7 @@ import { getTypeName } from "@graphql-markdown/utils";
 import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
 
-const printCodeDirectiveLocation = (type: GraphQLDirective) => {
+const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
   if (
     typeof type.locations === "undefined" ||
     type.locations == null ||
@@ -31,7 +32,7 @@ const printCodeDirectiveLocation = (type: GraphQLDirective) => {
 export const printDirectiveMetadata = (
   type: GraphQLDirective,
   options: PrintDirectiveOptions,
-) => {
+): string | MDXString => {
   if ("args" in type === false) {
     return "";
   }
@@ -48,7 +49,7 @@ export const printCodeDirective = (
   type: GraphQLDirective,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: PrintDirectiveOptions,
-) => {
+): string => {
   let code = `directive @${getTypeName(type)}`;
   code += printCodeArguments(type);
   code += printCodeDirectiveLocation(type);

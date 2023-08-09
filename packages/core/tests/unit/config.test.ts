@@ -434,7 +434,7 @@ describe("config", () => {
         case: "tag is is not a function",
         options: {
           test: {
-            descriptor: () => {},
+            descriptor: (): void => {},
             tag: {},
           },
         },
@@ -455,7 +455,7 @@ describe("config", () => {
       const descriptor = (
         _: GraphQLDirective,
         constDirectiveType: GraphQLDirective,
-      ) => `Test${constDirectiveType.name}`;
+      ): string => `Test${constDirectiveType.name}`;
       const options = {
         testA: { descriptor },
         testB: { descriptor },

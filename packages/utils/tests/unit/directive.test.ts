@@ -31,11 +31,11 @@ describe("directive", () => {
   const descriptor = (
     directiveType: GraphQLNamedType,
     constDirectiveType: GraphQLDirective,
-  ) => `Test ${constDirectiveType.name}`;
+  ): string => `Test ${constDirectiveType.name}`;
   const wildcard = (
     directiveType: GraphQLNamedType,
     constDirectiveType: GraphQLDirective,
-  ) => `TestWildcard ${constDirectiveType.name}`;
+  ): string => `TestWildcard ${constDirectiveType.name}`;
   const customDirectiveOptions = {
     testA: {
       descriptor,
