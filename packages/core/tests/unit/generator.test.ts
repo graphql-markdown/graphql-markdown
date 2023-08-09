@@ -33,6 +33,31 @@ import { generateDocFromSchema } from "../../src";
 
 describe("generator", () => {
   describe("generateDocFromSchema()", () => {
+    const options = {
+      baseURL: "base URL",
+      schemaLocation: "schema location",
+      outputDir: "output dir",
+      linkRoot: "link root",
+      homepageLocation: "homepage location",
+      tmpDir: "temp dir",
+      diffMethod: "diff method",
+      docOptions: {
+        index: true,
+        pagination: true,
+        toc: true,
+      },
+      printTypeOptions: {
+        codeSection: true,
+        deprecated: "skip",
+        parentTypePrefix: true,
+        relatedTypeSection: true,
+        typeBadges: true,
+      },
+      prettify: true,
+      printer: "printer module",
+      skipDocDirective: "doc directive",
+    } as unknown as GeneratorOptions;
+
     beforeAll(() => {
       Object.assign(global, { logger: global.console });
     });
@@ -52,31 +77,7 @@ describe("generator", () => {
     });
 
     test("passes options to Printer and Renderer", async () => {
-      const options = {
-        baseURL: "base URL",
-        schemaLocation: "schema location",
-        outputDir: "output dir",
-        linkRoot: "link root",
-        homepageLocation: "homepage location",
-        tmpDir: "temp dir",
-        diffMethod: "diff method",
-        docOptions: {
-          index: true,
-          pagination: true,
-          toc: true,
-        },
-        printTypeOptions: {
-          codeSection: true,
-          deprecated: "skip",
-          parentTypePrefix: true,
-          relatedTypeSection: true,
-          typeBadges: true,
-        },
-        prettify: true,
-        printer: "printer module",
-        skipDocDirective: "doc directive",
-      } as unknown as GeneratorOptions;
-
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
       jest
         .spyOn(Utils, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
@@ -88,11 +89,10 @@ describe("generator", () => {
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
       jest.spyOn(Utils, "getGroups").mockReturnValueOnce(undefined);
       jest.spyOn(Utils, "getCustomDirectives").mockReturnValueOnce(undefined);
-      jest
+
+      const getPrinterSpy = jest
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-
-      const getPrinterSpy = jest.spyOn(CorePrinter, "getPrinter");
       const rendererSpy = jest.spyOn(CoreRenderer, "Renderer");
 
       await generateDocFromSchema(options);
@@ -126,31 +126,6 @@ describe("generator", () => {
 
     test("prints summary when completed", async () => {
       expect.assertions(1);
-
-      const options = {
-        baseURL: "base URL",
-        schemaLocation: "schema location",
-        outputDir: "output dir",
-        linkRoot: "link root",
-        homepageLocation: "homepage location",
-        tmpDir: "temp dir",
-        diffMethod: "diff method",
-        docOptions: {
-          index: true,
-          pagination: true,
-          toc: true,
-        },
-        printTypeOptions: {
-          codeSection: true,
-          deprecated: "skip",
-          parentTypePrefix: true,
-          relatedTypeSection: true,
-          typeBadges: true,
-        },
-        prettify: true,
-        printer: "printer module",
-        skipDocDirective: "doc directive",
-      } as unknown as GeneratorOptions;
 
       jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
       jest
@@ -222,15 +197,11 @@ describe("generator", () => {
         .spyOn(CoreDiff, "hasChanges")
         .mockResolvedValueOnce(true);
 
-      await generateDocFromSchema({
-        diffMethod: "diffMethod",
-        tmpDir: "tmpDir",
-        printTypeOptions: { deprecated: "skip" },
-      } as unknown as GeneratorOptions);
+      await generateDocFromSchema(options);
 
-      expect(hasChangesSpy).toHaveBeenCalledWith({}, "tmpDir", "diffMethod");
+      expect(hasChangesSpy).toHaveBeenCalledWith({}, "temp dir", "diff method");
       expect(loggerSpy).not.toHaveBeenCalledWith(
-        `No changes detected in schema "schemaLocation".`,
+        `No changes detected in schema "schema location".`,
       );
     });
 
@@ -249,10 +220,9 @@ describe("generator", () => {
       const hasChangesSpy = jest.spyOn(CoreDiff, "hasChanges");
 
       await generateDocFromSchema({
+        ...options,
         diffMethod: DiffMethod.NONE,
-        tmpDir: "tmpDir",
-        printTypeOptions: { deprecated: "skip" },
-      } as unknown as GeneratorOptions);
+      });
 
       expect(hasChangesSpy).not.toHaveBeenCalled();
     });
@@ -274,16 +244,11 @@ describe("generator", () => {
         .spyOn(CoreDiff, "hasChanges")
         .mockResolvedValueOnce(false);
 
-      await generateDocFromSchema({
-        schemaLocation: "schemaLocation",
-        diffMethod: "diffMethod",
-        tmpDir: "tmpDir",
-        printTypeOptions: { deprecated: "skip" },
-      } as unknown as GeneratorOptions);
+      await generateDocFromSchema(options);
 
-      expect(hasChangesSpy).toHaveBeenCalledWith({}, "tmpDir", "diffMethod");
+      expect(hasChangesSpy).toHaveBeenCalledWith({}, "temp dir", "diff method");
       expect(loggerSpy).toHaveBeenCalledWith(
-        `No changes detected in schema "schemaLocation".`,
+        `No changes detected in schema "schema location".`,
       );
     });
   });
