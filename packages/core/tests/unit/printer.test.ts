@@ -41,7 +41,7 @@ describe("generator", () => {
     });
 
     test.each([[undefined], [null]])(
-      "throws exception if no printer module is %s",
+      "throws exception if printer module is %s",
       async (value) => {
         expect.assertions(1);
 
