@@ -28,10 +28,10 @@ export function getCustomDirectives(
 
   for (const schemaDirectiveName in schemaDirectives) {
     if (
-      isCustomDirective(
+      !isCustomDirective(
         schemaDirectiveName as DirectiveName,
         customDirectiveOptions,
-      ) === false
+      )
     ) {
       continue;
     }
@@ -51,7 +51,7 @@ export function getCustomDirectives(
     };
   }
 
-  return isEmpty(customDirectives) === true ? undefined : customDirectives;
+  return isEmpty(customDirectives) ? undefined : customDirectives;
 }
 
 export function getCustomDirectiveOptions(

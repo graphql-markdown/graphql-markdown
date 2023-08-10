@@ -4,7 +4,6 @@ import type {
   MDXString,
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
-  CustomDirectiveFunction,
   Maybe,
 } from "@graphql-markdown/types";
 
@@ -90,7 +89,7 @@ export const getCustomTags = (
 export const printCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   const badges = getCustomTags(type, options);
 
   if (badges.length === 0) {
@@ -114,8 +113,5 @@ export const getCustomDirectiveResolver = (
     return fallback;
   }
 
-  return (constDirectiveOption[resolver] as CustomDirectiveFunction)!(
-    constDirectiveOption.type,
-    type,
-  );
+  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
 };

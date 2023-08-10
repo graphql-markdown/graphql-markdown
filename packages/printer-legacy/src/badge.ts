@@ -33,21 +33,21 @@ export const getTypeBadges = (
 
   const rootType = ("type" in type ? type.type : type) as GraphQLType;
 
-  if (isDeprecated(type) === true) {
+  if (isDeprecated(type)) {
     badges.push({
       text: "deprecated",
       classname: "badge--deprecated badge--secondary",
     } as Badge);
   }
 
-  if (isNonNullType(rootType) === true) {
+  if (isNonNullType(rootType)) {
     badges.push({
       text: "non-null",
       classname: DEFAULT_CSS_CLASSNAME,
     } as Badge);
   }
 
-  if (isListType(rootType) === true) {
+  if (isListType(rootType)) {
     badges.push({ text: "list", classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }
 
@@ -76,7 +76,7 @@ export const printBadges = (
   if (
     !("typeBadges" in options) ||
     typeof options.typeBadges !== "boolean" ||
-    options.typeBadges !== true
+    !options.typeBadges
   ) {
     return "";
   }

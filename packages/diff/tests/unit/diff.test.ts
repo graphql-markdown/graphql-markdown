@@ -115,7 +115,7 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() =>
+          .mockImplementationOnce(async () =>
             Promise.resolve(new graphql.GraphQLSchema({})),
           );
         const changes: Change[] = [];
@@ -127,7 +127,7 @@ describe("lib", () => {
         });
         jest
           .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve(changes));
+          .mockImplementationOnce(async () => Promise.resolve(changes));
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
@@ -150,12 +150,12 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() =>
+          .mockImplementationOnce(async () =>
             Promise.resolve(new graphql.GraphQLSchema({})),
           );
         jest
           .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([]));
+          .mockImplementationOnce(async () => Promise.resolve([]));
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
@@ -178,12 +178,12 @@ describe("lib", () => {
           .mockImplementationOnce(() => "schema");
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(() =>
+          .mockImplementationOnce(async () =>
             Promise.resolve(new graphql.GraphQLSchema({})),
           );
         jest
           .spyOn(inspector, "diff")
-          .mockImplementationOnce(() => Promise.resolve([]));
+          .mockImplementationOnce(async () => Promise.resolve([]));
 
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),

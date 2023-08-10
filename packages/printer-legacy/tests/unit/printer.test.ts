@@ -411,7 +411,9 @@ describe("Printer", () => {
 
         Printer.printType(name, type);
 
-        spies.forEach((spy) => expect(spy).toHaveBeenCalledTimes(1));
+        spies.forEach((spy) => {
+          expect(spy).toHaveBeenCalledTimes(1);
+        });
       },
     );
 

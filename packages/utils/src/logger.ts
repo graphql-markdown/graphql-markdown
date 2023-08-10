@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, no-var */
+/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, no-var */
 
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
@@ -35,7 +35,7 @@ export const Logger = {
     if (typeof global.logger === "undefined" || logger === null) {
       return Logger.setInstance(module);
     }
-    return global.logger as LoggerType;
+    return global.logger!;
   },
 };
 

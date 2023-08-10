@@ -17,7 +17,7 @@ export const printCodeField = (
   type: unknown,
   options?: PrintTypeOptions,
   indentationLevel: number = 0,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
@@ -25,14 +25,14 @@ export const printCodeField = (
   const skipDirective =
     typeof options !== "undefined" &&
     "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective) === true;
+    hasDirective(type, options.skipDocDirective);
   const skipDeprecated =
     typeof options !== "undefined" &&
     "deprecated" in options &&
     options.deprecated === "skip" &&
-    isDeprecated(type) === true;
+    isDeprecated(type);
 
-  if (skipDirective === true || skipDeprecated === true) {
+  if (skipDirective || skipDeprecated) {
     return "";
   }
 

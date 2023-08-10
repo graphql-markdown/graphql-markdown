@@ -8,8 +8,8 @@ export function toArray(param: unknown): Maybe<unknown[]> {
   if (typeof param !== "object" || param === null) {
     return undefined;
   }
-  return (Object.keys(param) as Array<string>).map(
-    (key: string): unknown => (<Record<string, unknown>>param)[key],
+  return (Object.keys(param) as string[]).map(
+    (key: string): unknown => (param as Record<string, unknown>)[key],
   );
 }
 

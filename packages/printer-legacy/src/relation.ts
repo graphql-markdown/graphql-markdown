@@ -36,7 +36,7 @@ export const printRelationOf = <T>(
   section: unknown,
   getRelation: Maybe<IGetRelation<T>>,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (
     !isNamedType(type) ||
     isOperation(type) ||
@@ -85,7 +85,7 @@ export const printRelationOf = <T>(
 export const printRelations = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   const relations: Record<string, IGetRelation<unknown>> = {
     "Returned by": getRelationOfReturn,
     "Member of": getRelationOfField,

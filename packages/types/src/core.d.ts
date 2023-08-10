@@ -27,9 +27,9 @@ export type ConfigPrintTypeOptions = {
 
 export type DiffMethodName = string & { _opaque: typeof DiffMethodName };
 declare const DiffMethodName: unique symbol;
-export type TypeDiffMethod = DiffMethodName | "NONE" | "FORCE";
+export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";
 
-type Pointer = string | UnnormalizedTypeDefPointer;
+type Pointer = UnnormalizedTypeDefPointer | string;
 
 export type ConfigOptions = {
   baseURL?: Maybe<string>;
@@ -46,7 +46,7 @@ export type ConfigOptions = {
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   rootPath?: Maybe<string>;
   schema?: Maybe<Pointer>;
-  skipDocDirective?: Maybe<DirectiveName[] | DirectiveName>;
+  skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   tmpDir?: Maybe<string>;
 };
 
@@ -74,7 +74,7 @@ export type CliOptions = {
 
 export type Options = Omit<
   ConfigOptions,
-  "homepage" | "pretty" | "schema" | "rootPath"
+  "homepage" | "pretty" | "rootPath" | "schema"
 > & {
   baseURL: string;
   docOptions: Required<ConfigDocOptions>;

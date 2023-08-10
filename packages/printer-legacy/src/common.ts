@@ -48,7 +48,7 @@ export const printCustomDirectives = (
 export const formatDescription = (
   type: unknown,
   replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null) {
     return `${MARKDOWN_EOP}${replacement}`;
   }
@@ -61,11 +61,7 @@ export const formatDescription = (
 };
 
 export const printDeprecation = (type: unknown): string => {
-  if (
-    typeof type !== "object" ||
-    type === null ||
-    isDeprecated(type) === false
-  ) {
+  if (typeof type !== "object" || type === null || !isDeprecated(type)) {
     return "";
   }
 
@@ -81,7 +77,7 @@ export const printDescription = (
   type: unknown,
   options?: PrintTypeOptions,
   noText?: string,
-): string | MDXString => {
+): MDXString | string => {
   const description = formatDescription(type, noText);
   const customDirectives = printCustomDirectives(type, options);
   const deprecation = printDeprecation(type);

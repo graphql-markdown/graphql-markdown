@@ -93,7 +93,7 @@ export const generateDocFromSchema = async ({
   });
 
   const pages = await Promise.all(
-    Object.keys(rootTypes).map((typeName) =>
+    Object.keys(rootTypes).map(async (typeName) =>
       renderer.renderRootTypes(
         typeName as SchemaEntity,
         rootTypes[typeName as SchemaEntity],

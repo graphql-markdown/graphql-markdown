@@ -5,7 +5,7 @@ import { getTypeName } from "@graphql-markdown/utils";
 import { MARKDOWN_EOP } from "../const/strings";
 import { SectionLevels } from "../const/options";
 
-export const printSpecification = (type: unknown): string | MDXString => {
+export const printSpecification = (type: unknown): MDXString | string => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -24,7 +24,7 @@ export const printSpecification = (type: unknown): string | MDXString => {
 export const printScalarMetadata = (
   type: unknown,
   options?: PrintTypeOptions, // eslint-disable-line @typescript-eslint/no-unused-vars
-): string | MDXString => {
+): MDXString | string => {
   return printSpecification(type);
 };
 

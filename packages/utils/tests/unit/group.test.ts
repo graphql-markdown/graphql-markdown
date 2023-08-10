@@ -1,4 +1,5 @@
-import { GraphQLFieldMap, GraphQLObjectType, buildSchema } from "graphql";
+import type { GraphQLFieldMap, GraphQLObjectType } from "graphql";
+import { buildSchema } from "graphql";
 
 import type {
   GroupByDirectiveOptions,

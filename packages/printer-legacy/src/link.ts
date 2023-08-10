@@ -146,7 +146,7 @@ export const getRelationLink = (
 export const printParentLink = (
   type: unknown,
   options: PrintLinkOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
@@ -178,14 +178,10 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
     options,
   );
 
-  if (
-    typeof options !== "undefined" &&
-    hasOptionWithAttributes(options) === false
-  ) {
-    const textWithAttribute =
-      hasOptionParentType(options) === true
-        ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
-        : `\`${link.text}\``;
+  if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
+    const textWithAttribute = hasOptionParentType(options)
+      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
+      : `\`${link.text}\``;
     return `[${textWithAttribute}](${link.url})`;
   }
 

@@ -13,11 +13,16 @@ jest.mock("graphql", () => {
     ),
   };
 });
+import type {
+  GraphQLDirective,
+  GraphQLNamedType,
+  GraphQLSchema,
+  ObjectTypeDefinitionNode,
+} from "graphql";
 import {
   buildSchema,
   getDirectiveValues,
   GraphQLBoolean,
-  GraphQLDirective,
   GraphQLEnumType,
   GraphQLFloat,
   GraphQLID,
@@ -25,14 +30,11 @@ import {
   GraphQLInt,
   GraphQLInterfaceType,
   GraphQLList,
-  GraphQLNamedType,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLSchema,
   GraphQLString,
   GraphQLUnionType,
   isDirective,
-  ObjectTypeDefinitionNode,
 } from "graphql";
 
 import {
@@ -1012,9 +1014,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>(
-        type.astNode!
-      )).fields!.find((field) => field.name.value === "fieldA")!;
+      const typeFieldNode = (
+        type.astNode! as ObjectTypeDefinitionNode
+      ).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argC";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -1030,9 +1032,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>(
-        type.astNode!
-      )).fields!.find((field) => field.name.value === "fieldA")!;
+      const typeFieldNode = (
+        type.astNode! as ObjectTypeDefinitionNode
+      ).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argB";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -1048,9 +1050,9 @@ describe("graphql", () => {
 
       const directiveName = "testB";
       const directiveType = schema.getDirective(directiveName)!;
-      const typeFieldNode = (<ObjectTypeDefinitionNode>(
-        type.astNode!
-      )).fields!.find((field) => field.name.value === "fieldA")!;
+      const typeFieldNode = (
+        type.astNode! as ObjectTypeDefinitionNode
+      ).fields!.find((field) => field.name.value === "fieldA")!;
       const argName = "argA";
 
       expect(

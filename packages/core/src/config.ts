@@ -41,7 +41,7 @@ export const ASSET_HOMEPAGE_LOCATION = join(
 );
 
 export const DEFAULT_OPTIONS: Required<
-  Omit<ConfigOptions, "groupByDirective" | "customDirective" | "loaders">
+  Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">
 > & {
   groupByDirective: Maybe<GroupByDirectiveOptions>;
   customDirective: Maybe<CustomDirective>;
@@ -212,7 +212,7 @@ export function getPrintTypeOptions(
 export function getSkipDocDirectives(
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<
-    Pick<ConfigOptions, "skipDocDirective" | "printTypeOptions">
+    Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
   >,
 ): DirectiveName[] {
   const directiveList: DirectiveName[] = [].concat(
