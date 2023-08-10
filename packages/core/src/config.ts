@@ -80,7 +80,7 @@ export async function buildConfig(
   cliOpts: Maybe<CliOptions>,
   id: Maybe<string> = "default",
 ): Promise<Options> {
-  if (typeof cliOpts === "undefined" || cliOpts === null) {
+  if (!cliOpts) {
     cliOpts = {};
   }
 
@@ -91,7 +91,7 @@ export async function buildConfig(
     ...configFileOpts,
   } as const;
 
-  const baseURL: string = cliOpts.base ?? config.baseURL!;
+  const baseURL: string = cliOpts.base ?? config.baseURL;
   const skipDocDirective = getSkipDocDirectives(cliOpts, config);
 
   return {
@@ -100,10 +100,7 @@ export async function buildConfig(
       config.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(
-      cliOpts.diff ?? config.diffMethod!,
-      cliOpts.force,
-    ),
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
     docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
@@ -112,7 +109,7 @@ export async function buildConfig(
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
-    outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
+    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
     prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
     printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
@@ -225,11 +222,9 @@ export function getSkipDocDirectives(
   );
 
   if (
-    (typeof configFileOpts !== "undefined" &&
-      configFileOpts !== null &&
+    (configFileOpts &&
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
-    (typeof cliOpts !== "undefined" &&
-      cliOpts?.deprecated === DeprecatedOption.SKIP)
+    (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
   ) {
     skipDirectives.push("deprecated" as DirectiveName);
   }

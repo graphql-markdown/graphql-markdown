@@ -72,7 +72,7 @@ export const loadConfiguration = async (
     throwOnEmpty,
   });
 
-  if (typeof config === "undefined") {
+  if (!config) {
     return undefined;
   }
 

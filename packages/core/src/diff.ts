@@ -26,7 +26,7 @@ export const hasChanges = async (
       diffModule
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.warn(
       `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
     );
