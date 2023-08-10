@@ -404,7 +404,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 
   if ("name" in type) {
-    return type.name as string;
+    return String(type.name);
   }
 
   if ("toString" in type && typeof type.toString === "function") {
