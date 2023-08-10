@@ -10,7 +10,7 @@ const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
 
 export default function pluginGraphQLDocGenerator(
-  context: LoadContext,
+  _: LoadContext,
   options: PluginOptions,
 ): Plugin {
   const loggerModule = require.resolve("@docusaurus/logger");
