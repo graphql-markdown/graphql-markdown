@@ -13,8 +13,8 @@ describe("string", () => {
     test("applies no transformation if one is not given", () => {
       expect.hasAssertions();
 
-      const text = "This is Not Transformed to lowercase.";
-      const expected = "This is Not Transformed to lowercase";
+      const text = "this is Not Transformed to lowercase 42 times.";
+      const expected = "this is Not Transformed to lowercase 42 times";
 
       expect(stringCaseBuilder(text, undefined, " ")).toBe(expected);
     });
@@ -28,6 +28,12 @@ describe("string", () => {
       const expected = "Aees";
 
       expect(replaceDiacritics(text)).toBe(expected);
+    });
+
+    test("returns empty string if param not a string", () => {
+      expect.hasAssertions();
+
+      expect(replaceDiacritics(undefined as unknown as string)).toBe("");
     });
   });
 
