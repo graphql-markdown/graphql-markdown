@@ -68,7 +68,7 @@ export async function loadSchema(
 
   if (typeof options !== "undefined" && "rootTypes" in options) {
     rootTypes = options.rootTypes;
-    delete options["rootTypes"];
+    delete options.rootTypes;
   }
 
   const schema = await asyncLoadSchema(schemaLocation, options);
@@ -194,7 +194,7 @@ export function getTypeFromSchema<T>(
   schema: Maybe<GraphQLSchema>,
   type: unknown,
 ): Maybe<Record<string, T>> {
-  if (typeof schema === "undefined" || schema == null) {
+  if (!schema) {
     return undefined;
   }
 
@@ -203,7 +203,7 @@ export function getTypeFromSchema<T>(
     const operationType = schema.getRootType(
       operationTypeNode as OperationTypeNode,
     );
-    if (typeof operationType !== "undefined" && operationType !== null) {
+    if (operationType) {
       operationKinds.push(operationType.name);
     }
   });
@@ -245,8 +245,7 @@ export function hasDirective(
 ): boolean {
   if (
     !hasAstNode(node) ||
-    typeof directives === "undefined" ||
-    directives === null ||
+    !directives ||
     !Array.isArray(node.astNode.directives)
   ) {
     return false;
@@ -267,8 +266,7 @@ export function getDirective(
 ): GraphQLDirective[] {
   if (
     !hasAstNode(node) ||
-    typeof directives === "undefined" ||
-    directives === null ||
+    !directives ||
     !Array.isArray(node.astNode.directives)
   ) {
     return [];
@@ -506,9 +504,10 @@ export const getRelationOfReturn: IGetRelation<Record<string, unknown[]>> = (
       if (
         typeof relationType === "object" &&
         relationType !== null &&
-        "type" in relationType &&
         isNamedType(type) &&
-        getNamedType(relationType.type as GraphQLType).name === type.name
+        "type" in relationType &&
+        getNamedType(relationType.type as Maybe<GraphQLType>)?.name ===
+          type.name
       ) {
         if (
           !results.find(
@@ -564,7 +563,7 @@ export const getRelationOfField: IGetRelation<
       for (const fieldDef of Object.values(fields)) {
         if (
           isNamedType(type) &&
-          getNamedType(fieldDef.type as GraphQLType).name === type.name
+          getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
         ) {
           if (
             !results.find(
