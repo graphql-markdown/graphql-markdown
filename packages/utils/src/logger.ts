@@ -29,6 +29,16 @@ export const Logger = {
         global.logger!.info.apply(null, args);
     }
 
+    if (typeof global.logger.warn === "undefined") {
+      global.logger.warn = (...args: unknown[]): void =>
+        global.logger!.info.apply(null, args);
+    }
+
+    if (typeof global.logger.error === "undefined") {
+      global.logger.error = (...args: unknown[]): void =>
+        global.logger!.info.apply(null, args);
+    }
+
     return global.logger;
   },
   getInstance: (moduleName?: string): LoggerType => {
