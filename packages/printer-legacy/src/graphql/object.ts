@@ -53,11 +53,11 @@ export const printCodeType = (
     type.getInterfaces().length > 0
       ? ` implements ${type
           .getInterfaces()
-          .map((field: unknown) => getTypeName(field))
+          .map((field: unknown): string => getTypeName(field))
           .join(", ")}`
       : "";
   const typeFields = getFields(type)
-    .map((field: unknown) => {
+    .map((field: unknown): string => {
       const f = printCodeField(field, options, 1);
       return f.length > 0 ? `${MARKDOWN_CODE_INDENTATION}${f}` : "";
     })

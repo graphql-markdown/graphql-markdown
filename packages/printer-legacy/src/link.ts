@@ -75,21 +75,17 @@ export const toLink = (
     }
   }
 
-  const graphQLNamedType = getNamedType(type as GraphQLType);
+  const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
 
   let category = getLinkCategory(graphQLNamedType);
 
-  if (
-    typeof category === "undefined" ||
-    category === null ||
-    typeof graphQLNamedType === "undefined"
-  ) {
+  if (!category || !graphQLNamedType) {
     return fallback;
   }
 
   // special case for relation map
   if (category === ROOT_TYPE_LOCALE.OPERATION) {
-    if (typeof operation === "undefined" || operation === null) {
+    if (!operation) {
       return fallback;
     }
     category = operation;
@@ -108,7 +104,7 @@ export const toLink = (
       ? DEPRECATED
       : "";
   const group =
-    "groups" in options && typeof options.groups !== "undefined"
+    "groups" in options && options.groups
       ? getGroup(type, options.groups, category as SchemaEntity)
       : "";
 
@@ -132,8 +128,7 @@ export const getRelationLink = (
   options: PrintLinkOptions,
 ): Maybe<TypeLink> => {
   if (
-    typeof category === "undefined" ||
-    category === null ||
+    !category ||
     typeof type !== "object" ||
     type === null ||
     !("name" in type)
@@ -173,7 +168,7 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
 
   const link = toLink(
     type,
-    getTypeName(type, type.toString()),
+    getTypeName(type, String(type)),
     undefined,
     options,
   );

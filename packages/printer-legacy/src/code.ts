@@ -23,11 +23,11 @@ export const printCodeField = (
   }
 
   const skipDirective =
-    typeof options !== "undefined" &&
+    options &&
     "skipDocDirective" in options &&
     hasDirective(type, options.skipDocDirective);
   const skipDeprecated =
-    typeof options !== "undefined" &&
+    options &&
     "deprecated" in options &&
     options.deprecated === "skip" &&
     isDeprecated(type);
@@ -68,8 +68,8 @@ export const printCodeArguments = (
     const hasDefaultValue =
       typeof defaultValue !== "undefined" && defaultValue !== null;
     const printedDefault = hasDefaultValue ? ` = ${getDefaultValue(v)}` : "";
-    const propType = v.type.toString();
-    const propName = v.name.toString();
+    const propType = String(v.type);
+    const propName = String(v.name);
     return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
   }, "");
   code += `${parentIndentation})`;

@@ -27,11 +27,7 @@ export const printCustomDirectives = (
 ): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
-  if (
-    typeof constDirectiveMap === "undefined" ||
-    constDirectiveMap === null ||
-    isEmpty(constDirectiveMap)
-  ) {
+  if (!constDirectiveMap || isEmpty(constDirectiveMap)) {
     return "";
   }
 

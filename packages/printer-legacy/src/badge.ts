@@ -52,16 +52,16 @@ export const getTypeBadges = (
   }
 
   const category = getLinkCategory(getNamedType(rootType));
-  if (typeof category !== "undefined" && category !== null) {
+  if (category) {
     badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }
 
-  if (typeof groups !== "undefined" && groups !== null) {
+  if (groups) {
     const typeCategory = (
       typeof category === "string" ? category : category?.plural
     ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
-    if (typeof group !== "undefined" && group !== "") {
+    if (group && group !== "") {
       badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
     }
   }
@@ -87,7 +87,9 @@ export const printBadges = (
     return "";
   }
 
-  return badges.map((badge) => printBadge(badge)).join(" ") as MDXString;
+  return badges
+    .map((badge): MDXString => printBadge(badge))
+    .join(" ") as MDXString;
 };
 
 export const printBadge = ({ text, classname }: Badge): MDXString => {

@@ -2,6 +2,7 @@ import type {
   PrintTypeOptions,
   GraphQLUnionType,
   MDXString,
+  GraphQLObjectType,
 } from "@graphql-markdown/types";
 
 import { isUnionType, getTypeName } from "@graphql-markdown/utils";
@@ -33,7 +34,7 @@ export const printCodeUnion = (
   let code = `union ${getTypeName(type)} = `;
   code += (type as GraphQLUnionType)
     .getTypes()
-    .map((v) => getTypeName(v))
+    .map((v: GraphQLObjectType<unknown, unknown>): string => getTypeName(v))
     .join(" | ");
 
   return code;

@@ -93,9 +93,7 @@ export const printSection = (
   }
 
   const level = (
-    "level" in options &&
-    typeof options.level !== "undefined" &&
-    options.level !== null
+    "level" in options && typeof options.level === "string"
       ? options.level
       : SectionLevels.LEVEL_3
   ) as SectionLevelValue;
@@ -104,12 +102,7 @@ export const printSection = (
 
   const [openSection, closeSection] = ((): MDXString[] | string[] => {
     if (
-      "collapsible" in options &&
-      typeof options.collapsible !== "undefined" &&
-      options.collapsible !== null &&
-      "dataOpen" in options.collapsible &&
-      typeof options.collapsible.dataOpen === "string" &&
-      "dataClose" in options.collapsible &&
+      typeof options.collapsible?.dataOpen === "string" &&
       typeof options.collapsible.dataClose === "string"
     ) {
       return [
@@ -144,9 +137,7 @@ export const printSectionItems = (
   }
 
   const level = (
-    "level" in options &&
-    typeof options.level !== "undefined" &&
-    options.level !== null
+    "level" in options && typeof options.level === "string"
       ? options.level
       : SectionLevels.LEVEL_4
   ) as SectionLevelValue;
@@ -168,26 +159,14 @@ export const printSectionItem = (
   options: PrintTypeOptions,
 ): MDXString | string => {
   const level =
-    "level" in options &&
-    typeof options.level !== "undefined" &&
-    options.level !== null
+    "level" in options && typeof options.level === "string"
       ? options.level
       : SectionLevels.LEVEL_4;
 
-  const skipDirective =
-    "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective);
-  const skipDeprecated =
-    "deprecated" in options &&
-    options.deprecated === "skip" &&
-    isDeprecated(type);
+  const skipDirective = hasDirective(type, options.skipDocDirective);
+  const skipDeprecated = options.deprecated === "skip" && isDeprecated(type);
 
-  if (
-    typeof type === "undefined" ||
-    type === null ||
-    skipDirective ||
-    skipDeprecated
-  ) {
+  if (!type || skipDirective || skipDeprecated) {
     return "";
   }
 

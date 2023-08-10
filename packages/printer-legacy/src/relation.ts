@@ -40,15 +40,17 @@ export const printRelationOf = <T>(
   if (
     !isNamedType(type) ||
     isOperation(type) ||
-    typeof options.schema === "undefined" ||
+    !options.schema ||
     typeof getRelation !== "function"
   ) {
     return "";
   }
 
-  const relations = getRelation(type, options.schema);
+  const relations = getRelation(type, options.schema) as Maybe<
+    Record<string, unknown[]>
+  >;
 
-  if (typeof relations === "undefined" || relations === null) {
+  if (!relations) {
     return "";
   }
 
@@ -64,7 +66,7 @@ export const printRelationOf = <T>(
       classname: DEFAULT_CSS_CLASSNAME,
     });
     data = data.concat(
-      types.map((t: unknown) => {
+      types.map((t: unknown): string => {
         const link = getRelationLink(category, t, options);
         return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
@@ -77,7 +79,7 @@ export const printRelationOf = <T>(
 
   const content = [...data]
     .sort((a, b) => a.localeCompare(b))
-    .join("<Bullet />");
+    .join("<Bullet />") as MDXString;
 
   return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };

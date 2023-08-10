@@ -240,10 +240,8 @@ export class Printer implements IPrinter {
     };
 
     if (
-      typeof type === "undefined" ||
-      type === null ||
-      typeof name === "undefined" ||
-      name === null ||
+      !type ||
+      !name ||
       hasDirective(type, printTypeOptions.skipDocDirective)
     ) {
       return undefined;
