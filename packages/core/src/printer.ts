@@ -12,7 +12,7 @@ export const getPrinter = async (
   config?: Maybe<PrinterConfig>,
   options?: Maybe<PrinterOptions>,
 ): Promise<Printer> => {
-  if (typeof printerModule !== "string" || printerModule === null) {
+  if (typeof printerModule !== "string") {
     throw new Error(
       'Invalid printer module name in "printTypeOptions" settings.',
     );

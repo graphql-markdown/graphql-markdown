@@ -18,7 +18,7 @@ export function getObjPath(
   obj: unknown,
   fallback: unknown = "",
 ): unknown {
-  if (isEmpty(obj) || typeof path !== "string" || path === null) {
+  if (isEmpty(obj) || typeof path !== "string") {
     return fallback;
   }
 

@@ -11,11 +11,7 @@ import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";
 
 const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
-  if (
-    typeof type.locations === "undefined" ||
-    type.locations == null ||
-    type.locations.length === 0
-  ) {
+  if (typeof type.locations === "undefined" || type.locations.length === 0) {
     return "";
   }
 

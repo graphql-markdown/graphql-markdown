@@ -15,12 +15,7 @@ export const hasChanges = async (
   diffMethod: DiffMethodName,
   diffModule: Maybe<string> = "@graphql-markdown/diff",
 ): Promise<boolean> => {
-  if (
-    typeof diffMethod === "undefined" ||
-    diffMethod == null ||
-    typeof diffModule === "undefined" ||
-    diffModule == null
-  ) {
+  if (typeof diffMethod !== "string" || typeof diffModule !== "string") {
     return true;
   }
 

@@ -81,13 +81,13 @@ export async function loadSchema(
   const config: Readonly<GraphQLSchemaConfig> = {
     ...schema.toConfig(),
     query: schema.getType(
-      rootTypes?.query ?? OperationTypeNode.QUERY,
+      rootTypes.query ?? OperationTypeNode.QUERY,
     ) as GraphQLObjectType<unknown, unknown>,
     mutation: schema.getType(
-      rootTypes?.mutation ?? OperationTypeNode.MUTATION,
+      rootTypes.mutation ?? OperationTypeNode.MUTATION,
     ) as GraphQLObjectType<unknown, unknown>,
     subscription: schema.getType(
-      rootTypes?.subscription ?? OperationTypeNode.SUBSCRIPTION,
+      rootTypes.subscription ?? OperationTypeNode.SUBSCRIPTION,
     ) as GraphQLObjectType<unknown, unknown>,
   };
 
@@ -111,10 +111,7 @@ export async function getDocumentLoaders(
       const { [className]: Loader } = await import(graphqlDocumentLoader);
       loaders.push(new Loader());
     } else {
-      if (
-        typeof graphqlDocumentLoader.module === "undefined" ||
-        graphqlDocumentLoader.module == null
-      ) {
+      if (typeof graphqlDocumentLoader.module === "undefined") {
         throw new Error(
           `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
         );
@@ -302,7 +299,6 @@ export function getConstDirectiveMap(
 ): Maybe<CustomDirectiveMap> {
   if (
     typeof options === "undefined" ||
-    options === null ||
     !("customDirectives" in options) ||
     typeof options.customDirectives === "undefined" ||
     options.customDirectives === null ||
@@ -590,10 +586,7 @@ export const getRelationOfField: IGetRelation<
             !results.find(
               (r) =>
                 r.toString() === key ||
-                (typeof r === "object" &&
-                  r !== null &&
-                  "name" in r &&
-                  r.name === key),
+                (typeof r === "object" && "name" in r && r.name === key),
             )
           ) {
             results.push(relationType as GraphQLNamedType | GraphQLDirective);
@@ -628,10 +621,7 @@ export const getRelationOfUnion: IGetRelation<
         if (
           !results.find(
             (r) =>
-              typeof r === "object" &&
-              r !== null &&
-              "name" in r &&
-              r.name === relationName,
+              typeof r === "object" && "name" in r && r.name === relationName,
           )
         ) {
           results.push(relationType);
@@ -670,10 +660,7 @@ export const getRelationOfInterface: IGetRelation<
         if (
           !results.find(
             (r) =>
-              typeof r === "object" &&
-              r !== null &&
-              "name" in r &&
-              r.name === relationName,
+              typeof r === "object" && "name" in r && r.name === relationName,
           )
         ) {
           results.push(relationType);

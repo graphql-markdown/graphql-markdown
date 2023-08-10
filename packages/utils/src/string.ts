@@ -10,8 +10,7 @@ export function stringCaseBuilder(
   transformation?: Maybe<(word: string) => string>,
   separator?: string,
 ): string {
-  const hasTransformation =
-    typeof transformation === "function" && transformation !== null;
+  const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
     .replace(/([a-z]+)(\d)/g, "$1 $2")
