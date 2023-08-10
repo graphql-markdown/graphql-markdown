@@ -1,4 +1,4 @@
-import {
+import type {
   IPrinter,
   Maybe,
   PackageName,
@@ -18,7 +18,7 @@ export const getPrinter = async (
     );
   }
 
-  if (typeof config === "undefined" || config === null) {
+  if (!config) {
     throw new Error('Invalid printer config in "printTypeOptions" settings.');
   }
 

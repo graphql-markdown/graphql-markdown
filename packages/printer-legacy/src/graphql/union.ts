@@ -2,6 +2,7 @@ import type {
   PrintTypeOptions,
   GraphQLUnionType,
   MDXString,
+  GraphQLObjectType,
 } from "@graphql-markdown/types";
 
 import { isUnionType, getTypeName } from "@graphql-markdown/utils";
@@ -11,14 +12,14 @@ import { printSection } from "../section";
 export const printUnionMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (!isUnionType(type)) {
     return "";
   }
 
-  return printSection((<GraphQLUnionType>type).getTypes(), "Possible types", {
+  return printSection((type as GraphQLUnionType).getTypes(), "Possible types", {
     ...options,
-    parentType: (<GraphQLUnionType>type).name,
+    parentType: (type as GraphQLUnionType).name,
   });
 };
 
@@ -31,9 +32,9 @@ export const printCodeUnion = (
   }
 
   let code = `union ${getTypeName(type)} = `;
-  code += (<GraphQLUnionType>type)
+  code += (type as GraphQLUnionType)
     .getTypes()
-    .map((v) => getTypeName(v))
+    .map((v: GraphQLObjectType<unknown, unknown>): string => getTypeName(v))
     .join(" | ");
 
   return code;

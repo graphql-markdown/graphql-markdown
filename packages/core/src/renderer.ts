@@ -2,6 +2,7 @@ import type {
   Category,
   ConfigDocOptions,
   Maybe,
+  MDXString,
   Printer,
   PrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -109,8 +110,7 @@ export class Renderer {
     }
 
     if (
-      typeof this.group !== "undefined" &&
-      this.group !== null &&
+      this.group &&
       rootTypeName in this.group &&
       name in this.group[rootTypeName]!
     ) {
@@ -165,14 +165,14 @@ export class Renderer {
     const fileName = toSlug(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
 
-    let content;
+    let content: MDXString;
     try {
       content = this.printer.printType(
         fileName,
         type,
         this.options as PrintTypeOptions,
       );
-      if (typeof content === "undefined") {
+      if (typeof content !== "string") {
         return undefined;
       }
     } catch (error) {
@@ -190,7 +190,7 @@ export class Renderer {
 
     const page = PageRegex.exec(pagePath);
 
-    if (typeof page === "undefined" || typeof page?.groups === "undefined") {
+    if (!page?.groups) {
       logger.warn(
         `An error occurred while processing file ${filePath} for type "${type}"`,
       );

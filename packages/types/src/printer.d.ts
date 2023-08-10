@@ -20,7 +20,7 @@ export type RootTypeName =
   | "SUBSCRIPTION"
   | "TYPE"
   | "UNION";
-export type TypeLocale = { singular: string; plural: string } | string;
+export type TypeLocale = string | { singular: string; plural: string };
 export type RootTypeLocale = {
   [name in RootTypeName]: TypeLocale;
 };
@@ -60,7 +60,7 @@ declare const SectionLevelValue: unique symbol;
 export type SectionLevel = SectionLevelValue | "####" | "#####";
 
 export type Badge = {
-  text: string | TypeLocale;
+  text: TypeLocale | string;
   classname: string;
 };
 
@@ -69,23 +69,20 @@ export type TypeLink = {
   url: string;
 };
 
-export type PrintLinkOptions = Pick<
-  PrintTypeOptions,
-  | "groups"
-  | "parentTypePrefix"
-  | "parentType"
-  | "basePath"
-  | "withAttributes"
-  | "skipDocDirective"
-  | "deprecated"
-> &
-  Partial<PrintTypeOptions>;
+export type PrintLinkOptions = Partial<PrintTypeOptions> &
+  Pick<
+    PrintTypeOptions,
+    | "basePath"
+    | "deprecated"
+    | "groups"
+    | "parentType"
+    | "parentTypePrefix"
+    | "skipDocDirective"
+    | "withAttributes"
+  >;
 
-export type PrintDirectiveOptions = Pick<
-  PrintTypeOptions,
-  "basePath" | "deprecated" | "parentTypePrefix"
-> &
-  Partial<PrintTypeOptions>;
+export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
+  Pick<PrintTypeOptions, "basePath" | "deprecated" | "parentTypePrefix">;
 
 export abstract class IPrinter {
   static init(
@@ -97,37 +94,37 @@ export abstract class IPrinter {
   static printHeader(
     id: string,
     title: string,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): string;
   static printDescription(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
     noText: string,
   ): string;
   static printCode(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): string;
   static printCustomDirectives(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): MDXString;
   static printCustomTags(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): MDXString;
   static printTypeMetadata(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): MDXString;
   static printRelations(
     type: unknown,
-    options: PrinterOptions & PrinterConfig,
+    options: PrinterConfig & PrinterOptions,
   ): MDXString;
   static printType(
     name: string,
     type: unknown,
-    options: Maybe<Partial<PrinterOptions & PrinterConfig>>,
+    options: Maybe<Partial<PrinterConfig & PrinterOptions>>,
   ): MDXString;
 }
 export type Printer = typeof IPrinter;

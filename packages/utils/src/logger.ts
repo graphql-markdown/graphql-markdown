@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, no-var */
+/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, no-var */
 
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
@@ -7,11 +7,11 @@ declare global {
 }
 
 export const Logger = {
-  setInstance: (module?: string): LoggerType => {
-    if (typeof module !== "string") {
+  setInstance: (moduleName?: string): LoggerType => {
+    if (typeof moduleName !== "string" || moduleName === "") {
       global.logger = global.console as unknown as LoggerType;
     } else {
-      global.logger = require(module) as unknown as LoggerType;
+      global.logger = require(moduleName) as unknown as LoggerType;
     }
 
     if (typeof global.logger.log === "undefined") {
@@ -31,11 +31,11 @@ export const Logger = {
 
     return global.logger;
   },
-  getInstance: (module?: string): LoggerType => {
-    if (typeof global.logger === "undefined" || logger === null) {
-      return Logger.setInstance(module);
+  getInstance: (moduleName?: string): LoggerType => {
+    if (!global.logger) {
+      return Logger.setInstance(moduleName);
     }
-    return global.logger as LoggerType;
+    return global.logger;
   },
 };
 

@@ -29,12 +29,12 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    | "schema"
-    | "skipDocDirective"
     | "collapsible"
-    | "parentType"
     | "groups"
     | "level"
+    | "parentType"
+    | "schema"
+    | "skipDocDirective"
   >
 > & {
   schema: Maybe<GraphQLSchema>;

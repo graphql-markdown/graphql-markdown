@@ -1,4 +1,4 @@
-import { GraphQLNamedType } from "graphql/type/definition";
+import type { GraphQLNamedType } from "graphql/type/definition";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {

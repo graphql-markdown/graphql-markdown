@@ -8,8 +8,8 @@ export function toArray(param: unknown): Maybe<unknown[]> {
   if (typeof param !== "object" || param === null) {
     return undefined;
   }
-  return (Object.keys(param) as Array<string>).map(
-    (key: string): unknown => (<Record<string, unknown>>param)[key],
+  return Object.keys(param).map(
+    (key: string): unknown => (param as Record<string, unknown>)[key],
   );
 }
 
@@ -21,7 +21,7 @@ export function convertArrayToObject<T>(typeArray: T[]): Record<string, T> {
           "name" in entry &&
           typeof entry.name !== "undefined" &&
           entry.name !== null
-            ? entry.name.toString()
+            ? String(entry.name)
             : null;
         if (key === null) {
           return result;

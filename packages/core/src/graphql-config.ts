@@ -21,8 +21,8 @@ type ThrowOptions = {
 };
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-export type ExtensionProjectConfig = Writeable<GraphQLProjectConfig> &
-  Omit<ConfigOptions, "schema">;
+export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
+  Writeable<GraphQLProjectConfig>;
 
 export const setLoaderOptions = (
   loaders: LoaderOption,
@@ -72,7 +72,7 @@ export const loadConfiguration = async (
     throwOnEmpty,
   });
 
-  if (typeof config === "undefined") {
+  if (!config) {
     return undefined;
   }
 

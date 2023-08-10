@@ -1,9 +1,9 @@
+import type { GraphQLNamedType } from "graphql";
 import {
   GraphQLList,
   GraphQLDirective,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLNamedType,
 } from "graphql";
 
 import type { PrintLinkOptions, TypeLocale } from "@graphql-markdown/types";

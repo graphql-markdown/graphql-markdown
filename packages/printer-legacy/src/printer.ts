@@ -122,7 +122,7 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header!;
-    const pagination_buttons = pagination
+    const pagination_buttons = pagination!
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
 
@@ -192,7 +192,7 @@ export class Printer implements IPrinter {
   static printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
-  ): string | MDXString => {
+  ): MDXString | string => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type as GraphQLScalarType, options);
@@ -221,7 +221,7 @@ export class Printer implements IPrinter {
   static printRelations = (
     type: unknown,
     options: PrintTypeOptions,
-  ): string | MDXString => {
+  ): MDXString | string => {
     if (options.relatedTypeSection !== true) {
       return "";
     }
@@ -240,10 +240,8 @@ export class Printer implements IPrinter {
     };
 
     if (
-      typeof type === "undefined" ||
-      type === null ||
-      typeof name === "undefined" ||
-      name === null ||
+      !type ||
+      !name ||
       hasDirective(type, printTypeOptions.skipDocDirective)
     ) {
       return undefined;

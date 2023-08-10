@@ -12,7 +12,7 @@ const logger = Logger.getInstance();
 export const hasChanges = async (
   schema: GraphQLSchema,
   tmpDir: string,
-  diffMethod: DiffMethodName,
+  diffMethod: Maybe<DiffMethodName>,
   diffModule: Maybe<string> = "@graphql-markdown/diff",
 ): Promise<boolean> => {
   if (typeof diffMethod !== "string" || typeof diffModule !== "string") {
@@ -26,7 +26,7 @@ export const hasChanges = async (
       diffModule
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
-  } catch (error) {
+  } catch (error: unknown) {
     logger.warn(
       `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
     );

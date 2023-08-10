@@ -14,9 +14,10 @@ import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
 import type { Maybe } from ".";
 
-export interface CustomDirectiveFunction {
-  <T>(directive?: GraphQLDirective, node?: unknown): T;
-}
+export type CustomDirectiveFunction = <T>(
+  directive?: GraphQLDirective,
+  node?: unknown,
+) => T;
 
 export type CustomDirectiveResolver = "descriptor" | "tag";
 
@@ -31,9 +32,9 @@ export type CustomDirective = {
 export type DirectiveName = string & { _opaque: typeof DirectiveName };
 declare const DirectiveName: unique symbol;
 
-export type CustomDirectiveMapItem = {
+export type CustomDirectiveMapItem = CustomDirectiveOptions & {
   type: GraphQLDirective;
-} & CustomDirectiveOptions;
+};
 
 export type CustomDirectiveMap = {
   [name: DirectiveName]: CustomDirectiveMapItem;
@@ -50,7 +51,7 @@ export type SchemaEntitiesGroupMap = Partial<
 >;
 
 export type LoaderOption = {
-  [name: ClassName]: PackageName | PackageConfig;
+  [name: ClassName]: PackageConfig | PackageName;
 };
 
 export type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
@@ -73,16 +74,16 @@ export type ClassName = string & { _opaque: typeof ClassName };
 declare const ClassName: unique symbol;
 
 export type SchemaEntity =
-  | "queries"
-  | "mutations"
-  | "subscriptions"
   | "directives"
-  | "objects"
-  | "unions"
-  | "interfaces"
   | "enums"
   | "inputs"
-  | "scalars";
+  | "interfaces"
+  | "mutations"
+  | "objects"
+  | "queries"
+  | "scalars"
+  | "subscriptions"
+  | "unions";
 
 export type SchemaMap = {
   queries?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;

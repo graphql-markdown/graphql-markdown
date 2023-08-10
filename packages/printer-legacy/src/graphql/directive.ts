@@ -28,8 +28,8 @@ const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
 export const printDirectiveMetadata = (
   type: GraphQLDirective,
   options: PrintDirectiveOptions,
-): string | MDXString => {
-  if ("args" in type === false) {
+): MDXString | string => {
+  if (!("args" in type)) {
     return "";
   }
 

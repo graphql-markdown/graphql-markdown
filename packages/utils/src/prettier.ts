@@ -20,11 +20,11 @@ export async function prettify(
 export async function prettifyMarkdown(
   content: string,
 ): Promise<string | undefined> {
-  return await prettify(content, "markdown");
+  return prettify(content, "markdown");
 }
 
 export async function prettifyJavascript(
   content: string,
 ): Promise<string | undefined> {
-  return await prettify(content, "babel");
+  return prettify(content, "babel");
 }

@@ -24,5 +24,5 @@ export function getObjPath(
 
   return path
     .split(".")
-    .reduce((res: any, key: string) => res[key] || fallback, obj); // eslint-disable-line @typescript-eslint/no-explicit-any
+    .reduce((res: any, key: string) => res[key] ?? fallback, obj); // eslint-disable-line @typescript-eslint/no-explicit-any
 }

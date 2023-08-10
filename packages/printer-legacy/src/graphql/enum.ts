@@ -17,14 +17,14 @@ import { printMetadataSection } from "../section";
 export const printEnumMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (!isEnumType(type)) {
     return "";
   }
 
   return printMetadataSection(
     type,
-    (<GraphQLEnumType>type).getValues(),
+    (type as GraphQLEnumType).getValues(),
     "Values",
     options,
   );
@@ -39,21 +39,21 @@ export const printCodeEnum = (
   }
 
   let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
-  code += (<GraphQLEnumType>type)
+  code += (type as GraphQLEnumType)
     .getValues()
     .map((value) => {
       const skipDirective =
         "skipDocDirective" in options &&
-        hasDirective(value, options.skipDocDirective) === true;
+        hasDirective(value, options.skipDocDirective);
       const skipDeprecated =
         "deprecated" in options &&
         options.deprecated === "skip" &&
-        isDeprecated(value) === true;
-      if (skipDirective === true || skipDeprecated === true) {
+        isDeprecated(value);
+      if (skipDirective || skipDeprecated) {
         return "";
       }
       const v = getTypeName(value);
-      const d = isDeprecated(value) === true ? ` @${DEPRECATED}` : "";
+      const d = isDeprecated(value) ? ` @${DEPRECATED}` : "";
       return `  ${v}${d}`;
     })
     .filter((value) => value.length > 0)

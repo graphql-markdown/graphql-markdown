@@ -1,6 +1,6 @@
 import { GraphQLDirective, buildSchema } from "graphql";
 
-import {
+import type {
   DirectiveName,
   Badge,
   PrintTypeOptions,

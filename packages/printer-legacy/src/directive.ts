@@ -4,7 +4,6 @@ import type {
   MDXString,
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
-  CustomDirectiveFunction,
   Maybe,
 } from "@graphql-markdown/types";
 
@@ -21,19 +20,16 @@ export const printCustomDirectives = (
 ): string => {
   const constDirectiveMap = getConstDirectiveMap(type, options);
 
-  if (
-    typeof constDirectiveMap === "undefined" ||
-    constDirectiveMap === null ||
-    Object.keys(constDirectiveMap).length < 1
-  ) {
+  if (!constDirectiveMap || Object.keys(constDirectiveMap).length < 1) {
     return "";
   }
 
   const directives = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map((constDirectiveOption) =>
-      printCustomDirective(type, constDirectiveOption, options),
+    .map(
+      (constDirectiveOption): Maybe<string> =>
+        printCustomDirective(type, constDirectiveOption, options),
     )
-    .filter((value) => typeof value !== "undefined");
+    .filter((value): boolean => typeof value !== "undefined");
 
   if (directives.length === 0) {
     return "";
@@ -59,7 +55,7 @@ export const printCustomDirective = (
     constDirectiveOption,
   );
 
-  if (typeof description === "undefined") {
+  if (typeof description !== "string") {
     return undefined;
   }
 
@@ -81,23 +77,28 @@ export const getCustomTags = (
   }
 
   return Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map((constDirectiveOption) =>
-      getCustomDirectiveResolver("tag", type, constDirectiveOption),
+    .map(
+      (constDirectiveOption): Maybe<string> =>
+        getCustomDirectiveResolver("tag", type, constDirectiveOption),
     )
-    .filter((value) => typeof value !== "undefined") as unknown as Badge[];
+    .filter(
+      (value): boolean => typeof value !== "undefined",
+    ) as unknown as Badge[];
 };
 
 export const printCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   const badges = getCustomTags(type, options);
 
   if (badges.length === 0) {
     return "";
   }
 
-  return badges.map((badge) => printBadge(badge)).join(" ") as MDXString;
+  return badges
+    .map((badge): MDXString => printBadge(badge))
+    .join(" ") as MDXString;
 };
 
 export const getCustomDirectiveResolver = (
@@ -114,8 +115,5 @@ export const getCustomDirectiveResolver = (
     return fallback;
   }
 
-  return (constDirectiveOption[resolver] as CustomDirectiveFunction)!(
-    constDirectiveOption.type,
-    type,
-  );
+  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
 };

@@ -17,22 +17,22 @@ export const printCodeField = (
   type: unknown,
   options?: PrintTypeOptions,
   indentationLevel: number = 0,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
 
   const skipDirective =
-    typeof options !== "undefined" &&
+    options &&
     "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective) === true;
+    hasDirective(type, options.skipDocDirective);
   const skipDeprecated =
-    typeof options !== "undefined" &&
+    options &&
     "deprecated" in options &&
     options.deprecated === "skip" &&
-    isDeprecated(type) === true;
+    isDeprecated(type);
 
-  if (skipDirective === true || skipDeprecated === true) {
+  if (skipDirective || skipDeprecated) {
     return "";
   }
 
@@ -68,8 +68,8 @@ export const printCodeArguments = (
     const hasDefaultValue =
       typeof defaultValue !== "undefined" && defaultValue !== null;
     const printedDefault = hasDefaultValue ? ` = ${getDefaultValue(v)}` : "";
-    const propType = v.type.toString();
-    const propName = v.name.toString();
+    const propType = String(v.type);
+    const propName = String(v.name);
     return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
   }, "");
   code += `${parentIndentation})`;

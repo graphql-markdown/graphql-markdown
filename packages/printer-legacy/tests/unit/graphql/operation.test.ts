@@ -1,9 +1,5 @@
-import {
-  GraphQLID,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-} from "graphql";
+import type { GraphQLSchema } from "graphql";
+import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {

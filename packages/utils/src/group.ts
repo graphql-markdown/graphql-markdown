@@ -14,13 +14,13 @@ export function getGroups(
 ): Maybe<SchemaEntitiesGroupMap> {
   const groups: SchemaEntitiesGroupMap = {};
 
-  if (typeof groupByDirective === "undefined" || groupByDirective == null) {
+  if (!groupByDirective) {
     return undefined;
   }
 
   Object.keys(rootTypes).forEach((typeName) => {
     const rootType = rootTypes[typeName as SchemaEntity];
-    if (typeof rootType !== "undefined" && rootType !== null) {
+    if (rootType) {
       if (typeof groups[typeName as SchemaEntity] === "undefined") {
         groups[typeName as SchemaEntity] = {};
       }
@@ -40,12 +40,7 @@ export function getGroupName(
   type: unknown,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
 ): Maybe<string> {
-  if (
-    typeof type === "undefined" ||
-    type == null ||
-    typeof groupByDirective === "undefined" ||
-    groupByDirective == null
-  ) {
+  if (!type || !groupByDirective) {
     return undefined;
   }
 

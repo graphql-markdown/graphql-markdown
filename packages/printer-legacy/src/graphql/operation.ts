@@ -8,7 +8,7 @@ import { printCodeField } from "../code";
 export const printOperationType = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null || !("type" in type)) {
     return "";
   }
@@ -23,7 +23,7 @@ export const printOperationType = (
 export const printOperationMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): string | MDXString => {
+): MDXString | string => {
   if (typeof type !== "object" || type === null || !("args" in type)) {
     return "";
   }

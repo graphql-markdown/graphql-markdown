@@ -45,7 +45,7 @@ export const generateDocFromSchema = async ({
 
   const loaders = await getDocumentLoaders(loadersList);
 
-  if (typeof loaders === "undefined" || loaders === null) {
+  if (!loaders) {
     logger.error(
       `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
     );
@@ -61,7 +61,7 @@ export const generateDocFromSchema = async ({
       diffMethod as DiffMethodName,
     );
     if (!changed) {
-      logger.info(`No changes detected in schema "${schemaLocation}".`);
+      logger.info(`No changes detected in schema "${String(schemaLocation)}".`);
     }
   }
 
@@ -93,7 +93,7 @@ export const generateDocFromSchema = async ({
   });
 
   const pages = await Promise.all(
-    Object.keys(rootTypes).map((typeName) =>
+    Object.keys(rootTypes).map(async (typeName) =>
       renderer.renderRootTypes(
         typeName as SchemaEntity,
         rootTypes[typeName as SchemaEntity],
@@ -115,7 +115,7 @@ export const generateDocFromSchema = async ({
   logger.info(
     `${
       pages.flat().length
-    } pages generated in ${duration}s from schema "${schemaLocation}".`,
+    } pages generated in ${duration}s from schema "${String(schemaLocation)}".`,
   );
   logger.info(
     `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
