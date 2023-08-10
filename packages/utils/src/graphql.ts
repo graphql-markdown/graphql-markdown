@@ -29,7 +29,6 @@ import type { Loader } from "graphql-config";
 import type {
   ASTNode,
   CustomDirectiveMap,
-  CustomDirectiveMapItem,
   DirectiveDefinitionNode,
   DirectiveName,
   DirectiveNode,
@@ -74,7 +73,7 @@ export async function loadSchema(
 
   const schema = await asyncLoadSchema(schemaLocation, options);
 
-  if (typeof rootTypes === "undefined") {
+  if (!rootTypes) {
     return schema;
   }
 
@@ -130,15 +129,15 @@ export async function getDocumentLoaders(
   return { ...loaderOptions, loaders };
 }
 
-export function getListDefaultValues(
+export function getListDefaultValues<T>(
   type: Maybe<GraphQLType>,
-  value: unknown,
+  value: T,
 ): string {
   if (typeof type === "undefined" || type === null) {
     return "";
   }
 
-  const defaultValues: unknown[] = Array.isArray(value) ? value : [value];
+  const defaultValues: T[] = Array.isArray(value) ? value : [value];
 
   const defaultValuesString = defaultValues.map((defaultValue) =>
     getDefaultValue({ type, defaultValue }),
@@ -147,13 +146,13 @@ export function getListDefaultValues(
   return `[${defaultValuesString.join(", ")}]`;
 }
 
-export function getDefaultValue({
+export function getDefaultValue<T>({
   type,
   defaultValue,
 }: {
   type: Maybe<GraphQLType>;
-  defaultValue: unknown;
-}): unknown {
+  defaultValue: T;
+}): Maybe<T | string> {
   if (
     typeof type === "undefined" ||
     type === null ||
@@ -170,10 +169,10 @@ export function getDefaultValue({
   return formatDefaultValue(type, defaultValue);
 }
 
-function formatDefaultValue(
+function formatDefaultValue<T>(
   type: Maybe<GraphQLType>,
-  defaultValue: unknown,
-): unknown {
+  defaultValue: T,
+): T | string {
   if (isEnumType(type)) {
     return defaultValue;
   }
@@ -297,13 +296,7 @@ export function getConstDirectiveMap(
   node: unknown,
   options?: Partial<PrintTypeOptions>,
 ): Maybe<CustomDirectiveMap> {
-  if (
-    typeof options === "undefined" ||
-    !("customDirectives" in options) ||
-    typeof options.customDirectives === "undefined" ||
-    options.customDirectives === null ||
-    isEmpty(options.customDirectives)
-  ) {
+  if (!options?.customDirectives || isEmpty(options.customDirectives)) {
     return undefined;
   }
 
@@ -317,9 +310,7 @@ export function getConstDirectiveMap(
 
   return constDirectives.reduce((directiveMap, constDirective) => {
     const name = constDirective.name as DirectiveName;
-    directiveMap[name] = options.customDirectives![
-      name
-    ] as CustomDirectiveMapItem;
+    directiveMap[name] = options.customDirectives![name];
     return directiveMap;
   }, {} as CustomDirectiveMap);
 }
@@ -331,16 +322,11 @@ export function getTypeDirectiveArgValue(
 ): Maybe<Record<string, unknown>> {
   const args = getTypeDirectiveValues(directive, node);
 
-  if (
-    typeof args === "undefined" ||
-    args === null ||
-    typeof args[argName] === "undefined" ||
-    args[argName] === null
-  ) {
+  if (!args || !args[argName]) {
     throw new Error(`Directive argument '${argName}' not found!`);
   }
 
-  return args[argName] as Record<string, unknown>;
+  return args[argName] as Maybe<Record<string, unknown>>;
 }
 
 export function getTypeDirectiveValues(
@@ -367,8 +353,7 @@ function __getFields<T, V>(
   type: T,
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): GraphQLFieldMap<any, any> | GraphQLInputFieldMap | V {
+): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V {
   if (
     !(
       typeof type === "object" &&
@@ -383,10 +368,9 @@ function __getFields<T, V>(
   const fieldMap = type.getFields();
 
   if (typeof processor !== "undefined") {
-    return processor(fieldMap) as V;
+    return processor(fieldMap);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return fieldMap;
 }
 
@@ -426,7 +410,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 
   if ("toString" in type && typeof type.toString === "function") {
-    return type.toString();
+    return String(type);
   }
 
   return defaultName;
@@ -490,7 +474,7 @@ function mapRelationOf<T>(
     const entity: Maybe<Record<string, T>> = schemaMap[
       relation as SchemaEntity
     ] as Maybe<Record<string, T>>;
-    if (typeof entity === "undefined" || entity === null) {
+    if (!entity) {
       continue;
     }
 
