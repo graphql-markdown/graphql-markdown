@@ -52,7 +52,7 @@ describe("group-info", () => {
         string,
         GraphQLObjectType<unknown, unknown>
       >,
-      queries: schema?.getQueryType()?.getFields() as GraphQLFieldMap<
+      queries: schema.getQueryType()?.getFields() as GraphQLFieldMap<
         unknown,
         unknown
       >,

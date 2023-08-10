@@ -61,7 +61,7 @@ export const getTypeBadges = (
       typeof category === "string" ? category : category?.plural
     ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
-    if (typeof group !== "undefined" && group !== null && group !== "") {
+    if (typeof group !== "undefined" && group !== "") {
       badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
     }
   }

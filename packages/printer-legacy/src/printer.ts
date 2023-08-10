@@ -144,7 +144,7 @@ export class Printer implements IPrinter {
     let code = "";
 
     if (
-      typeof options?.codeSection === "undefined" ||
+      typeof options.codeSection === "undefined" ||
       options.codeSection !== true
     ) {
       return code;

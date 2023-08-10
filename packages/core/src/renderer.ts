@@ -197,7 +197,7 @@ export class Renderer {
       return undefined;
     }
 
-    const slug = pathUrl.join(page.groups.category ?? "", page.groups.pageId);
+    const slug = pathUrl.join(page.groups.category, page.groups.pageId);
 
     return {
       category: startCase(page.groups.category),

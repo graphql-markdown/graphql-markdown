@@ -78,7 +78,7 @@ export const DEFAULT_OPTIONS: Required<
 export async function buildConfig(
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts: Maybe<CliOptions>,
-  id: string = "default",
+  id: Maybe<string> = "default",
 ): Promise<Options> {
   if (typeof cliOpts === "undefined" || cliOpts === null) {
     cliOpts = {};

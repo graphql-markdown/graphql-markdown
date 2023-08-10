@@ -50,6 +50,7 @@ module.exports = {
       },
       rules: {
         "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-unnecessary-condition": "error",
       },
     },
     {

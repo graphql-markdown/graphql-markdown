@@ -82,8 +82,7 @@ export const toLink = (
   if (
     typeof category === "undefined" ||
     category === null ||
-    typeof graphQLNamedType === "undefined" ||
-    graphQLNamedType === null
+    typeof graphQLNamedType === "undefined"
   ) {
     return fallback;
   }
@@ -117,7 +116,7 @@ export const toLink = (
     options.basePath,
     deprecated,
     group,
-    category ?? "",
+    category,
     toSlug(text),
   );
 
@@ -159,9 +158,7 @@ export const printParentLink = (
 };
 
 export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
-  options !== null &&
-  "withAttributes" in options &&
-  options.withAttributes === true;
+  "withAttributes" in options && options.withAttributes === true;
 
 export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
   "parentTypePrefix" in options &&

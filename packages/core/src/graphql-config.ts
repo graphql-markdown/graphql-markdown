@@ -54,7 +54,7 @@ export const loadConfiguration = async (
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>> => {
   let GraphQLConfig;
 
-  if (typeof id !== "string" || id === null) {
+  if (typeof id !== "string") {
     return undefined;
   }
 
