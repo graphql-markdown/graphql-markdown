@@ -18,12 +18,7 @@ export function convertArrayToObject<T>(typeArray: T[]): Record<string, T> {
   return typeArray.reduce(
     (result, entry: T) => {
       if (typeof entry === "object" && entry !== null) {
-        const key =
-          "name" in entry &&
-          typeof entry.name !== "undefined" &&
-          entry.name !== null
-            ? String(entry.name)
-            : null;
+        const key = "name" in entry && entry.name ? String(entry.name) : null;
         if (key === null) {
           return result;
         }
