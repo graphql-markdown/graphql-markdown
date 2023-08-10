@@ -17,7 +17,6 @@ import type {
   GraphQLDirective,
   GraphQLNamedType,
   GraphQLSchema,
-  GraphQLType,
   ObjectTypeDefinitionNode,
 } from "graphql";
 import {
