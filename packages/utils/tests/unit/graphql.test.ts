@@ -153,26 +153,36 @@ describe("graphql", () => {
 
   // covers printDefaultValue()
   describe("getDefaultValue()", () => {
-    test.each([
-      { type: GraphQLInt, value: 5 },
-      { type: GraphQLInt, value: 0 },
-      { type: GraphQLFloat, value: 5.3 },
-      { type: GraphQLFloat, value: 0.0 },
-      { type: GraphQLBoolean, value: true },
-      { type: GraphQLBoolean, value: false },
-    ])("returns $value value as default for $type", ({ type, value }) => {
+    test("returns undefined if type is undefined", () => {
       expect.hasAssertions();
-
-      const argument = {
-        name: "foobar",
-        description: undefined,
-        type: type,
-        defaultValue: value,
-        extensions: undefined,
-      };
-
-      expect(getDefaultValue(argument)).toEqual(value);
+      expect(
+        getDefaultValue({ type: undefined, defaultValue: 5 }),
+      ).toBeUndefined();
     });
+
+    test.each([
+      { type: GraphQLInt, defaultValue: 5 },
+      { type: GraphQLInt, defaultValue: 0 },
+      { type: GraphQLFloat, defaultValue: 5.3 },
+      { type: GraphQLFloat, defaultValue: 0.0 },
+      { type: GraphQLBoolean, defaultValue: true },
+      { type: GraphQLBoolean, defaultValue: false },
+    ])(
+      "returns $defaultValue value as default for $type",
+      ({ type, defaultValue }) => {
+        expect.hasAssertions();
+
+        const argument = {
+          name: "foobar",
+          description: undefined,
+          type,
+          defaultValue,
+          extensions: undefined,
+        };
+
+        expect(getDefaultValue(argument)).toEqual(defaultValue);
+      },
+    );
 
     test.each([
       { type: GraphQLInt },
@@ -189,7 +199,7 @@ describe("graphql", () => {
         const argument = {
           name: "foobar",
           description: undefined,
-          type: type,
+          type,
           defaultValue: undefined,
           extensions: undefined,
         };
@@ -354,6 +364,30 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       const name = getTypeName({ toString: undefined }, "FooBar");
+
+      expect(name).toBe("FooBar");
+    });
+
+    test("returns empty string is not default name set", () => {
+      expect.hasAssertions();
+
+      const name = getTypeName({ toString: undefined });
+
+      expect(name).toBe("");
+    });
+
+    test("calls toString method when it exists", () => {
+      expect.hasAssertions();
+
+      const name = getTypeName({ toString: () => "FooBar" });
+
+      expect(name).toBe("FooBar");
+    });
+
+    test("return type.name when it exists", () => {
+      expect.hasAssertions();
+
+      const name = getTypeName({ name: "FooBar" });
 
       expect(name).toBe("FooBar");
     });
@@ -790,7 +824,7 @@ describe("graphql", () => {
         }
       `);
 
-    test("return false is the type has no directive", () => {
+    test("return false if the type has no directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("Subscription")!;
@@ -798,7 +832,15 @@ describe("graphql", () => {
       expect(hasDirective(type, "foobar")).toBeFalsy();
     });
 
-    test("return false is the type has no matching directive", () => {
+    test("return false if directives not defined", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Subscription")!;
+
+      expect(hasDirective(type, undefined)).toBeFalsy();
+    });
+
+    test("return false if the type has no matching directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
@@ -806,7 +848,7 @@ describe("graphql", () => {
       expect(hasDirective(type, "foobar")).toBeFalsy();
     });
 
-    test("return true is the type has matching directive", () => {
+    test("return true if the type has matching directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
@@ -814,7 +856,7 @@ describe("graphql", () => {
       expect(hasDirective(type, "foobaz")).toBeTruthy();
     });
 
-    test("return true is the type has one matching directive", () => {
+    test("return true if the type has one matching directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
@@ -856,6 +898,15 @@ describe("graphql", () => {
 
       const type = schema.getType("Subscription")!;
       const actual = getDirective(type, "foobar");
+
+      expect(actual).toHaveLength(0);
+    });
+
+    test("return empty list if directives not defined", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Subscription")!;
+      const actual = getDirective(type, undefined);
 
       expect(actual).toHaveLength(0);
     });
@@ -1182,6 +1233,12 @@ describe("graphql", () => {
       const type = schema.getQueryType()!.getFields();
 
       expect(isDeprecated(type.getStudyItem)).toBeTruthy();
+    });
+
+    test("return true is the type has isDeprecated = true", () => {
+      expect.hasAssertions();
+
+      expect(isDeprecated({ isDeprecated: true })).toBeTruthy();
     });
   });
 });

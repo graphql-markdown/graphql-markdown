@@ -17,6 +17,19 @@ describe("logger", () => {
       expect(Logger.setInstance().info()).toBe("Mocked Console");
     });
 
+    test.each([[undefined], [""]])(
+      "returns a NodeJS.console object is module is '%s'",
+      async (moduleName) => {
+        expect.hasAssertions();
+
+        jest
+          .spyOn(global.console, "info")
+          .mockImplementation(() => "Mocked Console");
+
+        expect(Logger.setInstance(moduleName).info()).toBe("Mocked Console");
+      },
+    );
+
     test("returns logger with aliased methods", () => {
       expect.hasAssertions();
 
@@ -40,6 +53,17 @@ describe("logger", () => {
       );
 
       expect(logger.info()).toBe("Dummy logger");
+
+      expect(logger).toEqual(
+        expect.objectContaining({
+          debug: expect.any(Function),
+          error: expect.any(Function),
+          info: expect.any(Function),
+          log: expect.any(Function),
+          success: expect.any(Function),
+          warn: expect.any(Function),
+        }),
+      );
     });
   });
 

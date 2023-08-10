@@ -4,11 +4,9 @@ import { buildSchema } from "graphql";
 
 import type { DirectiveName, CustomDirective } from "@graphql-markdown/types";
 
-import {
-  getCustomDirectives,
-  getCustomDirectiveOptions,
-  isCustomDirective,
-} from "../../src/directive";
+import * as Directives from "../../src/directive";
+const { getCustomDirectives, getCustomDirectiveOptions, isCustomDirective } =
+  Directives;
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -136,6 +134,14 @@ describe("directive", () => {
       expect(getCustomDirectives(schemaMap)).toBeUndefined();
     });
 
+    test("returns undefined if schema map is undefined", () => {
+      expect.assertions(1);
+
+      expect(
+        getCustomDirectives({ directives: undefined }, customDirectiveOptions),
+      ).toBeUndefined();
+    });
+
     test("returns undefined if schema map contains no directive definitions", () => {
       expect.assertions(1);
 
@@ -150,8 +156,14 @@ describe("directive", () => {
         customDirectiveOptions,
       )!;
 
-      expect(customDirectives).toMatchSnapshot();
-
+      expect(customDirectives).toMatchInlineSnapshot(`
+      {
+        "testA": {
+          "descriptor": [Function],
+          "type": "@testA",
+        },
+      }
+      `);
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(
           undefined,
@@ -173,7 +185,18 @@ describe("directive", () => {
         ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
       })!;
 
-      expect(customDirectives).toMatchSnapshot();
+      expect(customDirectives).toMatchInlineSnapshot(`
+      {
+        "testA": {
+          "descriptor": [Function],
+          "type": "@testA",
+        },
+        "testB": {
+          "descriptor": [Function],
+          "type": "@testB",
+        },
+      }
+      `);
 
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(
@@ -198,7 +221,18 @@ describe("directive", () => {
         ...customDirectiveOptions,
       })!;
 
-      expect(customDirectives).toMatchSnapshot();
+      expect(customDirectives).toMatchInlineSnapshot(`
+      {
+        "testA": {
+          "descriptor": [Function],
+          "type": "@testA",
+        },
+        "testB": {
+          "descriptor": [Function],
+          "type": "@testB",
+        },
+      }
+      `);
 
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(

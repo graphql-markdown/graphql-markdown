@@ -41,7 +41,7 @@ export function getCustomDirectives(
       customDirectiveOptions,
     );
 
-    if (typeof directiveOptions === "undefined") {
+    if (typeof directiveOptions !== "object") {
       continue;
     }
 
