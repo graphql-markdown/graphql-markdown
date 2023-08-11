@@ -22,6 +22,7 @@ jobs:
   mutation:
     name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
+    if: "! github.event.pull_request.draft"
     strategy:
       fail-fast: false
       matrix:
