@@ -18,6 +18,10 @@ describe("string", () => {
 
       expect(stringCaseBuilder(text, undefined, " ")).toBe(expected);
     });
+
+    test("returns empty string if param not a string", () => {
+      expect(stringCaseBuilder(undefined, undefined, " ")).toBe("");
+    });
   });
 
   describe("replaceDiacritics()", () => {
@@ -33,7 +37,7 @@ describe("string", () => {
     test("returns empty string if param not a string", () => {
       expect.hasAssertions();
 
-      expect(replaceDiacritics(undefined as unknown as string)).toBe("");
+      expect(replaceDiacritics(undefined)).toBe("");
     });
   });
 
@@ -60,6 +64,12 @@ describe("string", () => {
 
       expect(prune(text, "-")).toBe(expected);
     });
+
+    test("returns empty string if param not a string", () => {
+      expect.hasAssertions();
+
+      expect(prune(undefined)).toBe("");
+    });
   });
 
   describe("toSlug()", () => {
@@ -70,6 +80,12 @@ describe("string", () => {
       const expected = "this-is-not-a-slug-but-you-can-use-to-slug-function";
 
       expect(toSlug(text)).toBe(expected);
+    });
+
+    test("returns empty string if param not a string", () => {
+      expect.hasAssertions();
+
+      expect(toSlug(undefined)).toBe("");
     });
   });
 
@@ -108,6 +124,12 @@ describe("string", () => {
         expect(capitalize(input)).toBe(expected);
       },
     );
+
+    test("returns empty string if param not a string", () => {
+      expect.hasAssertions();
+
+      expect(capitalize(undefined)).toBe("");
+    });
   });
 
   describe("interpolate()", () => {

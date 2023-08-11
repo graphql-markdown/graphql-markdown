@@ -1,4 +1,5 @@
-import { GraphQLScalarType, type GraphQLSchema } from "graphql";
+import type { GraphQLSchema } from "graphql";
+import { GraphQLScalarType } from "graphql";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -9,13 +10,13 @@ jest.mock("@graphql-markdown/utils", () => {
     isInputType: jest.fn(),
     isInterfaceType: jest.fn(),
     isObjectType: jest.fn(),
-    isOperation: jest.fn(),
+    isOperation: jest.fn(() => false),
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
     escapeMDX: jest.fn((s) => s),
     toSlug: jest.fn(),
     pathUrl: jest.fn(),
-    isNamedType: jest.fn(),
+    isNamedType: jest.fn(() => true),
     hasDirective: jest.fn(),
   };
 });
@@ -71,6 +72,8 @@ describe("relation", () => {
     test("returns empty string if type is undefined", () => {
       expect.hasAssertions();
 
+      jest.spyOn(Utils, "isNamedType").mockReturnValueOnce(false);
+
       const relation = printRelationOf(
         undefined,
         "RelationOf",
@@ -89,7 +92,7 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      jest.spyOn(Utils, "isOperation").mockImplementation(() => true);
+      jest.spyOn(Utils, "isOperation").mockReturnValueOnce(true);
 
       const relation = printRelationOf(
         type,
@@ -104,7 +107,7 @@ describe("relation", () => {
     test("returns empty string if getRelation is not a function", () => {
       expect.hasAssertions();
 
-      const type = new GraphQLScalarType({
+      const type = new GraphQLScalarType<string, string>({
         name: "String",
         description: "Lorem Ipsum",
       });
@@ -119,6 +122,22 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
+    test("returns empty string if schema is not defined", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      const relation = printRelationOf(type, "RelationOf", jest.fn(), {
+        ...DEFAULT_OPTIONS,
+        schema: undefined,
+      });
+
+      expect(relation).toBe("");
+    });
+
     test("returns empty string if getRelation returns undefined", () => {
       expect.hasAssertions();
 
@@ -126,6 +145,8 @@ describe("relation", () => {
         name: "String",
         description: "Lorem Ipsum",
       });
+
+      jest.spyOn(Utils, "isNamedType").mockReturnValueOnce(true);
 
       const relation = printRelationOf(
         type,
@@ -137,7 +158,7 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
-    test("returns empty string if getRelation returns empty list", () => {
+    test("returns empty string if getRelation returns empty map", () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType({
@@ -148,7 +169,7 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        jest.fn().mockReturnValue([]),
+        jest.fn().mockReturnValue({ objects: [] }),
         DEFAULT_OPTIONS,
       );
 
