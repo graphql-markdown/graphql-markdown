@@ -21,7 +21,7 @@ jobs:
   smoke:
     name: Smoke Tests
     runs-on: ubuntu-latest
-    if: "! github.event.pull_request.draft"
+    if: github.event.pull_request.draft == false
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1
