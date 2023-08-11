@@ -56,7 +56,9 @@
     }
   ],
   "scripts": {
-    "test": "jest --config=./config/jest.config.js",
+    "test": "jest --config=./config/jest.config.js --maxWorkers=50%",
+    "test:watch": "jest --config=./config/jest.config.js --watch --maxWorkers=25%",
+    "test:ci": "jest --config=./config/jest.config.js --runInBand",
     "prepare": "husky install",
     "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
     "lint": "eslint \"packages/**/{src,tests,assets}/**\"",
