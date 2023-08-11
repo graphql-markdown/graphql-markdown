@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          npm test:ci /integration/ -- --passWithNoTests --coverage --selectProjects @graphql-markdown/${{ matrix.package }}
+          npm run test:ci /integration/ -- --passWithNoTests --coverage --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
           mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
