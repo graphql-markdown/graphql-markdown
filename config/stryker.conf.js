@@ -4,25 +4,30 @@
  */
 
 const config = {
-  inPlace: false,
-  ignoreStatic: true,
+  buildCommand: "tsc --build",
+  checkers: ["typescript"],
+  commandRunner: { command: "npm run test:ci" },
   coverageAnalysis: "perTest",
+  dashboard: {},
+  ignorePatterns: ["assets", "build", "config", "coverage", "dist", "docs"],
+  ignoreStatic: true,
+  inPlace: false,
   jest: {
-    projectType: "custom",
     config: {
+      bail: false,
+      collectCoverage: false,
+      collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
+      moduleFileExtensions: ["js", "ts"],
+      notify: false,
+      preset: "ts-jest",
+      reporters: [],
       roots: [
         "<rootDir>/src/",
         "<rootDir>/tests/",
         "<rootDir>/tests/__mocks__",
       ],
-      preset: "ts-jest",
-      moduleFileExtensions: ["ts", "js"],
       testEnvironment: "node",
-      bail: false,
-      collectCoverage: false,
-      notify: false,
-      reporters: [],
-      verbose: false,
+      testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
       transform: {
         "^.+\\.ts$": [
           "ts-jest",
@@ -31,26 +36,23 @@ const config = {
           },
         ],
       },
-      collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-      testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
+      verbose: false,
     },
     enableFindRelatedTests: true,
+    projectType: "custom",
   },
   mutate: ["src/**/*.ts", "!src/**/prettier.ts"],
-  ignorePatterns: ["dist", "coverage", "build", "docs", "config", "assets"],
   packageManager: "npm",
   reporters: ["html"],
+  symlinkNodeModules: true,
   testRunner: "jest",
   testRunnerNodeArgs: ["--experimental-vm-modules"],
   thresholds: { high: 85, low: 75, break: 70 },
-  symlinkNodeModules: true,
-  dashboard: {},
-  checkers: ["typescript"],
   tsconfigFile: "tsconfig.json",
   typescriptChecker: {
     prioritizePerformanceOverAccuracy: true,
   },
-  buildCommand: "tsc -b",
+  warnings: true,
 };
 
 module.exports = config;

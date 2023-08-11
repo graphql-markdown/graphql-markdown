@@ -2,7 +2,7 @@ name: Mutation Test
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - main
@@ -14,10 +14,15 @@ on:
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   mutation:
     name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     strategy:
       fail-fast: false
       matrix:
@@ -32,5 +37,5 @@ jobs:
 
       - name: Run Mutations Tests
         run: |
-          [ $(npm test -- --selectProjects @graphql-markdown/${{matrix.package}} --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).ts" | grep -i "test.ts" | wc -l) = "0" ] && exit 0
+          [ $(npm run test:ci -- --selectProjects @graphql-markdown/${{matrix.package}} --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).ts" | grep -i "test.ts" | wc -l) = "0" ] && exit 0
           npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard

@@ -2,7 +2,7 @@ name: Smoke Tests
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - main
@@ -21,6 +21,7 @@ jobs:
   smoke:
     name: Smoke Tests
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1

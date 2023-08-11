@@ -30,12 +30,12 @@ build:
 unit-test:
   FROM +build
   RUN export NODE_ENV=ci
-  RUN npm test /unit -- --runInBand
+  RUN npm run test:ci /unit
 
 integration-test:
   FROM +build
   RUN export NODE_ENV=ci
-  RUN npm run test /integration -- --runInBand
+  RUN npm run test:ci /integration
 
 mutation-test:
   FROM +deps
