@@ -1,9 +1,12 @@
 import type { GraphQLSchema } from "graphql";
 import { GraphQLScalarType } from "graphql";
+jest.mock("graphql");
+
+import type { IGetRelation } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    getNamedType: jest.fn(),
+    getNamedType: jest.fn((t) => t),
     getRelationOfReturn: jest.fn(),
     isDirectiveType: jest.fn(),
     isEnumType: jest.fn(),
@@ -30,43 +33,8 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("relation", () => {
   describe("printRelationOf()", () => {
-    beforeEach(() => {
-      jest.mock("graphql");
-    });
-
-    afterEach(() => {
+    afterAll(() => {
       jest.restoreAllMocks();
-    });
-
-    test("prints type relations", () => {
-      expect.hasAssertions();
-
-      const type = new GraphQLScalarType({
-        name: "String",
-        description: "Lorem Ipsum",
-      });
-
-      jest.spyOn(Utils, "isNamedType").mockReturnValueOnce(true);
-      jest.spyOn(Utils, "getRelationOfReturn").mockImplementation(() => ({
-        queries: [{ name: "Foo" }],
-        interfaces: [{ name: "Bar" }],
-        subscriptions: [{ name: "Baz" }],
-      }));
-
-      const relation = printRelationOf(
-        type,
-        "RelationOf",
-        Utils.getRelationOfReturn,
-        { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
-      );
-
-      expect(relation).toMatchInlineSnapshot(`
-            "### RelationOf
-
-            [\`Bar\`](#)  <Badge class="badge badge--secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="badge badge--secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="badge badge--secondary" text="query"/>
-
-            "
-          `);
     });
 
     test("returns empty string if type is undefined", () => {
@@ -151,7 +119,7 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        jest.fn().mockReturnValue(undefined),
+        () => undefined,
         DEFAULT_OPTIONS,
       );
 
@@ -169,11 +137,45 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        jest.fn().mockReturnValue({ objects: [] }),
+        () => ({ objects: [] }),
         DEFAULT_OPTIONS,
       );
 
       expect(relation).toBe("");
+    });
+
+    test("prints type relations", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+
+      const getRelationOfReturn: IGetRelation<
+        Record<string, unknown[]>
+      > = () => ({
+        queries: [{ name: "Foo" }],
+        interfaces: [{ name: "Bar" }],
+        subscriptions: [{ name: "Baz" }],
+      });
+
+      jest.spyOn(Utils, "isNamedType").mockReturnValue(true);
+
+      const relation = printRelationOf(
+        type,
+        "RelationOf",
+        getRelationOfReturn,
+        { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
+      );
+
+      expect(relation).toMatchInlineSnapshot(`
+            "### RelationOf
+
+            [\`Bar\`](#)  <Badge class="badge badge--secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="badge badge--secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="badge badge--secondary" text="query"/>
+
+            "
+          `);
     });
   });
 
