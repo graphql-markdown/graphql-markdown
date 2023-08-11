@@ -6,10 +6,14 @@ import type { Maybe } from "@graphql-markdown/types";
 import { getObjPath } from "./object";
 
 export function stringCaseBuilder(
-  str: string,
+  str: Maybe<string>,
   transformation?: Maybe<(word: string) => string>,
   separator?: string,
 ): string {
+  if (typeof str !== "string") {
+    return "";
+  }
+
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -21,7 +25,11 @@ export function stringCaseBuilder(
   return prune(stringCase, separator);
 }
 
-export function prune(str: string, char: string = ""): string {
+export function prune(str: Maybe<string>, char: string = ""): string {
+  if (typeof str !== "string") {
+    return "";
+  }
+
   let res = str;
 
   if (res.startsWith(char)) {
@@ -37,31 +45,43 @@ export function prune(str: string, char: string = ""): string {
   return res;
 }
 
-export function toSlug(str: string): string {
+export function toSlug(str: Maybe<string>): string {
+  if (typeof str !== "string") {
+    return "";
+  }
   return kebabCase(str);
 }
 
-export function toHTMLUnicode(char: string): string {
+export function toHTMLUnicode(char: Maybe<string>): string {
+  if (typeof char !== "string") {
+    return "";
+  }
   const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
   return `&#x${unicodeChar.toUpperCase()};`;
 }
 
 export function escapeMDX(str: unknown): string {
-  return `${str}`.replace(/[<>{}]/g, toHTMLUnicode);
+  return `${String(str)}`.replace(/[<>{}]/g, toHTMLUnicode);
 }
 
-export function firstUppercase(word: string): string {
+export function firstUppercase(word: Maybe<string>): string {
+  if (typeof word !== "string") {
+    return "";
+  }
   const sliceUppercase = word.slice(0, 1).toUpperCase();
   const sliceDefaultCase = word.slice(1);
   return `${sliceUppercase}${sliceDefaultCase}`;
 }
 
-export function capitalize(word: string): string {
+export function capitalize(word: Maybe<string>): string {
+  if (typeof word !== "string") {
+    return "";
+  }
   return firstUppercase(word.toLowerCase());
 }
 
 // from https://stackoverflow.com/a/37511463
-export function replaceDiacritics(str: string): string {
+export function replaceDiacritics(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
   }
@@ -71,11 +91,17 @@ export function replaceDiacritics(str: string): string {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-export function startCase(str: string): string {
+export function startCase(str: Maybe<string>): string {
+  if (typeof str !== "string") {
+    return "";
+  }
   return stringCaseBuilder(str, firstUppercase, " ");
 }
 
-export function kebabCase(str: string): string {
+export function kebabCase(str: Maybe<string>): string {
+  if (typeof str !== "string") {
+    return "";
+  }
   return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
 }
 
