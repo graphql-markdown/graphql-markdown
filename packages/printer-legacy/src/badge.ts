@@ -31,7 +31,7 @@ export const getTypeBadges = (
     return badges;
   }
 
-  const rootType = ("type" in type ? type.type : type) as GraphQLType;
+  const rootType = ("type" in type ? type.type : type) as Maybe<GraphQLType>;
 
   if (isDeprecated(type)) {
     badges.push({

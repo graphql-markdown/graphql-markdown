@@ -66,5 +66,5 @@
   ],
   "eslint.workingDirectories": ["./config"],
   "jest.rootPath": ".",
-  "jest.jestCommandLine": "npm test --config=./config/jest.config.js"
+  "jest.jestCommandLine": "npm run test:ci --",
 }

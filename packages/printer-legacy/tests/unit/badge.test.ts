@@ -42,7 +42,7 @@ import * as Badge from "../../src/badge";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("badge", () => {
-  afterEach(() => {
+  afterAll(() => {
     jest.restoreAllMocks();
   });
 

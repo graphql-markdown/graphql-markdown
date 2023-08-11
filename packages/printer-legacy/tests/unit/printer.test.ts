@@ -137,6 +137,7 @@ describe("Printer", () => {
   ] as const;
 
   beforeEach(() => {
+    Printer.options = undefined;
     jest
       .spyOn(Utils, "getTypeName")
       .mockImplementation((value) => value as string);
