@@ -3,7 +3,6 @@ import type {
   SchemaEntity,
   GraphQLType,
   Maybe,
-  GraphQLNamedType,
 } from "@graphql-markdown/types";
 
 import { toSlug, getNamedType } from "@graphql-markdown/utils";
@@ -17,15 +16,20 @@ export const getGroup = (
     return "";
   }
 
-  const graphLQLNamedType: GraphQLNamedType = getNamedType(
-    type as Maybe<GraphQLType>,
-  )!;
-  const typeName = graphLQLNamedType.name || graphLQLNamedType.toString();
+  const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
 
-  return typeCategory in groups &&
-    groups[typeCategory] &&
-    typeName in groups[typeCategory]! &&
-    groups[typeCategory]![typeName]
-    ? toSlug(groups[typeCategory]![typeName]!)
-    : "";
+  if (!graphQLNamedType) {
+    return "";
+  }
+
+  const typeName =
+    "name" in graphQLNamedType
+      ? graphQLNamedType.name
+      : String(graphQLNamedType);
+
+  if (!(typeCategory in groups && typeName in groups[typeCategory]!)) {
+    return "";
+  }
+
+  return toSlug(groups[typeCategory]![typeName]);
 };
