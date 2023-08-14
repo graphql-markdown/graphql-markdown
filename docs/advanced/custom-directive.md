@@ -137,11 +137,11 @@ import {
 
 ### `@graphql-markdown/helpers` | `directiveDescriptor`
 
-[`helper.directiveDescriptor(directive: GraphQLDirective, type?: unknown, template?: string): string`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/index.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
+[`directiveDescriptor(directive: GraphQLDirective, type?: unknown, template?: string): string`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
 
 ### `@graphql-markdown/helpers` | `tagDescriptor`
 
-[`helper.tagDescriptor(directive: GraphQLDirective, type?: unknown, classname?: string): Badge`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/index.js) returns the directive badge, with `classname` defaulted to `badge--secondary`.
+[`tagDescriptor(directive: GraphQLDirective, type?: unknown, classname?: string): Badge`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts) returns the directive badge, with `classname` defaulted to `badge--secondary`.
 
 ### `@graphql-markdown/utils` | `getTypeDirectiveArgValue`
 
