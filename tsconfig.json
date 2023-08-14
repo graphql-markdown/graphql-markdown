@@ -5,6 +5,7 @@
     { "path": "packages/utils" },
     { "path": "packages/core" },
     { "path": "packages/diff" },
+    { "path": "packages/helpers" },
     { "path": "packages/printer-legacy" },
     { "path": "packages/docusaurus" }
   ]

@@ -102,7 +102,7 @@ plugins: [
 You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
 ```js {11-14}
-const { helper } = require("@graphql-markdown/utils");
+const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helpers");
 
 //...//
 
@@ -113,8 +113,8 @@ plugins: [
       // ... other options
       customDirective: {
         "*": {
-          descriptor: helper.directiveDescriptor,
-          tag: helper.tagDescriptor,
+          descriptor: directiveDescriptor,
+          tag: tagDescriptor,
         },
         // ... optionally specific custom directive options
       },
@@ -125,29 +125,28 @@ plugins: [
 
 ## Helpers
 
-The package `@graphql-markdown/utils` provides few helper functions to quick start:
+The packages `@graphql-markdown/helpers` and `@graphql-markdown/utils` provide few helper functions to quick start:
 
 ```ts
+import { directiveDescriptor, tagDescriptor } from "@graphql-markdown/helpers";
 import {
-  directiveDescriptor,
   getTypeDirectiveArgValue,
   getTypeDirectiveValues,
-  tagDescriptor,
 } from "@graphql-markdown/utils";
 ```
 
-### `directiveDescriptor`
+### `@graphql-markdown/helpers` | `directiveDescriptor`
 
-[`helper.directiveDescriptor(directive: GraphQLDirective, type?: unknown, template?: string): string`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
+[`helper.directiveDescriptor(directive: GraphQLDirective, type?: unknown, template?: string): string`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/index.js) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
 
-### `tagDescriptor`
+### `@graphql-markdown/helpers` | `tagDescriptor`
 
-[`helper.tagDescriptor(directive: GraphQLDirective, type?: unknown, classname?: string): Badge`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/helper.js) returns the directive badge, with `classname` defaulted to `badge--secondary`.
+[`helper.tagDescriptor(directive: GraphQLDirective, type?: unknown, classname?: string): Badge`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/index.js) returns the directive badge, with `classname` defaulted to `badge--secondary`.
 
-### `getTypeDirectiveArgValue`
+### `@graphql-markdown/utils` | `getTypeDirectiveArgValue`
 
 `graphql.getTypeDirectiveArgValue(directive: GraphQLDirective, node: unknown, argName: string): Record<string, unknown> | undefined` returns the value of a specific directive argument by name.
 
-### `getTypeDirectiveValues`
+### `@graphql-markdown/utils` | `getTypeDirectiveValues`
 
 `graphql.getTypeDirectiveValues(directive: GraphQLDirective, node: unknown): Record<string, unknown> | undefined` returns a map of directive arguments and their values.

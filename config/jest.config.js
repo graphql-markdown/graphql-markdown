@@ -30,6 +30,7 @@ module.exports = {
     projectConfig("core"),
     projectConfig("printer-legacy"),
     projectConfig("diff"),
+    projectConfig("helpers"),
     projectConfig("docusaurus"),
   ],
 };

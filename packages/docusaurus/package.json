@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@graphql-markdown/core": "^1.6.4",
+    "@graphql-markdown/helpers": "^1.0.0",
     "@graphql-markdown/printer-legacy": "^1.4.3"
   },
   "devDependencies": {

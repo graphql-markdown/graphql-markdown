@@ -1,0 +1,16 @@
+scripts
+tests
+output
+reports
+coverage
+build
+.nyc_output
+
+.dccache
+
+jest.config.js
+jest.setup.js
+nyc.config.js
+stryker.conf.js
+.eslintrc.js   
+.prettierrc.js

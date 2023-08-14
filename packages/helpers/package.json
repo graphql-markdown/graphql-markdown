@@ -1,27 +1,20 @@
 {
-  "name": "@graphql-markdown/core",
+  "name": "@graphql-markdown/helpers",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "GraphQL-Markdown core package for generating Markdown documentation from a GraphQL schema.",
+  "description": "GraphQL-Markdown customization helpers.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.6.4",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "graphql-markdown/graphql-markdown",
-    "directory": "packages/core"
+    "directory": "packages/helpers"
   },
   "author": {
     "name": "Gregory Heitz"
   },
-  "keywords": [
-    "graphql",
-    "graphql-schema",
-    "documentation",
-    "markdown",
-    "graphql-markdown"
-  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -39,18 +32,18 @@
         "default": "./dist/index.js"
       }
     },
-    "./*": {
+    "./directives/*": {
       "require": {
-        "types": "./dist/*.d.ts",
-        "default": "./dist/*.js"
+        "types": "./dist/directives/**.d.ts",
+        "default": "./dist/directives/**.js"
       },
       "import": {
-        "types": "./dist/*.d.ts",
-        "default": "./dist/*.js"
+        "types": "./dist/directives/**.d.ts",
+        "default": "./dist/directives/**.js"
       },
       "default": {
-        "types": "./dist/*.d.ts",
-        "default": "./dist/*.js"
+        "types": "./dist/directives/**.d.ts",
+        "default": "./dist/directives/**.js"
       }
     },
     "./package.json": "./package.json"
@@ -64,28 +57,8 @@
   "dependencies": {
     "@graphql-markdown/utils": "^1.5.1"
   },
-  "peerDependencies": {
-    "@graphql-markdown/diff": "^1.0.14",
-    "@graphql-markdown/helpers": "^1.0.0",
-    "@graphql-markdown/printer-legacy": "^1.4.3",
-    "graphql-config": "^5.0.2"
-  },
   "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@graphql-markdown/printer-legacy": {
-      "optional": true
-    },
-    "@graphql-markdown/diff": {
-      "optional": true
-    },
-    "@graphql-markdown/helpers": {
-      "optional": true
-    },
-    "graphql-config": {
-      "optional": true
-    }
   },
   "directories": {
     "test": "tests"
@@ -101,7 +74,6 @@
     "definition": "dist/index.d.ts"
   },
   "files": [
-    "dist",
-    "assets"
+    "dist"
   ]
 }

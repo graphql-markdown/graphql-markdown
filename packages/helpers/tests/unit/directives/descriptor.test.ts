@@ -10,9 +10,9 @@ jest.mock("graphql", () => {
 import graphql from "graphql";
 import type { GraphQLDirective, GraphQLNamedType } from "graphql";
 
-import { directiveDescriptor, directiveTag } from "../../src/helper";
+import { directiveDescriptor } from "../../../src";
 
-describe("helper", () => {
+describe("directives", () => {
   describe("directiveDescriptor", () => {
     test("returns a templated description of a directive", () => {
       expect.hasAssertions();
@@ -56,36 +56,6 @@ describe("helper", () => {
           {} as unknown as GraphQLNamedType,
         ),
       ).toBe("");
-    });
-  });
-  describe("directiveTag", () => {
-    test("returns a tag object for the directive with custom classname", () => {
-      expect.hasAssertions();
-
-      expect(
-        directiveTag(
-          { name: "dummy" } as unknown as GraphQLDirective,
-          {} as unknown as GraphQLNamedType,
-          "warning",
-        ),
-      ).toStrictEqual({
-        text: "@dummy",
-        classname: "warning",
-      });
-    });
-
-    test("returns a tag object for the directive with default classname", () => {
-      expect.hasAssertions();
-
-      expect(
-        directiveTag(
-          { name: "dummy" } as unknown as GraphQLDirective,
-          {} as unknown as GraphQLNamedType,
-        ),
-      ).toStrictEqual({
-        text: "@dummy",
-        classname: "badge--secondary",
-      });
     });
   });
 });

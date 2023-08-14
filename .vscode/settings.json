@@ -67,4 +67,8 @@
   "eslint.workingDirectories": ["./config"],
   "jest.rootPath": ".",
   "jest.jestCommandLine": "npm run test:ci --",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "graphql-markdown",
+    "projectKey": "graphql-markdown_graphql-markdown"
+  }
 }
