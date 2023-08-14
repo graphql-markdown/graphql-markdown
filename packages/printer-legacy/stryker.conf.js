@@ -3,6 +3,4 @@
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
 
-const config = require("@graphql-markdown/tools-config").stryker;
-
-module.exports = { ...config, dashboard: { module: "printer-legacy" } };
+module.exports = require("../../config/stryker.conf");

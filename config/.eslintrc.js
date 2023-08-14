@@ -3,52 +3,48 @@ const { join } = require("path");
 
 module.exports = {
   root: true,
-  env: {
-    node: true,
-    es6: true,
-    jest: true,
-    "jest/globals": true,
-  },
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
-    "plugin:prettier/recommended",
-    "prettier",
-  ],
-  plugins: ["jest", "prettier", "@typescript-eslint"],
-  settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"],
-    },
-    "import/resolver": {
-      typescript: {
-        project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
-      },
-    },
-  },
-  rules: {
-    "prettier/prettier": "error",
-    "brace-style": [
-      "error",
-      "1tbs",
-      {
-        allowSingleLine: false,
-      },
-    ],
-  },
-  ignorePatterns: ["**/packages/**/*.md"],
   overrides: [
     {
       files: ["**/*.ts"],
+      env: {
+        node: true,
+        es6: true,
+        jest: true,
+        "jest/globals": true,
+      },
+      plugins: ["jest", "prettier", "@typescript-eslint"],
+      settings: {
+        "import/parsers": {
+          "@typescript-eslint/parser": [".ts", ".tsx"],
+        },
+        "import/resolver": {
+          typescript: {
+            project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
+          },
+        },
+      },
+      extends: [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "prettier",
+      ],
       parser: "@typescript-eslint/parser",
       parserOptions: {
         tsconfigRootDir: join(__dirname, ".."),
         project: ["./packages/*/tsconfig.test.json"],
       },
       rules: {
+        "prettier/prettier": "error",
+        "brace-style": [
+          "error",
+          "1tbs",
+          {
+            allowSingleLine: false,
+          },
+        ],
         "@typescript-eslint/array-type": "error",
         "@typescript-eslint/ban-types": "error",
         "@typescript-eslint/consistent-generic-constructors": "error",
@@ -94,7 +90,18 @@ module.exports = {
     },
     {
       files: ["**/*.mdx?"],
-      extends: ["plugin:mdx/recommended"],
+      plugins: ["prettier"],
+      rules: {
+        "prettier/prettier": "error",
+        "brace-style": [
+          "error",
+          "1tbs",
+          {
+            allowSingleLine: false,
+          },
+        ],
+      },
+      extends: ["plugin:mdx/recommended", "eslint:recommended", "prettier"],
       settings: {
         "mdx/code-blocks": true,
         "mdx/language-mapper": {},
@@ -102,25 +109,68 @@ module.exports = {
     },
     {
       files: ["**/*.js"],
+      env: {
+        node: true,
+        es6: true,
+        jest: true,
+        "jest/globals": true,
+      },
+      plugins: ["jest", "prettier", "@typescript-eslint"],
+      extends: [
+        "eslint:recommended",
+        "prettier",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+      ],
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
+      },
+      rules: {
+        "prettier/prettier": "error",
+        "brace-style": [
+          "error",
+          "1tbs",
+          {
+            allowSingleLine: false,
+          },
+        ],
       },
     },
     {
       files: ["**/*.json"],
       extends: [
         "eslint:recommended",
-        "plugin:prettier/recommended",
         "prettier",
         "plugin:jsonc/recommended-with-jsonc",
       ],
       parser: "jsonc-eslint-parser",
+      rules: {
+        "prettier/prettier": "error",
+        "brace-style": [
+          "error",
+          "1tbs",
+          {
+            allowSingleLine: false,
+          },
+        ],
+      },
     },
     {
       files: ["**/*.graphql"],
       parser: "@graphql-eslint/eslint-plugin",
       plugins: ["@graphql-eslint"],
+      extends: ["eslint:recommended", "prettier"],
+      rules: {
+        "prettier/prettier": "error",
+        "brace-style": [
+          "error",
+          "1tbs",
+          {
+            allowSingleLine: false,
+          },
+        ],
+      },
     },
   ],
 };

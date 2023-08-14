@@ -60,8 +60,8 @@
     "test:watch": "jest --config=./config/jest.config.js --watch --maxWorkers=25%",
     "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests",
     "prepare": "husky install",
-    "prettier": "prettier \"packages/**/{src,tests,assets}/**/*.{ts,js,json,md}\"",
-    "lint": "eslint \"packages/**/{src,tests,assets}/**\"",
+    "prettier": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\"",
+    "lint": "eslint \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
     "check": "node ./scripts/dep-checks.js",
     "clean": "tsc --build --clean && npm run clean -ws --if-present",
     "compile": "tsc --build",
@@ -192,7 +192,6 @@
     "@graphql-markdown/docusaurus": "file:packages/docusaurus",
     "@graphql-markdown/helpers": "file:packages/helpers",
     "@graphql-markdown/printer-legacy": "file:packages/printer-legacy",
-    "@graphql-markdown/tools-config": "file:config",
     "@graphql-markdown/types": "file:packages/types",
     "@graphql-markdown/utils": "file:packages/utils",
     "typescript": "5.1.6"
