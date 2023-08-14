@@ -1,0 +1,9 @@
+.DS_Store
+.nyc_output
+.stryker-tmp
+build
+output
+packages/*/.stryker-tmp
+packages/*/coverage
+packages/*/dist
+packages/*/reports

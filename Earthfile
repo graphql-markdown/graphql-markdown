@@ -1,4 +1,4 @@
-VERSION 0.6
+VERSION 0.7
 
 ARG nodeVersion=lts
 FROM docker.io/library/node:$nodeVersion-alpine
@@ -6,22 +6,17 @@ RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
 
 deps:
-  COPY package.json package-lock.json tsconfig.json ./
+  COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
   COPY --dir config packages ./
   RUN npm config set update-notifier false
   RUN npm ci
 
 lint: 
   FROM +deps
+  RUN export NODE_ENV=ci
   RUN npm run ts:check
-  IF [ ! $(EARTHLY_CI) ]
-    RUN npm run prettier -- --write
-    RUN npm run lint -- --fix
-  ELSE
-    RUN export NODE_ENV=ci
-    RUN npm run prettier -- --check
-    RUN npm run lint
-  END
+  RUN npm run prettier -- --check
+  RUN npm run lint
 
 build:
   FROM +lint

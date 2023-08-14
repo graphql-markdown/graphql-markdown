@@ -24,6 +24,6 @@ output
 dist
 *.tgz
 *.tsbuildinfo
-
 bin
-graphql-markdown.code-workspace
+
+*.code-workspace
