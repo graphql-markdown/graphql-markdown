@@ -29,7 +29,7 @@ type Query {
 
 Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
 
-The `descriptor` and `tag` functions receives 2 arguments:
+The `descriptor` and `tag` functions receive 2 arguments:
 
 - `directive` of type [`GraphQLDirective`](https://github.com/graphql/graphql-js/blob/main/src/type/directives.ts)
 - `node` of type [`GraphQLNamedType`](https://github.com/graphql/graphql-js/blob/main/src/type/definition.ts) or [`ASTNode`](https://github.com/graphql/graphql-js/blob/main/src/language/ast.ts)
@@ -135,18 +135,22 @@ import {
 } from "@graphql-markdown/utils";
 ```
 
-### `@graphql-markdown/helpers` | `directiveDescriptor`
+:::info
+`@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
-[`directiveDescriptor(directive: GraphQLDirective, type?: unknown, template?: string): string`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts) interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
+```shell
+npm i @graphql-markdown/helpers
+```
+:::
 
-### `@graphql-markdown/helpers` | `tagDescriptor`
+### `@graphql-markdown/helpers`
 
-[`tagDescriptor(directive: GraphQLDirective, type?: unknown, classname?: string): Badge`](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts) returns the directive badge, with `classname` defaulted to `badge--secondary`.
+- <code><b>directiveDescriptor</b>(directive: GraphQLDirective, type?: unknown, template?: string): string</code> interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
 
-### `@graphql-markdown/utils` | `getTypeDirectiveArgValue`
+- <code><b>tagDescriptor</b>(directive: GraphQLDirective, type?: unknown, classname?: string): Badge</code> returns the directive badge, with `classname` defaulted to `badge--secondary`.
 
-`graphql.getTypeDirectiveArgValue(directive: GraphQLDirective, node: unknown, argName: string): Record<string, unknown> | undefined` returns the value of a specific directive argument by name.
+### `@graphql-markdown/utils`
 
-### `@graphql-markdown/utils` | `getTypeDirectiveValues`
+- <code><b>getTypeDirectiveArgValue</b>(directive: GraphQLDirective, node: unknown, argName: string): Record&lt;string, unknown&gt; | undefined</code> returns the value of a specific directive argument by name.
 
-`graphql.getTypeDirectiveValues(directive: GraphQLDirective, node: unknown): Record<string, unknown> | undefined` returns a map of directive arguments and their values.
+- <code><b>getTypeDirectiveValues</b>(directive: GraphQLDirective, node: unknown): Record&lt;string, unknown&gt; | undefined</code> returns a map of directive arguments and their values.
