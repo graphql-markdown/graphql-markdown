@@ -149,7 +149,6 @@ The quickest way to understand the code structure is to look at the folder struc
     - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
 - `config` folder configuration files for development tools.
-- `config` folder configuration files for development tools.
 - `docs` folder contains online documentation.
 - `scripts` folder contains scripts for monorepo (eg. packages version check).
 - `website` folder contains Docusaurus file for generating website.
