@@ -129,22 +129,26 @@ The quickest way to understand the code structure is to look at the folder struc
 
 - `packages` contains packages sources
   - `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
-    - `src` contains all JS files used by the package.
+    - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
     - `scripts` contains scripts used for running smoke tests.
   - `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
     - `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
-    - `src` contains all JS files used by the package.
+    - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
   - `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
-    - `src` contains all JS files used by the package.
+    - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
   - `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
-    - `src` contains all JS files used by the package.
+    - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
   - `diff` contains diff methods (optional) 📦 [`@graphql-markdown/diff`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/diff)
-    - `src` contains all JS files used by the package.
+    - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `helpers` contains helpers for customized directives feature (optional) 📦 [`@graphql-markdown/helpers`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/helpers)
+    - `src` contains all TS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+- `config` folder configuration files for development tools.
 - `config` folder configuration files for development tools.
 - `docs` folder contains online documentation.
 - `scripts` folder contains scripts for monorepo (eg. packages version check).

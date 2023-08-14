@@ -6,7 +6,6 @@ const pluginGroupConfigFilename =
 const pluginGraphqlrcConfigFilename =
   "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js";
 
-// eslint-disable-next-line node/no-missing-require
 const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
 const config = {
@@ -63,7 +62,6 @@ const config = {
           sidebarPath: "sidebars.js",
         },
         theme: {
-          // eslint-disable-next-line node/no-missing-require
           customCss: require.resolve("./src/css/custom.css"),
         },
       },

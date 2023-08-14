@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const { getTypeDirectiveValues } = require("@graphql-markdown/utils");
 const {
-  getTypeDirectiveValues,
   directiveDescriptor,
   directiveTag,
-} = require("@graphql-markdown/utils");
+} = require("@graphql-markdown/helpers");
 
 module.exports = {
   id: "schema_with_grouping",
