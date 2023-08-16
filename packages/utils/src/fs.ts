@@ -9,7 +9,9 @@ import { dirname } from "node:path";
 
 import type { Maybe } from "@graphql-markdown/types";
 
+/** @hidden */
 export const readFile = fs.readFile;
+/** @hidden */
 export const copyFile = fs.copyFile;
 
 /**

@@ -9,5 +9,6 @@
   "githubPages": false,
   "excludeReferences": true,
   "hideBreadcrumbs": true,
-  "hidePageTitle": true
+  "hidePageTitle": true,
+  "excludeExternals": true
 }
