@@ -49,10 +49,10 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { convertArrayToObject } from "./array";
+import { convertArrayToMapObject } from "./array";
 import { isEmpty } from "./object";
 
-enum OperationTypeNodeName {
+export enum OperationTypeNodeName {
   query = OperationTypeNode.QUERY,
   mutation = OperationTypeNode.MUTATION,
   subscription = OperationTypeNode.SUBSCRIPTION,
@@ -425,7 +425,7 @@ export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
     ["subscriptions" as SchemaEntity]: getIntrospectionFieldsList(
       schema?.getSubscriptionType() ?? undefined,
     ),
-    ["directives" as SchemaEntity]: convertArrayToObject<GraphQLDirective>(
+    ["directives" as SchemaEntity]: convertArrayToMapObject<GraphQLDirective>(
       schema?.getDirectives() as GraphQLDirective[],
     ),
     ["objects" as SchemaEntity]: getTypeFromSchema<GraphQLObjectType>(

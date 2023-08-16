@@ -1,10 +1,19 @@
 /**
- * String functions
+ * Library of helpers for formatting strings.
+ *
+ * @packageDocumentation
  */
+
 import type { Maybe } from "@graphql-markdown/types";
 
 import { getObjPath } from "./object";
 
+/**
+ * stringCaseBuilder
+ *
+ * @internal
+ *
+ */
 export function stringCaseBuilder(
   str: Maybe<string>,
   transformation?: Maybe<(word: string) => string>,
@@ -13,7 +22,6 @@ export function stringCaseBuilder(
   if (typeof str !== "string") {
     return "";
   }
-
   const hasTransformation = typeof transformation === "function";
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
@@ -25,26 +33,27 @@ export function stringCaseBuilder(
   return prune(stringCase, separator);
 }
 
+/**
+ * prune
+ *
+ * @internal
+ *
+ */
 export function prune(str: Maybe<string>, char: string = ""): string {
   if (typeof str !== "string") {
     return "";
   }
-
   let res = str;
-
-  if (res.startsWith(char)) {
-    // Remove first character
-    res = res.slice(1);
-  }
-
-  if (res.endsWith(char)) {
-    // Remove last character
-    res = res.slice(0, -1);
-  }
-
+  res = res.startsWith(char) ? res.slice(1) : res;
+  res = res.endsWith(char) ? res.slice(0, -1) : res;
   return res;
 }
 
+/**
+ * toSlug
+ *
+ *
+ */
 export function toSlug(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
@@ -52,6 +61,12 @@ export function toSlug(str: Maybe<string>): string {
   return kebabCase(str);
 }
 
+/**
+ * toHTMLUnicode
+ *
+ * @internal
+ *
+ */
 export function toHTMLUnicode(char: Maybe<string>): string {
   if (typeof char !== "string") {
     return "";
@@ -60,10 +75,21 @@ export function toHTMLUnicode(char: Maybe<string>): string {
   return `&#x${unicodeChar.toUpperCase()};`;
 }
 
+/**
+ * escapeMDX
+ *
+ * @internal
+ *
+ */
 export function escapeMDX(str: unknown): string {
   return `${String(str)}`.replace(/[<>{}]/g, toHTMLUnicode);
 }
 
+/**
+ * firstUppercase
+ *
+ *
+ */
 export function firstUppercase(word: Maybe<string>): string {
   if (typeof word !== "string") {
     return "";
@@ -73,6 +99,11 @@ export function firstUppercase(word: Maybe<string>): string {
   return `${sliceUppercase}${sliceDefaultCase}`;
 }
 
+/**
+ * capitalize
+ *
+ *
+ */
 export function capitalize(word: Maybe<string>): string {
   if (typeof word !== "string") {
     return "";
@@ -80,6 +111,14 @@ export function capitalize(word: Maybe<string>): string {
   return firstUppercase(word.toLowerCase());
 }
 
+/**
+ * replaceDiacritics
+ *
+ * {@link https://stackoverflow.com/a/37511463 | StackOverflow source}
+ *
+ * @internal
+ *
+ */
 // from https://stackoverflow.com/a/37511463
 export function replaceDiacritics(str: Maybe<string>): string {
   if (typeof str !== "string") {
@@ -91,6 +130,11 @@ export function replaceDiacritics(str: Maybe<string>): string {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+/**
+ * startCase
+ *
+ *
+ */
 export function startCase(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
@@ -98,6 +142,11 @@ export function startCase(str: Maybe<string>): string {
   return stringCaseBuilder(str, firstUppercase, " ");
 }
 
+/**
+ * kebabCase
+ *
+ *
+ */
 export function kebabCase(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
@@ -105,13 +154,18 @@ export function kebabCase(str: Maybe<string>): string {
   return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
 }
 
+/**
+ * interpolate
+ *
+ * @internal
+ *
+ */
 export function interpolate(
   template: string,
   variables: Maybe<Record<string, unknown>>,
   fallback?: string,
 ): string {
   const regex = /\${[^{]+}/g;
-
   return template.replace(regex, (match) => {
     const objPath = match.slice(2, -1).trim();
     return getObjPath(objPath, variables, fallback) as string;

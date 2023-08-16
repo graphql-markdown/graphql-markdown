@@ -1,4 +1,4 @@
-import { toArray, convertArrayToObject } from "../../src/array";
+import { toArray, convertArrayToMapObject } from "../../src/array";
 
 describe("array", () => {
   describe("toArray()", () => {
@@ -19,11 +19,11 @@ describe("array", () => {
     test("returns undefined if not an object", () => {
       expect.hasAssertions();
 
-      expect(toArray("test")).toBeUndefined();
+      expect(toArray(undefined)).toBeUndefined();
     });
   });
 
-  describe("convertArrayToObject()", () => {
+  describe("convertArrayToMapObject()", () => {
     test("returns a k/v object from an array of objects with name property", () => {
       expect.hasAssertions();
 
@@ -39,9 +39,15 @@ describe("array", () => {
         "123": { name: 123 },
       };
 
-      const actual = convertArrayToObject(input);
+      const actual = convertArrayToMapObject(input);
 
       expect(actual).toStrictEqual(expected);
+    });
+
+    test("returns undefined if not an array", () => {
+      expect.hasAssertions();
+
+      expect(convertArrayToMapObject(undefined)).toBeUndefined();
     });
   });
 });
