@@ -2,13 +2,22 @@
   "$schema": "https://typedoc.org/schema.json",
   "exclude": ["**/index.ts"],
   "hideGenerator": true,
-  "plugin": ["typedoc-plugin-markdown"],
+  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-frontmatter"],
   "theme": "default",
   "visibilityFilters": {},
   "readme": "none",
+  "entryFileName": "index.md",
+  "indexFileName": "index",
   "githubPages": false,
   "excludeReferences": true,
+  "excludeExternals": true,
   "hideBreadcrumbs": true,
   "hidePageTitle": true,
-  "excludeExternals": true
+  "hideInPageTOC":  true,
+  "hidePageHeader": true,
+  "identifiersAsCodeBlocks": true,
+  "frontmatterGlobals": {
+    "pagination_prev": null,
+    "pagination_next": null
+  }
 }
