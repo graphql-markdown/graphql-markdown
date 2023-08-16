@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "exclude": ["**/index.ts"],
+  "hideGenerator": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "theme": "default",
+  "visibilityFilters": {},
+  "readme": "none",
+  "githubPages": false,
+  "excludeReferences": true,
+  "hideBreadcrumbs": true,
+  "hidePageTitle": true
+}

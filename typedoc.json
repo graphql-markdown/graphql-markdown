@@ -1,0 +1,7 @@
+{
+  "extends": ["./typedoc.base.json"],
+  "entryPoints": ["packages/*"],
+  "entryPointStrategy": "packages",
+  "name": "@graphql-markdown",
+  "out": "./docs/api"
+}
