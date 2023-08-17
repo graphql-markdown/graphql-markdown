@@ -13,7 +13,7 @@
   "excludeReferences": true,
   "excludeExternals": true,
   "hideBreadcrumbs": true,
-  "hideInPageTOC":  true,
+  "hideInPageTOC": true,
   "hidePageHeader": true,
   "identifiersAsCodeBlocks": true,
   "outputFileStrategy": "modules"
