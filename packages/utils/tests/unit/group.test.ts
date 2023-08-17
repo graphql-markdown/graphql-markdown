@@ -99,14 +99,13 @@ describe("group-info", () => {
   });
 
   describe("getGroupName()", () => {
-    test("returns group name if category directive", () => {
-      expect.assertions(2);
-
-      const type = schema.getType("Bird")!;
-      const queryType = schema.getQueryType()!.getFields()!["Fish"];
+    test.each([
+      [schema.getType("Bird")!],
+      [schema.getQueryType()!.getFields()!["Fish"]],
+    ])("returns group name if category directive", (type) => {
+      expect.assertions(1);
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
-      expect(getGroupName(queryType, groupOptions)).toBe("animal");
     });
 
     test.each([

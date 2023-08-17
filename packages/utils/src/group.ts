@@ -1,3 +1,11 @@
+/**
+ * Library supporting `groupByDirective` for grouping GraphQL schema entities.
+ *
+ * @see {@link https://graphql-markdown.github.io/docs/advanced/group-by-directive | Option `groupByDirective`}
+ *
+ * @packageDocumentation
+ */
+
 import type {
   SchemaMap,
   GroupByDirectiveOptions,
@@ -8,6 +16,71 @@ import type {
 
 import { hasAstNode } from "./graphql";
 
+/**
+ * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
+ *
+ * @param rootTypes - the GraphQL schema map returned by {@link graphql.getSchemaMap}
+ * @param groupByDirective - the `groupByDirective` option.
+ *
+ * @returns a map of entities with matching group name.
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getGroups } from "@graphql-markdown/utils/groups";
+ *
+ * const schema = buildSchema(`
+ *   directive @doc(
+ *     category: String
+ *   ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+ *   type Unicorn {
+ *     name: String!
+ *   }
+ *   type Bird @doc(category: "animal") {
+ *     name: String!
+ *   }
+ *   type Fish {
+ *     name: String!
+ *   }
+ *   type Elf @doc(category: "fantasy") {
+ *     name: String!
+ *   }
+ *   type Query {
+ *     Fish: [Fish!]! @doc(category: "animal")
+ *   }
+ * `);
+ *
+ *
+ * const schemaMap = {
+ *   objects: schema.getTypeMap(),
+ *   queries: schema.getQueryType()?.getFields(),
+ * };
+ *
+ * const groupOptions = {
+ *   fallback: "common",
+ *   directive: "doc",
+ *   field: "category",
+ * }
+ *
+ * const groupsMap = getGroups(schemaMap, groupOptions);
+ *
+ * // Expected result: {
+ * //   "objects": {
+ * //     "Bird": "animal",
+ * //     "Boolean": "common",
+ * //     "Elf": "fantasy",
+ * //     "Fish": "common",
+ * //     "Query": "common",
+ * //     "String": "common",
+ * //     "Unicorn": "common",
+ * //   },
+ * //   "queries": {
+ * //     "Fish": "animal",
+ * //   },
+ * // }
+ * ```
+ *
+ */
 export function getGroups(
   rootTypes: SchemaMap,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
@@ -36,6 +109,52 @@ export function getGroups(
   return groups;
 }
 
+/**
+ * Gets the group name for a schema type based on the directive information.
+ *
+ * @param type - a GraphQL schema named type
+ * @param groupByDirective - the `groupByDirective` option.
+ *
+ * @returns the group name matching the type, or `groupByDirective.fallback` if no match found.
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getGroupName } from "@graphql-markdown/utils/groups";
+ *
+ * const schema = buildSchema(`
+ *   directive @doc(
+ *     category: String
+ *   ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+ *   type Unicorn {
+ *     name: String!
+ *   }
+ *   type Bird @doc(category: "animal") {
+ *     name: String!
+ *   }
+ *   type Fish {
+ *     name: String!
+ *   }
+ *   type Elf @doc(category: "fantasy") {
+ *     name: String!
+ *   }
+ *   type Query {
+ *     Fish: [Fish!]! @doc(category: "animal")
+ *   }
+ * `);
+ *
+ * const groupOptions = {
+ *   fallback: "common",
+ *   directive: "doc",
+ *   field: "category",
+ * }
+ *
+ * getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
+ *
+ * getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
+ *
+ * ```
+ */
 export function getGroupName(
   type: unknown,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
