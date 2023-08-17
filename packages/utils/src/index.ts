@@ -3,7 +3,7 @@ export * from "./prettier";
 export * from "./array";
 export * from "./object";
 export * from "./string";
-export * from "./url";
+export * as pathUrl from "./url";
 export * from "./graphql";
 export * from "./group";
 export * from "./directive";

@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /**
- * Path functions
+ * Alias `path.posix` to normalize URL handling on Windows.
+ *
+ * @packageDocumentation
  */
 
-import { posix } from "node:path";
-
-export const pathUrl = posix;
+export { join, resolve } from "node:path/posix";
