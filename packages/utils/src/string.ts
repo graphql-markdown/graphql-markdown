@@ -6,65 +6,103 @@
 
 import type { Maybe } from "@graphql-markdown/types";
 
-import { getObjPath } from "./object";
-
 /**
- * stringCaseBuilder
+ * Returns a string after applying a transformation function.
+ * By default `splitter` expression will split the string into words, where non-alphanum chars are considered as word separators.
+ * `separator` will be used for joining the words back together.
+ * {@link prune} using `separator` is applied to the result of the transformation.
  *
  * @internal
+ *
+ * @param str - the string to be transformed.
+ * @param transformation - the transformation function.
+ * @param separator - optional character separator for word-based transformation.
+ * @param splitter - optional regex or string rule for splitting string into word.
+ *
+ * @returns a transformed string, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * const text = "The quick brown fox jumps over the lazy dog.";
+ * const transformation = (word: string): string => `*${word}*`
+ *
+ * stringCaseBuilder(text, transformation, " ");
+ * // Expected result: "*The* *quick* *brown* *fox* *jumps* *over* *the* *lazy* *dog*"
+ * ```
  *
  */
 export function stringCaseBuilder(
   str: Maybe<string>,
   transformation?: Maybe<(word: string) => string>,
   separator?: string,
+  splitter: RegExp | string = /[^0-9A-Za-z]+/g,
 ): string {
   if (typeof str !== "string") {
     return "";
   }
-  const hasTransformation = typeof transformation === "function";
+
+  if (typeof transformation !== "function") {
+    return str;
+  }
+
   const stringCase = replaceDiacritics(str)
     .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
     .replace(/([a-z]+)(\d)/g, "$1 $2")
     .replace(/(\d+)([a-z])/g, "$1 $2")
-    .split(/[^0-9A-Za-z]+/g)
-    .map((word) => (hasTransformation ? transformation(word) : word))
+    .split(splitter)
+    .filter((word) => word.length > 0)
+    .map((word: string): string => transformation(word))
     .join(separator);
   return prune(stringCase, separator);
 }
 
 /**
- * prune
+ * Returns a string pruned on both start and end, similar to `trim()` but with any substring.
  *
  * @internal
  *
+ * @param str - the string to be pruned.
+ * @param substr - the substring to be removed from `str`.
+ *
+ * @returns a pruned string, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * const text = "**The quick brown fox jumps over the lazy dog.**";
+ *
+ * prune(text, "**");
+ * // Expected result: "The quick brown fox jumps over the lazy dog."
+ * ```
+ *
  */
-export function prune(str: Maybe<string>, char: string = ""): string {
+export function prune(str: Maybe<string>, substr: string = ""): string {
   if (typeof str !== "string") {
     return "";
   }
+
+  if (substr.length === 0) {
+    return str;
+  }
+
   let res = str;
-  res = res.startsWith(char) ? res.slice(1) : res;
-  res = res.endsWith(char) ? res.slice(0, -1) : res;
+  res = res.startsWith(substr) ? res.slice(substr.length) : res;
+  res = res.endsWith(substr) ? res.slice(0, -substr.length) : res;
   return res;
 }
 
 /**
- * toSlug
- *
- *
- */
-export function toSlug(str: Maybe<string>): string {
-  if (typeof str !== "string") {
-    return "";
-  }
-  return kebabCase(str);
-}
-
-/**
- * toHTMLUnicode
+ * Converts a character to its equivalent HTML unicode representation `&#x0000`.
  *
  * @internal
+ *
+ * @param char - the character to be transformed.
+ *
+ * @returns a HTML unicode representation of `char`, or an empty string if `char` is not a valid string.
+ *
+ * @example
+ * ```js
+ * toHTMLUnicode("%"); // Expected result: "&#x0025;"
+ * ```
  *
  */
 export function toHTMLUnicode(char: Maybe<string>): string {
@@ -76,9 +114,19 @@ export function toHTMLUnicode(char: Maybe<string>): string {
 }
 
 /**
- * escapeMDX
+ * Returns a string with MDX special characters converted to HTML unicode using {@link toHTMLUnicode}.
  *
  * @internal
+ *
+ * @param str - the string to be transformed.
+ *
+ * @returns a string with MDX special characters replaced by HTML unicode equivalents.
+ *
+ * @example
+ * ```js
+ * escapeMDX("{MDX} <special> characters");
+ * // Expected result: "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters"
+ * ```
  *
  */
 export function escapeMDX(str: unknown): string {
@@ -86,40 +134,64 @@ export function escapeMDX(str: unknown): string {
 }
 
 /**
- * firstUppercase
+ * Returns a string with the 1st character in uppercase.
  *
+ * @param str - the string to be transformed.
+ *
+ * @returns a string with the 1st character in uppercase, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * firstUppercase("the quick Brown Fox");
+ * // Expected result: "The quick Brown Fox"
+ * ```
  *
  */
-export function firstUppercase(word: Maybe<string>): string {
-  if (typeof word !== "string") {
+export function firstUppercase(str: Maybe<string>): string {
+  if (typeof str !== "string") {
     return "";
   }
-  const sliceUppercase = word.slice(0, 1).toUpperCase();
-  const sliceDefaultCase = word.slice(1);
+  const sliceUppercase = str.slice(0, 1).toUpperCase();
+  const sliceDefaultCase = str.slice(1);
   return `${sliceUppercase}${sliceDefaultCase}`;
 }
 
 /**
- * capitalize
+ * Returns a string in lowercase excepted for the 1st character capitalized using {@link firstUppercase}.
  *
+ * @param str - the string to be transformed.
  *
+ * @returns a capitalized string, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * firstUppercase("the quick Brown Fox");
+ * // Expected result: "The quick brown fox"
+ * ```
  */
-export function capitalize(word: Maybe<string>): string {
-  if (typeof word !== "string") {
+export function capitalize(str: Maybe<string>): string {
+  if (typeof str !== "string") {
     return "";
   }
-  return firstUppercase(word.toLowerCase());
+  return firstUppercase(str.toLowerCase());
 }
 
 /**
- * replaceDiacritics
+ * Replaces diacritics by non-diacritic equivalent characters.
  *
- * {@link https://stackoverflow.com/a/37511463 | StackOverflow source}
  *
- * @internal
+ * @param str - the string to be transformed.
+ *
+ * @returns a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
+ *
+ *  * @example
+ * ```js
+ * replaceDiacritics("Âéêś"); // Expected result: "Aees"
+ * ```
+ *
+ * @see {@link https://stackoverflow.com/a/37511463 | StackOverflow source}.
  *
  */
-// from https://stackoverflow.com/a/37511463
 export function replaceDiacritics(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
@@ -131,9 +203,17 @@ export function replaceDiacritics(str: Maybe<string>): string {
 }
 
 /**
- * startCase
+ * Applies {@link firstUppercase} using {@link stringCaseBuilder} to every word of a string with `space` character as separator.
  *
+ * @param str - the string to be transformed.
  *
+ * @returns a string converted to start case, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * startCase("the quick Brown Fox");
+ * // Expected result: "The Quick Brown Fox"
+ * ```
  */
 export function startCase(str: Maybe<string>): string {
   if (typeof str !== "string") {
@@ -143,8 +223,18 @@ export function startCase(str: Maybe<string>): string {
 }
 
 /**
- * kebabCase
+ * Returns a lowercase string with `-` as replacement for non alphanum characters using {@link stringCaseBuilder}.
  *
+ *
+ * @param str - the string to be transformed.
+ *
+ * @returns a string converted to start case, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * kebabCase("The quick brown Fox");
+ * // Expected result: "the-quick-brown-fox"
+ * ```
  *
  */
 export function kebabCase(str: Maybe<string>): string {
@@ -155,19 +245,7 @@ export function kebabCase(str: Maybe<string>): string {
 }
 
 /**
- * interpolate
- *
- * @internal
+ * Alias of {@link kebabCase}.
  *
  */
-export function interpolate(
-  template: string,
-  variables: Maybe<Record<string, unknown>>,
-  fallback?: string,
-): string {
-  const regex = /\${[^{]+}/g;
-  return template.replace(regex, (match) => {
-    const objPath = match.slice(2, -1).trim();
-    return getObjPath(objPath, variables, fallback) as string;
-  });
-}
+export const slugify = kebabCase;

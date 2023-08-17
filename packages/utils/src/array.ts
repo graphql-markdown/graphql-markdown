@@ -25,7 +25,7 @@ import type { Maybe } from "@graphql-markdown/types";
  *     child: { key: "value" },
  *   });
  *
- * // Returns [true, "test", 123, ["one", "two"], { key: "value" }]
+ * // Expected result: [true, "test", 123, ["one", "two"], { key: "value" }]
  * ```
  *
  * @returns an array of object values, or `undefined` if `recordMap` is not a valid object.
@@ -63,7 +63,7 @@ export function toArray(
  *     { name2: 1234 },
  *   ]);
  *
- * // Returns {
+ * // Expected result: {
  * //   true: { name: true },
  * //   test: { name: "test" },
  * //   "123": { name: 123 },

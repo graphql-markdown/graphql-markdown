@@ -10,7 +10,7 @@ import type { PrintLinkOptions, TypeLocale } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    toSlug: jest.fn(),
+    slugify: jest.fn(),
     pathUrl: jest.requireActual("path").posix,
     hasDirective: jest.fn(),
     getTypeName: jest.fn(),
@@ -136,7 +136,7 @@ describe("link", () => {
           .spyOn(Utils, "getNamedType")
           .mockReturnValue(entityName as unknown as GraphQLNamedType);
         jest.spyOn(Utils, guard).mockReturnValue(true);
-        jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
+        jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
 
         const link = Link.toLink(type, entityName, operation, {
           ...DEFAULT_OPTIONS,
@@ -163,7 +163,7 @@ describe("link", () => {
         .spyOn(Utils, "getNamedType")
         .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isObjectType").mockReturnValue(true);
-      jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
+      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -211,7 +211,7 @@ describe("link", () => {
         .spyOn(Utils, "getNamedType")
         .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isDirectiveType").mockReturnValue(true);
-      jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
+      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
       jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -242,7 +242,7 @@ describe("link", () => {
         .spyOn(Utils, "getNamedType")
         .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isDirectiveType").mockReturnValue(true);
-      jest.spyOn(Utils, "toSlug").mockReturnValueOnce(slug);
+      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
       jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -487,7 +487,7 @@ describe("link", () => {
         .spyOn(Utils, "getNamedType")
         .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isScalarType").mockReturnValue(true);
-      jest.spyOn(Utils, "toSlug").mockReturnValue(slug);
+      jest.spyOn(Utils, "slugify").mockReturnValue(slug);
 
       const link = Link.getRelationLink("foo", type, {
         ...DEFAULT_OPTIONS,
@@ -513,7 +513,7 @@ describe("link", () => {
         .spyOn(Utils, "getNamedType")
         .mockReturnValue(entityName as unknown as GraphQLNamedType);
       jest.spyOn(Utils, "isScalarType").mockReturnValue(true);
-      jest.spyOn(Utils, "toSlug").mockReturnValue(slug);
+      jest.spyOn(Utils, "slugify").mockReturnValue(slug);
 
       const link = Link.getRelationLink(undefined, type, {
         ...DEFAULT_OPTIONS,

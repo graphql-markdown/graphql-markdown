@@ -48,7 +48,7 @@ export async function ensureDir(location: string): Promise<void> {
  *
  * await fileExists("./.temp/local")
  *
- * // Returns true if path is valid, false if not
+ * // Expected true if path is valid, false if not
  * ```
  *
  * @returns `true` if the path is valid, else `false` if not.

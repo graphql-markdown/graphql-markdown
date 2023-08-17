@@ -17,7 +17,7 @@ jest.mock("@graphql-markdown/utils", () => {
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
     escapeMDX: jest.fn((s) => s),
-    toSlug: jest.fn(),
+    slugify: jest.fn(),
     pathUrl: jest.fn(),
     isNamedType: jest.fn(() => true),
     hasDirective: jest.fn(),

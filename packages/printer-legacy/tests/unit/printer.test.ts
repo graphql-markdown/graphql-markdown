@@ -16,7 +16,7 @@ import type { DirectiveName, PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    toSlug: jest.fn(),
+    slugify: jest.fn(),
     escapeMDX: jest.fn(),
     pathUrl: { join: posix.join },
     isEmpty: jest.fn(),

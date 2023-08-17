@@ -24,7 +24,7 @@ import {
   readFile,
   saveFile,
   startCase,
-  toSlug,
+  slugify,
 } from "@graphql-markdown/utils";
 
 const logger = Logger.getInstance();
@@ -100,7 +100,7 @@ export class Renderer {
       this.options.deprecated === "group" &&
       isDeprecated(type)
     ) {
-      dirPath = join(dirPath, toSlug("deprecated"));
+      dirPath = join(dirPath, slugify("deprecated"));
       await this.generateCategoryMetafile(
         "deprecated",
         dirPath,
@@ -114,14 +114,14 @@ export class Renderer {
       rootTypeName in this.group &&
       name in this.group[rootTypeName]!
     ) {
-      dirPath = join(dirPath, toSlug(this.group[rootTypeName]![name] ?? ""));
+      dirPath = join(dirPath, slugify(this.group[rootTypeName]![name] ?? ""));
       await this.generateCategoryMetafile(
         this.group[rootTypeName]![name] ?? "",
         dirPath,
       );
     }
 
-    dirPath = join(dirPath, toSlug(rootTypeName));
+    dirPath = join(dirPath, slugify(rootTypeName));
     await this.generateCategoryMetafile(rootTypeName, dirPath);
 
     return dirPath;
@@ -162,7 +162,7 @@ export class Renderer {
     const PageRegex =
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx$/;
 
-    const fileName = toSlug(name);
+    const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
 
     let content: MDXString;
