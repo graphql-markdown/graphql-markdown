@@ -8,16 +8,12 @@
   "readme": "none",
   "entryFileName": "index.md",
   "indexFileName": "index",
+  "skipIndexPage": true,
   "githubPages": false,
   "excludeReferences": true,
   "excludeExternals": true,
   "hideBreadcrumbs": true,
-  "hidePageTitle": true,
   "hideInPageTOC":  true,
-  "hidePageHeader": true,
   "identifiersAsCodeBlocks": true,
-  "frontmatterGlobals": {
-    "pagination_prev": null,
-    "pagination_next": null
-  }
+  "outputFileStrategy": "modules"
 }

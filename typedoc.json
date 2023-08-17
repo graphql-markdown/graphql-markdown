@@ -4,7 +4,11 @@
   "entryPointStrategy": "packages",
   "name": "api",
   "out": "./docs/api",
-  "skipIndexPage": true,
   "anchorFormat": "slug",
-  "outputFileStrategy": "modules"
+  "hidePageHeader": true,
+  "hidePageTitle": true,
+  "frontmatterGlobals": {
+    "pagination_prev": null,
+    "pagination_next": null
+  }
 }
