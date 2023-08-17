@@ -4,15 +4,12 @@
  * @packageDocumentation
  */
 
-import fs from "node:fs/promises";
+import { mkdir, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import type { Maybe } from "@graphql-markdown/types";
 
-/** @hidden */
-export const readFile = fs.readFile;
-/** @hidden */
-export const copyFile = fs.copyFile;
+export { readFile, copyFile } from "node:fs/promises";
 
 /**
  * Asynchronously create a folder structure if it does not exist.
@@ -32,7 +29,7 @@ export const copyFile = fs.copyFile;
  */
 export async function ensureDir(location: string): Promise<void> {
   if (!(await fileExists(location))) {
-    await fs.mkdir(location, { recursive: true });
+    await mkdir(location, { recursive: true });
   }
 }
 
@@ -56,7 +53,7 @@ export async function ensureDir(location: string): Promise<void> {
  */
 export async function fileExists(location: string): Promise<boolean> {
   try {
-    const stats = await fs.stat(location);
+    const stats = await stat(location);
     return typeof stats === "object";
   } catch (error) {
     return false;
@@ -94,5 +91,5 @@ export async function saveFile(
     content = (await prettify(content)) ?? content;
   }
   await ensureDir(dirname(location));
-  await fs.writeFile(location, content, "utf8");
+  await writeFile(location, content, "utf8");
 }
