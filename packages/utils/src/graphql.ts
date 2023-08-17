@@ -52,16 +52,10 @@ import type {
 import { convertArrayToMapObject } from "./array";
 import { isEmpty } from "./object";
 
-export enum OperationTypeNodeName {
-  query = OperationTypeNode.QUERY,
-  mutation = OperationTypeNode.MUTATION,
-  subscription = OperationTypeNode.SUBSCRIPTION,
-}
-
 export async function loadSchema(
   schemaLocation: string,
   options: LoadSchemaOptions & {
-    rootTypes?: Partial<Record<OperationTypeNodeName, string>>;
+    rootTypes?: Partial<Record<OperationTypeNode, string>>;
   },
 ): Promise<GraphQLSchema> {
   let rootTypes = undefined;
@@ -199,7 +193,7 @@ export function getTypeFromSchema<T>(
   }
 
   const operationKinds: string[] = [];
-  Object.keys(OperationTypeNodeName).forEach((operationTypeNode) => {
+  Object.values(OperationTypeNode).forEach((operationTypeNode) => {
     const operationType = schema.getRootType(
       operationTypeNode as OperationTypeNode,
     );
