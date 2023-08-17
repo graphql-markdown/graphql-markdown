@@ -19,7 +19,7 @@ import { hasAstNode } from "./graphql";
 /**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
  *
- * @param rootTypes - the GraphQL schema map returned by {@link graphql.getSchemaMap}
+ * @param schemaMap - the GraphQL schema map returned by {@link graphql.getSchemaMap}
  * @param groupByDirective - the `groupByDirective` option.
  *
  * @returns a map of entities with matching group name.
@@ -82,7 +82,7 @@ import { hasAstNode } from "./graphql";
  *
  */
 export function getGroups(
-  rootTypes: SchemaMap,
+  schemaMap: SchemaMap,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
 ): Maybe<SchemaEntitiesGroupMap> {
   const groups: SchemaEntitiesGroupMap = {};
@@ -91,8 +91,8 @@ export function getGroups(
     return undefined;
   }
 
-  Object.keys(rootTypes).forEach((typeName) => {
-    const rootType = rootTypes[typeName as SchemaEntity];
+  Object.keys(schemaMap).forEach((typeName) => {
+    const rootType = schemaMap[typeName as SchemaEntity];
     if (rootType) {
       if (typeof groups[typeName as SchemaEntity] === "undefined") {
         groups[typeName as SchemaEntity] = {};

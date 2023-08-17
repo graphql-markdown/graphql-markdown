@@ -1,20 +1,91 @@
+/**
+ * Library supporting `customDirective` for directive based customization.
+ *
+ * @see {@link https://graphql-markdown.github.io/docs/advanced/custom-directive | Option `customDirective`}
+ *
+ * @packageDocumentation
+ */
+
 import type {
   DirectiveName,
   CustomDirective,
   CustomDirectiveMap,
   CustomDirectiveOptions,
-  GraphQLDirective,
   Maybe,
+  SchemaMap,
 } from "@graphql-markdown/types";
 
 import { isEmpty } from "./object";
 
-export const WILDCARD_DIRECTIVE = "*";
+/**
+ * Wildcard `*` character for matching any directive name.
+ *
+ * See {@link getCustomDirectiveOptions}, {@link isCustomDirective}
+ *
+ */
+export const WILDCARD_DIRECTIVE = "*" as const;
 
+/**
+ * Returns a custom directives map with custom handlers from `customDirective`.
+ *
+ * @param schemaMap - the GraphQL schema map returned by {@link graphql.getSchemaMap}
+ * @param customDirectiveOptions - the `customDirective` option.
+ *
+ * @returns a custom directive map, or undefined if no match.
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getCustomDirectives } from "@graphql-markdown/utils/directive";
+ *
+ * const schema = buildSchema(`
+ *   directive @testA(
+ *     arg: ArgEnum = ARGA
+ *   ) on OBJECT | FIELD_DEFINITION
+ *   directive @testB(
+ *     argA: Int!,
+ *     argB: [String!]
+ *   ) on FIELD_DEFINITION
+ *   enum ArgEnum {
+ *     ARGA
+ *     ARGB
+ *     ARGC
+ *   }
+ * `);
+ *
+ * const schemaMap = {
+ *   directives: {
+ *     testA: schema.getDirective("testA"),
+ *     testB: schema.getDirective("testB"),
+ *   },
+ * };
+ *
+ * const customDirectiveOptions = {
+ *   testA: {
+ *     descriptor: (_, constDirectiveType) => `Named directive ${constDirectiveType.name}`;
+ *   },
+ *   "*": {
+ *     descriptor: (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`;
+ *   },
+ * };
+ *
+ * const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
+ *
+ * // Expected result: {
+ * //   "testA": {
+ * //     "descriptor": (_, constDirectiveType) => `Named directive ${constDirectiveType.name}`,
+ * //     "type": "@testA",
+ * //   },
+ * //   "testB": {
+ * //     "descriptor": (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`,
+ * //     "type": "@testB",
+ * //   },
+ * // }
+ * ```
+ *
+ */
 export function getCustomDirectives(
-  {
-    directives: schemaDirectives,
-  }: { directives?: Maybe<Record<DirectiveName, GraphQLDirective>> },
+  { directives: schemaDirectives }: Pick<SchemaMap, "directives">,
   customDirectiveOptions?: CustomDirective,
 ): Maybe<CustomDirectiveMap> {
   const customDirectives: CustomDirectiveMap = {};
@@ -54,6 +125,33 @@ export function getCustomDirectives(
   return isEmpty(customDirectives) ? undefined : customDirectives;
 }
 
+/**
+ * Returns a record set of custom handlers from a directive by name.
+ *
+ * @param schemaDirectiveName - the GraphQL directive name.
+ * @param customDirectiveOptions - the `customDirective` option.
+ *
+ * @returns a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
+ *
+ * @example
+ * ```js
+ * import { getCustomDirectiveOptions } from "@graphql-markdown/utils/directive";
+ *
+ * const customDirectiveOptions = {
+ *   "*": {
+ *     descriptor: (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`;
+ *   },
+ * };
+ *
+ * const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptions);
+ *
+ * // Expected result: {
+ * //   "descriptor": (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`,
+ * //   "type": "@testB",
+ * // }
+ * ```
+ *
+ */
 export function getCustomDirectiveOptions(
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
@@ -69,6 +167,15 @@ export function getCustomDirectiveOptions(
   return undefined;
 }
 
+/**
+ * Checks if a directive name is referenced in `customDirective` option.
+ *
+ * @param schemaDirectiveName - the GraphQL directive name.
+ * @param customDirectiveOptions - the `customDirective` option.
+ *
+ * @returns `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
+ *
+ */
 export function isCustomDirective(
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
