@@ -22,6 +22,16 @@ declare global {
  *
  * @returns an instance of the logger.
  *
+ * @example
+ * ```js
+ * import { Logger } from "@graphql-markdown/utils/logger";
+ *
+ * Logger().info("Info message"); // Expected console output "Info message"
+ *
+ * const loggerModule = require.resolve("@docusaurus/logger");
+ * Logger(loggerModule).info("Info message"); // Expected Docusaurus log output "Info message"
+ * ```
+ *
  */
 export const Logger = (moduleName?: string): LoggerType => {
   if (global.logger && typeof moduleName === "undefined") {

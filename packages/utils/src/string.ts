@@ -23,6 +23,8 @@ import type { Maybe } from "@graphql-markdown/types";
  *
  * @example
  * ```js
+ * import { stringCaseBuilder } from "@graphql-markdown/utils/string";
+ *
  * const text = "The quick brown fox jumps over the lazy dog.";
  * const transformation = (word: string): string => `*${word}*`
  *
@@ -68,6 +70,8 @@ export function stringCaseBuilder(
  *
  * @example
  * ```js
+ * import { prune } from "@graphql-markdown/utils/string";
+ *
  * const text = "**The quick brown fox jumps over the lazy dog.**";
  *
  * prune(text, "**");
@@ -101,6 +105,8 @@ export function prune(str: Maybe<string>, substr: string = ""): string {
  *
  * @example
  * ```js
+ * import { toHTMLUnicode } from "@graphql-markdown/utils/string";
+ *
  * toHTMLUnicode("%"); // Expected result: "&#x0025;"
  * ```
  *
@@ -124,6 +130,8 @@ export function toHTMLUnicode(char: Maybe<string>): string {
  *
  * @example
  * ```js
+ * import { escapeMDX } from "@graphql-markdown/utils/string";
+ *
  * escapeMDX("{MDX} <special> characters");
  * // Expected result: "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters"
  * ```
@@ -142,6 +150,8 @@ export function escapeMDX(str: unknown): string {
  *
  * @example
  * ```js
+ * import { firstUppercase } from "@graphql-markdown/utils/string";
+ *
  * firstUppercase("the quick Brown Fox");
  * // Expected result: "The quick Brown Fox"
  * ```
@@ -165,7 +175,9 @@ export function firstUppercase(str: Maybe<string>): string {
  *
  * @example
  * ```js
- * firstUppercase("the quick Brown Fox");
+ * import { capitalize } from "@graphql-markdown/utils/string";
+ *
+ * capitalize("the quick Brown Fox");
  * // Expected result: "The quick brown fox"
  * ```
  */
@@ -186,6 +198,8 @@ export function capitalize(str: Maybe<string>): string {
  *
  *  * @example
  * ```js
+ * import { replaceDiacritics } from "@graphql-markdown/utils/string";
+ *
  * replaceDiacritics("Âéêś"); // Expected result: "Aees"
  * ```
  *
@@ -211,6 +225,8 @@ export function replaceDiacritics(str: Maybe<string>): string {
  *
  * @example
  * ```js
+ * import { startCase } from "@graphql-markdown/utils/string";
+ *
  * startCase("the quick Brown Fox");
  * // Expected result: "The Quick Brown Fox"
  * ```
@@ -232,6 +248,8 @@ export function startCase(str: Maybe<string>): string {
  *
  * @example
  * ```js
+ * import { kebabCase } from "@graphql-markdown/utils/string";
+ *
  * kebabCase("The quick brown Fox");
  * // Expected result: "the-quick-brown-fox"
  * ```
