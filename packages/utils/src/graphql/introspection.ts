@@ -28,6 +28,8 @@ import type {
 import { convertArrayToMapObject } from "../array";
 import { instanceOf } from "./guard";
 
+export { getDirectiveValues, getNamedType, printSchema } from "graphql";
+
 /**
  * Returns a map of GraphQL named types from a schema for a defined GraphQL type.
  * When parsing the entities, internal GraphQL entities (starting with `__`) are excluded.
@@ -74,6 +76,16 @@ export function getTypeFromSchema<T>(
     .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
 }
 
+/**
+ * Type guard for type with an AST node property.
+ *
+ * @internal
+ *
+ * @param node - a GraphQL schema named type.
+ *
+ * @returns `true` if the entity has an AST node property, else `false`.
+ *
+ */
 export function hasAstNode<T>(
   node: T,
 ): node is Required<{ astNode: ObjectTypeDefinitionNode }> & T {
@@ -309,20 +321,3 @@ export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
     ),
   };
 }
-
-export {
-  getDirectiveValues,
-  getNamedType,
-  isDirective as isDirectiveType,
-  isEnumType,
-  isInputObjectType as isInputType,
-  isInterfaceType,
-  isLeafType,
-  isListType,
-  isNamedType,
-  isNonNullType,
-  isObjectType,
-  isScalarType,
-  isUnionType,
-  printSchema,
-} from "graphql";

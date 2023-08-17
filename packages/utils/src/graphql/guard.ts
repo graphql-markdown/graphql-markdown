@@ -1,5 +1,19 @@
 import type { GraphQLField } from "graphql";
 
+export {
+  isDirective as isDirectiveType,
+  isEnumType,
+  isInputObjectType as isInputType,
+  isInterfaceType,
+  isLeafType,
+  isListType,
+  isNamedType,
+  isNonNullType,
+  isObjectType,
+  isScalarType,
+  isUnionType,
+} from "graphql";
+
 export function isParametrizedField(
   type: unknown,
 ): type is GraphQLField<unknown, unknown, unknown> {
