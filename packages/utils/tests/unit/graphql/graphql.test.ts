@@ -36,11 +36,6 @@ import {
   getDocumentLoaders,
   getFields,
   getIntrospectionFieldsList,
-  getRelationOfField,
-  getRelationOfImplementation,
-  getRelationOfInterface,
-  getRelationOfReturn,
-  getRelationOfUnion,
   getSchemaMap,
   getTypeDirectiveValues,
   getTypeFromSchema,
@@ -51,6 +46,13 @@ import {
   isParametrizedField,
   loadSchema,
 } from "../../../src/graphql/graphql";
+import {
+  getRelationOfField,
+  getRelationOfImplementation,
+  getRelationOfInterface,
+  getRelationOfReturn,
+  getRelationOfUnion,
+} from "../../../src/graphql/relation";
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
