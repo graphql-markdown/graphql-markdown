@@ -1,16 +1,19 @@
-import {
-  getNamedType,
+import type {
   GraphQLDirective,
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLUnionType,
+} from "graphql";
+import {
+  getNamedType,
   isDirective as isDirectiveType,
   isInterfaceType,
   isNamedType,
   isObjectType,
   isUnionType,
 } from "graphql";
+
 import type {
   GraphQLNamedType,
   GraphQLType,
@@ -19,6 +22,7 @@ import type {
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
+
 import { getSchemaMap, __getFields } from "./introspection";
 import { isParametrizedField } from "./guard";
 
