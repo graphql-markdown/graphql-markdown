@@ -45,8 +45,8 @@ describe("directive", () => {
 
   const schemaMap = {
     directives: {
-      testA: schema.getDirective("testA"),
-      testB: schema.getDirective("testB"),
+      testA: schema.getDirective("testA")!,
+      testB: schema.getDirective("testB")!,
     },
   };
 
