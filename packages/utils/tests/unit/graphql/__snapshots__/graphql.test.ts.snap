@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`graphql getConstDirectiveMap returns custom directives map 1`] = `
-{
-  "testA": {
-    "descriptor": [Function],
-    "type": "@testA",
-  },
-}
-`;
-
 exports[`graphql getFields() returns list of type fields 1`] = `
 "[
   {

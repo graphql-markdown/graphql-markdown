@@ -1,23 +1,16 @@
 import {
   getDirectiveValues,
   getNamedType,
-  GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
-  GraphQLFloat,
-  GraphQLID,
   GraphQLInputObjectType,
-  GraphQLInt,
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLSchema,
-  GraphQLString,
   GraphQLUnionType,
   isDirective as isDirectiveType,
-  isEnumType,
   isInterfaceType,
-  isListType,
   isNamedType,
   isObjectType,
   isUnionType,
@@ -49,9 +42,29 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { convertArrayToMapObject } from "./array";
-import { isEmpty } from "./object";
+import { convertArrayToMapObject } from "../array";
+import { isEmpty } from "../object";
 
+/**
+ * Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
+ * The wrapper will load the schema using the loader declared in `options`.
+ * If `rootTypes` is set in the options, then the schema root types will be overridden to generate custom GraphQL schema.
+ *
+ * @param schemaLocation - the schema location pointer matching the loader.
+ * @param options - the schema `loaders`, and optional `rootTypes` override.
+ *
+ * @returns a GraphQL schema.
+ *
+ * @example
+ * ```js
+ * import { loadSchema } from "@graphql-markdown/utils/graphql"
+ *
+ * const schema = await loadSchema("schema.graphql", {
+ *   loaders: [new GraphQLFileLoader()],
+ *   rootTypes: { query: "Root", subscription: "" },
+ * });
+ * ```
+ */
 export async function loadSchema(
   schemaLocation: string,
   options: LoadSchemaOptions & {
@@ -87,6 +100,32 @@ export async function loadSchema(
   return new GraphQLSchema(config);
 }
 
+/**
+ * Asynchronously returns a valid loaders list for {@link loadSchema} based on the plugin config.
+ * Import each loader package, and instantiate a loader object.
+ *
+ * @param loadersList - the list of loaders defined in the plugin config.
+ *
+ * @returns a list of loader objects.
+ *
+ * @throws {@link Error} if no loader loader, or an error occurred when importing a loader package.
+ *
+ * @example
+ * ```js
+ * import { getDocumentLoaders, loadSchema } from "@graphql-markdown/utils/graphql"
+ *
+ * const loaderList = {
+ *   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+ * };
+ *
+ * const loaders = await getDocumentLoaders(loaderList);
+ *
+ * const schema = await loadSchema("schema.graphql", {
+ *   loaders,
+ *   rootTypes: { query: "Root", subscription: "" },
+ * });
+ * ```
+ */
 export async function getDocumentLoaders(
   loadersList: Maybe<LoaderOption>,
 ): Promise<Maybe<LoadSchemaOptions>> {
@@ -123,67 +162,20 @@ export async function getDocumentLoaders(
   return { ...loaderOptions, loaders };
 }
 
-export function getListDefaultValues<T>(
-  type: Maybe<GraphQLType>,
-  value: T,
-): string {
-  if (typeof type === "undefined" || type === null) {
-    return "";
-  }
-
-  const defaultValues: T[] = Array.isArray(value) ? value : [value];
-
-  const defaultValuesString = defaultValues.map((defaultValue) =>
-    getDefaultValue({ type, defaultValue }),
-  );
-
-  return `[${defaultValuesString.join(", ")}]`;
-}
-
-export function getDefaultValue<T>({
-  type,
-  defaultValue,
-}: {
-  type: Maybe<GraphQLType>;
-  defaultValue: T;
-}): Maybe<T | string> {
-  if (
-    typeof type === "undefined" ||
-    type === null ||
-    typeof defaultValue === "undefined" ||
-    defaultValue === null
-  ) {
-    return undefined;
-  }
-
-  if (isListType(type)) {
-    return getListDefaultValues(getNamedType(type), defaultValue);
-  }
-
-  return formatDefaultValue(type, defaultValue);
-}
-
-function formatDefaultValue<T>(
-  type: Maybe<GraphQLType>,
-  defaultValue: T,
-): T | string {
-  if (isEnumType(type)) {
-    return defaultValue;
-  }
-
-  switch (type) {
-    case GraphQLInt:
-    case GraphQLFloat:
-    case GraphQLBoolean:
-      return defaultValue;
-    case GraphQLID:
-    case GraphQLString:
-      return `"${defaultValue}"`;
-    default:
-      return defaultValue;
-  }
-}
-
+/**
+ * Returns a map of GraphQL named types from a schema for a defined GraphQL type.
+ * When parsing the entities, internal GraphQL entities (starting with `__`) are excluded.
+ *
+ * @see {@link getSchemaMap}
+ *
+ * @internal
+ *
+ * @param schema - a GraphQL schema.
+ * @param type - a GraphQL type, eg `GraphQLObjectType`.
+ *
+ * @returns a map of GraphQL named types for the matching GraphQL type, or undefined if no match.
+ *
+ */
 export function getTypeFromSchema<T>(
   schema: Maybe<GraphQLSchema>,
   type: unknown,
@@ -222,6 +214,17 @@ export function hasAstNode<T>(
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
 }
 
+/**
+ * Type guard for checking if a GraphQL named type is of type.
+ *
+ * @internal
+ *
+ * @param obj - a GraphQL named type from the GraphQL schema.
+ * @param type - a GraphQL type, eg `GraphQLObjectType`.
+ *
+ * @returns `true` if types matches, else `false`.
+ *
+ */
 function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
   try {
     const expect = type.name;
@@ -233,14 +236,23 @@ function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
   }
 }
 
+/**
+ * Checks if a schema entity as a directive belonging to a defined set.
+ *
+ * @param entity - a GraphQL schema entity.
+ * @param directives - a directive name or a list of directive names.
+ *
+ * @returns `true` if the entity has at least one directive matching, else `false`.
+ *
+ */
 export function hasDirective(
-  node: unknown,
+  entity: unknown,
   directives: Maybe<string[] | string>,
 ): boolean {
   if (
-    !hasAstNode(node) ||
+    !hasAstNode(entity) ||
     !directives ||
-    !Array.isArray(node.astNode.directives)
+    !Array.isArray(entity.astNode.directives)
   ) {
     return false;
   }
@@ -248,27 +260,36 @@ export function hasDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return (
-    node.astNode.directives.findIndex((directiveNode: DirectiveNode) =>
+    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) =>
       directiveList.includes(directiveNode.name.value),
     ) > -1
   );
 }
 
+/**
+ * Returns a schema entity's list of directives matching a defined set.
+ *
+ * @param entity - a GraphQL schema entity.
+ * @param directives - a directive name or a list of directive names.
+ *
+ * @returns a list of GraphQL directives matching the set, else `false`.
+ *
+ */
 export function getDirective(
-  node: unknown,
+  entity: unknown,
   directives: Maybe<string[] | string>,
 ): GraphQLDirective[] {
   if (
-    !hasAstNode(node) ||
+    !hasAstNode(entity) ||
     !directives ||
-    !Array.isArray(node.astNode.directives)
+    !Array.isArray(entity.astNode.directives)
   ) {
     return [];
   }
 
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
-  return node.astNode.directives
+  return entity.astNode.directives
     .filter((directiveNode: DirectiveDefinitionNode) =>
       directiveList.includes(directiveNode.name.value),
     )
@@ -284,29 +305,9 @@ export function getDirective(
     );
 }
 
-export function getConstDirectiveMap(
-  node: unknown,
-  options?: Partial<PrintTypeOptions>,
-): Maybe<CustomDirectiveMap> {
-  if (!options?.customDirectives || isEmpty(options.customDirectives)) {
-    return undefined;
-  }
-
-  const constDirectives = getDirective(
-    node,
-    Object.keys(options.customDirectives),
-  );
-  if (constDirectives.length === 0) {
-    return undefined;
-  }
-
-  return constDirectives.reduce((directiveMap, constDirective) => {
-    const name = constDirective.name as DirectiveName;
-    directiveMap[name] = options.customDirectives![name];
-    return directiveMap;
-  }, {} as CustomDirectiveMap);
-}
-
+/**
+ *
+ */
 export function getTypeDirectiveArgValue(
   directive: GraphQLDirective,
   node: unknown,
@@ -321,6 +322,12 @@ export function getTypeDirectiveArgValue(
   return args[argName] as Maybe<Record<string, unknown>>;
 }
 
+/**
+ *
+ * @param directive
+ * @param type
+ * @returns
+ */
 export function getTypeDirectiveValues(
   directive: GraphQLDirective,
   type: unknown,
@@ -341,6 +348,16 @@ export function getTypeDirectiveValues(
   );
 }
 
+/**
+ *
+ * @internal
+ *
+ * @param type
+ * @param processor
+ * @param fallback
+ *
+ * @returns
+ */
 function __getFields<T, V>(
   type: T,
   processor?: (fieldMap: Record<string, unknown>) => V,

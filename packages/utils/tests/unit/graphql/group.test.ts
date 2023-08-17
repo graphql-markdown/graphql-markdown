@@ -7,7 +7,7 @@ import type {
   DirectiveName,
 } from "@graphql-markdown/types";
 
-import { getGroups, getGroupName } from "../../src/group";
+import { getGroups, getGroupName } from "../../../src/graphql/group";
 
 describe("group-info", () => {
   const schema = buildSchema(`

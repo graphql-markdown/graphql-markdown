@@ -13,9 +13,11 @@ import type {
   CustomDirectiveOptions,
   Maybe,
   SchemaMap,
+  PrintTypeOptions,
 } from "@graphql-markdown/types";
 
-import { isEmpty } from "./object";
+import { isEmpty } from "../object";
+import { getDirective } from "./graphql";
 
 /**
  * Wildcard `*` character for matching any directive name.
@@ -184,4 +186,80 @@ export function isCustomDirective(
     schemaDirectiveName in customDirectiveOptions ||
     WILDCARD_DIRECTIVE in customDirectiveOptions
   );
+}
+
+/**
+ * Returns a map of custom directives for a schema entity.
+ *
+ * @param entity - a GraphQL schema entity.
+ * @param customDirectiveMap - a custom directive map (see {@link getCustomDirectives}).
+ *
+ * @returns a map of GraphQL directives matching the custom directives defined, else `undefined`.
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getConstDirectiveMap } from "@graphql-markdown/utils/directive";
+ *
+ * const schema = buildSchema(`
+ *     directive @testA(
+ *       arg: ArgEnum = ARGA
+ *     ) on OBJECT | FIELD_DEFINITION
+ *
+ *     directive @testB(
+ *       argA: Int!,
+ *       argB: [String!]
+ *     ) on FIELD_DEFINITION
+ *
+ *     enum ArgEnum {
+ *       ARGA
+ *       ARGB
+ *       ARGC
+ *     }
+ *
+ *     type Test @testA {
+ *       id: ID!
+ *       fieldA: [String!]
+ *         @testA(arg: ARGC)
+ *         @testB(argA: 10, argB: ["testArgB"])
+ *     }
+ *
+ *     type TestWithoutDirective {
+ *       id: ID!
+ *     }
+ *   `);
+ *
+ * const customDirectives = {
+ *   testA: {
+ *     type: schema.getDirective("testA"),
+ *     descriptor: (_, constDirectiveType) => `${constDirectiveType.name}`;
+ *   },
+ * };
+ *
+ * const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
+ * // Expected result: {
+ * //   "descriptor": (_, constDirectiveType) => `${constDirectiveType.name}`,
+ * //   "type": schema.getDirective("testA"),
+ * // }
+ *
+ * ```
+ */
+export function getConstDirectiveMap(
+  entity: unknown,
+  customDirectiveMap: Maybe<CustomDirectiveMap>,
+): Maybe<CustomDirectiveMap> {
+  if (!customDirectiveMap || isEmpty(customDirectiveMap)) {
+    return undefined;
+  }
+
+  const constDirectives = getDirective(entity, Object.keys(customDirectiveMap));
+  if (constDirectives.length === 0) {
+    return undefined;
+  }
+
+  return constDirectives.reduce((directiveMap, constDirective) => {
+    const name = constDirective.name as DirectiveName;
+    directiveMap[name] = customDirectiveMap[name];
+    return directiveMap;
+  }, {} as CustomDirectiveMap);
 }

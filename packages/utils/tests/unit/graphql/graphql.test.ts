@@ -15,31 +15,22 @@ jest.mock("graphql", () => {
 });
 import type {
   GraphQLDirective,
-  GraphQLNamedType,
   GraphQLSchema,
   ObjectTypeDefinitionNode,
 } from "graphql";
 import {
   buildSchema,
   getDirectiveValues,
-  GraphQLBoolean,
   GraphQLEnumType,
-  GraphQLFloat,
-  GraphQLID,
   GraphQLInputObjectType,
-  GraphQLInt,
   GraphQLInterfaceType,
-  GraphQLList,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLString,
   GraphQLUnionType,
   isDirective,
 } from "graphql";
 
 import {
-  getConstDirectiveMap,
-  getDefaultValue,
   getDirective,
   getTypeDirectiveArgValue,
   getDocumentLoaders,
@@ -59,16 +50,18 @@ import {
   isOperation,
   isParametrizedField,
   loadSchema,
-} from "../../src/graphql";
+} from "../../../src/graphql/graphql";
 
-const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../__data__/schema_with_custom_root_types.graphql",
+  "../../__data__/schema_with_custom_root_types.graphql",
 );
 const INTROSPECTION_SCHEMA_FILE = require.resolve(
-  "../__data__/introspection.json",
+  "../../__data__/introspection.json",
 );
-const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
+const SCHEMA_ISSUE_802_FILE = require.resolve(
+  "../../__data__/schema_802.graphql",
+);
 
 describe("graphql", () => {
   let schema: GraphQLSchema;
@@ -148,138 +141,6 @@ describe("graphql", () => {
       await expect(getDocumentLoaders(loaderList)).rejects.toThrow(
         `Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`,
       );
-    });
-  });
-
-  // covers printDefaultValue()
-  describe("getDefaultValue()", () => {
-    test("returns undefined if type is undefined", () => {
-      expect.hasAssertions();
-      expect(
-        getDefaultValue({ type: undefined, defaultValue: 5 }),
-      ).toBeUndefined();
-    });
-
-    test.each([
-      { type: GraphQLInt, defaultValue: 5 },
-      { type: GraphQLInt, defaultValue: 0 },
-      { type: GraphQLFloat, defaultValue: 5.3 },
-      { type: GraphQLFloat, defaultValue: 0.0 },
-      { type: GraphQLBoolean, defaultValue: true },
-      { type: GraphQLBoolean, defaultValue: false },
-    ])(
-      "returns $defaultValue value as default for $type",
-      ({ type, defaultValue }) => {
-        expect.hasAssertions();
-
-        const argument = {
-          name: "foobar",
-          description: undefined,
-          type,
-          defaultValue,
-          extensions: undefined,
-        };
-
-        expect(getDefaultValue(argument)).toEqual(defaultValue);
-      },
-    );
-
-    test.each([
-      { type: GraphQLInt },
-      { type: GraphQLID },
-      { type: GraphQLFloat },
-      { type: GraphQLString },
-      { type: GraphQLBoolean },
-      { type: new GraphQLList(GraphQLID) },
-    ])(
-      "returns undefined for type $type if not default value defined",
-      ({ type }) => {
-        expect.hasAssertions();
-
-        const argument = {
-          name: "foobar",
-          description: undefined,
-          type,
-          defaultValue: undefined,
-          extensions: undefined,
-        };
-
-        expect(getDefaultValue(argument)).toBeUndefined();
-      },
-    );
-
-    test.each([
-      {
-        type: new GraphQLList(GraphQLID),
-        defaultValue: ["0", "1"],
-        expected: '["0", "1"]',
-      },
-      {
-        type: new GraphQLList(GraphQLInt),
-        defaultValue: 42,
-        expected: "[42]",
-      },
-    ])(
-      "returns array default value as string for type $type",
-      ({ type, defaultValue, expected }) => {
-        expect.hasAssertions();
-
-        const argument = {
-          name: "id",
-          description: undefined,
-          type,
-          defaultValue,
-          extensions: undefined,
-        };
-
-        expect(getDefaultValue(argument)).toBe(expected);
-      },
-    );
-
-    test("returns unformatted default value for type GraphQLEnum", () => {
-      expect.hasAssertions();
-
-      const enumType = new GraphQLEnumType({
-        name: "RGB",
-        values: {
-          RED: { value: "RED" },
-          GREEN: { value: "GREEN" },
-          BLUE: { value: "BLUE" },
-        },
-      });
-
-      const argument = {
-        name: "color",
-        description: undefined,
-        type: enumType,
-        defaultValue: "RED",
-        extensions: undefined,
-      };
-
-      expect(getDefaultValue(argument)).toBe("RED");
-    });
-
-    test("returns array default value unformatted for type GraphQLList(GraphQLEnum)", () => {
-      expect.hasAssertions();
-
-      const enumType = new GraphQLEnumType({
-        name: "RGB",
-        values: {
-          RED: { value: "RED" },
-          GREEN: { value: "GREEN" },
-          BLUE: { value: "BLUE" },
-        },
-      });
-
-      const argument = {
-        name: "color",
-        description: undefined,
-        type: new GraphQLList(enumType),
-        defaultValue: ["RED"],
-        extensions: undefined,
-      };
-
-      expect(getDefaultValue(argument)).toBe("[RED]");
     });
   });
 
@@ -940,78 +801,6 @@ describe("graphql", () => {
       expect(actual).toHaveLength(1);
       expect(actual[0].toString()).toBe("@foobaz");
       expect(isDirective(actual[0])).toBeTruthy();
-    });
-  });
-
-  describe("getConstDirectiveMap", () => {
-    const schema = buildSchema(`
-      directive @testA(
-        arg: ArgEnum = ARGA
-      ) on OBJECT | FIELD_DEFINITION
-
-      directive @testB(
-        argA: Int!, 
-        argB: [String!]
-      ) on FIELD_DEFINITION
-
-      enum ArgEnum {
-        ARGA
-        ARGB
-        ARGC
-      }
-
-      type Test @testA {
-        id: ID!
-        fieldA: [String!] 
-          @testA(arg: ARGC) 
-          @testB(argA: 10, argB: ["testArgB"])
-      }
-
-      type TestWithoutDirective {
-        id: ID!
-      }
-    `);
-    const type = schema.getType("Test")!;
-    const typeWithoutDirective = schema.getType("TestWithoutDirective")!;
-    const descriptor = (
-      directiveType: GraphQLNamedType,
-      constDirectiveType: GraphQLDirective,
-    ): string => `Test${constDirectiveType.name}`;
-    const options = {
-      customDirectives: {
-        testA: {
-          type: schema.getDirective("testA"),
-          descriptor,
-        },
-        nonExist: {
-          type: undefined,
-          descriptor,
-        },
-      },
-    };
-
-    test("returns undefined when config is not set", () => {
-      expect.assertions(1);
-
-      const map = getConstDirectiveMap(type, { customDirectives: undefined });
-
-      expect(map).toBeUndefined();
-    });
-
-    test("returns undefined when config custom directive does not exist", () => {
-      expect.assertions(1);
-
-      const map = getConstDirectiveMap(typeWithoutDirective, options);
-
-      expect(map).toBeUndefined();
-    });
-
-    test("returns custom directives map", () => {
-      expect.assertions(1);
-
-      const map = getConstDirectiveMap(type, options);
-
-      expect(map).toMatchSnapshot();
     });
   });
 
