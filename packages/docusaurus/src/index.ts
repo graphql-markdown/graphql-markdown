@@ -14,7 +14,7 @@ export default function pluginGraphQLDocGenerator(
   options: PluginOptions,
 ): Plugin {
   const loggerModule = require.resolve("@docusaurus/logger");
-  Logger.setInstance(loggerModule);
+  Logger(loggerModule);
 
   const isDefaultId = options.id === DEFAULT_ID;
 

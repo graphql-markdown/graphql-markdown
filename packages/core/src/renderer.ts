@@ -27,7 +27,7 @@ import {
   slugify,
 } from "@graphql-markdown/utils";
 
-const logger = Logger.getInstance();
+const logger = Logger();
 
 const SIDEBAR = "sidebar-schema.js" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
