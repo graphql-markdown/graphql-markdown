@@ -1,8 +1,3 @@
-jest.mock("node:fs/promises");
-
-import path from "node:path";
-jest.mock("node:path", () => jest.requireActual("node:path"));
-
 import { GraphQLScalarType, Kind } from "graphql";
 
 import type {
@@ -11,6 +6,16 @@ import type {
   SchemaEntity,
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
+
+jest.mock("node:fs/promises");
+
+jest.mock("node:path", () => {
+  return {
+    __esModule: true,
+    ...jest.requireActual("node:path"),
+  };
+});
+import * as path from "node:path";
 
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
@@ -55,6 +60,9 @@ describe("renderer", () => {
             .deprecated as TypeDeprecatedOption,
         },
       );
+
+      // silent console
+      jest.spyOn(global.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -128,12 +136,8 @@ describe("renderer", () => {
         jest
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
-        jest
-          .spyOn(Utils.pathUrl, "relative")
-          .mockImplementationOnce(() => "not-valid.md");
-        const spy = jest
-          .spyOn(global.console, "warn")
-          .mockImplementationOnce(() => {});
+        jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
+        const spy = jest.spyOn(global.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -156,7 +160,11 @@ describe("renderer", () => {
 
         const filePath = await rendererInstance.renderSidebar();
 
-        expect(spy.mock.calls).toMatchSnapshot();
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          expect.anything(),
+          undefined,
+        );
         expect(filePath.endsWith("output/sidebar-schema.js")).toBeTruthy();
       });
     });
@@ -266,13 +274,17 @@ describe("renderer", () => {
 
         const category = "foobar";
         const outputPath = "/output/docs";
+        const filePath = path.join(outputPath, "_category_.yml");
 
         jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
         const spy = jest.spyOn(Utils, "saveFile");
 
         await rendererInstance.generateCategoryMetafile(category, outputPath);
 
-        expect(spy).not.toHaveBeenCalled();
+        expect(spy).not.toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
+        );
       });
 
       test("generate _category_.yml file with sidebar position", async () => {
