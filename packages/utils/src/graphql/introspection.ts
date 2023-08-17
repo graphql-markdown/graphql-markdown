@@ -1,3 +1,4 @@
+import type { GraphQLSchema } from "graphql";
 import {
   getDirectiveValues,
   GraphQLDirective,
@@ -6,154 +7,26 @@ import {
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLSchema,
   GraphQLUnionType,
   isNamedType,
   OperationTypeNode,
 } from "graphql";
-import { loadSchema as asyncLoadSchema } from "@graphql-tools/load";
-import type { Loader } from "graphql-config";
 
 import type {
   ASTNode,
-  CustomDirectiveMap,
   DirectiveDefinitionNode,
-  DirectiveName,
   DirectiveNode,
-  GraphQLField,
   GraphQLFieldMap,
   GraphQLInputFieldMap,
   GraphQLNamedType,
-  GraphQLSchemaConfig,
-  LoaderOption,
-  LoadSchemaOptions,
   Maybe,
   ObjectTypeDefinitionNode,
-  PackageOptionsConfig,
-  PrintTypeOptions,
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
 
 import { convertArrayToMapObject } from "../array";
-import { isEmpty } from "../object";
-
-/**
- * Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
- * The wrapper will load the schema using the loader declared in `options`.
- * If `rootTypes` is set in the options, then the schema root types will be overridden to generate custom GraphQL schema.
- *
- * @param schemaLocation - the schema location pointer matching the loader.
- * @param options - the schema `loaders`, and optional `rootTypes` override.
- *
- * @returns a GraphQL schema.
- *
- * @example
- * ```js
- * import { loadSchema } from "@graphql-markdown/utils/graphql"
- *
- * const schema = await loadSchema("schema.graphql", {
- *   loaders: [new GraphQLFileLoader()],
- *   rootTypes: { query: "Root", subscription: "" },
- * });
- * ```
- */
-export async function loadSchema(
-  schemaLocation: string,
-  options: LoadSchemaOptions & {
-    rootTypes?: Partial<Record<OperationTypeNode, string>>;
-  },
-): Promise<GraphQLSchema> {
-  let rootTypes = undefined;
-
-  if (typeof options !== "undefined" && "rootTypes" in options) {
-    rootTypes = options.rootTypes;
-    delete options.rootTypes;
-  }
-
-  const schema = await asyncLoadSchema(schemaLocation, options);
-
-  if (!rootTypes) {
-    return schema;
-  }
-
-  const config: Readonly<GraphQLSchemaConfig> = {
-    ...schema.toConfig(),
-    query: schema.getType(
-      rootTypes.query ?? OperationTypeNode.QUERY,
-    ) as GraphQLObjectType<unknown, unknown>,
-    mutation: schema.getType(
-      rootTypes.mutation ?? OperationTypeNode.MUTATION,
-    ) as GraphQLObjectType<unknown, unknown>,
-    subscription: schema.getType(
-      rootTypes.subscription ?? OperationTypeNode.SUBSCRIPTION,
-    ) as GraphQLObjectType<unknown, unknown>,
-  };
-
-  return new GraphQLSchema(config);
-}
-
-/**
- * Asynchronously returns a valid loaders list for {@link loadSchema} based on the plugin config.
- * Import each loader package, and instantiate a loader object.
- *
- * @param loadersList - the list of loaders defined in the plugin config.
- *
- * @returns a list of loader objects.
- *
- * @throws {@link Error} if no loader loader, or an error occurred when importing a loader package.
- *
- * @example
- * ```js
- * import { getDocumentLoaders, loadSchema } from "@graphql-markdown/utils/graphql"
- *
- * const loaderList = {
- *   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
- * };
- *
- * const loaders = await getDocumentLoaders(loaderList);
- *
- * const schema = await loadSchema("schema.graphql", {
- *   loaders,
- *   rootTypes: { query: "Root", subscription: "" },
- * });
- * ```
- */
-export async function getDocumentLoaders(
-  loadersList: Maybe<LoaderOption>,
-): Promise<Maybe<LoadSchemaOptions>> {
-  const loaders: Loader[] = [];
-  const loaderOptions: PackageOptionsConfig = {};
-
-  if (typeof loadersList !== "object" || loadersList === null) {
-    return undefined;
-  }
-
-  for (const [className, graphqlDocumentLoader] of Object.entries(
-    loadersList,
-  )) {
-    if (typeof graphqlDocumentLoader === "string") {
-      const { [className]: Loader } = await import(graphqlDocumentLoader);
-      loaders.push(new Loader());
-    } else {
-      if (typeof graphqlDocumentLoader.module === "undefined") {
-        throw new Error(
-          `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
-        );
-      }
-      const { [className]: Loader } = await import(
-        graphqlDocumentLoader.module
-      );
-      loaders.push(new Loader());
-      Object.assign(loaderOptions, graphqlDocumentLoader.options);
-    }
-  }
-
-  if (loaders.length < 1) {
-    throw new Error("No GraphQL document loaders available.");
-  }
-  return { ...loaderOptions, loaders };
-}
+import { instanceOf } from "./guard";
 
 /**
  * Returns a map of GraphQL named types from a schema for a defined GraphQL type.
@@ -205,28 +78,6 @@ export function hasAstNode<T>(
   node: T,
 ): node is Required<{ astNode: ObjectTypeDefinitionNode }> & T {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
-}
-
-/**
- * Type guard for checking if a GraphQL named type is of type.
- *
- * @internal
- *
- * @param obj - a GraphQL named type from the GraphQL schema.
- * @param type - a GraphQL type, eg `GraphQLObjectType`.
- *
- * @returns `true` if types matches, else `false`.
- *
- */
-function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
-  try {
-    const expect = type.name;
-    return typeof obj !== "object" || obj === null
-      ? false
-      : obj.constructor.name == expect;
-  } catch (_) {
-    return false;
-  }
 }
 
 /**
@@ -457,33 +308,6 @@ export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
       GraphQLScalarType,
     ),
   };
-}
-
-export function isParametrizedField(
-  type: unknown,
-): type is GraphQLField<unknown, unknown, unknown> {
-  return (
-    typeof type === "object" &&
-    type !== null &&
-    "args" in type &&
-    (type as GraphQLField<unknown, unknown, unknown>).args.length > 0
-  );
-}
-
-export function isOperation(type: unknown): boolean {
-  return typeof type === "object" && type !== null && "type" in type;
-}
-
-export function isDeprecated<T>(
-  type: T,
-): type is Partial<{ deprecationReason: string; isDeprecated: boolean }> & T {
-  return (
-    typeof type === "object" &&
-    type !== null &&
-    (("isDeprecated" in type && type.isDeprecated === true) ||
-      ("deprecationReason" in type &&
-        typeof type.deprecationReason === "string"))
-  );
 }
 
 export {

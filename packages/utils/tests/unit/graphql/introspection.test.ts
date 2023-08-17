@@ -2,8 +2,6 @@ import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-import type { LoaderOption } from "@graphql-markdown/types";
-
 jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
   return {
@@ -33,7 +31,6 @@ import {
 import {
   getDirective,
   getTypeDirectiveArgValue,
-  getDocumentLoaders,
   getFields,
   getIntrospectionFieldsList,
   getSchemaMap,
@@ -41,18 +38,8 @@ import {
   getTypeFromSchema,
   getTypeName,
   hasDirective,
-  isDeprecated,
-  isOperation,
-  isParametrizedField,
-  loadSchema,
-} from "../../../src/graphql/graphql";
-import {
-  getRelationOfField,
-  getRelationOfImplementation,
-  getRelationOfInterface,
-  getRelationOfReturn,
-  getRelationOfUnion,
-} from "../../../src/graphql/relation";
+} from "../../../src/graphql/introspection";
+import { loadSchema } from "../../../src/graphql/loader";
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
@@ -65,84 +52,12 @@ const SCHEMA_ISSUE_802_FILE = require.resolve(
   "../../__data__/schema_802.graphql",
 );
 
-describe("graphql", () => {
+describe("introspection", () => {
   let schema: GraphQLSchema;
 
   beforeAll(async () => {
     schema = await gqlToolsLoadSchema(SCHEMA_FILE, {
       loaders: [new GraphQLFileLoader()],
-    });
-  });
-
-  describe("loadSchema()", () => {
-    test("returns valid schema", async () => {
-      expect.hasAssertions();
-
-      const testSchema = await loadSchema(SCHEMA_FILE, {
-        loaders: [new GraphQLFileLoader()],
-      });
-      expect(JSON.stringify(testSchema)).toBe(JSON.stringify(schema));
-    });
-
-    test("returns valid schema with custom root type", async () => {
-      expect.hasAssertions();
-
-      const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
-        loaders: [new GraphQLFileLoader()],
-        rootTypes: { query: "Root", subscription: "" },
-      });
-
-      expect(testSchema.getQueryType()!.name).toBe("Root");
-      expect(testSchema.getMutationType()).toBeUndefined();
-      expect(testSchema.getSubscriptionType()).toBeUndefined();
-    });
-  });
-
-  describe("getDocumentLoaders()", () => {
-    test("returns loaders when plugin config loaders format is a string", async () => {
-      expect.hasAssertions();
-
-      const loaderList = {
-        GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
-      } as LoaderOption;
-      const documentLoaders = await getDocumentLoaders(loaderList);
-
-      expect(documentLoaders).toBeDefined();
-      const { loaders, ...loaderOptions } = documentLoaders!;
-
-      expect(loaders).toMatchObject([new GraphQLFileLoader()]);
-      expect(loaderOptions).toMatchObject({});
-    });
-
-    test("returns loaders and configuration when plugin config loaders format is an object", async () => {
-      expect.hasAssertions();
-
-      const loaderList = {
-        GraphQLFileLoader: {
-          module: "@graphql-tools/graphql-file-loader",
-          options: {
-            option1: true,
-          },
-        },
-      } as LoaderOption;
-      const documentLoaders = await getDocumentLoaders(loaderList);
-
-      expect(documentLoaders).toBeDefined();
-      const { loaders, ...loaderOptions } = documentLoaders!;
-
-      expect(loaders).toMatchObject([new GraphQLFileLoader()]);
-      expect(loaderOptions).toMatchObject({
-        option1: true,
-      });
-    });
-
-    test("throw an error when loader list is invalid", async () => {
-      expect.hasAssertions();
-
-      const loaderList = { GraphQLFileLoader: {} } as LoaderOption;
-      await expect(getDocumentLoaders(loaderList)).rejects.toThrow(
-        `Wrong format for plugin loader "GraphQLFileLoader", it should be {module: String, options?: Object}`,
-      );
     });
   });
 
@@ -375,287 +290,6 @@ describe("graphql", () => {
       const schemaTypeMap = getSchemaMap(testSchema);
 
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
-    });
-  });
-
-  describe("isParametrizedField()", () => {
-    test("returns true if type is parametrized", () => {
-      expect.hasAssertions();
-
-      const mutations = getIntrospectionFieldsList(schema.getMutationType());
-      const res = isParametrizedField(mutations["createTweet"]);
-
-      expect(res).toBeTruthy();
-    });
-
-    test("returns false if type is not parametrized", () => {
-      expect.hasAssertions();
-
-      const queries = getIntrospectionFieldsList(schema.getQueryType());
-      const res = isParametrizedField(queries["TweetsMeta"]);
-
-      expect(res).toBeFalsy();
-    });
-  });
-
-  describe("isOperation()", () => {
-    test("returns true if type is mutation", () => {
-      expect.hasAssertions();
-
-      const mutations = getIntrospectionFieldsList(schema.getMutationType());
-      const res = isOperation(mutations["createTweet"]);
-
-      expect(res).toBeTruthy();
-    });
-
-    test("returns true if type is query", () => {
-      expect.hasAssertions();
-
-      const queries = getIntrospectionFieldsList(schema.getQueryType());
-      const res = isOperation(queries["Tweets"]);
-
-      expect(res).toBeTruthy();
-    });
-
-    test("returns true if type is subscription", () => {
-      expect.hasAssertions();
-
-      const subscriptions = getIntrospectionFieldsList(
-        schema.getSubscriptionType(),
-      );
-      const res = isOperation(subscriptions["Notifications"]);
-
-      expect(res).toBeTruthy();
-    });
-
-    test("returns false if type is not an operation", () => {
-      expect.hasAssertions();
-
-      const objects = getTypeFromSchema<GraphQLObjectType>(
-        schema,
-        GraphQLObjectType,
-      )!;
-      const res = isOperation(objects["Tweet"]);
-
-      expect(res).toBeFalsy();
-    });
-  });
-
-  describe("getRelationOfInterface()", () => {
-    test("returns types and interfaces extending an interface", () => {
-      expect.hasAssertions();
-
-      const schema = buildSchema(`
-        interface Being {
-          name(surname: Boolean): String
-        }
-        
-        interface Mammal {
-          mother: Mammal
-          father: Mammal
-        }
-
-        interface Pet implements Being {
-          name(surname: Boolean): String
-        }
-        
-        interface Canine implements Mammal & Being {
-          name(surname: Boolean): String
-          mother: Canine
-          father: Canine
-        }
-        
-        type Dog implements Being & Pet & Mammal & Canine {
-          name(surname: Boolean): String
-          nickname: String
-          mother: Dog
-          father: Dog
-        }
-      `);
-
-      const interfaceType = schema.getType("Mammal");
-
-      const relations = getRelationOfInterface(interfaceType, schema);
-
-      expect(relations).toMatchInlineSnapshot(`
-        {
-          "interfaces": [
-            "Canine",
-          ],
-          "objects": [
-            "Dog",
-          ],
-        }
-      `);
-    });
-  });
-
-  describe("getRelationOfUnion", () => {
-    test("returns unions using a type", () => {
-      expect.hasAssertions();
-
-      const schema = buildSchema(`
-        type StudyItem {
-          id: ID!
-          subject: String!
-          duration: Int!
-        }
-        
-        type Meeting {
-          id: ID!
-          topic: String!
-        }
-        
-        type Shopping {
-          id: ID!
-        }
-        
-        union Task = StudyItem | Meeting | Shopping
-        
-        type Schedule {
-          task: Task
-        }
-      `);
-
-      const compositeType = schema.getType("Meeting");
-
-      const relations = getRelationOfUnion(compositeType, schema);
-
-      expect(relations).toMatchInlineSnapshot(`
-        {
-          "unions": [
-            "Task",
-          ],
-        }
-      `);
-    });
-  });
-
-  describe("getRelationOfImplementation", () => {
-    test("returns implementations compatible with type", () => {
-      expect.hasAssertions();
-
-      const schema = buildSchema(`
-        interface Being {
-          name(surname: Boolean): String
-        }
-
-        interface Mammal {
-          mother: Mammal
-          father: Mammal
-        }
-
-        interface Canine implements Mammal & Being {
-          name(surname: Boolean): String
-          mother: Canine
-          father: Canine
-        }
-        
-        type Dog implements Being & Mammal & Canine {
-          name(surname: Boolean): String
-          nickname: String
-          mother: Dog
-          father: Dog
-        }
-
-        type Cat implements Being & Mammal {
-          name(surname: Boolean): String
-          nickname: String
-          mother: Dog
-          father: Dog
-        }
-
-        union Pet = Dog | Cat | Being
-      `);
-
-      const compositeType = schema.getType("Being");
-
-      const relations = getRelationOfImplementation(compositeType, schema);
-
-      expect(relations).toMatchInlineSnapshot(`
-        {
-          "interfaces": [
-            "Canine",
-          ],
-          "objects": [
-            "Dog",
-            "Cat",
-          ],
-          "unions": [
-            "Pet",
-          ],
-        }
-      `);
-    });
-  });
-
-  describe("getRelationOfReturn", () => {
-    test("returns queries, subscriptions and mutations using a type", () => {
-      expect.hasAssertions();
-
-      const schema = buildSchema(`
-        type StudyItem {
-          id: ID!
-          subject: String!
-          duration: Int!
-        }
-        
-        type Query {
-          getStudyItems(subject: String): [StudyItem!]
-          getStudyItem(id: ID!): StudyItem
-        }
-
-        type Mutation {
-          addStudyItem(subject: String!, duration: Int!): StudyItem
-        }
-    
-        type Subscription {
-          listStudyItems: [StudyItem!]
-        }
-      `);
-
-      const compositeType = schema.getType("StudyItem");
-
-      const relations = getRelationOfReturn(compositeType, schema);
-
-      expect(relations).toMatchSnapshot();
-    });
-  });
-
-  describe("getRelationOfField", () => {
-    test("returns queries, subscriptions and mutations using a type", () => {
-      expect.hasAssertions();
-
-      const schema = buildSchema(`
-        interface Record {
-          id: String!
-        }
-
-        type StudyItem implements Record {
-          id: String!
-          subject: String!
-          duration: Int!
-        }
-        
-        type Query {
-          getStudyItems(subject: String): [StudyItem!]
-          getStudyItem(id: String!): StudyItem
-        }
-
-        type Mutation {
-          addStudyItem(subject: String!, duration: Int!): StudyItem
-        }
-    
-        type Subscription {
-          listStudyItems: [StudyItem!]
-        }
-      `);
-
-      const compositeType = schema.getType("String");
-
-      const relations = getRelationOfField(compositeType, schema);
-
-      expect(relations).toMatchSnapshot();
     });
   });
 
@@ -981,55 +615,6 @@ describe("graphql", () => {
         directiveType,
         type.astNode,
       );
-    });
-  });
-
-  describe("isDeprecated", () => {
-    const schema = buildSchema(`
-        interface Record {
-          id: String!
-        }
-
-        type StudyItem implements Record {
-          id: String!
-          subject: String!
-          duration: Int!
-        }
-        
-        type Query {
-          getStudyItems(subject: String): [StudyItem!]
-          getStudyItem(id: String!): StudyItem @deprecated
-        }
-
-        type Mutation {
-          addStudyItem(subject: String!, duration: Int!): StudyItem
-        }
-    
-        type Subscription {
-          listStudyItems: [StudyItem!]
-        }
-      `);
-
-    test("return false is the type is not deprecated", () => {
-      expect.hasAssertions();
-
-      const type = schema.getQueryType()!.getFields();
-
-      expect(isDeprecated(type.getStudyItems)).toBeFalsy();
-    });
-
-    test("return true is the type is deprecated", () => {
-      expect.hasAssertions();
-
-      const type = schema.getQueryType()!.getFields();
-
-      expect(isDeprecated(type.getStudyItem)).toBeTruthy();
-    });
-
-    test("return true is the type has isDeprecated = true", () => {
-      expect.hasAssertions();
-
-      expect(isDeprecated({ isDeprecated: true })).toBeTruthy();
     });
   });
 });

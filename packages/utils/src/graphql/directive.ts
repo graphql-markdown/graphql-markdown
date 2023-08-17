@@ -13,11 +13,10 @@ import type {
   CustomDirectiveOptions,
   Maybe,
   SchemaMap,
-  PrintTypeOptions,
 } from "@graphql-markdown/types";
 
 import { isEmpty } from "../object";
-import { getDirective } from "./graphql";
+import { getDirective } from "./introspection";
 
 /**
  * Wildcard `*` character for matching any directive name.
@@ -30,7 +29,7 @@ export const WILDCARD_DIRECTIVE = "*" as const;
 /**
  * Returns a custom directives map with custom handlers from `customDirective`.
  *
- * @param schemaMap - the GraphQL schema map returned by {@link graphql.getSchemaMap}
+ * @param schemaMap - the GraphQL schema map returned by {@link getSchemaMap}
  * @param customDirectiveOptions - the `customDirective` option.
  *
  * @returns a custom directive map, or undefined if no match.

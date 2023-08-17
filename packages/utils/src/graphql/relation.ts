@@ -19,7 +19,8 @@ import type {
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
-import { getSchemaMap, isParametrizedField, __getFields } from "./graphql";
+import { getSchemaMap, __getFields } from "./introspection";
+import { isParametrizedField } from "./guard";
 
 function mapRelationOf<T>(
   type: unknown,
