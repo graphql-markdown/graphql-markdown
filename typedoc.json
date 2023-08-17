@@ -5,7 +5,6 @@
   "name": "api",
   "out": "./docs/api",
   "anchorFormat": "slug",
-  "hidePageHeader": true,
   "hidePageTitle": true,
   "frontmatterGlobals": {
     "pagination_prev": null,
