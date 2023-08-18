@@ -1,28 +1,40 @@
 /**
- * Object functions
+ * Internal library of helpers for manipulating objects.
+ *
+ * @packageDocumentation
  */
 
-import type { Maybe } from "@graphql-markdown/types";
-
+/**
+ * Check if an object contains key/value records.
+ *
+ * @internal
+ *
+ * @param obj - the key/value record object.
+ *
+ * @example
+ * ```js
+ * import { isEmpty } from '@graphql-markdown/utils/object';
+ *
+ * isEmpty({
+ *     bool: true,
+ *     string: "test",
+ *     number: 123,
+ *     array: ["one", "two"],
+ *     child: { key: "value" },
+ *   });
+ *
+ * // Returns false
+ *
+ * isEmpty({}); // Returns true
+ * ```
+ *
+ * @returns `false` if the object is a valid k/v set of records, else `true`.
+ *
+ */
 export function isEmpty(obj: unknown): boolean {
   return !(
     typeof obj === "object" &&
     obj !== null &&
     Object.keys(obj).length > 0
   );
-}
-
-// get the specified property or nested property of an object
-export function getObjPath(
-  path: Maybe<string>,
-  obj: unknown,
-  fallback: unknown = "",
-): unknown {
-  if (isEmpty(obj) || typeof path !== "string") {
-    return fallback;
-  }
-
-  return path
-    .split(".")
-    .reduce((res: any, key: string) => res[key] ?? fallback, obj); // eslint-disable-line @typescript-eslint/no-explicit-any
 }

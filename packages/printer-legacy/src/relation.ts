@@ -11,6 +11,7 @@ import {
   getRelationOfField,
   getRelationOfImplementation,
   getRelationOfReturn,
+  getSchemaMap,
   isNamedType,
   isOperation,
 } from "@graphql-markdown/utils";
@@ -46,9 +47,9 @@ export const printRelationOf = <T>(
     return "";
   }
 
-  const relations = getRelation(type, options.schema) as Maybe<
-    Record<string, unknown[]>
-  >;
+  const schemaMap = getSchemaMap(options.schema);
+
+  const relations = getRelation(type, schemaMap) as Maybe<IGetRelation<T>>;
 
   if (!relations) {
     return "";

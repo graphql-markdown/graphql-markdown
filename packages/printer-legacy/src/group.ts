@@ -5,7 +5,7 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { toSlug, getNamedType } from "@graphql-markdown/utils";
+import { slugify, getNamedType } from "@graphql-markdown/utils";
 
 export const getGroup = (
   type: unknown,
@@ -31,5 +31,5 @@ export const getGroup = (
     return "";
   }
 
-  return toSlug(groups[typeCategory]![typeName]);
+  return slugify(groups[typeCategory]![typeName]);
 };

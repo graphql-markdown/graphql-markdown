@@ -7,7 +7,7 @@ import type {
 
 import { Logger } from "@graphql-markdown/utils";
 
-const logger = Logger.getInstance();
+const logger = Logger();
 
 export const hasChanges = async (
   schema: GraphQLSchema,

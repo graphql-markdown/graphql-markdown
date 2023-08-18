@@ -1,13 +1,14 @@
-import type { GraphQLFieldMap, GraphQLObjectType } from "graphql";
+import type { GraphQLObjectType } from "graphql";
 import { buildSchema } from "graphql";
 
 import type {
   GroupByDirectiveOptions,
   SchemaMap,
   DirectiveName,
+  GraphQLOperationType,
 } from "@graphql-markdown/types";
 
-import { getGroups, getGroupName } from "../../src/group";
+import { getGroups, getGroupName } from "../../../src/graphql/group";
 
 describe("group-info", () => {
   const schema = buildSchema(`
@@ -53,9 +54,9 @@ describe("group-info", () => {
         string,
         GraphQLObjectType<unknown, unknown>
       >,
-      queries: schema.getQueryType()?.getFields() as GraphQLFieldMap<
-        unknown,
-        unknown
+      queries: schema.getQueryType()?.getFields() as unknown as Record<
+        string,
+        GraphQLOperationType
       >,
     };
 
@@ -99,14 +100,13 @@ describe("group-info", () => {
   });
 
   describe("getGroupName()", () => {
-    test("returns group name if category directive", () => {
-      expect.assertions(2);
-
-      const type = schema.getType("Bird")!;
-      const queryType = schema.getQueryType()!.getFields()!["Fish"];
+    test.each([
+      [schema.getType("Bird")!],
+      [schema.getQueryType()!.getFields()!["Fish"]],
+    ])("returns group name if category directive", (type) => {
+      expect.assertions(1);
 
       expect(getGroupName(type, groupOptions)).toBe("animal");
-      expect(getGroupName(queryType, groupOptions)).toBe("animal");
     });
 
     test.each([

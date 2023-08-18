@@ -41,7 +41,7 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  const logger = Logger.setInstance(loggerModule);
+  const logger = Logger(loggerModule);
 
   const loaders = await getDocumentLoaders(loadersList);
 

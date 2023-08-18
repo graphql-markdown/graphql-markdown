@@ -1,18 +1,23 @@
 import type {
   GraphQLDirective,
   GraphQLEnumType,
-  GraphQLField,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-  GraphQLSchema,
+  GraphQLFieldMap,
+  GraphQLInputFieldMap,
+  GraphQLDirective,
+  GraphQLNamedType,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLUnionType,
 } from "graphql";
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type { Maybe } from ".";
+import type { GraphQLOperationType, Maybe } from ".";
 
 export type CustomDirectiveFunction = <T>(
   directive?: GraphQLDirective,
@@ -86,9 +91,9 @@ export type SchemaEntity =
   | "unions";
 
 export type SchemaMap = {
-  queries?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
-  mutations?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
-  subscriptions?: Maybe<Record<string, GraphQLField<unknown, unknown>>>;
+  queries?: Maybe<Record<string, GraphQLOperationType>>;
+  mutations?: Maybe<Record<string, GraphQLOperationType>>;
+  subscriptions?: Maybe<Record<string, GraphQLOperationType>>;
   directives?: Maybe<Record<string, GraphQLDirective>>;
   objects?: Maybe<Record<string, GraphQLObjectType<unknown, unknown>>>;
   unions?: Maybe<Record<string, GraphQLUnionType>>;
@@ -100,8 +105,8 @@ export type SchemaMap = {
 
 export type IGetRelation<T> = (
   type: unknown,
-  schema: Maybe<GraphQLSchema>,
-) => T;
+  schemaMap: Maybe<SchemaMap>,
+) => Partial<Record<SchemaEntity, T[]>>;
 
 export type LoggerType = {
   debug: Function; // eslint-disable-line @typescript-eslint/ban-types
@@ -116,5 +121,17 @@ export type Category = { category: string; slug: string };
 
 export type MDXString = string & { _opaque: typeof MDXString };
 declare const MDXString: unique symbol;
+
+export type GraphQLOperationType =
+  | GraphQLFieldMap<unknown, unknown>
+  | GraphQLInputFieldMap
+  | Record<string, never>;
+
+export type RelationOfField =
+  | GraphQLDirective
+  | GraphQLNamedType
+  | GraphQLOperationType;
+export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;
+export type RelationOfImplementation = GraphQLUnionType | RelationOfInterface;
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";

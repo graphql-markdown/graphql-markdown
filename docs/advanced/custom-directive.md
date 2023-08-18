@@ -141,6 +141,7 @@ import {
 ```shell
 npm i @graphql-markdown/helpers
 ```
+
 :::
 
 ### `@graphql-markdown/helpers`

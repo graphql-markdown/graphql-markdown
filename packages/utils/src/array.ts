@@ -1,21 +1,84 @@
 /**
- * Array functions
+ * Internal library of helpers for converting array \<-\> list.
+ *
+ * @packageDocumentation
  */
 
 import type { Maybe } from "@graphql-markdown/types";
 
-export function toArray(param: unknown): Maybe<unknown[]> {
-  if (typeof param !== "object" || param === null) {
+/**
+ * Returns an array of values from a k/v object.
+ *
+ * @internal
+ *
+ * @param recordMap - the key/value record object to be converted.
+ *
+ * @example
+ * ```js
+ * import { toArray } from '@graphql-markdown/utils/array';
+ *
+ * toArray({
+ *     bool: true,
+ *     string: "test",
+ *     number: 123,
+ *     array: ["one", "two"],
+ *     child: { key: "value" },
+ *   });
+ *
+ * // Expected result: [true, "test", 123, ["one", "two"], { key: "value" }]
+ * ```
+ *
+ * @returns an array of object values, or `undefined` if `recordMap` is not a valid object.
+ *
+ */
+export function toArray(
+  recordMap: Maybe<Record<string, unknown>>,
+): Maybe<unknown[]> {
+  if (typeof recordMap !== "object" || recordMap === null) {
     return undefined;
   }
 
-  return Object.keys(param).map(
-    (key: string): unknown => (param as Record<string, unknown>)[key],
-  );
+  return Object.keys(recordMap).map((key: string): unknown => recordMap[key]);
 }
 
-export function convertArrayToObject<T>(typeArray: T[]): Record<string, T> {
-  return typeArray.reduce(
+/**
+ * Returns a k/v object from an array of objects with a `name` property.
+ *
+ * @internal
+ *
+ * @param list - the list of objects of type `{ name: any }` to be converted.
+ *
+ * @typeParam T - the type of objects the list contains.
+ *
+ * @returns an array of object values with `name` as key, or `undefined` if `list` is not a valid array.
+ *
+ * @example
+ * ```js
+ * import { convertArrayToMapObject } from '@graphql-markdown/utils/array';
+ *
+ * convertArrayToMapObject([
+ *     { name: true },
+ *     { name: "test" },
+ *     { name: 123 },
+ *     { name2: 1234 },
+ *   ]);
+ *
+ * // Expected result: {
+ * //   true: { name: true },
+ * //   test: { name: "test" },
+ * //   "123": { name: 123 },
+ * // }
+ * ```
+ *
+ */
+export function convertArrayToMapObject<T>(
+  list: Maybe<T[]>,
+): Maybe<Record<string, T>> {
+  if (!Array.isArray(list)) {
+    return undefined;
+  }
+
+  return list.reduce(
     (result, entry: T) => {
       if (typeof entry === "object" && entry !== null) {
         const key = "name" in entry && entry.name ? String(entry.name) : null;

@@ -25,7 +25,7 @@ import {
   isOperation,
   isScalarType,
   isUnionType,
-  toSlug,
+  slugify,
   pathUrl,
 } from "@graphql-markdown/utils";
 
@@ -113,7 +113,7 @@ export const toLink = (
     deprecated,
     group,
     category,
-    toSlug(text),
+    slugify(text),
   );
 
   return {

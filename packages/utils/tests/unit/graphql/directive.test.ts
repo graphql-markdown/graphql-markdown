@@ -4,9 +4,13 @@ import { buildSchema } from "graphql";
 
 import type { DirectiveName, CustomDirective } from "@graphql-markdown/types";
 
-import * as Directives from "../../src/directive";
-const { getCustomDirectives, getCustomDirectiveOptions, isCustomDirective } =
-  Directives;
+import * as Directives from "../../../src/graphql/directive";
+const {
+  getConstDirectiveMap,
+  getCustomDirectiveOptions,
+  getCustomDirectives,
+  isCustomDirective,
+} = Directives;
 
 describe("directive", () => {
   const schema = buildSchema(`
@@ -45,8 +49,8 @@ describe("directive", () => {
 
   const schemaMap = {
     directives: {
-      testA: schema.getDirective("testA"),
-      testB: schema.getDirective("testB"),
+      testA: schema.getDirective("testA")!,
+      testB: schema.getDirective("testB")!,
     },
   };
 
@@ -247,6 +251,88 @@ describe("directive", () => {
           schemaMap.directives.testB,
         ),
       ).toBe("TestWildcard testB");
+    });
+  });
+
+  describe("getConstDirectiveMap", () => {
+    const schema = buildSchema(`
+      directive @testA(
+        arg: ArgEnum = ARGA
+      ) on OBJECT | FIELD_DEFINITION
+
+      directive @testB(
+        argA: Int!, 
+        argB: [String!]
+      ) on FIELD_DEFINITION
+
+      enum ArgEnum {
+        ARGA
+        ARGB
+        ARGC
+      }
+
+      type Test @testA {
+        id: ID!
+        fieldA: [String!] 
+          @testA(arg: ARGC) 
+          @testB(argA: 10, argB: ["testArgB"])
+      }
+
+      type TestWithoutDirective {
+        id: ID!
+      }
+    `);
+    const type = schema.getType("Test")!;
+    const typeWithoutDirective = schema.getType("TestWithoutDirective")!;
+    const descriptor = (
+      directiveType: GraphQLNamedType,
+      constDirectiveType: GraphQLDirective,
+    ): string => `Test${constDirectiveType.name}`;
+    const options = {
+      customDirectives: {
+        testA: {
+          type: schema.getDirective("testA"),
+          descriptor,
+        },
+        nonExist: {
+          type: undefined,
+          descriptor,
+        },
+      },
+    };
+
+    test("returns undefined when config is not set", () => {
+      expect.assertions(1);
+
+      const map = getConstDirectiveMap(type, undefined);
+
+      expect(map).toBeUndefined();
+    });
+
+    test("returns undefined when config custom directive does not exist", () => {
+      expect.assertions(1);
+
+      const map = getConstDirectiveMap(
+        typeWithoutDirective,
+        options.customDirectives,
+      );
+
+      expect(map).toBeUndefined();
+    });
+
+    test("returns custom directives map", () => {
+      expect.assertions(1);
+
+      const map = getConstDirectiveMap(type, options.customDirectives);
+
+      expect(map).toMatchInlineSnapshot(`
+      {
+        "testA": {
+          "descriptor": [Function],
+          "type": "@testA",
+        },
+      }
+      `);
     });
   });
 });

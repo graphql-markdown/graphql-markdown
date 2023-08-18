@@ -7,7 +7,7 @@ import type {
 } from "@graphql-markdown/types";
 
 import {
-  isParametrizedField,
+  isGraphQLFieldType,
   hasDirective,
   isDeprecated,
 } from "@graphql-markdown/utils";
@@ -183,7 +183,7 @@ export const printSectionItem = (
   const parentTypeLink = printParentLink(type, options);
 
   let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
-  if (isParametrizedField(type)) {
+  if (isGraphQLFieldType(type)) {
     section += printSectionItems(
       (type as GraphQLField<unknown, unknown, unknown>).args,
       {

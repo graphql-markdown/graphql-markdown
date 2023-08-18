@@ -1,0 +1,13 @@
+{
+  "extends": ["./typedoc.base.json"],
+  "entryPoints": ["packages/*"],
+  "entryPointStrategy": "packages",
+  "name": "api",
+  "out": "./docs/api",
+  "anchorFormat": "slug",
+  "hidePageTitle": true,
+  "frontmatterGlobals": {
+    "pagination_prev": null,
+    "pagination_next": null
+  }
+}

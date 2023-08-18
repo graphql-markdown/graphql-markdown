@@ -18,7 +18,10 @@ export const printCustomDirectives = (
   type: unknown,
   options: PrintTypeOptions,
 ): string => {
-  const constDirectiveMap = getConstDirectiveMap(type, options);
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
 
   if (!constDirectiveMap || Object.keys(constDirectiveMap).length < 1) {
     return "";
@@ -66,7 +69,10 @@ export const getCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
 ): Badge[] => {
-  const constDirectiveMap = getConstDirectiveMap(type, options);
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
 
   if (
     typeof constDirectiveMap !== "object" ||

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { join } = require("path");
+const { join } = require("node:path");
 
 module.exports = {
   root: true,
@@ -12,7 +12,12 @@ module.exports = {
         jest: true,
         "jest/globals": true,
       },
-      plugins: ["jest", "prettier", "@typescript-eslint"],
+      plugins: [
+        "jest",
+        "prettier",
+        "@typescript-eslint",
+        "eslint-plugin-tsdoc",
+      ],
       settings: {
         "import/parsers": {
           "@typescript-eslint/parser": [".ts", ".tsx"],
@@ -81,6 +86,7 @@ module.exports = {
         "@typescript-eslint/sort-type-constituents": "error",
         "@typescript-eslint/unified-signatures": "error",
         "no-return-await": "off",
+        "tsdoc/syntax": "warn",
         // "@typescript-eslint/member-ordering": "error",
         // "@typescript-eslint/naming-convention": "error",
         // "@typescript-eslint/no-unsafe-return": "error",

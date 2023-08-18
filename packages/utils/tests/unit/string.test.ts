@@ -1,11 +1,10 @@
 import {
   capitalize,
   escapeMDX,
-  interpolate,
   prune,
   replaceDiacritics,
   stringCaseBuilder,
-  toSlug,
+  slugify,
 } from "../../src/string";
 
 describe("string", () => {
@@ -14,13 +13,33 @@ describe("string", () => {
       expect.hasAssertions();
 
       const text = "this is Not Transformed to lowercase 42 times.";
-      const expected = "this is Not Transformed to lowercase 42 times";
+      const expected = "this is Not Transformed to lowercase 42 times.";
 
-      expect(stringCaseBuilder(text, undefined, " ")).toBe(expected);
+      expect(stringCaseBuilder(text, undefined)).toBe(expected);
     });
 
     test("returns empty string if param not a string", () => {
-      expect(stringCaseBuilder(undefined, undefined, " ")).toBe("");
+      expect(stringCaseBuilder(undefined, undefined)).toBe("");
+    });
+
+    test("returns a string with a transformation applied for each word using custom char for splitting", () => {
+      const text = "The quick brown fox/jumps over the lazy dog.";
+      const expected =
+        "*The* *quick* *brown* *fox/jumps* *over* *the* *lazy* *dog.*";
+      const transformation = (word: string): string => `*${word}*`;
+
+      expect(stringCaseBuilder(text, transformation, " ", " ")).toBe(expected);
+    });
+
+    test("returns a string with a transformation applied for each word using custom default splitting", () => {
+      const text = "The quick brown fox/jumps over the lazy dog.";
+      const expected =
+        "*The* *quick* *brown* *fox* *jumps* *over* *the* *lazy* *dog*";
+      const transformation = (word: string): string => `*${word}*`;
+
+      const value = stringCaseBuilder(text, transformation, " ");
+
+      expect(value).toBe(expected);
     });
   });
 
@@ -59,7 +78,7 @@ describe("string", () => {
         text: "string-with-no-dashes-in-beginning-or-end",
         expected: "string-with-no-dashes-in-beginning-or-end",
       },
-    ])("Removes dash from beginning and/or end", ({ text, expected }) => {
+    ])("removes dash from beginning and/or end", ({ text, expected }) => {
       expect.hasAssertions();
 
       expect(prune(text, "-")).toBe(expected);
@@ -70,22 +89,36 @@ describe("string", () => {
 
       expect(prune(undefined)).toBe("");
     });
+
+    test("returns unchanged string if substr is an empty string", () => {
+      expect.hasAssertions();
+
+      expect(prune("A string.")).toBe("A string.");
+    });
+
+    test("removes multiple characters", () => {
+      expect.hasAssertions();
+
+      expect(
+        prune("**The quick brown fox jumps over the lazy dog.**", "**"),
+      ).toBe("The quick brown fox jumps over the lazy dog.");
+    });
   });
 
-  describe("toSlug()", () => {
+  describe("slugify()", () => {
     test("returns kebab style slug", () => {
       expect.hasAssertions();
 
-      const text = "This is not a slug, but you can use toSlug() function.";
+      const text = "This is not a slug, but you can use to slug function.";
       const expected = "this-is-not-a-slug-but-you-can-use-to-slug-function";
 
-      expect(toSlug(text)).toBe(expected);
+      expect(slugify(text)).toBe(expected);
     });
 
     test("returns empty string if param not a string", () => {
       expect.hasAssertions();
 
-      expect(toSlug(undefined)).toBe("");
+      expect(slugify(undefined)).toBe("");
     });
   });
 
@@ -129,28 +162,6 @@ describe("string", () => {
       expect.hasAssertions();
 
       expect(capitalize(undefined)).toBe("");
-    });
-  });
-
-  describe("interpolate()", () => {
-    test("returns an interpolated string with replaced values", () => {
-      expect.hasAssertions();
-
-      const values = { foo: 42, bar: { value: "test" } };
-      const template = "${foo} is not ${bar.value}";
-
-      expect(interpolate(template, values)).toBe("42 is not test");
-    });
-
-    test("returns an interpolated string with fallback values when not found", () => {
-      expect.hasAssertions();
-
-      const values = { foo: 42, bar: { value: "test" } };
-      const template = "${foo} is not ${bar.notfound}";
-
-      expect(interpolate(template, values, "fallback")).toBe(
-        "42 is not fallback",
-      );
     });
   });
 });

@@ -6,7 +6,7 @@ describe("logger", () => {
     global.logger = undefined;
   });
 
-  describe("setInstance()", () => {
+  describe("Logger()", () => {
     test("returns a NodeJS.console object is no module passed", async () => {
       expect.hasAssertions();
 
@@ -14,7 +14,7 @@ describe("logger", () => {
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      expect(Logger.setInstance().info()).toBe("Mocked Console");
+      expect(Logger().info()).toBe("Mocked Console");
     });
 
     test.each([[undefined], [""]])(
@@ -26,14 +26,14 @@ describe("logger", () => {
           .spyOn(global.console, "info")
           .mockImplementation(() => "Mocked Console");
 
-        expect(Logger.setInstance(moduleName).info()).toBe("Mocked Console");
+        expect(Logger(moduleName).info()).toBe("Mocked Console");
       },
     );
 
     test("returns logger with aliased methods", () => {
       expect.hasAssertions();
 
-      expect(Logger.setInstance()).toEqual(
+      expect(Logger()).toEqual(
         expect.objectContaining({
           debug: expect.any(Function),
           error: expect.any(Function),
@@ -48,9 +48,7 @@ describe("logger", () => {
     test("returns module passed as logger", () => {
       expect.hasAssertions();
 
-      const logger = Logger.setInstance(
-        require.resolve("../__data__/dummy_logger"),
-      );
+      const logger = Logger(require.resolve("../__data__/dummy_logger"));
 
       expect(logger.info()).toBe("Dummy logger");
 
@@ -64,26 +62,6 @@ describe("logger", () => {
           warn: expect.any(Function),
         }),
       );
-    });
-  });
-
-  describe("getInstance()", () => {
-    test("returns module passed as logger", () => {
-      expect.hasAssertions();
-
-      Logger.setInstance(require.resolve("../__data__/dummy_logger"));
-
-      expect(Logger.getInstance().info()).toBe("Dummy logger");
-    });
-
-    test("returns a NodeJS.console object if not logger set", () => {
-      expect.hasAssertions();
-
-      jest
-        .spyOn(global.console, "info")
-        .mockImplementation(() => "Mocked Console");
-
-      expect(Logger.getInstance().info()).toBe("Mocked Console");
     });
   });
 });

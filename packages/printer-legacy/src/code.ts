@@ -1,7 +1,7 @@
 import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
-  getDefaultValue,
+  getFormattedDefaultValue,
   getTypeName,
   isDeprecated,
   hasDirective,
@@ -64,10 +64,12 @@ export const printCodeArguments = (
     indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
   let code = `(${MARKDOWN_EOL}`;
   code += type.args.reduce((r, v) => {
-    const defaultValue = getDefaultValue(v);
+    const defaultValue = getFormattedDefaultValue(v);
     const hasDefaultValue =
       typeof defaultValue !== "undefined" && defaultValue !== null;
-    const printedDefault = hasDefaultValue ? ` = ${getDefaultValue(v)}` : "";
+    const printedDefault = hasDefaultValue
+      ? ` = ${getFormattedDefaultValue(v)}`
+      : "";
     const propType = String(v.type);
     const propName = String(v.name);
     return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
