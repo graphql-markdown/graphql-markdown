@@ -1,4 +1,4 @@
-import type { GraphQLFieldMap, GraphQLObjectType } from "graphql";
+import type { GraphQLObjectType } from "graphql";
 import { buildSchema } from "graphql";
 
 import type {
