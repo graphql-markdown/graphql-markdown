@@ -1,5 +1,7 @@
 import { buildSchema } from "graphql";
 
+import { getSchemaMap } from "../../../src/graphql/introspection";
+
 import {
   getRelationOfField,
   getRelationOfImplementation,
@@ -41,9 +43,11 @@ describe("relation", () => {
         }
       `);
 
+      const schemaMap = getSchemaMap(schema);
+
       const interfaceType = schema.getType("Mammal");
 
-      const relations = getRelationOfInterface(interfaceType, schema);
+      const relations = getRelationOfInterface(interfaceType, schemaMap);
 
       expect(relations).toMatchInlineSnapshot(`
         {
@@ -85,9 +89,11 @@ describe("relation", () => {
         }
       `);
 
+      const schemaMap = getSchemaMap(schema);
+
       const compositeType = schema.getType("Meeting");
 
-      const relations = getRelationOfUnion(compositeType, schema);
+      const relations = getRelationOfUnion(compositeType, schemaMap);
 
       expect(relations).toMatchInlineSnapshot(`
         {
@@ -136,9 +142,11 @@ describe("relation", () => {
         union Pet = Dog | Cat | Being
       `);
 
+      const schemaMap = getSchemaMap(schema);
+
       const compositeType = schema.getType("Being");
 
-      const relations = getRelationOfImplementation(compositeType, schema);
+      const relations = getRelationOfImplementation(compositeType, schemaMap);
 
       expect(relations).toMatchInlineSnapshot(`
         {
@@ -182,9 +190,11 @@ describe("relation", () => {
         }
       `);
 
+      const schemaMap = getSchemaMap(schema);
+
       const compositeType = schema.getType("StudyItem");
 
-      const relations = getRelationOfReturn(compositeType, schema);
+      const relations = getRelationOfReturn(compositeType, schemaMap);
 
       expect(relations).toMatchSnapshot();
     });
@@ -219,9 +229,11 @@ describe("relation", () => {
         }
       `);
 
+      const schemaMap = getSchemaMap(schema);
+
       const compositeType = schema.getType("String");
 
-      const relations = getRelationOfField(compositeType, schema);
+      const relations = getRelationOfField(compositeType, schemaMap);
 
       expect(relations).toMatchSnapshot();
     });

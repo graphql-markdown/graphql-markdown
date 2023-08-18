@@ -1,6 +1,6 @@
 import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
 
-import { getTypeName } from "@graphql-markdown/utils";
+import { getTypeName, isOperation } from "@graphql-markdown/utils";
 
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";
@@ -9,7 +9,7 @@ export const printOperationType = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
+  if (!isOperation(type)) {
     return "";
   }
 
@@ -24,7 +24,7 @@ export const printOperationMetadata = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("args" in type)) {
+  if (!isOperation(type)) {
     return "";
   }
 

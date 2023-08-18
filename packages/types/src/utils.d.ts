@@ -6,14 +6,18 @@ import type {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-  GraphQLSchema,
   GraphQLFieldMap,
   GraphQLInputFieldMap,
+  GraphQLDirective,
+  GraphQLNamedType,
+  GraphQLInterfaceType,
+  GraphQLObjectType,
+  GraphQLUnionType,
 } from "graphql";
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type { Maybe } from ".";
+import type { GraphQLOperationType, Maybe } from ".";
 
 export type CustomDirectiveFunction = <T>(
   directive?: GraphQLDirective,
@@ -101,8 +105,8 @@ export type SchemaMap = {
 
 export type IGetRelation<T> = (
   type: unknown,
-  schema: Maybe<GraphQLSchema>,
-) => T;
+  schemaMap: Maybe<SchemaMap>,
+) => Partial<Record<SchemaEntity, T[]>>;
 
 export type LoggerType = {
   debug: Function; // eslint-disable-line @typescript-eslint/ban-types
@@ -122,5 +126,12 @@ export type GraphQLOperationType =
   | GraphQLFieldMap<unknown, unknown>
   | GraphQLInputFieldMap
   | Record<string, never>;
+
+export type RelationOfField =
+  | GraphQLDirective
+  | GraphQLNamedType
+  | GraphQLOperationType;
+export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;
+export type RelationOfImplementation = GraphQLUnionType | RelationOfInterface;
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";

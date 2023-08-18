@@ -2,25 +2,29 @@ import type { GraphQLSchema } from "graphql";
 import { GraphQLScalarType } from "graphql";
 jest.mock("graphql");
 
-import type { IGetRelation } from "@graphql-markdown/types";
+import type {
+  GraphQLOperationType,
+  IGetRelation,
+} from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    escapeMDX: jest.fn((s) => s),
     getNamedType: jest.fn((t) => t),
     getRelationOfReturn: jest.fn(),
+    getSchemaMap: jest.fn(),
+    hasDirective: jest.fn(),
     isDirectiveType: jest.fn(),
     isEnumType: jest.fn(),
     isInputType: jest.fn(),
     isInterfaceType: jest.fn(),
+    isNamedType: jest.fn(() => true),
     isObjectType: jest.fn(),
     isOperation: jest.fn(() => false),
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
-    escapeMDX: jest.fn((s) => s),
-    slugify: jest.fn(),
     pathUrl: jest.fn(),
-    isNamedType: jest.fn(() => true),
-    hasDirective: jest.fn(),
+    slugify: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -119,7 +123,8 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        () => undefined,
+        (): ReturnType<IGetRelation<unknown>> =>
+          undefined as unknown as ReturnType<IGetRelation<unknown>>,
         DEFAULT_OPTIONS,
       );
 
@@ -152,12 +157,10 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const getRelationOfReturn: IGetRelation<
-        Record<string, unknown[]>
-      > = () => ({
-        queries: [{ name: "Foo" }],
-        interfaces: [{ name: "Bar" }],
-        subscriptions: [{ name: "Baz" }],
+      const getRelationOfReturn: IGetRelation<GraphQLOperationType> = () => ({
+        queries: [{ name: "Foo" } as unknown as GraphQLOperationType],
+        interfaces: [{ name: "Bar" } as unknown as GraphQLOperationType],
+        subscriptions: [{ name: "Baz" } as unknown as GraphQLOperationType],
       });
 
       jest.spyOn(Utils, "isNamedType").mockReturnValue(true);

@@ -45,6 +45,8 @@ export async function prettify(
  * @remarks
  * Same as `prettify(content, "markdown")`.
  *
+ * @see {@link prettify}
+ *
  * @internal
  *
  * @param content - the string to be prettified.
@@ -64,7 +66,7 @@ export async function prettifyMarkdown(
  * @remarks
  * Same as `prettify(content, "babel")`.
  *
- * @see prettify
+ * @see {@link prettify}
  *
  * @internal
  *

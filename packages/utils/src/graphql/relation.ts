@@ -1,10 +1,12 @@
-import type {
-  GraphQLDirective,
-  GraphQLInterfaceType,
-  GraphQLObjectType,
-  GraphQLSchema,
-  GraphQLUnionType,
-} from "graphql";
+/**
+ * Library supporting `relatedTypeSection` for displaying relations between GraphQL schema entities.
+ *
+ * @see {@link https://graphql-markdown.github.io/docs/settings#printtypeoptions | Option `relatedTypeSection`}
+ *
+ * @packageDocumentation
+ */
+
+import type { GraphQLUnionType } from "graphql";
 import {
   getNamedType,
   isDirective as isDirectiveType,
@@ -15,34 +17,62 @@ import {
 } from "graphql";
 
 import type {
-  GraphQLNamedType,
+  GraphQLOperationType,
   GraphQLType,
   IGetRelation,
   Maybe,
+  RelationOfField,
+  RelationOfImplementation,
+  RelationOfInterface,
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { getSchemaMap, __getFields } from "./introspection";
+import { __getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
 
-function mapRelationOf<T>(
+/**
+ * Callback type used by {@link mapRelationOf}.
+ */
+type RelationOfCallbackFunction<T> = (
   type: unknown,
-  relations: Record<string, T[]>,
-  schema: Maybe<GraphQLSchema>,
-  callback: (
-    type: unknown,
-    relationName: string,
-    relationType: unknown,
-    results: T[],
-  ) => T[],
-): Record<string, T[]> {
-  const schemaMap: SchemaMap = getSchemaMap(schema);
+  relationName: string,
+  relationType: T,
+  results: T[],
+) => T[];
+
+/**
+ * Generic method for fetching relations for a given GraphQL schema type.
+ *
+ * @internal
+ *
+ * @typeParam T - the type of the relation.
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param relations - the map of relations to be returned.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param callback - a function to execute for each entries of the schema map.
+ *
+ * @returns a record map of type `relations`.
+ *
+ */
+function mapRelationOf<
+  T,
+  R extends ReturnType<IGetRelation<T>> = ReturnType<IGetRelation<T>>,
+>(
+  type: unknown,
+  relations: R,
+  schemaMap: Maybe<SchemaMap>,
+  callback: RelationOfCallbackFunction<T>,
+): R {
+  if (!schemaMap) {
+    return {} as R;
+  }
 
   for (const relation of Object.keys(relations)) {
-    const entity: Maybe<Record<string, T>> = schemaMap[
+    const entity: Maybe<Record<SchemaEntity, T>> = schemaMap[
       relation as SchemaEntity
-    ] as Maybe<Record<string, T>>;
+    ] as Maybe<Record<SchemaEntity, T>>;
     if (!entity) {
       continue;
     }
@@ -51,61 +81,91 @@ function mapRelationOf<T>(
     for (const [relationName, relationType] of Object.entries<T>(entity)) {
       results = callback(type, relationName, relationType, results);
     }
-    relations[relation] = results;
+    relations[relation as keyof R] = results as R[keyof R];
   }
 
   return relations;
 }
 
-export const getRelationOfReturn: IGetRelation<Record<string, unknown[]>> = (
+/**
+ * Returns a map of operations (queries, mutations, subscriptions) where the GraphQL schema type is the return type.
+ *
+ * @see {@link mapRelationOf}
+ *
+ * @typeParam T - the type of the GraphQL schema type.
+ * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ *
+ * @returns a record map of operations relations.
+ *
+ */
+export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
   type: unknown,
-  schema: Maybe<GraphQLSchema>,
-): Record<string, unknown[]> => {
-  const relations: Partial<Record<SchemaEntity, unknown[]>> = {
+  schemaMap: Maybe<SchemaMap>,
+) => {
+  const relations: ReturnType<IGetRelation<GraphQLOperationType>> = {
     queries: [],
     mutations: [],
     subscriptions: [],
   };
 
-  return mapRelationOf(
+  const parserCallback: RelationOfCallbackFunction<GraphQLOperationType> = (
+    type,
+    relationName,
+    relationType,
+    results,
+  ) => {
+    if (
+      typeof relationType === "object" &&
+      isNamedType(type) &&
+      "type" in relationType &&
+      getNamedType(relationType.type as unknown as Maybe<GraphQLType>)?.name ===
+        type.name
+    ) {
+      if (
+        !results.find(
+          (r: unknown) =>
+            typeof r === "object" &&
+            r !== null &&
+            "name" in r &&
+            r.name === relationName,
+        )
+      ) {
+        results.push(relationType);
+      }
+    }
+    return results;
+  };
+
+  return mapRelationOf<GraphQLOperationType>(
     type,
     relations,
-    schema,
-    (type, relationName, relationType, results) => {
-      if (
-        typeof relationType === "object" &&
-        relationType !== null &&
-        isNamedType(type) &&
-        "type" in relationType &&
-        getNamedType(relationType.type as Maybe<GraphQLType>)?.name ===
-          type.name
-      ) {
-        if (
-          !results.find(
-            (r) =>
-              typeof r === "object" &&
-              r !== null &&
-              "name" in r &&
-              r.name === relationName,
-          )
-        ) {
-          results.push(relationType);
-        }
-      }
-      return results;
-    },
+    schemaMap,
+    parserCallback,
   );
 };
 
-export const getRelationOfField: IGetRelation<
-  Record<string, (GraphQLDirective | GraphQLNamedType)[]>
-> = (
-  type: unknown,
-  schema: Maybe<GraphQLSchema>,
-): Record<string, (GraphQLDirective | GraphQLNamedType)[]> => {
-  const relations: Partial<
-    Record<SchemaEntity, (GraphQLDirective | GraphQLNamedType)[]>
-  > = {
+/**
+ * Returns a map of fields and arguments where the GraphQL schema type matches the type.
+ *
+ * @see {@link mapRelationOf}
+ *
+ * @typeParam T - the type of the GraphQL schema type.
+ * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ *
+ * @returns a record map of fields and arguments relations.
+ *
+ */
+export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
+  type: T,
+  schemaMap: Maybe<SchemaMap>,
+) => {
+  const relations: ReturnType<IGetRelation<RelationOfField>> = {
     queries: [],
     mutations: [],
     subscriptions: [],
@@ -115,130 +175,176 @@ export const getRelationOfField: IGetRelation<
     directives: [],
   };
 
-  return mapRelationOf<GraphQLDirective | GraphQLNamedType>(
+  const parserCallback: RelationOfCallbackFunction<RelationOfField> = (
     type,
-    relations,
-    schema,
-    (type, relationName, relationType, results) => {
-      // directives are handled as flat array instead of map
-      const key = isDirectiveType(relationType)
-        ? relationType.name
-        : relationName;
+    relationName,
+    relationType,
+    results,
+  ) => {
+    // directives are handled as flat array instead of map
+    const key = isDirectiveType(relationType)
+      ? relationType.name
+      : relationName;
 
-      const paramFieldArgs = isGraphQLFieldType(relationType)
-        ? relationType.args
-        : {};
-      const fieldMap = __getFields(relationType, undefined, {});
+    const paramFieldArgs = isGraphQLFieldType(relationType)
+      ? relationType.args
+      : {};
+    const fieldMap = __getFields(relationType, undefined, {});
 
-      const fields = Object.assign({}, paramFieldArgs, fieldMap);
-      for (const fieldDef of Object.values(fields)) {
+    const fields = Object.assign({}, paramFieldArgs, fieldMap);
+    for (const fieldDef of Object.values(fields)) {
+      if (
+        isNamedType(type) &&
+        getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
+      ) {
         if (
-          isNamedType(type) &&
-          getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
+          !results.find(
+            (r) =>
+              r.toString() === key ||
+              (typeof r === "object" && "name" in r && r.name === key),
+          )
         ) {
-          if (
-            !results.find(
-              (r) =>
-                r.toString() === key ||
-                (typeof r === "object" && "name" in r && r.name === key),
-            )
-          ) {
-            results.push(relationType as GraphQLDirective | GraphQLNamedType);
-          }
+          results.push(relationType);
         }
       }
-      return results;
-    },
+    }
+    return results;
+  };
+
+  return mapRelationOf<RelationOfField>(
+    type,
+    relations,
+    schemaMap,
+    parserCallback,
   );
 };
 
-export const getRelationOfUnion: IGetRelation<
-  Record<string, GraphQLUnionType[]>
-> = (
-  type: unknown,
-  schema: Maybe<GraphQLSchema>,
-): Record<string, GraphQLUnionType[]> => {
-  const relations: Partial<Record<SchemaEntity, GraphQLUnionType[]>> = {
+/**
+ * Returns a map of unions where the GraphQL schema type is part of it.
+ *
+ * @see {@link mapRelationOf}
+ *
+ * @typeParam T - the type of the GraphQL schema type.
+ * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ *
+ * @returns a record map of unions relations.
+ *
+ */
+export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
+  type: T,
+  schemaMap: Maybe<SchemaMap>,
+) => {
+  const relations: ReturnType<IGetRelation<GraphQLUnionType>> = {
     unions: [],
+  };
+
+  const parserCallback: RelationOfCallbackFunction<GraphQLUnionType> = (
+    type,
+    relationName,
+    relationType,
+    results,
+  ) => {
+    if (
+      isNamedType(type) &&
+      isUnionType(relationType) &&
+      relationType.getTypes().find((subType) => subType.name === type.name)
+    ) {
+      if (
+        !results.find(
+          (r) =>
+            typeof r === "object" && "name" in r && r.name === relationName,
+        )
+      ) {
+        results.push(relationType);
+      }
+    }
+    return results;
   };
 
   return mapRelationOf<GraphQLUnionType>(
     type,
     relations,
-    schema,
-    (type, relationName, relationType, results) => {
-      if (
-        isNamedType(type) &&
-        isUnionType(relationType) &&
-        relationType.getTypes().find((subType) => subType.name === type.name)
-      ) {
-        if (
-          !results.find(
-            (r) =>
-              typeof r === "object" && "name" in r && r.name === relationName,
-          )
-        ) {
-          results.push(relationType);
-        }
-      }
-      return results;
-    },
+    schemaMap,
+    parserCallback,
   );
 };
 
-export const getRelationOfInterface: IGetRelation<
-  Record<string, (GraphQLInterfaceType | GraphQLObjectType)[]>
-> = (
-  type: unknown,
-  schema: Maybe<GraphQLSchema>,
-): Record<string, (GraphQLInterfaceType | GraphQLObjectType)[]> => {
-  const relations: Partial<
-    Record<SchemaEntity, (GraphQLInterfaceType | GraphQLObjectType)[]>
-  > = {
+/**
+ * Returns a map of interfaces where the GraphQL schema type is extended.
+ *
+ * @see {@link mapRelationOf}
+ *
+ * @typeParam T - the type of the GraphQL schema type.
+ * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ *
+ * @returns a record map of interfaces relations.
+ *
+ */
+export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
+  type: T,
+  schemaMap: Maybe<SchemaMap>,
+): Record<string, RelationOfInterface[]> => {
+  const relations: ReturnType<IGetRelation<RelationOfInterface>> = {
     objects: [],
     interfaces: [],
   };
 
-  return mapRelationOf<GraphQLInterfaceType | GraphQLObjectType>(
+  const parserCallback: RelationOfCallbackFunction<RelationOfInterface> = (
+    type,
+    relationName,
+    relationType,
+    results,
+  ) => {
+    if (
+      isNamedType(type) &&
+      (isObjectType(relationType) || isInterfaceType(relationType)) &&
+      relationType.getInterfaces().find((subType) => subType.name === type.name)
+    ) {
+      if (
+        !results.find(
+          (r) =>
+            typeof r === "object" && "name" in r && r.name === relationName,
+        )
+      ) {
+        results.push(relationType);
+      }
+    }
+    return results;
+  };
+
+  return mapRelationOf<RelationOfInterface>(
     type,
     relations,
-    schema,
-    (type, relationName, relationType, results) => {
-      if (
-        isNamedType(type) &&
-        (isObjectType(relationType) || isInterfaceType(relationType)) &&
-        relationType
-          .getInterfaces()
-          .find((subType) => subType.name === type.name)
-      ) {
-        if (
-          !results.find(
-            (r) =>
-              typeof r === "object" && "name" in r && r.name === relationName,
-          )
-        ) {
-          results.push(relationType);
-        }
-      }
-      return results;
-    },
+    schemaMap,
+    parserCallback,
   );
 };
 
+/**
+ * Returns a map of types (unions or interfaces) where the GraphQL schema type is implemented.
+ *
+ * @see {@link mapRelationOf}
+ *
+ * @typeParam T - the type of the GraphQL schema type.
+ * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
+ *
+ * @param type - the GraphQL schema type being processed.
+ * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ *
+ * @returns a record map of unions or interfaces relations.
+ *
+ */
 export const getRelationOfImplementation: IGetRelation<
-  Record<
-    string,
-    (GraphQLInterfaceType | GraphQLObjectType | GraphQLUnionType)[]
-  >
-> = (
-  type: unknown,
-  schema: Maybe<GraphQLSchema>,
-): Record<
-  string,
-  (GraphQLInterfaceType | GraphQLObjectType | GraphQLUnionType)[]
-> => {
+  RelationOfImplementation
+> = <T>(type: T, schemaMap: Maybe<SchemaMap>) => {
   return {
-    ...getRelationOfInterface(type, schema),
-    ...getRelationOfUnion(type, schema),
+    ...getRelationOfInterface(type, schemaMap),
+    ...getRelationOfUnion(type, schemaMap),
   };
 };

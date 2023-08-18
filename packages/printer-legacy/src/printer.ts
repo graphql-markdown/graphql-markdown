@@ -7,6 +7,7 @@ import type {
   GraphQLInputObjectType,
   GraphQLInterfaceType,
   GraphQLObjectType,
+  GraphQLOperationType,
   GraphQLScalarType,
   GraphQLSchema,
   GraphQLUnionType,
@@ -152,10 +153,7 @@ export class Printer implements IPrinter {
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(
-          type as GraphQLField<unknown, unknown, unknown>,
-          options,
-        );
+        code += printCodeOperation(type as GraphQLOperationType, options);
         break;
       case isEnumType(type):
         code += printCodeEnum(type as GraphQLEnumType, options);
