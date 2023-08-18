@@ -24,7 +24,7 @@ import type {
 } from "@graphql-markdown/types";
 
 import { getSchemaMap, __getFields } from "./introspection";
-import { isParametrizedField } from "./guard";
+import { isGraphQLFieldType } from "./guard";
 
 function mapRelationOf<T>(
   type: unknown,
@@ -125,7 +125,7 @@ export const getRelationOfField: IGetRelation<
         ? relationType.name
         : relationName;
 
-      const paramFieldArgs = isParametrizedField(relationType)
+      const paramFieldArgs = isGraphQLFieldType(relationType)
         ? relationType.args
         : {};
       const fieldMap = __getFields(relationType, undefined, {});

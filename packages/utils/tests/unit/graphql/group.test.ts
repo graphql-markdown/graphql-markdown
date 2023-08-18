@@ -5,6 +5,7 @@ import type {
   GroupByDirectiveOptions,
   SchemaMap,
   DirectiveName,
+  GraphQLOperationType,
 } from "@graphql-markdown/types";
 
 import { getGroups, getGroupName } from "../../../src/graphql/group";
@@ -53,9 +54,9 @@ describe("group-info", () => {
         string,
         GraphQLObjectType<unknown, unknown>
       >,
-      queries: schema.getQueryType()?.getFields() as GraphQLFieldMap<
-        unknown,
-        unknown
+      queries: schema.getQueryType()?.getFields() as unknown as Record<
+        string,
+        GraphQLOperationType
       >,
     };
 

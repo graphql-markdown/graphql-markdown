@@ -1,3 +1,10 @@
+/**
+ * Custom GraphQL type guards and property guards.
+ *
+ * @packageDocumentation
+ */
+
+import type { GraphQLOperationType } from "@graphql-markdown/types";
 import type { GraphQLField } from "graphql";
 
 export {
@@ -14,7 +21,13 @@ export {
   isUnionType,
 } from "graphql";
 
-export function isParametrizedField(
+/**
+ * Checks if a GraphQL named type is of type `GraphQLField`.
+ *
+ * @param type - a GraphQL type.
+ *
+ */
+export function isGraphQLFieldType(
   type: unknown,
 ): type is GraphQLField<unknown, unknown, unknown> {
   return (
@@ -25,31 +38,12 @@ export function isParametrizedField(
   );
 }
 
-export function isOperation(type: unknown): boolean {
-  return typeof type === "object" && type !== null && "type" in type;
-}
-
-export function isDeprecated<T>(
-  type: T,
-): type is Partial<{ deprecationReason: string; isDeprecated: boolean }> & T {
-  return (
-    typeof type === "object" &&
-    type !== null &&
-    (("isDeprecated" in type && type.isDeprecated === true) ||
-      ("deprecationReason" in type &&
-        typeof type.deprecationReason === "string"))
-  );
-}
-
 /**
- * Type guard for checking if a GraphQL named type is of type.
+ * Checks if a GraphQL named type is of generic type `T`.
  *
- * @internal
- *
+ * @typeParam T - a GraphQL type to check against, eg `GraphQLObjectType`.
  * @param obj - a GraphQL named type from the GraphQL schema.
- * @param type - a GraphQL type, eg `GraphQLObjectType`.
- *
- * @returns `true` if types matches, else `false`.
+ * @param type - the GraphQL type `T`.
  *
  */
 export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
@@ -61,4 +55,32 @@ export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
   } catch (_) {
     return false;
   }
+}
+
+/**
+ * Checks if a GraphQL named type is deprecated.
+ *
+ * @typeParam T - a GraphQL type to check against, eg `GraphQLObjectType`.
+ * @param obj - an instance of `T`.
+ *
+ */
+export function isDeprecated<T>(
+  obj: T,
+): obj is Partial<{ deprecationReason: string; isDeprecated: boolean }> & T {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    (("isDeprecated" in obj && obj.isDeprecated === true) ||
+      ("deprecationReason" in obj && typeof obj.deprecationReason === "string"))
+  );
+}
+
+/**
+ * Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
+ *
+ * @param type - a GraphQL type.
+ *
+ */
+export function isOperation(type: unknown): type is GraphQLOperationType {
+  return typeof type === "object" && type !== null && "type" in type;
 }

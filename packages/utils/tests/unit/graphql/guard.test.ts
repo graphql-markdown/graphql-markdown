@@ -5,13 +5,13 @@ import type { GraphQLSchema } from "graphql";
 import { buildSchema, GraphQLObjectType } from "graphql";
 
 import {
-  getIntrospectionFieldsList,
+  getOperation,
   getTypeFromSchema,
 } from "../../../src/graphql/introspection";
 import {
   isDeprecated,
   isOperation,
-  isParametrizedField,
+  isGraphQLFieldType,
 } from "../../../src/graphql/guard";
 
 const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
@@ -25,12 +25,12 @@ describe("graphql", () => {
     });
   });
 
-  describe("isParametrizedField()", () => {
+  describe("isGraphQLFieldType()", () => {
     test("returns true if type is parametrized", () => {
       expect.hasAssertions();
 
-      const mutations = getIntrospectionFieldsList(schema.getMutationType());
-      const res = isParametrizedField(mutations["createTweet"]);
+      const mutations = getOperation(schema.getMutationType());
+      const res = isGraphQLFieldType(mutations["createTweet"]);
 
       expect(res).toBeTruthy();
     });
@@ -38,8 +38,8 @@ describe("graphql", () => {
     test("returns false if type is not parametrized", () => {
       expect.hasAssertions();
 
-      const queries = getIntrospectionFieldsList(schema.getQueryType());
-      const res = isParametrizedField(queries["TweetsMeta"]);
+      const queries = getOperation(schema.getQueryType());
+      const res = isGraphQLFieldType(queries["TweetsMeta"]);
 
       expect(res).toBeFalsy();
     });
@@ -49,30 +49,25 @@ describe("graphql", () => {
     test("returns true if type is mutation", () => {
       expect.hasAssertions();
 
-      const mutations = getIntrospectionFieldsList(schema.getMutationType());
-      const res = isOperation(mutations["createTweet"]);
+      const mutations = getOperation(schema.getMutationType());
 
-      expect(res).toBeTruthy();
+      expect(isOperation(mutations["createTweet"])).toBeTruthy();
     });
 
     test("returns true if type is query", () => {
       expect.hasAssertions();
 
-      const queries = getIntrospectionFieldsList(schema.getQueryType());
-      const res = isOperation(queries["Tweets"]);
+      const queries = getOperation(schema.getQueryType());
 
-      expect(res).toBeTruthy();
+      expect(isOperation(queries["Tweets"])).toBeTruthy();
     });
 
     test("returns true if type is subscription", () => {
       expect.hasAssertions();
 
-      const subscriptions = getIntrospectionFieldsList(
-        schema.getSubscriptionType(),
-      );
-      const res = isOperation(subscriptions["Notifications"]);
+      const subscriptions = getOperation(schema.getSubscriptionType());
 
-      expect(res).toBeTruthy();
+      expect(isOperation(subscriptions["Notifications"])).toBeTruthy();
     });
 
     test("returns false if type is not an operation", () => {
@@ -82,9 +77,8 @@ describe("graphql", () => {
         schema,
         GraphQLObjectType,
       )!;
-      const res = isOperation(objects["Tweet"]);
 
-      expect(res).toBeFalsy();
+      expect(isOperation(objects["Tweet"])).toBeFalsy();
     });
   });
 

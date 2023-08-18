@@ -1,4 +1,8 @@
-import type { GraphQLSchema } from "graphql";
+import type {
+  GraphQLSchema,
+  GraphQLInputFieldMap,
+  GraphQLFieldMap,
+} from "graphql";
 import {
   getDirectiveValues,
   GraphQLDirective,
@@ -16,9 +20,8 @@ import type {
   ASTNode,
   DirectiveDefinitionNode,
   DirectiveNode,
-  GraphQLFieldMap,
-  GraphQLInputFieldMap,
   GraphQLNamedType,
+  GraphQLOperationType,
   Maybe,
   ObjectTypeDefinitionNode,
   SchemaEntity,
@@ -220,7 +223,7 @@ export function getTypeDirectiveValues(
  *
  * @internal
  *
- * see {@link getIntrospectionFieldsList}, {@link getFields}
+ * see {@link getOperation}, {@link getFields}
  *
  * @param type - the GraphQL schema type to parse.
  * @param processor - optional callback function to parse the fields map.
@@ -266,9 +269,9 @@ export function __getFields<T, V>(
  * @returns a map of fields as k/v records.
  *
  */
-export function getIntrospectionFieldsList(
+export function getOperation(
   operationType?: unknown,
-): Record<string, unknown> {
+): Record<string, GraphQLOperationType> {
   return __getFields(
     operationType,
     (fieldMap) =>
@@ -277,7 +280,7 @@ export function getIntrospectionFieldsList(
         {},
       ),
     {},
-  ) as Record<string, unknown>;
+  ) as Record<string, GraphQLOperationType>;
 }
 
 /**
@@ -397,13 +400,13 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
  */
 export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
   return {
-    ["queries" as SchemaEntity]: getIntrospectionFieldsList(
+    ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
     ),
-    ["mutations" as SchemaEntity]: getIntrospectionFieldsList(
+    ["mutations" as SchemaEntity]: getOperation(
       schema?.getMutationType() ?? undefined,
     ),
-    ["subscriptions" as SchemaEntity]: getIntrospectionFieldsList(
+    ["subscriptions" as SchemaEntity]: getOperation(
       schema?.getSubscriptionType() ?? undefined,
     ),
     ["directives" as SchemaEntity]: convertArrayToMapObject<GraphQLDirective>(

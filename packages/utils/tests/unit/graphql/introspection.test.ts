@@ -26,7 +26,7 @@ import {
   getDirective,
   getTypeDirectiveArgValue,
   getFields,
-  getIntrospectionFieldsList,
+  getOperation,
   getSchemaMap,
   getTypeDirectiveValues,
   getTypeFromSchema,
@@ -55,11 +55,11 @@ describe("introspection", () => {
     });
   });
 
-  describe("getIntrospectionFieldsList()", () => {
+  describe("getOperation()", () => {
     test("returns list of queries", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getQueryType()!);
+      const list = getOperation(schema.getQueryType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -67,7 +67,7 @@ describe("introspection", () => {
     test("returns list of mutations", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getMutationType()!);
+      const list = getOperation(schema.getMutationType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -75,7 +75,7 @@ describe("introspection", () => {
     test("returns list of subscriptions", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(schema.getSubscriptionType()!);
+      const list = getOperation(schema.getSubscriptionType()!);
 
       expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
     });
@@ -83,7 +83,7 @@ describe("introspection", () => {
     test("returns {} if null", () => {
       expect.hasAssertions();
 
-      const list = getIntrospectionFieldsList(null);
+      const list = getOperation(null);
 
       expect(list).toMatchObject({});
     });

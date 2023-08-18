@@ -523,7 +523,7 @@ exports[`introspection getFields() returns list of type fields 1`] = `
 ]"
 `;
 
-exports[`introspection getIntrospectionFieldsList() returns list of mutations 1`] = `
+exports[`introspection getOperation() returns list of mutations 1`] = `
 "{
   "createTweet": {
     "name": "createTweet",
@@ -1046,7 +1046,7 @@ exports[`introspection getIntrospectionFieldsList() returns list of mutations 1`
 }"
 `;
 
-exports[`introspection getIntrospectionFieldsList() returns list of queries 1`] = `
+exports[`introspection getOperation() returns list of queries 1`] = `
 "{
   "Tweet": {
     "name": "Tweet",
@@ -1986,7 +1986,7 @@ exports[`introspection getIntrospectionFieldsList() returns list of queries 1`] 
 }"
 `;
 
-exports[`introspection getIntrospectionFieldsList() returns list of subscriptions 1`] = `
+exports[`introspection getOperation() returns list of subscriptions 1`] = `
 "{
   "Notifications": {
     "name": "Notifications",
