@@ -1,21 +1,15 @@
-import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
   return {
+    __esModule: true,
     ...graphql,
-    getDirectiveValues: jest.fn((...args) =>
-      graphql.getDirectiveValues(...args),
-    ),
+    getDirectiveValues: jest.fn(graphql.getDirectiveValues),
   };
 });
-import type {
-  GraphQLDirective,
-  GraphQLSchema,
-  ObjectTypeDefinitionNode,
-} from "graphql";
+import type { GraphQLSchema, ObjectTypeDefinitionNode } from "graphql";
 import {
   buildSchema,
   getDirectiveValues,
@@ -56,7 +50,7 @@ describe("introspection", () => {
   let schema: GraphQLSchema;
 
   beforeAll(async () => {
-    schema = await gqlToolsLoadSchema(SCHEMA_FILE, {
+    schema = await loadSchema(SCHEMA_FILE, {
       loaders: [new GraphQLFileLoader()],
     });
   });
@@ -233,7 +227,7 @@ describe("introspection", () => {
     });
 
     test("handles null types from introspection JSON", async () => {
-      const schema = await gqlToolsLoadSchema(INTROSPECTION_SCHEMA_FILE, {
+      const schema = await loadSchema(INTROSPECTION_SCHEMA_FILE, {
         loaders: [new JsonFileLoader()],
       });
       const map = getTypeFromSchema<GraphQLScalarType>(
@@ -270,7 +264,7 @@ describe("introspection", () => {
     test("returns {} if root type no declared (issue #802)", async () => {
       expect.hasAssertions();
 
-      const schema802 = await gqlToolsLoadSchema(SCHEMA_ISSUE_802_FILE, {
+      const schema802 = await loadSchema(SCHEMA_ISSUE_802_FILE, {
         loaders: [new GraphQLFileLoader()],
       });
 
@@ -596,25 +590,29 @@ describe("introspection", () => {
     const directiveType = schema.getDirective("testA")!;
 
     test("converts type to astNode", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
-      getTypeDirectiveValues(directiveType, type);
+      const values = getTypeDirectiveValues(directiveType, type);
 
       expect(getDirectiveValues).toHaveBeenCalledWith(
         directiveType,
         type.astNode,
       );
+      expect(values).toMatchObject({ arg: "ARGA" });
     });
 
     test("does not convert astNode", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
-      getTypeDirectiveValues(directiveType as GraphQLDirective, type.astNode!);
+      const typeAstNode = type.astNode!;
+
+      const values = getTypeDirectiveValues(directiveType, typeAstNode);
 
       expect(getDirectiveValues).toHaveBeenCalledWith(
         directiveType,
-        type.astNode,
+        typeAstNode,
       );
+      expect(values).toMatchObject({ arg: "ARGA" });
     });
   });
 });
