@@ -162,6 +162,14 @@ export function getDirective(
 }
 
 /**
+ * Returns one directive's argument's value linked to a GraphQL schema type.
+ * It calls {@link getTypeDirectiveValues} and returns a matching record.
+ *
+ * @param directive - a GraphQL directive defined in the schema.
+ * @param type - the GraphQL schema type to parse.
+ * @param argName - the name of the GraphQL directive argument to fetch the value from.
+ *
+ * @returns a record k/v with `argName` as key and the argument's value.
  *
  */
 export function getTypeDirectiveArgValue(
@@ -179,10 +187,13 @@ export function getTypeDirectiveArgValue(
 }
 
 /**
+ * Returns all directive's arguments' values linked to a GraphQL schema type.
  *
- * @param directive
- * @param type
- * @returns
+ * @param directive - a GraphQL directive defined in the schema.
+ * @param type - the GraphQL schema type to parse.
+ *
+ * @returns a record k/v with arguments' name as keys and arguments' value.
+ *
  */
 export function getTypeDirectiveValues(
   directive: GraphQLDirective,
@@ -205,14 +216,18 @@ export function getTypeDirectiveValues(
 }
 
 /**
+ * Returns the fields from a GraphQL schema type.
  *
  * @internal
  *
- * @param type
- * @param processor
- * @param fallback
+ * see {@link getIntrospectionFieldsList}, {@link getFields}
  *
- * @returns
+ * @param type - the GraphQL schema type to parse.
+ * @param processor - optional callback function to parse the fields map.
+ * @param fallback - optional fallback value, `undefined` if not set.
+ *
+ * @returns a map of fields as k/v records, or `fallback` value if no fields available.
+ *
  */
 export function __getFields<T, V>(
   type: T,
@@ -232,18 +247,30 @@ export function __getFields<T, V>(
 
   const fieldMap = type.getFields();
 
-  if (typeof processor !== "undefined") {
+  if (typeof processor === "function") {
     return processor(fieldMap);
   }
 
   return fieldMap;
 }
 
+/**
+ * Returns fields map for a GraphQL operation type (query, mutation, subscription...).
+ *
+ * @internal
+ *
+ * see {@link getSchemaMap}
+ *
+ * @param operationType - the operation type to parse.
+ *
+ * @returns a map of fields as k/v records.
+ *
+ */
 export function getIntrospectionFieldsList(
-  queryType?: unknown,
+  operationType?: unknown,
 ): Record<string, unknown> {
   return __getFields(
-    queryType,
+    operationType,
     (fieldMap) =>
       Object.keys(fieldMap).reduce(
         (res, key) => ({ ...res, [key]: fieldMap[key] }),
@@ -253,6 +280,16 @@ export function getIntrospectionFieldsList(
   ) as Record<string, unknown>;
 }
 
+/**
+ * Returns fields map for a GraphQL schema type.
+ *
+ * see {@link getSchemaMap}
+ *
+ * @param type - the GraphQL schema type to parse.
+ *
+ * @returns a list of fields of type object.
+ *
+ */
 export function getFields(type: unknown): unknown[] {
   return __getFields(
     type,
@@ -265,6 +302,15 @@ export function getFields(type: unknown): unknown[] {
   ) as unknown[];
 }
 
+/**
+ * Resolves the name of a GraphQL schema type.
+ *
+ * @param getTypeName - the GraphQL schema type to parse.
+ * @param defaultName - optional fallback value if the name resolution fails.
+ *
+ * @returns the type's name, or `defaultName`.
+ *
+ */
 export function getTypeName(type: unknown, defaultName: string = ""): string {
   if (!(typeof type === "object" && type !== null)) {
     return defaultName;
@@ -281,6 +327,74 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   return defaultName;
 }
 
+/**
+ * Returns an introspection map of the GraphQL schema.
+ * This is the entry point for GraphQL-Markdown schema parsing features.
+ *
+ * @param schema - a GraphQL schema.
+ *
+ * @returns a schema map by GraphQL entities (see {@link SchemaEntity}).
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getSchemaMap } from "@graphql-markdown/utils/graphql";
+ *
+ * const schema = buildSchema(`
+ *   interface Record {
+ *     id: String!
+ *   }
+ *   type StudyItem implements Record {
+ *     id: String!
+ *     subject: String!
+ *     duration: Int!
+ *   }
+ *   type Query {
+ *     getStudyItems(subject: String): [StudyItem!]
+ *     getStudyItem(id: String!): StudyItem
+ *   }
+ *   type Mutation {
+ *     addStudyItem(subject: String!, duration: Int!): StudyItem
+ *   }
+ *   type Subscription {
+ *     listStudyItems: [StudyItem!]
+ *   }
+ * `);
+ *
+ * const schemaTypeMap = getSchemaMap(schema);
+ * 
+ * // expected result: {
+      queries: {
+        getStudyItems: GraphQLField,
+        getStudyItem: GraphQLField,
+      },
+      mutations: {
+        addStudyItem: GraphQLField,
+      },
+      subscriptions: {
+        listStudyItems: GraphQLField,
+      }
+      directives: {
+        include: GraphQLDirective,
+        skip: GraphQLDirective,
+        deprecated: GraphQLDirective,
+        specifiedBy: GraphQLDirective,
+      objects: {
+        StudyItem: GraphQLObjectType,
+      unions: {},
+      interfaces: {
+        Record: GraphQLInterfaceType,
+      enums: {},
+      inputs: {},
+      scalars: {
+        String: GraphQLScalarType,
+        Int: GraphQLScalarType,
+        Boolean: GraphQLScalarType,
+      }
+    }
+ * ```
+ *
+ */
 export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
   return {
     ["queries" as SchemaEntity]: getIntrospectionFieldsList(
