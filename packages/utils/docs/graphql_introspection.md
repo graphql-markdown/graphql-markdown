@@ -164,34 +164,34 @@ const schema = buildSchema(`
 const schemaTypeMap = getSchemaMap(schema);
 
 // expected result: {
-     queries: {
-       getStudyItems: GraphQLField,
-       getStudyItem: GraphQLField,
-     },
-     mutations: {
-       addStudyItem: GraphQLField,
-     },
-     subscriptions: {
-       listStudyItems: GraphQLField,
-     }
-     directives: {
-       include: GraphQLDirective,
-       skip: GraphQLDirective,
-       deprecated: GraphQLDirective,
-       specifiedBy: GraphQLDirective,
-     objects: {
-       StudyItem: GraphQLObjectType,
-     unions: {},
-     interfaces: {
-       Record: GraphQLInterfaceType,
-     enums: {},
-     inputs: {},
-     scalars: {
-       String: GraphQLScalarType,
-       Int: GraphQLScalarType,
-       Boolean: GraphQLScalarType,
-     }
-   }
+//   queries: {
+//     getStudyItems: GraphQLField,
+//     getStudyItem: GraphQLField,
+//   },
+//   mutations: {
+//     addStudyItem: GraphQLField,
+//   },
+//   subscriptions: {
+//     listStudyItems: GraphQLField,
+//   }
+//   directives: {
+//     include: GraphQLDirective,
+//     skip: GraphQLDirective,
+//     deprecated: GraphQLDirective,
+//     specifiedBy: GraphQLDirective,
+//   objects: {
+//     StudyItem: GraphQLObjectType,
+//   unions: {},
+//   interfaces: {
+//     Record: GraphQLInterfaceType,
+//   enums: {},
+//   inputs: {},
+//   scalars: {
+//     String: GraphQLScalarType,
+//     Int: GraphQLScalarType,
+//     Boolean: GraphQLScalarType,
+//   }
+// }
 ```
 
 #### Parameters

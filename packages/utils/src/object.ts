@@ -15,15 +15,15 @@
  * ```js
  * import { isEmpty } from '@graphql-markdown/utils/object';
  *
- * isEmpty({
- *     bool: true,
- *     string: "test",
- *     number: 123,
- *     array: ["one", "two"],
- *     child: { key: "value" },
- *   });
+ * const obj = {
+ *   bool: true,
+ *   string: "test",
+ *   number: 123,
+ *   array: ["one", "two"],
+ *   child: { key: "value" },
+ * };
  *
- * // Returns false
+ * isEmpty(obj); // Returns false
  *
  * isEmpty({}); // Returns true
  * ```
