@@ -51,7 +51,7 @@ an array of object values with `name` as key, or `undefined` if `list` is not a 
 
 #### Source
 
-[packages/utils/src/array.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/array.ts#L74)
+[packages/utils/src/array.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L74)
 
 ---
 
@@ -93,4 +93,4 @@ an array of object values, or `undefined` if `recordMap` is not a valid object.
 
 #### Source
 
-[packages/utils/src/array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/array.ts#L34)
+[packages/utils/src/array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L34)

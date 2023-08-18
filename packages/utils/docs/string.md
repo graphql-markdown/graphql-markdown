@@ -35,7 +35,7 @@ a capitalized string, or an empty string if `str` is not a valid string.
 
 #### Source
 
-[packages/utils/src/string.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L184)
+[packages/utils/src/string.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L184)
 
 ---
 
@@ -70,7 +70,7 @@ a string with MDX special characters replaced by HTML unicode equivalents.
 
 #### Source
 
-[packages/utils/src/string.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L140)
+[packages/utils/src/string.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L140)
 
 ---
 
@@ -105,7 +105,7 @@ a string with the 1st character in uppercase, or an empty string if `str` is not
 
 #### Source
 
-[packages/utils/src/string.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L160)
+[packages/utils/src/string.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L160)
 
 ---
 
@@ -140,7 +140,7 @@ a string converted to start case, or an empty string if `str` is not a valid str
 
 #### Source
 
-[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L258)
+[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
 ---
 
@@ -178,7 +178,7 @@ a pruned string, or an empty string if `str` is not a valid string.
 
 #### Source
 
-[packages/utils/src/string.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L82)
+[packages/utils/src/string.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L82)
 
 ---
 
@@ -218,7 +218,7 @@ a string with diacritic characters replaced, or an empty string if `str` is not 
 
 #### Source
 
-[packages/utils/src/string.ts:209](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L209)
+[packages/utils/src/string.ts:209](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L209)
 
 ---
 
@@ -242,7 +242,7 @@ Alias of [kebabCase](string.md#kebabcase).
 
 #### Source
 
-[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L258)
+[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
 ---
 
@@ -277,7 +277,7 @@ a string converted to start case, or an empty string if `str` is not a valid str
 
 #### Source
 
-[packages/utils/src/string.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L234)
+[packages/utils/src/string.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L234)
 
 ---
 
@@ -325,7 +325,7 @@ a transformed string, or an empty string if `str` is not a valid string.
 
 #### Source
 
-[packages/utils/src/string.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L36)
+[packages/utils/src/string.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L36)
 
 ---
 
@@ -359,4 +359,4 @@ a HTML unicode representation of `char`, or an empty string if `char` is not a v
 
 #### Source
 
-[packages/utils/src/string.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/string.ts#L114)
+[packages/utils/src/string.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L114)

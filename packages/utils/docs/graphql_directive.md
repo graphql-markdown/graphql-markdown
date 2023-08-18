@@ -20,7 +20,7 @@ See [getCustomDirectiveOptions](graphql_directive.md#getcustomdirectiveoptions),
 
 #### Source
 
-[packages/utils/src/graphql/directive.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/directive.ts#L27)
+[packages/utils/src/graphql/directive.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L27)
 
 ## Functions
 
@@ -96,7 +96,7 @@ a map of GraphQL directives matching the custom directives defined, else `undefi
 
 #### Source
 
-[packages/utils/src/graphql/directive.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/directive.ts#L246)
+[packages/utils/src/graphql/directive.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L246)
 
 ---
 
@@ -142,7 +142,7 @@ a record set of custom handlers for the matching directive (or if `*` is declare
 
 #### Source
 
-[packages/utils/src/graphql/directive.ts:156](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/directive.ts#L156)
+[packages/utils/src/graphql/directive.ts:156](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L156)
 
 ---
 
@@ -220,7 +220,7 @@ a custom directive map, or undefined if no match.
 
 #### Source
 
-[packages/utils/src/graphql/directive.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/directive.ts#L88)
+[packages/utils/src/graphql/directive.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L88)
 
 ---
 
@@ -247,4 +247,4 @@ Checks if a directive name is referenced in `customDirective` option.
 
 #### Source
 
-[packages/utils/src/graphql/directive.ts:180](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/directive.ts#L180)
+[packages/utils/src/graphql/directive.ts:180](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L180)

@@ -69,7 +69,7 @@ the group name matching the type, or `groupByDirective.fallback` if no match fou
 
 #### Source
 
-[packages/utils/src/graphql/group.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/group.ts#L158)
+[packages/utils/src/graphql/group.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/group.ts#L158)
 
 ---
 
@@ -152,4 +152,4 @@ a map of entities with matching group name.
 
 #### Source
 
-[packages/utils/src/graphql/group.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/group.ts#L84)
+[packages/utils/src/graphql/group.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/group.ts#L84)

@@ -44,4 +44,4 @@ isEmpty({}); // Returns true
 
 #### Source
 
-[packages/utils/src/object.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/object.ts#L34)
+[packages/utils/src/object.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/object.ts#L34)

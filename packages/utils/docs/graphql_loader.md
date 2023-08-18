@@ -51,7 +51,7 @@ a list of loader objects.
 
 #### Source
 
-[packages/utils/src/graphql/loader.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/loader.ts#L102)
+[packages/utils/src/graphql/loader.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/loader.ts#L102)
 
 ---
 
@@ -91,4 +91,4 @@ a GraphQL schema.
 
 #### Source
 
-[packages/utils/src/graphql/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/graphql/loader.ts#L41)
+[packages/utils/src/graphql/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/loader.ts#L41)

@@ -35,7 +35,7 @@ a prettified string, or undefined if an error occurred.
 
 #### Source
 
-[packages/utils/src/prettier.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/prettier.ts#L29)
+[packages/utils/src/prettier.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L29)
 
 ---
 
@@ -69,7 +69,7 @@ a prettified string, or undefined if an error occurred.
 
 #### Source
 
-[packages/utils/src/prettier.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/prettier.ts#L78)
+[packages/utils/src/prettier.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L78)
 
 ---
 
@@ -103,4 +103,4 @@ a prettified string, or undefined if an error occurred.
 
 #### Source
 
-[packages/utils/src/prettier.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/prettier.ts#L57)
+[packages/utils/src/prettier.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L57)

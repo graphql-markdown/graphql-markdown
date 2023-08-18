@@ -38,4 +38,4 @@ an instance of the logger.
 
 #### Source
 
-[packages/utils/src/logger.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/f79e0c1c/packages/utils/src/logger.ts#L36)
+[packages/utils/src/logger.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/logger.ts#L36)
