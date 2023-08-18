@@ -1,3 +1,9 @@
+/**
+ * Internal library of helpers for formatting GraphQL values.
+ *
+ * @packageDocumentation
+ */
+
 import type { GraphQLType } from "graphql";
 import {
   getNamedType,
@@ -12,23 +18,16 @@ import {
 
 import type { Maybe } from "@graphql-markdown/types";
 
-export function getFormattedListDefaultValues<T>(
-  type: Maybe<GraphQLType>,
-  value: T,
-): string {
-  if (typeof type === "undefined" || type === null) {
-    return "";
-  }
-
-  const defaultValues: T[] = Array.isArray(value) ? value : [value];
-
-  const defaultValuesString = defaultValues.map((defaultValue) =>
-    getFormattedDefaultValue({ type, defaultValue }),
-  );
-
-  return `[${defaultValuesString.join(", ")}]`;
-}
-
+/**
+ * Returns a printable formatted value for a GraphQL type.
+ * This is the generic function.
+ *
+ * @param type - the GraphQL schema type.
+ * @param defaultValue - the GraphQL schema type's value to be processed
+ *
+ * @returns a printable formatted value.
+ *
+ */
 export function getFormattedDefaultValue<T>({
   type,
   defaultValue,
@@ -46,12 +45,54 @@ export function getFormattedDefaultValue<T>({
   }
 
   if (isListType(type)) {
-    return getFormattedListDefaultValues(getNamedType(type), defaultValue);
+    return __formatListDefaultValues(getNamedType(type), defaultValue);
   }
 
-  return formatDefaultValue(type, defaultValue);
+  return __formatDefaultValue(type, defaultValue);
 }
-function formatDefaultValue<T>(
+
+/**
+ * Format a list GraphQL type value into a printable equivalent.
+ *
+ * @internal
+ *
+ * @param type - the GraphQL schema type.
+ * @param defaultValue - the GraphQL schema type's value to be processed
+ *
+ * @returns a printable formatted value.
+ *
+ */
+function __formatListDefaultValues<T>(
+  type: Maybe<GraphQLType>,
+  defaultValue: T,
+): string {
+  if (typeof type === "undefined" || type === null) {
+    return "";
+  }
+
+  const defaultValues: T[] = Array.isArray(defaultValue)
+    ? defaultValue
+    : [defaultValue];
+
+  const defaultValuesString = defaultValues.map((defaultValue) =>
+    getFormattedDefaultValue({ type, defaultValue }),
+  );
+
+  return `[${defaultValuesString.join(", ")}]`;
+}
+
+/**
+ * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
+ *
+ * @internal
+ *
+ * @param type - the GraphQL schema type.
+ * @param defaultValue - the GraphQL schema type's value to be processed
+ *
+ * @returns a printable formatted value.
+ *
+ */
+function __formatDefaultValue<T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
 ): T | string {
