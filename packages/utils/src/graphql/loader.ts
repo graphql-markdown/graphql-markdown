@@ -1,3 +1,9 @@
+/**
+ * Library for GraphQL schema loading and `loaders` config processing.
+ *
+ * @packageDocumentation
+ */
+
 import type { GraphQLObjectType } from "graphql";
 import { GraphQLSchema, OperationTypeNode } from "graphql";
 import { loadSchema as asyncLoadSchema } from "@graphql-tools/load";
