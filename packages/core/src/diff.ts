@@ -5,7 +5,7 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { Logger } from "@graphql-markdown/utils";
+import { Logger } from "@graphql-markdown/logger";
 
 const logger = Logger();
 

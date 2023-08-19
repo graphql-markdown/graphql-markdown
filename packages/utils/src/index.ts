@@ -5,4 +5,3 @@ export * from "./object";
 export * from "./string";
 export * as pathUrl from "./url";
 export * from "./graphql";
-export * from "./logger";

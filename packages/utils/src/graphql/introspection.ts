@@ -18,12 +18,12 @@ import {
 
 import type {
   ASTNode,
+  AstNodeType,
   DirectiveDefinitionNode,
   DirectiveNode,
   GraphQLNamedType,
   GraphQLOperationType,
   Maybe,
-  ObjectTypeDefinitionNode,
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
@@ -89,9 +89,7 @@ export function getTypeFromSchema<T>(
  * @returns `true` if the entity has an AST node property, else `false`.
  *
  */
-export function hasAstNode<T>(
-  node: T,
-): node is Required<{ astNode: ObjectTypeDefinitionNode }> & T {
+export function hasAstNode<T>(node: T): node is AstNodeType<T> {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
 }
 
@@ -234,6 +232,10 @@ export function getTypeDirectiveValues(
  */
 export function __getFields<T, V>(
   type: T,
+  /**
+   * @param fieldMap - a field map to be processed.
+   * @returns a new field map.
+   */
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
 ): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V {

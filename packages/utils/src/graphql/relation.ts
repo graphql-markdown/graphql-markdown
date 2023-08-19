@@ -50,7 +50,7 @@ type RelationOfCallbackFunction<T> = (
  *
  * @param type - the GraphQL schema type being processed.
  * @param relations - the map of relations to be returned.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  * @param callback - a function to execute for each entries of the schema map.
  *
  * @returns a record map of type `relations`.
@@ -96,7 +96,7 @@ function mapRelationOf<
  * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
  *
  * @param type - the GraphQL schema type being processed.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  *
  * @returns a record map of operations relations.
  *
@@ -156,7 +156,7 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
  * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
  *
  * @param type - the GraphQL schema type being processed.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  *
  * @returns a record map of fields and arguments relations.
  *
@@ -228,7 +228,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
  * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
  *
  * @param type - the GraphQL schema type being processed.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  *
  * @returns a record map of unions relations.
  *
@@ -281,7 +281,7 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
  * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
  *
  * @param type - the GraphQL schema type being processed.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  *
  * @returns a record map of interfaces relations.
  *
@@ -335,7 +335,7 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
  * @typeParam R - the return type of map of relations (see {@link IGetRelation}).
  *
  * @param type - the GraphQL schema type being processed.
- * @param schemaMap - a GraphQL schema map (see {@link getSchemaMap}).
+ * @param schemaMap - a GraphQL schema map (see {@link graphql/introspection!getSchemaMap}).
  *
  * @returns a record map of unions or interfaces relations.
  *

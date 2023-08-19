@@ -22,8 +22,9 @@ import type { Maybe } from "@graphql-markdown/types";
  * Returns a printable formatted value for a GraphQL type.
  * This is the generic function.
  *
- * @param type - the GraphQL schema type.
- * @param defaultValue - the GraphQL schema type's value to be processed
+ * @param entity - the GraphQL schema entity processed.
+ * @param entity.type - the GraphQL schema type.
+ * @param entity.defaultValue - the GraphQL schema type's value to be formatted.
  *
  * @returns a printable formatted value.
  *

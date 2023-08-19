@@ -17,7 +17,6 @@ import {
   ensureDir,
   fileExists,
   isDeprecated,
-  Logger,
   pathUrl,
   prettifyJavascript,
   prettifyMarkdown,
@@ -27,6 +26,7 @@ import {
   slugify,
 } from "@graphql-markdown/utils";
 
+import { Logger } from "@graphql-markdown/logger";
 const logger = Logger();
 
 const SIDEBAR = "sidebar-schema.js" as const;

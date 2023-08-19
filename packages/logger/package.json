@@ -1,26 +1,17 @@
 {
-  "name": "@graphql-markdown/docusaurus",
+  "name": "@graphql-markdown/logger",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
+  "description": "GraphQL-Markdown logger.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.20.4",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "graphql-markdown/graphql-markdown",
-    "directory": "packages/docusaurus"
+    "directory": "packages/logger"
   },
-  "keywords": [
-    "docusaurus",
-    "graphql",
-    "graphql-schema",
-    "documentation",
-    "plugin",
-    "markdown",
-    "graphql-markdown"
-  ],
   "author": {
     "name": "Gregory Heitz"
   },
@@ -47,19 +38,11 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist"
-  },
-  "dependencies": {
-    "@graphql-markdown/core": "^1.6.4",
-    "@graphql-markdown/logger": "^1.0.0",
-    "@graphql-markdown/printer-legacy": "^1.4.3"
+    "clean": "rm -rf ./dist",
+    "docs": "typedoc"
   },
   "devDependencies": {
-    "@docusaurus/types": "^2.4.1",
     "@graphql-markdown/types": "^1.0.0"
-  },
-  "peerDependencies": {
-    "@docusaurus/logger": "*"
   },
   "directories": {
     "test": "tests"

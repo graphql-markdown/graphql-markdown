@@ -1,6 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-frontmatter"],
+  "plugin": ["typedoc-plugin-markdown"],
   "entryFileName": "index.md",
   "exclude": ["**/index.ts"],
   "excludeExternals": true,
@@ -18,5 +18,8 @@
   "readme": "none",
   "skipIndexPage": true,
   "theme": "default",
-  "visibilityFilters": {}
+  "visibilityFilters": {},
+  "validation": {
+    "notDocumented": true
+  }
 }

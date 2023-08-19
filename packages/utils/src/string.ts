@@ -15,7 +15,7 @@ import type { Maybe } from "@graphql-markdown/types";
  * @internal
  *
  * @param str - the string to be transformed.
- * @param transformation - the transformation function.
+ * @param transformation - optional transformation callback function.
  * @param separator - optional character separator for word-based transformation.
  * @param splitter - optional regex or string rule for splitting string into word.
  *

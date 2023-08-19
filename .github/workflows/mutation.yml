@@ -27,7 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         package:
-          ["core", "diff", "docusaurus", "printer-legacy", "utils", "helpers"]
+          ["core", "diff", "docusaurus", "printer-legacy", "utils", "helpers", "logger"]
 
     steps:
       - name: Checkout Code Base

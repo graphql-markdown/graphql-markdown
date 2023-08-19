@@ -29,7 +29,7 @@ export const WILDCARD_DIRECTIVE = "*" as const;
 /**
  * Returns a custom directives map with custom handlers from `customDirective`.
  *
- * @param schemaMap - the GraphQL schema map returned by {@link getSchemaMap}
+ * @param schemaMap - the GraphQL schema map returned by {@link graphql/introspection!getSchemaMap}
  * @param customDirectiveOptions - the `customDirective` option.
  *
  * @returns a custom directive map, or undefined if no match.

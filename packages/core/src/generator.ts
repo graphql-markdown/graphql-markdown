@@ -4,13 +4,14 @@ import type {
   SchemaEntity,
 } from "@graphql-markdown/types";
 
+import { Logger } from "@graphql-markdown/logger";
+
 import {
   getCustomDirectives,
   getDocumentLoaders,
   getGroups,
   getSchemaMap,
   loadSchema,
-  Logger,
 } from "@graphql-markdown/utils";
 
 import { Renderer } from "./renderer";

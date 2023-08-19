@@ -13,6 +13,7 @@ import type {
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLUnionType,
+  ObjectTypeDefinitionNode,
 } from "graphql";
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
@@ -133,5 +134,21 @@ export type RelationOfField =
   | GraphQLOperationType;
 export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;
 export type RelationOfImplementation = GraphQLUnionType | RelationOfInterface;
+
+export type PrettifyCallbackFunction = (
+  text: string,
+  options?: unknown,
+) => Promise<Maybe<string>>;
+
+export type DeprecatedType<T> = Partial<{
+  deprecationReason: string;
+  isDeprecated: boolean;
+}> &
+  T;
+
+export type AstNodeType<T> = Required<{
+  astNode: ObjectTypeDefinitionNode;
+}> &
+  T;
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";

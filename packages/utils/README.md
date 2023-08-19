@@ -14,7 +14,6 @@
 - [graphql/introspection](docs/graphql_introspection.md)
 - [graphql/loader](docs/graphql_loader.md)
 - [graphql/relation](docs/graphql_relation.md)
-- [logger](docs/logger.md)
 - [object](docs/object.md)
 - [prettier](docs/prettier.md)
 - [string](docs/string.md)
