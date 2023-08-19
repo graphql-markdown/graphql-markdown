@@ -22,7 +22,6 @@ jest.mock("@graphql-markdown/utils", () => {
     isEmpty: jest.fn(),
   };
 });
-import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("@graphql-markdown/graphql", () => {
   return {
