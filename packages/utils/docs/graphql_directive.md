@@ -8,29 +8,42 @@ Library supporting `customDirective` for directive based customization.
 
 ## Variables
 
-### WILDCARD_DIRECTIVE
+### WILDCARD\_DIRECTIVE
 
 ```ts
-const WILDCARD_DIRECTIVE: "";
+const WILDCARD_DIRECTIVE: ""
 ```
 
 Wildcard `*` character for matching any directive name.
 
 See [getCustomDirectiveOptions](graphql_directive.md#getcustomdirectiveoptions), [isCustomDirective](graphql_directive.md#iscustomdirective)
 
-#### Source
+#### Defined In
 
-[packages/utils/src/graphql/directive.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L27)
+[packages/utils/src/graphql/directive.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/directive.ts#L27)
 
 ## Functions
 
-### getConstDirectiveMap()
+### getConstDirectiveMap
 
 ```ts
 getConstDirectiveMap(entity, customDirectiveMap): Maybe< CustomDirectiveMap >
 ```
 
 Returns a map of custom directives for a schema entity.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `entity` | `unknown` | a GraphQL schema entity. |
+| `customDirectiveMap` | `Maybe`\< `CustomDirectiveMap` \> | a custom directive map (see [getCustomDirectives](graphql_directive.md#getcustomdirectives)). |
+
+#### Returns
+
+`Maybe`\< `CustomDirectiveMap` \>
+
+a map of GraphQL directives matching the custom directives defined, else `undefined`.
 
 #### Example
 
@@ -81,32 +94,32 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 ```
 
-#### Parameters
+#### Defined In
 
-| Parameter            | Type                              | Description                                                                                   |
-| :------------------- | :-------------------------------- | :-------------------------------------------------------------------------------------------- |
-| `entity`             | `unknown`                         | a GraphQL schema entity.                                                                      |
-| `customDirectiveMap` | `Maybe`\< `CustomDirectiveMap` \> | a custom directive map (see [getCustomDirectives](graphql_directive.md#getcustomdirectives)). |
+[packages/utils/src/graphql/directive.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/directive.ts#L246)
 
-#### Returns
+***
 
-`Maybe`\< `CustomDirectiveMap` \>
-
-a map of GraphQL directives matching the custom directives defined, else `undefined`.
-
-#### Source
-
-[packages/utils/src/graphql/directive.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L246)
-
----
-
-### getCustomDirectiveOptions()
+### getCustomDirectiveOptions
 
 ```ts
 getCustomDirectiveOptions(schemaDirectiveName, customDirectiveOptions): Maybe< CustomDirectiveOptions >
 ```
 
 Returns a record set of custom handlers from a directive by name.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `schemaDirectiveName` | `DirectiveName` | the GraphQL directive name. |
+| `customDirectiveOptions` | `CustomDirective` | the `customDirective` option. |
+
+#### Returns
+
+`Maybe`\< `CustomDirectiveOptions` \>
+
+a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
 
 #### Example
 
@@ -127,32 +140,32 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 // }
 ```
 
-#### Parameters
+#### Defined In
 
-| Parameter                | Type              | Description                   |
-| :----------------------- | :---------------- | :---------------------------- |
-| `schemaDirectiveName`    | `DirectiveName`   | the GraphQL directive name.   |
-| `customDirectiveOptions` | `CustomDirective` | the `customDirective` option. |
+[packages/utils/src/graphql/directive.ts:156](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/directive.ts#L156)
 
-#### Returns
+***
 
-`Maybe`\< `CustomDirectiveOptions` \>
-
-a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
-
-#### Source
-
-[packages/utils/src/graphql/directive.ts:156](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L156)
-
----
-
-### getCustomDirectives()
+### getCustomDirectives
 
 ```ts
 getCustomDirectives(schemaMap, customDirectiveOptions?): Maybe< CustomDirectiveMap >
 ```
 
 Returns a custom directives map with custom handlers from `customDirective`.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `schemaMap` | `Pick`\< `SchemaMap`, `"directives"` \> | the GraphQL schema map returned by [getSchemaMap](graphql_introspection.md#getschemamap) |
+| `customDirectiveOptions`? | `CustomDirective` | the `customDirective` option. |
+
+#### Returns
+
+`Maybe`\< `CustomDirectiveMap` \>
+
+a custom directive map, or undefined if no match.
 
 #### Example
 
@@ -205,26 +218,13 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 // }
 ```
 
-#### Parameters
+#### Defined In
 
-| Parameter                 | Type                                    | Description                                     |
-| :------------------------ | :-------------------------------------- | :---------------------------------------------- |
-| `schemaMap`               | `Pick`\< `SchemaMap`, `"directives"` \> | the GraphQL schema map returned by getSchemaMap |
-| `customDirectiveOptions`? | `CustomDirective`                       | the `customDirective` option.                   |
+[packages/utils/src/graphql/directive.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/directive.ts#L88)
 
-#### Returns
+***
 
-`Maybe`\< `CustomDirectiveMap` \>
-
-a custom directive map, or undefined if no match.
-
-#### Source
-
-[packages/utils/src/graphql/directive.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L88)
-
----
-
-### isCustomDirective()
+### isCustomDirective
 
 ```ts
 isCustomDirective(schemaDirectiveName, customDirectiveOptions): boolean
@@ -234,9 +234,9 @@ Checks if a directive name is referenced in `customDirective` option.
 
 #### Parameters
 
-| Parameter                | Type              | Description                   |
-| :----------------------- | :---------------- | :---------------------------- |
-| `schemaDirectiveName`    | `DirectiveName`   | the GraphQL directive name.   |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `schemaDirectiveName` | `DirectiveName` | the GraphQL directive name. |
 | `customDirectiveOptions` | `CustomDirective` | the `customDirective` option. |
 
 #### Returns
@@ -245,6 +245,6 @@ Checks if a directive name is referenced in `customDirective` option.
 
 `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
 
-#### Source
+#### Defined In
 
-[packages/utils/src/graphql/directive.ts:180](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/directive.ts#L180)
+[packages/utils/src/graphql/directive.ts:180](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/directive.ts#L180)

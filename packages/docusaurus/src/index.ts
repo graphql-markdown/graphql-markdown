@@ -2,7 +2,7 @@
 import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
 import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
-import { Logger } from "@graphql-markdown/utils";
+import { Logger } from "@graphql-markdown/logger";
 
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const COMMAND = "graphql-to-doc" as const;

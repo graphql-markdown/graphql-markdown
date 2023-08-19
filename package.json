@@ -199,6 +199,7 @@
     "@graphql-markdown/diff": "file:packages/diff",
     "@graphql-markdown/docusaurus": "file:packages/docusaurus",
     "@graphql-markdown/helpers": "file:packages/helpers",
+    "@graphql-markdown/logger": "file:packages/logger",
     "@graphql-markdown/printer-legacy": "file:packages/printer-legacy",
     "@graphql-markdown/types": "file:packages/types",
     "@graphql-markdown/utils": "file:packages/utils",

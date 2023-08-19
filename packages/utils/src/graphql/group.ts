@@ -19,7 +19,7 @@ import { hasAstNode } from "./introspection";
 /**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
  *
- * @param schemaMap - the GraphQL schema map returned by {@link getSchemaMap}
+ * @param schemaMap - the GraphQL schema map returned by {@link graphql/introspection!getSchemaMap}
  * @param groupByDirective - the `groupByDirective` option.
  *
  * @returns a map of entities with matching group name.

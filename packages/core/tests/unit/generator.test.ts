@@ -10,9 +10,7 @@ import type {
 
 import * as Utils from "@graphql-markdown/utils";
 jest.mock("@graphql-markdown/utils", () => {
-  const utils = jest.requireActual("@graphql-markdown/utils");
   return {
-    Logger: utils.Logger,
     getCustomDirectives: jest.fn(),
     getDocumentLoaders: jest.fn(),
     getGroups: jest.fn(),

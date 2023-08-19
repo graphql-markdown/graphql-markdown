@@ -26,11 +26,12 @@ module.exports = {
   coverageReporters: ["json", "lcov"],
   moduleFileExtensions: ["ts", "js"],
   projects: [
-    projectConfig("utils"),
     projectConfig("core"),
-    projectConfig("printer-legacy"),
     projectConfig("diff"),
-    projectConfig("helpers"),
     projectConfig("docusaurus"),
+    projectConfig("helpers"),
+    projectConfig("logger"),
+    projectConfig("printer-legacy"),
+    projectConfig("utils"),
   ],
 };

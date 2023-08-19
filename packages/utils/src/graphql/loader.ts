@@ -41,6 +41,10 @@ import type {
 export async function loadSchema(
   schemaLocation: string,
   options: LoadSchemaOptions & {
+    /**
+     * @param rootTypes - optional `rootTypes` schema override
+     * @see {@link https://graphql-markdown.github.io/docs/advanced/custom-root-types | Custom root types}
+     */
     rootTypes?: Partial<Record<OperationTypeNode, string>>;
   },
 ): Promise<GraphQLSchema> {
@@ -80,7 +84,7 @@ export async function loadSchema(
  *
  * @returns a list of loader objects.
  *
- * @throws {@link Error} if no loader loader, or an error occurred when importing a loader package.
+ * @throws an `Error` if no loader has been loaded, or if an error occurred while importing loaders.
  *
  * @example
  * ```js

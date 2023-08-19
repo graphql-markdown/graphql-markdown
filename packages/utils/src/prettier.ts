@@ -4,11 +4,9 @@
  * @packageDocumentation
  */
 
+import type { LoggerType } from "@graphql-markdown/types";
+
 /* istanbul ignore file */
-
-import { Logger } from "./logger";
-
-const logger = Logger();
 
 /**
  * Prettify a string using {@link https://prettier.io/docs/en/api#prettierformatsource-options | prettier.format}.
@@ -34,7 +32,11 @@ export async function prettify(
     const { format } = await import("prettier");
     return await format(content, { parser });
   } catch (error: unknown) {
-    logger.warn("Prettier is not found");
+    if ("logger" in global) {
+      (global.logger as LoggerType).warn("Prettier is not found");
+    } else {
+      console.log("Prettier is not found");
+    }
     return undefined;
   }
 }

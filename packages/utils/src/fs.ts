@@ -7,7 +7,7 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-import type { Maybe } from "@graphql-markdown/types";
+import type { PrettifyCallbackFunction } from "@graphql-markdown/types";
 
 export { readFile, copyFile } from "node:fs/promises";
 
@@ -85,7 +85,7 @@ export async function fileExists(location: string): Promise<boolean> {
 export async function saveFile(
   location: string,
   content: string,
-  prettify?: (text: string, options?: unknown) => Promise<Maybe<string>>,
+  prettify?: PrettifyCallbackFunction,
 ): Promise<void> {
   if (typeof prettify === "function") {
     content = (await prettify(content)) ?? content;

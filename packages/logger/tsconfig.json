@@ -9,11 +9,5 @@
       "@graphql-markdown/types": ["../types/src/index.d.ts"],
       "@graphql-markdown/*": ["../*/src/index.ts"]
     }
-  },
-
-  "references": [
-    { "path": "../utils" }, 
-    { "path": "../logger" },
-    { "path": "../printer-legacy" } // needed for mutation tests only
-  ]
+  }
 }

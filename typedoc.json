@@ -1,5 +1,6 @@
 {
   "extends": ["./typedoc.base.json"],
+  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-frontmatter"],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
   "name": "api",

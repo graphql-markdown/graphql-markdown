@@ -1,10 +1,10 @@
-# Module: logger
+# @graphql-markdown/logger
 
 Logger singleton module.
 
 ## Functions
 
-### Logger()
+### Logger
 
 ```ts
 Logger(moduleName?): LoggerType
@@ -12,6 +12,18 @@ Logger(moduleName?): LoggerType
 
 Returns a logger module, if a package name is provided then instantiates it.
 By default, the logger module uses `global.console`
+
+#### Parameters
+
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `moduleName`? | `string` | optional name of the logger package. |
+
+#### Returns
+
+`LoggerType`
+
+an instance of the logger.
 
 #### Example
 
@@ -24,18 +36,6 @@ const loggerModule = require.resolve("@docusaurus/logger");
 Logger(loggerModule).info("Info message"); // Expected Docusaurus log output "Info message"
 ```
 
-#### Parameters
+#### Defined In
 
-| Parameter     | Type     | Description                          |
-| :------------ | :------- | :----------------------------------- |
-| `moduleName`? | `string` | optional name of the logger package. |
-
-#### Returns
-
-`LoggerType`
-
-an instance of the logger.
-
-#### Source
-
-[packages/utils/src/logger.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/logger.ts#L36)
+index.ts:36

@@ -3,9 +3,12 @@
  *
  * @packageDocumentation
  */
-
-import type { GraphQLOperationType } from "@graphql-markdown/types";
 import type { GraphQLField } from "graphql";
+
+import type {
+  GraphQLOperationType,
+  DeprecatedType,
+} from "@graphql-markdown/types";
 
 export {
   isDirective as isDirectiveType,
@@ -64,9 +67,7 @@ export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
  * @param obj - an instance of `T`.
  *
  */
-export function isDeprecated<T>(
-  obj: T,
-): obj is Partial<{ deprecationReason: string; isDeprecated: boolean }> & T {
+export function isDeprecated<T>(obj: T): obj is DeprecatedType<T> {
   return (
     typeof obj === "object" &&
     obj !== null &&
