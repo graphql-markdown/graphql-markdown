@@ -38,4 +38,4 @@ Logger(loggerModule).info("Info message"); // Expected Docusaurus log output "In
 
 #### Defined In
 
-index.ts:36
+[index.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L36)

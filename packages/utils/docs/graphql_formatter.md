@@ -35,4 +35,4 @@ a printable formatted value.
 
 #### Defined In
 
-[packages/utils/src/graphql/formatter.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/graphql/formatter.ts#L32)
+[packages/utils/src/graphql/formatter.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/formatter.ts#L32)

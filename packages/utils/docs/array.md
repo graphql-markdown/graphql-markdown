@@ -51,7 +51,7 @@ convertArrayToMapObject([
 
 #### Defined In
 
-[packages/utils/src/array.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/array.ts#L74)
+[packages/utils/src/array.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L74)
 
 ***
 
@@ -93,4 +93,4 @@ toArray({
 
 #### Defined In
 
-[packages/utils/src/array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/array.ts#L34)
+[packages/utils/src/array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L34)

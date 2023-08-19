@@ -35,7 +35,7 @@ https://prettier.io/docs/en/options#parser for the list of parsers.
 
 #### Defined In
 
-[packages/utils/src/prettier.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/prettier.ts#L27)
+[packages/utils/src/prettier.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L27)
 
 ***
 
@@ -69,7 +69,7 @@ Same as `prettify(content, "babel")`.
 
 #### Defined In
 
-[packages/utils/src/prettier.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/prettier.ts#L80)
+[packages/utils/src/prettier.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L80)
 
 ***
 
@@ -103,4 +103,4 @@ Same as `prettify(content, "markdown")`.
 
 #### Defined In
 
-[packages/utils/src/prettier.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/prettier.ts#L59)
+[packages/utils/src/prettier.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L59)

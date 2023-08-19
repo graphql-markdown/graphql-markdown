@@ -35,7 +35,7 @@ mapRelationOf
 
 #### Defined In
 
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/types/src/utils.d.ts#L107)
+[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
 
 ***
 
@@ -66,7 +66,7 @@ mapRelationOf
 
 #### Defined In
 
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/types/src/utils.d.ts#L107)
+[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
 
 ***
 
@@ -97,7 +97,7 @@ mapRelationOf
 
 #### Defined In
 
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/types/src/utils.d.ts#L107)
+[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
 
 ***
 
@@ -128,7 +128,7 @@ mapRelationOf
 
 #### Defined In
 
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/types/src/utils.d.ts#L107)
+[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
 
 ***
 
@@ -159,4 +159,4 @@ mapRelationOf
 
 #### Defined In
 
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/types/src/utils.d.ts#L107)
+[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)

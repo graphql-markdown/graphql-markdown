@@ -35,7 +35,7 @@ capitalize("the quick Brown Fox");
 
 #### Defined In
 
-[packages/utils/src/string.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L184)
+[packages/utils/src/string.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L184)
 
 ***
 
@@ -70,7 +70,7 @@ escapeMDX("{MDX} <special> characters");
 
 #### Defined In
 
-[packages/utils/src/string.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L140)
+[packages/utils/src/string.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L140)
 
 ***
 
@@ -105,7 +105,7 @@ firstUppercase("the quick Brown Fox");
 
 #### Defined In
 
-[packages/utils/src/string.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L160)
+[packages/utils/src/string.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L160)
 
 ***
 
@@ -140,7 +140,7 @@ kebabCase("The quick brown Fox");
 
 #### Defined In
 
-[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L258)
+[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
 ***
 
@@ -178,7 +178,7 @@ prune(text, "**");
 
 #### Defined In
 
-[packages/utils/src/string.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L82)
+[packages/utils/src/string.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L82)
 
 ***
 
@@ -218,7 +218,7 @@ replaceDiacritics("Âéêś"); // Expected result: "Aees"
 
 #### Defined In
 
-[packages/utils/src/string.ts:209](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L209)
+[packages/utils/src/string.ts:209](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L209)
 
 ***
 
@@ -242,7 +242,7 @@ Alias of [kebabCase](string.md#kebabcase).
 
 #### Defined In
 
-[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L258)
+[packages/utils/src/string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
 ***
 
@@ -277,7 +277,7 @@ startCase("the quick Brown Fox");
 
 #### Defined In
 
-[packages/utils/src/string.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L234)
+[packages/utils/src/string.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L234)
 
 ***
 
@@ -325,7 +325,7 @@ stringCaseBuilder(text, transformation, " ");
 
 #### Defined In
 
-[packages/utils/src/string.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L36)
+[packages/utils/src/string.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L36)
 
 ***
 
@@ -359,4 +359,4 @@ toHTMLUnicode("%"); // Expected result: "&#x0025;"
 
 #### Defined In
 
-[packages/utils/src/string.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/466abea6/packages/utils/src/string.ts#L114)
+[packages/utils/src/string.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L114)
