@@ -15,21 +15,21 @@
   "author": {
     "name": "Gregory Heitz"
   },
-  "main": "dist/logger.js",
-  "types": "dist/logger.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": {
-        "types": "./dist/logger.d.ts",
-        "default": "./dist/logger.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "import": {
-        "types": "./dist/logger.d.ts",
-        "default": "./dist/logger.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "default": {
-        "types": "./dist/logger.d.ts",
-        "default": "./dist/logger.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     },
     "./package.json": "./package.json"
