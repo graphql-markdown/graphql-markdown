@@ -15,6 +15,7 @@ describe("logger", () => {
         .mockImplementation(() => "Mocked Console");
 
       expect(Logger().info()).toBe("Mocked Console");
+      expect(global.logger).toBeDefined();
     });
 
     test.each([[undefined], [""]])(
@@ -27,6 +28,7 @@ describe("logger", () => {
           .mockImplementation(() => "Mocked Console");
 
         expect(Logger(moduleName).info()).toBe("Mocked Console");
+        expect(global.logger).toBeDefined();
       },
     );
 
@@ -45,13 +47,12 @@ describe("logger", () => {
       );
     });
 
-    test("returns module passed as logger", () => {
+    test("returns module passed with aliased methods", () => {
       expect.hasAssertions();
 
       const logger = Logger(require.resolve("../__data__/dummy_logger"));
 
-      expect(logger.info()).toBe("Dummy logger");
-
+      expect(global.logger).toBeDefined();
       expect(logger).toEqual(
         expect.objectContaining({
           debug: expect.any(Function),
@@ -62,6 +63,27 @@ describe("logger", () => {
           warn: expect.any(Function),
         }),
       );
+      expect(logger.log()).toBe("Dummy logger");
+      expect(logger.debug()).toBe("Dummy logger");
+      expect(logger.error()).toBe("Dummy logger");
+      expect(logger.log()).toBe("Dummy logger");
+      expect(logger.success()).toBe("Dummy logger");
+      expect(logger.warn()).toBe("Dummy logger");
+    });
+
+    test("overrides current logger", async () => {
+      expect.hasAssertions();
+
+      jest
+        .spyOn(global.console, "info")
+        .mockImplementation(() => "Mocked Console");
+
+      Logger();
+      expect(global.logger).toBeDefined();
+
+      const logger = Logger(require.resolve("../__data__/dummy_logger"));
+
+      expect(logger.info()).toBe("Dummy logger");
     });
   });
 });
