@@ -20,6 +20,12 @@ jest.mock("@graphql-markdown/utils", () => {
     escapeMDX: jest.fn(),
     pathUrl: { join: posix.join },
     isEmpty: jest.fn(),
+  };
+});
+import * as Utils from "@graphql-markdown/utils";
+
+jest.mock("@graphql-markdown/graphql", () => {
+  return {
     getConstDirectiveMap: jest.fn(),
     getTypeName: jest.fn(),
     hasDirective: jest.fn(),
@@ -33,7 +39,7 @@ jest.mock("@graphql-markdown/utils", () => {
     isUnionType: jest.fn(),
   };
 });
-import * as Utils from "@graphql-markdown/utils";
+import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
@@ -139,7 +145,7 @@ describe("Printer", () => {
   beforeEach(() => {
     Printer.options = undefined;
     jest
-      .spyOn(Utils, "getTypeName")
+      .spyOn(GraphQL, "getTypeName")
       .mockImplementation((value) => value as string);
   });
 
@@ -331,7 +337,7 @@ describe("Printer", () => {
       ({ type, printCode, name, guard }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Utils, guard).mockReturnValue(true);
+        jest.spyOn(GraphQL, guard).mockReturnValue(true);
         jest.spyOn(GraphQLPrinter, printCode).mockReturnValue(name);
 
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
@@ -370,7 +376,7 @@ describe("Printer", () => {
       ({ type, printMeta, name, guard }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Utils, guard).mockReturnValue(true);
+        jest.spyOn(GraphQL, guard).mockReturnValue(true);
         const spy = jest.spyOn(GraphQLPrinter, printMeta).mockReturnValue(name);
 
         Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
@@ -436,7 +442,7 @@ describe("Printer", () => {
 
     test("returns undefined if matches skipDocDirective", () => {
       expect.hasAssertions();
-      jest.spyOn(Utils, "hasDirective").mockReturnValue(true);
+      jest.spyOn(GraphQL, "hasDirective").mockReturnValue(true);
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();

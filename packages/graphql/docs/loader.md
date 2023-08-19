@@ -1,4 +1,4 @@
-# Module: graphql/loader
+# Module: loader
 
 Library for GraphQL schema loading and `loaders` config processing.
 
@@ -10,7 +10,7 @@ Library for GraphQL schema loading and `loaders` config processing.
 getDocumentLoaders(loadersList): Promise< Maybe< LoadSchemaOptions > >
 ```
 
-Asynchronously returns a valid loaders list for [loadSchema](graphql_loader.md#loadschema) based on the plugin config.
+Asynchronously returns a valid loaders list for [loadSchema](loader.md#loadschema) based on the plugin config.
 Import each loader package, and instantiate a loader object.
 
 #### Parameters
@@ -48,7 +48,7 @@ const schema = await loadSchema("schema.graphql", {
 
 #### Defined In
 
-[packages/utils/src/graphql/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/loader.ts#L106)
+[packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
 ***
 
@@ -88,4 +88,4 @@ const schema = await loadSchema("schema.graphql", {
 
 #### Defined In
 
-[packages/utils/src/graphql/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/loader.ts#L41)
+[packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L41)

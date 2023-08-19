@@ -29,6 +29,7 @@ module.exports = {
     projectConfig("core"),
     projectConfig("diff"),
     projectConfig("docusaurus"),
+    projectConfig("graphql"),
     projectConfig("helpers"),
     projectConfig("logger"),
     projectConfig("printer-legacy"),

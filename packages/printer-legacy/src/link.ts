@@ -25,9 +25,9 @@ import {
   isOperation,
   isScalarType,
   isUnionType,
-  slugify,
-  pathUrl,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
+
+import { slugify, pathUrl } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";

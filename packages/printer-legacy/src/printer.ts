@@ -31,8 +31,9 @@ import {
   isOperation,
   isScalarType,
   isUnionType,
-  pathUrl,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
+
+import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
 import { printDescription } from "./common";

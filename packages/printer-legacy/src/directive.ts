@@ -7,7 +7,7 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { getConstDirectiveMap } from "@graphql-markdown/utils";
+import { getConstDirectiveMap } from "@graphql-markdown/graphql";
 
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";

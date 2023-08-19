@@ -1,6 +1,6 @@
 import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
 
-import { getTypeName } from "@graphql-markdown/utils";
+import { getTypeName } from "@graphql-markdown/graphql";
 
 import { MARKDOWN_EOP } from "../const/strings";
 import { SectionLevels } from "../const/options";

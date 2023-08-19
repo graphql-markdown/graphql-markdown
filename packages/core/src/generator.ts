@@ -12,7 +12,7 @@ import {
   getGroups,
   getSchemaMap,
   loadSchema,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 
 import { Renderer } from "./renderer";
 import { hasChanges } from "./diff";

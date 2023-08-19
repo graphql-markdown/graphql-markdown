@@ -1,6 +1,6 @@
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
-import { getTypeName, getFields } from "@graphql-markdown/utils";
+import { getTypeName, getFields } from "@graphql-markdown/graphql";
 
 import { printSection, printMetadataSection } from "../section";
 import { printCodeField } from "../code";

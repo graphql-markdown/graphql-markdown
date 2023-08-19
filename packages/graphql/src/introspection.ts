@@ -28,7 +28,8 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { convertArrayToMapObject } from "../array";
+import { convertArrayToMapObject } from "@graphql-markdown/utils";
+
 import { instanceOf } from "./guard";
 
 export { getDirectiveValues, getNamedType, printSchema } from "graphql";

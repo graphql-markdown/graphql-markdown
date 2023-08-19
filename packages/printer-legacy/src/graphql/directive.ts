@@ -5,7 +5,7 @@ import type {
   MDXString,
 } from "@graphql-markdown/types";
 
-import { getTypeName } from "@graphql-markdown/utils";
+import { getTypeName } from "@graphql-markdown/graphql";
 
 import { printMetadataSection } from "../section";
 import { printCodeArguments } from "../code";

@@ -1,4 +1,4 @@
-# Module: graphql/group
+# Module: group
 
 Library supporting `groupByDirective` for grouping GraphQL schema entities.
 
@@ -70,7 +70,7 @@ getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "comm
 
 #### Defined In
 
-[packages/utils/src/graphql/group.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/group.ts#L158)
+[packages/graphql/src/group.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L158)
 
 ***
 
@@ -86,7 +86,7 @@ Parses a GraphQL schema to build a map of entities with matching `groupByDirecti
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `schemaMap` | `SchemaMap` | the GraphQL schema map returned by [getSchemaMap](graphql_introspection.md#getschemamap) |
+| `schemaMap` | `SchemaMap` | the GraphQL schema map returned by [getSchemaMap](introspection.md#getschemamap) |
 | `groupByDirective` | `Maybe`\< `GroupByDirectiveOptions` \> | the `groupByDirective` option. |
 
 #### Returns
@@ -153,4 +153,4 @@ const groupsMap = getGroups(schemaMap, groupOptions);
 
 #### Defined In
 
-[packages/utils/src/graphql/group.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/group.ts#L84)
+[packages/graphql/src/group.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L84)

@@ -12,11 +12,12 @@ import type {
 
 import { basename, join, relative, normalize } from "node:path";
 
+import { isDeprecated } from "@graphql-markdown/graphql";
+
 import {
   copyFile,
   ensureDir,
   fileExists,
-  isDeprecated,
   pathUrl,
   prettifyJavascript,
   prettifyMarkdown,

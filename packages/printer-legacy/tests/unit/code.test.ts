@@ -5,7 +5,7 @@ import {
   GraphQLString,
 } from "graphql";
 
-jest.mock("@graphql-markdown/utils", () => {
+jest.mock("@graphql-markdown/graphql", () => {
   return {
     getFormattedDefaultValue: jest.fn((type) => type?.defaultValue),
     getTypeName: jest.fn((t) => t.name ?? t.toString()),

@@ -5,12 +5,9 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import {
-  isDeprecated,
-  getConstDirectiveMap,
-  isEmpty,
-  escapeMDX,
-} from "@graphql-markdown/utils";
+import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
+
+import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
 import { getCustomDirectiveResolver } from "./directive";
 

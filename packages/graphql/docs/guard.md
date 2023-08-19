@@ -1,4 +1,4 @@
-# Module: graphql/guard
+# Module: guard
 
 Custom GraphQL type guards and property guards.
 
@@ -31,7 +31,7 @@ Checks if a GraphQL named type is of generic type `T`.
 
 #### Defined In
 
-[packages/utils/src/graphql/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/guard.ts#L52)
+[packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L52)
 
 ***
 
@@ -61,7 +61,7 @@ Checks if a GraphQL named type is deprecated.
 
 #### Defined In
 
-[packages/utils/src/graphql/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/guard.ts#L70)
+[packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L70)
 
 ***
 
@@ -85,7 +85,7 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 #### Defined In
 
-[packages/utils/src/graphql/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/guard.ts#L33)
+[packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L33)
 
 ***
 
@@ -109,4 +109,4 @@ Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
 
 #### Defined In
 
-[packages/utils/src/graphql/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/guard.ts#L85)
+[packages/graphql/src/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L85)

@@ -4,17 +4,10 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import type { GraphQLSchema } from "graphql";
 import { buildSchema, GraphQLObjectType } from "graphql";
 
-import {
-  getOperation,
-  getTypeFromSchema,
-} from "../../../src/graphql/introspection";
-import {
-  isDeprecated,
-  isOperation,
-  isGraphQLFieldType,
-} from "../../../src/graphql/guard";
+import { getOperation, getTypeFromSchema } from "../../src/introspection";
+import { isDeprecated, isOperation, isGraphQLFieldType } from "../../src/guard";
 
-const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 
 describe("graphql", () => {
   let schema: GraphQLSchema;
