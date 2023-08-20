@@ -8,7 +8,7 @@ import type {
   GraphQLOperationType,
 } from "@graphql-markdown/types";
 
-import { getGroups, getGroupName } from "../../../src/graphql/group";
+import { getGroups, getGroupName } from "../../src/group";
 
 describe("group-info", () => {
   const schema = buildSchema(`

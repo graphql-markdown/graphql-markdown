@@ -6,6 +6,12 @@ jest.mock("@graphql-markdown/utils", () => {
     escapeMDX: jest.fn((t) => t),
     pathUrl: jest.fn(),
     isEmpty: jest.fn(() => false),
+  };
+});
+import * as Utils from "@graphql-markdown/utils";
+
+jest.mock("@graphql-markdown/graphql", () => {
+  return {
     isNonNullType: jest.fn(),
     isListType: jest.fn(),
     isOperation: jest.fn(),
@@ -21,7 +27,7 @@ jest.mock("@graphql-markdown/utils", () => {
     getConstDirectiveMap: jest.fn(),
   };
 });
-import * as Utils from "@graphql-markdown/utils";
+import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/link", () => {
   return {
@@ -50,7 +56,7 @@ describe("badge", () => {
     test("returns a MDX string of Badge components", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
       jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
       const badges = Badge.printBadges(
@@ -100,7 +106,7 @@ describe("badge", () => {
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils, "isNonNullType").mockReturnValueOnce(true);
+      jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
 
       const type = {};
 
@@ -114,7 +120,7 @@ describe("badge", () => {
     test("return list badge is type is list", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils, "isListType").mockReturnValueOnce(true);
+      jest.spyOn(GraphQL, "isListType").mockReturnValueOnce(true);
 
       const type = {};
 

@@ -33,6 +33,15 @@ jest.mock("@graphql-markdown/utils", () => {
 });
 import * as Utils from "@graphql-markdown/utils";
 
+jest.mock("@graphql-markdown/graphql", () => {
+  return {
+    __esModule: true,
+    ...jest.requireActual("@graphql-markdown/graphql"),
+    isDeprecated: jest.fn(),
+  };
+});
+import * as GraphQL from "@graphql-markdown/graphql";
+
 import { Renderer } from "../../src/renderer";
 import { DEFAULT_OPTIONS } from "../../src/config";
 
@@ -380,7 +389,7 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
         });
-        jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -407,7 +416,7 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
         });
-        jest.spyOn(Utils, "isDeprecated").mockReturnValue(false);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -428,7 +437,7 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
         });
-        jest.spyOn(Utils, "isDeprecated").mockReturnValue(false);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -452,7 +461,7 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.spyOn(Utils, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,

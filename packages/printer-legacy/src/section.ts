@@ -10,7 +10,7 @@ import {
   isGraphQLFieldType,
   hasDirective,
   isDeprecated,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";

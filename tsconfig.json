@@ -5,6 +5,7 @@
     { "path": "packages/core" },
     { "path": "packages/diff" },
     { "path": "packages/docusaurus" },
+    { "path": "packages/graphql" },
     { "path": "packages/helpers" },
     { "path": "packages/logger" },
     { "path": "packages/printer-legacy" },

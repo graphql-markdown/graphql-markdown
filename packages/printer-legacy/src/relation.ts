@@ -14,7 +14,7 @@ import {
   getSchemaMap,
   isNamedType,
   isOperation,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 
 import { getRelationLink } from "./link";
 import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";

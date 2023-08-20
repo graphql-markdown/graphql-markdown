@@ -1,4 +1,4 @@
-# Module: graphql/relation
+# Module: relation
 
 Library supporting `relatedTypeSection` for displaying relations between GraphQL schema entities.
 
@@ -21,7 +21,7 @@ Returns a map of fields and arguments where the GraphQL schema type matches the 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `type` | `unknown` | the GraphQL schema type being processed. |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](graphql_introspection.md#getschemamap)). |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -52,7 +52,7 @@ Returns a map of types (unions or interfaces) where the GraphQL schema type is i
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `type` | `unknown` | the GraphQL schema type being processed. |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](graphql_introspection.md#getschemamap)). |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -83,7 +83,7 @@ Returns a map of interfaces where the GraphQL schema type is extended.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `type` | `unknown` | the GraphQL schema type being processed. |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](graphql_introspection.md#getschemamap)). |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -114,7 +114,7 @@ Returns a map of operations (queries, mutations, subscriptions) where the GraphQ
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `type` | `unknown` | the GraphQL schema type being processed. |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](graphql_introspection.md#getschemamap)). |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -145,7 +145,7 @@ Returns a map of unions where the GraphQL schema type is part of it.
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
 | `type` | `unknown` | the GraphQL schema type being processed. |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](graphql_introspection.md#getschemamap)). |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 

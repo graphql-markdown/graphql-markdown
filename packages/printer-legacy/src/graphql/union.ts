@@ -5,7 +5,7 @@ import type {
   GraphQLObjectType,
 } from "@graphql-markdown/types";
 
-import { isUnionType, getTypeName } from "@graphql-markdown/utils";
+import { isUnionType, getTypeName } from "@graphql-markdown/graphql";
 
 import { printSection } from "../section";
 

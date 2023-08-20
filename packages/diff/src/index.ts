@@ -11,12 +11,9 @@ import type {
   GraphQLSchema,
 } from "@graphql-markdown/types";
 
-import {
-  fileExists,
-  readFile,
-  saveFile,
-  printSchema,
-} from "@graphql-markdown/utils";
+import { printSchema } from "@graphql-markdown/graphql";
+
+import { fileExists, readFile, saveFile } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema" as const;
 export const SCHEMA_REF = "schema.graphql" as const;

@@ -1,10 +1,10 @@
 import type { GraphQLSchema } from "graphql";
 import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql";
 
-jest.mock("@graphql-markdown/utils", () => {
+jest.mock("@graphql-markdown/graphql", () => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
-    isDeprecated: jest.fn((t: any) => "deprecationReason" in t), // eslint-disable-line @typescript-eslint/no-explicit-any
+    ...jest.requireActual("@graphql-markdown/graphql"),
+    isDeprecated: jest.fn((T: any) => "deprecationReason" in T), // eslint-disable-line @typescript-eslint/no-explicit-any
   };
 });
 

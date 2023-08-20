@@ -4,7 +4,7 @@ import { buildSchema } from "graphql";
 
 import type { DirectiveName, CustomDirective } from "@graphql-markdown/types";
 
-import * as Directives from "../../../src/graphql/directive";
+import * as Directives from "../../src/directive";
 const {
   getConstDirectiveMap,
   getCustomDirectiveOptions,

@@ -8,8 +8,8 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import * as Utils from "@graphql-markdown/utils";
-jest.mock("@graphql-markdown/utils", () => {
+import * as GraphQL from "@graphql-markdown/graphql";
+jest.mock("@graphql-markdown/graphql", () => {
   return {
     getCustomDirectives: jest.fn(),
     getDocumentLoaders: jest.fn(),
@@ -77,16 +77,16 @@ describe("generator", () => {
     test("passes options to Printer and Renderer", async () => {
       jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
       jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
       jest
-        .spyOn(Utils, "loadSchema")
+        .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
       jest
-        .spyOn(Utils, "getSchemaMap")
+        .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest.spyOn(Utils, "getGroups").mockReturnValueOnce(undefined);
-      jest.spyOn(Utils, "getCustomDirectives").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
 
       const getPrinterSpy = jest
         .spyOn(CorePrinter, "getPrinter")
@@ -127,16 +127,16 @@ describe("generator", () => {
 
       jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
       jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
       jest
-        .spyOn(Utils, "loadSchema")
+        .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
       jest
-        .spyOn(Utils, "getSchemaMap")
+        .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest.spyOn(Utils, "getGroups").mockReturnValueOnce(undefined);
-      jest.spyOn(Utils, "getCustomDirectives").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
       jest
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
@@ -164,10 +164,10 @@ describe("generator", () => {
       expect.assertions(3);
 
       const getDocumentLoadersSpy = jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce(undefined);
       const loggerSpy = jest.spyOn(console, "error");
-      const loadSchemaSpy = jest.spyOn(Utils, "loadSchema");
+      const loadSchemaSpy = jest.spyOn(GraphQL, "loadSchema");
 
       await generateDocFromSchema({} as unknown as GeneratorOptions);
 
@@ -182,13 +182,13 @@ describe("generator", () => {
       expect.assertions(2);
 
       jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
       jest
-        .spyOn(Utils, "loadSchema")
+        .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
       jest
-        .spyOn(Utils, "getSchemaMap")
+        .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
       const loggerSpy = jest.spyOn(console, "info");
       const hasChangesSpy = jest
@@ -207,13 +207,13 @@ describe("generator", () => {
       expect.assertions(1);
 
       jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
       jest
-        .spyOn(Utils, "loadSchema")
+        .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
       jest
-        .spyOn(Utils, "getSchemaMap")
+        .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
       const hasChangesSpy = jest.spyOn(CoreDiff, "hasChanges");
 
@@ -229,13 +229,13 @@ describe("generator", () => {
       expect.assertions(2);
 
       jest
-        .spyOn(Utils, "getDocumentLoaders")
+        .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
       jest
-        .spyOn(Utils, "loadSchema")
+        .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
       jest
-        .spyOn(Utils, "getSchemaMap")
+        .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
       const loggerSpy = jest.spyOn(console, "info");
       const hasChangesSpy = jest

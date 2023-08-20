@@ -1,6 +1,6 @@
 import { buildSchema } from "graphql";
 
-import { getSchemaMap } from "../../../src/graphql/introspection";
+import { getSchemaMap } from "../../src/introspection";
 
 import {
   getRelationOfField,
@@ -8,7 +8,7 @@ import {
   getRelationOfInterface,
   getRelationOfReturn,
   getRelationOfUnion,
-} from "../../../src/graphql/relation";
+} from "../../src/relation";
 
 describe("relation", () => {
   describe("getRelationOfInterface()", () => {

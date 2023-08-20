@@ -5,7 +5,9 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { slugify, getNamedType } from "@graphql-markdown/utils";
+import { getNamedType } from "@graphql-markdown/graphql";
+
+import { slugify } from "@graphql-markdown/utils";
 
 export const getGroup = (
   type: unknown,

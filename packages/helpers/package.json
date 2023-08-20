@@ -55,7 +55,7 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "^1.5.1"
+    "@graphql-markdown/graphql": "^1.0.0"
   },
   "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"

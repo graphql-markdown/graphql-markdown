@@ -8,13 +8,14 @@ import type {
   SchemaEntity,
 } from "@graphql-markdown/types";
 
+import { escapeMDX } from "@graphql-markdown/utils";
+
 import {
-  escapeMDX,
   getNamedType,
   isDeprecated,
   isListType,
   isNonNullType,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 
 import { getLinkCategory } from "./link";
 import { getGroup } from "./group";

@@ -34,7 +34,7 @@ await ensureDir("./.temp/local")
 
 #### Defined In
 
-[packages/utils/src/fs.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L30)
+[fs.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L30)
 
 ***
 
@@ -70,7 +70,7 @@ await fileExists("./.temp/local")
 
 #### Defined In
 
-[packages/utils/src/fs.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L54)
+[fs.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L54)
 
 ***
 
@@ -113,4 +113,4 @@ await saveFile("./.temp/local.md", "foobar")
 
 #### Defined In
 
-[packages/utils/src/fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)
+[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)

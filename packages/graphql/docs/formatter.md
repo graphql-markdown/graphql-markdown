@@ -1,4 +1,4 @@
-# Module: graphql/formatter
+# Module: formatter
 
 Internal library of helpers for formatting GraphQL values.
 
@@ -35,4 +35,4 @@ a printable formatted value.
 
 #### Defined In
 
-[packages/utils/src/graphql/formatter.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/graphql/formatter.ts#L32)
+[packages/graphql/src/formatter.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L32)

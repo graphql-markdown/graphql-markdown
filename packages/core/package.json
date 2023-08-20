@@ -62,8 +62,9 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/utils": "^1.5.1",
-    "@graphql-markdown/logger": "^1.0.0"
+    "@graphql-markdown/graphql": "^1.0.0",
+    "@graphql-markdown/logger": "^1.0.0",
+    "@graphql-markdown/utils": "^1.5.1"
   },
   "peerDependencies": {
     "@graphql-markdown/diff": "^1.0.14",

@@ -8,7 +8,7 @@ import {
   GraphQLString,
 } from "graphql";
 
-import { getFormattedDefaultValue } from "../../../src/graphql/formatter";
+import { getFormattedDefaultValue } from "../../src/formatter";
 
 describe("formatter", () => {
   describe("getFormattedDefaultValue()", () => {

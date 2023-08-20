@@ -13,5 +13,5 @@
     }
   },
 
-  "references": [{ "path": "../utils" }]
+  "references": [{ "path": "../graphql" }, { "path": "../utils" }]
 }

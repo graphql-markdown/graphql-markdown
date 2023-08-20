@@ -9,7 +9,7 @@ import {
   getTypeName,
   isDeprecated,
   hasDirective,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";

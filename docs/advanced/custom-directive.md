@@ -125,14 +125,14 @@ plugins: [
 
 ## Helpers
 
-The packages `@graphql-markdown/helpers` and `@graphql-markdown/utils` provide few helper functions to quick start:
+The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide few helper functions to quick start:
 
 ```ts
 import { directiveDescriptor, tagDescriptor } from "@graphql-markdown/helpers";
 import {
   getTypeDirectiveArgValue,
   getTypeDirectiveValues,
-} from "@graphql-markdown/utils";
+} from "@graphql-markdown/graphql";
 ```
 
 :::info
@@ -150,7 +150,7 @@ npm i @graphql-markdown/helpers
 
 - <code><b>tagDescriptor</b>(directive: GraphQLDirective, type?: unknown, classname?: string): Badge</code> returns the directive badge, with `classname` defaulted to `badge--secondary`.
 
-### `@graphql-markdown/utils`
+### `@graphql-markdown/graphql`
 
 - <code><b>getTypeDirectiveArgValue</b>(directive: GraphQLDirective, node: unknown, argName: string): Record&lt;string, unknown&gt; | undefined</code> returns the value of a specific directive argument by name.
 

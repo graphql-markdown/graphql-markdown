@@ -1,16 +1,16 @@
 {
-  "name": "@graphql-markdown/printer-legacy",
+  "name": "@graphql-markdown/graphql",
   "homepage": "https://graphql-markdown.github.io",
-  "description": "GraphQL-Markdown legacy Docusaurus printer.",
+  "description": "GraphQL-Markdown GraphQL utilities.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.4.3",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "graphql-markdown/graphql-markdown",
-    "directory": "packages/utils"
+    "directory": "packages/graphql"
   },
   "author": {
     "name": "Gregory Heitz"
@@ -52,10 +52,10 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "docs": "typedoc"
   },
   "dependencies": {
-    "@graphql-markdown/graphql": "^1.0.0",
     "@graphql-markdown/utils": "^1.5.1"
   },
   "devDependencies": {

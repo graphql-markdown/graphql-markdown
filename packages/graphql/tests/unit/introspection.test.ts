@@ -32,19 +32,17 @@ import {
   getTypeFromSchema,
   getTypeName,
   hasDirective,
-} from "../../../src/graphql/introspection";
-import { loadSchema } from "../../../src/graphql/loader";
+} from "../../src/introspection";
+import { loadSchema } from "../../src/loader";
 
-const SCHEMA_FILE = require.resolve("../../__data__/tweet.graphql");
+const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../../__data__/schema_with_custom_root_types.graphql",
+  "../__data__/schema_with_custom_root_types.graphql",
 );
 const INTROSPECTION_SCHEMA_FILE = require.resolve(
-  "../../__data__/introspection.json",
+  "../__data__/introspection.json",
 );
-const SCHEMA_ISSUE_802_FILE = require.resolve(
-  "../../__data__/schema_802.graphql",
-);
+const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
 
 describe("introspection", () => {
   let schema: GraphQLSchema;

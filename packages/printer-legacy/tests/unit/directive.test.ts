@@ -12,13 +12,21 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
+    // ...jest.requireActual("@graphql-markdown/utils"),
     isEmpty: jest.fn(),
     getConstDirectiveMap: jest.fn(),
     escapeMDX: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
+
+jest.mock("@graphql-markdown/graphql", () => {
+  return {
+    ...jest.requireActual("@graphql-markdown/graphql"),
+    getConstDirectiveMap: jest.fn(),
+  };
+});
+import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/link", () => {
   return {
@@ -131,7 +139,7 @@ describe("directive", () => {
     test("returns empty string when config is not set", () => {
       expect.assertions(1);
 
-      jest.spyOn(Utils, "getConstDirectiveMap").mockReturnValue(undefined);
+      jest.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(undefined);
 
       expect(
         printCustomDirectives(type, {} as unknown as PrintTypeOptions),
@@ -145,7 +153,7 @@ describe("directive", () => {
         testA: options.customDirectives["testA" as DirectiveName],
       };
       jest
-        .spyOn(Utils, "getConstDirectiveMap")
+        .spyOn(GraphQL, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest
         .spyOn(Link, "printLink")
@@ -169,7 +177,7 @@ describe("directive", () => {
         testA: options.customDirectives["noDescriptor" as DirectiveName],
       };
       jest
-        .spyOn(Utils, "getConstDirectiveMap")
+        .spyOn(GraphQL, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest
         .spyOn(Link, "printLink")
@@ -198,7 +206,7 @@ describe("directive", () => {
       };
 
       jest
-        .spyOn(Utils, "getConstDirectiveMap")
+        .spyOn(GraphQL, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
 
@@ -225,7 +233,7 @@ describe("directive", () => {
         testA: options.customDirectives["testA" as DirectiveName],
       };
       jest
-        .spyOn(Utils, "getConstDirectiveMap")
+        .spyOn(GraphQL, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
       jest

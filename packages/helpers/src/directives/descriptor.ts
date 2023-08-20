@@ -1,6 +1,6 @@
 import type { GraphQLDirective } from "@graphql-markdown/types";
 
-import { getTypeDirectiveValues } from "@graphql-markdown/utils";
+import { getTypeDirectiveValues } from "@graphql-markdown/graphql";
 
 import { interpolate } from "../utils/interpolate";
 
