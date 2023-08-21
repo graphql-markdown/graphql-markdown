@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.6.4",
+  "version": "1.7.0-next.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -62,18 +62,18 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/graphql": "^1.0.0",
-    "@graphql-markdown/logger": "^1.0.0",
-    "@graphql-markdown/utils": "^1.5.1"
+    "@graphql-markdown/graphql": "^1.0.0-next.0",
+    "@graphql-markdown/logger": "^1.0.0-next.0",
+    "@graphql-markdown/utils": "^1.6.0-next.0"
   },
   "peerDependencies": {
-    "@graphql-markdown/diff": "^1.0.14",
-    "@graphql-markdown/helpers": "^1.0.0",
-    "@graphql-markdown/printer-legacy": "^1.4.3",
+    "@graphql-markdown/diff": "^1.1.0-next.0",
+    "@graphql-markdown/helpers": "^1.0.0-next.0",
+    "@graphql-markdown/printer-legacy": "^1.5.0-next.0",
     "graphql-config": "^5.0.2"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.0.0"
+    "@graphql-markdown/types": "^1.0.0-next.0"
   },
   "peerDependenciesMeta": {
     "@graphql-markdown/printer-legacy": {

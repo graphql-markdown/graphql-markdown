@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/types",
-  "version": "1.0.0",
+  "version": "1.0.0-next.0",
   "description": "Common types for @graphql-markdown packages",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
     "types",
     "typescript"
   ],
-  "author": "Greg Heitz",
+  "author": "Gregory Heitz",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
