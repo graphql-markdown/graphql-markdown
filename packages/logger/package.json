@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "graphql-markdown/graphql-markdown",
+    "url": "git+https://github.com/graphql-markdown/graphql-markdown",
     "directory": "packages/logger"
   },
   "author": {
