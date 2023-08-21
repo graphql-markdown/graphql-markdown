@@ -4,7 +4,7 @@
   "description": "Common types for @graphql-markdown packages",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/graphql-markdown/graphql-markdown",
+    "url": "git+https://github.com/graphql-markdown/graphql-markdown.git",
     "directory": "packages/types"
   },
   "keywords": [
