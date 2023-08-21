@@ -63,7 +63,7 @@ export function getObjPath(
 
 export function interpolate(
   template: string,
-  variables: Maybe<Record<string, unknown> & { description: string }>,
+  variables: Maybe<Record<string, unknown> & { description?: string }>,
   fallback?: string,
 ): string {
   const regex = /\${[^{]+}/g;
