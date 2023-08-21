@@ -150,6 +150,7 @@ describe("Printer", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("init()", () => {

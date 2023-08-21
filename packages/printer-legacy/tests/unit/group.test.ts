@@ -14,6 +14,7 @@ import { getGroup } from "../../src/group";
 describe("group", () => {
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("getGroup()", () => {

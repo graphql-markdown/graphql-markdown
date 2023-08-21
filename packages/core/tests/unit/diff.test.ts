@@ -16,6 +16,7 @@ describe("diff", () => {
 
     afterEach(() => {
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     test.each([[undefined], [null]])(

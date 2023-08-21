@@ -44,6 +44,7 @@ describe("relation", () => {
   describe("printRelationOf()", () => {
     afterAll(() => {
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     test("returns empty string if type is undefined", () => {

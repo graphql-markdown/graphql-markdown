@@ -31,6 +31,7 @@ describe("lib", () => {
     afterEach(() => {
       vol.reset();
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     describe("checkSchemaChanges()", () => {

@@ -98,6 +98,7 @@ describe("directive", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("printCustomDirective()", () => {

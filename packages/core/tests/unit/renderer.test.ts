@@ -76,6 +76,7 @@ describe("renderer", () => {
 
     afterEach(() => {
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     describe("renderTypeEntities()", () => {

@@ -3,6 +3,7 @@ import Logger from "../../src";
 describe("logger", () => {
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
     global.logger = undefined;
   });
 

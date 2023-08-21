@@ -68,6 +68,7 @@ describe("generator", () => {
 
     afterEach(() => {
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     afterAll(() => {
