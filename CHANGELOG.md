@@ -1,15 +1,36 @@
+<a name="1.21.0-next.0"></a>
+# [1.21.0-next.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.0-next.0) - 21 Aug 2023
+
+This is a pre-release following  the code base migration from JS to TS.
+
+## Breaking change
+- Custom directive helpers have been moved to dedicated packages, see docs.
+
+## Patch change
+- Helper `directiveDescriptor` now supports `description` placeholder, where `description` is the default directive description.
+
+## Technical change
+ - Typing is available in a dedicated package `@graphql-markdown/types`.
+ - Modules `helpers`, `graphql` and `logger` have been extracted from `@graphql-markdown/utils` into their own package.
+ - `Logger` has now a single method called `Logger()`.
+ - TS API is getting documented, see `API` in our docs.
+ - More and better tests.
+
+[Changes][1.21.0-next.0]
+
+
 <a name="1.20.4"></a>
 # [1.20.4](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.4) - 07 Aug 2023
 
+:technologist: Technical release to freeze the last JS changes before the migration of the code to TS.
+
 ## What's Changed
 
-:technologist: Technical release to freeze latest JS changes before migration of the code to TS.
-
-### @graphql-markdown/docusaurus@1.20.3
+### @graphql-markdown/docusaurus@1.20.4
 * :package: bump dependency @graphql-markdown/core to 1.6.4
 
 ### @graphql-markdown/core@1.6.4
-* :bug: fix generateDocFromSchema generator.js by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/917
+* :bug: fix typo in generateDocFromSchema (no impact) by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/917
 
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.3...1.20.4
@@ -1491,6 +1512,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.21.0-next.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.4...1.21.0-next.0
 [1.20.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.3...1.20.4
 [1.20.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.2...1.20.3
 [1.20.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.1...1.20.2
