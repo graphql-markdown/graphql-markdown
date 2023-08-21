@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.4.3",
+  "version": "1.5.0-next.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -55,11 +55,11 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/graphql": "^1.0.0",
-    "@graphql-markdown/utils": "^1.5.1"
+    "@graphql-markdown/graphql": "^1.0.0-next.0",
+    "@graphql-markdown/utils": "^1.6.0-next.0"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.0.0"
+    "@graphql-markdown/types": "^1.0.0-next.0"
   },
   "directories": {
     "test": "tests"
