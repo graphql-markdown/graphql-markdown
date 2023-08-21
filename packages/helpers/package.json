@@ -52,7 +52,8 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "docs": "typedoc"
   },
   "dependencies": {
     "@graphql-markdown/graphql": "^1.0.0"

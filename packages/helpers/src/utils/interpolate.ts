@@ -1,3 +1,9 @@
+/**
+ * Helpers utility functions library.
+ *
+ * @packageDocumentation
+ */
+
 import type { Maybe } from "@graphql-markdown/types";
 import { isEmpty } from "@graphql-markdown/utils";
 
@@ -10,6 +16,8 @@ import { isEmpty } from "@graphql-markdown/utils";
  * @param obj - the key/value record object.
  * @param fallback - optional fallback value to be returned if the path cannot be resolved.
  *
+ * @returns the property value if the path is resolved, else returns the `fallback` value.
+ *
  * @example
  * ```js
  * import { getObjPath } from '@graphql-markdown/utils/object';
@@ -18,8 +26,6 @@ import { isEmpty } from "@graphql-markdown/utils";
  *
  * getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
  * ```
- *
- * @returns the property value if the path is resolved, else returns the `fallback` value.
  *
  */
 export function getObjPath(
@@ -37,15 +43,27 @@ export function getObjPath(
 }
 
 /**
- * interpolate
+ * Interpolate a template literal-like string.
  *
- * @internal
+ * @param template - a string template literal-like.
+ * @param variables - a record map of values with variable's name as key and `description` as directive's description.
+ * @param fallback - optional fallback value if a variable cannot be substituted.
+ *
+ * @returns an interpolated new string from the template.
+ *
+ * @example
+ * ```js
+ * const values = { foo: 42, bar: { value: "test" } };
+ * const template = "${foo} is not ${bar.notfound}";
+ *
+ * interpolate(template, values, "fallback"); // Expected result: "42 is not fallback",
+ * ```
  *
  */
 
 export function interpolate(
   template: string,
-  variables: Maybe<Record<string, unknown>>,
+  variables: Maybe<Record<string, unknown> & { description: string }>,
   fallback?: string,
 ): string {
   const regex = /\${[^{]+}/g;
