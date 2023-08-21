@@ -22,11 +22,11 @@ This is an example on how to build a custom `tag` callback.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | `undefined` | the schema directive to parse. |
-| `type`? | `unknown` | `undefined` | the type being processed. |
-| `classname`? | `string` | `"badge--secondary"` | optional CSS classname, `"badge--secondary"` by default. |
+| Parameter    | Type               | Default value        | Description                                              |
+| :----------- | :----------------- | :------------------- | :------------------------------------------------------- |
+| `directive`  | `GraphQLDirective` | `undefined`          | the schema directive to parse.                           |
+| `type`?      | `unknown`          | `undefined`          | the type being processed.                                |
+| `classname`? | `string`           | `"badge--secondary"` | optional CSS classname, `"badge--secondary"` by default. |
 
 #### Returns
 
@@ -46,19 +46,22 @@ const directive = new GraphQLDirective({
   locations: [],
 });
 
-const type = new GraphQLScalarType<string>({
-  name: "FooBar",
-  astNode: {
-    kind: Kind.SCALAR_TYPE_DEFINITION,
-    name: { kind: Kind.NAME, value: "FooBar" },
-    directives: [
-      {
-        kind: Kind.DIRECTIVE,
-        name: { kind: Kind.NAME, value: "auth" },
-      },
-    ],
-  },
-});
+const type =
+  new GraphQLScalarType() <
+  string >
+  {
+    name: "FooBar",
+    astNode: {
+      kind: Kind.SCALAR_TYPE_DEFINITION,
+      name: { kind: Kind.NAME, value: "FooBar" },
+      directives: [
+        {
+          kind: Kind.DIRECTIVE,
+          name: { kind: Kind.NAME, value: "auth" },
+        },
+      ],
+    },
+  };
 
 directiveTag(directive, type);
 // Expected result: { text: "@auth", classname: "badge--secondary" }

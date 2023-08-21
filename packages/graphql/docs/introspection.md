@@ -21,17 +21,17 @@ see [getOperation](introspection.md#getoperation), [getFields](introspection.md#
 #### Type parameters
 
 | Parameter |
-| :------ |
-| `T` |
-| `V` |
+| :-------- |
+| `T`       |
+| `V`       |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `T` | the GraphQL schema type to parse. |
+| Parameter    | Type                | Description                                         |
+| :----------- | :------------------ | :-------------------------------------------------- |
+| `type`       | `T`                 | the GraphQL schema type to parse.                   |
 | `processor`? | (`fieldMap`) => `V` | optional callback function to parse the fields map. |
-| `fallback`? | `V` | optional fallback value, `undefined` if not set. |
+| `fallback`?  | `V`                 | optional fallback value, `undefined` if not set.    |
 
 #### Returns
 
@@ -43,7 +43,7 @@ a map of fields as k/v records, or `fallback` value if no fields available.
 
 [packages/graphql/src/introspection.ts:241](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L241)
 
-***
+---
 
 ### getDirective
 
@@ -55,9 +55,9 @@ Returns a schema entity's list of directives matching a defined set.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `entity` | `unknown` | a GraphQL schema entity. |
+| Parameter    | Type                                | Description                                    |
+| :----------- | :---------------------------------- | :--------------------------------------------- |
+| `entity`     | `unknown`                           | a GraphQL schema entity.                       |
 | `directives` | `Maybe`\< `string` \| `string`[] \> | a directive name or a list of directive names. |
 
 #### Returns
@@ -70,7 +70,7 @@ a list of GraphQL directives matching the set, else `false`.
 
 [packages/graphql/src/introspection.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L143)
 
-***
+---
 
 ### getFields
 
@@ -84,9 +84,9 @@ see [getSchemaMap](introspection.md#getschemamap)
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `unknown` | the GraphQL schema type to parse. |
+| Parameter | Type      | Description                       |
+| :-------- | :-------- | :-------------------------------- |
+| `type`    | `unknown` | the GraphQL schema type to parse. |
 
 #### Returns
 
@@ -98,7 +98,7 @@ a list of fields of type object.
 
 [packages/graphql/src/introspection.ts:306](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L306)
 
-***
+---
 
 ### getOperation
 
@@ -112,8 +112,8 @@ see [getSchemaMap](introspection.md#getschemamap)
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter        | Type      | Description                  |
+| :--------------- | :-------- | :--------------------------- |
 | `operationType`? | `unknown` | the operation type to parse. |
 
 #### Returns
@@ -126,7 +126,7 @@ a map of fields as k/v records.
 
 [packages/graphql/src/introspection.ts:282](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L282)
 
-***
+---
 
 ### getSchemaMap
 
@@ -139,9 +139,9 @@ This is the entry point for GraphQL-Markdown schema parsing features.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schema` | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema. |
+| Parameter | Type                         | Description       |
+| :-------- | :--------------------------- | :---------------- |
+| `schema`  | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema. |
 
 #### Returns
 
@@ -213,7 +213,7 @@ const schemaTypeMap = getSchemaMap(schema);
 
 [packages/graphql/src/introspection.ts:411](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L411)
 
-***
+---
 
 ### getTypeDirectiveArgValue
 
@@ -229,11 +229,11 @@ It calls [getTypeDirectiveValues](introspection.md#gettypedirectivevalues) and r
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | a GraphQL directive defined in the schema. |
-| `node` | `unknown` | - |
-| `argName` | `string` | the name of the GraphQL directive argument to fetch the value from. |
+| Parameter   | Type               | Description                                                         |
+| :---------- | :----------------- | :------------------------------------------------------------------ |
+| `directive` | `GraphQLDirective` | a GraphQL directive defined in the schema.                          |
+| `node`      | `unknown`          | -                                                                   |
+| `argName`   | `string`           | the name of the GraphQL directive argument to fetch the value from. |
 
 #### Returns
 
@@ -245,7 +245,7 @@ a record k/v with `argName` as key and the argument's value.
 
 [packages/graphql/src/introspection.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L184)
 
-***
+---
 
 ### getTypeDirectiveValues
 
@@ -257,10 +257,10 @@ Returns all directive's arguments' values linked to a GraphQL schema type.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter   | Type               | Description                                |
+| :---------- | :----------------- | :----------------------------------------- |
 | `directive` | `GraphQLDirective` | a GraphQL directive defined in the schema. |
-| `type` | `unknown` | the GraphQL schema type to parse. |
+| `type`      | `unknown`          | the GraphQL schema type to parse.          |
 
 #### Returns
 
@@ -272,7 +272,7 @@ a record k/v with arguments' name as keys and arguments' value.
 
 [packages/graphql/src/introspection.ts:207](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L207)
 
-***
+---
 
 ### getTypeFromSchema
 
@@ -286,15 +286,15 @@ When parsing the entities, internal GraphQL entities (starting with `__`) are ex
 #### Type parameters
 
 | Parameter |
-| :------ |
-| `T` |
+| :-------- |
+| `T`       |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schema` | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema. |
-| `type` | `unknown` | a GraphQL type, eg `GraphQLObjectType`. |
+| Parameter | Type                         | Description                             |
+| :-------- | :--------------------------- | :-------------------------------------- |
+| `schema`  | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema.                       |
+| `type`    | `unknown`                    | a GraphQL type, eg `GraphQLObjectType`. |
 
 #### Returns
 
@@ -310,7 +310,7 @@ a map of GraphQL named types for the matching GraphQL type, or undefined if no m
 
 [packages/graphql/src/introspection.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L58)
 
-***
+---
 
 ### getTypeName
 
@@ -322,10 +322,10 @@ Resolves the name of a GraphQL schema type.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `type` | `unknown` | `undefined` | - |
-| `defaultName` | `string` | `""` | optional fallback value if the name resolution fails. |
+| Parameter     | Type      | Default value | Description                                           |
+| :------------ | :-------- | :------------ | :---------------------------------------------------- |
+| `type`        | `unknown` | `undefined`   | -                                                     |
+| `defaultName` | `string`  | `""`          | optional fallback value if the name resolution fails. |
 
 #### Returns
 
@@ -337,7 +337,7 @@ the type's name, or `defaultName`.
 
 [packages/graphql/src/introspection.ts:327](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L327)
 
-***
+---
 
 ### hasAstNode
 
@@ -350,14 +350,14 @@ Type guard for type with an AST node property.
 #### Type parameters
 
 | Parameter |
-| :------ |
-| `T` |
+| :-------- |
+| `T`       |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `node` | `T` | a GraphQL schema named type. |
+| Parameter | Type | Description                  |
+| :-------- | :--- | :--------------------------- |
+| `node`    | `T`  | a GraphQL schema named type. |
 
 #### Returns
 
@@ -369,7 +369,7 @@ Type guard for type with an AST node property.
 
 [packages/graphql/src/introspection.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L100)
 
-***
+---
 
 ### hasDirective
 
@@ -381,9 +381,9 @@ Checks if a schema entity as a directive belonging to a defined set.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `entity` | `unknown` | a GraphQL schema entity. |
+| Parameter    | Type                                | Description                                    |
+| :----------- | :---------------------------------- | :--------------------------------------------- |
+| `entity`     | `unknown`                           | a GraphQL schema entity.                       |
 | `directives` | `Maybe`\< `string` \| `string`[] \> | a directive name or a list of directive names. |
 
 #### Returns

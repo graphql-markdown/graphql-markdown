@@ -15,8 +15,8 @@ Import each loader package, and instantiate a loader object.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter     | Type                        | Description                                       |
+| :------------ | :-------------------------- | :------------------------------------------------ |
 | `loadersList` | `Maybe`\< `LoaderOption` \> | the list of loaders defined in the plugin config. |
 
 #### Returns
@@ -32,7 +32,10 @@ an `Error` if no loader has been loaded, or if an error occurred while importing
 #### Example
 
 ```js
-import { getDocumentLoaders, loadSchema } from "@graphql-markdown/utils/graphql"
+import {
+  getDocumentLoaders,
+  loadSchema,
+} from "@graphql-markdown/utils/graphql";
 
 const loaderList = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
@@ -50,7 +53,7 @@ const schema = await loadSchema("schema.graphql", {
 
 [packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
-***
+---
 
 ### loadSchema
 
@@ -64,10 +67,10 @@ If `rootTypes` is set in the options, then the schema root types will be overrid
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schemaLocation` | `string` | the schema location pointer matching the loader. |
-| `options` | `BuildSchemaOptions` & `GraphQLParseOptions` & \{} & \{} & \{} & `Partial`\< `IExecutableSchemaDefinition`\< `any` \> \> & \{} & \{`rootTypes`: `Partial`\< `Record`\< `OperationTypeNode`, `string` \> \>;} | the schema `loaders`, and optional `rootTypes` override. |
+| Parameter        | Type                                                                                                                                                                                                         | Description                                              |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------- |
+| `schemaLocation` | `string`                                                                                                                                                                                                     | the schema location pointer matching the loader.         |
+| `options`        | `BuildSchemaOptions` & `GraphQLParseOptions` & \{} & \{} & \{} & `Partial`\< `IExecutableSchemaDefinition`\< `any` \> \> & \{} & \{`rootTypes`: `Partial`\< `Record`\< `OperationTypeNode`, `string` \> \>;} | the schema `loaders`, and optional `rootTypes` override. |
 
 #### Returns
 
@@ -78,7 +81,7 @@ a GraphQL schema.
 #### Example
 
 ```js
-import { loadSchema } from "@graphql-markdown/utils/graphql"
+import { loadSchema } from "@graphql-markdown/utils/graphql";
 
 const schema = await loadSchema("schema.graphql", {
   loaders: [new GraphQLFileLoader()],

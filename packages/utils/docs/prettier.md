@@ -14,10 +14,10 @@ Prettify a string using [prettier.format](https://prettier.io/docs/en/api#pretti
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `content` | `string` | the string to be prettified. |
-| `parser` | `string` | the `prettier` parser to use. |
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :---------------------------- |
+| `content` | `string` | the string to be prettified.  |
+| `parser`  | `string` | the `prettier` parser to use. |
 
 #### Returns
 
@@ -37,7 +37,7 @@ https://prettier.io/docs/en/options#parser for the list of parsers.
 
 [prettier.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L27)
 
-***
+---
 
 ### prettifyJavascript
 
@@ -49,8 +49,8 @@ Prettify a Javascript string using [prettify](prettier.md#prettify) and `babel` 
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type     | Description                  |
+| :-------- | :------- | :--------------------------- |
 | `content` | `string` | the string to be prettified. |
 
 #### Returns
@@ -71,7 +71,7 @@ Same as `prettify(content, "babel")`.
 
 [prettier.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L80)
 
-***
+---
 
 ### prettifyMarkdown
 
@@ -83,8 +83,8 @@ Prettify a Markdown string using [prettify](prettier.md#prettify) and `markdown`
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type     | Description                  |
+| :-------- | :------- | :--------------------------- |
 | `content` | `string` | the string to be prettified. |
 
 #### Returns

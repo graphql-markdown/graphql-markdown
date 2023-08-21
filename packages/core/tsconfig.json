@@ -12,7 +12,7 @@
   },
 
   "references": [
-    { "path": "../utils" }, 
+    { "path": "../utils" },
     { "path": "../logger" },
     { "path": "../graphql" },
     { "path": "../printer-legacy" } // needed for mutation tests only

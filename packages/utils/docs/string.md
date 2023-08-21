@@ -14,9 +14,9 @@ Returns a string in lowercase excepted for the 1st character capitalized using [
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
+| Parameter | Type                  | Description                   |
+| :-------- | :-------------------- | :---------------------------- |
+| `str`     | `Maybe`\< `string` \> | the string to be transformed. |
 
 #### Returns
 
@@ -37,7 +37,7 @@ capitalize("the quick Brown Fox");
 
 [string.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L184)
 
-***
+---
 
 ### escapeMDX
 
@@ -49,9 +49,9 @@ Returns a string with MDX special characters converted to HTML unicode using [to
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `unknown` | the string to be transformed. |
+| Parameter | Type      | Description                   |
+| :-------- | :-------- | :---------------------------- |
+| `str`     | `unknown` | the string to be transformed. |
 
 #### Returns
 
@@ -72,7 +72,7 @@ escapeMDX("{MDX} <special> characters");
 
 [string.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L140)
 
-***
+---
 
 ### firstUppercase
 
@@ -84,9 +84,9 @@ Returns a string with the 1st character in uppercase.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
+| Parameter | Type                  | Description                   |
+| :-------- | :-------------------- | :---------------------------- |
+| `str`     | `Maybe`\< `string` \> | the string to be transformed. |
 
 #### Returns
 
@@ -107,7 +107,7 @@ firstUppercase("the quick Brown Fox");
 
 [string.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L160)
 
-***
+---
 
 ### kebabCase
 
@@ -119,9 +119,9 @@ Returns a lowercase string with `-` as replacement for non alphanum characters u
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
+| Parameter | Type                  | Description                   |
+| :-------- | :-------------------- | :---------------------------- |
+| `str`     | `Maybe`\< `string` \> | the string to be transformed. |
 
 #### Returns
 
@@ -142,7 +142,7 @@ kebabCase("The quick brown Fox");
 
 [string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
-***
+---
 
 ### prune
 
@@ -154,10 +154,10 @@ Returns a string pruned on both start and end, similar to `trim()` but with any 
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | `undefined` | the string to be pruned. |
-| `substr` | `string` | `""` | the substring to be removed from `str`. |
+| Parameter | Type                  | Default value | Description                             |
+| :-------- | :-------------------- | :------------ | :-------------------------------------- |
+| `str`     | `Maybe`\< `string` \> | `undefined`   | the string to be pruned.                |
+| `substr`  | `string`              | `""`          | the substring to be removed from `str`. |
 
 #### Returns
 
@@ -180,7 +180,7 @@ prune(text, "**");
 
 [string.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L82)
 
-***
+---
 
 ### replaceDiacritics
 
@@ -192,9 +192,9 @@ Replaces diacritics by non-diacritic equivalent characters.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
+| Parameter | Type                  | Description                   |
+| :-------- | :-------------------- | :---------------------------- |
+| `str`     | `Maybe`\< `string` \> | the string to be transformed. |
 
 #### Returns
 
@@ -202,7 +202,7 @@ Replaces diacritics by non-diacritic equivalent characters.
 
 a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
 
- *
+-
 
 #### Example
 
@@ -220,7 +220,7 @@ replaceDiacritics("Âéêś"); // Expected result: "Aees"
 
 [string.ts:209](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L209)
 
-***
+---
 
 ### slugify
 
@@ -232,9 +232,9 @@ Alias of [kebabCase](string.md#kebabcase).
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `str` | `Maybe`\< `string` \> |
+| Parameter | Type                  |
+| :-------- | :-------------------- |
+| `str`     | `Maybe`\< `string` \> |
 
 #### Returns
 
@@ -244,7 +244,7 @@ Alias of [kebabCase](string.md#kebabcase).
 
 [string.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L258)
 
-***
+---
 
 ### startCase
 
@@ -256,9 +256,9 @@ Applies [firstUppercase](string.md#firstuppercase) using [stringCaseBuilder](str
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
+| Parameter | Type                  | Description                   |
+| :-------- | :-------------------- | :---------------------------- |
+| `str`     | `Maybe`\< `string` \> | the string to be transformed. |
 
 #### Returns
 
@@ -279,7 +279,7 @@ startCase("the quick Brown Fox");
 
 [string.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L234)
 
-***
+---
 
 ### stringCaseBuilder
 
@@ -298,12 +298,12 @@ By default `splitter` expression will split the string into words, where non-alp
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `str` | `Maybe`\< `string` \> | the string to be transformed. |
-| `transformation`? | `Maybe`\< (`word`) => `string` \> | optional transformation callback function. |
-| `separator`? | `string` | optional character separator for word-based transformation. |
-| `splitter`? | `string` \| `RegExp` | optional regex or string rule for splitting string into word. |
+| Parameter         | Type                              | Description                                                   |
+| :---------------- | :-------------------------------- | :------------------------------------------------------------ |
+| `str`             | `Maybe`\< `string` \>             | the string to be transformed.                                 |
+| `transformation`? | `Maybe`\< (`word`) => `string` \> | optional transformation callback function.                    |
+| `separator`?      | `string`                          | optional character separator for word-based transformation.   |
+| `splitter`?       | `string` \| `RegExp`              | optional regex or string rule for splitting string into word. |
 
 #### Returns
 
@@ -327,7 +327,7 @@ stringCaseBuilder(text, transformation, " ");
 
 [string.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L36)
 
-***
+---
 
 ### toHTMLUnicode
 
@@ -339,9 +339,9 @@ Converts a character to its equivalent HTML unicode representation `&#x0000`.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `char` | `Maybe`\< `string` \> | the character to be transformed. |
+| Parameter | Type                  | Description                      |
+| :-------- | :-------------------- | :------------------------------- |
+| `char`    | `Maybe`\< `string` \> | the character to be transformed. |
 
 #### Returns
 
