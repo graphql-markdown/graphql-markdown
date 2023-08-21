@@ -1,3 +1,10 @@
+/**
+ * Library for introspecting a GraphQL schema.
+ * The entry point method is {@link getSchemaMap}.
+ *
+ * @packageDocumentation
+ */
+
 import type {
   GraphQLSchema,
   GraphQLInputFieldMap,

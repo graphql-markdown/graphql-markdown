@@ -1,5 +1,8 @@
 # Module: introspection
 
+Library for introspecting a GraphQL schema.
+The entry point method is [getSchemaMap](introspection.md#getschemamap).
+
 ## Functions
 
 ### \_\_getFields
@@ -38,7 +41,7 @@ a map of fields as k/v records, or `fallback` value if no fields available.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L234)
+[packages/graphql/src/introspection.ts:241](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L241)
 
 ***
 
@@ -65,7 +68,7 @@ a list of GraphQL directives matching the set, else `false`.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:136](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L136)
+[packages/graphql/src/introspection.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L143)
 
 ***
 
@@ -93,7 +96,7 @@ a list of fields of type object.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:299](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L299)
+[packages/graphql/src/introspection.ts:306](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L306)
 
 ***
 
@@ -121,7 +124,7 @@ a map of fields as k/v records.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:275](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L275)
+[packages/graphql/src/introspection.ts:282](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L282)
 
 ***
 
@@ -208,7 +211,7 @@ const schemaTypeMap = getSchemaMap(schema);
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:404](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L404)
+[packages/graphql/src/introspection.ts:411](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L411)
 
 ***
 
@@ -240,7 +243,7 @@ a record k/v with `argName` as key and the argument's value.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:177](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L177)
+[packages/graphql/src/introspection.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L184)
 
 ***
 
@@ -267,7 +270,7 @@ a record k/v with arguments' name as keys and arguments' value.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L200)
+[packages/graphql/src/introspection.ts:207](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L207)
 
 ***
 
@@ -305,7 +308,7 @@ a map of GraphQL named types for the matching GraphQL type, or undefined if no m
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L51)
+[packages/graphql/src/introspection.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L58)
 
 ***
 
@@ -332,7 +335,7 @@ the type's name, or `defaultName`.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:320](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L320)
+[packages/graphql/src/introspection.ts:327](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L327)
 
 ***
 
@@ -364,7 +367,7 @@ Type guard for type with an AST node property.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L93)
+[packages/graphql/src/introspection.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L100)
 
 ***
 
@@ -391,4 +394,4 @@ Checks if a schema entity as a directive belonging to a defined set.
 
 #### Defined In
 
-[packages/graphql/src/introspection.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L106)
+[packages/graphql/src/introspection.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L113)
