@@ -139,6 +139,12 @@ The quickest way to understand the code structure is to look at the folder struc
   - `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
     - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `graphql` contains utilities for loading and parsing GraphQL schema 📦 [`@graphql-markdown/graphql`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/graphql)
+    - `src` contains all TS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
+  - `logger` contains GraphQL-Markdown 📦 [`@graphql-markdown/logger`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/logger)
+    - `src` contains all TS files used by the package.
+    - `tests` folder contains all tests needed (see [tests](#tests) section).
   - `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
     - `src` contains all TS files used by the package.
     - `tests` folder contains all tests needed (see [tests](#tests) section).
