@@ -15,8 +15,8 @@ By default, the logger module uses `global.console`
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter     | Type     | Description                          |
+| :------------ | :------- | :----------------------------------- |
 | `moduleName`? | `string` | optional name of the logger package. |
 
 #### Returns

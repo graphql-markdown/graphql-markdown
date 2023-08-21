@@ -15,6 +15,7 @@
   "identifiersAsCodeBlocks": true,
   "indexFileName": "index",
   "outputFileStrategy": "modules",
+  "pretty": true,
   "readme": "none",
   "skipIndexPage": true,
   "theme": "default",

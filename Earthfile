@@ -105,6 +105,7 @@ build-docs:
   COPY ./website ./
   COPY +build-examples/examples ./examples
   COPY --dir docs .
+  COPY --dir api .
   RUN npm install
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build

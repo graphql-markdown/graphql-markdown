@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install modules
+        run: npm ci
+
       - name: Install Earthly
         uses: earthly/actions-setup@v1
         with:
@@ -45,6 +48,7 @@ jobs:
       - name: Build docs
         run: |
           cd package
+          npm run docs:api
           earthly +build-docs
 
       - name: Push changes to website repo

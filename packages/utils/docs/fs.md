@@ -14,8 +14,8 @@ Asynchronously create a folder structure if it does not exist.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter  | Type     | Description                      |
+| :--------- | :------- | :------------------------------- |
 | `location` | `string` | folder structure in path format. |
 
 #### Returns
@@ -25,9 +25,9 @@ Asynchronously create a folder structure if it does not exist.
 #### Example
 
 ```js
-import { ensureDir } from '@graphql-markdown/utils/fs';
+import { ensureDir } from "@graphql-markdown/utils/fs";
 
-await ensureDir("./.temp/local")
+await ensureDir("./.temp/local");
 
 // Creates both folders if they do not exists.
 ```
@@ -36,7 +36,7 @@ await ensureDir("./.temp/local")
 
 [fs.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L30)
 
-***
+---
 
 ### fileExists
 
@@ -48,8 +48,8 @@ Asynchronously check if a file or folder exists at the path location.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter  | Type     | Description              |
+| :--------- | :------- | :----------------------- |
 | `location` | `string` | file or folder location. |
 
 #### Returns
@@ -61,9 +61,9 @@ Asynchronously check if a file or folder exists at the path location.
 #### Example
 
 ```js
-import { fileExists } from '@graphql-markdown/utils/fs';
+import { fileExists } from "@graphql-markdown/utils/fs";
 
-await fileExists("./.temp/local")
+await fileExists("./.temp/local");
 
 // Expected true if path is valid, false if not
 ```
@@ -72,7 +72,7 @@ await fileExists("./.temp/local")
 
 [fs.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L54)
 
-***
+---
 
 ### saveFile
 
@@ -89,10 +89,10 @@ The function calls `ensureDir(dirname(location))` to create the folder structure
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `location` | `string` | file location. |
-| `content` | `string` | data to be written into the file (UTF-8 string). |
+| Parameter   | Type                       | Description                                             |
+| :---------- | :------------------------- | :------------------------------------------------------ |
+| `location`  | `string`                   | file location.                                          |
+| `content`   | `string`                   | data to be written into the file (UTF-8 string).        |
 | `prettify`? | `PrettifyCallbackFunction` | optional callback function for prettifying the content. |
 
 #### Returns
@@ -104,9 +104,9 @@ The function calls `ensureDir(dirname(location))` to create the folder structure
 #### Example
 
 ```js
-import { saveFile } from '@graphql-markdown/utils/fs';
+import { saveFile } from "@graphql-markdown/utils/fs";
 
-await saveFile("./.temp/local.md", "foobar")
+await saveFile("./.temp/local.md", "foobar");
 
 // Created .temp folder if it does not exists, and save data into local.md
 ```

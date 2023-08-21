@@ -125,15 +125,7 @@ plugins: [
 
 ## Helpers
 
-The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide few helper functions to quick start:
-
-```ts
-import { directiveDescriptor, tagDescriptor } from "@graphql-markdown/helpers";
-import {
-  getTypeDirectiveArgValue,
-  getTypeDirectiveValues,
-} from "@graphql-markdown/graphql";
-```
+The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide few helper functions to quick start.
 
 :::info
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
@@ -146,12 +138,10 @@ npm i @graphql-markdown/helpers
 
 ### `@graphql-markdown/helpers`
 
-- <code><b>directiveDescriptor</b>(directive: GraphQLDirective, type?: unknown, template?: string): string</code> interpolates a template-like string using a directive arguments values. It returns the directive description, if `template` is `undefined`.
-
-- <code><b>tagDescriptor</b>(directive: GraphQLDirective, type?: unknown, classname?: string): Badge</code> returns the directive badge, with `classname` defaulted to `badge--secondary`.
+- [`directiveDescriptor`](/api/helpers/directives_descriptor)
+- [`tagDescriptor`](/api/helpers/directives_tag)
 
 ### `@graphql-markdown/graphql`
 
-- <code><b>getTypeDirectiveArgValue</b>(directive: GraphQLDirective, node: unknown, argName: string): Record&lt;string, unknown&gt; | undefined</code> returns the value of a specific directive argument by name.
-
-- <code><b>getTypeDirectiveValues</b>(directive: GraphQLDirective, node: unknown): Record&lt;string, unknown&gt; | undefined</code> returns a map of directive arguments and their values.
+- [`getTypeDirectiveValues`](/api/graphql/introspection#gettypedirectivevalues)
+- [`getTypeDirectiveArgValue`](/api/graphql/introspection#gettypedirectiveargvalue)

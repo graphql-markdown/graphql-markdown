@@ -18,9 +18,9 @@ Gets the group name for a schema type based on the directive information.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `unknown` | a GraphQL schema named type |
+| Parameter          | Type                                   | Description                    |
+| :----------------- | :------------------------------------- | :----------------------------- |
+| `type`             | `unknown`                              | a GraphQL schema named type    |
 | `groupByDirective` | `Maybe`\< `GroupByDirectiveOptions` \> | the `groupByDirective` option. |
 
 #### Returns
@@ -60,19 +60,18 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
 
 getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
-
 ```
 
 #### Defined In
 
 [packages/graphql/src/group.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L158)
 
-***
+---
 
 ### getGroups
 
@@ -84,10 +83,10 @@ Parses a GraphQL schema to build a map of entities with matching `groupByDirecti
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schemaMap` | `SchemaMap` | the GraphQL schema map returned by [getSchemaMap](introspection.md#getschemamap) |
-| `groupByDirective` | `Maybe`\< `GroupByDirectiveOptions` \> | the `groupByDirective` option. |
+| Parameter          | Type                                   | Description                                                                      |
+| :----------------- | :------------------------------------- | :------------------------------------------------------------------------------- |
+| `schemaMap`        | `SchemaMap`                            | the GraphQL schema map returned by [getSchemaMap](introspection.md#getschemamap) |
+| `groupByDirective` | `Maybe`\< `GroupByDirectiveOptions` \> | the `groupByDirective` option.                                                   |
 
 #### Returns
 
@@ -131,7 +130,7 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 const groupsMap = getGroups(schemaMap, groupOptions);
 

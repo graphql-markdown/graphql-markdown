@@ -14,9 +14,9 @@ Check if an object contains key/value records.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `obj` | `unknown` | the key/value record object. |
+| Parameter | Type      | Description                  |
+| :-------- | :-------- | :--------------------------- |
+| `obj`     | `unknown` | the key/value record object. |
 
 #### Returns
 
@@ -27,7 +27,7 @@ Check if an object contains key/value records.
 #### Example
 
 ```js
-import { isEmpty } from '@graphql-markdown/utils/object';
+import { isEmpty } from "@graphql-markdown/utils/object";
 
 const obj = {
   bool: true,

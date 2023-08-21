@@ -16,16 +16,16 @@ This is the generic function.
 #### Type parameters
 
 | Parameter |
-| :------ |
-| `T` |
+| :-------- |
+| `T`       |
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `entity` | `object` | the GraphQL schema entity processed. |
-| `entity.defaultValue` | `T` | the GraphQL schema type's value to be formatted. |
-| `entity.type` | `Maybe`\< `GraphQLType` \> | the GraphQL schema type. |
+| Parameter             | Type                       | Description                                      |
+| :-------------------- | :------------------------- | :----------------------------------------------- |
+| `entity`              | `object`                   | the GraphQL schema entity processed.             |
+| `entity.defaultValue` | `T`                        | the GraphQL schema type's value to be formatted. |
+| `entity.type`         | `Maybe`\< `GraphQLType` \> | the GraphQL schema type.                         |
 
 #### Returns
 

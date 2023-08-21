@@ -40,6 +40,14 @@ const config = {
         sidebarPath: require.resolve("./examples/group-by/sidebar-schema.js"),
       },
     ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "api",
+        path: "./api",
+        routeBasePath: "api",
+      },
+    ],
   ],
 
   presets: [
@@ -47,10 +55,12 @@ const config = {
       "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
+        debug: true,
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
+          exclude: ["**/__*.md"],
         },
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
@@ -87,6 +97,11 @@ const config = {
             docId: "intro",
             position: "right",
             label: "Docs",
+          },
+          {
+            to: "/api/",
+            position: "right",
+            label: "API",
           },
           {
             type: "dropdown",
