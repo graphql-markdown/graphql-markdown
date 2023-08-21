@@ -10,6 +10,7 @@ build
 .eslintcache
 .dccache
 .docusaurus
+api
 
 # stryker temp files
 .stryker-tmp

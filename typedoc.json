@@ -1,14 +1,23 @@
 {
   "extends": ["./typedoc.base.json"],
-  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-frontmatter"],
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-frontmatter",
+    "./scripts/custom-frontmatter.js"
+  ],
+  "anchorFormat": "slug",
+  "entryFileName": "index.md",
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
-  "name": "api",
-  "out": "./docs/api",
-  "anchorFormat": "slug",
-  "hidePageTitle": true,
+  "excludeGroups": true,
+  "excludeInternal": true,
   "frontmatterGlobals": {
     "pagination_prev": null,
-    "pagination_next": null
-  }
+    "pagination_next": null,
+    "toc_max_heading_level": 2
+  },
+  "hidePageTitle": true,
+  "name": "Dev API",
+  "out": "./api",
+  "readme": "./docs/__api/__index.md"
 }

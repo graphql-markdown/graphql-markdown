@@ -67,7 +67,8 @@
     "compile": "tsc --build",
     "build": "npm run clean && npm run compile",
     "ts:check": "tsc --noEmit",
-    "docs:api": "typedoc",
+    "typedoc": "typedoc",
+    "docs:api": "sh ./scripts/docs-api.sh",
     "docs:api:all": "npm run docs --workspaces --if-present"
   },
   "prettier": "./config/.prettierrc.js",
