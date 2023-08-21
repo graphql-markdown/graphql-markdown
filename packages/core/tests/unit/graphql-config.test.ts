@@ -14,6 +14,7 @@ describe("graphql-config", () => {
     afterEach(() => {
       vol.reset();
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     test("returns undefined if graphql-config empty", async () => {
@@ -257,6 +258,7 @@ describe("config", () => {
     afterEach(() => {
       vol.reset();
       jest.restoreAllMocks();
+      jest.resetAllMocks();
     });
 
     test("returns config with .graphqlrc options set", async () => {

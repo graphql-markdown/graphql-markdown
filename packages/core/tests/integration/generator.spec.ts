@@ -43,6 +43,7 @@ describe("renderer", () => {
   afterEach(() => {
     vol.reset();
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("generateDocFromSchema()", () => {

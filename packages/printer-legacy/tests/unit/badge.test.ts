@@ -50,6 +50,7 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 describe("badge", () => {
   afterAll(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("printBadges", () => {

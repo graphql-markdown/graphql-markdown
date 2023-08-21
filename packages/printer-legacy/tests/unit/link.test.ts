@@ -98,6 +98,7 @@ describe("link", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("getLinkCategory()", () => {

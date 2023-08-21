@@ -20,6 +20,7 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 describe("code", () => {
   afterAll(() => {
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("printCodeArguments()", () => {
