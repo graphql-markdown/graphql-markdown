@@ -55,7 +55,6 @@ const config = {
       "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        debug: true,
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
