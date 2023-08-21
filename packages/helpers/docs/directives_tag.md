@@ -18,7 +18,7 @@ directiveTag(
 ```
 
 Helper for rendering custom description from schema directive on type.
-This is an example on how to build a custom `descriptor` callback.
+This is an example on how to build a custom `tag` callback.
 
 #### Parameters
 
@@ -66,4 +66,4 @@ directiveTag(directive, type);
 
 #### Defined In
 
-[directives/tag.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L52)
+[directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)

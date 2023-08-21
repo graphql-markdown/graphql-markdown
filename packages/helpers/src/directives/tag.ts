@@ -10,7 +10,7 @@ import type { Badge, GraphQLDirective } from "@graphql-markdown/types";
 
 /**
  * Helper for rendering custom description from schema directive on type.
- * This is an example on how to build a custom `descriptor` callback.
+ * This is an example on how to build a custom `tag` callback.
  *
  * @param directive - the schema directive to parse.
  * @param type - the type being processed.
