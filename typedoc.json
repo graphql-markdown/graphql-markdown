@@ -9,6 +9,7 @@
   "entryFileName": "index.md",
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
+  "exclude": [""],
   "excludeGroups": true,
   "excludeInternal": true,
   "frontmatterGlobals": {
@@ -16,8 +17,9 @@
     "pagination_next": null,
     "toc_max_heading_level": 2
   },
+  "gitRevision": "main",
   "hidePageTitle": true,
-  "name": "Dev API",
+  "name": "API",
   "out": "./api",
   "readme": "./docs/__api/__index.md"
 }
