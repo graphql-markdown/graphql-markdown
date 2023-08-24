@@ -1,9 +1,10 @@
-import type { GraphQLSchema } from "graphql";
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
+import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
 import type {
   CustomDirective,
   DirectiveName,
+  GraphQLSchema,
   GroupByDirectiveOptions,
   LoaderOption,
   PackageName,
@@ -96,5 +97,34 @@ export type FunctionCheckSchemaChanges = (
 ) => Promise<boolean>;
 
 export type GeneratorOptions = Options & { loggerModule?: string };
+
+export type GroupByDirectiveOptions = {
+  directive: DirectiveName;
+  field: string;
+  fallback?: string;
+};
+
+export type LoaderOption = {
+  [name: ClassName]: PackageConfig | PackageName;
+};
+
+export type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
+
+export type PackageConfig = {
+  module: PackageName;
+  options?: PackageOptionsConfig;
+};
+
+export type RootTypes = {
+  query?: string;
+  mutation?: string;
+  subscription?: string;
+};
+
+export type PackageName = string & { _opaque: typeof PackageName };
+declare const PackageName: unique symbol;
+
+export type ClassName = string & { _opaque: typeof ClassName };
+declare const ClassName: unique symbol;
 
 export type { GraphQLProjectConfig } from "graphql-config";

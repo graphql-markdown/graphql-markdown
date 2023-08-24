@@ -13,63 +13,81 @@ declare global {
 }
 
 /**
- * Returns a logger module, if a package name is provided then instantiates it.
- * By default, the logger module uses `global.console`
+ * Log levels.
  *
- * @internal
+ */
+export enum LogLevel {
+  debug = "debug",
+  error = "error",
+  info = "info",
+  log = "log",
+  success = "success",
+  warn = "warn",
+}
+
+/**
+ * Logs a message by calling the active logger instance.
  *
- * @param moduleName - optional name of the logger package.
+ * @remarks
+ * If a log level is not supported by the logger instance, then it defaults to `"info"`.
  *
- * @returns an instance of the logger.
+ * @param message - a string to be logged.
+ * @param level - optional log level, `"info"` by default.
  *
  * @example
  * ```js
- * import { Logger } from "@graphql-markdown/utils/logger";
+ * import { log } from "@graphql-markdown/utils/logger";
  *
- * Logger().info("Info message"); // Expected console output "Info message"
- *
- * const loggerModule = require.resolve("@docusaurus/logger");
- * Logger(loggerModule).info("Info message"); // Expected Docusaurus log output "Info message"
+ * log("Info message"); // Expected console output "Info message"
  * ```
  *
  */
-export const Logger = (moduleName?: string): LoggerType => {
-  if (global.logger && typeof moduleName === "undefined") {
-    return global.logger;
+export function log(
+  message: string,
+  level: LogLevel | keyof typeof LogLevel = LogLevel.info,
+): void {
+  Logger();
+  global.logger?._log(message, level);
+}
+
+/**
+ * Instantiate a logger module.
+ * By default, the logger module uses `global.console`
+ *
+ * @param moduleName - optional name of the logger package.
+ *
+ * @example
+ * ```js
+ * import { Logger, log } from "@graphql-markdown/utils/logger";
+ *
+ * log("Info message"); // Expected console output "Info message"
+ *
+ * Logger("@docusaurus/logger");
+ * log("Info message", "info"); // Expected Docusaurus log output "Info message"
+ * ```
+ *
+ */
+export const Logger = (moduleName?: string): void => {
+  if (global.logger?.instance && typeof moduleName === "undefined") {
+    return;
   }
 
-  if (typeof moduleName !== "string" || moduleName === "") {
-    global.logger = global.console as unknown as LoggerType;
-  } else {
-    global.logger = require(moduleName) as unknown as LoggerType;
-  }
+  const instance: LoggerType["instance"] =
+    typeof moduleName === "string" && moduleName !== ""
+      ? require(moduleName)
+      : global.console;
 
-  if (typeof global.logger.log === "undefined") {
-    global.logger.log = (...args: unknown[]): void =>
-      global.logger!.info.apply(null, args);
-  }
+  const _log = (
+    message: string,
+    level: LogLevel | keyof typeof LogLevel = LogLevel.info,
+  ): void => {
+    const fallback = instance[LogLevel.info];
+    const callback =
+      typeof instance[level] === "function" ? instance[level] : fallback;
+    callback?.apply(this, [message]);
+  };
 
-  if (typeof global.logger.success === "undefined") {
-    global.logger.success = (...args: unknown[]): void =>
-      global.logger!.info.apply(null, args);
-  }
-
-  if (typeof global.logger.debug === "undefined") {
-    global.logger.debug = (...args: unknown[]): void =>
-      global.logger!.info.apply(null, args);
-  }
-
-  if (typeof global.logger.warn === "undefined") {
-    global.logger.warn = (...args: unknown[]): void =>
-      global.logger!.info.apply(null, args);
-  }
-
-  if (typeof global.logger.error === "undefined") {
-    global.logger.error = (...args: unknown[]): void =>
-      global.logger!.info.apply(null, args);
-  }
-
-  return global.logger;
+  global.logger = { instance, _log };
 };
 
 export default Logger;

@@ -1,21 +1,52 @@
-import Logger from "../../src";
+import * as Logger from "../../src";
 
 describe("logger", () => {
+  beforeEach(() => {
+    jest.spyOn(global.console, "info").mockImplementation(() => {});
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
     jest.resetAllMocks();
     global.logger = undefined;
   });
 
+  describe("log()", () => {
+    test("instantiates Logger", async () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(Logger, "Logger");
+
+      expect(global.logger).toBeUndefined();
+
+      Logger.log("test");
+
+      expect(spy).toHaveBeenCalled();
+      expect(global.logger).toBeDefined();
+    });
+
+    test("uses fallback log method if level not supported", async () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(global.console, "info");
+
+      Logger.log("test", "success");
+
+      expect(spy).toHaveBeenCalledWith("test");
+    });
+  });
+
   describe("Logger()", () => {
     test("returns a NodeJS.console object is no module passed", async () => {
       expect.hasAssertions();
 
-      jest
+      const spy = jest
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      expect(Logger().info()).toBe("Mocked Console");
+      Logger.log("test");
+
+      expect(spy).toHaveLastReturnedWith("Mocked Console");
       expect(global.logger).toBeDefined();
     });
 
@@ -24,67 +55,66 @@ describe("logger", () => {
       async (moduleName) => {
         expect.hasAssertions();
 
-        jest
+        const spy = jest
           .spyOn(global.console, "info")
           .mockImplementation(() => "Mocked Console");
 
-        expect(Logger(moduleName).info()).toBe("Mocked Console");
+        Logger.Logger(moduleName);
+        Logger.log("test");
+
+        expect(spy).toHaveBeenCalledWith("test");
+        expect(spy).toHaveLastReturnedWith("Mocked Console");
         expect(global.logger).toBeDefined();
       },
     );
 
-    test("returns logger with aliased methods", () => {
+    test("instantiates a logger", () => {
       expect.hasAssertions();
 
-      expect(Logger()).toEqual(
+      Logger.Logger();
+
+      expect(global.logger?.instance).toEqual(
         expect.objectContaining({
           debug: expect.any(Function),
           error: expect.any(Function),
           info: expect.any(Function),
           log: expect.any(Function),
-          success: expect.any(Function),
           warn: expect.any(Function),
         }),
       );
     });
 
-    test("returns module passed with aliased methods", () => {
+    test("returns module passed", () => {
       expect.hasAssertions();
 
-      const logger = Logger(require.resolve("../__data__/dummy_logger"));
+      Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
       expect(global.logger).toBeDefined();
-      expect(logger).toEqual(
+      expect(global.logger?.instance).toEqual(
         expect.objectContaining({
-          debug: expect.any(Function),
-          error: expect.any(Function),
           info: expect.any(Function),
-          log: expect.any(Function),
-          success: expect.any(Function),
-          warn: expect.any(Function),
         }),
       );
-      expect(logger.log()).toBe("Dummy logger");
-      expect(logger.debug()).toBe("Dummy logger");
-      expect(logger.error()).toBe("Dummy logger");
-      expect(logger.log()).toBe("Dummy logger");
-      expect(logger.success()).toBe("Dummy logger");
-      expect(logger.warn()).toBe("Dummy logger");
     });
 
     test("overrides current logger", async () => {
       expect.hasAssertions();
 
-      jest
+      const spyConsole = jest
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      Logger();
+      Logger.Logger();
       expect(global.logger).toBeDefined();
 
-      const logger = Logger(require.resolve("../__data__/dummy_logger"));
+      Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
-      expect(logger.info()).toBe("Dummy logger");
+      const spyLogger = jest.spyOn(global.logger!, "_log");
+
+      Logger.log("test");
+
+      expect(spyConsole).not.toHaveBeenCalled();
+      expect(spyLogger).toHaveBeenCalledWith("test", "info");
     });
   });
 });

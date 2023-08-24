@@ -33,7 +33,7 @@ export async function prettify(
     return await format(content, { parser });
   } catch (error: unknown) {
     if ("logger" in global) {
-      (global.logger as LoggerType).warn("Prettier is not found");
+      (global.logger as LoggerType)._log("Prettier is not found");
     } else {
       console.log("Prettier is not found");
     }

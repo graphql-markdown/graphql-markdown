@@ -1,16 +1,13 @@
 import type {
   ClassName,
-  ConfigOptions,
-  GraphQLProjectConfig,
+  ExtensionProjectConfig,
   LoaderOption,
   Maybe,
   PackageConfig,
   PackageOptionsConfig,
 } from "@graphql-markdown/types";
 
-import { Logger } from "@graphql-markdown/logger";
-
-const logger = Logger();
+import { log } from "@graphql-markdown/logger";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
 export const GraphQLConfigExtension = () => ({ name: EXTENSION_NAME }) as const;
@@ -19,10 +16,6 @@ type ThrowOptions = {
   throwOnMissing: boolean;
   throwOnEmpty: boolean;
 };
-
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
-  Writeable<GraphQLProjectConfig>;
 
 export const setLoaderOptions = (
   loaders: LoaderOption,
@@ -61,7 +54,7 @@ export const loadConfiguration = async (
   try {
     GraphQLConfig = await import("graphql-config");
   } catch (error) {
-    logger.log("Cannot find module 'graphql-config'!");
+    log("Cannot find module 'graphql-config'!");
     return undefined;
   }
 

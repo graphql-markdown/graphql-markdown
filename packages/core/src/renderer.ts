@@ -27,8 +27,7 @@ import {
   slugify,
 } from "@graphql-markdown/utils";
 
-import { Logger } from "@graphql-markdown/logger";
-const logger = Logger();
+import { log } from "@graphql-markdown/logger";
 
 const SIDEBAR = "sidebar-schema.js" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
@@ -177,7 +176,7 @@ export class Renderer {
         return undefined;
       }
     } catch (error) {
-      logger.warn(`An error occurred while processing "${type}"`);
+      log(`An error occurred while processing "${type}"`, "warn");
       return undefined;
     }
 
@@ -192,8 +191,9 @@ export class Renderer {
     const page = PageRegex.exec(pagePath);
 
     if (!page?.groups) {
-      logger.warn(
+      log(
         `An error occurred while processing file ${filePath} for type "${type}"`,
+        "warn",
       );
       return undefined;
     }

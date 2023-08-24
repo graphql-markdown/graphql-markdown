@@ -4,7 +4,7 @@ import type {
   SchemaEntity,
 } from "@graphql-markdown/types";
 
-import { Logger } from "@graphql-markdown/logger";
+import { Logger, log } from "@graphql-markdown/logger";
 
 import {
   getCustomDirectives,
@@ -42,13 +42,14 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  const logger = Logger(loggerModule);
+  Logger(loggerModule);
 
   const loaders = await getDocumentLoaders(loadersList);
 
   if (!loaders) {
-    logger.error(
+    log(
       `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+      "error",
     );
     return;
   }
@@ -62,7 +63,7 @@ export const generateDocFromSchema = async ({
       diffMethod as DiffMethodName,
     );
     if (!changed) {
-      logger.info(`No changes detected in schema "${String(schemaLocation)}".`);
+      log(`No changes detected in schema "${String(schemaLocation)}".`);
     }
   }
 
@@ -110,15 +111,16 @@ export const generateDocFromSchema = async ({
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(SEC_DECIMALS);
 
-  logger.success(
+  log(
     `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+    "success",
   );
-  logger.info(
+  log(
     `${
       pages.flat().length
     } pages generated in ${duration}s from schema "${String(schemaLocation)}".`,
   );
-  logger.info(
+  log(
     `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
   );
 };

@@ -1,4 +1,7 @@
 export type {
+  ASTNode,
+  DirectiveDefinitionNode,
+  DirectiveNode,
   getDirectiveValues,
   getNamedType,
   GraphQLArgument,
@@ -22,10 +25,9 @@ export type {
   GraphQLType,
   GraphQLUnionType,
   ObjectTypeDefinitionNode,
-  ASTNode,
-  DirectiveDefinitionNode,
-  DirectiveNode,
 } from "graphql";
+
+export type { LoadSchemaOptions } from "@graphql-tools/load";
 
 export type Maybe<T> = T | null | undefined;
 
@@ -37,3 +39,12 @@ export * from "./utils";
 
 // @graphql-markdown/printer-legacy
 export * from "./printer";
+
+// @graphql-markdown/logger
+export * from "./logger";
+
+// @graphql-markdown/graphql
+export * from "./graphql";
+
+// @graphql-markdown/helpers
+export * from "./helpers";
