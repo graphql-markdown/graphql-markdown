@@ -84,7 +84,7 @@ export const Logger = (moduleName?: string): void => {
     const fallback = instance[LogLevel.info];
     const callback =
       typeof instance[level] === "function" ? instance[level] : fallback;
-    callback.apply(this, [message]);
+    callback?.apply(this, [message]);
   };
 
   global.logger = { instance, _log };

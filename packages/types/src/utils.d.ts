@@ -114,15 +114,11 @@ export type IGetRelation<T> = (
   schemaMap: Maybe<SchemaMap>,
 ) => Partial<Record<SchemaEntity, T[]>>;
 
+type LogLevel = "debug" | "error" | "info" | "log" | "success" | "warn";
 export type LoggerType = {
-  _log: (...unknown) => void;
+  _log: (message: string, level?: LogLevel) => void;
   instance: {
-    debug: (...unknown) => void;
-    error: (...unknown) => void;
-    info: (...unknown) => void;
-    log: (...unknown) => void;
-    success: (...unknown) => void;
-    warn: (...unknown) => void;
+    [level in LogLevel]?: (...unknown) => void;
   };
 };
 
