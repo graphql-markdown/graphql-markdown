@@ -1,10 +1,48 @@
-import { Logger, log } from "../../src";
+import * as Logger from "../../src";
 
 describe("logger", () => {
   afterEach(() => {
     jest.restoreAllMocks();
     jest.resetAllMocks();
     global.logger = undefined;
+  });
+
+  describe("log()", () => {
+    test("does not Logger if  defined", async () => {
+      expect.hasAssertions();
+
+      Logger.Logger();
+
+      const spy = jest.spyOn(Logger, "Logger");
+      expect(global.logger).toBeDefined();
+
+      Logger.log("test");
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    test("instantiates Logger if not defined", async () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(Logger, "Logger");
+
+      expect(global.logger).toBeUndefined();
+
+      Logger.log("test");
+
+      expect(spy).toHaveBeenCalled();
+      expect(global.logger).toBeDefined();
+    });
+
+    test("uses fallback log method if level not supported", async () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(global.console, "info");
+
+      Logger.log("test", "success");
+
+      expect(spy).toHaveBeenCalledWith("test");
+    });
   });
 
   describe("Logger()", () => {
@@ -15,7 +53,7 @@ describe("logger", () => {
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      log("test");
+      Logger.log("test");
 
       expect(spy).toHaveLastReturnedWith("Mocked Console");
       expect(global.logger).toBeDefined();
@@ -30,9 +68,10 @@ describe("logger", () => {
           .spyOn(global.console, "info")
           .mockImplementation(() => "Mocked Console");
 
-        Logger(moduleName);
-        log("test");
+        Logger.Logger(moduleName);
+        Logger.log("test");
 
+        expect(spy).toHaveBeenCalledWith("test");
         expect(spy).toHaveLastReturnedWith("Mocked Console");
         expect(global.logger).toBeDefined();
       },
@@ -41,7 +80,7 @@ describe("logger", () => {
     test("instantiates a logger", () => {
       expect.hasAssertions();
 
-      Logger();
+      Logger.Logger();
 
       expect(global.logger?.instance).toEqual(
         expect.objectContaining({
@@ -57,7 +96,7 @@ describe("logger", () => {
     test("returns module passed", () => {
       expect.hasAssertions();
 
-      Logger(require.resolve("../__data__/dummy_logger"));
+      Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
       expect(global.logger).toBeDefined();
       expect(global.logger?.instance).toEqual(
@@ -74,14 +113,14 @@ describe("logger", () => {
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
-      Logger();
+      Logger.Logger();
       expect(global.logger).toBeDefined();
 
-      Logger(require.resolve("../__data__/dummy_logger"));
+      Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
       const spyLogger = jest.spyOn(global.logger!, "_log");
 
-      log("test");
+      Logger.log("test");
 
       expect(spyConsole).not.toHaveBeenCalled();
       expect(spyLogger).toHaveBeenCalledWith("test", "info");
