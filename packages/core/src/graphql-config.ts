@@ -8,9 +8,7 @@ import type {
   PackageOptionsConfig,
 } from "@graphql-markdown/types";
 
-import { Logger } from "@graphql-markdown/logger";
-
-const logger = Logger();
+import { log } from "@graphql-markdown/logger";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
 export const GraphQLConfigExtension = () => ({ name: EXTENSION_NAME }) as const;
@@ -61,7 +59,7 @@ export const loadConfiguration = async (
   try {
     GraphQLConfig = await import("graphql-config");
   } catch (error) {
-    logger.log("Cannot find module 'graphql-config'!");
+    log("Cannot find module 'graphql-config'!");
     return undefined;
   }
 

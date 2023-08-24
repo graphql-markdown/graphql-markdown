@@ -110,12 +110,15 @@ export type IGetRelation<T> = (
 ) => Partial<Record<SchemaEntity, T[]>>;
 
 export type LoggerType = {
-  debug: Function; // eslint-disable-line @typescript-eslint/ban-types
-  error: Function; // eslint-disable-line @typescript-eslint/ban-types
-  info: Function; // eslint-disable-line @typescript-eslint/ban-types
-  log: Function; // eslint-disable-line @typescript-eslint/ban-types
-  success: Function; // eslint-disable-line @typescript-eslint/ban-types
-  warn: Function; // eslint-disable-line @typescript-eslint/ban-types
+  _log: (...unknown) => void;
+  instance: {
+    debug: (...unknown) => void;
+    error: (...unknown) => void;
+    info: (...unknown) => void;
+    log: (...unknown) => void;
+    success: (...unknown) => void;
+    warn: (...unknown) => void;
+  };
 };
 
 export type Category = { category: string; slug: string };
