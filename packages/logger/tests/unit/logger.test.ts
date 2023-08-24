@@ -1,6 +1,10 @@
 import * as Logger from "../../src";
 
 describe("logger", () => {
+  beforeEach(() => {
+    jest.spyOn(global.console, "info").mockImplementation(() => {});
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
     jest.resetAllMocks();
@@ -8,20 +12,7 @@ describe("logger", () => {
   });
 
   describe("log()", () => {
-    test("does not Logger if  defined", async () => {
-      expect.hasAssertions();
-
-      Logger.Logger();
-
-      const spy = jest.spyOn(Logger, "Logger");
-      expect(global.logger).toBeDefined();
-
-      Logger.log("test");
-
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    test("instantiates Logger if not defined", async () => {
+    test("instantiates Logger", async () => {
       expect.hasAssertions();
 
       const spy = jest.spyOn(Logger, "Logger");

@@ -46,10 +46,7 @@ export function log(
   message: string,
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void {
-  if (!global.logger?.instance) {
-    Logger();
-  }
-
+  Logger();
   global.logger?._log(message, level);
 }
 
