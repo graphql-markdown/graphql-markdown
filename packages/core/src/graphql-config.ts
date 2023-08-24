@@ -1,7 +1,6 @@
 import type {
   ClassName,
-  ConfigOptions,
-  GraphQLProjectConfig,
+  ExtensionProjectConfig,
   LoaderOption,
   Maybe,
   PackageConfig,
@@ -17,10 +16,6 @@ type ThrowOptions = {
   throwOnMissing: boolean;
   throwOnEmpty: boolean;
 };
-
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
-  Writeable<GraphQLProjectConfig>;
 
 export const setLoaderOptions = (
   loaders: LoaderOption,

@@ -18,7 +18,12 @@ import type {
 
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type { GraphQLOperationType, Maybe } from ".";
+import type {
+  ConfigOptions,
+  GraphQLOperationType,
+  GraphQLProjectConfig,
+  Maybe,
+} from ".";
 
 export type CustomDirectiveFunction = <T>(
   directive?: GraphQLDirective,
@@ -153,5 +158,12 @@ export type AstNodeType<T> = Required<{
   astNode: ObjectTypeDefinitionNode;
 }> &
   T;
+
+type Writeable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
+  Writeable<GraphQLProjectConfig>;
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";
