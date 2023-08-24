@@ -46,7 +46,7 @@ export function log(
   message: string,
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void {
-  if (!global.logger) {
+  if (!global.logger?.instance) {
     Logger();
   }
 
@@ -86,9 +86,7 @@ export const Logger = (moduleName?: string): void => {
   ): void => {
     const fallback = instance[LogLevel.info];
     const callback =
-      typeof level === "string" && typeof instance[level] === "function"
-        ? instance[level]
-        : fallback;
+      typeof instance[level] === "function" ? instance[level] : fallback;
     callback.apply(this, [message]);
   };
 

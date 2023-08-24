@@ -70,7 +70,7 @@ describe("logger", () => {
     test("overrides current logger", async () => {
       expect.hasAssertions();
 
-      const spy = jest
+      const spyConsole = jest
         .spyOn(global.console, "info")
         .mockImplementation(() => "Mocked Console");
 
@@ -79,9 +79,12 @@ describe("logger", () => {
 
       Logger(require.resolve("../__data__/dummy_logger"));
 
+      const spyLogger = jest.spyOn(global.logger!, "_log");
+
       log("test");
 
-      expect(spy).not.toHaveBeenCalled();
+      expect(spyConsole).not.toHaveBeenCalled();
+      expect(spyLogger).toHaveBeenCalledWith("test", "info");
     });
   });
 });
