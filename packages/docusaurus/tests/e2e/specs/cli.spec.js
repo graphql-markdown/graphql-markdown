@@ -6,7 +6,9 @@ const cli = require("../../helpers/cli");
 
 const rootDir = "/docusaurus2";
 
-const pluginConfigs = require(`${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`);
+const pluginConfigs = require(
+  `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`,
+);
 
 const docsDirs = [];
 const messagesGenerated = [];
