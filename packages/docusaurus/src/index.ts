@@ -27,6 +27,9 @@ export default function pluginGraphQLDocGenerator(
     name: NAME,
 
     async loadContent(): Promise<void> {
+      if (options.runOnBuild === false) {
+        return;
+      }
       const config = await buildConfig(
         options as ConfigOptions,
         {},
