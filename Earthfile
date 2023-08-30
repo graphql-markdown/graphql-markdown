@@ -108,6 +108,7 @@ build-docs:
   COPY --dir docs .
   COPY --dir api .
   RUN npm install
+  RUN npx update-browserslist-db@latest
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
