@@ -2,11 +2,12 @@
 const { exec } = require("child_process");
 
 module.exports = function cli({
+  cmd = "graphql-to-doc",
   args = [],
   cwd = "/docusaurus2",
-  commandID,
+  id = undefined,
 } = {}) {
-  const command = commandID ? `graphql-to-doc:${commandID}` : "graphql-to-doc";
+  const command = id ? `${cmd}:${id}` : cmd;
 
   return new Promise((resolve) => {
     exec(
