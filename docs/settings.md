@@ -198,6 +198,15 @@ Use [`prettier`](https://prettier.io) to format generated files.
 The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
 :::
 
+## `runOnBuild`
+
+When set to `false` disables running doc generation on `docusaurus build`.
+If `false`, then the documentation can only be generated with the Docusaurus command `graphql-to-doc`.
+
+| Setting      | CLI flag | Default  |
+| ------------ | -------- | -------- |
+| `runOnBuild` | n/a      | `true`   |
+
 ## `rootPath`
 
 The output root path for the generated documentation, relative to the current workspace.

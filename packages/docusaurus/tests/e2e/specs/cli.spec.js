@@ -160,4 +160,21 @@ describe("loadContent", () => {
       `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
     );
   }, 60000);
+
+  test("should not generate plugin files on build when runOnBuild is false", async () => {
+    const generateOutput = await cli({
+      cmd: "build",
+      args: ["--config docusaurus2-graphql-doc-nobuild.js"],
+    });
+    expect(generateOutput).toMatchObject({
+      code: 0,
+      error: null,
+      stderr: "",
+      stdout: expect.any(String),
+    });
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+    expect(stdout).not.toMatch(
+      `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
+    );
+  }, 60000);
 });
