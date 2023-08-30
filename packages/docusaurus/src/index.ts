@@ -11,7 +11,7 @@ const DEFAULT_ID = "default" as const;
 
 export default function pluginGraphQLDocGenerator(
   _: LoadContext,
-  options: PluginOptions,
+  options: Partial<PluginOptions>,
 ): Plugin {
   const loggerModule = require.resolve("@docusaurus/logger");
   Logger(loggerModule);
@@ -25,6 +25,19 @@ export default function pluginGraphQLDocGenerator(
 
   return {
     name: NAME,
+
+    async loadContent(): Promise<void> {
+      const config = await buildConfig(
+        options as ConfigOptions,
+        {},
+        options.id,
+      );
+      await generateDocFromSchema({
+        ...config,
+        loggerModule: loggerModule,
+      });
+    },
+
     extendCli(cli): void {
       cli
         .command(command)

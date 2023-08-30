@@ -66,6 +66,7 @@ smoke-init:
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY ./packages/docusaurus/tests/__data__/.graphqlrc ./.graphqlrc
+  COPY ./packages/docusaurus/tests/__data__/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js
   COPY ./website/static/img ./static/img
   RUN node config-plugin.js
 

@@ -22,12 +22,12 @@ for (const pluginConfig of pluginConfigs) {
     path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
   );
   messagesGenerated.push([
-    `Documentation successfully generated in "${path.join(
+    `[SUCCESS] Documentation successfully generated in "${path.join(
       pluginConfig.rootPath,
       pluginConfig.baseURL,
     )}" with base URL "${pluginConfig.baseURL}".`,
-    `{Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
-    `Remember to update your Docusaurus site's sidebars with "${path.join(
+    `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
+    `[INFO] Remember to update your Docusaurus site's sidebars with "${path.join(
       pluginConfig.rootPath,
       pluginConfig.baseURL,
       "sidebar-schema.js",
@@ -99,7 +99,7 @@ describe("graphql-to-doc", () => {
       }
 
       const generateOutput = await cli({
-        commandID: pluginConfig.id,
+        id: pluginConfig.id,
         args: ["--force"],
       });
 
@@ -122,7 +122,7 @@ describe("graphql-to-doc", () => {
   }, 60000);
 
   test("should return 0 when using .graphqlrc config", async () => {
-    const generateOutput = await cli({ commandID: "schema_tweets" });
+    const generateOutput = await cli({ id: "schema_tweets" });
     expect(generateOutput).toMatchObject({
       code: 0,
       error: null,
@@ -131,7 +131,33 @@ describe("graphql-to-doc", () => {
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
     expect(stdout).toMatch(
-      `{Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
+      `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
+    );
+  }, 60000);
+});
+
+describe("loadContent", () => {
+  beforeEach(async () => {
+    const docsDir = `${rootDir}/docs`;
+    await fs.rm(docsDir, { recursive: true, force: true });
+    await fs.mkdir(docsDir, { recursive: true });
+    await fs.writeFile(`${docsDir}/groups.md`, "");
+  });
+
+  test("should generate plugin files on build", async () => {
+    const generateOutput = await cli({
+      cmd: "build",
+      args: ["--config docusaurus2-graphql-doc-build.js"],
+    });
+    expect(generateOutput).toMatchObject({
+      code: 0,
+      error: null,
+      stderr: "",
+      stdout: expect.any(String),
+    });
+    const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
+    expect(stdout).toMatch(
+      `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "data/tweet.graphql".`,
     );
   }, 60000);
 });
