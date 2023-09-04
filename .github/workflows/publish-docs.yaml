@@ -30,13 +30,13 @@ jobs:
           git config --global user.email "graphql-markdown-bot@edno.io"
 
       - name: Checkout package repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: package
           token: ${{ secrets.BOT_PAT }}
 
       - name: Checkout website repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: graphql-markdown/graphql-markdown.github.io
           path: website

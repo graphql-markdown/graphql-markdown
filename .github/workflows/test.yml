@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install modules
         run: npm ci
@@ -89,7 +89,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install modules
         run: npm ci
