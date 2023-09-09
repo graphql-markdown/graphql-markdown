@@ -7,6 +7,13 @@
  */
 
 import type {
+  ConstArgumentNode,
+  ConstDirectiveNode,
+  StringValueNode,
+} from "graphql";
+import { Kind } from "graphql";
+
+import type {
   SchemaMap,
   GroupByDirectiveOptions,
   SchemaEntitiesGroupMap,
@@ -15,12 +22,6 @@ import type {
 } from "@graphql-markdown/types";
 
 import { hasAstNode } from "./introspection";
-import {
-  Kind,
-  type ConstArgumentNode,
-  type ConstDirectiveNode,
-  type StringValueNode,
-} from "graphql";
 
 /**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
