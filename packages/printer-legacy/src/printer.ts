@@ -70,6 +70,12 @@ import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
 export class Printer implements IPrinter {
   static options: Maybe<PrintTypeOptions>;
 
+  static printDescription = printDescription;
+
+  static printCustomDirectives = printCustomDirectives;
+
+  static printCustomTags = printCustomTags;
+
   static init(
     schema: Maybe<GraphQLSchema>,
     baseURL: Maybe<string> = "schema",
@@ -140,8 +146,6 @@ export class Printer implements IPrinter {
     return header.join(MARKDOWN_EOL);
   };
 
-  static printDescription = printDescription;
-
   static printCode = (type: unknown, options: PrintTypeOptions): string => {
     let code = "";
 
@@ -183,10 +187,6 @@ export class Printer implements IPrinter {
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
-
-  static printCustomDirectives = printCustomDirectives;
-
-  static printCustomTags = printCustomTags;
 
   static printTypeMetadata = (
     type: unknown,

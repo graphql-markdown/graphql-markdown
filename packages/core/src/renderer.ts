@@ -38,12 +38,13 @@ enum SIDEBAR_POSITION {
 }
 
 export class Renderer {
-  private printer: Printer;
   group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
   baseURL: string;
   prettify: boolean;
   options: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>;
+
+  private printer: Printer;
 
   constructor(
     printer: Printer,
