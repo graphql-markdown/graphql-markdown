@@ -15,7 +15,7 @@ import type { Change } from "@graphql-inspector/core/typings/diff/changes/change
 
 import {
   checkSchemaChanges,
-  COMPARE_METHOD,
+  CompareMethod,
   SCHEMA_HASH_FILE,
   SCHEMA_REF,
 } from "../../src/index";
@@ -51,7 +51,7 @@ describe("lib", () => {
         expect(check).toBeTruthy();
       });
 
-      test("returns true if COMPARE_METHOD.HASH comparison differs", async () => {
+      test("returns true if CompareMethod.HASH comparison differs", async () => {
         expect.assertions(1);
 
         const printSchema = jest.spyOn(graphql, "printSchema");
@@ -65,13 +65,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH as DiffMethodName,
+          CompareMethod.HASH as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
       });
 
-      test("returns false if COMPARE_METHOD.HASH comparison is equals", async () => {
+      test("returns false if CompareMethod.HASH comparison is equals", async () => {
         expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
@@ -84,13 +84,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH as DiffMethodName,
+          CompareMethod.HASH as DiffMethodName,
         );
 
         expect(check).toBeFalsy();
       });
 
-      test("returns true if COMPARE_METHOD.HASH comparison has no reference hash file", async () => {
+      test("returns true if CompareMethod.HASH comparison has no reference hash file", async () => {
         expect.assertions(1);
 
         jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
@@ -102,13 +102,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.HASH as DiffMethodName,
+          CompareMethod.HASH as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
       });
 
-      test("returns true if COMPARE_METHOD.DIFF comparison differs", async () => {
+      test("returns true if CompareMethod.DIFF comparison differs", async () => {
         expect.assertions(1);
 
         jest
@@ -137,13 +137,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF as DiffMethodName,
+          CompareMethod.DIFF as DiffMethodName,
         );
 
         expect(check).toBeTruthy();
       });
 
-      test("returns false if COMPARE_METHOD.DIFF comparison is equals", async () => {
+      test("returns false if CompareMethod.DIFF comparison is equals", async () => {
         expect.assertions(1);
 
         jest
@@ -165,13 +165,13 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF as DiffMethodName,
+          CompareMethod.DIFF as DiffMethodName,
         );
 
         expect(check).toBeFalsy();
       });
 
-      test("returns true if COMPARE_METHOD.DIFF no schema introspection file exists", async () => {
+      test("returns true if CompareMethod.DIFF no schema introspection file exists", async () => {
         expect.assertions(1);
 
         jest
@@ -189,7 +189,7 @@ describe("lib", () => {
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
-          COMPARE_METHOD.DIFF as DiffMethodName,
+          CompareMethod.DIFF as DiffMethodName,
         );
 
         expect(check).toBeTruthy();

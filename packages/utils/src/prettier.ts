@@ -24,10 +24,10 @@ import type { LoggerType } from "@graphql-markdown/types";
  * @returns a prettified string, or undefined if an error occurred.
  *
  */
-export async function prettify(
+export const prettify = async (
   content: string,
   parser: string,
-): Promise<string | undefined> {
+): Promise<string | undefined> => {
   try {
     const { format } = await import("prettier");
     return await format(content, { parser });
@@ -39,7 +39,7 @@ export async function prettify(
     }
     return undefined;
   }
-}
+};
 
 /**
  * Prettify a Markdown string using {@link prettify} and `markdown` parser.
@@ -56,11 +56,11 @@ export async function prettify(
  * @returns a prettified string, or undefined if an error occurred.
  *
  */
-export async function prettifyMarkdown(
+export const prettifyMarkdown = async (
   content: string,
-): Promise<string | undefined> {
+): Promise<string | undefined> => {
   return prettify(content, "markdown");
-}
+};
 
 /**
  * Prettify a Javascript string using {@link prettify} and `babel` parser.
@@ -77,8 +77,8 @@ export async function prettifyMarkdown(
  * @returns a prettified string, or undefined if an error occurred.
  *
  */
-export async function prettifyJavascript(
+export const prettifyJavascript = async (
   content: string,
-): Promise<string | undefined> {
+): Promise<string | undefined> => {
   return prettify(content, "babel");
-}
+};

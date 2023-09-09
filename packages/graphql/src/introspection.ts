@@ -55,10 +55,10 @@ export { getDirectiveValues, getNamedType, printSchema } from "graphql";
  * @returns a map of GraphQL named types for the matching GraphQL type, or undefined if no match.
  *
  */
-export function getTypeFromSchema<T>(
+export const getTypeFromSchema = <T>(
   schema: Maybe<GraphQLSchema>,
   type: unknown,
-): Maybe<Record<string, T>> {
+): Maybe<Record<string, T>> => {
   if (!schema) {
     return undefined;
   }
@@ -82,10 +82,16 @@ export function getTypeFromSchema<T>(
   const typeMap = schema.getTypeMap();
 
   return Object.keys(typeMap)
-    .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => instanceOf(typeMap[key], type as never))
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
-}
+    .filter((key) => {
+      return excludeListRegExp.test(key);
+    })
+    .filter((key) => {
+      return instanceOf(typeMap[key], type as never);
+    })
+    .reduce((res, key) => {
+      return { ...res, [key]: typeMap[key] };
+    }, {});
+};
 
 /**
  * Type guard for type with an AST node property.
@@ -97,9 +103,9 @@ export function getTypeFromSchema<T>(
  * @returns `true` if the entity has an AST node property, else `false`.
  *
  */
-export function hasAstNode<T>(node: T): node is AstNodeType<T> {
+export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
-}
+};
 
 /**
  * Checks if a schema entity as a directive belonging to a defined set.
@@ -110,10 +116,10 @@ export function hasAstNode<T>(node: T): node is AstNodeType<T> {
  * @returns `true` if the entity has at least one directive matching, else `false`.
  *
  */
-export function hasDirective(
+export const hasDirective = (
   entity: unknown,
   directives: Maybe<string[] | string>,
-): boolean {
+): boolean => {
   if (
     !hasAstNode(entity) ||
     !directives ||
@@ -125,11 +131,11 @@ export function hasDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return (
-    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) =>
-      directiveList.includes(directiveNode.name.value),
-    ) > -1
+    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
+      return directiveList.includes(directiveNode.name.value);
+    }) > -1
   );
-}
+};
 
 /**
  * Returns a schema entity's list of directives matching a defined set.
@@ -140,10 +146,10 @@ export function hasDirective(
  * @returns a list of GraphQL directives matching the set, else `false`.
  *
  */
-export function getDirective(
+export const getDirective = (
   entity: unknown,
   directives: Maybe<string[] | string>,
-): GraphQLDirective[] {
+): GraphQLDirective[] => {
   if (
     !hasAstNode(entity) ||
     !directives ||
@@ -155,45 +161,19 @@ export function getDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return entity.astNode.directives
-    .filter((directiveNode: DirectiveDefinitionNode) =>
-      directiveList.includes(directiveNode.name.value),
-    )
-    .map(
-      (directiveNode: DirectiveDefinitionNode) =>
-        new GraphQLDirective({
-          name: directiveNode.name.value,
-          description: directiveNode.description?.value,
-          locations: [],
-          extensions: undefined,
-          astNode: directiveNode,
-        }),
-    );
-}
-
-/**
- * Returns one directive's argument's value linked to a GraphQL schema type.
- * It calls {@link getTypeDirectiveValues} and returns a matching record.
- *
- * @param directive - a GraphQL directive defined in the schema.
- * @param type - the GraphQL schema type to parse.
- * @param argName - the name of the GraphQL directive argument to fetch the value from.
- *
- * @returns a record k/v with `argName` as key and the argument's value.
- *
- */
-export function getTypeDirectiveArgValue(
-  directive: GraphQLDirective,
-  node: unknown,
-  argName: string,
-): Maybe<Record<string, unknown>> {
-  const args = getTypeDirectiveValues(directive, node);
-
-  if (!args || !args[argName]) {
-    throw new Error(`Directive argument '${argName}' not found!`);
-  }
-
-  return args[argName] as Maybe<Record<string, unknown>>;
-}
+    .filter((directiveNode: DirectiveDefinitionNode): boolean => {
+      return directiveList.includes(directiveNode.name.value);
+    })
+    .map((directiveNode: DirectiveDefinitionNode): GraphQLDirective => {
+      return new GraphQLDirective({
+        name: directiveNode.name.value,
+        description: directiveNode.description?.value,
+        locations: [],
+        extensions: undefined,
+        astNode: directiveNode,
+      });
+    }) as GraphQLDirective[];
+};
 
 /**
  * Returns all directive's arguments' values linked to a GraphQL schema type.
@@ -204,10 +184,10 @@ export function getTypeDirectiveArgValue(
  * @returns a record k/v with arguments' name as keys and arguments' value.
  *
  */
-export function getTypeDirectiveValues(
+export const getTypeDirectiveValues = (
   directive: GraphQLDirective,
   type: unknown,
-): Maybe<Record<string, unknown>> {
+): Maybe<Record<string, unknown>> => {
   if (hasAstNode(type)) {
     return getDirectiveValues(
       directive,
@@ -222,7 +202,32 @@ export function getTypeDirectiveValues(
       readonly directives?: readonly DirectiveNode[];
     },
   );
-}
+};
+
+/**
+ * Returns one directive's argument's value linked to a GraphQL schema type.
+ * It calls {@link getTypeDirectiveValues} and returns a matching record.
+ *
+ * @param directive - a GraphQL directive defined in the schema.
+ * @param type - the GraphQL schema type to parse.
+ * @param argName - the name of the GraphQL directive argument to fetch the value from.
+ *
+ * @returns a record k/v with `argName` as key and the argument's value.
+ *
+ */
+export const getTypeDirectiveArgValue = (
+  directive: GraphQLDirective,
+  node: unknown,
+  argName: string,
+): Maybe<Record<string, unknown>> => {
+  const args = getTypeDirectiveValues(directive, node);
+
+  if (!args?.[argName]) {
+    throw new Error(`Directive argument '${argName}' not found!`);
+  }
+
+  return args[argName] as Maybe<Record<string, unknown>>;
+};
 
 /**
  * Returns the fields from a GraphQL schema type.
@@ -238,7 +243,7 @@ export function getTypeDirectiveValues(
  * @returns a map of fields as k/v records, or `fallback` value if no fields available.
  *
  */
-export function __getFields<T, V>(
+export const _getFields = <T, V>(
   type: T,
   /**
    * @param fieldMap - a field map to be processed.
@@ -246,7 +251,7 @@ export function __getFields<T, V>(
    */
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
-): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V {
+): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V => {
   if (
     !(
       typeof type === "object" &&
@@ -265,7 +270,7 @@ export function __getFields<T, V>(
   }
 
   return fieldMap;
-}
+};
 
 /**
  * Returns fields map for a GraphQL operation type (query, mutation, subscription...).
@@ -279,19 +284,19 @@ export function __getFields<T, V>(
  * @returns a map of fields as k/v records.
  *
  */
-export function getOperation(
+export const getOperation = (
   operationType?: unknown,
-): Record<string, GraphQLOperationType> {
-  return __getFields(
+): Record<string, GraphQLOperationType> => {
+  return _getFields(
     operationType,
-    (fieldMap) =>
-      Object.keys(fieldMap).reduce(
-        (res, key) => ({ ...res, [key]: fieldMap[key] }),
-        {},
-      ),
+    (fieldMap) => {
+      return Object.keys(fieldMap).reduce((res, key) => {
+        return { ...res, [key]: fieldMap[key] };
+      }, {});
+    },
     {},
   ) as Record<string, GraphQLOperationType>;
-}
+};
 
 /**
  * Returns fields map for a GraphQL schema type.
@@ -303,17 +308,19 @@ export function getOperation(
  * @returns a list of fields of type object.
  *
  */
-export function getFields(type: unknown): unknown[] {
-  return __getFields(
+export const getFields = (type: unknown): unknown[] => {
+  return _getFields(
     type,
     (fieldMap) => {
       const res: unknown[] = [];
-      Object.keys(fieldMap).forEach((name: string) => res.push(fieldMap[name]));
+      Object.keys(fieldMap).forEach((name: string) => {
+        return res.push(fieldMap[name]);
+      });
       return res;
     },
     [],
   ) as unknown[];
-}
+};
 
 /**
  * Resolves the name of a GraphQL schema type.
@@ -324,7 +331,10 @@ export function getFields(type: unknown): unknown[] {
  * @returns the type's name, or `defaultName`.
  *
  */
-export function getTypeName(type: unknown, defaultName: string = ""): string {
+export const getTypeName = (
+  type: unknown,
+  defaultName: string = "",
+): string => {
   if (!(typeof type === "object" && type !== null)) {
     return defaultName;
   }
@@ -338,7 +348,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 
   return defaultName;
-}
+};
 
 /**
  * Returns an introspection map of the GraphQL schema.
@@ -408,7 +418,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
  * ```
  *
  */
-export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
+export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
   return {
     ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
@@ -447,4 +457,4 @@ export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
       GraphQLScalarType,
     ),
   };
-}
+};

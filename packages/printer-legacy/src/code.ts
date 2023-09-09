@@ -13,38 +13,6 @@ import {
   MARKDOWN_CODE_INDENTATION,
 } from "./const/strings";
 
-export const printCodeField = (
-  type: unknown,
-  options?: PrintTypeOptions,
-  indentationLevel: number = 0,
-): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
-    return "";
-  }
-
-  const skipDirective =
-    options &&
-    "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective);
-  const skipDeprecated =
-    options &&
-    "deprecated" in options &&
-    options.deprecated === "skip" &&
-    isDeprecated(type);
-
-  if (skipDirective || skipDeprecated) {
-    return "";
-  }
-
-  let code = `${getTypeName(type)}`;
-  code += printCodeArguments(type, indentationLevel + 1);
-  code += `: ${getTypeName(type.type)}`;
-  code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
-  code += MARKDOWN_EOL;
-
-  return code;
-};
-
 export const printCodeArguments = (
   type: unknown,
   indentationLevel: number = 1,
@@ -75,6 +43,40 @@ export const printCodeArguments = (
     return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
   }, "");
   code += `${parentIndentation})`;
+
+  return code;
+};
+
+export const printCodeField = (
+  type: unknown,
+  options?: PrintTypeOptions,
+  indentationLevel: number = 0,
+): MDXString | string => {
+  if (typeof type !== "object" || type === null || !("type" in type)) {
+    return "";
+  }
+
+  const skipDirective =
+    (options &&
+      "skipDocDirective" in options &&
+      hasDirective(type, options.skipDocDirective)) ??
+    false;
+  const skipDeprecated =
+    (options &&
+      "deprecated" in options &&
+      options.deprecated === "skip" &&
+      isDeprecated(type)) ??
+    false;
+
+  if (skipDirective || skipDeprecated) {
+    return "";
+  }
+
+  let code = `${getTypeName(type)}`;
+  code += printCodeArguments(type, indentationLevel + 1);
+  code += `: ${getTypeName(type.type)}`;
+  code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
+  code += MARKDOWN_EOL;
 
   return code;
 };

@@ -11,14 +11,10 @@ export type CustomDirectiveOptions = {
   [name in CustomDirectiveResolver]?: CustomDirectiveFunction;
 };
 
-export type CustomDirective = {
-  [name: DirectiveName]: CustomDirectiveOptions;
-};
+export type CustomDirective = Record<DirectiveName, CustomDirectiveOptions>;
 
 export type CustomDirectiveMapItem = CustomDirectiveOptions & {
   type: GraphQLDirective;
 };
 
-export type CustomDirectiveMap = {
-  [name: DirectiveName]: CustomDirectiveMapItem;
-};
+export type CustomDirectiveMap = Record<DirectiveName, CustomDirectiveMapItem>;

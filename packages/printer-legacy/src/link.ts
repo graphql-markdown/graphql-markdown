@@ -54,6 +54,19 @@ export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   return undefined;
 };
 
+export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
+  return "withAttributes" in options && options.withAttributes === true;
+};
+
+export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
+  return (
+    "parentTypePrefix" in options &&
+    options.parentTypePrefix === true &&
+    "parentType" in options &&
+    typeof options.parentType !== "undefined"
+  );
+};
+
 export const toLink = (
   type: unknown,
   name: string,
@@ -138,28 +151,32 @@ export const getRelationLink = (
   return toLink(type, type.name as string, category, options);
 };
 
-export const printParentLink = (
+export const printLinkAttributes = (
   type: unknown,
-  options: PrintLinkOptions,
-): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
-    return "";
+  text: Maybe<string> = "",
+): string => {
+  if (typeof type !== "object" || type === null) {
+    return text ?? "";
   }
 
-  return `<Bullet />${printLink(type.type, {
-    ...options,
-    withAttributes: true,
-  })}` as MDXString;
+  if (
+    !isLeafType(type) &&
+    "ofType" in type &&
+    typeof type.ofType !== "undefined"
+  ) {
+    text = printLinkAttributes(type.ofType as GraphQLNamedType, text);
+  }
+
+  if (isListType(type)) {
+    return `[${text}]`;
+  }
+
+  if (isNonNullType(type)) {
+    return `${text}!`;
+  }
+
+  return text ?? "";
 };
-
-export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
-  "withAttributes" in options && options.withAttributes === true;
-
-export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
-  "parentTypePrefix" in options &&
-  options.parentTypePrefix === true &&
-  "parentType" in options &&
-  typeof options.parentType !== "undefined";
 
 export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   if (typeof type !== "object" || type === null) {
@@ -185,29 +202,16 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   return `[\`${text}\`](${link.url})`;
 };
 
-export const printLinkAttributes = (
+export const printParentLink = (
   type: unknown,
-  text: Maybe<string> = "",
-): string => {
-  if (typeof type !== "object" || type === null) {
-    return text ?? "";
+  options: PrintLinkOptions,
+): MDXString | string => {
+  if (typeof type !== "object" || type === null || !("type" in type)) {
+    return "";
   }
 
-  if (
-    !isLeafType(type) &&
-    "ofType" in type &&
-    typeof type.ofType != "undefined"
-  ) {
-    text = printLinkAttributes(type.ofType as GraphQLNamedType, text);
-  }
-
-  if (isListType(type)) {
-    return `[${text}]`;
-  }
-
-  if (isNonNullType(type)) {
-    return `${text}!`;
-  }
-
-  return text ?? "";
+  return `<Bullet />${printLink(type.type, {
+    ...options,
+    withAttributes: true,
+  })}` as MDXString;
 };

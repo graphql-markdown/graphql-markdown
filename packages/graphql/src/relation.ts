@@ -28,7 +28,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { __getFields } from "./introspection";
+import { _getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
 
 /**
@@ -56,7 +56,7 @@ type RelationOfCallbackFunction<T> = (
  * @returns a record map of type `relations`.
  *
  */
-function mapRelationOf<
+const mapRelationOf = <
   T,
   R extends ReturnType<IGetRelation<T>> = ReturnType<IGetRelation<T>>,
 >(
@@ -64,7 +64,7 @@ function mapRelationOf<
   relations: R,
   schemaMap: Maybe<SchemaMap>,
   callback: RelationOfCallbackFunction<T>,
-): R {
+): R => {
   if (!schemaMap) {
     return {} as R;
   }
@@ -85,7 +85,7 @@ function mapRelationOf<
   }
 
   return relations;
-}
+};
 
 /**
  * Returns a map of operations (queries, mutations, subscriptions) where the GraphQL schema type is the return type.
@@ -125,13 +125,14 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
         type.name
     ) {
       if (
-        !results.find(
-          (r: unknown) =>
+        !results.find((r: unknown) => {
+          return (
             typeof r === "object" &&
             r !== null &&
             "name" in r &&
-            r.name === relationName,
-        )
+            r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }
@@ -189,7 +190,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
     const paramFieldArgs = isGraphQLFieldType(relationType)
       ? relationType.args
       : {};
-    const fieldMap = __getFields(relationType, undefined, {});
+    const fieldMap = _getFields(relationType, undefined, {});
 
     const fields = Object.assign({}, paramFieldArgs, fieldMap);
     for (const fieldDef of Object.values(fields)) {
@@ -198,11 +199,12 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
         getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
       ) {
         if (
-          !results.find(
-            (r) =>
-              r.toString() === key ||
-              (typeof r === "object" && "name" in r && r.name === key),
-          )
+          !results.find((r) => {
+            return (
+              String(r) === key ||
+              (typeof r === "object" && "name" in r && r.name === key)
+            );
+          })
         ) {
           results.push(relationType);
         }
@@ -250,13 +252,16 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
     if (
       isNamedType(type) &&
       isUnionType(relationType) &&
-      relationType.getTypes().find((subType) => subType.name === type.name)
+      relationType.getTypes().find((subType) => {
+        return subType.name === type.name;
+      })
     ) {
       if (
-        !results.find(
-          (r) =>
-            typeof r === "object" && "name" in r && r.name === relationName,
-        )
+        !results.find((r) => {
+          return (
+            typeof r === "object" && "name" in r && r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }
@@ -304,13 +309,16 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
     if (
       isNamedType(type) &&
       (isObjectType(relationType) || isInterfaceType(relationType)) &&
-      relationType.getInterfaces().find((subType) => subType.name === type.name)
+      relationType.getInterfaces().find((subType) => {
+        return subType.name === type.name;
+      })
     ) {
       if (
-        !results.find(
-          (r) =>
-            typeof r === "object" && "name" in r && r.name === relationName,
-        )
+        !results.find((r) => {
+          return (
+            typeof r === "object" && "name" in r && r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }

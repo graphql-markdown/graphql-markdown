@@ -38,7 +38,7 @@ import type {
  * ```
  */
 
-export async function loadSchema(
+export const loadSchema = async (
   schemaLocation: string,
   options: LoadSchemaOptions & {
     /**
@@ -47,7 +47,7 @@ export async function loadSchema(
      */
     rootTypes?: Partial<Record<OperationTypeNode, string>>;
   },
-): Promise<GraphQLSchema> {
+): Promise<GraphQLSchema> => {
   let rootTypes = undefined;
 
   if (typeof options !== "undefined" && "rootTypes" in options) {
@@ -75,7 +75,7 @@ export async function loadSchema(
   };
 
   return new GraphQLSchema(config);
-}
+};
 /**
  * Asynchronously returns a valid loaders list for {@link loadSchema} based on the plugin config.
  * Import each loader package, and instantiate a loader object.
@@ -103,9 +103,9 @@ export async function loadSchema(
  * ```
  */
 
-export async function getDocumentLoaders(
+export const getDocumentLoaders = async (
   loadersList: Maybe<LoaderOption>,
-): Promise<Maybe<LoadSchemaOptions>> {
+): Promise<Maybe<LoadSchemaOptions>> => {
   const loaders: Loader[] = [];
   const loaderOptions: PackageOptionsConfig = {};
 
@@ -137,4 +137,4 @@ export async function getDocumentLoaders(
     throw new Error("No GraphQL document loaders available.");
   }
   return { ...loaderOptions, loaders };
-}
+};

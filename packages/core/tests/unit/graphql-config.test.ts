@@ -70,6 +70,7 @@ describe("graphql-config", () => {
         .spyOn(GraphQLConfig, "loadConfig")
         .mockResolvedValueOnce({
           getProject: () =>
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             ({
               extension: (): any =>
                 ({
@@ -95,7 +96,7 @@ describe("graphql-config", () => {
         schema: "http://localhost:4000/graphql",
       });
       expect(spy).toHaveBeenCalledWith({
-        extensions: [CoreGraphQLConfig.GraphQLConfigExtension],
+        extensions: [CoreGraphQLConfig.graphQLConfigExtension],
         throwOnMissing: true,
         throwOnEmpty: true,
       });
@@ -129,8 +130,9 @@ describe("graphql-config", () => {
 
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           ({
-            extension: () =>
+            extension: (): any =>
               ({
                 documents: undefined,
                 exclude: undefined,
@@ -192,8 +194,9 @@ describe("graphql-config", () => {
 
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           ({
-            extension: () =>
+            extension: (): any =>
               ({
                 documents: undefined,
                 exclude: undefined,
@@ -275,8 +278,9 @@ describe("config", () => {
 
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           ({
-            extension: () =>
+            extension: (): any =>
               ({
                 documents: undefined,
                 exclude: undefined,

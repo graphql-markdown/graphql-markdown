@@ -1,7 +1,6 @@
 import type {
   PrintTypeOptions,
   MDXString,
-  CustomDirectiveMapItem,
   Maybe,
 } from "@graphql-markdown/types";
 
@@ -31,11 +30,18 @@ export const printCustomDirectives = (
     return "";
   }
 
-  const content = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map((constDirectiveOption) =>
-      getCustomDirectiveResolver("descriptor", type, constDirectiveOption, ""),
-    )
-    .filter((text) => typeof text === "string" && text.length > 0)
+  const content = Object.values(constDirectiveMap)
+    .map((constDirectiveOption) => {
+      return getCustomDirectiveResolver(
+        "descriptor",
+        type,
+        constDirectiveOption,
+        "",
+      );
+    })
+    .filter((text) => {
+      return typeof text === "string" && text.length > 0;
+    })
     .join(MARKDOWN_EOP);
 
   return `${MARKDOWN_EOP}${content}`;

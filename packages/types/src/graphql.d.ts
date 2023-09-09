@@ -12,6 +12,7 @@ import type {
   GraphQLScalarType,
   GraphQLUnionType,
   Maybe,
+  ObjectTypeDefinitionNode,
 } from ".";
 
 export type DeprecatedType<T> = Partial<{
@@ -37,7 +38,7 @@ export type SchemaEntity =
   | "subscriptions"
   | "unions";
 
-export type SchemaMap = {
+export interface SchemaMap {
   queries?: Maybe<Record<string, GraphQLOperationType>>;
   mutations?: Maybe<Record<string, GraphQLOperationType>>;
   subscriptions?: Maybe<Record<string, GraphQLOperationType>>;
@@ -48,10 +49,10 @@ export type SchemaMap = {
   enums?: Maybe<Record<string, GraphQLEnumType>>;
   inputs?: Maybe<Record<string, GraphQLInputObjectType>>;
   scalars?: Maybe<Record<string, GraphQLScalarType<unknown, unknown>>>;
-};
+}
 
-export type DirectiveName = string & { _opaque: typeof DirectiveName };
-declare const DirectiveName: unique symbol;
+export type DirectiveName = string & { _opaque: typeof DIRECTIVE_NAME };
+declare const DIRECTIVE_NAME: unique symbol;
 
 export type SchemaEntitiesGroupMap = Partial<
   Record<SchemaEntity, Record<string, Maybe<string>>>
@@ -70,6 +71,10 @@ export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;
 export type RelationOfImplementation = GraphQLUnionType | RelationOfInterface;
 export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
   Writeable<GraphQLProjectConfig>;
+export interface RelationOf {
+  section: string;
+  getRelation: IGetRelation;
+}
 export type IGetRelation<T> = (
   type: unknown,
   schemaMap: Maybe<SchemaMap>,

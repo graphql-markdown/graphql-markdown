@@ -70,6 +70,12 @@ import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
 export class Printer implements IPrinter {
   static options: Maybe<PrintTypeOptions>;
 
+  static printDescription = printDescription;
+
+  static printCustomDirectives = printCustomDirectives;
+
+  static printCustomTags = printCustomTags;
+
   static init(
     schema: Maybe<GraphQLSchema>,
     baseURL: Maybe<string> = "schema",
@@ -124,7 +130,7 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header!;
-    const pagination_buttons = pagination!
+    const paginationButtons = pagination!
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
 
@@ -133,14 +139,12 @@ export class Printer implements IPrinter {
       `id: ${id}`,
       `title: ${title}`,
       `hide_table_of_contents: ${!toc}`,
-      ...pagination_buttons,
+      ...paginationButtons,
       FRONT_MATTER,
     ];
 
     return header.join(MARKDOWN_EOL);
   };
-
-  static printDescription = printDescription;
 
   static printCode = (type: unknown, options: PrintTypeOptions): string => {
     let code = "";
@@ -183,10 +187,6 @@ export class Printer implements IPrinter {
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
-
-  static printCustomDirectives = printCustomDirectives;
-
-  static printCustomTags = printCustomTags;
 
   static printTypeMetadata = (
     type: unknown,

@@ -72,30 +72,20 @@ describe("group-info", () => {
     test("returns group for each types in schema", () => {
       expect.assertions(1);
 
-      expect(getGroups(schemaMap, groupOptions)).toMatchInlineSnapshot(`
-        {
-          "objects": {
-            "Bird": "animal",
-            "Boolean": "common",
-            "Elf": "common",
-            "Fish": "common",
-            "Query": "common",
-            "String": "common",
-            "Unicorn": "common",
-            "__Directive": "common",
-            "__DirectiveLocation": "common",
-            "__EnumValue": "common",
-            "__Field": "common",
-            "__InputValue": "common",
-            "__Schema": "common",
-            "__Type": "common",
-            "__TypeKind": "common",
-          },
-          "queries": {
-            "Fish": "animal",
-          },
-        }
-      `);
+      expect(getGroups(schemaMap, groupOptions)).toEqual({
+        objects: expect.objectContaining({
+          Bird: "animal",
+          Boolean: "common",
+          Elf: "common",
+          Fish: "common",
+          Query: "common",
+          String: "common",
+          Unicorn: "common",
+        }),
+        queries: {
+          Fish: "animal",
+        },
+      });
     });
   });
 

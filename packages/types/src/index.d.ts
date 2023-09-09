@@ -8,6 +8,7 @@ export type {
   GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
+  GraphQLEnumValue,
   GraphQLField,
   GraphQLFieldMap,
   GraphQLFloat,
@@ -27,7 +28,10 @@ export type {
   ObjectTypeDefinitionNode,
 } from "graphql";
 
-export type { LoadSchemaOptions } from "@graphql-tools/load";
+export type {
+  LoadSchemaOptions,
+  GraphQLExtensionDeclaration,
+} from "@graphql-tools/load";
 
 export type Maybe<T> = T | null | undefined;
 

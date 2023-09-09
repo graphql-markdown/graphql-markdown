@@ -1,9 +1,12 @@
 import type { Maybe } from ".";
 
-export type Category = { category: string; slug: string };
+export interface Category {
+  category: string;
+  slug: string;
+}
 
-export type MDXString = string & { _opaque: typeof MDXString };
-declare const MDXString: unique symbol;
+export type MDXString = string & { _opaque: typeof MDX_STRING };
+declare const MDX_STRING: unique symbol;
 
 export type PrettifyCallbackFunction = (
   text: string,

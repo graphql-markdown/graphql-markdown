@@ -14,33 +14,21 @@ import { SectionLevels } from "./const/options";
 import { printLink } from "./link";
 import { printBadge } from "./badge";
 
-export const printCustomDirectives = (
+export const getCustomDirectiveResolver = (
+  resolver: CustomDirectiveResolver,
   type: unknown,
-  options: PrintTypeOptions,
-): string => {
-  const constDirectiveMap = getConstDirectiveMap(
-    type,
-    options.customDirectives,
-  );
-
-  if (!constDirectiveMap || Object.keys(constDirectiveMap).length < 1) {
-    return "";
+  constDirectiveOption: CustomDirectiveMapItem,
+  fallback?: Maybe<string>,
+): Maybe<string> => {
+  if (
+    typeof constDirectiveOption === "undefined" ||
+    typeof constDirectiveOption.type !== "object" ||
+    typeof constDirectiveOption[resolver] !== "function"
+  ) {
+    return fallback;
   }
 
-  const directives = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map(
-      (constDirectiveOption): Maybe<string> =>
-        printCustomDirective(type, constDirectiveOption, options),
-    )
-    .filter((value): boolean => typeof value !== "undefined");
-
-  if (directives.length === 0) {
-    return "";
-  }
-
-  const content = directives.join(MARKDOWN_EOP);
-
-  return `${SectionLevels.LEVEL_3} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
 };
 
 export const printCustomDirective = (
@@ -65,6 +53,36 @@ export const printCustomDirective = (
   return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 };
 
+export const printCustomDirectives = (
+  type: unknown,
+  options: PrintTypeOptions,
+): string => {
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
+
+  if (!constDirectiveMap || Object.keys(constDirectiveMap).length < 1) {
+    return "";
+  }
+
+  const directives = Object.values(constDirectiveMap)
+    .map((constDirectiveOption): Maybe<string> => {
+      return printCustomDirective(type, constDirectiveOption, options);
+    })
+    .filter((value): boolean => {
+      return typeof value !== "undefined";
+    });
+
+  if (directives.length === 0) {
+    return "";
+  }
+
+  const content = directives.join(MARKDOWN_EOP);
+
+  return `${SectionLevels.LEVEL_3} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+};
+
 export const getCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
@@ -82,14 +100,13 @@ export const getCustomTags = (
     return [];
   }
 
-  return Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map(
-      (constDirectiveOption): Maybe<string> =>
-        getCustomDirectiveResolver("tag", type, constDirectiveOption),
-    )
-    .filter(
-      (value): boolean => typeof value !== "undefined",
-    ) as unknown as Badge[];
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption): Maybe<string> => {
+      return getCustomDirectiveResolver("tag", type, constDirectiveOption);
+    })
+    .filter((value): boolean => {
+      return typeof value !== "undefined";
+    }) as unknown as Badge[];
 };
 
 export const printCustomTags = (
@@ -103,23 +120,8 @@ export const printCustomTags = (
   }
 
   return badges
-    .map((badge): MDXString => printBadge(badge))
+    .map((badge): MDXString => {
+      return printBadge(badge);
+    })
     .join(" ") as MDXString;
-};
-
-export const getCustomDirectiveResolver = (
-  resolver: CustomDirectiveResolver,
-  type: unknown,
-  constDirectiveOption: CustomDirectiveMapItem,
-  fallback?: Maybe<string>,
-): Maybe<string> => {
-  if (
-    typeof constDirectiveOption === "undefined" ||
-    typeof constDirectiveOption.type !== "object" ||
-    typeof constDirectiveOption[resolver] !== "function"
-  ) {
-    return fallback;
-  }
-
-  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
 };

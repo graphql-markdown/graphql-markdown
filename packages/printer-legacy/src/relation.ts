@@ -3,6 +3,7 @@ import type {
   MDXString,
   Maybe,
   PrintTypeOptions,
+  RelationOf,
   RootTypeName,
   TypeLocale,
 } from "@graphql-markdown/types";
@@ -79,7 +80,9 @@ export const printRelationOf = <T>(
   }
 
   const content = [...data]
-    .sort((a, b) => a.localeCompare(b))
+    .sort((a, b) => {
+      return a.localeCompare(b);
+    })
     .join("<Bullet />") as MDXString;
 
   return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
@@ -89,16 +92,17 @@ export const printRelations = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  const relations: Record<string, IGetRelation<unknown>> = {
-    "Returned by": getRelationOfReturn,
-    "Member of": getRelationOfField,
-    "Implemented by": getRelationOfImplementation,
+  const relations: Record<string, RelationOf> = {
+    returnedBy: { section: "Returned by", getRelation: getRelationOfReturn },
+    memberOf: { section: "Member Of", getRelation: getRelationOfField },
+    implementedBy: {
+      section: "Implemented By",
+      getRelation: getRelationOfImplementation,
+    },
   };
 
   let data = "";
-  for (const [section, getRelation] of Object.entries<IGetRelation<unknown>>(
-    relations,
-  )) {
+  for (const { section, getRelation } of Object.values(relations)) {
     data += printRelationOf(type, section, getRelation, options);
   }
 

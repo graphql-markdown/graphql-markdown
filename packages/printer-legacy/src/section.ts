@@ -1,5 +1,5 @@
 import type {
-  GraphQLField,
+  GraphQLArgument,
   MDXString,
   PrintTypeOptions,
   SectionLevel,
@@ -31,60 +31,79 @@ export const sectionLevels: SectionLevel[] = [
   SectionLevels.LEVEL_5 as SectionLevelValue,
 ];
 
-export const printMetadataSection = (
-  type: unknown,
-  values: unknown,
-  section: string,
+export const printSectionItem = <T>(
+  type: T,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  if (
-    typeof type !== "object" ||
-    type === null ||
-    !("name" in type) ||
-    !Array.isArray(values) ||
-    values.length === 0
-  ) {
+  const level =
+    "level" in options && typeof options.level === "string"
+      ? options.level
+      : SectionLevels.LEVEL_4;
+
+  const skipDirective = hasDirective(type, options.skipDocDirective);
+  const skipDeprecated = options.deprecated === "skip" && isDeprecated(type);
+
+  if (!type || skipDirective || skipDeprecated) {
     return "";
   }
 
-  switch (options.deprecated) {
-    case "group": {
-      const { fields, deprecated } = values.reduce(
-        (res, arg) => {
-          isDeprecated(arg) ? res.deprecated.push(arg) : res.fields.push(arg);
-          return res;
-        },
-        { fields: [] as unknown[], deprecated: [] as unknown[] },
-      );
+  const typeNameLink = printLink(type, {
+    ...options,
+    withAttributes: false,
+  });
+  const description = printDescription(type, options, "").replaceAll(
+    "\n",
+    `${MARKDOWN_EOL}> `,
+  );
+  const badges = printBadges(type, options);
+  const tags = printCustomTags(type, options);
+  const parentTypeLink = printParentLink(type, options);
 
-      const meta = printSection(fields, section, {
-        ...options,
-        parentType: type.name as string,
-      });
-      const deprecatedMeta = printSection(deprecated, "", {
-        ...options,
-        parentType: type.name as string,
-        level: SectionLevels.NONE as SectionLevelValue,
-        collapsible: {
-          dataOpen: HIDE_DEPRECATED,
-          dataClose: SHOW_DEPRECATED,
-        },
-      });
-
-      return `${meta}${deprecatedMeta}`;
-    }
-
-    case "default":
-    default:
-      return printSection(values, section, {
-        ...options,
-        parentType: type.name as string,
-      });
+  let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+  if (isGraphQLFieldType(type)) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    section += printSectionItems(type.args as GraphQLArgument[], {
+      ...options,
+      level: SectionLevels.LEVEL_5 as SectionLevelValue,
+      parentType:
+        typeof options.parentType === "undefined"
+          ? type.name
+          : `${options.parentType}.${type.name}`,
+    });
   }
+
+  return section as MDXString;
 };
 
-export const printSection = (
-  values: unknown,
+export const printSectionItems = <V>(
+  values: V | V[],
+  options: PrintTypeOptions,
+): MDXString | string => {
+  if (!Array.isArray(values) || values.length === 0) {
+    return "";
+  }
+
+  const level = (
+    "level" in options && typeof options.level === "string"
+      ? options.level
+      : SectionLevels.LEVEL_4
+  ) as SectionLevelValue;
+
+  return values
+    .map((v: V): MDXString => {
+      return (
+        v &&
+        (printSectionItem(v, {
+          ...options,
+          level,
+        }) as MDXString)
+      );
+    })
+    .join(MARKDOWN_EOP) as MDXString;
+};
+
+export const printSection = <V>(
+  values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
 ): MDXString | string => {
@@ -128,76 +147,58 @@ export const printSection = (
   return `${level} ${section}${openSection}${items}${closeSection}` as MDXString;
 };
 
-export const printSectionItems = (
-  values: unknown,
+export const printMetadataSection = <T, V>(
+  type: T,
+  values: V | V[] | readonly V[],
+  section: string,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  if (!Array.isArray(values) || values.length === 0) {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    !("name" in type) ||
+    !Array.isArray(values) ||
+    values.length === 0
+  ) {
     return "";
   }
 
-  const level = (
-    "level" in options && typeof options.level === "string"
-      ? options.level
-      : SectionLevels.LEVEL_4
-  ) as SectionLevelValue;
+  switch (options.deprecated) {
+    case "group": {
+      const { fields, deprecated } = values.reduce(
+        (res, arg) => {
+          if (isDeprecated(arg)) {
+            res.deprecated.push(arg);
+          } else {
+            res.fields.push(arg);
+          }
+          return res;
+        },
+        { fields: [] as V[], deprecated: [] as V[] },
+      );
 
-  return values
-    .map(
-      (v) =>
-        v &&
-        printSectionItem(v, {
-          ...options,
-          level,
-        }),
-    )
-    .join(MARKDOWN_EOP) as MDXString;
-};
-
-export const printSectionItem = (
-  type: unknown,
-  options: PrintTypeOptions,
-): MDXString | string => {
-  const level =
-    "level" in options && typeof options.level === "string"
-      ? options.level
-      : SectionLevels.LEVEL_4;
-
-  const skipDirective = hasDirective(type, options.skipDocDirective);
-  const skipDeprecated = options.deprecated === "skip" && isDeprecated(type);
-
-  if (!type || skipDirective || skipDeprecated) {
-    return "";
-  }
-
-  const typeNameLink = printLink(type, {
-    ...options,
-    withAttributes: false,
-  });
-  const description = printDescription(type, options, "").replaceAll(
-    "\n",
-    `${MARKDOWN_EOL}> `,
-  );
-  const badges = printBadges(type, options);
-  const tags = printCustomTags(type, options);
-  const parentTypeLink = printParentLink(type, options);
-
-  let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
-  if (isGraphQLFieldType(type)) {
-    section += printSectionItems(
-      (type as GraphQLField<unknown, unknown, unknown>).args,
-      {
+      const meta = printSection(fields, section, {
         ...options,
-        level: SectionLevels.LEVEL_5 as SectionLevelValue,
-        parentType:
-          typeof options.parentType === "undefined"
-            ? (type as GraphQLField<unknown, unknown, unknown>).name
-            : `${options.parentType}.${
-                (type as GraphQLField<unknown, unknown, unknown>).name
-              }`,
-      },
-    );
-  }
+        parentType: type.name as string,
+      });
+      const deprecatedMeta = printSection(deprecated, "", {
+        ...options,
+        parentType: type.name as string,
+        level: SectionLevels.NONE as SectionLevelValue,
+        collapsible: {
+          dataOpen: HIDE_DEPRECATED,
+          dataClose: SHOW_DEPRECATED,
+        },
+      });
 
-  return section as MDXString;
+      return `${meta}${deprecatedMeta}`;
+    }
+
+    case "default":
+    default:
+      return printSection(values, section, {
+        ...options,
+        parentType: type.name as string,
+      });
+  }
 };
