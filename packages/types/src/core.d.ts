@@ -97,9 +97,7 @@ export interface GroupByDirectiveOptions {
   fallback?: string;
 }
 
-export interface LoaderOption {
-  [name: ClassName]: PackageConfig | PackageName;
-}
+export type LoaderOption = Record<ClassName, PackageConfig | PackageName>;
 
 export type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
 
