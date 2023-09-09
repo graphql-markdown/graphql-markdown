@@ -58,10 +58,7 @@ smoke-init:
   FROM +build-docusaurus
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
-    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
-    RUN npm install ./graphql-markdown-${package}.tgz
-  END
+  DO +INSTALL_PKG
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
@@ -105,11 +102,13 @@ build-examples:
 
 build-docs:
   COPY ./website ./
-  COPY +build-examples/examples ./examples
+  DO +INSTALL_PKG
+  COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir docs .
   COPY --dir api .
   RUN npm install
   RUN npx update-browserslist-db@latest
+  RUN mkdir --parents ./examples/default; mkdir --parents ./examples/group-by
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
@@ -139,3 +138,11 @@ GQLMD:
     RUN npx docusaurus graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
+
+INSTALL_PKG:
+  COMMAND
+  ARG packages=types utils graphql helpers logger printer-legacy diff core docusaurus
+  FOR package IN ${packages}
+    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
+    RUN npm install ./graphql-markdown-${package}.tgz
+  END

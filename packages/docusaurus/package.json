@@ -50,6 +50,7 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
+    "@docusaurus/plugin-content-docs": "2.4.1",
     "@graphql-markdown/core": "^1.7.0-next.0",
     "@graphql-markdown/logger": "^1.0.0-next.0",
     "@graphql-markdown/printer-legacy": "^1.5.0-next.0"

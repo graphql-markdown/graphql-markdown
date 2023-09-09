@@ -1,0 +1,43 @@
+projects:
+  example-default:
+    schema: https://graphql.anilist.co/
+    extensions:
+      graphql-markdown:
+        linkRoot: "/examples/default"
+        rootPath: "./examples/default"
+        baseURL: "."
+        homepage: data/anilist.md
+        loaders:
+          UrlLoader:
+            module: "@graphql-tools/url-loader"
+            options:
+              method: POST
+        printTypeOptions:
+          deprecated: group
+        docOptions:
+          pagination: false
+          toc: false
+  example-group-by:
+    schema: data/schema_with_grouping.graphql
+    extensions:
+      graphql-markdown:
+        baseURL: "."
+        rootPath: "./examples/group-by"
+        linkRoot: "/examples/group-by"
+        homepage: data/groups.md
+        diffMethod: "SCHEMA-HASH"
+        loaders:
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
+        groupByDirective:
+          directive: "doc"
+          field: "category"
+          fallback: "Common"
+        docOptions:
+          index: true
+        printTypeOptions:
+          parentTypePrefix: false
+          relatedTypeSection: false
+          typeBadges: true
+          deprecated: group
+        skipDocDirective:
+          - "@noDoc"

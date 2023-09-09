@@ -1,45 +1,62 @@
 /* istanbul ignore file */
-import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
+import type { LoadedContent } from "@docusaurus/plugin-content-docs";
+import type { LoadContext, Plugin } from "@docusaurus/types";
+
 import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import { Logger } from "@graphql-markdown/logger";
 
+import type { Options } from "./options";
+import { pluginContentDocs } from "./plugin-content-docs";
+import { DEFAULT_ID } from "./options";
+
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
-const DEFAULT_ID = "default" as const;
+Logger(require.resolve("@docusaurus/logger"));
 
-export default function pluginGraphQLDocGenerator(
-  _: LoadContext,
-  options: Partial<PluginOptions>,
-): Plugin {
-  const loggerModule = require.resolve("@docusaurus/logger");
-  Logger(loggerModule);
+export default async function pluginGraphQLMarkdown(
+  context: LoadContext,
+  options: Options,
+): Promise<Plugin<LoadedContent>> {
+  const pluginId = options.id;
 
-  const isDefaultId = options.id === DEFAULT_ID;
+  // console.dir(options);
 
-  const command = isDefaultId ? COMMAND : `${COMMAND}:${options.id}`;
-  const description = isDefaultId
-    ? DESCRIPTION
-    : `${DESCRIPTION} for configuration with id ${options.id}`;
+  const command = pluginId === DEFAULT_ID ? COMMAND : `${COMMAND}:${pluginId}`;
+  const description =
+    pluginId === DEFAULT_ID ? DESCRIPTION : `${DESCRIPTION} (${pluginId})`;
+
+  const docsPluginInstance = (await pluginContentDocs(
+    context,
+    options,
+  )) as Plugin<LoadedContent>;
+
+  const loadContent = async (
+    cliOptions?: CliOptions,
+  ): Promise<LoadedContent> => {
+    if (options.runOnBuild === false && !cliOptions) {
+      console.log("SKIPPY");
+      return { loadedVersions: [] };
+    }
+
+    const config = await buildConfig(
+      options as ConfigOptions,
+      cliOptions,
+      pluginId,
+    );
+    await generateDocFromSchema({
+      ...config,
+    });
+
+    const content = (await docsPluginInstance.loadContent!()) as LoadedContent;
+    return content;
+  };
 
   return {
-    name: NAME,
+    ...docsPluginInstance,
 
-    async loadContent(): Promise<void> {
-      if (options.runOnBuild === false) {
-        return;
-      }
-      const config = await buildConfig(
-        options as ConfigOptions,
-        {},
-        options.id,
-      );
-      await generateDocFromSchema({
-        ...config,
-        loggerModule: loggerModule,
-      });
-    },
+    name: NAME,
 
     extendCli(cli): void {
       cli
@@ -74,16 +91,12 @@ export default function pluginGraphQLDocGenerator(
         )
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions: CliOptions) => {
-          const config = await buildConfig(
-            options as ConfigOptions,
-            cliOptions,
-            options.id,
-          );
-          await generateDocFromSchema({
-            ...config,
-            loggerModule: loggerModule,
-          });
+          await loadContent(cliOptions);
         });
     },
-  };
+
+    loadContent,
+  } as Plugin<LoadedContent>;
 }
+
+export { validateOptions } from "./options";

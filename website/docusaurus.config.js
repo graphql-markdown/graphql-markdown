@@ -1,7 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable node/no-missing-require */
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
+
+const { directiveDescriptor } = require("@graphql-markdown/helpers");
+const { getTypeDirectiveValues } = require("@graphql-markdown/graphql");
 
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
@@ -21,24 +22,45 @@ const config = {
   projectName: "graphql-markdown.github.io",
 
   plugins: [
-    require.resolve("@cmfcmf/docusaurus-search-local"),
+    "@cmfcmf/docusaurus-search-local",
     [
-      "@docusaurus/plugin-content-docs",
+      "@graphql-markdown/docusaurus",
       {
         id: "example-default",
-        path: "./examples/default",
-        routeBasePath: "examples/default",
-        sidebarPath: require.resolve("./examples/default/sidebar-schema.js"),
+        linkRoot: "/examples/default",
+        rootPath: "./examples/default",
       },
     ],
     [
-      "@docusaurus/plugin-content-docs",
-      {
+      "@graphql-markdown/docusaurus",
+      /** @type {import('@graphql-markdown/types').ConfigOptions & import('@docusaurus/plugin-content-docs').PluginOptions} */
+      ({
         id: "example-group-by",
-        path: "./examples/group-by",
-        routeBasePath: "examples/group-by",
-        sidebarPath: require.resolve("./examples/group-by/sidebar-schema.js"),
-      },
+        rootPath: "./examples/group-by",
+        linkRoot: "/examples/group-by",
+        customDirective: {
+          auth: {
+            descriptor: (directive, type) =>
+              directiveDescriptor(
+                directive,
+                type,
+                "This requires the current user to be in `${requires}` role.",
+              ),
+          },
+          complexity: {
+            descriptor: (directive, type) => {
+              const { value, multipliers } = getTypeDirectiveValues(
+                directive,
+                type,
+              );
+              const multiplierDescription = multipliers
+                ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`
+                : "";
+              return `This has an additional cost of \`${value}\` points${multiplierDescription}.`;
+            },
+          },
+        },
+      }),
     ],
     [
       "@docusaurus/plugin-content-docs",
@@ -56,13 +78,13 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: "./sidebars.js",
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
           exclude: ["**/__*.md"],
         },
         theme: {
-          customCss: [require.resolve("./src/css/custom.css")],
+          customCss: ["./src/css/custom.css"],
         },
         sitemap: {
           changefreq: "monthly",
