@@ -186,7 +186,7 @@ export function getGroupName<T>(
     ) {
       continue;
     }
-    const field = (directive.arguments as ConstArgumentNode[]).find(
+    const field = directive.arguments.find(
       ({ name, value }): boolean =>
         name.value === groupByDirective.field && value.kind === Kind.STRING,
     ) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
