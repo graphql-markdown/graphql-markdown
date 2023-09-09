@@ -66,7 +66,7 @@ export const printCustomDirectives = (
     return "";
   }
 
-  const directives = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
+  const directives = Object.values(constDirectiveMap)
     .map(
       (constDirectiveOption): Maybe<string> =>
         printCustomDirective(type, constDirectiveOption, options),
@@ -99,7 +99,7 @@ export const getCustomTags = (
     return [];
   }
 
-  return Object.values<CustomDirectiveMapItem>(constDirectiveMap)
+  return Object.values(constDirectiveMap)
     .map(
       (constDirectiveOption): Maybe<string> =>
         getCustomDirectiveResolver("tag", type, constDirectiveOption),
