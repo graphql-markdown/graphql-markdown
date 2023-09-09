@@ -23,14 +23,16 @@ export const printCodeField = (
   }
 
   const skipDirective =
-    options &&
-    "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective);
+    (options &&
+      "skipDocDirective" in options &&
+      hasDirective(type, options.skipDocDirective)) ??
+    false;
   const skipDeprecated =
-    options &&
-    "deprecated" in options &&
-    options.deprecated === "skip" &&
-    isDeprecated(type);
+    (options &&
+      "deprecated" in options &&
+      options.deprecated === "skip" &&
+      isDeprecated(type)) ??
+    false;
 
   if (skipDirective || skipDeprecated) {
     return "";

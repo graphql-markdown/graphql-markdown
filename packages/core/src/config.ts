@@ -176,6 +176,7 @@ export function getDocOptions(
       (!cliOpts?.noToc && configOptions?.toc) ??
       DEFAULT_OPTIONS.docOptions.toc!,
     index:
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       (cliOpts?.index || configOptions?.index) ??
       DEFAULT_OPTIONS.docOptions.index!,
   } as Required<ConfigDocOptions>;
@@ -223,6 +224,7 @@ export function getSkipDocDirectives(
 
   if (
     (configFileOpts &&
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
     (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
   ) {
