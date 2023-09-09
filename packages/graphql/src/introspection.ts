@@ -188,7 +188,7 @@ export function getTypeDirectiveArgValue(
 ): Maybe<Record<string, unknown>> {
   const args = getTypeDirectiveValues(directive, node);
 
-  if (!args || !args[argName]) {
+  if (!args?.[argName]) {
     throw new Error(`Directive argument '${argName}' not found!`);
   }
 

@@ -39,6 +39,7 @@ export function getFormattedDefaultValue<T>({
   if (
     typeof type === "undefined" ||
     type === null ||
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     typeof defaultValue === "undefined" ||
     defaultValue === null
   ) {

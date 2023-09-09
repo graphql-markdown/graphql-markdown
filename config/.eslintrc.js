@@ -80,6 +80,7 @@ module.exports = {
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/prefer-optional-chain": "error",
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error",
         "@typescript-eslint/promise-function-async": "error",
@@ -90,9 +91,7 @@ module.exports = {
         "no-return-await": "off",
         "tsdoc/syntax": "warn",
         // "@typescript-eslint/member-ordering": "error",
-        // "@typescript-eslint/naming-convention": "error",
-        // "@typescript-eslint/prefer-optional-chain": "error",
-      },
+        // "@typescript-eslint/naming-convention": "error",      },
     },
     {
       files: ["**/*.mdx?"],
