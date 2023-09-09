@@ -38,7 +38,9 @@ export function toArray(
     return undefined;
   }
 
-  return Object.keys(recordMap).map((key: string): unknown => recordMap[key]);
+  return Object.keys(recordMap).map((key: string): unknown => {
+    return recordMap[key];
+  });
 }
 
 /**

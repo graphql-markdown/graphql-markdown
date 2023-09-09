@@ -54,7 +54,7 @@ export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
     const expect = type.name;
     return typeof obj !== "object" || obj === null
       ? false
-      : obj.constructor.name == expect;
+      : obj.constructor.name === expect;
   } catch (_) {
     return false;
   }

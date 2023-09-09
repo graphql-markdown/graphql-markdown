@@ -95,6 +95,8 @@ export const printBadges = (
   }
 
   return badges
-    .map((badge): MDXString => printBadge(badge))
+    .map((badge): MDXString => {
+      return printBadge(badge);
+    })
     .join(" ") as MDXString;
 };

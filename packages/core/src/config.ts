@@ -101,9 +101,9 @@ export function getSkipDocDirectives(
     (configFileOpts?.skipDocDirective ?? []) as never[],
   );
 
-  const skipDirectives = directiveList.map((option) =>
-    getSkipDocDirective(option),
-  );
+  const skipDirectives = directiveList.map((option) => {
+    return getSkipDocDirective(option);
+  });
 
   if (
     (configFileOpts &&
@@ -215,7 +215,7 @@ export function parseGroupByOption(
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions === "undefined" || parsedOptions == null) {
+  if (typeof parsedOptions === "undefined" || parsedOptions === null) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 

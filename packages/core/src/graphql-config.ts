@@ -11,8 +11,9 @@ import type {
 import { log } from "@graphql-markdown/logger";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
-export const graphQLConfigExtension: GraphQLExtensionDeclaration = () =>
-  ({ name: EXTENSION_NAME }) as const;
+export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
+  return { name: EXTENSION_NAME } as const;
+};
 
 interface ThrowOptions {
   throwOnMissing: boolean;

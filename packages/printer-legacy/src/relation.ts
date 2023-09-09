@@ -80,7 +80,9 @@ export const printRelationOf = <T>(
   }
 
   const content = [...data]
-    .sort((a, b) => a.localeCompare(b))
+    .sort((a, b) => {
+      return a.localeCompare(b);
+    })
     .join("<Bullet />") as MDXString;
 
   return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;

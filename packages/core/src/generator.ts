@@ -95,12 +95,12 @@ export const generateDocFromSchema = async ({
   });
 
   const pages = await Promise.all(
-    Object.keys(rootTypes).map(async (typeName) =>
-      renderer.renderRootTypes(
+    Object.keys(rootTypes).map(async (typeName) => {
+      return renderer.renderRootTypes(
         typeName as SchemaEntity,
         rootTypes[typeName as SchemaEntity],
-      ),
-    ),
+      );
+    }),
   );
 
   await renderer.renderHomepage(homepageLocation);

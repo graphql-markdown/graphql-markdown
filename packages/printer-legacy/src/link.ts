@@ -54,14 +54,18 @@ export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   return undefined;
 };
 
-export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
-  "withAttributes" in options && options.withAttributes === true;
+export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
+  return "withAttributes" in options && options.withAttributes === true;
+};
 
-export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
-  "parentTypePrefix" in options &&
-  options.parentTypePrefix === true &&
-  "parentType" in options &&
-  typeof options.parentType !== "undefined";
+export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
+  return (
+    "parentTypePrefix" in options &&
+    options.parentTypePrefix === true &&
+    "parentType" in options &&
+    typeof options.parentType !== "undefined"
+  );
+};
 
 export const toLink = (
   type: unknown,
@@ -158,7 +162,7 @@ export const printLinkAttributes = (
   if (
     !isLeafType(type) &&
     "ofType" in type &&
-    typeof type.ofType != "undefined"
+    typeof type.ofType !== "undefined"
   ) {
     text = printLinkAttributes(type.ofType as GraphQLNamedType, text);
   }

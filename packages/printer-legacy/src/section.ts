@@ -90,14 +90,15 @@ export const printSectionItems = <V>(
   ) as SectionLevelValue;
 
   return values
-    .map(
-      (v: V): MDXString =>
+    .map((v: V): MDXString => {
+      return (
         v &&
         (printSectionItem(v, {
           ...options,
           level,
-        }) as MDXString),
-    )
+        }) as MDXString)
+      );
+    })
     .join(MARKDOWN_EOP) as MDXString;
 };
 

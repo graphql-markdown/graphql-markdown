@@ -125,13 +125,14 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
         type.name
     ) {
       if (
-        !results.find(
-          (r: unknown) =>
+        !results.find((r: unknown) => {
+          return (
             typeof r === "object" &&
             r !== null &&
             "name" in r &&
-            r.name === relationName,
-        )
+            r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }
@@ -198,11 +199,12 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
         getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
       ) {
         if (
-          !results.find(
-            (r) =>
+          !results.find((r) => {
+            return (
               String(r) === key ||
-              (typeof r === "object" && "name" in r && r.name === key),
-          )
+              (typeof r === "object" && "name" in r && r.name === key)
+            );
+          })
         ) {
           results.push(relationType);
         }
@@ -250,13 +252,16 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
     if (
       isNamedType(type) &&
       isUnionType(relationType) &&
-      relationType.getTypes().find((subType) => subType.name === type.name)
+      relationType.getTypes().find((subType) => {
+        return subType.name === type.name;
+      })
     ) {
       if (
-        !results.find(
-          (r) =>
-            typeof r === "object" && "name" in r && r.name === relationName,
-        )
+        !results.find((r) => {
+          return (
+            typeof r === "object" && "name" in r && r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }
@@ -304,13 +309,16 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
     if (
       isNamedType(type) &&
       (isObjectType(relationType) || isInterfaceType(relationType)) &&
-      relationType.getInterfaces().find((subType) => subType.name === type.name)
+      relationType.getInterfaces().find((subType) => {
+        return subType.name === type.name;
+      })
     ) {
       if (
-        !results.find(
-          (r) =>
-            typeof r === "object" && "name" in r && r.name === relationName,
-        )
+        !results.find((r) => {
+          return (
+            typeof r === "object" && "name" in r && r.name === relationName
+          );
+        })
       ) {
         results.push(relationType);
       }

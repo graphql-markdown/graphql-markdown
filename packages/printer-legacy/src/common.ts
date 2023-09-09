@@ -31,10 +31,17 @@ export const printCustomDirectives = (
   }
 
   const content = Object.values(constDirectiveMap)
-    .map((constDirectiveOption) =>
-      getCustomDirectiveResolver("descriptor", type, constDirectiveOption, ""),
-    )
-    .filter((text) => typeof text === "string" && text.length > 0)
+    .map((constDirectiveOption) => {
+      return getCustomDirectiveResolver(
+        "descriptor",
+        type,
+        constDirectiveOption,
+        "",
+      );
+    })
+    .filter((text) => {
+      return typeof text === "string" && text.length > 0;
+    })
     .join(MARKDOWN_EOP);
 
   return `${MARKDOWN_EOP}${content}`;

@@ -151,7 +151,9 @@ export class Renderer {
             (type as Record<string, unknown>)[name],
           );
         })
-        .filter((res) => typeof res !== "undefined"),
+        .filter((res) => {
+          return typeof res !== "undefined";
+        }),
     );
   }
 

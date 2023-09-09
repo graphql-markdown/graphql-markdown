@@ -94,10 +94,11 @@ export function getGroupName<T>(
     ) {
       continue;
     }
-    const field = directive.arguments.find(
-      ({ name, value }): boolean =>
-        name.value === groupByDirective.field && value.kind === Kind.STRING,
-    ) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
+    const field = directive.arguments.find(({ name, value }): boolean => {
+      return (
+        name.value === groupByDirective.field && value.kind === Kind.STRING
+      );
+    }) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
     return field?.value.value;
   }
 

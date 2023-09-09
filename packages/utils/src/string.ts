@@ -116,8 +116,12 @@ export function stringCaseBuilder(
     .replace(/([a-z]+)(\d)/g, "$1 $2")
     .replace(/(\d+)([a-z])/g, "$1 $2")
     .split(splitter)
-    .filter((word) => word.length > 0)
-    .map((word: string): string => transformation(word))
+    .filter((word) => {
+      return word.length > 0;
+    })
+    .map((word: string): string => {
+      return transformation(word);
+    })
     .join(separator);
   return prune(stringCase, separator);
 }
@@ -259,7 +263,13 @@ export function kebabCase(str: Maybe<string>): string {
   if (typeof str !== "string") {
     return "";
   }
-  return stringCaseBuilder(str, (word: string) => word.toLowerCase(), "-");
+  return stringCaseBuilder(
+    str,
+    (word: string) => {
+      return word.toLowerCase();
+    },
+    "-",
+  );
 }
 
 /**

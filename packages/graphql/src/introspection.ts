@@ -82,9 +82,15 @@ export function getTypeFromSchema<T>(
   const typeMap = schema.getTypeMap();
 
   return Object.keys(typeMap)
-    .filter((key) => excludeListRegExp.test(key))
-    .filter((key) => instanceOf(typeMap[key], type as never))
-    .reduce((res, key) => ({ ...res, [key]: typeMap[key] }), {});
+    .filter((key) => {
+      return excludeListRegExp.test(key);
+    })
+    .filter((key) => {
+      return instanceOf(typeMap[key], type as never);
+    })
+    .reduce((res, key) => {
+      return { ...res, [key]: typeMap[key] };
+    }, {});
 }
 
 /**
@@ -125,9 +131,9 @@ export function hasDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return (
-    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) =>
-      directiveList.includes(directiveNode.name.value),
-    ) > -1
+    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
+      return directiveList.includes(directiveNode.name.value);
+    }) > -1
   );
 }
 
@@ -155,19 +161,18 @@ export function getDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return entity.astNode.directives
-    .filter((directiveNode: DirectiveDefinitionNode): boolean =>
-      directiveList.includes(directiveNode.name.value),
-    )
-    .map(
-      (directiveNode: DirectiveDefinitionNode): GraphQLDirective =>
-        new GraphQLDirective({
-          name: directiveNode.name.value,
-          description: directiveNode.description?.value,
-          locations: [],
-          extensions: undefined,
-          astNode: directiveNode,
-        }),
-    ) as GraphQLDirective[];
+    .filter((directiveNode: DirectiveDefinitionNode): boolean => {
+      return directiveList.includes(directiveNode.name.value);
+    })
+    .map((directiveNode: DirectiveDefinitionNode): GraphQLDirective => {
+      return new GraphQLDirective({
+        name: directiveNode.name.value,
+        description: directiveNode.description?.value,
+        locations: [],
+        extensions: undefined,
+        astNode: directiveNode,
+      });
+    }) as GraphQLDirective[];
 }
 
 /**
@@ -284,11 +289,11 @@ export function getOperation(
 ): Record<string, GraphQLOperationType> {
   return _getFields(
     operationType,
-    (fieldMap) =>
-      Object.keys(fieldMap).reduce(
-        (res, key) => ({ ...res, [key]: fieldMap[key] }),
-        {},
-      ),
+    (fieldMap) => {
+      return Object.keys(fieldMap).reduce((res, key) => {
+        return { ...res, [key]: fieldMap[key] };
+      }, {});
+    },
     {},
   ) as Record<string, GraphQLOperationType>;
 }
@@ -308,7 +313,9 @@ export function getFields(type: unknown): unknown[] {
     type,
     (fieldMap) => {
       const res: unknown[] = [];
-      Object.keys(fieldMap).forEach((name: string) => res.push(fieldMap[name]));
+      Object.keys(fieldMap).forEach((name: string) => {
+        return res.push(fieldMap[name]);
+      });
       return res;
     },
     [],

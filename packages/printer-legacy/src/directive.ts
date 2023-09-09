@@ -67,11 +67,12 @@ export const printCustomDirectives = (
   }
 
   const directives = Object.values(constDirectiveMap)
-    .map(
-      (constDirectiveOption): Maybe<string> =>
-        printCustomDirective(type, constDirectiveOption, options),
-    )
-    .filter((value): boolean => typeof value !== "undefined");
+    .map((constDirectiveOption): Maybe<string> => {
+      return printCustomDirective(type, constDirectiveOption, options);
+    })
+    .filter((value): boolean => {
+      return typeof value !== "undefined";
+    });
 
   if (directives.length === 0) {
     return "";
@@ -100,13 +101,12 @@ export const getCustomTags = (
   }
 
   return Object.values(constDirectiveMap)
-    .map(
-      (constDirectiveOption): Maybe<string> =>
-        getCustomDirectiveResolver("tag", type, constDirectiveOption),
-    )
-    .filter(
-      (value): boolean => typeof value !== "undefined",
-    ) as unknown as Badge[];
+    .map((constDirectiveOption): Maybe<string> => {
+      return getCustomDirectiveResolver("tag", type, constDirectiveOption);
+    })
+    .filter((value): boolean => {
+      return typeof value !== "undefined";
+    }) as unknown as Badge[];
 };
 
 export const printCustomTags = (
@@ -120,6 +120,8 @@ export const printCustomTags = (
   }
 
   return badges
-    .map((badge): MDXString => printBadge(badge))
+    .map((badge): MDXString => {
+      return printBadge(badge);
+    })
     .join(" ") as MDXString;
 };

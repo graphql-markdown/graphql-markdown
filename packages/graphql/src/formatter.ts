@@ -73,10 +73,10 @@ function _formatListDefaultValues<T>(
     ? defaultValue
     : [defaultValue];
 
-  const defaultValuesString = defaultValues.map((defaultValue) =>
+  const defaultValuesString = defaultValues.map((defaultValue) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    getFormattedDefaultValue({ type, defaultValue }),
-  );
+    return getFormattedDefaultValue({ type, defaultValue });
+  });
 
   return `[${defaultValuesString.join(", ")}]`;
 }
