@@ -238,7 +238,7 @@ export function getTypeDirectiveValues(
  * @returns a map of fields as k/v records, or `fallback` value if no fields available.
  *
  */
-export function __getFields<T, V>(
+export function _getFields<T, V>(
   type: T,
   /**
    * @param fieldMap - a field map to be processed.
@@ -282,7 +282,7 @@ export function __getFields<T, V>(
 export function getOperation(
   operationType?: unknown,
 ): Record<string, GraphQLOperationType> {
-  return __getFields(
+  return _getFields(
     operationType,
     (fieldMap) =>
       Object.keys(fieldMap).reduce(
@@ -304,7 +304,7 @@ export function getOperation(
  *
  */
 export function getFields(type: unknown): unknown[] {
-  return __getFields(
+  return _getFields(
     type,
     (fieldMap) => {
       const res: unknown[] = [];

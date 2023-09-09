@@ -55,8 +55,10 @@ export type PrintTypeOptions = {
   header?: Maybe<PrintTypeHeaderOptions>;
 };
 
-export type SectionLevelValue = string & { _opaque: typeof SectionLevelValue };
-declare const SectionLevelValue: unique symbol;
+export type SectionLevelValue = string & {
+  _opaque: typeof SECTION_LEVEL_VALUE;
+};
+declare const SECTION_LEVEL_VALUE: unique symbol;
 export type SectionLevel = SectionLevelValue | "####" | "#####";
 
 export type Badge = {

@@ -5,7 +5,7 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { log } from "@graphql-markdown/logger";
+import { log, LogLevel } from "@graphql-markdown/logger";
 
 export const hasChanges = async (
   schema: GraphQLSchema,
@@ -27,7 +27,7 @@ export const hasChanges = async (
   } catch (error: unknown) {
     log(
       `Cannot find module '${diffModule}' from @graphql-markdown/core!`,
-      "warn",
+      LogLevel.warn,
     );
     return true;
   }

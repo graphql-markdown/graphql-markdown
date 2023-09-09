@@ -130,7 +130,7 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header!;
-    const pagination_buttons = pagination!
+    const paginationButtons = pagination!
       ? []
       : ["pagination_next: null", "pagination_prev: null"];
 
@@ -139,7 +139,7 @@ export class Printer implements IPrinter {
       `id: ${id}`,
       `title: ${title}`,
       `hide_table_of_contents: ${!toc}`,
-      ...pagination_buttons,
+      ...paginationButtons,
       FRONT_MATTER,
     ];
 

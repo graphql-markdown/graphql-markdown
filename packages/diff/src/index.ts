@@ -17,7 +17,7 @@ import { fileExists, readFile, saveFile } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema" as const;
 export const SCHEMA_REF = "schema.graphql" as const;
-export enum COMPARE_METHOD {
+export enum CompareMethod {
   DIFF = "SCHEMA-DIFF",
   HASH = "SCHEMA-HASH",
   FORCE = "FORCE",
@@ -42,9 +42,9 @@ export const getDiff = async (
 export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   schema: GraphQLSchema,
   outputDir: string,
-  method: DiffMethodName = COMPARE_METHOD.DIFF as DiffMethodName,
+  method: DiffMethodName = CompareMethod.DIFF as DiffMethodName,
 ): Promise<boolean> => {
-  if (method === COMPARE_METHOD.DIFF) {
+  if (method === CompareMethod.DIFF) {
     const schemaRef = join(outputDir, SCHEMA_REF);
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
@@ -54,7 +54,7 @@ export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
     await saveFile(schemaRef, schemaPrint);
   }
 
-  if (method === COMPARE_METHOD.HASH) {
+  if (method === CompareMethod.HASH) {
     const hashFile = join(outputDir, SCHEMA_HASH_FILE);
     const hashSchema = getSchemaHash(schema);
     if (await fileExists(hashFile)) {

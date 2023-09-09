@@ -28,7 +28,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { __getFields } from "./introspection";
+import { _getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
 
 /**
@@ -189,7 +189,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
     const paramFieldArgs = isGraphQLFieldType(relationType)
       ? relationType.args
       : {};
-    const fieldMap = __getFields(relationType, undefined, {});
+    const fieldMap = _getFields(relationType, undefined, {});
 
     const fields = Object.assign({}, paramFieldArgs, fieldMap);
     for (const fieldDef of Object.values(fields)) {

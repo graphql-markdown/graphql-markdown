@@ -91,7 +91,6 @@ module.exports = {
         "@typescript-eslint/unified-signatures": "error",
         "no-return-await": "off",
         "tsdoc/syntax": "warn",
-        // "@typescript-eslint/naming-convention": "error",
       },
     },
     {

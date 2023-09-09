@@ -27,12 +27,12 @@ import {
   slugify,
 } from "@graphql-markdown/utils";
 
-import { log } from "@graphql-markdown/logger";
+import { log, LogLevel } from "@graphql-markdown/logger";
 
 const SIDEBAR = "sidebar-schema.js" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
 
-enum SIDEBAR_POSITION {
+enum SidebarPosition {
   FIRST = 1,
   LAST = 999,
 }
@@ -65,7 +65,7 @@ export class Renderer {
   async generateCategoryMetafile(
     category: string,
     dirPath: string,
-    sidebarPosition: number = SIDEBAR_POSITION.FIRST,
+    sidebarPosition: number = SidebarPosition.FIRST,
     styleClass?: string,
   ): Promise<void> {
     const filePath = join(dirPath, CATEGORY_YAML);
@@ -105,7 +105,7 @@ export class Renderer {
       await this.generateCategoryMetafile(
         "deprecated",
         dirPath,
-        SIDEBAR_POSITION.LAST,
+        SidebarPosition.LAST,
         "deprecated",
       );
     }
@@ -177,7 +177,7 @@ export class Renderer {
         return undefined;
       }
     } catch (error) {
-      log(`An error occurred while processing "${type}"`, "warn");
+      log(`An error occurred while processing "${type}"`, LogLevel.warn);
       return undefined;
     }
 
@@ -194,7 +194,7 @@ export class Renderer {
     if (!page?.groups) {
       log(
         `An error occurred while processing file ${filePath} for type "${type}"`,
-        "warn",
+        LogLevel.warn,
       );
       return undefined;
     }

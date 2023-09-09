@@ -50,7 +50,7 @@ export function getFormattedDefaultValue<T>({
     return __formatListDefaultValues(getNamedType(type), defaultValue);
   }
 
-  return __formatDefaultValue(type, defaultValue);
+  return _formatDefaultValue(type, defaultValue);
 }
 
 /**
@@ -94,7 +94,7 @@ function __formatListDefaultValues<T>(
  * @returns a printable formatted value.
  *
  */
-function __formatDefaultValue<T>(
+function _formatDefaultValue<T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
 ): T | string {
