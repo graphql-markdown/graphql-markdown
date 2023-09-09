@@ -91,7 +91,8 @@ module.exports = {
         "no-return-await": "off",
         "tsdoc/syntax": "warn",
         // "@typescript-eslint/member-ordering": "error",
-        // "@typescript-eslint/naming-convention": "error",      },
+        // "@typescript-eslint/naming-convention": "error",
+      },
     },
     {
       files: ["**/*.mdx?"],
