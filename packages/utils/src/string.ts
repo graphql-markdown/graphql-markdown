@@ -236,9 +236,6 @@ export const capitalize = (str: Maybe<string>): string => {
  * ```
  */
 export const startCase = (str: Maybe<string>): string => {
-  if (typeof str !== "string") {
-    return "";
-  }
   return stringCaseBuilder(str, firstUppercase, " ");
 };
 
@@ -260,9 +257,6 @@ export const startCase = (str: Maybe<string>): string => {
  *
  */
 export const kebabCase = (str: Maybe<string>): string => {
-  if (typeof str !== "string") {
-    return "";
-  }
   return stringCaseBuilder(
     str,
     (word: string) => {

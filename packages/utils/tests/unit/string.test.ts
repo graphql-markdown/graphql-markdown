@@ -171,12 +171,6 @@ describe("string", () => {
   });
 
   describe("startCase()", () => {
-    test("returns empty string if not a string", () => {
-      expect.hasAssertions();
-
-      expect(startCase(null)).toBe("");
-    });
-
     test("returns startCase version", () => {
       expect.hasAssertions();
 
@@ -185,12 +179,6 @@ describe("string", () => {
   });
 
   describe("kebabCase()", () => {
-    test("returns empty string if not a string", () => {
-      expect.hasAssertions();
-
-      expect(kebabCase(null)).toBe("");
-    });
-
     test("returns a kebabCase version", () => {
       expect.hasAssertions();
 
