@@ -14,10 +14,10 @@ export const EXTENSION_NAME = "graphql-markdown" as const;
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () =>
   ({ name: EXTENSION_NAME }) as const;
 
-type ThrowOptions = {
+interface ThrowOptions {
   throwOnMissing: boolean;
   throwOnEmpty: boolean;
-};
+}
 
 export const setLoaderOptions = (
   loaders: LoaderOption,

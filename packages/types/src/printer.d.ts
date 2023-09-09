@@ -25,19 +25,25 @@ export type RootTypeLocale = {
   [name in RootTypeName]: TypeLocale;
 };
 
-export type PrinterConfigPrintTypeOptions = {
+export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-};
+}
 
-export type CollapsibleOption = { dataOpen: string; dataClose: string };
+export interface CollapsibleOption {
+  dataOpen: string;
+  dataClose: string;
+}
 
-export type PrintTypeHeaderOptions = { toc?: boolean; pagination?: boolean };
+export interface PrintTypeHeaderOptions {
+  toc?: boolean;
+  pagination?: boolean;
+}
 
-export type PrintTypeOptions = {
+export interface PrintTypeOptions {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
@@ -53,7 +59,7 @@ export type PrintTypeOptions = {
   typeBadges?: boolean;
   withAttributes?: boolean;
   header?: Maybe<PrintTypeHeaderOptions>;
-};
+}
 
 export type SectionLevelValue = string & {
   _opaque: typeof SECTION_LEVEL_VALUE;
@@ -61,15 +67,15 @@ export type SectionLevelValue = string & {
 declare const SECTION_LEVEL_VALUE: unique symbol;
 export type SectionLevel = SectionLevelValue | "####" | "#####";
 
-export type Badge = {
+export interface Badge {
   text: TypeLocale | string;
   classname: string;
-};
+}
 
-export type TypeLink = {
+export interface TypeLink {
   text: string;
   url: string;
-};
+}
 
 export type PrintLinkOptions = Partial<PrintTypeOptions> &
   Pick<
@@ -131,16 +137,16 @@ export abstract class IPrinter {
 }
 export type Printer = typeof IPrinter;
 
-export type PrinterConfig = {
+export interface PrinterConfig {
   schema: Maybe<GraphQLSchema>;
   baseURL: string;
   linkRoot: string;
-};
+}
 
-export type PrinterOptions = {
+export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirective?: Maybe<DirectiveName[]>;
-};
+}

@@ -1,38 +1,31 @@
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type {
-  CustomDirective,
-  DirectiveName,
-  GraphQLSchema,
-  GroupByDirectiveOptions,
-  LoaderOption,
-  PackageName,
-} from ".";
+import type { CustomDirective, DirectiveName, GraphQLSchema } from ".";
 
-export type ConfigDocOptions = {
+export interface ConfigDocOptions {
   index?: boolean;
   pagination?: boolean;
   toc?: boolean;
-};
+}
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
 
-export type ConfigPrintTypeOptions = {
+export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-};
+}
 
-export type DiffMethodName = string & { _opaque: typeof DiffMethodName };
-declare const DiffMethodName: unique symbol;
+export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
+declare const DIFF_METHOD_NAME: unique symbol;
 export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";
 
 type Pointer = UnnormalizedTypeDefPointer | string;
 
-export type ConfigOptions = {
+export interface ConfigOptions {
   baseURL?: Maybe<string>;
   customDirective?: Maybe<CustomDirective>;
   diffMethod?: Maybe<TypeDiffMethod>;
@@ -49,9 +42,9 @@ export type ConfigOptions = {
   schema?: Maybe<Pointer>;
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   tmpDir?: Maybe<string>;
-};
+}
 
-export type CliOptions = {
+export interface CliOptions {
   base?: string;
   deprecated?: TypeDeprecatedOption;
   diff?: TypeDiffMethod;
@@ -71,7 +64,7 @@ export type CliOptions = {
   schema?: Pointer;
   skip?: string[] | string;
   tmp?: string;
-};
+}
 
 export type Options = Omit<
   ConfigOptions,
@@ -98,33 +91,33 @@ export type FunctionCheckSchemaChanges = (
 
 export type GeneratorOptions = Options & { loggerModule?: string };
 
-export type GroupByDirectiveOptions = {
+export interface GroupByDirectiveOptions {
   directive: DirectiveName;
   field: string;
   fallback?: string;
-};
+}
 
-export type LoaderOption = {
+export interface LoaderOption {
   [name: ClassName]: PackageConfig | PackageName;
-};
+}
 
 export type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
 
-export type PackageConfig = {
+export interface PackageConfig {
   module: PackageName;
   options?: PackageOptionsConfig;
-};
+}
 
-export type RootTypes = {
+export interface RootTypes {
   query?: string;
   mutation?: string;
   subscription?: string;
-};
+}
 
-export type PackageName = string & { _opaque: typeof PackageName };
-declare const PackageName: unique symbol;
+export type PackageName = string & { _opaque: typeof PACKAGE_NAME };
+declare const PACKAGE_NAME: unique symbol;
 
-export type ClassName = string & { _opaque: typeof ClassName };
-declare const ClassName: unique symbol;
+export type ClassName = string & { _opaque: typeof CLASS_NAME };
+declare const CLASS_NAME: unique symbol;
 
 export type { GraphQLProjectConfig } from "graphql-config";

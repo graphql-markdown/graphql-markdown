@@ -12,28 +12,6 @@ import type { PrettifyCallbackFunction } from "@graphql-markdown/types";
 export { readFile, copyFile } from "node:fs/promises";
 
 /**
- * Asynchronously create a folder structure if it does not exist.
- *
- *
- * @param location - folder structure in path format.
- *
- * @example
- * ```js
- * import { ensureDir } from '@graphql-markdown/utils/fs';
- *
- * await ensureDir("./.temp/local")
- *
- * // Creates both folders if they do not exists.
- * ```
- *
- */
-export async function ensureDir(location: string): Promise<void> {
-  if (!(await fileExists(location))) {
-    await mkdir(location, { recursive: true });
-  }
-}
-
-/**
  * Asynchronously check if a file or folder exists at the path location.
  *
  *
@@ -57,6 +35,28 @@ export async function fileExists(location: string): Promise<boolean> {
     return typeof stats === "object";
   } catch (error) {
     return false;
+  }
+}
+
+/**
+ * Asynchronously create a folder structure if it does not exist.
+ *
+ *
+ * @param location - folder structure in path format.
+ *
+ * @example
+ * ```js
+ * import { ensureDir } from '@graphql-markdown/utils/fs';
+ *
+ * await ensureDir("./.temp/local")
+ *
+ * // Creates both folders if they do not exists.
+ * ```
+ *
+ */
+export async function ensureDir(location: string): Promise<void> {
+  if (!(await fileExists(location))) {
+    await mkdir(location, { recursive: true });
   }
 }
 

@@ -28,6 +28,67 @@ import { getDirective } from "./introspection";
 export const WILDCARD_DIRECTIVE = "*" as const;
 
 /**
+ * Checks if a directive name is referenced in `customDirective` option.
+ *
+ * @param schemaDirectiveName - the GraphQL directive name.
+ * @param customDirectiveOptions - the `customDirective` option.
+ *
+ * @returns `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
+ *
+ */
+export function isCustomDirective(
+  schemaDirectiveName: DirectiveName,
+  customDirectiveOptions: CustomDirective,
+): boolean {
+  return (
+    schemaDirectiveName in customDirectiveOptions ||
+    WILDCARD_DIRECTIVE in customDirectiveOptions
+  );
+}
+
+/**
+ * Returns a record set of custom handlers from a directive by name.
+ *
+ * @param schemaDirectiveName - the GraphQL directive name.
+ * @param customDirectiveOptions - the `customDirective` option.
+ *
+ * @returns a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
+ *
+ * @example
+ * ```js
+ * import { getCustomDirectiveOptions } from "@graphql-markdown/utils/directive";
+ *
+ * const customDirectiveOptions = {
+ *   "*": {
+ *     descriptor: (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`;
+ *   },
+ * };
+ *
+ * const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptions);
+ *
+ * // Expected result: {
+ * //   "descriptor": (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`,
+ * //   "type": "@testB",
+ * // }
+ * ```
+ *
+ */
+export function getCustomDirectiveOptions(
+  schemaDirectiveName: DirectiveName,
+  customDirectiveOptions: CustomDirective,
+): Maybe<CustomDirectiveOptions> {
+  if (schemaDirectiveName in customDirectiveOptions) {
+    return customDirectiveOptions[schemaDirectiveName];
+  }
+
+  if (WILDCARD_DIRECTIVE in customDirectiveOptions) {
+    return customDirectiveOptions[WILDCARD_DIRECTIVE as DirectiveName];
+  }
+
+  return undefined;
+}
+
+/**
  * Returns a custom directives map with custom handlers from `customDirective`.
  *
  * @param schemaMap - the GraphQL schema map returned by {@link introspection!getSchemaMap}
@@ -128,67 +189,6 @@ export function getCustomDirectives(
 }
 
 /**
- * Returns a record set of custom handlers from a directive by name.
- *
- * @param schemaDirectiveName - the GraphQL directive name.
- * @param customDirectiveOptions - the `customDirective` option.
- *
- * @returns a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
- *
- * @example
- * ```js
- * import { getCustomDirectiveOptions } from "@graphql-markdown/utils/directive";
- *
- * const customDirectiveOptions = {
- *   "*": {
- *     descriptor: (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`;
- *   },
- * };
- *
- * const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptions);
- *
- * // Expected result: {
- * //   "descriptor": (_, constDirectiveType) => `Wildcard ${constDirectiveType.name}`,
- * //   "type": "@testB",
- * // }
- * ```
- *
- */
-export function getCustomDirectiveOptions(
-  schemaDirectiveName: DirectiveName,
-  customDirectiveOptions: CustomDirective,
-): Maybe<CustomDirectiveOptions> {
-  if (schemaDirectiveName in customDirectiveOptions) {
-    return customDirectiveOptions[schemaDirectiveName];
-  }
-
-  if (WILDCARD_DIRECTIVE in customDirectiveOptions) {
-    return customDirectiveOptions[WILDCARD_DIRECTIVE as DirectiveName];
-  }
-
-  return undefined;
-}
-
-/**
- * Checks if a directive name is referenced in `customDirective` option.
- *
- * @param schemaDirectiveName - the GraphQL directive name.
- * @param customDirectiveOptions - the `customDirective` option.
- *
- * @returns `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
- *
- */
-export function isCustomDirective(
-  schemaDirectiveName: DirectiveName,
-  customDirectiveOptions: CustomDirective,
-): boolean {
-  return (
-    schemaDirectiveName in customDirectiveOptions ||
-    WILDCARD_DIRECTIVE in customDirectiveOptions
-  );
-}
-
-/**
  * Returns a map of custom directives for a schema entity.
  *
  * @param entity - a GraphQL schema entity.
@@ -257,9 +257,12 @@ export function getConstDirectiveMap(
     return undefined;
   }
 
-  return constDirectives.reduce((directiveMap, constDirective) => {
-    const name = constDirective.name as DirectiveName;
-    directiveMap[name] = customDirectiveMap[name];
-    return directiveMap;
-  }, {} as CustomDirectiveMap);
+  return constDirectives.reduce<CustomDirectiveMap>(
+    (directiveMap, constDirective) => {
+      const name = constDirective.name as DirectiveName;
+      directiveMap[name] = customDirectiveMap[name];
+      return directiveMap;
+    },
+    {},
+  );
 }

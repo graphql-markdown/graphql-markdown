@@ -14,6 +14,45 @@ import { SectionLevels } from "./const/options";
 import { printLink } from "./link";
 import { printBadge } from "./badge";
 
+export const getCustomDirectiveResolver = (
+  resolver: CustomDirectiveResolver,
+  type: unknown,
+  constDirectiveOption: CustomDirectiveMapItem,
+  fallback?: Maybe<string>,
+): Maybe<string> => {
+  if (
+    typeof constDirectiveOption === "undefined" ||
+    typeof constDirectiveOption.type !== "object" ||
+    typeof constDirectiveOption[resolver] !== "function"
+  ) {
+    return fallback;
+  }
+
+  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
+};
+
+export const printCustomDirective = (
+  type: unknown,
+  constDirectiveOption: CustomDirectiveMapItem,
+  options: PrintTypeOptions,
+): Maybe<string> => {
+  const typeNameLink = printLink(constDirectiveOption.type, {
+    ...options,
+    withAttributes: false,
+  });
+  const description = getCustomDirectiveResolver(
+    "descriptor",
+    type,
+    constDirectiveOption,
+  );
+
+  if (typeof description !== "string") {
+    return undefined;
+  }
+
+  return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+};
+
 export const printCustomDirectives = (
   type: unknown,
   options: PrintTypeOptions,
@@ -41,28 +80,6 @@ export const printCustomDirectives = (
   const content = directives.join(MARKDOWN_EOP);
 
   return `${SectionLevels.LEVEL_3} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
-};
-
-export const printCustomDirective = (
-  type: unknown,
-  constDirectiveOption: CustomDirectiveMapItem,
-  options: PrintTypeOptions,
-): Maybe<string> => {
-  const typeNameLink = printLink(constDirectiveOption.type, {
-    ...options,
-    withAttributes: false,
-  });
-  const description = getCustomDirectiveResolver(
-    "descriptor",
-    type,
-    constDirectiveOption,
-  );
-
-  if (typeof description !== "string") {
-    return undefined;
-  }
-
-  return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
 };
 
 export const getCustomTags = (
@@ -105,21 +122,4 @@ export const printCustomTags = (
   return badges
     .map((badge): MDXString => printBadge(badge))
     .join(" ") as MDXString;
-};
-
-export const getCustomDirectiveResolver = (
-  resolver: CustomDirectiveResolver,
-  type: unknown,
-  constDirectiveOption: CustomDirectiveMapItem,
-  fallback?: Maybe<string>,
-): Maybe<string> => {
-  if (
-    typeof constDirectiveOption === "undefined" ||
-    typeof constDirectiveOption.type !== "object" ||
-    typeof constDirectiveOption[resolver] !== "function"
-  ) {
-    return fallback;
-  }
-
-  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
 };

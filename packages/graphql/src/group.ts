@@ -24,6 +24,87 @@ import type {
 import { hasAstNode } from "./introspection";
 
 /**
+ * Gets the group name for a schema type based on the directive information.
+ *
+ * @param type - a GraphQL schema named type
+ * @param groupByDirective - the `groupByDirective` option.
+ *
+ * @returns the group name matching the type, or `groupByDirective.fallback` if no match found.
+ *
+ * @example
+ * ```js
+ * import { buildSchema } from "graphql";
+ * import { getGroupName } from "@graphql-markdown/utils/groups";
+ *
+ * const schema = buildSchema(`
+ *   directive @doc(
+ *     category: String
+ *   ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+ *   type Unicorn {
+ *     name: String!
+ *   }
+ *   type Bird @doc(category: "animal") {
+ *     name: String!
+ *   }
+ *   type Fish {
+ *     name: String!
+ *   }
+ *   type Elf @doc(category: "fantasy") {
+ *     name: String!
+ *   }
+ *   type Query {
+ *     Fish: [Fish!]! @doc(category: "animal")
+ *   }
+ * `);
+ *
+ * const groupOptions = {
+ *   fallback: "common",
+ *   directive: "doc",
+ *   field: "category",
+ * }
+ *
+ * getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
+ *
+ * getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
+ *
+ * ```
+ */
+export function getGroupName<T>(
+  type: T,
+  groupByDirective: Maybe<GroupByDirectiveOptions>,
+): Maybe<string> {
+  if (!type || !groupByDirective) {
+    return undefined;
+  }
+
+  if (!hasAstNode(type)) {
+    return groupByDirective.fallback;
+  }
+
+  const allDirectives = type.astNode.directives as Maybe<ConstDirectiveNode[]>;
+
+  if (!Array.isArray(allDirectives)) {
+    return groupByDirective.fallback;
+  }
+
+  for (const directive of allDirectives) {
+    if (
+      !directive.arguments ||
+      directive.name.value !== groupByDirective.directive
+    ) {
+      continue;
+    }
+    const field = directive.arguments.find(
+      ({ name, value }): boolean =>
+        name.value === groupByDirective.field && value.kind === Kind.STRING,
+    ) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
+    return field?.value.value;
+  }
+
+  return groupByDirective.fallback;
+}
+
+/**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
  *
  * @param schemaMap - the GraphQL schema map returned by {@link introspection!getSchemaMap}
@@ -114,85 +195,4 @@ export function getGroups(
   });
 
   return groups;
-}
-
-/**
- * Gets the group name for a schema type based on the directive information.
- *
- * @param type - a GraphQL schema named type
- * @param groupByDirective - the `groupByDirective` option.
- *
- * @returns the group name matching the type, or `groupByDirective.fallback` if no match found.
- *
- * @example
- * ```js
- * import { buildSchema } from "graphql";
- * import { getGroupName } from "@graphql-markdown/utils/groups";
- *
- * const schema = buildSchema(`
- *   directive @doc(
- *     category: String
- *   ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
- *   type Unicorn {
- *     name: String!
- *   }
- *   type Bird @doc(category: "animal") {
- *     name: String!
- *   }
- *   type Fish {
- *     name: String!
- *   }
- *   type Elf @doc(category: "fantasy") {
- *     name: String!
- *   }
- *   type Query {
- *     Fish: [Fish!]! @doc(category: "animal")
- *   }
- * `);
- *
- * const groupOptions = {
- *   fallback: "common",
- *   directive: "doc",
- *   field: "category",
- * }
- *
- * getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
- *
- * getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
- *
- * ```
- */
-export function getGroupName<T>(
-  type: T,
-  groupByDirective: Maybe<GroupByDirectiveOptions>,
-): Maybe<string> {
-  if (!type || !groupByDirective) {
-    return undefined;
-  }
-
-  if (!hasAstNode(type)) {
-    return groupByDirective.fallback;
-  }
-
-  const allDirectives = type.astNode.directives as Maybe<ConstDirectiveNode[]>;
-
-  if (!Array.isArray(allDirectives)) {
-    return groupByDirective.fallback;
-  }
-
-  for (const directive of allDirectives) {
-    if (
-      !directive.arguments ||
-      directive.name.value !== groupByDirective.directive
-    ) {
-      continue;
-    }
-    const field = directive.arguments.find(
-      ({ name, value }): boolean =>
-        name.value === groupByDirective.field && value.kind === Kind.STRING,
-    ) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
-    return field?.value.value;
-  }
-
-  return groupByDirective.fallback;
 }

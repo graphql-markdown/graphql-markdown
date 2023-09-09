@@ -200,7 +200,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
         if (
           !results.find(
             (r) =>
-              r.toString() === key ||
+              String(r) === key ||
               (typeof r === "object" && "name" in r && r.name === key),
           )
         ) {

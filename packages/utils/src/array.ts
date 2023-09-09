@@ -78,17 +78,14 @@ export function convertArrayToMapObject<T>(
     return undefined;
   }
 
-  return list.reduce(
-    (result, entry: T) => {
-      if (typeof entry === "object" && entry !== null) {
-        const key = "name" in entry && entry.name ? String(entry.name) : null;
-        if (key === null) {
-          return result;
-        }
-        result[key] = entry;
+  return list.reduce<Record<string, T>>((result, entry: T) => {
+    if (typeof entry === "object" && entry !== null) {
+      const key = "name" in entry && entry.name ? String(entry.name) : null;
+      if (key === null) {
+        return result;
       }
-      return result;
-    },
-    {} as Record<string, T>,
-  );
+      result[key] = entry;
+    }
+    return result;
+  }, {});
 }

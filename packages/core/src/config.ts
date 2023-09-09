@@ -7,7 +7,6 @@ import type {
   ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
-  CustomDirectiveOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,
@@ -75,48 +74,47 @@ export const DEFAULT_OPTIONS: Required<
   skipDocDirective: [],
 } as const;
 
-export async function buildConfig(
-  configFileOpts: Maybe<ConfigOptions>,
-  cliOpts: Maybe<CliOptions>,
-  id: Maybe<string> = "default",
-): Promise<Options> {
-  if (!cliOpts) {
-    cliOpts = {};
+export function getSkipDocDirective(name: Maybe<DirectiveName>): DirectiveName {
+  const OPTION_REGEX = /^@(?<directive>\w+)$/;
+
+  if (typeof name !== "string" || !OPTION_REGEX.test(name)) {
+    throw new Error(`Invalid "${name}"`);
   }
 
-  const graphqlConfig = await loadConfiguration(id);
-  const config: ConfigOptions = {
-    ...DEFAULT_OPTIONS,
-    ...graphqlConfig,
-    ...configFileOpts,
-  } as const;
+  const {
+    groups: { directive },
+  } = OPTION_REGEX.exec(name) as RegExpExecArray & {
+    groups: { directive: DirectiveName };
+  };
 
-  const baseURL: string = cliOpts.base ?? config.baseURL;
-  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
+  return directive;
+}
 
-  return {
-    baseURL,
-    customDirective: getCustomDirectives(
-      config.customDirective,
-      skipDocDirective,
-    ),
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
-    docOptions: getDocOptions(cliOpts, config.docOptions),
-    groupByDirective:
-      parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
-    homepageLocation:
-      cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
-    id: id ?? DEFAULT_OPTIONS.id,
-    linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
-    loaders: config.loaders,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
-    prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
-    printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
-    printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
-    schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
-    skipDocDirective,
-    tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
-  } as Options;
+export function getSkipDocDirectives(
+  cliOpts: Maybe<CliOptions>,
+  configFileOpts: Maybe<
+    Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
+  >,
+): DirectiveName[] {
+  const directiveList: DirectiveName[] = [].concat(
+    (cliOpts?.skip ?? []) as never[],
+    (configFileOpts?.skipDocDirective ?? []) as never[],
+  );
+
+  const skipDirectives = directiveList.map((option) =>
+    getSkipDocDirective(option),
+  );
+
+  if (
+    (configFileOpts &&
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
+    (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
+  ) {
+    skipDirectives.push("deprecated" as DirectiveName);
+  }
+
+  return skipDirectives;
 }
 
 export function getCustomDirectives(
@@ -124,16 +122,13 @@ export function getCustomDirectives(
   skipDocDirective?: Maybe<DirectiveName[]>,
 ): Maybe<CustomDirective> {
   if (
-    typeof customDirectiveOptions === "undefined" ||
-    customDirectiveOptions === null ||
+    !customDirectiveOptions ||
     Object.keys(customDirectiveOptions).length === 0
   ) {
     return undefined;
   }
 
-  for (const [name, option] of Object.entries<CustomDirectiveOptions>(
-    customDirectiveOptions,
-  )) {
+  for (const [name, option] of Object.entries(customDirectiveOptions)) {
     if (
       Array.isArray(skipDocDirective) &&
       skipDocDirective.includes(name as DirectiveName)
@@ -207,49 +202,6 @@ export function getPrintTypeOptions(
   } as Required<ConfigPrintTypeOptions>;
 }
 
-export function getSkipDocDirectives(
-  cliOpts: Maybe<CliOptions>,
-  configFileOpts: Maybe<
-    Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
-  >,
-): DirectiveName[] {
-  const directiveList: DirectiveName[] = [].concat(
-    (cliOpts?.skip ?? []) as never[],
-    (configFileOpts?.skipDocDirective ?? []) as never[],
-  );
-
-  const skipDirectives = directiveList.map((option) =>
-    getSkipDocDirective(option),
-  );
-
-  if (
-    (configFileOpts &&
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
-    (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
-  ) {
-    skipDirectives.push("deprecated" as DirectiveName);
-  }
-
-  return skipDirectives;
-}
-
-export function getSkipDocDirective(name: Maybe<DirectiveName>): DirectiveName {
-  const OPTION_REGEX = /^@(?<directive>\w+)$/;
-
-  if (typeof name !== "string" || !OPTION_REGEX.test(name)) {
-    throw new Error(`Invalid "${name}"`);
-  }
-
-  const {
-    groups: { directive },
-  } = OPTION_REGEX.exec(name) as RegExpExecArray & {
-    groups: { directive: DirectiveName };
-  };
-
-  return directive;
-}
-
 export function parseGroupByOption(
   groupOptions: unknown,
 ): Maybe<GroupByDirectiveOptions> {
@@ -275,6 +227,50 @@ export function parseGroupByOption(
     directive,
     field,
     fallback = DEFAULT_GROUP,
-  } = parsedOptions.groups as GroupByDirectiveOptions;
+  } = parsedOptions.groups as unknown as GroupByDirectiveOptions;
   return { directive, field, fallback } as GroupByDirectiveOptions;
+}
+
+export async function buildConfig(
+  configFileOpts: Maybe<ConfigOptions>,
+  cliOpts: Maybe<CliOptions>,
+  id: Maybe<string> = "default",
+): Promise<Options> {
+  if (!cliOpts) {
+    cliOpts = {};
+  }
+
+  const graphqlConfig = await loadConfiguration(id);
+  const config: ConfigOptions = {
+    ...DEFAULT_OPTIONS,
+    ...graphqlConfig,
+    ...configFileOpts,
+  } as const;
+
+  const baseURL: string = cliOpts.base ?? config.baseURL;
+  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
+
+  return {
+    baseURL,
+    customDirective: getCustomDirectives(
+      config.customDirective,
+      skipDocDirective,
+    ),
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
+    docOptions: getDocOptions(cliOpts, config.docOptions),
+    groupByDirective:
+      parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
+    homepageLocation:
+      cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
+    id: id ?? DEFAULT_OPTIONS.id,
+    linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
+    loaders: config.loaders,
+    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
+    prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
+    printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
+    printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
+    schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
+    skipDocDirective,
+    tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
+  } as Options;
 }

@@ -171,31 +171,6 @@ export function getDirective(
 }
 
 /**
- * Returns one directive's argument's value linked to a GraphQL schema type.
- * It calls {@link getTypeDirectiveValues} and returns a matching record.
- *
- * @param directive - a GraphQL directive defined in the schema.
- * @param type - the GraphQL schema type to parse.
- * @param argName - the name of the GraphQL directive argument to fetch the value from.
- *
- * @returns a record k/v with `argName` as key and the argument's value.
- *
- */
-export function getTypeDirectiveArgValue(
-  directive: GraphQLDirective,
-  node: unknown,
-  argName: string,
-): Maybe<Record<string, unknown>> {
-  const args = getTypeDirectiveValues(directive, node);
-
-  if (!args?.[argName]) {
-    throw new Error(`Directive argument '${argName}' not found!`);
-  }
-
-  return args[argName] as Maybe<Record<string, unknown>>;
-}
-
-/**
  * Returns all directive's arguments' values linked to a GraphQL schema type.
  *
  * @param directive - a GraphQL directive defined in the schema.
@@ -222,6 +197,31 @@ export function getTypeDirectiveValues(
       readonly directives?: readonly DirectiveNode[];
     },
   );
+}
+
+/**
+ * Returns one directive's argument's value linked to a GraphQL schema type.
+ * It calls {@link getTypeDirectiveValues} and returns a matching record.
+ *
+ * @param directive - a GraphQL directive defined in the schema.
+ * @param type - the GraphQL schema type to parse.
+ * @param argName - the name of the GraphQL directive argument to fetch the value from.
+ *
+ * @returns a record k/v with `argName` as key and the argument's value.
+ *
+ */
+export function getTypeDirectiveArgValue(
+  directive: GraphQLDirective,
+  node: unknown,
+  argName: string,
+): Maybe<Record<string, unknown>> {
+  const args = getTypeDirectiveValues(directive, node);
+
+  if (!args?.[argName]) {
+    throw new Error(`Directive argument '${argName}' not found!`);
+  }
+
+  return args[argName] as Maybe<Record<string, unknown>>;
 }
 
 /**

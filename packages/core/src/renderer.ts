@@ -44,7 +44,7 @@ export class Renderer {
   prettify: boolean;
   options: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>;
 
-  private printer: Printer;
+  private readonly printer: Printer;
 
   constructor(
     printer: Printer,

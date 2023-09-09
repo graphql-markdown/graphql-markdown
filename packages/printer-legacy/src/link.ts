@@ -54,6 +54,15 @@ export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   return undefined;
 };
 
+export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
+  "withAttributes" in options && options.withAttributes === true;
+
+export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
+  "parentTypePrefix" in options &&
+  options.parentTypePrefix === true &&
+  "parentType" in options &&
+  typeof options.parentType !== "undefined";
+
 export const toLink = (
   type: unknown,
   name: string,
@@ -138,53 +147,6 @@ export const getRelationLink = (
   return toLink(type, type.name as string, category, options);
 };
 
-export const printParentLink = (
-  type: unknown,
-  options: PrintLinkOptions,
-): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
-    return "";
-  }
-
-  return `<Bullet />${printLink(type.type, {
-    ...options,
-    withAttributes: true,
-  })}` as MDXString;
-};
-
-export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean =>
-  "withAttributes" in options && options.withAttributes === true;
-
-export const hasOptionParentType = (options: PrintLinkOptions): boolean =>
-  "parentTypePrefix" in options &&
-  options.parentTypePrefix === true &&
-  "parentType" in options &&
-  typeof options.parentType !== "undefined";
-
-export const printLink = (type: unknown, options: PrintLinkOptions): string => {
-  if (typeof type !== "object" || type === null) {
-    return "";
-  }
-
-  const link = toLink(
-    type,
-    getTypeName(type, String(type)),
-    undefined,
-    options,
-  );
-
-  if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
-    const textWithAttribute = hasOptionParentType(options)
-      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
-      : `\`${link.text}\``;
-    return `[${textWithAttribute}](${link.url})`;
-  }
-
-  const text = printLinkAttributes(type, link.text);
-
-  return `[\`${text}\`](${link.url})`;
-};
-
 export const printLinkAttributes = (
   type: unknown,
   text: Maybe<string> = "",
@@ -210,4 +172,42 @@ export const printLinkAttributes = (
   }
 
   return text ?? "";
+};
+
+export const printLink = (type: unknown, options: PrintLinkOptions): string => {
+  if (typeof type !== "object" || type === null) {
+    return "";
+  }
+
+  const link = toLink(
+    type,
+    getTypeName(type, String(type)),
+    undefined,
+    options,
+  );
+
+  if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
+    const textWithAttribute = hasOptionParentType(options)
+      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
+      : `\`${link.text}\``;
+    return `[${textWithAttribute}](${link.url})`;
+  }
+
+  const text = printLinkAttributes(type, link.text);
+
+  return `[\`${text}\`](${link.url})`;
+};
+
+export const printParentLink = (
+  type: unknown,
+  options: PrintLinkOptions,
+): MDXString | string => {
+  if (typeof type !== "object" || type === null || !("type" in type)) {
+    return "";
+  }
+
+  return `<Bullet />${printLink(type.type, {
+    ...options,
+    withAttributes: true,
+  })}` as MDXString;
 };

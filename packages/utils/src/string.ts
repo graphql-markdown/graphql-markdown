@@ -7,6 +7,70 @@
 import type { Maybe } from "@graphql-markdown/types";
 
 /**
+ * Replaces diacritics by non-diacritic equivalent characters.
+ *
+ *
+ * @param str - the string to be transformed.
+ *
+ * @returns a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
+ *
+ *  * @example
+ * ```js
+ * import { replaceDiacritics } from "@graphql-markdown/utils/string";
+ *
+ * replaceDiacritics("Âéêś"); // Expected result: "Aees"
+ * ```
+ *
+ * @see {@link https://stackoverflow.com/a/37511463 | StackOverflow source}.
+ *
+ */
+export function replaceDiacritics(str: Maybe<string>): string {
+  if (typeof str !== "string") {
+    return "";
+  }
+  return str
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+/**
+ * Returns a string pruned on both start and end, similar to `trim()` but with any substring.
+ *
+ * @internal
+ *
+ * @param str - the string to be pruned.
+ * @param substr - the substring to be removed from `str`.
+ *
+ * @returns a pruned string, or an empty string if `str` is not a valid string.
+ *
+ * @example
+ * ```js
+ * import { prune } from "@graphql-markdown/utils/string";
+ *
+ * const text = "**The quick brown fox jumps over the lazy dog.**";
+ *
+ * prune(text, "**");
+ * // Expected result: "The quick brown fox jumps over the lazy dog."
+ * ```
+ *
+ */
+export function prune(str: Maybe<string>, substr: string = ""): string {
+  if (typeof str !== "string") {
+    return "";
+  }
+
+  if (substr.length === 0) {
+    return str;
+  }
+
+  let res = str;
+  res = res.startsWith(substr) ? res.slice(substr.length) : res;
+  res = res.endsWith(substr) ? res.slice(0, -substr.length) : res;
+  return res;
+}
+
+/**
  * Returns a string after applying a transformation function.
  * By default `splitter` expression will split the string into words, where non-alphanum chars are considered as word separators.
  * `separator` will be used for joining the words back together.
@@ -56,42 +120,6 @@ export function stringCaseBuilder(
     .map((word: string): string => transformation(word))
     .join(separator);
   return prune(stringCase, separator);
-}
-
-/**
- * Returns a string pruned on both start and end, similar to `trim()` but with any substring.
- *
- * @internal
- *
- * @param str - the string to be pruned.
- * @param substr - the substring to be removed from `str`.
- *
- * @returns a pruned string, or an empty string if `str` is not a valid string.
- *
- * @example
- * ```js
- * import { prune } from "@graphql-markdown/utils/string";
- *
- * const text = "**The quick brown fox jumps over the lazy dog.**";
- *
- * prune(text, "**");
- * // Expected result: "The quick brown fox jumps over the lazy dog."
- * ```
- *
- */
-export function prune(str: Maybe<string>, substr: string = ""): string {
-  if (typeof str !== "string") {
-    return "";
-  }
-
-  if (substr.length === 0) {
-    return str;
-  }
-
-  let res = str;
-  res = res.startsWith(substr) ? res.slice(substr.length) : res;
-  res = res.endsWith(substr) ? res.slice(0, -substr.length) : res;
-  return res;
 }
 
 /**
@@ -186,34 +214,6 @@ export function capitalize(str: Maybe<string>): string {
     return "";
   }
   return firstUppercase(str.toLowerCase());
-}
-
-/**
- * Replaces diacritics by non-diacritic equivalent characters.
- *
- *
- * @param str - the string to be transformed.
- *
- * @returns a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
- *
- *  * @example
- * ```js
- * import { replaceDiacritics } from "@graphql-markdown/utils/string";
- *
- * replaceDiacritics("Âéêś"); // Expected result: "Aees"
- * ```
- *
- * @see {@link https://stackoverflow.com/a/37511463 | StackOverflow source}.
- *
- */
-export function replaceDiacritics(str: Maybe<string>): string {
-  if (typeof str !== "string") {
-    return "";
-  }
-  return str
-    .toString()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
 }
 
 /**

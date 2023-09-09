@@ -19,71 +19,6 @@ import {
 import type { Maybe } from "@graphql-markdown/types";
 
 /**
- * Returns a printable formatted value for a GraphQL type.
- * This is the generic function.
- *
- * @param entity - the GraphQL schema entity processed.
- * @param entity.type - the GraphQL schema type.
- * @param entity.defaultValue - the GraphQL schema type's value to be formatted.
- *
- * @returns a printable formatted value.
- *
- */
-export function getFormattedDefaultValue<T>({
-  type,
-  defaultValue,
-}: {
-  type: Maybe<GraphQLType>;
-  defaultValue: T;
-}): Maybe<T | string> {
-  if (
-    typeof type === "undefined" ||
-    type === null ||
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    typeof defaultValue === "undefined" ||
-    defaultValue === null
-  ) {
-    return undefined;
-  }
-
-  if (isListType(type)) {
-    return __formatListDefaultValues(getNamedType(type), defaultValue);
-  }
-
-  return _formatDefaultValue(type, defaultValue);
-}
-
-/**
- * Format a list GraphQL type value into a printable equivalent.
- *
- * @internal
- *
- * @param type - the GraphQL schema type.
- * @param defaultValue - the GraphQL schema type's value to be processed
- *
- * @returns a printable formatted value.
- *
- */
-function __formatListDefaultValues<T>(
-  type: Maybe<GraphQLType>,
-  defaultValue: T,
-): string {
-  if (typeof type === "undefined" || type === null) {
-    return "";
-  }
-
-  const defaultValues: T[] = Array.isArray(defaultValue)
-    ? defaultValue
-    : [defaultValue];
-
-  const defaultValuesString = defaultValues.map((defaultValue) =>
-    getFormattedDefaultValue({ type, defaultValue }),
-  );
-
-  return `[${defaultValuesString.join(", ")}]`;
-}
-
-/**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
  *
  * @internal
@@ -113,4 +48,70 @@ function _formatDefaultValue<T>(
     default:
       return defaultValue;
   }
+}
+
+/**
+ * Format a list GraphQL type value into a printable equivalent.
+ *
+ * @internal
+ *
+ * @param type - the GraphQL schema type.
+ * @param defaultValue - the GraphQL schema type's value to be processed
+ *
+ * @returns a printable formatted value.
+ *
+ */
+function _formatListDefaultValues<T>(
+  type: Maybe<GraphQLType>,
+  defaultValue: T,
+): string {
+  if (typeof type === "undefined" || type === null) {
+    return "";
+  }
+
+  const defaultValues: T[] = Array.isArray(defaultValue)
+    ? defaultValue
+    : [defaultValue];
+
+  const defaultValuesString = defaultValues.map((defaultValue) =>
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    getFormattedDefaultValue({ type, defaultValue }),
+  );
+
+  return `[${defaultValuesString.join(", ")}]`;
+}
+
+/**
+ * Returns a printable formatted value for a GraphQL type.
+ * This is the generic function.
+ *
+ * @param entity - the GraphQL schema entity processed.
+ * @param entity.type - the GraphQL schema type.
+ * @param entity.defaultValue - the GraphQL schema type's value to be formatted.
+ *
+ * @returns a printable formatted value.
+ *
+ */
+export function getFormattedDefaultValue<T>({
+  type,
+  defaultValue,
+}: {
+  type: Maybe<GraphQLType>;
+  defaultValue: T;
+}): Maybe<T | string> {
+  if (
+    typeof type === "undefined" ||
+    type === null ||
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    typeof defaultValue === "undefined" ||
+    defaultValue === null
+  ) {
+    return undefined;
+  }
+
+  if (isListType(type)) {
+    return _formatListDefaultValues(getNamedType(type), defaultValue);
+  }
+
+  return _formatDefaultValue(type, defaultValue);
 }

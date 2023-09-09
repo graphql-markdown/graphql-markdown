@@ -26,31 +26,6 @@ export enum LogLevel {
 }
 
 /**
- * Logs a message by calling the active logger instance.
- *
- * @remarks
- * If a log level is not supported by the logger instance, then it defaults to `"info"`.
- *
- * @param message - a string to be logged.
- * @param level - optional log level, `"info"` by default.
- *
- * @example
- * ```js
- * import { log } from "@graphql-markdown/utils/logger";
- *
- * log("Info message"); // Expected console output "Info message"
- * ```
- *
- */
-export function log(
-  message: string,
-  level: LogLevel | keyof typeof LogLevel = LogLevel.info,
-): void {
-  Logger();
-  global.logger?._log(message, level);
-}
-
-/**
  * Instantiate a logger module.
  * By default, the logger module uses `global.console`
  *
@@ -89,5 +64,30 @@ export const Logger = (moduleName?: string): void => {
 
   global.logger = { instance, _log };
 };
+
+/**
+ * Logs a message by calling the active logger instance.
+ *
+ * @remarks
+ * If a log level is not supported by the logger instance, then it defaults to `"info"`.
+ *
+ * @param message - a string to be logged.
+ * @param level - optional log level, `"info"` by default.
+ *
+ * @example
+ * ```js
+ * import { log } from "@graphql-markdown/utils/logger";
+ *
+ * log("Info message"); // Expected console output "Info message"
+ * ```
+ *
+ */
+export function log(
+  message: string,
+  level: LogLevel | keyof typeof LogLevel = LogLevel.info,
+): void {
+  Logger();
+  global.logger?._log(message, level);
+}
 
 export default Logger;
