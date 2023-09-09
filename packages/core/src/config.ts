@@ -74,7 +74,9 @@ export const DEFAULT_OPTIONS: Required<
   skipDocDirective: [],
 } as const;
 
-export function getSkipDocDirective(name: Maybe<DirectiveName>): DirectiveName {
+export const getSkipDocDirective = (
+  name: Maybe<DirectiveName>,
+): DirectiveName => {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
   if (typeof name !== "string" || !OPTION_REGEX.test(name)) {
@@ -88,14 +90,14 @@ export function getSkipDocDirective(name: Maybe<DirectiveName>): DirectiveName {
   };
 
   return directive;
-}
+};
 
-export function getSkipDocDirectives(
+export const getSkipDocDirectives = (
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<
     Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
   >,
-): DirectiveName[] {
+): DirectiveName[] => {
   const directiveList: DirectiveName[] = [].concat(
     (cliOpts?.skip ?? []) as never[],
     (configFileOpts?.skipDocDirective ?? []) as never[],
@@ -115,12 +117,12 @@ export function getSkipDocDirectives(
   }
 
   return skipDirectives;
-}
+};
 
-export function getCustomDirectives(
+export const getCustomDirectives = (
   customDirectiveOptions: Maybe<CustomDirective>,
   skipDocDirective?: Maybe<DirectiveName[]>,
-): Maybe<CustomDirective> {
+): Maybe<CustomDirective> => {
   if (
     !customDirectiveOptions ||
     Object.keys(customDirectiveOptions).length === 0
@@ -148,21 +150,21 @@ export function getCustomDirectives(
   return Object.keys(customDirectiveOptions).length === 0
     ? undefined
     : customDirectiveOptions;
-}
+};
 
-export function getDiffMethod(
+export const getDiffMethod = (
   diff: TypeDiffMethod,
   force: boolean = false,
-): TypeDiffMethod {
+): TypeDiffMethod => {
   return force
     ? DiffMethod.FORCE
     : (diff.toLocaleUpperCase() as TypeDiffMethod);
-}
+};
 
-export function getDocOptions(
+export const getDocOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigDocOptions>,
-): Required<ConfigDocOptions> {
+): Required<ConfigDocOptions> => {
   return {
     pagination:
       (!cliOpts?.noPagination && configOptions?.pagination) ??
@@ -175,12 +177,12 @@ export function getDocOptions(
       (cliOpts?.index || configOptions?.index) ??
       DEFAULT_OPTIONS.docOptions.index!,
   } as Required<ConfigDocOptions>;
-}
+};
 
-export function getPrintTypeOptions(
+export const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
-): Required<ConfigPrintTypeOptions> {
+): Required<ConfigPrintTypeOptions> => {
   return {
     codeSection:
       (!cliOpts?.noCode && configOptions?.codeSection) ??
@@ -200,11 +202,11 @@ export function getPrintTypeOptions(
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
       DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
   } as Required<ConfigPrintTypeOptions>;
-}
+};
 
-export function parseGroupByOption(
+export const parseGroupByOption = (
   groupOptions: unknown,
-): Maybe<GroupByDirectiveOptions> {
+): Maybe<GroupByDirectiveOptions> => {
   const DEFAULT_GROUP = "Miscellaneous";
   const OPTION_REGEX =
     /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
@@ -229,13 +231,13 @@ export function parseGroupByOption(
     fallback = DEFAULT_GROUP,
   } = parsedOptions.groups as unknown as GroupByDirectiveOptions;
   return { directive, field, fallback } as GroupByDirectiveOptions;
-}
+};
 
-export async function buildConfig(
+export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts: Maybe<CliOptions>,
   id: Maybe<string> = "default",
-): Promise<Options> {
+): Promise<Options> => {
   if (!cliOpts) {
     cliOpts = {};
   }
@@ -273,4 +275,4 @@ export async function buildConfig(
     skipDocDirective,
     tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
   } as Options;
-}
+};

@@ -36,15 +36,15 @@ export const WILDCARD_DIRECTIVE = "*" as const;
  * @returns `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
  *
  */
-export function isCustomDirective(
+export const isCustomDirective = (
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
-): boolean {
+): boolean => {
   return (
     schemaDirectiveName in customDirectiveOptions ||
     WILDCARD_DIRECTIVE in customDirectiveOptions
   );
-}
+};
 
 /**
  * Returns a record set of custom handlers from a directive by name.
@@ -73,10 +73,10 @@ export function isCustomDirective(
  * ```
  *
  */
-export function getCustomDirectiveOptions(
+export const getCustomDirectiveOptions = (
   schemaDirectiveName: DirectiveName,
   customDirectiveOptions: CustomDirective,
-): Maybe<CustomDirectiveOptions> {
+): Maybe<CustomDirectiveOptions> => {
   if (schemaDirectiveName in customDirectiveOptions) {
     return customDirectiveOptions[schemaDirectiveName];
   }
@@ -86,7 +86,7 @@ export function getCustomDirectiveOptions(
   }
 
   return undefined;
-}
+};
 
 /**
  * Returns a custom directives map with custom handlers from `customDirective`.
@@ -147,10 +147,10 @@ export function getCustomDirectiveOptions(
  * ```
  *
  */
-export function getCustomDirectives(
+export const getCustomDirectives = (
   { directives: schemaDirectives }: Pick<SchemaMap, "directives">,
   customDirectiveOptions?: CustomDirective,
-): Maybe<CustomDirectiveMap> {
+): Maybe<CustomDirectiveMap> => {
   const customDirectives: CustomDirectiveMap = {};
 
   if (
@@ -186,7 +186,7 @@ export function getCustomDirectives(
   }
 
   return isEmpty(customDirectives) ? undefined : customDirectives;
-}
+};
 
 /**
  * Returns a map of custom directives for a schema entity.
@@ -244,10 +244,10 @@ export function getCustomDirectives(
  *
  * ```
  */
-export function getConstDirectiveMap(
+export const getConstDirectiveMap = (
   entity: unknown,
   customDirectiveMap: Maybe<CustomDirectiveMap>,
-): Maybe<CustomDirectiveMap> {
+): Maybe<CustomDirectiveMap> => {
   if (!customDirectiveMap || isEmpty(customDirectiveMap)) {
     return undefined;
   }
@@ -265,4 +265,4 @@ export function getConstDirectiveMap(
     },
     {},
   );
-}
+};

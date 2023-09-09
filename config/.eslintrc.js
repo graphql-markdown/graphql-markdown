@@ -13,10 +13,10 @@ module.exports = {
         "jest/globals": true,
       },
       plugins: [
-        "jest",
-        "prettier",
         "@typescript-eslint",
         "eslint-plugin-tsdoc",
+        "jest",
+        "prettier",
       ],
       settings: {
         "import/parsers": {
@@ -107,6 +107,8 @@ module.exports = {
         "no-unused-expressions": "off",
         "no-use-before-define": "off",
         "tsdoc/syntax": "warn",
+        "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
+        "func-style": ["error", "expression", { allowArrowFunctions: true }],
       },
     },
     {

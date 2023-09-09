@@ -31,10 +31,10 @@
  * @returns `false` if the object is a valid k/v set of records, else `true`.
  *
  */
-export function isEmpty(obj: unknown): boolean {
+export const isEmpty = (obj: unknown): boolean => {
   return !(
     typeof obj === "object" &&
     obj !== null &&
     Object.keys(obj).length > 0
   );
-}
+};

@@ -69,10 +69,10 @@ import { hasAstNode } from "./introspection";
  *
  * ```
  */
-export function getGroupName<T>(
+export const getGroupName = <T>(
   type: T,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
-): Maybe<string> {
+): Maybe<string> => {
   if (!type || !groupByDirective) {
     return undefined;
   }
@@ -103,7 +103,7 @@ export function getGroupName<T>(
   }
 
   return groupByDirective.fallback;
-}
+};
 
 /**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
@@ -170,10 +170,10 @@ export function getGroupName<T>(
  * ```
  *
  */
-export function getGroups(
+export const getGroups = (
   schemaMap: SchemaMap,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
-): Maybe<SchemaEntitiesGroupMap> {
+): Maybe<SchemaEntitiesGroupMap> => {
   const groups: SchemaEntitiesGroupMap = {};
 
   if (!groupByDirective) {
@@ -196,4 +196,4 @@ export function getGroups(
   });
 
   return groups;
-}
+};

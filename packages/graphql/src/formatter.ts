@@ -29,10 +29,10 @@ import type { Maybe } from "@graphql-markdown/types";
  * @returns a printable formatted value.
  *
  */
-function _formatDefaultValue<T>(
+const _formatDefaultValue = <T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
-): T | string {
+): T | string => {
   if (isEnumType(type)) {
     return defaultValue;
   }
@@ -48,7 +48,7 @@ function _formatDefaultValue<T>(
     default:
       return defaultValue;
   }
-}
+};
 
 /**
  * Format a list GraphQL type value into a printable equivalent.
@@ -61,10 +61,10 @@ function _formatDefaultValue<T>(
  * @returns a printable formatted value.
  *
  */
-function _formatListDefaultValues<T>(
+const _formatListDefaultValues = <T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
-): string {
+): string => {
   if (typeof type === "undefined" || type === null) {
     return "";
   }
@@ -79,7 +79,7 @@ function _formatListDefaultValues<T>(
   });
 
   return `[${defaultValuesString.join(", ")}]`;
-}
+};
 
 /**
  * Returns a printable formatted value for a GraphQL type.
@@ -92,13 +92,13 @@ function _formatListDefaultValues<T>(
  * @returns a printable formatted value.
  *
  */
-export function getFormattedDefaultValue<T>({
+export const getFormattedDefaultValue = <T>({
   type,
   defaultValue,
 }: {
   type: Maybe<GraphQLType>;
   defaultValue: T;
-}): Maybe<T | string> {
+}): Maybe<T | string> => {
   if (
     typeof type === "undefined" ||
     type === null ||
@@ -114,4 +114,4 @@ export function getFormattedDefaultValue<T>({
   }
 
   return _formatDefaultValue(type, defaultValue);
-}
+};

@@ -55,10 +55,10 @@ export { getDirectiveValues, getNamedType, printSchema } from "graphql";
  * @returns a map of GraphQL named types for the matching GraphQL type, or undefined if no match.
  *
  */
-export function getTypeFromSchema<T>(
+export const getTypeFromSchema = <T>(
   schema: Maybe<GraphQLSchema>,
   type: unknown,
-): Maybe<Record<string, T>> {
+): Maybe<Record<string, T>> => {
   if (!schema) {
     return undefined;
   }
@@ -91,7 +91,7 @@ export function getTypeFromSchema<T>(
     .reduce((res, key) => {
       return { ...res, [key]: typeMap[key] };
     }, {});
-}
+};
 
 /**
  * Type guard for type with an AST node property.
@@ -103,9 +103,9 @@ export function getTypeFromSchema<T>(
  * @returns `true` if the entity has an AST node property, else `false`.
  *
  */
-export function hasAstNode<T>(node: T): node is AstNodeType<T> {
+export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
-}
+};
 
 /**
  * Checks if a schema entity as a directive belonging to a defined set.
@@ -116,10 +116,10 @@ export function hasAstNode<T>(node: T): node is AstNodeType<T> {
  * @returns `true` if the entity has at least one directive matching, else `false`.
  *
  */
-export function hasDirective(
+export const hasDirective = (
   entity: unknown,
   directives: Maybe<string[] | string>,
-): boolean {
+): boolean => {
   if (
     !hasAstNode(entity) ||
     !directives ||
@@ -135,7 +135,7 @@ export function hasDirective(
       return directiveList.includes(directiveNode.name.value);
     }) > -1
   );
-}
+};
 
 /**
  * Returns a schema entity's list of directives matching a defined set.
@@ -146,10 +146,10 @@ export function hasDirective(
  * @returns a list of GraphQL directives matching the set, else `false`.
  *
  */
-export function getDirective(
+export const getDirective = (
   entity: unknown,
   directives: Maybe<string[] | string>,
-): GraphQLDirective[] {
+): GraphQLDirective[] => {
   if (
     !hasAstNode(entity) ||
     !directives ||
@@ -173,7 +173,7 @@ export function getDirective(
         astNode: directiveNode,
       });
     }) as GraphQLDirective[];
-}
+};
 
 /**
  * Returns all directive's arguments' values linked to a GraphQL schema type.
@@ -184,10 +184,10 @@ export function getDirective(
  * @returns a record k/v with arguments' name as keys and arguments' value.
  *
  */
-export function getTypeDirectiveValues(
+export const getTypeDirectiveValues = (
   directive: GraphQLDirective,
   type: unknown,
-): Maybe<Record<string, unknown>> {
+): Maybe<Record<string, unknown>> => {
   if (hasAstNode(type)) {
     return getDirectiveValues(
       directive,
@@ -202,7 +202,7 @@ export function getTypeDirectiveValues(
       readonly directives?: readonly DirectiveNode[];
     },
   );
-}
+};
 
 /**
  * Returns one directive's argument's value linked to a GraphQL schema type.
@@ -215,11 +215,11 @@ export function getTypeDirectiveValues(
  * @returns a record k/v with `argName` as key and the argument's value.
  *
  */
-export function getTypeDirectiveArgValue(
+export const getTypeDirectiveArgValue = (
   directive: GraphQLDirective,
   node: unknown,
   argName: string,
-): Maybe<Record<string, unknown>> {
+): Maybe<Record<string, unknown>> => {
   const args = getTypeDirectiveValues(directive, node);
 
   if (!args?.[argName]) {
@@ -227,7 +227,7 @@ export function getTypeDirectiveArgValue(
   }
 
   return args[argName] as Maybe<Record<string, unknown>>;
-}
+};
 
 /**
  * Returns the fields from a GraphQL schema type.
@@ -243,7 +243,7 @@ export function getTypeDirectiveArgValue(
  * @returns a map of fields as k/v records, or `fallback` value if no fields available.
  *
  */
-export function _getFields<T, V>(
+export const _getFields = <T, V>(
   type: T,
   /**
    * @param fieldMap - a field map to be processed.
@@ -251,7 +251,7 @@ export function _getFields<T, V>(
    */
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
-): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V {
+): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V => {
   if (
     !(
       typeof type === "object" &&
@@ -270,7 +270,7 @@ export function _getFields<T, V>(
   }
 
   return fieldMap;
-}
+};
 
 /**
  * Returns fields map for a GraphQL operation type (query, mutation, subscription...).
@@ -284,9 +284,9 @@ export function _getFields<T, V>(
  * @returns a map of fields as k/v records.
  *
  */
-export function getOperation(
+export const getOperation = (
   operationType?: unknown,
-): Record<string, GraphQLOperationType> {
+): Record<string, GraphQLOperationType> => {
   return _getFields(
     operationType,
     (fieldMap) => {
@@ -296,7 +296,7 @@ export function getOperation(
     },
     {},
   ) as Record<string, GraphQLOperationType>;
-}
+};
 
 /**
  * Returns fields map for a GraphQL schema type.
@@ -308,7 +308,7 @@ export function getOperation(
  * @returns a list of fields of type object.
  *
  */
-export function getFields(type: unknown): unknown[] {
+export const getFields = (type: unknown): unknown[] => {
   return _getFields(
     type,
     (fieldMap) => {
@@ -320,7 +320,7 @@ export function getFields(type: unknown): unknown[] {
     },
     [],
   ) as unknown[];
-}
+};
 
 /**
  * Resolves the name of a GraphQL schema type.
@@ -331,7 +331,10 @@ export function getFields(type: unknown): unknown[] {
  * @returns the type's name, or `defaultName`.
  *
  */
-export function getTypeName(type: unknown, defaultName: string = ""): string {
+export const getTypeName = (
+  type: unknown,
+  defaultName: string = "",
+): string => {
   if (!(typeof type === "object" && type !== null)) {
     return defaultName;
   }
@@ -345,7 +348,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
   }
 
   return defaultName;
-}
+};
 
 /**
  * Returns an introspection map of the GraphQL schema.
@@ -415,7 +418,7 @@ export function getTypeName(type: unknown, defaultName: string = ""): string {
  * ```
  *
  */
-export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
+export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
   return {
     ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
@@ -454,4 +457,4 @@ export function getSchemaMap(schema: Maybe<GraphQLSchema>): SchemaMap {
       GraphQLScalarType,
     ),
   };
-}
+};

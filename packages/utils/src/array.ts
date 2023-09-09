@@ -31,9 +31,9 @@ import type { Maybe } from "@graphql-markdown/types";
  * @returns an array of object values, or `undefined` if `recordMap` is not a valid object.
  *
  */
-export function toArray(
+export const toArray = (
   recordMap: Maybe<Record<string, unknown>>,
-): Maybe<unknown[]> {
+): Maybe<unknown[]> => {
   if (typeof recordMap !== "object" || recordMap === null) {
     return undefined;
   }
@@ -41,7 +41,7 @@ export function toArray(
   return Object.keys(recordMap).map((key: string): unknown => {
     return recordMap[key];
   });
-}
+};
 
 /**
  * Returns a k/v object from an array of objects with a `name` property.
@@ -73,9 +73,9 @@ export function toArray(
  * ```
  *
  */
-export function convertArrayToMapObject<T>(
+export const convertArrayToMapObject = <T>(
   list: Maybe<T[]>,
-): Maybe<Record<string, T>> {
+): Maybe<Record<string, T>> => {
   if (!Array.isArray(list)) {
     return undefined;
   }
@@ -90,4 +90,4 @@ export function convertArrayToMapObject<T>(
     }
     return result;
   }, {});
-}
+};

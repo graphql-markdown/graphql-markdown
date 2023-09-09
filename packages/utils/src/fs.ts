@@ -29,14 +29,14 @@ export { readFile, copyFile } from "node:fs/promises";
  * @returns `true` if the path is valid, else `false` if not.
  *
  */
-export async function fileExists(location: string): Promise<boolean> {
+export const fileExists = async (location: string): Promise<boolean> => {
   try {
     const stats = await stat(location);
     return typeof stats === "object";
   } catch (error) {
     return false;
   }
-}
+};
 
 /**
  * Asynchronously create a folder structure if it does not exist.
@@ -54,11 +54,11 @@ export async function fileExists(location: string): Promise<boolean> {
  * ```
  *
  */
-export async function ensureDir(location: string): Promise<void> {
+export const ensureDir = async (location: string): Promise<void> => {
   if (!(await fileExists(location))) {
     await mkdir(location, { recursive: true });
   }
-}
+};
 
 /**
  * Asynchronously save a file with a string content at specified location in local FS.
@@ -82,14 +82,14 @@ export async function ensureDir(location: string): Promise<void> {
  * @returns `true` if the path is valid, else `false` if not.
  *
  */
-export async function saveFile(
+export const saveFile = async (
   location: string,
   content: string,
   prettify?: PrettifyCallbackFunction,
-): Promise<void> {
+): Promise<void> => {
   if (typeof prettify === "function") {
     content = (await prettify(content)) ?? content;
   }
   await ensureDir(dirname(location));
   await writeFile(location, content, "utf8");
-}
+};

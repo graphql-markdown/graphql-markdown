@@ -24,7 +24,7 @@ import type { Maybe } from "@graphql-markdown/types";
  * @see {@link https://stackoverflow.com/a/37511463 | StackOverflow source}.
  *
  */
-export function replaceDiacritics(str: Maybe<string>): string {
+export const replaceDiacritics = (str: Maybe<string>): string => {
   if (typeof str !== "string") {
     return "";
   }
@@ -32,7 +32,7 @@ export function replaceDiacritics(str: Maybe<string>): string {
     .toString()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
-}
+};
 
 /**
  * Returns a string pruned on both start and end, similar to `trim()` but with any substring.
@@ -55,7 +55,7 @@ export function replaceDiacritics(str: Maybe<string>): string {
  * ```
  *
  */
-export function prune(str: Maybe<string>, substr: string = ""): string {
+export const prune = (str: Maybe<string>, substr: string = ""): string => {
   if (typeof str !== "string") {
     return "";
   }
@@ -68,7 +68,7 @@ export function prune(str: Maybe<string>, substr: string = ""): string {
   res = res.startsWith(substr) ? res.slice(substr.length) : res;
   res = res.endsWith(substr) ? res.slice(0, -substr.length) : res;
   return res;
-}
+};
 
 /**
  * Returns a string after applying a transformation function.
@@ -97,12 +97,12 @@ export function prune(str: Maybe<string>, substr: string = ""): string {
  * ```
  *
  */
-export function stringCaseBuilder(
+export const stringCaseBuilder = (
   str: Maybe<string>,
   transformation?: Maybe<(word: string) => string>,
   separator?: string,
   splitter: RegExp | string = /[^0-9A-Za-z]+/g,
-): string {
+): string => {
   if (typeof str !== "string") {
     return "";
   }
@@ -124,7 +124,7 @@ export function stringCaseBuilder(
     })
     .join(separator);
   return prune(stringCase, separator);
-}
+};
 
 /**
  * Converts a character to its equivalent HTML unicode representation `&#x0000`.
@@ -143,13 +143,13 @@ export function stringCaseBuilder(
  * ```
  *
  */
-export function toHTMLUnicode(char: Maybe<string>): string {
+export const toHTMLUnicode = (char: Maybe<string>): string => {
   if (typeof char !== "string") {
     return "";
   }
   const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
   return `&#x${unicodeChar.toUpperCase()};`;
-}
+};
 
 /**
  * Returns a string with MDX special characters converted to HTML unicode using {@link toHTMLUnicode}.
@@ -169,9 +169,9 @@ export function toHTMLUnicode(char: Maybe<string>): string {
  * ```
  *
  */
-export function escapeMDX(str: unknown): string {
+export const escapeMDX = (str: unknown): string => {
   return `${String(str)}`.replace(/[<>{}]/g, toHTMLUnicode);
-}
+};
 
 /**
  * Returns a string with the 1st character in uppercase.
@@ -189,14 +189,14 @@ export function escapeMDX(str: unknown): string {
  * ```
  *
  */
-export function firstUppercase(str: Maybe<string>): string {
+export const firstUppercase = (str: Maybe<string>): string => {
   if (typeof str !== "string") {
     return "";
   }
   const sliceUppercase = str.slice(0, 1).toUpperCase();
   const sliceDefaultCase = str.slice(1);
   return `${sliceUppercase}${sliceDefaultCase}`;
-}
+};
 
 /**
  * Returns a string in lowercase excepted for the 1st character capitalized using {@link firstUppercase}.
@@ -213,12 +213,12 @@ export function firstUppercase(str: Maybe<string>): string {
  * // Expected result: "The quick brown fox"
  * ```
  */
-export function capitalize(str: Maybe<string>): string {
+export const capitalize = (str: Maybe<string>): string => {
   if (typeof str !== "string") {
     return "";
   }
   return firstUppercase(str.toLowerCase());
-}
+};
 
 /**
  * Applies {@link firstUppercase} using {@link stringCaseBuilder} to every word of a string with `space` character as separator.
@@ -235,12 +235,12 @@ export function capitalize(str: Maybe<string>): string {
  * // Expected result: "The Quick Brown Fox"
  * ```
  */
-export function startCase(str: Maybe<string>): string {
+export const startCase = (str: Maybe<string>): string => {
   if (typeof str !== "string") {
     return "";
   }
   return stringCaseBuilder(str, firstUppercase, " ");
-}
+};
 
 /**
  * Returns a lowercase string with `-` as replacement for non alphanum characters using {@link stringCaseBuilder}.
@@ -259,7 +259,7 @@ export function startCase(str: Maybe<string>): string {
  * ```
  *
  */
-export function kebabCase(str: Maybe<string>): string {
+export const kebabCase = (str: Maybe<string>): string => {
   if (typeof str !== "string") {
     return "";
   }
@@ -270,7 +270,7 @@ export function kebabCase(str: Maybe<string>): string {
     },
     "-",
   );
-}
+};
 
 /**
  * Alias of {@link kebabCase}.

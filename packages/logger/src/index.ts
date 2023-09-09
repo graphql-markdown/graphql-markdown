@@ -82,12 +82,12 @@ export const Logger = (moduleName?: string): void => {
  * ```
  *
  */
-export function log(
+export const log = (
   message: string,
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
-): void {
+): void => {
   Logger();
   global.logger?._log(message, level);
-}
+};
 
 export default Logger;

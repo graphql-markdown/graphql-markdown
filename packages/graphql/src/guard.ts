@@ -30,16 +30,16 @@ export {
  * @param type - a GraphQL type.
  *
  */
-export function isGraphQLFieldType(
+export const isGraphQLFieldType = (
   type: unknown,
-): type is GraphQLField<unknown, unknown, unknown> {
+): type is GraphQLField<unknown, unknown, unknown> => {
   return (
     typeof type === "object" &&
     type !== null &&
     "args" in type &&
     (type as GraphQLField<unknown, unknown, unknown>).args.length > 0
   );
-}
+};
 
 /**
  * Checks if a GraphQL named type is of generic type `T`.
@@ -49,7 +49,7 @@ export function isGraphQLFieldType(
  * @param type - the GraphQL type `T`.
  *
  */
-export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
+export const instanceOf = <T>(obj: unknown, type: new () => T): obj is T => {
   try {
     const expect = type.name;
     return typeof obj !== "object" || obj === null
@@ -58,7 +58,7 @@ export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
   } catch (_) {
     return false;
   }
-}
+};
 
 /**
  * Checks if a GraphQL named type is deprecated.
@@ -67,14 +67,14 @@ export function instanceOf<T>(obj: unknown, type: new () => T): obj is T {
  * @param obj - an instance of `T`.
  *
  */
-export function isDeprecated<T>(obj: T): obj is DeprecatedType<T> {
+export const isDeprecated = <T>(obj: T): obj is DeprecatedType<T> => {
   return (
     typeof obj === "object" &&
     obj !== null &&
     (("isDeprecated" in obj && obj.isDeprecated === true) ||
       ("deprecationReason" in obj && typeof obj.deprecationReason === "string"))
   );
-}
+};
 
 /**
  * Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
@@ -82,6 +82,6 @@ export function isDeprecated<T>(obj: T): obj is DeprecatedType<T> {
  * @param type - a GraphQL type.
  *
  */
-export function isOperation(type: unknown): type is GraphQLOperationType {
+export const isOperation = (type: unknown): type is GraphQLOperationType => {
   return typeof type === "object" && type !== null && "type" in type;
-}
+};
