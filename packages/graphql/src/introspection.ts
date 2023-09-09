@@ -155,11 +155,11 @@ export function getDirective(
   const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
 
   return entity.astNode.directives
-    .filter((directiveNode: DirectiveDefinitionNode) =>
+    .filter((directiveNode: DirectiveDefinitionNode): boolean =>
       directiveList.includes(directiveNode.name.value),
     )
     .map(
-      (directiveNode: DirectiveDefinitionNode) =>
+      (directiveNode: DirectiveDefinitionNode): GraphQLDirective =>
         new GraphQLDirective({
           name: directiveNode.name.value,
           description: directiveNode.description?.value,
@@ -167,7 +167,7 @@ export function getDirective(
           extensions: undefined,
           astNode: directiveNode,
         }),
-    );
+    ) as GraphQLDirective[];
 }
 
 /**

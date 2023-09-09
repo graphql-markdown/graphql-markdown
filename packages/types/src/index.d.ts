@@ -8,6 +8,7 @@ export type {
   GraphQLBoolean,
   GraphQLDirective,
   GraphQLEnumType,
+  GraphQLEnumValue,
   GraphQLField,
   GraphQLFieldMap,
   GraphQLFloat,

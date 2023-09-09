@@ -3,7 +3,7 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 jest.mock("@graphql-markdown/utils", () => {
   return {
     slugify: jest.fn(),
-    escapeMDX: jest.fn((t) => t),
+    escapeMDX: jest.fn(<T>(t: T): T => t),
     pathUrl: jest.fn(),
     isEmpty: jest.fn(() => false),
   };
@@ -65,8 +65,8 @@ describe("badge", () => {
         { ...DEFAULT_OPTIONS, typeBadges: true },
       );
 
-      expect(badges).toMatchInlineSnapshot(
-        `"<Badge class="badge badge--secondary" text="non-null"/>"`,
+      expect(badges).toBe(
+        '<Badge class="badge badge--secondary" text="non-null"/>',
       );
     });
 

@@ -12,6 +12,7 @@ import type {
   GraphQLScalarType,
   GraphQLUnionType,
   Maybe,
+  ObjectTypeDefinitionNode,
 } from ".";
 
 export type DeprecatedType<T> = Partial<{

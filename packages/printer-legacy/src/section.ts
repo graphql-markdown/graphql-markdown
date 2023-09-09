@@ -1,5 +1,5 @@
 import type {
-  GraphQLField,
+  GraphQLArgument,
   MDXString,
   PrintTypeOptions,
   SectionLevel,
@@ -31,9 +31,9 @@ export const sectionLevels: SectionLevel[] = [
   SectionLevels.LEVEL_5 as SectionLevelValue,
 ];
 
-export const printMetadataSection = (
-  type: unknown,
-  values: unknown,
+export const printMetadataSection = <T, V>(
+  type: T,
+  values: V | V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
 ): MDXString | string => {
@@ -54,7 +54,7 @@ export const printMetadataSection = (
           isDeprecated(arg) ? res.deprecated.push(arg) : res.fields.push(arg);
           return res;
         },
-        { fields: [] as unknown[], deprecated: [] as unknown[] },
+        { fields: [] as V[], deprecated: [] as V[] },
       );
 
       const meta = printSection(fields, section, {
@@ -83,8 +83,8 @@ export const printMetadataSection = (
   }
 };
 
-export const printSection = (
-  values: unknown,
+export const printSection = <V>(
+  values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
 ): MDXString | string => {
@@ -128,8 +128,8 @@ export const printSection = (
   return `${level} ${section}${openSection}${items}${closeSection}` as MDXString;
 };
 
-export const printSectionItems = (
-  values: unknown,
+export const printSectionItems = <V>(
+  values: V | V[],
   options: PrintTypeOptions,
 ): MDXString | string => {
   if (!Array.isArray(values) || values.length === 0) {
@@ -144,18 +144,18 @@ export const printSectionItems = (
 
   return values
     .map(
-      (v) =>
+      (v: V): MDXString =>
         v &&
-        printSectionItem(v, {
+        (printSectionItem(v, {
           ...options,
           level,
-        }),
+        }) as MDXString),
     )
     .join(MARKDOWN_EOP) as MDXString;
 };
 
-export const printSectionItem = (
-  type: unknown,
+export const printSectionItem = <T>(
+  type: T,
   options: PrintTypeOptions,
 ): MDXString | string => {
   const level =
@@ -184,19 +184,14 @@ export const printSectionItem = (
 
   let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
   if (isGraphQLFieldType(type)) {
-    section += printSectionItems(
-      (type as GraphQLField<unknown, unknown, unknown>).args,
-      {
-        ...options,
-        level: SectionLevels.LEVEL_5 as SectionLevelValue,
-        parentType:
-          typeof options.parentType === "undefined"
-            ? (type as GraphQLField<unknown, unknown, unknown>).name
-            : `${options.parentType}.${
-                (type as GraphQLField<unknown, unknown, unknown>).name
-              }`,
-      },
-    );
+    section += printSectionItems(type.args as GraphQLArgument[], {
+      ...options,
+      level: SectionLevels.LEVEL_5 as SectionLevelValue,
+      parentType:
+        typeof options.parentType === "undefined"
+          ? type.name
+          : `${options.parentType}.${type.name}`,
+    });
   }
 
   return section as MDXString;

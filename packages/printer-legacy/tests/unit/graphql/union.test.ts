@@ -23,23 +23,21 @@ describe("union", () => {
 
       const code = printUnionMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toMatchInlineSnapshot(`
-        "### Possible types
+      expect(code).toBe(`### Possible types
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](/objects/one) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](/objects/one) <Badge class="badge badge--secondary" text="object"/> 
+> 
+> 
+> 
+> 
 
-        #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](/objects/two) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](/objects/two) <Badge class="badge badge--secondary" text="object"/> 
+> 
+> 
+> 
+> 
 
-        "
-      `);
+`);
     });
   });
 
@@ -49,7 +47,7 @@ describe("union", () => {
 
       const code = printCodeUnion(type);
 
-      expect(code).toMatchInlineSnapshot(`"union UnionTypeName = one | two"`);
+      expect(code).toBe("union UnionTypeName = one | two");
     });
 
     test("returns empty string if not union type", () => {

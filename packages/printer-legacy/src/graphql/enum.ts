@@ -22,12 +22,7 @@ export const printEnumMetadata = (
     return "";
   }
 
-  return printMetadataSection(
-    type,
-    (type as GraphQLEnumType).getValues(),
-    "Values",
-    options,
-  );
+  return printMetadataSection(type, type.getValues(), "Values", options);
 };
 
 export const printCodeEnum = (

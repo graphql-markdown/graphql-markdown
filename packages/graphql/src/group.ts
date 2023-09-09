@@ -15,6 +15,12 @@ import type {
 } from "@graphql-markdown/types";
 
 import { hasAstNode } from "./introspection";
+import {
+  Kind,
+  type ConstArgumentNode,
+  type ConstDirectiveNode,
+  type StringValueNode,
+} from "graphql";
 
 /**
  * Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
@@ -155,8 +161,8 @@ export function getGroups(
  *
  * ```
  */
-export function getGroupName(
-  type: unknown,
+export function getGroupName<T>(
+  type: T,
   groupByDirective: Maybe<GroupByDirectiveOptions>,
 ): Maybe<string> {
   if (!type || !groupByDirective) {
@@ -167,21 +173,24 @@ export function getGroupName(
     return groupByDirective.fallback;
   }
 
-  const allDirectives = type.astNode.directives;
+  const allDirectives = type.astNode.directives as Maybe<ConstDirectiveNode[]>;
 
   if (!Array.isArray(allDirectives)) {
     return groupByDirective.fallback;
   }
 
   for (const directive of allDirectives) {
-    if (directive.name.value !== groupByDirective.directive) {
+    if (
+      !directive.arguments ||
+      directive.name.value !== groupByDirective.directive
+    ) {
       continue;
     }
-    const field = directive.arguments.find(
-      ({ name }: { name: Record<string, string> }) =>
-        name.value === groupByDirective.field,
-    );
-    return field.value.value;
+    const field = (directive.arguments as ConstArgumentNode[]).find(
+      ({ name, value }): boolean =>
+        name.value === groupByDirective.field && value.kind === Kind.STRING,
+    ) as Maybe<ConstArgumentNode & { value: StringValueNode }>;
+    return field?.value.value;
   }
 
   return groupByDirective.fallback;
