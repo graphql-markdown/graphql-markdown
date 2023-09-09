@@ -5,6 +5,9 @@ import {
   replaceDiacritics,
   stringCaseBuilder,
   slugify,
+  startCase,
+  kebabCase,
+  firstUppercase,
 } from "../../src/string";
 
 describe("string", () => {
@@ -131,11 +134,13 @@ describe("string", () => {
       );
     });
 
-    test("return a stringified version if not a string", () => {
+    test.each([
+      [5, "5"],
+      [{ five: 5 }, "[object Object]"],
+    ])("returns a stringified version if not a string", (value, expected) => {
       expect.hasAssertions();
 
-      expect(escapeMDX(5)).toBe("5");
-      expect(escapeMDX({ five: 5 })).toBe("[object Object]");
+      expect(escapeMDX(value)).toBe(expected);
     });
   });
 
@@ -162,6 +167,48 @@ describe("string", () => {
       expect.hasAssertions();
 
       expect(capitalize(undefined)).toBe("");
+    });
+  });
+
+  describe("startCase()", () => {
+    test("returns empty string if not a string", () => {
+      expect.hasAssertions();
+
+      expect(startCase(null)).toBe("");
+    });
+
+    test("returns startCase version", () => {
+      expect.hasAssertions();
+
+      expect(startCase("the quick Brown Fox")).toBe("The Quick Brown Fox");
+    });
+  });
+
+  describe("kebabCase()", () => {
+    test("returns empty string if not a string", () => {
+      expect.hasAssertions();
+
+      expect(kebabCase(null)).toBe("");
+    });
+
+    test("returns a kebabCase version", () => {
+      expect.hasAssertions();
+
+      expect(kebabCase("the quick Brown Fox")).toBe("the-quick-brown-fox");
+    });
+  });
+
+  describe("firstUppercase()", () => {
+    test("returns empty string if not a string", () => {
+      expect.hasAssertions();
+
+      expect(firstUppercase(null)).toBe("");
+    });
+
+    test("returns a firstUppercase version", () => {
+      expect.hasAssertions();
+
+      expect(firstUppercase("the quick Brown Fox")).toBe("The quick Brown Fox");
     });
   });
 });
