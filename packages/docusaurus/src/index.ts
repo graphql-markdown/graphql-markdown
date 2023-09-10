@@ -13,16 +13,14 @@ import { DEFAULT_ID } from "./options";
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
-Logger(require.resolve("@docusaurus/logger"));
+
+Logger("@docusaurus/logger");
 
 export default async function pluginGraphQLMarkdown(
   context: LoadContext,
   options: Options,
 ): Promise<Plugin<LoadedContent>> {
-  const pluginId = options.id;
-
-  // console.dir(options);
-
+  const pluginId: string = options.id;
   const command = pluginId === DEFAULT_ID ? COMMAND : `${COMMAND}:${pluginId}`;
   const description =
     pluginId === DEFAULT_ID ? DESCRIPTION : `${DESCRIPTION} (${pluginId})`;
@@ -36,7 +34,6 @@ export default async function pluginGraphQLMarkdown(
     cliOptions?: CliOptions,
   ): Promise<LoadedContent> => {
     if (options.runOnBuild === false && !cliOptions) {
-      console.log("SKIPPY");
       return { loadedVersions: [] };
     }
 
@@ -49,8 +46,7 @@ export default async function pluginGraphQLMarkdown(
       ...config,
     });
 
-    const content = (await docsPluginInstance.loadContent!()) as LoadedContent;
-    return content;
+    return docsPluginInstance.loadContent!();
   };
 
   return {
