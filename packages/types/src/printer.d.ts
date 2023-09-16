@@ -39,8 +39,8 @@ export interface CollapsibleOption {
 }
 
 export interface PrintTypeHeaderOptions {
-  toc?: boolean;
   pagination?: boolean;
+  toc?: boolean;
 }
 
 export interface PrintTypeOptions {
@@ -50,7 +50,9 @@ export interface PrintTypeOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  header?: Maybe<PrintTypeHeaderOptions>;
   level?: Maybe<SectionLevelValue>;
+  onlyDocDirective?: Maybe<DirectiveName[]>;
   parentType?: Maybe<string>;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
@@ -58,7 +60,6 @@ export interface PrintTypeOptions {
   skipDocDirective?: Maybe<DirectiveName[]>;
   typeBadges?: boolean;
   withAttributes?: boolean;
-  header?: Maybe<PrintTypeHeaderOptions>;
 }
 
 export type SectionLevelValue = string & {
@@ -83,6 +84,7 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
     | "basePath"
     | "deprecated"
     | "groups"
+    | "onlyDocDirective"
     | "parentType"
     | "parentTypePrefix"
     | "skipDocDirective"
@@ -147,6 +149,7 @@ export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  onlyDocDirective?: Maybe<DirectiveName[]>;
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirective?: Maybe<DirectiveName[]>;
 }

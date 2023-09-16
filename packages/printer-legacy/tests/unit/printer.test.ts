@@ -143,9 +143,9 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    jest
-      .spyOn(GraphQL, "getTypeName")
-      .mockImplementation((value) => value as string);
+    jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
+      return value as string;
+    });
   });
 
   afterEach(() => {
@@ -174,6 +174,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "onlyDocDirective": undefined,
           "parentType": undefined,
           "parentTypePrefix": true,
           "relatedTypeSection": true,
@@ -224,6 +225,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "onlyDocDirective": undefined,
           "parentType": undefined,
           "parentTypePrefix": false,
           "relatedTypeSection": false,
@@ -412,9 +414,9 @@ describe("Printer", () => {
       ({ name, type }) => {
         expect.hasAssertions();
 
-        const spies = methods.map((method) =>
-          jest.spyOn(Printer, method).mockReturnValue(""),
-        );
+        const spies = methods.map((method) => {
+          return jest.spyOn(Printer, method).mockReturnValue("");
+        });
 
         Printer.printType(name, type);
 

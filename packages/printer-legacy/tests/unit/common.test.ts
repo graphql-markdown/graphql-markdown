@@ -5,14 +5,31 @@ import {
 } from "graphql";
 
 import {
+  hasPrintableDirective,
   printCustomDirectives,
   printDeprecation,
   printDescription,
 } from "../../src/common";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
+import type { PrintTypeOptions } from "@graphql-markdown/types";
+
+jest.mock("@graphql-markdown/graphql", () => {
+  const original = jest.requireActual("@graphql-markdown/graphql");
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return {
+    ...original,
+    isDeprecated: jest.fn(original.isDeprecated),
+    hasDirective: jest.fn(original.hasDirective),
+  };
+});
+import * as mockGraphQL from "@graphql-markdown/graphql";
 
 describe("common", () => {
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
+
   describe("printDescription()", () => {
     test("returns the type description text", () => {
       expect.hasAssertions();
@@ -141,8 +158,9 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective): string =>
-              `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective): string => {
+              return `Test ${directive.name}`;
+            },
           },
         },
       };
@@ -245,8 +263,9 @@ describe("common", () => {
         customDirectives: {
           testDirective: {
             type: directiveType,
-            descriptor: (directive: GraphQLDirective): string =>
-              `Test ${directive.name}`,
+            descriptor: (directive: GraphQLDirective): string => {
+              return `Test ${directive.name}`;
+            },
           },
         },
       };
@@ -259,5 +278,87 @@ describe("common", () => {
 Test testDirective"
 `);
     });
+  });
+
+  describe("hasPrintableDirective", () => {
+    test.each([
+      { options: undefined },
+      {
+        options: {
+          skipDocDirective: undefined,
+          onlyDocDirective: [],
+          deprecated: undefined,
+        },
+      },
+      {
+        options: {
+          skipDocDirective: [],
+          onlyDocDirective: undefined,
+          deprecated: undefined,
+        },
+      },
+    ])("return true if no option set", ({ options }) => {
+      expect(
+        hasPrintableDirective({}, options as unknown as PrintTypeOptions),
+      ).toBeTruthy();
+    });
+  });
+
+  test("return false if type has skip directive", () => {
+    const options = {
+      skipDocDirective: ["noDoc"],
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
+    expect(hasPrintableDirective({}, options)).toBeFalsy();
+  });
+
+  test("return true if type has not skip directive", () => {
+    const options = {
+      skipDocDirective: ["noDoc"],
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(false);
+    expect(hasPrintableDirective({}, options)).toBeTruthy();
+  });
+
+  test("return false if type has skip deprecated", () => {
+    const options = {
+      deprecated: "skip",
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
+    expect(hasPrintableDirective({}, options)).toBeFalsy();
+  });
+
+  test("return true if type has not skip deprecated", () => {
+    const options = {
+      deprecated: "default",
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
+    expect(hasPrintableDirective({}, options)).toBeTruthy();
+  });
+
+  test("return true if type has only directive", () => {
+    const options = {
+      onlyDocDirective: ["public"],
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
+    expect(hasPrintableDirective({}, options)).toBeTruthy();
+  });
+
+  test("return false if type has not only directive", () => {
+    const options = {
+      onlyDocDirective: ["public"],
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(false);
+    expect(hasPrintableDirective({}, options)).toBeFalsy();
+  });
+
+  test("return false if type has only directive and skip deprecated", () => {
+    const options = {
+      deprecated: "skip",
+      onlyDocDirective: ["public"],
+    } as unknown as PrintTypeOptions;
+    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
+    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
+    expect(hasPrintableDirective({}, options)).toBeFalsy();
   });
 });

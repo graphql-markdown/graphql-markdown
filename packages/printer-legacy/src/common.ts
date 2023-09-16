@@ -6,7 +6,11 @@ import type {
 
 import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
 
-import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
+import {
+  isDeprecated,
+  getConstDirectiveMap,
+  hasDirective,
+} from "@graphql-markdown/graphql";
 
 import { getCustomDirectiveResolver } from "./directive";
 
@@ -84,4 +88,31 @@ export const printDescription = (
   const customDirectives = printCustomDirectives(type, options);
   const deprecation = printDeprecation(type);
   return `${deprecation}${description}${customDirectives}`;
+};
+
+export const hasPrintableDirective = (
+  type: unknown,
+  options?: PrintTypeOptions,
+): boolean => {
+  if (!options) {
+    return true;
+  }
+
+  const skipDirective =
+    "skipDocDirective" in options &&
+    hasDirective(type, options.skipDocDirective);
+
+  const skipDeprecated =
+    "deprecated" in options &&
+    options.deprecated === "skip" &&
+    isDeprecated(type);
+
+  const onlyDirective =
+    "onlyDocDirective" in options &&
+    options.onlyDocDirective &&
+    options.onlyDocDirective.length > 0
+      ? hasDirective(type, options.onlyDocDirective)
+      : true;
+
+  return !(skipDirective || skipDeprecated) && onlyDirective;
 };

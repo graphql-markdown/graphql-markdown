@@ -32,17 +32,19 @@ export const DEFAULT_OPTIONS: Required<
     | "collapsible"
     | "groups"
     | "level"
+    | "onlyDocDirective"
     | "parentType"
     | "schema"
     | "skipDocDirective"
   >
 > & {
-  schema: Maybe<GraphQLSchema>;
-  skipDocDirective: Maybe<DirectiveName[]>;
   collapsible: Maybe<CollapsibleOption>;
-  parentType: Maybe<string>;
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
+  onlyDocDirective: Maybe<DirectiveName[]>;
+  parentType: Maybe<string>;
+  schema: Maybe<GraphQLSchema>;
+  skipDocDirective: Maybe<DirectiveName[]>;
 } = {
   ...PRINT_TYPE_DEFAULT_OPTIONS,
   basePath: "/",
@@ -51,6 +53,7 @@ export const DEFAULT_OPTIONS: Required<
   groups: undefined,
   header: { toc: true, pagination: true } as Required<PrintTypeHeaderOptions>,
   level: undefined,
+  onlyDocDirective: undefined,
   parentType: undefined,
   schema: undefined,
   skipDocDirective: undefined,
