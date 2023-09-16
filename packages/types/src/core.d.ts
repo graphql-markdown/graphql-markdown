@@ -41,6 +41,7 @@ export interface ConfigOptions {
   rootPath?: Maybe<string>;
   schema?: Maybe<Pointer>;
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   tmpDir?: Maybe<string>;
 }
 
@@ -63,6 +64,7 @@ export interface CliOptions {
   root?: string;
   schema?: Pointer;
   skip?: string[] | string;
+  only?: string[] | string;
   tmp?: string;
 }
 
