@@ -215,13 +215,14 @@ export const hasDirective = (
   }
 
   return (
-    entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
+    directives.findIndex((directive) => {
+      // if the directive location is not applicable to entity then skip it
+      if (checkLocation && !isValidDirectiveLocation(entity, directive)) {
+        return true;
+      }
       return (
-        directives.findIndex((directive) => {
-          // if the directive location is not applicable to entity then skip it
-          if (checkLocation && !isValidDirectiveLocation(entity, directive)) {
-            return true;
-          }
+        entity.astNode.directives &&
+        entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
           return directive.name === directiveNode.name.value;
         }) > -1
       );
@@ -250,7 +251,7 @@ export const getDirective = (
     return [];
   }
 
-  return directives.filter((directive: GraphQLDirective): boolean => {
+  return directives.filter((directive): boolean => {
     return (
       (entity.astNode.directives &&
         entity.astNode.directives.findIndex((directiveNode) => {

@@ -368,6 +368,14 @@ describe("introspection", () => {
 
       expect(hasDirective(type, [foobar, foobaz])).toBeTruthy();
     });
+
+    test("return true if the type is not a valid directive location and checkLocation is true", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Record")!;
+
+      expect(hasDirective(type, [foobar, foobaz], true)).toBeTruthy();
+    });
   });
 
   describe("getDirective", () => {
@@ -697,6 +705,14 @@ describe("introspection", () => {
           schema.getDirective("testA")!,
         ),
       ).toBeTruthy();
+    });
+
+    test("returns false if entity has no astNode definition", () => {
+      expect.assertions(1);
+
+      expect(
+        isValidDirectiveLocation({}, schema.getDirective("testA")!),
+      ).toBeFalsy();
     });
   });
 });

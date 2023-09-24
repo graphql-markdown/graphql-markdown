@@ -18,6 +18,7 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import * as GraphQL from "@graphql-markdown/graphql";
+import exp from "constants";
 jest.mock("@graphql-markdown/graphql", () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
@@ -361,48 +362,64 @@ Test testDirective"
         },
       },
     ])("return true if no option set", ({ options }) => {
+      expect.assertions(1);
+
       expect(
         hasPrintableDirective({}, options as unknown as PrintTypeOptions),
       ).toBeTruthy();
     });
 
     test("return false if type has skip directive", () => {
+      expect.assertions(1);
+
       const options = {
         skipDocDirectives: [noDocDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(false);
       mockGraphQL.hasDirective.mockReturnValue(true);
+
       expect(hasPrintableDirective(enumType, options)).toBeFalsy();
     });
 
     test("return true if type has not skip directive", () => {
+      expect.assertions(1);
+
       const options = {
         skipDocDirectives: [noDocDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(false);
       mockGraphQL.hasDirective.mockReturnValue(false);
+
       expect(hasPrintableDirective(enumType, options)).toBeTruthy();
     });
 
     test("return false if type has skip deprecated", () => {
+      expect.assertions(1);
+
       const options = {
         deprecated: "skip",
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(true);
       mockGraphQL.hasDirective.mockReturnValue(true);
+
       expect(hasPrintableDirective(enumType, options)).toBeFalsy();
     });
 
     test("return true if type has not skip deprecated", () => {
+      expect.assertions(1);
+
       const options = {
         deprecated: "default",
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(true);
       mockGraphQL.hasDirective.mockReturnValue(true);
+
       expect(hasPrintableDirective(enumType, options)).toBeTruthy();
     });
 
     test("return true if type has only directive", () => {
+      expect.assertions(1);
+
       const options = {
         onlyDocDirectives: [publicDirective],
       } as unknown as PrintTypeOptions;
@@ -410,10 +427,13 @@ Test testDirective"
       mockGraphQL.hasDirective.mockImplementation(
         jest.requireActual("@graphql-markdown/graphql").hasDirective,
       );
+
       expect(hasPrintableDirective(enumType, options)).toBeTruthy();
     });
 
     test("return false if type has not only directive and type is a valid location", () => {
+      expect.assertions(1);
+
       const options = {
         onlyDocDirectives: [noDocDirective],
       } as unknown as PrintTypeOptions;
@@ -421,10 +441,13 @@ Test testDirective"
       mockGraphQL.hasDirective.mockImplementation(
         jest.requireActual("@graphql-markdown/graphql").hasDirective,
       );
+
       expect(hasPrintableDirective(enumType, options)).toBeFalsy();
     });
 
     test("return true if type has not only directive and type is not a valid location", () => {
+      expect.assertions(1);
+
       const options = {
         onlyDocDirectives: [docDirective],
       } as unknown as PrintTypeOptions;
@@ -432,10 +455,13 @@ Test testDirective"
       mockGraphQL.hasDirective.mockImplementation(
         jest.requireActual("@graphql-markdown/graphql").hasDirective,
       );
+
       expect(hasPrintableDirective(enumType, options)).toBeTruthy();
     });
 
     test("return false if type has only directive and skip deprecated", () => {
+      expect.assertions(1);
+
       const options = {
         deprecated: "skip",
         onlyDocDirectives: [publicDirective],
@@ -444,6 +470,7 @@ Test testDirective"
       mockGraphQL.hasDirective.mockImplementation(
         jest.requireActual("@graphql-markdown/graphql").hasDirective,
       );
+
       expect(hasPrintableDirective(enumType, options)).toBeFalsy();
     });
   });
