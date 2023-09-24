@@ -14,9 +14,9 @@ Check if an object contains key/value records.
 
 #### Parameters
 
-| Parameter | Type      | Description                  |
-| :-------- | :-------- | :--------------------------- |
-| `obj`     | `unknown` | the key/value record object. |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `obj` | `unknown` | the key/value record object. |
 
 #### Returns
 
@@ -24,10 +24,14 @@ Check if an object contains key/value records.
 
 `false` if the object is a valid k/v set of records, else `true`.
 
+#### Source
+
+[object.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/object.ts#L34)
+
 #### Example
 
 ```js
-import { isEmpty } from "@graphql-markdown/utils/object";
+import { isEmpty } from '@graphql-markdown/utils/object';
 
 const obj = {
   bool: true,
@@ -41,7 +45,3 @@ isEmpty(obj); // Returns false
 
 isEmpty({}); // Returns true
 ```
-
-#### Defined In
-
-[object.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/object.ts#L34)

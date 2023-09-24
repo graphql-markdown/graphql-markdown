@@ -14,26 +14,26 @@ Checks if a GraphQL named type is of generic type `T`.
 
 #### Type parameters
 
-| Parameter | Description                                              |
-| :-------- | :------------------------------------------------------- |
-| `T`       | a GraphQL type to check against, eg `GraphQLObjectType`. |
+| Parameter | Description |
+| :------ | :------ |
+| `T` | a GraphQL type to check against, eg `GraphQLObjectType`. |
 
 #### Parameters
 
-| Parameter | Type      | Description                                   |
-| :-------- | :-------- | :-------------------------------------------- |
-| `obj`     | `unknown` | a GraphQL named type from the GraphQL schema. |
-| `type`    | () => `T` | the GraphQL type `T`.                         |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `obj` | `unknown` | a GraphQL named type from the GraphQL schema. |
+| `type` | () => `T` | the GraphQL type `T`. |
 
 #### Returns
 
 `obj is T`
 
-#### Defined In
+#### Source
 
 [packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L52)
 
----
+***
 
 ### isDeprecated
 
@@ -45,25 +45,25 @@ Checks if a GraphQL named type is deprecated.
 
 #### Type parameters
 
-| Parameter | Description                                              |
-| :-------- | :------------------------------------------------------- |
-| `T`       | a GraphQL type to check against, eg `GraphQLObjectType`. |
+| Parameter | Description |
+| :------ | :------ |
+| `T` | a GraphQL type to check against, eg `GraphQLObjectType`. |
 
 #### Parameters
 
-| Parameter | Type | Description         |
-| :-------- | :--- | :------------------ |
-| `obj`     | `T`  | an instance of `T`. |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `obj` | `T` | an instance of `T`. |
 
 #### Returns
 
 `obj is DeprecatedType<T>`
 
-#### Defined In
+#### Source
 
 [packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L70)
 
----
+***
 
 ### isGraphQLFieldType
 
@@ -75,19 +75,19 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 #### Parameters
 
-| Parameter | Type      | Description     |
-| :-------- | :-------- | :-------------- |
-| `type`    | `unknown` | a GraphQL type. |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | a GraphQL type. |
 
 #### Returns
 
 `type is GraphQLField<unknown, unknown, unknown>`
 
-#### Defined In
+#### Source
 
 [packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L33)
 
----
+***
 
 ### isOperation
 
@@ -99,14 +99,14 @@ Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
 
 #### Parameters
 
-| Parameter | Type      | Description     |
-| :-------- | :-------- | :-------------- |
-| `type`    | `unknown` | a GraphQL type. |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | a GraphQL type. |
 
 #### Returns
 
 `type is GraphQLOperationType`
 
-#### Defined In
+#### Source
 
 [packages/graphql/src/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L85)

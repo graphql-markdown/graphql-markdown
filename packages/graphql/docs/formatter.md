@@ -7,7 +7,7 @@ Internal library of helpers for formatting GraphQL values.
 ### getFormattedDefaultValue
 
 ```ts
-getFormattedDefaultValue<T>(entity): Maybe< T | string >
+getFormattedDefaultValue<T>(entity): Maybe< string | T >
 ```
 
 Returns a printable formatted value for a GraphQL type.
@@ -16,23 +16,23 @@ This is the generic function.
 #### Type parameters
 
 | Parameter |
-| :-------- |
-| `T`       |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Parameter             | Type                       | Description                                      |
-| :-------------------- | :------------------------- | :----------------------------------------------- |
-| `entity`              | `object`                   | the GraphQL schema entity processed.             |
-| `entity.defaultValue` | `T`                        | the GraphQL schema type's value to be formatted. |
-| `entity.type`         | `Maybe`\< `GraphQLType` \> | the GraphQL schema type.                         |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `entity` | `object` | the GraphQL schema entity processed. |
+| `entity.defaultValue` | `T` | the GraphQL schema type's value to be formatted. |
+| `entity.type` | `Maybe`\< `GraphQLType` \> | the GraphQL schema type. |
 
 #### Returns
 
-`Maybe`\< `T` \| `string` \>
+`Maybe`\< `string` \| `T` \>
 
 a printable formatted value.
 
-#### Defined In
+#### Source
 
-[packages/graphql/src/formatter.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L32)
+[packages/graphql/src/formatter.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L95)

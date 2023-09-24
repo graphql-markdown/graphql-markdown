@@ -16,11 +16,9 @@ Log levels.
 debug: "debug"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L20)
-
-***
 
 ##### error
 
@@ -28,11 +26,9 @@ debug: "debug"
 error: "error"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L21)
-
-***
 
 ##### info
 
@@ -40,11 +36,9 @@ error: "error"
 info: "info"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L22)
-
-***
 
 ##### log
 
@@ -52,11 +46,9 @@ info: "info"
 log: "log"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L23)
-
-***
 
 ##### success
 
@@ -64,11 +56,9 @@ log: "log"
 success: "success"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L24)
-
-***
 
 ##### warn
 
@@ -76,7 +66,7 @@ success: "success"
 warn: "warn"
 ```
 
-###### Defined In
+###### Source
 
 [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L25)
 
@@ -101,6 +91,10 @@ By default, the logger module uses `global.console`
 
 `void`
 
+#### Source
+
+[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
+
 #### Example
 
 ```js
@@ -111,10 +105,6 @@ log("Info message"); // Expected console output "Info message"
 Logger("@docusaurus/logger");
 log("Info message", "info"); // Expected Docusaurus log output "Info message"
 ```
-
-#### Defined In
-
-[index.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L73)
 
 ***
 
@@ -137,6 +127,10 @@ Logs a message by calling the active logger instance.
 
 `void`
 
+#### Source
+
+[index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L85)
+
 #### Remarks
 
 If a log level is not supported by the logger instance, then it defaults to `"info"`.
@@ -148,7 +142,3 @@ import { log } from "@graphql-markdown/utils/logger";
 
 log("Info message"); // Expected console output "Info message"
 ```
-
-#### Defined In
-
-[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
