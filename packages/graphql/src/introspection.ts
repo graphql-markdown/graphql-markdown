@@ -143,6 +143,9 @@ export const getDirectiveLocationForASTPath = (
     case Kind.INPUT_OBJECT_TYPE_DEFINITION:
     case Kind.INPUT_OBJECT_TYPE_EXTENSION:
       return DirectiveLocation.INPUT_OBJECT;
+    case Kind.INPUT_VALUE_DEFINITION:
+    case Kind.ARGUMENT:
+      return DirectiveLocation.ARGUMENT_DEFINITION;
     // Not reachable, all possible types have been considered.
     default:
       throw new Error("Unexpected kind: " + String(appliedTo.kind));
