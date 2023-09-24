@@ -8,14 +8,16 @@ import {
 
 import type { PrintLinkOptions, TypeLocale } from "@graphql-markdown/types";
 
+import * as Utils from "@graphql-markdown/utils";
 jest.mock("@graphql-markdown/utils", () => {
   return {
     slugify: jest.fn(),
     pathUrl: jest.requireActual("path").posix,
   };
 });
-import * as Utils from "@graphql-markdown/utils";
+const mockUtils = jest.mocked(Utils);
 
+import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
     hasDirective: jest.fn(),
@@ -35,16 +37,22 @@ jest.mock("@graphql-markdown/graphql", () => {
     isDeprecated: jest.fn(),
   };
 });
-import * as GraphQL from "@graphql-markdown/graphql";
+const mockGraphQL = jest.mocked(GraphQL);
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
-jest.mock("../../src/group", () => {
-  return { getGroup: jest.fn(() => "") };
-});
 import * as Group from "../../src/group";
+jest.mock("../../src/group", () => {
+  return {
+    getGroup: jest.fn(() => {
+      return "";
+    }),
+  };
+});
+const mockGroup = jest.mocked(Group);
 
 import * as Link from "../../src/link";
+import * as Common from "../../src/common";
 
 describe("link", () => {
   const basePath: string = "docs/graphql";
@@ -105,7 +113,9 @@ describe("link", () => {
     test.each(types)(
       "returns a category object matching the graphLQLNamedType $name",
       ({ guard }) => {
-        jest.spyOn(GraphQL, guard).mockReturnValueOnce(true);
+        expect.assertions(1);
+
+        mockGraphQL[guard].mockReturnValueOnce(true);
 
         const category = Link.getLinkCategory(
           {} as unknown as GraphQLNamedType,
@@ -116,6 +126,8 @@ describe("link", () => {
     );
 
     test("returns undefined if unknown", () => {
+      expect.assertions(1);
+
       const category = Link.getLinkCategory({} as unknown as GraphQLNamedType);
 
       expect(category).toBeUndefined();
@@ -124,7 +136,7 @@ describe("link", () => {
 
   describe("toLink()", () => {
     beforeEach(() => {
-      jest.spyOn(Group, "getGroup").mockReturnValue("");
+      mockGroup.getGroup.mockReturnValue("");
     });
 
     test.each(types)(
@@ -139,11 +151,11 @@ describe("link", () => {
           locations: [],
         });
 
-        jest
-          .spyOn(GraphQL, "getNamedType")
-          .mockReturnValue(entityName as unknown as GraphQLNamedType);
-        jest.spyOn(GraphQL, guard).mockReturnValue(true);
-        jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
+        mockGraphQL.getNamedType.mockReturnValue(
+          entityName as unknown as GraphQLNamedType,
+        );
+        mockGraphQL[guard].mockReturnValue(true);
+        mockUtils.slugify.mockReturnValueOnce(slug);
 
         const link = Link.toLink(type, entityName, operation, {
           ...DEFAULT_OPTIONS,
@@ -166,11 +178,11 @@ describe("link", () => {
         }),
       );
 
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue(entityName as unknown as GraphQLNamedType);
-      jest.spyOn(GraphQL, "isObjectType").mockReturnValue(true);
-      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isObjectType.mockReturnValue(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -204,6 +216,34 @@ describe("link", () => {
       `);
     });
 
+    test("returns plain text for type without printable directive", () => {
+      expect.hasAssertions();
+
+      const entityName = `Test`;
+      const type = new GraphQLDirective({
+        name: entityName,
+        locations: [],
+      });
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL[TypeGuard.DIRECTIVE].mockReturnValue(true);
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValueOnce(false);
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+      });
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "Test",
+          "url": "#",
+        }
+      `);
+    });
+
     test("returns markdown link with group in path", () => {
       expect.hasAssertions();
 
@@ -214,12 +254,12 @@ describe("link", () => {
         locations: [],
       });
 
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue(entityName as unknown as GraphQLNamedType);
-      jest.spyOn(GraphQL, "isDirectiveType").mockReturnValue(true);
-      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
-      jest.spyOn(Group, "getGroup").mockReturnValueOnce("group");
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isDirectiveType.mockReturnValue(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockGroup.getGroup.mockReturnValueOnce("group");
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -245,12 +285,12 @@ describe("link", () => {
         locations: [],
       });
 
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue(entityName as unknown as GraphQLNamedType);
-      jest.spyOn(GraphQL, "isDirectiveType").mockReturnValue(true);
-      jest.spyOn(Utils, "slugify").mockReturnValueOnce(slug);
-      jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isDirectiveType.mockReturnValue(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -291,7 +331,7 @@ describe("link", () => {
     test("calls recursively if not a leaf node", () => {
       expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isLeafType").mockReturnValueOnce(false);
+      mockGraphQL.isLeafType.mockReturnValueOnce(false);
 
       const type = { ofType: "test" };
       const text = "baz";
@@ -304,7 +344,7 @@ describe("link", () => {
     test("returns a format [text] if type is list", () => {
       expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isListType").mockReturnValueOnce(true);
+      mockGraphQL.isListType.mockReturnValueOnce(true);
 
       const type = { ofType: "test" };
       const text = "baz";
@@ -317,7 +357,7 @@ describe("link", () => {
     test("returns a format text! if type is non-null", () => {
       expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
+      mockGraphQL.isNonNullType.mockReturnValueOnce(true);
 
       const type = { ofType: "test" };
       const text = "baz";
@@ -490,11 +530,11 @@ describe("link", () => {
         name: entityName,
       });
 
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue(entityName as unknown as GraphQLNamedType);
-      jest.spyOn(GraphQL, "isScalarType").mockReturnValue(true);
-      jest.spyOn(Utils, "slugify").mockReturnValue(slug);
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isScalarType.mockReturnValue(true);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.getRelationLink("foo", type, {
         ...DEFAULT_OPTIONS,
@@ -516,11 +556,11 @@ describe("link", () => {
         name: entityName,
       });
 
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue(entityName as unknown as GraphQLNamedType);
-      jest.spyOn(GraphQL, "isScalarType").mockReturnValue(true);
-      jest.spyOn(Utils, "slugify").mockReturnValue(slug);
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isScalarType.mockReturnValue(true);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.getRelationLink(undefined, type, {
         ...DEFAULT_OPTIONS,

@@ -21,7 +21,6 @@ import type {
 
 import {
   getTypeName,
-  hasDirective,
   isDirectiveType,
   isEnumType,
   isInputType,
@@ -35,7 +34,7 @@ import {
 import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
-import { printDescription } from "./common";
+import { hasPrintableDirective, printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
 import {
   printCodeDirective,
@@ -212,7 +211,7 @@ export class Printer implements IPrinter {
         return printDirectiveMetadata(type as GraphQLDirective, options);
       case isOperation(type):
         return printOperationMetadata(
-          type as GraphQLField<unknown, unknown, unknown>,
+          type as unknown as GraphQLField<unknown, unknown, unknown>,
           options,
         );
       default:
@@ -241,11 +240,7 @@ export class Printer implements IPrinter {
       ...options,
     };
 
-    if (
-      !type ||
-      !name ||
-      hasDirective(type, printTypeOptions.skipDocDirectives)
-    ) {
+    if (!name || !hasPrintableDirective(type, printTypeOptions)) {
       return undefined;
     }
 

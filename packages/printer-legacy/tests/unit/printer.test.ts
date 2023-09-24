@@ -43,6 +43,8 @@ import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
+import * as Common from "../../src/common";
+
 import { Printer } from "../../src/printer";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
@@ -447,9 +449,9 @@ describe("Printer", () => {
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if matches skipDocDirective", () => {
+    test("returns undefined if type has no printable directive", () => {
       expect.hasAssertions();
-      jest.spyOn(GraphQL, "hasDirective").mockReturnValue(true);
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValueOnce(false);
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();

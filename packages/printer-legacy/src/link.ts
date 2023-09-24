@@ -12,7 +12,6 @@ import type {
 import {
   getNamedType,
   getTypeName,
-  hasDirective,
   isDeprecated,
   isDirectiveType,
   isEnumType,
@@ -31,6 +30,7 @@ import { slugify, pathUrl } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
+import { hasPrintableDirective } from "./common";
 
 export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
@@ -82,11 +82,7 @@ export const toLink = (
     return fallback;
   }
 
-  if (
-    typeof options !== "undefined" &&
-    "skipDocDirectives" in options &&
-    hasDirective(type, options.skipDocDirectives)
-  ) {
+  if (typeof options !== "undefined" && !hasPrintableDirective(type, options)) {
     return fallback;
   }
 
