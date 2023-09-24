@@ -1,6 +1,4 @@
-import { GraphQLDirective } from "graphql";
-
-import { buildSchema } from "graphql";
+import { GraphQLDirective, buildSchema } from "graphql";
 
 import type {
   DirectiveName,

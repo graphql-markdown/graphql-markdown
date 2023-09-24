@@ -1,6 +1,5 @@
 import type {
   CollapsibleOption,
-  DirectiveName,
   GraphQLDirective,
   GraphQLSchema,
   Maybe,
