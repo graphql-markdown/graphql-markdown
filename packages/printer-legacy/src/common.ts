@@ -97,6 +97,10 @@ export const hasPrintableDirective = (
     "deprecated" | "onlyDocDirectives" | "skipDocDirectives"
   >,
 ): boolean => {
+  if (!type) {
+    return false;
+  }
+
   if (!options) {
     return true;
   }

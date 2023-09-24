@@ -368,6 +368,12 @@ Test testDirective"
       ).toBeTruthy();
     });
 
+    test("return false if type undefined", () => {
+      expect.assertions(1);
+
+      expect(hasPrintableDirective(undefined, {})).toBeFalsy();
+    });
+
     test("return false if type has skip directive", () => {
       expect.assertions(1);
 

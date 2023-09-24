@@ -36,7 +36,7 @@ export const printSectionItem = <T>(
       ? options.level
       : SectionLevels.LEVEL_4;
 
-  if (!type || !hasPrintableDirective(type, options)) {
+  if (!hasPrintableDirective(type, options)) {
     return "";
   }
 
