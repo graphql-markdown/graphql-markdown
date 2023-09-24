@@ -10,9 +10,10 @@ jest.mock("graphql", () => {
     getDirectiveValues: jest.fn(graphql.getDirectiveValues),
   };
 });
-import type { GraphQLSchema, ObjectTypeDefinitionNode } from "graphql";
+import type { GraphQLSchema, ObjectTypeDefinitionNode, ASTNode } from "graphql";
 import {
   buildSchema,
+  DirectiveLocation,
   getDirectiveValues,
   GraphQLDirective,
   GraphQLEnumType,
@@ -22,6 +23,7 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   isDirective,
+  Kind,
 } from "graphql";
 
 import {
@@ -35,6 +37,7 @@ import {
   getTypeName,
   hasDirective,
   isValidDirectiveLocation,
+  getDirectiveLocationForASTPath,
 } from "../../src/introspection";
 import { loadSchema } from "../../src/loader";
 
@@ -713,6 +716,76 @@ describe("introspection", () => {
       expect(
         isValidDirectiveLocation({}, schema.getDirective("testA")!),
       ).toBeFalsy();
+    });
+  });
+
+  describe("getDirectiveLocationForASTPath", () => {
+    const schema = buildSchema(`
+    directive @directiveTest on OBJECT
+
+    enum ArgEnum {
+      ARGA
+      ARGB
+      ARGC
+    }
+
+    type TestObject {
+      id: ID!
+      fieldA: [String!] 
+    }
+
+    input TestInput {
+      id: ID!
+    }
+
+    interface TestInterface {
+      id: String!
+    }
+
+    union TestUnion = ID | String 
+  `);
+
+    test.each([
+      {
+        entity: schema.getType("ArgEnum"),
+        location: DirectiveLocation.ENUM,
+      },
+      {
+        entity: schema.getType("TestObject"),
+        location: DirectiveLocation.OBJECT,
+      },
+      {
+        entity: schema.getType("TestInput"),
+        location: DirectiveLocation.INPUT_OBJECT,
+      },
+      {
+        entity: schema.getType("TestInterface"),
+        location: DirectiveLocation.INTERFACE,
+      },
+      {
+        entity: schema.getType("TestUnion"),
+        location: DirectiveLocation.UNION,
+      },
+    ])("returns matching directive location", ({ entity, location }) => {
+      expect.assertions(1);
+
+      expect(getDirectiveLocationForASTPath(entity?.astNode)).toBe(location);
+    });
+
+    test.each([
+      [{}],
+      [undefined],
+      [
+        {
+          appliedTo: Kind.DIRECTIVE,
+        },
+      ],
+    ])("throws on unsupported entity", (node: unknown) => {
+      expect.assertions(1);
+
+      expect(() => {
+        return getDirectiveLocationForASTPath(node as ASTNode);
+      }).toThrow();
     });
   });
 });

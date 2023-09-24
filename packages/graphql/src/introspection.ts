@@ -108,39 +108,16 @@ export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
 };
 
-const getDirectiveLocationForOperation = (
-  operation: OperationTypeNode,
+export const getDirectiveLocationForASTPath = (
+  appliedTo: Maybe<ASTNode>,
 ): DirectiveLocation => {
-  switch (operation) {
-    case OperationTypeNode.QUERY:
-      return DirectiveLocation.QUERY;
-    case OperationTypeNode.MUTATION:
-      return DirectiveLocation.MUTATION;
-    case OperationTypeNode.SUBSCRIPTION:
-      return DirectiveLocation.SUBSCRIPTION;
-  }
-};
-
-const getDirectiveLocationForASTPath = (
-  appliedTo: ASTNode,
-): DirectiveLocation => {
-  if (!("kind" in appliedTo)) {
+  if (!appliedTo || !("kind" in appliedTo)) {
     throw new Error("Unexpected kind: " + String(appliedTo));
   }
 
   switch (appliedTo.kind) {
-    case Kind.OPERATION_DEFINITION:
-      return getDirectiveLocationForOperation(appliedTo.operation);
     case Kind.FIELD:
       return DirectiveLocation.FIELD;
-    case Kind.FRAGMENT_SPREAD:
-      return DirectiveLocation.FRAGMENT_SPREAD;
-    case Kind.INLINE_FRAGMENT:
-      return DirectiveLocation.INLINE_FRAGMENT;
-    case Kind.FRAGMENT_DEFINITION:
-      return DirectiveLocation.FRAGMENT_DEFINITION;
-    case Kind.VARIABLE_DEFINITION:
-      return DirectiveLocation.VARIABLE_DEFINITION;
     case Kind.SCHEMA_DEFINITION:
     case Kind.SCHEMA_EXTENSION:
       return DirectiveLocation.SCHEMA;
