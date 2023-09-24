@@ -71,20 +71,18 @@ export const generateDocFromSchema = async ({
     }
   }
 
-  const onlyDocDirectives = (onlyDocDirective as DirectiveName[])
-    .map((name: string) => {
-      return schema.getDirective(name);
-    })
-    .filter((directive: Maybe<GraphQLDirective>) => {
-      return typeof directive !== "undefined";
-    }) as GraphQLDirective[];
-  const skipDocDirectives = (skipDocDirective as DirectiveName[])
-    .map((name: string) => {
-      return schema.getDirective(name);
-    })
-    .filter((directive: Maybe<GraphQLDirective>) => {
-      return typeof directive !== "undefined";
-    }) as GraphQLDirective[];
+  const [onlyDocDirectives, skipDocDirectives] = [
+    onlyDocDirective,
+    skipDocDirective,
+  ].map((directiveList: DirectiveName[]) => {
+    return directiveList
+      .map((name: string) => {
+        return schema.getDirective(name);
+      })
+      .filter((directive: Maybe<GraphQLDirective>) => {
+        return typeof directive !== "undefined";
+      }) as GraphQLDirective[];
+  });
 
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
