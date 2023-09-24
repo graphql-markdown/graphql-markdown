@@ -144,7 +144,7 @@ See also [`skipDocDirective`](#skipdocdirective).
 <br/>
 
 :::info
-It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be apply to a type (e.g. `ENUM`) then the type will be displayed.
+It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`) then the type will be displayed.
 :::
 
 ## `printTypeOptions`
