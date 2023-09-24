@@ -143,8 +143,8 @@ See also [`skipDocDirective`](#skipdocdirective).
 
 <br/>
 
-:::warn
-Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will generate an error.
+:::info
+It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be apply to a type (e.g. `ENUM`) then the type will be displayed.
 :::
 
 ## `printTypeOptions`
