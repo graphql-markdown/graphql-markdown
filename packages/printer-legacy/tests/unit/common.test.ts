@@ -18,7 +18,6 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import * as GraphQL from "@graphql-markdown/graphql";
-import exp from "constants";
 jest.mock("@graphql-markdown/graphql", () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
