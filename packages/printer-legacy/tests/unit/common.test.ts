@@ -1,7 +1,10 @@
+import type { ConstDirectiveNode } from "graphql";
 import {
   DirectiveLocation,
   GraphQLDirective,
+  GraphQLEnumType,
   GraphQLScalarType,
+  Kind,
 } from "graphql";
 
 import {
@@ -14,20 +17,25 @@ import {
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
+import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
-  const original = jest.requireActual("@graphql-markdown/graphql");
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
-    ...original,
-    isDeprecated: jest.fn(original.isDeprecated),
-    hasDirective: jest.fn(original.hasDirective),
+    ...jest.requireActual("@graphql-markdown/graphql"),
+    isDeprecated: jest.fn(),
+    hasDirective: jest.fn(),
   };
 });
-import * as mockGraphQL from "@graphql-markdown/graphql";
+const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
 
 describe("common", () => {
+  beforeEach(() => {
+    mockGraphQL.isDeprecated.mockReturnValue(false);
+  });
+
   afterAll(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe("printDescription()", () => {
@@ -115,6 +123,8 @@ describe("common", () => {
     });
 
     test("return DEPRECATED tag if deprecated", () => {
+      mockGraphQL.isDeprecated.mockReturnValue(true);
+
       const type = {
         description: "Lorem ipsum",
         isDeprecated: true,
@@ -181,6 +191,8 @@ describe("common", () => {
     test("prints deprecated badge if type is deprecated", () => {
       expect.hasAssertions();
 
+      mockGraphQL.isDeprecated.mockReturnValue(true);
+
       const type = {
         name: "EntityTypeName",
         isDeprecated: true,
@@ -197,6 +209,8 @@ describe("common", () => {
 
     test("prints deprecation reason if type is deprecated with reason", () => {
       expect.hasAssertions();
+
+      mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const type = {
         name: "EntityTypeName",
@@ -281,19 +295,68 @@ Test testDirective"
   });
 
   describe("hasPrintableDirective", () => {
+    const noDocDirective = new GraphQLDirective({
+      name: "noDoc",
+      locations: [DirectiveLocation.ENUM],
+      astNode: {
+        kind: Kind.DIRECTIVE_DEFINITION,
+        name: { kind: Kind.NAME, value: "noDoc" },
+        repeatable: false,
+        locations: [],
+      },
+    });
+    const publicDirective = new GraphQLDirective({
+      name: "public",
+      locations: [DirectiveLocation.ENUM],
+      astNode: {
+        kind: Kind.DIRECTIVE_DEFINITION,
+        name: { kind: Kind.NAME, value: "public" },
+        repeatable: false,
+        locations: [],
+      },
+    });
+    const docDirective = new GraphQLDirective({
+      name: "doc",
+      locations: [DirectiveLocation.OBJECT],
+      astNode: {
+        kind: Kind.DIRECTIVE_DEFINITION,
+        name: { kind: Kind.NAME, value: "doc" },
+        repeatable: false,
+        locations: [],
+      },
+    });
+    const enumType = new GraphQLEnumType({
+      name: "test",
+      values: {
+        RED: { value: 0 },
+        GREEN: { value: 1 },
+        BLUE: { value: 2 },
+      },
+      astNode: {
+        kind: Kind.ENUM_TYPE_DEFINITION,
+        name: { kind: Kind.NAME, value: "test" },
+        directives: [
+          {
+            ...publicDirective.astNode,
+            kind: Kind.DIRECTIVE,
+          } as ConstDirectiveNode,
+        ],
+      },
+    });
+
     test.each([
       { options: undefined },
       {
         options: {
-          skipDocDirective: undefined,
-          onlyDocDirective: [],
+          skipDocDirectives: undefined,
+          onlyDocDirectives: [],
           deprecated: undefined,
         },
       },
       {
         options: {
-          skipDocDirective: [],
-          onlyDocDirective: undefined,
+          skipDocDirectives: [],
+          onlyDocDirectives: undefined,
           deprecated: undefined,
         },
       },
@@ -302,63 +365,86 @@ Test testDirective"
         hasPrintableDirective({}, options as unknown as PrintTypeOptions),
       ).toBeTruthy();
     });
-  });
 
-  test("return false if type has skip directive", () => {
-    const options = {
-      skipDocDirective: ["noDoc"],
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
-    expect(hasPrintableDirective({}, options)).toBeFalsy();
-  });
+    test("return false if type has skip directive", () => {
+      const options = {
+        skipDocDirectives: [noDocDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(false);
+      mockGraphQL.hasDirective.mockReturnValue(true);
+      expect(hasPrintableDirective(enumType, options)).toBeFalsy();
+    });
 
-  test("return true if type has not skip directive", () => {
-    const options = {
-      skipDocDirective: ["noDoc"],
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(false);
-    expect(hasPrintableDirective({}, options)).toBeTruthy();
-  });
+    test("return true if type has not skip directive", () => {
+      const options = {
+        skipDocDirectives: [noDocDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(false);
+      mockGraphQL.hasDirective.mockReturnValue(false);
+      expect(hasPrintableDirective(enumType, options)).toBeTruthy();
+    });
 
-  test("return false if type has skip deprecated", () => {
-    const options = {
-      deprecated: "skip",
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
-    expect(hasPrintableDirective({}, options)).toBeFalsy();
-  });
+    test("return false if type has skip deprecated", () => {
+      const options = {
+        deprecated: "skip",
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(true);
+      mockGraphQL.hasDirective.mockReturnValue(true);
+      expect(hasPrintableDirective(enumType, options)).toBeFalsy();
+    });
 
-  test("return true if type has not skip deprecated", () => {
-    const options = {
-      deprecated: "default",
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
-    expect(hasPrintableDirective({}, options)).toBeTruthy();
-  });
+    test("return true if type has not skip deprecated", () => {
+      const options = {
+        deprecated: "default",
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(true);
+      mockGraphQL.hasDirective.mockReturnValue(true);
+      expect(hasPrintableDirective(enumType, options)).toBeTruthy();
+    });
 
-  test("return true if type has only directive", () => {
-    const options = {
-      onlyDocDirective: ["public"],
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
-    expect(hasPrintableDirective({}, options)).toBeTruthy();
-  });
+    test("return true if type has only directive", () => {
+      const options = {
+        onlyDocDirectives: [publicDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(false);
+      mockGraphQL.hasDirective.mockImplementation(
+        jest.requireActual("@graphql-markdown/graphql").hasDirective,
+      );
+      expect(hasPrintableDirective(enumType, options)).toBeTruthy();
+    });
 
-  test("return false if type has not only directive", () => {
-    const options = {
-      onlyDocDirective: ["public"],
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(false);
-    expect(hasPrintableDirective({}, options)).toBeFalsy();
-  });
+    test("return false if type has not only directive and type is a valid location", () => {
+      const options = {
+        onlyDocDirectives: [noDocDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(false);
+      mockGraphQL.hasDirective.mockImplementation(
+        jest.requireActual("@graphql-markdown/graphql").hasDirective,
+      );
+      expect(hasPrintableDirective(enumType, options)).toBeFalsy();
+    });
 
-  test("return false if type has only directive and skip deprecated", () => {
-    const options = {
-      deprecated: "skip",
-      onlyDocDirective: ["public"],
-    } as unknown as PrintTypeOptions;
-    jest.spyOn(mockGraphQL, "isDeprecated").mockReturnValueOnce(true);
-    jest.spyOn(mockGraphQL, "hasDirective").mockReturnValueOnce(true);
-    expect(hasPrintableDirective({}, options)).toBeFalsy();
+    test("return true if type has not only directive and type is not a valid location", () => {
+      const options = {
+        onlyDocDirectives: [docDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(false);
+      mockGraphQL.hasDirective.mockImplementation(
+        jest.requireActual("@graphql-markdown/graphql").hasDirective,
+      );
+      expect(hasPrintableDirective(enumType, options)).toBeTruthy();
+    });
+
+    test("return false if type has only directive and skip deprecated", () => {
+      const options = {
+        deprecated: "skip",
+        onlyDocDirectives: [publicDirective],
+      } as unknown as PrintTypeOptions;
+      mockGraphQL.isDeprecated.mockReturnValue(true);
+      mockGraphQL.hasDirective.mockImplementation(
+        jest.requireActual("@graphql-markdown/graphql").hasDirective,
+      );
+      expect(hasPrintableDirective(enumType, options)).toBeFalsy();
+    });
   });
 });

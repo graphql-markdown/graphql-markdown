@@ -12,7 +12,7 @@ import {
   GraphQLSchema,
 } from "graphql";
 
-import type { DirectiveName, PrintTypeOptions } from "@graphql-markdown/types";
+import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -174,12 +174,12 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
-          "onlyDocDirective": undefined,
+          "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": true,
           "relatedTypeSection": true,
           "schema": undefined,
-          "skipDocDirective": undefined,
+          "skipDocDirectives": [],
           "typeBadges": true,
           "withAttributes": false,
         }
@@ -199,6 +199,11 @@ describe("Printer", () => {
     test("override values on init when options is undefined", () => {
       expect.hasAssertions();
 
+      const testDirective = new GraphQLDirective({
+        name: "test",
+        locations: [],
+      });
+
       Printer.options = undefined;
 
       Printer.init(new GraphQLSchema({}), "test", "/", {
@@ -209,7 +214,7 @@ describe("Printer", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: ["test" as DirectiveName],
+        skipDocDirectives: [testDirective],
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
@@ -225,7 +230,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
-          "onlyDocDirective": undefined,
+          "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": false,
           "relatedTypeSection": false,
@@ -259,8 +264,8 @@ describe("Printer", () => {
             "extensionASTNodes": [],
             "extensions": {},
           },
-          "skipDocDirective": [
-            "test",
+          "skipDocDirectives": [
+            "@test",
           ],
           "typeBadges": false,
           "withAttributes": false,

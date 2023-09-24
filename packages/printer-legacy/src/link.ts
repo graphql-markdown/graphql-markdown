@@ -82,10 +82,12 @@ export const toLink = (
     return fallback;
   }
 
-  if (typeof options !== "undefined" && "skipDocDirective" in options) {
-    if (hasDirective(type, options.skipDocDirective)) {
-      return fallback;
-    }
+  if (
+    typeof options !== "undefined" &&
+    "skipDocDirectives" in options &&
+    hasDirective(type, options.skipDocDirectives)
+  ) {
+    return fallback;
   }
 
   const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);

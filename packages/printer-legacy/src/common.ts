@@ -92,15 +92,18 @@ export const printDescription = (
 
 export const hasPrintableDirective = (
   type: unknown,
-  options?: PrintTypeOptions,
+  options?: Pick<
+    PrintTypeOptions,
+    "deprecated" | "onlyDocDirectives" | "skipDocDirectives"
+  >,
 ): boolean => {
   if (!options) {
     return true;
   }
 
   const skipDirective =
-    "skipDocDirective" in options &&
-    hasDirective(type, options.skipDocDirective);
+    "skipDocDirectives" in options &&
+    hasDirective(type, options.skipDocDirectives);
 
   const skipDeprecated =
     "deprecated" in options &&
@@ -108,10 +111,10 @@ export const hasPrintableDirective = (
     isDeprecated(type);
 
   const onlyDirective =
-    "onlyDocDirective" in options &&
-    options.onlyDocDirective &&
-    options.onlyDocDirective.length > 0
-      ? hasDirective(type, options.onlyDocDirective)
+    "onlyDocDirectives" in options &&
+    options.onlyDocDirectives &&
+    options.onlyDocDirectives.length > 0
+      ? hasDirective(type, options.onlyDocDirectives, true)
       : true;
 
   return !(skipDirective || skipDeprecated) && onlyDirective;

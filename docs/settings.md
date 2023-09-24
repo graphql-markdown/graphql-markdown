@@ -29,9 +29,9 @@ The method to be used for identifying changes in the schema for triggering the d
 The possible values are:
 
 - `FORCE`: skip diff, always generate documentation, same as CLI flag `-f` or `--force`.
-- `NONE`: skip diff (same as `FORCE`)
-- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) for identifying changes in the schema (including description)
-- `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters)
+- `NONE`: skip diff (same as `FORCE`).
+- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) for identifying changes in the schema (including description).
+- `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters).
 
 | Setting      | CLI flag                  | Default |
 | ------------ | ------------------------- | ------- |
@@ -53,9 +53,9 @@ npm install @graphql-markdown/diff
 
 Use these options to tweak some of the Docusaurus documentation features:
 
-- `pagination`: page buttons `Previous` and `Next`
-- `toc`: page table of content
-- `index`: index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page)
+- `pagination`: page buttons `Previous` and `Next`.
+- `toc`: page table of content.
+- `index`: index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
 
 | Setting                 | CLI flag         | Default |
 | ----------------------- | ---------------- | ------- |
@@ -129,18 +129,36 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
 
+## `onlyDocDirective`
+
+The schema directive/s used for selecting types to be rendered in the documentation.
+
+The CLI flag supports multiple values separated by a space character, eg `--only @stable @beta`.
+
+| Setting            | CLI flag                 | Default |
+| ------------------ | ------------------------ | ------- |
+| `onlyDocDirective` | `--only <@directive...>` | `[]`    |
+
+See also [`skipDocDirective`](#skipdocdirective).
+
+<br/>
+
+:::warn
+Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will generate an error.
+:::
+
 ## `printTypeOptions`
 
 Use these options to toggle type information rendered on pages:
 
-- `codeSection`: display type code section
-- `parentTypePrefix`: prefix field names with parent type name
-- `relatedTypeSection`: display related type sections
-- `typeBadges`: add field type attributes badges
-- `deprecated`: option for displaying deprecated entities (fields, values, operations)
-  - `default`: deprecated entities are displayed with other entities
-  - `group`: deprecated entities are grouped together
-  - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective))
+- `codeSection`: display type code section.
+- `parentTypePrefix`: prefix field names with parent type name.
+- `relatedTypeSection`: display related type sections.
+- `typeBadges`: add field type attributes badges.
+- `deprecated`: option for displaying deprecated entities (fields, values, operations).
+  - `default`: deprecated entities are displayed with other entities.
+  - `group`: deprecated entities are grouped together.
+  - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
@@ -234,7 +252,13 @@ The CLI flag supports multiple values separated by a space character, eg `--skip
 | ------------------ | ------------------------ | ------- |
 | `skipDocDirective` | `--skip <@directive...>` | `[]`    |
 
+See also [`onlyDocDirective`](#onlydocdirective).
+
 <br/>
+
+:::warn
+Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will generate an error.
+:::
 
 :::info
 Types with `@deprecated` directive can also be skipped using the setting **[`printTypeOptions.deprecated: "skip"`](#printtypeoptions)** or the flag `--deprecated skip`.

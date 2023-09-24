@@ -28,7 +28,10 @@ export const getCustomDirectiveResolver = (
     return fallback;
   }
 
-  return constDirectiveOption[resolver]!(constDirectiveOption.type, type);
+  return constDirectiveOption[resolver]!(
+    constDirectiveOption.type,
+    type,
+  ) as Maybe<string>;
 };
 
 export const printCustomDirective = (

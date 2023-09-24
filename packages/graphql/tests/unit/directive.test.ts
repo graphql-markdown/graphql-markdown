@@ -1,8 +1,14 @@
-import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+import { GraphQLDirective } from "graphql";
 
 import { buildSchema } from "graphql";
 
-import type { DirectiveName, CustomDirective } from "@graphql-markdown/types";
+import type {
+  DirectiveName,
+  CustomDirective,
+  CustomDirectiveFunction,
+  Maybe,
+  CustomDirectiveMap,
+} from "@graphql-markdown/types";
 
 import * as Directives from "../../src/directive";
 const {
@@ -30,19 +36,21 @@ describe("directive", () => {
     }
   `);
 
-  const descriptor = (
-    directiveType: GraphQLNamedType,
-    constDirectiveType: GraphQLDirective,
-  ): string => `Test ${constDirectiveType.name}`;
-  const wildcard = (
-    directiveType: GraphQLNamedType,
-    constDirectiveType: GraphQLDirective,
-  ): string => `TestWildcard ${constDirectiveType.name}`;
-  const customDirectiveOptions = {
-    testA: {
+  const descriptor: CustomDirectiveFunction = (
+    directive: Maybe<GraphQLDirective>,
+  ): string => {
+    return `Test ${directive!.name}`;
+  };
+  const wildcard: CustomDirectiveFunction = (
+    directive: Maybe<GraphQLDirective>,
+  ): string => {
+    return `TestWildcard ${directive!.name}`;
+  };
+  const customDirectiveOptions: CustomDirective = {
+    ["testA" as DirectiveName]: {
       descriptor,
     },
-    nonExist: {
+    ["nonExist" as DirectiveName]: {
       descriptor,
     },
   };
@@ -89,16 +97,16 @@ describe("directive", () => {
       const descriptorDirective = getCustomDirectiveOptions(
         "testA" as DirectiveName,
         {
-          ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
+          ["*" as DirectiveName]: { descriptor: wildcard },
           ...customDirectiveOptions,
         },
       )!;
 
       expect(descriptorDirective.descriptor).toBeDefined();
 
-      expect(
-        descriptorDirective.descriptor!(undefined, schemaMap.directives.testA),
-      ).toBe("Test testA");
+      expect(descriptorDirective.descriptor!(schemaMap.directives.testA)).toBe(
+        "Test testA",
+      );
     });
 
     test("returns wildcard description if wildcard match", () => {
@@ -107,16 +115,16 @@ describe("directive", () => {
       const descriptorDirective = getCustomDirectiveOptions(
         "testB" as DirectiveName,
         {
-          ["*" as DirectiveName]: { descriptor: wildcard } as CustomDirective,
+          ["*" as DirectiveName]: { descriptor: wildcard },
           ...customDirectiveOptions,
         },
       )!;
 
       expect(descriptorDirective.descriptor).toBeDefined();
 
-      expect(
-        descriptorDirective.descriptor!(undefined, schemaMap.directives.testB),
-      ).toBe("TestWildcard testB");
+      expect(descriptorDirective.descriptor!(schemaMap.directives.testB)).toBe(
+        "TestWildcard testB",
+      );
     });
 
     test("returns undefined if no match", () => {
@@ -170,7 +178,6 @@ describe("directive", () => {
       `);
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(
-          undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("Test testA");
@@ -204,14 +211,12 @@ describe("directive", () => {
 
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(
-          undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("TestWildcard testA");
 
       expect(
         customDirectives["testB" as DirectiveName].descriptor!(
-          undefined,
           schemaMap.directives.testB,
         ),
       ).toBe("TestWildcard testB");
@@ -240,14 +245,12 @@ describe("directive", () => {
 
       expect(
         customDirectives["testA" as DirectiveName].descriptor!(
-          undefined,
           schemaMap.directives.testA,
         ),
       ).toBe("Test testA");
 
       expect(
         customDirectives["testB" as DirectiveName].descriptor!(
-          undefined,
           schemaMap.directives.testB,
         ),
       ).toBe("TestWildcard testB");
@@ -284,18 +287,19 @@ describe("directive", () => {
     `);
     const type = schema.getType("Test")!;
     const typeWithoutDirective = schema.getType("TestWithoutDirective")!;
-    const descriptor = (
-      directiveType: GraphQLNamedType,
-      constDirectiveType: GraphQLDirective,
-    ): string => `Test${constDirectiveType.name}`;
-    const options = {
+    const descriptor: CustomDirectiveFunction = (
+      directive: Maybe<GraphQLDirective>,
+    ): string => {
+      return `Test${directive!.name}`;
+    };
+    const options: { customDirectives: CustomDirectiveMap } = {
       customDirectives: {
-        testA: {
-          type: schema.getDirective("testA"),
+        ["testA" as DirectiveName]: {
+          type: schema.getDirective("testA")!,
           descriptor,
         },
-        nonExist: {
-          type: undefined,
+        ["nonExist" as DirectiveName]: {
+          type: new GraphQLDirective({ name: "nonExist", locations: [] }),
           descriptor,
         },
       },

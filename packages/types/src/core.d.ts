@@ -76,6 +76,7 @@ export type Options = Omit<
   docOptions: Required<ConfigDocOptions>;
   homepageLocation: string;
   linkRoot: string;
+  onlyDocDirective: DirectiveName[];
   outputDir: string;
   prettify: boolean;
   printer: PackageName;

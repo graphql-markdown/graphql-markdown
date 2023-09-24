@@ -252,7 +252,13 @@ export const getConstDirectiveMap = (
     return undefined;
   }
 
-  const constDirectives = getDirective(entity, Object.keys(customDirectiveMap));
+  const directiveList = Object.values(customDirectiveMap).map(
+    (directiveMapItem) => {
+      return directiveMapItem.type;
+    },
+  );
+
+  const constDirectives = getDirective(entity, directiveList);
   if (constDirectives.length === 0) {
     return undefined;
   }

@@ -1,6 +1,5 @@
 import type {
   CustomDirectiveMap,
-  DirectiveName,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLField,
@@ -83,19 +82,22 @@ export class Printer implements IPrinter {
     {
       customDirectives,
       groups,
+      onlyDocDirectives,
       printTypeOptions,
-      skipDocDirective,
+      skipDocDirectives,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
       groups?: SchemaEntitiesGroupMap;
+      onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
-      skipDocDirective?: DirectiveName[];
+      skipDocDirectives?: GraphQLDirective[];
     } = {
       customDirectives: undefined,
       groups: undefined,
+      onlyDocDirectives: [],
       printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
-      skipDocDirective: undefined,
+      skipDocDirectives: [],
     },
   ): void {
     if (typeof Printer.options !== "undefined") {
@@ -118,7 +120,8 @@ export class Printer implements IPrinter {
         printTypeOptions?.relatedTypeSection ??
         PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
       schema,
-      skipDocDirective: skipDocDirective ?? undefined,
+      onlyDocDirectives: onlyDocDirectives ?? [],
+      skipDocDirectives: skipDocDirectives ?? [],
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
     };
@@ -241,7 +244,7 @@ export class Printer implements IPrinter {
     if (
       !type ||
       !name ||
-      hasDirective(type, printTypeOptions.skipDocDirective)
+      hasDirective(type, printTypeOptions.skipDocDirectives)
     ) {
       return undefined;
     }

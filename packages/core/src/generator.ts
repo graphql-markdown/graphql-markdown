@@ -1,6 +1,9 @@
 import type {
   DiffMethodName,
+  DirectiveName,
   GeneratorOptions,
+  GraphQLDirective,
+  Maybe,
   SchemaEntity,
 } from "@graphql-markdown/types";
 
@@ -32,6 +35,7 @@ export const generateDocFromSchema = async ({
   linkRoot,
   loaders: loadersList,
   loggerModule,
+  onlyDocDirective,
   outputDir,
   prettify,
   printer: printerModule,
@@ -67,6 +71,21 @@ export const generateDocFromSchema = async ({
     }
   }
 
+  const onlyDocDirectives = (onlyDocDirective as DirectiveName[])
+    .map((name: string) => {
+      return schema.getDirective(name);
+    })
+    .filter((directive: Maybe<GraphQLDirective>) => {
+      return typeof directive !== "undefined";
+    }) as GraphQLDirective[];
+  const skipDocDirectives = (skipDocDirective as DirectiveName[])
+    .map((name: string) => {
+      return schema.getDirective(name);
+    })
+    .filter((directive: Maybe<GraphQLDirective>) => {
+      return typeof directive !== "undefined";
+    }) as GraphQLDirective[];
+
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
@@ -85,8 +104,9 @@ export const generateDocFromSchema = async ({
     {
       customDirectives,
       groups,
+      onlyDocDirectives,
       printTypeOptions,
-      skipDocDirective,
+      skipDocDirectives,
     },
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {

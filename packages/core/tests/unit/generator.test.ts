@@ -8,6 +8,8 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
+import { GraphQLDirective } from "graphql";
+
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
@@ -53,8 +55,9 @@ describe("generator", () => {
       },
       prettify: true,
       printer: "printer module",
-      skipDocDirective: "doc directive",
-    } as unknown as GeneratorOptions;
+      skipDocDirective: ["docDirective"],
+      onlyDocDirective: [],
+    } as GeneratorOptions;
 
     beforeAll(() => {
       Object.assign(global, { logger: global.console });
@@ -75,14 +78,18 @@ describe("generator", () => {
       delete global.logger;
     });
 
+    const getDirective = (name: string): GraphQLDirective => {
+      return new GraphQLDirective({ name, locations: [] });
+    };
+
     test("passes options to Printer and Renderer", async () => {
       jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
       jest
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
@@ -101,13 +108,16 @@ describe("generator", () => {
         {
           baseURL: options.baseURL,
           linkRoot: options.linkRoot,
-          schema: {},
+          schema: { getDirective },
         },
         {
           customDirectives: undefined,
           groups: undefined,
           printTypeOptions: options.printTypeOptions,
-          skipDocDirective: options.skipDocDirective,
+          onlyDocDirectives: [],
+          skipDocDirectives: [
+            expect.objectContaining({ name: "docDirective" }),
+          ],
         },
       );
       expect(rendererSpy).toHaveBeenCalledWith(
@@ -130,9 +140,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
@@ -168,7 +178,11 @@ describe("generator", () => {
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce(undefined);
       const loggerSpy = jest.spyOn(console, "error");
-      const loadSchemaSpy = jest.spyOn(GraphQL, "loadSchema");
+      const loadSchemaSpy = jest
+        .spyOn(GraphQL, "loadSchema")
+        .mockResolvedValueOnce({
+          getDirective,
+        } as unknown as GraphQLSchema);
 
       await generateDocFromSchema({} as unknown as GeneratorOptions);
 
@@ -185,9 +199,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
@@ -198,7 +212,11 @@ describe("generator", () => {
 
       await generateDocFromSchema(options);
 
-      expect(hasChangesSpy).toHaveBeenCalledWith({}, "temp dir", "diff method");
+      expect(hasChangesSpy).toHaveBeenCalledWith(
+        { getDirective },
+        "temp dir",
+        "diff method",
+      );
       expect(loggerSpy).not.toHaveBeenCalledWith(
         `No changes detected in schema "schema location".`,
       );
@@ -210,9 +228,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
@@ -232,9 +250,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
@@ -245,7 +263,11 @@ describe("generator", () => {
 
       await generateDocFromSchema(options);
 
-      expect(hasChangesSpy).toHaveBeenCalledWith({}, "temp dir", "diff method");
+      expect(hasChangesSpy).toHaveBeenCalledWith(
+        { getDirective },
+        "temp dir",
+        "diff method",
+      );
       expect(loggerSpy).toHaveBeenCalledWith(
         `No changes detected in schema "schema location".`,
       );

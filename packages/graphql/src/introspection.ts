@@ -9,10 +9,11 @@ import type {
   GraphQLSchema,
   GraphQLInputFieldMap,
   GraphQLFieldMap,
+  GraphQLDirective,
 } from "graphql";
 import {
+  DirectiveLocation,
   getDirectiveValues,
-  GraphQLDirective,
   GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
@@ -20,13 +21,13 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   isNamedType,
+  Kind,
   OperationTypeNode,
 } from "graphql";
 
 import type {
   ASTNode,
   AstNodeType,
-  DirectiveDefinitionNode,
   DirectiveNode,
   GraphQLNamedType,
   GraphQLOperationType,
@@ -107,18 +108,103 @@ export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
 };
 
+const getDirectiveLocationForOperation = (
+  operation: OperationTypeNode,
+): DirectiveLocation => {
+  switch (operation) {
+    case OperationTypeNode.QUERY:
+      return DirectiveLocation.QUERY;
+    case OperationTypeNode.MUTATION:
+      return DirectiveLocation.MUTATION;
+    case OperationTypeNode.SUBSCRIPTION:
+      return DirectiveLocation.SUBSCRIPTION;
+  }
+};
+
+const getDirectiveLocationForASTPath = (
+  appliedTo: ASTNode,
+): DirectiveLocation => {
+  if (!("kind" in appliedTo)) {
+    throw new Error("Unexpected kind: " + String(appliedTo));
+  }
+
+  switch (appliedTo.kind) {
+    case Kind.OPERATION_DEFINITION:
+      return getDirectiveLocationForOperation(appliedTo.operation);
+    case Kind.FIELD:
+      return DirectiveLocation.FIELD;
+    case Kind.FRAGMENT_SPREAD:
+      return DirectiveLocation.FRAGMENT_SPREAD;
+    case Kind.INLINE_FRAGMENT:
+      return DirectiveLocation.INLINE_FRAGMENT;
+    case Kind.FRAGMENT_DEFINITION:
+      return DirectiveLocation.FRAGMENT_DEFINITION;
+    case Kind.VARIABLE_DEFINITION:
+      return DirectiveLocation.VARIABLE_DEFINITION;
+    case Kind.SCHEMA_DEFINITION:
+    case Kind.SCHEMA_EXTENSION:
+      return DirectiveLocation.SCHEMA;
+    case Kind.SCALAR_TYPE_DEFINITION:
+    case Kind.SCALAR_TYPE_EXTENSION:
+      return DirectiveLocation.SCALAR;
+    case Kind.OBJECT_TYPE_DEFINITION:
+    case Kind.OBJECT_TYPE_EXTENSION:
+      return DirectiveLocation.OBJECT;
+    case Kind.FIELD_DEFINITION:
+      return DirectiveLocation.FIELD_DEFINITION;
+    case Kind.INTERFACE_TYPE_DEFINITION:
+    case Kind.INTERFACE_TYPE_EXTENSION:
+      return DirectiveLocation.INTERFACE;
+    case Kind.UNION_TYPE_DEFINITION:
+    case Kind.UNION_TYPE_EXTENSION:
+      return DirectiveLocation.UNION;
+    case Kind.ENUM_TYPE_DEFINITION:
+    case Kind.ENUM_TYPE_EXTENSION:
+      return DirectiveLocation.ENUM;
+    case Kind.ENUM_VALUE_DEFINITION:
+      return DirectiveLocation.ENUM_VALUE;
+    case Kind.INPUT_OBJECT_TYPE_DEFINITION:
+    case Kind.INPUT_OBJECT_TYPE_EXTENSION:
+      return DirectiveLocation.INPUT_OBJECT;
+    // Not reachable, all possible types have been considered.
+    default:
+      throw new Error("Unexpected kind: " + String(appliedTo.kind));
+  }
+};
+
+/** Check if a directive can be applied to specific schema entity location.
+ *
+ * @param entity - a GraphQL schema entity.
+ * @param directive - a directive name.
+ *
+ * @returns `true` if the entity is a valid directive location, else `false`.
+ *
+ */
+export const isValidDirectiveLocation = (
+  entity: unknown,
+  directive: GraphQLDirective,
+): boolean => {
+  if (!hasAstNode(entity)) {
+    return false;
+  }
+  const location = getDirectiveLocationForASTPath(entity.astNode);
+  return directive.locations.includes(location);
+};
+
 /**
  * Checks if a schema entity as a directive belonging to a defined set.
  *
  * @param entity - a GraphQL schema entity.
  * @param directives - a directive name or a list of directive names.
+ * @param checkLocation - optional flag to check if a directive can be applied to the entity location.
  *
  * @returns `true` if the entity has at least one directive matching, else `false`.
  *
  */
 export const hasDirective = (
   entity: unknown,
-  directives: Maybe<string[] | string>,
+  directives: Maybe<GraphQLDirective[]>,
+  checkLocation: boolean = false,
 ): boolean => {
   if (
     !hasAstNode(entity) ||
@@ -128,11 +214,17 @@ export const hasDirective = (
     return false;
   }
 
-  const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
-
   return (
     entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
-      return directiveList.includes(directiveNode.name.value);
+      return (
+        directives.findIndex((directive) => {
+          // if the directive location is not applicable to entity then skip it
+          if (checkLocation && !isValidDirectiveLocation(entity, directive)) {
+            return true;
+          }
+          return directive.name === directiveNode.name.value;
+        }) > -1
+      );
     }) > -1
   );
 };
@@ -148,7 +240,7 @@ export const hasDirective = (
  */
 export const getDirective = (
   entity: unknown,
-  directives: Maybe<string[] | string>,
+  directives: Maybe<GraphQLDirective[]>,
 ): GraphQLDirective[] => {
   if (
     !hasAstNode(entity) ||
@@ -158,21 +250,15 @@ export const getDirective = (
     return [];
   }
 
-  const directiveList = Array.isArray(directives) ? directives : [directives]; // backward_compatibility
-
-  return entity.astNode.directives
-    .filter((directiveNode: DirectiveDefinitionNode): boolean => {
-      return directiveList.includes(directiveNode.name.value);
-    })
-    .map((directiveNode: DirectiveDefinitionNode): GraphQLDirective => {
-      return new GraphQLDirective({
-        name: directiveNode.name.value,
-        description: directiveNode.description?.value,
-        locations: [],
-        extensions: undefined,
-        astNode: directiveNode,
-      });
-    }) as GraphQLDirective[];
+  return directives.filter((directive: GraphQLDirective): boolean => {
+    return (
+      (entity.astNode.directives &&
+        entity.astNode.directives.findIndex((directiveNode) => {
+          return directiveNode.name.value === directive.name;
+        }) > -1) ??
+      false
+    );
+  });
 };
 
 /**
