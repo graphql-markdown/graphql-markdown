@@ -41,7 +41,7 @@ a map of fields as k/v records, or `fallback` value if no fields available.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:310](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L310)
+[packages/graphql/src/introspection.ts:313](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L313)
 
 ***
 
@@ -68,7 +68,7 @@ a list of GraphQL directives matching the set, else `false`.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:219](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L219)
+[packages/graphql/src/introspection.ts:222](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L222)
 
 ***
 
@@ -118,7 +118,7 @@ a list of fields of type object.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:375](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L375)
+[packages/graphql/src/introspection.ts:378](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L378)
 
 ***
 
@@ -146,7 +146,7 @@ a map of fields as k/v records.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:351](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L351)
+[packages/graphql/src/introspection.ts:354](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L354)
 
 ***
 
@@ -173,7 +173,7 @@ a schema map by GraphQL entities (see SchemaEntity).
 
 #### Source
 
-[packages/graphql/src/introspection.ts:485](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L485)
+[packages/graphql/src/introspection.ts:488](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L488)
 
 #### Example
 
@@ -265,7 +265,7 @@ a record k/v with `argName` as key and the argument's value.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:282](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L282)
+[packages/graphql/src/introspection.ts:285](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L285)
 
 ***
 
@@ -292,7 +292,7 @@ a record k/v with arguments' name as keys and arguments' value.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:251](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L251)
+[packages/graphql/src/introspection.ts:254](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L254)
 
 ***
 
@@ -357,7 +357,7 @@ the type's name, or `defaultName`.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:398](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L398)
+[packages/graphql/src/introspection.ts:401](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L401)
 
 ***
 
@@ -399,7 +399,7 @@ Type guard for type with an AST node property.
 hasDirective(
   entity,
   directives,
-  checkLocation = false): boolean
+  fallback = false): boolean
 ```
 
 Checks if a schema entity as a directive belonging to a defined set.
@@ -410,7 +410,7 @@ Checks if a schema entity as a directive belonging to a defined set.
 | :------ | :------ | :------ | :------ |
 | `entity` | `unknown` | `undefined` | a GraphQL schema entity. |
 | `directives` | `Maybe`\< `GraphQLDirective`[] \> | `undefined` | a directive name or a list of directive names. |
-| `checkLocation` | `boolean` | `false` | optional flag to check if a directive can be applied to the entity location. |
+| `fallback` | `boolean` | `false` | default value if the entity type is not a valid location for directives. |
 
 #### Returns
 
@@ -420,7 +420,7 @@ Checks if a schema entity as a directive belonging to a defined set.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:181](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L181)
+[packages/graphql/src/introspection.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L184)
 
 ***
 
@@ -447,4 +447,4 @@ Check if a directive can be applied to specific schema entity location.
 
 #### Source
 
-[packages/graphql/src/introspection.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L160)
+[packages/graphql/src/introspection.ts:163](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L163)
