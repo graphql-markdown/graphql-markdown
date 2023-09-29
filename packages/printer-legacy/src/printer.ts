@@ -31,7 +31,6 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 import { pathUrl } from "@graphql-markdown/utils";
-import { LogLevel, log } from "@graphql-markdown/logger";
 
 import { printRelations } from "./relation";
 import { hasPrintableDirective, printDescription } from "./common";
@@ -241,7 +240,6 @@ export class Printer implements IPrinter {
     };
 
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
-      log(`Skip type ${String(type)}`, LogLevel.log);
       return undefined;
     }
 
