@@ -297,13 +297,13 @@ describe("introspection", () => {
 
   describe("hasDirective", () => {
     const schema = buildSchema(`
-        directive @foobaz on OBJECT
+        directive @foobar on OBJECT
 
         interface Record {
           id: String!
         }
 
-        type StudyItem implements Record @foobaz {
+        type StudyItem implements Record @foobar {
           id: String!
           subject: String!
           duration: Int!
@@ -325,11 +325,11 @@ describe("introspection", () => {
 
     const foobar = new GraphQLDirective({
       name: "foobar",
-      locations: [],
+      locations: [DirectiveLocation.SUBSCRIPTION, DirectiveLocation.OBJECT],
     });
     const foobaz = new GraphQLDirective({
       name: "foobaz",
-      locations: [],
+      locations: [DirectiveLocation.SUBSCRIPTION],
     });
 
     test("return false if the type has no directive", () => {
@@ -353,7 +353,7 @@ describe("introspection", () => {
 
       const type = schema.getType("StudyItem")!;
 
-      expect(hasDirective(type, [foobar])).toBeFalsy();
+      expect(hasDirective(type, [foobaz])).toBeFalsy();
     });
 
     test("return true if the type has matching directive", () => {
@@ -361,7 +361,7 @@ describe("introspection", () => {
 
       const type = schema.getType("StudyItem")!;
 
-      expect(hasDirective(type, [foobaz])).toBeTruthy();
+      expect(hasDirective(type, [foobar])).toBeTruthy();
     });
 
     test("return true if the type has one matching directive", () => {
@@ -743,6 +743,8 @@ describe("introspection", () => {
     }
 
     union TestUnion = ID | String 
+
+    scalar JSON
   `);
 
     test.each([
@@ -766,7 +768,11 @@ describe("introspection", () => {
         entity: schema.getType("TestUnion"),
         location: DirectiveLocation.UNION,
       },
-    ])("returns matching directive location", ({ entity, location }) => {
+      {
+        entity: schema.getType("JSON"),
+        location: DirectiveLocation.SCALAR,
+      },
+    ])("returns directive location", ({ entity, location }) => {
       expect.assertions(1);
 
       expect(getDirectiveLocationForASTPath(entity?.astNode)).toBe(location);

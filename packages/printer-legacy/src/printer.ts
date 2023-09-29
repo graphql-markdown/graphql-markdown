@@ -30,8 +30,8 @@ import {
   isScalarType,
   isUnionType,
 } from "@graphql-markdown/graphql";
-
 import { pathUrl } from "@graphql-markdown/utils";
+import { LogLevel, log } from "@graphql-markdown/logger";
 
 import { printRelations } from "./relation";
 import { hasPrintableDirective, printDescription } from "./common";
@@ -63,8 +63,8 @@ import {
   MARKDOWN_SOC,
 } from "./const/strings";
 import { mdx } from "./const/mdx";
-
 import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
+
 export class Printer implements IPrinter {
   static options: Maybe<PrintTypeOptions>;
 
@@ -241,6 +241,7 @@ export class Printer implements IPrinter {
     };
 
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
+      log(`Skip type ${String(type)}`, LogLevel.log);
       return undefined;
     }
 

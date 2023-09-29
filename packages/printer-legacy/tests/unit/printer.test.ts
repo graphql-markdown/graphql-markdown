@@ -421,6 +421,8 @@ describe("Printer", () => {
       ({ name, type }) => {
         expect.hasAssertions();
 
+        jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+
         const spies = methods.map((method) => {
           return jest.spyOn(Printer, method).mockReturnValue("");
         });

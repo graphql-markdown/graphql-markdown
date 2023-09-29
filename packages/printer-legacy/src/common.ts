@@ -106,9 +106,7 @@ export const hasPrintableDirective = (
   }
 
   const skipDirective =
-    "skipDocDirectives" in options &&
-    options.skipDocDirectives &&
-    options.skipDocDirectives.length > 0
+    "skipDocDirectives" in options && options.skipDocDirectives
       ? hasDirective(type, options.skipDocDirectives)
       : false;
 
@@ -118,9 +116,7 @@ export const hasPrintableDirective = (
     isDeprecated(type);
 
   const onlyDirective =
-    "onlyDocDirectives" in options &&
-    options.onlyDocDirectives &&
-    options.onlyDocDirectives.length > 0
+    "onlyDocDirectives" in options && options.onlyDocDirectives
       ? hasDirective(type, options.onlyDocDirectives, true)
       : true;
 

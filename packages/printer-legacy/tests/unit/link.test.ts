@@ -115,6 +115,8 @@ describe("link", () => {
       ({ guard }) => {
         expect.assertions(1);
 
+        jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+
         mockGraphQL[guard].mockReturnValueOnce(true);
 
         const category = Link.getLinkCategory(
@@ -137,6 +139,7 @@ describe("link", () => {
   describe("toLink()", () => {
     beforeEach(() => {
       mockGroup.getGroup.mockReturnValue("");
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
     });
 
     test.each(types)(
@@ -529,6 +532,8 @@ describe("link", () => {
       const type = new GraphQLScalarType({
         name: entityName,
       });
+
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
 
       mockGraphQL.getNamedType.mockReturnValue(
         entityName as unknown as GraphQLNamedType,

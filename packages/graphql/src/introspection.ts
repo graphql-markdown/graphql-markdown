@@ -176,7 +176,7 @@ export const isValidDirectiveLocation = (
  *
  * @param entity - a GraphQL schema entity.
  * @param directives - a directive name or a list of directive names.
- * @param checkLocation - optional flag to check if a directive can be applied to the entity location.
+ * @param fallback - default value if the entity type is not a valid location for directives.
  *
  * @returns `true` if the entity has at least one directive matching, else `false`.
  *
@@ -184,21 +184,21 @@ export const isValidDirectiveLocation = (
 export const hasDirective = (
   entity: unknown,
   directives: Maybe<GraphQLDirective[]>,
-  checkLocation: boolean = false,
+  fallback: boolean = false,
 ): boolean => {
   if (
     !hasAstNode(entity) ||
     !directives ||
-    !Array.isArray(entity.astNode.directives)
+    !Array.isArray(entity.astNode.directives) ||
+    directives.length === 0
   ) {
-    return false;
+    return fallback;
   }
-
   return (
     directives.findIndex((directive) => {
       // if the directive location is not applicable to entity then skip it
-      if (checkLocation && !isValidDirectiveLocation(entity, directive)) {
-        return true;
+      if (!isValidDirectiveLocation(entity, directive)) {
+        return fallback;
       }
       return (
         entity.astNode.directives &&
