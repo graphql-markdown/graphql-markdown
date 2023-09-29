@@ -1,6 +1,5 @@
 import type {
   CustomDirectiveMap,
-  DirectiveName,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLField,
@@ -22,7 +21,6 @@ import type {
 
 import {
   getTypeName,
-  hasDirective,
   isDirectiveType,
   isEnumType,
   isInputType,
@@ -32,11 +30,10 @@ import {
   isScalarType,
   isUnionType,
 } from "@graphql-markdown/graphql";
-
 import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
-import { printDescription } from "./common";
+import { hasPrintableDirective, printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
 import {
   printCodeDirective,
@@ -65,8 +62,8 @@ import {
   MARKDOWN_SOC,
 } from "./const/strings";
 import { mdx } from "./const/mdx";
-
 import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
+
 export class Printer implements IPrinter {
   static options: Maybe<PrintTypeOptions>;
 
@@ -83,19 +80,22 @@ export class Printer implements IPrinter {
     {
       customDirectives,
       groups,
+      onlyDocDirectives,
       printTypeOptions,
-      skipDocDirective,
+      skipDocDirectives,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
       groups?: SchemaEntitiesGroupMap;
+      onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
-      skipDocDirective?: DirectiveName[];
+      skipDocDirectives?: GraphQLDirective[];
     } = {
       customDirectives: undefined,
       groups: undefined,
+      onlyDocDirectives: [],
       printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
-      skipDocDirective: undefined,
+      skipDocDirectives: [],
     },
   ): void {
     if (typeof Printer.options !== "undefined") {
@@ -118,7 +118,8 @@ export class Printer implements IPrinter {
         printTypeOptions?.relatedTypeSection ??
         PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
       schema,
-      skipDocDirective: skipDocDirective ?? undefined,
+      onlyDocDirectives: onlyDocDirectives ?? [],
+      skipDocDirectives: skipDocDirectives ?? [],
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
     };
@@ -209,7 +210,7 @@ export class Printer implements IPrinter {
         return printDirectiveMetadata(type as GraphQLDirective, options);
       case isOperation(type):
         return printOperationMetadata(
-          type as GraphQLField<unknown, unknown, unknown>,
+          type as unknown as GraphQLField<unknown, unknown, unknown>,
           options,
         );
       default:
@@ -238,11 +239,7 @@ export class Printer implements IPrinter {
       ...options,
     };
 
-    if (
-      !type ||
-      !name ||
-      hasDirective(type, printTypeOptions.skipDocDirective)
-    ) {
+    if (!name || !hasPrintableDirective(type, printTypeOptions)) {
       return undefined;
     }
 

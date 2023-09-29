@@ -1,9 +1,9 @@
 import type { GraphQLDirective, DirectiveName } from ".";
 
-export type CustomDirectiveFunction = <T>(
+export type CustomDirectiveFunction = (
   directive?: GraphQLDirective,
   node?: unknown,
-) => T;
+) => unknown;
 
 export type CustomDirectiveResolver = "descriptor" | "tag";
 

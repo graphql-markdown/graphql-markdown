@@ -4,7 +4,6 @@ import {
   getFormattedDefaultValue,
   getTypeName,
   isDeprecated,
-  hasDirective,
 } from "@graphql-markdown/graphql";
 
 import {
@@ -12,6 +11,7 @@ import {
   DEPRECATED,
   MARKDOWN_CODE_INDENTATION,
 } from "./const/strings";
+import { hasPrintableDirective } from "./common";
 
 export const printCodeArguments = (
   type: unknown,
@@ -56,19 +56,7 @@ export const printCodeField = (
     return "";
   }
 
-  const skipDirective =
-    (options &&
-      "skipDocDirective" in options &&
-      hasDirective(type, options.skipDocDirective)) ??
-    false;
-  const skipDeprecated =
-    (options &&
-      "deprecated" in options &&
-      options.deprecated === "skip" &&
-      isDeprecated(type)) ??
-    false;
-
-  if (skipDirective || skipDeprecated) {
+  if (!hasPrintableDirective(type, options)) {
     return "";
   }
 

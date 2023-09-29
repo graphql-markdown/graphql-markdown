@@ -12,7 +12,7 @@ import {
   GraphQLSchema,
 } from "graphql";
 
-import type { DirectiveName, PrintTypeOptions } from "@graphql-markdown/types";
+import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -42,6 +42,8 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
+
+import * as Common from "../../src/common";
 
 import { Printer } from "../../src/printer";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
@@ -143,9 +145,9 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    jest
-      .spyOn(GraphQL, "getTypeName")
-      .mockImplementation((value) => value as string);
+    jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
+      return value as string;
+    });
   });
 
   afterEach(() => {
@@ -174,11 +176,12 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": true,
           "relatedTypeSection": true,
           "schema": undefined,
-          "skipDocDirective": undefined,
+          "skipDocDirectives": [],
           "typeBadges": true,
           "withAttributes": false,
         }
@@ -198,6 +201,11 @@ describe("Printer", () => {
     test("override values on init when options is undefined", () => {
       expect.hasAssertions();
 
+      const testDirective = new GraphQLDirective({
+        name: "test",
+        locations: [],
+      });
+
       Printer.options = undefined;
 
       Printer.init(new GraphQLSchema({}), "test", "/", {
@@ -208,7 +216,7 @@ describe("Printer", () => {
           relatedTypeSection: false,
           typeBadges: false,
         },
-        skipDocDirective: ["test" as DirectiveName],
+        skipDocDirectives: [testDirective],
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
@@ -224,6 +232,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": false,
           "relatedTypeSection": false,
@@ -257,8 +266,8 @@ describe("Printer", () => {
             "extensionASTNodes": [],
             "extensions": {},
           },
-          "skipDocDirective": [
-            "test",
+          "skipDocDirectives": [
+            "@test",
           ],
           "typeBadges": false,
           "withAttributes": false,
@@ -412,9 +421,11 @@ describe("Printer", () => {
       ({ name, type }) => {
         expect.hasAssertions();
 
-        const spies = methods.map((method) =>
-          jest.spyOn(Printer, method).mockReturnValue(""),
-        );
+        jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+
+        const spies = methods.map((method) => {
+          return jest.spyOn(Printer, method).mockReturnValue("");
+        });
 
         Printer.printType(name, type);
 
@@ -440,9 +451,9 @@ describe("Printer", () => {
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if matches skipDocDirective", () => {
+    test("returns undefined if type has no printable directive", () => {
       expect.hasAssertions();
-      jest.spyOn(GraphQL, "hasDirective").mockReturnValue(true);
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValueOnce(false);
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();

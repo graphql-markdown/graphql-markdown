@@ -67,7 +67,11 @@ export default function pluginGraphQLDocGenerator(
           "-gbd, --groupByDirective <@directive(field|=fallback)>",
           "Group documentation by directive",
         )
-        .option("--skip <@directive...>", "Skip type with matching directive")
+        .option(
+          "--only <@directive...>",
+          "Only print types with matching directive",
+        )
+        .option("--skip <@directive...>", "Skip types with matching directive")
         .option(
           "--deprecated <option>",
           "Option for printing deprecated entities: `default`, `group` or `skip`",

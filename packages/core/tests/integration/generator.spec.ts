@@ -29,9 +29,9 @@ describe("renderer", () => {
     jest.spyOn(global.console, "info").mockImplementation(() => {});
     jest.spyOn(global.console, "error").mockImplementation(() => {});
 
-    jest
-      .spyOn(Printer, "printType")
-      .mockImplementation((value) => value as MDXString);
+    jest.spyOn(Printer, "printType").mockImplementation((value) => {
+      return value as MDXString;
+    });
 
     vol.fromJSON({
       "/output": null,
@@ -67,6 +67,8 @@ describe("renderer", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
         },
+        onlyDocDirective: [],
+        skipDocDirective: [],
       } as GeneratorOptions;
 
       await generateDocFromSchema(config);
@@ -96,13 +98,15 @@ describe("renderer", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
         },
+        onlyDocDirective: [],
+        skipDocDirective: [],
       } as GeneratorOptions;
 
       jest.spyOn(diff, "checkSchemaChanges").mockResolvedValue(false);
       await generateDocFromSchema(config);
 
       expect(logSpy).toHaveBeenCalledWith(
-        `No changes detected in schema "${config.schemaLocation}".`,
+        `No changes detected in schema "${String(config.schemaLocation)}".`,
       );
     });
 
@@ -134,6 +138,8 @@ describe("renderer", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
         },
+        onlyDocDirective: [],
+        skipDocDirective: [],
       } as GeneratorOptions;
 
       await generateDocFromSchema(config);

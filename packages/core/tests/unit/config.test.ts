@@ -17,8 +17,10 @@ import {
   DEFAULT_OPTIONS,
   DiffMethod,
   getCustomDirectives,
-  getSkipDocDirective,
+  getDocDirective,
+  getOnlyDocDirectives,
   getSkipDocDirectives,
+  getVisibilityDirectives,
   parseGroupByOption,
 } from "../../src/config";
 
@@ -80,27 +82,85 @@ describe("config", () => {
     });
   });
 
-  describe("getSkipDocDirective", () => {
+  describe("getOnlyDocDirectives", () => {
+    test("returns a list of directive names", () => {
+      expect.hasAssertions();
+
+      expect(
+        getOnlyDocDirectives(
+          { only: ["@public" as DirectiveName] },
+          { onlyDocDirective: ["@admin" as DirectiveName] },
+        ),
+      ).toStrictEqual(["public", "admin"]);
+    });
+
+    test("supports string as input", () => {
+      expect.hasAssertions();
+
+      expect(
+        getOnlyDocDirectives({ only: "@public" as DirectiveName }, undefined),
+      ).toStrictEqual(["public"]);
+    });
+  });
+
+  describe("getVisibilityDirectives", () => {
+    test("returns a list of skip and only directive names", () => {
+      expect.hasAssertions();
+
+      expect(
+        getVisibilityDirectives(
+          {
+            only: ["@public" as DirectiveName],
+            skip: ["@noDoc" as DirectiveName],
+          },
+          {
+            onlyDocDirective: ["@admin" as DirectiveName],
+            skipDocDirective: ["@deprecated" as DirectiveName],
+          },
+        ),
+      ).toStrictEqual({
+        onlyDocDirective: ["public", "admin"],
+        skipDocDirective: ["noDoc", "deprecated"],
+      });
+    });
+
+    test("throws an errors if a directive is declared both as only and skip", () => {
+      expect.hasAssertions();
+
+      expect(() => {
+        return getVisibilityDirectives(
+          {
+            only: ["@admin" as DirectiveName],
+          },
+          {
+            skipDocDirective: ["@admin" as DirectiveName],
+          },
+        );
+      }).toThrow(Error);
+    });
+  });
+
+  describe("getDocDirective", () => {
     test("returns a directive name", () => {
       expect.hasAssertions();
 
-      expect(getSkipDocDirective("@noDoc" as DirectiveName)).toBe("noDoc");
+      expect(getDocDirective("@noDoc" as DirectiveName)).toBe("noDoc");
     });
 
     test("throws an error if not a string", () => {
       expect.hasAssertions();
 
-      expect(() => getSkipDocDirective({} as unknown as DirectiveName)).toThrow(
-        Error,
-      );
+      expect(() => {
+        return getDocDirective({} as unknown as DirectiveName);
+      }).toThrow(Error);
     });
 
     test("throws an error if format is not a directive", () => {
       expect.hasAssertions();
 
-      expect(() =>
-        getSkipDocDirective("+NotADirective@" as DirectiveName),
-      ).toThrow(`Invalid "+NotADirective@"`);
+      expect(() => {
+        return getDocDirective("+NotADirective@" as DirectiveName);
+      }).toThrow(`Invalid "+NotADirective@"`);
     });
   });
 
@@ -112,22 +172,23 @@ describe("config", () => {
 
       expect(config).toEqual(
         expect.objectContaining({
-          id: DEFAULT_OPTIONS.id,
           baseURL: DEFAULT_OPTIONS.baseURL,
+          customDirective: DEFAULT_OPTIONS.customDirective,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
+          docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
+          id: DEFAULT_OPTIONS.id,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
           outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+          onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
           prettify: DEFAULT_OPTIONS.pretty,
-          schemaLocation: DEFAULT_OPTIONS.schema,
-          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
-          docOptions: DEFAULT_OPTIONS.docOptions,
-          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
           printer: DEFAULT_OPTIONS.printer,
+          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          schemaLocation: DEFAULT_OPTIONS.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
-          customDirective: DEFAULT_OPTIONS.customDirective,
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
         }),
       );
     });
@@ -171,7 +232,9 @@ describe("config", () => {
             descriptor: (
               directiveType?: GraphQLDirective,
               node?: GraphQLDirective,
-            ): string => `Test${node!.name}`,
+            ): string => {
+              return `Test${node!.name}`;
+            },
           } as CustomDirective,
         },
       };
@@ -179,22 +242,23 @@ describe("config", () => {
       const config = await buildConfig(configFileOpts, undefined);
 
       expect(config).toStrictEqual({
-        id: DEFAULT_OPTIONS.id,
         baseURL: configFileOpts.baseURL,
+        customDirective: configFileOpts.customDirective,
         diffMethod: configFileOpts.diffMethod,
+        docOptions: configFileOpts.docOptions,
         groupByDirective: configFileOpts.groupByDirective,
         homepageLocation: configFileOpts.homepage,
+        id: DEFAULT_OPTIONS.id,
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
         outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
+        onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         prettify: configFileOpts.pretty,
-        schemaLocation: configFileOpts.schema,
-        tmpDir: configFileOpts.tmpDir,
-        docOptions: configFileOpts.docOptions,
-        printTypeOptions: configFileOpts.printTypeOptions,
         printer: DEFAULT_OPTIONS.printer,
+        printTypeOptions: configFileOpts.printTypeOptions,
+        schemaLocation: configFileOpts.schema,
         skipDocDirective: ["noDoc"],
-        customDirective: configFileOpts.customDirective,
+        tmpDir: configFileOpts.tmpDir,
       });
     });
 
@@ -236,6 +300,7 @@ describe("config", () => {
         noCode: true,
         noPagination: true,
         noToc: true,
+        only: "@public",
         pretty: true,
         root: "cli",
         schema: "cli/my-schema.graphql",
@@ -273,6 +338,7 @@ describe("config", () => {
         },
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
+        onlyDocDirective: ["public"],
         customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });
@@ -293,22 +359,23 @@ describe("config", () => {
       const input = await buildConfig(configFileOpts, cliOpts);
 
       expect(input).toStrictEqual({
-        id: DEFAULT_OPTIONS.id,
         baseURL: configFileOpts.baseURL,
-        schemaLocation: cliOpts.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL!),
-        linkRoot: DEFAULT_OPTIONS.linkRoot,
-        homepageLocation: DEFAULT_OPTIONS.homepage,
-        diffMethod: DEFAULT_OPTIONS.diffMethod,
-        tmpDir: DEFAULT_OPTIONS.tmpDir,
-        loaders: configFileOpts.loaders,
-        groupByDirective: undefined,
-        prettify: cliOpts.pretty,
-        docOptions: DEFAULT_OPTIONS.docOptions,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
-        printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        diffMethod: DEFAULT_OPTIONS.diffMethod,
+        docOptions: DEFAULT_OPTIONS.docOptions,
+        groupByDirective: undefined,
+        homepageLocation: DEFAULT_OPTIONS.homepage,
+        id: DEFAULT_OPTIONS.id,
+        linkRoot: DEFAULT_OPTIONS.linkRoot,
+        loaders: configFileOpts.loaders,
+        onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
+        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL!),
+        prettify: cliOpts.pretty,
+        printer: DEFAULT_OPTIONS.printer,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        schemaLocation: cliOpts.schema,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });
 
@@ -320,22 +387,23 @@ describe("config", () => {
       const input = await buildConfig({ loaders: {} }, cliOpts);
 
       expect(input).toStrictEqual({
-        id: DEFAULT_OPTIONS.id,
         baseURL: DEFAULT_OPTIONS.baseURL,
-        schemaLocation: DEFAULT_OPTIONS.schema,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
-        linkRoot: DEFAULT_OPTIONS.linkRoot,
-        homepageLocation: DEFAULT_OPTIONS.homepage,
-        diffMethod: DiffMethod.FORCE as TypeDiffMethod,
-        tmpDir: DEFAULT_OPTIONS.tmpDir,
-        loaders: {},
-        groupByDirective: DEFAULT_OPTIONS.groupByDirective,
-        prettify: DEFAULT_OPTIONS.pretty,
-        docOptions: DEFAULT_OPTIONS.docOptions,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
-        printer: DEFAULT_OPTIONS.printer,
-        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        diffMethod: DiffMethod.FORCE as TypeDiffMethod,
+        docOptions: DEFAULT_OPTIONS.docOptions,
+        groupByDirective: DEFAULT_OPTIONS.groupByDirective,
+        homepageLocation: DEFAULT_OPTIONS.homepage,
+        id: DEFAULT_OPTIONS.id,
+        linkRoot: DEFAULT_OPTIONS.linkRoot,
+        loaders: {},
+        onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
+        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+        prettify: DEFAULT_OPTIONS.pretty,
+        printer: DEFAULT_OPTIONS.printer,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        schemaLocation: DEFAULT_OPTIONS.schema,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });
   });
@@ -455,7 +523,9 @@ describe("config", () => {
       const descriptor = (
         _: GraphQLDirective,
         constDirectiveType: GraphQLDirective,
-      ): string => `Test${constDirectiveType.name}`;
+      ): string => {
+        return `Test${constDirectiveType.name}`;
+      };
       const options = {
         testA: { descriptor },
         testB: { descriptor },

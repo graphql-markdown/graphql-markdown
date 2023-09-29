@@ -3,16 +3,19 @@ import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...graphql,
     getDirectiveValues: jest.fn(graphql.getDirectiveValues),
   };
 });
-import type { GraphQLSchema, ObjectTypeDefinitionNode } from "graphql";
+import type { GraphQLSchema, ObjectTypeDefinitionNode, ASTNode } from "graphql";
 import {
   buildSchema,
+  DirectiveLocation,
   getDirectiveValues,
+  GraphQLDirective,
   GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
@@ -20,6 +23,7 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   isDirective,
+  Kind,
 } from "graphql";
 
 import {
@@ -32,6 +36,8 @@ import {
   getTypeFromSchema,
   getTypeName,
   hasDirective,
+  isValidDirectiveLocation,
+  getDirectiveLocationForASTPath,
 } from "../../src/introspection";
 import { loadSchema } from "../../src/loader";
 
@@ -149,7 +155,11 @@ describe("introspection", () => {
     test("calls toString method when it exists", () => {
       expect.hasAssertions();
 
-      const name = getTypeName({ toString: () => "FooBar" });
+      const name = getTypeName({
+        toString: () => {
+          return "FooBar";
+        },
+      });
 
       expect(name).toBe("FooBar");
     });
@@ -287,13 +297,13 @@ describe("introspection", () => {
 
   describe("hasDirective", () => {
     const schema = buildSchema(`
-        directive @foobaz on OBJECT
+        directive @foobar on OBJECT
 
         interface Record {
           id: String!
         }
 
-        type StudyItem implements Record @foobaz {
+        type StudyItem implements Record @foobar {
           id: String!
           subject: String!
           duration: Int!
@@ -313,12 +323,21 @@ describe("introspection", () => {
         }
       `);
 
+    const foobar = new GraphQLDirective({
+      name: "foobar",
+      locations: [DirectiveLocation.SUBSCRIPTION, DirectiveLocation.OBJECT],
+    });
+    const foobaz = new GraphQLDirective({
+      name: "foobaz",
+      locations: [DirectiveLocation.SUBSCRIPTION],
+    });
+
     test("return false if the type has no directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("Subscription")!;
 
-      expect(hasDirective(type, "foobar")).toBeFalsy();
+      expect(hasDirective(type, [foobar])).toBeFalsy();
     });
 
     test("return false if directives not defined", () => {
@@ -334,7 +353,7 @@ describe("introspection", () => {
 
       const type = schema.getType("StudyItem")!;
 
-      expect(hasDirective(type, "foobar")).toBeFalsy();
+      expect(hasDirective(type, [foobaz])).toBeFalsy();
     });
 
     test("return true if the type has matching directive", () => {
@@ -342,7 +361,7 @@ describe("introspection", () => {
 
       const type = schema.getType("StudyItem")!;
 
-      expect(hasDirective(type, "foobaz")).toBeTruthy();
+      expect(hasDirective(type, [foobar])).toBeTruthy();
     });
 
     test("return true if the type has one matching directive", () => {
@@ -350,7 +369,15 @@ describe("introspection", () => {
 
       const type = schema.getType("StudyItem")!;
 
-      expect(hasDirective(type, ["foobar", "foobaz"])).toBeTruthy();
+      expect(hasDirective(type, [foobar, foobaz])).toBeTruthy();
+    });
+
+    test("return true if the type is not a valid directive location and checkLocation is true", () => {
+      expect.hasAssertions();
+
+      const type = schema.getType("Record")!;
+
+      expect(hasDirective(type, [foobar, foobaz], true)).toBeTruthy();
     });
   });
 
@@ -382,11 +409,20 @@ describe("introspection", () => {
       }
     `);
 
+    const foobar = new GraphQLDirective({
+      name: "foobar",
+      locations: [],
+    });
+    const foobaz = new GraphQLDirective({
+      name: "foobaz",
+      locations: [],
+    });
+
     test("return empty list if the type has no directive", () => {
       expect.hasAssertions();
 
       const type = schema.getType("Subscription")!;
-      const actual = getDirective(type, "foobar");
+      const actual = getDirective(type, [foobar]);
 
       expect(actual).toHaveLength(0);
     });
@@ -404,7 +440,7 @@ describe("introspection", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
-      const actual = getDirective(type, "foobar");
+      const actual = getDirective(type, [foobar]);
 
       expect(actual).toHaveLength(0);
     });
@@ -413,7 +449,7 @@ describe("introspection", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
-      const actual = getDirective(type, "foobaz");
+      const actual = getDirective(type, [foobaz]);
 
       expect(actual).toHaveLength(1);
       expect(actual[0].toString()).toBe("@foobaz");
@@ -424,7 +460,7 @@ describe("introspection", () => {
       expect.hasAssertions();
 
       const type = schema.getType("StudyItem")!;
-      const actual = getDirective(type, ["foobar", "foobaz"]);
+      const actual = getDirective(type, [foobar, foobaz]);
 
       expect(actual).toHaveLength(1);
       expect(actual[0].toString()).toBe("@foobaz");
@@ -484,7 +520,9 @@ describe("introspection", () => {
       const directiveType = schema.getDirective(directiveName)!;
       const typeFieldNode = (
         type.astNode! as ObjectTypeDefinitionNode
-      ).fields!.find((field) => field.name.value === "fieldA")!;
+      ).fields!.find((field) => {
+        return field.name.value === "fieldA";
+      })!;
       const argName = "argC";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -502,7 +540,9 @@ describe("introspection", () => {
       const directiveType = schema.getDirective(directiveName)!;
       const typeFieldNode = (
         type.astNode! as ObjectTypeDefinitionNode
-      ).fields!.find((field) => field.name.value === "fieldA")!;
+      ).fields!.find((field) => {
+        return field.name.value === "fieldA";
+      })!;
       const argName = "argB";
 
       expect(getTypeDirectiveArgValue(directiveType, typeFieldNode, argName))
@@ -520,7 +560,9 @@ describe("introspection", () => {
       const directiveType = schema.getDirective(directiveName)!;
       const typeFieldNode = (
         type.astNode! as ObjectTypeDefinitionNode
-      ).fields!.find((field) => field.name.value === "fieldA")!;
+      ).fields!.find((field) => {
+        return field.name.value === "fieldA";
+      })!;
       const argName = "argA";
 
       expect(
@@ -611,6 +653,145 @@ describe("introspection", () => {
         typeAstNode,
       );
       expect(values).toMatchObject({ arg: "ARGA" });
+    });
+  });
+
+  describe("isValidDirectiveLocation", () => {
+    const schema = buildSchema(`
+    directive @dirWithoutArg on OBJECT
+
+    directive @testA(
+      arg: ArgEnum = ARGA
+    ) on OBJECT | FIELD_DEFINITION
+
+    directive @testB(
+      argA: Int!, 
+      argB: [String!]
+      argC: TestInput
+    ) on FIELD_DEFINITION
+
+    enum ArgEnum {
+      ARGA
+      ARGB
+      ARGC
+    }
+
+    type Test @testA @dirWithoutArg {
+      id: ID!
+      fieldA: [String!] 
+        @testA(arg: ARGC) 
+        @testB(argA: 10, argB: ["testArgB"], argC: { id: "input-id" })
+    }
+
+    input TestInput {
+      id: ID!
+    }
+  `);
+
+    test("returns false if entity location is not a valid directive location", () => {
+      expect.assertions(1);
+
+      expect(
+        isValidDirectiveLocation(
+          schema.getType("ArgEnum"),
+          schema.getDirective("testA")!,
+        ),
+      ).toBeFalsy();
+    });
+
+    test("returns true if entity location is a valid directive location", () => {
+      expect.assertions(1);
+
+      expect(
+        isValidDirectiveLocation(
+          schema.getType("Test"),
+          schema.getDirective("testA")!,
+        ),
+      ).toBeTruthy();
+    });
+
+    test("returns false if entity has no astNode definition", () => {
+      expect.assertions(1);
+
+      expect(
+        isValidDirectiveLocation({}, schema.getDirective("testA")!),
+      ).toBeFalsy();
+    });
+  });
+
+  describe("getDirectiveLocationForASTPath", () => {
+    const schema = buildSchema(`
+    directive @directiveTest on OBJECT
+
+    enum ArgEnum {
+      ARGA
+      ARGB
+      ARGC
+    }
+
+    type TestObject {
+      id: ID!
+      fieldA: [String!] 
+    }
+
+    input TestInput {
+      id: ID!
+    }
+
+    interface TestInterface {
+      id: String!
+    }
+
+    union TestUnion = ID | String 
+
+    scalar JSON
+  `);
+
+    test.each([
+      {
+        entity: schema.getType("ArgEnum"),
+        location: DirectiveLocation.ENUM,
+      },
+      {
+        entity: schema.getType("TestObject"),
+        location: DirectiveLocation.OBJECT,
+      },
+      {
+        entity: schema.getType("TestInput"),
+        location: DirectiveLocation.INPUT_OBJECT,
+      },
+      {
+        entity: schema.getType("TestInterface"),
+        location: DirectiveLocation.INTERFACE,
+      },
+      {
+        entity: schema.getType("TestUnion"),
+        location: DirectiveLocation.UNION,
+      },
+      {
+        entity: schema.getType("JSON"),
+        location: DirectiveLocation.SCALAR,
+      },
+    ])("returns directive location", ({ entity, location }) => {
+      expect.assertions(1);
+
+      expect(getDirectiveLocationForASTPath(entity?.astNode)).toBe(location);
+    });
+
+    test.each([
+      [{}],
+      [undefined],
+      [
+        {
+          appliedTo: Kind.DIRECTIVE,
+        },
+      ],
+    ])("throws on unsupported entity", (node: unknown) => {
+      expect.assertions(1);
+
+      expect(() => {
+        return getDirectiveLocationForASTPath(node as ASTNode);
+      }).toThrow();
     });
   });
 });

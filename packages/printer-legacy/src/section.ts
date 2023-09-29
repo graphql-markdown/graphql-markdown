@@ -6,13 +6,9 @@ import type {
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
-import {
-  isGraphQLFieldType,
-  hasDirective,
-  isDeprecated,
-} from "@graphql-markdown/graphql";
+import { isGraphQLFieldType, isDeprecated } from "@graphql-markdown/graphql";
 
-import { printDescription } from "./common";
+import { hasPrintableDirective, printDescription } from "./common";
 import { printBadges } from "./badge";
 import { printLink, printParentLink } from "./link";
 import { printCustomTags } from "./directive";
@@ -40,10 +36,7 @@ export const printSectionItem = <T>(
       ? options.level
       : SectionLevels.LEVEL_4;
 
-  const skipDirective = hasDirective(type, options.skipDocDirective);
-  const skipDeprecated = options.deprecated === "skip" && isDeprecated(type);
-
-  if (!type || skipDirective || skipDeprecated) {
+  if (!hasPrintableDirective(type, options)) {
     return "";
   }
 

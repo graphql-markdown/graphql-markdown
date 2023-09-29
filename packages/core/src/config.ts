@@ -72,11 +72,10 @@ export const DEFAULT_OPTIONS: Required<
   schema: "./schema.graphql",
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   skipDocDirective: [],
+  onlyDocDirective: [],
 } as const;
 
-export const getSkipDocDirective = (
-  name: Maybe<DirectiveName>,
-): DirectiveName => {
+export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
   if (typeof name !== "string" || !OPTION_REGEX.test(name)) {
@@ -92,6 +91,22 @@ export const getSkipDocDirective = (
   return directive;
 };
 
+export const getOnlyDocDirectives = (
+  cliOpts: Maybe<CliOptions>,
+  configFileOpts: Maybe<Pick<ConfigOptions, "onlyDocDirective">>,
+): DirectiveName[] => {
+  const directiveList: DirectiveName[] = [].concat(
+    (cliOpts?.only ?? []) as never[],
+    (configFileOpts?.onlyDocDirective ?? []) as never[],
+  );
+
+  const onlyDirectives = directiveList.map((directiveName) => {
+    return getDocDirective(directiveName);
+  });
+
+  return onlyDirectives;
+};
+
 export const getSkipDocDirectives = (
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<
@@ -103,8 +118,8 @@ export const getSkipDocDirectives = (
     (configFileOpts?.skipDocDirective ?? []) as never[],
   );
 
-  const skipDirectives = directiveList.map((option) => {
-    return getSkipDocDirective(option);
+  const skipDirectives = directiveList.map((directiveName) => {
+    return getDocDirective(directiveName);
   });
 
   if (
@@ -117,6 +132,31 @@ export const getSkipDocDirectives = (
   }
 
   return skipDirectives;
+};
+
+export const getVisibilityDirectives = (
+  cliOpts: Maybe<CliOptions>,
+  configFileOpts: Maybe<
+    Pick<
+      ConfigOptions,
+      "onlyDocDirective" | "printTypeOptions" | "skipDocDirective"
+    >
+  >,
+): { onlyDocDirective: DirectiveName[]; skipDocDirective: DirectiveName[] } => {
+  const skipDocDirective = getSkipDocDirectives(cliOpts, configFileOpts);
+  const onlyDocDirective = getOnlyDocDirectives(cliOpts, configFileOpts);
+
+  if (
+    onlyDocDirective.some((directiveName) => {
+      return skipDocDirective.includes(directiveName);
+    })
+  ) {
+    throw new Error(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  }
+
+  return { onlyDocDirective, skipDocDirective };
 };
 
 export const getCustomDirectives = (
@@ -250,7 +290,10 @@ export const buildConfig = async (
   } as const;
 
   const baseURL: string = cliOpts.base ?? config.baseURL;
-  const skipDocDirective = getSkipDocDirectives(cliOpts, config);
+  const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
+    cliOpts,
+    config,
+  );
 
   return {
     baseURL,
@@ -267,6 +310,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
+    onlyDocDirective,
     outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
     prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
     printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,

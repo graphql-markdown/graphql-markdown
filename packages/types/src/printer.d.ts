@@ -2,10 +2,10 @@ import type {
   Maybe,
   TypeDeprecatedOption,
   SchemaEntitiesGroupMap,
-  DirectiveName,
   GraphQLSchema,
   CustomDirectiveMap,
   ConfigPrintTypeOptions,
+  GraphQLDirective,
 } from ".";
 
 export type RootTypeName =
@@ -39,8 +39,8 @@ export interface CollapsibleOption {
 }
 
 export interface PrintTypeHeaderOptions {
-  toc?: boolean;
   pagination?: boolean;
+  toc?: boolean;
 }
 
 export interface PrintTypeOptions {
@@ -50,15 +50,16 @@ export interface PrintTypeOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  header?: Maybe<PrintTypeHeaderOptions>;
   level?: Maybe<SectionLevelValue>;
+  onlyDocDirectives?: GraphQLDirective[];
   parentType?: Maybe<string>;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   schema?: Maybe<GraphQLSchema>;
-  skipDocDirective?: Maybe<DirectiveName[]>;
+  skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
   withAttributes?: boolean;
-  header?: Maybe<PrintTypeHeaderOptions>;
 }
 
 export type SectionLevelValue = string & {
@@ -83,9 +84,10 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
     | "basePath"
     | "deprecated"
     | "groups"
+    | "onlyDocDirectives"
     | "parentType"
     | "parentTypePrefix"
-    | "skipDocDirective"
+    | "skipDocDirectives"
     | "withAttributes"
   >;
 
@@ -147,6 +149,7 @@ export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  onlyDocDirectives?: GraphQLDirective[];
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
-  skipDocDirective?: Maybe<DirectiveName[]>;
+  skipDocDirectives?: GraphQLDirective[];
 }

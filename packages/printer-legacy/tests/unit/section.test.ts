@@ -1,4 +1,4 @@
-import type { DirectiveName, SectionLevelValue } from "@graphql-markdown/types";
+import type { SectionLevelValue } from "@graphql-markdown/types";
 
 import {
   GraphQLNonNull,
@@ -6,6 +6,9 @@ import {
   GraphQLList,
   GraphQLObjectType,
   GraphQLString,
+  GraphQLDirective,
+  Kind,
+  DirectiveLocation,
 } from "graphql";
 
 import {
@@ -149,6 +152,11 @@ describe("section", () => {
   });
 
   describe("printSectionItem()", () => {
+    const noDoc = new GraphQLDirective({
+      name: "noDoc",
+      locations: [DirectiveLocation.FIELD],
+    });
+
     test("returns Markdown #### link section with description", () => {
       expect.hasAssertions();
 
@@ -351,13 +359,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const type = {
         name: "EntityTypeNameList",
         astNode: {
-          directives: [{ name: { value: "@noDoc" } }],
+          kind: Kind.FIELD,
+          directives: [{ name: { value: "noDoc", appliedTo: [Kind.FIELD] } }],
         },
       };
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc" as DirectiveName],
+        skipDocDirectives: [noDoc],
       });
 
       expect(section).toBe("");
@@ -370,13 +379,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         name: "EntityTypeNameList",
         isDeprecated: true,
         astNode: {
-          directives: [{ name: { value: "@noDoc" } }],
+          kind: Kind.FIELD,
+          directives: [{ name: { value: "@noDoc" }, appliedTo: [Kind.FIELD] }],
         },
       };
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc" as DirectiveName],
+        skipDocDirectives: [noDoc],
         deprecated: "skip",
       });
 
@@ -394,14 +404,18 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
             name: "ParameterTypeName",
             type: GraphQLString,
             astNode: {
-              directives: [{ name: { value: "@doc" } }],
+              kind: Kind.FIELD,
+              directives: [{ name: { value: "doc", appliedTo: [Kind.FIELD] } }],
             },
           },
           {
             name: "ParameterSkipDoc",
             type: GraphQLString,
             astNode: {
-              directives: [{ name: { value: "@noDoc" } }],
+              kind: Kind.FIELD,
+              directives: [
+                { name: { value: "noDoc" }, appliedTo: [Kind.FIELD] },
+              ],
             },
           },
         ],
@@ -409,7 +423,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
-        skipDocDirective: ["@noDoc" as DirectiveName],
+        skipDocDirectives: [noDoc],
       });
 
       expect(section).toMatchInlineSnapshot(`

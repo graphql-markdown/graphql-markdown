@@ -8,11 +8,11 @@ import {
   isEnumType,
   getTypeName,
   isDeprecated,
-  hasDirective,
 } from "@graphql-markdown/graphql";
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
+import { hasPrintableDirective } from "../common";
 
 export const printEnumMetadata = (
   type: unknown,
@@ -27,7 +27,7 @@ export const printEnumMetadata = (
 
 export const printCodeEnum = (
   type: unknown,
-  options: PrintTypeOptions,
+  options?: PrintTypeOptions,
 ): string => {
   if (!isEnumType(type)) {
     return "";
@@ -36,22 +36,17 @@ export const printCodeEnum = (
   let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
   code += (type as GraphQLEnumType)
     .getValues()
-    .map((value) => {
-      const skipDirective =
-        "skipDocDirective" in options &&
-        hasDirective(value, options.skipDocDirective);
-      const skipDeprecated =
-        "deprecated" in options &&
-        options.deprecated === "skip" &&
-        isDeprecated(value);
-      if (skipDirective || skipDeprecated) {
+    .map((value): string => {
+      if (!hasPrintableDirective(value, options)) {
         return "";
       }
       const v = getTypeName(value);
       const d = isDeprecated(value) ? ` @${DEPRECATED}` : "";
       return `  ${v}${d}`;
     })
-    .filter((value) => value.length > 0)
+    .filter((value): boolean => {
+      return value.length > 0;
+    })
     .join(MARKDOWN_EOL);
   code += `${MARKDOWN_EOL}}`;
 

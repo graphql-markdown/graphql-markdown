@@ -18,10 +18,10 @@ Returns a map of fields and arguments where the GraphQL schema type matches the 
 
 #### Parameters
 
-| Parameter   | Type                     | Description                                                               |
-| :---------- | :----------------------- | :------------------------------------------------------------------------ |
-| `type`      | `unknown`                | the GraphQL schema type being processed.                                  |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | the GraphQL schema type being processed. |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -29,15 +29,15 @@ Returns a map of fields and arguments where the GraphQL schema type matches the 
 
 a record map of fields and arguments relations.
 
+#### Source
+
+[packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
+
 #### See
 
 mapRelationOf
 
-#### Defined In
-
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
-
----
+***
 
 ### getRelationOfImplementation
 
@@ -49,10 +49,10 @@ Returns a map of types (unions or interfaces) where the GraphQL schema type is i
 
 #### Parameters
 
-| Parameter   | Type                     | Description                                                               |
-| :---------- | :----------------------- | :------------------------------------------------------------------------ |
-| `type`      | `unknown`                | the GraphQL schema type being processed.                                  |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | the GraphQL schema type being processed. |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -60,15 +60,15 @@ Returns a map of types (unions or interfaces) where the GraphQL schema type is i
 
 a record map of unions or interfaces relations.
 
+#### Source
+
+[packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
+
 #### See
 
 mapRelationOf
 
-#### Defined In
-
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
-
----
+***
 
 ### getRelationOfInterface
 
@@ -80,10 +80,10 @@ Returns a map of interfaces where the GraphQL schema type is extended.
 
 #### Parameters
 
-| Parameter   | Type                     | Description                                                               |
-| :---------- | :----------------------- | :------------------------------------------------------------------------ |
-| `type`      | `unknown`                | the GraphQL schema type being processed.                                  |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | the GraphQL schema type being processed. |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -91,15 +91,15 @@ Returns a map of interfaces where the GraphQL schema type is extended.
 
 a record map of interfaces relations.
 
+#### Source
+
+[packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
+
 #### See
 
 mapRelationOf
 
-#### Defined In
-
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
-
----
+***
 
 ### getRelationOfReturn
 
@@ -111,10 +111,10 @@ Returns a map of operations (queries, mutations, subscriptions) where the GraphQ
 
 #### Parameters
 
-| Parameter   | Type                     | Description                                                               |
-| :---------- | :----------------------- | :------------------------------------------------------------------------ |
-| `type`      | `unknown`                | the GraphQL schema type being processed.                                  |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | the GraphQL schema type being processed. |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -122,15 +122,15 @@ Returns a map of operations (queries, mutations, subscriptions) where the GraphQ
 
 a record map of operations relations.
 
+#### Source
+
+[packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
+
 #### See
 
 mapRelationOf
 
-#### Defined In
-
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
-
----
+***
 
 ### getRelationOfUnion
 
@@ -142,10 +142,10 @@ Returns a map of unions where the GraphQL schema type is part of it.
 
 #### Parameters
 
-| Parameter   | Type                     | Description                                                               |
-| :---------- | :----------------------- | :------------------------------------------------------------------------ |
-| `type`      | `unknown`                | the GraphQL schema type being processed.                                  |
-| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [getSchemaMap](introspection.md#getschemamap)). |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `unknown` | the GraphQL schema type being processed. |
+| `schemaMap` | `Maybe`\< `SchemaMap` \> | a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)). |
 
 #### Returns
 
@@ -153,10 +153,10 @@ Returns a map of unions where the GraphQL schema type is part of it.
 
 a record map of unions relations.
 
+#### Source
+
+[packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
+
 #### See
 
 mapRelationOf
-
-#### Defined In
-
-[packages/types/src/utils.d.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/utils.d.ts#L107)
