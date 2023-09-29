@@ -349,16 +349,12 @@ Test testDirective"
       {
         options: {
           skipDocDirectives: undefined,
-          onlyDocDirectives: [],
+          onlyDocDirectives: undefined,
           deprecated: undefined,
         },
       },
       {
-        options: {
-          skipDocDirectives: [],
-          onlyDocDirectives: undefined,
-          deprecated: undefined,
-        },
+        options: {},
       },
     ])("return true if no option set", ({ options }) => {
       expect.assertions(1);

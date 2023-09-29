@@ -190,7 +190,7 @@ export const hasDirective = (
     !hasAstNode(entity) ||
     !directives ||
     !Array.isArray(entity.astNode.directives) ||
-    directives.length === 0
+    directives.length < 1
   ) {
     return fallback;
   }
