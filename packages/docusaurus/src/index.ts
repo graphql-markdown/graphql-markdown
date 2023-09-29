@@ -11,7 +11,8 @@ const DEFAULT_ID = "default" as const;
 
 export default function pluginGraphQLDocGenerator(
   _: LoadContext,
-  options: Partial<PluginOptions>,
+  options: ConfigOptions &
+    Partial<PluginOptions> & { runOnBuild: boolean | undefined },
 ): Plugin {
   const loggerModule = require.resolve("@docusaurus/logger");
   Logger(loggerModule);
@@ -27,17 +28,13 @@ export default function pluginGraphQLDocGenerator(
     name: NAME,
 
     async loadContent(): Promise<void> {
-      if (options.runOnBuild === false) {
+      if (options.runOnBuild !== true) {
         return;
       }
-      const config = await buildConfig(
-        options as ConfigOptions,
-        {},
-        options.id,
-      );
+      const config = await buildConfig(options, {}, options.id);
       await generateDocFromSchema({
         ...config,
-        loggerModule: loggerModule,
+        loggerModule,
       });
     },
 
@@ -78,14 +75,10 @@ export default function pluginGraphQLDocGenerator(
         )
         .option("--pretty", "Prettify generated files")
         .action(async (cliOptions: CliOptions) => {
-          const config = await buildConfig(
-            options as ConfigOptions,
-            cliOptions,
-            options.id,
-          );
+          const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
             ...config,
-            loggerModule: loggerModule,
+            loggerModule,
           });
         });
     },
