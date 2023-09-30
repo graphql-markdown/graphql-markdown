@@ -1,6 +1,6 @@
 [![GraphQL-Markdown](https://user-images.githubusercontent.com/324670/188957463-dae99daa-763d-466e-91f4-0629f455df74.svg)](https://graphql-markdown.github.io)
 
-<h1 align="center">Flexible GraphQL Documentation Generator</h1>
+<h1 align="center">Flexible documentation for GraphQL schemas</h1>
 
 [![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/docusaurus?style=flat)](https://www.npmjs.com/package/@graphql-markdown/docusaurus)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
