@@ -41,7 +41,12 @@ module.exports = {
     [
       "@graphql-markdown/docusaurus",
       // override .graphqlrc
-      { id: "schema_tweets", rootPath: "./docs", linkRoot: "/" },
+      {
+        id: "schema_tweets",
+        rootPath: "./docs",
+        linkRoot: "/",
+        runOnBuild: true,
+      },
     ],
   ],
 };
