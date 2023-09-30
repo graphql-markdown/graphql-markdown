@@ -28,6 +28,7 @@ export type RootTypeLocale = {
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
+  metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
@@ -52,6 +53,7 @@ export interface PrintTypeOptions {
   groups?: Maybe<SchemaEntitiesGroupMap>;
   header?: Maybe<PrintTypeHeaderOptions>;
   level?: Maybe<SectionLevelValue>;
+  metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   parentType?: Maybe<string>;
   parentTypePrefix?: boolean;
@@ -149,6 +151,7 @@ export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirectives?: GraphQLDirective[];

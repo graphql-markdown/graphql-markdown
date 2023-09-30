@@ -83,6 +83,7 @@ export class Printer implements IPrinter {
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
+      metatags,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
@@ -90,12 +91,14 @@ export class Printer implements IPrinter {
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
+      metatags?: Record<string, string>[];
     } = {
       customDirectives: undefined,
       groups: undefined,
       onlyDocDirectives: [],
       printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
       skipDocDirectives: [],
+      metatags: [],
     },
   ): void {
     if (typeof Printer.options !== "undefined") {
@@ -122,6 +125,7 @@ export class Printer implements IPrinter {
       skipDocDirectives: skipDocDirectives ?? [],
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
+      metatags: metatags ?? [],
     };
   }
 
@@ -228,6 +232,25 @@ export class Printer implements IPrinter {
     return printRelations(type, options);
   };
 
+  static printMetaTags = (
+    _type: unknown,
+    { metatags }: PrintTypeOptions,
+  ): MDXString | string => {
+    if (!metatags || metatags.length < 1) {
+      return "";
+    }
+
+    const meta = metatags.map((tag) => {
+      const props = Object.entries(tag).map(([name, value]) => {
+        return `${name}="${value}"`;
+      });
+
+      return `<meta ${props.join(" ")} />`;
+    });
+
+    return ["<head>", ...meta, "</head>"].join(MARKDOWN_EOL);
+  };
+
   static printType = (
     name: Maybe<string>,
     type: unknown,
@@ -248,6 +271,7 @@ export class Printer implements IPrinter {
       getTypeName(type),
       printTypeOptions,
     );
+    const metatags = Printer.printMetaTags(type, printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
     const customDirectives = Printer.printCustomDirectives(
@@ -260,6 +284,7 @@ export class Printer implements IPrinter {
 
     return [
       header,
+      metatags,
       mdx,
       tags,
       description,

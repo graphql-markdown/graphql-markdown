@@ -16,4 +16,8 @@ projects:
           typeBadges: true
           deprecated: group
         skipDocDirective:
-          - "@noDoc"
+        - "@noDoc"
+        metatags:
+        - name: googlebot
+          content: noindex
+        - charset: utf-8

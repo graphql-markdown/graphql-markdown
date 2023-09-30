@@ -21,6 +21,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
   {
     codeSection: true,
     deprecated: "default",
+    metatags: [],
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
@@ -53,6 +54,7 @@ export const DEFAULT_OPTIONS: Required<
   groups: undefined,
   header: { toc: true, pagination: true } as Required<PrintTypeHeaderOptions>,
   level: undefined,
+  metatags: [],
   onlyDocDirectives: [],
   parentType: undefined,
   schema: undefined,

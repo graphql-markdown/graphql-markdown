@@ -35,6 +35,7 @@ export interface ConfigOptions {
   id?: Maybe<string>;
   linkRoot?: Maybe<string>;
   loaders?: Maybe<LoaderOption>;
+  metatags?: Record<string, string>[];
   pretty?: Maybe<boolean>;
   printer?: Maybe<PackageName>;
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;

@@ -58,9 +58,7 @@ describe("generator", () => {
               printTypeOptions: {},
             },
           ),
-        ).rejects.toThrow(
-          `Invalid printer module name in "printTypeOptions" settings.`,
-        );
+        ).rejects.toThrow("Invalid printer module name.");
       },
     );
 
@@ -76,9 +74,7 @@ describe("generator", () => {
             printTypeOptions: {},
           },
         ),
-      ).rejects.toThrow(
-        `Invalid printer config in "printTypeOptions" settings.`,
-      );
+      ).rejects.toThrow("Invalid printer config.");
     });
 
     test("throws exception if no printer module not found", async () => {
@@ -97,9 +93,7 @@ describe("generator", () => {
             printTypeOptions: {},
           },
         ),
-      ).rejects.toThrow(
-        `Cannot find module 'foobar' defined in "printTypeOptions" settings.`,
-      );
+      ).rejects.toThrow("Cannot find module 'foobar'.");
     });
   });
 });

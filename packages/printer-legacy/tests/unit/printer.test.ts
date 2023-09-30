@@ -176,6 +176,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "metatags": [],
           "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": true,
@@ -232,6 +233,7 @@ describe("Printer", () => {
             "toc": true,
           },
           "level": undefined,
+          "metatags": [],
           "onlyDocDirectives": [],
           "parentType": undefined,
           "parentTypePrefix": false,
@@ -457,6 +459,34 @@ describe("Printer", () => {
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();
+    });
+  });
+
+  describe("printMetaTags", () => {
+    test.each([
+      { options: {} },
+      { options: { metatags: undefined } },
+      { options: { metatags: [] } },
+    ])("return empty string if no metatags set", ({ options }) => {
+      expect.assertions(1);
+
+      expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe("");
+    });
+
+    test("returns a formatted head tag with meta tags", () => {
+      expect.assertions(1);
+
+      const metatags = [
+        { charSet: "utf-8" },
+        { name: "robot", contents: "none" },
+      ];
+
+      expect(
+        Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
+      ).toBe(`<head>
+<meta charSet="utf-8" />
+<meta name="robot" contents="none" />
+</head>`);
     });
   });
 });
