@@ -228,6 +228,17 @@ export class Printer implements IPrinter {
     return printRelations(type, options);
   };
 
+  static printMetaTags = (
+    type: unknown,
+    { metatags }: PrintTypeOptions,
+  ): MDXString | string => {
+    if (!metatags || metatags.length < 1) {
+      return "";
+    }
+    const meta = JSON.stringify(metatags);
+    return ("<Meta meta=" + meta + " />") as MDXString;
+  };
+
   static printType = (
     name: Maybe<string>,
     type: unknown,
@@ -248,6 +259,7 @@ export class Printer implements IPrinter {
       getTypeName(type),
       printTypeOptions,
     );
+    const metatags = Printer.printMetaTags(type, printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
     const customDirectives = Printer.printCustomDirectives(
@@ -261,6 +273,7 @@ export class Printer implements IPrinter {
     return [
       header,
       mdx,
+      metatags,
       tags,
       description,
       code,
