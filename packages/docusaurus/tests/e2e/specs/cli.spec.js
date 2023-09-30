@@ -144,7 +144,7 @@ describe("loadContent", () => {
     await fs.writeFile(`${docsDir}/groups.md`, "");
   });
 
-  test("should generate plugin files on build", async () => {
+  test("should generate plugin files on build when runOnBuild is true", async () => {
     const generateOutput = await cli({
       cmd: "build",
       args: ["--config docusaurus2-graphql-doc-build.js"],
