@@ -13,13 +13,11 @@ export const getPrinter = async (
   options?: Maybe<PrinterOptions>,
 ): Promise<Printer> => {
   if (typeof printerModule !== "string") {
-    throw new Error(
-      'Invalid printer module name in "printTypeOptions" settings.',
-    );
+    throw new Error("Invalid printer module name.");
   }
 
   if (!config) {
-    throw new Error('Invalid printer config in "printTypeOptions" settings.');
+    throw new Error("Invalid printer config.");
   }
 
   try {
@@ -32,8 +30,6 @@ export const getPrinter = async (
 
     return Printer;
   } catch (error: unknown) {
-    throw new Error(
-      `Cannot find module '${printerModule}' defined in "printTypeOptions" settings.`,
-    );
+    throw new Error(`Cannot find module '${printerModule}'.`);
   }
 };

@@ -222,6 +222,7 @@ describe("config", () => {
         printTypeOptions: {
           codeSection: false,
           deprecated: "group",
+          metadata: [],
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,

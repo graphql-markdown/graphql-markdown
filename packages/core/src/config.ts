@@ -67,6 +67,7 @@ export const DEFAULT_OPTIONS: Required<
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
+    metadata: [],
   },
   rootPath: "./docs",
   schema: "./schema.graphql",
@@ -232,6 +233,8 @@ export const getPrintTypeOptions = (
         configOptions?.deprecated ??
         DEFAULT_OPTIONS.printTypeOptions.deprecated!) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
+    metadata:
+      configOptions?.metadata ?? DEFAULT_OPTIONS.printTypeOptions.metadata,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,

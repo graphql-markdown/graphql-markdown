@@ -14,6 +14,7 @@ export type TypeDeprecatedOption = "default" | "group" | "skip";
 export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
+  metadata?: Record<string, string>[];
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
