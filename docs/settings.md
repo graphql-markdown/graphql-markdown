@@ -253,7 +253,7 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `runOnBuild`
 
-:::warn
+:::caution
 `runOnBuild` is an experimental feature, and it should not be used in production.
 :::
 
@@ -295,7 +295,7 @@ See also [`onlyDocDirective`](#onlydocdirective).
 
 <br/>
 
-:::warn
+:::danger
 Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will generate an error.
 :::
 
