@@ -253,12 +253,16 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `runOnBuild`
 
-When set to `false` disables running doc generation on `docusaurus build`.
+:::warn
+`runOnBuild` is an experimental feature, and it should not be used in production.
+:::
+
+When set to `true` enables running doc generation on `docusaurus build`.
 If `false`, then the documentation can only be generated with the Docusaurus command `graphql-to-doc`.
 
 | Setting      | CLI flag | Default  |
 | ------------ | -------- | -------- |
-| `runOnBuild` | n/a      | `true`   |
+| `runOnBuild` | n/a      | `false`  |
 
 ## `rootPath`
 
