@@ -229,14 +229,20 @@ export class Printer implements IPrinter {
   };
 
   static printMetaTags = (
-    type: unknown,
+    _type: unknown,
     { metatags }: PrintTypeOptions,
   ): MDXString | string => {
     if (!metatags || metatags.length < 1) {
       return "";
     }
-    const meta = JSON.stringify(metatags);
-    return ("<Meta meta=" + meta + " />") as MDXString;
+    const meta = metatags.map((tag) => {
+      const props = Object.entries(tag).map(([name, value]) => {
+        return `${name}="${value}"`;
+      });
+
+      return `<meta ${props.join(" ")} />`;
+    });
+    return ["<head>", ...meta, "</head>"].join(MARKDOWN_EOL);
   };
 
   static printType = (

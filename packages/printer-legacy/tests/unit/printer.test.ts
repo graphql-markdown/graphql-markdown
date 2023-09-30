@@ -483,7 +483,10 @@ describe("Printer", () => {
 
       expect(
         Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
-      ).toBe("");
+      ).toBe(`<head>
+<meta charSet="utf-8" />
+<meta name="robot" contents="none" />
+</head>`);
     });
   });
 });

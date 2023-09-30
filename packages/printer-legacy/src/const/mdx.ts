@@ -7,8 +7,6 @@ export const SpecifiedBy = ({url}) => <>Specification<a className="link" style={
 
 export const Badge = ({class, text}) => <><span className={class}>{text}</span></>
 
-export const Meta = ({meta}) => <head>{ meta.map(({name, value}) => (<meta {name}='{value}' />)) }</head>
-
 import { useState } from 'react';
 
 export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
