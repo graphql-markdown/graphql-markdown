@@ -11,4 +11,5 @@ module.exports = {
       options: { method: "POST" },
     },
   },
+  metatags: [{ name: "googlebot", content: "noindex" }, { charset: "utf-8" }],
 };

@@ -15,9 +15,9 @@ projects:
           relatedTypeSection: false
           typeBadges: true
           deprecated: group
-          metadata:
-          - name: googlebot
-            content: noindex
-          - charset: utf-8
         skipDocDirective:
-          - "@noDoc"
+        - "@noDoc"
+        metatags:
+        - name: googlebot
+          content: noindex
+        - charset: utf-8
