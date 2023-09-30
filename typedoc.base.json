@@ -12,12 +12,10 @@
   "hideGenerator": true,
   "hideInPageTOC": true,
   "hidePageHeader": true,
-  "identifiersAsCodeBlocks": true,
-  "indexFileName": "index",
+  "useCodeBlocks": true,
   "outputFileStrategy": "modules",
   "pretty": true,
   "readme": "none",
-  "skipIndexPage": true,
   "theme": "default",
   "visibilityFilters": {},
   "validation": {

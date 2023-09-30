@@ -3,7 +3,6 @@
   "entryPoints": ["./src"],
   "entryPointStrategy": "expand",
   "out": "./docs",
-  "skipIndexPage": false,
   "entryFileName": "logger.md",
   "indexPageTitle": "@graphql-markdown/logger",
   "exclude": []

@@ -138,8 +138,8 @@ npm i @graphql-markdown/helpers
 
 ### `@graphql-markdown/helpers`
 
-- [`directiveDescriptor`](/api/helpers/directives_descriptor)
-- [`tagDescriptor`](/api/helpers/directives_tag)
+- [`directiveDescriptor`](/api/helpers/directives/descriptor)
+- [`tagDescriptor`](/api/helpers/directives/tag)
 
 ### `@graphql-markdown/graphql`
 
