@@ -1,3 +1,35 @@
+<a name="1.21.0"></a>
+# [1.21.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.0) - 30 Sep 2023
+
+# 🚀  **BIG release** 🚀 
+
+This is an exceptionally big and packed release with a lot of changes, so read carefully the release notes before upgrading.
+
+The main changes are under the hood as we migrated the codebase from Javascript to Typescript to simplify the coding experience but also to increase the code safety.
+
+## ⚠️ Breaking changes
+- Custom directive helpers have been moved to dedicated packages, see [docs](https://graphql-markdown.github.io/docs/advanced/custom-directive#helpers).
+
+## ✨ New features
+ - `onlyDocDirective` filters the schema entities to be rendered in the documentation. This is the counterpart of `skipDocDirective`, based on a request from [@brampurnot](https://github.com/brampurnot) in [#994](https://github.com/graphql-markdown/graphql-markdown/issues/994). See documentation.
+ - `metatags` adds HTML metadata to pages using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata), based on a request from [@akillkumar](https://github.com/akillkumar) in [#1015](https://github.com/graphql-markdown/graphql-markdown/issues/1015). See documentation.
+ - Helper `directiveDescriptor` now supports the `description` placeholder, where `description` is the default directive's description.
+
+## 🛠️ Other changes
+- Typing is available in a dedicated package `@graphql-markdown/types`.
+- Modules helpers, graphql and logger have been extracted from `@graphql-markdown/utils` into dedicated packages.
+- Logger has now a single method called log().
+- TS API is getting documented, see [API](https://graphql-markdown.github.io/api/) in the docs.
+- More and better tests.
+- Upgrade dependencies version.
+
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.4...1.21.0
+
+[Changes][1.21.0]
+
+
 <a name="1.21.0-next.0"></a>
 # [1.21.0-next.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.0-next.0) - 21 Aug 2023
 
@@ -1512,6 +1544,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.21.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0-next.0...1.21.0
 [1.21.0-next.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.4...1.21.0-next.0
 [1.20.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.3...1.20.4
 [1.20.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.2...1.20.3
