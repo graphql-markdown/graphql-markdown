@@ -35,6 +35,7 @@ export const generateDocFromSchema = async ({
   linkRoot,
   loaders: loadersList,
   loggerModule,
+  metatags,
   onlyDocDirective,
   outputDir,
   prettify,
@@ -105,6 +106,7 @@ export const generateDocFromSchema = async ({
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
+      metatags,
     },
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {

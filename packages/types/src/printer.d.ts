@@ -151,6 +151,7 @@ export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirectives?: GraphQLDirective[];

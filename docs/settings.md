@@ -129,6 +129,41 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
 
+## `metatags`
+
+Set page metadata  in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
+
+Meta tags are provided as list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
+
+| Setting   | CLI flag        | Default |
+| --------- | --------------- | ------- |
+| `metatags` | _not supported_ | `[]`   |
+
+<br/>
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        // highlight-start
+        metatags: [
+          { name: "robots", content: "noindex" }, // <meta name="robots" content="noindex" />
+          { charset: "utf-8" }, // <meta charset="utf-8" />
+        ],
+        // highlight-end
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
+      },
+    ],
+  ],
+```
+
 ## `onlyDocDirective`
 
 The schema directive/s used for selecting types to be rendered in the documentation.

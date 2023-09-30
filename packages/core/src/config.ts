@@ -40,11 +40,15 @@ export const ASSET_HOMEPAGE_LOCATION = join(
 );
 
 export const DEFAULT_OPTIONS: Required<
-  Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">
+  Omit<
+    ConfigOptions,
+    "customDirective" | "groupByDirective" | "loaders" | "metatags"
+  >
 > & {
-  groupByDirective: Maybe<GroupByDirectiveOptions>;
   customDirective: Maybe<CustomDirective>;
+  groupByDirective: Maybe<GroupByDirectiveOptions>;
   loaders: Maybe<LoaderOption>;
+  metatags: Record<string, string>[];
 } = {
   id: "default",
   baseURL: "schema",
@@ -59,6 +63,7 @@ export const DEFAULT_OPTIONS: Required<
   homepage: ASSET_HOMEPAGE_LOCATION,
   linkRoot: "/",
   loaders: undefined,
+  metatags: [] as Record<string, string>[],
   pretty: false,
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
@@ -67,7 +72,6 @@ export const DEFAULT_OPTIONS: Required<
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
-    metadata: [],
   },
   rootPath: "./docs",
   schema: "./schema.graphql",
@@ -233,8 +237,6 @@ export const getPrintTypeOptions = (
         configOptions?.deprecated ??
         DEFAULT_OPTIONS.printTypeOptions.deprecated!) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
-    metadata:
-      configOptions?.metadata ?? DEFAULT_OPTIONS.printTypeOptions.metadata,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,
@@ -313,6 +315,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
+    metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
     outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
     prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,

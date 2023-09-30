@@ -54,6 +54,7 @@ export const DEFAULT_OPTIONS: Required<
   groups: undefined,
   header: { toc: true, pagination: true } as Required<PrintTypeHeaderOptions>,
   level: undefined,
+  metatags: [],
   onlyDocDirectives: [],
   parentType: undefined,
   schema: undefined,
