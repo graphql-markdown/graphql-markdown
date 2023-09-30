@@ -83,6 +83,7 @@ export class Printer implements IPrinter {
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
+      metatags,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
@@ -90,12 +91,14 @@ export class Printer implements IPrinter {
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
+      metatags?: Record<string, string>[];
     } = {
       customDirectives: undefined,
       groups: undefined,
       onlyDocDirectives: [],
       printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
       skipDocDirectives: [],
+      metatags: [],
     },
   ): void {
     if (typeof Printer.options !== "undefined") {
@@ -122,6 +125,7 @@ export class Printer implements IPrinter {
       skipDocDirectives: skipDocDirectives ?? [],
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
+      metatags: metatags ?? [],
     };
   }
 
@@ -235,6 +239,7 @@ export class Printer implements IPrinter {
     if (!metatags || metatags.length < 1) {
       return "";
     }
+
     const meta = metatags.map((tag) => {
       const props = Object.entries(tag).map(([name, value]) => {
         return `${name}="${value}"`;
@@ -242,6 +247,7 @@ export class Printer implements IPrinter {
 
       return `<meta ${props.join(" ")} />`;
     });
+
     return ["<head>", ...meta, "</head>"].join(MARKDOWN_EOL);
   };
 
