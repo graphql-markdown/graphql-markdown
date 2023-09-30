@@ -284,8 +284,8 @@ export class Printer implements IPrinter {
 
     return [
       header,
-      mdx,
       metatags,
+      mdx,
       tags,
       description,
       code,
