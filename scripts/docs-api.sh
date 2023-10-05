@@ -2,6 +2,8 @@
 
 API_DIR=./api
 
+npm run build
+
 npm run typedoc -- --out ${API_DIR}
 
 find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "index.md" \) -delete

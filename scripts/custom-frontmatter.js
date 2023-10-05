@@ -1,3 +1,4 @@
+const path = require("path/posix");
 const { ReflectionKind } = require("typedoc");
 const { FrontmatterEvent } = require("typedoc-plugin-frontmatter");
 
@@ -9,7 +10,7 @@ module.exports = {
       // Update event.frontmatter object using information from the page model as JSON
       event.frontmatter = {
         // add a title
-        title: event.page.model?.name,
+        title: path.basename(event.page.model?.name),
         // add sidebar position for root project page
         ...(event.page.model?.kindOf(ReflectionKind.Project) && {
           sidebar_position: 1,
