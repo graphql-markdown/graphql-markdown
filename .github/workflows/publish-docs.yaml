@@ -46,7 +46,6 @@ jobs:
         run: |
           cd package
           npm ci
-          npm run build
           npm run docs:api
           earthly +build-docs
 
