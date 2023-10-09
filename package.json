@@ -162,7 +162,7 @@
     "@stryker-mutator/jest-runner": "7.2.0",
     "@stryker-mutator/typescript-checker": "7.2.0",
     "@types/jest": "29.5.5",
-    "@types/node": "20.8.3",
+    "@types/node": "20.8.4",
     "@typescript-eslint/eslint-plugin": "6.7.4",
     "@typescript-eslint/parser": "6.7.4",
     "commitizen": "4.3.0",
