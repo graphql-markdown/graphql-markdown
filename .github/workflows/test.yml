@@ -35,6 +35,11 @@ jobs:
       - name: Checkout Code Base
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts
+          cache: "npm"
+
       - name: Install modules
         run: npm ci
 
@@ -90,6 +95,11 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts
+          cache: "npm"
 
       - name: Install modules
         run: npm ci

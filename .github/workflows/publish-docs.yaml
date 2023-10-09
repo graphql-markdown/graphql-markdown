@@ -42,6 +42,12 @@ jobs:
           path: website
           token: ${{ secrets.BOT_PAT }}
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts
+          cache: "npm"
+          cache-dependency-path: package/package-lock.json
+
       - name: Build docs
         run: |
           cd package
