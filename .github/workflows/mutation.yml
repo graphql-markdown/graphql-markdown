@@ -46,6 +46,4 @@ jobs:
         run: npm ci
 
       - name: Run Mutations Tests
-        run: |
-          [ $(npm run test:ci -- --selectProjects @graphql-markdown/${{matrix.package}} --listTests --testMatch "<rootDir>/tests/unit/**/?(*.)+(spec|test).ts" | grep -i "test.ts" | wc -l) = "0" ] && exit 0
-          npm run stryker -w @graphql-markdown/${{matrix.package}} -- --reporters dashboard --dashboard.module ${{matrix.package}}
+        run: npm run stryker -w @graphql-markdown/${{matrix.package}} -- --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}
