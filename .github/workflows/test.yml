@@ -37,7 +37,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: lts
+          node-version: "lts/*"
           cache: "npm"
 
       - name: Install modules
@@ -98,7 +98,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: lts
+          node-version: "lts/*"
           cache: "npm"
 
       - name: Install modules
