@@ -175,7 +175,7 @@
     "eslint-plugin-jsonc": "2.10.0",
     "eslint-plugin-mdx": "2.2.0",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-prettier": "5.0.0",
+    "eslint-plugin-prettier": "5.0.1",
     "eslint-plugin-tsdoc": "0.2.17",
     "graphql": "16.8.1",
     "graphql-config": "5.0.3",
