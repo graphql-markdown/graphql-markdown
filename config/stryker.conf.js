@@ -41,7 +41,7 @@ const config = {
     enableFindRelatedTests: true,
     projectType: "custom",
   },
-  mutate: ["src/**/*.ts", "!src/**/prettier.ts"],
+  mutate: ["src/**/*.ts"],
   packageManager: "npm",
   reporters: ["html"],
   symlinkNodeModules: true,
