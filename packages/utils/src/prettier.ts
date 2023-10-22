@@ -8,6 +8,8 @@ import type { LoggerType } from "@graphql-markdown/types";
 
 /* istanbul ignore file */
 
+// Stryker disable all
+
 /**
  * Prettify a string using {@link https://prettier.io/docs/en/api#prettierformatsource-options | prettier.format}.
  *
