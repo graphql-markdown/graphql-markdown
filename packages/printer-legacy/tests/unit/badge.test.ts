@@ -3,9 +3,13 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 jest.mock("@graphql-markdown/utils", () => {
   return {
     slugify: jest.fn(),
-    escapeMDX: jest.fn(<T>(t: T): T => t),
+    escapeMDX: jest.fn(<T>(t: T): T => {
+      return t;
+    }),
     pathUrl: jest.fn(),
-    isEmpty: jest.fn(() => false),
+    isEmpty: jest.fn(() => {
+      return false;
+    }),
   };
 });
 import * as Utils from "@graphql-markdown/utils";

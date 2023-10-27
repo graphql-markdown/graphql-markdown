@@ -53,7 +53,9 @@ export const printCodeType = (
     type.getInterfaces().length > 0
       ? ` implements ${type
           .getInterfaces()
-          .map((field: unknown): string => getTypeName(field))
+          .map((field: unknown): string => {
+            return getTypeName(field);
+          })
           .join(", ")}`
       : "";
   const typeFields = getFields(type)
@@ -61,7 +63,9 @@ export const printCodeType = (
       const f = printCodeField(field, options, 1);
       return f.length > 0 ? `${MARKDOWN_CODE_INDENTATION}${f}` : "";
     })
-    .filter((field) => field.length > 0)
+    .filter((field) => {
+      return field.length > 0;
+    })
     .join("");
 
   return `${entity} ${name}${extendsInterface} {${MARKDOWN_EOL}${typeFields}}`;
@@ -70,4 +74,6 @@ export const printCodeType = (
 export const printCodeObject = (
   type: unknown,
   options: PrintTypeOptions,
-): string => printCodeType(type, "type", options);
+): string => {
+  return printCodeType(type, "type", options);
+};

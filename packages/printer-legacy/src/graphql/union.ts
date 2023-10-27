@@ -34,7 +34,9 @@ export const printCodeUnion = (
   let code = `union ${getTypeName(type)} = `;
   code += (type as GraphQLUnionType)
     .getTypes()
-    .map((v: GraphQLObjectType<unknown, unknown>): string => getTypeName(v))
+    .map((v: GraphQLObjectType<unknown, unknown>): string => {
+      return getTypeName(v);
+    })
     .join(" | ");
 
   return code;

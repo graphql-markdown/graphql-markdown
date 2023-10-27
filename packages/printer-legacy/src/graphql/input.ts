@@ -7,4 +7,6 @@ export const printInputMetadata = printObjectMetadata;
 export const printCodeInput = (
   type: unknown,
   options: PrintTypeOptions,
-): string => printCodeType(type, "input", options);
+): string => {
+  return printCodeType(type, "input", options);
+};

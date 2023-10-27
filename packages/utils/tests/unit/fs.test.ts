@@ -85,7 +85,9 @@ describe("saveFile()", () => {
     await saveFile(
       "/foo/bar/test/prettify.test",
       "foobar file for test",
-      async () => Promise.resolve("prettify hello"),
+      async () => {
+        return Promise.resolve("prettify hello");
+      },
     );
 
     expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
