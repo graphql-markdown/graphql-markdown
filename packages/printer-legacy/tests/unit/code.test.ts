@@ -7,10 +7,16 @@ import {
 
 jest.mock("@graphql-markdown/graphql", () => {
   return {
-    getFormattedDefaultValue: jest.fn((type) => type?.defaultValue),
-    getTypeName: jest.fn((t) => t.name ?? t.toString()),
+    getFormattedDefaultValue: jest.fn((type) => {
+      return type?.defaultValue;
+    }),
+    getTypeName: jest.fn((t) => {
+      return t.name ?? t.toString();
+    }),
     hasDirective: jest.fn(),
-    isDeprecated: jest.fn((t) => t.isDeprecated || false),
+    isDeprecated: jest.fn((t) => {
+      return t.isDeprecated || false;
+    }),
   };
 });
 

@@ -71,16 +71,19 @@ describe("graphql-config", () => {
         .mockResolvedValueOnce({
           getProject: () =>
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            ({
-              extension: (): any =>
-                ({
-                  documents: undefined,
-                  exclude: undefined,
-                  include: undefined,
-                  schema: graphqlConfig.schema,
-                  ...graphqlConfig.extensions["graphql-markdown"],
-                }) as unknown as any,
-            }) as unknown as any,
+            {
+              return {
+                extension: (): any => {
+                  return {
+                    documents: undefined,
+                    exclude: undefined,
+                    include: undefined,
+                    schema: graphqlConfig.schema,
+                    ...graphqlConfig.extensions["graphql-markdown"],
+                  } as unknown as any;
+                },
+              } as unknown as any;
+            },
         } as unknown as any);
 
       await expect(
@@ -131,16 +134,19 @@ describe("graphql-config", () => {
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          ({
-            extension: (): any =>
-              ({
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.schema,
-                ...graphqlConfig.extensions["graphql-markdown"],
-              }) as unknown as any,
-          }) as unknown as any,
+          {
+            return {
+              extension: (): any => {
+                return {
+                  documents: undefined,
+                  exclude: undefined,
+                  include: undefined,
+                  schema: graphqlConfig.schema,
+                  ...graphqlConfig.extensions["graphql-markdown"],
+                } as unknown as any;
+              },
+            } as unknown as any;
+          },
       } as unknown as any);
 
       await expect(
@@ -195,16 +201,19 @@ describe("graphql-config", () => {
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          ({
-            extension: (): any =>
-              ({
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.projects.foo.schema,
-                ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
-              }) as unknown as any,
-          }) as unknown as any,
+          {
+            return {
+              extension: (): any => {
+                return {
+                  documents: undefined,
+                  exclude: undefined,
+                  include: undefined,
+                  schema: graphqlConfig.projects.foo.schema,
+                  ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
+                } as unknown as any;
+              },
+            } as unknown as any;
+          },
       } as unknown as any);
 
       await expect(
@@ -235,7 +244,9 @@ describe("graphql-config", () => {
       expect.hasAssertions();
 
       (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => undefined),
+        getProject: jest.fn(() => {
+          return undefined;
+        }),
       });
 
       await expect(
@@ -279,16 +290,19 @@ describe("config", () => {
       jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
         getProject: () =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          ({
-            extension: (): any =>
-              ({
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.schema,
-                ...graphqlConfig.extensions["graphql-markdown"],
-              }) as unknown as any,
-          }) as unknown as any,
+          {
+            return {
+              extension: (): any => {
+                return {
+                  documents: undefined,
+                  exclude: undefined,
+                  include: undefined,
+                  schema: graphqlConfig.schema,
+                  ...graphqlConfig.extensions["graphql-markdown"],
+                } as unknown as any;
+              },
+            } as unknown as any;
+          },
       } as unknown as any);
 
       const config = await buildConfig(undefined, undefined);

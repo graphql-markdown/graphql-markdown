@@ -7,4 +7,6 @@ export const printInterfaceMetadata = printObjectMetadata;
 export const printCodeInterface = (
   type: unknown,
   options: PrintTypeOptions,
-): string => printCodeType(type, "interface", options);
+): string => {
+  return printCodeType(type, "interface", options);
+};

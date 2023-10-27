@@ -40,9 +40,9 @@ describe("logger", () => {
     test("returns a NodeJS.console object is no module passed", async () => {
       expect.hasAssertions();
 
-      const spy = jest
-        .spyOn(global.console, "info")
-        .mockImplementation(() => "Mocked Console");
+      const spy = jest.spyOn(global.console, "info").mockImplementation(() => {
+        return "Mocked Console";
+      });
 
       Logger.log("test");
 
@@ -57,7 +57,9 @@ describe("logger", () => {
 
         const spy = jest
           .spyOn(global.console, "info")
-          .mockImplementation(() => "Mocked Console");
+          .mockImplementation(() => {
+            return "Mocked Console";
+          });
 
         Logger.Logger(moduleName);
         Logger.log("test");
@@ -102,7 +104,9 @@ describe("logger", () => {
 
       const spyConsole = jest
         .spyOn(global.console, "info")
-        .mockImplementation(() => "Mocked Console");
+        .mockImplementation(() => {
+          return "Mocked Console";
+        });
 
       Logger.Logger();
       expect(global.logger).toBeDefined();

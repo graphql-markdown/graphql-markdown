@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable node/no-missing-require */
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 

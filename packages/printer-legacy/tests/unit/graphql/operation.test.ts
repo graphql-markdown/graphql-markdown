@@ -4,7 +4,9 @@ import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
-    isDeprecated: jest.fn((T: any) => "deprecationReason" in T), // eslint-disable-line @typescript-eslint/no-explicit-any
+    isDeprecated: jest.fn((T: any) => {
+      return "deprecationReason" in T;
+    }), // eslint-disable-line @typescript-eslint/no-explicit-any
   };
 });
 
@@ -29,11 +31,12 @@ describe("operation", () => {
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
-          getType: () =>
-            new GraphQLObjectType({
+          getType: () => {
+            return new GraphQLObjectType({
               name: "Test",
               fields: {},
-            }),
+            });
+          },
         } as unknown as GraphQLSchema,
       });
 
@@ -67,11 +70,12 @@ describe("operation", () => {
       const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
-          getType: () =>
-            new GraphQLObjectType({
+          getType: () => {
+            return new GraphQLObjectType({
               name: "Test",
               fields: {},
-            }),
+            });
+          },
         } as unknown as GraphQLSchema,
       });
 
@@ -119,11 +123,12 @@ describe("operation", () => {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
         schema: {
-          getType: () =>
-            new GraphQLObjectType({
+          getType: () => {
+            return new GraphQLObjectType({
               name: "Test",
               fields: {},
-            }),
+            });
+          },
         } as unknown as GraphQLSchema,
       });
 

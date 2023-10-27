@@ -9,7 +9,9 @@ import type {
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    escapeMDX: jest.fn((s) => s),
+    escapeMDX: jest.fn((s) => {
+      return s;
+    }),
     pathUrl: jest.fn(),
     slugify: jest.fn(),
   };
@@ -17,7 +19,9 @@ jest.mock("@graphql-markdown/utils", () => {
 
 jest.mock("@graphql-markdown/graphql", () => {
   return {
-    getNamedType: jest.fn((t) => t),
+    getNamedType: jest.fn((t) => {
+      return t;
+    }),
     getRelationOfReturn: jest.fn(),
     getSchemaMap: jest.fn(),
     hasDirective: jest.fn(),
@@ -25,9 +29,13 @@ jest.mock("@graphql-markdown/graphql", () => {
     isEnumType: jest.fn(),
     isInputType: jest.fn(),
     isInterfaceType: jest.fn(),
-    isNamedType: jest.fn(() => true),
+    isNamedType: jest.fn(() => {
+      return true;
+    }),
     isObjectType: jest.fn(),
-    isOperation: jest.fn(() => false),
+    isOperation: jest.fn(() => {
+      return false;
+    }),
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
   };
@@ -129,8 +137,9 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        (): ReturnType<IGetRelation<unknown>> =>
-          undefined as unknown as ReturnType<IGetRelation<unknown>>,
+        (): ReturnType<IGetRelation<unknown>> => {
+          return undefined as unknown as ReturnType<IGetRelation<unknown>>;
+        },
         DEFAULT_OPTIONS,
       );
 
@@ -148,7 +157,9 @@ describe("relation", () => {
       const relation = printRelationOf(
         type,
         "RelationOf",
-        () => ({ objects: [] }),
+        () => {
+          return { objects: [] };
+        },
         DEFAULT_OPTIONS,
       );
 
@@ -163,11 +174,13 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const getRelationOfReturn: IGetRelation<GraphQLOperationType> = () => ({
-        queries: [{ name: "Foo" } as unknown as GraphQLOperationType],
-        interfaces: [{ name: "Bar" } as unknown as GraphQLOperationType],
-        subscriptions: [{ name: "Baz" } as unknown as GraphQLOperationType],
-      });
+      const getRelationOfReturn: IGetRelation<GraphQLOperationType> = () => {
+        return {
+          queries: [{ name: "Foo" } as unknown as GraphQLOperationType],
+          interfaces: [{ name: "Bar" } as unknown as GraphQLOperationType],
+          subscriptions: [{ name: "Baz" } as unknown as GraphQLOperationType],
+        };
+      };
 
       jest.spyOn(GraphQL, "isNamedType").mockReturnValue(true);
 
