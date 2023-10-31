@@ -60,9 +60,9 @@ smoke-init:
   FROM +build-docusaurus --VERSION=$VERSION
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
-    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
-    RUN npm install ./graphql-markdown-${package}.tgz
+  FOR PACKAGE IN types utils graphql helpers logger printer-legacy diff core docusaurus
+    COPY (+build-package/graphql-markdown-${PACKAGE}.tgz --package=${PACKAGE}) ./
+    RUN npm install ./graphql-markdown-${PACKAGE}.tgz
   END
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
   COPY ./website/src/css/custom.css ./src/css/custom.css
