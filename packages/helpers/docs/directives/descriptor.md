@@ -1,4 +1,4 @@
-# Module: directives/descriptor
+# directives/descriptor
 
 Custom directive `descriptor` helper.
 
@@ -8,13 +8,13 @@ Custom directive `descriptor` helper.
 
 ## Functions
 
-### directiveDescriptor
+### directiveDescriptor()
 
 ```ts
 directiveDescriptor(
-  directive,
-  type?,
-  descriptionTemplate?): string
+   directive, 
+   type?, 
+   descriptionTemplate?): string
 ```
 
 Helper for rendering custom description from schema directive on type.
@@ -22,21 +22,23 @@ This is an example on how to build a custom `descriptor` callback.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | the schema directive to parse. |
-| `type`? | `unknown` | the schema type to be processed for generating a custom description. |
-| `descriptionTemplate`? | `string` | optional template literal-like string for rendering the description (see [interpolate](utils_interpolate.md#interpolate)), if not present then the directive description will be used. |
+▪ **directive**: `GraphQLDirective`
+
+the schema directive to parse.
+
+▪ **type?**: `unknown`
+
+the schema type to be processed for generating a custom description.
+
+▪ **descriptionTemplate?**: `string`
+
+optional template literal-like string for rendering the description (see [interpolate](../utils/interpolate.md#interpolate)), if not present then the directive description will be used.
 
 #### Returns
 
 `string`
 
 a custom description based on directive value.
-
-#### Source
-
-[directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)
 
 #### Example
 
@@ -95,3 +97,7 @@ directiveDescriptor(directive, type);
 directiveDescriptor(directive, type, "Version should be at least ^${major}.${minor}.${patch}");
 // Expected result: "Version should be at least ^2.1.3"
 ```
+
+#### Source
+
+[directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)

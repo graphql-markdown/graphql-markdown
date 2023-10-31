@@ -1,13 +1,13 @@
-# Module: loader
+# loader
 
 Library for GraphQL schema loading and `loaders` config processing.
 
 ## Functions
 
-### getDocumentLoaders
+### getDocumentLoaders()
 
 ```ts
-getDocumentLoaders(loadersList): Promise< Maybe< LoadSchemaOptions > >
+getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>
 ```
 
 Asynchronously returns a valid loaders list for [loadSchema](loader.md#loadschema) based on the plugin config.
@@ -15,19 +15,15 @@ Import each loader package, and instantiate a loader object.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `loadersList` | `Maybe`\< `LoaderOption` \> | the list of loaders defined in the plugin config. |
+▪ **loadersList**: `Maybe`\<`LoaderOption`\>
+
+the list of loaders defined in the plugin config.
 
 #### Returns
 
-`Promise`\< `Maybe`\< `LoadSchemaOptions` \> \>
+`Promise`\<`Maybe`\<`LoadSchemaOptions`\>\>
 
 a list of loader objects.
-
-#### Source
-
-[packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
 #### Throws
 
@@ -50,12 +46,16 @@ const schema = await loadSchema("schema.graphql", {
 });
 ```
 
+#### Source
+
+[packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
+
 ***
 
-### loadSchema
+### loadSchema()
 
 ```ts
-loadSchema(schemaLocation, options): Promise< GraphQLSchema >
+loadSchema(schemaLocation, options): Promise<GraphQLSchema>
 ```
 
 Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
@@ -64,20 +64,19 @@ If `rootTypes` is set in the options, then the schema root types will be overrid
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schemaLocation` | `string` | the schema location pointer matching the loader. |
-| `options` | `BuildSchemaOptions` & `GraphQLParseOptions` & \{} & \{} & \{} & `Partial`\< `IExecutableSchemaDefinition`\< `any` \> \> & \{} & \{<br />  `rootTypes`: `Partial`\< `Record`\< `OperationTypeNode`, `string` \> \>;<br /> } | the schema `loaders`, and optional `rootTypes` override. |
+▪ **schemaLocation**: `string`
+
+the schema location pointer matching the loader.
+
+▪ **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `object` & `object` & `object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `object` & `object`
+
+the schema `loaders`, and optional `rootTypes` override.
 
 #### Returns
 
-`Promise`\< `GraphQLSchema` \>
+`Promise`\<`GraphQLSchema`\>
 
 a GraphQL schema.
-
-#### Source
-
-[packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L41)
 
 #### Example
 
@@ -89,3 +88,7 @@ const schema = await loadSchema("schema.graphql", {
   rootTypes: { query: "Root", subscription: "" },
 });
 ```
+
+#### Source
+
+[packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L41)

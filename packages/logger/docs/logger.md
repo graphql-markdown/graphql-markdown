@@ -1,5 +1,8 @@
 # @graphql-markdown/logger
 
+[![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/logger?style=flat-square)](https://www.npmjs.com/package/@graphql-markdown/logger)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat-square)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+
 Logger singleton module.
 
 ## Enumerations
@@ -13,7 +16,7 @@ Log levels.
 ##### debug
 
 ```ts
-debug: "debug"
+debug: "debug";
 ```
 
 ###### Source
@@ -23,7 +26,7 @@ debug: "debug"
 ##### error
 
 ```ts
-error: "error"
+error: "error";
 ```
 
 ###### Source
@@ -33,7 +36,7 @@ error: "error"
 ##### info
 
 ```ts
-info: "info"
+info: "info";
 ```
 
 ###### Source
@@ -43,7 +46,7 @@ info: "info"
 ##### log
 
 ```ts
-log: "log"
+log: "log";
 ```
 
 ###### Source
@@ -53,7 +56,7 @@ log: "log"
 ##### success
 
 ```ts
-success: "success"
+success: "success";
 ```
 
 ###### Source
@@ -63,7 +66,7 @@ success: "success"
 ##### warn
 
 ```ts
-warn: "warn"
+warn: "warn";
 ```
 
 ###### Source
@@ -72,7 +75,7 @@ warn: "warn"
 
 ## Functions
 
-### Logger
+### Logger()
 
 ```ts
 Logger(moduleName?): void
@@ -83,17 +86,13 @@ By default, the logger module uses `global.console`
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `moduleName`? | `string` | optional name of the logger package. |
+▪ **moduleName?**: `string`
+
+optional name of the logger package.
 
 #### Returns
 
 `void`
-
-#### Source
-
-[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
 
 #### Example
 
@@ -106,30 +105,40 @@ Logger("@docusaurus/logger");
 log("Info message", "info"); // Expected Docusaurus log output "Info message"
 ```
 
+#### Source
+
+[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
+
 ***
 
-### log
+### log()
 
 ```ts
-log(message, level = LogLevel.info): void
+log(message, level): void
 ```
 
 Logs a message by calling the active logger instance.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `message` | `string` | `undefined` | a string to be logged. |
-| `level` | `"debug"` \| `"error"` \| `"info"` \| `"log"` \| `"success"` \| `"warn"` \| [`LogLevel`](logger.md#loglevel) | `LogLevel.info` | optional log level, `"info"` by default. |
+▪ **message**: `string`
+
+a string to be logged.
+
+▪ **level**: 
+  \| `"debug"`
+  \| `"error"`
+  \| `"info"`
+  \| `"log"`
+  \| `"success"`
+  \| `"warn"`
+  \| [`LogLevel`](logger.md#loglevel)= `LogLevel.info`
+
+optional log level, `"info"` by default.
 
 #### Returns
 
 `void`
-
-#### Source
-
-[index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L85)
 
 #### Remarks
 
@@ -142,3 +151,7 @@ import { log } from "@graphql-markdown/utils/logger";
 
 log("Info message"); // Expected console output "Info message"
 ```
+
+#### Source
+
+[index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L85)
