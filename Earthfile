@@ -41,9 +41,9 @@ mutation-test:
 
 build-package:
   FROM +build
-  ARG --required PACKAGE
-  RUN npm pack --workspace @graphql-markdown/$PACKAGE | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$PACKAGE.tgz
-  SAVE ARTIFACT graphql-markdown-$PACKAGE.tgz
+  ARG --required package
+  RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
+  SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus:
   ARG VERSION=latest
@@ -61,7 +61,7 @@ smoke-init:
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
   FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
-    COPY (+build-package/graphql-markdown-${package}.tgz --PACKAGE=${package}) ./
+    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
     RUN npm install ./graphql-markdown-${package}.tgz
   END
   COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
