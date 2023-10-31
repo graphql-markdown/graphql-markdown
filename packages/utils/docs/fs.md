@@ -1,30 +1,26 @@
-# Module: fs
+# fs
 
 Library of helper functions for handling files and folders.
 
 ## Functions
 
-### ensureDir
+### ensureDir()
 
 ```ts
-ensureDir(location): Promise< void >
+ensureDir(location): Promise<void>
 ```
 
 Asynchronously create a folder structure if it does not exist.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `location` | `string` | folder structure in path format. |
+▪ **location**: `string`
+
+folder structure in path format.
 
 #### Returns
 
-`Promise`\< `void` \>
-
-#### Source
-
-[fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L57)
+`Promise`\<`void`\>
 
 #### Example
 
@@ -36,31 +32,31 @@ await ensureDir("./.temp/local")
 // Creates both folders if they do not exists.
 ```
 
+#### Source
+
+[fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L57)
+
 ***
 
-### fileExists
+### fileExists()
 
 ```ts
-fileExists(location): Promise< boolean >
+fileExists(location): Promise<boolean>
 ```
 
 Asynchronously check if a file or folder exists at the path location.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `location` | `string` | file or folder location. |
+▪ **location**: `string`
+
+file or folder location.
 
 #### Returns
 
-`Promise`\< `boolean` \>
+`Promise`\<`boolean`\>
 
 `true` if the path is valid, else `false` if not.
-
-#### Source
-
-[fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L32)
 
 #### Example
 
@@ -72,15 +68,19 @@ await fileExists("./.temp/local")
 // Expected true if path is valid, false if not
 ```
 
+#### Source
+
+[fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L32)
+
 ***
 
-### saveFile
+### saveFile()
 
 ```ts
 saveFile(
-  location,
-  content,
-  prettify?): Promise< void >
+   location, 
+   content, 
+prettify?): Promise<void>
 ```
 
 Asynchronously save a file with a string content at specified location in local FS.
@@ -89,21 +89,23 @@ The function calls `ensureDir(dirname(location))` to create the folder structure
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `location` | `string` | file location. |
-| `content` | `string` | data to be written into the file (UTF-8 string). |
-| `prettify`? | `PrettifyCallbackFunction` | optional callback function for prettifying the content. |
+▪ **location**: `string`
+
+file location.
+
+▪ **content**: `string`
+
+data to be written into the file (UTF-8 string).
+
+▪ **prettify?**: `PrettifyCallbackFunction`
+
+optional callback function for prettifying the content.
 
 #### Returns
 
-`Promise`\< `void` \>
+`Promise`\<`void`\>
 
 `true` if the path is valid, else `false` if not.
-
-#### Source
-
-[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)
 
 #### Example
 
@@ -114,3 +116,7 @@ await saveFile("./.temp/local.md", "foobar")
 
 // Created .temp folder if it does not exists, and save data into local.md
 ```
+
+#### Source
+
+[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)

@@ -15,10 +15,11 @@
   "useCodeBlocks": true,
   "outputFileStrategy": "modules",
   "pretty": true,
-  "readme": "none",
+  "mergeReadme": true,
   "theme": "default",
   "visibilityFilters": {},
   "validation": {
     "notDocumented": true
-  }
+  },
+  "sourceLinkExternal": true,
 }

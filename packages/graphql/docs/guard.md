@@ -1,10 +1,10 @@
-# Module: guard
+# guard
 
 Custom GraphQL type guards and property guards.
 
 ## Functions
 
-### instanceOf
+### instanceOf()
 
 ```ts
 instanceOf<T>(obj, type): obj is T
@@ -14,16 +14,19 @@ Checks if a GraphQL named type is of generic type `T`.
 
 #### Type parameters
 
-| Parameter | Description |
-| :------ | :------ |
-| `T` | a GraphQL type to check against, eg `GraphQLObjectType`. |
+▪ **T**
+
+a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `obj` | `unknown` | a GraphQL named type from the GraphQL schema. |
-| `type` | () => `T` | the GraphQL type `T`. |
+▪ **obj**: `unknown`
+
+a GraphQL named type from the GraphQL schema.
+
+▪ **type**: () => `T`
+
+the GraphQL type `T`.
 
 #### Returns
 
@@ -35,7 +38,7 @@ Checks if a GraphQL named type is of generic type `T`.
 
 ***
 
-### isDeprecated
+### isDeprecated()
 
 ```ts
 isDeprecated<T>(obj): obj is DeprecatedType<T>
@@ -45,15 +48,15 @@ Checks if a GraphQL named type is deprecated.
 
 #### Type parameters
 
-| Parameter | Description |
-| :------ | :------ |
-| `T` | a GraphQL type to check against, eg `GraphQLObjectType`. |
+▪ **T**
+
+a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `obj` | `T` | an instance of `T`. |
+▪ **obj**: `T`
+
+an instance of `T`.
 
 #### Returns
 
@@ -65,7 +68,7 @@ Checks if a GraphQL named type is deprecated.
 
 ***
 
-### isGraphQLFieldType
+### isGraphQLFieldType()
 
 ```ts
 isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>
@@ -75,9 +78,9 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `unknown` | a GraphQL type. |
+▪ **type**: `unknown`
+
+a GraphQL type.
 
 #### Returns
 
@@ -89,7 +92,7 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 ***
 
-### isOperation
+### isOperation()
 
 ```ts
 isOperation(type): type is GraphQLOperationType
@@ -99,9 +102,9 @@ Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `unknown` | a GraphQL type. |
+▪ **type**: `unknown`
+
+a GraphQL type.
 
 #### Returns
 

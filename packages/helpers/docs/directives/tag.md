@@ -1,4 +1,4 @@
-# Module: directives/tag
+# directives/tag
 
 Custom directive `tag` helper.
 
@@ -8,13 +8,13 @@ Custom directive `tag` helper.
 
 ## Functions
 
-### directiveTag
+### directiveTag()
 
 ```ts
 directiveTag(
-  directive,
-  type?,
-  classname? = "badge--secondary"): Badge
+   directive, 
+   type?, 
+   classname?): Badge
 ```
 
 Helper for rendering custom description from schema directive on type.
@@ -22,21 +22,23 @@ This is an example on how to build a custom `tag` callback.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | `undefined` | the schema directive to parse. |
-| `type`? | `unknown` | `undefined` | the type being processed. |
-| `classname`? | `string` | `"badge--secondary"` | optional CSS classname, `"badge--secondary"` by default. |
+▪ **directive**: `GraphQLDirective`
+
+the schema directive to parse.
+
+▪ **type?**: `unknown`
+
+the type being processed.
+
+▪ **classname?**: `string`= `"badge--secondary"`
+
+optional CSS classname, `"badge--secondary"` by default.
 
 #### Returns
 
 `Badge`
 
 a custom description based on directive value.
-
-#### Source
-
-[directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)
 
 #### Example
 
@@ -67,3 +69,7 @@ const type = new GraphQLScalarType<string>({
 directiveTag(directive, type);
 // Expected result: { text: "@auth", classname: "badge--secondary" }
 ```
+
+#### Source
+
+[directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)
