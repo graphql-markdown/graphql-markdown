@@ -34,7 +34,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Smoke Tests
-        run: earthly --ci --build-arg VERSION=/${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+        run: earthly --ci --build-arg VERSION=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
         env:
           EARTHLY_NO_CACHE: true
 
