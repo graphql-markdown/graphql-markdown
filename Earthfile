@@ -41,13 +41,14 @@ mutation-test:
 
 build-package:
   FROM +build
-  ARG --required package
-  RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
-  SAVE ARTIFACT graphql-markdown-$package.tgz
+  ARG --required PACKAGE
+  RUN npm pack --workspace @graphql-markdown/$PACKAGE | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$PACKAGE.tgz
+  SAVE ARTIFACT graphql-markdown-$PACKAGE.tgz
 
 build-docusaurus:
+  ARG VERSION=latest
   WORKDIR /
-  RUN npx --quiet create-docusaurus@latest docusaurus2 classic
+  RUN npx --quiet create-docusaurus@$VERSION docusaurus2 classic
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN npm cache clean --force; rm -rf node_modules
@@ -55,7 +56,8 @@ build-docusaurus:
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
 
 smoke-init:
-  FROM +build-docusaurus
+  ARG VERSION=latest
+  FROM +build-docusaurus --VERSION=$VERSION
   WORKDIR /docusaurus2
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
   FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
@@ -72,7 +74,8 @@ smoke-init:
   RUN node config-plugin.js
 
 smoke-test:
-  FROM +smoke-init
+  ARG VERSION=latest
+  FROM +smoke-init --VERSION=$VERSION
   WORKDIR /docusaurus2
   RUN npm config set update-notifier false
   RUN npm install -g jest 
@@ -84,16 +87,18 @@ smoke-test:
   RUN npx jest --runInBand
 
 smoke-run:
+  ARG VERSION=latest
   ARG OPTIONS=
-  FROM +smoke-init
+  FROM +smoke-init --VERSION=$VERSION
   WORKDIR /docusaurus2
   DO +GQLMD --options=$OPTIONS
   RUN npm run build
   RUN npm run clear
 
 build-examples:
+  ARG VERSION=latest
   ARG TARGET=examples
-  FROM +smoke-init
+  FROM +smoke-init --VERSION=$VERSION
   WORKDIR /docusaurus2
   RUN npm install prettier
   RUN mkdir $TARGET
@@ -104,8 +109,9 @@ build-examples:
   SAVE ARTIFACT ./$TARGET
 
 build-docs:
+  ARG VERSION=latest
   COPY ./website ./
-  COPY +build-examples/examples ./examples
+  COPY +build-examples/examples --VERSION=$VERSION ./examples
   COPY --dir docs .
   COPY --dir api .
   RUN npm install
@@ -114,7 +120,8 @@ build-docs:
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
-  FROM +build-docs
+  ARG VERSION=latest
+  FROM +build-docs --VERSION=$VERSION
   EXPOSE 8080
   ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
