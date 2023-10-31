@@ -47,22 +47,28 @@ describe("group", () => {
       expect(group).toBe("");
     });
 
-    test.each([[{ name: "FooBaz" }], [{ toString: (): string => "FooBaz" }]])(
-      "returns group name string if type has group",
-      (type) => {
-        jest
-          .spyOn(GraphQL, "getNamedType")
-          .mockReturnValue({ name: "FooBaz" } as unknown as GraphQLNamedType);
+    test.each([
+      [{ name: "FooBaz" }],
+      [
+        {
+          toString: (): string => {
+            return "FooBaz";
+          },
+        },
+      ],
+    ])("returns group name string if type has group", (type) => {
+      jest
+        .spyOn(GraphQL, "getNamedType")
+        .mockReturnValue({ name: "FooBaz" } as unknown as GraphQLNamedType);
 
-        const group = getGroup(
-          type,
-          { objects: { FooBaz: "Group Test" } },
-          "objects",
-        );
+      const group = getGroup(
+        type,
+        { objects: { FooBaz: "Group Test" } },
+        "objects",
+      );
 
-        expect(group).toBe("group-test");
-      },
-    );
+      expect(group).toBe("group-test");
+    });
 
     test("returns empty string if type not in group", () => {
       jest

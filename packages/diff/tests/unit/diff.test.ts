@@ -38,9 +38,9 @@ describe("lib", () => {
       test("returns true if no valid comparison method is selected", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementationOnce(() => {
+          return "schema";
+        });
 
         const check: boolean = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
@@ -55,13 +55,17 @@ describe("lib", () => {
         expect.assertions(1);
 
         const printSchema = jest.spyOn(graphql, "printSchema");
-        printSchema.mockImplementationOnce(() => "schema");
+        printSchema.mockImplementationOnce(() => {
+          return "schema";
+        });
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_HASH_FILE}`]: "",
         });
 
-        printSchema.mockImplementationOnce(() => "schema-new");
+        printSchema.mockImplementationOnce(() => {
+          return "schema-new";
+        });
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),
           "/output",
@@ -74,7 +78,9 @@ describe("lib", () => {
       test("returns false if CompareMethod.HASH comparison is equals", async () => {
         expect.assertions(1);
 
-        jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementation(() => {
+          return "schema";
+        });
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_HASH_FILE}`]:
@@ -93,7 +99,9 @@ describe("lib", () => {
       test("returns true if CompareMethod.HASH comparison has no reference hash file", async () => {
         expect.assertions(1);
 
-        jest.spyOn(graphql, "printSchema").mockImplementation(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementation(() => {
+          return "schema";
+        });
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
@@ -111,14 +119,14 @@ describe("lib", () => {
       test("returns true if CompareMethod.DIFF comparison differs", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementationOnce(() => {
+          return "schema";
+        });
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(async () =>
-            Promise.resolve(new graphql.GraphQLSchema({})),
-          );
+          .mockImplementationOnce(async () => {
+            return Promise.resolve(new graphql.GraphQLSchema({}));
+          });
         const changes: Change[] = [];
         changes.push({
           message: "",
@@ -126,9 +134,9 @@ describe("lib", () => {
           meta: "",
           criticality: { level: inspector.CriticalityLevel.Breaking },
         });
-        jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(async () => Promise.resolve(changes));
+        jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
+          return Promise.resolve(changes);
+        });
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
@@ -146,17 +154,17 @@ describe("lib", () => {
       test("returns false if CompareMethod.DIFF comparison is equals", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementationOnce(() => {
+          return "schema";
+        });
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(async () =>
-            Promise.resolve(new graphql.GraphQLSchema({})),
-          );
-        jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(async () => Promise.resolve([]));
+          .mockImplementationOnce(async () => {
+            return Promise.resolve(new graphql.GraphQLSchema({}));
+          });
+        jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
+          return Promise.resolve([]);
+        });
 
         vol.fromJSON({
           [`${"/output"}/${SCHEMA_REF}`]: "schema",
@@ -174,17 +182,17 @@ describe("lib", () => {
       test("returns true if CompareMethod.DIFF no schema introspection file exists", async () => {
         expect.assertions(1);
 
-        jest
-          .spyOn(graphql, "printSchema")
-          .mockImplementationOnce(() => "schema");
+        jest.spyOn(graphql, "printSchema").mockImplementationOnce(() => {
+          return "schema";
+        });
         jest
           .spyOn(graphqlLoad, "loadSchema")
-          .mockImplementationOnce(async () =>
-            Promise.resolve(new graphql.GraphQLSchema({})),
-          );
-        jest
-          .spyOn(inspector, "diff")
-          .mockImplementationOnce(async () => Promise.resolve([]));
+          .mockImplementationOnce(async () => {
+            return Promise.resolve(new graphql.GraphQLSchema({}));
+          });
+        jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
+          return Promise.resolve([]);
+        });
 
         const check = await checkSchemaChanges(
           new graphql.GraphQLSchema({}),

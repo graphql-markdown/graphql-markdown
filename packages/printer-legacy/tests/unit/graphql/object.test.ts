@@ -27,9 +27,11 @@ describe("object", () => {
         },
       },
     },
-    interfaces: (): GraphQLInterfaceType[] => [
-      new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} }),
-    ],
+    interfaces: (): GraphQLInterfaceType[] => {
+      return [
+        new GraphQLInterfaceType({ name: "TestInterfaceName", fields: {} }),
+      ];
+    },
   });
 
   describe("printObjectMetadata", () => {

@@ -199,9 +199,9 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(2);
 
-        jest
-          .spyOn(Printer, "printType")
-          .mockImplementation(() => "content" as MDXString);
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
         jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
         const spy = jest.spyOn(Utils, "saveFile");
 

@@ -29,7 +29,9 @@ describe("string", () => {
       const text = "The quick brown fox/jumps over the lazy dog.";
       const expected =
         "*The* *quick* *brown* *fox/jumps* *over* *the* *lazy* *dog.*";
-      const transformation = (word: string): string => `*${word}*`;
+      const transformation = (word: string): string => {
+        return `*${word}*`;
+      };
 
       expect(stringCaseBuilder(text, transformation, " ", " ")).toBe(expected);
     });
@@ -38,7 +40,9 @@ describe("string", () => {
       const text = "The quick brown fox/jumps over the lazy dog.";
       const expected =
         "*The* *quick* *brown* *fox* *jumps* *over* *the* *lazy* *dog*";
-      const transformation = (word: string): string => `*${word}*`;
+      const transformation = (word: string): string => {
+        return `*${word}*`;
+      };
 
       const value = stringCaseBuilder(text, transformation, " ");
 

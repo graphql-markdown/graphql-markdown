@@ -67,12 +67,15 @@ describe("directive", () => {
     }
   `);
   const type = schema.getType("Test")!;
-  const descriptor = (directive?: GraphQLDirective): string =>
-    `Test ${directive!.name}`;
-  const tag = (directive?: GraphQLDirective): Badge => ({
-    text: directive!.toString(),
-    classname: "warning",
-  });
+  const descriptor = (directive?: GraphQLDirective): string => {
+    return `Test ${directive!.name}`;
+  };
+  const tag = (directive?: GraphQLDirective): Badge => {
+    return {
+      text: directive!.toString(),
+      classname: "warning",
+    };
+  };
   const directiveNotDeclared = new GraphQLDirective({
     name: "Dummy",
     locations: [],
@@ -237,9 +240,9 @@ describe("directive", () => {
         .spyOn(GraphQL, "getConstDirectiveMap")
         .mockReturnValue(mockConstDirectiveMap);
       jest.spyOn(Utils, "isEmpty").mockReturnValue(false);
-      jest
-        .spyOn(Utils, "escapeMDX")
-        .mockImplementation((text: unknown) => text as string);
+      jest.spyOn(Utils, "escapeMDX").mockImplementation((text: unknown) => {
+        return text as string;
+      });
 
       const tags = printCustomTags(type, options);
 

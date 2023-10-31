@@ -2,9 +2,9 @@ jest.mock("graphql", () => {
   const graphql = jest.requireActual("graphql");
   return {
     ...graphql,
-    getDirectiveValues: jest.fn((...args) =>
-      graphql.getDirectiveValues(...args),
-    ),
+    getDirectiveValues: jest.fn((...args) => {
+      return graphql.getDirectiveValues(...args);
+    }),
   };
 });
 import graphql from "graphql";

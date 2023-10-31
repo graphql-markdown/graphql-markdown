@@ -1,41 +1,46 @@
-# Module: introspection
+# introspection
 
 Library for introspecting a GraphQL schema.
 The entry point method is [getSchemaMap](introspection.md#getschemamap).
 
 ## Functions
 
-### \_getFields
+### \_getFields()
 
 ```ts
 _getFields<T, V>(
-  type,
-  processor?,
-  fallback?): GraphQLFieldMap< unknown, unknown > | GraphQLInputFieldMap | V
+   type, 
+   processor?, 
+   fallback?): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V
 ```
 
 Returns the fields from a GraphQL schema type.
 
-see [getOperation](introspection.md#getoperation), [getFields](introspection.md#getfields)
+see [getOperation](introspection.md#getoperation), [getFields](introspection.md#getfields-1)
 
 #### Type parameters
 
-| Parameter |
-| :------ |
-| `T` |
-| `V` |
+▪ **T**
+
+▪ **V**
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `T` | the GraphQL schema type to parse. |
-| `processor`? | (`fieldMap`) => `V` | optional callback function to parse the fields map. |
-| `fallback`? | `V` | optional fallback value, `undefined` if not set. |
+▪ **type**: `T`
+
+the GraphQL schema type to parse.
+
+▪ **processor?**: (`fieldMap`) => `V`
+
+optional callback function to parse the fields map.
+
+▪ **fallback?**: `V`
+
+optional fallback value, `undefined` if not set.
 
 #### Returns
 
-`GraphQLFieldMap`\< `unknown`, `unknown` \> \| `GraphQLInputFieldMap` \| `V`
+`GraphQLFieldMap`\<`unknown`, `unknown`\> \| `GraphQLInputFieldMap` \| `V`
 
 a map of fields as k/v records, or `fallback` value if no fields available.
 
@@ -45,7 +50,7 @@ a map of fields as k/v records, or `fallback` value if no fields available.
 
 ***
 
-### getDirective
+### getDirective()
 
 ```ts
 getDirective(entity, directives): GraphQLDirective[]
@@ -55,10 +60,13 @@ Returns a schema entity's list of directives matching a defined set.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `entity` | `unknown` | a GraphQL schema entity. |
-| `directives` | `Maybe`\< `GraphQLDirective`[] \> | a directive name or a list of directive names. |
+▪ **entity**: `unknown`
+
+a GraphQL schema entity.
+
+▪ **directives**: `Maybe`\<`GraphQLDirective`[]\>
+
+a directive name or a list of directive names.
 
 #### Returns
 
@@ -72,7 +80,7 @@ a list of GraphQL directives matching the set, else `false`.
 
 ***
 
-### getDirectiveLocationForASTPath
+### getDirectiveLocationForASTPath()
 
 ```ts
 getDirectiveLocationForASTPath(appliedTo): DirectiveLocation
@@ -80,9 +88,7 @@ getDirectiveLocationForASTPath(appliedTo): DirectiveLocation
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `appliedTo` | `Maybe`\< `ASTNode` \> |
+▪ **appliedTo**: `Maybe`\<`ASTNode`\>
 
 #### Returns
 
@@ -94,7 +100,7 @@ getDirectiveLocationForASTPath(appliedTo): DirectiveLocation
 
 ***
 
-### getFields
+### getFields()
 
 ```ts
 getFields(type): unknown[]
@@ -106,9 +112,9 @@ see [getSchemaMap](introspection.md#getschemamap)
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `unknown` | the GraphQL schema type to parse. |
+▪ **type**: `unknown`
+
+the GraphQL schema type to parse.
 
 #### Returns
 
@@ -122,10 +128,10 @@ a list of fields of type object.
 
 ***
 
-### getOperation
+### getOperation()
 
 ```ts
-getOperation(operationType?): Record< string, GraphQLOperationType >
+getOperation(operationType?): Record<string, GraphQLOperationType>
 ```
 
 Returns fields map for a GraphQL operation type (query, mutation, subscription...).
@@ -134,13 +140,13 @@ see [getSchemaMap](introspection.md#getschemamap)
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `operationType`? | `unknown` | the operation type to parse. |
+▪ **operationType?**: `unknown`
+
+the operation type to parse.
 
 #### Returns
 
-`Record`\< `string`, `GraphQLOperationType` \>
+`Record`\<`string`, `GraphQLOperationType`\>
 
 a map of fields as k/v records.
 
@@ -150,7 +156,7 @@ a map of fields as k/v records.
 
 ***
 
-### getSchemaMap
+### getSchemaMap()
 
 ```ts
 getSchemaMap(schema): SchemaMap
@@ -161,19 +167,15 @@ This is the entry point for GraphQL-Markdown schema parsing features.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schema` | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema. |
+▪ **schema**: `Maybe`\<`GraphQLSchema`\>
+
+a GraphQL schema.
 
 #### Returns
 
 `SchemaMap`
 
-a schema map by GraphQL entities (see SchemaEntity).
-
-#### Source
-
-[packages/graphql/src/introspection.ts:488](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L488)
+a schema map by GraphQL entities (see [SchemaEntity]([object Object])).
 
 #### Example
 
@@ -235,15 +237,19 @@ const schemaTypeMap = getSchemaMap(schema);
 // }
 ```
 
+#### Source
+
+[packages/graphql/src/introspection.ts:488](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L488)
+
 ***
 
-### getTypeDirectiveArgValue
+### getTypeDirectiveArgValue()
 
 ```ts
 getTypeDirectiveArgValue(
-  directive,
-  node,
-  argName): Maybe< Record< string, unknown > >
+   directive, 
+   node, 
+argName): Maybe<Record<string, unknown>>
 ```
 
 Returns one directive's argument's value linked to a GraphQL schema type.
@@ -251,15 +257,19 @@ It calls [getTypeDirectiveValues](introspection.md#gettypedirectivevalues) and r
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | a GraphQL directive defined in the schema. |
-| `node` | `unknown` | - |
-| `argName` | `string` | the name of the GraphQL directive argument to fetch the value from. |
+▪ **directive**: `GraphQLDirective`
+
+a GraphQL directive defined in the schema.
+
+▪ **node**: `unknown`
+
+▪ **argName**: `string`
+
+the name of the GraphQL directive argument to fetch the value from.
 
 #### Returns
 
-`Maybe`\< `Record`\< `string`, `unknown` \> \>
+`Maybe`\<`Record`\<`string`, `unknown`\>\>
 
 a record k/v with `argName` as key and the argument's value.
 
@@ -269,24 +279,27 @@ a record k/v with `argName` as key and the argument's value.
 
 ***
 
-### getTypeDirectiveValues
+### getTypeDirectiveValues()
 
 ```ts
-getTypeDirectiveValues(directive, type): Maybe< Record< string, unknown > >
+getTypeDirectiveValues(directive, type): Maybe<Record<string, unknown>>
 ```
 
 Returns all directive's arguments' values linked to a GraphQL schema type.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `directive` | `GraphQLDirective` | a GraphQL directive defined in the schema. |
-| `type` | `unknown` | the GraphQL schema type to parse. |
+▪ **directive**: `GraphQLDirective`
+
+a GraphQL directive defined in the schema.
+
+▪ **type**: `unknown`
+
+the GraphQL schema type to parse.
 
 #### Returns
 
-`Maybe`\< `Record`\< `string`, `unknown` \> \>
+`Maybe`\<`Record`\<`string`, `unknown`\>\>
 
 a record k/v with arguments' name as keys and arguments' value.
 
@@ -296,10 +309,10 @@ a record k/v with arguments' name as keys and arguments' value.
 
 ***
 
-### getTypeFromSchema
+### getTypeFromSchema()
 
 ```ts
-getTypeFromSchema<T>(schema, type): Maybe< Record< string, T > >
+getTypeFromSchema<T>(schema, type): Maybe<Record<string, T>>
 ```
 
 Returns a map of GraphQL named types from a schema for a defined GraphQL type.
@@ -307,47 +320,49 @@ When parsing the entities, internal GraphQL entities (starting with `__`) are ex
 
 #### Type parameters
 
-| Parameter |
-| :------ |
-| `T` |
+▪ **T**
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `schema` | `Maybe`\< `GraphQLSchema` \> | a GraphQL schema. |
-| `type` | `unknown` | a GraphQL type, eg `GraphQLObjectType`. |
+▪ **schema**: `Maybe`\<`GraphQLSchema`\>
+
+a GraphQL schema.
+
+▪ **type**: `unknown`
+
+a GraphQL type, eg `GraphQLObjectType`.
 
 #### Returns
 
-`Maybe`\< `Record`\< `string`, `T` \> \>
+`Maybe`\<`Record`\<`string`, `T`\>\>
 
 a map of GraphQL named types for the matching GraphQL type, or undefined if no match.
-
-#### Source
-
-[packages/graphql/src/introspection.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L59)
 
 #### See
 
 [getSchemaMap](introspection.md#getschemamap)
 
+#### Source
+
+[packages/graphql/src/introspection.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L59)
+
 ***
 
-### getTypeName
+### getTypeName()
 
 ```ts
-getTypeName(type, defaultName = ""): string
+getTypeName(type, defaultName): string
 ```
 
 Resolves the name of a GraphQL schema type.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `type` | `unknown` | `undefined` | - |
-| `defaultName` | `string` | `""` | optional fallback value if the name resolution fails. |
+▪ **type**: `unknown`
+
+▪ **defaultName**: `string`= `""`
+
+optional fallback value if the name resolution fails.
 
 #### Returns
 
@@ -361,7 +376,7 @@ the type's name, or `defaultName`.
 
 ***
 
-### hasAstNode
+### hasAstNode()
 
 ```ts
 hasAstNode<T>(node): node is AstNodeType<T>
@@ -371,15 +386,13 @@ Type guard for type with an AST node property.
 
 #### Type parameters
 
-| Parameter |
-| :------ |
-| `T` |
+▪ **T**
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `node` | `T` | a GraphQL schema named type. |
+▪ **node**: `T`
+
+a GraphQL schema named type.
 
 #### Returns
 
@@ -393,24 +406,30 @@ Type guard for type with an AST node property.
 
 ***
 
-### hasDirective
+### hasDirective()
 
 ```ts
 hasDirective(
-  entity,
-  directives,
-  fallback = false): boolean
+   entity, 
+   directives, 
+   fallback): boolean
 ```
 
 Checks if a schema entity as a directive belonging to a defined set.
 
 #### Parameters
 
-| Parameter | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `entity` | `unknown` | `undefined` | a GraphQL schema entity. |
-| `directives` | `Maybe`\< `GraphQLDirective`[] \> | `undefined` | a directive name or a list of directive names. |
-| `fallback` | `boolean` | `false` | default value if the entity type is not a valid location for directives. |
+▪ **entity**: `unknown`
+
+a GraphQL schema entity.
+
+▪ **directives**: `Maybe`\<`GraphQLDirective`[]\>
+
+a directive name or a list of directive names.
+
+▪ **fallback**: `boolean`= `false`
+
+default value if the entity type is not a valid location for directives.
 
 #### Returns
 
@@ -424,7 +443,7 @@ Checks if a schema entity as a directive belonging to a defined set.
 
 ***
 
-### isValidDirectiveLocation
+### isValidDirectiveLocation()
 
 ```ts
 isValidDirectiveLocation(entity, directive): boolean
@@ -434,10 +453,13 @@ Check if a directive can be applied to specific schema entity location.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `entity` | `unknown` | a GraphQL schema entity. |
-| `directive` | `GraphQLDirective` | a directive name. |
+▪ **entity**: `unknown`
+
+a GraphQL schema entity.
+
+▪ **directive**: `GraphQLDirective`
+
+a directive name.
 
 #### Returns
 
