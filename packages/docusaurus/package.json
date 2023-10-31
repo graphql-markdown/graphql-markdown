@@ -55,7 +55,7 @@
     "@graphql-markdown/printer-legacy": "^1.5.0"
   },
   "devDependencies": {
-    "@docusaurus/types": "^2.4.1",
+    "@docusaurus/types": "^3.0.0",
     "@graphql-markdown/types": "^1.0.0"
   },
   "peerDependencies": {
