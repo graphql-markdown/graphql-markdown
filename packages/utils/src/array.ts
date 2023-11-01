@@ -1,5 +1,5 @@
 /**
- * Internal library of helpers for converting array \<-\> list.
+ * Internal library of helpers for manipulating array and list.
  *
  * @packageDocumentation
  */

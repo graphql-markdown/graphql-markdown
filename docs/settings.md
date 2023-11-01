@@ -93,9 +93,9 @@ plugins: [
 
 Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/advanced/group-by-directive)).
 
-| Setting            | CLI flag                                                                 | Default     |
-| ------------------ | ------------------------------------------------------------------------ | ----------- |
-| `groupByDirective` | <code>-gdb, --groupByDirective <@directive(field&#124;=fallback)></code> | `undefined` |
+| Setting            | CLI flag                                                                        | Default     |
+| ------------------ | ------------------------------------------------------------------------------- | ----------- |
+| `groupByDirective` | <code>-gdb, --groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
 
 ## `homepage`
 
