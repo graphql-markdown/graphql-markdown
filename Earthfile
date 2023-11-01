@@ -111,7 +111,7 @@ build-examples:
 build-docs:
   ARG VERSION=latest
   COPY ./website ./
-  COPY +build-examples/examples --VERSION=$VERSION ./examples
+  COPY (+build-examples/examples --VERSION=$VERSION) ./examples
   COPY --dir docs .
   COPY --dir api .
   RUN npm install
