@@ -15,7 +15,6 @@
   "useCodeBlocks": true,
   "outputFileStrategy": "modules",
   "pretty": true,
-  "mergeReadme": true,
   "theme": "default",
   "visibilityFilters": {},
   "validation": {
