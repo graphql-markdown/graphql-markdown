@@ -53,7 +53,7 @@ jobs:
           cd package
           npm ci
           npm run docs:api
-          earthly +build-docs
+          earthly --build-arg VERSION=3 +build-docs
 
       - name: Push changes to website repo
         run: |
