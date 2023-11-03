@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        docusaurus: [2]
+        docusaurus: [2, 3]
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1
