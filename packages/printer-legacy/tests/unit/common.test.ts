@@ -128,7 +128,7 @@ describe("common", () => {
       const type = {
         description: "Lorem ipsum",
         isDeprecated: true,
-        deprecationReason: "Foobar",
+        deprecationReason: "{ Foobar }",
       };
       const description = printDescription(type);
 
@@ -136,7 +136,7 @@ describe("common", () => {
         "
 
         :::caution DEPRECATED
-        Foobar
+        &#x007B; Foobar &#x007D;
         :::
 
         Lorem ipsum"
@@ -215,7 +215,7 @@ describe("common", () => {
       const type = {
         name: "EntityTypeName",
         isDeprecated: true,
-        deprecationReason: "foobar",
+        deprecationReason: "{ foobar }",
       };
       const deprecation = printDeprecation(type);
 
@@ -223,7 +223,7 @@ describe("common", () => {
         "
 
         :::caution DEPRECATED
-        foobar
+        &#x007B; foobar &#x007D;
         :::"
       `);
     });

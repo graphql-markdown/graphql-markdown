@@ -46,6 +46,9 @@ export const printCustomDirectives = (
     .filter((text) => {
       return typeof text === "string" && text.length > 0;
     })
+    .map((text) => {
+      return escapeMDX(text);
+    })
     .join(MARKDOWN_EOP);
 
   return `${MARKDOWN_EOP}${content}`;
@@ -56,14 +59,14 @@ export const formatDescription = (
   replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
 ): MDXString | string => {
   if (typeof type !== "object" || type === null) {
-    return `${MARKDOWN_EOP}${replacement}`;
+    return `${MARKDOWN_EOP}${escapeMDX(replacement)}`;
   }
 
   const description =
     "description" in type && typeof type.description === "string"
-      ? escapeMDX(type.description)
+      ? type.description
       : replacement;
-  return `${MARKDOWN_EOP}${description}`;
+  return `${MARKDOWN_EOP}${escapeMDX(description)}`;
 };
 
 export const printDeprecation = (type: unknown): string => {
@@ -73,7 +76,7 @@ export const printDeprecation = (type: unknown): string => {
 
   const reason =
     "deprecationReason" in type && typeof type.deprecationReason === "string"
-      ? type.deprecationReason + MARKDOWN_EOL
+      ? escapeMDX(type.deprecationReason) + MARKDOWN_EOL
       : "";
 
   return `${MARKDOWN_EOP}:::caution ${DEPRECATED.toUpperCase()}${MARKDOWN_EOL}${reason}:::`;
