@@ -70,7 +70,7 @@
     "@graphql-markdown/diff": "^1.1.1",
     "@graphql-markdown/helpers": "^1.0.1",
     "@graphql-markdown/printer-legacy": "^1.5.1",
-    "graphql-config": "^5.0.2"
+    "graphql-config": "^5.0.3"
   },
   "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"
