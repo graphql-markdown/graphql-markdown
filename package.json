@@ -152,7 +152,7 @@
     }
   },
   "devDependencies": {
-    "@docusaurus/types": "2.4.3",
+    "@docusaurus/types": "3.0.0",
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@graphql-tools/graphql-file-loader": "8.0.0",
     "@graphql-tools/json-file-loader": "8.0.0",
@@ -191,9 +191,6 @@
     "typedoc-plugin-frontmatter": "0.0.2",
     "typedoc-plugin-markdown": "4.0.0-next.25",
     "unionfs": "4.5.1"
-  },
-  "resolutions": {
-    "chalk": "5.3.0"
   },
   "dependencies": {
     "@graphql-markdown/core": "file:packages/core",

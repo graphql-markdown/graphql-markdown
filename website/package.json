@@ -21,7 +21,7 @@
   },
   "overrides": {
     "@cmfcmf/docusaurus-search-local": {
-        "@docusaurus/core": "^3.0.0-rc.0"
+        "@docusaurus/core": "^3.0.0"
     }
   },
   "devDependencies": {
