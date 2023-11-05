@@ -1,7 +1,51 @@
+<a name="1.21.1"></a>
+# [1.21.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.1) - 05 Nov 2023
+
+:rocket:  Fix compatibility with Docusaurus 3, since it MDX v3 is stricter than previous version used with Docusaurus 2.
+
+The compatibility with Docusaurus 2 is maintained, and there is no plan to drop it for now.
+
+## What's Changed
+
+### @graphql-markdown/docusaurus@1.21.1
+* :package: bump dependency @graphql-markdown/core to 1.7.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump dependency @graphql-markdown/printer-legacy to 1.5.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/core@1.7.1
+* :package: bump dependency @graphql-markdown/graphql to 1.0.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump dependency @graphql-markdown/utils to 1.6.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump peer dependency @graphql-markdown/diff to 1.1.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump peer dependency @graphql-markdown/helpers to 1.0.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump peer dependency @graphql-markdown/printer-legacy to 1.5.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump peer dependency graphql-config to 5.0.3 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/helpers@1.0.1
+* :package: bump dependency @graphql-markdown/graphql to 1.0.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/graphql@1.0.1
+* :package: bump dependency @graphql-markdown/utils to 1.6.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/printer-legacy@1.5.1
+* :bug: fix docusaurus v3 support by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1073
+* :package: bump dependency @graphql-markdown/graphql to 1.0.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump dependency @graphql-markdown/utils to 1.6.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/diff@1.1.1
+* :package: bump dependency @graphql-markdown/graphql to 1.0.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+* :package: bump dependency @graphql-markdown/utils to 1.6.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
+
+### @graphql-markdown/utils@1.6.1
+*  📝 udpate typedoc to fix compatibility with docusaurus v3 [#1072](https://github.com/graphql-markdown/graphql-markdown/issues/1072) 
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
+
+[Changes][1.21.1]
+
+
 <a name="1.21.0"></a>
 # [1.21.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.0) - 30 Sep 2023
 
-# 🚀  **BIG release** 🚀 
+### 🚀  **BIG release** 🚀 
 
 This is an exceptionally big and packed release with a lot of changes, so read carefully the release notes before upgrading.
 
@@ -11,8 +55,8 @@ The main changes are under the hood as we migrated the codebase from Javascript 
 - Custom directive helpers have been moved to dedicated packages, see [docs](https://graphql-markdown.github.io/docs/advanced/custom-directive#helpers).
 
 ## ✨ New features
- - `onlyDocDirective` filters the schema entities to be rendered in the documentation. This is the counterpart of `skipDocDirective`, based on a request from [@brampurnot](https://github.com/brampurnot) in [#994](https://github.com/graphql-markdown/graphql-markdown/issues/994). See documentation.
- - `metatags` adds HTML metadata to pages using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata), based on a request from [@akillkumar](https://github.com/akillkumar) in [#1015](https://github.com/graphql-markdown/graphql-markdown/issues/1015). See documentation.
+ - `onlyDocDirective` filters the schema entities to be rendered in the documentation. This is the counterpart of `skipDocDirective`, based on a request from [@brampurnot](https://github.com/brampurnot) in [#994](https://github.com/graphql-markdown/graphql-markdown/issues/994). See [documentation](https://graphql-markdown.github.io/docs/settings#onlydocdirective).
+ - `metatags` adds HTML metadata to pages using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata), based on a request from [@akillkumar](https://github.com/akillkumar) in [#1015](https://github.com/graphql-markdown/graphql-markdown/issues/1015). See [documentation](https://graphql-markdown.github.io/docs/settings#metatags).
  - Helper `directiveDescriptor` now supports the `description` placeholder, where `description` is the default directive's description.
 
 ## 🛠️ Other changes
@@ -1544,6 +1588,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.21.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
 [1.21.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0-next.0...1.21.0
 [1.21.0-next.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.4...1.21.0-next.0
 [1.20.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.3...1.20.4
