@@ -1,8 +1,9 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const { themes } =  require("prism-react-renderer");
-const lightCodeTheme = themes.github, darkCodeTheme = themes.dracula;
+const { themes } = require("prism-react-renderer");
+const lightCodeTheme = themes.github,
+  darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -76,11 +77,12 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        content:
-          'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
-        backgroundColor: "#485e58",
-        textColor: "#dbf5e6",
-        isCloseable: false,
+        content: "🚀 Fully compatible with Docusaurus 2 and Docusaurus 3 🚀",
+        // content:
+        //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
+        // backgroundColor: "#485e58",
+        // textColor: "#dbf5e6",
+        isCloseable: true,
       },
       navbar: {
         title: "GraphQL-Markdown",
