@@ -29,7 +29,9 @@ module.exports = {
 All settings are described in the page **[settings](/docs/settings)**.
 
 :::tip
+
 If you want to use several GraphQL schemas, read our guide for **[additional schema](/docs/advanced/additional-schema)**.
+
 :::
 
 ## Sidebar
@@ -45,14 +47,18 @@ module.exports = {
 };
 ```
 
-:::caution
+:::warning
+
 The sidebar path must be relative to the `sidebars.js` location. By default, the plugin provides a relative path from the root folder of Docusaurus.
 
 For example, if your `sidebars.js` is located under `./src` folder, then you need to go one level up in the path: `./../docs/swapi/sidebar-schema`.
+
 :::
 
 :::tip
+
 See **[docs multi-instance](/docs/advanced/docs-multi-instance)** for sidebar settings when using multiple sets of documentation.
+
 :::
 
 ## Site Settings
@@ -79,7 +85,9 @@ For more details about `navbar`, please refer to Docusaurus [documentation](http
 ## GraphQL Config
 
 :::tip
+
 The GraphQL-Markdown template provides GraphQL Config as default configuration file.
+
 :::
 
 Instead of defining the configuration alongside the Docusaurus config file, you can use a [GraphQL Config](https://the-guild.dev/graphql/config/docs/user/usage) file (multiple formats supported).
@@ -116,8 +124,10 @@ extensions:
       toc: false
 ```
 
-:::caution
+:::warning
+
 Note that **`schema` is not part of the extension configuration**, but part of the default graphql-config configuration.
+
 :::
 
 **Current limitations:**
