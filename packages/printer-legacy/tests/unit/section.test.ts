@@ -430,7 +430,8 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         "#### [\`EntityTypeName\`](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
         > 
         > 
-        > :::caution DEPRECATED
+        > :::warning[DEPRECATED]
+        > 
         > :::
         > 
         > 

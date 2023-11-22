@@ -88,8 +88,10 @@ describe("directive", () => {
         #### [<code style={{ fontWeight: 'normal' }}>FooBar.<b>Bar</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
-        > :::caution DEPRECATED
+        > :::warning[DEPRECATED]
+        > 
         > Deprecated
+        > 
         > :::
         > 
         > 

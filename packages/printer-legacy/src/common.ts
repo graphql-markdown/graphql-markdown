@@ -1,3 +1,5 @@
+import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
+
 import type {
   PrintTypeOptions,
   MDXString,
@@ -14,12 +16,7 @@ import {
 
 import { getCustomDirectiveResolver } from "./directive";
 
-import {
-  DEPRECATED,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  NO_DESCRIPTION_TEXT,
-} from "./const/strings";
+import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
 
 export const printCustomDirectives = (
   type: unknown,
@@ -69,6 +66,18 @@ export const formatDescription = (
   return `${MARKDOWN_EOP}${escapeMDX(description)}`;
 };
 
+export const printWarning = (text?: string, title?: string): string => {
+  const formattedText =
+    typeof text !== "string" || text.trim() === ""
+      ? MARKDOWN_EOP
+      : `${MARKDOWN_EOP}${text}${MARKDOWN_EOP}`;
+
+  if (DOCUSAURUS_VERSION.startsWith("2")) {
+    return `${MARKDOWN_EOP}:::caution ${title}${formattedText}:::`;
+  }
+  return `${MARKDOWN_EOP}:::warning[${title}]${formattedText}:::`;
+};
+
 export const printDeprecation = (type: unknown): string => {
   if (typeof type !== "object" || type === null || !isDeprecated(type)) {
     return "";
@@ -76,10 +85,10 @@ export const printDeprecation = (type: unknown): string => {
 
   const reason =
     "deprecationReason" in type && typeof type.deprecationReason === "string"
-      ? escapeMDX(type.deprecationReason) + MARKDOWN_EOL
+      ? escapeMDX(type.deprecationReason)
       : "";
 
-  return `${MARKDOWN_EOP}:::caution ${DEPRECATED.toUpperCase()}${MARKDOWN_EOL}${reason}:::`;
+  return printWarning(reason, DEPRECATED.toUpperCase());
 };
 
 export const printDescription = (
