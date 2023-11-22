@@ -7,7 +7,7 @@ npm run build
 npm run typedoc -- --out ${API_DIR}
 
 find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "index.md" \) -delete
-rm ${API_DIR}/modules.md
+rm ${API_DIR}/packages.md
 
 for depth in 1 2 3; do
   for folder in $(find ${API_DIR}/*/ -mindepth ${depth} -maxdepth ${depth} -type d); do 
