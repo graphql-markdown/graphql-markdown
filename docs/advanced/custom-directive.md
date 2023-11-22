@@ -128,11 +128,13 @@ plugins: [
 The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide few helper functions to quick start.
 
 :::info
+
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
 ```shell
 npm i @graphql-markdown/helpers
 ```
+
 
 :::
 
