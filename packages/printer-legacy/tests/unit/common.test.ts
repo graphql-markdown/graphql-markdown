@@ -12,10 +12,21 @@ import {
   printCustomDirectives,
   printDeprecation,
   printDescription,
+  printWarning,
 } from "../../src/common";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
+
+import * as DocusaurusUtils from "@docusaurus/utils";
+jest.mock("@docusaurus/utils", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return {
+    __esModule: true,
+    DOCUSAURUS_VERSION: "1.0.0",
+  };
+});
+const mockDocusaurusUtils = jest.mocked(DocusaurusUtils);
 
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
@@ -123,6 +134,10 @@ describe("common", () => {
     });
 
     test("return DEPRECATED tag if deprecated", () => {
+      expect.hasAssertions();
+
+      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
+
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const type = {
@@ -135,8 +150,10 @@ describe("common", () => {
       expect(description).toMatchInlineSnapshot(`
         "
 
-        :::caution DEPRECATED
+        :::warning[DEPRECATED]
+
         &#x007B; Foobar &#x007D;
+
         :::
 
         Lorem ipsum"
@@ -144,6 +161,8 @@ describe("common", () => {
     });
 
     test("return custom directive description if applied", () => {
+      expect.hasAssertions();
+
       const directiveType = new GraphQLDirective({
         name: "testDirective",
         locations: [DirectiveLocation.OBJECT],
@@ -188,6 +207,10 @@ describe("common", () => {
   });
 
   describe("printDeprecation()", () => {
+    beforeEach(() => {
+      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
+    });
+
     test("prints deprecated badge if type is deprecated", () => {
       expect.hasAssertions();
 
@@ -202,7 +225,8 @@ describe("common", () => {
       expect(deprecation).toMatchInlineSnapshot(`
         "
 
-        :::caution DEPRECATED
+        :::warning[DEPRECATED]
+
         :::"
       `);
     });
@@ -222,8 +246,10 @@ describe("common", () => {
       expect(deprecation).toMatchInlineSnapshot(`
         "
 
-        :::caution DEPRECATED
+        :::warning[DEPRECATED]
+
         &#x007B; foobar &#x007D;
+        
         :::"
       `);
     });
@@ -294,7 +320,7 @@ Test testDirective"
     });
   });
 
-  describe("hasPrintableDirective", () => {
+  describe("hasPrintableDirective()", () => {
     const noDocDirective = new GraphQLDirective({
       name: "noDoc",
       locations: [DirectiveLocation.ENUM],
@@ -473,6 +499,39 @@ Test testDirective"
       );
 
       expect(hasPrintableDirective(enumType, options)).toBeFalsy();
+    });
+  });
+
+  describe("printWarning()", () => {
+    test("prints admonition caution for Docusaurus v2", () => {
+      expect.assertions(1);
+
+      mockDocusaurusUtils.DOCUSAURUS_VERSION = "2.4.2";
+
+      expect(printWarning("test", "DEPRECATED")).toMatchInlineSnapshot(`
+        "
+
+        :::caution DEPRECATED
+
+        test
+
+        :::"
+      `);
+    });
+    test("prints admonition warning for Docusaurus v3", () => {
+      expect.assertions(1);
+
+      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
+
+      expect(printWarning("test", "DEPRECATED")).toMatchInlineSnapshot(`
+        "
+
+        :::warning[DEPRECATED]
+
+        test
+
+        :::"
+      `);
     });
   });
 });

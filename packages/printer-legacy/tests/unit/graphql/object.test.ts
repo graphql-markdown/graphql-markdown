@@ -52,8 +52,10 @@ describe("object", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
-        > :::caution DEPRECATED
+        > :::warning[DEPRECATED]
+        > 
         > Deprecated
+        > 
         > :::
         > 
         > 
@@ -115,8 +117,10 @@ describe("object", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
-        > :::caution DEPRECATED
+        > :::warning[DEPRECATED]
+        > 
         > Deprecated
+        > 
         > :::
         > 
         > 

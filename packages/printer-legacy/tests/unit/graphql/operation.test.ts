@@ -148,8 +148,10 @@ describe("operation", () => {
         #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
-        > :::caution DEPRECATED
+        > :::warning[DEPRECATED]
+        > 
         > Deprecated
+        > 
         > :::
         > 
         > 
