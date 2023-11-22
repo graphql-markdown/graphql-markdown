@@ -19,6 +19,7 @@ This documentation has been automatically generated from the GraphQL schema.
 ```
 
 :::tip
+
 If you want to hide the homepage from the sidebar, then set the front matter `sidebar_class_name` (or `className` depending on your Docusaurus version) to `navbar__toggle`.
 
 ```markdown {6}
@@ -30,5 +31,6 @@ sidebar_position: 1
 sidebar_class_name: navbar__toggle
 ---
 ```
+
 
 :::

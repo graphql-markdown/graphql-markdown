@@ -34,7 +34,9 @@ The command also installs all necessary dependencies you need to run Docusaurus.
 See [schema loading](/docs/advanced/schema-loading).
 
 :::tip
+
 The template comes by default with `@graphql-tools/url-loader` for remote schemas.
+
 :::
 
 ### Start your site
@@ -49,7 +51,9 @@ npm start
 The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 
 :::tip
+
 The `npm run doc` is a template shortcut for command line document generation `npm run docusaurus graphql-to-doc`.
+
 :::
 
 The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
@@ -72,7 +76,9 @@ npm install @graphql-markdown/docusaurus graphql
 ```
 
 :::info
+
 The `graphql` package is a peer-dependency, and it should be installed if not yet present.
+
 :::
 
 ### Add a GraphQL schema loader

@@ -1,9 +1,35 @@
+<a name="1.21.2"></a>
+# [1.21.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.2) - 22 Nov 2023
+
+:magic_wand:   Improve compatibility with Docusaurus 3 to use new [admonition format](https://docusaurus.io/docs/markdown-features/admonitions) for the `deprecated` admonition (see [#1096](https://github.com/graphql-markdown/graphql-markdown/issues/1096)).
+
+| Docusaurus 2 | Docusaurus 3 |
+|---|---|
+|<code>:::caution DEPRECATED</code>|<code>:::warning[DEPRECATED]</code>|
+
+## What's Changed
+
+### @graphql-markdown/docusaurus@1.21.2
+* :package: bump dependency @graphql-markdown/core to 1.7.2 [#1103](https://github.com/graphql-markdown/graphql-markdown/issues/1103) 
+* :package: bump dependency @graphql-markdown/printer-legacy to 1.5.2 [#1103](https://github.com/graphql-markdown/graphql-markdown/issues/1103) 
+
+### @graphql-markdown/core@1.7.2
+* :package: bump peer dependency @graphql-markdown/printer-legacy to 1.5.2 [#1103](https://github.com/graphql-markdown/graphql-markdown/issues/1103) 
+
+### @graphql-markdown/printer-legacy@1.5.2
+* :sparkles:  (feat) replace caution admonition by warning for docusaurus v3 by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1101
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.1...1.21.2
+
+[Changes][1.21.2]
+
+
 <a name="1.21.1"></a>
 # [1.21.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.1) - 05 Nov 2023
 
-:rocket:  Fix compatibility with Docusaurus 3, since it MDX v3 is stricter than previous version used with Docusaurus 2.
+:rocket:  Fix **compatibility with Docusaurus 3**, since it comes with MDX v3 that is stricter than the version used by Docusaurus 2. :rocket: 
 
-The compatibility with Docusaurus 2 is maintained, and there is no plan to drop it for now.
+_The compatibility with Docusaurus 2 is maintained, and there is no plan to drop it._
 
 ## What's Changed
 
@@ -1588,6 +1614,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.21.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
 [1.21.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0-next.0...1.21.0
 [1.21.0-next.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.20.4...1.21.0-next.0

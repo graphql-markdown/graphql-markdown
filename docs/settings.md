@@ -40,12 +40,14 @@ The possible values are:
 <br/>
 
 :::info
+
 The package `@graphql-markdown/diff` is required for using `diffMethod`.
 If the package is missing, then the change detection is always skipped.
 
 ```shell
 npm install @graphql-markdown/diff
 ```
+
 
 :::
 
@@ -110,7 +112,9 @@ The plugin provides a default page in `assets/generated`.
 <br/>
 
 :::info
+
 The GraphQL-Markdown template for Docusaurus provides a customized homepage located at `static/index.md`.
+
 :::
 
 ## `linkRoot`
@@ -179,7 +183,9 @@ See also [`skipDocDirective`](#skipdocdirective).
 <br/>
 
 :::info
+
 It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`) then the type will be displayed.
+
 :::
 
 ## `printTypeOptions`
@@ -234,7 +240,9 @@ plugins: [
 <br/>
 
 :::info
+
 See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
+
 :::
 
 ## `pretty`
@@ -248,13 +256,17 @@ Use [`prettier`](https://prettier.io) to format generated files.
 <br/>
 
 :::info
+
 The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
+
 :::
 
 ## `runOnBuild`
 
-:::caution
+:::warning
+
 `runOnBuild` is an experimental feature, and it should not be used in production.
+
 :::
 
 When set to `true` enables running doc generation on `docusaurus build`.
@@ -296,11 +308,15 @@ See also [`onlyDocDirective`](#onlydocdirective).
 <br/>
 
 :::danger
+
 Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will generate an error.
+
 :::
 
 :::info
+
 Types with `@deprecated` directive can also be skipped using the setting **[`printTypeOptions.deprecated: "skip"`](#printtypeoptions)** or the flag `--deprecated skip`.
+
 :::
 
 ## `tmpDir`
