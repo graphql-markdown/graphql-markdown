@@ -50,9 +50,9 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@graphql-markdown/core": "^1.7.2",
+    "@graphql-markdown/core": "^1.7.3",
     "@graphql-markdown/logger": "^1.0.0",
-    "@graphql-markdown/printer-legacy": "^1.5.2"
+    "@graphql-markdown/printer-legacy": "^1.5.3"
   },
   "devDependencies": {
     "@docusaurus/types": "^3.0.0",
