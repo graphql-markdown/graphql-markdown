@@ -49,10 +49,13 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prepare": "npm run build",
+    "clean": "tsc --build --clean && rm -rf ./dist",
+    "compile": "tsc --build",
+    "build": "npm run clean && npm run compile",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "stryker": "stryker run",
-    "clean": "rm -rf ./dist"
+    "stryker": "stryker run"
   },
   "dependencies": {
     "@graphql-inspector/core": "^5.0.0",
