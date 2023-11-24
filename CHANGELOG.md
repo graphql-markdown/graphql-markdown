@@ -1,7 +1,28 @@
+<a name="1.21.3"></a>
+# [1.21.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.3) - 24 Nov 2023
+
+🐛  Fix the incorrect build for 1.21.2 that was missing the changes for [#1101](https://github.com/graphql-markdown/graphql-markdown/issues/1101).
+
+## What's Changed
+### @graphql-markdown/docusaurus@1.21.3
+- 📦 bump dependency @graphql-markdown/core to 1.7.3
+- 📦 bump dependency @graphql-markdown/printer-legacy to 1.5.3
+
+### @graphql-markdown/core@1.7.3
+- 📦 bump peer dependency @graphql-markdown/printer-legacy to 1.5.3
+
+### @graphql-markdown/printer-legacy@1.5.3
+- ✨ rebuild package
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.2...1.21.3
+
+[Changes][1.21.3]
+
+
 <a name="1.21.2"></a>
 # [1.21.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.2) - 22 Nov 2023
 
-:magic_wand:   Improve compatibility with Docusaurus 3 to use new [admonition format](https://docusaurus.io/docs/markdown-features/admonitions) for the `deprecated` admonition (see [#1096](https://github.com/graphql-markdown/graphql-markdown/issues/1096)).
+:magic_wand:   Improve compatibility with Docusaurus 3 by using the new [admonition format](https://docusaurus.io/docs/markdown-features/admonitions) for the `deprecated` admonition (see [#1096](https://github.com/graphql-markdown/graphql-markdown/issues/1096)).
 
 | Docusaurus 2 | Docusaurus 3 |
 |---|---|
@@ -73,7 +94,7 @@ _The compatibility with Docusaurus 2 is maintained, and there is no plan to drop
 
 ### 🚀  **BIG release** 🚀 
 
-This is an exceptionally big and packed release with a lot of changes, so read carefully the release notes before upgrading.
+This is an exceptionally big release packed with a lot of changes, so read carefully the release notes before upgrading.
 
 The main changes are under the hood as we migrated the codebase from Javascript to Typescript to simplify the coding experience but also to increase the code safety.
 
@@ -1614,6 +1635,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.21.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
 [1.21.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0-next.0...1.21.0
