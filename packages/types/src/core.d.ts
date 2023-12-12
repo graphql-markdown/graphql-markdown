@@ -121,5 +121,3 @@ declare const PACKAGE_NAME: unique symbol;
 
 export type ClassName = string & { _opaque: typeof CLASS_NAME };
 declare const CLASS_NAME: unique symbol;
-
-export type { GraphQLProjectConfig } from "graphql-config";

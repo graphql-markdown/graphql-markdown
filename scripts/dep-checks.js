@@ -4,7 +4,7 @@ process.chdir(__dirname);
 
 const rootDir = "..";
 
-const { dependencies: packages } = require(`${rootDir}/package.json`);
+const { peerDependencies: packages } = require(`${rootDir}/package.json`);
 
 const getWorkspacePackagesMap = () => {
   const map = {};

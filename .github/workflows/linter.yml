@@ -38,5 +38,8 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Run Knip
+        run: npm run knip
+
       - name: Run Workspace dependencies check
         run: npm run check

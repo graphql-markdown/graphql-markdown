@@ -5,12 +5,6 @@
  * @packageDocumentation
  */
 
-import type {
-  GraphQLSchema,
-  GraphQLInputFieldMap,
-  GraphQLFieldMap,
-  GraphQLDirective,
-} from "graphql";
 import {
   DirectiveLocation,
   getDirectiveValues,
@@ -29,8 +23,12 @@ import type {
   ASTNode,
   AstNodeType,
   DirectiveNode,
+  GraphQLDirective,
+  GraphQLFieldMap,
+  GraphQLInputFieldMap,
   GraphQLNamedType,
   GraphQLOperationType,
+  GraphQLSchema,
   Maybe,
   SchemaEntity,
   SchemaMap,
@@ -40,7 +38,7 @@ import { convertArrayToMapObject } from "@graphql-markdown/utils";
 
 import { instanceOf } from "./guard";
 
-export { getDirectiveValues, getNamedType, printSchema } from "graphql";
+export { getNamedType, printSchema } from "graphql";
 
 /**
  * Returns a map of GraphQL named types from a schema for a defined GraphQL type.
@@ -234,7 +232,7 @@ export const getDirective = (
   return directives.filter((directive): boolean => {
     return (
       (entity.astNode.directives &&
-        entity.astNode.directives.findIndex((directiveNode) => {
+        entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
           return directiveNode.name.value === directive.name;
         }) > -1) ??
       false

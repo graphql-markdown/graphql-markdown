@@ -56,7 +56,8 @@
     "docs": "typedoc"
   },
   "dependencies": {
-    "@graphql-markdown/graphql": "^1.0.1"
+    "@graphql-markdown/graphql": "^1.0.1",
+    "@graphql-markdown/utils": "^1.6.1"
   },
   "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"

@@ -8,12 +8,13 @@ import type {
   GraphQLInterfaceType,
   GraphQLNamedType,
   GraphQLObjectType,
-  GraphQLProjectConfig,
   GraphQLScalarType,
   GraphQLUnionType,
   Maybe,
   ObjectTypeDefinitionNode,
 } from ".";
+
+import type { GraphQLProjectConfig } from "graphql-config";
 
 export type DeprecatedType<T> = Partial<{
   deprecationReason: string;
