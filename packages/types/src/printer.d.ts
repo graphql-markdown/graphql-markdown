@@ -96,6 +96,9 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
 export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
   Pick<PrintTypeOptions, "basePath" | "deprecated" | "parentTypePrefix">;
 
+/**
+ * @public
+ */
 export abstract class IPrinter {
   static init(
     schema: Maybe<GraphQLSchema>,

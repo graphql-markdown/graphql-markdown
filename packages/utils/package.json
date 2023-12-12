@@ -55,9 +55,6 @@
     "clean": "rm -rf ./dist",
     "docs": "typedoc"
   },
-  "dependencies": {
-    "@graphql-tools/load": "^8.0.1"
-  },
   "devDependencies": {
     "@graphql-markdown/types": "^1.0.0"
   },

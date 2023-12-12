@@ -4,7 +4,6 @@
  * @packageDocumentation
  */
 
-import type { GraphQLType } from "graphql";
 import {
   getNamedType,
   GraphQLBoolean,
@@ -16,7 +15,7 @@ import {
   isListType,
 } from "graphql";
 
-import type { Maybe } from "@graphql-markdown/types";
+import type { GraphQLType, Maybe } from "@graphql-markdown/types";
 
 /**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
