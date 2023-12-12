@@ -1,0 +1,34 @@
+{
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.js", "dangerfile.js", "config/*.js"],
+      "project": ["{config,scripts}/**/*.js"],
+      "ignoreDependencies": ["@graphql-markdown/*"]
+    },
+    "packages/*": {
+      "entry": ["src/index.ts!"],
+      "project": ["**/*.ts!"],
+      "ignore": ["**/__mocks__/**/*.ts"],
+      "ignoreDependencies": ["prettier"]
+    },
+    "packages/core": {
+      "entry": ["src/index.ts!"],
+      "project": ["**/*.ts!"],
+      "ignore": ["**/__mocks__/**/*.ts"],
+      "ignoreDependencies": ["@graphql-markdown/diff", "@graphql-markdown/printer-legacy", "graphql-config"]
+    },
+    "packages/utils": {
+      "entry": ["src/index.ts!"],
+      "project": ["**/*.ts!"],
+      "ignore": ["**/__mocks__/**/*.ts"],
+      "ignoreDependencies": ["prettier"]
+    }
+  },
+  "ignoreDependencies": ["danger"],
+  "ignoreBinaries": ["danger"],
+  "ignoreExportsUsedInFile": true,
+  "jest": {
+    "config": ["config/jest.config.js"],
+    "entry": ["**/tests/**/*.ts"]
+  }
+}

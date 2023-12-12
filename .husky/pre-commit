@@ -5,4 +5,5 @@ npm run ts:check
 npm run lint
 npm run prettier -- --check
 npm test
+npm run knip
 npm run check
