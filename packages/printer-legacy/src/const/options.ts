@@ -53,8 +53,6 @@ export const DEFAULT_OPTIONS: Required<
   customDirectives: {},
   groups: undefined,
   header: {
-    toc: true,
-    pagination: true,
     frontMatter: undefined,
   } as Required<PrintTypeHeaderOptions>,
   level: undefined,

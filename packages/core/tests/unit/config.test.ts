@@ -552,6 +552,8 @@ describe("config", () => {
 
   describe("parseDeprecatedDocOptions", () => {
     test("returns empty object if no deprecated option is used", () => {
+      expect.hasAssertions();
+
       const cliOpt = {},
         configOptions = { frontMatter: undefined };
 
@@ -572,6 +574,8 @@ describe("config", () => {
     ])(
       "returns pagination nulled if pagination option is disabled",
       ({ cliOpt, configOptions }) => {
+        expect.hasAssertions();
+
         const spyConsole = jest
           .spyOn(global.console, "warn")
           .mockImplementation(() => {});
@@ -598,6 +602,8 @@ describe("config", () => {
     ])(
       "returns hide_table_of_contents set to true if toc option is disabled",
       ({ cliOpt, configOptions }) => {
+        expect.hasAssertions();
+
         const spyConsole = jest
           .spyOn(global.console, "warn")
           .mockImplementation(() => {});

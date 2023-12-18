@@ -173,8 +173,6 @@ describe("Printer", () => {
           "groups": undefined,
           "header": {
             "frontMatter": undefined,
-            "pagination": true,
-            "toc": true,
           },
           "level": undefined,
           "metatags": [],
@@ -231,8 +229,6 @@ describe("Printer", () => {
           "groups": {},
           "header": {
             "frontMatter": undefined,
-            "pagination": true,
-            "toc": true,
           },
           "level": undefined,
           "metatags": [],
@@ -294,51 +290,6 @@ describe("Printer", () => {
             "---
             id: an-object-type-name
             title: An Object Type Name
-            hide_table_of_contents: false
-            ---"
-          `);
-    });
-
-    test("returns a Docusaurus document header with ToC disabled", () => {
-      expect.hasAssertions();
-
-      const header = Printer.printHeader(
-        "an-object-type-name",
-        "An Object Type Name",
-        {
-          ...DEFAULT_OPTIONS,
-          header: { ...DEFAULT_OPTIONS.header, toc: false },
-        },
-      );
-
-      expect(header).toMatchInlineSnapshot(`
-            "---
-            id: an-object-type-name
-            title: An Object Type Name
-            hide_table_of_contents: true
-            ---"
-          `);
-    });
-
-    test("returns a Docusaurus document header with pagination disabled", () => {
-      expect.hasAssertions();
-
-      const header = Printer.printHeader(
-        "an-object-type-name",
-        "An Object Type Name",
-        {
-          ...DEFAULT_OPTIONS,
-          header: { ...DEFAULT_OPTIONS.header, pagination: false },
-        },
-      );
-
-      expect(header).toMatchInlineSnapshot(`
-            "---
-            id: an-object-type-name
-            title: An Object Type Name
-            pagination_next: null
-            pagination_prev: null
-            hide_table_of_contents: false
             ---"
           `);
     });
@@ -362,8 +313,8 @@ describe("Printer", () => {
             "---
             id: an-object-type-name
             title: An Object Type Name
-            hide_table_of_contents: null
             draft: true
+            hide_table_of_contents: null
             ---"
           `);
     });
