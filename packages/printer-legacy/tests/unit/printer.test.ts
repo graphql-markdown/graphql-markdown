@@ -172,6 +172,7 @@ describe("Printer", () => {
           "deprecated": "default",
           "groups": undefined,
           "header": {
+            "frontMatter": undefined,
             "pagination": true,
             "toc": true,
           },
@@ -229,6 +230,7 @@ describe("Printer", () => {
           "deprecated": "default",
           "groups": {},
           "header": {
+            "frontMatter": undefined,
             "pagination": true,
             "toc": true,
           },
@@ -334,9 +336,34 @@ describe("Printer", () => {
             "---
             id: an-object-type-name
             title: An Object Type Name
-            hide_table_of_contents: false
             pagination_next: null
             pagination_prev: null
+            hide_table_of_contents: false
+            ---"
+          `);
+    });
+
+    test("returns a Docusaurus document header with custom frontmatter", () => {
+      expect.hasAssertions();
+
+      const header = Printer.printHeader(
+        "an-object-type-name",
+        "An Object Type Name",
+        {
+          ...DEFAULT_OPTIONS,
+          header: {
+            ...DEFAULT_OPTIONS.header,
+            frontMatter: { draft: true, hide_table_of_contents: null },
+          },
+        },
+      );
+
+      expect(header).toMatchInlineSnapshot(`
+            "---
+            id: an-object-type-name
+            title: An Object Type Name
+            hide_table_of_contents: null
+            draft: true
             ---"
           `);
     });

@@ -3,8 +3,18 @@ import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
 import type { CustomDirective, DirectiveName, GraphQLSchema } from ".";
 
-export interface ConfigDocOptions {
+export type FrontMatterOptions = Record<string, undefined> & {
+  id: never;
+  slug: never;
+  title: never;
+};
+
+export type ConfigDocOptions = DeprecatedConfigDocOptions & {
   index?: boolean;
+  frontMatter?: FrontMatterOptions;
+};
+
+export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
   toc?: boolean;
 }

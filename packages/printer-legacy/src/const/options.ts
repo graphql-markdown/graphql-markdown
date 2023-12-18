@@ -52,7 +52,11 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: undefined,
   customDirectives: {},
   groups: undefined,
-  header: { toc: true, pagination: true } as Required<PrintTypeHeaderOptions>,
+  header: {
+    toc: true,
+    pagination: true,
+    frontMatter: undefined,
+  } as Required<PrintTypeHeaderOptions>,
   level: undefined,
   metatags: [],
   onlyDocDirectives: [],

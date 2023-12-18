@@ -42,6 +42,7 @@ export interface CollapsibleOption {
 export interface PrintTypeHeaderOptions {
   pagination?: boolean;
   toc?: boolean;
+  frontMatter?: Maybe<FrontMatterOptions>;
 }
 
 export interface PrintTypeOptions {
