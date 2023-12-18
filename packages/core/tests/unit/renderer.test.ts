@@ -388,6 +388,7 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
           deprecated: "group",
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
@@ -415,6 +416,7 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
           deprecated: "group",
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
@@ -436,6 +438,7 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
           deprecated: "default",
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
@@ -457,6 +460,7 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
           deprecated: "group",
         });
         jest.replaceProperty(rendererInstance, "group", {

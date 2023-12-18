@@ -11,7 +11,7 @@ export type FrontMatterOptions = Record<string, undefined> & {
 
 export type ConfigDocOptions = DeprecatedConfigDocOptions & {
   index?: boolean;
-  frontMatter?: FrontMatterOptions;
+  frontMatter: Maybe<FrontMatterOptions>;
 };
 
 export interface DeprecatedConfigDocOptions {

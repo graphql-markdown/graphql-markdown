@@ -19,6 +19,8 @@ import type {
 
 import { loadConfiguration } from "./graphql-config";
 
+import { log } from "@graphql-markdown/logger";
+
 export enum DiffMethod {
   NONE = "NONE",
   FORCE = "FORCE",
@@ -56,8 +58,7 @@ export const DEFAULT_OPTIONS: Required<
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
     index: false,
-    pagination: true,
-    toc: true,
+    frontMatter: {},
   },
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -206,22 +207,61 @@ export const getDiffMethod = (
     : (diff.toLocaleUpperCase() as TypeDiffMethod);
 };
 
+export const parseDeprecatedDocOptions = (
+  cliOpts: Maybe<CliOptions>,
+  configOptions: Maybe<ConfigDocOptions>,
+): Partial<{
+  pagination_next: null;
+  pagination_prev: null;
+  hide_table_of_contents: boolean;
+}> => {
+  // deprecated, replaced by frontMatter
+  let pagination: Maybe<{ pagination_next: null; pagination_prev: null }>;
+  if (
+    (typeof cliOpts?.noPagination !== "undefined" && cliOpts.noPagination) ||
+    (typeof configOptions?.pagination !== "undefined" &&
+      !configOptions.pagination)
+  ) {
+    pagination = { pagination_next: null, pagination_prev: null };
+    log(
+      "Doc option `pagination` is deprecated. Use `frontMatter: { pagination_next: null, pagination_prev: null }` instead.",
+      "warn",
+    );
+  }
+
+  // deprecated, replaced by frontMatter
+  let toc: Maybe<{ hide_table_of_contents: boolean }>;
+  if (
+    typeof cliOpts?.noToc !== "undefined" ||
+    typeof configOptions?.toc !== "undefined"
+  ) {
+    toc = {
+      hide_table_of_contents:
+        cliOpts?.noToc === true || configOptions?.toc === false,
+    };
+    log(
+      "Doc option `toc` is deprecated. Use `frontMatter: { hide_table_of_contents: true | false }` instead.",
+      "warn",
+    );
+  }
+
+  return { ...pagination, ...toc };
+};
+
 export const getDocOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigDocOptions>,
-): Required<ConfigDocOptions> => {
+): Required<Pick<ConfigDocOptions, "frontMatter" | "index">> => {
+  const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   return {
-    pagination:
-      (!cliOpts?.noPagination && configOptions?.pagination) ??
-      DEFAULT_OPTIONS.docOptions.pagination!,
-    toc:
-      (!cliOpts?.noToc && configOptions?.toc) ??
-      DEFAULT_OPTIONS.docOptions.toc!,
     index:
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       (cliOpts?.index || configOptions?.index) ??
       DEFAULT_OPTIONS.docOptions.index!,
-  } as Required<ConfigDocOptions>;
+    frontMatter: {
+      ...deprecated,
+    },
+  } as Required<Pick<ConfigDocOptions, "frontMatter" | "index">>;
 };
 
 export const getPrintTypeOptions = (
