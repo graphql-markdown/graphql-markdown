@@ -31,10 +31,6 @@ This documentation has been automatically generated using [AniList APIv2](https:
   },
   "printTypeOptions": {
     "deprecated": "group"
-  },
-  "docOptions": {
-    "pagination": false,
-    "toc": false
   }
 }
 ```
@@ -56,9 +52,6 @@ extensions:
           method: POST
     printTypeOptions:
       deprecated: group
-    docOptions:
-      pagination: false
-      toc: false
 ```
 
 </TabItem>
@@ -70,7 +63,6 @@ npx docusaurus graphql-to-doc \
     --schema https://graphql.anilist.co/ \
     --base . \
     --link /examples/default \
-    --noPagination \
     --deprecated group
 ```
 

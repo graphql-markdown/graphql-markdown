@@ -23,6 +23,13 @@ module.exports = {
     relatedTypeSection: false,
     typeBadges: true,
   },
+  docOptions: {
+    frontMatter: {
+      pagination_next: null,
+      pagination_prev: null,
+      hide_table_of_contents: true,
+    },
+  },
   customDirective: {
     beta: {
       tag: (directive) => ({
