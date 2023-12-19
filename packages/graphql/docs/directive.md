@@ -8,7 +8,7 @@ Library supporting `customDirective` for directive based customization.
 
 ## Variables
 
-### WILDCARD\_DIRECTIVE
+### WILDCARD_DIRECTIVE
 
 ```ts
 const WILDCARD_DIRECTIVE: "*";
@@ -101,7 +101,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 [packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L247)
 
-***
+---
 
 ### getCustomDirectiveOptions()
 
@@ -150,7 +150,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 
 [packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L76)
 
-***
+---
 
 ### getCustomDirectives()
 
@@ -231,7 +231,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 
 [packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L150)
 
-***
+---
 
 ### isCustomDirective()
 

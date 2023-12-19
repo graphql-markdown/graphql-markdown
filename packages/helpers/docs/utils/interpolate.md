@@ -8,8 +8,8 @@ Helpers utility functions library.
 
 ```ts
 getObjPath(
-   path, 
-   obj, 
+   path,
+   obj,
    fallback): unknown
 ```
 
@@ -38,7 +38,7 @@ the property value if the path is resolved, else returns the `fallback` value.
 #### Example
 
 ```js
-import { getObjPath } from '@graphql-markdown/utils/object';
+import { getObjPath } from "@graphql-markdown/utils/object";
 
 getObjPath("foo.bar", { foo: { bar: 42 } }); // Returns 42
 
@@ -49,14 +49,14 @@ getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 
 [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
 
-***
+---
 
 ### interpolate()
 
 ```ts
 interpolate(
-   template, 
-   variables, 
+   template,
+   variables,
    fallback?): string
 ```
 

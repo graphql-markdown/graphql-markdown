@@ -9,8 +9,8 @@ The entry point method is [getSchemaMap](introspection.md#getschemamap).
 
 ```ts
 _getFields<T, V>(
-   type, 
-   processor?, 
+   type,
+   processor?,
    fallback?): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V
 ```
 
@@ -48,7 +48,7 @@ a map of fields as k/v records, or `fallback` value if no fields available.
 
 [packages/graphql/src/introspection.ts:313](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L313)
 
-***
+---
 
 ### getDirective()
 
@@ -78,7 +78,7 @@ a list of GraphQL directives matching the set, else `false`.
 
 [packages/graphql/src/introspection.ts:222](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L222)
 
-***
+---
 
 ### getDirectiveLocationForASTPath()
 
@@ -98,7 +98,7 @@ getDirectiveLocationForASTPath(appliedTo): DirectiveLocation
 
 [packages/graphql/src/introspection.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L111)
 
-***
+---
 
 ### getFields()
 
@@ -126,7 +126,7 @@ a list of fields of type object.
 
 [packages/graphql/src/introspection.ts:378](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L378)
 
-***
+---
 
 ### getOperation()
 
@@ -154,7 +154,7 @@ a map of fields as k/v records.
 
 [packages/graphql/src/introspection.ts:354](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L354)
 
-***
+---
 
 ### getSchemaMap()
 
@@ -241,14 +241,14 @@ const schemaTypeMap = getSchemaMap(schema);
 
 [packages/graphql/src/introspection.ts:488](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L488)
 
-***
+---
 
 ### getTypeDirectiveArgValue()
 
 ```ts
 getTypeDirectiveArgValue(
-   directive, 
-   node, 
+   directive,
+   node,
 argName): Maybe<Record<string, unknown>>
 ```
 
@@ -277,7 +277,7 @@ a record k/v with `argName` as key and the argument's value.
 
 [packages/graphql/src/introspection.ts:285](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L285)
 
-***
+---
 
 ### getTypeDirectiveValues()
 
@@ -307,7 +307,7 @@ a record k/v with arguments' name as keys and arguments' value.
 
 [packages/graphql/src/introspection.ts:254](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L254)
 
-***
+---
 
 ### getTypeFromSchema()
 
@@ -346,7 +346,7 @@ a map of GraphQL named types for the matching GraphQL type, or undefined if no m
 
 [packages/graphql/src/introspection.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L59)
 
-***
+---
 
 ### getTypeName()
 
@@ -374,7 +374,7 @@ the type's name, or `defaultName`.
 
 [packages/graphql/src/introspection.ts:401](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L401)
 
-***
+---
 
 ### hasAstNode()
 
@@ -404,14 +404,14 @@ a GraphQL schema named type.
 
 [packages/graphql/src/introspection.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L107)
 
-***
+---
 
 ### hasDirective()
 
 ```ts
 hasDirective(
-   entity, 
-   directives, 
+   entity,
+   directives,
    fallback): boolean
 ```
 
@@ -441,7 +441,7 @@ default value if the entity type is not a valid location for directives.
 
 [packages/graphql/src/introspection.ts:184](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L184)
 
-***
+---
 
 ### isValidDirectiveLocation()
 

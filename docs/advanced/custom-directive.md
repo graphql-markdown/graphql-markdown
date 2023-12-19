@@ -135,7 +135,6 @@ The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide
 npm i @graphql-markdown/helpers
 ```
 
-
 :::
 
 ### `@graphql-markdown/helpers`

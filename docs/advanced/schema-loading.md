@@ -72,7 +72,7 @@ plugins: [
         UrlLoader: {
           module: "@graphql-tools/url-loader",
           options: {
-            headers: { 
+            headers: {
               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
              }
           }

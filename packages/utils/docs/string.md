@@ -37,7 +37,7 @@ capitalize("the quick Brown Fox");
 
 [string.ts:216](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L216)
 
-***
+---
 
 ### escapeMDX()
 
@@ -72,7 +72,7 @@ escapeMDX("{MDX} <special> characters");
 
 [string.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L172)
 
-***
+---
 
 ### firstUppercase()
 
@@ -107,7 +107,7 @@ firstUppercase("the quick Brown Fox");
 
 [string.ts:192](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L192)
 
-***
+---
 
 ### kebabCase()
 
@@ -142,7 +142,7 @@ kebabCase("The quick brown Fox");
 
 [string.ts:259](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L259)
 
-***
+---
 
 ### prune()
 
@@ -183,7 +183,7 @@ prune(text, "**");
 
 [string.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L58)
 
-***
+---
 
 ### replaceDiacritics()
 
@@ -205,7 +205,7 @@ the string to be transformed.
 
 a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
 
- *
+-
 
 #### Example
 
@@ -223,7 +223,7 @@ replaceDiacritics("Âéêś"); // Expected result: "Aees"
 
 [string.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L27)
 
-***
+---
 
 ### slugify()
 
@@ -245,7 +245,7 @@ Alias of [kebabCase](string.md#kebabcase).
 
 [string.ts:259](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L259)
 
-***
+---
 
 ### startCase()
 
@@ -280,15 +280,15 @@ startCase("the quick Brown Fox");
 
 [string.ts:238](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L238)
 
-***
+---
 
 ### stringCaseBuilder()
 
 ```ts
 stringCaseBuilder(
-   str, 
-   transformation?, 
-   separator?, 
+   str,
+   transformation?,
+   separator?,
    splitter?): string
 ```
 
@@ -337,7 +337,7 @@ stringCaseBuilder(text, transformation, " ");
 
 [string.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L100)
 
-***
+---
 
 ### toHTMLUnicode()
 

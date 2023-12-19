@@ -32,5 +32,4 @@ sidebar_class_name: navbar__toggle
 ---
 ```
 
-
 :::

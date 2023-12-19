@@ -139,7 +139,7 @@ Note that **`schema` is not part of the extension configuration**, but part of t
 
 GraphQL-Markdown allows mixing the different configuration, and build the final configuration as follow:
 
-  1. Default configuration
-  2. `.graphqlrc` configuration file
-  3. Docusaurus plugin configuration
-  4. CLI flags
+1. Default configuration
+2. `.graphqlrc` configuration file
+3. Docusaurus plugin configuration
+4. CLI flags

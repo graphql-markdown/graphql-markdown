@@ -106,7 +106,7 @@ log("Info message", "info"); // Expected Docusaurus log output "Info message"
 
 [index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
 
-***
+---
 
 ### log()
 
@@ -122,14 +122,14 @@ Logs a message by calling the active logger instance.
 
 a string to be logged.
 
-▪ **level**: 
-  \| `"debug"`
-  \| `"error"`
-  \| `"info"`
-  \| `"log"`
-  \| `"success"`
-  \| `"warn"`
-  \| [`LogLevel`](exports.md#loglevel)= `LogLevel.info`
+▪ **level**:
+\| `"debug"`
+\| `"error"`
+\| `"info"`
+\| `"log"`
+\| `"success"`
+\| `"warn"`
+\| [`LogLevel`](exports.md#loglevel)= `LogLevel.info`
 
 optional log level, `"info"` by default.
 

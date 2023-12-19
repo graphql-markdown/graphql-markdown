@@ -12,8 +12,8 @@ Custom directive `tag` helper.
 
 ```ts
 directiveTag(
-   directive, 
-   type?, 
+   directive,
+   type?,
    classname?): Badge
 ```
 
@@ -52,19 +52,22 @@ const directive = new GraphQLDirective({
   locations: [],
 });
 
-const type = new GraphQLScalarType<string>({
-  name: "FooBar",
-  astNode: {
-    kind: Kind.SCALAR_TYPE_DEFINITION,
-    name: { kind: Kind.NAME, value: "FooBar" },
-    directives: [
-      {
-        kind: Kind.DIRECTIVE,
-        name: { kind: Kind.NAME, value: "auth" },
-      },
-    ],
-  },
-});
+const type =
+  new GraphQLScalarType() <
+  string >
+  {
+    name: "FooBar",
+    astNode: {
+      kind: Kind.SCALAR_TYPE_DEFINITION,
+      name: { kind: Kind.NAME, value: "FooBar" },
+      directives: [
+        {
+          kind: Kind.DIRECTIVE,
+          name: { kind: Kind.NAME, value: "auth" },
+        },
+      ],
+    },
+  };
 
 directiveTag(directive, type);
 // Expected result: { text: "@auth", classname: "badge--secondary" }

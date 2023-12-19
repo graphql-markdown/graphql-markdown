@@ -32,7 +32,10 @@ an `Error` if no loader has been loaded, or if an error occurred while importing
 #### Example
 
 ```js
-import { getDocumentLoaders, loadSchema } from "@graphql-markdown/utils/graphql"
+import {
+  getDocumentLoaders,
+  loadSchema,
+} from "@graphql-markdown/utils/graphql";
 
 const loaderList = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
@@ -50,7 +53,7 @@ const schema = await loadSchema("schema.graphql", {
 
 [packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
-***
+---
 
 ### loadSchema()
 
@@ -81,7 +84,7 @@ a GraphQL schema.
 #### Example
 
 ```js
-import { loadSchema } from "@graphql-markdown/utils/graphql"
+import { loadSchema } from "@graphql-markdown/utils/graphql";
 
 const schema = await loadSchema("schema.graphql", {
   loaders: [new GraphQLFileLoader()],
