@@ -9,7 +9,7 @@ module.exports = {
   id: "schema_with_grouping",
   schema: "data/schema_with_grouping.graphql",
   rootPath: "./docs",
-  linkRoot: "/examples/default",
+  linkRoot: "/examples/group-by",
   baseURL: ".",
   diffMethod: "SCHEMA-HASH",
   loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
@@ -24,11 +24,6 @@ module.exports = {
     typeBadges: true,
   },
   docOptions: {
-    frontMatter: {
-      pagination_next: null,
-      pagination_prev: null,
-      hide_table_of_contents: true,
-    },
     index: true,
   },
   customDirective: {

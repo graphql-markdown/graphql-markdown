@@ -29,11 +29,6 @@ This is an example of documentation grouping with GraphQL directive using the `g
     fallback: "Common"
   },
   docOptions: {
-    frontMatter: {
-      pagination_next: null,
-      pagination_prev: null,
-      hide_table_of_contents: true,
-    },
     index: true,
   },
   printTypeOptions: {
@@ -82,11 +77,6 @@ This is an example of documentation grouping with GraphQL directive using the `g
         fallback: "Common"
       },
       docOptions: {
-        frontMatter: {
-          pagination_next: null,
-          pagination_prev: null,
-          hide_table_of_contents: true,
-        },
         index: true,
       },
       printTypeOptions: {

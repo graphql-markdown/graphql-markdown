@@ -29,6 +29,12 @@ This documentation has been automatically generated using [AniList APIv2](https:
       "options": { "method": "POST" }
     }
   },
+  "docOptions": {
+    "frontMatter": {
+      "pagination_next": null,
+      "pagination_prev": null
+    }
+  },
   "printTypeOptions": {
     "deprecated": "group"
   }
@@ -50,6 +56,10 @@ extensions:
         module: "@graphql-tools/url-loader"
         options:
           method: POST
+    docOptions:
+      frontMatter:
+        pagination_next: null,
+        pagination_prev: null,
     printTypeOptions:
       deprecated: group
 ```
