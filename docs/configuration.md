@@ -119,9 +119,6 @@ extensions:
           method: "POST"
     printTypeOptions:
       deprecated: "group"
-    docOptions:
-      pagination: false,
-      toc: false
 ```
 
 :::warning

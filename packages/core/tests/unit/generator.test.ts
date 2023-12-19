@@ -43,8 +43,6 @@ describe("generator", () => {
       diffMethod: "diff method",
       docOptions: {
         index: true,
-        pagination: true,
-        toc: true,
       },
       printTypeOptions: {
         codeSection: true,
