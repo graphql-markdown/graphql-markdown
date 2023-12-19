@@ -29,6 +29,7 @@ module.exports = {
       pagination_prev: null,
       hide_table_of_contents: true,
     },
+    index: true,
   },
   customDirective: {
     beta: {

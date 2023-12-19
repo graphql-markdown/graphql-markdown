@@ -54,14 +54,14 @@ npm install @graphql-markdown/diff
 
 Use these options to tweak some of the Docusaurus documentation features:
 
-- `frontMatter`: maps of front matter overrides, see [Docusaurus documentation](https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
-- `index`: index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
-- `pagination`: page buttons `Previous` and `Next` [**deprecated**, see note below].
-- `toc`: page table of content [**deprecated**, see note below].
+- `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
+- `index`: enable/disable index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
+- `pagination`: enable/disable page buttons `Previous` and `Next` [**deprecated**, see note below].
+- `toc`: enable/disable page table of content [**deprecated**, see note below].
 
 | Setting                  | CLI flag         | Default |
 | ------------------------ | ---------------- | ------- |
-| `docOptions.frontMatter` | -                | `{}`    |
+| `docOptions.frontMatter` | _not supported_  | `{}`    |
 | `docOptions.index`       | `--index`        | `false` |
 | `docOptions.pagination`  | `--noPagination` | `true`  |
 | `docOptions.toc`         | `--noToc`        | `true`  |
@@ -95,22 +95,32 @@ plugins: [
   ],
 ```
 
-::: warning DEPRECATED
+<br/>
 
-- **`docOptions.pagination`** (CLI flag `--noPagination`) has been replaced by `frontMatter`:
-  ```js
+:::warning[DEPRECATED]
+
+- **`docOptions.pagination`** (CLI flag `--noPagination`) has been replaced by `docOptions.frontMatter`:
+
+  ```js title="docusaurus.config.js"
+  docOptions: {
    frontMatter: {
      pagination_next: null, // disable page navigation next
      pagination_prev: null, // disable page navigation previous
    },
+  },
   ```
-- **`docOptions.toc`** (CLI flag `--noToc`) has been replaced by `frontMatter`:
-  ```js
+
+- **`docOptions.toc`** (CLI flag `--noToc`) has been replaced by `docOptions.frontMatter`:
+
+  ```js title="docusaurus.config.js"
+  docOptions: {
    frontMatter: {
      hide_table_of_contents: true, // disable page table of content
    },
+  },
   ```
-  :::
+
+:::
 
 ## `groupByDirective`
 
@@ -284,7 +294,7 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `runOnBuild`
 
-:::warning
+:::warning[EXPERIMENTAL]
 
 `runOnBuild` is an experimental feature, and it should not be used in production.
 
