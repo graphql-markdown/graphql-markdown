@@ -18,10 +18,6 @@ module.exports = {
     field: "category",
     fallback: "Common",
   },
-  docOptions: {
-    pagination: true,
-    toc: true,
-  },
   printTypeOptions: {
     parentTypePrefix: false,
     relatedTypeSection: false,
