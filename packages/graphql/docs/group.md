@@ -67,19 +67,18 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
 
 getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
-
 ```
 
 #### Source
 
 [packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
 
-***
+---
 
 ### getGroups()
 
@@ -141,7 +140,7 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 const groupsMap = getGroups(schemaMap, groupOptions);
 

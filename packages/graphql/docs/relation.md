@@ -40,7 +40,7 @@ a record map of fields and arguments relations.
 
 [packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
 
-***
+---
 
 ### getRelationOfImplementation()
 
@@ -74,7 +74,7 @@ a record map of unions or interfaces relations.
 
 [packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
 
-***
+---
 
 ### getRelationOfInterface()
 
@@ -108,7 +108,7 @@ a record map of interfaces relations.
 
 [packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
 
-***
+---
 
 ### getRelationOfReturn()
 
@@ -142,7 +142,7 @@ a record map of operations relations.
 
 [packages/types/src/graphql.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L78)
 
-***
+---
 
 ### getRelationOfUnion()
 

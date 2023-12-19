@@ -170,11 +170,8 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "frontMatter": {},
           "groups": undefined,
-          "header": {
-            "pagination": true,
-            "toc": true,
-          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -227,11 +224,8 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "frontMatter": {},
           "groups": {},
-          "header": {
-            "pagination": true,
-            "toc": true,
-          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -292,12 +286,11 @@ describe("Printer", () => {
             "---
             id: an-object-type-name
             title: An Object Type Name
-            hide_table_of_contents: false
             ---"
           `);
     });
 
-    test("returns a Docusaurus document header with ToC disabled", () => {
+    test("returns a Docusaurus document header with custom frontmatter", () => {
       expect.hasAssertions();
 
       const header = Printer.printHeader(
@@ -305,7 +298,7 @@ describe("Printer", () => {
         "An Object Type Name",
         {
           ...DEFAULT_OPTIONS,
-          header: { ...DEFAULT_OPTIONS.header, toc: false },
+          frontMatter: { draft: true, hide_table_of_contents: null },
         },
       );
 
@@ -313,30 +306,8 @@ describe("Printer", () => {
             "---
             id: an-object-type-name
             title: An Object Type Name
-            hide_table_of_contents: true
-            ---"
-          `);
-    });
-
-    test("returns a Docusaurus document header with pagination disabled", () => {
-      expect.hasAssertions();
-
-      const header = Printer.printHeader(
-        "an-object-type-name",
-        "An Object Type Name",
-        {
-          ...DEFAULT_OPTIONS,
-          header: { ...DEFAULT_OPTIONS.header, pagination: false },
-        },
-      );
-
-      expect(header).toMatchInlineSnapshot(`
-            "---
-            id: an-object-type-name
-            title: An Object Type Name
-            hide_table_of_contents: false
-            pagination_next: null
-            pagination_prev: null
+            draft: true
+            hide_table_of_contents: null
             ---"
           `);
     });

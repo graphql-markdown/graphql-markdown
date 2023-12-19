@@ -27,7 +27,7 @@ the key/value record object.
 #### Example
 
 ```js
-import { isEmpty } from '@graphql-markdown/utils/object';
+import { isEmpty } from "@graphql-markdown/utils/object";
 
 const obj = {
   bool: true,

@@ -18,17 +18,28 @@ import {
   DiffMethod,
   getCustomDirectives,
   getDocDirective,
+  getDocOptions,
   getOnlyDocDirectives,
   getSkipDocDirectives,
   getVisibilityDirectives,
+  parseDeprecatedDocOptions,
   parseGroupByOption,
 } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
 
 describe("config", () => {
+  beforeAll(() => {
+    Object.assign(global, { logger: global.console });
+  });
+
   afterEach(() => {
+    jest.restoreAllMocks();
     jest.resetAllMocks();
+  });
+
+  afterAll(() => {
+    delete global.logger;
   });
 
   describe("getSkipDocDirectives", () => {
@@ -217,8 +228,6 @@ describe("config", () => {
         pretty: true,
         docOptions: {
           index: false,
-          pagination: false,
-          toc: false,
         },
         printTypeOptions: {
           codeSection: false,
@@ -246,7 +255,7 @@ describe("config", () => {
         baseURL: configFileOpts.baseURL,
         customDirective: configFileOpts.customDirective,
         diffMethod: configFileOpts.diffMethod,
-        docOptions: configFileOpts.docOptions,
+        docOptions: { ...configFileOpts.docOptions, frontMatter: {} },
         groupByDirective: configFileOpts.groupByDirective,
         homepageLocation: configFileOpts.homepage,
         id: DEFAULT_OPTIONS.id,
@@ -285,8 +294,6 @@ describe("config", () => {
           fallback: "Common",
         },
         docOptions: {
-          pagination: true,
-          toc: true,
           index: true,
         },
       };
@@ -300,8 +307,6 @@ describe("config", () => {
         index: true,
         link: "/cli",
         noCode: true,
-        noPagination: true,
-        noToc: true,
         only: "@public",
         pretty: true,
         root: "cli",
@@ -330,9 +335,8 @@ describe("config", () => {
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
         docOptions: {
-          pagination: !cliOpts.noPagination,
-          toc: !cliOpts.noToc,
-          index: cliOpts.index,
+          frontMatter: {},
+          index: true,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -545,5 +549,116 @@ describe("config", () => {
       }
       `);
     });
+  });
+
+  describe("getDocOptions()", () => {
+    test("returns object with default index and default frontMatter", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions();
+
+      expect(index).toBeFalsy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed index from cli", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions({ index: true });
+
+      expect(index).toBeTruthy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed index from config", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions(undefined, {
+        index: true,
+        frontMatter: undefined,
+      });
+
+      expect(index).toBeTruthy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed frontMatter from config", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions(undefined, {
+        frontMatter: { draft: true },
+      });
+
+      expect(index).toBeFalsy();
+      expect(frontMatter).toStrictEqual({ draft: true });
+    });
+  });
+
+  describe("parseDeprecatedDocOptions", () => {
+    test("returns empty object if no deprecated option is used", () => {
+      expect.hasAssertions();
+
+      const cliOpt = {},
+        configOptions = undefined;
+
+      expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
+        {},
+      );
+    });
+
+    test.each([
+      {
+        cliOpt: { noPagination: true },
+        configOptions: { frontMatter: undefined },
+      },
+      {
+        cliOpt: {},
+        configOptions: { pagination: false, frontMatter: undefined },
+      },
+    ])(
+      "returns pagination nulled if pagination option is disabled",
+      ({ cliOpt, configOptions }) => {
+        expect.hasAssertions();
+
+        const spyConsole = jest
+          .spyOn(global.console, "warn")
+          .mockImplementation(() => {});
+
+        expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual({
+          pagination_next: null,
+          pagination_prev: null,
+        });
+        expect(spyConsole).toHaveBeenCalledWith(
+          "Doc option `pagination` is deprecated. Use `frontMatter: { pagination_next: null, pagination_prev: null }` instead.",
+        );
+      },
+    );
+
+    test.each([
+      {
+        cliOpt: { noToc: true },
+        configOptions: { frontMatter: undefined },
+      },
+      {
+        cliOpt: {},
+        configOptions: { toc: false, frontMatter: undefined },
+      },
+    ])(
+      "returns hide_table_of_contents set to true if toc option is disabled",
+      ({ cliOpt, configOptions }) => {
+        expect.hasAssertions();
+
+        const spyConsole = jest
+          .spyOn(global.console, "warn")
+          .mockImplementation(() => {});
+
+        expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual({
+          hide_table_of_contents: true,
+        });
+        expect(spyConsole).toHaveBeenCalledWith(
+          "Doc option `toc` is deprecated. Use `frontMatter: { hide_table_of_contents: true | false }` instead.",
+        );
+      },
+    );
   });
 });

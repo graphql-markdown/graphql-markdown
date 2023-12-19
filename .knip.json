@@ -15,7 +15,11 @@
       "entry": ["src/index.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"],
-      "ignoreDependencies": ["@graphql-markdown/diff", "@graphql-markdown/printer-legacy", "graphql-config"]
+      "ignoreDependencies": [
+        "@graphql-markdown/diff",
+        "@graphql-markdown/printer-legacy",
+        "graphql-config"
+      ]
     },
     "packages/utils": {
       "entry": ["src/index.ts!"],

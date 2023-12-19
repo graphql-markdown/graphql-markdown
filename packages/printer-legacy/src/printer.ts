@@ -134,19 +134,16 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    const { toc, pagination } = options.header ?? DEFAULT_OPTIONS.header!;
-    const paginationButtons = pagination!
-      ? []
-      : ["pagination_next: null", "pagination_prev: null"];
+    const frontMatter = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter!;
 
-    const header = [
-      FRONT_MATTER,
-      `id: ${id}`,
-      `title: ${title}`,
-      `hide_table_of_contents: ${!toc}`,
-      ...paginationButtons,
-      FRONT_MATTER,
-    ];
+    const header: string[] = [FRONT_MATTER, `id: ${id}`, `title: ${title}`];
+
+    if (typeof frontMatter === "object") {
+      for (const [key, value] of Object.entries(frontMatter)) {
+        header.push(`${key}: ${value}`);
+      }
+    }
+    header.push(FRONT_MATTER);
 
     return header.join(MARKDOWN_EOL);
   };

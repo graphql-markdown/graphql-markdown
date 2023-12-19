@@ -25,9 +25,9 @@ folder structure in path format.
 #### Example
 
 ```js
-import { ensureDir } from '@graphql-markdown/utils/fs';
+import { ensureDir } from "@graphql-markdown/utils/fs";
 
-await ensureDir("./.temp/local")
+await ensureDir("./.temp/local");
 
 // Creates both folders if they do not exists.
 ```
@@ -36,7 +36,7 @@ await ensureDir("./.temp/local")
 
 [fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L57)
 
-***
+---
 
 ### fileExists()
 
@@ -61,9 +61,9 @@ file or folder location.
 #### Example
 
 ```js
-import { fileExists } from '@graphql-markdown/utils/fs';
+import { fileExists } from "@graphql-markdown/utils/fs";
 
-await fileExists("./.temp/local")
+await fileExists("./.temp/local");
 
 // Expected true if path is valid, false if not
 ```
@@ -72,14 +72,14 @@ await fileExists("./.temp/local")
 
 [fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L32)
 
-***
+---
 
 ### saveFile()
 
 ```ts
 saveFile(
-   location, 
-   content, 
+   location,
+   content,
 prettify?): Promise<void>
 ```
 
@@ -110,9 +110,9 @@ optional callback function for prettifying the content.
 #### Example
 
 ```js
-import { saveFile } from '@graphql-markdown/utils/fs';
+import { saveFile } from "@graphql-markdown/utils/fs";
 
-await saveFile("./.temp/local.md", "foobar")
+await saveFile("./.temp/local.md", "foobar");
 
 // Created .temp folder if it does not exists, and save data into local.md
 ```

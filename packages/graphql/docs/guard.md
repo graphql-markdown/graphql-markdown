@@ -36,7 +36,7 @@ the GraphQL type `T`.
 
 [packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L52)
 
-***
+---
 
 ### isDeprecated()
 
@@ -66,7 +66,7 @@ an instance of `T`.
 
 [packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L70)
 
-***
+---
 
 ### isGraphQLFieldType()
 
@@ -90,7 +90,7 @@ a GraphQL type.
 
 [packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L33)
 
-***
+---
 
 ### isOperation()
 

@@ -95,7 +95,13 @@ span.deprecated::after {
 div[class^="announcementBar_"] {
   --site-announcement-bar-stripe-color1: #ffd7ff;
   --site-announcement-bar-stripe-color2: #e6ffd1;
-  background: repeating-linear-gradient(55deg, var(--site-announcement-bar-stripe-color1), var(--site-announcement-bar-stripe-color1) 20px, var(--site-announcement-bar-stripe-color2) 10px, var(--site-announcement-bar-stripe-color2) 40px);
+  background: repeating-linear-gradient(
+    55deg,
+    var(--site-announcement-bar-stripe-color1),
+    var(--site-announcement-bar-stripe-color1) 20px,
+    var(--site-announcement-bar-stripe-color2) 10px,
+    var(--site-announcement-bar-stripe-color2) 40px
+  );
   color: black !important;
   font-weight: 500;
 }

@@ -6,6 +6,7 @@ import type {
   CustomDirectiveMap,
   ConfigPrintTypeOptions,
   GraphQLDirective,
+  FrontMatterOptions,
 } from ".";
 
 export type RootTypeName =
@@ -39,19 +40,14 @@ export interface CollapsibleOption {
   dataClose: string;
 }
 
-export interface PrintTypeHeaderOptions {
-  pagination?: boolean;
-  toc?: boolean;
-}
-
 export interface PrintTypeOptions {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
+  frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
-  header?: Maybe<PrintTypeHeaderOptions>;
   level?: Maybe<SectionLevelValue>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
@@ -139,15 +135,15 @@ export abstract class IPrinter {
   static printType(
     name: string,
     type: unknown,
-    options: Maybe<Partial<PrinterConfig & PrinterOptions>>,
+    options?: Maybe<Partial<PrintTypeOptions>>,
   ): MDXString;
 }
 export type Printer = typeof IPrinter;
 
 export interface PrinterConfig {
-  schema: Maybe<GraphQLSchema>;
   baseURL: string;
   linkRoot: string;
+  schema: Maybe<GraphQLSchema>;
 }
 
 export interface PrinterOptions {

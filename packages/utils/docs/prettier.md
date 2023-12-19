@@ -40,7 +40,7 @@ https://prettier.io/docs/en/options#parser for the list of parsers.
 
 [prettier.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L29)
 
-***
+---
 
 ### prettifyJavascript()
 
@@ -74,7 +74,7 @@ Same as `prettify(content, "babel")`.
 
 [prettier.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L82)
 
-***
+---
 
 ### prettifyMarkdown()
 

@@ -48,22 +48,23 @@ If the package is missing, then the change detection is always skipped.
 npm install @graphql-markdown/diff
 ```
 
-
 :::
 
 ## `docOptions`
 
 Use these options to tweak some of the Docusaurus documentation features:
 
-- `pagination`: page buttons `Previous` and `Next`.
-- `toc`: page table of content.
-- `index`: index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
+- `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
+- `index`: enable/disable index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
+- `pagination`: enable/disable page buttons `Previous` and `Next` [**deprecated**, see note below].
+- `toc`: enable/disable page table of content [**deprecated**, see note below].
 
-| Setting                 | CLI flag         | Default |
-| ----------------------- | ---------------- | ------- |
-| `docOptions.pagination` | `--noPagination` | `true`  |
-| `docOptions.toc`        | `--noToc`        | `true`  |
-| `docOptions.index`      | `--index`        | `false` |
+| Setting                  | CLI flag         | Default |
+| ------------------------ | ---------------- | ------- |
+| `docOptions.frontMatter` | _not supported_  | `{}`    |
+| `docOptions.index`       | `--index`        | `false` |
+| `docOptions.pagination`  | `--noPagination` | `true`  |
+| `docOptions.toc`         | `--noToc`        | `true`  |
 
 <br/>
 
@@ -78,8 +79,11 @@ plugins: [
         homepage: "./docs/swapi.md",
         // highlight-start
         docOptions: {
-          pagination: false, // disable buttons previous and next, same as CLI flag --noPagination
-          toc: false, // disable page table of content, same as CLI flag --noToc
+          frontMatter: {
+            pagination_next: null, // disable page navigation next
+            pagination_prev: null, // disable page navigation previous
+            hide_table_of_contents: true, // disable page table of content
+          },
           index: true, // enable generated index pages, same as CLI flag --index
         },
         // highlight-end
@@ -90,6 +94,33 @@ plugins: [
     ],
   ],
 ```
+
+<br/>
+
+:::warning[DEPRECATED]
+
+- **`docOptions.pagination`** (CLI flag `--noPagination`) has been replaced by `docOptions.frontMatter`:
+
+  ```js title="docusaurus.config.js"
+  docOptions: {
+   frontMatter: {
+     pagination_next: null, // disable page navigation next
+     pagination_prev: null, // disable page navigation previous
+   },
+  },
+  ```
+
+- **`docOptions.toc`** (CLI flag `--noToc`) has been replaced by `docOptions.frontMatter`:
+
+  ```js title="docusaurus.config.js"
+  docOptions: {
+   frontMatter: {
+     hide_table_of_contents: true, // disable page table of content
+   },
+  },
+  ```
+
+:::
 
 ## `groupByDirective`
 
@@ -135,13 +166,13 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 ## `metatags`
 
-Set page metadata  in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
+Set page metadata in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
 
 Meta tags are provided as list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
 
-| Setting   | CLI flag        | Default |
-| --------- | --------------- | ------- |
-| `metatags` | _not supported_ | `[]`   |
+| Setting    | CLI flag        | Default |
+| ---------- | --------------- | ------- |
+| `metatags` | _not supported_ | `[]`    |
 
 <br/>
 
@@ -263,7 +294,7 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `runOnBuild`
 
-:::warning
+:::warning[EXPERIMENTAL]
 
 `runOnBuild` is an experimental feature, and it should not be used in production.
 
@@ -272,9 +303,9 @@ The `prettier` package has to be installed separately. If the package is not pre
 When set to `true` enables running doc generation on `docusaurus build`.
 If `false`, then the documentation can only be generated with the Docusaurus command `graphql-to-doc`.
 
-| Setting      | CLI flag | Default  |
-| ------------ | -------- | -------- |
-| `runOnBuild` | n/a      | `false`  |
+| Setting      | CLI flag | Default |
+| ------------ | -------- | ------- |
+| `runOnBuild` | n/a      | `false` |
 
 ## `rootPath`
 
