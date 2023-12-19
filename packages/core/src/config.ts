@@ -249,8 +249,8 @@ export const parseDeprecatedDocOptions = (
 };
 
 export const getDocOptions = (
-  cliOpts: Maybe<CliOptions>,
-  configOptions: Maybe<ConfigDocOptions>,
+  cliOpts?: Maybe<CliOptions>,
+  configOptions?: Maybe<ConfigDocOptions>,
 ): Required<Pick<ConfigDocOptions, "frontMatter" | "index">> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   return {
@@ -260,6 +260,7 @@ export const getDocOptions = (
       DEFAULT_OPTIONS.docOptions.index!,
     frontMatter: {
       ...deprecated,
+      ...configOptions?.frontMatter,
     },
   } as Required<Pick<ConfigDocOptions, "frontMatter" | "index">>;
 };

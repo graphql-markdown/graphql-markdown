@@ -18,6 +18,7 @@ import {
   DiffMethod,
   getCustomDirectives,
   getDocDirective,
+  getDocOptions,
   getOnlyDocDirectives,
   getSkipDocDirectives,
   getVisibilityDirectives,
@@ -547,6 +548,49 @@ describe("config", () => {
         },
       }
       `);
+    });
+  });
+
+  describe("getDocOptions()", () => {
+    test("returns object with default index and default frontMatter", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions();
+
+      expect(index).toBeFalsy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed index from cli", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions({ index: true });
+
+      expect(index).toBeTruthy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed index from config", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions(undefined, {
+        index: true,
+        frontMatter: undefined,
+      });
+
+      expect(index).toBeTruthy();
+      expect(frontMatter).toStrictEqual({});
+    });
+
+    test("returns object with parsed frontMatter from config", () => {
+      expect.assertions(2);
+
+      const { index, frontMatter } = getDocOptions(undefined, {
+        frontMatter: { draft: true },
+      });
+
+      expect(index).toBeFalsy();
+      expect(frontMatter).toStrictEqual({ draft: true });
     });
   });
 
