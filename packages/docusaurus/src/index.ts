@@ -51,10 +51,8 @@ export default function pluginGraphQLDocGenerator(
           "File location for doc landing page",
         )
         .option("--noCode", "Disable code section for types")
-        .option("--noPagination", "Disable page navigation buttons")
         .option("--noParentType", "Disable parent type name as field prefix")
         .option("--noRelatedType", "Disable related types sections")
-        .option("--noToc", "Disable page table of content")
         .option("--noTypeBadges", "Disable badges for types")
         .option("--index", "Enable generated index for categories")
         .option("-f, --force", "Force document generation")
@@ -74,6 +72,12 @@ export default function pluginGraphQLDocGenerator(
           "Option for printing deprecated entities: `default`, `group` or `skip`",
         )
         .option("--pretty", "Prettify generated files")
+        // DEPRECATED options
+        .option("--noToc", "Disable page table of content [DEPRECATED]")
+        .option(
+          "--noPagination",
+          "Disable page navigation buttons [DEPRECATED]",
+        )
         .action(async (cliOptions: CliOptions) => {
           const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
