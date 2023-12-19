@@ -7,6 +7,8 @@ import type {
   ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
+  DeprecatedCliOptions,
+  DeprecatedConfigDocOptions,
   DirectiveName,
   GroupByDirectiveOptions,
   LoaderOption,
@@ -208,8 +210,8 @@ export const getDiffMethod = (
 };
 
 export const parseDeprecatedDocOptions = (
-  cliOpts: Maybe<CliOptions>,
-  configOptions: Maybe<ConfigDocOptions>,
+  cliOpts: Maybe<DeprecatedCliOptions>,
+  configOptions: Maybe<DeprecatedConfigDocOptions>,
 ): Partial<{
   pagination_next: null;
   pagination_prev: null;
@@ -249,9 +251,9 @@ export const parseDeprecatedDocOptions = (
 };
 
 export const getDocOptions = (
-  cliOpts?: Maybe<CliOptions>,
-  configOptions?: Maybe<ConfigDocOptions>,
-): Required<Pick<ConfigDocOptions, "frontMatter" | "index">> => {
+  cliOpts?: Maybe<CliOptions & DeprecatedCliOptions>,
+  configOptions?: Maybe<ConfigDocOptions & DeprecatedConfigDocOptions>,
+): Required<ConfigDocOptions> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   return {
     index:
@@ -262,7 +264,7 @@ export const getDocOptions = (
       ...deprecated,
       ...configOptions?.frontMatter,
     },
-  } as Required<Pick<ConfigDocOptions, "frontMatter" | "index">>;
+  } as Required<ConfigDocOptions>;
 };
 
 export const getPrintTypeOptions = (

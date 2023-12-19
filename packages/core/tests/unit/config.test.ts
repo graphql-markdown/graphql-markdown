@@ -599,7 +599,7 @@ describe("config", () => {
       expect.hasAssertions();
 
       const cliOpt = {},
-        configOptions = { frontMatter: undefined };
+        configOptions = undefined;
 
       expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
         {},

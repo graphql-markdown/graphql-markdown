@@ -9,10 +9,10 @@ export type FrontMatterOptions = Record<string, undefined> & {
   title: never;
 };
 
-export type ConfigDocOptions = DeprecatedConfigDocOptions & {
+export interface ConfigDocOptions {
   index?: boolean;
   frontMatter: Maybe<FrontMatterOptions>;
-};
+}
 
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
@@ -39,7 +39,7 @@ export interface ConfigOptions {
   baseURL?: Maybe<string>;
   customDirective?: Maybe<CustomDirective>;
   diffMethod?: Maybe<TypeDiffMethod>;
-  docOptions?: Maybe<ConfigDocOptions>;
+  docOptions?: Maybe<ConfigDocOptions & DeprecatedConfigDocOptions>;
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
   homepage?: Maybe<string>;
   id?: Maybe<string>;
@@ -56,6 +56,10 @@ export interface ConfigOptions {
   tmpDir?: Maybe<string>;
 }
 
+export interface ExperimentalConfigOptions {
+  runOnBuild: boolean | undefined;
+}
+
 export interface CliOptions {
   base?: string;
   deprecated?: TypeDeprecatedOption;
@@ -66,10 +70,8 @@ export interface CliOptions {
   index?: boolean;
   link?: string;
   noCode?: boolean;
-  noPagination?: boolean;
   noParentType?: boolean;
   noRelatedType?: boolean;
-  noToc?: boolean;
   noTypeBadges?: boolean;
   pretty?: boolean;
   root?: string;
@@ -77,6 +79,11 @@ export interface CliOptions {
   skip?: string[] | string;
   only?: string[] | string;
   tmp?: string;
+}
+
+export interface DeprecatedCliOptions {
+  noPagination?: boolean;
+  noToc?: boolean;
 }
 
 export type Options = Omit<

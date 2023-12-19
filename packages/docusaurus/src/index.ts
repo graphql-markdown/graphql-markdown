@@ -1,6 +1,10 @@
 /* istanbul ignore file */
 import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
-import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
+import type {
+  CliOptions,
+  ConfigOptions,
+  ExperimentalConfigOptions,
+} from "@graphql-markdown/types";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import { Logger } from "@graphql-markdown/logger";
 
@@ -11,8 +15,7 @@ const DEFAULT_ID = "default" as const;
 
 export default function pluginGraphQLDocGenerator(
   _: LoadContext,
-  options: ConfigOptions &
-    Partial<PluginOptions> & { runOnBuild: boolean | undefined },
+  options: ConfigOptions & ExperimentalConfigOptions & Partial<PluginOptions>,
 ): Plugin {
   const loggerModule = require.resolve("@docusaurus/logger");
   Logger(loggerModule);
