@@ -4,6 +4,7 @@ import type {
   Maybe,
   MDXString,
   Printer,
+  PrintTypeOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
   TypeDeprecatedOption,
@@ -169,7 +170,11 @@ export class Renderer {
 
     let content: MDXString;
     try {
-      content = this.printer.printType(fileName, type, this.options);
+      content = this.printer.printType(
+        fileName,
+        type,
+        this.options as unknown as PrintTypeOptions,
+      );
       if (typeof content !== "string") {
         return undefined;
       }

@@ -3,11 +3,7 @@ import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
 import type { CustomDirective, DirectiveName, GraphQLSchema } from ".";
 
-export type FrontMatterOptions = Record<string, undefined> & {
-  id: never;
-  slug: never;
-  title: never;
-};
+export type FrontMatterOptions = Record<string, unknown>;
 
 export interface ConfigDocOptions {
   index?: boolean;

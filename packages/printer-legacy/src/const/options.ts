@@ -1,9 +1,9 @@
 import type {
   CollapsibleOption,
+  FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
   Maybe,
-  PrintTypeHeaderOptions,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -52,9 +52,7 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: undefined,
   customDirectives: {},
   groups: undefined,
-  header: {
-    frontMatter: undefined,
-  } as Required<PrintTypeHeaderOptions>,
+  frontMatter: {} as FrontMatterOptions,
   level: undefined,
   metatags: [],
   onlyDocDirectives: [],

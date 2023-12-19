@@ -134,7 +134,7 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    const { frontMatter } = options.header ?? DEFAULT_OPTIONS.header!;
+    const frontMatter = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter!;
 
     const header: string[] = [FRONT_MATTER, `id: ${id}`, `title: ${title}`];
 

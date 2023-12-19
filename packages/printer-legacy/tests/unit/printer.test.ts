@@ -170,10 +170,8 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "frontMatter": {},
           "groups": undefined,
-          "header": {
-            "frontMatter": undefined,
-          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -226,10 +224,8 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "frontMatter": {},
           "groups": {},
-          "header": {
-            "frontMatter": undefined,
-          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -302,10 +298,7 @@ describe("Printer", () => {
         "An Object Type Name",
         {
           ...DEFAULT_OPTIONS,
-          header: {
-            ...DEFAULT_OPTIONS.header,
-            frontMatter: { draft: true, hide_table_of_contents: null },
-          },
+          frontMatter: { draft: true, hide_table_of_contents: null },
         },
       );
 
