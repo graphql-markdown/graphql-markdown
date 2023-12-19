@@ -135,7 +135,7 @@ export abstract class IPrinter {
   static printType(
     name: string,
     type: unknown,
-    options: Maybe<PrintTypeOptions>,
+    options?: Maybe<Partial<PrintTypeOptions>>,
   ): MDXString;
 }
 export type Printer = typeof IPrinter;
