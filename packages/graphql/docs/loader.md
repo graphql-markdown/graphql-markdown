@@ -15,7 +15,7 @@ Import each loader package, and instantiate a loader object.
 
 #### Parameters
 
-▪ **loadersList**: `Maybe`\<`LoaderOption`\>
+• **loadersList**: `Maybe`\<`LoaderOption`\>
 
 the list of loaders defined in the plugin config.
 
@@ -51,7 +51,7 @@ const schema = await loadSchema("schema.graphql", {
 
 #### Source
 
-[packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
+[packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/loader.ts#L106)
 
 ---
 
@@ -67,11 +67,11 @@ If `rootTypes` is set in the options, then the schema root types will be overrid
 
 #### Parameters
 
-▪ **schemaLocation**: `string`
+• **schemaLocation**: `string`
 
 the schema location pointer matching the loader.
 
-▪ **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `object` & `object` & `object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `object` & `object`
+• **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `Object` & `Object` & `Object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `Object` & `Object`
 
 the schema `loaders`, and optional `rootTypes` override.
 
@@ -94,4 +94,4 @@ const schema = await loadSchema("schema.graphql", {
 
 #### Source
 
-[packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L41)
+[packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/loader.ts#L41)

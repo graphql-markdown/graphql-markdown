@@ -22,15 +22,15 @@ This is an example on how to build a custom `tag` callback.
 
 #### Parameters
 
-▪ **directive**: `GraphQLDirective`
+• **directive**: `GraphQLDirective`
 
 the schema directive to parse.
 
-▪ **type?**: `unknown`
+• **type?**: `unknown`
 
 the type being processed.
 
-▪ **classname?**: `string`= `"badge--secondary"`
+• **classname?**: `string`= `"badge--secondary"`
 
 optional CSS classname, `"badge--secondary"` by default.
 
@@ -75,4 +75,4 @@ directiveTag(directive, type);
 
 #### Source
 
-[directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)
+[directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/helpers/src/directives/tag.ts#L51)

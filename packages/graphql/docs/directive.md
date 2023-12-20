@@ -20,7 +20,7 @@ See [getCustomDirectiveOptions](directive.md#getcustomdirectiveoptions), [isCust
 
 #### Source
 
-[packages/graphql/src/directive.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L28)
+[packages/graphql/src/directive.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L28)
 
 ## Functions
 
@@ -34,11 +34,11 @@ Returns a map of custom directives for a schema entity.
 
 #### Parameters
 
-▪ **entity**: `unknown`
+• **entity**: `unknown`
 
 a GraphQL schema entity.
 
-▪ **customDirectiveMap**: `Maybe`\<`CustomDirectiveMap`\>
+• **customDirectiveMap**: `Maybe`\<`CustomDirectiveMap`\>
 
 a custom directive map (see [getCustomDirectives](directive.md#getcustomdirectives)).
 
@@ -99,7 +99,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 #### Source
 
-[packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L247)
+[packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L247)
 
 ---
 
@@ -113,11 +113,11 @@ Returns a record set of custom handlers from a directive by name.
 
 #### Parameters
 
-▪ **schemaDirectiveName**: `DirectiveName`
+• **schemaDirectiveName**: `DirectiveName`
 
 the GraphQL directive name.
 
-▪ **customDirectiveOptions**: `CustomDirective`
+• **customDirectiveOptions**: `CustomDirective`
 
 the `customDirective` option.
 
@@ -148,7 +148,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 
 #### Source
 
-[packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L76)
+[packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L76)
 
 ---
 
@@ -162,11 +162,11 @@ Returns a custom directives map with custom handlers from `customDirective`.
 
 #### Parameters
 
-▪ **schemaMap**: `Pick`\<`SchemaMap`, `"directives"`\>
+• **schemaMap**: `Pick`\<`SchemaMap`, `"directives"`\>
 
 the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
 
-▪ **customDirectiveOptions?**: `CustomDirective`
+• **customDirectiveOptions?**: `CustomDirective`
 
 the `customDirective` option.
 
@@ -229,7 +229,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 
 #### Source
 
-[packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L150)
+[packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L150)
 
 ---
 
@@ -243,11 +243,11 @@ Checks if a directive name is referenced in `customDirective` option.
 
 #### Parameters
 
-▪ **schemaDirectiveName**: `DirectiveName`
+• **schemaDirectiveName**: `DirectiveName`
 
 the GraphQL directive name.
 
-▪ **customDirectiveOptions**: `CustomDirective`
+• **customDirectiveOptions**: `CustomDirective`
 
 the `customDirective` option.
 
@@ -259,4 +259,4 @@ the `customDirective` option.
 
 #### Source
 
-[packages/graphql/src/directive.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L39)
+[packages/graphql/src/directive.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L39)

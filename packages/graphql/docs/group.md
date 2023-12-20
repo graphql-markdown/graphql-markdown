@@ -18,15 +18,15 @@ Gets the group name for a schema type based on the directive information.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 #### Parameters
 
-▪ **type**: `T`
+• **type**: `T`
 
 a GraphQL schema named type
 
-▪ **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
+• **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
 
 the `groupByDirective` option.
 
@@ -76,7 +76,7 @@ getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "comm
 
 #### Source
 
-[packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
+[packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/group.ts#L72)
 
 ---
 
@@ -90,11 +90,11 @@ Parses a GraphQL schema to build a map of entities with matching `groupByDirecti
 
 #### Parameters
 
-▪ **schemaMap**: `SchemaMap`
+• **schemaMap**: `SchemaMap`
 
 the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
 
-▪ **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
+• **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
 
 the `groupByDirective` option.
 
@@ -162,4 +162,4 @@ const groupsMap = getGroups(schemaMap, groupOptions);
 
 #### Source
 
-[packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L173)
+[packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/group.ts#L173)

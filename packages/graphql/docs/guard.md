@@ -14,17 +14,17 @@ Checks if a GraphQL named type is of generic type `T`.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-▪ **obj**: `unknown`
+• **obj**: `unknown`
 
 a GraphQL named type from the GraphQL schema.
 
-▪ **type**: () => `T`
+• **type**: () => `T`
 
 the GraphQL type `T`.
 
@@ -34,7 +34,7 @@ the GraphQL type `T`.
 
 #### Source
 
-[packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L52)
+[packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/guard.ts#L52)
 
 ---
 
@@ -48,13 +48,13 @@ Checks if a GraphQL named type is deprecated.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-▪ **obj**: `T`
+• **obj**: `T`
 
 an instance of `T`.
 
@@ -64,7 +64,7 @@ an instance of `T`.
 
 #### Source
 
-[packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L70)
+[packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/guard.ts#L70)
 
 ---
 
@@ -78,7 +78,7 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 #### Parameters
 
-▪ **type**: `unknown`
+• **type**: `unknown`
 
 a GraphQL type.
 
@@ -88,7 +88,7 @@ a GraphQL type.
 
 #### Source
 
-[packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L33)
+[packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/guard.ts#L33)
 
 ---
 
@@ -102,7 +102,7 @@ Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
 
 #### Parameters
 
-▪ **type**: `unknown`
+• **type**: `unknown`
 
 a GraphQL type.
 
@@ -112,4 +112,4 @@ a GraphQL type.
 
 #### Source
 
-[packages/graphql/src/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L85)
+[packages/graphql/src/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/guard.ts#L85)

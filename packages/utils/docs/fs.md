@@ -14,7 +14,7 @@ Asynchronously create a folder structure if it does not exist.
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 folder structure in path format.
 
@@ -34,7 +34,7 @@ await ensureDir("./.temp/local");
 
 #### Source
 
-[fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L57)
+[fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/utils/src/fs.ts#L57)
 
 ---
 
@@ -48,7 +48,7 @@ Asynchronously check if a file or folder exists at the path location.
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 file or folder location.
 
@@ -70,7 +70,7 @@ await fileExists("./.temp/local");
 
 #### Source
 
-[fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L32)
+[fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/utils/src/fs.ts#L32)
 
 ---
 
@@ -89,15 +89,15 @@ The function calls `ensureDir(dirname(location))` to create the folder structure
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 file location.
 
-▪ **content**: `string`
+• **content**: `string`
 
 data to be written into the file (UTF-8 string).
 
-▪ **prettify?**: `PrettifyCallbackFunction`
+• **prettify?**: `PrettifyCallbackFunction`
 
 optional callback function for prettifying the content.
 
@@ -119,4 +119,4 @@ await saveFile("./.temp/local.md", "foobar");
 
 #### Source
 
-[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)
+[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/utils/src/fs.ts#L85)

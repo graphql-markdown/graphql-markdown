@@ -18,7 +18,7 @@ debug: "debug";
 
 ###### Source
 
-[index.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L20)
+[index.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L20)
 
 ##### error
 
@@ -28,7 +28,7 @@ error: "error";
 
 ###### Source
 
-[index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L21)
+[index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L21)
 
 ##### info
 
@@ -38,7 +38,7 @@ info: "info";
 
 ###### Source
 
-[index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L22)
+[index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L22)
 
 ##### log
 
@@ -48,7 +48,7 @@ log: "log";
 
 ###### Source
 
-[index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L23)
+[index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L23)
 
 ##### success
 
@@ -58,7 +58,7 @@ success: "success";
 
 ###### Source
 
-[index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L24)
+[index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L24)
 
 ##### warn
 
@@ -68,7 +68,7 @@ warn: "warn";
 
 ###### Source
 
-[index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L25)
+[index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L25)
 
 ## Functions
 
@@ -83,7 +83,7 @@ By default, the logger module uses `global.console`
 
 #### Parameters
 
-▪ **moduleName?**: `string`
+• **moduleName?**: `string`
 
 optional name of the logger package.
 
@@ -104,7 +104,7 @@ log("Info message", "info"); // Expected Docusaurus log output "Info message"
 
 #### Source
 
-[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
+[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L45)
 
 ---
 
@@ -118,11 +118,11 @@ Logs a message by calling the active logger instance.
 
 #### Parameters
 
-▪ **message**: `string`
+• **message**: `string`
 
 a string to be logged.
 
-▪ **level**:
+• **level**:
 \| `"debug"`
 \| `"error"`
 \| `"info"`
@@ -151,4 +151,4 @@ log("Info message"); // Expected console output "Info message"
 
 #### Source
 
-[index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L85)
+[index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/logger/src/index.ts#L85)

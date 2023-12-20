@@ -14,13 +14,13 @@ Returns a k/v object from an array of objects with a `name` property.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 the type of objects the list contains.
 
 #### Parameters
 
-▪ **list**: `Maybe`\<`T`[]\>
+• **list**: `Maybe`\<`T`[]\>
 
 the list of objects of type `{ name: any }` to be converted.
 
@@ -51,7 +51,7 @@ convertArrayToMapObject([
 
 #### Source
 
-[array.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L76)
+[array.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/utils/src/array.ts#L76)
 
 ---
 
@@ -65,7 +65,7 @@ Returns an array of values from a k/v object.
 
 #### Parameters
 
-▪ **recordMap**: `Maybe`\<`Record`\<`string`, `unknown`\>\>
+• **recordMap**: `Maybe`\<`Record`\<`string`, `unknown`\>\>
 
 the key/value record object to be converted.
 
@@ -93,4 +93,4 @@ toArray({
 
 #### Source
 
-[array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L34)
+[array.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/utils/src/array.ts#L34)

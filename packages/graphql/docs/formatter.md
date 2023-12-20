@@ -15,19 +15,19 @@ This is the generic function.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 #### Parameters
 
-▪ **entity**: `object`
+• **entity**: `Object`
 
 the GraphQL schema entity processed.
 
-▪ **entity.defaultValue**: `T`
+• **entity\.defaultValue**: `T`
 
 the GraphQL schema type's value to be formatted.
 
-▪ **entity.type**: `Maybe`\<`GraphQLType`\>
+• **entity\.type**: `Maybe`\<`GraphQLType`\>
 
 the GraphQL schema type.
 
@@ -39,4 +39,4 @@ a printable formatted value.
 
 #### Source
 
-[packages/graphql/src/formatter.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L95)
+[packages/graphql/src/formatter.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/formatter.ts#L94)
