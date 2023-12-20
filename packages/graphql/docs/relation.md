@@ -38,7 +38,7 @@ a record map of fields and arguments relations.
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/types/src/graphql.d.ts#L79)
+[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
 
 ---
 
@@ -72,7 +72,7 @@ a record map of unions or interfaces relations.
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/types/src/graphql.d.ts#L79)
+[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
 
 ---
 
@@ -106,7 +106,7 @@ a record map of interfaces relations.
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/types/src/graphql.d.ts#L79)
+[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
 
 ---
 
@@ -140,7 +140,7 @@ a record map of operations relations.
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/types/src/graphql.d.ts#L79)
+[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
 
 ---
 
@@ -174,4 +174,4 @@ a record map of unions relations.
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/types/src/graphql.d.ts#L79)
+[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)

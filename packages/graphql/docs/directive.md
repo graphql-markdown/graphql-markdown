@@ -20,7 +20,7 @@ See [getCustomDirectiveOptions](directive.md#getcustomdirectiveoptions), [isCust
 
 #### Source
 
-[packages/graphql/src/directive.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L28)
+[packages/graphql/src/directive.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L28)
 
 ## Functions
 
@@ -99,7 +99,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 #### Source
 
-[packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L247)
+[packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L247)
 
 ---
 
@@ -148,7 +148,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 
 #### Source
 
-[packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L76)
+[packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L76)
 
 ---
 
@@ -229,7 +229,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 
 #### Source
 
-[packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L150)
+[packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L150)
 
 ---
 
@@ -259,4 +259,4 @@ the `customDirective` option.
 
 #### Source
 
-[packages/graphql/src/directive.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/directive.ts#L39)
+[packages/graphql/src/directive.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L39)

@@ -39,4 +39,4 @@ a printable formatted value.
 
 #### Source
 
-[packages/graphql/src/formatter.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/formatter.ts#L94)
+[packages/graphql/src/formatter.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L94)

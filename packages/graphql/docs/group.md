@@ -76,7 +76,7 @@ getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "comm
 
 #### Source
 
-[packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/group.ts#L72)
+[packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
 
 ---
 
@@ -162,4 +162,4 @@ const groupsMap = getGroups(schemaMap, groupOptions);
 
 #### Source
 
-[packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/graphql/src/group.ts#L173)
+[packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L173)

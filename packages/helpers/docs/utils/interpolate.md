@@ -47,7 +47,7 @@ getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 
 #### Source
 
-[utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/helpers/src/utils/interpolate.ts#L31)
+[utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
 
 ---
 
@@ -93,4 +93,4 @@ interpolate(template, values, "fallback"); // Expected result: "42 is not fallba
 
 #### Source
 
-[utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/helpers/src/utils/interpolate.ts#L64)
+[utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L64)

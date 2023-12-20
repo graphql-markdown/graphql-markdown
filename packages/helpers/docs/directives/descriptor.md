@@ -111,4 +111,4 @@ directiveDescriptor(
 
 #### Source
 
-[directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/4217d2c0/packages/helpers/src/directives/descriptor.ts#L83)
+[directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)
