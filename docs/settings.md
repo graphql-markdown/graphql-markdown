@@ -54,7 +54,7 @@ npm install @graphql-markdown/diff
 
 Use these options to tweak some of the Docusaurus documentation features:
 
-- `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/next/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
+- `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
 - `index`: enable/disable index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
 - `pagination`: enable/disable page buttons `Previous` and `Next` [**deprecated**, see note below].
 - `toc`: enable/disable page table of content [**deprecated**, see note below].
