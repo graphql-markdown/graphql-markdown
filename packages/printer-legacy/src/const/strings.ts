@@ -16,7 +16,7 @@ export const ROOT_TYPE_LOCALE: RootTypeLocale = {
 
 export const NO_DESCRIPTION_TEXT = "No description" as const;
 
-export const FRONT_MATTER = "---" as const;
+export const FRONT_MATTER_DELIMITER = "---" as const;
 export const MARKDOWN_CODE_INDENTATION = "  " as const;
 export const MARKDOWN_EOL = "\n" as const;
 export const MARKDOWN_EOP = "\n\n" as const;
