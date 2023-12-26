@@ -85,15 +85,10 @@ export const printFrontMatter = (
   title: string,
   props?: Maybe<FrontMatterOptions>,
 ): string => {
-  const frontMatter = formatFrontMatterObject(
-    props as Record<string, unknown>,
-    -1,
-  );
+  const frontMatter = formatFrontMatterObject({ ...props, id, title }, -1);
 
   const header = [
     FRONT_MATTER_DELIMITER,
-    `id: ${id}`,
-    `title: ${title}`,
     ...frontMatter,
     FRONT_MATTER_DELIMITER,
   ];
