@@ -15,7 +15,7 @@ Import each loader package, and instantiate a loader object.
 
 #### Parameters
 
-▪ **loadersList**: `Maybe`\<`LoaderOption`\>
+• **loadersList**: `Maybe`\<`LoaderOption`\>
 
 the list of loaders defined in the plugin config.
 
@@ -67,11 +67,11 @@ If `rootTypes` is set in the options, then the schema root types will be overrid
 
 #### Parameters
 
-▪ **schemaLocation**: `string`
+• **schemaLocation**: `string`
 
 the schema location pointer matching the loader.
 
-▪ **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `object` & `object` & `object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `object` & `object`
+• **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `Object` & `Object` & `Object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `Object` & `Object`
 
 the schema `loaders`, and optional `rootTypes` override.
 

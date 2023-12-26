@@ -18,15 +18,15 @@ Gets the group name for a schema type based on the directive information.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 #### Parameters
 
-▪ **type**: `T`
+• **type**: `T`
 
 a GraphQL schema named type
 
-▪ **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
+• **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
 
 the `groupByDirective` option.
 
@@ -90,11 +90,11 @@ Parses a GraphQL schema to build a map of entities with matching `groupByDirecti
 
 #### Parameters
 
-▪ **schemaMap**: `SchemaMap`
+• **schemaMap**: `SchemaMap`
 
 the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
 
-▪ **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
+• **groupByDirective**: `Maybe`\<`GroupByDirectiveOptions`\>
 
 the `groupByDirective` option.
 

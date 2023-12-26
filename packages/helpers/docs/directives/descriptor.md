@@ -22,15 +22,15 @@ This is an example on how to build a custom `descriptor` callback.
 
 #### Parameters
 
-▪ **directive**: `GraphQLDirective`
+• **directive**: `GraphQLDirective`
 
 the schema directive to parse.
 
-▪ **type?**: `unknown`
+• **type?**: `unknown`
 
 the schema type to be processed for generating a custom description.
 
-▪ **descriptionTemplate?**: `string`
+• **descriptionTemplate?**: `string`
 
 optional template literal-like string for rendering the description (see [interpolate](../utils/interpolate.md#interpolate)), if not present then the directive description will be used.
 

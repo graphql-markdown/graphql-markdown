@@ -14,7 +14,7 @@ Check if an object contains key/value records.
 
 #### Parameters
 
-▪ **obj**: `unknown`
+• **obj**: `unknown`
 
 the key/value record object.
 

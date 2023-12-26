@@ -34,11 +34,11 @@ Returns a map of custom directives for a schema entity.
 
 #### Parameters
 
-▪ **entity**: `unknown`
+• **entity**: `unknown`
 
 a GraphQL schema entity.
 
-▪ **customDirectiveMap**: `Maybe`\<`CustomDirectiveMap`\>
+• **customDirectiveMap**: `Maybe`\<`CustomDirectiveMap`\>
 
 a custom directive map (see [getCustomDirectives](directive.md#getcustomdirectives)).
 
@@ -113,11 +113,11 @@ Returns a record set of custom handlers from a directive by name.
 
 #### Parameters
 
-▪ **schemaDirectiveName**: `DirectiveName`
+• **schemaDirectiveName**: `DirectiveName`
 
 the GraphQL directive name.
 
-▪ **customDirectiveOptions**: `CustomDirective`
+• **customDirectiveOptions**: `CustomDirective`
 
 the `customDirective` option.
 
@@ -162,11 +162,11 @@ Returns a custom directives map with custom handlers from `customDirective`.
 
 #### Parameters
 
-▪ **schemaMap**: `Pick`\<`SchemaMap`, `"directives"`\>
+• **schemaMap**: `Pick`\<`SchemaMap`, `"directives"`\>
 
 the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
 
-▪ **customDirectiveOptions?**: `CustomDirective`
+• **customDirectiveOptions?**: `CustomDirective`
 
 the `customDirective` option.
 
@@ -243,11 +243,11 @@ Checks if a directive name is referenced in `customDirective` option.
 
 #### Parameters
 
-▪ **schemaDirectiveName**: `DirectiveName`
+• **schemaDirectiveName**: `DirectiveName`
 
 the GraphQL directive name.
 
-▪ **customDirectiveOptions**: `CustomDirective`
+• **customDirectiveOptions**: `CustomDirective`
 
 the `customDirective` option.
 

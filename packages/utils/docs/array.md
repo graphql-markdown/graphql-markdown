@@ -14,13 +14,13 @@ Returns a k/v object from an array of objects with a `name` property.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 the type of objects the list contains.
 
 #### Parameters
 
-▪ **list**: `Maybe`\<`T`[]\>
+• **list**: `Maybe`\<`T`[]\>
 
 the list of objects of type `{ name: any }` to be converted.
 
@@ -65,7 +65,7 @@ Returns an array of values from a k/v object.
 
 #### Parameters
 
-▪ **recordMap**: `Maybe`\<`Record`\<`string`, `unknown`\>\>
+• **recordMap**: `Maybe`\<`Record`\<`string`, `unknown`\>\>
 
 the key/value record object to be converted.
 

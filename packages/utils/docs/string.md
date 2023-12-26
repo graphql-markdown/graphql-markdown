@@ -14,7 +14,7 @@ Returns a string in lowercase excepted for the 1st character capitalized using [
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
@@ -49,7 +49,7 @@ Returns a string with MDX special characters converted to HTML unicode using [to
 
 #### Parameters
 
-▪ **str**: `unknown`
+• **str**: `unknown`
 
 the string to be transformed.
 
@@ -84,7 +84,7 @@ Returns a string with the 1st character in uppercase.
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
@@ -119,7 +119,7 @@ Returns a lowercase string with `-` as replacement for non alphanum characters u
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
@@ -154,11 +154,11 @@ Returns a string pruned on both start and end, similar to `trim()` but with any 
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be pruned.
 
-▪ **substr**: `string`= `""`
+• **substr**: `string`= `""`
 
 the substring to be removed from `str`.
 
@@ -195,7 +195,7 @@ Replaces diacritics by non-diacritic equivalent characters.
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
@@ -235,11 +235,13 @@ Alias of [kebabCase](string.md#kebabcase).
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 #### Returns
 
 `string`
+
+#### Alias
 
 #### Source
 
@@ -257,7 +259,7 @@ Applies [firstUppercase](string.md#firstuppercase) using [stringCaseBuilder](str
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
@@ -299,19 +301,19 @@ By default `splitter` expression will split the string into words, where non-alp
 
 #### Parameters
 
-▪ **str**: `Maybe`\<`string`\>
+• **str**: `Maybe`\<`string`\>
 
 the string to be transformed.
 
-▪ **transformation?**: `Maybe`\<(`word`) => `string`\>
+• **transformation?**: `Maybe`\<(`word`) => `string`\>
 
 optional transformation callback function.
 
-▪ **separator?**: `string`
+• **separator?**: `string`
 
 optional character separator for word-based transformation.
 
-▪ **splitter?**: `string` \| `RegExp`= `undefined`
+• **splitter?**: `string` \| `RegExp`= `undefined`
 
 optional regex or string rule for splitting string into word.
 
@@ -349,7 +351,7 @@ Converts a character to its equivalent HTML unicode representation `&#x0000`.
 
 #### Parameters
 
-▪ **char**: `Maybe`\<`string`\>
+• **char**: `Maybe`\<`string`\>
 
 the character to be transformed.
 

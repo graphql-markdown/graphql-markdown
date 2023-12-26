@@ -22,15 +22,15 @@ This is an example on how to build a custom `tag` callback.
 
 #### Parameters
 
-▪ **directive**: `GraphQLDirective`
+• **directive**: `GraphQLDirective`
 
 the schema directive to parse.
 
-▪ **type?**: `unknown`
+• **type?**: `unknown`
 
 the type being processed.
 
-▪ **classname?**: `string`= `"badge--secondary"`
+• **classname?**: `string`= `"badge--secondary"`
 
 optional CSS classname, `"badge--secondary"` by default.
 

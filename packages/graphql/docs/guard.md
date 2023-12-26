@@ -14,17 +14,17 @@ Checks if a GraphQL named type is of generic type `T`.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-▪ **obj**: `unknown`
+• **obj**: `unknown`
 
 a GraphQL named type from the GraphQL schema.
 
-▪ **type**: () => `T`
+• **type**: () => `T`
 
 the GraphQL type `T`.
 
@@ -48,13 +48,13 @@ Checks if a GraphQL named type is deprecated.
 
 #### Type parameters
 
-▪ **T**
+• **T**
 
 a GraphQL type to check against, eg `GraphQLObjectType`.
 
 #### Parameters
 
-▪ **obj**: `T`
+• **obj**: `T`
 
 an instance of `T`.
 
@@ -78,7 +78,7 @@ Checks if a GraphQL named type is of type `GraphQLField`.
 
 #### Parameters
 
-▪ **type**: `unknown`
+• **type**: `unknown`
 
 a GraphQL type.
 
@@ -102,7 +102,7 @@ Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
 
 #### Parameters
 
-▪ **type**: `unknown`
+• **type**: `unknown`
 
 a GraphQL type.
 

@@ -17,15 +17,15 @@ Returns the value of the specified property or nested property of an object usin
 
 #### Parameters
 
-▪ **path**: `Maybe`\<`string`\>
+• **path**: `Maybe`\<`string`\>
 
 property path as string.
 
-▪ **obj**: `unknown`
+• **obj**: `unknown`
 
 the key/value record object.
 
-▪ **fallback**: `unknown`= `""`
+• **fallback**: `unknown`= `""`
 
 optional fallback value to be returned if the path cannot be resolved.
 
@@ -64,15 +64,15 @@ Interpolate a template literal-like string.
 
 #### Parameters
 
-▪ **template**: `string`
+• **template**: `string`
 
 a string template literal-like.
 
-▪ **variables**: `Maybe`\<`Record`\<`string`, `unknown`\> & `object`\>
+• **variables**: `Maybe`\<`Record`\<`string`, `unknown`\> & `Object`\>
 
 a record map of values with variable's name as key and `description` as directive's description.
 
-▪ **fallback?**: `string`
+• **fallback?**: `string`
 
 optional fallback value if a variable cannot be substituted.
 

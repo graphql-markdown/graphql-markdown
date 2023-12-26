@@ -14,11 +14,11 @@ Prettify a string using [prettier.format](https://prettier.io/docs/en/api#pretti
 
 #### Parameters
 
-▪ **content**: `string`
+• **content**: `string`
 
 the string to be prettified.
 
-▪ **parser**: `string`
+• **parser**: `string`
 
 the `prettier` parser to use.
 
@@ -52,7 +52,7 @@ Prettify a Javascript string using [prettify](prettier.md#prettify) and `babel` 
 
 #### Parameters
 
-▪ **content**: `string`
+• **content**: `string`
 
 the string to be prettified.
 
@@ -86,7 +86,7 @@ Prettify a Markdown string using [prettify](prettier.md#prettify) and `markdown`
 
 #### Parameters
 
-▪ **content**: `string`
+• **content**: `string`
 
 the string to be prettified.
 

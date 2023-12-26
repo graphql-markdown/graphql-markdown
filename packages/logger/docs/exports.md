@@ -83,7 +83,7 @@ By default, the logger module uses `global.console`
 
 #### Parameters
 
-▪ **moduleName?**: `string`
+• **moduleName?**: `string`
 
 optional name of the logger package.
 
@@ -118,11 +118,11 @@ Logs a message by calling the active logger instance.
 
 #### Parameters
 
-▪ **message**: `string`
+• **message**: `string`
 
 a string to be logged.
 
-▪ **level**:
+• **level**:
 \| `"debug"`
 \| `"error"`
 \| `"info"`

@@ -14,7 +14,7 @@ Asynchronously create a folder structure if it does not exist.
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 folder structure in path format.
 
@@ -48,7 +48,7 @@ Asynchronously check if a file or folder exists at the path location.
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 file or folder location.
 
@@ -89,15 +89,15 @@ The function calls `ensureDir(dirname(location))` to create the folder structure
 
 #### Parameters
 
-▪ **location**: `string`
+• **location**: `string`
 
 file location.
 
-▪ **content**: `string`
+• **content**: `string`
 
 data to be written into the file (UTF-8 string).
 
-▪ **prettify?**: `PrettifyCallbackFunction`
+• **prettify?**: `PrettifyCallbackFunction`
 
 optional callback function for prettifying the content.
 
