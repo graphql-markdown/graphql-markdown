@@ -304,10 +304,10 @@ describe("Printer", () => {
 
       expect(header).toMatchInlineSnapshot(`
             "---
-            id: an-object-type-name
-            title: An Object Type Name
             draft: true
             hide_table_of_contents: null
+            id: an-object-type-name
+            title: An Object Type Name
             ---"
           `);
     });

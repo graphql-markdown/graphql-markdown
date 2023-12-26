@@ -35,6 +35,7 @@ import { pathUrl } from "@graphql-markdown/utils";
 import { printRelations } from "./relation";
 import { hasPrintableDirective, printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
+import { printFrontMatter } from "./frontmatter";
 import {
   printCodeDirective,
   printCodeEnum,
@@ -55,7 +56,6 @@ import {
 } from "./graphql";
 
 import {
-  FRONT_MATTER,
   MARKDOWN_EOC,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -134,18 +134,9 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    const frontMatter = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter!;
+    const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
-    const header: string[] = [FRONT_MATTER, `id: ${id}`, `title: ${title}`];
-
-    if (typeof frontMatter === "object") {
-      for (const [key, value] of Object.entries(frontMatter)) {
-        header.push(`${key}: ${value}`);
-      }
-    }
-    header.push(FRONT_MATTER);
-
-    return header.join(MARKDOWN_EOL);
+    return printFrontMatter(id, title, fmOptions);
   };
 
   static printCode = (type: unknown, options: PrintTypeOptions): string => {
