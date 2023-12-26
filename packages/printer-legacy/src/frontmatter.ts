@@ -5,6 +5,10 @@ import {
   MARKDOWN_EOL,
 } from "./const/strings";
 
+const tabs = (indentation: number = 0): string => {
+  return MARKDOWN_CODE_INDENTATION.repeat(indentation);
+};
+
 const formatFrontMatterObject = (
   props: unknown,
   indentation: number = 0,
@@ -38,17 +42,15 @@ const formatFrontMatterList = (
     return frontMatter;
   }
 
-  const tabs = MARKDOWN_CODE_INDENTATION.repeat(indentation);
-
   prop.forEach((entry: unknown) => {
     if (typeof entry === "object") {
       frontMatter.push(
         ...formatFrontMatterObject(entry, -1, prefix).map((item) => {
-          return `${tabs}${item}`;
+          return `${tabs(indentation)}${item}`;
         }),
       );
     } else {
-      frontMatter.push(`${tabs}- ${entry}`);
+      frontMatter.push(`${tabs(indentation)}- ${entry}`);
     }
   });
 
@@ -66,20 +68,15 @@ export const formatFrontMatterProp = (
 
   const tabs = MARKDOWN_CODE_INDENTATION.repeat(indentation);
   const [key, value] = Object.entries(prop)[0];
+  const index = `${tabs}${prefix ?? ""}${key}:`;
 
   switch (true) {
     case typeof value !== "string" && Array.isArray(value):
-      return [
-        `${tabs}${prefix ?? ""}${key}:`,
-        ...formatFrontMatterList(value, indentation + 1, prefix),
-      ];
+      return [index, ...formatFrontMatterList(value, indentation + 1, prefix)];
     case typeof value === "object" && value !== null:
-      return [
-        `${tabs}${prefix ?? ""}${key}:`,
-        ...formatFrontMatterObject(value, indentation, prefix),
-      ];
+      return [index, ...formatFrontMatterObject(value, indentation, prefix)];
     default:
-      return [`${tabs}${prefix ?? ""}${key}: ${value}`];
+      return [`${index} ${value}`];
   }
 };
 

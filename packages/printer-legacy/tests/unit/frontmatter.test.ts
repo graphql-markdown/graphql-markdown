@@ -2,6 +2,12 @@ import { formatFrontMatterProp } from "../../src/frontmatter";
 
 describe("frontMatter", () => {
   describe("formatFrontMatterProp", () => {
+    test("returns empty structure if undefined", () => {
+      expect.hasAssertions();
+
+      expect(formatFrontMatterProp(undefined)).toStrictEqual([]);
+    });
+
     test("returns flat structure for simple object", () => {
       expect.hasAssertions();
 
