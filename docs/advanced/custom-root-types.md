@@ -17,7 +17,7 @@ type RootTypes = { query?: string; mutation?: string; subscription?: string };
 
 Add the option `rootTypes` to the loader options under `@graphql-markdown/docusaurus` configuration (see also [schema loading](/docs/advanced/schema-loading)):
 
-```js
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",

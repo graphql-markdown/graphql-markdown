@@ -94,7 +94,7 @@ Instead of defining the configuration alongside the Docusaurus config file, you 
 
 You need to install the package `graphql-config`.
 
-```bash
+```shell title="shell"
 npm install graphql-config
 ```
 

@@ -32,13 +32,13 @@ type LoaderOption = {
 
 Use `@graphql-tools/graphql-file-loader` if you want to load a local schema:
 
-```shell
+```shell title="shell"
 npm install @graphql-tools/graphql-file-loader
 ```
 
 Once done, you can declare the loader into `@graphql-markdown/docusaurus` configuration:
 
-```js
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -56,13 +56,13 @@ plugins: [
 
 Use `@graphql-tools/url-loader`, if you want to load a schema from a URL:
 
-```shell
+```shell title="shell"
 npm install @graphql-tools/url-loader
 ```
 
 Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
 
-```js
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -73,7 +73,7 @@ plugins: [
           module: "@graphql-tools/url-loader",
           options: {
             headers: {
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
              }
           }
         }

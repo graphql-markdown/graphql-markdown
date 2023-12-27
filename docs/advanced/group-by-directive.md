@@ -43,17 +43,19 @@ npx docusaurus graphql-to-doc --groupByDirective "@doc(category|=Common)"
 
 or the plugin configuration `groupByDirective`:
 
-```js {6-10}
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
     {
       // ... other options
+      // highlight-start
       groupByDirective: {
         directive: "doc",
         field: "category",
         fallback: "Common", // default is Miscellaneous
       }
+      // highlight-end
     },
   ],
 ],

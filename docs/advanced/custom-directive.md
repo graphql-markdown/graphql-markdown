@@ -54,7 +54,7 @@ type Badge = {
 
 The `descriptor` allows rendering custom directive description applicable to entities.
 
-```js {8-13}
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -62,12 +62,14 @@ plugins: [
       // ... other options
       customDirective: {
         auth: {
+          // highlight-start
           descriptor: (directive, node) =>
             directiveDescriptor(
               directive,
               node,
               "This requires the current user to be in `${requires}` role.",
             ),
+          // highlight-end
         }
         // ... other custom directive options
       },
@@ -80,7 +82,7 @@ plugins: [
 
 The `tag` allows rendering custom badges (tags) based on custom directive applicable to entities.
 
-```js {8}
+```js {8} title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -101,7 +103,7 @@ plugins: [
 
 You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
-```js {11-14}
+```js {11-14} title="docusaurus.config.js"
 const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helpers");
 
 //...//
@@ -131,7 +133,7 @@ The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide
 
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
-```shell
+```shell title="shell"
 npm i @graphql-markdown/helpers
 ```
 

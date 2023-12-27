@@ -21,7 +21,7 @@ Generate a new Docusaurus site using the [GraphQL-Markdown template](https://git
 
 The template will automatically be added to your project after you run the command:
 
-```bash
+```shell title="shell"
 npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 ```
 
@@ -43,7 +43,7 @@ The template comes by default with `@graphql-tools/url-loader` for remote schema
 
 Run the development server:
 
-```bash
+```shell title="shell"
 cd my-website
 npm start
 ```
@@ -71,7 +71,7 @@ The `npm run start` command builds your website locally and serves it through a 
 
 Add the `@graphql-markdown/docusaurus` plugin to your site installation:
 
-```shell
+```shell title="shell"
 npm install @graphql-markdown/docusaurus graphql
 ```
 
@@ -93,7 +93,7 @@ See [configuration](/docs/configuration).
 
 Build your website:
 
-```bash
+```shell title="shell"
 npm run docusaurus build
 ```
 
@@ -101,7 +101,7 @@ npm run docusaurus build
 
 Run the documentation generator using CLI:
 
-```bash
+```shell title="shell"
 npm run docusaurus graphql-to-doc
 ```
 

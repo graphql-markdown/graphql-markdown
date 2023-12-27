@@ -9,7 +9,7 @@ When using the option [`printTypeOptions.deprecated`](/docs/settings#printtypeop
 
 Adding a `warning` emoji ⚠️ is done with a quick tweak of [Docusaurus CSS](https://docusaurus.io/docs/styling-layout).
 
-```css
+```css title="/src/css/custom.css"
 .deprecated a::after,
 span.deprecated::after {
   content: "⚠️";

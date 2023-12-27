@@ -7,7 +7,7 @@ pagination_next: null
 
 In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-instance](https://docusaurus.io/docs/docs-multi-instance)), then you need to add a reference to `sidebar-schema.js` into the dedicated instance of `@docusaurus/plugin-content-docs`:
 
-```js
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@docusaurus/plugin-content-docs",

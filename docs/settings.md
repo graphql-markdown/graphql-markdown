@@ -101,7 +101,7 @@ plugins: [
 
 - **`docOptions.pagination`** (CLI flag `--noPagination`) has been replaced by `docOptions.frontMatter`:
 
-  ```js title="docusaurus.config.js"
+  ```js
   docOptions: {
    frontMatter: {
      pagination_next: null, // disable page navigation next
@@ -112,7 +112,7 @@ plugins: [
 
 - **`docOptions.toc`** (CLI flag `--noToc`) has been replaced by `docOptions.frontMatter`:
 
-  ```js title="docusaurus.config.js"
+  ```js
   docOptions: {
    frontMatter: {
      hide_table_of_contents: true, // disable page table of content

@@ -10,7 +10,7 @@ pagination_next: null
 
 Add a resolutions entry to your `package.json` file:
 
-```json
+```json title="package.json"
 "resolutions": {
   "graphql": "15.5.2"
 }
