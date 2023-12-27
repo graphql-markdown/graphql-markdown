@@ -1,7 +1,39 @@
+<a name="1.22.0"></a>
+# [1.22.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.22.0) - 27 Dec 2023
+
+🧑‍🔧 A new setting `docOptions.frontMatter` makes easier to generate pages with Docusaurus settings. Using this setting you can pass any [front matter setting](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter) to the generator.
+
+Example for the Docusaurus draft setting:
+```js
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       {
+        schema: "./schema/swapi.graphql",
+        docOptions: {
+          frontMatter: {
+            draft: true, // set draft for generated pages
+          },
+        },
+      },
+    ],
+  ],
+```
+
+This option deprecates the options `docOptions.pagination` and `docOptions.toc` (more details in the documentation).
+
+## What's Changed
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.3...1.22.0
+
+[Changes][1.22.0]
+
+
 <a name="1.21.3"></a>
 # [1.21.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.3) - 24 Nov 2023
 
-🐛  Fix the incorrect build for 1.21.2 that was missing the changes for [#1101](https://github.com/graphql-markdown/graphql-markdown/issues/1101).
+🐛  Fix the incorrect build for [1.21.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.21.2) that was missing the changes for [#1101](https://github.com/graphql-markdown/graphql-markdown/issues/1101).
 
 ## What's Changed
 ### @graphql-markdown/docusaurus@1.21.3
@@ -1635,6 +1667,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.22.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.3...1.22.0
 [1.21.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.2...1.21.3
 [1.21.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.1...1.21.2
 [1.21.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
