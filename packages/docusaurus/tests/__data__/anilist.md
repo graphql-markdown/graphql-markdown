@@ -58,8 +58,8 @@ extensions:
           method: POST
     docOptions:
       frontMatter:
-        pagination_next: null,
-        pagination_prev: null,
+        pagination_next: null
+        pagination_prev: null
     printTypeOptions:
       deprecated: group
 ```
