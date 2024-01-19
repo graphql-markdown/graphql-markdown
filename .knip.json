@@ -8,8 +8,7 @@
     "packages/*": {
       "entry": ["src/index.ts!"],
       "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"],
-      "ignoreDependencies": ["prettier"]
+      "ignore": ["**/__mocks__/**/*.ts"]
     },
     "packages/core": {
       "entry": ["src/index.ts!"],
@@ -27,6 +26,9 @@
       "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": ["prettier"]
     }
+  },
+  "rules": {
+    "enumMembers": "warn"
   },
   "ignoreDependencies": ["danger"],
   "ignoreBinaries": ["danger"],
