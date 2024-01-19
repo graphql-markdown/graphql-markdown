@@ -28,6 +28,9 @@
       "ignoreDependencies": ["prettier"]
     }
   },
+  "rules": {
+    "enumMembers": "warn"
+  },
   "ignoreDependencies": ["danger"],
   "ignoreBinaries": ["danger"],
   "ignoreExportsUsedInFile": true,
