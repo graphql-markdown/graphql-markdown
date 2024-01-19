@@ -8,8 +8,7 @@
     "packages/*": {
       "entry": ["src/index.ts!"],
       "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"],
-      "ignoreDependencies": ["prettier"]
+      "ignore": ["**/__mocks__/**/*.ts"]
     },
     "packages/core": {
       "entry": ["src/index.ts!"],
