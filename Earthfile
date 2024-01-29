@@ -1,4 +1,4 @@
-VERSION 0.7
+VERSION 0.8
 
 ARG nodeVersion=lts
 FROM docker.io/library/node:$nodeVersion-alpine
@@ -136,7 +136,7 @@ all:
 # --- UDCs ---
 
 GQLMD:
-  COMMAND
+  FUNCTION
   ARG id
   ARG options
   RUN mkdir -p docs
