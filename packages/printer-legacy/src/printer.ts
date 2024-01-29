@@ -65,13 +65,13 @@ import { mdx } from "./const/mdx";
 import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
 
 export class Printer implements IPrinter {
-  static options: Maybe<PrintTypeOptions>;
+  static options: Readonly<Maybe<PrintTypeOptions>>;
 
-  static printDescription = printDescription;
+  static readonly printDescription = printDescription;
 
-  static printCustomDirectives = printCustomDirectives;
+  static readonly printCustomDirectives = printCustomDirectives;
 
-  static printCustomTags = printCustomTags;
+  static readonly printCustomTags = printCustomTags;
 
   static init(
     schema: Maybe<GraphQLSchema>,
@@ -129,7 +129,7 @@ export class Printer implements IPrinter {
     };
   }
 
-  static printHeader = (
+  static readonly printHeader = (
     id: string,
     title: string,
     options: PrintTypeOptions,
@@ -139,7 +139,10 @@ export class Printer implements IPrinter {
     return printFrontMatter(id, title, fmOptions);
   };
 
-  static printCode = (type: unknown, options: PrintTypeOptions): string => {
+  static readonly printCode = (
+    type: unknown,
+    options: PrintTypeOptions,
+  ): string => {
     let code = "";
 
     if (
@@ -181,7 +184,7 @@ export class Printer implements IPrinter {
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
 
-  static printTypeMetadata = (
+  static readonly printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
   ): MDXString | string => {
@@ -210,7 +213,7 @@ export class Printer implements IPrinter {
     }
   };
 
-  static printRelations = (
+  static readonly printRelations = (
     type: unknown,
     options: PrintTypeOptions,
   ): MDXString | string => {
@@ -220,7 +223,7 @@ export class Printer implements IPrinter {
     return printRelations(type, options);
   };
 
-  static printMetaTags = (
+  static readonly printMetaTags = (
     _type: unknown,
     { metatags }: PrintTypeOptions,
   ): MDXString | string => {
@@ -239,7 +242,7 @@ export class Printer implements IPrinter {
     return ["<head>", ...meta, "</head>"].join(MARKDOWN_EOL);
   };
 
-  static printType = (
+  static readonly printType = (
     name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
