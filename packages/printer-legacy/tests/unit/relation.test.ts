@@ -23,6 +23,8 @@ jest.mock("@graphql-markdown/graphql", () => {
       return t;
     }),
     getRelationOfReturn: jest.fn(),
+    getRelationOfField: jest.fn(),
+    getRelationOfImplementation: jest.fn(),
     getSchemaMap: jest.fn(),
     hasDirective: jest.fn(),
     isDirectiveType: jest.fn(),
@@ -42,11 +44,11 @@ jest.mock("@graphql-markdown/graphql", () => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-import {
-  printRelationOf,
-  getRootTypeLocaleFromString,
-} from "../../src/relation";
+import * as Relation from "../../src/relation";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
+
+const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
+  Relation;
 
 describe("relation", () => {
   describe("printRelationOf()", () => {
@@ -55,40 +57,52 @@ describe("relation", () => {
       jest.resetAllMocks();
     });
 
-    test("returns empty string if type is undefined", () => {
-      expect.hasAssertions();
+    test.concurrent.each([[true], [false]])(
+      "returns empty string if type is undefined and isOperation is %p",
+      (isOperationMockedValue: boolean) => {
+        expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isNamedType").mockReturnValueOnce(false);
+        jest.spyOn(GraphQL, "isNamedType").mockReturnValueOnce(false);
+        jest
+          .spyOn(GraphQL, "isOperation")
+          .mockReturnValueOnce(isOperationMockedValue);
 
-      const relation = printRelationOf(
-        undefined,
-        "RelationOf",
-        GraphQL.getRelationOfReturn,
-        DEFAULT_OPTIONS,
-      );
+        const relation = printRelationOf(
+          undefined,
+          "RelationOf",
+          GraphQL.getRelationOfReturn,
+          { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
+        );
 
-      expect(relation).toBe("");
-    });
+        expect(relation).toBe("");
+      },
+    );
 
-    test("returns empty string if type is operation", () => {
-      expect.hasAssertions();
+    test.concurrent.each([[true], [false]])(
+      "returns empty string if type is operation and isNamedType is %p",
+      (isNamedTypeMockedValue: boolean) => {
+        expect.hasAssertions();
 
-      const type = new GraphQLScalarType({
-        name: "String",
-        description: "Lorem Ipsum",
-      });
+        const type = new GraphQLScalarType({
+          name: "String",
+          description: "Lorem Ipsum",
+        });
 
-      jest.spyOn(GraphQL, "isOperation").mockReturnValueOnce(true);
+        jest
+          .spyOn(GraphQL, "isNamedType")
+          .mockReturnValueOnce(isNamedTypeMockedValue);
+        jest.spyOn(GraphQL, "isOperation").mockReturnValueOnce(true);
 
-      const relation = printRelationOf(
-        type,
-        "RelationOf",
-        GraphQL.getRelationOfReturn,
-        DEFAULT_OPTIONS,
-      );
+        const relation = printRelationOf(
+          type,
+          "RelationOf",
+          GraphQL.getRelationOfReturn,
+          { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
+        );
 
-      expect(relation).toBe("");
-    });
+        expect(relation).toBe("");
+      },
+    );
 
     test("returns empty string if getRelation is not a function", () => {
       expect.hasAssertions();
@@ -98,12 +112,10 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const relation = printRelationOf(
-        type,
-        "RelationOf",
-        undefined,
-        DEFAULT_OPTIONS,
-      );
+      const relation = printRelationOf(type, "RelationOf", undefined, {
+        ...DEFAULT_OPTIONS,
+        schema: {} as GraphQLSchema,
+      });
 
       expect(relation).toBe("");
     });
@@ -133,6 +145,7 @@ describe("relation", () => {
       });
 
       jest.spyOn(GraphQL, "isNamedType").mockReturnValueOnce(true);
+      jest.spyOn(GraphQL, "isOperation").mockReturnValueOnce(false);
 
       const relation = printRelationOf(
         type,
@@ -140,7 +153,7 @@ describe("relation", () => {
         (): ReturnType<IGetRelation<unknown>> => {
           return undefined as unknown as ReturnType<IGetRelation<unknown>>;
         },
-        DEFAULT_OPTIONS,
+        { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
       );
 
       expect(relation).toBe("");
@@ -160,7 +173,7 @@ describe("relation", () => {
         () => {
           return { objects: [] };
         },
-        DEFAULT_OPTIONS,
+        { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema },
       );
 
       expect(relation).toBe("");
@@ -213,6 +226,47 @@ describe("relation", () => {
               "singular": "query",
             }
           `);
+    });
+  });
+
+  describe("printRelations()", () => {
+    test("calls printRelationOf() for each type of relation", () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(Relation, "printRelationOf");
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+      const options = { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema };
+
+      jest.spyOn(GraphQL, "isNamedType").mockReturnValue(true);
+
+      printRelations(type, options);
+
+      expect(spy).toHaveBeenCalledTimes(3);
+      expect(spy).toHaveBeenNthCalledWith(
+        1,
+        type,
+        "Returned By",
+        GraphQL.getRelationOfReturn,
+        options,
+      );
+      expect(spy).toHaveBeenNthCalledWith(
+        2,
+        type,
+        "Member Of",
+        GraphQL.getRelationOfField,
+        options,
+      );
+      expect(spy).toHaveBeenNthCalledWith(
+        3,
+        type,
+        "Implemented By",
+        GraphQL.getRelationOfImplementation,
+        options,
+      );
     });
   });
 });

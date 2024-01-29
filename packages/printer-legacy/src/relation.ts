@@ -93,7 +93,7 @@ export const printRelations = (
   options: PrintTypeOptions,
 ): MDXString | string => {
   const relations: Record<string, RelationOf> = {
-    returnedBy: { section: "Returned by", getRelation: getRelationOfReturn },
+    returnedBy: { section: "Returned By", getRelation: getRelationOfReturn },
     memberOf: { section: "Member Of", getRelation: getRelationOfField },
     implementedBy: {
       section: "Implemented By",
