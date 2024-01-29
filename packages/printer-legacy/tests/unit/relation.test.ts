@@ -23,6 +23,8 @@ jest.mock("@graphql-markdown/graphql", () => {
       return t;
     }),
     getRelationOfReturn: jest.fn(),
+    getRelationOfField: jest.fn(),
+    getRelationOfImplementation: jest.fn(),
     getSchemaMap: jest.fn(),
     hasDirective: jest.fn(),
     isDirectiveType: jest.fn(),
@@ -42,11 +44,11 @@ jest.mock("@graphql-markdown/graphql", () => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-import {
-  printRelationOf,
-  getRootTypeLocaleFromString,
-} from "../../src/relation";
+import * as Relation from "../../src/relation";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
+
+const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
+  Relation;
 
 describe("relation", () => {
   describe("printRelationOf()", () => {
@@ -224,6 +226,47 @@ describe("relation", () => {
               "singular": "query",
             }
           `);
+    });
+  });
+
+  describe("printRelations()", () => {
+    test("calls printRelationOf() for each type of relation", () => {
+      expect.hasAssertions();
+
+      const spy = jest.spyOn(Relation, "printRelationOf");
+
+      const type = new GraphQLScalarType({
+        name: "String",
+        description: "Lorem Ipsum",
+      });
+      const options = { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema };
+
+      jest.spyOn(GraphQL, "isNamedType").mockReturnValue(true);
+
+      printRelations(type, options);
+
+      expect(spy).toHaveBeenCalledTimes(3);
+      expect(spy).toHaveBeenNthCalledWith(
+        1,
+        type,
+        "Returned By",
+        GraphQL.getRelationOfReturn,
+        options,
+      );
+      expect(spy).toHaveBeenNthCalledWith(
+        2,
+        type,
+        "Member Of",
+        GraphQL.getRelationOfField,
+        options,
+      );
+      expect(spy).toHaveBeenNthCalledWith(
+        3,
+        type,
+        "Implemented By",
+        GraphQL.getRelationOfImplementation,
+        options,
+      );
     });
   });
 });
