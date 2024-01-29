@@ -10,7 +10,6 @@
   "githubPages": false,
   "hideBreadcrumbs": true,
   "hideGenerator": true,
-  "hideInPageTOC": true,
   "hidePageHeader": true,
   "useCodeBlocks": true,
   "outputFileStrategy": "modules",
