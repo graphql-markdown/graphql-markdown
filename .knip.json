@@ -30,7 +30,7 @@
   "rules": {
     "enumMembers": "warn"
   },
-  "ignoreDependencies": ["danger"],
+  "ignoreDependencies": ["danger", "commitizen"],
   "ignoreBinaries": ["danger"],
   "ignoreExportsUsedInFile": true,
   "jest": {
