@@ -63,8 +63,12 @@ export class Renderer {
   async generateCategoryMetafile(
     category: string,
     dirPath: string,
-    sidebarPosition: number = SidebarPosition.FIRST,
+    sidebarPosition?: number,
     styleClass?: string,
+    options: { collapsible: boolean; collapsed: boolean } = {
+      collapsible: true,
+      collapsed: true,
+    },
   ): Promise<void> {
     const filePath = join(dirPath, CATEGORY_YAML);
 
@@ -81,9 +85,13 @@ export class Renderer {
         : `\n  type: generated-index\n  title: '${label} overview'`;
     const className =
       typeof styleClass === "string" ? `className: ${styleClass}\n` : "";
+    const position =
+      typeof sidebarPosition === "number"
+        ? sidebarPosition
+        : SidebarPosition.FIRST;
     await saveFile(
       filePath,
-      `label: ${label}\nposition: ${sidebarPosition}\n${className}link: ${link}\n`,
+      `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options.collapsible}\ncollapsed: ${options.collapsed}\n`,
     );
   }
 
@@ -97,7 +105,13 @@ export class Renderer {
     if (this.options?.useApiGroup === true) {
       const typeCat = isApiType(type) ? "api" : "types";
       dirPath = join(dirPath, slugify(typeCat));
-      await this.generateCategoryMetafile(typeCat, dirPath);
+      await this.generateCategoryMetafile(
+        typeCat,
+        dirPath,
+        undefined,
+        "graphql-markdown-api-section",
+        { collapsible: false, collapsed: false },
+      );
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {

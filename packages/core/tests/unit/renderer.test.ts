@@ -255,7 +255,31 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: null\n`,
+          `label: Foobar\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
+        );
+      });
+
+      test("generate _category_.yml file with options override", async () => {
+        expect.assertions(1);
+
+        const category = "foobar";
+        const outputPath = "/output/docs";
+        const filePath = path.join(outputPath, "_category_.yml");
+
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.generateCategoryMetafile(
+          category,
+          outputPath,
+          undefined,
+          undefined,
+          { collapsed: false, collapsible: false },
+        );
+
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 1\nlink: null\ncollapsible: false\ncollapsed: false\n`,
         );
       });
 
@@ -278,7 +302,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -296,7 +320,7 @@ describe("renderer", () => {
 
         expect(spy).not.toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -318,7 +342,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 42\nlink: null\n`,
+          `label: Foobar\nposition: 42\nlink: null\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -342,7 +366,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\n`,
+          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\ncollapsible: true\ncollapsed: true\n`,
         );
       });
     });

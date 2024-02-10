@@ -10,6 +10,7 @@ import type {
 jest.mock("@graphql-markdown/utils", () => {
   return {
     escapeMDX: jest.fn((s) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return s;
     }),
     pathUrl: jest.fn(),
@@ -20,6 +21,7 @@ jest.mock("@graphql-markdown/utils", () => {
 jest.mock("@graphql-markdown/graphql", () => {
   return {
     getNamedType: jest.fn((t) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return t;
     }),
     getRelationOfReturn: jest.fn(),

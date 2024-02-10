@@ -5,16 +5,22 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
   "course/_category_.yml": "label: Course
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "course/mutations/_category_.yml": "label: Mutations
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "course/mutations/add-course.mdx": "add-course",
   "course/mutations/drop-course.mdx": "drop-course",
   "course/queries/_category_.yml": "label: Queries
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "course/queries/all-courses.mdx": "all-courses",
   "course/queries/course.mdx": "course",
@@ -24,16 +30,22 @@ link: null
   "grade/_category_.yml": "label: Grade
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "grade/mutations/_category_.yml": "label: Mutations
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "grade/mutations/update-gpa.mdx": "update-gpa",
   "grade/mutations/update-grade.mdx": "update-grade",
   "grade/queries/_category_.yml": "label: Queries
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "grade/queries/gpa.mdx": "gpa",
   "grade/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
@@ -41,10 +53,14 @@ link: null
   "misc/_category_.yml": "label: Misc
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/directives/_category_.yml": "label: Directives
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/directives/deprecated.mdx": "deprecated",
   "misc/directives/doc.mdx": "doc",
@@ -56,16 +72,22 @@ link: null
   "misc/enums/_category_.yml": "label: Enums
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/enums/roles.mdx": "roles",
   "misc/interfaces/_category_.yml": "label: Interfaces
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/interfaces/record.mdx": "record",
   "misc/objects/_category_.yml": "label: Objects
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/objects/course.mdx": "course",
   "misc/objects/department-information.mdx": "department-information",
@@ -74,11 +96,15 @@ link: null
   "misc/queries/_category_.yml": "label: Queries
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/queries/search-role.mdx": "search-role",
   "misc/scalars/_category_.yml": "label: Scalars
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "misc/scalars/boolean.mdx": "boolean",
   "misc/scalars/date.mdx": "date",
@@ -111,6 +137,8 @@ exports[`renderer generateDocFromSchema() generates Markdown document structure 
   "directives/_category_.yml": "label: Directives
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "directives/deprecated.mdx": "deprecated",
   "directives/include.mdx": "include",
@@ -119,22 +147,30 @@ link: null
   "enums/_category_.yml": "label: Enums
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "enums/media-type.mdx": "media-type",
   "generated.md": "Dummy homepage for tweet.graphql",
   "inputs/_category_.yml": "label: Inputs
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "inputs/tweet-content.mdx": "tweet-content",
   "interfaces/_category_.yml": "label: Interfaces
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "interfaces/node.mdx": "node",
   "mutations/_category_.yml": "label: Mutations
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "mutations/create-tweet.mdx": "create-tweet",
   "mutations/delete-tweet.mdx": "delete-tweet",
@@ -142,6 +178,8 @@ link: null
   "objects/_category_.yml": "label: Objects
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "objects/media.mdx": "media",
   "objects/meta.mdx": "meta",
@@ -152,6 +190,8 @@ link: null
   "queries/_category_.yml": "label: Queries
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "queries/notifications-meta.mdx": "notifications-meta",
   "queries/tweet.mdx": "tweet",
@@ -162,6 +202,8 @@ link: null
   "scalars/_category_.yml": "label: Scalars
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "scalars/boolean.mdx": "boolean",
   "scalars/date.mdx": "date",
@@ -185,6 +227,8 @@ module.exports = {
   "subscriptions/_category_.yml": "label: Subscriptions
 position: 1
 link: null
+collapsible: true
+collapsed: true
 ",
   "subscriptions/notifications.mdx": "notifications",
 }
