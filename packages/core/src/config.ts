@@ -75,6 +75,7 @@ export const DEFAULT_OPTIONS: Required<
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
+    useApiGroup: true,
   },
   rootPath: "./docs",
   schema: "./schema.graphql",
@@ -289,6 +290,9 @@ export const getPrintTypeOptions = (
     typeBadges:
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
       DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
+    useApiGroup:
+      configOptions?.useApiGroup ??
+      DEFAULT_OPTIONS.printTypeOptions.useApiGroup!,
   } as Required<ConfigPrintTypeOptions>;
 };
 

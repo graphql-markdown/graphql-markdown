@@ -66,6 +66,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
+          useApiGroup: false,
         },
         onlyDocDirective: [],
         skipDocDirective: [],
@@ -97,6 +98,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
+          useApiGroup: false,
         },
         onlyDocDirective: [],
         skipDocDirective: [],
@@ -137,6 +139,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
+          useApiGroup: false,
         },
         onlyDocDirective: [],
         skipDocDirective: [],

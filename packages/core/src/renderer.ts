@@ -1,17 +1,16 @@
 import type {
   Category,
-  ConfigDocOptions,
   Maybe,
   MDXString,
   Printer,
+  RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
-  TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
 
-import { isDeprecated } from "@graphql-markdown/graphql";
+import { isApiType, isDeprecated } from "@graphql-markdown/graphql";
 
 import {
   copyFile,
@@ -41,7 +40,7 @@ export class Renderer {
   outputDir: string;
   baseURL: string;
   prettify: boolean;
-  options: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>;
+  options: Maybe<RendererDocOptions>;
 
   private readonly printer: Printer;
 
@@ -51,7 +50,7 @@ export class Renderer {
     baseURL: string,
     group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
-    docOptions: Maybe<ConfigDocOptions & { deprecated: TypeDeprecatedOption }>,
+    docOptions: Maybe<RendererDocOptions>,
   ) {
     this.printer = printer;
     this.group = group;
@@ -95,11 +94,13 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (
-      this.options &&
-      this.options.deprecated === "group" &&
-      isDeprecated(type)
-    ) {
+    if (this.options?.useApiGroup === true) {
+      const typeCat = isApiType(type) ? "api" : "types";
+      dirPath = join(dirPath, slugify(typeCat));
+      await this.generateCategoryMetafile(typeCat, dirPath);
+    }
+
+    if (this.options?.deprecated === "group" && isDeprecated(type)) {
       dirPath = join(dirPath, slugify("deprecated"));
       await this.generateCategoryMetafile(
         "deprecated",
