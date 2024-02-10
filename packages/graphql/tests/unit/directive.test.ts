@@ -1,4 +1,4 @@
-import { GraphQLDirective, buildSchema } from "graphql";
+import { DirectiveLocation, GraphQLDirective, buildSchema } from "graphql";
 
 import type {
   DirectiveName,
@@ -335,6 +335,66 @@ describe("directive", () => {
         },
       }
       `);
+    });
+  });
+
+  describe("DirectiveLocation", () => {
+    const locations = [
+      { locations: [DirectiveLocation.QUERY], executable: true },
+      { locations: [DirectiveLocation.MUTATION], executable: true },
+      { locations: [DirectiveLocation.SUBSCRIPTION], executable: true },
+      { locations: [DirectiveLocation.FIELD], executable: true },
+      { locations: [DirectiveLocation.FRAGMENT_DEFINITION], executable: true },
+      { locations: [DirectiveLocation.FRAGMENT_SPREAD], executable: true },
+      { locations: [DirectiveLocation.INLINE_FRAGMENT], executable: true },
+      { locations: [DirectiveLocation.VARIABLE_DEFINITION], executable: true },
+      {
+        locations: [DirectiveLocation.QUERY, DirectiveLocation.ENUM],
+        executable: true,
+      },
+      {
+        locations: [DirectiveLocation.ENUM],
+        executable: false,
+      },
+      {
+        locations: [],
+        executable: false,
+      },
+    ];
+    describe("executableDirectiveLocation()", () => {
+      test.each(locations)(
+        "returns $executable if location is $locations",
+        ({ locations, executable }) => {
+          expect.assertions(1);
+
+          const directive = new GraphQLDirective({
+            name: "testExecutableDirectiveLocation",
+            locations,
+          });
+
+          expect(Directives.executableDirectiveLocation(directive)).toBe(
+            executable,
+          );
+        },
+      );
+    });
+
+    describe("typeSystemDirectiveLocation()", () => {
+      test.each(locations)(
+        "returns !$executable if location is $locations",
+        ({ locations, executable }) => {
+          expect.assertions(1);
+
+          const directive = new GraphQLDirective({
+            name: "testExecutableDirectiveLocation",
+            locations,
+          });
+
+          expect(Directives.typeSystemDirectiveLocation(directive)).not.toBe(
+            executable,
+          );
+        },
+      );
     });
   });
 });

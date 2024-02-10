@@ -35,7 +35,7 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/link", () => {
   return {
-    getLinkCategory: jest.fn(),
+    getCategoryLocale: jest.fn(),
   };
 });
 import * as Link from "../../src/link";
@@ -139,7 +139,7 @@ describe("badge", () => {
     test("return category name as badge is type is subtype", () => {
       expect.assertions(1);
 
-      jest.spyOn(Link, "getLinkCategory").mockReturnValueOnce("foobar");
+      jest.spyOn(Link, "getCategoryLocale").mockReturnValueOnce("foobar");
 
       const type = {};
 

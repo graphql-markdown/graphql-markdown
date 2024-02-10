@@ -14,7 +14,13 @@ export const getGroup = (
   groups: Maybe<SchemaEntitiesGroupMap>,
   typeCategory: Maybe<SchemaEntity>,
 ): string => {
-  if (typeof type !== "object" || type === null || !groups || !typeCategory) {
+  if (
+    typeof type !== "object" ||
+    type === null ||
+    typeof groups !== "object" ||
+    groups === null ||
+    !typeCategory
+  ) {
     return "";
   }
 

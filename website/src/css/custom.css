@@ -105,3 +105,9 @@ div[class^="announcementBar_"] {
   color: black !important;
   font-weight: 500;
 }
+
+.theme-doc-sidebar-item-category-level-1.graphql-markdown-api-section > div:first-child {
+	text-transform: uppercase full-width;
+	margin: 5px 5px auto auto;
+	background-color: rgb(246, 248, 250);
+}

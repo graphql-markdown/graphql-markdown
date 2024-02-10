@@ -25,6 +25,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
+    useApiGroup: true,
   };
 
 export const DEFAULT_OPTIONS: Required<

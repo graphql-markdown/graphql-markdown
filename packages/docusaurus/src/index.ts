@@ -53,6 +53,7 @@ export default function pluginGraphQLDocGenerator(
           "-h, --homepage <homepage>",
           "File location for doc landing page",
         )
+        .option("--noApiGroup", "Disable API grouping for types")
         .option("--noCode", "Disable code section for types")
         .option("--noParentType", "Disable parent type name as field prefix")
         .option("--noRelatedType", "Disable related types sections")

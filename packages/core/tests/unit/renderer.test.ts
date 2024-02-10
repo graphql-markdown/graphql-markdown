@@ -10,6 +10,7 @@ import type {
 jest.mock("node:fs/promises");
 
 jest.mock("node:path", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...jest.requireActual("node:path"),
@@ -21,6 +22,7 @@ jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/utils", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...jest.requireActual("@graphql-markdown/utils"),
@@ -34,6 +36,7 @@ jest.mock("@graphql-markdown/utils", () => {
 import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("@graphql-markdown/graphql", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...jest.requireActual("@graphql-markdown/graphql"),
@@ -252,7 +255,31 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: null\n`,
+          `label: Foobar\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
+        );
+      });
+
+      test("generate _category_.yml file with options override", async () => {
+        expect.assertions(1);
+
+        const category = "foobar";
+        const outputPath = "/output/docs";
+        const filePath = path.join(outputPath, "_category_.yml");
+
+        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.generateCategoryMetafile(
+          category,
+          outputPath,
+          undefined,
+          undefined,
+          { collapsed: false, collapsible: false },
+        );
+
+        expect(spy).toHaveBeenCalledWith(
+          filePath,
+          `label: Foobar\nposition: 1\nlink: null\ncollapsible: false\ncollapsed: false\n`,
         );
       });
 
@@ -275,7 +302,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -293,7 +320,7 @@ describe("renderer", () => {
 
         expect(spy).not.toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\n`,
+          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -315,7 +342,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 42\nlink: null\n`,
+          `label: Foobar\nposition: 42\nlink: null\ncollapsible: true\ncollapsed: true\n`,
         );
       });
 
@@ -339,7 +366,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith(
           filePath,
-          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\n`,
+          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\ncollapsible: true\ncollapsed: true\n`,
         );
       });
     });
@@ -390,8 +417,9 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           deprecated: "group",
+          useApiGroup: false,
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -418,8 +446,9 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           deprecated: "group",
+          useApiGroup: false,
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -440,8 +469,9 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           deprecated: "default",
+          useApiGroup: false,
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(false);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -462,11 +492,12 @@ describe("renderer", () => {
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           deprecated: "group",
+          useApiGroup: false,
         });
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValue(true);
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -478,6 +509,50 @@ describe("renderer", () => {
         expect(dirPath).toBe(
           `/output/deprecated/${group}/${root.toLowerCase()}`,
         );
+      });
+
+      test("generate api _category_.yml file", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          deprecated: "default",
+          useApiGroup: true,
+        });
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "queries",
+        );
+
+        expect(spy).toHaveBeenCalledWith("queries", "/output/api/queries");
+        expect(dirPath).toBe("/output/api/queries");
+      });
+
+      test("generate system _category_.yml file", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          deprecated: "default",
+          useApiGroup: true,
+        });
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "objects",
+        );
+
+        expect(spy).toHaveBeenCalledWith("objects", "/output/types/objects");
+        expect(dirPath).toBe("/output/types/objects");
       });
     });
   });

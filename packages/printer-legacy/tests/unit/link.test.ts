@@ -20,21 +20,24 @@ const mockUtils = jest.mocked(Utils);
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
-    hasDirective: jest.fn(),
-    getTypeName: jest.fn(),
+    executableDirectiveLocation: jest.fn(),
     getNamedType: jest.fn(),
-    isOperation: jest.fn(),
-    isEnumType: jest.fn(),
-    isUnionType: jest.fn(),
-    isInterfaceType: jest.fn(),
-    isObjectType: jest.fn(),
-    isInputType: jest.fn(),
-    isScalarType: jest.fn(),
+    getTypeName: jest.fn(),
+    hasDirective: jest.fn(),
+    isApiType: jest.fn(),
+    isDeprecated: jest.fn(),
+    isDirective: jest.fn(),
     isDirectiveType: jest.fn(),
+    isEnumType: jest.fn(),
+    isInputType: jest.fn(),
+    isInterfaceType: jest.fn(),
     isLeafType: jest.fn(),
     isListType: jest.fn(),
     isNonNullType: jest.fn(),
-    isDeprecated: jest.fn(),
+    isObjectType: jest.fn(),
+    isOperation: jest.fn(),
+    isScalarType: jest.fn(),
+    isUnionType: jest.fn(),
   };
 });
 const mockGraphQL = jest.mocked(GraphQL);
@@ -109,7 +112,7 @@ describe("link", () => {
     jest.resetAllMocks();
   });
 
-  describe("getLinkCategory()", () => {
+  describe("getLinkCategoryFolder()", () => {
     test.each(types)(
       "returns a category object matching the graphLQLNamedType $name",
       ({ guard }) => {
@@ -119,7 +122,7 @@ describe("link", () => {
 
         mockGraphQL[guard].mockReturnValueOnce(true);
 
-        const category = Link.getLinkCategory(
+        const category = Link.getLinkCategoryFolder(
           {} as unknown as GraphQLNamedType,
         );
 
@@ -130,7 +133,9 @@ describe("link", () => {
     test("returns undefined if unknown", () => {
       expect.assertions(1);
 
-      const category = Link.getLinkCategory({} as unknown as GraphQLNamedType);
+      const category = Link.getLinkCategoryFolder(
+        {} as unknown as GraphQLNamedType,
+      );
 
       expect(category).toBeUndefined();
     });
@@ -157,7 +162,8 @@ describe("link", () => {
         mockGraphQL.getNamedType.mockReturnValue(
           entityName as unknown as GraphQLNamedType,
         );
-        mockGraphQL[guard].mockReturnValue(true);
+        mockGraphQL[guard].mockReturnValueOnce(true);
+        mockGraphQL.isApiType.mockReturnValue(true);
         mockUtils.slugify.mockReturnValueOnce(slug);
 
         const link = Link.toLink(type, entityName, operation, {
@@ -181,10 +187,11 @@ describe("link", () => {
         }),
       );
 
-      mockGraphQL.getNamedType.mockReturnValue(
+      mockGraphQL.getNamedType.mockReturnValueOnce(
         entityName as unknown as GraphQLNamedType,
       );
-      mockGraphQL.isObjectType.mockReturnValue(true);
+      mockGraphQL.isObjectType.mockReturnValueOnce(true);
+      mockGraphQL.isApiType.mockReturnValueOnce(false);
       mockUtils.slugify.mockReturnValueOnce(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -195,7 +202,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestObjectList",
-          "url": "docs/graphql/objects/test-object-list",
+          "url": "docs/graphql/types/objects/test-object-list",
         }
       `);
     });
@@ -260,7 +267,8 @@ describe("link", () => {
       mockGraphQL.getNamedType.mockReturnValue(
         entityName as unknown as GraphQLNamedType,
       );
-      mockGraphQL.isDirectiveType.mockReturnValue(true);
+      mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
+      mockGraphQL.isApiType.mockReturnValueOnce(true);
       mockUtils.slugify.mockReturnValueOnce(slug);
       mockGroup.getGroup.mockReturnValueOnce("group");
 
@@ -273,7 +281,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/group/directives/test-directive",
+          "url": "docs/graphql/api/group/directives/test-directive",
         }
       `);
     });
@@ -291,7 +299,8 @@ describe("link", () => {
       mockGraphQL.getNamedType.mockReturnValue(
         entityName as unknown as GraphQLNamedType,
       );
-      mockGraphQL.isDirectiveType.mockReturnValue(true);
+      mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
+      mockGraphQL.isApiType.mockReturnValueOnce(true);
       mockUtils.slugify.mockReturnValueOnce(slug);
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
@@ -304,7 +313,37 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/deprecated/directives/test-directive",
+          "url": "docs/graphql/deprecated/api/directives/test-directive",
+        }
+      `);
+    });
+
+    test("returns markdown link without api group when disabled", () => {
+      expect.hasAssertions();
+
+      const entityName = `TestDirective`;
+      const slug = `test-directive`;
+      const type = new GraphQLDirective({
+        name: entityName,
+        locations: [],
+      });
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        useApiGroup: false,
+        basePath,
+      });
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestDirective",
+          "url": "docs/graphql/directives/test-directive",
         }
       `);
     });
@@ -539,7 +578,8 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isScalarType.mockReturnValue(true);
-      mockUtils.slugify.mockReturnValue(slug);
+      mockGraphQL.isApiType.mockReturnValueOnce(false);
+      mockUtils.slugify.mockReturnValueOnce(slug);
 
       const link = Link.getRelationLink("foo", type, {
         ...DEFAULT_OPTIONS,
@@ -548,7 +588,7 @@ describe("link", () => {
 
       expect(link).toStrictEqual({
         text: "TestScalar",
-        url: "docs/graphql/scalars/test-scalar",
+        url: "docs/graphql/types/scalars/test-scalar",
       });
     });
 
@@ -561,11 +601,11 @@ describe("link", () => {
         name: entityName,
       });
 
-      mockGraphQL.getNamedType.mockReturnValue(
+      mockGraphQL.getNamedType.mockReturnValueOnce(
         entityName as unknown as GraphQLNamedType,
       );
-      mockGraphQL.isScalarType.mockReturnValue(true);
-      mockUtils.slugify.mockReturnValue(slug);
+      mockGraphQL.isScalarType.mockReturnValueOnce(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
 
       const link = Link.getRelationLink(undefined, type, {
         ...DEFAULT_OPTIONS,

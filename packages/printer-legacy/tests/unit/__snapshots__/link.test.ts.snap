@@ -1,113 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Directive 1`] = `
-{
-  "plural": "directives",
-  "singular": "directive",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Directive 1`] = `"directives"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Enum 1`] = `
-{
-  "plural": "enums",
-  "singular": "enum",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Enum 1`] = `"enums"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Input 1`] = `
-{
-  "plural": "inputs",
-  "singular": "input",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Input 1`] = `"inputs"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Interface 1`] = `
-{
-  "plural": "interfaces",
-  "singular": "interface",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Interface 1`] = `"interfaces"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Object 1`] = `
-{
-  "plural": "objects",
-  "singular": "object",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Object 1`] = `"objects"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Operation 1`] = `
-{
-  "plural": "operations",
-  "singular": "operation",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Operation 1`] = `undefined`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Scalar 1`] = `
-{
-  "plural": "scalars",
-  "singular": "scalar",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Scalar 1`] = `"scalars"`;
 
-exports[`link getLinkCategory() returns a category object matching the graphLQLNamedType Union 1`] = `
-{
-  "plural": "unions",
-  "singular": "union",
-}
-`;
+exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Union 1`] = `"unions"`;
 
 exports[`link toLink() returns markdown link for GraphQL Directive 1`] = `
 {
   "text": "TestDirective",
-  "url": "docs/graphql/directives/test-directive",
+  "url": "docs/graphql/api/directives/test-directive",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Enum 1`] = `
 {
   "text": "TestEnum",
-  "url": "docs/graphql/enums/test-enum",
+  "url": "docs/graphql/api/enums/test-enum",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Input 1`] = `
 {
   "text": "TestInput",
-  "url": "docs/graphql/inputs/test-input",
+  "url": "docs/graphql/api/inputs/test-input",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Interface 1`] = `
 {
   "text": "TestInterface",
-  "url": "docs/graphql/interfaces/test-interface",
+  "url": "docs/graphql/api/interfaces/test-interface",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Object 1`] = `
 {
   "text": "TestObject",
-  "url": "docs/graphql/objects/test-object",
+  "url": "docs/graphql/api/objects/test-object",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Operation 1`] = `
 {
   "text": "TestOperation",
-  "url": "docs/graphql/queries/test-operation",
+  "url": "docs/graphql/api/queries/test-operation",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Scalar 1`] = `
 {
   "text": "TestScalar",
-  "url": "docs/graphql/scalars/test-scalar",
+  "url": "docs/graphql/api/scalars/test-scalar",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Union 1`] = `
 {
   "text": "TestUnion",
-  "url": "docs/graphql/unions/test-union",
+  "url": "docs/graphql/api/unions/test-union",
 }
 `;

@@ -126,6 +126,8 @@ export class Printer implements IPrinter {
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
       metatags: metatags ?? [],
+      useApiGroup:
+        printTypeOptions?.useApiGroup ?? PRINT_TYPE_DEFAULT_OPTIONS.useApiGroup,
     };
   }
 

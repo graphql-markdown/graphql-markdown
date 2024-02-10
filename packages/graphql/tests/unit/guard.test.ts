@@ -5,7 +5,13 @@ import type { GraphQLSchema } from "graphql";
 import { buildSchema, GraphQLObjectType } from "graphql";
 
 import { getOperation, getTypeFromSchema } from "../../src/introspection";
-import { isDeprecated, isOperation, isGraphQLFieldType } from "../../src/guard";
+import {
+  isDeprecated,
+  isOperation,
+  isGraphQLFieldType,
+  isApiType,
+  isSystemType,
+} from "../../src/guard";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
 
@@ -121,6 +127,77 @@ describe("graphql", () => {
       expect.hasAssertions();
 
       expect(isDeprecated({ isDeprecated: true })).toBeTruthy();
+    });
+  });
+
+  describe("ApiType or SystemType", () => {
+    const schema = buildSchema(`
+    directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
+
+    interface Record {
+      id: String!
+    }
+
+    type StudyItem implements Record {
+      id: String!
+      subject: String!
+      duration: Int!
+    }
+    
+    type Query {
+      getStudyItems(subject: String): [StudyItem!]
+      getStudyItem(id: String!): StudyItem @deprecated
+    }
+  `);
+
+    const types = [
+      {
+        gqlType: schema.getQueryType()!.getFields().getStudyItems,
+        isApi: true,
+        text: "operation",
+      },
+      {
+        gqlType: schema.getDirective("include"),
+        isApi: true,
+        text: "executable directive",
+      },
+      {
+        gqlType: schema.getDirective("noDoc"),
+        isApi: false,
+        text: "system directive",
+      },
+      {
+        gqlType: schema.getType("Record"),
+        isApi: false,
+        text: "interface type",
+      },
+      {
+        gqlType: schema.getType("StudyItem"),
+        isApi: false,
+        text: "object type",
+      },
+    ];
+
+    describe("isApiType()", () => {
+      test.each(types)(
+        "returns $isApiType if type is $text",
+        ({ gqlType, isApi }) => {
+          expect.assertions(1);
+
+          expect(isApiType(gqlType)).toBe(isApi);
+        },
+      );
+    });
+
+    describe("isSystemType()", () => {
+      test.each(types)(
+        "returns !$isApiType if type is $text",
+        ({ gqlType, isApi }) => {
+          expect.assertions(1);
+
+          expect(isSystemType(gqlType)).not.toBe(isApi);
+        },
+      );
     });
   });
 });

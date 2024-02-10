@@ -224,21 +224,23 @@ It only applies to types with a location compatible with the directive, i.e. if 
 Use these options to toggle type information rendered on pages:
 
 - `codeSection`: display type code section.
-- `parentTypePrefix`: prefix field names with parent type name.
-- `relatedTypeSection`: display related type sections.
-- `typeBadges`: add field type attributes badges.
 - `deprecated`: option for displaying deprecated entities (fields, values, operations).
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped together.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
+- `parentTypePrefix`: prefix field names with parent type name.
+- `relatedTypeSection`: display related type sections.
+- `typeBadges`: add field type attributes badges.
+- `useApiGroup`: split entities in `API` group (executable types) and `Types` group (system types).
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
 | `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
+| `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
-| `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
+| `printTypeOptions.useApiGroup`        | `--noApiGroup`          | `true`    |
 
 <br/>
 
@@ -254,10 +256,11 @@ plugins: [
         // highlight-start
         printTypeOptions: {
           codeSection: false, // disable code section, same as CLI flag --noCode
+          deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
-          deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
+          useApiGroup: false, // disable type API grouping, same as CLI flag --noApiGroup
         },
         // highlight-end
         loaders: {

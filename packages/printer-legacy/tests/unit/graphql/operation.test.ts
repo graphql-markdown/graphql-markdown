@@ -4,6 +4,7 @@ import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
+    isDirectiveType: jest.fn(),
     isDeprecated: jest.fn((T: any) => {
       return "deprecationReason" in T;
     }), // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -43,7 +44,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
+        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -82,7 +83,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -90,7 +91,7 @@ describe("operation", () => {
 
         ### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
+        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -135,7 +136,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         "### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -145,7 +146,7 @@ describe("operation", () => {
 
         <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > :::warning[DEPRECATED]
@@ -161,7 +162,7 @@ describe("operation", () => {
 
         ### Type
 
-        #### [\`Test\`](/objects/test) <Badge class="badge badge--secondary" text="object"/> 
+        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 

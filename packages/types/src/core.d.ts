@@ -10,6 +10,11 @@ export interface ConfigDocOptions {
   frontMatter: Maybe<FrontMatterOptions>;
 }
 
+export type RendererDocOptions = ConfigDocOptions & {
+  deprecated: TypeDeprecatedOption;
+  useApiGroup: boolean;
+};
+
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
   toc?: boolean;
@@ -23,6 +28,7 @@ export interface ConfigPrintTypeOptions {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
+  useApiGroup?: boolean;
 }
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
@@ -65,6 +71,7 @@ export interface CliOptions {
   homepage?: string;
   index?: boolean;
   link?: string;
+  noApiGroup?: boolean;
   noCode?: boolean;
   noParentType?: boolean;
   noRelatedType?: boolean;

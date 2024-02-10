@@ -50,6 +50,7 @@ describe("generator", () => {
         parentTypePrefix: true,
         relatedTypeSection: true,
         typeBadges: true,
+        useApiGroup: true,
       },
       prettify: true,
       printer: "printer module",
@@ -127,6 +128,7 @@ describe("generator", () => {
         {
           ...options.docOptions,
           deprecated: options.printTypeOptions.deprecated,
+          useApiGroup: options.printTypeOptions.useApiGroup,
         },
       );
     });

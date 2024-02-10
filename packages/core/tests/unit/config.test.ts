@@ -235,6 +235,7 @@ describe("config", () => {
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
+          useApiGroup: false,
         },
         skipDocDirective: ["@noDoc" as DirectiveName],
         customDirective: {
