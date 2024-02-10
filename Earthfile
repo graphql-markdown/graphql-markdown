@@ -104,7 +104,7 @@ build-examples:
   RUN mkdir $TARGET
   DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${TARGET}/default --force --pretty --deprecated group"
   RUN mv docs ./$TARGET/default
-  DO +GQLMD --id="schema_with_grouping" --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noParentType --noRelatedType --deprecated group"
+  DO +GQLMD --id="schema_with_grouping" --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noParentType --noRelatedType --deprecated group --noApiGroup"
   RUN mv docs ./$TARGET/group-by
   SAVE ARTIFACT ./$TARGET
 

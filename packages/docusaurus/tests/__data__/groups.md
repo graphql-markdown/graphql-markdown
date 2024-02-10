@@ -32,10 +32,11 @@ This is an example of documentation grouping with GraphQL directive using the `g
     index: true,
   },
   printTypeOptions: {
+    deprecated: "group",
     parentTypePrefix: false,
     relatedTypeSection: false,
     typeBadges: true,
-    deprecated: "group"
+    useApiGroup: false
   },
   skipDocDirective: ["@noDoc"],
   customDirective: {
@@ -80,10 +81,11 @@ This is an example of documentation grouping with GraphQL directive using the `g
         index: true,
       },
       printTypeOptions: {
+        deprecated: "group",
         parentTypePrefix: false,
         relatedTypeSection: false,
         typeBadges: true,
-        deprecated: "group"
+        useApiGroup: false
       },
       skipDocDirective: ["@noDoc"],
       customDirective: {
@@ -125,6 +127,7 @@ npx docusaurus graphql-to-doc \
     --noParentType \
     --noRelatedType \
     --deprecated group
+    --noApiGroup
 ```
 
 </TabItem>
