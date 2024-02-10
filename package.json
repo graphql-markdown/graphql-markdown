@@ -187,7 +187,7 @@
     "pinst": "3.0.0",
     "prettier": "3.2.5",
     "ts-jest": "29.1.2",
-    "typedoc": "0.25.7",
+    "typedoc": "0.25.8",
     "typedoc-plugin-frontmatter": "0.0.2",
     "typedoc-plugin-markdown": "4.0.0-next.53",
     "typescript": "5.3.3",
