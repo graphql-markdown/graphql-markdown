@@ -71,6 +71,7 @@ export interface CliOptions {
   homepage?: string;
   index?: boolean;
   link?: string;
+  noApiGroup?: boolean;
   noCode?: boolean;
   noParentType?: boolean;
   noRelatedType?: boolean;

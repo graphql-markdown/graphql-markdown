@@ -291,7 +291,7 @@ export const getPrintTypeOptions = (
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
       DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
     useApiGroup:
-      configOptions?.useApiGroup ??
+      (!cliOpts?.noApiGroup && configOptions?.useApiGroup) ??
       DEFAULT_OPTIONS.printTypeOptions.useApiGroup!,
   } as Required<ConfigPrintTypeOptions>;
 };
