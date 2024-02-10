@@ -9,6 +9,9 @@ import type {
   GraphQLOperationType,
   DeprecatedType,
 } from "@graphql-markdown/types";
+import { isDirectiveType } from "@graphql-markdown/graphql";
+
+import { executableDirectiveLocation } from "./directive";
 
 export {
   isDirective as isDirectiveType,
@@ -84,4 +87,27 @@ export const isDeprecated = <T>(obj: T): obj is DeprecatedType<T> => {
  */
 export const isOperation = (type: unknown): type is GraphQLOperationType => {
   return typeof type === "object" && type !== null && "type" in type;
+};
+
+/**
+ * Checks if a type belongs to API (operation related).
+ *
+ * @param type - a GraphQL type.
+ *
+ */
+export const isApiType = (type: unknown): boolean => {
+  if (isOperation(type)) {
+    return true;
+  }
+  return isDirectiveType(type) && executableDirectiveLocation(type);
+};
+
+/**
+ * Checks if a type belongs to schema (schema type definition excluding operations related types).
+ *
+ * @param type - a GraphQL type.
+ *
+ */
+export const isSystemType = (type: unknown): boolean => {
+  return !isApiType(type);
 };
