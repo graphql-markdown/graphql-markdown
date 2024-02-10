@@ -8,13 +8,16 @@ import {
 jest.mock("@graphql-markdown/graphql", () => {
   return {
     getFormattedDefaultValue: jest.fn((type) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return type?.defaultValue;
     }),
-    getTypeName: jest.fn((t) => {
+    getTypeName: jest.fn((t): string => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return t.name ?? t.toString();
     }),
     hasDirective: jest.fn(),
     isDeprecated: jest.fn((t) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return t.isDeprecated || false;
     }),
   };

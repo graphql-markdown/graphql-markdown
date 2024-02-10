@@ -181,6 +181,7 @@ describe("Printer", () => {
           "schema": undefined,
           "skipDocDirectives": [],
           "typeBadges": true,
+          "useApiGroup": true,
           "withAttributes": false,
         }
       `);
@@ -213,6 +214,7 @@ describe("Printer", () => {
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
+          useApiGroup: false,
         },
         skipDocDirectives: [testDirective],
       });
@@ -266,6 +268,7 @@ describe("Printer", () => {
             "@test",
           ],
           "typeBadges": false,
+          "useApiGroup": false,
           "withAttributes": false,
         }
       `);

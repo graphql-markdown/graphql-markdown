@@ -5,6 +5,7 @@ import type {
   Maybe,
   PrintLinkOptions,
   SchemaEntity,
+  TypeDeprecatedOption,
   TypeLink,
   TypeLocale,
 } from "@graphql-markdown/types";
@@ -12,6 +13,7 @@ import type {
 import {
   getNamedType,
   getTypeName,
+  isApiType,
   isDeprecated,
   isDirectiveType,
   isEnumType,
@@ -32,7 +34,7 @@ import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
 import { hasPrintableDirective } from "./common";
 
-export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
+export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
     case isDirectiveType(type):
       return ROOT_TYPE_LOCALE.DIRECTIVE;
@@ -54,6 +56,31 @@ export const getLinkCategory = (type: unknown): Maybe<TypeLocale> => {
   return undefined;
 };
 
+export const getLinkCategoryFolder = (
+  type: unknown,
+  operationLocale?: Maybe<TypeLocale>,
+): Maybe<string> => {
+  const categoryLocale = getCategoryLocale(type);
+
+  if (!categoryLocale) {
+    return undefined;
+  }
+
+  // special case for relation map
+  if (categoryLocale === ROOT_TYPE_LOCALE.OPERATION) {
+    if (!operationLocale) {
+      return undefined;
+    }
+    return typeof operationLocale === "object"
+      ? operationLocale.plural
+      : operationLocale;
+  }
+
+  return typeof categoryLocale === "object"
+    ? categoryLocale.plural
+    : categoryLocale;
+};
+
 export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
   return "withAttributes" in options && options.withAttributes === true;
 };
@@ -67,6 +94,17 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   );
 };
 
+export const getLinkApiGroupFolder = (type: unknown): string => {
+  return isApiType(type) ? "api" : "types";
+};
+
+export const getLinkDeprecatedFolder = (
+  type: unknown,
+  option: Maybe<TypeDeprecatedOption>,
+): string => {
+  return option === "group" && isDeprecated(type) ? DEPRECATED : "";
+};
+
 export const toLink = (
   type: unknown,
   name: string,
@@ -78,58 +116,42 @@ export const toLink = (
     url: "#",
   };
 
-  if (typeof type !== "object") {
-    return fallback;
-  }
-
-  if (typeof options !== "undefined" && !hasPrintableDirective(type, options)) {
+  if (
+    typeof type !== "object" ||
+    (typeof options !== "undefined" && !hasPrintableDirective(type, options))
+  ) {
     return fallback;
   }
 
   const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
 
-  let category = getLinkCategory(graphQLNamedType);
+  const category = getLinkCategoryFolder(graphQLNamedType, operation);
 
   if (!category || !graphQLNamedType) {
     return fallback;
   }
 
-  // special case for relation map
-  if (category === ROOT_TYPE_LOCALE.OPERATION) {
-    if (!operation) {
-      return fallback;
-    }
-    category = operation;
-  }
-
-  if (typeof category === "object") {
-    category = category.plural;
-  }
-
   const text = graphQLNamedType.name || graphQLNamedType.toString();
-  const deprecated =
-    typeof options !== "undefined" &&
-    "deprecated" in options &&
-    options.deprecated === "group" &&
-    isDeprecated(type)
-      ? DEPRECATED
-      : "";
-  const group =
-    "groups" in options && options.groups
-      ? getGroup(type, options.groups, category as SchemaEntity)
-      : "";
+  const deprecatedFolder = options.deprecated
+    ? getLinkDeprecatedFolder(type, options.deprecated)
+    : "";
+  const groupFolder = options.groups
+    ? getGroup(type, options.groups, category as SchemaEntity)
+    : "";
+  const apiGroupFolder = options.useApiGroup ? getLinkApiGroupFolder(type) : "";
 
   const url = pathUrl.join(
     options.basePath,
-    deprecated,
-    group,
+    deprecatedFolder,
+    apiGroupFolder,
+    groupFolder,
     category,
     slugify(text),
   );
 
   return {
-    text: text,
-    url: url,
+    text,
+    url,
   } as TypeLink;
 };
 

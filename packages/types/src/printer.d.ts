@@ -33,6 +33,7 @@ export interface PrinterConfigPrintTypeOptions {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
+  useApiGroup?: boolean;
 }
 
 export interface CollapsibleOption {
@@ -57,6 +58,7 @@ export interface PrintTypeOptions {
   schema?: Maybe<GraphQLSchema>;
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
+  useApiGroup?: boolean;
   withAttributes?: boolean;
 }
 
@@ -86,6 +88,7 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
     | "parentType"
     | "parentTypePrefix"
     | "skipDocDirectives"
+    | "useApiGroup"
     | "withAttributes"
   >;
 

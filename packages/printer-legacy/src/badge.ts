@@ -17,7 +17,7 @@ import {
   isNonNullType,
 } from "@graphql-markdown/graphql";
 
-import { getLinkCategory } from "./link";
+import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
 
 export const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
@@ -52,7 +52,7 @@ export const getTypeBadges = (
     badges.push({ text: "list", classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }
 
-  const category = getLinkCategory(getNamedType(rootType));
+  const category = getCategoryLocale(getNamedType(rootType));
   if (category) {
     badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME } as Badge);
   }

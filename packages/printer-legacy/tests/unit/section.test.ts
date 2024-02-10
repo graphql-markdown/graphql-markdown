@@ -169,7 +169,7 @@ describe("section", () => {
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
+        "#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > Lorem ipsum
@@ -198,7 +198,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
+        "#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > Lorem ipsum dolor sit amet, 
@@ -231,7 +231,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -257,7 +257,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
         > 
         > 
         > 
@@ -305,7 +305,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         > 
         > 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -324,7 +324,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/scalars/int) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/> 
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/types/scalars/int) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -345,7 +345,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/scalars/int) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/> 
+        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/types/scalars/int) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
@@ -435,7 +435,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         > :::
         > 
         > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
         > 
         > 
         > 
