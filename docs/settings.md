@@ -228,6 +228,7 @@ Use these options to toggle type information rendered on pages:
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped together.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
+- `exampleSection`: display example section based on directive data (see [Examples](/docs/advanced/examples)).
 - `parentTypePrefix`: prefix field names with parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
@@ -237,6 +238,7 @@ Use these options to toggle type information rendered on pages:
 | ------------------------------------- | ----------------------- | --------- |
 | `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
 | `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
+| `printTypeOptions.exampleSection`     | `--noExample`           | `true`    |
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
@@ -257,6 +259,7 @@ plugins: [
         printTypeOptions: {
           codeSection: false, // disable code section, same as CLI flag --noCode
           deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
+          exampleSection: false, // disable code section, same as CLI flag --noExample
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
