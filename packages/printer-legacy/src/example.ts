@@ -1,4 +1,4 @@
-import type { GraphQLDirective } from "graphql";
+import type { Maybe, GraphQLDirective } from "@graphql-markdown/types";
 
 import {
   IntrospectionError,
@@ -6,7 +6,6 @@ import {
   getTypeDirectiveArgValue,
   hasDirective,
 } from "@graphql-markdown/graphql";
-import type { Maybe } from "@graphql-markdown/types";
 
 export const printExample = (
   type: unknown,
