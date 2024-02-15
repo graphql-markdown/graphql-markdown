@@ -21,6 +21,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
   {
     codeSection: true,
     deprecated: "default",
+    exampleSection: true,
     metatags: [],
     parentTypePrefix: true,
     relatedTypeSection: true,

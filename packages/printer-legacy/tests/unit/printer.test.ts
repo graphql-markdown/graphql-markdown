@@ -10,6 +10,7 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   GraphQLSchema,
+  GraphQLString,
 } from "graphql";
 
 import type { PrintTypeOptions } from "@graphql-markdown/types";
@@ -42,6 +43,9 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 jest.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
+
+jest.mock("../../src/example");
+import * as ExamplePrinter from "../../src/example";
 
 import * as Common from "../../src/common";
 
@@ -170,6 +174,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "exampleSection": true,
           "frontMatter": {},
           "groups": undefined,
           "level": undefined,
@@ -211,6 +216,7 @@ describe("Printer", () => {
         groups: {},
         printTypeOptions: {
           codeSection: false,
+          exampleSection: false,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
@@ -226,6 +232,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
+          "exampleSection": false,
           "frontMatter": {},
           "groups": {},
           "level": undefined,
@@ -461,6 +468,94 @@ describe("Printer", () => {
 <meta charSet="utf-8" />
 <meta name="robot" contents="none" />
 </head>`);
+    });
+  });
+
+  describe("printExample()", () => {
+    test("returns a Markdown graphql codeblock with example", () => {
+      expect.hasAssertions();
+
+      const spy = jest
+        .spyOn(ExamplePrinter, "printExample")
+        .mockReturnValue("This is an example");
+
+      const code = Printer.printExample(GraphQLString, {
+        ...DEFAULT_OPTIONS,
+        schema: {
+          getDirective: (name: string) => {
+            return { name } as GraphQLDirective;
+          },
+        } as GraphQLSchema,
+      });
+
+      expect(spy).toHaveBeenCalledWith(GraphQLString, {
+        argName: "value",
+        directive: { name: "example" },
+      });
+      expect(code).toMatchSnapshot();
+    });
+
+    test("returns an empty string if printTypeOptions.exampleSection is false", () => {
+      expect.hasAssertions();
+
+      const spy = jest
+        .spyOn(ExamplePrinter, "printExample")
+        .mockReturnValue("This is an example");
+
+      const code = Printer.printExample(GraphQLString, {
+        ...DEFAULT_OPTIONS,
+        exampleSection: false,
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(code).toBe("");
+    });
+
+    test("returns a Markdown graphql codeblock with example options override", () => {
+      expect.hasAssertions();
+
+      const spy = jest
+        .spyOn(ExamplePrinter, "printExample")
+        .mockReturnValue("This is an example");
+
+      const code = Printer.printExample(GraphQLString, {
+        ...DEFAULT_OPTIONS,
+        exampleSection: {
+          directive: "set",
+          arg: "examples",
+        },
+        schema: {
+          getDirective: (name: string) => {
+            return { name } as GraphQLDirective;
+          },
+        } as GraphQLSchema,
+      });
+
+      expect(spy).toHaveBeenCalledWith(GraphQLString, {
+        argName: "examples",
+        directive: { name: "set" },
+      });
+      expect(code).toMatchSnapshot();
+    });
+
+    test("returns an empty string if printTypeOptions.exampleSection directive is invalid", () => {
+      expect.hasAssertions();
+
+      const spy = jest
+        .spyOn(ExamplePrinter, "printExample")
+        .mockReturnValue("This is an example");
+
+      const code = Printer.printExample(GraphQLString, {
+        ...DEFAULT_OPTIONS,
+        schema: {
+          getDirective: () => {
+            return undefined;
+          },
+        } as unknown as GraphQLSchema,
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+      expect(code).toBe("");
     });
   });
 });

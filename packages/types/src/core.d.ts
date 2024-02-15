@@ -25,6 +25,7 @@ export type TypeDeprecatedOption = "default" | "group" | "skip";
 export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
+  exampleSection?: boolean;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
@@ -73,6 +74,7 @@ export interface CliOptions {
   link?: string;
   noApiGroup?: boolean;
   noCode?: boolean;
+  noExample?: boolean;
   noParentType?: boolean;
   noRelatedType?: boolean;
   noTypeBadges?: boolean;
