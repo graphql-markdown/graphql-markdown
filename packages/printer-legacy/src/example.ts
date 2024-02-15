@@ -33,7 +33,7 @@ export const printExample = (
       fields.forEach((field) => {
         example = {
           ...example,
-          [field.name as string]: printExample(field.type, directiveExample),
+          [field.name]: printExample(field.type, directiveExample),
         };
       });
       return JSON.stringify(example);
