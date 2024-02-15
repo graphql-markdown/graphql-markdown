@@ -1,9 +1,18 @@
 """
+Example of example directive for `exampleSection`.
+
+See [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions)
+"""
+directive @example(
+  value: String
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | QUERY | MUTATION | SCALAR
+
+"""
 Example of custom directive for `skipDocDirective`.
 
 See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdirective)
 """
-directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION
+directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION | SCALAR
 
 """
 Example of custom directive for `groupByDirective`.
@@ -17,7 +26,7 @@ directive @doc(
   See [documentation](https://graphql-markdown.github.io/docs/settings#groupbydirective)
   """
   category: String
-) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
 
 """
 Example of custom directive for `customDirective`.
@@ -30,13 +39,13 @@ directive @complexity(
 
   If the field needs to call an expensive service to resolve itself, then the complexity should be at a high level but if the field is easy to resolve and not an expensive operation, the complexity should be at a low level.
   """
-  value: Int!
+  value: Int! @example(value: "1")
   """
   An array containing names of parameters present in the GraphQL field.
 
   Use parameters values to compute the field's cost dynamically. If the parameter is an array, its multiplier value will be the length of the array.
   """
-  multipliers: [String!]
+  multipliers: [String!] @example(value: "[\\\"roles\\\"]")
 ) on FIELD_DEFINITION
 
 """
@@ -58,11 +67,11 @@ See [documentation](https://graphql-markdown.github.io/docs/settings#skipdocdire
 """
 directive @beta on OBJECT | INTERFACE | FIELD_DEFINITION
 
-scalar Date
-scalar EmailAddress
-scalar PhoneNumber
-scalar Time
-scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+scalar Date @example(value: "1970-01-01")
+scalar EmailAddress @example(value: "john.doe@corp.com")
+scalar PhoneNumber @example(value: "1-234-4567")
+scalar Time @example(value: "01:02:23.453")
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986") @example(value: "https://tools.ietf.org/html/rfc3986")
 
 type Mutation {
   UpdateGrade(input: String): String @doc(category: "Grade") @auth
@@ -107,15 +116,15 @@ type Query {
 }
 
 type UnusedType implements Record @noDoc {
-  id: ID!
+  id: ID! @example(value: "1")
 }
 
 interface Record {
-  id: ID!
+  id: ID! @example(value: "1")
 }
 
 type Semester implements Record {
-  id: ID!
+  id: ID! @example(value: "1")
   startDate: Date
   withdrawDate: Date @deprecated
   endDate: Date
@@ -126,17 +135,17 @@ type Semester implements Record {
 }
 
 type DepartmentInformation implements Record @auth {
-  id: ID!
-  uuid: String @beta
+  id: ID! @example(value: "1")
+  uuid: String @beta @example(value: "9c5b94b1-35ad-49bb-b118-8e8fc24abf80")
   email: EmailAddress
   number: PhoneNumber
   departmentOpenTime: Time
   departmentCloseTime: Time
   website: URL
-  employees(skip: Int): [String!]!
+  employees(skip: Int): [String!]! @example(value: "[\\\"John Doe\\\"]")
 }
 
 type Course {
-  id: ID!
-  title: String!
+  id: ID! @example(value: "1")
+  title: String! @example(value: "GraphQL")
 }
