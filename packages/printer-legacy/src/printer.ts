@@ -228,6 +228,10 @@ export class Printer implements IPrinter {
 
     const example = printExample(type, { directive, argName });
 
+    if (!example) {
+      return "";
+    }
+
     return `${SectionLevels.LEVEL_3} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
   };
 

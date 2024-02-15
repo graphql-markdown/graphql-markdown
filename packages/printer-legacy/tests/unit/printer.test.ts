@@ -511,6 +511,16 @@ describe("Printer", () => {
       expect(code).toBe("");
     });
 
+    test("returns an empty string if printExample returns undefined", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(ExamplePrinter, "printExample").mockReturnValue(undefined);
+
+      const code = Printer.printExample(GraphQLString, DEFAULT_OPTIONS);
+
+      expect(code).toBe("");
+    });
+
     test("returns a Markdown graphql codeblock with example options override", () => {
       expect.hasAssertions();
 
