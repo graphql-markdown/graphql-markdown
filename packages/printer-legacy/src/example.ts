@@ -4,6 +4,7 @@ import {
   IntrospectionError,
   getFields,
   getTypeDirectiveArgValue,
+  hasDirective,
 } from "@graphql-markdown/graphql";
 import type { Maybe } from "@graphql-markdown/types";
 
@@ -24,16 +25,23 @@ export const printExample = (
     return arg ? String(arg) : undefined;
   } catch (err: unknown) {
     if (err instanceof IntrospectionError) {
-      const fields = getFields(type) as { name: string; type: unknown }[];
+      const fields = getFields(type) as {
+        astNode: unknown;
+        name: string;
+        type: unknown;
+      }[];
       if (fields.length === 0) {
         return undefined;
       }
 
       let example = {};
       fields.forEach((field) => {
+        const fieldType = hasDirective(field, [directiveExample.directive])
+          ? field
+          : field.type;
         example = {
           ...example,
-          [field.name]: printExample(field.type, directiveExample),
+          [field.name]: printExample(fieldType, directiveExample),
         };
       });
       return JSON.stringify(example);

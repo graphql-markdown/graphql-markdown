@@ -14,12 +14,14 @@ describe("example", () => {
 
   type TypeExtrapolateExample {
     example: ScalarExample
-    value: JSON
+    value: JSON @example(value: "{\\"example\\": \\"This is an example\\"}")
+    id: ID!
   }
 
-  type TypeExample @example(value: "{\\\"example\\\": \\\"This is an example\\\", \\\"value\\\": {}}") {
+  type TypeExample @example(value: "{\\"example\\": \\"This is an example\\", \\"value\\": {}}") {
     example: ScalarExample
     value: JSON
+    id: ID!
   }
 `);
   const exampleDirective = schema.getDirective("example")!;
@@ -55,7 +57,9 @@ describe("example", () => {
           directive: exampleDirective,
           argName: "value",
         }),
-      ).toBe('{"example":"This is an example"}');
+      ).toBe(
+        '{"example":"This is an example","value":"{\\"example\\": \\"This is an example\\"}"}',
+      );
     });
 
     test("returns a formatted example for the type using @example directive for complex type", () => {
