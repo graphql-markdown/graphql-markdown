@@ -28,6 +28,7 @@ export type RootTypeLocale = {
 
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
+  exampleSection?: ExampleDirectiveOption | boolean;
   deprecated?: TypeDeprecatedOption;
   metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
@@ -41,12 +42,18 @@ export interface CollapsibleOption {
   dataClose: string;
 }
 
+export interface ExampleDirectiveOption {
+  directive?: string;
+  arg?: string;
+}
+
 export interface PrintTypeOptions {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
+  exampleSection?: Maybe<ExampleDirectiveOption | boolean>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
   level?: Maybe<SectionLevelValue>;

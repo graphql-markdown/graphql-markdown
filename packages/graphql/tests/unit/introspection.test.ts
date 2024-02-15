@@ -10,7 +10,9 @@ jest.mock("graphql", () => {
     getDirectiveValues: jest.fn(graphql.getDirectiveValues),
   };
 });
+
 import type { GraphQLSchema, ObjectTypeDefinitionNode, ASTNode } from "graphql";
+
 import {
   buildSchema,
   DirectiveLocation,
@@ -38,6 +40,7 @@ import {
   hasDirective,
   isValidDirectiveLocation,
   getDirectiveLocationForASTPath,
+  IntrospectionError,
 } from "../../src/introspection";
 import { loadSchema } from "../../src/loader";
 
@@ -501,7 +504,7 @@ describe("introspection", () => {
     `);
     const type = schema.getType("Test")!;
 
-    test("throws an error if argument does not exist", () => {
+    test("throws IntrospectionError if argument does not exist", () => {
       expect.assertions(1);
 
       const directiveName = "dirWithoutArg";
@@ -510,7 +513,9 @@ describe("introspection", () => {
 
       expect(() => {
         getTypeDirectiveArgValue(directiveType, type.astNode!, argName);
-      }).toThrow(`Directive argument '${argName}' not found!`);
+      }).toThrow(
+        new IntrospectionError(`Directive argument '${argName}' not found!`),
+      );
     });
 
     test("returns fields value if argument is of input type", () => {

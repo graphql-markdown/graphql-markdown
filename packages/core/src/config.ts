@@ -72,6 +72,7 @@ export const DEFAULT_OPTIONS: Required<
   printTypeOptions: {
     codeSection: true,
     deprecated: DeprecatedOption.DEFAULT,
+    exampleSection: true,
     parentTypePrefix: true,
     relatedTypeSection: true,
     typeBadges: true,
@@ -281,6 +282,9 @@ export const getPrintTypeOptions = (
         configOptions?.deprecated ??
         DEFAULT_OPTIONS.printTypeOptions.deprecated!) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
+    exampleSection:
+      (!cliOpts?.noExample && configOptions?.exampleSection) ??
+      DEFAULT_OPTIONS.printTypeOptions.exampleSection!,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,

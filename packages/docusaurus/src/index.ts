@@ -55,6 +55,7 @@ export default function pluginGraphQLDocGenerator(
         )
         .option("--noApiGroup", "Disable API grouping for types")
         .option("--noCode", "Disable code section for types")
+        .option("--noExample", "Disable example section for types")
         .option("--noParentType", "Disable parent type name as field prefix")
         .option("--noRelatedType", "Disable related types sections")
         .option("--noTypeBadges", "Disable badges for types")

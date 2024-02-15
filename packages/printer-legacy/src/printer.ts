@@ -62,7 +62,12 @@ import {
   MARKDOWN_SOC,
 } from "./const/strings";
 import { mdx } from "./const/mdx";
-import { DEFAULT_OPTIONS, PRINT_TYPE_DEFAULT_OPTIONS } from "./const/options";
+import {
+  DEFAULT_OPTIONS,
+  PRINT_TYPE_DEFAULT_OPTIONS,
+  SectionLevels,
+} from "./const/options";
+import { printExample } from "./example";
 
 export class Printer implements IPrinter {
   static options: Readonly<Maybe<PrintTypeOptions>>;
@@ -111,6 +116,9 @@ export class Printer implements IPrinter {
       codeSection:
         printTypeOptions?.codeSection ?? PRINT_TYPE_DEFAULT_OPTIONS.codeSection,
       customDirectives,
+      exampleSection:
+        printTypeOptions?.exampleSection ??
+        PRINT_TYPE_DEFAULT_OPTIONS.exampleSection,
       groups,
       parentTypePrefix:
         printTypeOptions?.parentTypePrefix ??
@@ -184,6 +192,47 @@ export class Printer implements IPrinter {
     }
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
+  };
+
+  static readonly printExample = (
+    type: unknown,
+    options: PrintTypeOptions,
+  ): string => {
+    if (
+      typeof options.exampleSection === "undefined" ||
+      options.exampleSection === null ||
+      options.exampleSection === false
+    ) {
+      return "";
+    }
+
+    let directiveName: string = "example",
+      argName: string = "value";
+    if (typeof options.exampleSection === "object") {
+      if (
+        "directive" in options.exampleSection &&
+        options.exampleSection.directive
+      ) {
+        directiveName = options.exampleSection.directive;
+      }
+      if ("arg" in options.exampleSection && options.exampleSection.arg) {
+        argName = options.exampleSection.arg;
+      }
+    }
+
+    const directive = options.schema?.getDirective(directiveName);
+
+    if (!directive) {
+      return "";
+    }
+
+    const example = printExample(type, { directive, argName });
+
+    if (!example) {
+      return "";
+    }
+
+    return `${SectionLevels.LEVEL_3} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
   };
 
   static readonly printTypeMetadata = (
@@ -274,6 +323,7 @@ export class Printer implements IPrinter {
     const tags = Printer.printCustomTags(type, printTypeOptions);
     const metadata = Printer.printTypeMetadata(type, printTypeOptions);
     const relations = Printer.printRelations(type, printTypeOptions);
+    const example = Printer.printExample(type, printTypeOptions);
 
     return [
       header,
@@ -284,6 +334,7 @@ export class Printer implements IPrinter {
       code,
       customDirectives,
       metadata,
+      example,
       relations,
     ].join(MARKDOWN_EOP) as MDXString;
   };

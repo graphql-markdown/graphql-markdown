@@ -40,6 +40,8 @@ import { instanceOf } from "./guard";
 
 export { getNamedType, printSchema } from "graphql";
 
+export class IntrospectionError extends Error {}
+
 /**
  * Returns a map of GraphQL named types from a schema for a defined GraphQL type.
  * When parsing the entities, internal GraphQL entities (starting with `__`) are excluded.
@@ -110,7 +112,7 @@ export const getDirectiveLocationForASTPath = (
   appliedTo: Maybe<ASTNode>,
 ): DirectiveLocation => {
   if (!appliedTo || !("kind" in appliedTo)) {
-    throw new Error("Unexpected kind: " + String(appliedTo));
+    throw new IntrospectionError("Unexpected kind: " + String(appliedTo));
   }
 
   switch (appliedTo.kind) {
@@ -146,7 +148,9 @@ export const getDirectiveLocationForASTPath = (
       return DirectiveLocation.ARGUMENT_DEFINITION;
     // Not reachable, all possible types have been considered.
     default:
-      throw new Error("Unexpected kind: " + String(appliedTo.kind));
+      throw new IntrospectionError(
+        "Unexpected kind: " + String(appliedTo.kind),
+      );
   }
 };
 
@@ -284,14 +288,14 @@ export const getTypeDirectiveArgValue = (
   directive: GraphQLDirective,
   node: unknown,
   argName: string,
-): Maybe<Record<string, unknown>> => {
+): Maybe<Record<string, unknown> | string> => {
   const args = getTypeDirectiveValues(directive, node);
 
   if (!args?.[argName]) {
-    throw new Error(`Directive argument '${argName}' not found!`);
+    throw new IntrospectionError(`Directive argument '${argName}' not found!`);
   }
 
-  return args[argName] as Maybe<Record<string, unknown>>;
+  return args[argName] as Maybe<Record<string, unknown> | string>;
 };
 
 /**
