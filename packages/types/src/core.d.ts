@@ -26,7 +26,7 @@ export type DirectiveExampleParserFunction = (value?: unknown) => unknown;
 
 export interface TypeDirectiveExample {
   directive: GraphQLDirective;
-  argName: string;
+  field: string;
   parser?: DirectiveExampleParserFunction;
 }
 

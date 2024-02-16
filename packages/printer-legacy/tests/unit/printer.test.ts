@@ -489,7 +489,7 @@ describe("Printer", () => {
       });
 
       expect(spy).toHaveBeenCalledWith(GraphQLString, {
-        argName: "value",
+        field: "value",
         directive: { name: "example" },
       });
       expect(code).toMatchSnapshot();
@@ -532,7 +532,7 @@ describe("Printer", () => {
         ...DEFAULT_OPTIONS,
         exampleSection: {
           directive: "set",
-          arg: "examples",
+          field: "examples",
         },
         schema: {
           getDirective: (name: string) => {
@@ -542,7 +542,7 @@ describe("Printer", () => {
       });
 
       expect(spy).toHaveBeenCalledWith(GraphQLString, {
-        argName: "examples",
+        field: "examples",
         directive: { name: "set" },
       });
       expect(code).toMatchSnapshot();

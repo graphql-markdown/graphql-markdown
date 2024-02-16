@@ -80,7 +80,7 @@ const parseExampleDirective = (
     const arg = getTypeDirectiveArgValue(
       directiveExample.directive,
       namedType,
-      directiveExample.argName,
+      directiveExample.field,
     ) as unknown;
 
     return parser(arg);
