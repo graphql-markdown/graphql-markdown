@@ -1,7 +1,12 @@
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type { CustomDirective, DirectiveName, GraphQLSchema } from ".";
+import type {
+  CustomDirective,
+  DirectiveName,
+  GraphQLDirective,
+  GraphQLSchema,
+} from ".";
 
 export type FrontMatterOptions = Record<string, unknown>;
 
@@ -22,10 +27,22 @@ export interface DeprecatedConfigDocOptions {
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
 
+export type DirectiveExampleParserFunction = (value?: unknown) => unknown;
+
+export interface TypeDirectiveExample {
+  directive: GraphQLDirective;
+  field: string;
+  parser?: DirectiveExampleParserFunction;
+}
+
+export type TypeExampleSectionOption = Partial<
+  Omit<TypeDirectiveExample, "directive"> & { directive: string }
+>;
+
 export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
-  exampleSection?: boolean;
+  exampleSection?: TypeExampleSectionOption | boolean;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;

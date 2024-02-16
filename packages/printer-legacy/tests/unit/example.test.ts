@@ -23,6 +23,29 @@ describe("example", () => {
     value: JSON
     id: ID!
   }
+
+  type TypeListExample {
+    example: [ScalarExample!]!
+  }
+
+  type TypeComplexExample {
+    example: [TypeListExample!]!
+  }
+
+  input SpectaQLInput {
+    key: String!
+    value: String!
+  }
+
+  directive @spectaql(
+    options: [SpectaQLInput!]!
+  ) on OBJECT | FIELD_DEFINITION | SCALAR
+
+  type CustomExampleDirective {
+    myField: String @spectaql(options: [{ key: "undocumented", value: "true" }])
+    myFieldOtherField: String @spectaql(options: [{ key: "example", value: "An Example from the Directive" }])
+    myFieldOtherOtherField: String @spectaql(options: [{ key: "examples", value: "[\\"Example 1 from the Directive\\", \\"Example 2 from the Directive\\"]" }])
+  }
 `);
   const exampleDirective = schema.getDirective("example")!;
 
@@ -33,9 +56,9 @@ describe("example", () => {
       expect(
         printExample(schema.getType("ScalarExample"), {
           directive: exampleDirective,
-          argName: "value",
+          field: "value",
         }),
-      ).toBe("This is an example");
+      ).toBe('"This is an example"');
     });
 
     test("returns undefined if no example directive", () => {
@@ -44,8 +67,22 @@ describe("example", () => {
       expect(
         printExample(schema.getType("JSON"), {
           directive: exampleDirective,
-          argName: "value",
+          field: "value",
         }),
+      ).toBeUndefined();
+    });
+
+    test("returns undefined if not a valid GraphQL type", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(
+          {},
+          {
+            directive: exampleDirective,
+            field: "value",
+          },
+        ),
       ).toBeUndefined();
     });
 
@@ -55,10 +92,10 @@ describe("example", () => {
       expect(
         printExample(schema.getType("TypeExtrapolateExample"), {
           directive: exampleDirective,
-          argName: "value",
+          field: "value",
         }),
       ).toBe(
-        '{"example":"This is an example","value":"{\\"example\\": \\"This is an example\\"}"}',
+        '{\n  "example": "This is an example",\n  "value": {\n    "example": "This is an example"\n  }\n}',
       );
     });
 
@@ -68,9 +105,60 @@ describe("example", () => {
       expect(
         printExample(schema.getType("TypeExample"), {
           directive: exampleDirective,
-          argName: "value",
+          field: "value",
         }),
-      ).toBe('{"example": "This is an example", "value": {}}');
+      ).toBe('{\n  "example": "This is an example",\n  "value": {}\n}');
+    });
+
+    test("returns a formatted example supporting list format", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getType("TypeListExample"), {
+          directive: exampleDirective,
+          field: "value",
+        }),
+      ).toBe('{\n  "example": [\n    "This is an example"\n  ]\n}');
+    });
+
+    test("returns an extrapolated from complex types", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getType("TypeComplexExample"), {
+          directive: exampleDirective,
+          field: "value",
+        }),
+      ).toBe(
+        '{\n  "example": [\n    {\n      "example": [\n        "This is an example"\n      ]\n    }\n  ]\n}',
+      );
+    });
+
+    test("returns a formatted example using custom parser", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getType("CustomExampleDirective"), {
+          directive: schema.getDirective("spectaql")!,
+          field: "options",
+          parser: (options: unknown): string | undefined => {
+            const example = (options as [{ key: string; value: string }]).find(
+              (option) => {
+                return ["example", "examples"].includes(option.key);
+              },
+            );
+            if (!example) {
+              return undefined;
+            }
+            if (example.key === "example") {
+              return example.value;
+            }
+            return (JSON.parse(example.value) as string[])[0];
+          },
+        }),
+      ).toBe(
+        '{\n  "myFieldOtherField": "An Example from the Directive",\n  "myFieldOtherOtherField": "Example 1 from the Directive"\n}',
+      );
     });
   });
 });

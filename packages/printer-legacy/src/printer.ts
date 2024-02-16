@@ -215,8 +215,8 @@ export class Printer implements IPrinter {
       ) {
         directiveName = options.exampleSection.directive;
       }
-      if ("arg" in options.exampleSection && options.exampleSection.arg) {
-        argName = options.exampleSection.arg;
+      if ("field" in options.exampleSection && options.exampleSection.field) {
+        argName = options.exampleSection.field;
       }
     }
 
@@ -226,7 +226,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    const example = printExample(type, { directive, argName });
+    const example = printExample(type, { directive, field: argName });
 
     if (!example) {
       return "";

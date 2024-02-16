@@ -38,7 +38,7 @@ import { convertArrayToMapObject } from "@graphql-markdown/utils";
 
 import { instanceOf } from "./guard";
 
-export { getNamedType, printSchema } from "graphql";
+export { getNamedType, printSchema, getNullableType } from "graphql";
 
 export class IntrospectionError extends Error {}
 
@@ -320,7 +320,11 @@ export const _getFields = <T, V>(
    */
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
-): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V => {
+):
+  | GraphQLFieldMap<unknown, unknown>
+  | GraphQLInputFieldMap
+  | GraphQLObjectType
+  | V => {
   if (
     !(
       typeof type === "object" &&
