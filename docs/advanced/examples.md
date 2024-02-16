@@ -75,7 +75,7 @@ plugins: [
       printTypeOptions: {
         exampleSection: {
           directive: schema.getDirective("spectaql")!,
-          argName: "options",
+          field: "options",
           parser: (options: unknown): string | undefined => {
             const example = (options as [{ key: string; value: string }]).find(
               (option) => {
