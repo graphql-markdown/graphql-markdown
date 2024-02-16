@@ -5,7 +5,7 @@ See [documentation](https://graphql-markdown.github.io/docs/settings#printtypeop
 """
 directive @example(
   value: String
-) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
+) on OBJECT | INPUT_OBJECT | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
 
 """
 Example of custom directive for `skipDocDirective`.
@@ -145,7 +145,7 @@ type DepartmentInformation implements Record @auth {
   employees(skip: Int): [String!]! @example(value: "[\"John Doe\"]")
 }
 
-type Course {
-  id: ID! @example(value: "1")
-  title: String! @example(value: "GraphQL")
+type Course implements Record @example(value: "{ \"id\": 2, \"title\": \"GraphQL\" }") {
+  id: ID!
+  title: String!
 }
