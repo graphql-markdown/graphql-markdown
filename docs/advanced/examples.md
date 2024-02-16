@@ -56,7 +56,7 @@ interface TypeExampleSectionOption {
 }
 ```
 
-For example, if the GraphQL schema already support examples using `@spectaql` directive.
+For example, if the GraphQL schema already supports examples using the `@spectaql` directive.
 
 ```graphql
 type CustomExampleDirective {
