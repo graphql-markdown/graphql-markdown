@@ -1,5 +1,4 @@
 import type {
-  GraphQLDirective,
   GraphQLType,
   Maybe,
   TypeDirectiveExample,
@@ -13,12 +12,12 @@ import {
   hasDirective,
   IntrospectionError,
   isListType,
+  isType,
 } from "@graphql-markdown/graphql";
-import { isType } from "graphql";
 
 const parseTypeFields = (
   type: Maybe<GraphQLType>,
-  directiveExample: Required<TypeDirectiveExample>,
+  directiveExample: TypeDirectiveExample,
 ): Maybe<unknown> => {
   const fields = getFields(type) as {
     astNode: unknown;
@@ -51,10 +50,27 @@ const parseTypeFields = (
   return example;
 };
 
+const parseExampleValue = (value: unknown): Maybe<unknown> => {
+  if (!value || typeof value !== "string") {
+    return undefined;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (err: unknown) {
+    return value;
+  }
+};
+
 const parseExampleDirective = (
   type: Maybe<GraphQLType>,
-  directiveExample: Required<TypeDirectiveExample>,
+  directiveExample: TypeDirectiveExample,
 ): Maybe<unknown> => {
+  const parser =
+    typeof directiveExample.parser === "function"
+      ? directiveExample.parser
+      : parseExampleValue;
+
   const namedType = getNamedType(type);
   if (!namedType) {
     return undefined;
@@ -65,17 +81,9 @@ const parseExampleDirective = (
       directiveExample.directive,
       namedType,
       directiveExample.argName,
-    ) as string;
+    ) as unknown;
 
-    if (!arg) {
-      return undefined;
-    }
-
-    try {
-      return JSON.parse(arg);
-    } catch (err: unknown) {
-      return arg;
-    }
+    return parser(arg);
   } catch (err: unknown) {
     if (err instanceof IntrospectionError) {
       return parseTypeFields(namedType, directiveExample);
@@ -86,10 +94,7 @@ const parseExampleDirective = (
 
 export const printExample = (
   type: unknown,
-  directiveExample: {
-    directive: GraphQLDirective;
-    argName: string;
-  },
+  directiveExample: TypeDirectiveExample,
 ): Maybe<string> => {
   if (!isType(type)) {
     return undefined;

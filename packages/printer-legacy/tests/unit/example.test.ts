@@ -118,5 +118,19 @@ describe("example", () => {
         '{\n  "example": [\n    {\n      "example": [\n        "This is an example"\n      ]\n    }\n  ]\n}',
       );
     });
+
+    test("returns a formatted example using custom parser", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getType("ScalarExample"), {
+          directive: exampleDirective,
+          argName: "value",
+          parser: (): number => {
+            return 42;
+          },
+        }),
+      ).toBe("42");
+    });
   });
 });

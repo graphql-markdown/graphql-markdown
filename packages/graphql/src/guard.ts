@@ -24,6 +24,7 @@ export {
   isNonNullType,
   isObjectType,
   isScalarType,
+  isType,
   isUnionType,
 } from "graphql";
 

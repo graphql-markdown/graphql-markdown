@@ -22,9 +22,12 @@ export interface DeprecatedConfigDocOptions {
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
 
+export type DirectiveExampleParserFunction = (value?: unknown) => unknown;
+
 export interface TypeDirectiveExample {
-  directive: Maybe<GraphQLDirective>;
-  argName?: string;
+  directive: GraphQLDirective;
+  argName: string;
+  parser?: DirectiveExampleParserFunction;
 }
 
 export type TypeExampleSectionOption = TypeDirectiveExample | boolean;
@@ -32,7 +35,7 @@ export type TypeExampleSectionOption = TypeDirectiveExample | boolean;
 export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
-  exampleSection?: TypeExampleSectionOption;
+  exampleSection?: Partial<TypeExampleSectionOption>;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
