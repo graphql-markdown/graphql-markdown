@@ -7,7 +7,7 @@ import type {
   ConfigPrintTypeOptions,
   GraphQLDirective,
   FrontMatterOptions,
-  TypeDirectiveExample,
+  TypeExampleSectionOption,
 } from ".";
 
 export type RootTypeName =
@@ -29,7 +29,7 @@ export type RootTypeLocale = {
 
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
-  exampleSection?: TypeDirectiveExample | boolean;
+  exampleSection?: TypeExampleSectionOption | boolean;
   deprecated?: TypeDeprecatedOption;
   metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
@@ -49,7 +49,7 @@ export interface PrintTypeOptions {
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
-  exampleSection?: Maybe<Partial<TypeDirectiveExample> | boolean>;
+  exampleSection?: Maybe<TypeExampleSectionOption | boolean>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
   level?: Maybe<SectionLevelValue>;

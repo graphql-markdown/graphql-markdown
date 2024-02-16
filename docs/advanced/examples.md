@@ -49,9 +49,9 @@ Examples can be inherited, this is why in the above example there is no example 
 Example directive definition and parser behavior can be customized through the configuration using a `TypeDirectiveExample` object instead of a boolean value for `printTypeOptions.exampleSection`:
 
 ```ts
-interface TypeDirectiveExample {
-  directive: GraphQLDirective; // customize the directive name
-  field: string; // customize the directive's field name
+interface TypeExampleSectionOption {
+  directive?: string; // customize the directive name
+  field?: string; // customize the directive's field name
   parser?: (value?: unknown) => unknown; // customize the field's value parsing
 }
 ```
