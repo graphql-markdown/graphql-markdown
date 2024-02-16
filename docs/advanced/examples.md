@@ -43,3 +43,59 @@ Using the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeopt
 Examples can be inherited, this is why in the above example there is no example explicitly set for the type `Semester`, and it will render as following
 
 ![examples](/img/docs/examples.png)
+
+## Custom directive example
+
+Example directive definition and parser behavior can be customized through the configuration using a `TypeDirectiveExample` object instead of a boolean value for `printTypeOptions.exampleSection`:
+
+```ts
+interface TypeDirectiveExample {
+  directive: GraphQLDirective; // customize the directive name
+  field: string; // customize the directive's field name
+  parser?: (value?: unknown) => unknown; // customize the field's value parsing
+}
+```
+
+For example, if the GraphQL schema already support examples using `@spectaql` directive.
+
+```graphql
+type CustomExampleDirective {
+  myField: String @spectaql(options: [{ key: "undocumented", value: "true" }])
+  myFieldOtherField: String @spectaql(options: [{ key: "example", value: "An Example from the Directive" }])
+  myFieldOtherOtherField: String @spectaql(options: [{ key: "examples", value: "[\"Example 1 from the Directive\", \"Example 2 from the Directive\"]" }])
+}
+```
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      // ... other options
+      printTypeOptions: {
+        exampleSection: {
+          directive: schema.getDirective("spectaql")!,
+          argName: "options",
+          parser: (options: unknown): string | undefined => {
+            const example = (options as [{ key: string; value: string }]).find(
+              (option) => {
+                return ["example", "examples"].includes(option.key);
+              },
+            );
+
+            if (!example) {
+              return undefined;
+            }
+
+            if (example.key === "example") {
+              return example.value;
+            }
+
+            return (JSON.parse(example.value) as string[])[0];
+          }
+        }
+      }
+    }
+  ]
+]
+```
