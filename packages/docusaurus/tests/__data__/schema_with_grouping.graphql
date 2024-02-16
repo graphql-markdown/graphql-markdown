@@ -5,7 +5,7 @@ See [documentation](https://graphql-markdown.github.io/docs/settings#printtypeop
 """
 directive @example(
   value: String
-) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | QUERY | MUTATION | SCALAR
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION
 
 """
 Example of custom directive for `skipDocDirective`.
@@ -45,7 +45,7 @@ directive @complexity(
 
   Use parameters values to compute the field's cost dynamically. If the parameter is an array, its multiplier value will be the length of the array.
   """
-  multipliers: [String!] @example(value: "[\\\"roles\\\"]")
+  multipliers: [String!] @example(value: "[\"roles\"]")
 ) on FIELD_DEFINITION
 
 """
@@ -82,11 +82,11 @@ type Mutation {
 }
 
 type Mutation {
-  AddCourse(input: String): String @doc(category: "Course") @auth
+  AddCourse(input: String): Course @doc(category: "Course") @auth
 }
 
 type Mutation {
-  DropCourse(input: String): String @doc(category: "Course") @auth
+  DropCourse(input: String): Course @doc(category: "Course") @auth
 }
 
 enum Roles {
@@ -102,13 +102,13 @@ type Query {
   UnWeightedGPA(input: String, skip: Int!): Int
     @doc(category: "Grade")
     @complexity(value: 3)
-  Course(skip: Int = 0): Course @doc(category: "Course")
+  Course(skip: Int = 0): Course @doc(category: "Course") @example(value: "{\n Course(skip: 1)\n {\n id\n title\n }\n }")
 }
 
 type Query {
-  allCourses: [String] @doc(category: "Course")
-  mathCourses: [String] @doc(category: "Course") @deprecated
-  scienceCourses: [String] @doc(category: "Course") @deprecated
+  allCourses: [Course] @doc(category: "Course")
+  mathCourses: [Course] @doc(category: "Course") @deprecated
+  scienceCourses: [Course] @doc(category: "Course") @deprecated
   searchRole(roles: [Roles!]! = [ADMIN]): Int!
     @beta
     @auth
@@ -142,7 +142,7 @@ type DepartmentInformation implements Record @auth {
   departmentOpenTime: Time
   departmentCloseTime: Time
   website: URL
-  employees(skip: Int): [String!]! @example(value: "[\\\"John Doe\\\"]")
+  employees(skip: Int): [String!]! @example(value: "[\"John Doe\"]")
 }
 
 type Course {

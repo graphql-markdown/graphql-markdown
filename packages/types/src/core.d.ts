@@ -22,10 +22,17 @@ export interface DeprecatedConfigDocOptions {
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
 
+export interface TypeDirectiveExample {
+  directive: Maybe<GraphQLDirective>;
+  argName?: string;
+}
+
+export type TypeExampleSectionOption = TypeDirectiveExample | boolean;
+
 export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
-  exampleSection?: boolean;
+  exampleSection?: TypeExampleSectionOption;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
