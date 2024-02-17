@@ -1,4 +1,4 @@
-import { GraphQLSchema } from "graphql";
+import { GraphQLSchema } from "graphql/type";
 
 import type { DiffMethodName } from "@graphql-markdown/types";
 

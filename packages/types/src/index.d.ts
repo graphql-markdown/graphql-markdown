@@ -18,7 +18,7 @@ export type {
   GraphQLSchemaConfig,
   GraphQLType,
   GraphQLUnionType,
-} from "graphql";
+} from "graphql/type";
 
 export type {
   LoadSchemaOptions,
