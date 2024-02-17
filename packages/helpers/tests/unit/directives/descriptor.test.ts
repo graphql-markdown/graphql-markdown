@@ -1,5 +1,6 @@
-jest.mock("graphql", () => {
-  const graphql = jest.requireActual("graphql");
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+jest.mock("graphql/execution", () => {
+  const graphql = jest.requireActual("graphql/execution");
   return {
     ...graphql,
     getDirectiveValues: jest.fn((...args) => {
@@ -7,8 +8,8 @@ jest.mock("graphql", () => {
     }),
   };
 });
-import graphql from "graphql";
-import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+import graphql from "graphql/execution";
+import type { GraphQLDirective, GraphQLNamedType } from "graphql/type";
 
 import { directiveDescriptor } from "../../../src";
 

@@ -1,8 +1,8 @@
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-jest.mock("graphql", () => {
-  const graphql = jest.requireActual("graphql");
+jest.mock("graphql/execution", () => {
+  const graphql = jest.requireActual("graphql/execution");
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
@@ -11,12 +11,10 @@ jest.mock("graphql", () => {
   };
 });
 
-import type { GraphQLSchema, ObjectTypeDefinitionNode, ASTNode } from "graphql";
+import type { GraphQLSchema } from "graphql/type";
+import type { ObjectTypeDefinitionNode, ASTNode } from "graphql/language";
 
 import {
-  buildSchema,
-  DirectiveLocation,
-  getDirectiveValues,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLInputObjectType,
@@ -25,8 +23,10 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   isDirective,
-  Kind,
-} from "graphql";
+} from "graphql/type";
+import { getDirectiveValues } from "graphql/execution";
+import { DirectiveLocation, Kind } from "graphql/language";
+import { buildSchema } from "graphql/utilities";
 
 import {
   getDirective,

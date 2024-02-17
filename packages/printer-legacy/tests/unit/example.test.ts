@@ -32,6 +32,11 @@ describe("example", () => {
     example: [TypeListExample!]!
   }
 
+  type Query {
+    example(id: ID!): TypeExample @example(value: "query { example(id: \\"1\\") { example value id } }")
+    examples(id: ID!): [TypeExample]
+  }
+
   input SpectaQLInput {
     key: String!
     value: String!
@@ -59,6 +64,28 @@ describe("example", () => {
           field: "value",
         }),
       ).toBe('"This is an example"');
+    });
+
+    test("returns a formatted example for the operation using @example directive", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getQueryType()?.getFields().example, {
+          directive: exampleDirective,
+          field: "value",
+        }),
+      ).toBe('{\n  example(id: "1") {\n    example\n    value\n    id\n  }\n}');
+    });
+
+    test("returns undefined if the operation has no @example directive", () => {
+      expect.assertions(1);
+
+      expect(
+        printExample(schema.getQueryType()?.getFields().examples, {
+          directive: exampleDirective,
+          field: "value",
+        }),
+      ).toBeUndefined();
     });
 
     test("returns undefined if no example directive", () => {
@@ -141,7 +168,7 @@ describe("example", () => {
         printExample(schema.getType("CustomExampleDirective"), {
           directive: schema.getDirective("spectaql")!,
           field: "options",
-          parser: (options: unknown): string | undefined => {
+          parser: (options: unknown): unknown => {
             const example = (options as [{ key: string; value: string }]).find(
               (option) => {
                 return ["example", "examples"].includes(option.key);

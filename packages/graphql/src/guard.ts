@@ -3,9 +3,9 @@
  *
  * @packageDocumentation
  */
-import type { GraphQLField } from "graphql";
 
 import type {
+  GraphQLField,
   GraphQLOperationType,
   DeprecatedType,
 } from "@graphql-markdown/types";
@@ -26,7 +26,8 @@ export {
   isScalarType,
   isType,
   isUnionType,
-} from "graphql";
+} from "graphql/type";
+export { isNode } from "graphql/language/ast";
 
 /**
  * Checks if a GraphQL named type is of type `GraphQLField`.

@@ -6,8 +6,6 @@
  */
 
 import {
-  DirectiveLocation,
-  getDirectiveValues,
   GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
@@ -15,9 +13,11 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   isNamedType,
-  Kind,
-  OperationTypeNode,
-} from "graphql";
+} from "graphql/type";
+
+import { DirectiveLocation, Kind, OperationTypeNode } from "graphql/language";
+
+import { getDirectiveValues } from "graphql/execution";
 
 import type {
   ASTNode,
@@ -38,7 +38,9 @@ import { convertArrayToMapObject } from "@graphql-markdown/utils";
 
 import { instanceOf } from "./guard";
 
-export { getNamedType, printSchema, getNullableType } from "graphql";
+export { printSchema } from "graphql/utilities";
+export { getNamedType, getNullableType } from "graphql/type";
+export { parse, print } from "graphql/language";
 
 export class IntrospectionError extends Error {}
 

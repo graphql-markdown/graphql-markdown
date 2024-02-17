@@ -27,7 +27,10 @@ export interface DeprecatedConfigDocOptions {
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
 
-export type DirectiveExampleParserFunction = (value?: unknown) => unknown;
+export type DirectiveExampleParserFunction = (
+  value?: unknown,
+  type?: unknown,
+) => unknown;
 
 export interface TypeDirectiveExample {
   directive: GraphQLDirective;

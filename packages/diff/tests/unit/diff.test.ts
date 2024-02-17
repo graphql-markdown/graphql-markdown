@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { vol } from "memfs";
 jest.mock("node:fs/promises");
 
 import type { DiffMethodName } from "@graphql-markdown/types";
 
-jest.mock("graphql");
-import * as graphql from "graphql";
+import { GraphQLSchema } from "graphql/type";
+
+jest.mock("graphql/utilities");
+import * as graphql from "graphql/utilities";
 
 jest.mock("@graphql-tools/load");
 import * as graphqlLoad from "@graphql-tools/load";
@@ -43,7 +46,7 @@ describe("lib", () => {
         });
 
         const check: boolean = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           "FOOBAR" as DiffMethodName,
         );
@@ -67,7 +70,7 @@ describe("lib", () => {
           return "schema-new";
         });
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.HASH as DiffMethodName,
         );
@@ -88,7 +91,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.HASH as DiffMethodName,
         );
@@ -108,7 +111,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.HASH as DiffMethodName,
         );
@@ -125,7 +128,7 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new graphql.GraphQLSchema({}));
+            return Promise.resolve(new GraphQLSchema({}));
           });
         const changes: Change[] = [];
         changes.push({
@@ -143,7 +146,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.DIFF as DiffMethodName,
         );
@@ -160,7 +163,7 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new graphql.GraphQLSchema({}));
+            return Promise.resolve(new GraphQLSchema({}));
           });
         jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
           return Promise.resolve([]);
@@ -171,7 +174,7 @@ describe("lib", () => {
         });
 
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.DIFF as DiffMethodName,
         );
@@ -188,14 +191,14 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new graphql.GraphQLSchema({}));
+            return Promise.resolve(new GraphQLSchema({}));
           });
         jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
           return Promise.resolve([]);
         });
 
         const check = await checkSchemaChanges(
-          new graphql.GraphQLSchema({}),
+          new GraphQLSchema({}),
           "/output",
           CompareMethod.DIFF as DiffMethodName,
         );

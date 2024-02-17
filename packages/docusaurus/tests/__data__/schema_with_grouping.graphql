@@ -102,7 +102,7 @@ type Query {
   UnWeightedGPA(input: String, skip: Int!): Int
     @doc(category: "Grade")
     @complexity(value: 3)
-  Course(skip: Int = 0): Course @doc(category: "Course") @example(value: "{\n Course(skip: 1)\n {\n id\n title\n }\n }")
+  Course(skip: Int = 0): Course @doc(category: "Course") @example(value: "query { Course(skip: 1) { id title } }")
 }
 
 type Query {
