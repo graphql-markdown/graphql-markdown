@@ -17,7 +17,7 @@ Using the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeopt
   ) on OBJECT | INPUT_OBJECT | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
   ```
 
-**2. Enrich your types definitions with examples**
+**2. Add examples to the schema**
 
   ```graphql
   scalar Date @example(value: "1970-01-01")
@@ -38,6 +38,10 @@ Using the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeopt
     endDate: Date
     courses: [Course!]!
   }
+
+  type Query {
+    course(id: ID!): Course @example(value: "{ course(id: \"1\") { title } }")
+  }
   ```
 
 Examples can be inherited, this is why in the above example there is no example explicitly set for the type `Semester`, and it will render as following
@@ -52,7 +56,7 @@ Example directive definition and parser behavior can be customized through the c
 interface TypeExampleSectionOption {
   directive?: string; // customize the directive name
   field?: string; // customize the directive's field name
-  parser?: (value?: unknown) => unknown; // customize the field's value parsing
+  parser?: (value?: unknown, type?: unknown) => unknown; // customize the field's value parsing
 }
 ```
 
@@ -76,7 +80,12 @@ plugins: [
         exampleSection: {
           directive: "spectaql",
           field: "options",
-          parser: (options: unknown): string | undefined => {
+          /* simplified parser for @spectaql (non production ready) */
+          parser: (options?: unknown, type?: unknown): unknown => {
+            if (!option) {
+              return undefined;
+            }
+
             const example = (options as [{ key: string; value: string }]).find(
               (option) => {
                 return ["example", "examples"].includes(option.key);
