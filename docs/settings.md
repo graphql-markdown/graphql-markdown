@@ -238,7 +238,7 @@ Use these options to toggle type information rendered on pages:
 | ------------------------------------- | ----------------------- | --------- |
 | `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
 | `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
-| `printTypeOptions.exampleSection`     | `--noExample`           | `true`    |
+| `printTypeOptions.exampleSection`     | `--noExample`           | `false`   |
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |

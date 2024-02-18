@@ -11,6 +11,7 @@ In this use case, you have multiple sets of documentation (a.k.a. [Docs Multi-in
 plugins: [
   [
     "@docusaurus/plugin-content-docs",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       id: "api",
       path: "api",

@@ -174,7 +174,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
-          "exampleSection": true,
+          "exampleSection": false,
           "frontMatter": {},
           "groups": undefined,
           "level": undefined,
@@ -216,7 +216,7 @@ describe("Printer", () => {
         groups: {},
         printTypeOptions: {
           codeSection: false,
-          exampleSection: false,
+          exampleSection: true,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
@@ -232,7 +232,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
-          "exampleSection": false,
+          "exampleSection": true,
           "frontMatter": {},
           "groups": {},
           "level": undefined,
@@ -481,6 +481,7 @@ describe("Printer", () => {
 
       const code = Printer.printExample(GraphQLString, {
         ...DEFAULT_OPTIONS,
+        exampleSection: true,
         schema: {
           getDirective: (name: string) => {
             return { name } as GraphQLDirective;

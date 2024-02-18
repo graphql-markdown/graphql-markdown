@@ -111,8 +111,8 @@ export const generateDocFromSchema = async ({
   );
   const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
     ...docOptions,
-    deprecated: printTypeOptions.deprecated,
-    useApiGroup: printTypeOptions.useApiGroup,
+    deprecated: printTypeOptions?.deprecated,
+    useApiGroup: printTypeOptions?.useApiGroup,
   });
 
   const pages = await Promise.all(

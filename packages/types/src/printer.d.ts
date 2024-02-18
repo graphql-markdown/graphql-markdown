@@ -1,12 +1,12 @@
 import type {
-  Maybe,
-  TypeDeprecatedOption,
-  SchemaEntitiesGroupMap,
-  GraphQLSchema,
-  CustomDirectiveMap,
   ConfigPrintTypeOptions,
-  GraphQLDirective,
+  CustomDirectiveMap,
   FrontMatterOptions,
+  GraphQLDirective,
+  GraphQLSchema,
+  Maybe,
+  SchemaEntitiesGroupMap,
+  TypeDeprecatedOption,
   TypeExampleSectionOption,
 } from ".";
 

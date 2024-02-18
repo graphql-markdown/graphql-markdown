@@ -42,6 +42,7 @@ Once done, you can declare the loader into `@graphql-markdown/docusaurus` config
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       loaders: {
@@ -66,6 +67,7 @@ Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` c
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       loaders: {

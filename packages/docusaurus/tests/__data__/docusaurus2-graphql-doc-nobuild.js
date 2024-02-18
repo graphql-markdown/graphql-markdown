@@ -1,3 +1,4 @@
+/** @type {import('@docusaurus/types').Config} */
 module.exports = {
   url: "https://graphql-markdown.github.io",
   baseUrl: "/",
@@ -41,6 +42,7 @@ module.exports = {
     [
       "@graphql-markdown/docusaurus",
       // override .graphqlrc
+      /** @type {import('@graphql-markdown/types').ConfigOptions} */
       {
         id: "schema_tweets",
         rootPath: "./docs",

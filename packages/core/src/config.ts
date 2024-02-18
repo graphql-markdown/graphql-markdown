@@ -10,11 +10,12 @@ import type {
   DeprecatedCliOptions,
   DeprecatedConfigDocOptions,
   DirectiveName,
+  FrontMatterOptions,
   GroupByDirectiveOptions,
-  LoaderOption,
   Maybe,
   Options,
   PackageName,
+  Pointer,
   TypeDeprecatedOption,
   TypeDiffMethod,
 } from "@graphql-markdown/types";
@@ -43,46 +44,43 @@ export const ASSET_HOMEPAGE_LOCATION = join(
   "generated.md",
 );
 
-export const DEFAULT_OPTIONS: Required<
-  Omit<
-    ConfigOptions,
-    "customDirective" | "groupByDirective" | "loaders" | "metatags"
-  >
-> & {
-  customDirective: Maybe<CustomDirective>;
-  groupByDirective: Maybe<GroupByDirectiveOptions>;
-  loaders: Maybe<LoaderOption>;
-  metatags: Record<string, string>[];
-} = {
+export const DEFAULT_OPTIONS: Readonly<
+  Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
+    Required<
+      Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">
+    >
+> = {
   id: "default",
   baseURL: "schema",
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
-    index: false,
-    frontMatter: {},
-  },
+    index: false as boolean,
+    frontMatter: {} as FrontMatterOptions,
+  } as Required<
+    Pick<ConfigDocOptions & DeprecatedConfigDocOptions, "frontMatter" | "index">
+  >,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
   linkRoot: "/",
   loaders: undefined,
   metatags: [] as Record<string, string>[],
-  pretty: false,
+  pretty: false as boolean,
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
-    codeSection: true,
-    deprecated: DeprecatedOption.DEFAULT,
-    exampleSection: true,
-    parentTypePrefix: true,
-    relatedTypeSection: true,
-    typeBadges: true,
-    useApiGroup: true,
-  },
+    codeSection: true as boolean,
+    deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
+    exampleSection: false as boolean,
+    parentTypePrefix: true as boolean,
+    relatedTypeSection: true as boolean,
+    typeBadges: true as boolean,
+    useApiGroup: true as boolean,
+  } as Required<ConfigPrintTypeOptions>,
   rootPath: "./docs",
-  schema: "./schema.graphql",
+  schema: "./schema.graphql" as Pointer,
   tmpDir: join(tmpdir(), PACKAGE_NAME),
-  skipDocDirective: [],
-  onlyDocDirective: [],
+  skipDocDirective: [] as DirectiveName[],
+  onlyDocDirective: [] as DirectiveName[],
 } as const;
 
 export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
@@ -261,7 +259,7 @@ export const getDocOptions = (
     index:
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       (cliOpts?.index || configOptions?.index) ??
-      DEFAULT_OPTIONS.docOptions.index!,
+      DEFAULT_OPTIONS.docOptions!.index!,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
@@ -276,27 +274,27 @@ export const getPrintTypeOptions = (
   return {
     codeSection:
       (!cliOpts?.noCode && configOptions?.codeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions.codeSection!,
+      DEFAULT_OPTIONS.printTypeOptions!.codeSection!,
     deprecated: (
       (cliOpts?.deprecated ??
         configOptions?.deprecated ??
-        DEFAULT_OPTIONS.printTypeOptions.deprecated!) as string
+        DEFAULT_OPTIONS.printTypeOptions!.deprecated!) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
     exampleSection:
       (!cliOpts?.noExample && configOptions?.exampleSection) ??
-      DEFAULT_OPTIONS.printTypeOptions.exampleSection!,
+      DEFAULT_OPTIONS.printTypeOptions!.exampleSection!,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
-      DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix!,
+      DEFAULT_OPTIONS.printTypeOptions!.parentTypePrefix!,
     relatedTypeSection:
       (!cliOpts?.noRelatedType && configOptions?.relatedTypeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions.relatedTypeSection!,
+      DEFAULT_OPTIONS.printTypeOptions!.relatedTypeSection!,
     typeBadges:
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
-      DEFAULT_OPTIONS.printTypeOptions.typeBadges!,
+      DEFAULT_OPTIONS.printTypeOptions!.typeBadges!,
     useApiGroup:
       (!cliOpts?.noApiGroup && configOptions?.useApiGroup) ??
-      DEFAULT_OPTIONS.printTypeOptions.useApiGroup!,
+      DEFAULT_OPTIONS.printTypeOptions!.useApiGroup!,
   } as Required<ConfigPrintTypeOptions>;
 };
 
@@ -345,7 +343,7 @@ export const buildConfig = async (
     ...configFileOpts,
   } as const;
 
-  const baseURL: string = cliOpts.base ?? config.baseURL;
+  const baseURL: string = cliOpts.base ?? config.baseURL!;
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
     cliOpts,
     config,
@@ -357,7 +355,10 @@ export const buildConfig = async (
       config.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod, cliOpts.force),
+    diffMethod: getDiffMethod(
+      cliOpts.diff ?? config.diffMethod!,
+      cliOpts.force,
+    ),
     docOptions: getDocOptions(cliOpts, config.docOptions),
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
@@ -368,7 +369,7 @@ export const buildConfig = async (
     loaders: config.loaders,
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
-    outputDir: join(cliOpts.root ?? config.rootPath, baseURL),
+    outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
     prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
     printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),

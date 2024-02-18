@@ -5,7 +5,7 @@ pagination_next: null
 
 # Examples
 
-Using the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions), you can add examples to types documentation.
+By enabling the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions), you can add examples to types documentation.
 
 ## Usage
 
@@ -74,6 +74,7 @@ type CustomExampleDirective {
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       printTypeOptions: {

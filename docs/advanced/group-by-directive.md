@@ -47,6 +47,7 @@ or the plugin configuration `groupByDirective`:
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       // highlight-start

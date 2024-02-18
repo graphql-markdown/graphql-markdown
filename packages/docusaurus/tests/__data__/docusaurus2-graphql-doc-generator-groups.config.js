@@ -5,6 +5,7 @@ const {
   directiveTag,
 } = require("@graphql-markdown/helpers");
 
+/** @type {import('@graphql-markdown/types').ConfigOptions} */
 module.exports = {
   id: "schema_with_grouping",
   schema: "data/schema_with_grouping.graphql",
@@ -15,12 +16,13 @@ module.exports = {
   loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
   groupByDirective: {
     directive: "doc",
-    field: "category",
     fallback: "Common",
+    field: "category",
   },
   printTypeOptions: {
     parentTypePrefix: false,
     relatedTypeSection: false,
+    sectionExample: true,
     typeBadges: true,
   },
   docOptions: {

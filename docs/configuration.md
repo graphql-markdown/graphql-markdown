@@ -12,6 +12,7 @@ module.exports = {
   plugins: [
     [
       "@graphql-markdown/docusaurus",
+      /** @type {import('@graphql-markdown/types').ConfigOptions} */
       {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)

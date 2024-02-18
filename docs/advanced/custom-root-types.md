@@ -21,6 +21,7 @@ Add the option `rootTypes` to the loader options under `@graphql-markdown/docusa
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       loaders: {

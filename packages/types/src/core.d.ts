@@ -6,18 +6,19 @@ import type {
   DirectiveName,
   GraphQLDirective,
   GraphQLSchema,
+  Maybe,
 } from ".";
 
 export type FrontMatterOptions = Record<string, unknown>;
 
 export interface ConfigDocOptions {
   index?: boolean;
-  frontMatter: Maybe<FrontMatterOptions>;
+  frontMatter?: Maybe<FrontMatterOptions>;
+  useApiGroup?: boolean;
 }
 
 export type RendererDocOptions = ConfigDocOptions & {
-  deprecated: TypeDeprecatedOption;
-  useApiGroup: boolean;
+  deprecated?: Maybe<TypeDeprecatedOption>;
 };
 
 export interface DeprecatedConfigDocOptions {
@@ -113,21 +114,30 @@ export interface DeprecatedCliOptions {
 
 export type Options = Omit<
   ConfigOptions,
-  "homepage" | "pretty" | "rootPath" | "schema"
-> & {
-  baseURL: string;
-  docOptions: Required<ConfigDocOptions>;
-  homepageLocation: string;
-  linkRoot: string;
-  onlyDocDirective: DirectiveName[];
-  outputDir: string;
-  prettify: boolean;
-  printer: PackageName;
-  printTypeOptions: Required<ConfigPrintTypeOptions>;
-  schemaLocation: Pointer;
-  skipDocDirective: DirectiveName[];
-  tmpDir: string;
-};
+  "homepage" | "linkRoot" | "pretty" | "rootPath"
+> &
+  Required<
+    Pick<
+      ConfigOptions,
+      | "diffMethod"
+      | "docOptions"
+      | "metatags"
+      | "onlyDocDirective"
+      | "printer"
+      | "printTypeOptions"
+      | "skipDocDirective"
+    > & {
+      baseURL: string;
+      homepageLocation: string;
+      linkRoot: string;
+      onlyDocDirective: DirectiveName[];
+      outputDir: string;
+      prettify: boolean;
+      schemaLocation: Pointer;
+      tmpDir: string;
+      skipDocDirective: DirectiveName[];
+    }
+  >;
 
 export type FunctionCheckSchemaChanges = (
   schema: GraphQLSchema,
