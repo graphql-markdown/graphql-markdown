@@ -162,7 +162,7 @@ describe("renderer", () => {
       await generateDocFromSchema(config);
 
       expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
-      expect(vol.toJSON(config.tmpDir!, undefined, true)).toMatchSnapshot();
+      expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
     });
   });
 });
