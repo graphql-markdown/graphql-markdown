@@ -16,14 +16,14 @@ module.exports = {
   loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
   groupByDirective: {
     directive: "doc",
-    field: "category",
     fallback: "Common",
+    field: "category",
   },
   printTypeOptions: {
     parentTypePrefix: false,
     relatedTypeSection: false,
-    typeBadges: true,
     sectionExample: true,
+    typeBadges: true,
   },
   docOptions: {
     index: true,
