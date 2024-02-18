@@ -22,7 +22,7 @@ module.exports = {
   printTypeOptions: {
     parentTypePrefix: false,
     relatedTypeSection: false,
-    sectionExample: true,
+    exampleSection: true,
     typeBadges: true,
   },
   docOptions: {

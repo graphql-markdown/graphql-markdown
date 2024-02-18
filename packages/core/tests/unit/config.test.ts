@@ -233,7 +233,7 @@ describe("config", () => {
         printTypeOptions: {
           codeSection: false,
           deprecated: "group",
-          exampleSection: false,
+          exampleSection: true,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
@@ -299,6 +299,9 @@ describe("config", () => {
         docOptions: {
           index: true,
         },
+        printTypeOptions: {
+          exampleSection: true,
+        },
       };
 
       const cliOpts: CliOptions = {
@@ -310,6 +313,7 @@ describe("config", () => {
         index: true,
         link: "/cli",
         noCode: true,
+        noExample: true,
         only: "@public",
         pretty: true,
         root: "cli",
@@ -345,6 +349,7 @@ describe("config", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           codeSection: false,
           deprecated: "group",
+          exampleSection: false,
         },
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
@@ -621,7 +626,7 @@ describe("config", () => {
     ])(
       "returns pagination nulled if pagination option is disabled",
       ({ cliOpt, configOptions }) => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
         const spyConsole = jest
           .spyOn(global.console, "warn")
@@ -649,7 +654,7 @@ describe("config", () => {
     ])(
       "returns hide_table_of_contents set to true if toc option is disabled",
       ({ cliOpt, configOptions }) => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
         const spyConsole = jest
           .spyOn(global.console, "warn")
