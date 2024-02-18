@@ -14,7 +14,6 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
-  onBrokenAnchors: "warn",
   favicon: "img/favicon.ico",
   title: "GraphQL-Markdown",
   tagline: "Flexible GraphQL Documentation Generator",
