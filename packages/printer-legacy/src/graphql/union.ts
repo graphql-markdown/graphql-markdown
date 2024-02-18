@@ -1,6 +1,5 @@
 import type {
   PrintTypeOptions,
-  GraphQLUnionType,
   MDXString,
   GraphQLObjectType,
 } from "@graphql-markdown/types";

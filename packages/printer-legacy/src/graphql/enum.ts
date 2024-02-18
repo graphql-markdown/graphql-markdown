@@ -1,8 +1,4 @@
-import type {
-  GraphQLEnumType,
-  MDXString,
-  PrintTypeOptions,
-} from "@graphql-markdown/types";
+import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
   isEnumType,
