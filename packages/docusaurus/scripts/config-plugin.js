@@ -14,6 +14,7 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
+  onBrokenAnchors: "warn",
   favicon: "img/favicon.ico",
   title: "GraphQL-Markdown",
   tagline: "Flexible GraphQL Documentation Generator",
@@ -100,35 +101,3 @@ fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
   }
 });
 
-const sidebarConfig = require.resolve(`${process.cwd()}/sidebars.js`);
-
-const sidebarConfigString = `
-const path = require("path");
-const { existsSync } = require("fs");
-
-let sidebar = {};
-
-const basicSchema = require(path.resolve(__dirname, "data/${pluginConfigFilename}"));
-const basicSidebarFile = path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js");
-if (existsSync(basicSidebarFile)) {
-  const { schemaSidebar } = require(basicSidebarFile);
-  sidebar = { ...sidebar, basic: schemaSidebar };
-}
-
-const groupSchema = require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"));
-const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
-if (existsSync(groupBySidebarFile)) {
-  const { schemaSidebar } = require(groupBySidebarFile);
-  sidebar = { ...sidebar, group: schemaSidebar };
-}
-
-module.exports = sidebar;
-\n`;
-
-fs.writeFile(sidebarConfig, sidebarConfigString, (err) => {
-  if (err) {
-    console.log(`Error updating '${sidebarConfig}'`, err);
-  } else {
-    console.log(`Successfully updated '${sidebarConfig}'`);
-  }
-});
