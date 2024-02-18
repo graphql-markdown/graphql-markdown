@@ -1,26 +1,10 @@
-const { writeFile } = require("node:fs");
-const { resolve } = require("node:path");
+const fs = require("node:fs");
 
-/** @type {import('@graphql-markdown/types').ConfigOptions} */
-const pluginConfig = require(
-  resolve(__dirname, "data", "docusaurus2-graphql-doc-generator.config.js"),
-);
-/** @type {import('@graphql-markdown/types').ConfigOptions} */
-const pluginGroupConfig = require(
-  resolve(
-    __dirname,
-    "data",
-    "docusaurus2-graphql-doc-generator-groups.config.js",
-  ),
-);
-/** @type {import('@graphql-markdown/types').ConfigOptions} */
-const pluginGraphqlrcConfig = require(
-  resolve(
-    __dirname,
-    "data",
-    "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js",
-  ),
-);
+const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
+const pluginGroupConfigFilename =
+  "docusaurus2-graphql-doc-generator-groups.config.js";
+const pluginGraphqlrcConfigFilename =
+  "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js";
 
 const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
@@ -85,15 +69,30 @@ const config = {
     ],
   ],
   plugins: [
-    ["@graphql-markdown/docusaurus", pluginConfig],
-    ["@graphql-markdown/docusaurus", pluginGroupConfig],
-    ["@graphql-markdown/docusaurus", pluginGraphqlrcConfig],
+    ["@graphql-markdown/docusaurus", "@config1@"],
+    ["@graphql-markdown/docusaurus", "@config2@"],
+    ["@graphql-markdown/docusaurus", "@config3@"],
   ],
 };
 
-const configExportString = `module.exports = ${JSON.stringify(config)};`;
+const configExportString = `
+const path = require("path");
 
-writeFile(docusaurusConfigFilepath, configExportString, (err) => {
+module.exports = ${JSON.stringify(config)};\n`
+  .replace(
+    `"@config1@"`,
+    `require(path.resolve(__dirname, "data/${pluginConfigFilename}"))`,
+  )
+  .replace(
+    `"@config2@"`,
+    `require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"))`,
+  )
+  .replace(
+    `"@config3@"`,
+    `require(path.resolve(__dirname, "data/${pluginGraphqlrcConfigFilename}"))`,
+  );
+
+fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
   if (err) {
     console.log(`Error updating '${docusaurusConfigFilepath}'`, err);
   } else {
@@ -104,19 +103,20 @@ writeFile(docusaurusConfigFilepath, configExportString, (err) => {
 const sidebarConfig = require.resolve(`${process.cwd()}/sidebars.js`);
 
 const sidebarConfigString = `
-const { resolve } = require("node:path");
-const { existsSync } = require("node:fs");
+const path = require("path");
+const { existsSync } = require("fs");
 
-const sidebarFile = "sidebar-schema.js"
 let sidebar = {};
 
-const basicSidebarFile = resolve(__dirname, ${pluginConfig.rootPath}, ${pluginConfig.baseURL}, sidebarFile);
+const basicSchema = require(path.resolve(__dirname, "data/${pluginConfigFilename}"));
+const basicSidebarFile = path.resolve(__dirname, basicSchema.rootPath, basicSchema.baseURL, "sidebar-schema.js");
 if (existsSync(basicSidebarFile)) {
   const { schemaSidebar } = require(basicSidebarFile);
   sidebar = { ...sidebar, basic: schemaSidebar };
 }
 
-const groupBySidebarFile = resolve(__dirname, ${pluginGroupConfig.rootPath}, ${pluginGroupConfig.baseURL}, sidebarFile);
+const groupSchema = require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"));
+const groupBySidebarFile = path.resolve(__dirname, groupSchema.rootPath, groupSchema.baseURL, "sidebar-schema.js");
 if (existsSync(groupBySidebarFile)) {
   const { schemaSidebar } = require(groupBySidebarFile);
   sidebar = { ...sidebar, group: schemaSidebar };
@@ -125,7 +125,7 @@ if (existsSync(groupBySidebarFile)) {
 module.exports = sidebar;
 \n`;
 
-writeFile(sidebarConfig, sidebarConfigString, (err) => {
+fs.writeFile(sidebarConfig, sidebarConfigString, (err) => {
   if (err) {
     console.log(`Error updating '${sidebarConfig}'`, err);
   } else {
