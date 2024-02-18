@@ -7,6 +7,7 @@ import type {
   GraphQLDirective,
   Maybe,
   PackageName,
+  TypeDeprecatedOption,
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
@@ -68,7 +69,7 @@ describe("config", () => {
         options: {
           cliOpt: undefined,
           configFileOpts: {
-            printTypeOptions: { deprecated: "skip" },
+            printTypeOptions: { deprecated: "skip" as TypeDeprecatedOption },
           },
         },
       },
@@ -77,7 +78,7 @@ describe("config", () => {
         options: {
           cliOpt: { deprecated: "skip" },
           configFileOpts: {
-            printTypeOptions: { deprecated: "group" },
+            printTypeOptions: { deprecated: "group" as TypeDeprecatedOption },
           },
         },
       },
@@ -193,7 +194,7 @@ describe("config", () => {
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
           metatags: DEFAULT_OPTIONS.metatags,
-          outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+          outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
           onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
           prettify: DEFAULT_OPTIONS.pretty,
           printer: DEFAULT_OPTIONS.printer,
@@ -379,7 +380,7 @@ describe("config", () => {
         loaders: configFileOpts.loaders,
         metatags: DEFAULT_OPTIONS.metatags,
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, configFileOpts.baseURL!),
+        outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
         prettify: cliOpts.pretty,
         printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
@@ -408,7 +409,7 @@ describe("config", () => {
         loaders: {},
         metatags: DEFAULT_OPTIONS.metatags,
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
-        outputDir: join(DEFAULT_OPTIONS.rootPath, DEFAULT_OPTIONS.baseURL),
+        outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
         printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,

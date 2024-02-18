@@ -36,7 +36,8 @@ This is an example of documentation grouping with GraphQL directive using the `g
     parentTypePrefix: false,
     relatedTypeSection: false,
     typeBadges: true,
-    useApiGroup: false
+    sectionExample: true,
+    useApiGroup: false,
   },
   skipDocDirective: ["@noDoc"],
   customDirective: {
@@ -85,7 +86,8 @@ This is an example of documentation grouping with GraphQL directive using the `g
         parentTypePrefix: false,
         relatedTypeSection: false,
         typeBadges: true,
-        useApiGroup: false
+        sectionExample: true,
+        useApiGroup: false,
       },
       skipDocDirective: ["@noDoc"],
       customDirective: {

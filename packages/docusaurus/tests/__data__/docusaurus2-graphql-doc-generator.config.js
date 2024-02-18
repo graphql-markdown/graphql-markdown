@@ -1,3 +1,4 @@
+/** @type {import('@graphql-markdown/types').ConfigOptions} */
 module.exports = {
   schema: "data/tweet.graphql",
   rootPath: "./docs",

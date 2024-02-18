@@ -88,7 +88,7 @@ export const loadConfiguration = async (
 
         if (typeof projectConfig.loaders !== "undefined") {
           projectConfig.loaders = setLoaderOptions(
-            projectConfig.loaders,
+            projectConfig.loaders ?? {},
             Object.values(schema)[0] as PackageOptionsConfig,
           );
         }

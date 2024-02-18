@@ -5,6 +5,7 @@ const {
   directiveTag,
 } = require("@graphql-markdown/helpers");
 
+/** @type {import('@graphql-markdown/types').ConfigOptions} */
 module.exports = {
   id: "schema_with_grouping",
   schema: "data/schema_with_grouping.graphql",
@@ -22,6 +23,7 @@ module.exports = {
     parentTypePrefix: false,
     relatedTypeSection: false,
     typeBadges: true,
+    sectionExample: true,
   },
   docOptions: {
     index: true,

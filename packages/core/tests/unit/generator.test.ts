@@ -1,10 +1,12 @@
 jest.useFakeTimers();
 
 import type {
+  DirectiveName,
   GeneratorOptions,
   GraphQLSchema,
   IPrinter,
   LoadSchemaOptions,
+  PackageName,
   SchemaMap,
 } from "@graphql-markdown/types";
 
@@ -33,30 +35,34 @@ import { generateDocFromSchema } from "../../src";
 
 describe("generator", () => {
   describe("generateDocFromSchema()", () => {
-    const options = {
+    const options: GeneratorOptions = {
       baseURL: "base URL",
-      schemaLocation: "schema location",
-      outputDir: "output dir",
-      linkRoot: "link root",
-      homepageLocation: "homepage location",
-      tmpDir: "temp dir",
-      diffMethod: "diff method",
+      diffMethod: "diff method" as DiffMethod,
       docOptions: {
         index: true,
+        frontMatter: {},
+        useApiGroup: true,
       },
+      homepageLocation: "homepage location",
+      linkRoot: "link root",
+      metatags: [],
+      onlyDocDirective: [],
+      prettify: true,
+      printer: "printer module" as PackageName,
       printTypeOptions: {
         codeSection: true,
         deprecated: "skip",
+        exampleSection: false,
         parentTypePrefix: true,
         relatedTypeSection: true,
         typeBadges: true,
         useApiGroup: true,
       },
-      prettify: true,
-      printer: "printer module",
-      skipDocDirective: ["docDirective"],
-      onlyDocDirective: [],
-    } as GeneratorOptions;
+      outputDir: "output dir",
+      schemaLocation: "schema location",
+      tmpDir: "temp dir",
+      skipDocDirective: ["docDirective" as DirectiveName],
+    };
 
     beforeAll(() => {
       Object.assign(global, { logger: global.console });
@@ -112,6 +118,7 @@ describe("generator", () => {
         {
           customDirectives: undefined,
           groups: undefined,
+          metatags: [],
           printTypeOptions: options.printTypeOptions,
           onlyDocDirectives: [],
           skipDocDirectives: [
@@ -127,8 +134,8 @@ describe("generator", () => {
         options.prettify,
         {
           ...options.docOptions,
-          deprecated: options.printTypeOptions.deprecated,
-          useApiGroup: options.printTypeOptions.useApiGroup,
+          deprecated: options.printTypeOptions!.deprecated,
+          useApiGroup: options.printTypeOptions!.useApiGroup,
         },
       );
     });

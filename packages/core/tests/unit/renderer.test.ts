@@ -3,6 +3,7 @@ import { GraphQLScalarType, Kind } from "graphql";
 import type {
   IPrinter,
   MDXString,
+  RendererDocOptions,
   SchemaEntity,
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
@@ -48,10 +49,10 @@ import * as GraphQL from "@graphql-markdown/graphql";
 import { Renderer } from "../../src/renderer";
 import { DEFAULT_OPTIONS } from "../../src/config";
 
-const DEFAULT_RENDERER_OPTIONS = {
+const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
-  deprecated: DEFAULT_OPTIONS.printTypeOptions
-    .deprecated as TypeDeprecatedOption,
+  deprecated: DEFAULT_OPTIONS.printTypeOptions!
+    .deprecated! as TypeDeprecatedOption,
 };
 
 describe("renderer", () => {
@@ -65,11 +66,11 @@ describe("renderer", () => {
         "/output",
         baseURL,
         undefined,
-        DEFAULT_OPTIONS.pretty,
+        DEFAULT_OPTIONS.pretty!,
         {
           ...DEFAULT_OPTIONS.docOptions,
-          deprecated: DEFAULT_OPTIONS.printTypeOptions
-            .deprecated as TypeDeprecatedOption,
+          deprecated: DEFAULT_OPTIONS.printTypeOptions!
+            .deprecated! as TypeDeprecatedOption,
         },
       );
 

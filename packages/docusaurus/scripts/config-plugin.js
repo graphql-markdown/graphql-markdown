@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("node:fs");
 
 const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
 const pluginGroupConfigFilename =
@@ -8,6 +8,7 @@ const pluginGraphqlrcConfigFilename =
 
 const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
+/** @type {import('@docusaurus/types').Config} */
 const config = {
   url: "https://graphql-markdown.github.io",
   baseUrl: "/",

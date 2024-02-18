@@ -151,11 +151,12 @@ export const getCustomDirectiveOptions = (
  */
 export const getCustomDirectives = (
   { directives: schemaDirectives }: Pick<SchemaMap, "directives">,
-  customDirectiveOptions?: CustomDirective,
+  customDirectiveOptions?: Maybe<CustomDirective>,
 ): Maybe<CustomDirectiveMap> => {
   const customDirectives: CustomDirectiveMap = {};
 
   if (
+    !customDirectiveOptions ||
     typeof schemaDirectives !== "object" ||
     typeof customDirectiveOptions !== "object"
   ) {
