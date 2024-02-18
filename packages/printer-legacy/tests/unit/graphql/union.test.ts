@@ -2,7 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-} from "graphql";
+} from "graphql/type";
 
 import { printCodeUnion, printUnionMetadata } from "../../../src/graphql/union";
 

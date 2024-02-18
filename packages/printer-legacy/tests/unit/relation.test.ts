@@ -1,10 +1,10 @@
-import type { GraphQLSchema } from "graphql";
-import { GraphQLScalarType } from "graphql";
+import { GraphQLScalarType } from "graphql/type";
 jest.mock("graphql");
 
 import type {
   GraphQLOperationType,
   IGetRelation,
+  GraphQLSchema,
 } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {

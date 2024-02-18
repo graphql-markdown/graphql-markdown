@@ -1,4 +1,7 @@
-import type { GraphQLDirective, GraphQLNamedType } from "graphql";
+import type {
+  GraphQLDirective,
+  GraphQLNamedType,
+} from "@graphql-markdown/types";
 
 import { directiveTag } from "../../../src";
 

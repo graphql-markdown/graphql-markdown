@@ -7,9 +7,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLDirective,
-  Kind,
-  DirectiveLocation,
-} from "graphql";
+} from "graphql/type";
+import { Kind, DirectiveLocation } from "graphql/language";
 
 import {
   printSection,

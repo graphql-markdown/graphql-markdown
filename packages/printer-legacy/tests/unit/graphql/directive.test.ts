@@ -1,4 +1,5 @@
-import { GraphQLDirective, GraphQLBoolean, DirectiveLocation } from "graphql";
+import { GraphQLDirective, GraphQLBoolean } from "graphql/type";
+import { DirectiveLocation } from "graphql/language";
 
 import { DEFAULT_OPTIONS } from "../../../src/const/options";
 

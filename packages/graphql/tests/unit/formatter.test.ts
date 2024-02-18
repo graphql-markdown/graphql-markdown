@@ -6,7 +6,7 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLString,
-} from "graphql";
+} from "graphql/type";
 
 import { getFormattedDefaultValue } from "../../src/formatter";
 

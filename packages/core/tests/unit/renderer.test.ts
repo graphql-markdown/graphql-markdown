@@ -1,4 +1,5 @@
-import { GraphQLScalarType, Kind } from "graphql";
+import { GraphQLScalarType } from "graphql/type";
+import { Kind } from "graphql/language";
 
 import type {
   IPrinter,

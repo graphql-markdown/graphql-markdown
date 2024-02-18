@@ -1,6 +1,6 @@
 import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import type { GraphQLSchema } from "graphql";
+import type { GraphQLSchema } from "graphql/type";
 
 import type { LoaderOption } from "@graphql-markdown/types";
 

@@ -1,4 +1,8 @@
-import { GraphQLBoolean, GraphQLString, GraphQLInputObjectType } from "graphql";
+import {
+  GraphQLBoolean,
+  GraphQLString,
+  GraphQLInputObjectType,
+} from "graphql/type";
 
 import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
