@@ -3,7 +3,7 @@ import {
   GraphQLInt,
   GraphQLScalarType,
   GraphQLString,
-} from "graphql";
+} from "graphql/type";
 
 jest.mock("@graphql-markdown/graphql", () => {
   return {

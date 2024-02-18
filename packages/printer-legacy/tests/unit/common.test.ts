@@ -1,11 +1,10 @@
-import type { ConstDirectiveNode } from "graphql";
+import type { ConstDirectiveNode } from "graphql/language";
 import {
-  DirectiveLocation,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLScalarType,
-  Kind,
-} from "graphql";
+} from "graphql/type";
+import { DirectiveLocation, Kind } from "graphql/language";
 
 import {
   hasPrintableDirective,

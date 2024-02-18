@@ -1,4 +1,4 @@
-import { buildSchema } from "graphql";
+import { buildSchema } from "graphql/utilities";
 
 import { printExample } from "../../src/example";
 

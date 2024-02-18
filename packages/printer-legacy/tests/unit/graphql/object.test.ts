@@ -3,7 +3,7 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLInterfaceType,
-} from "graphql";
+} from "graphql/type";
 
 import { DEFAULT_OPTIONS } from "../../../src/const/options";
 

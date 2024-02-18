@@ -19,7 +19,7 @@ import type {
 import { isEmpty } from "@graphql-markdown/utils";
 
 import { getDirective } from "./introspection";
-import { DirectiveLocation } from "graphql";
+import { DirectiveLocation } from "graphql/language";
 
 /**
  * Wildcard `*` character for matching any directive name.

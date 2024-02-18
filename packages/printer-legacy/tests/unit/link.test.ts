@@ -1,12 +1,15 @@
-import type { GraphQLNamedType } from "graphql";
 import {
   GraphQLList,
   GraphQLDirective,
   GraphQLObjectType,
   GraphQLScalarType,
-} from "graphql";
+} from "graphql/type";
 
-import type { PrintLinkOptions, TypeLocale } from "@graphql-markdown/types";
+import type {
+  PrintLinkOptions,
+  TypeLocale,
+  GraphQLNamedType,
+} from "@graphql-markdown/types";
 
 import * as Utils from "@graphql-markdown/utils";
 jest.mock("@graphql-markdown/utils", () => {

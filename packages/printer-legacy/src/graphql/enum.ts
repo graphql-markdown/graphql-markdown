@@ -1,8 +1,4 @@
-import type {
-  GraphQLEnumType,
-  MDXString,
-  PrintTypeOptions,
-} from "@graphql-markdown/types";
+import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
   isEnumType,
@@ -34,7 +30,7 @@ export const printCodeEnum = (
   }
 
   let code = `enum ${getTypeName(type)} {${MARKDOWN_EOL}`;
-  code += (type as GraphQLEnumType)
+  code += type
     .getValues()
     .map((value): string => {
       if (!hasPrintableDirective(value, options)) {

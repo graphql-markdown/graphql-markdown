@@ -1,8 +1,9 @@
 import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-import type { GraphQLSchema } from "graphql";
-import { buildSchema, GraphQLObjectType } from "graphql";
+import type { GraphQLSchema } from "graphql/type";
+import { GraphQLObjectType } from "graphql/type";
+import { buildSchema } from "graphql/utilities";
 
 import { getOperation, getTypeFromSchema } from "../../src/introspection";
 import {

@@ -10,7 +10,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { GraphQLDirective } from "graphql";
+import { GraphQLDirective } from "graphql/type";
 
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {

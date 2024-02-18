@@ -1,4 +1,4 @@
-import { GraphQLEnumType, GraphQLScalarType } from "graphql";
+import { GraphQLEnumType, GraphQLScalarType } from "graphql/type";
 
 import { printCodeEnum, printEnumMetadata } from "../../../src/graphql/enum";
 

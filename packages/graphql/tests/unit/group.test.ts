@@ -1,11 +1,11 @@
-import type { GraphQLObjectType } from "graphql";
-import { buildSchema } from "graphql";
+import { buildSchema } from "graphql/utilities";
 
 import type {
+  DirectiveName,
+  GraphQLObjectType,
+  GraphQLOperationType,
   GroupByDirectiveOptions,
   SchemaMap,
-  DirectiveName,
-  GraphQLOperationType,
 } from "@graphql-markdown/types";
 
 import { getGroups, getGroupName } from "../../src/group";

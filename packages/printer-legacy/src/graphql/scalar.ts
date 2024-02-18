@@ -10,7 +10,7 @@ export const printSpecification = (type: unknown): MDXString | string => {
     typeof type !== "object" ||
     type === null ||
     !("specifiedByURL" in type) ||
-    !type.specifiedByURL
+    typeof type.specifiedByURL !== "string"
   ) {
     return "";
   }

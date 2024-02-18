@@ -10,8 +10,8 @@ import type {
   ConstArgumentNode,
   ConstDirectiveNode,
   StringValueNode,
-} from "graphql";
-import { Kind } from "graphql";
+} from "graphql/language";
+import { Kind } from "graphql/language";
 
 import type {
   SchemaMap,

@@ -1,4 +1,5 @@
-import { GraphQLDirective, buildSchema } from "graphql";
+import { buildSchema } from "graphql/utilities";
+import { GraphQLDirective } from "graphql/type";
 
 import type {
   DirectiveName,
@@ -21,6 +22,7 @@ jest.mock("@graphql-markdown/utils", () => {
 import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("@graphql-markdown/graphql", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
     getConstDirectiveMap: jest.fn(),

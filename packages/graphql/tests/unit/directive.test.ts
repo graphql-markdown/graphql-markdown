@@ -1,4 +1,6 @@
-import { DirectiveLocation, GraphQLDirective, buildSchema } from "graphql";
+import { DirectiveLocation } from "graphql/language";
+import { GraphQLDirective } from "graphql/type";
+import { buildSchema } from "graphql/utilities";
 
 import type {
   DirectiveName,

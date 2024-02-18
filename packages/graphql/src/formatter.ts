@@ -13,7 +13,7 @@ import {
   GraphQLString,
   isEnumType,
   isListType,
-} from "graphql";
+} from "graphql/type";
 
 import type { GraphQLType, Maybe } from "@graphql-markdown/types";
 

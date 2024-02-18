@@ -1,7 +1,6 @@
 import type {
   PrintDirectiveOptions,
   GraphQLDirective,
-  GraphQLArgument,
   MDXString,
 } from "@graphql-markdown/types";
 
@@ -33,12 +32,7 @@ export const printDirectiveMetadata = (
     return "";
   }
 
-  return printMetadataSection(
-    type,
-    type.args as GraphQLArgument[],
-    "Arguments",
-    options,
-  );
+  return printMetadataSection(type, type.args, "Arguments", options);
 };
 
 export const printCodeDirective = (

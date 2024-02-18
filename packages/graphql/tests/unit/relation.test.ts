@@ -1,4 +1,4 @@
-import { buildSchema } from "graphql";
+import { buildSchema } from "graphql/utilities";
 
 import { getSchemaMap } from "../../src/introspection";
 

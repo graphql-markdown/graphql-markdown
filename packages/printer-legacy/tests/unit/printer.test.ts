@@ -11,7 +11,7 @@ import {
   GraphQLUnionType,
   GraphQLSchema,
   GraphQLString,
-} from "graphql";
+} from "graphql/type";
 
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
