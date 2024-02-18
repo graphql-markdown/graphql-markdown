@@ -58,6 +58,7 @@ The `descriptor` allows rendering custom directive description applicable to ent
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       customDirective: {
@@ -86,6 +87,7 @@ The `tag` allows rendering custom badges (tags) based on custom directive applic
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       customDirective: {
@@ -111,6 +113,7 @@ const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helper
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // ... other options
       customDirective: {

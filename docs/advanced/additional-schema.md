@@ -13,6 +13,7 @@ Assign a unique `id` attribute to each plugin instance (if not set, then `id` va
 plugins: [
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // highlight-next-line
       // id: 'default', // omitted => default instance
@@ -27,6 +28,7 @@ plugins: [
   ],
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // highlight-next-line
       id: "admin",
@@ -57,6 +59,7 @@ plugins: [
   "@graphql-markdown/docusaurus", // default instance
   [
     "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
     {
       // highlight-next-line
       id: "admin",
