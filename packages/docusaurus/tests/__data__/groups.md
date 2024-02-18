@@ -33,10 +33,10 @@ This is an example of documentation grouping with GraphQL directive using the `g
   },
   printTypeOptions: {
     deprecated: "group",
+    exampleSection: true,
     parentTypePrefix: false,
     relatedTypeSection: false,
     typeBadges: true,
-    sectionExample: true,
     useApiGroup: false,
   },
   skipDocDirective: ["@noDoc"],
@@ -83,10 +83,10 @@ This is an example of documentation grouping with GraphQL directive using the `g
       },
       printTypeOptions: {
         deprecated: "group",
+        exampleSection: true,
         parentTypePrefix: false,
         relatedTypeSection: false,
         typeBadges: true,
-        sectionExample: true,
         useApiGroup: false,
       },
       skipDocDirective: ["@noDoc"],

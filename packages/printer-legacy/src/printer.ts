@@ -1,15 +1,8 @@
 import type {
   CustomDirectiveMap,
   GraphQLDirective,
-  GraphQLEnumType,
   GraphQLField,
-  GraphQLInputObjectType,
-  GraphQLInterfaceType,
-  GraphQLObjectType,
-  GraphQLOperationType,
-  GraphQLScalarType,
   GraphQLSchema,
-  GraphQLUnionType,
   IPrinter,
   MDXString,
   Maybe,
@@ -100,10 +93,6 @@ export class Printer implements IPrinter {
     } = {
       customDirectives: undefined,
       groups: undefined,
-      onlyDocDirectives: [],
-      printTypeOptions: PRINT_TYPE_DEFAULT_OPTIONS,
-      skipDocDirectives: [],
-      metatags: [],
     },
   ): void {
     if (typeof Printer.options !== "undefined") {
@@ -164,28 +153,28 @@ export class Printer implements IPrinter {
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(type as GraphQLOperationType, options);
+        code += printCodeOperation(type, options);
         break;
       case isEnumType(type):
-        code += printCodeEnum(type as GraphQLEnumType, options);
+        code += printCodeEnum(type, options);
         break;
       case isUnionType(type):
-        code += printCodeUnion(type as GraphQLUnionType, options);
+        code += printCodeUnion(type, options);
         break;
       case isInterfaceType(type):
-        code += printCodeInterface(type as GraphQLInterfaceType, options);
+        code += printCodeInterface(type, options);
         break;
       case isObjectType(type):
-        code += printCodeObject(type as GraphQLObjectType, options);
+        code += printCodeObject(type, options);
         break;
       case isInputType(type):
-        code += printCodeInput(type as GraphQLInputObjectType, options);
+        code += printCodeInput(type, options);
         break;
       case isScalarType(type):
-        code += printCodeScalar(type as GraphQLScalarType, options);
+        code += printCodeScalar(type, options);
         break;
       case isDirectiveType(type):
-        code += printCodeDirective(type as GraphQLDirective, options);
+        code += printCodeDirective(type, options);
         break;
       default:
         code += `"${getTypeName(type)}" not supported`;
@@ -241,19 +230,19 @@ export class Printer implements IPrinter {
   ): MDXString | string => {
     switch (true) {
       case isScalarType(type):
-        return printScalarMetadata(type as GraphQLScalarType, options);
+        return printScalarMetadata(type, options);
       case isEnumType(type):
-        return printEnumMetadata(type as GraphQLEnumType, options);
+        return printEnumMetadata(type, options);
       case isUnionType(type):
-        return printUnionMetadata(type as GraphQLUnionType, options);
+        return printUnionMetadata(type, options);
       case isObjectType(type):
-        return printObjectMetadata(type as GraphQLObjectType, options);
+        return printObjectMetadata(type, options);
       case isInterfaceType(type):
-        return printInterfaceMetadata(type as GraphQLInterfaceType, options);
+        return printInterfaceMetadata(type, options);
       case isInputType(type):
-        return printInputMetadata(type as GraphQLInputObjectType, options);
+        return printInputMetadata(type, options);
       case isDirectiveType(type):
-        return printDirectiveMetadata(type as GraphQLDirective, options);
+        return printDirectiveMetadata(type, options);
       case isOperation(type):
         return printOperationMetadata(
           type as unknown as GraphQLField<unknown, unknown, unknown>,
