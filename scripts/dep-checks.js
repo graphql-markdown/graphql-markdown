@@ -1,6 +1,6 @@
-const process = require("node:process");
+const { chdir } = require("node:process");
 
-process.chdir(__dirname);
+chdir(__dirname);
 
 const rootDir = "..";
 
@@ -65,7 +65,7 @@ const generateReport = (packagesMap, type) => {
 (() => {
   let errorCount = 0;
 
-  const types = ["dependencies", "peerDependencies"];
+  const types = ["dependencies", "peerDependencies", "devDependencies"];
   types.forEach((type) => {
     const report = generateReport(packagesMap, type);
     errorCount += report.length;
