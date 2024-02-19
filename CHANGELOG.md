@@ -1,13 +1,32 @@
+<a name="1.24.0"></a>
+# [1.24.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.0) - 19 Feb 2024
+
+## What's Changed
+
+:robot:  A new feature `printTypeOptions.exampleSection` adds supports for examples using schema directives.
+The feature allows inheritance of examples, so once a scalar is set with an example all types using this scalar will share the example. And, of course, you can override those examples. You can also use a custom directive and custom parser. 
+The group demo has the feature enabled, and you can find more details in the documentation.
+
+| Object | Operation |
+|---|---|
+|![Screenshot from 2024-02-19 18-38-20](https://github.com/graphql-markdown/graphql-markdown/assets/324670/3039b891-33da-4817-863d-305071f20c12)|![Screenshot from 2024-02-19 18-38-37](https://github.com/graphql-markdown/graphql-markdown/assets/324670/c21e17cc-822f-4fcb-b226-2829c86d70c9)|
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.23.0...1.24.0
+
+[Changes][1.24.0]
+
+
 <a name="1.23.0"></a>
 # [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) - 10 Feb 2024
 
 ## What's changed
 
-:sparkle: Executable types (operations and related directives) and system types (entity types) have now separate sections. The behaviour can be disabled by setting the option `printTypeOptions.useApiGrou`  to `false` or using the cli flag `--noApiGroup`.
+:sparkle: Executable types (operations and related directives) and system types (entity types) have now separate sections. 
+The behaviour can be disabled by setting the option `printTypeOptions.useApiGroup`  to `false` or using the cli flag `--noApiGroup` (see [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions)).
 
 ![Screenshot from 2024-02-10 16-37-28](https://github.com/graphql-markdown/graphql-markdown/assets/324670/d339e140-4738-4df6-8631-d1e1d4fe9954)
 
-The online examples have been updated with one using the new sections and one with the option disabled. Note that the examples have some custom CSS that is not part of the default package.
+The online examples have been updated with [one using the new sections](https://graphql-markdown.github.io/examples/default) and [one with the option disabled](https://graphql-markdown.github.io/examples/group-by). Note that the examples have some [custom CSS](https://github.com/graphql-markdown/graphql-markdown/blob/1.23.0/website/src/css/custom.css#L109-L113) that is not part of the default package.
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.22.0...1.23.0
 
@@ -1683,6 +1702,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.24.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.22.0...1.23.0
 [1.22.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.3...1.22.0
 [1.21.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.2...1.21.3
