@@ -48,7 +48,7 @@ Examples can be inherited, this is why in the above example there is no example 
 
 ![examples](/img/docs/examples.png)
 
-## Custom directive example
+## Advanced options
 
 Example directive definition and parser behavior can be customized through the configuration using a `TypeDirectiveExample` object instead of a boolean value for `printTypeOptions.exampleSection`:
 
@@ -83,7 +83,7 @@ plugins: [
           field: "options",
           /* simplified parser for @spectaql (non production ready) */
           parser: (options?: unknown, type?: unknown): unknown => {
-            if (!option) {
+            if (!options) {
               return undefined;
             }
 
