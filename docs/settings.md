@@ -72,6 +72,7 @@ Use these options to tweak some of the Docusaurus documentation features:
 plugins: [
     [
       "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",
@@ -180,6 +181,7 @@ Meta tags are provided as list of metadata objects, eg `[{ name: "robots", conte
 plugins: [
     [
       "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",
@@ -250,6 +252,7 @@ Use these options to toggle type information rendered on pages:
 plugins: [
     [
       "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
        {
         schema: "./schema/swapi.graphql",
         rootPath: "./docs",
