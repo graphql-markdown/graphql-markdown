@@ -2,11 +2,16 @@ name: Auto approve
 
 on: pull_request_target
 
+permissions:
+  pull-requests: write
+
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]' || github.actor == 'renovate[bot]' || github.actor == 'graphql-markdown-bot'
+    env:
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:
-      - uses: hmarr/auto-approve-action@v4
-        if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]' || github.actor == 'renovate[bot]' || github.actor == 'graphql-markdown-bot'
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Auto approve PR
+        run: gh pr review --approve "$PR_URL"
