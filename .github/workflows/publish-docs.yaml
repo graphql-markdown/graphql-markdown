@@ -1,4 +1,10 @@
 name: Publish docs
+run-name: >-
+  if [[ ${{ github.event_name }} == "workflow_dispatch" ]]; then
+  "Publish docs by @${{ github.actor }} on #${{ github.ref_name }}"
+  else
+  "Publish docs ${{ github.event.release.name }}"
+  fi
 
 on:
   workflow_dispatch:
