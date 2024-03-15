@@ -1,10 +1,9 @@
 name: Publish docs
 run-name: >-
-  if [[ ${{ github.event_name }} == "workflow_dispatch" ]]; then
-  "Publish docs by @${{ github.actor }} on #${{ github.ref_name }}"
-  else
-  "Publish docs ${{ github.event.release.name }}"
-  fi
+  ${{ github.event_name == 'workflow_dispatch' 
+    && format('Publish docs from #{1} by @{0}', github.actor, github.ref_name) 
+    || format('Publish docs release ${0}', github.event.release.name)
+  }}
 
 on:
   workflow_dispatch:
