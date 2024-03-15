@@ -9,7 +9,9 @@ permissions:
 jobs:
   automerge:
     runs-on: ubuntu-latest
-    if: github.repository == 'graphql-markdown/graphql-markdown'
+    if: | 
+      github.repository == 'graphql-markdown/graphql-markdown' &&
+      contains(github.event.pull_request.labels.*.name, 'automerge')
     env:
       PR_URL: ${{ github.event.pull_request.html_url }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
