@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     if: | 
       github.repository == 'graphql-markdown/graphql-markdown' &&
-      contains(github.event.pull_request.labels.*.name, 'automerge')
+      contains(github.event.workflow_run.pull_requests[0].labels.*.name, 'automerge')
     env:
-      PR_URL: ${{ github.event.pull_request.html_url }}
+      PR_URL: ${{ github.event.workflow_run.pull_requests[0].url }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:
       - name: Auto merge PR
