@@ -1,6 +1,9 @@
 name: Auto merge PR
 
-on: pull_request_target
+on:
+  workflow_run:
+    workflows: [Auto approve]
+    types: [completed]
 
 permissions:
   contents: write
@@ -10,6 +13,7 @@ jobs:
   automerge:
     runs-on: ubuntu-latest
     if: | 
+      github.event.workflow_run.conclusion == 'success' &&
       github.repository == 'graphql-markdown/graphql-markdown' &&
       contains(github.event.pull_request.labels.*.name, 'automerge')
     env:
