@@ -153,6 +153,8 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
 
 /**
  * Returns a string with MDX special characters converted to HTML unicode using {@link toHTMLUnicode}.
+ * Characters within code notation should not be converted.
+ * List of special characters: `{`, `<`, `>`, `}`
  *
  * @internal
  *
@@ -166,11 +168,17 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
  *
  * escapeMDX("{MDX} <special> characters");
  * // Expected result: "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters"
+ *
+ * escapeMDX("`{MDX}` `<special>` characters");
+ * // Expected result: "`{MDX}` `<special>` characters"
  * ```
  *
  */
 export const escapeMDX = (str: unknown): string => {
-  return `${String(str)}`.replace(/[<>{}]/g, toHTMLUnicode);
+  return `${String(str)}`.replace(
+    /(?<!`)([{<>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g,
+    toHTMLUnicode,
+  );
 };
 
 /**
