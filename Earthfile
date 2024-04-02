@@ -141,10 +141,10 @@ GQLMD:
 
 CREATE:
   FUNCTION
-  IF [ "$docusaurusVersion" == "2" ]
-    RUN npx create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --package-manager npm
+  IF [ "$docusaurusVersion" = "2" ]
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
   ELSE
-    RUN npx create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --javascript --skip-install --package-manager npm
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --javascript --skip-install
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
