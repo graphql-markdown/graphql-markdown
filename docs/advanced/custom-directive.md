@@ -52,7 +52,7 @@ type Badge = {
 
 ### `descriptor`
 
-The `descriptor` allows rendering custom directive description applicable to entities.
+The `descriptor` allows rendering the custom directive's description applicable to entities.
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -81,7 +81,7 @@ plugins: [
 
 ### `tag`
 
-The `tag` allows rendering custom badges (tags) based on custom directive applicable to entities.
+The `tag` allows rendering custom badges (tags) based on the custom directive applicable to entities.
 
 ```js {8} title="docusaurus.config.js"
 plugins: [
@@ -103,7 +103,7 @@ plugins: [
 
 ### Wildcard
 
-You can use **`"*"` as wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
+You can use **`"*"` as a wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
 ```js {11-14} title="docusaurus.config.js"
 const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helpers");
@@ -130,7 +130,7 @@ plugins: [
 
 ## Helpers
 
-The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide few helper functions to quick start.
+The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide a few helper functions to quickly start.
 
 :::info
 

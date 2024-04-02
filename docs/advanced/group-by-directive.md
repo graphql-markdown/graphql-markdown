@@ -5,7 +5,7 @@ pagination_next: null
 
 # Documentation categories
 
-You can group the documentation to provide for an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
+You can group the documentation to provide an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
 
 For example, we have two mutations called `addCourse` and `dropCourse`, and we want to group them under a category called `Courses`.
 

@@ -8,7 +8,7 @@ pagination_next: null
 
 ## Duplicate "graphql" modules cannot be used at the same time
 
-Add a resolutions entry to your `package.json` file:
+Add a `resolutions` entry to your `package.json` file:
 
 ```json title="package.json"
 "resolutions": {
