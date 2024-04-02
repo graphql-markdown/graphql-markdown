@@ -8,7 +8,7 @@ By default, the plugin will use the options as defined in the [configuration](/d
 
 ## `baseURL`
 
-The base URL to be used by Docusaurus. It will also be used as folder name under [`rootPath`](#rootpath) for the generated documentation.
+The base URL used by Docusaurus. It will also be used as the folder name under [`rootPath`](#rootpath) for the generated documentation.
 
 | Setting   | CLI flag               | Default  |
 | --------- | ---------------------- | -------- |
@@ -30,7 +30,7 @@ The possible values are:
 
 - `FORCE`: skip diff, always generate documentation, same as CLI flag `-f` or `--force`.
 - `NONE`: skip diff (same as `FORCE`).
-- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) for identifying changes in the schema (including description).
+- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) to identify changes in the schema (including description).
 - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters).
 
 | Setting      | CLI flag                  | Default |
@@ -55,7 +55,7 @@ npm install @graphql-markdown/diff
 Use these options to tweak some of the Docusaurus documentation features:
 
 - `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
-- `index`: enable/disable index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
+- `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
 - `pagination`: enable/disable page buttons `Previous` and `Next` [**deprecated**, see note below].
 - `toc`: enable/disable page table of content [**deprecated**, see note below].
 
@@ -169,7 +169,7 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 Set page metadata in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
 
-Meta tags are provided as list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
+Meta tags are provided as a list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
 
 | Setting    | CLI flag        | Default |
 | ---------- | --------------- | ------- |
@@ -203,7 +203,7 @@ plugins: [
 
 ## `onlyDocDirective`
 
-The schema directive/s used for selecting types to be rendered in the documentation.
+The schema directive/s is used for selecting types to be rendered in the documentation.
 
 The CLI flag supports multiple values separated by a space character, eg `--only @stable @beta`.
 
@@ -228,10 +228,10 @@ Use these options to toggle type information rendered on pages:
 - `codeSection`: display type code section.
 - `deprecated`: option for displaying deprecated entities (fields, values, operations).
   - `default`: deprecated entities are displayed with other entities.
-  - `group`: deprecated entities are grouped together.
+  - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
 - `exampleSection`: display example section based on directive data (see [Examples](/docs/advanced/examples)).
-- `parentTypePrefix`: prefix field names with parent type name.
+- `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
 - `useApiGroup`: split entities in `API` group (executable types) and `Types` group (system types).
@@ -319,7 +319,7 @@ If `false`, then the documentation can only be generated with the Docusaurus com
 ## `rootPath`
 
 The output root path for the generated documentation, relative to the current workspace.
-It works in relation with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
+It works in relation to [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
 
 | Setting    | CLI flag                | Default  |
 | ---------- | ----------------------- | -------- |
@@ -335,7 +335,7 @@ The GraphQL schema location.
 
 ## `skipDocDirective`
 
-The schema directive/s used for skipping types from documentation.
+The schema directive/s is used for skipping types from documentation.
 
 The CLI flag supports multiple values separated by a space character, eg `--skip @noDoc @deprecated`.
 
@@ -361,7 +361,7 @@ Types with `@deprecated` directive can also be skipped using the setting **[`pri
 
 ## `tmpDir`
 
-The folder used for storing schema copy and signature used by [`diffMethod`](#diffmethod) setting.
+The folder used for storing schema copy and signature is used by [`diffMethod`](#diffmethod) setting.
 
 | Setting  | CLI flag             | Default          |
 | -------- | -------------------- | ---------------- |

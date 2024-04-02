@@ -22,6 +22,6 @@ span.deprecated::after {
 }
 ```
 
-The above CSS will render the deprecated sections as following
+The above CSS will render the deprecated sections as the following
 
 ![custom-deprecated-section](/img/docs/custom-deprecated-section.png)

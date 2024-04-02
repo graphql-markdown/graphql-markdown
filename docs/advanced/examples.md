@@ -44,7 +44,7 @@ By enabling the option [`printTypeOptions.exampleSection`](/docs/settings#printt
   }
   ```
 
-Examples can be inherited, this is why in the above example there is no example explicitly set for the type `Semester`, and it will render as following
+Examples can be inherited, this is why in the above example there is no example explicitly set for the type `Semester`, and it will render as the following
 
 ![examples](/img/docs/examples.png)
 

@@ -36,7 +36,7 @@ Use `@graphql-tools/graphql-file-loader` if you want to load a local schema:
 npm install @graphql-tools/graphql-file-loader
 ```
 
-Once done, you can declare the loader into `@graphql-markdown/docusaurus` configuration:
+Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -61,7 +61,7 @@ Use `@graphql-tools/url-loader`, if you want to load a schema from a URL:
 npm install @graphql-tools/url-loader
 ```
 
-Once done, you can declare the loader into `docusaurus2-graphql-doc-generator` configuration:
+Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
 
 ```js title="docusaurus.config.js"
 plugins: [

@@ -31,7 +31,7 @@ All settings are described in the page **[settings](/docs/settings)**.
 
 :::tip
 
-If you want to use several GraphQL schemas, read our guide for **[additional schema](/docs/advanced/additional-schema)**.
+If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/advanced/additional-schema)**.
 
 :::
 
@@ -81,13 +81,13 @@ module.exports = {
 };
 ```
 
-For more details about `navbar`, please refer to Docusaurus [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar).
+For more details about the `navbar`, please refer to Docusaurus [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar).
 
 ## GraphQL Config
 
 :::tip
 
-The GraphQL-Markdown template provides GraphQL Config as default configuration file.
+The GraphQL-Markdown template provides GraphQL Config as the default configuration file.
 
 :::
 
@@ -124,7 +124,7 @@ extensions:
 
 :::warning
 
-Note that **`schema` is not part of the extension configuration**, but part of the default graphql-config configuration.
+Note that **`schema` is not part of the extension configuration**, but part of the default `graphql-config` configuration.
 
 :::
 
@@ -135,7 +135,7 @@ Note that **`schema` is not part of the extension configuration**, but part of t
 
 ## Configuration lifecycle
 
-GraphQL-Markdown allows mixing the different configuration, and build the final configuration as follow:
+GraphQL-Markdown allows mixing the different configurations, and building the final configuration using the following order:
 
 1. Default configuration
 2. `.graphqlrc` configuration file
