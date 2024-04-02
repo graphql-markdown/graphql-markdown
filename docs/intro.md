@@ -10,7 +10,7 @@ The `@graphql-markdown/docusaurus` package extends the Docusaurus CLI with comma
 
 ## Features
 
-- Easy to setup and customizable
+- Easy set up and customizable
 - Full relations information between types
 - MDX generated are fully compatible with `plugin-content-docs`
 - Use any schema loader compatible with `@graphql-tools/load`

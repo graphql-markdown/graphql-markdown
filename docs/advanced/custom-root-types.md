@@ -11,8 +11,8 @@ For custom operation root types (queries not of type `Query`, or root type name 
 type RootTypes = { query?: string; mutation?: string; subscription?: string };
 ```
 
-- use a custom type name to override standard type
-- use a empty string to disable the GraphQL standard type
+- use a custom type name to override the standard type
+use an empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
 
 Add the option `rootTypes` to the loader options under `@graphql-markdown/docusaurus` configuration (see also [schema loading](/docs/advanced/schema-loading)):

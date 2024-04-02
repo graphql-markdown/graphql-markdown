@@ -48,7 +48,7 @@ cd my-website
 npm start
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+The `cd` command changes the directory you're working with. To work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 
 :::tip
 
@@ -105,4 +105,4 @@ Run the documentation generator using CLI:
 npm run docusaurus graphql-to-doc
 ```
 
-The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command's flags are documented in [settings](/docs/settings).
+The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command flags are documented in [settings](/docs/settings).

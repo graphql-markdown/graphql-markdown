@@ -44,7 +44,7 @@ plugins: [
 ],
 ```
 
-Instance with an `id` will have their own command line:
+Instance with an `id` will have their command line:
 
 ```shell
 npm run docusaurus graphql-to-doc:admin
