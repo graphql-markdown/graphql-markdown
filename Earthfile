@@ -1,6 +1,9 @@
 VERSION 0.8
 
-ARG nodeVersion=lts
+ARG nodeVersion="lts"
+ARG --global docusaurusVersion="latest"
+ARG --global docusaurusProject="docusaurus2"
+
 FROM docker.io/library/node:$nodeVersion-alpine
 RUN npm install -g npm@latest
 WORKDIR /graphql-markdown
@@ -46,19 +49,12 @@ build-package:
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus:
-  ARG VERSION=latest
   WORKDIR /
-  RUN npx --quiet create-docusaurus@$VERSION docusaurus2 classic
-  WORKDIR /docusaurus2
-  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  RUN npm cache clean --force; rm -rf node_modules
-  RUN npm ci
-  RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
+  DO +CREATE
 
 smoke-init:
-  ARG VERSION=latest
-  FROM +build-docusaurus --VERSION=$VERSION
-  WORKDIR /docusaurus2
+  FROM +build-docusaurus
+  WORKDIR /$docusaurusProject
   RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
   FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
@@ -74,9 +70,8 @@ smoke-init:
   RUN node config-plugin.js
 
 smoke-test:
-  ARG VERSION=latest
-  FROM +smoke-init --VERSION=$VERSION
-  WORKDIR /docusaurus2
+  FROM +smoke-init
+  WORKDIR /$docusaurusProject
   RUN npm config set update-notifier false
   RUN npm install -g jest 
   RUN npm install graphql-config
@@ -87,10 +82,9 @@ smoke-test:
   RUN npx jest --runInBand
 
 smoke-run:
-  ARG VERSION=latest
   ARG OPTIONS=
-  FROM +smoke-init --VERSION=$VERSION
-  WORKDIR /docusaurus2
+  FROM +smoke-init
+  WORKDIR /$docusaurusProject
   DO +GQLMD --options=$OPTIONS
   RUN npm run build
   RUN npm run clear
@@ -98,8 +92,8 @@ smoke-run:
 build-examples:
   ARG VERSION=latest
   ARG TARGET=examples
-  FROM +smoke-init --VERSION=$VERSION
-  WORKDIR /docusaurus2
+  FROM +smoke-init
+  WORKDIR /$docusaurusProject
   RUN npm install prettier
   RUN mkdir $TARGET
   DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${TARGET}/default --force --pretty --deprecated group"
@@ -109,9 +103,8 @@ build-examples:
   SAVE ARTIFACT ./$TARGET
 
 build-docs:
-  ARG VERSION=latest
   COPY ./website ./
-  COPY (+build-examples/examples --VERSION=$VERSION) ./examples
+  COPY (+build-examples/examples) ./examples
   COPY --dir docs .
   COPY --dir api .
   RUN npm install
@@ -120,8 +113,7 @@ build-docs:
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
-  ARG VERSION=latest
-  FROM +build-docs --VERSION=$VERSION
+  FROM +build-docs
   EXPOSE 8080
   ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
@@ -146,3 +138,15 @@ GQLMD:
     RUN npx docusaurus graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
+
+CREATE:
+  FUNCTION
+  IF [ "$docusaurusVersion" = "2" ]
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+  ELSE
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --javascript --skip-install
+  END
+  WORKDIR /$docusaurusProject
+  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+  RUN npm install
+  RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
