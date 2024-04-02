@@ -1,8 +1,8 @@
 VERSION 0.8
 
 ARG nodeVersion="lts"
-ARG docusaurusVersion="latest"
-ARG docusaurusProject="docusaurus2"
+ARG --global docusaurusVersion="latest"
+ARG --global docusaurusProject="docusaurus2"
 
 FROM docker.io/library/node:$nodeVersion-alpine
 RUN npm install -g npm@latest
