@@ -50,7 +50,7 @@ build-package:
 
 build-docusaurus:
   WORKDIR /
-  DO +CREATE --version=$docusaurusVersion --project=docusaurusProject
+  DO +CREATE --version=$docusaurusVersion --project=$docusaurusProject
 
 smoke-init:
   FROM +build-docusaurus
