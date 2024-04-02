@@ -48,10 +48,13 @@ build-package:
 build-docusaurus:
   ARG VERSION=latest
   WORKDIR /
-  RUN npx --quiet create-docusaurus@$VERSION docusaurus2 classic
+  IF [ $VERSION == "2" ]
+    RUN npx create-docusaurus@$VERSION docusaurus2 classic --skip-install --package-manager npm
+  ELSE
+    RUN npx create-docusaurus@$VERSION docusaurus2 classic --javascript --skip-install --package-manager npm
+  END
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  RUN npm cache clean --force; rm -rf node_modules
   RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
 
