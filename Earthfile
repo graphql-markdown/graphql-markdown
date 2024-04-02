@@ -52,7 +52,7 @@ build-docusaurus:
   WORKDIR /docusaurus2
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN npm cache clean --force; rm -rf node_modules
-  RUN npm ci
+  RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
 
 smoke-init:
