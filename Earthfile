@@ -50,7 +50,7 @@ build-package:
 
 build-docusaurus:
   WORKDIR /
-  DO +CREATE --version=$docusaurusVersion --project=$docusaurusProject
+  DO +CREATE
 
 smoke-init:
   FROM +build-docusaurus
@@ -141,14 +141,12 @@ GQLMD:
 
 CREATE:
   FUNCTION
-  ARG version="latest"
-  ARG project="docusaurus2"
-  IF [ "$version" == "2" ]
-    RUN npx create-docusaurus@$version $project classic --skip-install --package-manager npm
+  IF [ "$docusaurusVersion" == "2" ]
+    RUN npx create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --package-manager npm
   ELSE
-    RUN npx create-docusaurus@$version $project classic --javascript --skip-install --package-manager npm
+    RUN npx create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --javascript --skip-install --package-manager npm
   END
-  WORKDIR /$project
+  WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
