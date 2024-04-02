@@ -138,6 +138,14 @@ describe("string", () => {
       );
     });
 
+    test("does not transform MDX special characters enclosed as code", () => {
+      expect.hasAssertions();
+
+      expect(escapeMDX(">`{MDX}` `<special>` characters")).toBe(
+        "&#x003E;`{MDX}` `<special>` characters",
+      );
+    });
+
     test.each([
       [5, "5"],
       [{ five: 5 }, "[object Object]"],
