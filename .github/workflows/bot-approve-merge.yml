@@ -30,8 +30,7 @@ jobs:
       contents: write
       pull-requests: write
     if: | 
-      github.repository == 'graphql-markdown/graphql-markdown' &&
-      contains(github.event.pull_request.labels.*.name, 'automerge')
+      github.repository == 'graphql-markdown/graphql-markdown'
     env:
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:

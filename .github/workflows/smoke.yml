@@ -34,19 +34,19 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Smoke Tests
-        run: earthly --ci --build-arg VERSION=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
         env:
           EARTHLY_NO_CACHE: true
 
       - name: Docusaurus Production Smoke Build without parameters and local schema
-        run: earthly --ci --build-arg VERSION=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
 
       - name: Docusaurus Production Smoke Build with parameters and remote schema
-        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg VERSION=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
         env:
           OPTIONS: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
 
       - name: Docusaurus Production Smoke Build with groupByDirective option
-        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg VERSION=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
         env:
           OPTIONS: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
