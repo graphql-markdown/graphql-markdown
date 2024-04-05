@@ -68,19 +68,6 @@ jobs:
           cd packages/${{ matrix.package }}
           npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
           npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
-          cd ../..
-
-      - name: Coveralls
-        id: coveralls
-        if: ${{ success() && steps.coverage.outputs.skipped }}
-        continue-on-error: true
-        uses: coverallsapp/github-action@v2.2.3
-        with:
-          parallel: true
-          flag-name: package-${{ matrix.package }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
-          base-path: ./packages/${{ matrix.package }}
 
       - name: SonarCloud Scan
         id: sonarcloud
@@ -96,19 +83,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-
-  coverage:
-    name: Report coverage
-    runs-on: ubuntu-latest
-    needs: test
-    if: ${{ !cancelled() }}
-    steps:
-      - name: Coveralls
-        continue-on-error: true
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Mock Build
