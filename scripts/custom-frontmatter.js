@@ -1,4 +1,4 @@
-const path = require("path/posix");
+const path = require("node:path/posix");
 const { ReflectionKind } = require("typedoc");
 const { FrontmatterEvent } = require("typedoc-plugin-frontmatter");
 
