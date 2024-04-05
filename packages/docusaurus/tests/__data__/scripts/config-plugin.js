@@ -99,4 +99,3 @@ fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
     console.log(`Successfully updated '${docusaurusConfigFilepath}'`);
   }
 });
-
