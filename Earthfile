@@ -1,22 +1,23 @@
 VERSION 0.8
 
 ARG nodeVersion="lts"
+ARG npmVersion="latest"
 ARG --global docusaurusVersion="latest"
-ARG --global docusaurusProject="docusaurus2"
+ARG --global docusaurusProject="docusaurus-gqlmd"
 
 FROM docker.io/library/node:$nodeVersion-alpine
-RUN npm install -g npm@latest
+RUN export NODE_ENV=ci
+RUN npm install -g npm@$npmVersion
+RUN npm config set update-notifier false
 WORKDIR /graphql-markdown
 
 deps:
   COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
   COPY --dir config packages ./
-  RUN npm config set update-notifier false
   RUN npm ci
 
 lint: 
   FROM +deps
-  RUN export NODE_ENV=ci
   RUN npm run ts:check
   RUN npm run prettier -- --check
   RUN npm run lint
@@ -27,12 +28,10 @@ build:
 
 unit-test:
   FROM +build
-  RUN export NODE_ENV=ci
   RUN npm run test:ci /unit
 
 integration-test:
   FROM +build
-  RUN export NODE_ENV=ci
   RUN npm run test:ci /integration
 
 mutation-test:
@@ -48,59 +47,65 @@ build-package:
   RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
-build-docusaurus:
+build-project:
+  FROM +build
   WORKDIR /
-  DO +CREATE
-
-smoke-init:
-  FROM +build-docusaurus
-  WORKDIR /$docusaurusProject
-  RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
-  FOR package IN types utils graphql helpers logger printer-legacy diff core docusaurus
-    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
-    RUN npm install ./graphql-markdown-${package}.tgz
+  IF [ "$docusaurusVersion" = "2" ]
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+  ELSE
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
   END
-  COPY ./packages/docusaurus/scripts/config-plugin.js ./config-plugin.js
-  COPY ./website/src/css/custom.css ./src/css/custom.css
+  WORKDIR /$docusaurusProject
+  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+  DO +INSTALL_DOCUSARUS
+
+setup-project:
+  FROM +build-project
+  WORKDIR /$docusaurusProject
+  DO +INSTALL_GRAPHQL
+  DO +INSTALL_GQLMD
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
-  COPY ./packages/docusaurus/tests/__data__/.graphqlrc ./.graphqlrc
-  COPY ./packages/docusaurus/tests/__data__/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js
-  COPY ./packages/docusaurus/tests/__data__/docusaurus2-graphql-doc-nobuild.js ./docusaurus2-graphql-doc-nobuild.js
-  COPY ./website/static/img ./static/img
+  COPY --dir ./website/static/img ./static/img
+  COPY --dir ./website/src/css ./src/css
+  RUN mv ./data/.graphqlrc ./.graphqlrc
+  RUN mv ./data/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js
+  RUN mv ./data/docusaurus2-graphql-doc-nobuild.js ./docusaurus2-graphql-doc-nobuild.js
+  RUN mv ./data/scripts/config-plugin.js ./config-plugin.js
   RUN node config-plugin.js
 
 smoke-test:
-  FROM +smoke-init
+  FROM +setup-project
   WORKDIR /$docusaurusProject
-  RUN npm config set update-notifier false
   RUN npm install -g jest 
   RUN npm install graphql-config
-  COPY --dir ./packages/docusaurus/tests/e2e/specs ./__tests__/e2e/specs
+  COPY --dir ./packages/docusaurus/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
-  COPY ./packages/docusaurus/tests/e2e/jest.config.js ./jest.config.js
-  RUN export NODE_ENV=ci
+  RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
   RUN npx jest --runInBand
 
 smoke-run:
-  ARG OPTIONS=
-  FROM +smoke-init
+  ARG options=
+  FROM +setup-project
   WORKDIR /$docusaurusProject
-  DO +GQLMD --options=$OPTIONS
+  DO +GQLMD --options=$options
   RUN npm run build
   RUN npm run clear
 
 build-examples:
-  ARG VERSION=latest
-  ARG TARGET=examples
-  FROM +smoke-init
+  LET folderDocs="examples"
+  FROM +setup-project
   WORKDIR /$docusaurusProject
   RUN npm install prettier
-  RUN mkdir $TARGET
-  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${TARGET}/default --force --pretty --deprecated group"
-  RUN mv docs ./$TARGET/default
-  DO +GQLMD --id="schema_with_grouping" --options="--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base . --link /${TARGET}/group-by --skip @noDoc --index --noParentType --noRelatedType --deprecated group --noApiGroup"
-  RUN mv docs ./$TARGET/group-by
-  SAVE ARTIFACT ./$TARGET
+  RUN mkdir $folderDocs
+  LET folderExample="default"
+  LET idExample="default"
+  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  RUN mv docs ./$folderDocs/$folderExample
+  SET folderExample="group-by"
+  SET idExample="schema_with_grouping"
+  DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --noApiGroup"
+  RUN mv docs ./$folderDocs/$folderExample
+  SAVE ARTIFACT ./$folderDocs
 
 build-docs:
   COPY ./website ./
@@ -139,14 +144,18 @@ GQLMD:
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
-CREATE:
+INSTALL_GQLMD:
   FUNCTION
-  IF [ "$docusaurusVersion" = "2" ]
-    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
-  ELSE
-    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --javascript --skip-install
+  FOR package IN $(ls -1pd -- /graphql-markdown/packages/* | awk -F "/" "{print \$(NF-1)}")
+    COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
+    RUN npm install ./graphql-markdown-${package}.tgz
   END
-  WORKDIR /$docusaurusProject
-  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+
+INSTALL_DOCUSARUS:
+  FUNCTION
   RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
+
+INSTALL_GRAPHQL:
+  FUNCTION
+  RUN npm install graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { exec } = require("child_process");
+const { exec } = require("node:child_process");
 
 module.exports = function cli({
   cmd = "graphql-to-doc",
   args = [],
-  cwd = "/docusaurus2",
+  cwd = global["__ROOT_DIR__"],
   id = undefined,
 } = {}) {
   const command = id ? `${cmd}:${id}` : cmd;

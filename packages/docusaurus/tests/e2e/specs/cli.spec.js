@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
-const { promises: fs } = require("fs");
+const path = require("node:path");
+const { promises: fs } = require("node:fs");
 
 const cli = require("../../helpers/cli");
 
-const rootDir = "/docusaurus2";
+const rootDir = global["__ROOT_DIR__"];
 
 const pluginConfigs = require(
   `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`,

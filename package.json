@@ -66,7 +66,7 @@
     "lint": "eslint \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
     "prepare": "husky install",
     "prettier": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\"",
-    "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests",
+    "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests --ci --silent",
     "test:watch": "jest --config=./config/jest.config.js --watch --maxWorkers=25%",
     "test": "jest --config=./config/jest.config.js --maxWorkers=50% --randomize",
     "ts:check": "tsc --noEmit",
