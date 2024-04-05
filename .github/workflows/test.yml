@@ -89,7 +89,7 @@ jobs:
           projectBaseDir: ${{ github.workspace }}
           args: >
             -Dsonar.organization=graphql-markdown
-            -Dsonar.projectKey=graphql-markdown_graphql-markdown
+            -Dsonar.projectKey=graphql-markdown_${{ matrix.package }}
             -Dsonar.sources=./packages/${{ matrix.package }}/src
             -Dsonar.tests=./packages/${{ matrix.package }}/tests
             -Dsonar.javascript.lcov.reportPaths=./packages/${{ matrix.package }}/coverage/lcov.info
