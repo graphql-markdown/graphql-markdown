@@ -82,6 +82,12 @@ jobs:
           path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
           base-path: ./packages/${{ matrix.package }}
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          detached: true
+          limit-access-to-actor: false
+
       - name: SonarCloud Scan
         id: sonarcloud
         uses: SonarSource/sonarcloud-github-action@v2.1.1
