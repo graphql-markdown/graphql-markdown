@@ -1,7 +1,7 @@
 /**
  * Custom directive `tag` helper.
  *
- * @see {@link https://graphql-markdown.github.io/docs/advanced/custom-directive#tag | Option `customDirective.[directive].tag`}
+ * @see {@link https://graphql-markdown.dev/docs/advanced/custom-directive#tag | Option `customDirective.[directive].tag`}
  *
  * @packageDocumentation
  */

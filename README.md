@@ -1,4 +1,4 @@
-[![GraphQL-Markdown](https://user-images.githubusercontent.com/324670/188957463-dae99daa-763d-466e-91f4-0629f455df74.svg)](https://graphql-markdown.github.io)
+[![GraphQL-Markdown](https://user-images.githubusercontent.com/324670/188957463-dae99daa-763d-466e-91f4-0629f455df74.svg)](https://graphql-markdown.dev)
 
 <h1 align="center">Flexible documentation for GraphQL schemas</h1>
 
@@ -34,15 +34,15 @@ The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://d
 npx docusaurus graphql-to-doc
 ```
 
-Command line options are described in the [documentation settings](https://graphql-markdown.github.io/docs/settings) page.
+Command line options are described in the [documentation settings](https://graphql-markdown.dev/docs/settings) page.
 
 ## Configuration
 
-See [documentation configuration](https://graphql-markdown.github.io/docs/configuration) page.
+See [documentation configuration](https://graphql-markdown.dev/docs/configuration) page.
 
 ## Troubleshooting
 
-See [documentation troubleshooting](https://graphql-markdown.github.io/docs/troubleshooting) page.
+See [documentation troubleshooting](https://graphql-markdown.dev/docs/troubleshooting) page.
 
 ## License
 

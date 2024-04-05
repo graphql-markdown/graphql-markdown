@@ -35,7 +35,7 @@ export enum DeprecatedOption {
   SKIP = "skip",
 }
 
-export const DOCS_URL = "https://graphql-markdown.github.io/docs" as const;
+export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
 export const ASSET_HOMEPAGE_LOCATION = join(
   __dirname,

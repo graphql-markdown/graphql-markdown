@@ -33,15 +33,15 @@ The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://d
 npx docusaurus graphql-to-doc
 ```
 
-Command line options are described in the [documentation settings](https://graphql-markdown.github.io/docs/settings) page.
+Command line options are described in the [documentation settings](https://graphql-markdown.dev/docs/settings) page.
 
 ## Configuration
 
-See [documentation settings](https://graphql-markdown.github.io/docs/settings) page.
+See [documentation settings](https://graphql-markdown.dev/docs/settings) page.
 
 ## Troubleshooting
 
-See [documentation troubleshooting](https://graphql-markdown.github.io/docs/troubleshooting) page.
+See [documentation troubleshooting](https://graphql-markdown.dev/docs/troubleshooting) page.
 
 ## License
 

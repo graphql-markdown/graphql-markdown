@@ -4,7 +4,7 @@ Library supporting `relatedTypeSection` for displaying relations between GraphQL
 
 ## See
 
-[Option `relatedTypeSection`](https://graphql-markdown.github.io/docs/settings#printtypeoptions)
+[Option `relatedTypeSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
 
 ## Functions
 

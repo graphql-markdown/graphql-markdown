@@ -10,7 +10,7 @@ const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  url: "https://graphql-markdown.github.io",
+  url: "https://graphql-markdown.dev",
   baseUrl: "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
