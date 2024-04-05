@@ -90,9 +90,11 @@ jobs:
           args: >
             -Dsonar.organization=graphql-markdown
             -Dsonar.projectKey=graphql-markdown_graphql-markdown
-            -Dsonar.verbose=true
-            -X
+            -Dsonar.sources=./packages/${{ matrix.package }}/src
+            -Dsonar.tests=./packages/${{ matrix.package }}/tests
+            -Dsonar.javascript.lcov.reportPaths= coverage/lcov.info
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
   coverage:
