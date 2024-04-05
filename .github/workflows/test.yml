@@ -82,9 +82,6 @@ jobs:
           path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
           base-path: ./packages/${{ matrix.package }}
 
-      - name: DEBUG
-        run: cat /github/workspace/sonar-project.properties
-
       - name: SonarCloud Scan
         id: sonarcloud
         uses: SonarSource/sonarcloud-github-action@v2.1.1
