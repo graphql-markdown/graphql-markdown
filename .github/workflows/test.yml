@@ -67,13 +67,17 @@ jobs:
       - name: Coveralls
         continue-on-error: true
         if: ${{ always() }}
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2.2.3
         with:
           parallel: true
           flag-name: package-${{ matrix.package }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./packages/${{ matrix.package }}/coverage/lcov.info
           base-path: ./packages/${{ matrix.package }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
+        env:
+          SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
 
   coverage:
     name: Report coverage
