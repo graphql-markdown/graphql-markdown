@@ -35,7 +35,8 @@ jobs:
       - name: Checkout Code Base
         uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup NodeJS LTS
+        uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           cache: "npm"
@@ -63,6 +64,7 @@ jobs:
           cd packages/${{ matrix.package }}
           npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
           npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
+          cd ../..
 
       - name: Coveralls
         continue-on-error: true
@@ -76,6 +78,9 @@ jobs:
           base-path: ./packages/${{ matrix.package }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.1
+        with:
+          args: >
+            -X
         env:
           SONAR_TOKEN: ${{ secrets. SONAR_TOKEN }}
 
