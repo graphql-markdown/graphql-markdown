@@ -58,13 +58,13 @@ describe("scalar", () => {
 
       const typeSpecifiedBy = new GraphQLScalarType<number>({
         name: "ScalarTypeName",
-        specifiedByURL: "https://graphql-markdown.github.io/",
+        specifiedByURL: "https://graphql-markdown.dev/",
       });
 
       const metadata = printScalarMetadata(typeSpecifiedBy);
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### <SpecifiedBy url="https://graphql-markdown.github.io/"/>
+        "### <SpecifiedBy url="https://graphql-markdown.dev/"/>
 
         "
       `);

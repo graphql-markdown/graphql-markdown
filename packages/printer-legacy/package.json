@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/printer-legacy",
-  "homepage": "https://graphql-markdown.github.io",
+  "homepage": "https://graphql-markdown.dev",
   "description": "GraphQL-Markdown legacy Docusaurus printer.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"

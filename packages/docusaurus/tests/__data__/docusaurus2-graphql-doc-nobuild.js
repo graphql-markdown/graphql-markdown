@@ -1,6 +1,6 @@
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
-  url: "https://graphql-markdown.github.io",
+  url: "https://graphql-markdown.dev",
   baseUrl: "/",
   onBrokenLinks: "log",
   onBrokenMarkdownLinks: "warn",

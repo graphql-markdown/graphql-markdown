@@ -22,11 +22,11 @@ The group demo has the feature enabled, and you can find more details in the doc
 ## What's changed
 
 :sparkle: Executable types (operations and related directives) and system types (entity types) have now separate sections. 
-The behaviour can be disabled by setting the option `printTypeOptions.useApiGroup`  to `false` or using the cli flag `--noApiGroup` (see [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions)).
+The behaviour can be disabled by setting the option `printTypeOptions.useApiGroup`  to `false` or using the cli flag `--noApiGroup` (see [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
 
 ![Screenshot from 2024-02-10 16-37-28](https://github.com/graphql-markdown/graphql-markdown/assets/324670/d339e140-4738-4df6-8631-d1e1d4fe9954)
 
-The online examples have been updated with [one using the new sections](https://graphql-markdown.github.io/examples/default) and [one with the option disabled](https://graphql-markdown.github.io/examples/group-by). Note that the examples have some [custom CSS](https://github.com/graphql-markdown/graphql-markdown/blob/1.23.0/website/src/css/custom.css#L109-L113) that is not part of the default package.
+The online examples have been updated with [one using the new sections](https://graphql-markdown.dev/examples/default) and [one with the option disabled](https://graphql-markdown.dev/examples/group-by). Note that the examples have some [custom CSS](https://github.com/graphql-markdown/graphql-markdown/blob/1.23.0/website/src/css/custom.css#L109-L113) that is not part of the default package.
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.22.0...1.23.0
 
@@ -55,7 +55,7 @@ plugins: [
   ],
 ```
 
-This option deprecates the options `docOptions.pagination` and `docOptions.toc` (more details in the [documentation](https://graphql-markdown.github.io/docs/settings#docoptions)).
+This option deprecates the options `docOptions.pagination` and `docOptions.toc` (more details in the [documentation](https://graphql-markdown.dev/docs/settings#docoptions)).
 
 ## What's Changed
 
@@ -166,18 +166,18 @@ This is an exceptionally big release packed with a lot of changes, so read caref
 The main changes are under the hood as we migrated the codebase from Javascript to Typescript to simplify the coding experience but also to increase the code safety.
 
 ## ⚠️ Breaking changes
-- Custom directive helpers have been moved to dedicated packages, see [docs](https://graphql-markdown.github.io/docs/advanced/custom-directive#helpers).
+- Custom directive helpers have been moved to dedicated packages, see [docs](https://graphql-markdown.dev/docs/advanced/custom-directive#helpers).
 
 ## ✨ New features
- - `onlyDocDirective` filters the schema entities to be rendered in the documentation. This is the counterpart of `skipDocDirective`, based on a request from [@brampurnot](https://github.com/brampurnot) in [#994](https://github.com/graphql-markdown/graphql-markdown/issues/994). See [documentation](https://graphql-markdown.github.io/docs/settings#onlydocdirective).
- - `metatags` adds HTML metadata to pages using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata), based on a request from [@akillkumar](https://github.com/akillkumar) in [#1015](https://github.com/graphql-markdown/graphql-markdown/issues/1015). See [documentation](https://graphql-markdown.github.io/docs/settings#metatags).
+ - `onlyDocDirective` filters the schema entities to be rendered in the documentation. This is the counterpart of `skipDocDirective`, based on a request from [@brampurnot](https://github.com/brampurnot) in [#994](https://github.com/graphql-markdown/graphql-markdown/issues/994). See [documentation](https://graphql-markdown.dev/docs/settings#onlydocdirective).
+ - `metatags` adds HTML metadata to pages using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata), based on a request from [@akillkumar](https://github.com/akillkumar) in [#1015](https://github.com/graphql-markdown/graphql-markdown/issues/1015). See [documentation](https://graphql-markdown.dev/docs/settings#metatags).
  - Helper `directiveDescriptor` now supports the `description` placeholder, where `description` is the default directive's description.
 
 ## 🛠️ Other changes
 - Typing is available in a dedicated package `@graphql-markdown/types`.
 - Modules helpers, graphql and logger have been extracted from `@graphql-markdown/utils` into dedicated packages.
 - Logger has now a single method called log().
-- TS API is getting documented, see [API](https://graphql-markdown.github.io/api/) in the docs.
+- TS API is getting documented, see [API](https://graphql-markdown.dev/api/) in the docs.
 - More and better tests.
 - Upgrade dependencies version.
 
@@ -231,7 +231,7 @@ This is a pre-release following  the code base migration from JS to TS.
 <a name="1.20.3"></a>
 # [1.20.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.3) - 19 Jul 2023
 
-:bug: Fix a CSS issue for type badges in *related type* sections (see option [`printTypeOptions.relatedTypeSection`](https://graphql-markdown.github.io/docs/settings#printtypeoptions)).
+:bug: Fix a CSS issue for type badges in *related type* sections (see option [`printTypeOptions.relatedTypeSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
 
 * **Before fix** :disappointed: 
   ![Screenshot 2023-07-19 at 14-22-28 Deleted GraphQL-Markdown](https://github.com/graphql-markdown/graphql-markdown/assets/324670/185015cc-a811-47ba-9564-69b65049d11f)
@@ -259,7 +259,7 @@ This is a pre-release following  the code base migration from JS to TS.
 <a name="1.20.2"></a>
 # [1.20.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.2) - 07 Jul 2023
 
-:sparkles: New option `printTypeOptions.codeSection` and CLI flag `--noCode` for hiding the codeblock section, based on an initial request from [@ris314](https://github.com/ris314) in https://github.com/graphql-markdown/graphql-markdown/issues/895. See [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions) for more information.
+:sparkles: New option `printTypeOptions.codeSection` and CLI flag `--noCode` for hiding the codeblock section, based on an initial request from [@ris314](https://github.com/ris314) in https://github.com/graphql-markdown/graphql-markdown/issues/895. See [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions) for more information.
 
 ![Screenshot 2023-07-07 at 16-28-08 AddCourse GraphQL-Markdown](https://github.com/graphql-markdown/graphql-markdown/assets/324670/4a3ceb99-266d-4bd4-846b-65ba448f8077)
 
@@ -290,7 +290,7 @@ This is a pre-release following  the code base migration from JS to TS.
 
 ## What's Changed
 
-:package: Update compatibility with `prettier v3` when using [`pretty`](https://graphql-markdown.github.io/docs/settings#pretty) setting. :magic_wand: 
+:package: Update compatibility with `prettier v3` when using [`pretty`](https://graphql-markdown.dev/docs/settings#pretty) setting. :magic_wand: 
 
 ### @graphql-markdown/docusaurus@1.20.1
 * :package: bump dependency @graphql-markdown/core to 1.6.1
@@ -320,7 +320,7 @@ This is a pre-release following  the code base migration from JS to TS.
 <a name="1.20.0"></a>
 # [1.20.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.20.0) - 01 Jul 2023
 
-:sparkles: [GraphQL Config](https://the-guild.dev/graphql/config) is now supported, see the [documentation](https://graphql-markdown.github.io/docs/configuration#graphql-config) for more information and limitations :rocket: 
+:sparkles: [GraphQL Config](https://the-guild.dev/graphql/config) is now supported, see the [documentation](https://graphql-markdown.dev/docs/configuration#graphql-config) for more information and limitations :rocket: 
 
 
 > *This is the default set up when creating a new site using the [template](https://github.com/graphql-markdown/template).*
@@ -385,7 +385,7 @@ extensions:
 
 :label: Building upon `customDirective` released in 1.18.0, we added a new option `tag` that allows one to display custom badges (tags) in the documentation pages. 
 
-The feature is an extension of the `customDirective` by using the already available directive processing. It works the same way as `descriptor`, and it also comes with an helper `directiveTag`... more details in the [documentation](https://graphql-markdown.github.io/docs/advanced/custom-directive).
+The feature is an extension of the `customDirective` by using the already available directive processing. It works the same way as `descriptor`, and it also comes with an helper `directiveTag`... more details in the [documentation](https://graphql-markdown.dev/docs/advanced/custom-directive).
 
 ```js
   customDirective: {
@@ -462,7 +462,7 @@ The feature is an extension of the `customDirective` by using the already availa
 # [1.18.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.18.2) - 01 Jun 2023
 
 
-:sparkle:  Add wildcard `*` support for **`customDirective`**, more details in the [documentation](https://graphql-markdown.github.io/docs/advanced/custom-directive).
+:sparkle:  Add wildcard `*` support for **`customDirective`**, more details in the [documentation](https://graphql-markdown.dev/docs/advanced/custom-directive).
 
 ## What's Changed
 
@@ -517,7 +517,7 @@ The feature is an extension of the `customDirective` by using the already availa
 <a name="1.18.0"></a>
 # [1.18.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.18.0) - 05 May 2023
 
-:star_struck: A new really cool feature by [@ljiang-ti](https://github.com/ljiang-ti), [**`customDirective`**](https://graphql-markdown.github.io/docs/settings#customdirective) provides documentation of schema directives at type level. One can now choose to print a custom description for schema directives applying to a type or field. :sparkles: 
+:star_struck: A new really cool feature by [@ljiang-ti](https://github.com/ljiang-ti), [**`customDirective`**](https://graphql-markdown.dev/docs/settings#customdirective) provides documentation of schema directives at type level. One can now choose to print a custom description for schema directives applying to a type or field. :sparkles: 
 
 :point_right: ~_There is a [open discussion](https://github.com/graphql-markdown/graphql-markdown/issues/843) for this feature, and the possible improvements._~
 
@@ -545,9 +545,9 @@ plugins: [
 
 ![Screenshot from 2023-05-05 10-21-14](https://user-images.githubusercontent.com/324670/236418483-81387261-72d2-4a7d-b8e0-1b0c8c1376d9.png)
 
-If you want to see it live, the [`group-by` example documentation](https://graphql-markdown.github.io/examples/group-by) has been updated to showcase the feature.
+If you want to see it live, the [`group-by` example documentation](https://graphql-markdown.dev/examples/group-by) has been updated to showcase the feature.
 
-You can find more examples and information regarding helpers to get you started in the [documentation](https://graphql-markdown.github.io/docs/advanced/custom-directive).
+You can find more examples and information regarding helpers to get you started in the [documentation](https://graphql-markdown.dev/docs/advanced/custom-directive).
 
 ## What's Changed
 
@@ -692,7 +692,7 @@ Lot of changes in this release 🚀
  * ✨ options `skipDocDirective` and `--skip` now support multiple values
  * 🔮  new options `printTypeOptions.deprecated` and `--deprecated` give more control over `deprecated` types, based on an initial request from [@patrys](https://github.com/patrys) in https://github.com/graphql-markdown/graphql-markdown/issues/735
  
-> The new option `printTypeOptions.deprecated` comes with several options (see [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions)), and the most exciting of those allows `@deprecated` entities to be grouped together - and, it is customisable (see [documentation](https://graphql-markdown.github.io/docs/advanced/custom-deprecated-section)).
+> The new option `printTypeOptions.deprecated` comes with several options (see [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)), and the most exciting of those allows `@deprecated` entities to be grouped together - and, it is customisable (see [documentation](https://graphql-markdown.dev/docs/advanced/custom-deprecated-section)).
 
 <img width="400" alt="custom-deprecated-section-5b7fd7a5deebdcddb64e68c8958f355a" src="https://user-images.githubusercontent.com/324670/229355935-263ce6cb-a7f7-4d13-a295-5661fcb23f83.png">
 
@@ -950,7 +950,7 @@ directive @example on
   | INLINE_FRAGMENT
 ```
 
-🪄 Support excluding types by directive, [see doc](https://graphql-markdown.github.io/docs/settings#skipdocdirective).
+🪄 Support excluding types by directive, [see doc](https://graphql-markdown.dev/docs/settings#skipdocdirective).
 
 ### @graphql-markdown/docusaurus@1.16.0
 * :sparkles:  exclude type by directive by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/686
@@ -989,7 +989,7 @@ directive @example on
   ```bash
   npm i @graphql-tools/graphql-file-loader
   ```
-   Explicitly declare the loader in your `@graphql-markdown/docusaurus` plugin configuration, see the [doc](https://graphql-markdown.github.io/docs/advanced/schema-loading).
+   Explicitly declare the loader in your `@graphql-markdown/docusaurus` plugin configuration, see the [doc](https://graphql-markdown.dev/docs/advanced/schema-loading).
    ```js
   module.exports = {
     // ...
@@ -1010,7 +1010,7 @@ directive @example on
   };
   ```
 
-* `diffMethod` is now set to `NONE` (disabled) by default. If you miss it, see the [doc](https://graphql-markdown.github.io/docs/settings#diffmethod).
+* `diffMethod` is now set to `NONE` (disabled) by default. If you miss it, see the [doc](https://graphql-markdown.dev/docs/settings#diffmethod).
 
 # @graphql-markdown/core@1.0.1
 
@@ -1078,7 +1078,7 @@ Update dependency to `@graphql-markdown/utils@1.0.1`
 <a name="1.13.0"></a>
 # [1.13.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.13.0) - 02 Sep 2022
 
-🪄 A new option for the schema loader allows custom root types in your schema (see [documentation](https://graphql-markdown.github.io/docs/advanced/custom-root-types)), based on a request from [@JaKXz](https://github.com/JaKXz).
+🪄 A new option for the schema loader allows custom root types in your schema (see [documentation](https://graphql-markdown.dev/docs/advanced/custom-root-types)), based on a request from [@JaKXz](https://github.com/JaKXz).
 
 ## What's Changed
 * use prepare script for husky install by [@JaKXz](https://github.com/JaKXz) in https://github.com/graphql-markdown/graphql-markdown/pull/623
@@ -1105,11 +1105,11 @@ Update dependency to `@graphql-markdown/utils@1.0.1`
 
 1. **Type relations** give you information about where a type is used: operation, union, interface, type... 
 2. **Parent prefix** makes it easier to read fields in type pages, especially for nested ones
-3. **Type attributes badges** provide a quick overview of the field attributes such as root type, list, nullability, and groups (if you use the [grouping feature](https://graphql-markdown.github.io/docs/settings#groupbydirective))
+3. **Type attributes badges** provide a quick overview of the field attributes such as root type, list, nullability, and groups (if you use the [grouping feature](https://graphql-markdown.dev/docs/settings#groupbydirective))
 
-👀  Look at [Demo 1](https://graphql-markdown.github.io/schema/schema) to see how the documentation renders with those options.
+👀  Look at [Demo 1](https://graphql-markdown.dev/schema/schema) to see how the documentation renders with those options.
 
-ℹ️  All those options are enabled by default, but they can be toggled off if you don't need them, see the [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions).
+ℹ️  All those options are enabled by default, but they can be toggled off if you don't need them, see the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions).
 
 💅 Those changes have also been a good opportunity for cleaning the MDX structures in the Markdown generated files.
 
@@ -1134,7 +1134,7 @@ Update dependency to `@graphql-markdown/utils@1.0.1`
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.11.0) - 17 Jul 2022
 
-✨ New [documentation option](https://graphql-markdown.github.io/docs/settings#docoptions) `index` for generating index page for schema categories (eg. queries, inputs, mutations...) powered by [Docusaurus generated index](https://docusaurus.io/docs/sidebar/items#generated-index-page) feature. You can see the option in action in [Demo 2](https://graphql-markdown.github.io/group-by/category/directives).
+✨ New [documentation option](https://graphql-markdown.dev/docs/settings#docoptions) `index` for generating index page for schema categories (eg. queries, inputs, mutations...) powered by [Docusaurus generated index](https://docusaurus.io/docs/sidebar/items#generated-index-page) feature. You can see the option in action in [Demo 2](https://graphql-markdown.dev/group-by/category/directives).
 
 ## What's Changed
 * 📦 npm(deps): Bump @graphql-inspector/core from 3.1.2 to 3.2.0 by [@dependabot](https://github.com/dependabot) in https://github.com/graphql-markdown/graphql-markdown/pull/572
@@ -1207,7 +1207,7 @@ This release provides several fixes affecting the rendering of array/list nested
 # [1.10.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.10.0) - 18 May 2022
 
 ✨ New options available for disabling Docusaurus navigation buttons and table of content for schema documentation pages. 
-More information in the [documentation](https://graphql-markdown.github.io/docs/settings#docoptions).
+More information in the [documentation](https://graphql-markdown.dev/docs/settings#docoptions).
 
 ## What's Changed
 * 📦 npm(deps): Bump @graphql-tools/graphql-file-loader from 7.3.9 to 7.3.10 by [@dependabot](https://github.com/dependabot) in https://github.com/graphql-markdown/graphql-markdown/pull/507

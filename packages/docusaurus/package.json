@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/docusaurus",
-  "homepage": "https://graphql-markdown.github.io",
+  "homepage": "https://graphql-markdown.dev",
   "description": "Docusaurus plugin for generating Markdown documentation from a GraphQL schema.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"

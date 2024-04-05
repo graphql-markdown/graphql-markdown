@@ -9,7 +9,7 @@ const lightCodeTheme = themes.github,
 const config = {
   title: "GraphQL-Markdown",
   tagline: "Human-friendly documentation for GraphQL schemas.",
-  url: "https://graphql-markdown.github.io",
+  url: "https://graphql-markdown.dev",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
@@ -17,7 +17,7 @@ const config = {
 
   // GitHub pages deployment config.
   organizationName: "graphql-markdown",
-  projectName: "graphql-markdown.github.io",
+  projectName: "graphql-markdown.dev",
 
   plugins: [
     require.resolve("@cmfcmf/docusaurus-search-local"),
