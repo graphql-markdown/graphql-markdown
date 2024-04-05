@@ -43,7 +43,7 @@ jobs:
       - name: Checkout website repo
         uses: actions/checkout@v4
         with:
-          repository: graphql-markdown/graphql-markdown.dev
+          repository: graphql-markdown/graphql-markdown.github.io
           path: website
           token: ${{ secrets.BOT_PAT }}
 
