@@ -99,7 +99,7 @@ jobs:
             -Dsonar.verbose=true
             -X
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
   coverage:
     name: Report coverage
