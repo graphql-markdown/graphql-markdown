@@ -92,6 +92,7 @@ jobs:
         id: sonarcloud
         uses: SonarSource/sonarcloud-github-action@v2.1.1
         with:
+          projectBaseDir: ${{ github.workspace }}
           args: >
             -X
         env:
