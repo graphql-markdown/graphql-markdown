@@ -106,6 +106,9 @@ type Query {
 }
 
 type Query {
+  """
+  List of courses available.
+  """
   allCourses: [Course] @doc(category: "Course")
   mathCourses: [Course] @doc(category: "Course") @deprecated
   scienceCourses: [Course] @doc(category: "Course") @deprecated
