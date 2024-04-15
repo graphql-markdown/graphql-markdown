@@ -69,6 +69,11 @@ jobs:
           npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
           npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
 
+      - name: Checkout Main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: SonarCloud Scan
         id: sonarcloud
         uses: SonarSource/sonarcloud-github-action@v2.1.1
