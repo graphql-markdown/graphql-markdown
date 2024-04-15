@@ -1,6 +1,11 @@
+import type { PrintTypeOptions } from "@graphql-markdown/types";
+
 import { buildSchema } from "graphql/utilities";
 
 import { printExample } from "../../src/example";
+
+import * as Common from "../../src/common";
+jest.mock("../../src/common");
 
 describe("example", () => {
   const schema = buildSchema(`
@@ -22,6 +27,12 @@ describe("example", () => {
     example: ScalarExample
     value: JSON
     id: ID!
+  }
+
+  type TypeNestedExample {
+    id: ID!
+    privateExample: TypeExample
+    publicExample: TypeExtrapolateExample
   }
 
   type TypeListExample {
@@ -52,7 +63,14 @@ describe("example", () => {
     myFieldOtherOtherField: String @spectaql(options: [{ key: "examples", value: "[\\"Example 1 from the Directive\\", \\"Example 2 from the Directive\\"]" }])
   }
 `);
-  const exampleDirective = schema.getDirective("example")!;
+
+  beforeEach(() => {
+    jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
   describe("printExample()", () => {
     test("returns a formatted example for the type using @example directive for scalar", () => {
@@ -60,9 +78,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("ScalarExample"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe('"This is an example"');
     });
 
@@ -71,9 +88,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getQueryType()?.getFields().example, {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe('{\n  example(id: "1") {\n    example\n    value\n    id\n  }\n}');
     });
 
@@ -82,9 +98,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getQueryType()?.getFields().examples, {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBeUndefined();
     });
 
@@ -93,9 +108,20 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("JSON"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
+      ).toBeUndefined();
+    });
+
+    test("returns undefined if directive not printable", () => {
+      expect.assertions(1);
+
+      jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(false);
+
+      expect(
+        printExample(schema.getType("ScalarExample"), {
+          schema,
+        } as PrintTypeOptions),
       ).toBeUndefined();
     });
 
@@ -103,13 +129,9 @@ describe("example", () => {
       expect.assertions(1);
 
       expect(
-        printExample(
-          {},
-          {
-            directive: exampleDirective,
-            field: "value",
-          },
-        ),
+        printExample({}, {
+          schema,
+        } as PrintTypeOptions),
       ).toBeUndefined();
     });
 
@@ -118,11 +140,65 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("TypeExtrapolateExample"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe(
         '{\n  "example": "This is an example",\n  "value": {\n    "example": "This is an example"\n  }\n}',
+      );
+    });
+
+    test("returns JSON formatted string example using subtype examples skipping non printable type", () => {
+      expect.assertions(1);
+
+      jest
+        .spyOn(Common, "hasPrintableDirective")
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .mockImplementation((type, _options) => {
+          return (type as { name: string }).name !== "ScalarExample";
+        });
+
+      expect(
+        printExample(schema.getType("TypeExtrapolateExample"), {
+          schema,
+        } as PrintTypeOptions),
+      ).toBe('{\n  "value": {\n    "example": "This is an example"\n  }\n}');
+    });
+
+    test("returns null if a non printable type is deeply nested", () => {
+      expect.assertions(1);
+
+      jest
+        .spyOn(Common, "hasPrintableDirective")
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .mockImplementation((type, _options) => {
+          return (type as { name: string }).name !== "ScalarExample";
+        });
+
+      expect(
+        printExample(schema.getType("TypeComplexExample"), {
+          schema,
+        } as PrintTypeOptions),
+      ).toBe(
+        '{\n  "example": [\n    {\n      "example": [\n        null\n      ]\n    }\n  ]\n}',
+      );
+    });
+
+    test("skips attributes of non-printable type", () => {
+      expect.assertions(1);
+
+      jest
+        .spyOn(Common, "hasPrintableDirective")
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .mockImplementation((type, _options) => {
+          return (type as { name: string }).name !== "TypeExample";
+        });
+
+      expect(
+        printExample(schema.getType("TypeNestedExample"), {
+          schema,
+        } as PrintTypeOptions),
+      ).toBe(
+        '{\n  "publicExample": {\n    "example": "This is an example",\n    "value": {\n      "example": "This is an example"\n    }\n  }\n}',
       );
     });
 
@@ -131,9 +207,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("TypeExample"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe('{\n  "example": "This is an example",\n  "value": {}\n}');
     });
 
@@ -142,9 +217,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("TypeListExample"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe('{\n  "example": [\n    "This is an example"\n  ]\n}');
     });
 
@@ -153,9 +227,8 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("TypeComplexExample"), {
-          directive: exampleDirective,
-          field: "value",
-        }),
+          schema,
+        } as PrintTypeOptions),
       ).toBe(
         '{\n  "example": [\n    {\n      "example": [\n        "This is an example"\n      ]\n    }\n  ]\n}',
       );
@@ -166,23 +239,26 @@ describe("example", () => {
 
       expect(
         printExample(schema.getType("CustomExampleDirective"), {
-          directive: schema.getDirective("spectaql")!,
-          field: "options",
-          parser: (options: unknown): unknown => {
-            const example = (options as [{ key: string; value: string }]).find(
-              (option) => {
+          schema,
+          exampleSection: {
+            directive: "spectaql",
+            field: "options",
+            parser: (options: unknown): unknown => {
+              const example = (
+                options as [{ key: string; value: string }]
+              ).find((option) => {
                 return ["example", "examples"].includes(option.key);
-              },
-            );
-            if (!example) {
-              return undefined;
-            }
-            if (example.key === "example") {
-              return example.value;
-            }
-            return (JSON.parse(example.value) as string[])[0];
+              });
+              if (!example) {
+                return undefined;
+              }
+              if (example.key === "example") {
+                return example.value;
+              }
+              return (JSON.parse(example.value) as string[])[0];
+            },
           },
-        }),
+        } as PrintTypeOptions),
       ).toBe(
         '{\n  "myFieldOtherField": "An Example from the Directive",\n  "myFieldOtherOtherField": "Example 1 from the Directive"\n}',
       );

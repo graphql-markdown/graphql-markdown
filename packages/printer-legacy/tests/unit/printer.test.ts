@@ -475,11 +475,7 @@ describe("Printer", () => {
     test("returns a Markdown graphql codeblock with example", () => {
       expect.hasAssertions();
 
-      const spy = jest
-        .spyOn(ExamplePrinter, "printExample")
-        .mockReturnValue("This is an example");
-
-      const code = Printer.printExample(GraphQLString, {
+      const options = {
         ...DEFAULT_OPTIONS,
         exampleSection: true,
         schema: {
@@ -487,12 +483,15 @@ describe("Printer", () => {
             return { name } as GraphQLDirective;
           },
         } as GraphQLSchema,
-      });
+      } as PrintTypeOptions;
 
-      expect(spy).toHaveBeenCalledWith(GraphQLString, {
-        field: "value",
-        directive: { name: "example" },
-      });
+      const spy = jest
+        .spyOn(ExamplePrinter, "printExample")
+        .mockReturnValue("This is an example");
+
+      const code = Printer.printExample(GraphQLString, options);
+
+      expect(spy).toHaveBeenCalledWith(GraphQLString, options);
       expect(code).toMatchSnapshot();
     });
 
@@ -520,33 +519,6 @@ describe("Printer", () => {
       const code = Printer.printExample(GraphQLString, DEFAULT_OPTIONS);
 
       expect(code).toBe("");
-    });
-
-    test("returns a Markdown graphql codeblock with example options override", () => {
-      expect.hasAssertions();
-
-      const spy = jest
-        .spyOn(ExamplePrinter, "printExample")
-        .mockReturnValue("This is an example");
-
-      const code = Printer.printExample(GraphQLString, {
-        ...DEFAULT_OPTIONS,
-        exampleSection: {
-          directive: "set",
-          field: "examples",
-        },
-        schema: {
-          getDirective: (name: string) => {
-            return { name } as GraphQLDirective;
-          },
-        } as GraphQLSchema,
-      });
-
-      expect(spy).toHaveBeenCalledWith(GraphQLString, {
-        field: "examples",
-        directive: { name: "set" },
-      });
-      expect(code).toMatchSnapshot();
     });
 
     test("returns an empty string if printTypeOptions.exampleSection directive is invalid", () => {

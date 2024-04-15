@@ -83,15 +83,3 @@ This is an example
 
 "
 `;
-
-exports[`Printer printExample() returns a Markdown graphql codeblock with example options override 1`] = `
-"### Example
-
-
-\`\`\`graphql
-This is an example
-\`\`\`
-
-
-"
-`;
