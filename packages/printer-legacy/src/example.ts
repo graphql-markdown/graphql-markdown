@@ -42,7 +42,7 @@ export const getDirectiveExampleOption = (
     if ("field" in options.exampleSection && options.exampleSection.field) {
       argName = options.exampleSection.field;
     }
-    if ("field" in options.exampleSection && options.exampleSection.parser) {
+    if ("parser" in options.exampleSection && options.exampleSection.parser) {
       parserFunc = options.exampleSection.parser;
     }
   }

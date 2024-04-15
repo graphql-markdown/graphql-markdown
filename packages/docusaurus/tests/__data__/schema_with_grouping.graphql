@@ -149,9 +149,9 @@ type DepartmentInformation implements Record @auth {
   courses: [Course] @noDoc @deprecated
 }
 
-type Course implements Record @example(value: "{ \"id\": 2, \"title\": \"GraphQL\" }") {
-  id: ID!
-  title: String!
+type Course implements Record {
+  id: ID! @example(value: "5")
+  title: String! @example(value: "GraphQL Markdown")
   createdAt: Date! @noDoc
   updatedAt: Date! 
 }
