@@ -22,8 +22,9 @@ import {
   print,
 } from "@graphql-markdown/graphql";
 
-import { hasPrintableDirective } from "./common";
 import { isEmpty } from "@graphql-markdown/utils";
+
+import { hasPrintableDirective } from "./common";
 
 export const getDirectiveExampleOption = (
   options: PrintTypeOptions,

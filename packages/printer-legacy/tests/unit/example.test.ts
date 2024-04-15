@@ -108,25 +108,22 @@ describe("example", () => {
         expected: schema.getDirective("test"),
       },
       { option: "field", value: "test", expected: "test" },
-    ])(
-      "returns override parameter ${option}",
-      ({ option, value, expected }) => {
-        expect.assertions(1);
+    ])("returns override parameter $option", ({ option, value, expected }) => {
+      expect.assertions(1);
 
-        expect(
-          getDirectiveExampleOption({
-            schema,
-            exampleSection: {
-              [option]: value,
-            } as unknown,
-          } as PrintTypeOptions),
-        ).toEqual(
-          expect.objectContaining({
-            [option]: expected,
-          }),
-        );
-      },
-    );
+      expect(
+        getDirectiveExampleOption({
+          schema,
+          exampleSection: {
+            [option]: value,
+          } as unknown,
+        } as PrintTypeOptions),
+      ).toEqual(
+        expect.objectContaining({
+          [option]: expected,
+        }),
+      );
+    });
   });
 
   describe("printExample()", () => {
