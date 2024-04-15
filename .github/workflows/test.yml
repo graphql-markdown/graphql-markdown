@@ -34,6 +34,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup NodeJS LTS
         uses: actions/setup-node@v4
@@ -68,11 +70,6 @@ jobs:
           cd packages/${{ matrix.package }}
           npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
           npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
-
-      - name: Checkout Main branch
-        uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: SonarCloud Scan
         id: sonarcloud
