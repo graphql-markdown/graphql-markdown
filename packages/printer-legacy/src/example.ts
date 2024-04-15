@@ -23,6 +23,7 @@ import {
 } from "@graphql-markdown/graphql";
 
 import { hasPrintableDirective } from "./common";
+import { isEmpty } from "@graphql-markdown/utils";
 
 export const getDirectiveExampleOption = (
   options: PrintTypeOptions,
@@ -44,7 +45,10 @@ export const getDirectiveExampleOption = (
       parserFunc = options.exampleSection.parser;
     }
   }
-  const directive = options.schema?.getDirective(directiveName);
+  const directive =
+    options.schema && !isEmpty(options.schema)
+      ? options.schema.getDirective(directiveName)
+      : undefined;
 
   if (!directive) {
     return undefined;

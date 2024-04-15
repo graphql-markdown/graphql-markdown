@@ -2,7 +2,7 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import { buildSchema } from "graphql/utilities";
 
-import { printExample } from "../../src/example";
+import { getDirectiveExampleOption, printExample } from "../../src/example";
 
 import * as Common from "../../src/common";
 jest.mock("../../src/common");
@@ -10,6 +10,10 @@ jest.mock("../../src/common");
 describe("example", () => {
   const schema = buildSchema(`
   directive @example(
+    value: String
+  ) on OBJECT | FIELD_DEFINITION | SCALAR
+
+  directive @test(
     value: String
   ) on OBJECT | FIELD_DEFINITION | SCALAR
 
@@ -70,6 +74,59 @@ describe("example", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  describe("getDirectiveExampleOption()", () => {
+    test("returns default settings if no override", () => {
+      expect.assertions(1);
+
+      expect(
+        getDirectiveExampleOption({
+          schema,
+        } as PrintTypeOptions),
+      ).toMatchObject({
+        directive: schema.getDirective("example"),
+        field: "value",
+        parser: undefined,
+      });
+    });
+
+    test("returns undefined if directive does not exist", () => {
+      expect.assertions(1);
+
+      expect(
+        getDirectiveExampleOption({
+          schema: {},
+        } as PrintTypeOptions),
+      ).toBeUndefined();
+    });
+
+    test.each([
+      {
+        option: "directive",
+        value: "test",
+        expected: schema.getDirective("test"),
+      },
+      { option: "field", value: "test", expected: "test" },
+    ])(
+      "returns override parameter ${option}",
+      ({ option, value, expected }) => {
+        expect.assertions(1);
+
+        expect(
+          getDirectiveExampleOption({
+            schema,
+            exampleSection: {
+              [option]: value,
+            } as unknown,
+          } as PrintTypeOptions),
+        ).toEqual(
+          expect.objectContaining({
+            [option]: expected,
+          }),
+        );
+      },
+    );
   });
 
   describe("printExample()", () => {
