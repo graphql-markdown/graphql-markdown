@@ -218,25 +218,6 @@ describe("example", () => {
       ).toBe('{\n  "value": {\n    "example": "This is an example"\n  }\n}');
     });
 
-    test("returns null if a non printable type is deeply nested", () => {
-      expect.assertions(1);
-
-      jest
-        .spyOn(Common, "hasPrintableDirective")
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .mockImplementation((type, _options) => {
-          return (type as { name: string }).name !== "ScalarExample";
-        });
-
-      expect(
-        printExample(schema.getType("TypeComplexExample"), {
-          schema,
-        } as PrintTypeOptions),
-      ).toBe(
-        '{\n  "example": [\n    {\n      "example": [\n        null\n      ]\n    }\n  ]\n}',
-      );
-    });
-
     test("skips attributes of non-printable type", () => {
       expect.assertions(1);
 

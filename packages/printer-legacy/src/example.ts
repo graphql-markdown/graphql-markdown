@@ -82,22 +82,28 @@ const parseTypeFields = (
   }
 
   let example: Record<string, unknown> = {};
-  fields.forEach((field) => {
-    const fieldType = hasDirective(field, [directiveExample.directive])
-      ? field
-      : field.type;
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const value = parseExampleDirective(
-      fieldType as Maybe<GraphQLType>,
-      options,
-    );
-    example = {
-      ...example,
-      [field.name]: isListType(getNullableType(fieldType as Maybe<GraphQLType>))
-        ? [value]
-        : value,
-    };
-  });
+  fields
+    .filter((field) => {
+      return hasPrintableDirective(field, options);
+    })
+    .forEach((field) => {
+      const fieldType = hasDirective(field, [directiveExample.directive])
+        ? field
+        : field.type;
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      const value = parseExampleDirective(
+        fieldType as Maybe<GraphQLType>,
+        options,
+      );
+      example = {
+        ...example,
+        [field.name]: isListType(
+          getNullableType(fieldType as Maybe<GraphQLType>),
+        )
+          ? [value]
+          : value,
+      };
+    });
 
   return example;
 };
@@ -131,7 +137,7 @@ const parseExampleDirective = (
   options: PrintTypeOptions,
 ): Maybe<unknown> => {
   const directiveExample = getDirectiveExampleOption(options);
-  if (!directiveExample) {
+  if (!directiveExample || !hasPrintableDirective(type, options)) {
     return undefined;
   }
 
@@ -141,7 +147,7 @@ const parseExampleDirective = (
       : parseExampleValue;
 
   const namedType = isType(type) ? getNamedType(type) : type;
-  if (!namedType || !hasPrintableDirective(namedType, options)) {
+  if (!namedType) {
     return undefined;
   }
 
