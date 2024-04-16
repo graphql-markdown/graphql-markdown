@@ -1,7 +1,9 @@
 import type {
+  DirectiveExampleParserFunction,
   GraphQLOperationType,
   GraphQLType,
   Maybe,
+  PrintTypeOptions,
   TypeDirectiveExample,
 } from "@graphql-markdown/types";
 
@@ -20,10 +22,55 @@ import {
   print,
 } from "@graphql-markdown/graphql";
 
+import { isEmpty } from "@graphql-markdown/utils";
+
+import { hasPrintableDirective } from "./common";
+
+export const getDirectiveExampleOption = (
+  options: PrintTypeOptions,
+): Maybe<TypeDirectiveExample> => {
+  let directiveName: string = "example",
+    argName: string = "value",
+    parserFunc: Maybe<DirectiveExampleParserFunction> = undefined;
+  if (options.exampleSection && typeof options.exampleSection === "object") {
+    if (
+      "directive" in options.exampleSection &&
+      options.exampleSection.directive
+    ) {
+      directiveName = options.exampleSection.directive;
+    }
+    if ("field" in options.exampleSection && options.exampleSection.field) {
+      argName = options.exampleSection.field;
+    }
+    if ("parser" in options.exampleSection && options.exampleSection.parser) {
+      parserFunc = options.exampleSection.parser;
+    }
+  }
+  const directive =
+    options.schema && !isEmpty(options.schema)
+      ? options.schema.getDirective(directiveName)
+      : undefined;
+
+  if (!directive) {
+    return undefined;
+  }
+
+  return {
+    directive,
+    field: argName,
+    parser: parserFunc,
+  } as TypeDirectiveExample;
+};
+
 const parseTypeFields = (
   type: Maybe<GraphQLType>,
-  directiveExample: TypeDirectiveExample,
+  options: PrintTypeOptions,
 ): Maybe<unknown> => {
+  const directiveExample = getDirectiveExampleOption(options);
+  if (!directiveExample) {
+    return undefined;
+  }
+
   const fields = getFields(type) as {
     astNode: unknown;
     name: string;
@@ -35,22 +82,28 @@ const parseTypeFields = (
   }
 
   let example: Record<string, unknown> = {};
-  fields.forEach((field) => {
-    const fieldType = hasDirective(field, [directiveExample.directive])
-      ? field
-      : field.type;
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    const value = parseExampleDirective(
-      fieldType as Maybe<GraphQLType>,
-      directiveExample,
-    );
-    example = {
-      ...example,
-      [field.name]: isListType(getNullableType(fieldType as Maybe<GraphQLType>))
-        ? [value]
-        : value,
-    };
-  });
+  fields
+    .filter((field) => {
+      return hasPrintableDirective(field, options);
+    })
+    .forEach((field) => {
+      const fieldType = hasDirective(field, [directiveExample.directive])
+        ? field
+        : field.type;
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      const value = parseExampleDirective(
+        fieldType as Maybe<GraphQLType>,
+        options,
+      );
+      example = {
+        ...example,
+        [field.name]: isListType(
+          getNullableType(fieldType as Maybe<GraphQLType>),
+        )
+          ? [value]
+          : value,
+      };
+    });
 
   return example;
 };
@@ -81,8 +134,13 @@ const parseExampleValue = (
 
 const parseExampleDirective = (
   type: Maybe<GraphQLOperationType | GraphQLType>,
-  directiveExample: TypeDirectiveExample,
+  options: PrintTypeOptions,
 ): Maybe<unknown> => {
+  const directiveExample = getDirectiveExampleOption(options);
+  if (!directiveExample || !hasPrintableDirective(type, options)) {
+    return undefined;
+  }
+
   const parser =
     typeof directiveExample.parser === "function"
       ? directiveExample.parser
@@ -104,7 +162,7 @@ const parseExampleDirective = (
   } catch (err: unknown) {
     if (err instanceof IntrospectionError) {
       return isType(namedType)
-        ? parseTypeFields(namedType, directiveExample)
+        ? parseTypeFields(namedType, options)
         : undefined;
     }
     throw err;
@@ -113,13 +171,13 @@ const parseExampleDirective = (
 
 export const printExample = (
   type: unknown,
-  directiveExample: TypeDirectiveExample,
+  options: PrintTypeOptions,
 ): Maybe<string> => {
   if (!isType(type) && !isOperation(type)) {
     return undefined;
   }
 
-  const example = parseExampleDirective(type, directiveExample);
+  const example = parseExampleDirective(type, options);
 
   if (!example) {
     return undefined;

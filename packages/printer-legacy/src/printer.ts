@@ -195,27 +195,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    let directiveName: string = "example",
-      argName: string = "value";
-    if (typeof options.exampleSection === "object") {
-      if (
-        "directive" in options.exampleSection &&
-        options.exampleSection.directive
-      ) {
-        directiveName = options.exampleSection.directive;
-      }
-      if ("field" in options.exampleSection && options.exampleSection.field) {
-        argName = options.exampleSection.field;
-      }
-    }
-
-    const directive = options.schema?.getDirective(directiveName);
-
-    if (!directive) {
-      return "";
-    }
-
-    const example = printExample(type, { directive, field: argName });
+    const example = printExample(type, options);
 
     if (!example) {
       return "";
