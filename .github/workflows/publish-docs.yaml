@@ -2,7 +2,7 @@ name: Publish docs
 run-name: >-
   ${{ github.event_name == 'workflow_dispatch' 
     && format('Publish docs from #{1} by @{0}', github.actor, github.ref_name) 
-    || format('Publish docs release ${0}', github.event.release.name)
+    || format('Publish docs release {0}', github.event.release.name)
   }}
 
 on:
