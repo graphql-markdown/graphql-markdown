@@ -13,7 +13,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
-  COPY --dir config packages ./
+  COPY --dir config packages scripts ./
   RUN npm ci
 
 lint: 
@@ -146,7 +146,7 @@ GQLMD:
 
 INSTALL_GQLMD:
   FUNCTION
-  FOR package IN $(ls -1pd -- /graphql-markdown/packages/* | awk -F "/" "{print \$(NF-1)}")
+  FOR package IN $(node /scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
     RUN npm install ./graphql-markdown-${package}.tgz
   END

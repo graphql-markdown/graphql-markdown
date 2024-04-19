@@ -1,30 +1,7 @@
-const { chdir } = require("node:process");
+const { getWorkspacePackagesMap } = require("./shared/dependencies-utils");
 
-chdir(__dirname);
-
-const rootDir = "..";
-
-const { peerDependencies: packages } = require(`${rootDir}/package.json`);
-
-const getWorkspacePackagesMap = () => {
-  const map = {};
-  Object.entries(packages).forEach(([packageName, packagePath]) => {
-    if (!packageName.startsWith("@graphql-markdown")) {
-      return;
-    }
-
-    const packageJson =
-      packagePath.replace("file:", `${rootDir}/`) + "/package.json";
-    const { version, dependencies, peerDependencies } = require(packageJson);
-
-    Object.assign(map, {
-      [packageName]: { version, dependencies, peerDependencies },
-    });
-  });
-  return map;
-};
-
-const packagesMap = getWorkspacePackagesMap();
+const orgName = "@graphql-markdown";
+const packagesMap = getWorkspacePackagesMap(orgName);
 
 const checkPackage = (packageName, dependencies) => {
   const report = [];
@@ -33,7 +10,7 @@ const checkPackage = (packageName, dependencies) => {
   }
 
   Object.entries(dependencies).map(([depName, version]) => {
-    if (!depName.startsWith("@graphql-markdown")) {
+    if (!depName.startsWith(orgName)) {
       return [];
     }
 
