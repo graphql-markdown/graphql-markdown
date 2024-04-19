@@ -13,7 +13,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
-  COPY --dir config packages ./
+  COPY --dir config packages scripts ./
   RUN npm ci
 
 lint: 
@@ -44,6 +44,7 @@ mutation-test:
 build-package:
   FROM +build
   ARG --required package
+  WORKDIR /graphql-markdown
   RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
@@ -146,7 +147,7 @@ GQLMD:
 
 INSTALL_GQLMD:
   FUNCTION
-  FOR package IN $(ls -1pd -- /graphql-markdown/packages/* | awk -F "/" "{print \$(NF-1)}")
+  FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
     RUN npm install ./graphql-markdown-${package}.tgz
   END
