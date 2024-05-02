@@ -3,6 +3,6 @@
   "entryPoints": ["./src"],
   "entryPointStrategy": "expand",
   "out": "./docs",
-  "name": "@graphql-markdown/logger",
+  "name": "@graphql-markdown/docusaurus",
   "exclude": []
 }
