@@ -7,7 +7,7 @@ Internal library of helpers for formatting GraphQL values.
 ### getFormattedDefaultValue()
 
 ```ts
-getFormattedDefaultValue<T>(entity): Maybe<string | T>
+function getFormattedDefaultValue<T>(entity): Maybe<string | T>
 ```
 
 Returns a printable formatted value for a GraphQL type.
@@ -19,15 +19,15 @@ This is the generic function.
 
 #### Parameters
 
-• **entity**: `Object`
+• **entity**
 
 the GraphQL schema entity processed.
 
-• **entity\.defaultValue**: `T`
+• **entity.defaultValue**: `T`
 
 the GraphQL schema type's value to be formatted.
 
-• **entity\.type**: `Maybe`\<`GraphQLType`\>
+• **entity.type**: `Maybe`\<`GraphQLType`\>
 
 the GraphQL schema type.
 

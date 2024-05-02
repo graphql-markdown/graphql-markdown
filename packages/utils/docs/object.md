@@ -6,8 +6,10 @@ Internal library of helpers for manipulating objects.
 
 ### isEmpty()
 
+`Internal`
+
 ```ts
-isEmpty(obj): boolean
+function isEmpty(obj): boolean
 ```
 
 Check if an object contains key/value records.
@@ -27,7 +29,7 @@ the key/value record object.
 #### Example
 
 ```js
-import { isEmpty } from "@graphql-markdown/utils/object";
+import { isEmpty } from '@graphql-markdown/utils/object';
 
 const obj = {
   bool: true,

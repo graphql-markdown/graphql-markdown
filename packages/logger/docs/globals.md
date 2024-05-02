@@ -75,7 +75,7 @@ warn: "warn";
 ### Logger()
 
 ```ts
-Logger(moduleName?): void
+function Logger(moduleName?): void
 ```
 
 Instantiate a logger module.
@@ -106,12 +106,12 @@ log("Info message", "info"); // Expected Docusaurus log output "Info message"
 
 [index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
 
----
+***
 
 ### log()
 
 ```ts
-log(message, level): void
+function log(message, level): void
 ```
 
 Logs a message by calling the active logger instance.
@@ -122,14 +122,14 @@ Logs a message by calling the active logger instance.
 
 a string to be logged.
 
-• **level**:
-\| `"debug"`
-\| `"error"`
-\| `"info"`
-\| `"log"`
-\| `"success"`
-\| `"warn"`
-\| [`LogLevel`](exports.md#loglevel)= `LogLevel.info`
+• **level**: 
+  \| `"debug"`
+  \| `"error"`
+  \| `"info"`
+  \| `"log"`
+  \| `"success"`
+  \| `"warn"`
+  \| [`LogLevel`](globals.md#loglevel)= `LogLevel.info`
 
 optional log level, `"info"` by default.
 

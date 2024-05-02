@@ -11,7 +11,7 @@ Library supporting `relatedTypeSection` for displaying relations between GraphQL
 ### getRelationOfField()
 
 ```ts
-getRelationOfField(type, schemaMap): Partial<Record<SchemaEntity, RelationOfField[]>>
+function getRelationOfField(type, schemaMap): Partial<Record<SchemaEntity, RelationOfField[]>>
 ```
 
 Returns a map of fields and arguments where the GraphQL schema type matches the type.
@@ -34,18 +34,18 @@ a record map of fields and arguments relations.
 
 #### See
 
-[mapRelationOf]([object Object])
+mapRelationOf
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
+[packages/graphql/src/relation.ts:165](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L165)
 
----
+***
 
 ### getRelationOfImplementation()
 
 ```ts
-getRelationOfImplementation(type, schemaMap): Partial<Record<SchemaEntity, RelationOfImplementation[]>>
+function getRelationOfImplementation(type, schemaMap): Partial<Record<SchemaEntity, RelationOfImplementation[]>>
 ```
 
 Returns a map of types (unions or interfaces) where the GraphQL schema type is implemented.
@@ -68,18 +68,18 @@ a record map of unions or interfaces relations.
 
 #### See
 
-[mapRelationOf]([object Object])
+mapRelationOf
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
+[packages/graphql/src/relation.ts:351](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L351)
 
----
+***
 
 ### getRelationOfInterface()
 
 ```ts
-getRelationOfInterface(type, schemaMap): Partial<Record<SchemaEntity, RelationOfInterface[]>>
+function getRelationOfInterface(type, schemaMap): Partial<Record<SchemaEntity, RelationOfInterface[]>>
 ```
 
 Returns a map of interfaces where the GraphQL schema type is extended.
@@ -102,18 +102,18 @@ a record map of interfaces relations.
 
 #### See
 
-[mapRelationOf]([object Object])
+mapRelationOf
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
+[packages/graphql/src/relation.ts:294](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L294)
 
----
+***
 
 ### getRelationOfReturn()
 
 ```ts
-getRelationOfReturn(type, schemaMap): Partial<Record<SchemaEntity, GraphQLOperationType[]>>
+function getRelationOfReturn(type, schemaMap): Partial<Record<SchemaEntity, GraphQLOperationType[]>>
 ```
 
 Returns a map of operations (queries, mutations, subscriptions) where the GraphQL schema type is the return type.
@@ -136,18 +136,18 @@ a record map of operations relations.
 
 #### See
 
-[mapRelationOf]([object Object])
+mapRelationOf
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
+[packages/graphql/src/relation.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L104)
 
----
+***
 
 ### getRelationOfUnion()
 
 ```ts
-getRelationOfUnion(type, schemaMap): Partial<Record<SchemaEntity, GraphQLUnionType[]>>
+function getRelationOfUnion(type, schemaMap): Partial<Record<SchemaEntity, GraphQLUnionType[]>>
 ```
 
 Returns a map of unions where the GraphQL schema type is part of it.
@@ -170,8 +170,8 @@ a record map of unions relations.
 
 #### See
 
-[mapRelationOf]([object Object])
+mapRelationOf
 
 #### Source
 
-[packages/types/src/graphql.d.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/graphql.d.ts#L79)
+[packages/graphql/src/relation.ts:238](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L238)
