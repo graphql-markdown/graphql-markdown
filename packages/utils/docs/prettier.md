@@ -6,8 +6,10 @@ Internal library for prettifying files using `prettier`.
 
 ### prettify()
 
+`Internal`
+
 ```ts
-prettify(content, parser): Promise<undefined | string>
+function prettify(content, parser): Promise<undefined | string>
 ```
 
 Prettify a string using [prettier.format](https://prettier.io/docs/en/api#prettierformatsource-options).
@@ -40,12 +42,14 @@ https://prettier.io/docs/en/options#parser for the list of parsers.
 
 [prettier.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L29)
 
----
+***
 
 ### prettifyJavascript()
 
+`Internal`
+
 ```ts
-prettifyJavascript(content): Promise<undefined | string>
+function prettifyJavascript(content): Promise<undefined | string>
 ```
 
 Prettify a Javascript string using [prettify](prettier.md#prettify) and `babel` parser.
@@ -74,12 +78,14 @@ Same as `prettify(content, "babel")`.
 
 [prettier.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L82)
 
----
+***
 
 ### prettifyMarkdown()
 
+`Internal`
+
 ```ts
-prettifyMarkdown(content): Promise<undefined | string>
+function prettifyMarkdown(content): Promise<undefined | string>
 ```
 
 Prettify a Markdown string using [prettify](prettier.md#prettify) and `markdown` parser.

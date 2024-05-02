@@ -11,7 +11,7 @@ Library supporting `groupByDirective` for grouping GraphQL schema entities.
 ### getGroupName()
 
 ```ts
-getGroupName<T>(type, groupByDirective): Maybe<string>
+function getGroupName<T>(type, groupByDirective): Maybe<string>
 ```
 
 Gets the group name for a schema type based on the directive information.
@@ -67,23 +67,24 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-};
+}
 
 getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
 
 getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
+
 ```
 
 #### Source
 
 [packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
 
----
+***
 
 ### getGroups()
 
 ```ts
-getGroups(schemaMap, groupByDirective): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>
+function getGroups(schemaMap, groupByDirective): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>
 ```
 
 Parses a GraphQL schema to build a map of entities with matching `groupByDirective` option.
@@ -140,7 +141,7 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-};
+}
 
 const groupsMap = getGroups(schemaMap, groupOptions);
 

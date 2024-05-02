@@ -1,16 +1,17 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "plugin": ["typedoc-plugin-markdown"],
-  "entryFileName": "index.md",
   "exclude": ["**/index.ts"],
   "excludeExternals": true,
   "excludeInternal": false,
   "excludePrivate": true,
   "excludeReferences": true,
+  "excludeNotDocumented": false,
   "githubPages": false,
   "hideBreadcrumbs": true,
   "hideGenerator": true,
   "hidePageHeader": true,
+  "hidePageTitle": false,
   "useCodeBlocks": true,
   "outputFileStrategy": "modules",
   "pretty": true,
@@ -19,5 +20,7 @@
   "validation": {
     "notDocumented": true
   },
-  "sourceLinkExternal": true
+  "sourceLinkExternal": true,
+  "gitRevision": "main",
+  "entryFileName": "index.md",
 }

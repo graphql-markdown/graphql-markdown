@@ -8,7 +8,7 @@ Library supporting `customDirective` for directive based customization.
 
 ## Variables
 
-### WILDCARD_DIRECTIVE
+### WILDCARD\_DIRECTIVE
 
 ```ts
 const WILDCARD_DIRECTIVE: "*";
@@ -20,14 +20,36 @@ See [getCustomDirectiveOptions](directive.md#getcustomdirectiveoptions), [isCust
 
 #### Source
 
-[packages/graphql/src/directive.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L28)
+[packages/graphql/src/directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L30)
 
 ## Functions
+
+### executableDirectiveLocation()
+
+```ts
+function executableDirectiveLocation(directive): boolean
+```
+
+Checks if a directive is executable (related to operations).
+
+#### Parameters
+
+• **directive**: `GraphQLDirective`
+
+#### Returns
+
+`boolean`
+
+#### Source
+
+[packages/graphql/src/directive.ts:285](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L285)
+
+***
 
 ### getConstDirectiveMap()
 
 ```ts
-getConstDirectiveMap(entity, customDirectiveMap): Maybe<CustomDirectiveMap>
+function getConstDirectiveMap(entity, customDirectiveMap): Maybe<CustomDirectiveMap>
 ```
 
 Returns a map of custom directives for a schema entity.
@@ -99,14 +121,14 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 #### Source
 
-[packages/graphql/src/directive.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L247)
+[packages/graphql/src/directive.ts:250](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L250)
 
----
+***
 
 ### getCustomDirectiveOptions()
 
 ```ts
-getCustomDirectiveOptions(schemaDirectiveName, customDirectiveOptions): Maybe<CustomDirectiveOptions>
+function getCustomDirectiveOptions(schemaDirectiveName, customDirectiveOptions): Maybe<CustomDirectiveOptions>
 ```
 
 Returns a record set of custom handlers from a directive by name.
@@ -148,14 +170,14 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 
 #### Source
 
-[packages/graphql/src/directive.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L76)
+[packages/graphql/src/directive.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L78)
 
----
+***
 
 ### getCustomDirectives()
 
 ```ts
-getCustomDirectives(schemaMap, customDirectiveOptions?): Maybe<CustomDirectiveMap>
+function getCustomDirectives(schemaMap, customDirectiveOptions?): Maybe<CustomDirectiveMap>
 ```
 
 Returns a custom directives map with custom handlers from `customDirective`.
@@ -166,7 +188,7 @@ Returns a custom directives map with custom handlers from `customDirective`.
 
 the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
 
-• **customDirectiveOptions?**: `CustomDirective`
+• **customDirectiveOptions?**: `Maybe`\<`CustomDirective`\>
 
 the `customDirective` option.
 
@@ -229,14 +251,14 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 
 #### Source
 
-[packages/graphql/src/directive.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L150)
+[packages/graphql/src/directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L152)
 
----
+***
 
 ### isCustomDirective()
 
 ```ts
-isCustomDirective(schemaDirectiveName, customDirectiveOptions): boolean
+function isCustomDirective(schemaDirectiveName, customDirectiveOptions): boolean
 ```
 
 Checks if a directive name is referenced in `customDirective` option.
@@ -259,4 +281,26 @@ the `customDirective` option.
 
 #### Source
 
-[packages/graphql/src/directive.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L39)
+[packages/graphql/src/directive.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L41)
+
+***
+
+### typeSystemDirectiveLocation()
+
+```ts
+function typeSystemDirectiveLocation(directive): boolean
+```
+
+Checks if a directive is system (related to schema definition).
+
+#### Parameters
+
+• **directive**: `GraphQLDirective`
+
+#### Returns
+
+`boolean`
+
+#### Source
+
+[packages/graphql/src/directive.ts:308](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L308)

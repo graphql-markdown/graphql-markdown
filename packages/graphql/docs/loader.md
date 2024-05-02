@@ -7,7 +7,7 @@ Library for GraphQL schema loading and `loaders` config processing.
 ### getDocumentLoaders()
 
 ```ts
-getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>
+function getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>
 ```
 
 Asynchronously returns a valid loaders list for [loadSchema](loader.md#loadschema) based on the plugin config.
@@ -32,10 +32,7 @@ an `Error` if no loader has been loaded, or if an error occurred while importing
 #### Example
 
 ```js
-import {
-  getDocumentLoaders,
-  loadSchema,
-} from "@graphql-markdown/utils/graphql";
+import { getDocumentLoaders, loadSchema } from "@graphql-markdown/utils/graphql"
 
 const loaderList = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
@@ -53,12 +50,12 @@ const schema = await loadSchema("schema.graphql", {
 
 [packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
----
+***
 
 ### loadSchema()
 
 ```ts
-loadSchema(schemaLocation, options): Promise<GraphQLSchema>
+function loadSchema(schemaLocation, options): Promise<GraphQLSchema>
 ```
 
 Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
@@ -71,7 +68,7 @@ If `rootTypes` is set in the options, then the schema root types will be overrid
 
 the schema location pointer matching the loader.
 
-• **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `Object` & `Object` & `Object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `Object` & `Object`
+• **options**: `BuildSchemaOptions` & `GraphQLParseOptions` & `object` & `object` & `object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `object` & `object`
 
 the schema `loaders`, and optional `rootTypes` override.
 
@@ -84,7 +81,7 @@ a GraphQL schema.
 #### Example
 
 ```js
-import { loadSchema } from "@graphql-markdown/utils/graphql";
+import { loadSchema } from "@graphql-markdown/utils/graphql"
 
 const schema = await loadSchema("schema.graphql", {
   loaders: [new GraphQLFileLoader()],

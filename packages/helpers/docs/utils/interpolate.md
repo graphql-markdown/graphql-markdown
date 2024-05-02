@@ -6,10 +6,12 @@ Helpers utility functions library.
 
 ### getObjPath()
 
+`Internal`
+
 ```ts
-getObjPath(
-   path,
-   obj,
+function getObjPath(
+   path, 
+   obj, 
    fallback): unknown
 ```
 
@@ -38,7 +40,7 @@ the property value if the path is resolved, else returns the `fallback` value.
 #### Example
 
 ```js
-import { getObjPath } from "@graphql-markdown/utils/object";
+import { getObjPath } from '@graphql-markdown/utils/object';
 
 getObjPath("foo.bar", { foo: { bar: 42 } }); // Returns 42
 
@@ -49,14 +51,14 @@ getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 
 [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
 
----
+***
 
 ### interpolate()
 
 ```ts
-interpolate(
-   template,
-   variables,
+function interpolate(
+   template, 
+   variables, 
    fallback?): string
 ```
 
@@ -68,7 +70,7 @@ Interpolate a template literal-like string.
 
 a string template literal-like.
 
-• **variables**: `Maybe`\<`Record`\<`string`, `unknown`\> & `Object`\>
+• **variables**: `Maybe`\<`Record`\<`string`, `unknown`\> & `object`\>
 
 a record map of values with variable's name as key and `description` as directive's description.
 

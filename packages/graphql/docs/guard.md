@@ -7,7 +7,7 @@ Custom GraphQL type guards and property guards.
 ### instanceOf()
 
 ```ts
-instanceOf<T>(obj, type): obj is T
+function instanceOf<T>(obj, type): obj is T
 ```
 
 Checks if a GraphQL named type is of generic type `T`.
@@ -24,7 +24,7 @@ a GraphQL type to check against, eg `GraphQLObjectType`.
 
 a GraphQL named type from the GraphQL schema.
 
-• **type**: () => `T`
+• **type**
 
 the GraphQL type `T`.
 
@@ -34,14 +34,38 @@ the GraphQL type `T`.
 
 #### Source
 
-[packages/graphql/src/guard.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L52)
+[packages/graphql/src/guard.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L57)
 
----
+***
+
+### isApiType()
+
+```ts
+function isApiType(type): boolean
+```
+
+Checks if a type belongs to API (operation related).
+
+#### Parameters
+
+• **type**: `unknown`
+
+a GraphQL type.
+
+#### Returns
+
+`boolean`
+
+#### Source
+
+[packages/graphql/src/guard.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L100)
+
+***
 
 ### isDeprecated()
 
 ```ts
-isDeprecated<T>(obj): obj is DeprecatedType<T>
+function isDeprecated<T>(obj): obj is DeprecatedType<T>
 ```
 
 Checks if a GraphQL named type is deprecated.
@@ -64,14 +88,14 @@ an instance of `T`.
 
 #### Source
 
-[packages/graphql/src/guard.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L70)
+[packages/graphql/src/guard.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L75)
 
----
+***
 
 ### isGraphQLFieldType()
 
 ```ts
-isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>
+function isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>
 ```
 
 Checks if a GraphQL named type is of type `GraphQLField`.
@@ -88,14 +112,14 @@ a GraphQL type.
 
 #### Source
 
-[packages/graphql/src/guard.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L33)
+[packages/graphql/src/guard.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L38)
 
----
+***
 
 ### isOperation()
 
 ```ts
-isOperation(type): type is GraphQLOperationType
+function isOperation(type): type is GraphQLOperationType
 ```
 
 Checks if a GraphQL type a GraphQL operation (query, mutation, subscription).
@@ -112,4 +136,28 @@ a GraphQL type.
 
 #### Source
 
-[packages/graphql/src/guard.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L85)
+[packages/graphql/src/guard.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L90)
+
+***
+
+### isSystemType()
+
+```ts
+function isSystemType(type): boolean
+```
+
+Checks if a type belongs to schema (schema type definition excluding operations related types).
+
+#### Parameters
+
+• **type**: `unknown`
+
+a GraphQL type.
+
+#### Returns
+
+`boolean`
+
+#### Source
+
+[packages/graphql/src/guard.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L113)
