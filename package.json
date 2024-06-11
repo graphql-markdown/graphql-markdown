@@ -185,7 +185,7 @@
     "lodash.filter": "4.6.0",
     "memfs": "4.9.2",
     "pinst": "3.0.0",
-    "prettier": "3.3.1",
+    "prettier": "3.3.2",
     "ts-jest": "29.1.4",
     "typedoc": "0.25.13",
     "typedoc-plugin-frontmatter": "1.0.0",
