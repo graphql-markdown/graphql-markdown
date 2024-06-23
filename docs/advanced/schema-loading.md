@@ -7,25 +7,27 @@ pagination_next: null
 
 GraphQL-Markdown use external loaders for loading GraphQL schemas (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
 
-You can declare as many loaders as you need using the structure:
+You can declare as many loaders as you need using a `LoaderOption` map:
 
 ```ts
-type RootTypes = { query?: string; mutation?: string; subscription?: string };
+// highlight-start
+type LoaderOption = {
+  [name: ClassName]: PackageName | PackageConfig;
+};
+// highlight-end
 
-type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
+type PackageName = string & { _opaque: typeof PackageName };
+
+type ClassName = string & { _opaque: typeof ClassName };
 
 type PackageConfig = {
   module: PackageName;
   options?: PackageOptionsConfig;
 };
 
-type PackageName = string & { _opaque: typeof PackageName };
+type RootTypes = { query?: string; mutation?: string; subscription?: string };
 
-type ClassName = string & { _opaque: typeof ClassName };
-
-type LoaderOption = {
-  [name: ClassName]: PackageName | PackageConfig;
-};
+type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
 ```
 
 ## Local schema (file)
