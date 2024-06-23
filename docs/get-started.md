@@ -71,12 +71,15 @@ The `npm run start` command builds your website locally and serves it through a 
 
 ## Existing site
 
-### What you'll need
+### Requirements
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
+- Node.js version [18.0](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`). 
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-- [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs](https://docusaurus.io/docs/docs-introduction) feature:
+ 
+- [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs](https://docusaurus.io/docs/docs-introduction) feature.
   - Docs feature is provided by [`@docusaurus/plugin-content-docs`](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) or `@docusaurus/preset-classic`.
+ 
+- [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above. 
 
 ### Install the plugin
 
@@ -85,12 +88,6 @@ Add the `@graphql-markdown/docusaurus` plugin to your site installation:
 ```shell title="shell"
 npm install @graphql-markdown/docusaurus graphql
 ```
-
-:::info
-
-The `graphql` package is a peer-dependency, and it should be installed if not yet present.
-
-:::
 
 ### Add a GraphQL schema loader
 
