@@ -2309,7 +2309,8 @@ exports[`introspection getSchemaMap() returns {} if root type no declared (issue
     "include": "@include",
     "skip": "@skip",
     "deprecated": "@deprecated",
-    "specifiedBy": "@specifiedBy"
+    "specifiedBy": "@specifiedBy",
+    "oneOf": "@oneOf"
   },
   "objects": {
     "Author": "Author",
@@ -3915,7 +3916,8 @@ exports[`introspection getSchemaMap() returns schema types map 1`] = `
     "include": "@include",
     "skip": "@skip",
     "deprecated": "@deprecated",
-    "specifiedBy": "@specifiedBy"
+    "specifiedBy": "@specifiedBy",
+    "oneOf": "@oneOf"
   },
   "objects": {
     "Media": "Media",
@@ -4379,7 +4381,8 @@ exports[`introspection getSchemaMap() returns schema types map with custom root 
     "include": "@include",
     "skip": "@skip",
     "deprecated": "@deprecated",
-    "specifiedBy": "@specifiedBy"
+    "specifiedBy": "@specifiedBy",
+    "oneOf": "@oneOf"
   },
   "objects": {
     "Subscription": "Subscription"

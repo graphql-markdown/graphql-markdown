@@ -66,6 +66,7 @@ collapsed: true
   "misc/directives/doc.mdx": "doc",
   "misc/directives/include.mdx": "include",
   "misc/directives/no-doc.mdx": "no-doc",
+  "misc/directives/one-of.mdx": "one-of",
   "misc/directives/public.mdx": "public",
   "misc/directives/skip.mdx": "skip",
   "misc/directives/specified-by.mdx": "specified-by",
@@ -142,6 +143,7 @@ collapsed: true
 ",
   "directives/deprecated.mdx": "deprecated",
   "directives/include.mdx": "include",
+  "directives/one-of.mdx": "one-of",
   "directives/skip.mdx": "skip",
   "directives/specified-by.mdx": "specified-by",
   "enums/_category_.yml": "label: Enums
