@@ -12,7 +12,7 @@ Add a `resolutions` entry to your `package.json` file:
 
 ```json title="package.json"
 "resolutions": {
-  "graphql": "15.5.2"
+  "graphql": "16.9.0"
 }
 ```
 

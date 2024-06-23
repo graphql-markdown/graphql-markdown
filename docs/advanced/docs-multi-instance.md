@@ -16,6 +16,7 @@ plugins: [
       id: "api",
       path: "api",
       routeBasePath: "api",
+      /// highlight-next-line
       sidebarPath: require.resolve("./api/sidebar-schema.js"),
       // ... other options
     },

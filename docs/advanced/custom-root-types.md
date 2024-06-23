@@ -28,10 +28,12 @@ plugins: [
         GraphQLFileLoader: {
           module: "@graphql-tools/graphql-file-loader",
           options: {
+            // highlight-start
             rootTypes: {
               query: "Root", // use custom root type Root for queries, instead of Query
               subscription: "" // disable Subscription type
             },
+            // highlight-end
           },
         },
       },

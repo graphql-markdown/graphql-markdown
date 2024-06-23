@@ -83,7 +83,7 @@ plugins: [
 
 The `tag` allows rendering custom badges (tags) based on the custom directive applicable to entities.
 
-```js {8} title="docusaurus.config.js"
+```js title="docusaurus.config.js"
 plugins: [
   [
     "@graphql-markdown/docusaurus",
@@ -92,6 +92,7 @@ plugins: [
       // ... other options
       customDirective: {
         beta: {
+          // highlight-next-line
           tag: (directive, node) => ({ text: directive.name, classname: "badge--info" }),
         }
         // ... other custom directive options
@@ -105,7 +106,7 @@ plugins: [
 
 You can use **`"*"` as a wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
-```js {11-14} title="docusaurus.config.js"
+```js title="docusaurus.config.js"
 const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helpers");
 
 //...//
@@ -117,10 +118,12 @@ plugins: [
     {
       // ... other options
       customDirective: {
+        // highlight-start
         "*": {
           descriptor: directiveDescriptor,
           tag: tagDescriptor,
         },
+        // highlight-end
         // ... optionally specific custom directive options
       },
     },
