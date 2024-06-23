@@ -59,6 +59,9 @@
     "@graphql-tools/load": "8.0.2",
     "@graphql-markdown/utils": "^1.6.4"
   },
+  "peerDependencies": {
+    "graphql": "^16.0"
+  },
   "devDependencies": {
     "@graphql-markdown/types": "^1.2.1"
   },
