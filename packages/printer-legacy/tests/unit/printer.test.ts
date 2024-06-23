@@ -248,6 +248,7 @@ describe("Printer", () => {
               "@skip",
               "@deprecated",
               "@specifiedBy",
+              "@oneOf",
             ],
             "_implementationsMap": {},
             "_mutationType": undefined,
