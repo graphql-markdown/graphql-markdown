@@ -10,10 +10,21 @@ Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
 
 ## New site
 
-### What you'll need
+### Requirements
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+Node.js version [18.0](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required. 
+
+:::info
+
+When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+
+:::
+
+:::tip
+
+You can use [nvm](https://github.com/nvm-sh/nvm) for managing multiple Node.js versions on a single machine installed.
+
+:::
 
 ### Generate a new site
 
