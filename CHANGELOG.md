@@ -1,9 +1,24 @@
+<a name="1.24.2"></a>
+# [1.24.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.2) - 23 Jun 2024
+
+🔧 Technical release for dependencies upgrades.
+
+⚠️ This version removes compatibility with the `graphql` package version below 16 (see issue https://github.com/graphql-markdown/graphql-markdown/issues/1458).
+
+## What's Changed
+* :package:  restrict graphql version to 16 and fix peer deps declarations in https://github.com/graphql-markdown/graphql-markdown/pull/1525
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.1...1.24.2
+
+[Changes][1.24.2]
+
+
 <a name="1.24.1"></a>
 # [1.24.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.1) - 19 Apr 2024
 
 ## What's Changed
 * 🐛 fix mdx special chars escaped in code section (https://github.com/graphql-markdown/graphql-markdown/pull/1382)
-* 🐛 add missing support for non printable type in examples (https://github.com/graphql-markdown/graphql-markdown/pull/1419)
+* 🐛 add missing support for non printable type in examples (https://github.com/graphql-markdown/graphql-markdown/pull/1419) reported by [@Dodoboulistick](https://github.com/Dodoboulistick) in [#1417](https://github.com/graphql-markdown/graphql-markdown/issues/1417)
 
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.0...1.24.1
@@ -1717,6 +1732,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.24.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.1...1.24.2
 [1.24.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.0...1.24.1
 [1.24.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.22.0...1.23.0
