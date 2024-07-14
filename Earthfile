@@ -12,7 +12,7 @@ RUN npm config set update-notifier false
 WORKDIR /graphql-markdown
 
 deps:
-  COPY package.json package-lock.json tsconfig.json tsconfig.base.json ./
+  COPY *.json ./
   COPY --dir config packages scripts ./
   RUN npm ci
 
@@ -108,11 +108,17 @@ build-examples:
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
+build-api-docs:
+  FROM +deps
+  COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
+  RUN npm run docs:api
+  SAVE ARTIFACT ./api
+
 build-docs:
   COPY ./website ./
   COPY (+build-examples/examples) ./examples
+  COPY (+build-api-docs/api) ./api
   COPY --dir docs .
-  COPY --dir api .
   RUN npm install
   RUN npx update-browserslist-db@latest
   RUN npm run build
