@@ -34,10 +34,10 @@ jobs:
           git config --global user.name "GraphQL-Markdown bot"
           git config --global user.email "graphql-markdown-bot@edno.io"
 
-      - name: Checkout package repo
+      - name: Checkout project repo
         uses: actions/checkout@v4
         with:
-          path: package
+          path: project
           token: ${{ secrets.BOT_PAT }}
 
       - name: Checkout website repo
@@ -55,9 +55,7 @@ jobs:
 
       - name: Build docs
         run: |
-          cd package
-          npm ci
-          npm run docs:api
+          cd project
           earthly --build-arg VERSION=3 +build-docs
 
       - name: Push changes to website repo

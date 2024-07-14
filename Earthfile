@@ -108,11 +108,16 @@ build-examples:
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
+build-api-docs:
+  FROM +build
+  RUN npm run docs:api
+  SAVE ARTIFACT ./api
+
 build-docs:
   COPY ./website ./
   COPY (+build-examples/examples) ./examples
+  COPY (+build-api-docs/api) ./api
   COPY --dir docs .
-  COPY --dir api .
   RUN npm install
   RUN npx update-browserslist-db@latest
   RUN npm run build
