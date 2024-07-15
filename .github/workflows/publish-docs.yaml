@@ -54,7 +54,7 @@ jobs:
 
       - name: Push changes to website repo
         run: |
-          cp -Rf package/build/** website/
+          cp -Rf project/build/** website/
           cd website
           git add --all
           git commit -am ":memo: update documentation ($GITHUB_SHA)"
