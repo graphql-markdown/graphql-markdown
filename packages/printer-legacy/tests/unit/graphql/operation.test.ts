@@ -44,16 +44,14 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Type
+"### Type
 
-        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > 
+#### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
 
-        "
-      `);
+
+
+"
+`);
     });
 
     test("returns operation metadata with arguments", () => {
@@ -83,24 +81,20 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Arguments
+"### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        ### Type
 
-        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > 
 
-        "
-      `);
+### Type
+
+#### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
+
+
+
+"
+`);
     });
 
     test("returns operation metadata with arguments with grouped deprecated", () => {
@@ -136,42 +130,34 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Arguments
+"### Arguments
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-         
 
-        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > Deprecated
-        > 
-        > :::
-        > 
-        > 
-        > 
+ 
 
-        </Details>
+<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        ### Type
+#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+:::warning[DEPRECATED]
 
-        #### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > 
+Deprecated
 
-        "
-      `);
+:::
+
+
+</Details>
+
+### Type
+
+#### [\`Test\`](/types/objects/test) <Badge class="badge badge--secondary" text="object"/> 
+
+
+
+"
+`);
     });
   });
 

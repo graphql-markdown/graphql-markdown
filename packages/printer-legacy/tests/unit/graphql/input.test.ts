@@ -24,22 +24,18 @@ describe("input", () => {
       const metadata = printInputMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Fields
+"### Fields
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
 
-        "
-      `);
+
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--secondary" text="scalar"/> 
+
+
+
+"
+`);
     });
   });
 

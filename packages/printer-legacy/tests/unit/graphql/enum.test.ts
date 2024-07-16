@@ -20,28 +20,22 @@ describe("enum", () => {
       const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Values
+"### Values
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > Deprecated
-        > 
-        > :::
-        > 
-        > 
-        > 
 
-        "
-      `);
+
+#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
+:::warning[DEPRECATED]
+
+Deprecated
+
+:::
+
+
+"
+`);
     });
 
     test("returns enum metadata with grouped deprecated", () => {
@@ -53,34 +47,28 @@ describe("enum", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Values
+"### Values
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
 
-         
 
-        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        #### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > Deprecated
-        > 
-        > :::
-        > 
-        > 
-        > 
+ 
 
-        </Details>
+<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        "
-      `);
+#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
+:::warning[DEPRECATED]
+
+Deprecated
+
+:::
+
+
+</Details>
+
+"
+`);
     });
   });
 

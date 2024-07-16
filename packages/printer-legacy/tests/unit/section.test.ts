@@ -31,16 +31,14 @@ describe("section", () => {
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "### section title
+"### section title
 
-        ####   
-        > 
-        > 
-        > 
-        > 
+####   
 
-        "
-      `);
+
+
+"
+`);
     });
 
     test("returns Markdown ### section with collapsible content", () => {
@@ -58,20 +56,18 @@ describe("section", () => {
       });
 
       expect(section).toMatchInlineSnapshot(`
-        " 
+" 
 
-        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-        ####   
-        > 
-        > 
-        > 
-        > 
+####   
 
-        </Details>
 
-        "
-      `);
+
+</Details>
+
+"
+`);
     });
 
     test("returns Markdown custom section level", () => {
@@ -86,16 +82,14 @@ describe("section", () => {
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "# section title
+"# section title
 
-        ####   
-        > 
-        > 
-        > 
-        > 
+####   
 
-        "
-      `);
+
+
+"
+`);
     });
 
     test("returns empty string if content is empty", () => {
@@ -119,24 +113,18 @@ describe("section", () => {
       const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "####   
-        > 
-        > 
-        > 
-        > 
+"####   
 
-        ####   
-        > 
-        > 
-        > 
-        > 
 
-        ####   
-        > 
-        > 
-        > 
-        > "
-      `);
+
+####   
+
+
+
+####   
+
+"
+`);
     });
 
     test("returns empty text if not a list", () => {
@@ -168,12 +156,10 @@ describe("section", () => {
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > Lorem ipsum
-        > "
-      `);
+"#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
+Lorem ipsum
+"
+`);
     });
 
     test("returns Markdown #### link section with multi-lines description", () => {
@@ -197,21 +183,19 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > Lorem ipsum dolor sit amet, 
-        > consectetur adipiscing elit, 
-        > sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        > 
-        > Ut enim ad minim veniam, 
-        > quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        > Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        > 
-        > Excepteur sint occaecat cupidatat non proident, 
-        > sunt in culpa qui officia deserunt mollit anim id est laborum.
-        > "
-      `);
+"#### [\`EntityTypeName\`](/types/objects/entity-type-name) <Badge class="badge badge--secondary" text="object"/> 
+Lorem ipsum dolor sit amet, 
+consectetur adipiscing elit, 
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+
+Ut enim ad minim veniam, 
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+Excepteur sint occaecat cupidatat non proident, 
+sunt in culpa qui officia deserunt mollit anim id est laborum.
+"
+`);
     });
 
     test("returns Markdown #### link section with sub type is non-nullable", () => {
@@ -230,12 +214,10 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+
+"
+`);
     });
 
     test("returns Markdown #### link section with sub type list and non-nullable", () => {
@@ -256,12 +238,10 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/types/objects/non-nullable-object-type) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+
+"
+`);
     });
 
     test("returns Markdown #### link section with parent type prefix", () => {
@@ -277,12 +257,10 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [<code style={{ fontWeight: 'normal' }}>parentTypePrefix.<b>EntityTypeName</b></code>](#)  
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [<code style={{ fontWeight: 'normal' }}>parentTypePrefix.<b>EntityTypeName</b></code>](#)  
+
+"
+`);
     });
 
     test("returns Markdown #### link section with field parameters", () => {
@@ -300,16 +278,12 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#)  
-        > 
-        > 
-        > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [\`EntityTypeName\`](#)  
+
+##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+
+"
+`);
     });
 
     test("returns Markdown #### link section with non empty nullable list [!]", () => {
@@ -323,12 +297,10 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/types/scalars/int) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/types/scalars/int) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/> 
+
+"
+`);
     });
 
     test("returns Markdown #### link section with non empty no nullable list [!]!", () => {
@@ -344,12 +316,10 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/types/scalars/int) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > "
-      `);
+"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/types/scalars/int) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/> 
+
+"
+`);
     });
 
     test("returns no section if item matches skipDocDirective", () => {
@@ -426,22 +396,16 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       });
 
       expect(section).toMatchInlineSnapshot(`
-        "#### [\`EntityTypeName\`](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > :::
-        > 
-        > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+"#### [\`EntityTypeName\`](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
+:::warning[DEPRECATED]
 
-        "
-      `);
+:::
+##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+
+
+
+"
+`);
     });
   });
 });
