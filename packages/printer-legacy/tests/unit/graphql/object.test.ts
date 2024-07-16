@@ -41,46 +41,34 @@ describe("object", () => {
       const metadata = printObjectMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Fields
+"### Fields
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > Deprecated
-        > 
-        > :::
-        > 
-        > 
-        > 
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
 
-        ### Interfaces
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+:::warning[DEPRECATED]
 
-        #### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
-        > 
-        > 
-        > 
-        > 
+Deprecated
 
-        "
-      `);
+:::
+
+
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+
+##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+
+
+
+### Interfaces
+
+#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
+
+
+
+"
+`);
     });
 
     test("returns object metadata with grouped deprecated", () => {
@@ -92,52 +80,40 @@ describe("object", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### Fields
+"### Fields
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > ##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > 
-        > 
 
-         
 
-        <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        #### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-        > 
-        > 
-        > :::warning[DEPRECATED]
-        > 
-        > Deprecated
-        > 
-        > :::
-        > 
-        > 
-        > 
+##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
 
-        </Details>
 
-        ### Interfaces
 
-        #### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
-        > 
-        > 
-        > 
-        > 
+ 
 
-        "
-      `);
+<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+:::warning[DEPRECATED]
+
+Deprecated
+
+:::
+
+
+</Details>
+
+### Interfaces
+
+#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
+
+
+
+"
+`);
     });
   });
 

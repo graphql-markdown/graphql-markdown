@@ -44,15 +44,17 @@ export const printSectionItem = <T>(
     ...options,
     withAttributes: false,
   });
-  const description = printDescription(type, options, "").replaceAll(
-    "\n",
-    `${MARKDOWN_EOL}> `,
-  );
+
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
+  const title = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
 
-  let section = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+  const description = printDescription(type, options, "")
+    .trim()
+    .replaceAll("\n", `${MARKDOWN_EOL}`);
+
+  let section = `${title}${description}${MARKDOWN_EOL}`;
   if (isGraphQLFieldType(type)) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     section += printSectionItems(type.args as GraphQLArgument[], {

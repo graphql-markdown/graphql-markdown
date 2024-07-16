@@ -26,16 +26,12 @@ describe("union", () => {
       expect(code).toBe(`### Possible types
 
 #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>one</b></code>](/types/objects/one) <Badge class="badge badge--secondary" text="object"/> 
-> 
-> 
-> 
-> 
+
+
 
 #### [<code style={{ fontWeight: 'normal' }}>UnionTypeName.<b>two</b></code>](/types/objects/two) <Badge class="badge badge--secondary" text="object"/> 
-> 
-> 
-> 
-> 
+
+
 
 `);
     });

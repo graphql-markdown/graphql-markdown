@@ -53,7 +53,7 @@ export const printCustomDirective = (
     return undefined;
   }
 
-  return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL}> ${description}${MARKDOWN_EOL}> `;
+  return `${SectionLevels.LEVEL_4} ${typeNameLink}${MARKDOWN_EOL} ${description}${MARKDOWN_EOL} `;
 };
 
 export const printCustomDirectives = (

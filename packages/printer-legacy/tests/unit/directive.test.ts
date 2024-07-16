@@ -119,10 +119,10 @@ describe("directive", () => {
 
       expect(printCustomDirective(type, constDirectiveOption, options))
         .toMatchInlineSnapshot(`
-        "#### [\`foo\`](/bar)
-        > Test testA
-        > "
-      `);
+"#### [\`foo\`](/bar)
+ Test testA
+ "
+`);
     });
 
     test("returns undefined if no descriptor exists", () => {
@@ -166,14 +166,14 @@ describe("directive", () => {
         .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
-        "### Directives
+"### Directives
 
-        #### [\`foo\`](/bar)
-        > Test testA
-        > 
+#### [\`foo\`](/bar)
+ Test testA
+ 
 
-        "
-      `);
+"
+`);
     });
 
     test("exclude undefined description", () => {
