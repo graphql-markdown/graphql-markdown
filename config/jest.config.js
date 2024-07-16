@@ -1,5 +1,6 @@
 const projectConfig = (name) => ({
   displayName: `@graphql-markdown/${name}`,
+  prettierPath: null,
   rootDir: `./packages/${name}`,
   roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
   testEnvironment: "node",
