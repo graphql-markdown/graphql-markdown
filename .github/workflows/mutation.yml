@@ -1,5 +1,8 @@
 name: Mutation Test
 
+env:
+  HUSKY: 0
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]

@@ -1,6 +1,9 @@
 name: "Danger JS"
 on: pull_request
 
+env:
+  HUSKY: 0
+
 jobs:
   danger-js:
     name: Danger.js Checks
