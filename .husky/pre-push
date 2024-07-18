@@ -1,4 +1,3 @@
-#!/usr/bin/env sh
 
 # check internal packages versions
 npm run check
