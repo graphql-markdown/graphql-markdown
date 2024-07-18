@@ -2,6 +2,7 @@ name: Mutation Test
 
 env:
   HUSKY: 0
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 on:
   pull_request:
@@ -13,9 +14,6 @@ on:
       - "packages/**/src/**/*"
       - "packages/**/tests/**/*"
       - ".github/workflows/mutation.yml"
-
-env:
-  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
