@@ -1,9 +1,24 @@
+<a name="1.24.3"></a>
+# [1.24.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.3) - 18 Jul 2024
+
+:bug: This release removes the use of block quotes for type description, fixing issues like [#1535](https://github.com/graphql-markdown/graphql-markdown/issues/1535)
+
+## What's Changed
+* :bug:  remove blockquotes by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1572
+
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.2...1.24.3
+
+[Changes][1.24.3]
+
+
 <a name="1.24.2"></a>
 # [1.24.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.2) - 23 Jun 2024
 
-🔧 Technical release for dependencies upgrades.
+🔧 Technical maintenance release for dependencies upgrades.
 
-⚠️ This version removes compatibility with the `graphql` package version below 16 (see issue https://github.com/graphql-markdown/graphql-markdown/issues/1458).
+⚠️ This version removes compatibility with the `graphql` package version below **16** (see issue https://github.com/graphql-markdown/graphql-markdown/issues/1458).
 
 ## What's Changed
 * :package:  restrict graphql version to 16 and fix peer deps declarations in https://github.com/graphql-markdown/graphql-markdown/pull/1525
@@ -29,8 +44,6 @@
 <a name="1.24.0"></a>
 # [1.24.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.0) - 19 Feb 2024
 
-## What's Changed
-
 :robot:  A new feature [`printTypeOptions.exampleSection`](https://graphql-markdown.github.io/docs/settings#printtypeoptions) adds supports for examples using schema directives.
 The feature allows inheritance of examples, so once a scalar is set with an example all types using this scalar will share the example. And, of course, you can override those examples. You can also use a custom directive and custom parser. 
 More details in the [documentation](https://graphql-markdown.github.io/docs/advanced/examples).
@@ -41,6 +54,8 @@ More details in the [documentation](https://graphql-markdown.github.io/docs/adva
 
 The screenshots come from the [_Group by_ demo](https://graphql-markdown.github.io/examples/group-by) with the feature enabled.
 
+## What's Changed
+
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.23.0...1.24.0
 
 [Changes][1.24.0]
@@ -49,14 +64,14 @@ The screenshots come from the [_Group by_ demo](https://graphql-markdown.github.
 <a name="1.23.0"></a>
 # [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) - 10 Feb 2024
 
-## What's changed
-
 :sparkle: Executable types (operations and related directives) and system types (entity types) have now separate sections. 
 The behaviour can be disabled by setting the option `printTypeOptions.useApiGroup`  to `false` or using the cli flag `--noApiGroup` (see [documentation](https://graphql-markdown.github.io/docs/settings#printtypeoptions)).
 
 ![Screenshot from 2024-02-10 16-37-28](https://github.com/graphql-markdown/graphql-markdown/assets/324670/d339e140-4738-4df6-8631-d1e1d4fe9954)
 
 The online examples have been updated with [one using the new sections](https://graphql-markdown.github.io/examples/default) and [one with the option disabled](https://graphql-markdown.github.io/examples/group-by). Note that the examples have some [custom CSS](https://github.com/graphql-markdown/graphql-markdown/blob/1.23.0/website/src/css/custom.css#L109-L113) that is not part of the default package.
+
+## What's changed
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.22.0...1.23.0
 
@@ -1732,6 +1747,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.24.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.2...1.24.3
 [1.24.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.1...1.24.2
 [1.24.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.0...1.24.1
 [1.24.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.23.0...1.24.0
