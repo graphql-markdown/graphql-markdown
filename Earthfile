@@ -13,7 +13,7 @@ WORKDIR /graphql-markdown
 
 deps:
   COPY *.json ./
-  COPY --dir config packages scripts .husky ./
+  COPY --dir config packages scripts ./
   RUN HUSKY=0 npm ci
 
 lint: 
