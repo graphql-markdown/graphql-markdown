@@ -1,4 +1,5 @@
 name: Changelog
+run-name: ${{ format('Changelog release {0}', github.event.release.name) }}
 
 on:
   workflow_dispatch:
