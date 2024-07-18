@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+npm run ts:check
+npm run lint
+npm run prettier -- --check
+npm test
+npm run knip

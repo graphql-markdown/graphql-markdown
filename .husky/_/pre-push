@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+# check internal packages versions
+npm run check
+
+# run local CI checks
+earthly --ci +all
