@@ -1,4 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
+# check internal packages versions
+npm run check
+
+# run local CI checks
 earthly --ci +all
