@@ -43,11 +43,11 @@ describe("object", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Fields
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean.mdx) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
 :::warning[DEPRECATED]
 
 Deprecated
@@ -55,15 +55,15 @@ Deprecated
 :::
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
-##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
 
 
 ### Interfaces
 
-#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
+#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name.mdx) <Badge class="badge badge--secondary" text="interface"/> 
 
 
 
@@ -82,13 +82,13 @@ Deprecated
       expect(metadata).toMatchInlineSnapshot(`
 "### Fields
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
-##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string) <Badge class="badge badge--secondary" text="scalar"/> 
+##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
 
 
 
@@ -96,7 +96,7 @@ Deprecated
 
 <Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean.mdx) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
 :::warning[DEPRECATED]
 
 Deprecated
@@ -108,7 +108,7 @@ Deprecated
 
 ### Interfaces
 
-#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name) <Badge class="badge badge--secondary" text="interface"/> 
+#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name.mdx) <Badge class="badge badge--secondary" text="interface"/> 
 
 
 
