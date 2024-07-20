@@ -1,3 +1,18 @@
+<a name="1.24.4"></a>
+# [1.24.4](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.4) - 20 Jul 2024
+
+:bug: The generated links now follow Docusaurus [recommended practices](https://docusaurus.io/docs/versioning#link-docs-by-file-paths) to link docs files by full path. This fix adds the `.mdx` extension to generated links in Markdown files. :rabbit: 
+
+## What's Changed
+* ✨ support relative paths by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1583
+* :technologist:  fix snyk reports by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1585
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.3...1.24.4
+
+[Changes][1.24.4]
+
+
 <a name="1.24.3"></a>
 # [1.24.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.3) - 18 Jul 2024
 
@@ -1747,6 +1762,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.24.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.3...1.24.4
 [1.24.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.2...1.24.3
 [1.24.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.1...1.24.2
 [1.24.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.0...1.24.1
