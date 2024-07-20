@@ -31,7 +31,11 @@ import {
 import { slugify, pathUrl } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
-import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
+import {
+  DEPRECATED,
+  LINK_MDX_EXTENSION,
+  ROOT_TYPE_LOCALE,
+} from "./const/strings";
 import { hasPrintableDirective } from "./common";
 
 export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
@@ -146,7 +150,7 @@ export const toLink = (
     apiGroupFolder,
     groupFolder,
     category,
-    slugify(text),
+    `${slugify(text)}${LINK_MDX_EXTENSION}`,
   );
 
   return {
