@@ -16,6 +16,6 @@ function generateDocFromSchema(__namedParameters): Promise<void>
 
 `Promise`\<`void`\>
 
-#### Source
+#### Defined in
 
 [generator.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L28)

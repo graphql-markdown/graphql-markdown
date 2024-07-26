@@ -18,7 +18,7 @@ function printCodeEnum(type, options?): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/enum.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L24)
 
@@ -40,6 +40,6 @@ function printEnumMetadata(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [graphql/enum.ts:13](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L13)

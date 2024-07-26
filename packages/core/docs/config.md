@@ -12,7 +12,7 @@
 DEFAULT: "default";
 ```
 
-###### Source
+###### Defined in
 
 [config.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L33)
 
@@ -22,7 +22,7 @@ DEFAULT: "default";
 GROUP: "group";
 ```
 
-###### Source
+###### Defined in
 
 [config.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L34)
 
@@ -32,7 +32,7 @@ GROUP: "group";
 SKIP: "skip";
 ```
 
-###### Source
+###### Defined in
 
 [config.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L35)
 
@@ -48,7 +48,7 @@ SKIP: "skip";
 FORCE: "FORCE";
 ```
 
-###### Source
+###### Defined in
 
 [config.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L29)
 
@@ -58,7 +58,7 @@ FORCE: "FORCE";
 NONE: "NONE";
 ```
 
-###### Source
+###### Defined in
 
 [config.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L28)
 
@@ -70,7 +70,7 @@ NONE: "NONE";
 const ASSET_HOMEPAGE_LOCATION: string;
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L40)
 
@@ -82,7 +82,7 @@ const ASSET_HOMEPAGE_LOCATION: string;
 const DEFAULT_OPTIONS: Readonly<Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> & Required<Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">>>;
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L47)
 
@@ -94,7 +94,7 @@ const DEFAULT_OPTIONS: Readonly<Pick<ConfigOptions, "customDirective" | "groupBy
 const DOCS_URL: "https://graphql-markdown.dev/docs";
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L38)
 
@@ -106,7 +106,7 @@ const DOCS_URL: "https://graphql-markdown.dev/docs";
 const PACKAGE_NAME: "@graphql-markdown/docusaurus";
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L39)
 
@@ -127,13 +127,13 @@ id): Promise<Options>
 
 • **cliOpts**: `Maybe`\<`CliOptions`\>
 
-• **id**: `Maybe`\<`string`\>= `"default"`
+• **id**: `Maybe`\<`string`\> = `"default"`
 
 #### Returns
 
 `Promise`\<`Options`\>
 
-#### Source
+#### Defined in
 
 [config.ts:330](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L330)
 
@@ -155,7 +155,7 @@ function getCustomDirectives(customDirectiveOptions, skipDocDirective?): Maybe<C
 
 `Maybe`\<`CustomDirective`\>
 
-#### Source
+#### Defined in
 
 [config.ts:170](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L170)
 
@@ -171,13 +171,13 @@ function getDiffMethod(diff, force): TypeDiffMethod
 
 • **diff**: `TypeDiffMethod`
 
-• **force**: `boolean`= `false`
+• **force**: `boolean` = `false`
 
 #### Returns
 
 `TypeDiffMethod`
 
-#### Source
+#### Defined in
 
 [config.ts:203](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L203)
 
@@ -197,7 +197,7 @@ function getDocDirective(name): DirectiveName
 
 `DirectiveName`
 
-#### Source
+#### Defined in
 
 [config.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L86)
 
@@ -219,7 +219,7 @@ function getDocOptions(cliOpts?, configOptions?): Required<ConfigDocOptions>
 
 `Required`\<`ConfigDocOptions`\>
 
-#### Source
+#### Defined in
 
 [config.ts:253](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L253)
 
@@ -241,7 +241,7 @@ function getOnlyDocDirectives(cliOpts, configFileOpts): DirectiveName[]
 
 `DirectiveName`[]
 
-#### Source
+#### Defined in
 
 [config.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L102)
 
@@ -263,7 +263,7 @@ function getPrintTypeOptions(cliOpts, configOptions): Required<ConfigPrintTypeOp
 
 `Required`\<`ConfigPrintTypeOptions`\>
 
-#### Source
+#### Defined in
 
 [config.ts:270](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L270)
 
@@ -285,7 +285,7 @@ function getSkipDocDirectives(cliOpts, configFileOpts): DirectiveName[]
 
 `DirectiveName`[]
 
-#### Source
+#### Defined in
 
 [config.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L118)
 
@@ -319,7 +319,7 @@ onlyDocDirective: DirectiveName[];
 skipDocDirective: DirectiveName[];
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L145)
 
@@ -359,7 +359,7 @@ pagination_next: null;
 pagination_prev: null;
 ```
 
-#### Source
+#### Defined in
 
 [config.ts:212](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L212)
 
@@ -379,6 +379,6 @@ function parseGroupByOption(groupOptions): Maybe<GroupByDirectiveOptions>
 
 `Maybe`\<`GroupByDirectiveOptions`\>
 
-#### Source
+#### Defined in
 
 [config.ts:301](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L301)

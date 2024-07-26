@@ -16,7 +16,7 @@ function getRootTypeLocaleFromString(text): Maybe<TypeLocale>
 
 `Maybe`\<`TypeLocale`\>
 
-#### Source
+#### Defined in
 
 [relation.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L25)
 
@@ -32,7 +32,7 @@ function printRelationOf<T>(
    options): string | MDXString
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -50,7 +50,7 @@ function printRelationOf<T>(
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [relation.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L36)
 
@@ -72,6 +72,6 @@ function printRelations(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [relation.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L91)

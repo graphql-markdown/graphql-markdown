@@ -20,12 +20,12 @@ diffModule): Promise<boolean>
 
 • **diffMethod**: `Maybe`\<`DiffMethodName`\>
 
-• **diffModule**: `Maybe`\<`string`\>= `"@graphql-markdown/diff"`
+• **diffModule**: `Maybe`\<`string`\> = `"@graphql-markdown/diff"`
 
 #### Returns
 
 `Promise`\<`boolean`\>
 
-#### Source
+#### Defined in
 
 [diff.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L10)

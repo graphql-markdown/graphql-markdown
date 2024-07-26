@@ -98,6 +98,6 @@ directiveDescriptor(directive, type, "Version should be at least ^${major}.${min
 // Expected result: "Version should be at least ^2.1.3"
 ```
 
-#### Source
+#### Defined in
 
 [directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)

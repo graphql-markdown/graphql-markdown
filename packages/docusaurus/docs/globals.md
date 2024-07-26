@@ -18,6 +18,6 @@ function default(_, options): Plugin
 
 `Plugin`
 
-#### Source
+#### Defined in
 
 [index.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/index.ts#L16)

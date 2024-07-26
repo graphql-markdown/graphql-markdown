@@ -6,14 +6,14 @@ Helpers utility functions library.
 
 ### getObjPath()
 
-`Internal`
-
 ```ts
 function getObjPath(
    path, 
    obj, 
    fallback): unknown
 ```
+
+**`Internal`**
 
 Returns the value of the specified property or nested property of an object using a string path.
 
@@ -27,7 +27,7 @@ property path as string.
 
 the key/value record object.
 
-• **fallback**: `unknown`= `""`
+• **fallback**: `unknown` = `""`
 
 optional fallback value to be returned if the path cannot be resolved.
 
@@ -47,7 +47,7 @@ getObjPath("foo.bar", { foo: { bar: 42 } }); // Returns 42
 getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 ```
 
-#### Source
+#### Defined in
 
 [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
 
@@ -93,6 +93,6 @@ const template = "${foo} is not ${bar.notfound}";
 interpolate(template, values, "fallback"); // Expected result: "42 is not fallback",
 ```
 
-#### Source
+#### Defined in
 
 [utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L64)

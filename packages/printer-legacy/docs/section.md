@@ -8,7 +8,7 @@
 const sectionLevels: SectionLevel[];
 ```
 
-#### Source
+#### Defined in
 
 [section.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L24)
 
@@ -24,7 +24,7 @@ function printMetadataSection<T, V>(
    options): string | MDXString
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -44,9 +44,9 @@ function printMetadataSection<T, V>(
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
-[section.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L143)
+[section.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L145)
 
 ***
 
@@ -59,7 +59,7 @@ function printSection<V>(
    options): string | MDXString
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **V**
 
@@ -75,9 +75,9 @@ function printSection<V>(
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
-[section.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L98)
+[section.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L100)
 
 ***
 
@@ -87,7 +87,7 @@ function printSection<V>(
 function printSectionItem<T>(type, options): string | MDXString
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -101,7 +101,7 @@ function printSectionItem<T>(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [section.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L30)
 
@@ -113,7 +113,7 @@ function printSectionItem<T>(type, options): string | MDXString
 function printSectionItems<V>(values, options): string | MDXString
 ```
 
-#### Type parameters
+#### Type Parameters
 
 • **V**
 
@@ -127,6 +127,6 @@ function printSectionItems<V>(values, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
-[section.ts:71](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L71)
+[section.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L73)

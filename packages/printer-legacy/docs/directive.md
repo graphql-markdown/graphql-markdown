@@ -26,7 +26,7 @@ fallback?): Maybe<string>
 
 `Maybe`\<`string`\>
 
-#### Source
+#### Defined in
 
 [directive.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L17)
 
@@ -48,7 +48,7 @@ function getCustomTags(type, options): Badge[]
 
 `Badge`[]
 
-#### Source
+#### Defined in
 
 [directive.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L89)
 
@@ -75,7 +75,7 @@ options): Maybe<string>
 
 `Maybe`\<`string`\>
 
-#### Source
+#### Defined in
 
 [directive.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L37)
 
@@ -97,7 +97,7 @@ function printCustomDirectives(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [directive.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L59)
 
@@ -119,6 +119,6 @@ function printCustomTags(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [directive.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L115)

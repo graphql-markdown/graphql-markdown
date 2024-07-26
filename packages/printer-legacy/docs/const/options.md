@@ -12,7 +12,7 @@
 LEVEL_3: "###";
 ```
 
-###### Source
+###### Defined in
 
 [const/options.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L15)
 
@@ -22,7 +22,7 @@ LEVEL_3: "###";
 LEVEL_4: "####";
 ```
 
-###### Source
+###### Defined in
 
 [const/options.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L16)
 
@@ -32,7 +32,7 @@ LEVEL_4: "####";
 LEVEL_5: "#####";
 ```
 
-###### Source
+###### Defined in
 
 [const/options.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L17)
 
@@ -42,7 +42,7 @@ LEVEL_5: "#####";
 NONE: "";
 ```
 
-###### Source
+###### Defined in
 
 [const/options.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L14)
 
@@ -105,7 +105,7 @@ schema: Maybe<GraphQLSchema>;
 skipDocDirectives: GraphQLDirective[];
 ```
 
-#### Source
+#### Defined in
 
 [const/options.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L32)
 
@@ -117,6 +117,6 @@ skipDocDirectives: GraphQLDirective[];
 const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>;
 ```
 
-#### Source
+#### Defined in
 
 [const/options.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L20)

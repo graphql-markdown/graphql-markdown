@@ -16,7 +16,7 @@ function getGroupName<T>(type, groupByDirective): Maybe<string>
 
 Gets the group name for a schema type based on the directive information.
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -75,7 +75,7 @@ getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "comm
 
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
 
@@ -161,6 +161,6 @@ const groupsMap = getGroups(schemaMap, groupOptions);
 // }
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L173)

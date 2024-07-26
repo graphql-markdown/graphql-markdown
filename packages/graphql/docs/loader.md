@@ -46,7 +46,7 @@ const schema = await loadSchema("schema.graphql", {
 });
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/loader.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L106)
 
@@ -89,6 +89,6 @@ const schema = await loadSchema("schema.graphql", {
 });
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/loader.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L41)

@@ -23,6 +23,6 @@ options?): Promise<typeof IPrinter>
 
 `Promise`\<*typeof* `IPrinter`\>
 
-#### Source
+#### Defined in
 
 [printer.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L10)
