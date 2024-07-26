@@ -126,8 +126,6 @@ export const generateDocFromSchema = async ({
 
   await renderer.renderHomepage(homepageLocation);
 
-  const sidebarPath = await renderer.renderSidebar();
-
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(SEC_DECIMALS);
@@ -140,8 +138,5 @@ export const generateDocFromSchema = async ({
     `${
       pages.flat().length
     } pages generated in ${duration}s from schema "${String(schemaLocation)}".`,
-  );
-  log(
-    `Remember to update your Docusaurus site's sidebars with "${sidebarPath}".`,
   );
 };
