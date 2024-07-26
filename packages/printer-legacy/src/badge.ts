@@ -71,7 +71,7 @@ export const getTypeBadges = (
 };
 
 export const printBadge = ({ text, classname }: Badge): MDXString => {
-  const textString = typeof text === "string" ? text : text.singular;
+  const textString = typeof text === "object" ? text.singular : text.toString();
   const formattedText = escapeMDX(textString);
   return `<Badge class="badge ${classname}" text="${formattedText}"/>` as MDXString;
 };

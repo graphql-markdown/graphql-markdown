@@ -64,7 +64,7 @@ export const printRelationOf = <T>(
 
     const category = getRootTypeLocaleFromString(relation)!;
     const badge = printBadge({
-      text: typeof category === "string" ? category : category.singular,
+      text: category,
       classname: DEFAULT_CSS_CLASSNAME,
     });
     data = data.concat(

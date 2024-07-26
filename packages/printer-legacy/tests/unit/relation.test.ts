@@ -48,19 +48,19 @@ const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
 const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
 
 describe("relation", () => {
-  describe("printRelationOf()", () => {
-    afterAll(() => {
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
-    });
+  afterAll(() => {
+    jest.restoreAllMocks();
+    jest.resetAllMocks();
+  });
 
+  describe("printRelationOf()", () => {
     test.concurrent.each([[true], [false]])(
       "returns empty string if type is undefined and isOperation is %p",
       (isOperationMockedValue: boolean) => {
         expect.hasAssertions();
 
-        mockGraphQL.isNamedType.mockReturnValueOnce(false);
-        mockGraphQL.isOperation.mockReturnValueOnce(isOperationMockedValue);
+        mockGraphQL.isNamedType.mockReturnValue(false);
+        mockGraphQL.isOperation.mockReturnValue(isOperationMockedValue);
 
         const relation = printRelationOf(
           undefined,
@@ -83,8 +83,8 @@ describe("relation", () => {
           description: "Lorem Ipsum",
         });
 
-        mockGraphQL.isNamedType.mockReturnValueOnce(isNamedTypeMockedValue);
-        mockGraphQL.isOperation.mockReturnValueOnce(true);
+        mockGraphQL.isNamedType.mockReturnValue(isNamedTypeMockedValue);
+        mockGraphQL.isOperation.mockReturnValue(true);
 
         const relation = printRelationOf(
           type,
@@ -105,8 +105,8 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      mockGraphQL.isNamedType.mockReturnValueOnce(true);
-      mockGraphQL.isOperation.mockReturnValueOnce(false);
+      mockGraphQL.isNamedType.mockReturnValue(true);
+      mockGraphQL.isOperation.mockReturnValue(false);
 
       const relation = printRelationOf(type, "RelationOf", undefined, {
         ...DEFAULT_OPTIONS,
@@ -124,8 +124,8 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      mockGraphQL.isNamedType.mockReturnValueOnce(true);
-      mockGraphQL.isOperation.mockReturnValueOnce(false);
+      mockGraphQL.isNamedType.mockReturnValue(true);
+      mockGraphQL.isOperation.mockReturnValue(false);
 
       const relation = printRelationOf(type, "RelationOf", jest.fn(), {
         ...DEFAULT_OPTIONS,
@@ -143,8 +143,8 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      mockGraphQL.isNamedType.mockReturnValueOnce(true);
-      mockGraphQL.isOperation.mockReturnValueOnce(false);
+      mockGraphQL.isNamedType.mockReturnValue(true);
+      mockGraphQL.isOperation.mockReturnValue(false);
 
       const relation = printRelationOf(
         type,
@@ -196,7 +196,6 @@ describe("relation", () => {
 
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
-      mockGraphQL.getNamedType.mockImplementation((t) => t as any);
 
       const relation = printRelationOf(
         type,
