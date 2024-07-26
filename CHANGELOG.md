@@ -1,7 +1,23 @@
+<a name="1.25.0"></a>
+# [1.25.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.25.0) - 26 Jul 2024
+
+:warning: **BREAKING CHANGE** - This release removes `sidebar` files generation. The sidebars now rely on the Docusaurus [default sidebar](https://docusaurus.io/docs/sidebar#default-sidebar) behavior.
+
+## What's Changed
+* ✨ remove sidebar file generation by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1596
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.4...1.25.0
+
+[Changes][1.25.0]
+
+
 <a name="1.24.4"></a>
 # [1.24.4](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.24.4) - 20 Jul 2024
 
-:bug: The generated links now follow Docusaurus [recommended practices](https://docusaurus.io/docs/versioning#link-docs-by-file-paths) to link docs files by full path. This fix adds the `.mdx` extension to generated links in Markdown files. :rabbit: 
+:bug: Generated links now follow Docusaurus [recommended practices](https://docusaurus.io/docs/versioning#link-docs-by-file-paths) to link docs by file path. This fix adds the `.mdx` extension to generated links in Markdown files. 
+
+:rabbit: _A CodeSandox demo using Docusaurus versioning is available here: https://codesandbox.io/p/devbox/determined-spence-mrpnmp_ 
 
 ## What's Changed
 * ✨ support relative paths by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1583
@@ -1762,6 +1778,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.25.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.4...1.25.0
 [1.24.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.3...1.24.4
 [1.24.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.2...1.24.3
 [1.24.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.1...1.24.2
