@@ -30,7 +30,6 @@ module.exports = {
         docs: {
           path: "docs",
           routeBasePath: "/",
-          sidebarPath: "sidebars.js",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),

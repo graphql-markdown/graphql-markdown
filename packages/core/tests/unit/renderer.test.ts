@@ -167,23 +167,6 @@ describe("renderer", () => {
       });
     });
 
-    describe("renderSidebar()", () => {
-      test("creates Docusaurus compatible sidebar.js into output folder", async () => {
-        expect.assertions(2);
-
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        const filePath = await rendererInstance.renderSidebar();
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          expect.anything(),
-          undefined,
-        );
-        expect(filePath.endsWith("output/sidebar-schema.js")).toBeTruthy();
-      });
-    });
-
     describe("renderHomepage()", () => {
       test("copies default homepage into output folder", async () => {
         expect.assertions(1);

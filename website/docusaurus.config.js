@@ -27,7 +27,6 @@ const config = {
         id: "example-default",
         path: "./examples/default",
         routeBasePath: "examples/default",
-        sidebarPath: "./examples/default/sidebar-schema.js",
       },
     ],
     [
@@ -36,7 +35,6 @@ const config = {
         id: "example-group-by",
         path: "./examples/group-by",
         routeBasePath: "examples/group-by",
-        sidebarPath: "./examples/group-by/sidebar-schema.js",
       },
     ],
     [
@@ -55,7 +53,6 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: "./sidebars.js",
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
           exclude: ["**/__*.md"],

@@ -13,7 +13,7 @@ function getFormattedDefaultValue<T>(entity): Maybe<string | T>
 Returns a printable formatted value for a GraphQL type.
 This is the generic function.
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -37,6 +37,6 @@ the GraphQL schema type.
 
 a printable formatted value.
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/formatter.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L94)

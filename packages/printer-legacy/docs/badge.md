@@ -8,7 +8,7 @@
 const DEFAULT_CSS_CLASSNAME: "badge--secondary";
 ```
 
-#### Source
+#### Defined in
 
 [badge.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L23)
 
@@ -30,7 +30,7 @@ function getTypeBadges(type, groups?): Badge[]
 
 `Badge`[]
 
-#### Source
+#### Defined in
 
 [badge.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L25)
 
@@ -50,7 +50,7 @@ function printBadge(__namedParameters): MDXString
 
 `MDXString`
 
-#### Source
+#### Defined in
 
 [badge.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L73)
 
@@ -72,6 +72,6 @@ function printBadges(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [badge.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L79)

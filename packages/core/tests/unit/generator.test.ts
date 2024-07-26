@@ -164,18 +164,15 @@ describe("generator", () => {
       await generateDocFromSchema(options);
 
       expect(loggerSpy.mock.calls).toMatchInlineSnapshot(`
-      [
-        [
-          "Documentation successfully generated in "output dir" with base URL "base URL".",
-        ],
-        [
-          "1 pages generated in 0.000s from schema "schema location".",
-        ],
-        [
-          "Remember to update your Docusaurus site's sidebars with "undefined".",
-        ],
-      ]
-      `);
+[
+  [
+    "Documentation successfully generated in "output dir" with base URL "base URL".",
+  ],
+  [
+    "1 pages generated in 0.000s from schema "schema location".",
+  ],
+]
+`);
     });
 
     test("calls getDocumentLoaders and returns an error if loaders cannot be fetched", async () => {

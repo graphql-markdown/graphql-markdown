@@ -12,7 +12,7 @@
 DIFF: "SCHEMA-DIFF";
 ```
 
-###### Source
+###### Defined in
 
 [diff/src/index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L21)
 
@@ -22,7 +22,7 @@ DIFF: "SCHEMA-DIFF";
 FORCE: "FORCE";
 ```
 
-###### Source
+###### Defined in
 
 [diff/src/index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L23)
 
@@ -32,7 +32,7 @@ FORCE: "FORCE";
 HASH: "SCHEMA-HASH";
 ```
 
-###### Source
+###### Defined in
 
 [diff/src/index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L22)
 
@@ -42,7 +42,7 @@ HASH: "SCHEMA-HASH";
 NONE: "NONE";
 ```
 
-###### Source
+###### Defined in
 
 [diff/src/index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L24)
 
@@ -54,7 +54,7 @@ NONE: "NONE";
 const SCHEMA_HASH_FILE: ".schema";
 ```
 
-#### Source
+#### Defined in
 
 [diff/src/index.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L18)
 
@@ -66,7 +66,7 @@ const SCHEMA_HASH_FILE: ".schema";
 const SCHEMA_REF: "schema.graphql";
 ```
 
-#### Source
+#### Defined in
 
 [diff/src/index.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L19)
 
@@ -93,7 +93,7 @@ diffMethod?): Promise<boolean>
 
 `Promise`\<`boolean`\>
 
-#### Source
+#### Defined in
 
 [diff/src/index.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L42)
 
@@ -115,7 +115,7 @@ function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>
 
 `Promise`\<`Change`\<`any`\>[]\>
 
-#### Source
+#### Defined in
 
 [diff/src/index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L32)
 
@@ -135,6 +135,6 @@ function getSchemaHash(schema): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [diff/src/index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L27)

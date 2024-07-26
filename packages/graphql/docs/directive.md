@@ -18,7 +18,7 @@ Wildcard `*` character for matching any directive name.
 
 See [getCustomDirectiveOptions](directive.md#getcustomdirectiveoptions), [isCustomDirective](directive.md#iscustomdirective)
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L30)
 
@@ -40,7 +40,7 @@ Checks if a directive is executable (related to operations).
 
 `boolean`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:285](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L285)
 
@@ -119,7 +119,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:250](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L250)
 
@@ -168,7 +168,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 // }
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L78)
 
@@ -249,7 +249,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 // }
 ```
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L152)
 
@@ -279,7 +279,7 @@ the `customDirective` option.
 
 `true` if the directive is declared or `*` is declared in `customDirective` option, else `false`.
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L41)
 
@@ -301,6 +301,6 @@ Checks if a directive is system (related to schema definition).
 
 `boolean`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/directive.ts:308](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L308)

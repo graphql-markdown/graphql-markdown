@@ -16,9 +16,9 @@ function getCategoryLocale(type): Maybe<TypeLocale>
 
 `Maybe`\<`TypeLocale`\>
 
-#### Source
+#### Defined in
 
-[link.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L37)
+[link.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L41)
 
 ***
 
@@ -36,9 +36,9 @@ function getLinkApiGroupFolder(type): string
 
 `string`
 
-#### Source
+#### Defined in
 
-[link.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L97)
+[link.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L101)
 
 ***
 
@@ -58,9 +58,9 @@ function getLinkCategoryFolder(type, operationLocale?): Maybe<string>
 
 `Maybe`\<`string`\>
 
-#### Source
+#### Defined in
 
-[link.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L59)
+[link.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L63)
 
 ***
 
@@ -80,9 +80,9 @@ function getLinkDeprecatedFolder(type, option): string
 
 `string`
 
-#### Source
+#### Defined in
 
-[link.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L101)
+[link.ts:105](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L105)
 
 ***
 
@@ -107,9 +107,9 @@ options): Maybe<TypeLink>
 
 `Maybe`\<`TypeLink`\>
 
-#### Source
+#### Defined in
 
-[link.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L158)
+[link.ts:162](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L162)
 
 ***
 
@@ -127,9 +127,9 @@ function hasOptionParentType(options): boolean
 
 `boolean`
 
-#### Source
+#### Defined in
 
-[link.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L88)
+[link.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L92)
 
 ***
 
@@ -147,9 +147,9 @@ function hasOptionWithAttributes(options): boolean
 
 `boolean`
 
-#### Source
+#### Defined in
 
-[link.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L84)
+[link.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L88)
 
 ***
 
@@ -169,9 +169,9 @@ function printLink(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
-[link.ts:201](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L201)
+[link.ts:205](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L205)
 
 ***
 
@@ -185,15 +185,15 @@ function printLinkAttributes(type, text): string
 
 • **type**: `unknown`
 
-• **text**: `Maybe`\<`string`\>= `""`
+• **text**: `Maybe`\<`string`\> = `""`
 
 #### Returns
 
 `string`
 
-#### Source
+#### Defined in
 
-[link.ts:174](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L174)
+[link.ts:178](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L178)
 
 ***
 
@@ -213,9 +213,9 @@ function printParentLink(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
-[link.ts:225](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L225)
+[link.ts:229](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L229)
 
 ***
 
@@ -243,6 +243,6 @@ function toLink(
 
 `TypeLink`
 
-#### Source
+#### Defined in
 
-[link.ts:108](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L108)
+[link.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L112)

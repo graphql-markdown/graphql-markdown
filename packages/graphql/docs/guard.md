@@ -12,7 +12,7 @@ function instanceOf<T>(obj, type): obj is T
 
 Checks if a GraphQL named type is of generic type `T`.
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -32,7 +32,7 @@ the GraphQL type `T`.
 
 `obj is T`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L57)
 
@@ -56,7 +56,7 @@ a GraphQL type.
 
 `boolean`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L100)
 
@@ -70,7 +70,7 @@ function isDeprecated<T>(obj): obj is DeprecatedType<T>
 
 Checks if a GraphQL named type is deprecated.
 
-#### Type parameters
+#### Type Parameters
 
 • **T**
 
@@ -86,7 +86,7 @@ an instance of `T`.
 
 `obj is DeprecatedType<T>`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L75)
 
@@ -110,7 +110,7 @@ a GraphQL type.
 
 `type is GraphQLField<unknown, unknown, unknown>`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L38)
 
@@ -134,7 +134,7 @@ a GraphQL type.
 
 `type is GraphQLOperationType`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L90)
 
@@ -158,6 +158,6 @@ a GraphQL type.
 
 `boolean`
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/guard.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L113)

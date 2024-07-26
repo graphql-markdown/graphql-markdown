@@ -15,7 +15,7 @@ function formatFrontMatterProp(
 
 • **prop**: `unknown`
 
-• **indentation**: `number`= `0`
+• **indentation**: `number` = `0`
 
 • **prefix?**: `string`
 
@@ -23,7 +23,7 @@ function formatFrontMatterProp(
 
 `string`[]
 
-#### Source
+#### Defined in
 
 [frontmatter.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L60)
 
@@ -50,6 +50,6 @@ function printFrontMatter(
 
 `string`
 
-#### Source
+#### Defined in
 
 [frontmatter.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L83)

@@ -28,14 +28,14 @@ new Printer(): Printer
 static options: Readonly<Maybe<PrintTypeOptions>>;
 ```
 
-###### Source
+###### Defined in
 
 [printer.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L66)
 
 ##### printCustomDirectives()
 
 ```ts
-static readonly printCustomDirectives: (type, options) => string;
+readonly static printCustomDirectives: (type, options) => string;
 ```
 
 ###### Parameters
@@ -48,14 +48,14 @@ static readonly printCustomDirectives: (type, options) => string;
 
 `string`
 
-###### Source
+###### Defined in
 
 [printer.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L70)
 
 ##### printCustomTags()
 
 ```ts
-static readonly printCustomTags: (type, options) => string | MDXString;
+readonly static printCustomTags: (type, options) => string | MDXString;
 ```
 
 ###### Parameters
@@ -68,14 +68,14 @@ static readonly printCustomTags: (type, options) => string | MDXString;
 
 `string` \| `MDXString`
 
-###### Source
+###### Defined in
 
 [printer.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L72)
 
 ##### printDescription()
 
 ```ts
-static readonly printDescription: (type, options?, noText?) => string | MDXString;
+readonly static printDescription: (type, options?, noText?) => string | MDXString;
 ```
 
 ###### Parameters
@@ -90,7 +90,7 @@ static readonly printDescription: (type, options?, noText?) => string | MDXStrin
 
 `string` \| `MDXString`
 
-###### Source
+###### Defined in
 
 [printer.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L68)
 
@@ -110,11 +110,11 @@ static init(
 
 • **schema**: `Maybe`\<`GraphQLSchema`\>
 
-• **baseURL**: `Maybe`\<`string`\>= `"schema"`
+• **baseURL**: `Maybe`\<`string`\> = `"schema"`
 
-• **linkRoot**: `Maybe`\<`string`\>= `"/"`
+• **linkRoot**: `Maybe`\<`string`\> = `"/"`
 
-• **\_\_namedParameters**= `undefined`
+• **\_\_namedParameters** = `...`
 
 • **\_\_namedParameters.customDirectives?**: `CustomDirectiveMap`
 
@@ -134,14 +134,14 @@ static init(
 
 `void`
 
-###### Source
+###### Defined in
 
 [printer.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L74)
 
 ##### printCode()
 
 ```ts
-static readonly printCode(type, options): string
+readonly static printCode(type, options): string
 ```
 
 ###### Parameters
@@ -154,14 +154,14 @@ static readonly printCode(type, options): string
 
 `string`
 
-###### Source
+###### Defined in
 
 [printer.ts:141](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L141)
 
 ##### printExample()
 
 ```ts
-static readonly printExample(type, options): string
+readonly static printExample(type, options): string
 ```
 
 ###### Parameters
@@ -174,14 +174,14 @@ static readonly printExample(type, options): string
 
 `string`
 
-###### Source
+###### Defined in
 
 [printer.ts:186](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L186)
 
 ##### printHeader()
 
 ```ts
-static readonly printHeader(
+readonly static printHeader(
    id, 
    title, 
    options): string
@@ -199,14 +199,14 @@ static readonly printHeader(
 
 `string`
 
-###### Source
+###### Defined in
 
 [printer.ts:131](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L131)
 
 ##### printMetaTags()
 
 ```ts
-static readonly printMetaTags(_type, __namedParameters): string | MDXString
+readonly static printMetaTags(_type, __namedParameters): string | MDXString
 ```
 
 ###### Parameters
@@ -219,14 +219,14 @@ static readonly printMetaTags(_type, __namedParameters): string | MDXString
 
 `string` \| `MDXString`
 
-###### Source
+###### Defined in
 
 [printer.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L246)
 
 ##### printRelations()
 
 ```ts
-static readonly printRelations(type, options): string | MDXString
+readonly static printRelations(type, options): string | MDXString
 ```
 
 ###### Parameters
@@ -239,14 +239,14 @@ static readonly printRelations(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-###### Source
+###### Defined in
 
 [printer.ts:236](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L236)
 
 ##### printType()
 
 ```ts
-static readonly printType(
+readonly static printType(
    name, 
    type, 
 options?): Maybe<MDXString>
@@ -264,14 +264,14 @@ options?): Maybe<MDXString>
 
 `Maybe`\<`MDXString`\>
 
-###### Source
+###### Defined in
 
 [printer.ts:265](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L265)
 
 ##### printTypeMetadata()
 
 ```ts
-static readonly printTypeMetadata(type, options): string | MDXString
+readonly static printTypeMetadata(type, options): string | MDXString
 ```
 
 ###### Parameters
@@ -284,6 +284,6 @@ static readonly printTypeMetadata(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-###### Source
+###### Defined in
 
 [printer.ts:207](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L207)

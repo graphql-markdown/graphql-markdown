@@ -12,13 +12,13 @@ function printCodeArguments(type, indentationLevel): string
 
 • **type**: `unknown`
 
-• **indentationLevel**: `number`= `1`
+• **indentationLevel**: `number` = `1`
 
 #### Returns
 
 `string`
 
-#### Source
+#### Defined in
 
 [code.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L16)
 
@@ -39,12 +39,12 @@ function printCodeField(
 
 • **options?**: `PrintTypeOptions`
 
-• **indentationLevel?**: `number`= `0`
+• **indentationLevel?**: `number` = `0`
 
 #### Returns
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [code.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L50)

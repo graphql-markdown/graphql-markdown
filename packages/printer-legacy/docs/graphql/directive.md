@@ -18,7 +18,7 @@ function printCodeDirective(type, options?): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/directive.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L38)
 
@@ -40,6 +40,6 @@ function printDirectiveMetadata(type, options): string | MDXString
 
 `string` \| `MDXString`
 
-#### Source
+#### Defined in
 
 [graphql/directive.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L27)

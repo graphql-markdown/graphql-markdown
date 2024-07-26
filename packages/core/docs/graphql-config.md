@@ -8,7 +8,7 @@
 const EXTENSION_NAME: "graphql-markdown";
 ```
 
-#### Source
+#### Defined in
 
 [graphql-config.ts:13](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L13)
 
@@ -20,7 +20,7 @@ const EXTENSION_NAME: "graphql-markdown";
 const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-#### Source
+#### Defined in
 
 [graphql-config.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L14)
 
@@ -41,13 +41,13 @@ __namedParameters?): Promise<Maybe<Readonly<ExtensionProjectConfig>>>
 
 • **options?**: `Maybe`\<`PackageOptionsConfig`\>
 
-• **\_\_namedParameters?**: `ThrowOptions`= `undefined`
+• **\_\_namedParameters?**: `ThrowOptions` = `...`
 
 #### Returns
 
 `Promise`\<`Maybe`\<`Readonly`\<`ExtensionProjectConfig`\>\>\>
 
-#### Source
+#### Defined in
 
 [graphql-config.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L43)
 
@@ -69,6 +69,6 @@ function setLoaderOptions(loaders, options): LoaderOption
 
 `LoaderOption`
 
-#### Source
+#### Defined in
 
 [graphql-config.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L23)

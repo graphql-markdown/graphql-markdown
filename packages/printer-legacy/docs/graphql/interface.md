@@ -18,7 +18,7 @@ function printCodeInterface(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/interface.ts:7](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L7)
 
@@ -40,6 +40,6 @@ function printInterfaceMetadata(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/interface.ts:5](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L5)

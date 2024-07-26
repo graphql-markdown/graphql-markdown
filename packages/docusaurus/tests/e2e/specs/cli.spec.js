@@ -27,11 +27,6 @@ for (const pluginConfig of pluginConfigs) {
       pluginConfig.baseURL,
     )}" with base URL "${pluginConfig.baseURL}".`,
     `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
-    `[INFO] Remember to update your Docusaurus site's sidebars with "${path.join(
-      pluginConfig.rootPath,
-      pluginConfig.baseURL,
-      "sidebar-schema.js",
-    )}".`,
   ]);
 }
 

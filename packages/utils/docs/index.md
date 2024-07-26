@@ -8,9 +8,9 @@
 
 ## Modules
 
-- [array](docs/array.md)
-- [fs](docs/fs.md)
-- [object](docs/object.md)
-- [prettier](docs/prettier.md)
-- [string](docs/string.md)
-- [url](docs/url.md)
+- [array](_media/array.md)
+- [fs](_media/fs.md)
+- [object](_media/object.md)
+- [prettier](_media/prettier.md)
+- [string](_media/string.md)
+- [url](_media/url.md)

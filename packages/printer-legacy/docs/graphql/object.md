@@ -18,7 +18,7 @@ function printCodeObject(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/object.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L74)
 
@@ -45,7 +45,7 @@ function printCodeType(
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/object.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L40)
 
@@ -67,6 +67,6 @@ function printObjectMetadata(type, options): string
 
 `string`
 
-#### Source
+#### Defined in
 
 [graphql/object.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L25)

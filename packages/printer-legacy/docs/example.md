@@ -16,7 +16,7 @@ function getDirectiveExampleOption(options): Maybe<TypeDirectiveExample>
 
 `Maybe`\<`TypeDirectiveExample`\>
 
-#### Source
+#### Defined in
 
 [example.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L29)
 
@@ -38,6 +38,6 @@ function printExample(type, options): Maybe<string>
 
 `Maybe`\<`string`\>
 
-#### Source
+#### Defined in
 
 [example.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L172)

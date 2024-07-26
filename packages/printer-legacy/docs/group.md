@@ -23,6 +23,6 @@ function getGroup(
 
 `string`
 
-#### Source
+#### Defined in
 
 [group.ts:12](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L12)

@@ -16,7 +16,7 @@ Log levels.
 debug: "debug";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L20)
 
@@ -26,7 +26,7 @@ debug: "debug";
 error: "error";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L21)
 
@@ -36,7 +36,7 @@ error: "error";
 info: "info";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L22)
 
@@ -46,7 +46,7 @@ info: "info";
 log: "log";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L23)
 
@@ -56,7 +56,7 @@ log: "log";
 success: "success";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L24)
 
@@ -66,7 +66,7 @@ success: "success";
 warn: "warn";
 ```
 
-###### Source
+###### Defined in
 
 [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L25)
 
@@ -102,7 +102,7 @@ Logger("@docusaurus/logger");
 log("Info message", "info"); // Expected Docusaurus log output "Info message"
 ```
 
-#### Source
+#### Defined in
 
 [index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
 
@@ -129,7 +129,7 @@ a string to be logged.
   \| `"log"`
   \| `"success"`
   \| `"warn"`
-  \| [`LogLevel`](globals.md#loglevel)= `LogLevel.info`
+  \| [`LogLevel`](globals.md#loglevel) = `LogLevel.info`
 
 optional log level, `"info"` by default.
 
@@ -149,6 +149,6 @@ import { log } from "@graphql-markdown/utils/logger";
 log("Info message"); // Expected console output "Info message"
 ```
 
-#### Source
+#### Defined in
 
 [index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L85)

@@ -36,7 +36,7 @@ a record map of fields and arguments relations.
 
 mapRelationOf
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/relation.ts:165](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L165)
 
@@ -70,7 +70,7 @@ a record map of unions or interfaces relations.
 
 mapRelationOf
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/relation.ts:351](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L351)
 
@@ -104,7 +104,7 @@ a record map of interfaces relations.
 
 mapRelationOf
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/relation.ts:294](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L294)
 
@@ -138,7 +138,7 @@ a record map of operations relations.
 
 mapRelationOf
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/relation.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L104)
 
@@ -172,6 +172,6 @@ a record map of unions relations.
 
 mapRelationOf
 
-#### Source
+#### Defined in
 
 [packages/graphql/src/relation.ts:238](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L238)

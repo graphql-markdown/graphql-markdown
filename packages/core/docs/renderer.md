@@ -36,9 +36,9 @@ new Renderer(
 
 [`Renderer`](renderer.md#renderer)
 
-###### Source
+###### Defined in
 
-[renderer.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L47)
+[renderer.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L45)
 
 #### Properties
 
@@ -48,9 +48,9 @@ new Renderer(
 baseURL: string;
 ```
 
-###### Source
+###### Defined in
 
-[renderer.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L41)
+[renderer.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L39)
 
 ##### group
 
@@ -58,9 +58,9 @@ baseURL: string;
 group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 ```
 
-###### Source
+###### Defined in
 
-[renderer.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L39)
+[renderer.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L37)
 
 ##### options
 
@@ -68,9 +68,9 @@ group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 options: Maybe<RendererDocOptions>;
 ```
 
-###### Source
+###### Defined in
 
-[renderer.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L43)
+[renderer.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L41)
 
 ##### outputDir
 
@@ -78,9 +78,9 @@ options: Maybe<RendererDocOptions>;
 outputDir: string;
 ```
 
-###### Source
+###### Defined in
 
-[renderer.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L40)
+[renderer.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L38)
 
 ##### prettify
 
@@ -88,9 +88,9 @@ outputDir: string;
 prettify: boolean;
 ```
 
-###### Source
+###### Defined in
 
-[renderer.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L42)
+[renderer.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L40)
 
 #### Methods
 
@@ -115,7 +115,7 @@ options?): Promise<void>
 
 • **styleClass?**: `string`
 
-• **options?**= `undefined`
+• **options?** = `...`
 
 • **options.collapsed?**: `boolean`
 
@@ -125,9 +125,9 @@ options?): Promise<void>
 
 `Promise`\<`void`\>
 
-###### Source
+###### Defined in
 
-[renderer.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L63)
+[renderer.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L61)
 
 ##### generateCategoryMetafileType()
 
@@ -150,9 +150,9 @@ rootTypeName): Promise<string>
 
 `Promise`\<`string`\>
 
-###### Source
+###### Defined in
 
-[renderer.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L98)
+[renderer.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L96)
 
 ##### renderHomepage()
 
@@ -168,9 +168,9 @@ renderHomepage(homepageLocation): Promise<void>
 
 `Promise`\<`void`\>
 
-###### Source
+###### Defined in
 
-[renderer.ts:248](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L248)
+[renderer.ts:220](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L220)
 
 ##### renderRootTypes()
 
@@ -188,23 +188,9 @@ renderRootTypes(rootTypeName, type): Promise<Maybe<Maybe<Category>[]>>
 
 `Promise`\<`Maybe`\<`Maybe`\<`Category`\>[]\>\>
 
-###### Source
+###### Defined in
 
-[renderer.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L145)
-
-##### renderSidebar()
-
-```ts
-renderSidebar(): Promise<string>
-```
-
-###### Returns
-
-`Promise`\<`string`\>
-
-###### Source
-
-[renderer.ts:222](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L222)
+[renderer.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L143)
 
 ##### renderTypeEntities()
 
@@ -227,6 +213,6 @@ type): Promise<Maybe<Category>>
 
 `Promise`\<`Maybe`\<`Category`\>\>
 
-###### Source
+###### Defined in
 
-[renderer.ts:174](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L174)
+[renderer.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L172)
