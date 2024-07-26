@@ -18,12 +18,10 @@ jest.mock("@graphql-markdown/utils", () => {
   };
 });
 
+import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
   return {
-    getNamedType: jest.fn((t) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return t;
-    }),
+    getNamedType: jest.fn(),
     getRelationOfReturn: jest.fn(),
     getRelationOfField: jest.fn(),
     getRelationOfImplementation: jest.fn(),
@@ -33,24 +31,21 @@ jest.mock("@graphql-markdown/graphql", () => {
     isEnumType: jest.fn(),
     isInputType: jest.fn(),
     isInterfaceType: jest.fn(),
-    isNamedType: jest.fn(() => {
-      return true;
-    }),
+    isNamedType: jest.fn(),
     isObjectType: jest.fn(),
-    isOperation: jest.fn(() => {
-      return false;
-    }),
+    isOperation: jest.fn(),
     isScalarType: jest.fn(),
     isUnionType: jest.fn(),
   };
 });
-import * as GraphQL from "@graphql-markdown/graphql";
 
 import * as Relation from "../../src/relation";
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
   Relation;
+
+const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
 
 describe("relation", () => {
   describe("printRelationOf()", () => {
@@ -64,10 +59,8 @@ describe("relation", () => {
       (isOperationMockedValue: boolean) => {
         expect.hasAssertions();
 
-        jest.spyOn(GraphQL, "isNamedType").mockReturnValueOnce(false);
-        jest
-          .spyOn(GraphQL, "isOperation")
-          .mockReturnValueOnce(isOperationMockedValue);
+        mockGraphQL.isNamedType.mockReturnValueOnce(false);
+        mockGraphQL.isOperation.mockReturnValueOnce(isOperationMockedValue);
 
         const relation = printRelationOf(
           undefined,
@@ -90,10 +83,8 @@ describe("relation", () => {
           description: "Lorem Ipsum",
         });
 
-        jest
-          .spyOn(GraphQL, "isNamedType")
-          .mockReturnValueOnce(isNamedTypeMockedValue);
-        jest.spyOn(GraphQL, "isOperation").mockReturnValueOnce(true);
+        mockGraphQL.isNamedType.mockReturnValueOnce(isNamedTypeMockedValue);
+        mockGraphQL.isOperation.mockReturnValueOnce(true);
 
         const relation = printRelationOf(
           type,
@@ -114,6 +105,9 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
+      mockGraphQL.isNamedType.mockReturnValueOnce(true);
+      mockGraphQL.isOperation.mockReturnValueOnce(false);
+
       const relation = printRelationOf(type, "RelationOf", undefined, {
         ...DEFAULT_OPTIONS,
         schema: {} as GraphQLSchema,
@@ -129,6 +123,9 @@ describe("relation", () => {
         name: "String",
         description: "Lorem Ipsum",
       });
+
+      mockGraphQL.isNamedType.mockReturnValueOnce(true);
+      mockGraphQL.isOperation.mockReturnValueOnce(false);
 
       const relation = printRelationOf(type, "RelationOf", jest.fn(), {
         ...DEFAULT_OPTIONS,
@@ -146,8 +143,8 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      jest.spyOn(GraphQL, "isNamedType").mockReturnValueOnce(true);
-      jest.spyOn(GraphQL, "isOperation").mockReturnValueOnce(false);
+      mockGraphQL.isNamedType.mockReturnValueOnce(true);
+      mockGraphQL.isOperation.mockReturnValueOnce(false);
 
       const relation = printRelationOf(
         type,
@@ -197,7 +194,9 @@ describe("relation", () => {
         };
       };
 
-      jest.spyOn(GraphQL, "isNamedType").mockReturnValue(true);
+      mockGraphQL.isNamedType.mockReturnValue(true);
+      mockGraphQL.isOperation.mockReturnValue(false);
+      mockGraphQL.getNamedType.mockImplementation((t) => t as any);
 
       const relation = printRelationOf(
         type,
@@ -229,6 +228,14 @@ describe("relation", () => {
             }
           `);
     });
+
+    test("returns undefined if not root type know", () => {
+      expect.hasAssertions();
+
+      const deprecation = getRootTypeLocaleFromString("unknown");
+
+      expect(deprecation).toBeUndefined();
+    });
   });
 
   describe("printRelations()", () => {
@@ -243,7 +250,8 @@ describe("relation", () => {
       });
       const options = { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema };
 
-      jest.spyOn(GraphQL, "isNamedType").mockReturnValue(true);
+      mockGraphQL.isNamedType.mockReturnValue(true);
+      mockGraphQL.isOperation.mockReturnValue(false);
 
       printRelations(type, options);
 
