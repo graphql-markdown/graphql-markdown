@@ -279,6 +279,14 @@ plugins: [
 
 <br/>
 
+:::warning[useApiGroup]
+
+**If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some case the old GraphQL documentation structure is not being removed.
+
+To resolve this, you will need to delete manually all files to get a clean folder and regenerate the documentation, or disable `useApiGroup` to keep the previous behavior.
+
+:::
+
 :::info
 
 See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
