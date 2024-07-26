@@ -52,7 +52,7 @@ If you aim at a code contribution, you will need the following tools:
 - [earthly](https://earthly.dev/get-earthly)
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
-If you do not yet have an IDE, then I recommend [VS Code](https://code.visualstudio.com/download) for this project.
+This project is fully compatible with [GitHub Codespaces](https://github.com/features/codespaces). However, if you prefer a local environment, then we recommend [VS Code](https://code.visualstudio.com/download) for this project.
 
 _\* For using `podman` with `earthly`, you need to run `earthly config global.container_frontend podman-shell` (see [earthly ticket](https://github.com/earthly/earthly/issues/760#issuecomment-932323241))._
 
