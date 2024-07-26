@@ -63,24 +63,3 @@ export const prettifyMarkdown = async (
 ): Promise<string | undefined> => {
   return prettify(content, "markdown");
 };
-
-/**
- * Prettify a Javascript string using {@link prettify} and `babel` parser.
- *
- * @remarks
- * Same as `prettify(content, "babel")`.
- *
- * @see {@link prettify}
- *
- * @internal
- *
- * @param content - the string to be prettified.
- *
- * @returns a prettified string, or undefined if an error occurred.
- *
- */
-export const prettifyJavascript = async (
-  content: string,
-): Promise<string | undefined> => {
-  return prettify(content, "babel");
-};
