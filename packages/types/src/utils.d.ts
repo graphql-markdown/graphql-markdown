@@ -12,3 +12,5 @@ export type PrettifyCallbackFunction = (
   text: string,
   options?: unknown,
 ) => Promise<Maybe<string>>;
+
+export type EnsureDirOptions = Maybe<{ forceEmpty?: boolean }>;

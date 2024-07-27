@@ -4,10 +4,13 @@
  * @packageDocumentation
  */
 
-import { mkdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, rmdir, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-import type { PrettifyCallbackFunction } from "@graphql-markdown/types";
+import type {
+  EnsureDirOptions,
+  PrettifyCallbackFunction,
+} from "@graphql-markdown/types";
 
 export { readFile, copyFile } from "node:fs/promises";
 
@@ -54,9 +57,18 @@ export const fileExists = async (location: string): Promise<boolean> => {
  * ```
  *
  */
-export const ensureDir = async (location: string): Promise<void> => {
+export const ensureDir = async (
+  location: string,
+  options?: EnsureDirOptions,
+): Promise<void> => {
   if (!(await fileExists(location))) {
     await mkdir(location, { recursive: true });
+    return;
+  }
+
+  if (options && options.forceEmpty === true) {
+    await rmdir(location, { recursive: true });
+    await ensureDir(location);
   }
 };
 

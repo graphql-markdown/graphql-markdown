@@ -8,6 +8,7 @@ describe("fs", () => {
     vol.fromJSON({
       "/testFolder": null,
       "/testFolder/testFile": "just a test",
+      "/testFolder2/testFile": "just a test",
     });
   });
 
@@ -54,7 +55,7 @@ describe("fs", () => {
         exists: false,
         desc: "created if not present",
       },
-    ])("folder is", async ({ path, exists }) => {
+    ])("folder is $desc", async ({ path, exists }) => {
       expect.assertions(2);
 
       await expect(fileExists(path)).resolves.toBe(exists);
@@ -63,6 +64,34 @@ describe("fs", () => {
 
       await expect(fileExists(path)).resolves.toBeTruthy();
     });
+
+    test("folder is always empty if forceEmpty is true", async () => {
+      expect.assertions(3);
+
+      const folder = "/testFolder2";
+      const file = `${folder}/testFile`;
+      await expect(fileExists(file)).resolves.toBeTruthy();
+
+      await ensureDir(folder, { forceEmpty: true });
+
+      await expect(fileExists(file)).resolves.toBeFalsy();
+      await expect(fileExists(folder)).resolves.toBeTruthy();
+    });
+
+    test.each([[undefined], [null], [{ forceEmpty: false }], [{}]])(
+      "folder is left unchanged if forceEmpty is %s",
+      async (options) => {
+        expect.assertions(2);
+
+        const folder = "/testFolder2";
+        const file = `${folder}/testFile`;
+        await expect(fileExists(file)).resolves.toBeTruthy();
+
+        await ensureDir(folder, options);
+
+        await expect(fileExists(file)).resolves.toBeTruthy();
+      },
+    );
   });
 });
 
