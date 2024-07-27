@@ -109,11 +109,18 @@ export const generateDocFromSchema = async ({
       metatags,
     },
   );
-  const renderer = new Renderer(printer, outputDir, baseURL, groups, prettify, {
-    ...docOptions,
-    deprecated: printTypeOptions?.deprecated,
-    useApiGroup: printTypeOptions?.useApiGroup,
-  });
+  const renderer = await Renderer.init(
+    printer,
+    outputDir,
+    baseURL,
+    groups,
+    prettify,
+    {
+      ...docOptions,
+      deprecated: printTypeOptions?.deprecated,
+      useApiGroup: printTypeOptions?.useApiGroup,
+    },
+  );
 
   const pages = await Promise.all(
     Object.keys(rootTypes).map(async (typeName) => {

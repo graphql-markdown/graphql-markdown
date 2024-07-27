@@ -61,8 +61,8 @@ describe("renderer", () => {
     let rendererInstance: Renderer;
     const baseURL: string = "graphql";
 
-    beforeEach(() => {
-      rendererInstance = new Renderer(
+    beforeEach(async () => {
+      rendererInstance = await Renderer.init(
         Printer as unknown as typeof IPrinter,
         "/output",
         baseURL,

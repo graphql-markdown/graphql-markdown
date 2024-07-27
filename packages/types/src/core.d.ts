@@ -19,7 +19,7 @@ export interface ConfigDocOptions {
 
 export type RendererDocOptions = ConfigDocOptions & {
   deprecated?: Maybe<TypeDeprecatedOption>;
-};
+} & { force?: boolean };
 
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
