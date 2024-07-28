@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { mkdir, rmdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, rm, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import type {
@@ -67,7 +67,7 @@ export const ensureDir = async (
   }
 
   if (options && options.forceEmpty === true) {
-    await rmdir(location, { recursive: true });
+    await rm(location, { recursive: true });
     await ensureDir(location);
   }
 };

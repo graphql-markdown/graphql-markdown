@@ -5,4 +5,10 @@ import type { IFS } from "unionfs";
 
 const fs = jest.requireActual("node:fs");
 
-module.exports = ufs.use(fs).use(vol as unknown as IFS).promises;
+const promises = ufs.use(fs).use(vol as unknown as IFS).promises;
+
+module.exports = { ...promises, rm: promises.rmdir };
+
+if ("rm" in promises) {
+  module.exports = promises;
+}
