@@ -93,36 +93,36 @@ describe("fs", () => {
       },
     );
   });
-});
 
-describe("saveFile()", () => {
-  test("create file and folders", async () => {
-    expect.assertions(1);
+  describe("saveFile()", () => {
+    test("create file and folders", async () => {
+      expect.assertions(1);
 
-    await saveFile("/foo/bar/test/foobar.test", "foobar file for test");
+      await saveFile("/foo/bar/test/foobar.test", "foobar file for test");
 
-    expect(vol.toJSON("/foo/bar/test/foobar.test")).toMatchInlineSnapshot(`
+      expect(vol.toJSON("/foo/bar/test/foobar.test")).toMatchInlineSnapshot(`
         {
           "/foo/bar/test/foobar.test": "foobar file for test",
         }
       `);
-  });
+    });
 
-  test("run prettify function if valid", async () => {
-    expect.assertions(1);
+    test("run prettify function if valid", async () => {
+      expect.assertions(1);
 
-    await saveFile(
-      "/foo/bar/test/prettify.test",
-      "foobar file for test",
-      async () => {
-        return Promise.resolve("prettify hello");
-      },
-    );
+      await saveFile(
+        "/foo/bar/test/prettify.test",
+        "foobar file for test",
+        async () => {
+          return Promise.resolve("prettify hello");
+        },
+      );
 
-    expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
+      expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
         {
           "/foo/bar/test/prettify.test": "prettify hello",
         }
       `);
+    });
   });
 });
