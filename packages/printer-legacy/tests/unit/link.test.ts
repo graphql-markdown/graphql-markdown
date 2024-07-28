@@ -18,7 +18,7 @@ jest.mock("@graphql-markdown/utils", () => {
     pathUrl: jest.requireActual("path").posix,
   };
 });
-const mockUtils = jest.mocked(Utils);
+const mockUtils = jest.mocked(Utils, { shallow: true });
 
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {
@@ -43,7 +43,7 @@ jest.mock("@graphql-markdown/graphql", () => {
     isUnionType: jest.fn(),
   };
 });
-const mockGraphQL = jest.mocked(GraphQL);
+const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
@@ -55,7 +55,7 @@ jest.mock("../../src/group", () => {
     }),
   };
 });
-const mockGroup = jest.mocked(Group);
+const mockGroup = jest.mocked(Group, { shallow: true });
 
 import * as Link from "../../src/link";
 import * as Common from "../../src/common";
