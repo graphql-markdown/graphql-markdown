@@ -242,7 +242,7 @@ Use these options to toggle type information rendered on pages:
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
-- `useApiGroup`: split entities in `API` group (executable types) and `Types` group (system types).
+- `useApiGroup`: split entities in `Operations` group (executable types) and `Types` group (system types).
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
