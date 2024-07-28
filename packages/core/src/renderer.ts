@@ -1,4 +1,5 @@
 import type {
+  ApiGroupOverrideType,
   Category,
   Maybe,
   MDXString,
@@ -26,12 +27,30 @@ import {
 
 import { log, LogLevel } from "@graphql-markdown/logger";
 
+const DEPRECATED = "deprecated" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
+const CATEGORY_STYLE_CLASS = "graphql-markdown-api-section" as const;
 
 enum SidebarPosition {
   FIRST = 1,
   LAST = 999,
 }
+
+export const API_GROUPS: Required<ApiGroupOverrideType> = {
+  operations: "operations",
+  types: "types",
+} as const;
+
+export const getApiGroupFolder = (
+  type: unknown,
+  groups?: Maybe<ApiGroupOverrideType | boolean>,
+): string => {
+  let folderNames = API_GROUPS;
+  if (groups && typeof groups === "object") {
+    folderNames = { ...API_GROUPS, ...groups };
+  }
+  return isApiType(type) ? folderNames.operations : folderNames.types;
+};
 
 export class Renderer {
   group: Maybe<SchemaEntitiesGroupMap>;
@@ -100,25 +119,25 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (this.options?.useApiGroup === true) {
-      const typeCat = isApiType(type) ? "api" : "types";
+    if (this.options?.useApiGroup) {
+      const typeCat = getApiGroupFolder(type, this.options.useApiGroup);
       dirPath = join(dirPath, slugify(typeCat));
       await this.generateCategoryMetafile(
         typeCat,
         dirPath,
         undefined,
-        "graphql-markdown-api-section",
+        CATEGORY_STYLE_CLASS,
         { collapsible: false, collapsed: false },
       );
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
-      dirPath = join(dirPath, slugify("deprecated"));
+      dirPath = join(dirPath, slugify(DEPRECATED));
       await this.generateCategoryMetafile(
-        "deprecated",
+        DEPRECATED,
         dirPath,
         SidebarPosition.LAST,
-        "deprecated",
+        DEPRECATED,
       );
     }
 

@@ -50,34 +50,34 @@ export const DEFAULT_OPTIONS: Readonly<
       Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">
     >
 > = {
-  id: "default",
-  baseURL: "schema",
+  id: "default" as const,
+  baseURL: "schema" as const,
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
-    index: false as boolean,
     frontMatter: {} as FrontMatterOptions,
+    index: false as const,
   } as Required<
     Pick<ConfigDocOptions & DeprecatedConfigDocOptions, "frontMatter" | "index">
   >,
-  force: false,
+  force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
-  linkRoot: "/",
+  linkRoot: "/" as const,
   loaders: undefined,
   metatags: [] as Record<string, string>[],
-  pretty: false as boolean,
+  pretty: false as const,
   printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
-    codeSection: true as boolean,
+    codeSection: true as const,
     deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
-    exampleSection: false as boolean,
-    parentTypePrefix: true as boolean,
-    relatedTypeSection: true as boolean,
-    typeBadges: true as boolean,
-    useApiGroup: true as boolean,
+    exampleSection: false as const,
+    parentTypePrefix: true as const,
+    relatedTypeSection: true as const,
+    typeBadges: true as const,
+    useApiGroup: true as const,
   } as Required<ConfigPrintTypeOptions>,
-  rootPath: "./docs",
+  rootPath: "./docs" as const,
   schema: "./schema.graphql" as Pointer,
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   skipDocDirective: [] as DirectiveName[],
@@ -257,14 +257,14 @@ export const getDocOptions = (
 ): Required<ConfigDocOptions> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   return {
-    index:
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      (cliOpts?.index || configOptions?.index) ??
-      DEFAULT_OPTIONS.docOptions!.index!,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
     },
+    index:
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      (cliOpts?.index || configOptions?.index) ??
+      DEFAULT_OPTIONS.docOptions!.index,
   } as Required<ConfigDocOptions>;
 };
 

@@ -8,6 +8,7 @@ import type {
   SchemaEntitiesGroupMap,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
+  UseApiGroupOptionType,
 } from ".";
 
 export type RootTypeName =
@@ -35,7 +36,7 @@ export interface PrinterConfigPrintTypeOptions {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-  useApiGroup?: boolean;
+  useApiGroup?: UseApiGroupOptionType;
 }
 
 export interface CollapsibleOption {
@@ -61,7 +62,7 @@ export interface PrintTypeOptions {
   schema?: Maybe<GraphQLSchema>;
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
-  useApiGroup?: boolean;
+  useApiGroup?: UseApiGroupOptionType;
   withAttributes?: boolean;
 }
 

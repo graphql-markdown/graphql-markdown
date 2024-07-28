@@ -9,6 +9,7 @@ import type {
   PrintLinkOptions,
   TypeLocale,
   GraphQLNamedType,
+  ApiGroupOverrideType,
 } from "@graphql-markdown/types";
 
 import * as Utils from "@graphql-markdown/utils";
@@ -284,7 +285,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/api/group/directives/test-directive.mdx",
+          "url": "docs/graphql/operations/group/directives/test-directive.mdx",
         }
       `);
     });
@@ -316,7 +317,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/deprecated/api/directives/test-directive.mdx",
+          "url": "docs/graphql/deprecated/operations/directives/test-directive.mdx",
         }
       `);
     });
@@ -616,6 +617,43 @@ describe("link", () => {
       });
 
       expect(link).toBeUndefined();
+    });
+  });
+
+  describe("getLinkApiGroupFolder()", () => {
+    test.each([[null], [undefined], [false], [{}], [true]])(
+      "returns default folders if %s",
+      (apiGroupOption) => {
+        expect.hasAssertions();
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        expect(Link.getLinkApiGroupFolder({}, apiGroupOption)).toBe(
+          Link.API_GROUPS.operations,
+        );
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        expect(Link.getLinkApiGroupFolder({}, apiGroupOption)).toBe(
+          Link.API_GROUPS.types,
+        );
+      },
+    );
+    test("overrides default names", () => {
+      expect.hasAssertions();
+
+      const apiGroupOption: ApiGroupOverrideType = {
+        operations: "api",
+        types: "entities",
+      };
+
+      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+      expect(Link.getLinkApiGroupFolder({}, apiGroupOption)).toBe(
+        apiGroupOption.operations,
+      );
+
+      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+      expect(Link.getLinkApiGroupFolder({}, apiGroupOption)).toBe(
+        apiGroupOption.types,
+      );
     });
   });
 });

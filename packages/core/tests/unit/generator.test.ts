@@ -49,7 +49,6 @@ describe("generator", () => {
       docOptions: {
         index: true,
         frontMatter: {},
-        useApiGroup: true,
       },
       homepageLocation: "homepage location",
       linkRoot: "link root",

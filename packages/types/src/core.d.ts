@@ -11,15 +11,21 @@ import type {
 
 export type FrontMatterOptions = Record<string, unknown>;
 
-export interface ConfigDocOptions {
-  index?: boolean;
-  frontMatter?: Maybe<FrontMatterOptions>;
-  useApiGroup?: boolean;
+export interface ApiGroupOverrideType {
+  operations?: string;
+  types?: string;
 }
+
+export interface ConfigDocOptions {
+  frontMatter?: Maybe<FrontMatterOptions>;
+  index?: boolean;
+}
+
+export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
 
 export type RendererDocOptions = ConfigDocOptions & {
   deprecated?: Maybe<TypeDeprecatedOption>;
-} & { force?: boolean };
+} & { force?: boolean; useApiGroup?: UseApiGroupOptionType };
 
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
@@ -50,7 +56,7 @@ export interface ConfigPrintTypeOptions {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-  useApiGroup?: boolean;
+  useApiGroup?: UseApiGroupOptionType;
 }
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
