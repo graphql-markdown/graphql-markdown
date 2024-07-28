@@ -20,6 +20,7 @@ import {
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
+import type { Renderer } from "./renderer";
 import { getRenderer } from "./renderer";
 
 const NS_PER_SEC = 1e9 as const;
@@ -119,17 +120,18 @@ export const generateDocFromSchema = async ({
     {
       ...docOptions,
       deprecated: printTypeOptions?.deprecated,
-      useApiGroup: printTypeOptions?.useApiGroup,
       force,
+      useApiGroup: printTypeOptions?.useApiGroup,
     },
   );
 
   const pages = await Promise.all(
-    Object.keys(rootTypes).map(async (typeName) => {
+    Object.keys(rootTypes).map(async (name) => {
+      const typeName = name as SchemaEntity;
       return renderer.renderRootTypes(
-        typeName as SchemaEntity,
-        rootTypes[typeName as SchemaEntity],
-      );
+        typeName,
+        rootTypes[typeName],
+      ) as ReturnType<Renderer["renderRootTypes"]>;
     }),
   );
 

@@ -1,4 +1,5 @@
 import type {
+  ApiGroupOverrideType,
   GraphQLNamedType,
   GraphQLType,
   MDXString,
@@ -37,6 +38,11 @@ import {
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
 import { hasPrintableDirective } from "./common";
+
+export const API_GROUPS: Required<ApiGroupOverrideType> = {
+  operations: "operations",
+  types: "types",
+} as const;
 
 export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
@@ -98,8 +104,15 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   );
 };
 
-export const getLinkApiGroupFolder = (type: unknown): string => {
-  return isApiType(type) ? "api" : "types";
+export const getLinkApiGroupFolder = (
+  type: unknown,
+  groups?: Maybe<ApiGroupOverrideType | boolean>,
+): string => {
+  let folderNames = API_GROUPS;
+  if (groups && typeof groups === "object") {
+    folderNames = { ...API_GROUPS, ...groups };
+  }
+  return isApiType(type) ? folderNames.operations : folderNames.types;
 };
 
 export const getLinkDeprecatedFolder = (

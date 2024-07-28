@@ -125,7 +125,7 @@ plugins: [
 
 ## `force`
 
-Force generating documentation in an empty folder and set [`diffMethod`](diffMethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
+Force generating documentation in an empty folder and set [`diffMethod`](#diffmethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
 
 | Setting | CLI flag      | Default     |
 | ------- | ------------- | ----------- |
@@ -242,7 +242,7 @@ Use these options to toggle type information rendered on pages:
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
-- `useApiGroup`: split entities in `API` group (executable types) and `Types` group (system types).
+- `useApiGroup`: split entities in `Operations` group (executable types) and `Types` group (system types).
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
@@ -291,7 +291,32 @@ plugins: [
 
 **If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
 
-To resolve this, you need to delete manually all files to get a clean folder and then regenerate the documentation; or you can disable `useApiGroup` to keep the previous behavior.
+To resolve this, you can regenerate the documentation using the [`force`](#force) setting; or you can disable `useApiGroup` to keep the previous behavior.
+
+:::
+
+:::tip
+
+Default `useApiGroup` groups `operations` and `types` can be customized by passing a object using the group name as key for the new name:
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
+       {
+        // highlight-start
+        printTypeOptions: {
+          useApiGroup: { // enable useApiGroup with custom groups name
+            operations: "api", // rename the group 'operations' to 'api'
+            //group 'types' left unchanged
+          }
+        },
+        // highlight-end
+      },
+    ],
+  ],
+```
 
 :::
 
