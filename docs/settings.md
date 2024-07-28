@@ -28,7 +28,7 @@ The method to be used for identifying changes in the schema for triggering the d
 
 The possible values are:
 
-- `FORCE`: skip diff, always generate documentation, same as CLI flag `-f` or `--force`.
+- `FORCE`: skip diff, always generate documentation, see [`force`](#force) setting.
 - `NONE`: skip diff (same as `FORCE`).
 - `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) to identify changes in the schema (including description).
 - `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters).
@@ -122,6 +122,14 @@ plugins: [
   ```
 
 :::
+
+## `force`
+
+Force generating documentation in an empty folder and override `diffMethod` value to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete it and recreate it.
+
+| Setting | CLI flag      | Default     |
+| ------- | ------------- | ----------- |
+| `force` | `-f, --force` | `false`     |
 
 ## `groupByDirective`
 
