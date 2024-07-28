@@ -58,25 +58,6 @@ export class Renderer {
     this.options = docOptions;
   }
 
-  public static async init(
-    printer: Printer,
-    outputDir: string,
-    baseURL: string,
-    group: Maybe<SchemaEntitiesGroupMap>,
-    prettify: boolean,
-    docOptions: Maybe<RendererDocOptions>,
-  ): Promise<Renderer> {
-    await ensureDir(outputDir, { forceEmpty: docOptions?.force });
-    return new Renderer(
-      printer,
-      outputDir,
-      baseURL,
-      group,
-      prettify,
-      docOptions,
-    );
-  }
-
   async generateCategoryMetafile(
     category: string,
     dirPath: string,
@@ -253,3 +234,15 @@ export class Renderer {
     await saveFile(destLocation, data);
   }
 }
+
+export const getRenderer = async (
+  printer: Printer,
+  outputDir: string,
+  baseURL: string,
+  group: Maybe<SchemaEntitiesGroupMap>,
+  prettify: boolean,
+  docOptions: Maybe<RendererDocOptions>,
+): Promise<InstanceType<typeof Renderer>> => {
+  await ensureDir(outputDir, { forceEmpty: docOptions?.force });
+  return new Renderer(printer, outputDir, baseURL, group, prettify, docOptions);
+};

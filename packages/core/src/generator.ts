@@ -17,10 +17,10 @@ import {
   loadSchema,
 } from "@graphql-markdown/graphql";
 
-import { Renderer } from "./renderer";
+import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { DiffMethod } from "./config";
+import { getRenderer } from "./renderer";
 
 const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
@@ -30,6 +30,7 @@ export const generateDocFromSchema = async ({
   customDirective,
   diffMethod,
   docOptions,
+  force,
   groupByDirective,
   homepageLocation,
   linkRoot,
@@ -109,7 +110,7 @@ export const generateDocFromSchema = async ({
       metatags,
     },
   );
-  const renderer = await Renderer.init(
+  const renderer = await getRenderer(
     printer,
     outputDir,
     baseURL,
@@ -119,6 +120,7 @@ export const generateDocFromSchema = async ({
       ...docOptions,
       deprecated: printTypeOptions?.deprecated,
       useApiGroup: printTypeOptions?.useApiGroup,
+      force,
     },
   );
 

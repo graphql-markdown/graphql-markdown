@@ -31,6 +31,14 @@ jest.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
 jest.mock("../../src/printer");
 
+const mockRenderer = {
+  generateCategoryMetafile: jest.fn(),
+  generateCategoryMetafileType: jest.fn(),
+  renderRootTypes: jest.fn(),
+  renderTypeEntities: jest.fn(),
+  renderHomepage: jest.fn(),
+} as unknown as CoreRenderer.Renderer;
+
 import { generateDocFromSchema } from "../../src";
 
 describe("generator", () => {
@@ -75,8 +83,7 @@ describe("generator", () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
+      jest.clearAllMocks();
     });
 
     afterAll(() => {
@@ -104,7 +111,9 @@ describe("generator", () => {
       const getPrinterSpy = jest
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      const rendererSpy = jest.spyOn(CoreRenderer, "Renderer");
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema(options);
 
@@ -158,6 +167,9 @@ describe("generator", () => {
       jest
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
 
       const loggerSpy = jest.spyOn(global.console, "info");
 
@@ -209,6 +221,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
       const loggerSpy = jest.spyOn(console, "info");
       const hasChangesSpy = jest
         .spyOn(CoreDiff, "hasChanges")
@@ -238,6 +253,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
       const hasChangesSpy = jest.spyOn(CoreDiff, "hasChanges");
 
       await generateDocFromSchema({
@@ -260,6 +278,9 @@ describe("generator", () => {
       jest
         .spyOn(GraphQL, "getSchemaMap")
         .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
       const loggerSpy = jest.spyOn(console, "info");
       const hasChangesSpy = jest
         .spyOn(CoreDiff, "hasChanges")
