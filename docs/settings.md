@@ -291,7 +291,32 @@ plugins: [
 
 **If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
 
-To resolve this, you need to delete manually all files to get a clean folder and then regenerate the documentation; or you can disable `useApiGroup` to keep the previous behavior.
+To resolve this, you can regenerate the documentation using the [`force`](#force) setting; or you can disable `useApiGroup` to keep the previous behavior.
+
+:::
+
+:::tip
+
+Default `useApiGroup` groups `operations` and `types` can be customized by passing a object using the group name as key for the new name:
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
+       {
+        // highlight-start
+        printTypeOptions: {
+          useApiGroup: { // enable useApiGroup with custom groups name
+            operations: "api", // rename the group 'operations' to 'api'
+            //group 'types' left unchanged
+          }
+        },
+        // highlight-end
+      },
+    ],
+  ],
+```
 
 :::
 
