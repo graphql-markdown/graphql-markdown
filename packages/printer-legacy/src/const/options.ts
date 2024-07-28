@@ -19,14 +19,14 @@ export enum SectionLevels {
 
 export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions> =
   {
-    codeSection: true,
-    deprecated: "default",
-    exampleSection: false,
-    metatags: [],
-    parentTypePrefix: true,
-    relatedTypeSection: true,
-    typeBadges: true,
-    useApiGroup: true,
+    codeSection: true as const,
+    deprecated: "default" as const,
+    exampleSection: false as const,
+    metatags: [] as const,
+    parentTypePrefix: true as const,
+    relatedTypeSection: true as const,
+    typeBadges: true as const,
+    useApiGroup: true as const,
   };
 
 export const DEFAULT_OPTIONS: Required<
@@ -50,16 +50,16 @@ export const DEFAULT_OPTIONS: Required<
   skipDocDirectives: GraphQLDirective[];
 } = {
   ...PRINT_TYPE_DEFAULT_OPTIONS,
-  basePath: "/",
+  basePath: "/" as const,
   collapsible: undefined,
-  customDirectives: {},
+  customDirectives: {} as const,
   groups: undefined,
   frontMatter: {} as FrontMatterOptions,
   level: undefined,
-  metatags: [],
-  onlyDocDirectives: [],
+  metatags: [] as const,
+  onlyDocDirectives: [] as const,
   parentType: undefined,
   schema: undefined,
-  skipDocDirectives: [],
-  withAttributes: false,
+  skipDocDirectives: [] as const,
+  withAttributes: false as const,
 };
