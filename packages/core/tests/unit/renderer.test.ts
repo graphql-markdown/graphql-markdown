@@ -2,6 +2,7 @@ import { GraphQLScalarType } from "graphql/type";
 import { Kind } from "graphql/language";
 
 import type {
+  ApiGroupOverrideType,
   IPrinter,
   MDXString,
   RendererDocOptions,
@@ -47,7 +48,8 @@ jest.mock("@graphql-markdown/graphql", () => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-import { getRenderer, Renderer } from "../../src/renderer";
+import type { Renderer } from "../../src/renderer";
+import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
 import { DEFAULT_OPTIONS } from "../../src/config";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
@@ -514,8 +516,11 @@ describe("renderer", () => {
           "queries",
         );
 
-        expect(spy).toHaveBeenCalledWith("queries", "/output/api/queries");
-        expect(dirPath).toBe("/output/api/queries");
+        expect(spy).toHaveBeenCalledWith(
+          "queries",
+          `/output/${API_GROUPS.operations}/queries`,
+        );
+        expect(dirPath).toBe(`/output/${API_GROUPS.operations}/queries`);
       });
 
       test("generate system _category_.yml file", async () => {
@@ -536,9 +541,45 @@ describe("renderer", () => {
           "objects",
         );
 
-        expect(spy).toHaveBeenCalledWith("objects", "/output/types/objects");
-        expect(dirPath).toBe("/output/types/objects");
+        expect(spy).toHaveBeenCalledWith(
+          "objects",
+          `/output/${API_GROUPS.types}/objects`,
+        );
+        expect(dirPath).toBe(`/output/${API_GROUPS.types}/objects`);
       });
+    });
+  });
+
+  describe("getApiGroupFolder()", () => {
+    test.each([[null], [undefined], [false], [{}], [true]])(
+      "returns default folders if %s",
+      (apiGroupOption) => {
+        expect.hasAssertions();
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        expect(getApiGroupFolder({}, apiGroupOption)).toBe(
+          API_GROUPS.operations,
+        );
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        expect(getApiGroupFolder({}, apiGroupOption)).toBe(API_GROUPS.types);
+      },
+    );
+    test("overrides default names", () => {
+      expect.hasAssertions();
+
+      const apiGroupOption: ApiGroupOverrideType = {
+        operations: "api",
+        types: "entities",
+      };
+
+      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+      expect(getApiGroupFolder({}, apiGroupOption)).toBe(
+        apiGroupOption.operations,
+      );
+
+      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+      expect(getApiGroupFolder({}, apiGroupOption)).toBe(apiGroupOption.types);
     });
   });
 });

@@ -1,4 +1,5 @@
 import type {
+  ApiGroupOverrideType,
   ConfigPrintTypeOptions,
   CustomDirectiveMap,
   FrontMatterOptions,
@@ -61,7 +62,7 @@ export interface PrintTypeOptions {
   schema?: Maybe<GraphQLSchema>;
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
-  useApiGroup?: boolean;
+  useApiGroup?: ApiGroupOverrideType | boolean;
   withAttributes?: boolean;
 }
 
