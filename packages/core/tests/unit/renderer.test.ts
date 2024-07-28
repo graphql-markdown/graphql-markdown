@@ -47,7 +47,7 @@ jest.mock("@graphql-markdown/graphql", () => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-import { Renderer } from "../../src/renderer";
+import { getRenderer, Renderer } from "../../src/renderer";
 import { DEFAULT_OPTIONS } from "../../src/config";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
@@ -61,8 +61,8 @@ describe("renderer", () => {
     let rendererInstance: Renderer;
     const baseURL: string = "graphql";
 
-    beforeEach(() => {
-      rendererInstance = new Renderer(
+    beforeEach(async () => {
+      rendererInstance = await getRenderer(
         Printer as unknown as typeof IPrinter,
         "/output",
         baseURL,

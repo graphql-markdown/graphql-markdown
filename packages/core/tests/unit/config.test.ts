@@ -189,6 +189,7 @@ describe("config", () => {
           diffMethod: DEFAULT_OPTIONS.diffMethod,
           docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
+          force: DEFAULT_OPTIONS.force,
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
           id: DEFAULT_OPTIONS.id,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
@@ -260,6 +261,7 @@ describe("config", () => {
         diffMethod: configFileOpts.diffMethod,
         docOptions: { ...configFileOpts.docOptions, frontMatter: {} },
         groupByDirective: configFileOpts.groupByDirective,
+        force: DEFAULT_OPTIONS.force,
         homepageLocation: configFileOpts.homepage,
         id: DEFAULT_OPTIONS.id,
         linkRoot: configFileOpts.linkRoot,
@@ -328,6 +330,7 @@ describe("config", () => {
         id: DEFAULT_OPTIONS.id,
         baseURL: cliOpts.base,
         diffMethod: cliOpts.diff,
+        force: DEFAULT_OPTIONS.force,
         groupByDirective: {
           directive: "group",
           fallback: "misc",
@@ -378,6 +381,7 @@ describe("config", () => {
         customDirective: DEFAULT_OPTIONS.customDirective,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
         docOptions: DEFAULT_OPTIONS.docOptions,
+        force: DEFAULT_OPTIONS.force,
         groupByDirective: undefined,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         id: DEFAULT_OPTIONS.id,
@@ -407,6 +411,41 @@ describe("config", () => {
         customDirective: DEFAULT_OPTIONS.customDirective,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: DEFAULT_OPTIONS.docOptions,
+        force: cliOpts.force,
+        groupByDirective: DEFAULT_OPTIONS.groupByDirective,
+        homepageLocation: DEFAULT_OPTIONS.homepage,
+        id: DEFAULT_OPTIONS.id,
+        linkRoot: DEFAULT_OPTIONS.linkRoot,
+        loaders: {},
+        metatags: DEFAULT_OPTIONS.metatags,
+        onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
+        outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
+        prettify: DEFAULT_OPTIONS.pretty,
+        printer: DEFAULT_OPTIONS.printer,
+        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        schemaLocation: DEFAULT_OPTIONS.schema,
+        skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        tmpDir: DEFAULT_OPTIONS.tmpDir,
+      });
+    });
+
+    test("force overrides diffMethod to FORCE", async () => {
+      expect.hasAssertions();
+
+      const configFileOpts: ConfigOptions = {
+        diffMethod: DiffMethod.NONE,
+        force: true,
+        loaders: {},
+      };
+
+      const input = await buildConfig(configFileOpts);
+
+      expect(input).toStrictEqual({
+        baseURL: DEFAULT_OPTIONS.baseURL,
+        customDirective: DEFAULT_OPTIONS.customDirective,
+        diffMethod: DiffMethod.FORCE as TypeDiffMethod,
+        docOptions: DEFAULT_OPTIONS.docOptions,
+        force: configFileOpts.force,
         groupByDirective: DEFAULT_OPTIONS.groupByDirective,
         homepageLocation: DEFAULT_OPTIONS.homepage,
         id: DEFAULT_OPTIONS.id,

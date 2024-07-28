@@ -25,7 +25,7 @@ jest.mock("@docusaurus/utils", () => {
     DOCUSAURUS_VERSION: "1.0.0",
   };
 });
-const mockDocusaurusUtils = jest.mocked(DocusaurusUtils);
+const mockDocusaurusUtils = jest.mocked(DocusaurusUtils, { shallow: true });
 
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", () => {

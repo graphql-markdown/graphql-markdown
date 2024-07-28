@@ -60,6 +60,7 @@ export const DEFAULT_OPTIONS: Readonly<
   } as Required<
     Pick<ConfigDocOptions & DeprecatedConfigDocOptions, "frontMatter" | "index">
   >,
+  force: false,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
   linkRoot: "/",
@@ -329,7 +330,7 @@ export const parseGroupByOption = (
 
 export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
-  cliOpts: Maybe<CliOptions>,
+  cliOpts?: Maybe<CliOptions>,
   id: Maybe<string> = "default",
 ): Promise<Options> => {
   if (!cliOpts) {
@@ -349,17 +350,17 @@ export const buildConfig = async (
     config,
   );
 
+  const force = cliOpts.force ?? config.force ?? DEFAULT_OPTIONS.force;
+
   return {
     baseURL,
     customDirective: getCustomDirectives(
       config.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(
-      cliOpts.diff ?? config.diffMethod!,
-      cliOpts.force,
-    ),
+    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod!, force),
     docOptions: getDocOptions(cliOpts, config.docOptions),
+    force,
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
     homepageLocation:

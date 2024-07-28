@@ -8,6 +8,8 @@ describe("fs", () => {
     vol.fromJSON({
       "/testFolder": null,
       "/testFolder/testFile": "just a test",
+      "/testFolder2": null,
+      "/testFolder2/testFile": "just a test",
     });
   });
 
@@ -54,7 +56,7 @@ describe("fs", () => {
         exists: false,
         desc: "created if not present",
       },
-    ])("folder is", async ({ path, exists }) => {
+    ])("folder is $desc", async ({ path, exists }) => {
       expect.assertions(2);
 
       await expect(fileExists(path)).resolves.toBe(exists);
@@ -63,37 +65,66 @@ describe("fs", () => {
 
       await expect(fileExists(path)).resolves.toBeTruthy();
     });
+
+    test("folder is always empty if forceEmpty is true", async () => {
+      expect.assertions(4);
+
+      const folder = "/testFolder2";
+      const file = `${folder}/testFile`;
+      await expect(fileExists(file)).resolves.toBeTruthy();
+
+      await ensureDir(folder, { forceEmpty: true });
+
+      await expect(fileExists(folder)).resolves.toBeTruthy(); // folder should exist
+      await expect(fileExists(file)).resolves.toBeFalsy(); // folder should be empty
+      await expect(fileExists("/testFolder/testFile")).resolves.toBeTruthy(); // other folders should be untouched
+    });
+
+    test.each([[undefined], [null], [{ forceEmpty: false }], [{}]])(
+      "folder is left unchanged if forceEmpty is %s",
+      async (options) => {
+        expect.assertions(2);
+
+        const folder = "/testFolder2";
+        const file = `${folder}/testFile`;
+        await expect(fileExists(file)).resolves.toBeTruthy();
+
+        await ensureDir(folder, options);
+
+        await expect(fileExists(file)).resolves.toBeTruthy();
+      },
+    );
   });
-});
 
-describe("saveFile()", () => {
-  test("create file and folders", async () => {
-    expect.assertions(1);
+  describe("saveFile()", () => {
+    test("create file and folders", async () => {
+      expect.assertions(1);
 
-    await saveFile("/foo/bar/test/foobar.test", "foobar file for test");
+      await saveFile("/foo/bar/test/foobar.test", "foobar file for test");
 
-    expect(vol.toJSON("/foo/bar/test/foobar.test")).toMatchInlineSnapshot(`
+      expect(vol.toJSON("/foo/bar/test/foobar.test")).toMatchInlineSnapshot(`
         {
           "/foo/bar/test/foobar.test": "foobar file for test",
         }
       `);
-  });
+    });
 
-  test("run prettify function if valid", async () => {
-    expect.assertions(1);
+    test("run prettify function if valid", async () => {
+      expect.assertions(1);
 
-    await saveFile(
-      "/foo/bar/test/prettify.test",
-      "foobar file for test",
-      async () => {
-        return Promise.resolve("prettify hello");
-      },
-    );
+      await saveFile(
+        "/foo/bar/test/prettify.test",
+        "foobar file for test",
+        async () => {
+          return Promise.resolve("prettify hello");
+        },
+      );
 
-    expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
+      expect(vol.toJSON("/foo/bar/test/prettify.test")).toMatchInlineSnapshot(`
         {
           "/foo/bar/test/prettify.test": "prettify hello",
         }
       `);
+    });
   });
 });

@@ -19,7 +19,7 @@ export interface ConfigDocOptions {
 
 export type RendererDocOptions = ConfigDocOptions & {
   deprecated?: Maybe<TypeDeprecatedOption>;
-};
+} & { force?: boolean };
 
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
@@ -64,6 +64,7 @@ export interface ConfigOptions {
   customDirective?: Maybe<CustomDirective>;
   diffMethod?: Maybe<TypeDiffMethod>;
   docOptions?: Maybe<ConfigDocOptions & DeprecatedConfigDocOptions>;
+  force?: boolean;
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
   homepage?: Maybe<string>;
   id?: Maybe<string>;
