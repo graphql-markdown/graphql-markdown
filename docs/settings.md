@@ -125,7 +125,7 @@ plugins: [
 
 ## `force`
 
-Force generating documentation in an empty folder and set [`diffMethod`](diffMethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
+Force generating documentation in an empty folder and set [`diffMethod`](#diffmethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
 
 | Setting | CLI flag      | Default     |
 | ------- | ------------- | ----------- |
