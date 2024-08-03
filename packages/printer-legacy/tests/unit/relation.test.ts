@@ -9,9 +9,8 @@ import type {
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    escapeMDX: jest.fn((s) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return s;
+    escapeMDX: jest.fn((s): string => {
+      return s as string;
     }),
     pathUrl: jest.fn(),
     slugify: jest.fn(),

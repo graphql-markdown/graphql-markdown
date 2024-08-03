@@ -21,15 +21,34 @@ export interface ConfigDocOptions {
   index?: boolean;
 }
 
-export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
+export type TypeHierarchyValueType = "api" | "entity" | "flat";
+
+export type TypeHierarchyTypeOptions = Record<string, unknown>;
+
+export type TypeHierarchyObjectType = Partial<
+  Record<TypeHierarchyValueType, TypeHierarchyTypeOptions>
+>;
+
+export type TypeHierarchyType =
+  | TypeHierarchyObjectType
+  | TypeHierarchyValueType;
 
 export type RendererDocOptions = ConfigDocOptions & {
   deprecated?: Maybe<TypeDeprecatedOption>;
-} & { force?: boolean; useApiGroup?: UseApiGroupOptionType };
+} & {
+  force?: boolean;
+  hierarchy?: Maybe<TypeHierarchyObjectType>;
+};
 
 export interface DeprecatedConfigDocOptions {
   pagination?: boolean;
   toc?: boolean;
+}
+
+export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
+
+export interface DeprecatedConfigPrintTypeOptions {
+  useApiGroup?: UseApiGroupOptionType;
 }
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
@@ -53,10 +72,10 @@ export interface ConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption | boolean;
+  hierarchy?: TypeHierarchyType;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-  useApiGroup?: UseApiGroupOptionType;
 }
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
@@ -100,7 +119,7 @@ export interface CliOptions {
   homepage?: string;
   index?: boolean;
   link?: string;
-  noApiGroup?: boolean;
+  hierarchy?: TypeHierarchyValueType;
   noCode?: boolean;
   noExample?: boolean;
   noParentType?: boolean;
@@ -115,6 +134,7 @@ export interface CliOptions {
 }
 
 export interface DeprecatedCliOptions {
+  noApiGroup?: boolean;
   noPagination?: boolean;
   noToc?: boolean;
 }

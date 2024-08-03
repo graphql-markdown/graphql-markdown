@@ -10,6 +10,12 @@ import type {
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
+export enum TypeHierarchy {
+  API = "api",
+  ENTITY = "entity",
+  FLAT = "flat",
+}
+
 export enum SectionLevels {
   NONE = "",
   LEVEL_3 = "###",
@@ -26,7 +32,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
     parentTypePrefix: true as const,
     relatedTypeSection: true as const,
     typeBadges: true as const,
-    useApiGroup: true as const,
+    hierarchy: { [TypeHierarchy.API]: {} } as const,
   };
 
 export const DEFAULT_OPTIONS: Required<

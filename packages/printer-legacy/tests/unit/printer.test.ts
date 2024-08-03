@@ -50,7 +50,7 @@ import * as ExamplePrinter from "../../src/example";
 import * as Common from "../../src/common";
 
 import { Printer } from "../../src/printer";
-import { DEFAULT_OPTIONS } from "../../src/const/options";
+import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
 
 describe("Printer", () => {
   enum TypeGuard {
@@ -177,6 +177,9 @@ describe("Printer", () => {
           "exampleSection": false,
           "frontMatter": {},
           "groups": undefined,
+          "hierarchy": {
+            "api": {},
+          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -186,7 +189,6 @@ describe("Printer", () => {
           "schema": undefined,
           "skipDocDirectives": [],
           "typeBadges": true,
-          "useApiGroup": true,
           "withAttributes": false,
         }
       `);
@@ -217,10 +219,10 @@ describe("Printer", () => {
         printTypeOptions: {
           codeSection: false,
           exampleSection: true,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
-          useApiGroup: false,
         },
         skipDocDirectives: [testDirective],
       });
@@ -235,6 +237,9 @@ describe("Printer", () => {
           "exampleSection": true,
           "frontMatter": {},
           "groups": {},
+          "hierarchy": {
+            "entity": {},
+          },
           "level": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
@@ -276,7 +281,6 @@ describe("Printer", () => {
             "@test",
           ],
           "typeBadges": false,
-          "useApiGroup": false,
           "withAttributes": false,
         }
       `);

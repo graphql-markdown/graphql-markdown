@@ -7,6 +7,8 @@ import type {
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
@@ -26,6 +28,7 @@ import {
 } from "@graphql-markdown/utils";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
+import { TypeHierarchy } from "./config";
 
 const DEPRECATED = "deprecated" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
@@ -50,6 +53,13 @@ export const getApiGroupFolder = (
     folderNames = { ...API_GROUPS, ...groups };
   }
   return isApiType(type) ? folderNames.operations : folderNames.types;
+};
+
+const isHierarchy = (
+  options: Maybe<RendererDocOptions>,
+  hierarchy: TypeHierarchyValueType,
+): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
+  return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
 export class Renderer {
@@ -119,8 +129,16 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (this.options?.useApiGroup) {
-      const typeCat = getApiGroupFolder(type, this.options.useApiGroup);
+    if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return dirPath;
+    }
+
+    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
+      ? this.options.hierarchy[TypeHierarchy.API]
+      : (!this.options?.hierarchy as boolean);
+
+    if (useApiGroup) {
+      const typeCat = getApiGroupFolder(type, useApiGroup);
       dirPath = join(dirPath, slugify(typeCat));
       await this.generateCategoryMetafile(
         typeCat,
@@ -167,14 +185,19 @@ export class Renderer {
       return undefined;
     }
 
+    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
     return Promise.all(
       Object.keys(type)
         .map(async (name) => {
-          const dirPath = await this.generateCategoryMetafileType(
-            (type as Record<string, unknown>)[name],
-            name,
-            rootTypeName,
-          );
+          let dirPath = this.outputDir;
+
+          if (!isFlat) {
+            dirPath = await this.generateCategoryMetafileType(
+              (type as Record<string, unknown>)[name],
+              name,
+              rootTypeName,
+            );
+          }
 
           return this.renderTypeEntities(
             dirPath,
@@ -195,6 +218,7 @@ export class Renderer {
   ): Promise<Maybe<Category>> {
     const PageRegex =
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx$/;
+    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx$/;
 
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
@@ -218,7 +242,11 @@ export class Renderer {
 
     const pagePath = relative(this.outputDir, filePath);
 
-    const page = PageRegex.exec(pagePath);
+    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
+
+    const page = isFlat
+      ? PageRegexFlat.exec(pagePath)
+      : PageRegex.exec(pagePath);
 
     if (!page?.groups) {
       log(
@@ -228,11 +256,14 @@ export class Renderer {
       return undefined;
     }
 
-    const slug = pathUrl.join(page.groups.category, page.groups.pageId);
+    const slug = isFlat
+      ? page.groups.pageId
+      : pathUrl.join(page.groups.category, page.groups.pageId);
+    const category = isFlat ? "schema" : startCase(page.groups.category);
 
     return {
-      category: startCase(page.groups.category),
-      slug: slug,
+      category,
+      slug,
     } as Category;
   }
 

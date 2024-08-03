@@ -7,6 +7,8 @@ import type {
   PrintLinkOptions,
   SchemaEntity,
   TypeDeprecatedOption,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
   TypeLink,
   TypeLocale,
 } from "@graphql-markdown/types";
@@ -38,6 +40,7 @@ import {
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
 import { hasPrintableDirective } from "./common";
+import { TypeHierarchy } from "./const/options";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
@@ -122,6 +125,13 @@ export const getLinkDeprecatedFolder = (
   return option === "group" && isDeprecated(type) ? DEPRECATED : "";
 };
 
+const isHierarchy = (
+  options: Maybe<PrintLinkOptions>,
+  hierarchy: TypeHierarchyValueType,
+): options is PrintLinkOptions & { hierarchy: TypeHierarchyObjectType } => {
+  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+};
+
 export const toLink = (
   type: unknown,
   name: string,
@@ -141,21 +151,34 @@ export const toLink = (
   }
 
   const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
-
-  const category = getLinkCategoryFolder(graphQLNamedType, operation);
-
-  if (!category || !graphQLNamedType) {
+  if (!graphQLNamedType) {
     return fallback;
   }
 
+  let category: Maybe<string> = "";
+  let deprecatedFolder = "";
+  let groupFolder = "";
+  let apiGroupFolder = "";
+
+  if (!isHierarchy(options, TypeHierarchy.FLAT)) {
+    category = getLinkCategoryFolder(graphQLNamedType, operation);
+
+    if (!category) {
+      return fallback;
+    }
+
+    deprecatedFolder = options.deprecated
+      ? getLinkDeprecatedFolder(type, options.deprecated)
+      : "";
+    groupFolder = options.groups
+      ? getGroup(type, options.groups, category as SchemaEntity)
+      : "";
+    apiGroupFolder = isHierarchy(options, TypeHierarchy.API)
+      ? getLinkApiGroupFolder(type)
+      : "";
+  }
+
   const text = graphQLNamedType.name || graphQLNamedType.toString();
-  const deprecatedFolder = options.deprecated
-    ? getLinkDeprecatedFolder(type, options.deprecated)
-    : "";
-  const groupFolder = options.groups
-    ? getGroup(type, options.groups, category as SchemaEntity)
-    : "";
-  const apiGroupFolder = options.useApiGroup ? getLinkApiGroupFolder(type) : "";
 
   const url = pathUrl.join(
     options.basePath,

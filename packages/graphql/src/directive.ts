@@ -14,6 +14,7 @@ import type {
   Maybe,
   SchemaMap,
   GraphQLDirective,
+  CustomDirectiveMapItem,
 } from "@graphql-markdown/types";
 
 import { isEmpty } from "@graphql-markdown/utils";
@@ -251,15 +252,15 @@ export const getConstDirectiveMap = (
   entity: unknown,
   customDirectiveMap: Maybe<CustomDirectiveMap>,
 ): Maybe<CustomDirectiveMap> => {
-  if (!customDirectiveMap || isEmpty(customDirectiveMap)) {
+  if (isEmpty(customDirectiveMap)) {
     return undefined;
   }
 
-  const directiveList = Object.values(customDirectiveMap).map(
-    (directiveMapItem) => {
-      return directiveMapItem.type;
-    },
-  );
+  const directiveList = Object.values<CustomDirectiveMapItem>(
+    customDirectiveMap,
+  ).map((directiveMapItem) => {
+    return directiveMapItem.type;
+  });
 
   const constDirectives = getDirective(entity, directiveList);
   if (constDirectives.length === 0) {

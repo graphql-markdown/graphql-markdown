@@ -1,5 +1,152 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 1`] = `
+{
+  "generated.md": "Dummy homepage for tweet.graphql",
+  "operations/_category_.yml": "label: Operations
+position: 1
+className: graphql-markdown-api-section
+link: null
+collapsible: false
+collapsed: false
+",
+  "operations/directives/_category_.yml": "label: Directives
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "operations/directives/include.mdx": "include",
+  "operations/directives/skip.mdx": "skip",
+  "operations/mutations/_category_.yml": "label: Mutations
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "operations/mutations/add-course.mdx": "add-course",
+  "operations/mutations/drop-course.mdx": "drop-course",
+  "operations/mutations/update-gpa.mdx": "update-gpa",
+  "operations/mutations/update-grade.mdx": "update-grade",
+  "operations/queries/_category_.yml": "label: Queries
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "operations/queries/all-courses.mdx": "all-courses",
+  "operations/queries/course.mdx": "course",
+  "operations/queries/gpa.mdx": "gpa",
+  "operations/queries/math-courses.mdx": "math-courses",
+  "operations/queries/science-courses.mdx": "science-courses",
+  "operations/queries/search-role.mdx": "search-role",
+  "operations/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
+  "operations/queries/weighted-gpa.mdx": "weighted-gpa",
+  "types/_category_.yml": "label: Types
+position: 1
+className: graphql-markdown-api-section
+link: null
+collapsible: false
+collapsed: false
+",
+  "types/directives/_category_.yml": "label: Directives
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "types/directives/deprecated.mdx": "deprecated",
+  "types/directives/doc.mdx": "doc",
+  "types/directives/no-doc.mdx": "no-doc",
+  "types/directives/one-of.mdx": "one-of",
+  "types/directives/public.mdx": "public",
+  "types/directives/specified-by.mdx": "specified-by",
+  "types/enums/_category_.yml": "label: Enums
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "types/enums/roles.mdx": "roles",
+  "types/interfaces/_category_.yml": "label: Interfaces
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "types/interfaces/record.mdx": "record",
+  "types/objects/_category_.yml": "label: Objects
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "types/objects/course.mdx": "course",
+  "types/objects/department-information.mdx": "department-information",
+  "types/objects/semester.mdx": "semester",
+  "types/objects/unused-type.mdx": "unused-type",
+  "types/scalars/_category_.yml": "label: Scalars
+position: 1
+link: null
+collapsible: true
+collapsed: true
+",
+  "types/scalars/boolean.mdx": "boolean",
+  "types/scalars/date.mdx": "date",
+  "types/scalars/email-address.mdx": "email-address",
+  "types/scalars/id.mdx": "id",
+  "types/scalars/int.mdx": "int",
+  "types/scalars/phone-number.mdx": "phone-number",
+  "types/scalars/string.mdx": "string",
+  "types/scalars/time.mdx": "time",
+  "types/scalars/url.mdx": "url",
+}
+`;
+
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 2`] = `{}`;
+
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using flat hierarchy 1`] = `
+{
+  "add-course.mdx": "add-course",
+  "all-courses.mdx": "all-courses",
+  "boolean.mdx": "boolean",
+  "course.mdx": "course",
+  "date.mdx": "date",
+  "department-information.mdx": "department-information",
+  "deprecated.mdx": "deprecated",
+  "doc.mdx": "doc",
+  "drop-course.mdx": "drop-course",
+  "email-address.mdx": "email-address",
+  "generated.md": "Dummy homepage for tweet.graphql",
+  "gpa.mdx": "gpa",
+  "id.mdx": "id",
+  "include.mdx": "include",
+  "int.mdx": "int",
+  "math-courses.mdx": "math-courses",
+  "no-doc.mdx": "no-doc",
+  "one-of.mdx": "one-of",
+  "phone-number.mdx": "phone-number",
+  "public.mdx": "public",
+  "record.mdx": "record",
+  "roles.mdx": "roles",
+  "science-courses.mdx": "science-courses",
+  "search-role.mdx": "search-role",
+  "semester.mdx": "semester",
+  "skip.mdx": "skip",
+  "specified-by.mdx": "specified-by",
+  "string.mdx": "string",
+  "time.mdx": "time",
+  "un-weighted-gpa.mdx": "un-weighted-gpa",
+  "unused-type.mdx": "unused-type",
+  "update-gpa.mdx": "update-gpa",
+  "update-grade.mdx": "update-grade",
+  "url.mdx": "url",
+  "weighted-gpa.mdx": "weighted-gpa",
+}
+`;
+
+exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using flat hierarchy 2`] = `{}`;
+
 exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
 {
   "course/_category_.yml": "label: Course

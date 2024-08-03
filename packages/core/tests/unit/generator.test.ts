@@ -23,7 +23,7 @@ jest.mock("@graphql-markdown/graphql", () => {
   };
 });
 
-import { DiffMethod } from "../../src/config";
+import { DiffMethod, TypeHierarchy } from "../../src/config";
 import * as CoreDiff from "../../src/diff";
 jest.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
@@ -63,7 +63,7 @@ describe("generator", () => {
         parentTypePrefix: true,
         relatedTypeSection: true,
         typeBadges: true,
-        useApiGroup: true,
+        hierarchy: TypeHierarchy.API,
       },
       outputDir: "output dir",
       schemaLocation: "schema location",
@@ -143,7 +143,7 @@ describe("generator", () => {
         {
           ...options.docOptions,
           deprecated: options.printTypeOptions!.deprecated,
-          useApiGroup: options.printTypeOptions!.useApiGroup,
+          hierarchy: options.printTypeOptions!.hierarchy,
         },
       );
     });

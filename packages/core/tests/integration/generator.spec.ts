@@ -25,6 +25,7 @@ import {
   DEFAULT_OPTIONS,
   DeprecatedOption,
   DiffMethod,
+  TypeHierarchy,
 } from "../../src/config";
 
 describe("renderer", () => {
@@ -72,7 +73,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
         },
         schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         skipDocDirective: [],
@@ -108,7 +109,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
         } as Required<ConfigPrintTypeOptions>,
         schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         skipDocDirective: [],
@@ -153,7 +154,79 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp",
+      };
+
+      await generateDocFromSchema(config);
+
+      expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
+      expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
+    });
+
+    test("Markdown document structure from GraphQL schema is correct when using api hierarchy", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {},
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: { [TypeHierarchy.API]: {} },
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp",
+      };
+
+      await generateDocFromSchema(config);
+
+      expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
+      expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
+    });
+
+    test("Markdown document structure from GraphQL schema is correct when using flat hierarchy", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {},
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
         },
         skipDocDirective: [],
         tmpDir: "/temp",

@@ -9,6 +9,8 @@ import type {
   PackageName,
   TypeDeprecatedOption,
   TypeDiffMethod,
+  TypeHierarchyType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 import { join } from "node:path";
@@ -22,9 +24,12 @@ import {
   getDocOptions,
   getOnlyDocDirectives,
   getSkipDocDirectives,
+  getTypeHierarchyOption,
   getVisibilityDirectives,
   parseDeprecatedDocOptions,
+  parseDeprecatedPrintTypeOptions,
   parseGroupByOption,
+  TypeHierarchy,
 } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
@@ -88,7 +93,9 @@ describe("config", () => {
       expect(
         getSkipDocDirectives(
           options.cliOpt as CliOptions,
-          options.configFileOpts,
+          options.configFileOpts as Maybe<
+            Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
+          >,
         ),
       ).toStrictEqual(["deprecated"]);
     });
@@ -235,10 +242,10 @@ describe("config", () => {
           codeSection: false,
           deprecated: "group",
           exampleSection: true,
+          hierarchy: TypeHierarchy.ENTITY,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
-          useApiGroup: false,
         },
         skipDocDirective: ["@noDoc" as DirectiveName],
         customDirective: {
@@ -271,7 +278,10 @@ describe("config", () => {
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         prettify: configFileOpts.pretty,
         printer: DEFAULT_OPTIONS.printer,
-        printTypeOptions: configFileOpts.printTypeOptions,
+        printTypeOptions: {
+          ...configFileOpts.printTypeOptions,
+          hierarchy: { entity: {} },
+        },
         schemaLocation: configFileOpts.schema,
         skipDocDirective: ["noDoc"],
         tmpDir: configFileOpts.tmpDir,
@@ -303,6 +313,7 @@ describe("config", () => {
         },
         printTypeOptions: {
           exampleSection: true,
+          hierarchy: TypeHierarchy.ENTITY,
         },
       };
 
@@ -352,6 +363,7 @@ describe("config", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           codeSection: false,
           deprecated: "group",
+          hierarchy: { entity: {} },
           exampleSection: false,
         },
         printer: DEFAULT_OPTIONS.printer,
@@ -641,6 +653,89 @@ describe("config", () => {
     });
   });
 
+  describe("parseDeprecatedPrintTypeOptions", () => {
+    test("returns empty object if no deprecated option is used", () => {
+      expect.hasAssertions();
+
+      const cliOpt = {},
+        configOptions = undefined;
+
+      const spyConsole = jest.spyOn(global.console, "warn");
+
+      expect(
+        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
+      ).toStrictEqual({});
+      expect(spyConsole).not.toHaveBeenCalled();
+    });
+
+    test("returns hierarchy API if useApiGroup is set", () => {
+      expect.hasAssertions();
+
+      const spyConsole = jest
+        .spyOn(global.console, "warn")
+        .mockImplementation(() => {});
+
+      const cliOpt = {},
+        configOptions = { useApiGroup: true };
+
+      expect(
+        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
+      ).toStrictEqual({ hierarchy: TypeHierarchy.API });
+      expect(spyConsole).toHaveBeenCalledWith(
+        "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
+      );
+    });
+
+    test.each([
+      {
+        cliOpt: {},
+        configOptions: { useApiGroup: false },
+        warnMessage:
+          "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
+      },
+      {
+        cliOpt: { noApiGroup: true },
+        configOptions: {},
+        warnMessage:
+          "Type option `noApiGroup` is deprecated. Use `hierarchy: 'entity'` instead.",
+      },
+    ])(
+      "returns hierarchy ENTITY if --noApiGroup is set",
+      ({ cliOpt, configOptions, warnMessage }) => {
+        expect.hasAssertions();
+
+        const spyConsole = jest
+          .spyOn(global.console, "warn")
+          .mockImplementation(() => {});
+
+        expect(
+          parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
+        ).toStrictEqual({ hierarchy: TypeHierarchy.ENTITY });
+        expect(spyConsole).toHaveBeenCalledWith(warnMessage);
+      },
+    );
+
+    test("returns hierarchy API object if useApiGroup is customized", () => {
+      expect.hasAssertions();
+
+      const cliOpt = {},
+        configOptions = { useApiGroup: { operations: "api" } };
+
+      const spyConsole = jest
+        .spyOn(global.console, "warn")
+        .mockImplementation(() => {});
+
+      expect(
+        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
+      ).toStrictEqual({
+        hierarchy: { [TypeHierarchy.API]: { operations: "api" } },
+      });
+      expect(spyConsole).toHaveBeenCalledWith(
+        "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
+      );
+    });
+  });
+
   describe("parseDeprecatedDocOptions", () => {
     test("returns empty object if no deprecated option is used", () => {
       expect.hasAssertions();
@@ -648,9 +743,12 @@ describe("config", () => {
       const cliOpt = {},
         configOptions = undefined;
 
+      const spyConsole = jest.spyOn(global.console, "warn");
+
       expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
         {},
       );
+      expect(spyConsole).not.toHaveBeenCalled();
     });
 
     test.each([
@@ -705,6 +803,81 @@ describe("config", () => {
         expect(spyConsole).toHaveBeenCalledWith(
           "Doc option `toc` is deprecated. Use `frontMatter: { hide_table_of_contents: true | false }` instead.",
         );
+      },
+    );
+  });
+
+  describe("getTypeHierarchyOption()", () => {
+    test("returns default if not set", () => {
+      expect.assertions(1);
+
+      const hierarchy = getTypeHierarchyOption();
+
+      expect(hierarchy).toStrictEqual(
+        DEFAULT_OPTIONS.printTypeOptions.hierarchy,
+      );
+    });
+
+    test("throws an error if cli and config are different", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        return getTypeHierarchyOption(TypeHierarchy.ENTITY, TypeHierarchy.FLAT);
+      }).toThrow(
+        `Hierarchy option mismatch in CLI flag '${TypeHierarchy.ENTITY}' and config '${TypeHierarchy.FLAT}'`,
+      );
+    });
+
+    test("returns advanced config if set", () => {
+      expect.assertions(1);
+
+      const option = {
+        [TypeHierarchy.API]: { operations: "api" },
+      };
+      const hierarchy = getTypeHierarchyOption(undefined, option);
+
+      expect(hierarchy).toStrictEqual(option);
+    });
+
+    test.each([
+      { config: TypeHierarchy.ENTITY, cli: undefined },
+      { config: TypeHierarchy.API, cli: undefined },
+      { config: TypeHierarchy.FLAT, cli: undefined },
+    ])(
+      "returns config hierarchy if set",
+      ({
+        config,
+        cli,
+      }: {
+        config: Maybe<TypeHierarchyType>;
+        cli: Maybe<TypeHierarchyValueType>;
+      }) => {
+        expect.assertions(1);
+
+        const hierarchy = getTypeHierarchyOption(cli, config);
+
+        expect(hierarchy).toStrictEqual({ [config as string]: {} });
+      },
+    );
+
+    test.each([
+      { cli: TypeHierarchy.ENTITY, config: undefined },
+      { cli: TypeHierarchy.API, config: undefined },
+      { cli: TypeHierarchy.FLAT, config: undefined },
+    ])(
+      "returns cli hierarchy if set",
+      ({
+        config,
+        cli,
+      }: {
+        config: Maybe<TypeHierarchyType>;
+        cli: Maybe<TypeHierarchyValueType>;
+      }) => {
+        expect.assertions(1);
+
+        const hierarchy = getTypeHierarchyOption(cli, config);
+
+        expect(hierarchy).toStrictEqual({ [cli as string]: {} });
       },
     );
   });

@@ -1,9 +1,8 @@
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-jest.mock("graphql/execution", () => {
+jest.mock("graphql/execution", (): unknown => {
   const graphql = jest.requireActual("graphql/execution");
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...graphql,

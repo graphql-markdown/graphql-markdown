@@ -12,8 +12,7 @@ import type {
 
 jest.mock("node:fs/promises");
 
-jest.mock("node:path", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("node:path", (): unknown => {
   return {
     __esModule: true,
     ...jest.requireActual("node:path"),
@@ -24,8 +23,7 @@ import * as path from "node:path";
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-jest.mock("@graphql-markdown/utils", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
     ...jest.requireActual("@graphql-markdown/utils"),
@@ -38,8 +36,7 @@ jest.mock("@graphql-markdown/utils", () => {
 });
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/graphql", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     __esModule: true,
     ...jest.requireActual("@graphql-markdown/graphql"),
@@ -50,12 +47,13 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 import type { Renderer } from "../../src/renderer";
 import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
-import { DEFAULT_OPTIONS } from "../../src/config";
+import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/config";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
   deprecated: DEFAULT_OPTIONS.printTypeOptions!
     .deprecated! as TypeDeprecatedOption,
+  hierarchy: DEFAULT_OPTIONS.printTypeOptions!.hierarchy!,
 };
 
 describe("renderer", () => {
@@ -70,11 +68,7 @@ describe("renderer", () => {
         baseURL,
         undefined,
         DEFAULT_OPTIONS.pretty!,
-        {
-          ...DEFAULT_OPTIONS.docOptions,
-          deprecated: DEFAULT_OPTIONS.printTypeOptions!
-            .deprecated! as TypeDeprecatedOption,
-        },
+        DEFAULT_RENDERER_OPTIONS,
       );
 
       // silent console
@@ -87,7 +81,7 @@ describe("renderer", () => {
     });
 
     describe("renderTypeEntities()", () => {
-      test("creates entity page into output folder", async () => {
+      test("creates entity page structure into output folder", async () => {
         expect.assertions(2);
 
         jest
@@ -103,6 +97,34 @@ describe("renderer", () => {
         );
 
         expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("creates entity page flat structure into output if hierarchy is flat", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+
+        const output = "/output";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "FooBar",
+          "FooBar",
+        );
+
+        expect(meta).toEqual({ category: "schema", slug: "foo-bar" });
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
@@ -207,20 +229,20 @@ describe("renderer", () => {
             name: "bar",
             astNode: {
               kind: Kind.SCALAR_TYPE_DEFINITION,
-              name: { kind: Kind.NAME, value: "foo" },
+              name: { kind: Kind.NAME, value: "bar" },
             },
           }),
         });
 
         expect(spy).toHaveBeenNthCalledWith(
           1,
-          "/output/objects/foo.mdx",
+          "/output/types/objects/foo.mdx",
           "content",
           undefined,
         );
         expect(spy).toHaveBeenNthCalledWith(
           2,
-          "/output/objects/bar.mdx",
+          "/output/types/objects/bar.mdx",
           "content",
           undefined,
         );
@@ -360,9 +382,13 @@ describe("renderer", () => {
 
     describe("generateCategoryMetafileType()", () => {
       test("generate type _category_.yml file", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
+        });
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -370,6 +396,7 @@ describe("renderer", () => {
           "objects",
         );
 
+        expect(spy).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledWith("objects", "/output/objects");
         expect(dirPath).toBe("/output/objects");
       });
@@ -382,6 +409,9 @@ describe("renderer", () => {
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
+        });
+        jest.replaceProperty(rendererInstance, "options", {
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
@@ -402,9 +432,9 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "group",
-          useApiGroup: false,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
@@ -431,9 +461,9 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "group",
-          useApiGroup: false,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
@@ -454,9 +484,9 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "default",
-          useApiGroup: false,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
         jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
@@ -477,9 +507,9 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "group",
-          useApiGroup: false,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
@@ -499,13 +529,13 @@ describe("renderer", () => {
       });
 
       test("generate api _category_.yml file", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "default",
-          useApiGroup: true,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.API]: {} },
         });
 
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
@@ -516,6 +546,7 @@ describe("renderer", () => {
           "queries",
         );
 
+        expect(spy).toHaveBeenCalledTimes(2);
         expect(spy).toHaveBeenCalledWith(
           "queries",
           `/output/${API_GROUPS.operations}/queries`,
@@ -528,9 +559,9 @@ describe("renderer", () => {
 
         const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
         jest.replaceProperty(rendererInstance, "options", {
-          frontMatter: undefined,
           deprecated: "default",
-          useApiGroup: true,
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.API]: {} },
         });
 
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
@@ -546,6 +577,28 @@ describe("renderer", () => {
           `/output/${API_GROUPS.types}/objects`,
         );
         expect(dirPath).toBe(`/output/${API_GROUPS.types}/objects`);
+      });
+
+      test("does not generate _category_.yml file if hierarchy is flat", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "objects",
+        );
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(dirPath).toBe(`/output`);
       });
     });
   });

@@ -53,7 +53,10 @@ export default function pluginGraphQLDocGenerator(
           "-h, --homepage <homepage>",
           "File location for doc landing page",
         )
-        .option("--noApiGroup", "Disable API grouping for types")
+        .option(
+          "--hierarchy <hierarchy>",
+          "Schema entity hierarchy: `api`, `entity`, `flat`",
+        )
         .option("--noCode", "Disable code section for types")
         .option("--noExample", "Disable example section for types")
         .option("--noParentType", "Disable parent type name as field prefix")
@@ -83,6 +86,7 @@ export default function pluginGraphQLDocGenerator(
           "--noPagination",
           "Disable page navigation buttons [DEPRECATED]",
         )
+        .option("--noApiGroup", "Disable API grouping for types [DEPRECATED]")
         .action(async (cliOptions: CliOptions) => {
           const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
