@@ -18,8 +18,7 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import * as DocusaurusUtils from "@docusaurus/utils";
-jest.mock("@docusaurus/utils", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("@docusaurus/utils", (): unknown => {
   return {
     __esModule: true,
     DOCUSAURUS_VERSION: "1.0.0",
@@ -28,8 +27,7 @@ jest.mock("@docusaurus/utils", () => {
 const mockDocusaurusUtils = jest.mocked(DocusaurusUtils, { shallow: true });
 
 import * as GraphQL from "@graphql-markdown/graphql";
-jest.mock("@graphql-markdown/graphql", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
     isDeprecated: jest.fn(),

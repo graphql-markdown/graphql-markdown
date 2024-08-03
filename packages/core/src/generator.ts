@@ -5,6 +5,7 @@ import type {
   GraphQLDirective,
   Maybe,
   SchemaEntity,
+  TypeHierarchyObjectType,
 } from "@graphql-markdown/types";
 
 import { Logger, log } from "@graphql-markdown/logger";
@@ -121,7 +122,7 @@ export const generateDocFromSchema = async ({
       ...docOptions,
       deprecated: printTypeOptions?.deprecated,
       force,
-      useApiGroup: printTypeOptions?.useApiGroup,
+      hierarchy: printTypeOptions?.hierarchy as TypeHierarchyObjectType,
     },
   );
 

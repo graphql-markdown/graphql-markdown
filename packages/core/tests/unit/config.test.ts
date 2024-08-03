@@ -25,6 +25,7 @@ import {
   getVisibilityDirectives,
   parseDeprecatedDocOptions,
   parseGroupByOption,
+  TypeHierarchy,
 } from "../../src/config";
 
 jest.mock("@graphql-markdown/utils");
@@ -88,7 +89,9 @@ describe("config", () => {
       expect(
         getSkipDocDirectives(
           options.cliOpt as CliOptions,
-          options.configFileOpts,
+          options.configFileOpts as Maybe<
+            Pick<ConfigOptions, "printTypeOptions" | "skipDocDirective">
+          >,
         ),
       ).toStrictEqual(["deprecated"]);
     });
@@ -235,10 +238,10 @@ describe("config", () => {
           codeSection: false,
           deprecated: "group",
           exampleSection: true,
+          hierarchy: TypeHierarchy.ENTITY,
           parentTypePrefix: false,
           relatedTypeSection: false,
           typeBadges: false,
-          useApiGroup: false,
         },
         skipDocDirective: ["@noDoc" as DirectiveName],
         customDirective: {
@@ -271,7 +274,10 @@ describe("config", () => {
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         prettify: configFileOpts.pretty,
         printer: DEFAULT_OPTIONS.printer,
-        printTypeOptions: configFileOpts.printTypeOptions,
+        printTypeOptions: {
+          ...configFileOpts.printTypeOptions,
+          hierarchy: { entity: {} },
+        },
         schemaLocation: configFileOpts.schema,
         skipDocDirective: ["noDoc"],
         tmpDir: configFileOpts.tmpDir,
@@ -303,6 +309,7 @@ describe("config", () => {
         },
         printTypeOptions: {
           exampleSection: true,
+          hierarchy: TypeHierarchy.ENTITY,
         },
       };
 
@@ -352,6 +359,7 @@ describe("config", () => {
           ...DEFAULT_OPTIONS.printTypeOptions,
           codeSection: false,
           deprecated: "group",
+          hierarchy: { entity: {} },
           exampleSection: false,
         },
         printer: DEFAULT_OPTIONS.printer,

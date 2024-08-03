@@ -38,6 +38,7 @@ import {
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
 import { hasPrintableDirective } from "./common";
+import { TypeHierarchy } from "./const/options";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
@@ -141,21 +142,38 @@ export const toLink = (
   }
 
   const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
-
-  const category = getLinkCategoryFolder(graphQLNamedType, operation);
-
-  if (!category || !graphQLNamedType) {
+  if (!graphQLNamedType) {
     return fallback;
   }
 
+  const isFlatHierarchy = (options.hierarchy?.[TypeHierarchy.FLAT] &&
+    true) as boolean;
+
+  let category: Maybe<string> = "";
+  let deprecatedFolder = "";
+  let groupFolder = "";
+  let apiGroupFolder = "";
+
+  if (!isFlatHierarchy) {
+    category = getLinkCategoryFolder(graphQLNamedType, operation);
+
+    if (!category) {
+      return fallback;
+    }
+
+    deprecatedFolder = options.deprecated
+      ? getLinkDeprecatedFolder(type, options.deprecated)
+      : "";
+    groupFolder = options.groups
+      ? getGroup(type, options.groups, category as SchemaEntity)
+      : "";
+    apiGroupFolder =
+      options.hierarchy && TypeHierarchy.API in options.hierarchy
+        ? getLinkApiGroupFolder(type)
+        : "";
+  }
+
   const text = graphQLNamedType.name || graphQLNamedType.toString();
-  const deprecatedFolder = options.deprecated
-    ? getLinkDeprecatedFolder(type, options.deprecated)
-    : "";
-  const groupFolder = options.groups
-    ? getGroup(type, options.groups, category as SchemaEntity)
-    : "";
-  const apiGroupFolder = options.useApiGroup ? getLinkApiGroupFolder(type) : "";
 
   const url = pathUrl.join(
     options.basePath,

@@ -28,19 +28,19 @@ import { isEmpty } from "@graphql-markdown/utils";
  * ```
  *
  */
-export function getObjPath(
+export const getObjPath = (
   path: Maybe<string>,
   obj: unknown,
   fallback: unknown = "",
-): unknown {
+): unknown => {
   if (isEmpty(obj) || typeof path !== "string") {
-    return fallback;
+    return String(fallback);
   }
 
-  return path.split(".").reduce((res: any, key: string) => {
-    return res[key] ?? fallback;
-  }, obj); // eslint-disable-line @typescript-eslint/no-explicit-any
-}
+  return path.split(".").reduce((res: unknown, key: string): unknown => {
+    return (res as Record<string, unknown>)[key] ?? String(fallback);
+  }, obj);
+};
 
 /**
  * Interpolate a template literal-like string.
@@ -61,14 +61,14 @@ export function getObjPath(
  *
  */
 
-export function interpolate(
+export const interpolate = (
   template: string,
   variables: Maybe<Record<string, unknown> & { description?: string }>,
   fallback?: string,
-): string {
+): string => {
   const regex = /\${[^{]+}/g;
   return template.replace(regex, (match) => {
     const objPath = match.slice(2, -1).trim();
     return getObjPath(objPath, variables, fallback) as string;
   });
-}
+};

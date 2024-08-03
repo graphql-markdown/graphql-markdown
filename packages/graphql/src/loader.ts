@@ -17,6 +17,8 @@ import type {
   PackageOptionsConfig,
 } from "@graphql-markdown/types";
 
+export { GraphQLSchema } from "graphql";
+
 /**
  * Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
  * The wrapper will load the schema using the loader declared in `options`.

@@ -9,7 +9,8 @@ import type {
   GraphQLOperationType,
   DeprecatedType,
 } from "@graphql-markdown/types";
-import { isDirectiveType } from "@graphql-markdown/graphql";
+
+import { isDirective } from "graphql/type/directives";
 
 import { executableDirectiveLocation } from "./directive";
 
@@ -54,7 +55,10 @@ export const isGraphQLFieldType = (
  * @param type - the GraphQL type `T`.
  *
  */
-export const instanceOf = <T>(obj: unknown, type: new () => T): obj is T => {
+export const instanceOf = <T>(
+  obj: unknown,
+  type: new () => T,
+): obj is new () => T => {
   try {
     const expect = type.name;
     return typeof obj !== "object" || obj === null
@@ -101,7 +105,7 @@ export const isApiType = (type: unknown): boolean => {
   if (isOperation(type)) {
     return true;
   }
-  return isDirectiveType(type) && executableDirectiveLocation(type);
+  return isDirective(type) && executableDirectiveLocation(type);
 };
 
 /**

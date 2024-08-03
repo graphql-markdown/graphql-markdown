@@ -25,6 +25,7 @@ import {
   DEFAULT_OPTIONS,
   DeprecatedOption,
   DiffMethod,
+  TypeHierarchy,
 } from "../../src/config";
 
 describe("renderer", () => {
@@ -72,7 +73,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
         },
         schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         skipDocDirective: [],
@@ -108,7 +109,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
         } as Required<ConfigPrintTypeOptions>,
         schemaLocation: join(__dirname, "../__data__/tweet.graphql"),
         skipDocDirective: [],
@@ -153,7 +154,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          useApiGroup: false,
+          hierarchy: TypeHierarchy.ENTITY,
         },
         skipDocDirective: [],
         tmpDir: "/temp",

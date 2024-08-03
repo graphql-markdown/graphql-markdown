@@ -8,7 +8,7 @@ import type {
   SchemaEntitiesGroupMap,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
-  UseApiGroupOptionType,
+  TypeHierarchyObjectType,
 } from ".";
 
 export type RootTypeName =
@@ -30,13 +30,13 @@ export type RootTypeLocale = {
 
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
-  exampleSection?: TypeExampleSectionOption | boolean;
   deprecated?: TypeDeprecatedOption;
+  exampleSection?: TypeExampleSectionOption | boolean;
+  hierarchy?: TypeHierarchyObjectType;
   metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-  useApiGroup?: UseApiGroupOptionType;
 }
 
 export interface CollapsibleOption {
@@ -53,6 +53,7 @@ export interface PrintTypeOptions {
   exampleSection?: Maybe<TypeExampleSectionOption | boolean>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  hierarchy?: Maybe<TypeHierarchyObjectType>;
   level?: Maybe<SectionLevelValue>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
@@ -62,7 +63,6 @@ export interface PrintTypeOptions {
   schema?: Maybe<GraphQLSchema>;
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
-  useApiGroup?: UseApiGroupOptionType;
   withAttributes?: boolean;
 }
 
@@ -88,11 +88,11 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
     | "basePath"
     | "deprecated"
     | "groups"
+    | "hierarchy"
     | "onlyDocDirectives"
     | "parentType"
     | "parentTypePrefix"
     | "skipDocDirectives"
-    | "useApiGroup"
     | "withAttributes"
   >;
 

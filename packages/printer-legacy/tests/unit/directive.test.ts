@@ -21,8 +21,7 @@ jest.mock("@graphql-markdown/utils", () => {
 });
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/graphql", () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
     getConstDirectiveMap: jest.fn(),

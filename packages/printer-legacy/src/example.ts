@@ -12,7 +12,9 @@ import {
   getNamedType,
   getNullableType,
   getTypeDirectiveArgValue,
+  GraphQLSchema,
   hasDirective,
+  instanceOf,
   IntrospectionError,
   isListType,
   isNode,
@@ -21,8 +23,6 @@ import {
   parse,
   print,
 } from "@graphql-markdown/graphql";
-
-import { isEmpty } from "@graphql-markdown/utils";
 
 import { hasPrintableDirective } from "./common";
 
@@ -46,10 +46,9 @@ export const getDirectiveExampleOption = (
       parserFunc = options.exampleSection.parser;
     }
   }
-  const directive =
-    options.schema && !isEmpty(options.schema)
-      ? options.schema.getDirective(directiveName)
-      : undefined;
+  const directive = instanceOf(options.schema, GraphQLSchema as never)
+    ? options.schema.getDirective(directiveName)
+    : undefined;
 
   if (!directive) {
     return undefined;

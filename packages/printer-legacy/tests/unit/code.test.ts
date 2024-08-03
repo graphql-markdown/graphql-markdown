@@ -5,20 +5,17 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-jest.mock("@graphql-markdown/graphql", () => {
+jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
-    getFormattedDefaultValue: jest.fn((type) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    getFormattedDefaultValue: jest.fn((type): unknown => {
       return type?.defaultValue;
     }),
     getTypeName: jest.fn((t): string => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return t.name ?? t.toString();
+      return (t.name ?? t.toString()) as string;
     }),
     hasDirective: jest.fn(),
-    isDeprecated: jest.fn((t) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return t.isDeprecated || false;
+    isDeprecated: jest.fn((t): boolean => {
+      return (t.isDeprecated as boolean) || false;
     }),
   };
 });

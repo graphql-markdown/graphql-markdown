@@ -9,6 +9,7 @@ import type {
   CustomDirective,
   DeprecatedCliOptions,
   DeprecatedConfigDocOptions,
+  DeprecatedConfigPrintTypeOptions,
   DirectiveName,
   FrontMatterOptions,
   GroupByDirectiveOptions,
@@ -18,11 +19,20 @@ import type {
   Pointer,
   TypeDeprecatedOption,
   TypeDiffMethod,
+  TypeHierarchyObjectType,
+  TypeHierarchyType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 import { loadConfiguration } from "./graphql-config";
 
 import { log } from "@graphql-markdown/logger";
+
+export enum TypeHierarchy {
+  API = "api",
+  ENTITY = "entity",
+  FLAT = "flat",
+}
 
 export enum DiffMethod {
   NONE = "NONE",
@@ -47,9 +57,16 @@ export const ASSET_HOMEPAGE_LOCATION = join(
 export const DEFAULT_OPTIONS: Readonly<
   Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
     Required<
-      Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">
+      Omit<
+        ConfigOptions,
+        "customDirective" | "groupByDirective" | "loaders" | "printTypeOptions"
+      >
     >
-> = {
+> & {
+  printTypeOptions: Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
+    hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
+  };
+} = {
   id: "default" as const,
   baseURL: "schema" as const,
   customDirective: undefined,
@@ -75,8 +92,12 @@ export const DEFAULT_OPTIONS: Readonly<
     parentTypePrefix: true as const,
     relatedTypeSection: true as const,
     typeBadges: true as const,
-    useApiGroup: true as const,
-  } as Required<ConfigPrintTypeOptions>,
+    hierarchy: { [TypeHierarchy.API]: {} } as Required<
+      Pick<TypeHierarchyObjectType, TypeHierarchy.API>
+    >,
+  } as Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
+    hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
+  },
   rootPath: "./docs" as const,
   schema: "./schema.graphql" as Pointer,
   tmpDir: join(tmpdir(), PACKAGE_NAME),
@@ -268,34 +289,100 @@ export const getDocOptions = (
   } as Required<ConfigDocOptions>;
 };
 
+export const getTypeHierarchyOption = (
+  cliOption?: TypeHierarchyValueType,
+  configOption?: TypeHierarchyType,
+): TypeHierarchyObjectType => {
+  const parseValue = (
+    config?: TypeHierarchyType,
+  ): Maybe<TypeHierarchyObjectType> => {
+    if (typeof config === "string") {
+      switch (true) {
+        case new RegExp(`^${TypeHierarchy.ENTITY}$`, "i").test(config):
+          return { [TypeHierarchy.ENTITY]: {} };
+        case new RegExp(`^${TypeHierarchy.FLAT}$`, "i").test(config):
+          return { [TypeHierarchy.FLAT]: {} };
+        case new RegExp(`^${TypeHierarchy.API}$`, "i").test(config):
+        default:
+          return { [TypeHierarchy.API]: {} };
+      }
+    }
+    return config;
+  };
+
+  return (
+    parseValue(configOption) ??
+    parseValue(cliOption) ??
+    DEFAULT_OPTIONS.printTypeOptions.hierarchy
+  );
+};
+
+export const parseDeprecatedPrintTypeOptions = (
+  cliOpts: Maybe<DeprecatedCliOptions>,
+  configOptions: Maybe<DeprecatedConfigPrintTypeOptions>,
+): Partial<{ hierarchy: TypeHierarchyType }> => {
+  // deprecated, replaced by hierarchy
+  let option: Maybe<{ hierarchy: TypeHierarchyType }>;
+
+  if (typeof cliOpts?.noApiGroup !== "undefined" && cliOpts.noApiGroup) {
+    option = { hierarchy: TypeHierarchy.ENTITY };
+    log(
+      "Type option `noApiGroup` is deprecated. Use `hierarchy: 'entity'` instead.",
+      "warn",
+    );
+  } else if (
+    typeof configOptions?.useApiGroup !== "undefined" &&
+    configOptions.useApiGroup
+  ) {
+    if (typeof configOptions.useApiGroup === "object") {
+      option = {
+        hierarchy: { [TypeHierarchy.ENTITY]: { ...configOptions.useApiGroup } },
+      };
+    } else {
+      option = { hierarchy: TypeHierarchy.API };
+    }
+    log(
+      "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
+      "warn",
+    );
+  }
+
+  return { ...option };
+};
+
 export const getPrintTypeOptions = (
-  cliOpts: Maybe<CliOptions>,
-  configOptions: Maybe<ConfigPrintTypeOptions>,
+  cliOpts: Maybe<CliOptions & DeprecatedCliOptions>,
+  configOptions: Maybe<
+    ConfigPrintTypeOptions & DeprecatedConfigPrintTypeOptions
+  >,
 ): Required<ConfigPrintTypeOptions> => {
+  const deprecated = parseDeprecatedPrintTypeOptions(cliOpts, configOptions);
   return {
+    ...deprecated,
     codeSection:
       (!cliOpts?.noCode && configOptions?.codeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions!.codeSection!,
+      DEFAULT_OPTIONS.printTypeOptions.codeSection,
     deprecated: (
       (cliOpts?.deprecated ??
         configOptions?.deprecated ??
-        DEFAULT_OPTIONS.printTypeOptions!.deprecated!) as string
+        DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
     exampleSection:
       (!cliOpts?.noExample && configOptions?.exampleSection) ??
-      DEFAULT_OPTIONS.printTypeOptions!.exampleSection!,
+      DEFAULT_OPTIONS.printTypeOptions.exampleSection,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
-      DEFAULT_OPTIONS.printTypeOptions!.parentTypePrefix!,
+      DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix,
     relatedTypeSection:
       (!cliOpts?.noRelatedType && configOptions?.relatedTypeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions!.relatedTypeSection!,
+      DEFAULT_OPTIONS.printTypeOptions.relatedTypeSection,
     typeBadges:
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
-      DEFAULT_OPTIONS.printTypeOptions!.typeBadges!,
-    useApiGroup:
-      (!cliOpts?.noApiGroup && configOptions?.useApiGroup) ??
-      DEFAULT_OPTIONS.printTypeOptions!.useApiGroup!,
+      DEFAULT_OPTIONS.printTypeOptions.typeBadges,
+    hierarchy: getTypeHierarchyOption(
+      cliOpts?.hierarchy,
+      configOptions?.hierarchy,
+    ),
   } as Required<ConfigPrintTypeOptions>;
 };
 

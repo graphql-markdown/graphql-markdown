@@ -4,6 +4,8 @@ import type {
   PrintTypeOptions,
   MDXString,
   Maybe,
+  CustomDirectiveMap,
+  CustomDirectiveMapItem,
 } from "@graphql-markdown/types";
 
 import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
@@ -27,11 +29,11 @@ export const printCustomDirectives = (
     options?.customDirectives,
   );
 
-  if (!constDirectiveMap || isEmpty(constDirectiveMap)) {
+  if (isEmpty<CustomDirectiveMap>(constDirectiveMap)) {
     return "";
   }
 
-  const content = Object.values(constDirectiveMap)
+  const content = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
     .map((constDirectiveOption) => {
       return getCustomDirectiveResolver(
         "descriptor",

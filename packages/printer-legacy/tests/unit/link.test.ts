@@ -46,7 +46,7 @@ jest.mock("@graphql-markdown/graphql", () => {
 });
 const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
 
-import { DEFAULT_OPTIONS } from "../../src/const/options";
+import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
 
 import * as Group from "../../src/group";
 jest.mock("../../src/group", () => {
@@ -340,8 +340,8 @@ describe("link", () => {
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
-        useApiGroup: false,
         basePath,
+        hierarchy: { [TypeHierarchy.ENTITY]: {} },
       });
 
       expect(link).toMatchInlineSnapshot(`

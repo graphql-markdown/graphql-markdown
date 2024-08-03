@@ -26,6 +26,7 @@ import {
 } from "@graphql-markdown/utils";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
+import { TypeHierarchy } from "./config";
 
 const DEPRECATED = "deprecated" as const;
 const CATEGORY_YAML = "_category_.yml" as const;
@@ -119,8 +120,12 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    if (this.options?.useApiGroup) {
-      const typeCat = getApiGroupFolder(type, this.options.useApiGroup);
+    const useApiGroup = this.options?.hierarchy?.[TypeHierarchy.API]
+      ? this.options.hierarchy[TypeHierarchy.API]
+      : (!this.options?.hierarchy as boolean);
+
+    if (useApiGroup) {
+      const typeCat = getApiGroupFolder(type, useApiGroup);
       dirPath = join(dirPath, slugify(typeCat));
       await this.generateCategoryMetafile(
         typeCat,
@@ -167,14 +172,21 @@ export class Renderer {
       return undefined;
     }
 
+    const isFlat = (this.options?.hierarchy?.[TypeHierarchy.FLAT] &&
+      true) as boolean;
+
     return Promise.all(
       Object.keys(type)
         .map(async (name) => {
-          const dirPath = await this.generateCategoryMetafileType(
-            (type as Record<string, unknown>)[name],
-            name,
-            rootTypeName,
-          );
+          let dirPath = this.outputDir;
+
+          if (!isFlat) {
+            dirPath = await this.generateCategoryMetafileType(
+              (type as Record<string, unknown>)[name],
+              name,
+              rootTypeName,
+            );
+          }
 
           return this.renderTypeEntities(
             dirPath,

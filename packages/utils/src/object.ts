@@ -31,7 +31,9 @@
  * @returns `false` if the object is a valid k/v set of records, else `true`.
  *
  */
-export const isEmpty = (obj: unknown): boolean => {
+export const isEmpty = <T extends Record<string, unknown>>(
+  obj: unknown,
+): obj is Exclude<typeof obj, T> => {
   return !(
     typeof obj === "object" &&
     obj !== null &&
