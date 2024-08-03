@@ -239,16 +239,21 @@ Use these options to toggle type information rendered on pages:
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
 - `exampleSection`: display example section based on directive data (see [Examples](/docs/advanced/examples)).
+- `hierarchy`: option for type folder structure:
+  - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
+  - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
+  - `flat`: no folder structure structure (override [`groupByDirective`](#groupbydirective)).
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
-- `useApiGroup`: split entities in `Operations` group (executable types) and `Types` group (system types).
+- `useApiGroup`: split entities in `Operations` group (executable types) and `Types` group (system types) [**deprecated**, see note below].
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
 | `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
 | `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
 | `printTypeOptions.exampleSection`     | `--noExample`           | `false`   |
+| `printTypeOptions.hierarchy`          | `--hierarchy`           | `api`     |
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
@@ -271,10 +276,10 @@ plugins: [
           codeSection: false, // disable code section, same as CLI flag --noCode
           deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
           exampleSection: false, // disable code section, same as CLI flag --noExample
+          hierarchy: "entity",  // disable type API grouping, same as CLI flag --hierarchy entity
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
-          useApiGroup: false, // disable type API grouping, same as CLI flag --noApiGroup
         },
         // highlight-end
         loaders: {
@@ -287,17 +292,23 @@ plugins: [
 
 <br/>
 
-:::warning[useApiGroup]
+:::warning[hierarchy]
 
 **If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
 
-To resolve this, you can regenerate the documentation using the [`force`](#force) setting; or you can disable `useApiGroup` to keep the previous behavior.
+To resolve this, you can regenerate the documentation using the [`force`](#force) setting; or you use use `hierarchy: "flat"` to keep the previous behavior.
+
+:::
+
+:::danger
+
+Declaring the different option type in CLI flag `hierarchy` and config file `hierarchy` will generate an error.
 
 :::
 
 :::tip
 
-Default `useApiGroup` groups `operations` and `types` can be customized by passing a object using the group name as key for the new name:
+`api` option for `hierarchy` can use customized group names (defaults are `operations` and `types`) by passing an object instead of `api` using the group name as key for the new name:
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -307,9 +318,11 @@ plugins: [
        {
         // highlight-start
         printTypeOptions: {
-          useApiGroup: { // enable useApiGroup with custom groups name
-            operations: "api", // rename the group 'operations' to 'api'
-            //group 'types' left unchanged
+          hierarchy: { // no customization 'hierarchy: "api"' (default)
+            api: { // enable useApiGroup with custom groups name
+              operations: "api", // rename the group 'operations' to 'api'
+              //group 'types' left unchanged
+            }
           }
         },
         // highlight-end
@@ -324,6 +337,17 @@ plugins: [
 
 See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
 
+:::
+
+:::warning[DEPRECATED]
+
+**`printTypeOptions.useApiGroup`** (CLI flag `--noApiGroup`) has been replaced by `printTypeOptions.hierarchy`:
+
+```js
+printTypeOptions: {
+  hierarchy: "api", // use value "entity" for --noApiGroup equivalent
+},
+```
 :::
 
 ## `pretty`
