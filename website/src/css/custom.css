@@ -106,8 +106,20 @@ div[class^="announcementBar_"] {
   font-weight: 500;
 }
 
-.theme-doc-sidebar-item-category-level-1.graphql-markdown-api-section > div:first-child {
-	text-transform: uppercase full-width;
-	margin: 5px 5px auto auto;
-	background-color: rgb(246, 248, 250);
+.theme-doc-sidebar-item-category-level-1.graphql-markdown-api-section
+  > div:first-child {
+  text-transform: uppercase full-width;
+  margin: 5px 5px auto auto;
+  background-color: rgb(246, 248, 250);
+}
+
+.showcase {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 10em;
+}
+
+.showcase__card {
+  width: 15rem;
+  margin: 1rem;
 }
