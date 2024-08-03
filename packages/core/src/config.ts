@@ -182,7 +182,7 @@ export const getVisibilityDirectives = (
     })
   ) {
     throw new Error(
-      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+      `The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.`,
     );
   }
 
@@ -290,11 +290,11 @@ export const getDocOptions = (
 };
 
 export const getTypeHierarchyOption = (
-  cliOption?: TypeHierarchyValueType,
-  configOption?: TypeHierarchyType,
-): TypeHierarchyObjectType => {
+  cliOption?: Maybe<TypeHierarchyValueType>,
+  configOption?: Maybe<TypeHierarchyType>,
+): Maybe<TypeHierarchyObjectType> => {
   const parseValue = (
-    config?: TypeHierarchyType,
+    config?: Maybe<TypeHierarchyType>,
   ): Maybe<TypeHierarchyObjectType> => {
     if (typeof config === "string") {
       switch (true) {
@@ -303,16 +303,36 @@ export const getTypeHierarchyOption = (
         case new RegExp(`^${TypeHierarchy.FLAT}$`, "i").test(config):
           return { [TypeHierarchy.FLAT]: {} };
         case new RegExp(`^${TypeHierarchy.API}$`, "i").test(config):
-        default:
           return { [TypeHierarchy.API]: {} };
+        default:
+          return undefined;
       }
     }
     return config;
   };
 
+  const toStringHierarchy = (
+    hierarchy: Maybe<TypeHierarchyObjectType>,
+  ): Maybe<TypeHierarchyValueType> => {
+    return hierarchy && (Object.keys(hierarchy)[0] as TypeHierarchyValueType);
+  };
+
+  const cliHierarchy = parseValue(cliOption);
+  const configHierarchy = parseValue(configOption);
+
+  if (cliHierarchy && configHierarchy) {
+    const strCliHierarchy = toStringHierarchy(cliHierarchy);
+    const strConfigHierarchy = toStringHierarchy(configHierarchy);
+    if (strCliHierarchy !== strConfigHierarchy) {
+      throw new Error(
+        `Hierarchy option mismatch in CLI flag '${strCliHierarchy}' and config '${strConfigHierarchy}'`,
+      );
+    }
+  }
+
   return (
-    parseValue(configOption) ??
-    parseValue(cliOption) ??
+    cliHierarchy ??
+    configHierarchy ??
     DEFAULT_OPTIONS.printTypeOptions.hierarchy
   );
 };
@@ -330,16 +350,15 @@ export const parseDeprecatedPrintTypeOptions = (
       "Type option `noApiGroup` is deprecated. Use `hierarchy: 'entity'` instead.",
       "warn",
     );
-  } else if (
-    typeof configOptions?.useApiGroup !== "undefined" &&
-    configOptions.useApiGroup
-  ) {
+  } else if (typeof configOptions?.useApiGroup !== "undefined") {
     if (typeof configOptions.useApiGroup === "object") {
       option = {
-        hierarchy: { [TypeHierarchy.ENTITY]: { ...configOptions.useApiGroup } },
+        hierarchy: { [TypeHierarchy.API]: { ...configOptions.useApiGroup } },
       };
     } else {
-      option = { hierarchy: TypeHierarchy.API };
+      option = configOptions.useApiGroup
+        ? { hierarchy: TypeHierarchy.API }
+        : { hierarchy: TypeHierarchy.ENTITY };
     }
     log(
       "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",

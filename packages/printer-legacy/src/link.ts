@@ -7,6 +7,8 @@ import type {
   PrintLinkOptions,
   SchemaEntity,
   TypeDeprecatedOption,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
   TypeLink,
   TypeLocale,
 } from "@graphql-markdown/types";
@@ -123,6 +125,13 @@ export const getLinkDeprecatedFolder = (
   return option === "group" && isDeprecated(type) ? DEPRECATED : "";
 };
 
+const isHierarchy = (
+  options: Maybe<PrintLinkOptions>,
+  hierarchy: TypeHierarchyValueType,
+): options is PrintLinkOptions & { hierarchy: TypeHierarchyObjectType } => {
+  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+};
+
 export const toLink = (
   type: unknown,
   name: string,
@@ -146,15 +155,12 @@ export const toLink = (
     return fallback;
   }
 
-  const isFlatHierarchy = (options.hierarchy?.[TypeHierarchy.FLAT] &&
-    true) as boolean;
-
   let category: Maybe<string> = "";
   let deprecatedFolder = "";
   let groupFolder = "";
   let apiGroupFolder = "";
 
-  if (!isFlatHierarchy) {
+  if (!isHierarchy(options, TypeHierarchy.FLAT)) {
     category = getLinkCategoryFolder(graphQLNamedType, operation);
 
     if (!category) {
@@ -167,10 +173,9 @@ export const toLink = (
     groupFolder = options.groups
       ? getGroup(type, options.groups, category as SchemaEntity)
       : "";
-    apiGroupFolder =
-      options.hierarchy && TypeHierarchy.API in options.hierarchy
-        ? getLinkApiGroupFolder(type)
-        : "";
+    apiGroupFolder = isHierarchy(options, TypeHierarchy.API)
+      ? getLinkApiGroupFolder(type)
+      : "";
   }
 
   const text = graphQLNamedType.name || graphQLNamedType.toString();

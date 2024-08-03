@@ -7,6 +7,8 @@ import type {
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
@@ -51,6 +53,13 @@ export const getApiGroupFolder = (
     folderNames = { ...API_GROUPS, ...groups };
   }
   return isApiType(type) ? folderNames.operations : folderNames.types;
+};
+
+const isHierarchy = (
+  options: Maybe<RendererDocOptions>,
+  hierarchy: TypeHierarchyValueType,
+): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
+  return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
 export class Renderer {
@@ -120,7 +129,11 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
-    const useApiGroup = this.options?.hierarchy?.[TypeHierarchy.API]
+    if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return dirPath;
+    }
+
+    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
 
@@ -172,9 +185,7 @@ export class Renderer {
       return undefined;
     }
 
-    const isFlat = (this.options?.hierarchy?.[TypeHierarchy.FLAT] &&
-      true) as boolean;
-
+    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
     return Promise.all(
       Object.keys(type)
         .map(async (name) => {
@@ -207,6 +218,7 @@ export class Renderer {
   ): Promise<Maybe<Category>> {
     const PageRegex =
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx$/;
+    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx$/;
 
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.mdx`);
@@ -230,7 +242,11 @@ export class Renderer {
 
     const pagePath = relative(this.outputDir, filePath);
 
-    const page = PageRegex.exec(pagePath);
+    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
+
+    const page = isFlat
+      ? PageRegexFlat.exec(pagePath)
+      : PageRegex.exec(pagePath);
 
     if (!page?.groups) {
       log(
@@ -240,11 +256,14 @@ export class Renderer {
       return undefined;
     }
 
-    const slug = pathUrl.join(page.groups.category, page.groups.pageId);
+    const slug = isFlat
+      ? page.groups.pageId
+      : pathUrl.join(page.groups.category, page.groups.pageId);
+    const category = isFlat ? "schema" : startCase(page.groups.category);
 
     return {
-      category: startCase(page.groups.category),
-      slug: slug,
+      category,
+      slug,
     } as Category;
   }
 

@@ -351,6 +351,36 @@ describe("link", () => {
         }
       `);
     });
+
+    test("returns markdown link without folder when hierarchy is flat", () => {
+      expect.hasAssertions();
+
+      const entityName = `TestDirective`;
+      const slug = `test-directive`;
+      const type = new GraphQLDirective({
+        name: entityName,
+        locations: [],
+      });
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
+      mockUtils.slugify.mockReturnValueOnce(slug);
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+        hierarchy: { [TypeHierarchy.FLAT]: {} },
+      });
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "TestDirective",
+          "url": "docs/graphql/test-directive.mdx",
+        }
+      `);
+    });
   });
 
   describe("printLinkAttributes()", () => {

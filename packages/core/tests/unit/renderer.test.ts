@@ -81,7 +81,7 @@ describe("renderer", () => {
     });
 
     describe("renderTypeEntities()", () => {
-      test("creates entity page into output folder", async () => {
+      test("creates entity page structure into output folder", async () => {
         expect.assertions(2);
 
         jest
@@ -97,6 +97,34 @@ describe("renderer", () => {
         );
 
         expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("creates entity page flat structure into output if hierarchy is flat", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+
+        const output = "/output";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "FooBar",
+          "FooBar",
+        );
+
+        expect(meta).toEqual({ category: "schema", slug: "foo-bar" });
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
@@ -549,6 +577,28 @@ describe("renderer", () => {
           `/output/${API_GROUPS.types}/objects`,
         );
         expect(dirPath).toBe(`/output/${API_GROUPS.types}/objects`);
+      });
+
+      test("does not generate _category_.yml file if hierarchy is flat", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "objects",
+        );
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(dirPath).toBe(`/output`);
       });
     });
   });
