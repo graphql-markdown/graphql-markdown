@@ -242,7 +242,7 @@ Use these options to toggle type information rendered on pages:
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
-  - `flat`: no folder structure structure (override [`groupByDirective`](#groupbydirective)).
+  - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)).
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
