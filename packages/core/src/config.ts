@@ -182,7 +182,7 @@ export const getVisibilityDirectives = (
     })
   ) {
     throw new Error(
-      `The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.`,
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
     );
   }
 
