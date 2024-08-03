@@ -70,7 +70,10 @@ function Thanks() {
       <div className="text--center">
         <h3 className="padding-bottom--md">Thanks to our contributors</h3>
         <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
-          <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" alt="contributors" />
+          <img
+            src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8"
+            alt="contributors"
+          />
         </a>
       </div>
     </div>

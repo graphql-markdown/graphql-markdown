@@ -100,6 +100,11 @@ const config = {
             label: "API",
           },
           {
+            to: "showcase",
+            position: "right",
+            label: "Showcase",
+          },
+          {
             type: "dropdown",
             position: "right",
             label: "Examples",
