@@ -115,6 +115,8 @@ div[class^="announcementBar_"] {
 
 .showcase {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   flex-basis: 10em;
 }
