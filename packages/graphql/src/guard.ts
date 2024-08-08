@@ -64,7 +64,7 @@ export const instanceOf = <T>(
     return typeof obj !== "object" || obj === null
       ? false
       : obj.constructor.name === expect;
-  } catch (_) {
+  } catch {
     return false;
   }
 };

@@ -229,7 +229,7 @@ export class Renderer {
       if (typeof content !== "string") {
         return undefined;
       }
-    } catch (error) {
+    } catch {
       log(`An error occurred while processing "${type}"`, LogLevel.warn);
       return undefined;
     }
