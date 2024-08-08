@@ -109,7 +109,6 @@ const parseTypeFields = (
 
 const parseExampleValue = (
   value: unknown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type: GraphQLOperationType | GraphQLType,
 ): unknown => {
   if (!value || typeof value !== "string") {
@@ -118,11 +117,11 @@ const parseExampleValue = (
 
   try {
     return JSON.parse(value);
-  } catch (err: unknown) {
+  } catch {
     if (isOperation(type)) {
       try {
         return parse(value, { noLocation: true });
-      } catch (err: unknown) {
+      } catch {
         /* empty */
       }
     }

@@ -36,7 +36,7 @@ export const fileExists = async (location: string): Promise<boolean> => {
   try {
     const stats = await stat(location);
     return typeof stats === "object";
-  } catch (error) {
+  } catch {
     return false;
   }
 };

@@ -33,8 +33,8 @@ export const prettify = async (
   try {
     const { format } = await import("prettier");
     return await format(content, { parser });
-  } catch (error: unknown) {
-    if ("logger" in global) {
+  } catch {
+    if ("logger" in global && global.logger) {
       (global.logger as LoggerType)._log("Prettier is not found");
     } else {
       console.log("Prettier is not found");

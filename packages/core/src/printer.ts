@@ -29,7 +29,7 @@ export const getPrinter = async (
     Printer.init(schema, baseURL, linkRoot, { ...options });
 
     return Printer;
-  } catch (error: unknown) {
+  } catch {
     throw new Error(`Cannot find module '${printerModule}'.`);
   }
 };
