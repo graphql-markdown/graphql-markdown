@@ -67,7 +67,7 @@ node\_modules/typescript/lib/lib.es5.d.ts:1082
 function _getFields<T, V>(
    type, 
    processor?, 
-   fallback?): GraphQLObjectType<any, any> | GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V
+fallback?): GraphQLFieldMap<unknown, unknown> | GraphQLInputFieldMap | V | GraphQLObjectType<any, any>
 ```
 
 Returns the fields from a GraphQL schema type.
@@ -96,7 +96,7 @@ optional fallback value, `undefined` if not set.
 
 #### Returns
 
-`GraphQLObjectType`\<`any`, `any`\> \| `GraphQLFieldMap`\<`unknown`, `unknown`\> \| `GraphQLInputFieldMap` \| `V`
+`GraphQLFieldMap`\<`unknown`, `unknown`\> \| `GraphQLInputFieldMap` \| `V` \| `GraphQLObjectType`\<`any`, `any`\>
 
 a map of fields as k/v records, or `fallback` value if no fields available.
 

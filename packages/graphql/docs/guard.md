@@ -7,7 +7,7 @@ Custom GraphQL type guards and property guards.
 ### instanceOf()
 
 ```ts
-function instanceOf<T>(obj, type): obj is T
+function instanceOf<T>(obj, type): obj is Function
 ```
 
 Checks if a GraphQL named type is of generic type `T`.
@@ -30,11 +30,11 @@ the GraphQL type `T`.
 
 #### Returns
 
-`obj is T`
+`obj is Function`
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L57)
+[packages/graphql/src/guard.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L58)
 
 ***
 
@@ -58,7 +58,7 @@ a GraphQL type.
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L100)
+[packages/graphql/src/guard.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L104)
 
 ***
 
@@ -88,7 +88,7 @@ an instance of `T`.
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L75)
+[packages/graphql/src/guard.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L79)
 
 ***
 
@@ -112,7 +112,7 @@ a GraphQL type.
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L38)
+[packages/graphql/src/guard.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L39)
 
 ***
 
@@ -136,7 +136,7 @@ a GraphQL type.
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L90)
+[packages/graphql/src/guard.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L94)
 
 ***
 
@@ -160,4 +160,4 @@ a GraphQL type.
 
 #### Defined in
 
-[packages/graphql/src/guard.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L113)
+[packages/graphql/src/guard.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L117)

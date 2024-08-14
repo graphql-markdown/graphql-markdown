@@ -14,7 +14,7 @@ DEFAULT: "default";
 
 ###### Defined in
 
-[config.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L33)
+[config.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L43)
 
 ##### GROUP
 
@@ -24,7 +24,7 @@ GROUP: "group";
 
 ###### Defined in
 
-[config.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L34)
+[config.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L44)
 
 ##### SKIP
 
@@ -34,7 +34,7 @@ SKIP: "skip";
 
 ###### Defined in
 
-[config.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L35)
+[config.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L45)
 
 ***
 
@@ -50,7 +50,7 @@ FORCE: "FORCE";
 
 ###### Defined in
 
-[config.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L29)
+[config.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L39)
 
 ##### NONE
 
@@ -60,7 +60,43 @@ NONE: "NONE";
 
 ###### Defined in
 
-[config.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L28)
+[config.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L38)
+
+***
+
+### TypeHierarchy
+
+#### Enumeration Members
+
+##### API
+
+```ts
+API: "api";
+```
+
+###### Defined in
+
+[config.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L32)
+
+##### ENTITY
+
+```ts
+ENTITY: "entity";
+```
+
+###### Defined in
+
+[config.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L33)
+
+##### FLAT
+
+```ts
+FLAT: "flat";
+```
+
+###### Defined in
+
+[config.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L34)
 
 ## Variables
 
@@ -72,19 +108,35 @@ const ASSET_HOMEPAGE_LOCATION: string;
 
 #### Defined in
 
-[config.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L40)
+[config.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L50)
 
 ***
 
 ### DEFAULT\_OPTIONS
 
 ```ts
-const DEFAULT_OPTIONS: Readonly<Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> & Required<Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders">>>;
+const DEFAULT_OPTIONS: Readonly<Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> & Required<Omit<ConfigOptions, "customDirective" | "groupByDirective" | "loaders" | "printTypeOptions">>> & object;
+```
+
+#### Type declaration
+
+##### printTypeOptions
+
+```ts
+printTypeOptions: Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & object;
+```
+
+###### Type declaration
+
+###### hierarchy
+
+```ts
+hierarchy: Required<Pick<TypeHierarchyObjectType, API>>;
 ```
 
 #### Defined in
 
-[config.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L47)
+[config.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L57)
 
 ***
 
@@ -96,7 +148,7 @@ const DOCS_URL: "https://graphql-markdown.dev/docs";
 
 #### Defined in
 
-[config.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L38)
+[config.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L48)
 
 ***
 
@@ -108,7 +160,7 @@ const PACKAGE_NAME: "@graphql-markdown/docusaurus";
 
 #### Defined in
 
-[config.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L39)
+[config.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L49)
 
 ## Functions
 
@@ -117,17 +169,17 @@ const PACKAGE_NAME: "@graphql-markdown/docusaurus";
 ```ts
 function buildConfig(
    configFileOpts, 
-   cliOpts, 
-id): Promise<Options>
+   cliOpts?, 
+id?): Promise<Options>
 ```
 
 #### Parameters
 
 • **configFileOpts**: `Maybe`\<`ConfigOptions`\>
 
-• **cliOpts**: `Maybe`\<`CliOptions`\>
+• **cliOpts?**: `Maybe`\<`CliOptions`\>
 
-• **id**: `Maybe`\<`string`\> = `"default"`
+• **id?**: `Maybe`\<`string`\> = `"default"`
 
 #### Returns
 
@@ -135,7 +187,7 @@ id): Promise<Options>
 
 #### Defined in
 
-[config.ts:330](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L330)
+[config.ts:437](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L437)
 
 ***
 
@@ -157,7 +209,7 @@ function getCustomDirectives(customDirectiveOptions, skipDocDirective?): Maybe<C
 
 #### Defined in
 
-[config.ts:170](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L170)
+[config.ts:192](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L192)
 
 ***
 
@@ -179,7 +231,7 @@ function getDiffMethod(diff, force): TypeDiffMethod
 
 #### Defined in
 
-[config.ts:203](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L203)
+[config.ts:225](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L225)
 
 ***
 
@@ -199,7 +251,7 @@ function getDocDirective(name): DirectiveName
 
 #### Defined in
 
-[config.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L86)
+[config.ts:108](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L108)
 
 ***
 
@@ -221,7 +273,7 @@ function getDocOptions(cliOpts?, configOptions?): Required<ConfigDocOptions>
 
 #### Defined in
 
-[config.ts:253](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L253)
+[config.ts:275](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L275)
 
 ***
 
@@ -243,7 +295,7 @@ function getOnlyDocDirectives(cliOpts, configFileOpts): DirectiveName[]
 
 #### Defined in
 
-[config.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L102)
+[config.ts:124](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L124)
 
 ***
 
@@ -255,9 +307,9 @@ function getPrintTypeOptions(cliOpts, configOptions): Required<ConfigPrintTypeOp
 
 #### Parameters
 
-• **cliOpts**: `Maybe`\<`CliOptions`\>
+• **cliOpts**: `Maybe`\<`CliOptions` & `DeprecatedCliOptions`\>
 
-• **configOptions**: `Maybe`\<`ConfigPrintTypeOptions`\>
+• **configOptions**: `Maybe`\<`ConfigPrintTypeOptions` & `DeprecatedConfigPrintTypeOptions`\>
 
 #### Returns
 
@@ -265,7 +317,7 @@ function getPrintTypeOptions(cliOpts, configOptions): Required<ConfigPrintTypeOp
 
 #### Defined in
 
-[config.ts:270](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L270)
+[config.ts:372](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L372)
 
 ***
 
@@ -287,7 +339,29 @@ function getSkipDocDirectives(cliOpts, configFileOpts): DirectiveName[]
 
 #### Defined in
 
-[config.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L118)
+[config.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L140)
+
+***
+
+### getTypeHierarchyOption()
+
+```ts
+function getTypeHierarchyOption(cliOption?, configOption?): Maybe<Partial<Record<TypeHierarchyValueType, TypeHierarchyTypeOptions>>>
+```
+
+#### Parameters
+
+• **cliOption?**: `Maybe`\<`TypeHierarchyValueType`\>
+
+• **configOption?**: `Maybe`\<`TypeHierarchyType`\>
+
+#### Returns
+
+`Maybe`\<`Partial`\<`Record`\<`TypeHierarchyValueType`, `TypeHierarchyTypeOptions`\>\>\>
+
+#### Defined in
+
+[config.ts:292](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L292)
 
 ***
 
@@ -321,7 +395,7 @@ skipDocDirective: DirectiveName[];
 
 #### Defined in
 
-[config.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L145)
+[config.ts:167](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L167)
 
 ***
 
@@ -361,7 +435,35 @@ pagination_prev: null;
 
 #### Defined in
 
-[config.ts:212](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L212)
+[config.ts:234](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L234)
+
+***
+
+### parseDeprecatedPrintTypeOptions()
+
+```ts
+function parseDeprecatedPrintTypeOptions(cliOpts, configOptions): Partial<object>
+```
+
+#### Parameters
+
+• **cliOpts**: `Maybe`\<`DeprecatedCliOptions`\>
+
+• **configOptions**: `Maybe`\<`DeprecatedConfigPrintTypeOptions`\>
+
+#### Returns
+
+`Partial`\<`object`\>
+
+##### hierarchy
+
+```ts
+hierarchy: TypeHierarchyType;
+```
+
+#### Defined in
+
+[config.ts:340](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L340)
 
 ***
 
@@ -381,4 +483,4 @@ function parseGroupByOption(groupOptions): Maybe<GroupByDirectiveOptions>
 
 #### Defined in
 
-[config.ts:301](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L301)
+[config.ts:408](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L408)

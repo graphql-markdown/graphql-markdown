@@ -13,8 +13,6 @@ function getObjPath(
    fallback): unknown
 ```
 
-**`Internal`**
-
 Returns the value of the specified property or nested property of an object using a string path.
 
 #### Parameters

@@ -1,5 +1,17 @@
 # link
 
+## Variables
+
+### API\_GROUPS
+
+```ts
+const API_GROUPS: Required<ApiGroupOverrideType>;
+```
+
+#### Defined in
+
+[link.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L45)
+
 ## Functions
 
 ### getCategoryLocale()
@@ -18,19 +30,21 @@ function getCategoryLocale(type): Maybe<TypeLocale>
 
 #### Defined in
 
-[link.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L41)
+[link.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L50)
 
 ***
 
 ### getLinkApiGroupFolder()
 
 ```ts
-function getLinkApiGroupFolder(type): string
+function getLinkApiGroupFolder(type, groups?): string
 ```
 
 #### Parameters
 
 • **type**: `unknown`
+
+• **groups?**: `Maybe`\<`boolean` \| `ApiGroupOverrideType`\>
 
 #### Returns
 
@@ -38,7 +52,7 @@ function getLinkApiGroupFolder(type): string
 
 #### Defined in
 
-[link.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L101)
+[link.ts:110](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L110)
 
 ***
 
@@ -60,7 +74,7 @@ function getLinkCategoryFolder(type, operationLocale?): Maybe<string>
 
 #### Defined in
 
-[link.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L63)
+[link.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L72)
 
 ***
 
@@ -82,7 +96,7 @@ function getLinkDeprecatedFolder(type, option): string
 
 #### Defined in
 
-[link.ts:105](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L105)
+[link.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L121)
 
 ***
 
@@ -109,7 +123,7 @@ options): Maybe<TypeLink>
 
 #### Defined in
 
-[link.ts:162](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L162)
+[link.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L198)
 
 ***
 
@@ -129,7 +143,7 @@ function hasOptionParentType(options): boolean
 
 #### Defined in
 
-[link.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L92)
+[link.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L101)
 
 ***
 
@@ -149,7 +163,7 @@ function hasOptionWithAttributes(options): boolean
 
 #### Defined in
 
-[link.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L88)
+[link.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L97)
 
 ***
 
@@ -171,7 +185,7 @@ function printLink(type, options): string
 
 #### Defined in
 
-[link.ts:205](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L205)
+[link.ts:241](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L241)
 
 ***
 
@@ -193,7 +207,7 @@ function printLinkAttributes(type, text): string
 
 #### Defined in
 
-[link.ts:178](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L178)
+[link.ts:214](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L214)
 
 ***
 
@@ -215,7 +229,7 @@ function printParentLink(type, options): string | MDXString
 
 #### Defined in
 
-[link.ts:229](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L229)
+[link.ts:265](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L265)
 
 ***
 
@@ -245,4 +259,4 @@ function toLink(
 
 #### Defined in
 
-[link.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L112)
+[link.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L135)

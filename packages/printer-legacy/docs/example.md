@@ -40,4 +40,4 @@ function printExample(type, options): Maybe<string>
 
 #### Defined in
 
-[example.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L172)
+[example.ts:171](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L171)

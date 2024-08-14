@@ -20,7 +20,7 @@ See [getCustomDirectiveOptions](directive.md#getcustomdirectiveoptions), [isCust
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L30)
+[packages/graphql/src/directive.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L31)
 
 ## Functions
 
@@ -42,7 +42,7 @@ Checks if a directive is executable (related to operations).
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:285](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L285)
+[packages/graphql/src/directive.ts:286](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L286)
 
 ***
 
@@ -121,7 +121,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:250](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L250)
+[packages/graphql/src/directive.ts:251](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L251)
 
 ***
 
@@ -170,7 +170,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L78)
+[packages/graphql/src/directive.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L79)
 
 ***
 
@@ -251,7 +251,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L152)
+[packages/graphql/src/directive.ts:153](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L153)
 
 ***
 
@@ -281,7 +281,7 @@ the `customDirective` option.
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L41)
+[packages/graphql/src/directive.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L42)
 
 ***
 
@@ -303,4 +303,4 @@ Checks if a directive is system (related to schema definition).
 
 #### Defined in
 
-[packages/graphql/src/directive.ts:308](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L308)
+[packages/graphql/src/directive.ts:309](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L309)
