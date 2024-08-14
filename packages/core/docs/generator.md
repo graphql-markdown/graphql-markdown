@@ -18,4 +18,4 @@ function generateDocFromSchema(__namedParameters): Promise<void>
 
 #### Defined in
 
-[generator.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L28)
+[generator.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L30)

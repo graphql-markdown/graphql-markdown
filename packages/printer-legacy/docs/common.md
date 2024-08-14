@@ -20,7 +20,7 @@ function formatDescription(type, replacement): string | MDXString
 
 #### Defined in
 
-[common.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L54)
+[common.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L56)
 
 ***
 
@@ -42,7 +42,7 @@ function hasPrintableDirective(type, options?): boolean
 
 #### Defined in
 
-[common.ts:105](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L105)
+[common.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L107)
 
 ***
 
@@ -64,7 +64,7 @@ function printCustomDirectives(type, options?): string
 
 #### Defined in
 
-[common.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L21)
+[common.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L23)
 
 ***
 
@@ -84,7 +84,7 @@ function printDeprecation(type): string
 
 #### Defined in
 
-[common.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L81)
+[common.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L83)
 
 ***
 
@@ -111,7 +111,7 @@ function printDescription(
 
 #### Defined in
 
-[common.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L94)
+[common.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L96)
 
 ***
 
@@ -133,4 +133,4 @@ function printWarning(text?, title?): string
 
 #### Defined in
 
-[common.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L69)
+[common.ts:71](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L71)

@@ -7,10 +7,14 @@ Internal library of helpers for manipulating objects.
 ### isEmpty()
 
 ```ts
-function isEmpty(obj): boolean
+function isEmpty<T>(obj): obj is Exclude<unknown, T>
 ```
 
 Check if an object contains key/value records.
+
+#### Type Parameters
+
+• **T** *extends* `Record`\<`string`, `unknown`\>
 
 #### Parameters
 
@@ -20,7 +24,7 @@ the key/value record object.
 
 #### Returns
 
-`boolean`
+`obj is Exclude<unknown, T>`
 
 `false` if the object is a valid k/v set of records, else `true`.
 

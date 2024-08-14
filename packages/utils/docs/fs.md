@@ -7,7 +7,7 @@ Library of helper functions for handling files and folders.
 ### ensureDir()
 
 ```ts
-function ensureDir(location): Promise<void>
+function ensureDir(location, options?): Promise<void>
 ```
 
 Asynchronously create a folder structure if it does not exist.
@@ -17,6 +17,8 @@ Asynchronously create a folder structure if it does not exist.
 • **location**: `string`
 
 folder structure in path format.
+
+• **options?**: `EnsureDirOptions`
 
 #### Returns
 
@@ -34,7 +36,7 @@ await ensureDir("./.temp/local")
 
 #### Defined in
 
-[fs.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L57)
+[fs.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L60)
 
 ***
 
@@ -70,7 +72,7 @@ await fileExists("./.temp/local")
 
 #### Defined in
 
-[fs.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L32)
+[fs.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L35)
 
 ***
 
@@ -119,4 +121,4 @@ await saveFile("./.temp/local.md", "foobar")
 
 #### Defined in
 
-[fs.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L85)
+[fs.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L97)
