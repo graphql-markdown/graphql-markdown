@@ -37,7 +37,7 @@ This is an example of documentation grouping with GraphQL directive using the `g
     parentTypePrefix: false,
     relatedTypeSection: false,
     typeBadges: true,
-    useApiGroup: false,
+    hierarchy: "entity",
   },
   skipDocDirective: ["@noDoc"],
   customDirective: {
@@ -87,7 +87,7 @@ This is an example of documentation grouping with GraphQL directive using the `g
         parentTypePrefix: false,
         relatedTypeSection: false,
         typeBadges: true,
-        useApiGroup: false,
+        hierarchy: "entity",
       },
       skipDocDirective: ["@noDoc"],
       customDirective: {
@@ -128,8 +128,8 @@ npx docusaurus graphql-to-doc \
     --index \
     --noParentType \
     --noRelatedType \
-    --deprecated group
-    --noApiGroup
+    --deprecated group \
+    --hierarchy entity
 ```
 
 </TabItem>
