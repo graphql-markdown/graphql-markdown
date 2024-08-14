@@ -14,7 +14,6 @@ export type {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLSchema,
-  GraphQLSchema,
   GraphQLSchemaConfig,
   GraphQLType,
   GraphQLUnionType,

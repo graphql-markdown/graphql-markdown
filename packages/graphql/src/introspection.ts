@@ -39,7 +39,7 @@ import { convertArrayToMapObject } from "@graphql-markdown/utils";
 import { instanceOf } from "./guard";
 
 export { printSchema } from "graphql/utilities";
-export { getNamedType, getNullableType } from "graphql/type";
+export { getNamedType, getNullableType, GraphQLSchema } from "graphql/type";
 export { parse, print } from "graphql/language";
 
 export class IntrospectionError extends Error {}

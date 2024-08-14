@@ -46,9 +46,10 @@ export const getDirectiveExampleOption = (
       parserFunc = options.exampleSection.parser;
     }
   }
-  const directive = instanceOf(options.schema, GraphQLSchema as never)
-    ? options.schema.getDirective(directiveName)
-    : undefined;
+  const directive =
+    options.schema && instanceOf(options.schema, GraphQLSchema as never)
+      ? options.schema.getDirective(directiveName)
+      : undefined;
 
   if (!directive) {
     return undefined;
