@@ -52,6 +52,12 @@ This is an example of documentation grouping with GraphQL directive using the `g
           "This requires the current user to be in `${requires}` role.",
         ),
     },
+    beta: {
+      tag: (directive) => ({
+        text: directive?.name?.toUpperCase(),
+        classname: "badge--danger",
+      }),
+    },
     complexity: {
       descriptor: (directive, type) => {
         const { value, multipliers } = getTypeDirectiveValues(directive, type);
@@ -104,6 +110,12 @@ This is an example of documentation grouping with GraphQL directive using the `g
               type,
               "This requires the current user to be in `${requires}` role.",
             ),
+        },
+        beta: {
+          tag: (directive) => ({
+            text: directive?.name?.toUpperCase(),
+            classname: "badge--danger",
+          }),
         },
         complexity: {
           descriptor: (directive, type) => {
