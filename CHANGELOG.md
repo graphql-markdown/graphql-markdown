@@ -1,7 +1,27 @@
+<a name="1.26.0"></a>
+# [1.26.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.0) - 14 Aug 2024
+
+:sparkle: You can now generate the documentation in a flat files structure (single folder). This is supported by the option `printTypeOptions.hierarchy`, the option also deprecate the option `printTypeOptions.useApiGroup` (more information in the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
+
+:egg: This feature also introduces the `force` parameter that ensure that the target folder is empty before generating the documentation (more information in the [documentation](https://graphql-markdown.dev/docs/settings#force)).
+
+## What's Changed
+* 📝 add warning upgrade 1.3.0 in docs by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1602
+* ✨ add parameter to force empty output folder by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1608
+* ✨ add support for custom useApiGroup groups name by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1609
+* :recycle:  replace deprecated fs.rmdir by fs.rm by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1610
+* ✨ support flat files structure by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1622
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.25.0...1.26.0
+
+[Changes][1.26.0]
+
+
 <a name="1.25.0"></a>
 # [1.25.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.25.0) - 26 Jul 2024
 
-:warning: **BREAKING CHANGE** - This release removes `sidebar` files generation. The sidebars now rely on the Docusaurus [default sidebar](https://docusaurus.io/docs/sidebar#default-sidebar) behavior.
+:warning: **BREAKING CHANGE** - This release removes `sidebars` files generation. The sidebars now rely on the Docusaurus [default sidebar](https://docusaurus.io/docs/sidebar#default-sidebar) behavior.
 
 ## What's Changed
 * ✨ remove sidebar file generation by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1596
@@ -131,7 +151,7 @@ plugins: [
   ],
 ```
 
-This option deprecates the options `docOptions.pagination` and `docOptions.toc` (more details in the [documentation](https://graphql-markdown.github.io/docs/settings#docoptions)).
+**[DEPRECATED]** This option deprecates the options `docOptions.pagination` and `docOptions.toc` (more details in the [documentation](https://graphql-markdown.github.io/docs/settings#docoptions)).
 
 ## What's Changed
 
@@ -1778,6 +1798,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.26.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.25.0...1.26.0
 [1.25.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.4...1.25.0
 [1.24.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.3...1.24.4
 [1.24.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.2...1.24.3
