@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@graphql-markdown/core": "^1.12.0",
-    "@graphql-markdown/logger": "^1.0.3"
+    "@graphql-markdown/logger": "^1.0.4"
   },
   "devDependencies": {
     "@docusaurus/types": "^3.5.0",
