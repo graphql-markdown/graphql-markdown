@@ -23,6 +23,9 @@ This is an example of documentation grouping with GraphQL directive using the `g
   baseURL: ".",
   linkRoot: "/examples/group-by",
   homepage: "data/groups.md",
+  loaders: {
+    GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+  },
   groupByDirective: {
     directive: "doc",
     field: "category",
@@ -73,6 +76,9 @@ This is an example of documentation grouping with GraphQL directive using the `g
       baseURL: ".",
       linkRoot: "/examples/group-by",
       homepage: "data/groups.md",
+      loaders: {
+        GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+      },
       groupByDirective: {
         directive: "doc",
         field: "category",
