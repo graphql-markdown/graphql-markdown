@@ -22,7 +22,7 @@
   "devDependencies": {
     "graphql": "16.9.0",
     "@graphql-tools/load": "8.0.2",
-    "@graphql-tools/utils": "10.5.3",
+    "@graphql-tools/utils": "10.5.4",
     "graphql-config": "5.1.0"
   },
   "publishConfig": {
