@@ -44,7 +44,7 @@ export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   outputDir: string,
   method: DiffMethodName = CompareMethod.DIFF as DiffMethodName,
 ): Promise<boolean> => {
-  if (method === CompareMethod.DIFF) {
+  if (method.valueOf() === CompareMethod.DIFF.valueOf()) {
     const schemaRef = join(outputDir, SCHEMA_REF);
     if (await fileExists(schemaRef)) {
       const schemaDiff = await getDiff(schema, schemaRef);
@@ -54,7 +54,7 @@ export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
     await saveFile(schemaRef, schemaPrint);
   }
 
-  if (method === CompareMethod.HASH) {
+  if (method.valueOf() === CompareMethod.HASH.valueOf()) {
     const hashFile = join(outputDir, SCHEMA_HASH_FILE);
     const hashSchema = getSchemaHash(schema);
     if (await fileExists(hashFile)) {
