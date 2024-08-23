@@ -64,7 +64,7 @@
     "@graphql-markdown/types": "^1.4.0"
   },
   "resolutions": {
-    "micromatch": "4.0.7"
+    "micromatch": "4.0.8"
   },
   "directories": {
     "test": "tests"
