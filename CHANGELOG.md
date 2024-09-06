@@ -1,9 +1,28 @@
+<a name="1.26.2"></a>
+# [1.26.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.2) - 06 Sep 2024
+
+🐛  This release fixes `[ERROR] Error: Cannot find module '@graphql-markdown/printer-legacy'.` dependency package reported by [@mderriey](https://github.com/mderriey) in [#1691](https://github.com/graphql-markdown/graphql-markdown/issues/1691).
+
+## What's Changed
+* :bug:  fix missing dependency printer-legacy by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1692
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.0...1.26.2
+
+[Changes][1.26.2]
+
+
 <a name="1.26.0"></a>
 # [1.26.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.0) - 14 Aug 2024
 
-:sparkle: You can now generate the documentation in a flat files structure (single folder). This is supported by the option `printTypeOptions.hierarchy`, the option also deprecate the option `printTypeOptions.useApiGroup` (more information in the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
+:sparkle: You can now generate the documentation using a flat files structure (single folder),  provided by the option `printTypeOptions.hierarchy`. The option also deprecates the option `printTypeOptions.useApiGroup` (more information in the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
 
-:egg: This feature also introduces the `force` parameter that ensure that the target folder is empty before generating the documentation (more information in the [documentation](https://graphql-markdown.dev/docs/settings#force)).
+<img width="1049" alt="Screenshot 2024-08-03 at 12 17 47" src="https://github.com/user-attachments/assets/b2d41d8b-efca-4e2d-8ac7-d685c26d7b4c">
+
+:magic_wand: With the option `printTypeOptions.hierarchy`, you can also now rename the top categories when using `api` hierarchy (more information in the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
+
+⚠️ **BREAKING CHANGE** -  When using `api` hierarchy, the top categories are now `Operations` and `Types` instead of `Api` and `Types`. The option `printTypeOptions.hierarchy` allows backward compatibility (more information in the [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)).
+
+:egg: This release also introduces the `force` parameter that ensures the target folder is empty before generating the documentation (more information in the [documentation](https://graphql-markdown.dev/docs/settings#force)).
 
 ## What's Changed
 * 📝 add warning upgrade 1.3.0 in docs by [@edno](https://github.com/edno) in https://github.com/graphql-markdown/graphql-markdown/pull/1602
@@ -1798,6 +1817,7 @@ Fix crash due to extra await ([`144e46d756`](https://github.com/graphql-markdown
 [Changes][0.1.0]
 
 
+[1.26.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.0...1.26.2
 [1.26.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.25.0...1.26.0
 [1.25.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.4...1.25.0
 [1.24.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.24.3...1.24.4
