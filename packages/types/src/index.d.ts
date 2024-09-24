@@ -1,8 +1,5 @@
 export type {
-  ASTNode,
-  DirectiveNode,
   GraphQLArgument,
-  GraphQLDirective,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLField,
@@ -19,10 +16,11 @@ export type {
   GraphQLUnionType,
 } from "graphql/type";
 
-export type {
-  LoadSchemaOptions,
-  GraphQLExtensionDeclaration,
-} from "@graphql-tools/load";
+export type { LoadSchemaOptions } from "@graphql-tools/load";
+
+export type { GraphQLExtensionDeclaration } from "graphql-config";
+
+export type { ASTNode, DirectiveNode } from "graphql/language";
 
 export type Maybe<T> = T | null | undefined;
 
@@ -36,10 +34,10 @@ export * from "./utils";
 export * from "./printer";
 
 // @graphql-markdown/logger
-export * from "./logger";
+export type * from "./logger";
 
 // @graphql-markdown/graphql
 export * from "./graphql";
 
 // @graphql-markdown/helpers
-export * from "./helpers";
+export type * from "./helpers";
