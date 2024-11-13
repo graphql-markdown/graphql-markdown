@@ -33,7 +33,7 @@ export enum LogLevel {
  *
  * @example
  * ```js
- * import { Logger, log } from "@graphql-markdown/utils/logger";
+ * import Logger, { log } from "@graphql-markdown/utils/logger";
  *
  * log("Info message"); // Expected console output "Info message"
  *
@@ -42,14 +42,14 @@ export enum LogLevel {
  * ```
  *
  */
-export const Logger = (moduleName?: string): void => {
+export const Logger = async (moduleName?: string): Promise<void> => {
   if (global.logger?.instance && typeof moduleName === "undefined") {
     return;
   }
 
   const instance: LoggerType["instance"] =
     typeof moduleName === "string" && moduleName !== ""
-      ? require(moduleName)
+      ? (await import(moduleName)).default
       : global.console;
 
   const _log = (
@@ -86,7 +86,9 @@ export const log = (
   message: string,
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
-  Logger();
+  new Promise((resolve) => {
+    resolve(Logger());
+  }).catch(() => {});
   global.logger?._log(message, level);
 };
 

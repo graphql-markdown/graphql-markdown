@@ -61,7 +61,7 @@ describe("logger", () => {
             return "Mocked Console";
           });
 
-        Logger.Logger(moduleName);
+        await Logger.Logger(moduleName);
         Logger.log("test");
 
         expect(spy).toHaveBeenCalledWith("test");
@@ -70,10 +70,10 @@ describe("logger", () => {
       },
     );
 
-    test("instantiates a logger", () => {
+    test("instantiates a logger", async () => {
       expect.hasAssertions();
 
-      Logger.Logger();
+      await Logger.Logger();
 
       expect(global.logger?.instance).toEqual(
         expect.objectContaining({
@@ -86,10 +86,10 @@ describe("logger", () => {
       );
     });
 
-    test("returns module passed", () => {
+    test("returns module passed", async () => {
       expect.hasAssertions();
 
-      Logger.Logger(require.resolve("../__data__/dummy_logger"));
+      await Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
       expect(global.logger).toBeDefined();
       expect(global.logger?.instance).toEqual(
@@ -108,10 +108,10 @@ describe("logger", () => {
           return "Mocked Console";
         });
 
-      Logger.Logger();
+      await Logger.Logger();
       expect(global.logger).toBeDefined();
 
-      Logger.Logger(require.resolve("../__data__/dummy_logger"));
+      await Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
       const spyLogger = jest.spyOn(global.logger!, "_log");
 
@@ -119,6 +119,24 @@ describe("logger", () => {
 
       expect(spyConsole).not.toHaveBeenCalled();
       expect(spyLogger).toHaveBeenCalledWith("test", "info");
+    });
+
+    test("overrides current logger with Docusaurus", async () => {
+      expect.hasAssertions();
+
+      const spyConsole = jest
+        .spyOn(global.console, "info")
+        .mockImplementation(() => {
+          return "Mocked Console";
+        });
+
+      await Logger.Logger("@docusaurus/logger");
+
+      Logger.log("test");
+
+      expect(spyConsole).toHaveBeenCalledWith(
+        "\u001b[36m\u001b[1m[INFO]\u001b[22m\u001b[39m test",
+      );
     });
   });
 });

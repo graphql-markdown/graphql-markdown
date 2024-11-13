@@ -8,7 +8,7 @@ import type {
   TypeHierarchyObjectType,
 } from "@graphql-markdown/types";
 
-import { Logger, log } from "@graphql-markdown/logger";
+import Logger, { log } from "@graphql-markdown/logger";
 
 import {
   getCustomDirectives,
@@ -50,7 +50,7 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  Logger(loggerModule);
+  await Logger(loggerModule);
 
   const loaders = await getDocumentLoaders(loadersList);
 
