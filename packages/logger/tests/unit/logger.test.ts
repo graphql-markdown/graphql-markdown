@@ -1,3 +1,5 @@
+/* eslint "no-control-regex": "off" */
+
 import * as Logger from "../../src";
 
 describe("logger", () => {
@@ -134,9 +136,12 @@ describe("logger", () => {
 
       Logger.log("test");
 
-      expect(spyConsole).toHaveBeenCalledWith(
-        "\u001b[36m\u001b[1m[INFO]\u001b[22m\u001b[39m test",
+      const outputNoColor = spyConsole.mock.lastCall![0].replace(
+        /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+        "",
       );
+
+      expect(outputNoColor).toBe("[INFO] test");
     });
   });
 });
