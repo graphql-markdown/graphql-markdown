@@ -29,7 +29,7 @@
   "rules": {
     "enumMembers": "warn"
   },
-  "ignoreDependencies": ["danger"],
+  "ignoreDependencies": ["danger", "husky"],
   "ignoreBinaries": ["danger"],
   "ignoreExportsUsedInFile": true,
   "jest": {
