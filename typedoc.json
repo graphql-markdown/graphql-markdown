@@ -3,7 +3,7 @@
   "plugin": [
     "typedoc-plugin-markdown",
     "typedoc-plugin-frontmatter",
-    "./scripts/custom-frontmatter.js"
+    "./scripts/custom-frontmatter.mjs"
   ],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
