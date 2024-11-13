@@ -6,19 +6,19 @@ import type {
   ExperimentalConfigOptions,
 } from "@graphql-markdown/types";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
-import { Logger } from "@graphql-markdown/logger";
+import Logger from "@graphql-markdown/logger";
 
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
+const LOGGER_MODULE = "@docusaurus/logger" as const;
 
-export default function pluginGraphQLDocGenerator(
+export default async function pluginGraphQLDocGenerator(
   _: LoadContext,
   options: ConfigOptions & ExperimentalConfigOptions & Partial<PluginOptions>,
-): Plugin {
-  const loggerModule = require.resolve("@docusaurus/logger");
-  Logger(loggerModule);
+): Promise<Plugin> {
+  await Logger(LOGGER_MODULE);
 
   const isDefaultId = options.id === DEFAULT_ID;
 
@@ -37,7 +37,7 @@ export default function pluginGraphQLDocGenerator(
       const config = await buildConfig(options, {}, options.id);
       await generateDocFromSchema({
         ...config,
-        loggerModule,
+        loggerModule: LOGGER_MODULE,
       });
     },
 
@@ -91,7 +91,7 @@ export default function pluginGraphQLDocGenerator(
           const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
             ...config,
-            loggerModule,
+            loggerModule: LOGGER_MODULE,
           });
         });
     },
