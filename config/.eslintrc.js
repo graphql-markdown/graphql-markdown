@@ -5,7 +5,7 @@ module.exports = {
   root: true,
   overrides: [
     {
-      files: ["**/*.ts"],
+      files: ["**/*.ts", "**/*.mjs"],
       env: {
         node: true,
         es6: true,
