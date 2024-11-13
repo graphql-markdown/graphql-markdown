@@ -64,7 +64,7 @@
     "docs:api": "sh ./scripts/docs-api.sh",
     "knip": "knip",
     "lint": "eslint \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
-    "prepare": "node .husky/install.mjs",
+    "prepare": "husky | true",
     "prettier": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\"",
     "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests --ci --silent --randomize",
     "test:watch": "jest --config=./config/jest.config.js --watch --maxWorkers=25%",
