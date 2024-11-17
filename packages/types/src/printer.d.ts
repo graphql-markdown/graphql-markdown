@@ -24,9 +24,7 @@ export type RootTypeName =
   | "TYPE"
   | "UNION";
 export type TypeLocale = string | { singular: string; plural: string };
-export type RootTypeLocale = {
-  [name in RootTypeName]: TypeLocale;
-};
+export type RootTypeLocale = Record<RootTypeName, TypeLocale>;
 
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;

@@ -28,6 +28,8 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
+import { toString } from "@graphql-markdown/utils";
+
 import { _getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
 
@@ -201,7 +203,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
         if (
           !results.find((r) => {
             return (
-              String(r) === key ||
+              toString(r) === key ||
               (typeof r === "object" && "name" in r && r.name === key)
             );
           })

@@ -18,6 +18,8 @@ import {
   loadSchema,
 } from "@graphql-markdown/graphql";
 
+import { toString } from "@graphql-markdown/utils";
+
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
@@ -71,7 +73,7 @@ export const generateDocFromSchema = async ({
       diffMethod as DiffMethodName,
     );
     if (!changed) {
-      log(`No changes detected in schema "${String(schemaLocation)}".`);
+      log(`No changes detected in schema "${toString(schemaLocation)}".`);
     }
   }
 
@@ -149,6 +151,6 @@ export const generateDocFromSchema = async ({
   log(
     `${
       pages.flat().length
-    } pages generated in ${duration}s from schema "${String(schemaLocation)}".`,
+    } pages generated in ${duration}s from schema "${toString(schemaLocation)}".`,
   );
 };
