@@ -34,7 +34,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { convertArrayToMapObject } from "@graphql-markdown/utils";
+import { convertArrayToMapObject, toString } from "@graphql-markdown/utils";
 
 import { instanceOf } from "./guard";
 
@@ -415,11 +415,11 @@ export const getTypeName = (
   }
 
   if ("name" in type) {
-    return String(type.name);
+    return toString(type.name);
   }
 
   if ("toString" in type && typeof type.toString === "function") {
-    return String(type);
+    return toString(type);
   }
 
   return defaultName;

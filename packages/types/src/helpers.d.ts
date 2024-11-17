@@ -7,9 +7,9 @@ export type CustomDirectiveFunction = (
 
 export type CustomDirectiveResolver = "descriptor" | "tag";
 
-export type CustomDirectiveOptions = {
-  [name in CustomDirectiveResolver]?: CustomDirectiveFunction;
-};
+export type CustomDirectiveOptions = Partial<
+  Record<CustomDirectiveResolver, CustomDirectiveFunction>
+>;
 
 export type CustomDirective = Record<DirectiveName, CustomDirectiveOptions>;
 

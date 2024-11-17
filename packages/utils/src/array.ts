@@ -5,6 +5,7 @@
  */
 
 import type { Maybe } from "@graphql-markdown/types";
+import { toString } from "./string";
 
 /**
  * Returns an array of values from a k/v object.
@@ -82,7 +83,7 @@ export const convertArrayToMapObject = <T>(
 
   return list.reduce<Record<string, T>>((result, entry: T) => {
     if (typeof entry === "object" && entry !== null) {
-      const key = "name" in entry && entry.name ? String(entry.name) : null;
+      const key = "name" in entry && entry.name ? toString(entry.name) : null;
       if (key === null) {
         return result;
       }

@@ -31,7 +31,7 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 
-import { slugify, pathUrl } from "@graphql-markdown/utils";
+import { pathUrl, slugify, toString } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
 import {
@@ -245,7 +245,7 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
 
   const link = toLink(
     type,
-    getTypeName(type, String(type)),
+    getTypeName(type, toString(type)),
     undefined,
     options,
   );

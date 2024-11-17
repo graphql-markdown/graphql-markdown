@@ -280,3 +280,15 @@ export const kebabCase = (str: Maybe<string>): string => {
  * @alias
  */
 export const slugify = kebabCase;
+
+/**
+ * Returns a stringified version of the variable.
+ *
+ *
+ * @param variable - the variable to be transformed.
+ *
+ * @returns a string
+ */
+export const toString = (variable: unknown): string => {
+  return String(variable);
+};
