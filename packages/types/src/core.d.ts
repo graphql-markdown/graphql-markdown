@@ -1,13 +1,11 @@
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type {
-  CustomDirective,
-  DirectiveName,
-  GraphQLDirective,
-  GraphQLSchema,
-  Maybe,
-} from ".";
+import type { DirectiveName, GraphQLDirective, GraphQLSchema } from "./graphql";
+
+import type { CustomDirective } from "./helpers";
+
+import type { Maybe } from "./utils";
 
 export type FrontMatterOptions = Record<string, unknown>;
 

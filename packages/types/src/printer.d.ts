@@ -1,15 +1,17 @@
 import type {
   ConfigPrintTypeOptions,
-  CustomDirectiveMap,
   FrontMatterOptions,
-  GraphQLDirective,
-  GraphQLSchema,
-  Maybe,
-  SchemaEntitiesGroupMap,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
-} from ".";
+} from "./core";
+import type {
+  GraphQLDirective,
+  GraphQLSchema,
+  SchemaEntitiesGroupMap,
+} from "./graphql";
+import type { CustomDirectiveMap } from "./helpers";
+import type { Maybe, MDXString } from "./utils";
 
 export type RootTypeName =
   | "DIRECTIVE"
