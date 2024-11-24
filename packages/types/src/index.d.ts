@@ -1,17 +1,17 @@
 // @graphql-markdown/core
-export * from "./core";
+export type * from "./core";
 
 // @graphql-markdown/utils
-export * from "./utils";
+export type * from "./utils";
 
 // @graphql-markdown/printer-legacy
-export * from "./printer";
+export type * from "./printer";
 
 // @graphql-markdown/logger
 export type * from "./logger";
 
 // @graphql-markdown/graphql
-export * from "./graphql";
+export type * from "./graphql";
 
 // @graphql-markdown/helpers
 export type * from "./helpers";
