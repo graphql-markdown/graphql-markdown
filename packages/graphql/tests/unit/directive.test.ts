@@ -18,6 +18,8 @@ const {
   isCustomDirective,
 } = Directives;
 
+import * as Guard from "../../src/guard";
+
 describe("directive", () => {
   const schema = buildSchema(`
     directive @testA(
@@ -374,9 +376,7 @@ describe("directive", () => {
             locations,
           });
 
-          expect(Directives.executableDirectiveLocation(directive)).toBe(
-            executable,
-          );
+          expect(Guard.executableDirectiveLocation(directive)).toBe(executable);
         },
       );
     });
@@ -392,7 +392,7 @@ describe("directive", () => {
             locations,
           });
 
-          expect(Directives.typeSystemDirectiveLocation(directive)).not.toBe(
+          expect(Guard.typeSystemDirectiveLocation(directive)).not.toBe(
             executable,
           );
         },
