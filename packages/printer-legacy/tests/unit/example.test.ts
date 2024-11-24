@@ -7,6 +7,9 @@ import { getDirectiveExampleOption, printExample } from "../../src/example";
 import * as Common from "../../src/common";
 jest.mock("../../src/common");
 
+import * as Link from "../../src/link";
+jest.mock("../../src/link");
+
 describe("example", () => {
   const schema = buildSchema(`
   directive @example(
@@ -69,7 +72,7 @@ describe("example", () => {
 `);
 
   beforeEach(() => {
-    jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+    jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
   });
 
   afterEach(() => {
@@ -170,7 +173,7 @@ describe("example", () => {
     test("returns undefined if directive not printable", () => {
       expect.assertions(1);
 
-      jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(false);
+      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(false);
 
       expect(
         printExample(schema.getType("ScalarExample"), {
@@ -205,7 +208,7 @@ describe("example", () => {
       expect.assertions(1);
 
       jest
-        .spyOn(Common, "hasPrintableDirective")
+        .spyOn(Link, "hasPrintableDirective")
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "ScalarExample";
@@ -222,7 +225,7 @@ describe("example", () => {
       expect.assertions(1);
 
       jest
-        .spyOn(Common, "hasPrintableDirective")
+        .spyOn(Link, "hasPrintableDirective")
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "TypeExample";

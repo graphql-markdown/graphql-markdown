@@ -5,14 +5,14 @@
  */
 
 import type {
+  GraphQLDirective,
   GraphQLField,
   GraphQLOperationType,
   DeprecatedType,
 } from "@graphql-markdown/types";
 
+import { DirectiveLocation } from "graphql/language";
 import { isDirective } from "graphql/type/directives";
-
-import { executableDirectiveLocation } from "./directive";
 
 export {
   isDirective as isDirectiveType,
@@ -93,6 +93,42 @@ export const isDeprecated = <T>(obj: T): obj is DeprecatedType<T> => {
  */
 export const isOperation = (type: unknown): type is GraphQLOperationType => {
   return typeof type === "object" && type !== null && "type" in type;
+};
+
+/**
+ * Checks if a directive is executable (related to operations).
+ *
+ * @param type - a GraphQL directive.
+ *
+ */
+export const executableDirectiveLocation = (
+  directive: GraphQLDirective,
+): boolean => {
+  return [
+    DirectiveLocation.QUERY,
+    DirectiveLocation.MUTATION,
+    DirectiveLocation.SUBSCRIPTION,
+    DirectiveLocation.FIELD,
+    DirectiveLocation.FRAGMENT_DEFINITION,
+    DirectiveLocation.FRAGMENT_SPREAD,
+    DirectiveLocation.INLINE_FRAGMENT,
+    DirectiveLocation.VARIABLE_DEFINITION,
+  ].some((item) => {
+    return directive.locations.includes(item);
+  });
+};
+
+/**
+ * Checks if a directive is system (related to schema definition).
+ *
+ * @param type - a GraphQL directive.
+ *
+ */
+export const typeSystemDirectiveLocation = (
+  directive: GraphQLDirective,
+): boolean => {
+  // we assume that if not executable then it is a system directive
+  return !executableDirectiveLocation(directive);
 };
 
 /**

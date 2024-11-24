@@ -1,4 +1,4 @@
-import type { Maybe } from ".";
+export type Maybe<T> = T | null | undefined;
 
 export interface Category {
   category: string;

@@ -48,6 +48,7 @@ jest.mock("../../src/example");
 import * as ExamplePrinter from "../../src/example";
 
 import * as Common from "../../src/common";
+import * as Link from "../../src/link";
 
 import { Printer } from "../../src/printer";
 import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
@@ -409,7 +410,7 @@ describe("Printer", () => {
       ({ name, type }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Common, "hasPrintableDirective").mockReturnValue(true);
+        jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
 
         const spies = methods.map((method) => {
           return jest.spyOn(Printer, method).mockReturnValue("");
@@ -441,7 +442,7 @@ describe("Printer", () => {
 
     test("returns undefined if type has no printable directive", () => {
       expect.hasAssertions();
-      jest.spyOn(Common, "hasPrintableDirective").mockReturnValueOnce(false);
+      jest.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
       const printedType = Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();

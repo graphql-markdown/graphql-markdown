@@ -1,5 +1,6 @@
+import type { GraphQLProjectConfig } from "graphql-config";
+import type { ObjectTypeDefinitionNode } from "graphql/language";
 import type {
-  ConfigOptions,
   GraphQLDirective,
   GraphQLEnumType,
   GraphQLFieldMap,
@@ -10,11 +11,33 @@ import type {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
-  Maybe,
-  ObjectTypeDefinitionNode,
-} from ".";
+} from "graphql/type";
 
-import type { GraphQLProjectConfig } from "graphql-config";
+import type { Maybe } from "./utils";
+
+export type {
+  GraphQLArgument,
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLField,
+  GraphQLFieldMap,
+  GraphQLInputFieldMap,
+  GraphQLInputObjectType,
+  GraphQLInterfaceType,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLSchema,
+  GraphQLSchemaConfig,
+  GraphQLType,
+  GraphQLUnionType,
+} from "graphql/type";
+
+export type { LoadSchemaOptions } from "@graphql-tools/load";
+
+export type { GraphQLExtensionDeclaration } from "graphql-config";
+
+export type { ASTNode, DirectiveNode } from "graphql/language";
 
 export type DeprecatedType<T> = Partial<{
   deprecationReason: string;
@@ -72,14 +95,14 @@ export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;
 export type RelationOfImplementation = GraphQLUnionType | RelationOfInterface;
 export type ExtensionProjectConfig = Omit<ConfigOptions, "schema"> &
   Writeable<GraphQLProjectConfig>;
-export interface RelationOf {
-  section: string;
-  getRelation: IGetRelation;
-}
 export type IGetRelation<T> = (
   type: unknown,
   schemaMap: Maybe<SchemaMap>,
 ) => Partial<Record<SchemaEntity, T[]>>;
+export interface RelationOf {
+  section: string;
+  getRelation: IGetRelation<T>;
+}
 type Writeable<T> = {
   -readonly [P in keyof T]: T[P];
 };
