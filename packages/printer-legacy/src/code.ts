@@ -11,7 +11,7 @@ import {
   DEPRECATED,
   MARKDOWN_CODE_INDENTATION,
 } from "./const/strings";
-import { hasPrintableDirective } from "./common";
+import { hasPrintableDirective } from "./link";
 
 export const printCodeArguments = (
   type: unknown,

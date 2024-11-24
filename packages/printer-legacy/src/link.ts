@@ -5,6 +5,7 @@ import type {
   MDXString,
   Maybe,
   PrintLinkOptions,
+  PrintTypeOptions,
   SchemaEntity,
   TypeDeprecatedOption,
   TypeHierarchyObjectType,
@@ -16,6 +17,7 @@ import type {
 import {
   getNamedType,
   getTypeName,
+  hasDirective,
   isApiType,
   isDeprecated,
   isDirectiveType,
@@ -39,13 +41,45 @@ import {
   LINK_MDX_EXTENSION,
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
-import { hasPrintableDirective } from "./common";
 import { TypeHierarchy } from "./const/options";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
   types: "types",
 } as const;
+
+export const hasPrintableDirective = (
+  type: unknown,
+  options?: Pick<
+    PrintTypeOptions,
+    "deprecated" | "onlyDocDirectives" | "skipDocDirectives"
+  >,
+): boolean => {
+  if (!type) {
+    return false;
+  }
+
+  if (!options) {
+    return true;
+  }
+
+  const skipDirective =
+    "skipDocDirectives" in options && options.skipDocDirectives
+      ? hasDirective(type, options.skipDocDirectives)
+      : false;
+
+  const skipDeprecated =
+    "deprecated" in options &&
+    options.deprecated === "skip" &&
+    isDeprecated(type);
+
+  const onlyDirective =
+    "onlyDocDirectives" in options && options.onlyDocDirectives
+      ? hasDirective(type, options.onlyDocDirectives, true)
+      : true;
+
+  return !(skipDirective || skipDeprecated) && onlyDirective;
+};
 
 export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {

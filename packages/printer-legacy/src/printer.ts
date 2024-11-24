@@ -26,7 +26,7 @@ import {
 import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
-import { hasPrintableDirective, printDescription } from "./common";
+import { printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
 import { printFrontMatter } from "./frontmatter";
 import {
@@ -47,6 +47,7 @@ import {
   printScalarMetadata,
   printUnionMetadata,
 } from "./graphql";
+import { hasPrintableDirective } from "./link";
 
 import {
   MARKDOWN_EOC,

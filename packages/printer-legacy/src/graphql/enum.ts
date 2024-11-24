@@ -8,7 +8,7 @@ import {
 
 import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
 import { printMetadataSection } from "../section";
-import { hasPrintableDirective } from "../common";
+import { hasPrintableDirective } from "../link";
 
 export const printEnumMetadata = (
   type: unknown,

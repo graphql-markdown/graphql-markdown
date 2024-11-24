@@ -8,9 +8,9 @@ import type {
 
 import { isGraphQLFieldType, isDeprecated } from "@graphql-markdown/graphql";
 
-import { hasPrintableDirective, printDescription } from "./common";
+import { printDescription } from "./common";
 import { printBadges } from "./badge";
-import { printLink, printParentLink } from "./link";
+import { hasPrintableDirective, printLink, printParentLink } from "./link";
 import { printCustomTags } from "./directive";
 
 import {
