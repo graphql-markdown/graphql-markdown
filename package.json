@@ -153,7 +153,7 @@
     }
   },
   "devDependencies": {
-    "@graphql-eslint/eslint-plugin": "4.0.0",
+    "@graphql-eslint/eslint-plugin": "4.0.1",
     "@graphql-tools/graphql-file-loader": "8.0.4",
     "@graphql-tools/json-file-loader": "8.0.4",
     "@stryker-mutator/api": "8.6.0",
