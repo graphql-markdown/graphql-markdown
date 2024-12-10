@@ -1,4 +1,5 @@
 import type { FrontMatterOptions, Maybe } from "@graphql-markdown/types";
+import { toString } from "@graphql-markdown/utils";
 import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_CODE_INDENTATION,
@@ -50,7 +51,7 @@ const formatFrontMatterList = (
         }),
       );
     } else {
-      frontMatter.push(`${tabs(indentation)}- ${entry}`);
+      frontMatter.push(`${tabs(indentation)}- ${toString(entry)}`);
     }
   });
 
