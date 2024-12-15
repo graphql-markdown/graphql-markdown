@@ -20,7 +20,7 @@
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
   "types": "src/index.d.ts",
   "devDependencies": {
-    "graphql": "16.9.0",
+    "graphql": "16.10.0",
     "@graphql-tools/load": "8.0.9",
     "@graphql-tools/utils": "10.6.4",
     "graphql-config": "5.1.3"
