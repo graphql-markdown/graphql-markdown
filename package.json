@@ -171,7 +171,7 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-import-resolver-typescript": "3.7.0",
     "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-jest": "28.9.0",
+    "eslint-plugin-jest": "28.10.0",
     "eslint-plugin-jsonc": "2.18.2",
     "eslint-plugin-mdx": "3.1.5",
     "eslint-plugin-prettier": "5.2.1",
