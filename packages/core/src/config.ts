@@ -54,6 +54,8 @@ export const ASSET_HOMEPAGE_LOCATION = join(
   "generated.md",
 );
 
+export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
+
 export const DEFAULT_OPTIONS: Readonly<
   Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
     Required<
@@ -92,9 +94,6 @@ export const DEFAULT_OPTIONS: Readonly<
     parentTypePrefix: true as const,
     relatedTypeSection: true as const,
     typeBadges: true as const,
-    hierarchy: { [TypeHierarchy.API]: {} } as Required<
-      Pick<TypeHierarchyObjectType, TypeHierarchy.API>
-    >,
   } as Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   },
@@ -330,11 +329,7 @@ export const getTypeHierarchyOption = (
     }
   }
 
-  return (
-    cliHierarchy ??
-    configHierarchy ??
-    DEFAULT_OPTIONS.printTypeOptions.hierarchy
-  );
+  return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
 };
 
 export const parseDeprecatedPrintTypeOptions = (
