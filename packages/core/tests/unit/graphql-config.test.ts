@@ -5,7 +5,11 @@ import { vol } from "memfs";
 import { join } from "node:path";
 
 import * as CoreGraphQLConfig from "../../src/graphql-config";
-import { buildConfig, DEFAULT_OPTIONS } from "../../src/config";
+import {
+  buildConfig,
+  DEFAULT_HIERARCHY,
+  DEFAULT_OPTIONS,
+} from "../../src/config";
 
 jest.mock("graphql-config");
 import * as GraphQLConfig from "graphql-config";
@@ -317,7 +321,10 @@ describe("config", () => {
           ),
           prettify: DEFAULT_OPTIONS.pretty,
           printer: DEFAULT_OPTIONS.printer,
-          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          printTypeOptions: {
+            ...DEFAULT_OPTIONS.printTypeOptions,
+            hierarchy: DEFAULT_HIERARCHY,
+          },
           schemaLocation: graphqlConfig.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),

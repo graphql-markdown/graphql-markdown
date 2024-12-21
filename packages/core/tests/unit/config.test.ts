@@ -17,6 +17,7 @@ import { join } from "node:path";
 
 import {
   buildConfig,
+  DEFAULT_HIERARCHY,
   DEFAULT_OPTIONS,
   DiffMethod,
   getCustomDirectives,
@@ -206,7 +207,10 @@ describe("config", () => {
           onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
           prettify: DEFAULT_OPTIONS.pretty,
           printer: DEFAULT_OPTIONS.printer,
-          printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+          printTypeOptions: {
+            ...DEFAULT_OPTIONS.printTypeOptions,
+            hierarchy: DEFAULT_HIERARCHY,
+          },
           schemaLocation: DEFAULT_OPTIONS.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
           tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
@@ -404,7 +408,10 @@ describe("config", () => {
         outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
         prettify: cliOpts.pretty,
         printer: DEFAULT_OPTIONS.printer,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: DEFAULT_HIERARCHY,
+        },
         schemaLocation: cliOpts.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
@@ -434,7 +441,10 @@ describe("config", () => {
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
         printer: DEFAULT_OPTIONS.printer,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: DEFAULT_HIERARCHY,
+        },
         schemaLocation: DEFAULT_OPTIONS.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
@@ -468,7 +478,10 @@ describe("config", () => {
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
         printer: DEFAULT_OPTIONS.printer,
-        printTypeOptions: DEFAULT_OPTIONS.printTypeOptions,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: DEFAULT_HIERARCHY,
+        },
         schemaLocation: DEFAULT_OPTIONS.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
         tmpDir: DEFAULT_OPTIONS.tmpDir,
@@ -813,9 +826,7 @@ describe("config", () => {
 
       const hierarchy = getTypeHierarchyOption();
 
-      expect(hierarchy).toStrictEqual(
-        DEFAULT_OPTIONS.printTypeOptions.hierarchy,
-      );
+      expect(hierarchy).toStrictEqual(DEFAULT_HIERARCHY);
     });
 
     test("throws an error if cli and config are different", () => {
