@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/types",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Common types for @graphql-markdown packages",
   "repository": {
     "type": "git",
