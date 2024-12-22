@@ -4,9 +4,6 @@ import { buildSchema } from "graphql/utilities";
 
 import { getDirectiveExampleOption, printExample } from "../../src/example";
 
-import * as Common from "../../src/common";
-jest.mock("../../src/common");
-
 import * as Link from "../../src/link";
 jest.mock("../../src/link");
 
@@ -275,31 +272,96 @@ describe("example", () => {
     test("returns a formatted example using custom parser", () => {
       expect.assertions(1);
 
+      const type = schema.getType("CustomExampleDirective");
+      const parser = (options: unknown): unknown => {
+        const example = (options as [{ key: string; value: string }]).find(
+          (option) => {
+            return ["example", "examples"].includes(option.key);
+          },
+        );
+        if (!example) {
+          return undefined;
+        }
+        if (example.key === "example") {
+          return example.value;
+        }
+        return (JSON.parse(example.value) as string[])[0];
+      };
+
       expect(
-        printExample(schema.getType("CustomExampleDirective"), {
+        printExample(type, {
           schema,
           exampleSection: {
             directive: "spectaql",
             field: "options",
-            parser: (options: unknown): unknown => {
-              const example = (
-                options as [{ key: string; value: string }]
-              ).find((option) => {
-                return ["example", "examples"].includes(option.key);
-              });
-              if (!example) {
-                return undefined;
-              }
-              if (example.key === "example") {
-                return example.value;
-              }
-              return (JSON.parse(example.value) as string[])[0];
-            },
+            parser,
           },
         } as PrintTypeOptions),
       ).toBe(
         '{\n  "myFieldOtherField": "An Example from the Directive",\n  "myFieldOtherOtherField": "Example 1 from the Directive"\n}',
       );
+    });
+
+    test.each([
+      { typename: "Measure", expected: '{\n  "arguments": [\n    {}\n  ]\n}' },
+      {
+        typename: "Organization",
+        expected: '{\n  "id": "23",\n  "children": []\n}',
+      },
+      {
+        typename: "OrganizationConnection",
+        expected:
+          '{\n  "edges": [\n    {\n      "node": {\n        "id": "23",\n        "children": []\n      }\n    }\n  ]\n}',
+      },
+    ])('recursive structure "$typename"', ({ typename, expected }) => {
+      expect.assertions(1);
+
+      const schema = buildSchema(`
+        directive @example(
+          value: String
+        ) on OBJECT | FIELD_DEFINITION | SCALAR
+
+        type OrganizationEdge {
+          cursor: String!
+          node: Organization
+        }
+
+        type OrganizationConnection {
+          edges: [OrganizationEdge]
+          nodes: [Organization]
+        }
+
+        type Organization {
+          id: ID! @example(value: "\\"23\\"")
+          children: [Organization!]!
+          parent: Organization
+        }
+
+        type Measure  {
+          arguments: [Argument!]
+        }
+
+        type Argument {
+          measure: Measure!
+        }
+      
+        type Query {
+          organizations(
+            after: String
+            before: String
+            first: Int
+            last: Int
+          ): OrganizationConnection!
+        }
+      `);
+
+      const type = schema.getType(typename);
+
+      const example = printExample(type, {
+        schema,
+      } as PrintTypeOptions);
+
+      expect(example).toBe(expected);
     });
   });
 });

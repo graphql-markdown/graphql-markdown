@@ -18,37 +18,38 @@ import {
   IntrospectionError,
   isListType,
   isNode,
+  isNonNullType,
   isOperation,
   isType,
   parse,
   print,
 } from "@graphql-markdown/graphql";
 
+import { toString } from "@graphql-markdown/utils";
+
 import { hasPrintableDirective } from "./link";
 
-export const getDirectiveExampleOption = (
-  options: PrintTypeOptions,
-): Maybe<TypeDirectiveExample> => {
+export const getDirectiveExampleOption = ({
+  exampleSection,
+  schema,
+}: PrintTypeOptions): Maybe<TypeDirectiveExample> => {
   let directiveName: string = "example",
     argName: string = "value",
     parserFunc: Maybe<DirectiveExampleParserFunction> = undefined;
-  if (options.exampleSection && typeof options.exampleSection === "object") {
-    if (
-      "directive" in options.exampleSection &&
-      options.exampleSection.directive
-    ) {
-      directiveName = options.exampleSection.directive;
+  if (exampleSection && typeof exampleSection === "object") {
+    if ("directive" in exampleSection && exampleSection.directive) {
+      directiveName = exampleSection.directive;
     }
-    if ("field" in options.exampleSection && options.exampleSection.field) {
-      argName = options.exampleSection.field;
+    if ("field" in exampleSection && exampleSection.field) {
+      argName = exampleSection.field;
     }
-    if ("parser" in options.exampleSection && options.exampleSection.parser) {
-      parserFunc = options.exampleSection.parser;
+    if ("parser" in exampleSection && exampleSection.parser) {
+      parserFunc = exampleSection.parser;
     }
   }
   const directive =
-    options.schema && instanceOf(options.schema, GraphQLSchema as never)
-      ? options.schema.getDirective(directiveName)
+    schema && instanceOf(schema, GraphQLSchema as never)
+      ? schema.getDirective(directiveName)
       : undefined;
 
   if (!directive) {
@@ -65,6 +66,7 @@ export const getDirectiveExampleOption = (
 const parseTypeFields = (
   type: Maybe<GraphQLType>,
   options: PrintTypeOptions,
+  mappedTypes: string[] = [],
 ): Maybe<unknown> => {
   const directiveExample = getDirectiveExampleOption(options);
   if (!directiveExample) {
@@ -94,14 +96,21 @@ const parseTypeFields = (
       const value = parseExampleDirective(
         fieldType as Maybe<GraphQLType>,
         options,
+        mappedTypes,
       );
+
+      let structuredValue: unknown = value;
+      if (isListType(getNullableType(fieldType as Maybe<GraphQLType>))) {
+        if (!value && isNonNullType(fieldType as Maybe<GraphQLType>)) {
+          structuredValue = [];
+        } else {
+          structuredValue = value ? [value] : undefined;
+        }
+      }
+
       example = {
         ...example,
-        [field.name]: isListType(
-          getNullableType(fieldType as Maybe<GraphQLType>),
-        )
-          ? [value]
-          : value,
+        [field.name]: structuredValue,
       };
     });
 
@@ -134,6 +143,7 @@ const parseExampleValue = (
 const parseExampleDirective = (
   type: Maybe<GraphQLOperationType | GraphQLType>,
   options: PrintTypeOptions,
+  mappedTypes: string[] = [],
 ): Maybe<unknown> => {
   const directiveExample = getDirectiveExampleOption(options);
   if (!directiveExample || !hasPrintableDirective(type, options)) {
@@ -145,10 +155,22 @@ const parseExampleDirective = (
       ? directiveExample.parser
       : parseExampleValue;
 
+  // get parent type
   const namedType = isType(type) ? getNamedType(type) : type;
   if (!namedType) {
     return undefined;
   }
+
+  // get type name
+  const typename = isType(namedType)
+    ? toString(namedType)
+    : toString(namedType.name);
+
+  // recursion check
+  if (mappedTypes.includes(typename)) {
+    return undefined;
+  }
+  mappedTypes.push(typename);
 
   try {
     const arg = getTypeDirectiveArgValue(
@@ -160,9 +182,10 @@ const parseExampleDirective = (
     return parser(arg, namedType);
   } catch (err: unknown) {
     if (err instanceof IntrospectionError) {
-      return isType(namedType)
-        ? parseTypeFields(namedType, options)
-        : undefined;
+      if (!isType(namedType)) {
+        return undefined;
+      }
+      return parseTypeFields(namedType, options, mappedTypes);
     }
     throw err;
   }
