@@ -311,7 +311,7 @@ describe("example", () => {
       {
         typename: "OrganizationConnection",
         expected:
-          '{\n  "edges": [\n    {\n      "node": {\n        "id": "23",\n        "children": []\n      }\n    }\n  ],\n  "nodes": []\n}',
+          '{\n  "edges": [\n    {\n      "node": {\n        "id": "23",\n        "children": []\n      }\n    }\n  ]\n}',
       },
     ])('recursive structure "$typename"', ({ typename, expected }) => {
       expect.assertions(1);

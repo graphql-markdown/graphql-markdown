@@ -18,6 +18,7 @@ import {
   IntrospectionError,
   isListType,
   isNode,
+  isNonNullType,
   isOperation,
   isType,
   parse,
@@ -100,7 +101,11 @@ const parseTypeFields = (
 
       let structuredValue: unknown = value;
       if (isListType(getNullableType(fieldType as Maybe<GraphQLType>))) {
-        structuredValue = value ? [value] : [];
+        if (!value && isNonNullType(fieldType as Maybe<GraphQLType>)) {
+          structuredValue = [];
+        } else {
+          structuredValue = value ? [value] : undefined;
+        }
       }
 
       example = {
