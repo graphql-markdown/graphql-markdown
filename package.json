@@ -183,7 +183,7 @@
     "jsonc-eslint-parser": "2.4.0",
     "knip": "5.41.1",
     "lodash.filter": "4.6.0",
-    "memfs": "4.15.0",
+    "memfs": "4.15.1",
     "pinst": "3.0.0",
     "prettier": "3.4.2",
     "ts-jest": "29.2.5",
@@ -194,7 +194,7 @@
     "unionfs": "4.5.4"
   },
   "resolutions": {
-    "chalk": "5.4.0"
+    "chalk": "5.4.1"
   },
   "peerDependencies": {
     "@graphql-markdown/core": "file:packages/core",
