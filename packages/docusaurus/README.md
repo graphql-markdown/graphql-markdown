@@ -12,20 +12,11 @@
 
 ## Installation
 
-**`graphql` package is a peer-dependency, and it should be installed separately.**
-
 ```shell
-npm install @graphql-markdown/docusaurus graphql
+npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 ```
 
-Add `@graphql-markdown/docusaurus` to your site's `docusaurus.config.js` plugins option:
-
-```js
-module.exports = {
-  // ...
-  plugins: ["@graphql-markdown/docusaurus"],
-};
-```
+> _If you already have an existing Docusaurus installation, then see the [documentation](https://graphql-markdown.dev/docs/get-started) for alternative installation._
 
 ## Usage
 
