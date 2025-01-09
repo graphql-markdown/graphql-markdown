@@ -181,7 +181,7 @@
     "husky": "9.1.7",
     "jest": "29.7.0",
     "jsonc-eslint-parser": "2.4.0",
-    "knip": "5.41.1",
+    "knip": "5.42.0",
     "lodash.filter": "4.6.0",
     "memfs": "4.15.3",
     "pinst": "3.0.0",
