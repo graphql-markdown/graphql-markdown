@@ -51,6 +51,9 @@ const INTROSPECTION_SCHEMA_FILE = require.resolve(
   "../__data__/introspection.json",
 );
 const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
+const SCHEMA_ISSUE_1907_FILE = require.resolve(
+  "../__data__/schema_1907.graphql",
+);
 
 describe("introspection", () => {
   let schema: GraphQLSchema;
@@ -289,6 +292,18 @@ describe("introspection", () => {
       const testSchema = await loadSchema(SCHEMA_CUSTOM_ROOT_FILE, {
         loaders: [new GraphQLFileLoader()],
         rootTypes: { query: "Root", subscription: "" },
+      });
+
+      const schemaTypeMap = getSchemaMap(testSchema);
+
+      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+    });
+
+    test("returns schema types map with defined root types", async () => {
+      expect.hasAssertions();
+
+      const testSchema = await loadSchema(SCHEMA_ISSUE_1907_FILE, {
+        loaders: [new GraphQLFileLoader()],
       });
 
       const schemaTypeMap = getSchemaMap(testSchema);
