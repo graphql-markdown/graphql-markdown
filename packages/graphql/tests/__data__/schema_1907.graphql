@@ -1,0 +1,12 @@
+schema {
+  query: MyQueryRootType
+  mutation: MyMutationRootType
+}
+
+type MyQueryRootType {
+  someField: String
+}
+
+type MyMutationRootType {
+  setSomeField(to: String): String
+}

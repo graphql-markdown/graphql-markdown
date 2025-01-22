@@ -4400,6 +4400,177 @@ exports[`introspection getSchemaMap() returns schema types map with custom root 
 }"
 `;
 
+exports[`introspection getSchemaMap() returns schema types map with defined root types 1`] = `
+"{
+  "queries": {
+    "someField": {
+      "name": "someField",
+      "type": "String",
+      "args": [],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "someField",
+          "loc": {
+            "start": 93,
+            "end": 102
+          }
+        },
+        "arguments": [],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "String",
+            "loc": {
+              "start": 104,
+              "end": 110
+            }
+          },
+          "loc": {
+            "start": 104,
+            "end": 110
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 93,
+          "end": 110
+        }
+      }
+    }
+  },
+  "mutations": {
+    "setSomeField": {
+      "name": "setSomeField",
+      "type": "String",
+      "args": [
+        {
+          "name": "to",
+          "type": "String",
+          "extensions": {},
+          "astNode": {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "to",
+              "loc": {
+                "start": 155,
+                "end": 157
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 159,
+                  "end": 165
+                }
+              },
+              "loc": {
+                "start": 159,
+                "end": 165
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 155,
+              "end": 165
+            }
+          }
+        }
+      ],
+      "extensions": {},
+      "astNode": {
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": "setSomeField",
+          "loc": {
+            "start": 142,
+            "end": 154
+          }
+        },
+        "arguments": [
+          {
+            "kind": "InputValueDefinition",
+            "name": {
+              "kind": "Name",
+              "value": "to",
+              "loc": {
+                "start": 155,
+                "end": 157
+              }
+            },
+            "type": {
+              "kind": "NamedType",
+              "name": {
+                "kind": "Name",
+                "value": "String",
+                "loc": {
+                  "start": 159,
+                  "end": 165
+                }
+              },
+              "loc": {
+                "start": 159,
+                "end": 165
+              }
+            },
+            "directives": [],
+            "loc": {
+              "start": 155,
+              "end": 165
+            }
+          }
+        ],
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "String",
+            "loc": {
+              "start": 168,
+              "end": 174
+            }
+          },
+          "loc": {
+            "start": 168,
+            "end": 174
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 142,
+          "end": 174
+        }
+      }
+    }
+  },
+  "subscriptions": {},
+  "directives": {
+    "include": "@include",
+    "skip": "@skip",
+    "deprecated": "@deprecated",
+    "specifiedBy": "@specifiedBy",
+    "oneOf": "@oneOf"
+  },
+  "objects": {},
+  "unions": {},
+  "interfaces": {},
+  "enums": {},
+  "inputs": {},
+  "scalars": {
+    "String": "String",
+    "Boolean": "Boolean"
+  }
+}"
+`;
+
 exports[`introspection getTypeFromSchema() handles null types from introspection JSON 1`] = `
 "{
   "ID": "ID",
