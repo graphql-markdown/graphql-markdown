@@ -1,13 +1,13 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "semanticCommits": "enabled",
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@graphql-markdown"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": ["/^@graphql-markdown/"]
     },
     {
-      "matchPaths": ["website/**"],
+      "matchFileNames": ["website/**"],
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["main"],
       "enabled": false
