@@ -74,11 +74,11 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        content: "🚀 Fully compatible with Docusaurus 2 and Docusaurus 3 🚀",
-        // content:
-        //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
-        // backgroundColor: "#485e58",
-        // textColor: "#dbf5e6",
+        // content: "🚀 Fully compatible with Docusaurus 2 and Docusaurus 3 🚀",
+        content:
+          'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
+        backgroundColor: "#485e58",
+        textColor: "#dbf5e6",
         isCloseable: true,
       },
       navbar: {
