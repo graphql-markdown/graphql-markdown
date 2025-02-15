@@ -16,13 +16,12 @@ const DEFAULT_ID = "default" as const;
 export default async function GraphQLDocCLI(
   cli: Command,
   command: string = COMMAND,
-  config?: ConfigOptions & Partial<ExperimentalConfigOptions>,
+  options: ConfigOptions & Partial<ExperimentalConfigOptions>,
   loggerModule?: string,
 ): Promise<Command> {
   await Logger(loggerModule);
 
-  const options = { id: DEFAULT_ID, ...config };
-  const isDefaultId = options.id === DEFAULT_ID;
+  const isDefaultId = !options.id || options.id === DEFAULT_ID;
 
   const cmd = isDefaultId ? command : `${command}:${options.id}`;
   const description = isDefaultId
