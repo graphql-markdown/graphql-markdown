@@ -1,5 +1,5 @@
 /** @type {import('graphql-config').IGraphQLConfig} */
-export default {
+module.exports = {
   projects: {
     default: {
       extensions: {

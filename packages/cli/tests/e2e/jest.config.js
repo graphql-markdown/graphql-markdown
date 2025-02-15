@@ -3,7 +3,7 @@ const config = {
   collectCoverage: false,
   displayName: "End-to-End Tests",
   globals: {
-    __ROOT_DIR__: "/docusaurus-gqlmd",
+    __ROOT_DIR__: "/cli-gqlmd",
   },
   rootDir: __dirname,
   testEnvironment: "node",

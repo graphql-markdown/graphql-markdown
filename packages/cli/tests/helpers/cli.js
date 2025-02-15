@@ -7,7 +7,7 @@ module.exports = function cli({
   cwd = global["__ROOT_DIR__"],
   id = undefined,
 } = {}) {
-  const command = id ? `${cmd}:${id}` : cmd;
+  const command = id && id !== "default" ? `${cmd}:${id}` : cmd;
 
   return new Promise((resolve) => {
     exec(

@@ -4,6 +4,7 @@ ARG nodeVersion="lts"
 ARG npmVersion="latest"
 ARG --global docusaurusVersion="latest"
 ARG --global docusaurusProject="docusaurus-gqlmd"
+ARG --global gqlmdCliProject="cli-gqlmd"
 
 FROM docker.io/library/node:$nodeVersion-alpine
 RUN export NODE_ENV=ci
@@ -62,12 +63,11 @@ build-docusaurus-project:
 
 setup-cli-project:
   FROM +build
-  RUN mkdir /graphql-markdown-smoke
-  WORKDIR /graphql-markdown-smoke
+  RUN mkdir /$gqlmdCliProject
+  WORKDIR /$gqlmdCliProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
   COPY --dir ./packages/cli/tests/__data__ ./data
-  RUN mv ./data/.graphqlrc ./.graphqlrc
 
 setup-docusaurus-project:
   FROM +build-docusaurus-project
@@ -95,11 +95,12 @@ smoke-docusaurus-test:
 
 smoke-cli-test:
   FROM +setup-cli-project
-  WORKDIR /graphql-markdown-smoke
+  WORKDIR /$gqlmdCliProject
   RUN npm install -g jest 
   COPY --dir ./packages/cli/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/cli/tests/helpers ./__tests__/helpers
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
+  RUN mv ./data/cli-graphql-doc-generator-multi-instance.config.js ./graphql.config.js
   RUN npx jest --runInBand
 
 smoke-docusaurus-run:
@@ -129,7 +130,7 @@ build-docusaurus-examples:
 build-cli-examples:
   LET folderDocs="examples"
   FROM +setup-cli-project
-  WORKDIR /graphql-markdown-smoke
+  WORKDIR /$gqlmdCliProject
   RUN npm install prettier
   RUN mv ./data/graphql.config.js ./graphql.config.js
   RUN mkdir $folderDocs
