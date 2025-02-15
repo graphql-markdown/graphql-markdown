@@ -1,3 +1,6 @@
+// @graphql-markdown/cli
+export type * from "./cli";
+
 // @graphql-markdown/core
 export type * from "./core";
 
