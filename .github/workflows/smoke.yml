@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  smoke:
+  smoke-docusaurus:
     name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }}
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
@@ -36,20 +36,38 @@ jobs:
           version: latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Smoke Tests
-        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-test
+      - name: Run Docusaurus Smoke Tests
+        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-docusaurus-test
         env:
           EARTHLY_NO_CACHE: true
 
       - name: Docusaurus Production Smoke Build without parameters and local schema
-        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-docusaurus-run
 
       - name: Docusaurus Production Smoke Build with parameters and remote schema
-        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-docusaurus-run
         env:
           OPTIONS: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
 
       - name: Docusaurus Production Smoke Build with groupByDirective option
-        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-run
+        run: earthly --ci --build-arg OPTIONS="$OPTIONS" --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-docusaurus-run
         env:
           OPTIONS: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
+
+  smoke-cli:
+    name: Smoke Tests on CLI
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Install earthly
+        uses: earthly/actions-setup@v1
+        with:
+          version: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run CLI Smoke Tests
+        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-cli-test
+        env:
+          EARTHLY_NO_CACHE: true

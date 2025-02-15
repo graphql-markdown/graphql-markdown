@@ -29,6 +29,7 @@ jobs:
       matrix:
         package:
           [
+            "cli",
             "core",
             "diff",
             "docusaurus",
