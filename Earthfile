@@ -48,7 +48,7 @@ build-package:
   RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
-build-project:
+build-docusaurus-project:
   FROM +build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
@@ -58,10 +58,10 @@ build-project:
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  DO +INSTALL_DOCUSARUS
+  DO +INSTALL_DOCUSAURUS
 
-setup-project:
-  FROM +build-project
+setup-docusaurus-project:
+  FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
@@ -74,8 +74,8 @@ setup-project:
   RUN mv ./data/scripts/config-plugin.js ./config-plugin.js
   RUN node config-plugin.js
 
-smoke-test:
-  FROM +setup-project
+smoke-docusaurus-test:
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN npm install -g jest 
   RUN npm install graphql-config
@@ -84,17 +84,17 @@ smoke-test:
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
   RUN npx jest --runInBand
 
-smoke-run:
+smoke-docusaurus-run:
   ARG options=
-  FROM +setup-project
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   DO +GQLMD --options=$options
   RUN npm run build
   RUN npm run clear
 
-build-examples:
+build-docusaurus-examples:
   LET folderDocs="examples"
-  FROM +setup-project
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN npm install prettier
   RUN mkdir $folderDocs
@@ -114,9 +114,9 @@ build-api-docs:
   RUN npm run docs:api
   SAVE ARTIFACT ./api
 
-build-docs:
+build-docusaurus-docs:
   COPY ./website ./
-  COPY (+build-examples/examples) ./examples
+  COPY (+build-docusaurus-examples/examples) ./examples
   COPY (+build-api-docs/api) ./api
   COPY --dir docs .
   RUN npm install
@@ -124,8 +124,8 @@ build-docs:
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
-build-image:
-  FROM +build-docs
+build-docusaurus-image:
+  FROM +build-docusaurus-docs
   EXPOSE 8080
   ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
@@ -135,7 +135,7 @@ all:
   BUILD +build
   BUILD +unit-test
   BUILD +integration-test
-  BUILD +smoke-test
+  BUILD +smoke-docusaurus-test
 
 # --- UDCs ---
 
@@ -158,7 +158,7 @@ INSTALL_GQLMD:
     RUN npm install ./graphql-markdown-${package}.tgz
   END
 
-INSTALL_DOCUSARUS:
+INSTALL_DOCUSAURUS:
   FUNCTION
   RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
