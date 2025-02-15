@@ -24,6 +24,11 @@
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": ["prettier"]
+    },
+    "packages/cli": {
+      "entry": ["src/main.ts!"],
+      "project": ["**/*.ts!"],
+      "ignore": ["**/__mocks__/**/*.ts"]
     }
   },
   "rules": {
