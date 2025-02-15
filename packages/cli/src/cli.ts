@@ -1,10 +1,10 @@
-/* istanbul ignore file */
 import type {
   CliOptions,
   ConfigOptions,
   ExperimentalConfigOptions,
 } from "@graphql-markdown/types";
-import type { Command } from "commander";
+
+import { Command } from "commander";
 
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
@@ -13,20 +13,20 @@ const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
 
-export default async function GraphQLDocCLI(
-  cli: Command,
-  command: string = COMMAND,
+export default function GraphQLDocCLI(
   options: ConfigOptions & Partial<ExperimentalConfigOptions>,
   loggerModule?: string,
-): Promise<Command> {
-  await Logger(loggerModule);
+): Command {
+  void Logger(loggerModule);
 
   const isDefaultId = !options.id || options.id === DEFAULT_ID;
 
-  const cmd = isDefaultId ? command : `${command}:${options.id}`;
+  const cmd = isDefaultId ? COMMAND : `${COMMAND}:${options.id}`;
   const description = isDefaultId
     ? DESCRIPTION
     : `${DESCRIPTION} for configuration with id ${options.id}`;
+
+  const cli = new Command();
 
   return cli
     .command(cmd)

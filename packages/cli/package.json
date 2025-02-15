@@ -23,7 +23,7 @@
   "author": {
     "name": "Gregory Heitz"
   },
-  "main": "dist/main.js",
+  "main": "dist/cli.js",
   "types": "dist/cli.d.ts",
   "bin": {
     "gqlmd": "./dist/main.js"
@@ -32,15 +32,15 @@
     ".": {
       "require": {
         "types": "./dist/cli.d.ts",
-        "default": "./dist/main.js"
+        "default": "./dist/cli.js"
       },
       "import": {
         "types": "./dist/cli.d.ts",
-        "default": "./dist/main.js"
+        "default": "./dist/cli.js"
       },
       "default": {
         "types": "./dist/cli.d.ts",
-        "default": "./dist/main.js"
+        "default": "./dist/cli.js"
       }
     },
     "./package.json": "./package.json"
@@ -61,9 +61,6 @@
   },
   "devDependencies": {
     "@graphql-markdown/types": "^1.4.2"
-  },
-  "peerDependencies": {
-    "@docusaurus/logger": "*"
   },
   "directories": {
     "test": "tests"
