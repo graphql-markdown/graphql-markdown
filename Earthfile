@@ -68,7 +68,6 @@ setup-cli-project:
   DO +INSTALL_GQLMD
   COPY --dir ./packages/cli/tests/__data__ ./data
   RUN mv ./data/.graphqlrc ./.graphqlrc
-  # RUN npm install graphql-config
 
 setup-docusaurus-project:
   FROM +build-docusaurus-project
@@ -142,7 +141,6 @@ build-cli-examples:
   SET idExample="schema_with_grouping"
   DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
   RUN mv docs ./$folderDocs/$folderExample
-  RUN false
   SAVE ARTIFACT ./$folderDocs
 
 build-api-docs:
@@ -180,12 +178,12 @@ GQLMD:
   FUNCTION
   ARG id
   ARG options
-  ARG command=docusaurus graphql-to-doc
+  ARG command=docusaurus
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx $command $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx $command:${id} $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
