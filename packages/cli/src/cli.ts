@@ -9,14 +9,14 @@ import type { Command } from "commander";
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
 
-const COMMAND = "gqlmd" as const;
+const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
 
 export default async function GraphQLDocCLI(
   cli: Command,
   command: string = COMMAND,
-  config?: ConfigOptions & ExperimentalConfigOptions,
+  config?: ConfigOptions & Partial<ExperimentalConfigOptions>,
   loggerModule?: string,
 ): Promise<Command> {
   await Logger(loggerModule);

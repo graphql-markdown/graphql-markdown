@@ -2,7 +2,7 @@
 const { exec } = require("node:child_process");
 
 module.exports = function cli({
-  cmd = "gqlmd",
+  cmd = "graphql-to-doc",
   args = [],
   cwd = global["__ROOT_DIR__"],
   id = undefined,
@@ -11,7 +11,7 @@ module.exports = function cli({
 
   return new Promise((resolve) => {
     exec(
-      `npx ${command} ${args.join(" ")}`,
+      `npx gqlmd ${command} ${args.join(" ")}`.trim(),
       { cwd, env: { ...process.env, NODE_NO_WARNINGS: 1 } },
       (error, stdout, stderr) => {
         resolve({

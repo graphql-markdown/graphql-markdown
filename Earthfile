@@ -68,7 +68,7 @@ setup-cli-project:
   DO +INSTALL_GQLMD
   COPY --dir ./packages/cli/tests/__data__ ./data
   RUN mv ./data/.graphqlrc ./.graphqlrc
-  RUN npm install graphql-config
+  # RUN npm install graphql-config
 
 setup-docusaurus-project:
   FROM +build-docusaurus-project
