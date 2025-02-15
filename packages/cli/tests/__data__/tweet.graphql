@@ -1,0 +1,94 @@
+scalar SRI @specifiedBy(url: "https://www.w3.org/TR/SRI")
+
+interface Node {
+  id: ID!
+}
+
+enum MediaType {
+  IMAGE
+  MOVIE
+}
+
+type Media {
+  url: Url!
+  sri: SRI!
+  type: MediaType
+}
+
+type Tweet implements Node {
+  id: ID!
+  # The tweet text. No more than 140 characters!
+  body: String
+  # When the tweet was published
+  date: Date
+  # Who published the tweet
+  Author: User
+  # Views, retweets, likes, etc
+  Stats: Stat
+  # Get Meta
+  getMeta(meta: String): Meta
+}
+
+type User implements Node {
+  id: ID!
+  username: String
+  first_name: String
+  last_name: String
+  full_name: String
+  name: String @deprecated
+  avatar_url: Url @deprecated(reason: "Use Media { avatar }.")
+  avatar: Media
+}
+
+type Stat {
+  views: Int
+  likes: Int @deprecated(reason: "Use `reactions`.")
+  reactions: Int
+  retweets: Int
+  responses: Int
+}
+
+type Notification {
+  id: ID
+  date: Date
+  type: String
+}
+
+type Meta {
+  count: Int
+}
+
+scalar Url
+scalar Date
+
+type Query {
+  Tweet(id: ID!): Tweet
+  Tweets(
+    limit: Int = 5
+    skip: Int = 0
+    sort_field: String
+    sort_order: String = "ASC"
+  ): [Tweet]!
+  TweetsMeta: Meta @deprecated
+  User(id: ID!): User @deprecated(reason: "Use `Users`.")
+  Users(id: [ID!]!): [User]!
+  NotificationsMeta: Meta @deprecated
+}
+
+type Mutation {
+  createTweet(
+    input: TweetContent @deprecated(reason: "Use `content`.")
+    content: TweetContent
+  ): Tweet
+  deleteTweet(id: ID!): Tweet
+  markTweetRead(id: ID!): Boolean
+}
+
+input TweetContent {
+  content: String @deprecated(reason: "Use `body`.")
+  body: String
+}
+
+type Subscription {
+  Notifications(limit: Int): [Notification]!
+}

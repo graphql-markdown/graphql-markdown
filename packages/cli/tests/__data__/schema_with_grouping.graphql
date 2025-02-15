@@ -1,0 +1,157 @@
+"""
+Example of example directive for `exampleSection`.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+"""
+directive @example(
+  value: String
+) on OBJECT | INPUT_OBJECT | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
+
+"""
+Example of custom directive for `skipDocDirective`.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#skipdocdirective)
+"""
+directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION | SCALAR
+
+"""
+Example of custom directive for `groupByDirective`.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#groupbydirective)
+"""
+directive @doc(
+  """
+  Category name for `groupByDirective`.
+
+  See [documentation](https://graphql-markdown.dev/docs/settings#groupbydirective)
+  """
+  category: String
+) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
+
+"""
+Example of custom directive for `customDirective`.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#customdirective)
+"""
+directive @complexity(
+  """
+  The level of complexity to resolve the current field.
+
+  If the field needs to call an expensive service to resolve itself, then the complexity should be at a high level but if the field is easy to resolve and not an expensive operation, the complexity should be at a low level.
+  """
+  value: Int! @example(value: "1")
+  """
+  An array containing names of parameters present in the GraphQL field.
+
+  Use parameters values to compute the field's cost dynamically. If the parameter is an array, its multiplier value will be the length of the array.
+  """
+  multipliers: [String!] @example(value: "[\"roles\"]")
+) on FIELD_DEFINITION
+
+"""
+Example of custom directive for `customDirective` descriptor.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#customdirective)
+"""
+directive @auth(
+  """
+  User role required for access. Default to `ADMIN`.
+  """
+  requires: Roles = ADMIN
+) on OBJECT | FIELD_DEFINITION
+
+"""
+Example of custom directive for `customDirective` tag.
+
+See [documentation](https://graphql-markdown.dev/docs/settings#skipdocdirective)
+"""
+directive @beta on OBJECT | INTERFACE | FIELD_DEFINITION
+
+scalar Date @example(value: "1970-01-01")
+scalar EmailAddress @example(value: "john.doe@corp.com")
+scalar PhoneNumber @example(value: "1-234-4567")
+scalar Time @example(value: "01:02:23.453")
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986") @example(value: "https://tools.ietf.org/html/rfc3986")
+
+type Mutation {
+  UpdateGrade(input: String): String @doc(category: "Grade") @auth
+}
+
+type Mutation {
+  UpdateGPA(input: Int): Int @doc(category: "Grade") @auth
+}
+
+type Mutation {
+  AddCourse(input: String): Course @doc(category: "Course") @auth
+}
+
+type Mutation {
+  DropCourse(input: String): Course @doc(category: "Course") @auth
+}
+
+enum Roles {
+  ADMIN
+  USER
+}
+
+type Query {
+  GPA(skip: Int = 0): Int @doc(category: "Grade") @beta
+  WeightedGPA(input: String, skip: Int!): Int
+    @doc(category: "Grade")
+    @complexity(value: 3)
+  UnWeightedGPA(input: String, skip: Int!): Int
+    @doc(category: "Grade")
+    @complexity(value: 3)
+  Course(skip: Int = 0): Course @doc(category: "Course") @example(value: "query { Course(skip: 1) { id title } }")
+}
+
+type Query {
+  """
+  List of courses available.
+  """
+  allCourses: [Course] @doc(category: "Course")
+  mathCourses: [Course] @doc(category: "Course") @deprecated
+  scienceCourses: [Course] @doc(category: "Course") @deprecated
+  searchRole(roles: [Roles!]! = [ADMIN]): Int!
+    @beta
+    @auth
+    @complexity(value: 2, multipliers: ["roles"])
+}
+
+type UnusedType implements Record @noDoc {
+  id: ID! @example(value: "1")
+}
+
+interface Record {
+  id: ID! @example(value: "1")
+}
+
+type Semester implements Record {
+  id: ID! @example(value: "1")
+  startDate: Date
+  withdrawDate: Date @deprecated
+  endDate: Date
+  """
+  Courses for the semester.
+  """
+  courses: [Course!]! @auth @complexity(value: 2)
+}
+
+type DepartmentInformation implements Record @auth {
+  id: ID! @example(value: "1")
+  uuid: String @beta @example(value: "9c5b94b1-35ad-49bb-b118-8e8fc24abf80")
+  email: EmailAddress
+  number: PhoneNumber
+  departmentOpenTime: Time
+  departmentCloseTime: Time
+  website: URL
+  employees(skip: Int): [String!]! @example(value: "[\"John Doe\"]")
+  courses: [Course] @noDoc @deprecated
+}
+
+type Course implements Record {
+  id: ID! @example(value: "5")
+  title: String! @example(value: "GraphQL Markdown")
+  createdAt: Date! @noDoc
+  updatedAt: Date! 
+}

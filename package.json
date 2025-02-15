@@ -197,6 +197,7 @@
     "chalk": "5.4.1"
   },
   "peerDependencies": {
+    "@graphql-markdown/cli": "file:packages/cli",
     "@graphql-markdown/core": "file:packages/core",
     "@graphql-markdown/diff": "file:packages/diff",
     "@graphql-markdown/docusaurus": "file:packages/docusaurus",
