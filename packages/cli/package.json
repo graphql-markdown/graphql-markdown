@@ -25,6 +25,9 @@
   },
   "main": "dist/main.js",
   "types": "dist/cli.d.ts",
+  "bin": {
+    "gqlmd": "./dist/main.js"
+  },
   "exports": {
     ".": {
       "require": {
