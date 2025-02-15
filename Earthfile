@@ -60,6 +60,16 @@ build-docusaurus-project:
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
   DO +INSTALL_DOCUSAURUS
 
+setup-cli-project:
+  FROM +build
+  RUN mkdir /graphql-markdown-smoke
+  WORKDIR /graphql-markdown-smoke
+  DO +INSTALL_GRAPHQL
+  DO +INSTALL_GQLMD
+  COPY --dir ./packages/cli/tests/__data__ ./data
+  RUN mv ./data/.graphqlrc ./.graphqlrc
+  RUN npm install graphql-config
+
 setup-docusaurus-project:
   FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
@@ -81,6 +91,15 @@ smoke-docusaurus-test:
   RUN npm install graphql-config
   COPY --dir ./packages/docusaurus/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
+  RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
+  RUN npx jest --runInBand
+
+smoke-cli-test:
+  FROM +setup-cli-project
+  WORKDIR /graphql-markdown-smoke
+  RUN npm install -g jest 
+  COPY --dir ./packages/cli/tests/e2e ./__tests__/e2e
+  COPY --dir ./packages/cli/tests/helpers ./__tests__/helpers
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
   RUN npx jest --runInBand
 
@@ -106,6 +125,24 @@ build-docusaurus-examples:
   SET idExample="schema_with_grouping"
   DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
   RUN mv docs ./$folderDocs/$folderExample
+  SAVE ARTIFACT ./$folderDocs
+
+build-cli-examples:
+  LET folderDocs="examples"
+  FROM +setup-cli-project
+  WORKDIR /graphql-markdown-smoke
+  RUN npm install prettier
+  RUN mkdir $folderDocs
+  LET folderExample="default"
+  LET idExample="default"
+  LET command="gqlmd"
+  DO +GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  RUN mv docs ./$folderDocs/$folderExample
+  SET folderExample="group-by"
+  SET idExample="schema_with_grouping"
+  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
+  RUN mv docs ./$folderDocs/$folderExample
+  RUN false
   SAVE ARTIFACT ./$folderDocs
 
 build-api-docs:
@@ -143,11 +180,12 @@ GQLMD:
   FUNCTION
   ARG id
   ARG options
+  ARG command=docusaurus graphql-to-doc
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN npx $command $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx docusaurus graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN npx $command:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 

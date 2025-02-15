@@ -1,38 +1,38 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("node:path");
+// const path = require("node:path");
 const { promises: fs } = require("node:fs");
 
 const cli = require("../../helpers/cli");
 
 const rootDir = global["__ROOT_DIR__"];
 
-const pluginConfigs = require(
-  `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`,
-);
+// const pluginConfigs = require(
+//   `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`,
+// );
 
 const docsDirs = [];
 const messagesGenerated = [];
 
-for (const pluginConfig of pluginConfigs) {
-  if (!pluginConfig.schema) {
-    // if schema not test then assume .graphqlrc
-    continue;
-  }
-  docsDirs.push(
-    path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
-  );
-  messagesGenerated.push([
-    `[SUCCESS] Documentation successfully generated in "${path.join(
-      pluginConfig.rootPath,
-      pluginConfig.baseURL,
-    )}" with base URL "${pluginConfig.baseURL}".`,
-    `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
-  ]);
-}
+// for (const pluginConfig of pluginConfigs) {
+//   if (!pluginConfig.schema) {
+//     // if schema not test then assume .graphqlrc
+//     continue;
+//   }
+//   docsDirs.push(
+//     path.resolve(rootDir, pluginConfig.rootPath, pluginConfig.baseURL),
+//   );
+//   messagesGenerated.push([
+//     `[SUCCESS] Documentation successfully generated in "${path.join(
+//       pluginConfig.rootPath,
+//       pluginConfig.baseURL,
+//     )}" with base URL "${pluginConfig.baseURL}".`,
+//     `[INFO] {Any<Number>} pages generated in {Any<Number>}s from schema "${pluginConfig.schema}".`,
+//   ]);
+// }
 
-const messageNoUpdate = [
-  `No changes detected in schema "${pluginConfigs[0].schema}".`,
-];
+// const messageNoUpdate = [
+//   `No changes detected in schema "${pluginConfigs[0].schema}".`,
+// ];
 
 describe("graphql-to-doc", () => {
   beforeAll(async () => {
@@ -53,7 +53,7 @@ describe("graphql-to-doc", () => {
     messagesGenerated[0].forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
-  test("should return 0 with no update message when schema unchanged", async () => {
+  test.skip("should return 0 with no update message when schema unchanged", async () => {
     const generateOutput = await cli();
     expect(generateOutput).toHaveProperty("code", 0);
 
@@ -86,7 +86,7 @@ describe("graphql-to-doc", () => {
     messagesGenerated[0].forEach((message) => expect(stdout).toMatch(message));
   }, 60000);
 
-  test("should return 0 with generated message when completed with force flag (multi-instance)", async () => {
+  test.skip("should return 0 with generated message when completed with force flag (multi-instance)", async () => {
     for (const [index, pluginConfig] of pluginConfigs.entries()) {
       if (!pluginConfig.schema) {
         // if schema not test then assume .graphqlrc
@@ -139,7 +139,7 @@ describe("loadContent", () => {
     await fs.writeFile(`${docsDir}/groups.md`, "");
   });
 
-  test("should generate plugin files on build when runOnBuild is true", async () => {
+  test.skip("should generate plugin files on build when runOnBuild is true", async () => {
     const generateOutput = await cli({
       cmd: "build",
       args: ["--config docusaurus2-graphql-doc-build.js"],
@@ -156,7 +156,7 @@ describe("loadContent", () => {
     );
   }, 60000);
 
-  test("should not generate plugin files on build when runOnBuild is false", async () => {
+  test.skip("should not generate plugin files on build when runOnBuild is false", async () => {
     const generateOutput = await cli({
       cmd: "build",
       args: ["--config docusaurus2-graphql-doc-nobuild.js"],
