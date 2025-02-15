@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+    "rootDir": "./",
+
+    "noEmit": true,
+
+    "types": ["node", "@types/jest"],
+
+    "paths": {
+      "@graphql-markdown/types": ["./packages/types/src/index.d.ts"],
+      "@graphql-markdown/*": ["./packages/*/src/index.ts"]
+    }
+  },
+
+  "include": ["tests", "src", "assets"],
+  "exclude": ["**/data", "*.js", "**/dist"]
+}

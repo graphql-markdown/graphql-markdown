@@ -4,6 +4,7 @@ ARG nodeVersion="lts"
 ARG npmVersion="latest"
 ARG --global docusaurusVersion="latest"
 ARG --global docusaurusProject="docusaurus-gqlmd"
+ARG --global gqlmdCliProject="cli-gqlmd"
 
 FROM docker.io/library/node:$nodeVersion-alpine
 RUN export NODE_ENV=ci
@@ -48,7 +49,7 @@ build-package:
   RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
-build-project:
+build-docusaurus-project:
   FROM +build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
@@ -58,10 +59,18 @@ build-project:
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  DO +INSTALL_DOCUSARUS
+  DO +INSTALL_DOCUSAURUS
 
-setup-project:
-  FROM +build-project
+setup-cli-project:
+  FROM +build
+  RUN mkdir /$gqlmdCliProject
+  WORKDIR /$gqlmdCliProject
+  DO +INSTALL_GRAPHQL
+  DO +INSTALL_GQLMD
+  COPY --dir ./packages/cli/tests/__data__ ./data
+
+setup-docusaurus-project:
+  FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
@@ -74,8 +83,8 @@ setup-project:
   RUN mv ./data/scripts/config-plugin.js ./config-plugin.js
   RUN node config-plugin.js
 
-smoke-test:
-  FROM +setup-project
+smoke-docusaurus-test:
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN npm install -g jest 
   RUN npm install graphql-config
@@ -84,17 +93,27 @@ smoke-test:
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
   RUN npx jest --runInBand
 
-smoke-run:
+smoke-cli-test:
+  FROM +setup-cli-project
+  WORKDIR /$gqlmdCliProject
+  RUN npm install -g jest 
+  COPY --dir ./packages/cli/tests/e2e ./__tests__/e2e
+  COPY --dir ./packages/cli/tests/helpers ./__tests__/helpers
+  RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
+  RUN mv ./data/cli-graphql-doc-generator-multi-instance.config.js ./graphql.config.js
+  RUN npx jest --runInBand
+
+smoke-docusaurus-run:
   ARG options=
-  FROM +setup-project
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   DO +GQLMD --options=$options
   RUN npm run build
   RUN npm run clear
 
-build-examples:
+build-docusaurus-examples:
   LET folderDocs="examples"
-  FROM +setup-project
+  FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN npm install prettier
   RUN mkdir $folderDocs
@@ -108,15 +127,33 @@ build-examples:
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
+build-cli-examples:
+  LET folderDocs="examples"
+  FROM +setup-cli-project
+  WORKDIR /$gqlmdCliProject
+  RUN npm install prettier
+  RUN mv ./data/graphql.config.js ./graphql.config.js
+  RUN mkdir $folderDocs
+  LET folderExample="default"
+  LET idExample="default"
+  LET command="gqlmd"
+  DO +GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  RUN mv docs ./$folderDocs/$folderExample
+  SET folderExample="group-by"
+  SET idExample="schema_with_grouping"
+  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
+  RUN mv docs ./$folderDocs/$folderExample
+  SAVE ARTIFACT ./$folderDocs
+
 build-api-docs:
   FROM +deps
   COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
   RUN npm run docs:api
   SAVE ARTIFACT ./api
 
-build-docs:
+build-docusaurus-docs:
   COPY ./website ./
-  COPY (+build-examples/examples) ./examples
+  COPY (+build-docusaurus-examples/examples) ./examples
   COPY (+build-api-docs/api) ./api
   COPY --dir docs .
   RUN npm install
@@ -124,8 +161,8 @@ build-docs:
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
-build-image:
-  FROM +build-docs
+build-docusaurus-image:
+  FROM +build-docusaurus-docs
   EXPOSE 8080
   ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
@@ -135,7 +172,7 @@ all:
   BUILD +build
   BUILD +unit-test
   BUILD +integration-test
-  BUILD +smoke-test
+  BUILD +smoke-docusaurus-test
 
 # --- UDCs ---
 
@@ -143,11 +180,12 @@ GQLMD:
   FUNCTION
   ARG id
   ARG options
+  ARG command=docusaurus
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx docusaurus graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx docusaurus graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
@@ -158,7 +196,7 @@ INSTALL_GQLMD:
     RUN npm install ./graphql-markdown-${package}.tgz
   END
 
-INSTALL_DOCUSARUS:
+INSTALL_DOCUSAURUS:
   FUNCTION
   RUN npm install
   RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
