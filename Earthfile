@@ -131,6 +131,7 @@ build-cli-examples:
   FROM +setup-cli-project
   WORKDIR /graphql-markdown-smoke
   RUN npm install prettier
+  RUN mv ./data/graphql.config.js ./graphql.config.js
   RUN mkdir $folderDocs
   LET folderExample="default"
   LET idExample="default"
