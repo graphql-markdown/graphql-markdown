@@ -1,7 +1,6 @@
 import type {
   CliOptions,
-  ConfigOptions,
-  ExperimentalConfigOptions,
+  GraphQLMarkdownCliOptions,
 } from "@graphql-markdown/types";
 
 import { Command } from "commander";
@@ -13,8 +12,20 @@ const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
 
-export default function GraphQLDocCLI(
-  options: ConfigOptions & Partial<ExperimentalConfigOptions>,
+export const runGraphQLMarkdown = async (
+  options: GraphQLMarkdownCliOptions,
+  cliOptions: CliOptions,
+  loggerModule?: string,
+): Promise<void> => {
+  const config = await buildConfig(options, cliOptions, options.id);
+  await generateDocFromSchema({
+    ...config,
+    loggerModule,
+  });
+};
+
+export default function GraphQLMarkdownCLI(
+  options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
 ): Command {
   void Logger(loggerModule);
@@ -33,7 +44,7 @@ export default function GraphQLDocCLI(
     .description(description)
     .option("-s, --schema <schema>", "Schema location")
     .option("-r, --root <rootPath>", "Root folder for doc generation")
-    .option("-b, --base <baseURL>", "Base URL to be used by Docusaurus")
+    .option("-b, --base <baseURL>", "Base URL to be used by static generator")
     .option("-l, --link <linkRoot>", "Root for links in documentation")
     .option("-h, --homepage <homepage>", "File location for doc landing page")
     .option(
@@ -64,10 +75,6 @@ export default function GraphQLDocCLI(
     )
     .option("--pretty", "Prettify generated files")
     .action(async (cliOptions: CliOptions) => {
-      const config = await buildConfig(options, cliOptions, options.id);
-      await generateDocFromSchema({
-        ...config,
-        loggerModule,
-      });
+      await runGraphQLMarkdown(options, cliOptions, loggerModule);
     });
 }

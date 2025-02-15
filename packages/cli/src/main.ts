@@ -8,7 +8,7 @@ import type {
 import { Command } from "commander";
 import { loadConfig } from "graphql-config";
 
-import GraphQLDocCLI from "./cli";
+import GraphQLMarkdownCLI from "./cli";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
@@ -23,18 +23,19 @@ void (async (): Promise<void> => {
   });
 
   const program = new Command();
-  program.showHelpAfterError();
 
   const projects = config?.projects
     ? Object.keys(config.projects)
     : ["default"];
   // build commands for each project declared in graphql-config file
   for (const project of projects) {
-    const cmd = GraphQLDocCLI({
+    const cmd = GraphQLMarkdownCLI({
       id: project,
     } as unknown as ConfigOptions);
     program.addCommand(cmd);
   }
+
+  program.showHelpAfterError(true);
 
   await program.parseAsync(process.argv);
 })();
