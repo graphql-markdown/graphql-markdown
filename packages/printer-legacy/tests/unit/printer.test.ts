@@ -47,7 +47,6 @@ import * as GraphQLPrinter from "../../src/graphql";
 jest.mock("../../src/example");
 import * as ExamplePrinter from "../../src/example";
 
-import * as Common from "../../src/common";
 import * as Link from "../../src/link";
 
 import { Printer } from "../../src/printer";
@@ -182,6 +181,7 @@ describe("Printer", () => {
             "api": {},
           },
           "level": undefined,
+          "meta": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
           "parentType": undefined,
@@ -242,6 +242,7 @@ describe("Printer", () => {
             "entity": {},
           },
           "level": undefined,
+          "meta": undefined,
           "metatags": [],
           "onlyDocDirectives": [],
           "parentType": undefined,

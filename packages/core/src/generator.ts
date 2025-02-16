@@ -108,10 +108,14 @@ export const generateDocFromSchema = async ({
     {
       customDirectives,
       groups,
+      meta: {
+        generatorFrameworkName: docOptions?.generatorFrameworkName,
+        generatorFrameworkVersion: docOptions?.generatorFrameworkVersion,
+      },
+      metatags,
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
-      metatags,
     },
   );
   const renderer = await getRenderer(

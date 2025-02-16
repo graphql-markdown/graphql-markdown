@@ -1,3 +1,5 @@
+import type { MetaOptions, PrintTypeOptions } from "@graphql-markdown/types";
+
 import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
 import { DirectiveLocation } from "graphql/language";
 
@@ -9,15 +11,6 @@ import {
 } from "../../src/common";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
-
-import * as DocusaurusUtils from "@docusaurus/utils";
-jest.mock("@docusaurus/utils", (): unknown => {
-  return {
-    __esModule: true,
-    DOCUSAURUS_VERSION: "1.0.0",
-  };
-});
-const mockDocusaurusUtils = jest.mocked(DocusaurusUtils, { shallow: true });
 
 import * as GraphQL from "@graphql-markdown/graphql";
 jest.mock("@graphql-markdown/graphql", (): unknown => {
@@ -126,7 +119,10 @@ describe("common", () => {
     test("return DEPRECATED tag if deprecated", () => {
       expect.hasAssertions();
 
-      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
+      const meta: MetaOptions = {
+        generatorFrameworkName: "docusaurus",
+        generatorFrameworkVersion: "3.0.0",
+      };
 
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
@@ -135,7 +131,9 @@ describe("common", () => {
         isDeprecated: true,
         deprecationReason: "{ Foobar }",
       };
-      const description = printDescription(type);
+      const description = printDescription(type, {
+        meta,
+      } as unknown as PrintTypeOptions);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -197,12 +195,10 @@ describe("common", () => {
   });
 
   describe("printDeprecation()", () => {
-    beforeEach(() => {
-      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
-    });
-
     test("prints deprecated badge if type is deprecated", () => {
       expect.hasAssertions();
+
+      const meta: MetaOptions = {};
 
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
@@ -210,7 +206,9 @@ describe("common", () => {
         name: "EntityTypeName",
         isDeprecated: true,
       };
-      const deprecation = printDeprecation(type);
+      const deprecation = printDeprecation(type, {
+        meta,
+      } as unknown as PrintTypeOptions);
 
       expect(deprecation).toMatchInlineSnapshot(`
         "
@@ -314,9 +312,16 @@ Test testDirective"
     test("prints admonition caution for Docusaurus v2", () => {
       expect.assertions(1);
 
-      mockDocusaurusUtils.DOCUSAURUS_VERSION = "2.4.2";
+      const meta: MetaOptions = {
+        generatorFrameworkName: "docusaurus",
+        generatorFrameworkVersion: "2.4.2",
+      };
 
-      expect(printWarning("test", "DEPRECATED")).toMatchInlineSnapshot(`
+      expect(
+        printWarning("test", "DEPRECATED", {
+          meta,
+        } as unknown as PrintTypeOptions),
+      ).toMatchInlineSnapshot(`
         "
 
         :::caution DEPRECATED
@@ -329,9 +334,16 @@ Test testDirective"
     test("prints admonition warning for Docusaurus v3", () => {
       expect.assertions(1);
 
-      mockDocusaurusUtils.DOCUSAURUS_VERSION = "3.0.0";
+      const meta: MetaOptions = {
+        generatorFrameworkName: "docusaurus",
+        generatorFrameworkVersion: "3.0.0",
+      };
 
-      expect(printWarning("test", "DEPRECATED")).toMatchInlineSnapshot(`
+      expect(
+        printWarning("test", "DEPRECATED", {
+          meta,
+        } as unknown as PrintTypeOptions),
+      ).toMatchInlineSnapshot(`
         "
 
         :::warning[DEPRECATED]

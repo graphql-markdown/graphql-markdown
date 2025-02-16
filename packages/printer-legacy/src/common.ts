@@ -1,11 +1,9 @@
-import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
-
 import type {
-  PrintTypeOptions,
-  MDXString,
-  Maybe,
   CustomDirectiveMap,
   CustomDirectiveMapItem,
+  Maybe,
+  MDXString,
+  PrintTypeOptions,
 } from "@graphql-markdown/types";
 
 import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
@@ -64,19 +62,30 @@ export const formatDescription = (
   return `${MARKDOWN_EOP}${escapeMDX(description)}`;
 };
 
-export const printWarning = (text?: string, title?: string): string => {
+export const printWarning = (
+  text?: string,
+  title?: string,
+  options?: PrintTypeOptions,
+): string => {
   const formattedText =
     typeof text !== "string" || text.trim() === ""
       ? MARKDOWN_EOP
       : `${MARKDOWN_EOP}${text}${MARKDOWN_EOP}`;
 
-  if (DOCUSAURUS_VERSION.startsWith("2")) {
+  const isDocusaurus = options?.meta?.generatorFrameworkName === "docusaurus";
+  if (
+    isDocusaurus &&
+    options.meta?.generatorFrameworkVersion?.startsWith("2")
+  ) {
     return `${MARKDOWN_EOP}:::caution ${title}${formattedText}:::`;
   }
   return `${MARKDOWN_EOP}:::warning[${title}]${formattedText}:::`;
 };
 
-export const printDeprecation = (type: unknown): string => {
+export const printDeprecation = (
+  type: unknown,
+  options?: PrintTypeOptions,
+): string => {
   if (typeof type !== "object" || type === null || !isDeprecated(type)) {
     return "";
   }
@@ -86,7 +95,7 @@ export const printDeprecation = (type: unknown): string => {
       ? escapeMDX(type.deprecationReason)
       : "";
 
-  return printWarning(reason, DEPRECATED.toUpperCase());
+  return printWarning(reason, DEPRECATED.toUpperCase(), options);
 };
 
 export const printDescription = (
@@ -96,6 +105,6 @@ export const printDescription = (
 ): MDXString | string => {
   const description = formatDescription(type, noText);
   const customDirectives = printCustomDirectives(type, options);
-  const deprecation = printDeprecation(type);
+  const deprecation = printDeprecation(type, options);
   return `${deprecation}${description}${customDirectives}`;
 };

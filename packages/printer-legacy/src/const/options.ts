@@ -41,6 +41,7 @@ export const DEFAULT_OPTIONS: Required<
     | "collapsible"
     | "groups"
     | "level"
+    | "meta"
     | "onlyDocDirectives"
     | "parentType"
     | "schema"

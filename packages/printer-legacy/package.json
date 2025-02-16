@@ -56,7 +56,6 @@
     "docs": "typedoc"
   },
   "dependencies": {
-    "@docusaurus/utils": ">=3.2.0",
     "@graphql-markdown/graphql": "^1.1.5",
     "@graphql-markdown/utils": "^1.7.1"
   },

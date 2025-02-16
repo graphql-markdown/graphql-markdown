@@ -6,6 +6,7 @@ import type {
   IPrinter,
   MDXString,
   Maybe,
+  MetaOptions,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -79,18 +80,20 @@ export class Printer implements IPrinter {
     {
       customDirectives,
       groups,
+      meta,
+      metatags,
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
-      metatags,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
       groups?: SchemaEntitiesGroupMap;
+      meta?: Maybe<MetaOptions>;
+      metatags?: Record<string, string>[];
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
-      metatags?: Record<string, string>[];
     } = {
       customDirectives: undefined,
       groups: undefined,
@@ -126,6 +129,7 @@ export class Printer implements IPrinter {
       metatags: metatags ?? [],
       hierarchy:
         printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+      meta: meta,
     };
   }
 

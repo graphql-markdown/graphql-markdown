@@ -5,6 +5,9 @@ import type {
   ConfigOptions,
   ExperimentalConfigOptions,
 } from "@graphql-markdown/types";
+
+import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
+
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
 
@@ -91,6 +94,11 @@ export default async function pluginGraphQLDocGenerator(
           const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
             ...config,
+            docOptions: {
+              ...config.docOptions,
+              generatorFrameworkName: "docusaurus",
+              generatorFrameworkVersion: DOCUSAURUS_VERSION,
+            },
             loggerModule: LOGGER_MODULE,
           });
         });

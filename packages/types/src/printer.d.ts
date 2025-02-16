@@ -28,6 +28,11 @@ export type RootTypeName =
 export type TypeLocale = string | { singular: string; plural: string };
 export type RootTypeLocale = Record<RootTypeName, TypeLocale>;
 
+export interface MetaOptions {
+  generatorFrameworkName?: Maybe<string>;
+  generatorFrameworkVersion?: Maybe<string>;
+}
+
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
@@ -55,6 +60,7 @@ export interface PrintTypeOptions {
   groups?: Maybe<SchemaEntitiesGroupMap>;
   hierarchy?: Maybe<TypeHierarchyObjectType>;
   level?: Maybe<SectionLevelValue>;
+  meta?: Maybe<MetaOptions>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   parentType?: Maybe<string>;
@@ -157,6 +163,7 @@ export interface PrinterOptions {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
+  meta?: Maybe<MetaOptions>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
