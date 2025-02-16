@@ -56,15 +56,11 @@ Use these options to tweak some of the Docusaurus documentation features:
 
 - `frontMatter`: set custom front matter entries, see [Docusaurus documentation](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter).
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
-- `pagination`: enable/disable page buttons `Previous` and `Next` [**deprecated**, see note below].
-- `toc`: enable/disable page table of content [**deprecated**, see note below].
 
 | Setting                  | CLI flag         | Default |
 | ------------------------ | ---------------- | ------- |
 | `docOptions.frontMatter` | _not supported_  | `{}`    |
 | `docOptions.index`       | `--index`        | `false` |
-| `docOptions.pagination`  | `--noPagination` | `true`  |
-| `docOptions.toc`         | `--noToc`        | `true`  |
 
 <br/>
 
@@ -95,33 +91,6 @@ plugins: [
     ],
   ],
 ```
-
-<br/>
-
-:::warning[DEPRECATED]
-
-- **`docOptions.pagination`** (CLI flag `--noPagination`) has been replaced by `docOptions.frontMatter`:
-
-  ```js
-  docOptions: {
-   frontMatter: {
-     pagination_next: null, // disable page navigation next
-     pagination_prev: null, // disable page navigation previous
-   },
-  },
-  ```
-
-- **`docOptions.toc`** (CLI flag `--noToc`) has been replaced by `docOptions.frontMatter`:
-
-  ```js
-  docOptions: {
-   frontMatter: {
-     hide_table_of_contents: true, // disable page table of content
-   },
-  },
-  ```
-
-:::
 
 ## `force`
 
@@ -246,7 +215,6 @@ Use these options to toggle type information rendered on pages:
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
-- `useApiGroup`: split entities in `Operations` group (executable types) and `Types` group (system types) [**deprecated**, see note below].
 
 | Setting                               | CLI flag                | Default   |
 | ------------------------------------- | ----------------------- | --------- |
@@ -257,7 +225,6 @@ Use these options to toggle type information rendered on pages:
 | `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
 | `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
 | `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
-| `printTypeOptions.useApiGroup`        | `--noApiGroup`          | `true`    |
 
 <br/>
 
@@ -337,17 +304,6 @@ plugins: [
 
 See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
 
-:::
-
-:::warning[DEPRECATED]
-
-**`printTypeOptions.useApiGroup`** (CLI flag `--noApiGroup`) has been replaced by `printTypeOptions.hierarchy`:
-
-```js
-printTypeOptions: {
-  hierarchy: "api", // use value "entity" for --noApiGroup equivalent
-},
-```
 :::
 
 ## `pretty`

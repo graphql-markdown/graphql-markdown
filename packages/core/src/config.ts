@@ -26,8 +26,6 @@ import type {
 
 import { loadConfiguration } from "./graphql-config";
 
-import { log } from "@graphql-markdown/logger";
-
 export enum TypeHierarchy {
   API = "api",
   ENTITY = "entity",
@@ -231,60 +229,31 @@ export const getDiffMethod = (
 };
 
 export const parseDeprecatedDocOptions = (
-  cliOpts: Maybe<DeprecatedCliOptions>,
-  configOptions: Maybe<DeprecatedConfigDocOptions>,
-): Partial<{
-  pagination_next: null;
-  pagination_prev: null;
-  hide_table_of_contents: boolean;
-}> => {
-  // deprecated, replaced by frontMatter
-  let pagination: Maybe<{ pagination_next: null; pagination_prev: null }>;
-  if (
-    (typeof cliOpts?.noPagination !== "undefined" && cliOpts.noPagination) ||
-    (typeof configOptions?.pagination !== "undefined" &&
-      !configOptions.pagination)
-  ) {
-    pagination = { pagination_next: null, pagination_prev: null };
-    log(
-      "Doc option `pagination` is deprecated. Use `frontMatter: { pagination_next: null, pagination_prev: null }` instead.",
-      "warn",
-    );
-  }
-
-  // deprecated, replaced by frontMatter
-  let toc: Maybe<{ hide_table_of_contents: boolean }>;
-  if (
-    typeof cliOpts?.noToc !== "undefined" ||
-    typeof configOptions?.toc !== "undefined"
-  ) {
-    toc = {
-      hide_table_of_contents:
-        cliOpts?.noToc === true || configOptions?.toc === false,
-    };
-    log(
-      "Doc option `toc` is deprecated. Use `frontMatter: { hide_table_of_contents: true | false }` instead.",
-      "warn",
-    );
-  }
-
-  return { ...pagination, ...toc };
+  _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
+  _configOptions: Maybe<Omit<DeprecatedConfigDocOptions, "never">>,
+): Record<string, never> => {
+  return {};
 };
 
 export const getDocOptions = (
-  cliOpts?: Maybe<CliOptions & DeprecatedCliOptions>,
-  configOptions?: Maybe<ConfigDocOptions & DeprecatedConfigDocOptions>,
+  cliOpts?: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
+  configOptions?: Maybe<
+    ConfigDocOptions & Omit<DeprecatedConfigDocOptions, "never">
+  >,
 ): Required<ConfigDocOptions> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
+  const index =
+    typeof cliOpts?.index === "boolean"
+      ? cliOpts.index
+      : typeof configOptions?.index === "boolean"
+        ? configOptions.index
+        : DEFAULT_OPTIONS.docOptions!.index;
   return {
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
     },
-    index:
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      (cliOpts?.index || configOptions?.index) ??
-      DEFAULT_OPTIONS.docOptions!.index,
+    index,
   } as Required<ConfigDocOptions>;
 };
 
@@ -333,41 +302,16 @@ export const getTypeHierarchyOption = (
 };
 
 export const parseDeprecatedPrintTypeOptions = (
-  cliOpts: Maybe<DeprecatedCliOptions>,
-  configOptions: Maybe<DeprecatedConfigPrintTypeOptions>,
-): Partial<{ hierarchy: TypeHierarchyType }> => {
-  // deprecated, replaced by hierarchy
-  let option: Maybe<{ hierarchy: TypeHierarchyType }>;
-
-  if (typeof cliOpts?.noApiGroup !== "undefined" && cliOpts.noApiGroup) {
-    option = { hierarchy: TypeHierarchy.ENTITY };
-    log(
-      "Type option `noApiGroup` is deprecated. Use `hierarchy: 'entity'` instead.",
-      "warn",
-    );
-  } else if (typeof configOptions?.useApiGroup !== "undefined") {
-    if (typeof configOptions.useApiGroup === "object") {
-      option = {
-        hierarchy: { [TypeHierarchy.API]: { ...configOptions.useApiGroup } },
-      };
-    } else {
-      option = configOptions.useApiGroup
-        ? { hierarchy: TypeHierarchy.API }
-        : { hierarchy: TypeHierarchy.ENTITY };
-    }
-    log(
-      "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
-      "warn",
-    );
-  }
-
-  return { ...option };
+  _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
+  _configOptions: Maybe<Omit<DeprecatedConfigPrintTypeOptions, "never">>,
+): Record<string, never> => {
+  return {};
 };
 
 export const getPrintTypeOptions = (
-  cliOpts: Maybe<CliOptions & DeprecatedCliOptions>,
+  cliOpts: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
   configOptions: Maybe<
-    ConfigPrintTypeOptions & DeprecatedConfigPrintTypeOptions
+    ConfigPrintTypeOptions & Omit<DeprecatedConfigPrintTypeOptions, "never">
   >,
 ): Required<ConfigPrintTypeOptions> => {
   const deprecated = parseDeprecatedPrintTypeOptions(cliOpts, configOptions);

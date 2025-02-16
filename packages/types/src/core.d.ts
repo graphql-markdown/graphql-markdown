@@ -41,14 +41,13 @@ export type RendererDocOptions = ConfigDocOptions & {
 };
 
 export interface DeprecatedConfigDocOptions {
-  pagination?: boolean;
-  toc?: boolean;
+  never: never;
 }
 
 export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
 
 export interface DeprecatedConfigPrintTypeOptions {
-  useApiGroup?: UseApiGroupOptionType;
+  never: never;
 }
 
 export type TypeDeprecatedOption = "default" | "group" | "skip";
@@ -88,7 +87,9 @@ export interface ConfigOptions {
   baseURL?: Maybe<string>;
   customDirective?: Maybe<CustomDirective>;
   diffMethod?: Maybe<TypeDiffMethod>;
-  docOptions?: Maybe<ConfigDocOptions & DeprecatedConfigDocOptions>;
+  docOptions?: Maybe<
+    ConfigDocOptions & Omit<DeprecatedConfigDocOptions, "never">
+  >;
   force?: boolean;
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
   homepage?: Maybe<string>;
@@ -134,9 +135,7 @@ export interface CliOptions {
 }
 
 export interface DeprecatedCliOptions {
-  noApiGroup?: boolean;
-  noPagination?: boolean;
-  noToc?: boolean;
+  never: never;
 }
 
 export type Options = Omit<

@@ -83,6 +83,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-function-type": "error",
         "@typescript-eslint/no-unsafe-return": "error",
         "@typescript-eslint/no-unused-expressions": "error",
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
         "@typescript-eslint/no-use-before-define": "error",
         "@typescript-eslint/no-wrapper-object-types": "error",
         "@typescript-eslint/non-nullable-type-assertion-style": "error",

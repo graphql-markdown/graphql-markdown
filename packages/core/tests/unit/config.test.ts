@@ -667,7 +667,7 @@ describe("config", () => {
   });
 
   describe("parseDeprecatedPrintTypeOptions", () => {
-    test("returns empty object if no deprecated option is used", () => {
+    test("returns empty object if no deprecated option", () => {
       expect.hasAssertions();
 
       const cliOpt = {},
@@ -680,77 +680,10 @@ describe("config", () => {
       ).toStrictEqual({});
       expect(spyConsole).not.toHaveBeenCalled();
     });
-
-    test("returns hierarchy API if useApiGroup is set", () => {
-      expect.hasAssertions();
-
-      const spyConsole = jest
-        .spyOn(global.console, "warn")
-        .mockImplementation(() => {});
-
-      const cliOpt = {},
-        configOptions = { useApiGroup: true };
-
-      expect(
-        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
-      ).toStrictEqual({ hierarchy: TypeHierarchy.API });
-      expect(spyConsole).toHaveBeenCalledWith(
-        "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
-      );
-    });
-
-    test.each([
-      {
-        cliOpt: {},
-        configOptions: { useApiGroup: false },
-        warnMessage:
-          "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
-      },
-      {
-        cliOpt: { noApiGroup: true },
-        configOptions: {},
-        warnMessage:
-          "Type option `noApiGroup` is deprecated. Use `hierarchy: 'entity'` instead.",
-      },
-    ])(
-      "returns hierarchy ENTITY if --noApiGroup is set",
-      ({ cliOpt, configOptions, warnMessage }) => {
-        expect.hasAssertions();
-
-        const spyConsole = jest
-          .spyOn(global.console, "warn")
-          .mockImplementation(() => {});
-
-        expect(
-          parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
-        ).toStrictEqual({ hierarchy: TypeHierarchy.ENTITY });
-        expect(spyConsole).toHaveBeenCalledWith(warnMessage);
-      },
-    );
-
-    test("returns hierarchy API object if useApiGroup is customized", () => {
-      expect.hasAssertions();
-
-      const cliOpt = {},
-        configOptions = { useApiGroup: { operations: "api" } };
-
-      const spyConsole = jest
-        .spyOn(global.console, "warn")
-        .mockImplementation(() => {});
-
-      expect(
-        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
-      ).toStrictEqual({
-        hierarchy: { [TypeHierarchy.API]: { operations: "api" } },
-      });
-      expect(spyConsole).toHaveBeenCalledWith(
-        "Type option `useApiGroup` is deprecated. Use `hierarchy: 'api'` instead.",
-      );
-    });
   });
 
   describe("parseDeprecatedDocOptions", () => {
-    test("returns empty object if no deprecated option is used", () => {
+    test("returns empty object if no deprecated option", () => {
       expect.hasAssertions();
 
       const cliOpt = {},
@@ -763,61 +696,6 @@ describe("config", () => {
       );
       expect(spyConsole).not.toHaveBeenCalled();
     });
-
-    test.each([
-      {
-        cliOpt: { noPagination: true },
-        configOptions: { frontMatter: undefined },
-      },
-      {
-        cliOpt: {},
-        configOptions: { pagination: false, frontMatter: undefined },
-      },
-    ])(
-      "returns pagination nulled if pagination option is disabled",
-      ({ cliOpt, configOptions }) => {
-        expect.assertions(2);
-
-        const spyConsole = jest
-          .spyOn(global.console, "warn")
-          .mockImplementation(() => {});
-
-        expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual({
-          pagination_next: null,
-          pagination_prev: null,
-        });
-        expect(spyConsole).toHaveBeenCalledWith(
-          "Doc option `pagination` is deprecated. Use `frontMatter: { pagination_next: null, pagination_prev: null }` instead.",
-        );
-      },
-    );
-
-    test.each([
-      {
-        cliOpt: { noToc: true },
-        configOptions: { frontMatter: undefined },
-      },
-      {
-        cliOpt: {},
-        configOptions: { toc: false, frontMatter: undefined },
-      },
-    ])(
-      "returns hide_table_of_contents set to true if toc option is disabled",
-      ({ cliOpt, configOptions }) => {
-        expect.assertions(2);
-
-        const spyConsole = jest
-          .spyOn(global.console, "warn")
-          .mockImplementation(() => {});
-
-        expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual({
-          hide_table_of_contents: true,
-        });
-        expect(spyConsole).toHaveBeenCalledWith(
-          "Doc option `toc` is deprecated. Use `frontMatter: { hide_table_of_contents: true | false }` instead.",
-        );
-      },
-    );
   });
 
   describe("getTypeHierarchyOption()", () => {
