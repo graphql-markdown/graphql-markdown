@@ -67,6 +67,7 @@ setup-cli-project:
   WORKDIR /$gqlmdCliProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  RUN npm install ./graphql-markdown-cli.tgz
   COPY --dir ./packages/cli/tests/__data__ ./data
 
 setup-docusaurus-project:
@@ -74,6 +75,7 @@ setup-docusaurus-project:
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir ./website/static/img ./static/img
   COPY --dir ./website/src/css ./src/css
@@ -193,7 +195,9 @@ INSTALL_GQLMD:
   FUNCTION
   FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
-    RUN npm install ./graphql-markdown-${package}.tgz
+    IF [ "$package" != "cli" ] && [ "$package" != "docusaurus" ]
+      RUN npm install ./graphql-markdown-${package}.tgz
+    END
   END
 
 INSTALL_DOCUSAURUS:
