@@ -83,13 +83,6 @@ export default async function pluginGraphQLDocGenerator(
           "Option for printing deprecated entities: `default`, `group` or `skip`",
         )
         .option("--pretty", "Prettify generated files")
-        // DEPRECATED options
-        .option("--noToc", "Disable page table of content [DEPRECATED]")
-        .option(
-          "--noPagination",
-          "Disable page navigation buttons [DEPRECATED]",
-        )
-        .option("--noApiGroup", "Disable API grouping for types [DEPRECATED]")
         .action(async (cliOptions: CliOptions) => {
           const config = await buildConfig(options, cliOptions, options.id);
           await generateDocFromSchema({
