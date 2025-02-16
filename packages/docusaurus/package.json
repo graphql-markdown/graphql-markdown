@@ -51,6 +51,7 @@
     "docs": "typedoc"
   },
   "dependencies": {
+    "@docusaurus/utils": ">=3.2.0",
     "@graphql-markdown/core": "^1.12.2",
     "@graphql-markdown/logger": "^1.0.5",
     "@graphql-markdown/printer-legacy": "^1.9.1"

@@ -17,6 +17,8 @@ export interface ApiGroupOverrideType {
 export interface ConfigDocOptions {
   frontMatter?: Maybe<FrontMatterOptions>;
   index?: boolean;
+  generatorFrameworkName?: Maybe<string>;
+  generatorFrameworkVersion?: Maybe<string>;
 }
 
 export type TypeHierarchyValueType = "api" | "entity" | "flat";

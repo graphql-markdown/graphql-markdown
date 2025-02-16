@@ -126,6 +126,10 @@ describe("generator", () => {
         {
           customDirectives: undefined,
           groups: undefined,
+          meta: {
+            generatorFrameworkName: undefined,
+            generatorFrameworkVersion: undefined,
+          },
           metatags: [],
           printTypeOptions: options.printTypeOptions,
           onlyDocDirectives: [],
