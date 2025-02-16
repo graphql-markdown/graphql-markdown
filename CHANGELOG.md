@@ -1,12 +1,39 @@
+<a id="1.27.0"></a>
+# [1.27.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.27.0) - 2025-02-16
+
+🚀 This release introduces a **new NodeJS command line package** `@graphql-markdown/cli` allowing generating Markdown files without Docusaurus dependencies.
+This is still an early release and it is not yet documented, but you can experiment with it and [give your feedback](https://github.com/graphql-markdown/graphql-markdown/issues) on this new package when used with other static site generators - note that you'll need MDX support.
+
+1. Install `npm install @graphql-markdown/cli`
+2. Usage `npx gqlmd graphql-to-doc`
+
+ℹ️  The `cli` package works similarly to the Docusaurus plugin, but it relies on a [GraphQL config file](https://the-guild.dev/graphql/config/docs/user/usage) for the settings. You can find examples of settings in the [test folder of the package](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/cli/tests/__data__).
+
+⚠️  **BREAKING CHANGES**
+All previously deprecated settings have been removed:
+- `docOptions.pagination` | `--noPagination` (deprecated in [release 1.22.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.22.0))
+- `docOptions.toc` | `--noToc` (deprecated in [release 1.22.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.22.0))
+- `printTypeOptions.useApiGroup` | `--noApiGroup` (deprecated in [release 1.26.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.0))
+- 
+## What's Changed
+* ✨ generic cli package by [@edno](https://github.com/edno) in [#1959](https://github.com/graphql-markdown/graphql-markdown/pull/1959)
+* :sparkles:  move docusaurus\utils from printer to docusaurus plugin by [@edno](https://github.com/edno) in [#1962](https://github.com/graphql-markdown/graphql-markdown/pull/1962)
+* :sparkles:  remove deprecated settings by [@edno](https://github.com/edno) in [#1964](https://github.com/graphql-markdown/graphql-markdown/pull/1964)
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.4...1.27.0
+
+[Changes][1.27.0]
+
+
 <a id="1.26.4"></a>
 # [1.26.4](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.4) - 2024-12-22
 
-🐛 This release adds fixes for [`printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions) parameters `hierarchy` and `example`.
+🐛 This release adds fixes for [`printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions) parameters `hierarchy` and `exampleSection`.
 
 ## What's Changed
 * ♻️ remove circular dependencies in [#1820](https://github.com/graphql-markdown/graphql-markdown/issues/1820)
 * :bug:  fix error when hierarchy is defined in CLI but validation failed against default value in [#1884](https://github.com/graphql-markdown/graphql-markdown/issues/1884)
-* 🐛 fix example option with schema containing recursive types in [#1887](https://github.com/graphql-markdown/graphql-markdown/issues/1887), reported by [@TurkeyMcGuyver](https://github.com/TurkeyMcGuyver) in [#1883](https://github.com/graphql-markdown/graphql-markdown/issues/1883) 
+* 🐛 fix error with example option when a schema contains recursive types in [#1887](https://github.com/graphql-markdown/graphql-markdown/issues/1887), reported by [@TurkeyMcGuyver](https://github.com/TurkeyMcGuyver) in [#1883](https://github.com/graphql-markdown/graphql-markdown/issues/1883) 
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.3...1.26.4
 
@@ -1765,6 +1792,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.27.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.4...1.27.0
 [1.26.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.3...1.26.4
 [1.26.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.2...1.26.3
 [1.26.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.0...1.26.2
