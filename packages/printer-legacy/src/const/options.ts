@@ -4,7 +4,6 @@ import type {
   GraphQLDirective,
   GraphQLSchema,
   Maybe,
-  MetaOptions,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
