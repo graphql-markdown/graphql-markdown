@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.9.1",
+  "version": "1.10.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -60,7 +60,7 @@
     "@graphql-markdown/utils": "^1.7.1"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.4.2"
+    "@graphql-markdown/types": "^1.5.0"
   },
   "resolutions": {
     "micromatch": "4.0.8"
