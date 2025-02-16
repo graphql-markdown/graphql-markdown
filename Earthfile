@@ -153,7 +153,7 @@ build-api-docs:
   RUN npm run docs:api
   SAVE ARTIFACT ./api
 
-build-docusaurus-docs:
+build-docs:
   COPY ./website ./
   COPY (+build-docusaurus-examples/examples) ./examples
   COPY (+build-api-docs/api) ./api
@@ -163,8 +163,8 @@ build-docusaurus-docs:
   RUN npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
-build-docusaurus-image:
-  FROM +build-docusaurus-docs
+build-image:
+  FROM +build-docs
   EXPOSE 8080
   ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
