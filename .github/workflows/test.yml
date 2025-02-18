@@ -76,7 +76,7 @@ jobs:
 
       - name: SonarCloud Scan
         id: sonarcloud
-        uses: SonarSource/sonarqube-scan-action@v4.1.0
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           projectBaseDir: ${{ github.workspace }}
           args: >
