@@ -75,6 +75,7 @@ setup-docusaurus-project:
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  RUN npm install ./graphql-markdown-cli.tgz
   RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir ./website/static/img ./static/img

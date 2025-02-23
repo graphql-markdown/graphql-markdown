@@ -12,6 +12,7 @@
   },
 
   "references": [
+    { "path": "../cli" },
     { "path": "../utils" },
     { "path": "../core" },
     { "path": "../logger" }
