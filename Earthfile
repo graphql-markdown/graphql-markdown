@@ -36,8 +36,8 @@ integration-test:
   RUN npm run test:ci /integration
 
 mutation-test:
-  FROM +deps
-  RUN npm run stryker --workspaces --if-present -- --reporters progress,html
+  FROM +build
+  RUN npm run stryker --workspaces --if-present -- --allowEmpty --reporters progress,html
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
@@ -75,6 +75,7 @@ setup-docusaurus-project:
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  RUN npm install ./graphql-markdown-cli.tgz
   RUN npm install ./graphql-markdown-docusaurus.tgz
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir ./website/static/img ./static/img

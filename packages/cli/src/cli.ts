@@ -3,7 +3,8 @@ import type {
   GraphQLMarkdownCliOptions,
 } from "@graphql-markdown/types";
 
-import { Command } from "commander";
+import type { CommanderStatic } from "commander";
+import Commander from "commander";
 
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
@@ -11,6 +12,8 @@ import Logger from "@graphql-markdown/logger";
 const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
+
+export type GraphQLMarkdownCliType = CommanderStatic;
 
 export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
@@ -24,10 +27,10 @@ export const runGraphQLMarkdown = async (
   });
 };
 
-export default function GraphQLMarkdownCLI(
+export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
-): Command {
+): GraphQLMarkdownCliType => {
   void Logger(loggerModule);
 
   const isDefaultId = !options.id || options.id === DEFAULT_ID;
@@ -37,7 +40,7 @@ export default function GraphQLMarkdownCLI(
     ? DESCRIPTION
     : `${DESCRIPTION} for configuration with id ${options.id}`;
 
-  const cli = new Command();
+  const cli: GraphQLMarkdownCliType = Commander;
 
   return cli
     .command(cmd)
@@ -76,5 +79,5 @@ export default function GraphQLMarkdownCLI(
     .option("--pretty", "Prettify generated files")
     .action(async (cliOptions: CliOptions) => {
       await runGraphQLMarkdown(options, cliOptions, loggerModule);
-    });
-}
+    }) as GraphQLMarkdownCliType;
+};

@@ -11,9 +11,5 @@
     }
   },
 
-  "references": [
-    { "path": "../utils" },
-    { "path": "../core" },
-    { "path": "../logger" }
-  ]
+  "references": [{ "path": "../cli" }, { "path": "../logger" }]
 }

@@ -52,5 +52,8 @@ jobs:
       - name: Install modules
         run: npm ci
 
+      - name: Build packages
+        run: npm run build
+
       - name: Run Mutations Tests
         run: npm run stryker -w @graphql-markdown/${{matrix.package}} -- --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}
