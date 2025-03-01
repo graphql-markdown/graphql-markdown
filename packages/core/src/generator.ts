@@ -29,28 +29,33 @@ import { getRenderer } from "./renderer";
 const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
 
-export const generateDocFromSchema = async ({
-  baseURL,
-  customDirective,
-  diffMethod,
-  docOptions,
-  force,
-  groupByDirective,
-  homepageLocation,
-  linkRoot,
-  loaders: loadersList,
-  loggerModule,
-  metatags,
-  onlyDocDirective,
-  outputDir,
-  prettify,
-  printer: printerModule,
-  printTypeOptions,
-  schemaLocation,
-  skipDocDirective,
-  tmpDir,
-}: GeneratorOptions): Promise<void> => {
+export const generateDocFromSchema = async (
+  {
+    baseURL,
+    customDirective,
+    diffMethod,
+    docOptions,
+    force,
+    groupByDirective,
+    homepageLocation,
+    linkRoot,
+    loaders: loadersList,
+    loggerModule,
+    metatags,
+    onlyDocDirective,
+    outputDir,
+    prettify,
+    printer: printerModule,
+    printTypeOptions,
+    schemaLocation,
+    skipDocDirective,
+    tmpDir,
+  }: GeneratorOptions,
+  mdxParser?: Record<string, unknown>,
+): Promise<void> => {
   const start = process.hrtime.bigint();
+
+  const hasMDXSupport = mdxParser ? true : false;
 
   await Logger(loggerModule);
 
@@ -117,6 +122,7 @@ export const generateDocFromSchema = async ({
       printTypeOptions,
       skipDocDirectives,
     },
+    mdxParser,
   );
   const renderer = await getRenderer(
     printer,
@@ -130,6 +136,7 @@ export const generateDocFromSchema = async ({
       force,
       hierarchy: printTypeOptions?.hierarchy as TypeHierarchyObjectType,
     },
+    hasMDXSupport,
   );
 
   const pages = await Promise.all(

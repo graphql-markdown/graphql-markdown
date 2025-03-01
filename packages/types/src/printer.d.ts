@@ -33,6 +33,12 @@ export interface MetaOptions {
   generatorFrameworkVersion?: Maybe<string>;
 }
 
+export interface AdmonitionType {
+  title: Maybe<string>;
+  text: string;
+  type: string;
+}
+
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
@@ -114,6 +120,7 @@ export abstract class IPrinter {
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
+    mdxParser?: Record<string, unknown>,
   ): void;
   static printHeader(
     id: string,

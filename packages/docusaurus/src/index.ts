@@ -4,6 +4,8 @@ import type { GraphQLMarkdownCliOptions } from "@graphql-markdown/types";
 
 import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
 
+import * as DocusaurusMDX from "./mdx";
+
 import {
   getGraphQLMarkdownCli,
   runGraphQLMarkdown,
@@ -40,6 +42,7 @@ export default async function pluginGraphQLDocGenerator(
             },
           },
           LOGGER_MODULE,
+          DocusaurusMDX,
         ),
       );
     },
