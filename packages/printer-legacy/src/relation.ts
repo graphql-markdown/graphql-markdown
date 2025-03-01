@@ -21,6 +21,7 @@ import { getRelationLink } from "./link";
 import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
+import { formatMDXBullet } from "./mdx";
 
 export const getRootTypeLocaleFromString = (
   text: string,
@@ -83,7 +84,7 @@ export const printRelationOf = <T>(
     .sort((a, b) => {
       return a.localeCompare(b);
     })
-    .join("<Bullet />") as MDXString;
+    .join(formatMDXBullet()) as MDXString;
 
   return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };

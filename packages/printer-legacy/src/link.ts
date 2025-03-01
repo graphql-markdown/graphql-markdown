@@ -42,6 +42,7 @@ import {
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
 import { TypeHierarchy } from "./const/options";
+import { formatMDXBullet } from "./mdx";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
@@ -304,8 +305,10 @@ export const printParentLink = (
     return "";
   }
 
-  return `<Bullet />${printLink(type.type, {
-    ...options,
-    withAttributes: true,
-  })}` as MDXString;
+  return formatMDXBullet(
+    printLink(type.type, {
+      ...options,
+      withAttributes: true,
+    }),
+  );
 };

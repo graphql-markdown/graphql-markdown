@@ -56,7 +56,7 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { mdx } from "./const/mdx";
+import { mdxDeclaration } from "./mdx/mdx";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
@@ -302,7 +302,7 @@ export class Printer implements IPrinter {
     return [
       header,
       metatags,
-      mdx,
+      mdxDeclaration,
       tags,
       description,
       code,

@@ -10,9 +10,9 @@ import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
 
 import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
-import { getCustomDirectiveResolver } from "./directive";
-
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
+import { getCustomDirectiveResolver } from "./directive";
+import { formatMDXAdmonition } from "./mdx";
 
 export const printCustomDirectives = (
   type: unknown,
@@ -72,14 +72,10 @@ export const printWarning = (
       ? MARKDOWN_EOP
       : `${MARKDOWN_EOP}${text}${MARKDOWN_EOP}`;
 
-  const isDocusaurus = options?.meta?.generatorFrameworkName === "docusaurus";
-  if (
-    isDocusaurus &&
-    options.meta?.generatorFrameworkVersion?.startsWith("2")
-  ) {
-    return `${MARKDOWN_EOP}:::caution ${title}${formattedText}:::`;
-  }
-  return `${MARKDOWN_EOP}:::warning[${title}]${formattedText}:::`;
+  return formatMDXAdmonition(
+    { text: formattedText, type: "warning", title },
+    options?.meta,
+  );
 };
 
 export const printDeprecation = (

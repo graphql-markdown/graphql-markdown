@@ -20,6 +20,7 @@ import {
   SHOW_DEPRECATED,
 } from "./const/strings";
 import { SectionLevels } from "./const/options";
+import { formatMDXDetails } from "./mdx";
 
 export const sectionLevels: SectionLevel[] = [
   SectionLevels.LEVEL_3 as SectionLevelValue,
@@ -119,10 +120,7 @@ export const printSection = <V>(
       typeof options.collapsible?.dataOpen === "string" &&
       typeof options.collapsible.dataClose === "string"
     ) {
-      return [
-        `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}` as MDXString,
-        `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString,
-      ];
+      return formatMDXDetails(options.collapsible).split(`\r`);
     }
     return [MARKDOWN_EOP, MARKDOWN_EOP];
   })();
