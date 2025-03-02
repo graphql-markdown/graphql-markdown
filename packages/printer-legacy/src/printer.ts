@@ -5,8 +5,10 @@ import type {
   GraphQLSchema,
   IPrinter,
   MDXString,
+  MDXSupportType,
   Maybe,
   MetaOptions,
+  PackageName,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -56,7 +58,7 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { mdxDeclaration } from "./mdx";
+import { mdxModule } from "./mdx";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
@@ -73,7 +75,9 @@ export class Printer implements IPrinter {
 
   static readonly printCustomTags = printCustomTags;
 
-  static init(
+  static printMDXModule: Readonly<MDXSupportType>;
+
+  static async init(
     schema: Maybe<GraphQLSchema>,
     baseURL: Maybe<string> = "schema",
     linkRoot: Maybe<string> = "/",
@@ -98,7 +102,8 @@ export class Printer implements IPrinter {
       customDirectives: undefined,
       groups: undefined,
     },
-  ): void {
+    mdxParser: PackageName,
+  ): Promise<void> {
     if (typeof Printer.options !== "undefined") {
       return;
     }
@@ -131,6 +136,8 @@ export class Printer implements IPrinter {
         printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
       meta: meta,
     };
+
+    Printer.printMDXModule = await mdxModule(mdxParser);
   }
 
   static readonly printHeader = (
@@ -276,17 +283,16 @@ export class Printer implements IPrinter {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,
+      ...Printer.printMDXModule,
     };
 
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
       return undefined;
     }
 
-    const header = Printer.printHeader(
-      name,
-      getTypeName(type),
-      printTypeOptions,
-    );
+    const header = Printer.printMDXModule.mdxSupport
+      ? Printer.printHeader(name, getTypeName(type), printTypeOptions)
+      : "";
     const metatags = Printer.printMetaTags(type, printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
@@ -302,7 +308,7 @@ export class Printer implements IPrinter {
     return [
       header,
       metatags,
-      mdxDeclaration,
+      Printer.printMDXModule.mdxDeclaration,
       tags,
       description,
       code,

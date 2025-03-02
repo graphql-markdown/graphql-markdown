@@ -19,7 +19,6 @@ import {
 
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
-import { formatMDXBadge } from "./mdx";
 
 export const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
@@ -71,10 +70,13 @@ export const getTypeBadges = (
   return badges;
 };
 
-export const printBadge = ({ text, classname }: Badge): MDXString => {
+export const printBadge = (
+  { text, classname }: Badge,
+  options: PrintTypeOptions,
+): MDXString => {
   const textString = typeof text === "object" ? text.singular : text.toString();
   const formattedText = escapeMDX(textString);
-  return formatMDXBadge({ text: formattedText, classname });
+  return options.formatMDXBadge!({ text: formattedText, classname });
 };
 
 export const printBadges = (
@@ -97,7 +99,7 @@ export const printBadges = (
 
   return badges
     .map((badge): MDXString => {
-      return printBadge(badge);
+      return printBadge(badge, options);
     })
     .join(" ") as MDXString;
 };

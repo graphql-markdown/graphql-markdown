@@ -4,8 +4,6 @@ import type { GraphQLMarkdownCliOptions } from "@graphql-markdown/types";
 
 import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
 
-import * as DocusaurusMDX from "./mdx";
-
 import {
   getGraphQLMarkdownCli,
   runGraphQLMarkdown,
@@ -14,6 +12,7 @@ import Logger from "@graphql-markdown/logger";
 
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const LOGGER_MODULE = "@docusaurus/logger" as const;
+const MDX_PACKAGE = "@graphql-markdown/docusaurus/mdx" as const;
 
 export default async function pluginGraphQLDocGenerator(
   _: LoadContext,
@@ -42,7 +41,7 @@ export default async function pluginGraphQLDocGenerator(
             },
           },
           LOGGER_MODULE,
-          DocusaurusMDX,
+          MDX_PACKAGE,
         ),
       );
     },

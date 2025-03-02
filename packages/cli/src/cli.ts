@@ -1,6 +1,7 @@
 import type {
   CliOptions,
   GraphQLMarkdownCliOptions,
+  PackageName,
 } from "@graphql-markdown/types";
 
 import type { CommanderStatic } from "commander";
@@ -19,7 +20,7 @@ export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
   cliOptions: CliOptions,
   loggerModule?: string,
-  mdxParser?: Record<string, unknown>,
+  mdxParser?: PackageName,
 ): Promise<void> => {
   const config = await buildConfig(options, cliOptions, options.id);
   await generateDocFromSchema(
@@ -34,7 +35,7 @@ export const runGraphQLMarkdown = async (
 export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
-  mdxParser?: Record<string, unknown>,
+  mdxParser?: PackageName | string,
 ): GraphQLMarkdownCliType => {
   void Logger(loggerModule);
 
@@ -83,6 +84,11 @@ export const getGraphQLMarkdownCli = (
     )
     .option("--pretty", "Prettify generated files")
     .action(async (cliOptions: CliOptions) => {
-      await runGraphQLMarkdown(options, cliOptions, loggerModule, mdxParser);
+      await runGraphQLMarkdown(
+        options,
+        cliOptions,
+        loggerModule,
+        mdxParser as PackageName,
+      );
     }) as GraphQLMarkdownCliType;
 };

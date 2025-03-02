@@ -124,7 +124,7 @@ export const printCustomTags = (
 
   return badges
     .map((badge): MDXString => {
-      return printBadge(badge);
+      return printBadge(badge, options);
     })
     .join(" ") as MDXString;
 };

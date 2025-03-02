@@ -4,6 +4,7 @@ import type {
   GeneratorOptions,
   GraphQLDirective,
   Maybe,
+  PackageName,
   SchemaEntity,
   TypeHierarchyObjectType,
 } from "@graphql-markdown/types";
@@ -51,7 +52,7 @@ export const generateDocFromSchema = async (
     skipDocDirective,
     tmpDir,
   }: GeneratorOptions,
-  mdxParser?: Record<string, unknown>,
+  mdxParser?: PackageName,
 ): Promise<void> => {
   const start = process.hrtime.bigint();
 

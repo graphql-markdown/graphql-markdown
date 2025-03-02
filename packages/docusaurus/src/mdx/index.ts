@@ -40,3 +40,15 @@ export const formatMDXDetails = ({
 }): MDXString => {
   return `${MARKDOWN_EOP}<Details dataOpen={${dataOpen}} dataClose={${dataClose}}>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
 };
+
+export const formatMDXSpecifiedByLink = (url: string): MDXString => {
+  return `<SpecifiedBy url="${url}"/>` as MDXString;
+};
+
+export const formatMDXNameEntity = (
+  name: string,
+  parentType?: Maybe<string>,
+): MDXString => {
+  const parentName = parentType ? `${parentType}.` : "";
+  return `<code style={{ fontWeight: 'normal' }}>${parentName}<b>${name}</b></code>` as MDXString;
+};

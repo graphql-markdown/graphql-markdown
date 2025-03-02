@@ -220,8 +220,8 @@ export class Renderer {
     type: unknown,
   ): Promise<Maybe<Category>> {
     const PageRegex =
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx$/;
-    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx$/;
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
+    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx?$/;
 
     const extension = this.hasMDXSupport ? "mdx" : "md";
     const fileName = slugify(name);

@@ -3,6 +3,7 @@ import type {
   FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
+  MDXSupportType,
   Maybe,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
@@ -38,6 +39,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
+    | keyof MDXSupportType
     | "collapsible"
     | "groups"
     | "level"
@@ -51,6 +53,7 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: Maybe<CollapsibleOption>;
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
+  mdxSupport: boolean;
   onlyDocDirectives: GraphQLDirective[];
   parentType: Maybe<string>;
   schema: Maybe<GraphQLSchema>;
@@ -63,6 +66,7 @@ export const DEFAULT_OPTIONS: Required<
   groups: undefined,
   frontMatter: {} as FrontMatterOptions,
   level: undefined,
+  mdxSupport: false,
   metatags: [] as const,
   onlyDocDirectives: [] as const,
   parentType: undefined,

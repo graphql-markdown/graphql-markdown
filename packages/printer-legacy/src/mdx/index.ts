@@ -6,6 +6,7 @@ import type {
   MDXString,
   MDXSupportType,
   MetaOptions,
+  PackageName,
 } from "@graphql-markdown/types";
 
 import { toString } from "@graphql-markdown/utils";
@@ -53,11 +54,34 @@ const formatMDXNameEntity = (
 
 export const mdxDeclaration = "" as const;
 
-export default {
-  formatMDXAdmonition,
-  formatMDXBadge,
-  formatMDXBullet,
-  formatMDXDetails,
-  formatMDXNameEntity,
-  formatMDXSpecifiedByLink,
-} as MDXSupportType;
+export const mdxModule = async (
+  mdxPackage: PackageName,
+): Promise<Readonly<MDXSupportType>> => {
+  return import(mdxPackage)
+    .then((_module: Record<string, unknown>) => {
+      const module = (_module.default ?? _module) as Record<string, unknown>;
+      return {
+        formatMDXAdmonition: module.formatMDXAdmonition ?? formatMDXAdmonition,
+        formatMDXBadge: module.formatMDXBadge ?? formatMDXBadge,
+        formatMDXBullet: module.formatMDXBullet ?? formatMDXBullet,
+        formatMDXDetails: module.formatMDXDetails ?? formatMDXDetails,
+        formatMDXNameEntity: module.formatMDXNameEntity ?? formatMDXNameEntity,
+        formatMDXSpecifiedByLink:
+          module.formatMDXSpecifiedByLink ?? formatMDXSpecifiedByLink,
+        mdxDeclaration: module.mdxDeclaration ?? mdxDeclaration,
+        mdxSupport: true,
+      } as MDXSupportType;
+    })
+    .catch(() => {
+      return {
+        formatMDXAdmonition,
+        formatMDXBadge,
+        formatMDXBullet,
+        formatMDXDetails,
+        formatMDXNameEntity,
+        formatMDXSpecifiedByLink,
+        mdxDeclaration,
+        mdxSupport: false,
+      } as MDXSupportType;
+    });
+};

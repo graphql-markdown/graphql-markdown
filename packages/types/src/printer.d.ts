@@ -29,6 +29,8 @@ export interface MDXSupportType {
   }) => MDXString;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;
+  mdxDeclaration: string;
+  mdxSupport: boolean;
 }
 
 export type RootTypeName =
@@ -74,7 +76,7 @@ export interface CollapsibleOption {
   dataClose: string;
 }
 
-export interface PrintTypeOptions {
+export type PrintTypeOptions = Partial<MDXSupportType> & {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
@@ -95,7 +97,7 @@ export interface PrintTypeOptions {
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
   withAttributes?: boolean;
-}
+};
 
 export type SectionLevelValue = string & {
   _opaque: typeof SECTION_LEVEL_VALUE;
@@ -134,13 +136,13 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
  * @public
  */
 export abstract class IPrinter {
-  static init(
+  static async init(
     schema: Maybe<GraphQLSchema>,
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-    mdxParser?: Record<string, unknown>,
-  ): void;
+    mdxParser?: PackageName,
+  ): Promise<void>;
   static printHeader(
     id: string,
     title: string,
