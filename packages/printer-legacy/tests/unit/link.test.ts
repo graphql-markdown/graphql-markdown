@@ -6,7 +6,8 @@ import {
   GraphQLScalarType,
 } from "graphql/type";
 
-import { ConstDirectiveNode, DirectiveLocation, Kind } from "graphql/language";
+import type { ConstDirectiveNode } from "graphql/language";
+import { DirectiveLocation, Kind } from "graphql/language";
 
 import type {
   PrintLinkOptions,
@@ -457,7 +458,9 @@ describe("link", () => {
 
       const result = Link.printLink({}, DEFAULT_OPTIONS);
 
-      expect(result).toBe("[`foo`](/bar)");
+      expect(result).toBe(
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)',
+      );
     });
 
     test("returns formatted markdown link parentType", () => {
@@ -473,7 +476,7 @@ describe("link", () => {
       );
 
       expect(result).toBe(
-        "[<code style={{ fontWeight: 'normal' }}>baz.<b>foo</b></code>](/bar)",
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">baz.</code><code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)',
       );
     });
 
@@ -489,7 +492,9 @@ describe("link", () => {
         { ...DEFAULT_OPTIONS, withAttributes: true },
       );
 
-      expect(result).toBe("[`barfoo`](/bar)");
+      expect(result).toBe(
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">barfoo</code></span>](/bar)',
+      );
     });
   });
 
@@ -589,7 +594,9 @@ describe("link", () => {
 
       expect(
         Link.printParentLink({ type: "foo" }, DEFAULT_OPTIONS),
-      ).toMatchInlineSnapshot(`"<Bullet />[\`foo\`](/bar)"`);
+      ).toMatchInlineSnapshot(
+        `"<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[\`foo\`](/bar)"`,
+      );
     });
 
     test("returns an empty string if parent link undefined", () => {

@@ -204,12 +204,12 @@ describe("relation", () => {
       );
 
       expect(relation).toMatchInlineSnapshot(`
-            "### RelationOf
+"### RelationOf
 
-            [\`Bar\`](#)  <Badge class="badge badge--secondary" text="interface"/><Bullet />[\`Baz\`](#)  <Badge class="badge badge--secondary" text="subscription"/><Bullet />[\`Foo\`](#)  <Badge class="badge badge--secondary" text="query"/>
+[\`Bar\`](#)  <mark class="gqlmd-mdx-badge">interface</mark><span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[\`Baz\`](#)  <mark class="gqlmd-mdx-badge">subscription</mark><span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[\`Foo\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
 
-            "
-          `);
+"
+`);
     });
   });
 

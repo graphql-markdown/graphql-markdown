@@ -41,7 +41,7 @@ describe("common", () => {
         locations: [],
         description: "Lorem ipsum",
       });
-      const description = printDescription(type);
+      const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -57,7 +57,7 @@ describe("common", () => {
         name: "TestDirective",
         locations: [],
       });
-      const description = printDescription(type);
+      const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -73,7 +73,7 @@ describe("common", () => {
         name: "TestDirective",
         locations: [],
       });
-      const description = printDescription(type, undefined, "");
+      const description = printDescription(type, DEFAULT_OPTIONS, "");
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -90,7 +90,7 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type);
+      const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -107,7 +107,7 @@ describe("common", () => {
         locations: [],
         description: undefined,
       });
-      const description = printDescription(type);
+      const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
         "
@@ -119,11 +119,6 @@ describe("common", () => {
     test("return DEPRECATED tag if deprecated", () => {
       expect.hasAssertions();
 
-      const meta: MetaOptions = {
-        generatorFrameworkName: "docusaurus",
-        generatorFrameworkVersion: "3.0.0",
-      };
-
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const type = {
@@ -131,21 +126,22 @@ describe("common", () => {
         isDeprecated: true,
         deprecationReason: "{ Foobar }",
       };
-      const description = printDescription(type, {
-        meta,
-      } as unknown as PrintTypeOptions);
+      const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
-        "
+"
 
-        :::warning[DEPRECATED]
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
-        &#x007B; Foobar &#x007D;
+&#x007B; Foobar &#x007D;
 
-        :::
+</span>
+</fieldset>
 
-        Lorem ipsum"
-      `);
+Lorem ipsum"
+`);
     });
 
     test("return custom directive description if applied", () => {
@@ -198,25 +194,24 @@ describe("common", () => {
     test("prints deprecated badge if type is deprecated", () => {
       expect.hasAssertions();
 
-      const meta: MetaOptions = {};
-
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const type = {
         name: "EntityTypeName",
         isDeprecated: true,
       };
-      const deprecation = printDeprecation(type, {
-        meta,
-      } as unknown as PrintTypeOptions);
+      const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toMatchInlineSnapshot(`
-        "
+"
 
-        :::warning[DEPRECATED]
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
-        :::"
-      `);
+</span>
+</fieldset>"
+`);
     });
 
     test("prints deprecation reason if type is deprecated with reason", () => {
@@ -229,17 +224,20 @@ describe("common", () => {
         isDeprecated: true,
         deprecationReason: "{ foobar }",
       };
-      const deprecation = printDeprecation(type);
+      const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toMatchInlineSnapshot(`
-        "
+"
 
-        :::warning[DEPRECATED]
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
-        &#x007B; foobar &#x007D;
-        
-        :::"
-      `);
+&#x007B; foobar &#x007D;
+
+</span>
+</fieldset>"
+`);
     });
 
     test("does not print deprecated badge if type is not deprecated", () => {
@@ -251,7 +249,7 @@ describe("common", () => {
         specifiedByURL: "https://lorem.ipsum",
       });
 
-      const deprecation = printDeprecation(type);
+      const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toBe("");
     });
@@ -309,7 +307,26 @@ Test testDirective"
   });
 
   describe("printWarning()", () => {
-    test("prints admonition caution for Docusaurus v2", () => {
+    test("prints admonition warning", () => {
+      expect.assertions(1);
+
+      expect(
+        printWarning({ text: "test", title: "DEPRECATED" }, DEFAULT_OPTIONS),
+      ).toMatchInlineSnapshot(`
+"
+
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
+
+test
+
+</span>
+</fieldset>"
+`);
+    });
+    // eslint-disable-next-line jest/no-disabled-tests
+    test.skip("prints admonition caution for Docusaurus v2", () => {
       expect.assertions(1);
 
       const meta: MetaOptions = {
@@ -318,7 +335,7 @@ Test testDirective"
       };
 
       expect(
-        printWarning("test", "DEPRECATED", {
+        printWarning({ text: "test", title: "DEPRECATED" }, {
           meta,
         } as unknown as PrintTypeOptions),
       ).toMatchInlineSnapshot(`
@@ -331,7 +348,8 @@ Test testDirective"
         :::"
       `);
     });
-    test("prints admonition warning for Docusaurus v3", () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    test.skip("prints admonition warning for Docusaurus v3", () => {
       expect.assertions(1);
 
       const meta: MetaOptions = {
@@ -340,7 +358,7 @@ Test testDirective"
       };
 
       expect(
-        printWarning("test", "DEPRECATED", {
+        printWarning({ text: "test", title: "DEPRECATED" }, {
           meta,
         } as unknown as PrintTypeOptions),
       ).toMatchInlineSnapshot(`

@@ -22,16 +22,19 @@ describe("enum", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Values
 
-#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)  
 
 
 
-#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-:::warning[DEPRECATED]
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
 Deprecated
 
-:::
+</span>
+</fieldset>
 
 
 "
@@ -49,23 +52,27 @@ Deprecated
       expect(metadata).toMatchInlineSnapshot(`
 "### Values
 
-#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>one</b></code>](#)  
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)  
 
 
 
  
 
-<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+<details class="gqlmd-mdx-details">
+<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
 
-#### [<code style={{ fontWeight: 'normal' }}>EnumTypeName.<b>two</b></code>](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-:::warning[DEPRECATED]
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
 Deprecated
 
-:::
+</span>
+</fieldset>
 
 
-</Details>
+</details>
 
 "
 `);

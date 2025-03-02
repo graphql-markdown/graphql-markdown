@@ -3,13 +3,14 @@ import type {
   FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
-  MDXSupportType,
   Maybe,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
   SectionLevelValue,
 } from "@graphql-markdown/types";
+
+import MDXModule from "../mdx";
 
 export enum TypeHierarchy {
   API = "api",
@@ -39,7 +40,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    | keyof MDXSupportType
+    // | keyof MDXSupportType
     | "collapsible"
     | "groups"
     | "level"
@@ -66,11 +67,11 @@ export const DEFAULT_OPTIONS: Required<
   groups: undefined,
   frontMatter: {} as FrontMatterOptions,
   level: undefined,
-  mdxSupport: false,
   metatags: [] as const,
   onlyDocDirectives: [] as const,
   parentType: undefined,
   schema: undefined,
   skipDocDirectives: [] as const,
   withAttributes: false as const,
+  ...MDXModule,
 };

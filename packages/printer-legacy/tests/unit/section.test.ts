@@ -58,13 +58,14 @@ describe("section", () => {
       expect(section).toMatchInlineSnapshot(`
 " 
 
-<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+<details class="gqlmd-mdx-details">
+<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
 
 ####   
 
 
 
-</Details>
+</details>
 
 "
 `);
@@ -156,7 +157,7 @@ describe("section", () => {
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](/types/objects/entity-type-name.mdx) <Badge class="badge badge--secondary" text="object"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum
 "
 `);
@@ -183,7 +184,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](/types/objects/entity-type-name.mdx) <Badge class="badge badge--secondary" text="object"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum dolor sit amet, 
 consectetur adipiscing elit, 
 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -214,7 +215,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](#)<Bullet />[\`NonNullableObjectType!\`](/types/objects/non-nullable-object-type.mdx) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
 
 "
 `);
@@ -238,7 +239,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](#)<Bullet />[\`[NonNullableObjectType]!\`](/types/objects/non-nullable-object-type.mdx) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="object"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
 
 "
 `);
@@ -257,7 +258,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       });
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<code style={{ fontWeight: 'normal' }}>parentTypePrefix.<b>EntityTypeName</b></code>](#)  
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix.</code><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
 
 "
 `);
@@ -278,9 +279,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](#)  
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
 
-##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -297,7 +298,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]\`](/types/scalars/int.mdx) <Badge class="badge badge--secondary" text="list"/> <Badge class="badge badge--secondary" text="scalar"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int.mdx) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -316,7 +317,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeNameList\`](#)<Bullet />[\`[Int!]!\`](/types/scalars/int.mdx) <Badge class="badge badge--secondary" text="non-null"/> <Badge class="badge badge--secondary" text="scalar"/> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -396,11 +397,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       });
 
       expect(section).toMatchInlineSnapshot(`
-"#### [\`EntityTypeName\`](#) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> 
-:::warning[DEPRECATED]
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
-:::
-##### [<code style={{ fontWeight: 'normal' }}>EntityTypeName.<b>ParameterTypeName</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+</span>
+</fieldset>
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 

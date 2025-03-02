@@ -43,27 +43,30 @@ describe("object", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Fields
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean.mdx) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-:::warning[DEPRECATED]
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean.mdx) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
 Deprecated
 
-:::
+</span>
+</fieldset>
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">three</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
-##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three.</code><code class="gqlmd-mdx-entity-name">four</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
 ### Interfaces
 
-#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name.mdx) <Badge class="badge badge--secondary" text="interface"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name.mdx) <mark class="gqlmd-mdx-badge">interface</mark> 
 
 
 
@@ -82,33 +85,37 @@ Deprecated
       expect(metadata).toMatchInlineSnapshot(`
 "### Fields
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>one</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>three</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">three</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
-##### [<code style={{ fontWeight: 'normal' }}>TestName.three.<b>four</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three.</code><code class="gqlmd-mdx-entity-name">four</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
  
 
-<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+<details class="gqlmd-mdx-details">
+<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
 
-#### [<code style={{ fontWeight: 'normal' }}>TestName.<b>two</b></code>](#)<Bullet />[\`Boolean\`](/types/scalars/boolean.mdx) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-:::warning[DEPRECATED]
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean.mdx) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
 Deprecated
 
-:::
+</span>
+</fieldset>
 
 
-</Details>
+</details>
 
 ### Interfaces
 
-#### [\`TestInterfaceName\`](/types/interfaces/test-interface-name.mdx) <Badge class="badge badge--secondary" text="interface"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name.mdx) <mark class="gqlmd-mdx-badge">interface</mark> 
 
 
 

@@ -45,7 +45,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Type
 
-#### [\`Test\`](/types/objects/test.mdx) <Badge class="badge badge--secondary" text="object"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
@@ -82,13 +82,13 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Arguments
 
-#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>ArgFooBar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery.</code><code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
 ### Type
 
-#### [\`Test\`](/types/objects/test.mdx) <Badge class="badge badge--secondary" text="object"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
@@ -131,27 +131,31 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Arguments
 
-#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Foo</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--secondary" text="scalar"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery.</code><code class="gqlmd-mdx-entity-name">Foo</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
  
 
-<Details dataOpen={<><span className="deprecated">Hide deprecated</span></>} dataClose={<><span className="deprecated">Show deprecated</span></>}>
+<details class="gqlmd-mdx-details">
+<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
 
-#### [<code style={{ fontWeight: 'normal' }}>TestQuery.<b>Bar</b></code>](#)<Bullet />[\`String\`](/types/scalars/string.mdx) <Badge class="badge badge--deprecated badge--secondary" text="deprecated"/> <Badge class="badge badge--secondary" text="scalar"/> 
-:::warning[DEPRECATED]
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery.</code><code class="gqlmd-mdx-entity-name">Bar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+<fieldset class="gqlmd-mdx-admonition-fieldset">
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<span>
 
 Deprecated
 
-:::
+</span>
+</fieldset>
 
 
-</Details>
+</details>
 
 ### Type
 
-#### [\`Test\`](/types/objects/test.mdx) <Badge class="badge badge--secondary" text="object"/> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 

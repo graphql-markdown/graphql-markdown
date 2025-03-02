@@ -102,7 +102,7 @@ export class Printer implements IPrinter {
       customDirectives: undefined,
       groups: undefined,
     },
-    mdxParser: PackageName,
+    mdxParser?: PackageName,
   ): Promise<void> {
     if (typeof Printer.options !== "undefined") {
       return;

@@ -160,52 +160,60 @@ describe("Printer", () => {
   });
 
   describe("init()", () => {
-    test("sets Printer instance with default options", () => {
+    test("sets Printer instance with default options", async () => {
       expect.hasAssertions();
 
       expect(Printer.options).toBeUndefined();
 
-      Printer.init(undefined);
+      await Printer.init(undefined, undefined, undefined, undefined, undefined);
 
       expect(Printer.options).toMatchInlineSnapshot(`
-        {
-          "basePath": "/schema",
-          "codeSection": true,
-          "collapsible": undefined,
-          "customDirectives": undefined,
-          "deprecated": "default",
-          "exampleSection": false,
-          "frontMatter": {},
-          "groups": undefined,
-          "hierarchy": {
-            "api": {},
-          },
-          "level": undefined,
-          "meta": undefined,
-          "metatags": [],
-          "onlyDocDirectives": [],
-          "parentType": undefined,
-          "parentTypePrefix": true,
-          "relatedTypeSection": true,
-          "schema": undefined,
-          "skipDocDirectives": [],
-          "typeBadges": true,
-          "withAttributes": false,
-        }
-      `);
+{
+  "basePath": "/schema",
+  "codeSection": true,
+  "collapsible": undefined,
+  "customDirectives": undefined,
+  "deprecated": "default",
+  "exampleSection": false,
+  "formatMDXAdmonition": [Function],
+  "formatMDXBadge": [Function],
+  "formatMDXBullet": [Function],
+  "formatMDXDetails": [Function],
+  "formatMDXNameEntity": [Function],
+  "formatMDXSpecifiedByLink": [Function],
+  "frontMatter": {},
+  "groups": undefined,
+  "hierarchy": {
+    "api": {},
+  },
+  "level": undefined,
+  "mdxDeclaration": "",
+  "mdxSupport": false,
+  "meta": undefined,
+  "metatags": [],
+  "onlyDocDirectives": [],
+  "parentType": undefined,
+  "parentTypePrefix": true,
+  "relatedTypeSection": true,
+  "schema": undefined,
+  "skipDocDirectives": [],
+  "typeBadges": true,
+  "withAttributes": false,
+}
+`);
     });
 
-    test("does nothing is options is defined", () => {
+    test("does nothing is options is defined", async () => {
       expect.hasAssertions();
 
       Printer.options = {} as PrintTypeOptions;
 
-      Printer.init(undefined);
+      await Printer.init(undefined);
 
       expect(Printer.options).toMatchInlineSnapshot(`{}`);
     });
 
-    test("override values on init when options is undefined", () => {
+    test("override values on init when options is undefined", async () => {
       expect.hasAssertions();
 
       const testDirective = new GraphQLDirective({
@@ -215,7 +223,7 @@ describe("Printer", () => {
 
       Printer.options = undefined;
 
-      Printer.init(new GraphQLSchema({}), "test", "/", {
+      await Printer.init(new GraphQLSchema({}), "test", "/", {
         groups: {},
         printTypeOptions: {
           codeSection: false,
@@ -229,63 +237,71 @@ describe("Printer", () => {
       });
 
       expect(Printer.options).toMatchInlineSnapshot(`
-        {
-          "basePath": "/test",
-          "codeSection": false,
-          "collapsible": undefined,
-          "customDirectives": undefined,
-          "deprecated": "default",
-          "exampleSection": true,
-          "frontMatter": {},
-          "groups": {},
-          "hierarchy": {
-            "entity": {},
-          },
-          "level": undefined,
-          "meta": undefined,
-          "metatags": [],
-          "onlyDocDirectives": [],
-          "parentType": undefined,
-          "parentTypePrefix": false,
-          "relatedTypeSection": false,
-          "schema": GraphQLSchema {
-            "__validationErrors": undefined,
-            "_directives": [
-              "@include",
-              "@skip",
-              "@deprecated",
-              "@specifiedBy",
-              "@oneOf",
-            ],
-            "_implementationsMap": {},
-            "_mutationType": undefined,
-            "_queryType": undefined,
-            "_subTypeMap": {},
-            "_subscriptionType": undefined,
-            "_typeMap": {
-              "Boolean": "Boolean",
-              "String": "String",
-              "__Directive": "__Directive",
-              "__DirectiveLocation": "__DirectiveLocation",
-              "__EnumValue": "__EnumValue",
-              "__Field": "__Field",
-              "__InputValue": "__InputValue",
-              "__Schema": "__Schema",
-              "__Type": "__Type",
-              "__TypeKind": "__TypeKind",
-            },
-            "astNode": undefined,
-            "description": undefined,
-            "extensionASTNodes": [],
-            "extensions": {},
-          },
-          "skipDocDirectives": [
-            "@test",
-          ],
-          "typeBadges": false,
-          "withAttributes": false,
-        }
-      `);
+{
+  "basePath": "/test",
+  "codeSection": false,
+  "collapsible": undefined,
+  "customDirectives": undefined,
+  "deprecated": "default",
+  "exampleSection": true,
+  "formatMDXAdmonition": [Function],
+  "formatMDXBadge": [Function],
+  "formatMDXBullet": [Function],
+  "formatMDXDetails": [Function],
+  "formatMDXNameEntity": [Function],
+  "formatMDXSpecifiedByLink": [Function],
+  "frontMatter": {},
+  "groups": {},
+  "hierarchy": {
+    "entity": {},
+  },
+  "level": undefined,
+  "mdxDeclaration": "",
+  "mdxSupport": false,
+  "meta": undefined,
+  "metatags": [],
+  "onlyDocDirectives": [],
+  "parentType": undefined,
+  "parentTypePrefix": false,
+  "relatedTypeSection": false,
+  "schema": GraphQLSchema {
+    "__validationErrors": undefined,
+    "_directives": [
+      "@include",
+      "@skip",
+      "@deprecated",
+      "@specifiedBy",
+      "@oneOf",
+    ],
+    "_implementationsMap": {},
+    "_mutationType": undefined,
+    "_queryType": undefined,
+    "_subTypeMap": {},
+    "_subscriptionType": undefined,
+    "_typeMap": {
+      "Boolean": "Boolean",
+      "String": "String",
+      "__Directive": "__Directive",
+      "__DirectiveLocation": "__DirectiveLocation",
+      "__EnumValue": "__EnumValue",
+      "__Field": "__Field",
+      "__InputValue": "__InputValue",
+      "__Schema": "__Schema",
+      "__Type": "__Type",
+      "__TypeKind": "__TypeKind",
+    },
+    "astNode": undefined,
+    "description": undefined,
+    "extensionASTNodes": [],
+    "extensions": {},
+  },
+  "skipDocDirectives": [
+    "@test",
+  ],
+  "typeBadges": false,
+  "withAttributes": false,
+}
+`);
     });
   });
 
@@ -407,7 +423,7 @@ describe("Printer", () => {
     ] as const;
 
     test.each(types)(
-      "returns a Markdown formatted Docusaurus content for type $name",
+      "returns a Markdown formatted content for type $name",
       ({ name, type }) => {
         expect.hasAssertions();
 

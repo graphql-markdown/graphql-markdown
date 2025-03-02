@@ -9,12 +9,10 @@ import type {
   PackageName,
 } from "@graphql-markdown/types";
 
-import { toString } from "@graphql-markdown/utils";
-
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "../const/strings";
 
 const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
-  return `<mark class="gqlmd-mdx-badge">${toString(text)}</mark>` as MDXString;
+  return `<mark class="gqlmd-mdx-badge">${text as string}</mark>` as MDXString;
 };
 
 const formatMDXAdmonition = (
@@ -54,9 +52,23 @@ const formatMDXNameEntity = (
 
 export const mdxDeclaration = "" as const;
 
+const defaultModule = {
+  formatMDXAdmonition,
+  formatMDXBadge,
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+  mdxDeclaration,
+  mdxSupport: false,
+} as MDXSupportType;
+
 export const mdxModule = async (
-  mdxPackage: PackageName,
+  mdxPackage: Maybe<PackageName>,
 ): Promise<Readonly<MDXSupportType>> => {
+  if (!mdxPackage) {
+    return defaultModule;
+  }
   return import(mdxPackage)
     .then((_module: Record<string, unknown>) => {
       const module = (_module.default ?? _module) as Record<string, unknown>;
@@ -73,15 +85,8 @@ export const mdxModule = async (
       } as MDXSupportType;
     })
     .catch(() => {
-      return {
-        formatMDXAdmonition,
-        formatMDXBadge,
-        formatMDXBullet,
-        formatMDXDetails,
-        formatMDXNameEntity,
-        formatMDXSpecifiedByLink,
-        mdxDeclaration,
-        mdxSupport: false,
-      } as MDXSupportType;
+      return defaultModule;
     });
 };
+
+export default defaultModule;

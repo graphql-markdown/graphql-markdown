@@ -247,7 +247,7 @@ describe("directive", () => {
 
       const tags = printCustomTags(type, options);
 
-      expect(tags).toBe(`<Badge class="badge warning" text="@testA"/>`);
+      expect(tags).toBe('<mark class="gqlmd-mdx-badge">@testA</mark>');
     });
   });
 });
