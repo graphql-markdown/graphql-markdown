@@ -13,6 +13,24 @@ import type {
 import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
 
+export interface MDXSupportType {
+  formatMDXAdmonition: (
+    { text, title, type, icon }: AdmonitionType,
+    meta: Maybe<MetaOptions>,
+  ) => MDXString;
+  formatMDXBadge: ({ text, classname }: Badge) => MDXString;
+  formatMDXBullet: (text?: string) => MDXString;
+  formatMDXDetails: ({
+    dataOpen,
+    dataClose,
+  }: {
+    dataOpen: Maybe<string>;
+    dataClose: Maybe<string>;
+  }) => MDXString;
+  formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
+  formatMDXSpecifiedByLink: (url: string) => MDXString;
+}
+
 export type RootTypeName =
   | "DIRECTIVE"
   | "ENUM"
@@ -34,8 +52,9 @@ export interface MetaOptions {
 }
 
 export interface AdmonitionType {
-  title: Maybe<string>;
+  icon: Maybe<string>;
   text: string;
+  title: Maybe<string>;
   type: string;
 }
 

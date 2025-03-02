@@ -56,7 +56,7 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { mdxDeclaration } from "./mdx/mdx";
+import { mdxDeclaration } from "./mdx";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,

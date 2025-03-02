@@ -73,7 +73,7 @@ export const printWarning = (
       : `${MARKDOWN_EOP}${text}${MARKDOWN_EOP}`;
 
   return formatMDXAdmonition(
-    { text: formattedText, type: "warning", title },
+    { text: formattedText, type: "warning", icon: "⚠️", title },
     options?.meta,
   );
 };

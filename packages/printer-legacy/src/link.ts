@@ -42,7 +42,7 @@ import {
   ROOT_TYPE_LOCALE,
 } from "./const/strings";
 import { TypeHierarchy } from "./const/options";
-import { formatMDXBullet } from "./mdx";
+import { formatMDXBullet, formatMDXNameEntity } from "./mdx";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
@@ -286,15 +286,16 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   );
 
   if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
-    const textWithAttribute = hasOptionParentType(options)
-      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
-      : `\`${link.text}\``;
+    const textWithAttribute = formatMDXNameEntity(
+      link.text,
+      options.parentType,
+    );
     return `[${textWithAttribute}](${link.url})`;
   }
 
   const text = printLinkAttributes(type, link.text);
 
-  return `[\`${text}\`](${link.url})`;
+  return `[${formatMDXNameEntity(text)}](${link.url})`;
 };
 
 export const printParentLink = (
