@@ -14,6 +14,7 @@ import type {
 } from "graphql/type";
 
 import type { Maybe } from "./utils";
+import type { ConfigOptions } from "./core";
 
 export type {
   GraphQLArgument,
@@ -76,6 +77,7 @@ export interface SchemaMap {
 }
 
 export type DirectiveName = string & { _opaque: typeof DIRECTIVE_NAME };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare const DIRECTIVE_NAME: unique symbol;
 
 export type SchemaEntitiesGroupMap = Partial<
