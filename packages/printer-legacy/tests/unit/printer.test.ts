@@ -52,6 +52,8 @@ import * as Link from "../../src/link";
 import { Printer } from "../../src/printer";
 import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
 
+import mdxModule from "../../src/mdx";
+
 describe("Printer", () => {
   enum TypeGuard {
     DIRECTIVE = "isDirectiveType",
@@ -149,6 +151,7 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
+    Printer.printMDXModule = mdxModule;
     jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
       return value as string;
     });
@@ -306,13 +309,25 @@ describe("Printer", () => {
   });
 
   describe("printHeader()", () => {
-    test("returns a Docusaurus document header", () => {
+    test("returns a empty string if no mdxSupport", () => {
       expect.hasAssertions();
 
       const header = Printer.printHeader(
         "an-object-type-name",
         "An Object Type Name",
         DEFAULT_OPTIONS,
+      );
+
+      expect(header).toBe("");
+    });
+
+    test("returns a MDX frontmatter document header", () => {
+      expect.hasAssertions();
+
+      const header = Printer.printHeader(
+        "an-object-type-name",
+        "An Object Type Name",
+        { ...DEFAULT_OPTIONS, mdxSupport: true },
       );
 
       expect(header).toMatchInlineSnapshot(`
@@ -323,7 +338,7 @@ describe("Printer", () => {
           `);
     });
 
-    test("returns a Docusaurus document header with custom frontmatter", () => {
+    test("returns a MDX frontmatter document header with custom info", () => {
       expect.hasAssertions();
 
       const header = Printer.printHeader(
@@ -332,6 +347,7 @@ describe("Printer", () => {
         {
           ...DEFAULT_OPTIONS,
           frontMatter: { draft: true, hide_table_of_contents: null },
+          mdxSupport: true,
         },
       );
 

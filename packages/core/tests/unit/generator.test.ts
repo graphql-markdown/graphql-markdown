@@ -137,6 +137,7 @@ describe("generator", () => {
             expect.objectContaining({ name: "docDirective" }),
           ],
         },
+        undefined,
       );
       expect(rendererSpy).toHaveBeenCalledWith(
         {},
@@ -149,6 +150,7 @@ describe("generator", () => {
           deprecated: options.printTypeOptions!.deprecated,
           hierarchy: options.printTypeOptions!.hierarchy,
         },
+        false,
       );
     });
 

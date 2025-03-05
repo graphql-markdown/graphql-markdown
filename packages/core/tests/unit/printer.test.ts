@@ -27,6 +27,7 @@ describe("generator", () => {
         "@graphql-markdown/printer-legacy" as PackageName,
         printerConfig,
         printerOptions,
+        undefined,
       );
 
       expect(printer).toBeDefined();
@@ -37,6 +38,7 @@ describe("generator", () => {
         printerConfig.baseURL,
         printerConfig.linkRoot,
         printerOptions,
+        undefined,
       );
     });
 

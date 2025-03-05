@@ -145,6 +145,10 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
+    if (!options.mdxSupport) {
+      return "";
+    }
+
     const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
     return printFrontMatter(id, title, fmOptions);
@@ -290,9 +294,11 @@ export class Printer implements IPrinter {
       return undefined;
     }
 
-    const header = Printer.printMDXModule.mdxSupport
-      ? Printer.printHeader(name, getTypeName(type), printTypeOptions)
-      : "";
+    const header = Printer.printHeader(
+      name,
+      getTypeName(type),
+      printTypeOptions,
+    );
     const metatags = Printer.printMetaTags(type, printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);
     const code = Printer.printCode(type, printTypeOptions);
