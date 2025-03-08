@@ -21,7 +21,7 @@ export const printSpecification = (
   const url = type.specifiedByURL;
 
   // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
-  return `${SectionLevels.LEVEL_3} ${options!.formatMDXSpecifiedByLink!(url)}${MARKDOWN_EOP}` as MDXString;
+  return `${SectionLevels.LEVEL_3} ${options.formatMDXSpecifiedByLink!(url)}${MARKDOWN_EOP}` as MDXString;
 };
 
 export const printScalarMetadata = (

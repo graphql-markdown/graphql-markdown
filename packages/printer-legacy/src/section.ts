@@ -173,8 +173,8 @@ export const printMetadataSection = <T, V>(
         parentType: type.name as string,
         level: SectionLevels.NONE as SectionLevelValue,
         collapsible: {
-          dataOpen: DEPRECATED, // TODO
-          dataClose: DEPRECATED, // TODO
+          dataOpen: DEPRECATED,
+          dataClose: DEPRECATED,
         },
       });
 

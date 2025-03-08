@@ -51,7 +51,7 @@ const formatMDXNameEntity = (
   return `<span class="gqlmd-mdx-entity">${parentName}<code class="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };
 
-export const mdxDeclaration = "" as const;
+export const mdxDeclaration = "";
 
 const defaultModule = {
   formatMDXAdmonition,
