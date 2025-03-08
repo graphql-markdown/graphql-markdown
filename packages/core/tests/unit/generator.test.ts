@@ -93,66 +93,74 @@ describe("generator", () => {
       return new GraphQLDirective({ name, locations: [] });
     };
 
-    test("passes options to Printer and Renderer", async () => {
-      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
-      jest
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
-        getDirective,
-      } as unknown as GraphQLSchema);
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+    test.each([
+      [undefined, false],
+      ["custom-mdx", true],
+    ])(
+      "passes options to Printer and Renderer with mdxParser set to %s",
+      async (mdxParser, hasMDXSupport) => {
+        jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+        jest
+          .spyOn(GraphQL, "getDocumentLoaders")
+          .mockResolvedValueOnce({} as LoadSchemaOptions);
+        jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+          getDirective,
+        } as unknown as GraphQLSchema);
+        jest
+          .spyOn(GraphQL, "getSchemaMap")
+          .mockReturnValueOnce({ objects: {} } as SchemaMap);
+        jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+        jest
+          .spyOn(GraphQL, "getCustomDirectives")
+          .mockReturnValueOnce(undefined);
 
-      const getPrinterSpy = jest
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      const rendererSpy = jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+        const getPrinterSpy = jest
+          .spyOn(CorePrinter, "getPrinter")
+          .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+        const rendererSpy = jest
+          .spyOn(CoreRenderer, "getRenderer")
+          .mockResolvedValueOnce(mockRenderer);
 
-      await generateDocFromSchema(options);
+        await generateDocFromSchema(options, mdxParser as PackageName);
 
-      expect(getPrinterSpy).toHaveBeenCalledWith(
-        options.printer,
-        {
-          baseURL: options.baseURL,
-          linkRoot: options.linkRoot,
-          schema: { getDirective },
-        },
-        {
-          customDirectives: undefined,
-          groups: undefined,
-          meta: {
-            generatorFrameworkName: undefined,
-            generatorFrameworkVersion: undefined,
+        expect(getPrinterSpy).toHaveBeenCalledWith(
+          options.printer,
+          {
+            baseURL: options.baseURL,
+            linkRoot: options.linkRoot,
+            schema: { getDirective },
           },
-          metatags: [],
-          printTypeOptions: options.printTypeOptions,
-          onlyDocDirectives: [],
-          skipDocDirectives: [
-            expect.objectContaining({ name: "docDirective" }),
-          ],
-        },
-        undefined,
-      );
-      expect(rendererSpy).toHaveBeenCalledWith(
-        {},
-        options.outputDir,
-        options.baseURL,
-        undefined,
-        options.prettify,
-        {
-          ...options.docOptions,
-          deprecated: options.printTypeOptions!.deprecated,
-          hierarchy: options.printTypeOptions!.hierarchy,
-        },
-        false,
-      );
-    });
+          {
+            customDirectives: undefined,
+            groups: undefined,
+            meta: {
+              generatorFrameworkName: undefined,
+              generatorFrameworkVersion: undefined,
+            },
+            metatags: [],
+            printTypeOptions: options.printTypeOptions,
+            onlyDocDirectives: [],
+            skipDocDirectives: [
+              expect.objectContaining({ name: "docDirective" }),
+            ],
+          },
+          mdxParser,
+        );
+        expect(rendererSpy).toHaveBeenCalledWith(
+          {},
+          options.outputDir,
+          options.baseURL,
+          undefined,
+          options.prettify,
+          {
+            ...options.docOptions,
+            deprecated: options.printTypeOptions!.deprecated,
+            hierarchy: options.printTypeOptions!.hierarchy,
+          },
+          hasMDXSupport,
+        );
+      },
+    );
 
     test("prints summary when completed", async () => {
       expect.assertions(1);
