@@ -13,12 +13,7 @@ import { printBadges } from "./badge";
 import { hasPrintableDirective, printLink, printParentLink } from "./link";
 import { printCustomTags } from "./directive";
 
-import {
-  HIDE_DEPRECATED,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  SHOW_DEPRECATED,
-} from "./const/strings";
+import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
 export const sectionLevels: SectionLevel[] = [
@@ -178,8 +173,8 @@ export const printMetadataSection = <T, V>(
         parentType: type.name as string,
         level: SectionLevels.NONE as SectionLevelValue,
         collapsible: {
-          dataOpen: HIDE_DEPRECATED,
-          dataClose: SHOW_DEPRECATED,
+          dataOpen: DEPRECATED, // TODO
+          dataClose: DEPRECATED, // TODO
         },
       });
 

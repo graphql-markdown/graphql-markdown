@@ -11,6 +11,8 @@ import type {
 
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "../const/strings";
 
+import { log, LogLevel } from "@graphql-markdown/logger";
+
 const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
   return `<mark class="gqlmd-mdx-badge">${text as string}</mark>` as MDXString;
 };
@@ -28,12 +30,11 @@ const formatMDXBullet = (text: string = ""): MDXString => {
 
 const formatMDXDetails = ({
   dataOpen,
-  dataClose,
 }: {
   dataOpen: Maybe<string>;
   dataClose: Maybe<string>;
 }): MDXString => {
-  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary">Deprecation</summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen?.toUpperCase()}</span></summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 const formatMDXSpecifiedByLink = (url: string): MDXString => {
@@ -64,7 +65,7 @@ const defaultModule = {
 } as MDXSupportType;
 
 export const mdxModule = async (
-  mdxPackage: Maybe<PackageName>,
+  mdxPackage?: Maybe<PackageName>,
 ): Promise<Readonly<MDXSupportType>> => {
   if (!mdxPackage) {
     return defaultModule;
@@ -85,6 +86,10 @@ export const mdxModule = async (
       } as MDXSupportType;
     })
     .catch(() => {
+      log(
+        `An error occurred while loading MDX formatter "${mdxPackage}"`,
+        LogLevel.warn,
+      );
       return defaultModule;
     });
 };

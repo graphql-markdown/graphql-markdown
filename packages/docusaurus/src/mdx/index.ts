@@ -38,7 +38,7 @@ export const formatMDXDetails = ({
   dataOpen: Maybe<string>;
   dataClose: Maybe<string>;
 }): MDXString => {
-  return `${MARKDOWN_EOP}<Details dataOpen={${dataOpen}} dataClose={${dataClose}}>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<Details dataOpen={${"Hide " + dataOpen}} dataClose={${"Show " + dataClose}}>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
 };
 
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {

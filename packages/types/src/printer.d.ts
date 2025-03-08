@@ -24,8 +24,8 @@ export interface MDXSupportType {
     dataOpen,
     dataClose,
   }: {
-    dataOpen: Maybe<string>;
-    dataClose: Maybe<string>;
+    dataOpen?: Maybe<string>;
+    dataClose?: Maybe<string>;
   }) => MDXString;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;

@@ -29,8 +29,3 @@ export const MARKDOWN_EOC =
   `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${MARKDOWN_EOL}` as const;
 export const MARKDOWN_SOC =
   `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${GRAPHQL}${MARKDOWN_EOL}` as const;
-
-export const HIDE_DEPRECATED =
-  `<><span className="${DEPRECATED}">Hide ${DEPRECATED}</span></>` as const;
-export const SHOW_DEPRECATED =
-  `<><span className="${DEPRECATED}">Show ${DEPRECATED}</span></>` as const;

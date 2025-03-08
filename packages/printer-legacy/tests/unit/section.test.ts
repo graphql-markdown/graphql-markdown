@@ -16,7 +16,7 @@ import {
   printSectionItems,
 } from "../../src/section";
 
-import { HIDE_DEPRECATED, SHOW_DEPRECATED } from "../../src/const/strings";
+import { DEPRECATED } from "../../src/const/strings";
 
 import { DEFAULT_OPTIONS, SectionLevels } from "../../src/const/options";
 
@@ -50,8 +50,8 @@ describe("section", () => {
         ...DEFAULT_OPTIONS,
         level: SectionLevels.NONE as SectionLevelValue,
         collapsible: {
-          dataOpen: HIDE_DEPRECATED,
-          dataClose: SHOW_DEPRECATED,
+          dataOpen: DEPRECATED,
+          dataClose: DEPRECATED,
         },
       });
 
@@ -59,7 +59,7 @@ describe("section", () => {
 " 
 
 <details class="gqlmd-mdx-details">
-<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
+<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
 ####   
 

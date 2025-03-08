@@ -59,7 +59,7 @@ Deprecated
  
 
 <details class="gqlmd-mdx-details">
-<summary class="gqlmd-mdx-details-summary">Deprecation</summary>
+<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
