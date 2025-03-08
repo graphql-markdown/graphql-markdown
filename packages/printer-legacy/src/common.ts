@@ -10,9 +10,8 @@ import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
 
 import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
-import { getCustomDirectiveResolver } from "./directive";
-
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
+import { getCustomDirectiveResolver } from "./directive";
 
 export const printCustomDirectives = (
   type: unknown,
@@ -63,28 +62,23 @@ export const formatDescription = (
 };
 
 export const printWarning = (
-  text?: string,
-  title?: string,
-  options?: PrintTypeOptions,
+  { text, title }: { text?: string; title?: string },
+  options: PrintTypeOptions,
 ): string => {
   const formattedText =
     typeof text !== "string" || text.trim() === ""
       ? MARKDOWN_EOP
       : `${MARKDOWN_EOP}${text}${MARKDOWN_EOP}`;
 
-  const isDocusaurus = options?.meta?.generatorFrameworkName === "docusaurus";
-  if (
-    isDocusaurus &&
-    options.meta?.generatorFrameworkVersion?.startsWith("2")
-  ) {
-    return `${MARKDOWN_EOP}:::caution ${title}${formattedText}:::`;
-  }
-  return `${MARKDOWN_EOP}:::warning[${title}]${formattedText}:::`;
+  return options.formatMDXAdmonition!(
+    { text: formattedText, type: "warning", icon: "⚠️", title },
+    options.meta,
+  );
 };
 
 export const printDeprecation = (
   type: unknown,
-  options?: PrintTypeOptions,
+  options: PrintTypeOptions,
 ): string => {
   if (typeof type !== "object" || type === null || !isDeprecated(type)) {
     return "";
@@ -95,12 +89,15 @@ export const printDeprecation = (
       ? escapeMDX(type.deprecationReason)
       : "";
 
-  return printWarning(reason, DEPRECATED.toUpperCase(), options);
+  return printWarning(
+    { text: reason, title: DEPRECATED.toUpperCase() },
+    options,
+  );
 };
 
 export const printDescription = (
   type: unknown,
-  options?: PrintTypeOptions,
+  options: PrintTypeOptions,
   noText?: string,
 ): MDXString | string => {
   const description = formatDescription(type, noText);

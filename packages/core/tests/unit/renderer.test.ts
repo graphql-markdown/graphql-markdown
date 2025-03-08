@@ -98,7 +98,7 @@ describe("renderer", () => {
 
         expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
         expect(spy).toHaveBeenCalledWith(
-          `${output}/foo-bar.mdx`,
+          `${output}/foo-bar.md`,
           "Lorem ipsum",
           undefined,
         );
@@ -126,7 +126,7 @@ describe("renderer", () => {
 
         expect(meta).toEqual({ category: "schema", slug: "foo-bar" });
         expect(spy).toHaveBeenCalledWith(
-          `${output}/foo-bar.mdx`,
+          `${output}/foo-bar.md`,
           "Lorem ipsum",
           undefined,
         );
@@ -186,7 +186,7 @@ describe("renderer", () => {
 
         expect(meta).toBeUndefined();
         expect(spy).toHaveBeenCalledWith(
-          `An error occurred while processing file test/foo-bar.mdx for type "TestType"`,
+          `An error occurred while processing file test/foo-bar.md for type "TestType"`,
         );
       });
     });
@@ -236,13 +236,13 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenNthCalledWith(
           1,
-          "/output/types/objects/foo.mdx",
+          "/output/types/objects/foo.md",
           "content",
           undefined,
         );
         expect(spy).toHaveBeenNthCalledWith(
           2,
-          "/output/types/objects/bar.mdx",
+          "/output/types/objects/bar.md",
           "content",
           undefined,
         );

@@ -285,15 +285,16 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   );
 
   if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
-    const textWithAttribute = hasOptionParentType(options)
-      ? `<code style={{ fontWeight: 'normal' }}>${options.parentType}.<b>${link.text}</b></code>`
-      : `\`${link.text}\``;
+    const textWithAttribute = options.formatMDXNameEntity!(
+      link.text,
+      options.parentType,
+    );
     return `[${textWithAttribute}](${link.url})`;
   }
 
   const text = printLinkAttributes(type, link.text);
 
-  return `[\`${text}\`](${link.url})`;
+  return `[${options.formatMDXNameEntity!(text)}](${link.url})`;
 };
 
 export const printParentLink = (
@@ -304,8 +305,10 @@ export const printParentLink = (
     return "";
   }
 
-  return `<Bullet />${printLink(type.type, {
-    ...options,
-    withAttributes: true,
-  })}` as MDXString;
+  return options.formatMDXBullet!(
+    printLink(type.type, {
+      ...options,
+      withAttributes: true,
+    }),
+  );
 };

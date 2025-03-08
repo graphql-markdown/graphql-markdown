@@ -41,6 +41,20 @@
         "default": "./dist/index.js"
       }
     },
+    "./mdx": {
+      "require": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      },
+      "import": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      },
+      "default": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

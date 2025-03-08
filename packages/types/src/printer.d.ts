@@ -13,6 +13,26 @@ import type {
 import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
 
+export interface MDXSupportType {
+  formatMDXAdmonition: (
+    { text, title, type, icon }: AdmonitionType,
+    meta: Maybe<MetaOptions>,
+  ) => MDXString;
+  formatMDXBadge: ({ text, classname }: Badge) => MDXString;
+  formatMDXBullet: (text?: string) => MDXString;
+  formatMDXDetails: ({
+    dataOpen,
+    dataClose,
+  }: {
+    dataOpen?: Maybe<string>;
+    dataClose?: Maybe<string>;
+  }) => MDXString;
+  formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
+  formatMDXSpecifiedByLink: (url: string) => MDXString;
+  mdxDeclaration: string;
+  mdxSupport: boolean;
+}
+
 export type RootTypeName =
   | "DIRECTIVE"
   | "ENUM"
@@ -33,6 +53,13 @@ export interface MetaOptions {
   generatorFrameworkVersion?: Maybe<string>;
 }
 
+export interface AdmonitionType {
+  icon: Maybe<string>;
+  text: string;
+  title: Maybe<string>;
+  type: string;
+}
+
 export interface PrinterConfigPrintTypeOptions {
   codeSection?: boolean;
   deprecated?: TypeDeprecatedOption;
@@ -49,7 +76,7 @@ export interface CollapsibleOption {
   dataClose: string;
 }
 
-export interface PrintTypeOptions {
+export type PrintTypeOptions = Partial<MDXSupportType> & {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
@@ -70,7 +97,7 @@ export interface PrintTypeOptions {
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
   withAttributes?: boolean;
-}
+};
 
 export type SectionLevelValue = string & {
   _opaque: typeof SECTION_LEVEL_VALUE;
@@ -109,12 +136,13 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
  * @public
  */
 export abstract class IPrinter {
-  static init(
+  static async init(
     schema: Maybe<GraphQLSchema>,
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-  ): void;
+    mdxParser?: PackageName,
+  ): Promise<void>;
   static printHeader(
     id: string,
     title: string,

@@ -70,10 +70,13 @@ export const getTypeBadges = (
   return badges;
 };
 
-export const printBadge = ({ text, classname }: Badge): MDXString => {
-  const textString = typeof text === "object" ? text.singular : text.toString();
+export const printBadge = (
+  { text, classname }: Badge,
+  options: PrintTypeOptions,
+): MDXString => {
+  const textString = typeof text === "object" ? text.singular : text;
   const formattedText = escapeMDX(textString);
-  return `<Badge class="badge ${classname}" text="${formattedText}"/>` as MDXString;
+  return options.formatMDXBadge!({ text: formattedText, classname });
 };
 
 export const printBadges = (
@@ -96,7 +99,7 @@ export const printBadges = (
 
   return badges
     .map((badge): MDXString => {
-      return printBadge(badge);
+      return printBadge(badge, options);
     })
     .join(" ") as MDXString;
 };

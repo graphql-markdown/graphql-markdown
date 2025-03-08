@@ -10,6 +10,8 @@ import type {
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
+import MDXModule from "../mdx";
+
 export enum TypeHierarchy {
   API = "api",
   ENTITY = "entity",
@@ -38,6 +40,7 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
+    // | keyof MDXSupportType
     | "collapsible"
     | "groups"
     | "level"
@@ -51,6 +54,7 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: Maybe<CollapsibleOption>;
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
+  mdxSupport: boolean;
   onlyDocDirectives: GraphQLDirective[];
   parentType: Maybe<string>;
   schema: Maybe<GraphQLSchema>;
@@ -69,4 +73,5 @@ export const DEFAULT_OPTIONS: Required<
   schema: undefined,
   skipDocDirectives: [] as const,
   withAttributes: false as const,
+  ...MDXModule,
 };

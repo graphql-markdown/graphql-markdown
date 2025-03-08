@@ -68,6 +68,7 @@ export class Renderer {
   baseURL: string;
   prettify: boolean;
   options: Maybe<RendererDocOptions>;
+  hasMDXSupport: boolean;
 
   private readonly printer: Printer;
 
@@ -78,6 +79,7 @@ export class Renderer {
     group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
     docOptions: Maybe<RendererDocOptions>,
+    mdx: boolean = false,
   ) {
     this.printer = printer;
     this.group = group;
@@ -85,6 +87,7 @@ export class Renderer {
     this.baseURL = baseURL;
     this.prettify = prettify;
     this.options = docOptions;
+    this.hasMDXSupport = mdx;
   }
 
   async generateCategoryMetafile(
@@ -217,11 +220,12 @@ export class Renderer {
     type: unknown,
   ): Promise<Maybe<Category>> {
     const PageRegex =
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx$/;
-    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx$/;
+      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
+    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx?$/;
 
+    const extension = this.hasMDXSupport ? "mdx" : "md";
     const fileName = slugify(name);
-    const filePath = join(normalize(dirPath), `${fileName}.mdx`);
+    const filePath = join(normalize(dirPath), `${fileName}.${extension}`);
 
     let content: MDXString;
     try {
@@ -292,7 +296,16 @@ export const getRenderer = async (
   group: Maybe<SchemaEntitiesGroupMap>,
   prettify: boolean,
   docOptions: Maybe<RendererDocOptions>,
+  mdx: boolean = false,
 ): Promise<InstanceType<typeof Renderer>> => {
   await ensureDir(outputDir, { forceEmpty: docOptions?.force });
-  return new Renderer(printer, outputDir, baseURL, group, prettify, docOptions);
+  return new Renderer(
+    printer,
+    outputDir,
+    baseURL,
+    group,
+    prettify,
+    docOptions,
+    mdx,
+  );
 };

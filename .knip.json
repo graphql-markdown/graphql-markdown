@@ -29,6 +29,11 @@
       "entry": ["src/main.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"]
+    },
+    "packages/docusaurus": {
+      "entry": ["src/index.ts!", "src/mdx/index.ts!"],
+      "project": ["**/*.ts!"],
+      "ignore": ["**/__mocks__/**/*.ts"]
     }
   },
   "rules": {

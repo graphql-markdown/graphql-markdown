@@ -5,6 +5,7 @@ import {
   printScalarMetadata,
   printSpecification,
 } from "../../../src/graphql/scalar";
+import { DEFAULT_OPTIONS } from "../../../src/const/options";
 
 describe("scalar", () => {
   const type = new GraphQLScalarType<number>({
@@ -21,13 +22,13 @@ describe("scalar", () => {
         specifiedByURL: "https://lorem.ipsum",
       });
 
-      const deprecation = printSpecification(type);
+      const deprecation = printSpecification(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toMatchInlineSnapshot(`
-            "### <SpecifiedBy url="https://lorem.ipsum"/>
+"### <span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://lorem.ipsum" title="Specified by https://lorem.ipsum">⎘</a></span>
 
-            "
-          `);
+"
+`);
     });
 
     test("does not print specification link if directive specified by is not present", () => {
@@ -38,7 +39,7 @@ describe("scalar", () => {
         description: "Lorem Ipsum",
       });
 
-      const deprecation = printSpecification(type);
+      const deprecation = printSpecification(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toBe("");
     });
@@ -48,7 +49,7 @@ describe("scalar", () => {
     test("returns empty if not specifiedByUrl", () => {
       expect.hasAssertions();
 
-      const metadata = printScalarMetadata(type);
+      const metadata = printScalarMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toBe("");
     });
@@ -61,13 +62,13 @@ describe("scalar", () => {
         specifiedByURL: "https://graphql-markdown.dev/",
       });
 
-      const metadata = printScalarMetadata(typeSpecifiedBy);
+      const metadata = printScalarMetadata(typeSpecifiedBy, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
-        "### <SpecifiedBy url="https://graphql-markdown.dev/"/>
+"### <span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://graphql-markdown.dev/" title="Specified by https://graphql-markdown.dev/">⎘</a></span>
 
-        "
-      `);
+"
+`);
     });
   });
 

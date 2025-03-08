@@ -69,9 +69,7 @@ describe("badge", () => {
         { ...DEFAULT_OPTIONS, typeBadges: true },
       );
 
-      expect(badges).toBe(
-        '<Badge class="badge badge--secondary" text="non-null"/>',
-      );
+      expect(badges).toBe('<mark class="gqlmd-mdx-badge">non-null</mark>');
     });
 
     test("returns an empty string if typeBadges is not enabled", () => {

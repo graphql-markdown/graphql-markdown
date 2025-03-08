@@ -13,12 +13,7 @@ import { printBadges } from "./badge";
 import { hasPrintableDirective, printLink, printParentLink } from "./link";
 import { printCustomTags } from "./directive";
 
-import {
-  HIDE_DEPRECATED,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  SHOW_DEPRECATED,
-} from "./const/strings";
+import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
 export const sectionLevels: SectionLevel[] = [
@@ -119,10 +114,7 @@ export const printSection = <V>(
       typeof options.collapsible?.dataOpen === "string" &&
       typeof options.collapsible.dataClose === "string"
     ) {
-      return [
-        `${MARKDOWN_EOP}<Details dataOpen={${options.collapsible.dataOpen}} dataClose={${options.collapsible.dataClose}}>${MARKDOWN_EOP}` as MDXString,
-        `${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString,
-      ];
+      return options.formatMDXDetails!(options.collapsible).split(`\r`);
     }
     return [MARKDOWN_EOP, MARKDOWN_EOP];
   })();
@@ -181,8 +173,8 @@ export const printMetadataSection = <T, V>(
         parentType: type.name as string,
         level: SectionLevels.NONE as SectionLevelValue,
         collapsible: {
-          dataOpen: HIDE_DEPRECATED,
-          dataClose: SHOW_DEPRECATED,
+          dataOpen: DEPRECATED,
+          dataClose: DEPRECATED,
         },
       });
 
