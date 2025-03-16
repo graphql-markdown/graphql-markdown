@@ -114,6 +114,7 @@ export interface ExperimentalConfigOptions {
 
 export interface CliOptions {
   base?: string;
+  config?: boolean;
   deprecated?: TypeDeprecatedOption;
   diff?: TypeDiffMethod;
   force?: boolean;
@@ -122,6 +123,7 @@ export interface CliOptions {
   index?: boolean;
   link?: string;
   hierarchy?: TypeHierarchyValueType;
+  mdxParser?: string;
   noCode?: boolean;
   noExample?: boolean;
   noParentType?: boolean;

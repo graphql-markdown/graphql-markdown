@@ -6,6 +6,14 @@ sidebar_position: 5
 
 By default, the plugin will use the options as defined in the [configuration](/docs/configuration), and they can be overridden using CLI flags.
 
+## `--config`
+
+Print the resolved configuration used for generating documentation. This CLI flag is used for debugging purpose.
+
+| Setting | CLI flag   | Default  |
+| ------- | ---------- | -------- |
+|         | `--config` |          |
+
 ## `baseURL`
 
 The base URL used by Docusaurus. It will also be used as the folder name under [`rootPath`](#rootpath) for the generated documentation.
@@ -13,6 +21,7 @@ The base URL used by Docusaurus. It will also be used as the folder name under [
 | Setting   | CLI flag               | Default  |
 | --------- | ---------------------- | -------- |
 | `baseURL` | `-b, --base <baseURL>` | `schema` |
+
 
 ## `customDirective`
 
