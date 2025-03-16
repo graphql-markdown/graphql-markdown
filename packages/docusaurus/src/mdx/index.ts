@@ -4,10 +4,12 @@ import type {
   Maybe,
   MDXString,
   MetaOptions,
+  TypeLink,
 } from "@graphql-markdown/types";
 
 const MARKDOWN_EOL = "\n" as const;
 const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
+const LINK_MDX_EXTENSION = ".mdx" as const;
 
 export { mdxDeclaration } from "./components";
 
@@ -51,4 +53,11 @@ export const formatMDXNameEntity = (
 ): MDXString => {
   const parentName = parentType ? `${parentType}.` : "";
   return `<code style={{ fontWeight: 'normal' }}>${parentName}<b>${name}</b></code>` as MDXString;
+};
+
+export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
+  return {
+    text,
+    url: `${url}${LINK_MDX_EXTENSION}`,
+  };
 };

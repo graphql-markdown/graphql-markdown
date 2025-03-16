@@ -27,6 +27,7 @@ export interface MDXSupportType {
     dataOpen?: Maybe<string>;
     dataClose?: Maybe<string>;
   }) => MDXString;
+  formatMDXLink: (link: TypeLink) => TypeLink;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;
   mdxDeclaration: string;
@@ -120,6 +121,7 @@ export type PrintLinkOptions = Partial<PrintTypeOptions> &
     PrintTypeOptions,
     | "basePath"
     | "deprecated"
+    | "formatMDXLink"
     | "groups"
     | "hierarchy"
     | "onlyDocDirectives"

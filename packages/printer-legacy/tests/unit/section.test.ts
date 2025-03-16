@@ -157,7 +157,7 @@ describe("section", () => {
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum
 "
 `);
@@ -184,7 +184,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum dolor sit amet, 
 consectetur adipiscing elit, 
 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -215,7 +215,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
 
 "
 `);
@@ -239,7 +239,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
 
 "
 `);
@@ -281,7 +281,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -298,7 +298,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int.mdx) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -317,7 +317,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int.mdx) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 "
 `);
@@ -404,7 +404,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 </span>
 </fieldset>
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string.mdx) <mark class="gqlmd-mdx-badge">scalar</mark> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName.</code><code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
 
 
 
