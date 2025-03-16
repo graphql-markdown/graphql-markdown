@@ -1,7 +1,37 @@
+<a id="1.28.8"></a>
+# [1.28.0 (1.28.8)](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.28.8) - 2025-03-16
+
+✨ The independent package `cli` is slowly maturing, and it is now the backbone of the `docusaurus` package.
+From now, it should be possible to create customized MDX formatter for Next.js, Gatsby, Astro... using the undocumented setting `mdxParser`. For more information and examples, see the `docusaurus` package's source code.
+
+💡 This release also come with a tiny new CLI flag `--config` that will print the compiled config into a JSON format. This can be handy while debugging some of the customization.
+
+## What's Changed
+* 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#1976](https://github.com/graphql-markdown/graphql-markdown/pull/1976)
+* :sparkle:  docusaurus plugin extends cli package by [@edno](https://github.com/edno) in [#1982](https://github.com/graphql-markdown/graphql-markdown/pull/1982)
+* 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#1989](https://github.com/graphql-markdown/graphql-markdown/pull/1989)
+* 📄 Fix showcase Saleor typo by [@krzysztofzuraw](https://github.com/krzysztofzuraw) in [#1991](https://github.com/graphql-markdown/graphql-markdown/pull/1991)
+* 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#1999](https://github.com/graphql-markdown/graphql-markdown/pull/1999)
+* ✨ isolate mdx by [@edno](https://github.com/edno) in [#2000](https://github.com/graphql-markdown/graphql-markdown/pull/2000)
+* 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#2012](https://github.com/graphql-markdown/graphql-markdown/pull/2012)
+* 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#2014](https://github.com/graphql-markdown/graphql-markdown/pull/2014)
+* :sparkles:  add cli support for external mdx package by [@edno](https://github.com/edno) in [#2017](https://github.com/graphql-markdown/graphql-markdown/pull/2017)
+* :construction_worker:  fix packages api docs generation by [@edno](https://github.com/edno) in [#2021](https://github.com/graphql-markdown/graphql-markdown/pull/2021)
+* :wrench:  fix api doc generation issue by [@edno](https://github.com/edno) in [#2025](https://github.com/graphql-markdown/graphql-markdown/pull/2025)
+* 🐛  fix docusaurus mdx external module by [@edno](https://github.com/edno) in [#2023](https://github.com/graphql-markdown/graphql-markdown/pull/2023)
+
+## New Contributors
+* [@krzysztofzuraw](https://github.com/krzysztofzuraw) made their first contribution in [#1991](https://github.com/graphql-markdown/graphql-markdown/pull/1991)
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.8
+
+[Changes][1.28.8]
+
+
 <a id="1.27.0"></a>
 # [1.27.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.27.0) - 2025-02-16
 
-🚀 This release introduces a **new NodeJS command line package** `@graphql-markdown/cli` allowing generating Markdown files without Docusaurus dependencies.
+🚀 This release introduces a **new NodeJS command line package** `@graphql-markdown/cli` allowing generation of Markdown files without Docusaurus dependencies.
 This is still an early release and it is not yet documented, but you can experiment with it and [give your feedback](https://github.com/graphql-markdown/graphql-markdown/issues) on this new package when used with other static site generators - note that you'll need MDX support.
 
 1. Install `npm install @graphql-markdown/cli`
@@ -9,12 +39,11 @@ This is still an early release and it is not yet documented, but you can experim
 
 ℹ️  The `cli` package works similarly to the Docusaurus plugin, but it relies on a [GraphQL config file](https://the-guild.dev/graphql/config/docs/user/usage) for the settings. You can find examples of settings in the [test folder of the package](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/cli/tests/__data__).
 
-⚠️  **BREAKING CHANGES**
-All previously deprecated settings have been removed:
+**⚠️  BREAKING CHANGES** - All previously deprecated settings have been removed:
 - `docOptions.pagination` | `--noPagination` (deprecated in [release 1.22.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.22.0))
 - `docOptions.toc` | `--noToc` (deprecated in [release 1.22.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.22.0))
 - `printTypeOptions.useApiGroup` | `--noApiGroup` (deprecated in [release 1.26.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.0))
-- 
+
 ## What's Changed
 * ✨ generic cli package by [@edno](https://github.com/edno) in [#1959](https://github.com/graphql-markdown/graphql-markdown/pull/1959)
 * :sparkles:  move docusaurus\utils from printer to docusaurus plugin by [@edno](https://github.com/edno) in [#1962](https://github.com/graphql-markdown/graphql-markdown/pull/1962)
@@ -1792,6 +1821,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.28.8]: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.8
 [1.27.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.4...1.27.0
 [1.26.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.3...1.26.4
 [1.26.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.2...1.26.3
@@ -1870,4 +1900,4 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [1.1.0-beta]: https://github.com/graphql-markdown/graphql-markdown/compare/1.0.0-beta...1.1.0-beta
 [1.0.0-beta]: https://github.com/graphql-markdown/graphql-markdown/tree/1.0.0-beta
 
-<!-- Generated by https://github.com/rhysd/changelog-from-release v3.8.1 -->
+<!-- Generated by https://github.com/rhysd/changelog-from-release v3.9.0 -->
