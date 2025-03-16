@@ -196,7 +196,7 @@ INSTALL_GQLMD:
   FUNCTION
   FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
-    IF [ "$package" != "cli" ] && [ "$package" != "docusaurus" ]
+    IF [ "$package" != "docusaurus" ]
       RUN npm install ./graphql-markdown-${package}.tgz
     END
   END
