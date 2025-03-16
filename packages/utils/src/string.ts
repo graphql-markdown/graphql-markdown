@@ -277,7 +277,8 @@ export const kebabCase = (str: Maybe<string>): string => {
 /**
  * Alias of {@link kebabCase}.
  *
- * @alias
+ * @see kebabCase
+ * @alias kebabCase
  */
 export const slugify = kebabCase;
 
