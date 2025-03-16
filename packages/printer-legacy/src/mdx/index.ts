@@ -47,7 +47,7 @@ const formatMDXNameEntity = (
   parentType?: Maybe<string>,
 ): MDXString => {
   const parentName = parentType
-    ? `<code class="gqlmd-mdx-entity-parent">${parentType}.</code>`
+    ? `<code class="gqlmd-mdx-entity-parent">${parentType}</code>.`
     : "";
   return `<span class="gqlmd-mdx-entity">${parentName}<code class="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };

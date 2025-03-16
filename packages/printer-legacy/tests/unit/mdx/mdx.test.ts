@@ -80,7 +80,7 @@ describe("mdx", () => {
 
     test("returns a formatted named entity with parent prefix", () => {
       expect(MDX.formatMDXNameEntity("Entity", "Parent")).toBe(
-        '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">Parent.</code><code class="gqlmd-mdx-entity-name">Entity</code></span>',
+        '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">Parent</code>.<code class="gqlmd-mdx-entity-name">Entity</code></span>',
       );
     });
   });

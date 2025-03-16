@@ -426,6 +426,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
+    mdxParser: cliOpts.mdxParser ?? config.mdxParser,
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
     outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
