@@ -1,5 +1,5 @@
-<a id="1.28.8"></a>
-# [1.28.0 (1.28.8)](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.28.8) - 2025-03-16
+<a id="1.28.0"></a>
+# [1.28.0 (1.28.0)](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.28.0) - 2025-03-16
 
 ✨ The independent package `cli` is slowly maturing, and it is now the backbone of the `docusaurus` package.
 From now, it should be possible to create customized MDX formatter for Next.js, Gatsby, Astro... using the undocumented setting `mdxParser`. For more information and examples, see the `docusaurus` package's source code.
