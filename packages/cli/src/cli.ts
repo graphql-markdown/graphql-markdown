@@ -1,7 +1,6 @@
 import type {
   CliOptions,
   GraphQLMarkdownCliOptions,
-  PackageName,
 } from "@graphql-markdown/types";
 
 import type { CommanderStatic } from "commander";
@@ -20,22 +19,18 @@ export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
   cliOptions: CliOptions,
   loggerModule?: string,
-  mdxParser?: PackageName,
 ): Promise<void> => {
   const config = await buildConfig(options, cliOptions, options.id);
-  await generateDocFromSchema(
-    {
-      ...config,
-      loggerModule,
-    },
-    mdxParser,
-  );
+  await generateDocFromSchema({
+    ...config,
+    loggerModule,
+  });
 };
 
 export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
-  mdxParser?: PackageName | string,
+  customMdxParser?: boolean | string,
 ): GraphQLMarkdownCliType => {
   void Logger(loggerModule);
 
@@ -48,7 +43,7 @@ export const getGraphQLMarkdownCli = (
 
   const cli: GraphQLMarkdownCliType = Commander;
 
-  return cli
+  cli
     .command(cmd)
     .description(description)
     .option("-s, --schema <schema>", "Schema location")
@@ -84,11 +79,17 @@ export const getGraphQLMarkdownCli = (
     )
     .option("--pretty", "Prettify generated files")
     .action(async (cliOptions: CliOptions) => {
-      await runGraphQLMarkdown(
-        options,
-        cliOptions,
-        loggerModule,
-        mdxParser as PackageName,
-      );
+      await runGraphQLMarkdown(options, cliOptions, loggerModule);
     }) as GraphQLMarkdownCliType;
+
+  // allows passing the mdx package to the CLI
+  if (customMdxParser === true || typeof customMdxParser === "string") {
+    cli.option(
+      "--mdxParser <mdxParser>",
+      "Set MDX package processor",
+      typeof customMdxParser === "string" ? customMdxParser : undefined,
+    );
+  }
+
+  return cli;
 };
