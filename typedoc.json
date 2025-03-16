@@ -7,13 +7,23 @@
   ],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
-  "exclude": [""],
+  "exclude": ["packages/types"],
   "excludeGroups": true,
   "excludeInternal": true,
+  "excludeNotDocumented": true,
+  "excludePrivate": true,
+  "excludeReferences": true,
   "frontmatterGlobals": {
     "pagination_prev": null,
     "pagination_next": null,
     "toc_max_heading_level": 2
+  },
+  "validation": {
+    "notExported": false,
+    "invalidLink": false,
+    "rewrittenLink": false,
+    "notDocumented": false,
+    "unusedMergeModuleWith": false
   },
   "hidePageTitle": true,
   "name": "API",
