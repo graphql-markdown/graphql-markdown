@@ -151,6 +151,20 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
 
+## `mdxParser`
+
+:::warning[EXPERIMENTAL]
+
+`mdxParser` is an experimental and undocumented feature, and it should not be used in production.
+
+:::
+
+Provide a custom package for formatting MDX content.
+
+| Setting     | CLI flag      | Default                            |
+| ----------- | ------------- | ---------------------------------- |
+| `mdxParser` | `--mdxParser` | `@graphql-markdown/docusaurus/mdx` |
+
 ## `metatags`
 
 Set page metadata in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
