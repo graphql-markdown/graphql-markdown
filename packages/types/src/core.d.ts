@@ -96,14 +96,15 @@ export interface ConfigOptions {
   id?: Maybe<string>;
   linkRoot?: Maybe<string>;
   loaders?: Maybe<LoaderOption>;
+  mdxParser?: Maybe<PackageName | string>;
   metatags?: Record<string, string>[];
+  onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   pretty?: Maybe<boolean>;
   printer?: Maybe<PackageName>;
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   rootPath?: Maybe<string>;
   schema?: Maybe<Pointer>;
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
-  onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   tmpDir?: Maybe<string>;
 }
 

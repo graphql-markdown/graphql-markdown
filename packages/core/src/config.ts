@@ -59,7 +59,11 @@ export const DEFAULT_OPTIONS: Readonly<
     Required<
       Omit<
         ConfigOptions,
-        "customDirective" | "groupByDirective" | "loaders" | "printTypeOptions"
+        | "customDirective"
+        | "groupByDirective"
+        | "loaders"
+        | "mdxParser"
+        | "printTypeOptions"
       >
     >
 > & {

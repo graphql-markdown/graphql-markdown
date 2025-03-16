@@ -121,7 +121,7 @@ describe("generator", () => {
           .spyOn(CoreRenderer, "getRenderer")
           .mockResolvedValueOnce(mockRenderer);
 
-        await generateDocFromSchema(options, mdxParser as PackageName);
+        await generateDocFromSchema({ ...options, mdxParser });
 
         expect(getPrinterSpy).toHaveBeenCalledWith(
           options.printer,

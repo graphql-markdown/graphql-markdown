@@ -210,7 +210,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestObjectList",
-          "url": "docs/graphql/types/objects/test-object-list.mdx",
+          "url": "docs/graphql/types/objects/test-object-list",
         }
       `);
     });
@@ -289,7 +289,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/operations/group/directives/test-directive.mdx",
+          "url": "docs/graphql/operations/group/directives/test-directive",
         }
       `);
     });
@@ -321,7 +321,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/deprecated/operations/directives/test-directive.mdx",
+          "url": "docs/graphql/deprecated/operations/directives/test-directive",
         }
       `);
     });
@@ -351,7 +351,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/directives/test-directive.mdx",
+          "url": "docs/graphql/directives/test-directive",
         }
       `);
     });
@@ -381,7 +381,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/test-directive.mdx",
+          "url": "docs/graphql/test-directive",
         }
       `);
     });
@@ -632,7 +632,7 @@ describe("link", () => {
 
       expect(link).toStrictEqual({
         text: "TestScalar",
-        url: "docs/graphql/types/scalars/test-scalar.mdx",
+        url: "docs/graphql/types/scalars/test-scalar",
       });
     });
 

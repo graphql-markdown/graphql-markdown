@@ -25,11 +25,11 @@ describe("union", () => {
 
       expect(code).toBe(`### Possible types
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](/types/objects/one.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](/types/objects/one) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](/types/objects/two.mdx) <mark class="gqlmd-mdx-badge">object</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](/types/objects/two) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 

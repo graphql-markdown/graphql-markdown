@@ -14,8 +14,6 @@ export const ROOT_TYPE_LOCALE: RootTypeLocale = {
   UNION: { singular: "union", plural: "unions" },
 } as const;
 
-export const LINK_MDX_EXTENSION = ".mdx" as const;
-
 export const DEPRECATED = "deprecated" as const;
 export const GRAPHQL = "graphql" as const;
 export const NO_DESCRIPTION_TEXT = "No description" as const;
