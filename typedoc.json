@@ -7,9 +7,12 @@
   ],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
-  "exclude": [""],
+  "exclude": ["packages/types"],
   "excludeGroups": true,
   "excludeInternal": true,
+  "excludeNotDocumented": true,
+  "excludePrivate": true,
+  "excludeReferences": true,
   "frontmatterGlobals": {
     "pagination_prev": null,
     "pagination_next": null,

@@ -92,5 +92,8 @@ export const log = (
   global.logger?._log(message, level);
 };
 
-/** @alias */
+/**
+ * @see log
+ * @alias log
+ */
 export default Logger;
