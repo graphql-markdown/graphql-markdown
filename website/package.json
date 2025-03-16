@@ -11,9 +11,10 @@
     "serve": "docusaurus serve"
   },
   "dependencies": {
-    "@docusaurus/core": "3.5.2",
-    "@docusaurus/preset-classic": "3.5.2",
     "@cmfcmf/docusaurus-search-local": "1.1.0",
+    "@docusaurus/core": "3.7.0",
+    "@docusaurus/faster": "^3.7.0",
+    "@docusaurus/preset-classic": "3.7.0",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
@@ -22,7 +23,7 @@
   },
   "overrides": {
     "@cmfcmf/docusaurus-search-local": {
-      "@docusaurus/core": "^3.4.0"
+      "@docusaurus/core": "^3.7.0"
     },
     "serialize-javascript": "^6.0.2"
   },

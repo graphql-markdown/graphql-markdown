@@ -146,6 +146,10 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+
+  future: {
+    experimental_faster: true, // turns Docusaurus Faster on globally
+  },
 };
 
 module.exports = config;

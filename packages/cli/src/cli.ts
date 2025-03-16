@@ -21,6 +21,12 @@ export const runGraphQLMarkdown = async (
   loggerModule?: string,
 ): Promise<void> => {
   const config = await buildConfig(options, cliOptions, options.id);
+
+  if (cliOptions.config) {
+    console.dir(config, { depth: null });
+    return;
+  }
+
   await generateDocFromSchema({
     ...config,
     loggerModule,
@@ -77,7 +83,8 @@ export const getGraphQLMarkdownCli = (
       "--deprecated <option>",
       "Option for printing deprecated entities: `default`, `group` or `skip`",
     )
-    .option("--pretty", "Prettify generated files");
+    .option("--pretty", "Prettify generated files")
+    .option("--config", "Print configuration (for debugging)");
 
   // allows passing the mdx package to the CLI
   if (customMdxParser === true || typeof customMdxParser === "string") {

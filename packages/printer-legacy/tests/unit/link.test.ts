@@ -476,7 +476,7 @@ describe("link", () => {
       );
 
       expect(result).toBe(
-        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">baz.</code><code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)',
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">baz</code>.<code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)',
       );
     });
 
