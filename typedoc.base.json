@@ -16,11 +16,16 @@
   "outputFileStrategy": "modules",
   "pretty": true,
   "theme": "default",
-  "visibilityFilters": {},
   "validation": {
-    "notDocumented": true
+    "notExported": false,
+    "invalidLink": false,
+    "rewrittenLink": false,
+    "notDocumented": false,
+    "unusedMergeModuleWith": false
   },
+  "visibilityFilters": {},
   "sourceLinkExternal": true,
   "gitRevision": "main",
   "entryFileName": "index.md",
+  "excludeTags": ["@alias"]
 }

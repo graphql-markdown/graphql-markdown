@@ -18,13 +18,6 @@
     "pagination_next": null,
     "toc_max_heading_level": 2
   },
-  "validation": {
-    "notExported": false,
-    "invalidLink": false,
-    "rewrittenLink": false,
-    "notDocumented": false,
-    "unusedMergeModuleWith": false
-  },
   "hidePageTitle": true,
   "name": "API",
   "out": "./api",

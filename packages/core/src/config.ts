@@ -26,17 +26,26 @@ import type {
 
 import { loadConfiguration } from "./graphql-config";
 
+/**
+ * @public
+ */
 export enum TypeHierarchy {
   API = "api",
   ENTITY = "entity",
   FLAT = "flat",
 }
 
+/**
+ * @public
+ */
 export enum DiffMethod {
   NONE = "NONE",
   FORCE = "FORCE",
 }
 
+/**
+ * @public
+ */
 export enum DeprecatedOption {
   DEFAULT = "default",
   GROUP = "group",
