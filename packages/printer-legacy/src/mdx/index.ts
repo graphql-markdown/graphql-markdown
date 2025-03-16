@@ -7,6 +7,7 @@ import type {
   MDXSupportType,
   MetaOptions,
   PackageName,
+  TypeLink,
 } from "@graphql-markdown/types";
 
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "../const/strings";
@@ -51,6 +52,10 @@ const formatMDXNameEntity = (
   return `<span class="gqlmd-mdx-entity">${parentName}<code class="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };
 
+const formatMDXLink = (link: TypeLink): TypeLink => {
+  return link;
+};
+
 export const mdxDeclaration = "";
 
 const defaultModule = {
@@ -58,6 +63,7 @@ const defaultModule = {
   formatMDXBadge,
   formatMDXBullet,
   formatMDXDetails,
+  formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
   mdxDeclaration,
@@ -78,6 +84,7 @@ export const mdxModule = async (
         formatMDXBadge: module.formatMDXBadge ?? formatMDXBadge,
         formatMDXBullet: module.formatMDXBullet ?? formatMDXBullet,
         formatMDXDetails: module.formatMDXDetails ?? formatMDXDetails,
+        formatMDXLink: module.formatMDXLink ?? formatMDXLink,
         formatMDXNameEntity: module.formatMDXNameEntity ?? formatMDXNameEntity,
         formatMDXSpecifiedByLink:
           module.formatMDXSpecifiedByLink ?? formatMDXSpecifiedByLink,

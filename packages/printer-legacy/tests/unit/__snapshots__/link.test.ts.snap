@@ -19,55 +19,55 @@ exports[`link getLinkCategoryFolder() returns a category object matching the gra
 exports[`link toLink() returns markdown link for GraphQL Directive 1`] = `
 {
   "text": "TestDirective",
-  "url": "docs/graphql/operations/directives/test-directive.mdx",
+  "url": "docs/graphql/operations/directives/test-directive",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Enum 1`] = `
 {
   "text": "TestEnum",
-  "url": "docs/graphql/operations/enums/test-enum.mdx",
+  "url": "docs/graphql/operations/enums/test-enum",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Input 1`] = `
 {
   "text": "TestInput",
-  "url": "docs/graphql/operations/inputs/test-input.mdx",
+  "url": "docs/graphql/operations/inputs/test-input",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Interface 1`] = `
 {
   "text": "TestInterface",
-  "url": "docs/graphql/operations/interfaces/test-interface.mdx",
+  "url": "docs/graphql/operations/interfaces/test-interface",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Object 1`] = `
 {
   "text": "TestObject",
-  "url": "docs/graphql/operations/objects/test-object.mdx",
+  "url": "docs/graphql/operations/objects/test-object",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Operation 1`] = `
 {
   "text": "TestOperation",
-  "url": "docs/graphql/operations/queries/test-operation.mdx",
+  "url": "docs/graphql/operations/queries/test-operation",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Scalar 1`] = `
 {
   "text": "TestScalar",
-  "url": "docs/graphql/operations/scalars/test-scalar.mdx",
+  "url": "docs/graphql/operations/scalars/test-scalar",
 }
 `;
 
 exports[`link toLink() returns markdown link for GraphQL Union 1`] = `
 {
   "text": "TestUnion",
-  "url": "docs/graphql/operations/unions/test-union.mdx",
+  "url": "docs/graphql/operations/unions/test-union",
 }
 `;

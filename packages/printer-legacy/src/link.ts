@@ -36,11 +36,7 @@ import {
 import { pathUrl, slugify, toString } from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
-import {
-  DEPRECATED,
-  LINK_MDX_EXTENSION,
-  ROOT_TYPE_LOCALE,
-} from "./const/strings";
+import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
 import { TypeHierarchy } from "./const/options";
 
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
@@ -220,13 +216,19 @@ export const toLink = (
     apiGroupFolder,
     groupFolder,
     category,
-    `${slugify(text)}${LINK_MDX_EXTENSION}`,
+    `${slugify(text)}`,
   );
 
-  return {
+  const link = {
     text,
     url,
   } as TypeLink;
+
+  if (options.formatMDXLink) {
+    return options.formatMDXLink(link);
+  }
+
+  return link;
 };
 
 export const getRelationLink = (

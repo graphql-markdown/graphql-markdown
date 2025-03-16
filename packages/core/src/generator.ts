@@ -30,30 +30,28 @@ import { getRenderer } from "./renderer";
 const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
 
-export const generateDocFromSchema = async (
-  {
-    baseURL,
-    customDirective,
-    diffMethod,
-    docOptions,
-    force,
-    groupByDirective,
-    homepageLocation,
-    linkRoot,
-    loaders: loadersList,
-    loggerModule,
-    metatags,
-    onlyDocDirective,
-    outputDir,
-    prettify,
-    printer: printerModule,
-    printTypeOptions,
-    schemaLocation,
-    skipDocDirective,
-    tmpDir,
-  }: GeneratorOptions,
-  mdxParser?: PackageName,
-): Promise<void> => {
+export const generateDocFromSchema = async ({
+  baseURL,
+  customDirective,
+  diffMethod,
+  docOptions,
+  force,
+  groupByDirective,
+  homepageLocation,
+  linkRoot,
+  loaders: loadersList,
+  loggerModule,
+  mdxParser,
+  metatags,
+  onlyDocDirective,
+  outputDir,
+  prettify,
+  printer: printerModule,
+  printTypeOptions,
+  schemaLocation,
+  skipDocDirective,
+  tmpDir,
+}: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
   const hasMDXSupport = mdxParser ? true : false;
@@ -123,7 +121,7 @@ export const generateDocFromSchema = async (
       printTypeOptions,
       skipDocDirectives,
     },
-    mdxParser,
+    mdxParser as PackageName,
   );
   const renderer = await getRenderer(
     printer,

@@ -29,9 +29,13 @@ void (async (): Promise<void> => {
     : ["default"];
   // build commands for each project declared in graphql-config file
   for (const project of projects) {
-    const cmd = getGraphQLMarkdownCli({
-      id: project,
-    } as unknown as ConfigOptions);
+    const cmd = getGraphQLMarkdownCli(
+      {
+        id: project,
+      } as unknown as ConfigOptions,
+      undefined,
+      true,
+    );
     program.addCommand(cmd);
   }
 
