@@ -22,11 +22,11 @@ describe("enum", () => {
       expect(metadata).toMatchInlineSnapshot(`
 "### Values
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)  
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#)  
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
 <span>
@@ -52,7 +52,7 @@ Deprecated
       expect(metadata).toMatchInlineSnapshot(`
 "### Values
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">one</code></span>](#)  
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#)  
 
 
 
@@ -61,7 +61,7 @@ Deprecated
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName.</code><code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
 <span>
