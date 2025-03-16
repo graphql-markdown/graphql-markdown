@@ -43,7 +43,7 @@ export const getGraphQLMarkdownCli = (
 
   const cli: GraphQLMarkdownCliType = Commander;
 
-  cli
+  const command = cli
     .command(cmd)
     .description(description)
     .option("-s, --schema <schema>", "Schema location")
@@ -77,19 +77,20 @@ export const getGraphQLMarkdownCli = (
       "--deprecated <option>",
       "Option for printing deprecated entities: `default`, `group` or `skip`",
     )
-    .option("--pretty", "Prettify generated files")
-    .action(async (cliOptions: CliOptions) => {
-      await runGraphQLMarkdown(options, cliOptions, loggerModule);
-    }) as GraphQLMarkdownCliType;
+    .option("--pretty", "Prettify generated files");
 
   // allows passing the mdx package to the CLI
   if (customMdxParser === true || typeof customMdxParser === "string") {
-    cli.option(
+    command.option(
       "--mdxParser <mdxParser>",
       "Set MDX package processor",
       typeof customMdxParser === "string" ? customMdxParser : undefined,
     );
   }
 
-  return cli;
+  command.action(async (cliOptions: CliOptions) => {
+    await runGraphQLMarkdown(options, cliOptions, loggerModule);
+  }) as GraphQLMarkdownCliType;
+
+  return command as CommanderStatic;
 };
