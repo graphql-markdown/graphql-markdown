@@ -5,7 +5,7 @@ WORKSPACE=@graphql-markdown
 
 npm run build
 
-export NODE_OPTIONS=--max_old_space_size=8192
+# export NODE_OPTIONS=--max_old_space_size=8192
 npm run typedoc -- --skipErrorChecking --logLevel Error --out ${API_DIR}
 
 find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "index.md" \) -delete
