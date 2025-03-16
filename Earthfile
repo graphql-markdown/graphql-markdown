@@ -161,7 +161,7 @@ build-docs:
   COPY --dir docs .
   RUN npm install
   RUN npx update-browserslist-db@latest
-  RUN npm run build
+  RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
