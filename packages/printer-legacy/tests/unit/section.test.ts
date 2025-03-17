@@ -399,7 +399,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 </span>

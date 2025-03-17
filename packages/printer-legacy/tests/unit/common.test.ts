@@ -132,7 +132,7 @@ describe("common", () => {
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 &#x007B; Foobar &#x007D;
@@ -206,7 +206,7 @@ Lorem ipsum"
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 </span>
@@ -230,7 +230,7 @@ Lorem ipsum"
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 &#x007B; foobar &#x007D;
@@ -316,7 +316,7 @@ Test testDirective"
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 test

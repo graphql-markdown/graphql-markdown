@@ -46,7 +46,7 @@ describe("mdx", () => {
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">WARNING</span> **Warning**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">WARNING Warning</span></legend>
 <span>Test admonition</span>
 </fieldset>"
 `);

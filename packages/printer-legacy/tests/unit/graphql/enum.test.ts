@@ -28,7 +28,7 @@ describe("enum", () => {
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 Deprecated
@@ -63,7 +63,7 @@ Deprecated
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 Deprecated
