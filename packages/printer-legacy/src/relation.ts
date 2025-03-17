@@ -88,7 +88,7 @@ export const printRelationOf = <T>(
     })
     .join(options.formatMDXBullet!()) as MDXString;
 
-  return `${SectionLevels.LEVEL_3} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
+  return `${SectionLevels.LEVEL.repeat(3)} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
 export const printRelations = (

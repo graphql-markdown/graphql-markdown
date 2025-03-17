@@ -217,7 +217,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    return `${SectionLevels.LEVEL_3} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
+    return `${SectionLevels.LEVEL.repeat(3)} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
   };
 
   static readonly printTypeMetadata = (

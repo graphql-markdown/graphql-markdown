@@ -103,11 +103,10 @@ export type PrintTypeOptions = Partial<MDXSupportType> & {
   withAttributes?: boolean;
 };
 
-export type SectionLevelValue = string & {
+export type SectionLevelValue = {
   _opaque: typeof SECTION_LEVEL_VALUE;
-};
+} & (0 | 3 | 4 | 5);
 declare const SECTION_LEVEL_VALUE: unique symbol;
-export type SectionLevel = SectionLevelValue | "####" | "#####";
 
 export interface Badge {
   text: TypeLocale | string;

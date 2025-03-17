@@ -2,7 +2,6 @@ import type {
   GraphQLArgument,
   MDXString,
   PrintTypeOptions,
-  SectionLevel,
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
@@ -16,20 +15,12 @@ import { printCustomTags } from "./directive";
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
-export const sectionLevels: SectionLevel[] = [
-  SectionLevels.LEVEL_3 as SectionLevelValue,
-  SectionLevels.LEVEL_4 as SectionLevelValue,
-  SectionLevels.LEVEL_5 as SectionLevelValue,
-];
-
 export const printSectionItem = <T>(
   type: T,
   options: PrintTypeOptions,
 ): MDXString | string => {
   const level =
-    "level" in options && typeof options.level === "string"
-      ? options.level
-      : SectionLevels.LEVEL_4;
+    "level" in options && typeof options.level === "number" ? options.level : 4;
 
   if (!hasPrintableDirective(type, options)) {
     return "";
@@ -43,7 +34,7 @@ export const printSectionItem = <T>(
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
-  const title = `${level} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
+  const title = `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
 
   const description = printDescription(type, options, "")
     .trim()
@@ -54,7 +45,7 @@ export const printSectionItem = <T>(
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     section += printSectionItems(type.args as GraphQLArgument[], {
       ...options,
-      level: SectionLevels.LEVEL_5 as SectionLevelValue,
+      level: 5 as SectionLevelValue,
       parentType:
         typeof options.parentType === "undefined"
           ? type.name
@@ -74,9 +65,7 @@ export const printSectionItems = <V>(
   }
 
   const level = (
-    "level" in options && typeof options.level === "string"
-      ? options.level
-      : SectionLevels.LEVEL_4
+    "level" in options && typeof options.level === "number" ? options.level : 4
   ) as SectionLevelValue;
 
   return values
@@ -102,12 +91,8 @@ export const printSection = <V>(
   }
 
   const level = (
-    "level" in options && typeof options.level === "string"
-      ? options.level
-      : SectionLevels.LEVEL_3
+    "level" in options && typeof options.level === "number" ? options.level : 3
   ) as SectionLevelValue;
-
-  const levelPosition = sectionLevels.indexOf(level);
 
   const [openSection, closeSection] = ((): MDXString[] | string[] => {
     if (
@@ -122,16 +107,15 @@ export const printSection = <V>(
   const items = printSectionItems(values, {
     ...options,
     collapsible: undefined, // do not propagate collapsible
-    level: (levelPosition > -1
-      ? sectionLevels[levelPosition + 1]
-      : undefined) as SectionLevelValue,
+    level:
+      level >= 3 && level <= 5 ? ((level + 1) as SectionLevelValue) : undefined,
   });
 
   if (items === "") {
     return ""; // do not print section is no items printed
   }
 
-  return `${level} ${section}${openSection}${items}${closeSection}` as MDXString;
+  return `${SectionLevels.LEVEL.repeat(level)} ${section}${openSection}${items}${closeSection}` as MDXString;
 };
 
 export const printMetadataSection = <T, V>(
@@ -171,7 +155,7 @@ export const printMetadataSection = <T, V>(
       const deprecatedMeta = printSection(deprecated, "", {
         ...options,
         parentType: type.name as string,
-        level: SectionLevels.NONE as SectionLevelValue,
+        level: 0 as SectionLevelValue,
         collapsible: {
           dataOpen: DEPRECATED,
           dataClose: DEPRECATED,

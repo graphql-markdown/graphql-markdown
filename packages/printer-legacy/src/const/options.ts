@@ -20,9 +20,7 @@ export enum TypeHierarchy {
 
 export enum SectionLevels {
   NONE = "",
-  LEVEL_3 = "###",
-  LEVEL_4 = "####",
-  LEVEL_5 = "#####",
+  LEVEL = "#",
 }
 
 export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions> =
