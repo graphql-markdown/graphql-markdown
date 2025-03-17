@@ -54,7 +54,6 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: Maybe<CollapsibleOption>;
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
-  mdxSupport: boolean;
   onlyDocDirectives: GraphQLDirective[];
   parentType: Maybe<string>;
   schema: Maybe<GraphQLSchema>;

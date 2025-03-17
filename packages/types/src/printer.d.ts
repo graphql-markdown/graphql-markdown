@@ -30,8 +30,11 @@ export interface MDXSupportType {
   formatMDXLink: (link: TypeLink) => TypeLink;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;
+  formatMDXFrontmatter: (
+    props: Maybe<FrontMatterOptions>,
+    formatted: Maybe<string[]>,
+  ) => MDXString;
   mdxDeclaration: string;
-  mdxSupport: boolean;
 }
 
 export type RootTypeName =

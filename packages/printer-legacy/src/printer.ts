@@ -145,13 +145,13 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    if (!options.mdxSupport) {
+    if (options.frontMatter === false) {
       return `# ${title}${MARKDOWN_EOP}`;
     }
 
     const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
-    return printFrontMatter(title, { ...fmOptions, id });
+    return printFrontMatter(title, { ...fmOptions, id }, options);
   };
 
   static readonly printCode = (

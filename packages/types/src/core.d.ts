@@ -7,7 +7,7 @@ import type { CustomDirective } from "./helpers";
 
 import type { Maybe } from "./utils";
 
-export type FrontMatterOptions = Record<string, unknown>;
+export type FrontMatterOptions = Record<string, unknown> | false;
 
 export interface ApiGroupOverrideType {
   operations?: string;
