@@ -322,6 +322,8 @@ export class Printer implements IPrinter {
       metadata,
       example,
       relations,
-    ].join(MARKDOWN_EOP) as MDXString;
+    ]
+      .join(MARKDOWN_EOP)
+      .trim() as MDXString;
   };
 }
