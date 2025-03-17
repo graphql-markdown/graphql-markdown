@@ -38,7 +38,6 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    // | keyof MDXSupportType
     | "collapsible"
     | "groups"
     | "level"
