@@ -82,11 +82,10 @@ export const formatFrontMatterProp = (
 };
 
 export const printFrontMatter = (
-  id: string,
   title: string,
   props?: Maybe<FrontMatterOptions>,
 ): string => {
-  const frontMatter = formatFrontMatterObject({ ...props, id, title }, -1);
+  const frontMatter = formatFrontMatterObject({ ...props, title }, -1);
 
   const header = [
     FRONT_MATTER_DELIMITER,

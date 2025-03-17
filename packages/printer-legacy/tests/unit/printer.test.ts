@@ -320,7 +320,11 @@ describe("Printer", () => {
         DEFAULT_OPTIONS,
       );
 
-      expect(header).toBe("");
+      expect(header).toBe(
+        `# An Object Type Name
+
+`,
+      );
     });
 
     test("returns a MDX frontmatter document header", () => {
