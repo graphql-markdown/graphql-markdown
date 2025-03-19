@@ -8,7 +8,6 @@ import type {
   MDXSupportType,
   Maybe,
   MetaOptions,
-  PackageName,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -102,7 +101,7 @@ export class Printer implements IPrinter {
       customDirectives: undefined,
       groups: undefined,
     },
-    mdxParser?: PackageName,
+    mdxParser?: Record<string, unknown>,
   ): Promise<void> {
     if (typeof Printer.options !== "undefined") {
       return;

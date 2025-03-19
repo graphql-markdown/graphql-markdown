@@ -1,6 +1,7 @@
 import type {
   ConfigPrintTypeOptions,
   FrontMatterOptions,
+  MDXSupportType,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
@@ -12,30 +13,6 @@ import type {
 } from "./graphql";
 import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
-
-export interface MDXSupportType {
-  formatMDXAdmonition: (
-    { text, title, type, icon }: AdmonitionType,
-    meta: Maybe<MetaOptions>,
-  ) => MDXString;
-  formatMDXBadge: ({ text, classname }: Badge) => MDXString;
-  formatMDXBullet: (text?: string) => MDXString;
-  formatMDXDetails: ({
-    dataOpen,
-    dataClose,
-  }: {
-    dataOpen?: Maybe<string>;
-    dataClose?: Maybe<string>;
-  }) => MDXString;
-  formatMDXLink: (link: TypeLink) => TypeLink;
-  formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
-  formatMDXSpecifiedByLink: (url: string) => MDXString;
-  formatMDXFrontmatter: (
-    props: Maybe<FrontMatterOptions>,
-    formatted: Maybe<string[]>,
-  ) => MDXString;
-  mdxDeclaration: string;
-}
 
 export type RootTypeName =
   | "DIRECTIVE"
@@ -145,7 +122,7 @@ export abstract class IPrinter {
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-    mdxParser?: PackageName,
+    mdxModule?: unknown,
   ): Promise<void>;
   static printHeader(
     id: string,

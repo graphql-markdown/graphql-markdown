@@ -99,7 +99,9 @@ export const printSection = <V>(
       typeof options.collapsible?.dataOpen === "string" &&
       typeof options.collapsible.dataClose === "string"
     ) {
-      return options.formatMDXDetails!(options.collapsible).split(`\r`);
+      return options.formatMDXDetails!(options.collapsible).split(
+        `\r`,
+      ) as MDXString[];
     }
     return [MARKDOWN_EOP, MARKDOWN_EOP];
   })();

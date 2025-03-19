@@ -225,7 +225,7 @@ export const toLink = (
   } as TypeLink;
 
   if (options.formatMDXLink) {
-    return options.formatMDXLink(link);
+    return options.formatMDXLink(link) as TypeLink;
   }
 
   return link;
@@ -312,5 +312,5 @@ export const printParentLink = (
       ...options,
       withAttributes: true,
     }),
-  );
+  ) as MDXString;
 };

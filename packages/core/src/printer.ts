@@ -11,7 +11,7 @@ export const getPrinter = async (
   printerModule?: Maybe<PackageName>,
   config?: Maybe<PrinterConfig>,
   options?: Maybe<PrinterOptions>,
-  mdxParser?: PackageName,
+  mdxModule?: unknown,
 ): Promise<Printer> => {
   if (typeof printerModule !== "string") {
     throw new Error("Invalid printer module name.");
@@ -27,7 +27,7 @@ export const getPrinter = async (
     );
 
     const { schema, baseURL, linkRoot } = config;
-    await Printer.init(schema, baseURL, linkRoot, { ...options }, mdxParser);
+    await Printer.init(schema, baseURL, linkRoot, { ...options }, mdxModule);
 
     return Printer;
   } catch {

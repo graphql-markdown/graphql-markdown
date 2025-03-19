@@ -78,6 +78,7 @@ describe("generator", () => {
     beforeEach(() => {
       // silent console
       jest.spyOn(global.console, "info").mockImplementation(() => {});
+      jest.spyOn(global.console, "warn").mockImplementation(() => {});
       jest.spyOn(global.console, "error").mockImplementation(() => {});
     });
 
@@ -93,12 +94,11 @@ describe("generator", () => {
       return new GraphQLDirective({ name, locations: [] });
     };
 
-    test.each([
-      [undefined, false],
-      ["custom-mdx", true],
-    ])(
+    test.each([[undefined], ["custom-mdx"]])(
       "passes options to Printer and Renderer with mdxParser set to %s",
-      async (mdxParser, hasMDXSupport) => {
+      async (mdxParser) => {
+        expect.assertions(2);
+
         jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
         jest
           .spyOn(GraphQL, "getDocumentLoaders")
@@ -144,7 +144,7 @@ describe("generator", () => {
               expect.objectContaining({ name: "docDirective" }),
             ],
           },
-          mdxParser,
+          undefined,
         );
         expect(rendererSpy).toHaveBeenCalledWith(
           {},
@@ -157,7 +157,7 @@ describe("generator", () => {
             deprecated: options.printTypeOptions!.deprecated,
             hierarchy: options.printTypeOptions!.hierarchy,
           },
-          hasMDXSupport,
+          undefined,
         );
       },
     );

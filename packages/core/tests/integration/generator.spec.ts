@@ -1,4 +1,5 @@
-import { join } from "node:path";
+/* eslint-disable @typescript-eslint/no-base-to-string */
+import path, { join } from "node:path";
 
 import { vol } from "memfs";
 jest.mock("fs");
@@ -19,6 +20,18 @@ import { Printer } from "@graphql-markdown/printer-legacy";
 
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
+
+jest.mock(
+  "mdx-parser-mock",
+  () => {
+    return {
+      generateIndexMetafile: (dirPath: string, category: string): string => {
+        return path.join(dirPath, category).toLocaleLowerCase();
+      },
+    };
+  },
+  { virtual: true },
+);
 
 import { generateDocFromSchema } from "../../src/generator";
 import {
@@ -66,6 +79,7 @@ describe("renderer", () => {
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
         metatags: [],
+        mdxParser: "mdx-parser-mock" as PackageName,
         onlyDocDirective: [],
         outputDir: "/output",
         prettify: false,
@@ -101,6 +115,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
+        mdxParser: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",
@@ -146,6 +161,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
+        mdxParser: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",
@@ -183,6 +199,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
+        mdxParser: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",

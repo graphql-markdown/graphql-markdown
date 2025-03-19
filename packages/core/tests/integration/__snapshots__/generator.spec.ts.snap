@@ -3,103 +3,41 @@
 exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 1`] = `
 {
   "generated.md": "Dummy homepage for tweet.graphql",
-  "operations/_category_.yml": "label: Operations
-position: 1
-className: graphql-markdown-api-section
-link: null
-collapsible: false
-collapsed: false
-",
-  "operations/directives/_category_.yml": "label: Directives
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "operations/directives/include.md": "include",
-  "operations/directives/skip.md": "skip",
-  "operations/mutations/_category_.yml": "label: Mutations
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "operations/mutations/add-course.md": "add-course",
-  "operations/mutations/drop-course.md": "drop-course",
-  "operations/mutations/update-gpa.md": "update-gpa",
-  "operations/mutations/update-grade.md": "update-grade",
-  "operations/queries/_category_.yml": "label: Queries
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "operations/queries/all-courses.md": "all-courses",
-  "operations/queries/course.md": "course",
-  "operations/queries/gpa.md": "gpa",
-  "operations/queries/math-courses.md": "math-courses",
-  "operations/queries/science-courses.md": "science-courses",
-  "operations/queries/search-role.md": "search-role",
-  "operations/queries/un-weighted-gpa.md": "un-weighted-gpa",
-  "operations/queries/weighted-gpa.md": "weighted-gpa",
-  "types/_category_.yml": "label: Types
-position: 1
-className: graphql-markdown-api-section
-link: null
-collapsible: false
-collapsed: false
-",
-  "types/directives/_category_.yml": "label: Directives
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "types/directives/deprecated.md": "deprecated",
-  "types/directives/doc.md": "doc",
-  "types/directives/no-doc.md": "no-doc",
-  "types/directives/one-of.md": "one-of",
-  "types/directives/public.md": "public",
-  "types/directives/specified-by.md": "specified-by",
-  "types/enums/_category_.yml": "label: Enums
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "types/enums/roles.md": "roles",
-  "types/interfaces/_category_.yml": "label: Interfaces
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "types/interfaces/record.md": "record",
-  "types/objects/_category_.yml": "label: Objects
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "types/objects/course.md": "course",
-  "types/objects/department-information.md": "department-information",
-  "types/objects/semester.md": "semester",
-  "types/objects/unused-type.md": "unused-type",
-  "types/scalars/_category_.yml": "label: Scalars
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "types/scalars/boolean.md": "boolean",
-  "types/scalars/date.md": "date",
-  "types/scalars/email-address.md": "email-address",
-  "types/scalars/id.md": "id",
-  "types/scalars/int.md": "int",
-  "types/scalars/phone-number.md": "phone-number",
-  "types/scalars/string.md": "string",
-  "types/scalars/time.md": "time",
-  "types/scalars/url.md": "url",
+  "operations/directives/include.mdx": "include",
+  "operations/directives/skip.mdx": "skip",
+  "operations/mutations/add-course.mdx": "add-course",
+  "operations/mutations/drop-course.mdx": "drop-course",
+  "operations/mutations/update-gpa.mdx": "update-gpa",
+  "operations/mutations/update-grade.mdx": "update-grade",
+  "operations/queries/all-courses.mdx": "all-courses",
+  "operations/queries/course.mdx": "course",
+  "operations/queries/gpa.mdx": "gpa",
+  "operations/queries/math-courses.mdx": "math-courses",
+  "operations/queries/science-courses.mdx": "science-courses",
+  "operations/queries/search-role.mdx": "search-role",
+  "operations/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
+  "operations/queries/weighted-gpa.mdx": "weighted-gpa",
+  "types/directives/deprecated.mdx": "deprecated",
+  "types/directives/doc.mdx": "doc",
+  "types/directives/no-doc.mdx": "no-doc",
+  "types/directives/one-of.mdx": "one-of",
+  "types/directives/public.mdx": "public",
+  "types/directives/specified-by.mdx": "specified-by",
+  "types/enums/roles.mdx": "roles",
+  "types/interfaces/record.mdx": "record",
+  "types/objects/course.mdx": "course",
+  "types/objects/department-information.mdx": "department-information",
+  "types/objects/semester.mdx": "semester",
+  "types/objects/unused-type.mdx": "unused-type",
+  "types/scalars/boolean.mdx": "boolean",
+  "types/scalars/date.mdx": "date",
+  "types/scalars/email-address.mdx": "email-address",
+  "types/scalars/id.mdx": "id",
+  "types/scalars/int.mdx": "int",
+  "types/scalars/phone-number.mdx": "phone-number",
+  "types/scalars/string.mdx": "string",
+  "types/scalars/time.mdx": "time",
+  "types/scalars/url.mdx": "url",
 }
 `;
 
@@ -149,120 +87,42 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 
 exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
 {
-  "course/_category_.yml": "label: Course
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "course/mutations/_category_.yml": "label: Mutations
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "course/mutations/add-course.md": "add-course",
-  "course/mutations/drop-course.md": "drop-course",
-  "course/queries/_category_.yml": "label: Queries
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "course/queries/all-courses.md": "all-courses",
-  "course/queries/course.md": "course",
-  "course/queries/math-courses.md": "math-courses",
-  "course/queries/science-courses.md": "science-courses",
+  "course/mutations/add-course.mdx": "add-course",
+  "course/mutations/drop-course.mdx": "drop-course",
+  "course/queries/all-courses.mdx": "all-courses",
+  "course/queries/course.mdx": "course",
+  "course/queries/math-courses.mdx": "math-courses",
+  "course/queries/science-courses.mdx": "science-courses",
   "generated.md": "Dummy homepage for tweet.graphql",
-  "grade/_category_.yml": "label: Grade
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "grade/mutations/_category_.yml": "label: Mutations
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "grade/mutations/update-gpa.md": "update-gpa",
-  "grade/mutations/update-grade.md": "update-grade",
-  "grade/queries/_category_.yml": "label: Queries
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "grade/queries/gpa.md": "gpa",
-  "grade/queries/un-weighted-gpa.md": "un-weighted-gpa",
-  "grade/queries/weighted-gpa.md": "weighted-gpa",
-  "misc/_category_.yml": "label: Misc
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/directives/_category_.yml": "label: Directives
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/directives/deprecated.md": "deprecated",
-  "misc/directives/doc.md": "doc",
-  "misc/directives/include.md": "include",
-  "misc/directives/no-doc.md": "no-doc",
-  "misc/directives/one-of.md": "one-of",
-  "misc/directives/public.md": "public",
-  "misc/directives/skip.md": "skip",
-  "misc/directives/specified-by.md": "specified-by",
-  "misc/enums/_category_.yml": "label: Enums
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/enums/roles.md": "roles",
-  "misc/interfaces/_category_.yml": "label: Interfaces
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/interfaces/record.md": "record",
-  "misc/objects/_category_.yml": "label: Objects
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/objects/course.md": "course",
-  "misc/objects/department-information.md": "department-information",
-  "misc/objects/semester.md": "semester",
-  "misc/objects/unused-type.md": "unused-type",
-  "misc/queries/_category_.yml": "label: Queries
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/queries/search-role.md": "search-role",
-  "misc/scalars/_category_.yml": "label: Scalars
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "misc/scalars/boolean.md": "boolean",
-  "misc/scalars/date.md": "date",
-  "misc/scalars/email-address.md": "email-address",
-  "misc/scalars/id.md": "id",
-  "misc/scalars/int.md": "int",
-  "misc/scalars/phone-number.md": "phone-number",
-  "misc/scalars/string.md": "string",
-  "misc/scalars/time.md": "time",
-  "misc/scalars/url.md": "url",
+  "grade/mutations/update-gpa.mdx": "update-gpa",
+  "grade/mutations/update-grade.mdx": "update-grade",
+  "grade/queries/gpa.mdx": "gpa",
+  "grade/queries/un-weighted-gpa.mdx": "un-weighted-gpa",
+  "grade/queries/weighted-gpa.mdx": "weighted-gpa",
+  "misc/directives/deprecated.mdx": "deprecated",
+  "misc/directives/doc.mdx": "doc",
+  "misc/directives/include.mdx": "include",
+  "misc/directives/no-doc.mdx": "no-doc",
+  "misc/directives/one-of.mdx": "one-of",
+  "misc/directives/public.mdx": "public",
+  "misc/directives/skip.mdx": "skip",
+  "misc/directives/specified-by.mdx": "specified-by",
+  "misc/enums/roles.mdx": "roles",
+  "misc/interfaces/record.mdx": "record",
+  "misc/objects/course.mdx": "course",
+  "misc/objects/department-information.mdx": "department-information",
+  "misc/objects/semester.mdx": "semester",
+  "misc/objects/unused-type.mdx": "unused-type",
+  "misc/queries/search-role.mdx": "search-role",
+  "misc/scalars/boolean.mdx": "boolean",
+  "misc/scalars/date.mdx": "date",
+  "misc/scalars/email-address.mdx": "email-address",
+  "misc/scalars/id.mdx": "id",
+  "misc/scalars/int.mdx": "int",
+  "misc/scalars/phone-number.mdx": "phone-number",
+  "misc/scalars/string.mdx": "string",
+  "misc/scalars/time.mdx": "time",
+  "misc/scalars/url.mdx": "url",
 }
 `;
 
@@ -270,91 +130,37 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 
 exports[`renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
 {
-  "directives/_category_.yml": "label: Directives
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "directives/deprecated.md": "deprecated",
-  "directives/include.md": "include",
-  "directives/one-of.md": "one-of",
-  "directives/skip.md": "skip",
-  "directives/specified-by.md": "specified-by",
-  "enums/_category_.yml": "label: Enums
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "enums/media-type.md": "media-type",
+  "directives/deprecated.mdx": "deprecated",
+  "directives/include.mdx": "include",
+  "directives/one-of.mdx": "one-of",
+  "directives/skip.mdx": "skip",
+  "directives/specified-by.mdx": "specified-by",
+  "enums/media-type.mdx": "media-type",
   "generated.md": "Dummy homepage for tweet.graphql",
-  "inputs/_category_.yml": "label: Inputs
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "inputs/tweet-content.md": "tweet-content",
-  "interfaces/_category_.yml": "label: Interfaces
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "interfaces/node.md": "node",
-  "mutations/_category_.yml": "label: Mutations
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "mutations/create-tweet.md": "create-tweet",
-  "mutations/delete-tweet.md": "delete-tweet",
-  "mutations/mark-tweet-read.md": "mark-tweet-read",
-  "objects/_category_.yml": "label: Objects
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "objects/media.md": "media",
-  "objects/meta.md": "meta",
-  "objects/notification.md": "notification",
-  "objects/stat.md": "stat",
-  "objects/tweet.md": "tweet",
-  "objects/user.md": "user",
-  "queries/_category_.yml": "label: Queries
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "queries/notifications-meta.md": "notifications-meta",
-  "queries/tweet.md": "tweet",
-  "queries/tweets-meta.md": "tweets-meta",
-  "queries/tweets.md": "tweets",
-  "queries/user.md": "user",
-  "queries/users.md": "users",
-  "scalars/_category_.yml": "label: Scalars
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "scalars/boolean.md": "boolean",
-  "scalars/date.md": "date",
-  "scalars/id.md": "id",
-  "scalars/int.md": "int",
-  "scalars/sri.md": "sri",
-  "scalars/string.md": "string",
-  "scalars/url.md": "url",
-  "subscriptions/_category_.yml": "label: Subscriptions
-position: 1
-link: null
-collapsible: true
-collapsed: true
-",
-  "subscriptions/notifications.md": "notifications",
+  "inputs/tweet-content.mdx": "tweet-content",
+  "interfaces/node.mdx": "node",
+  "mutations/create-tweet.mdx": "create-tweet",
+  "mutations/delete-tweet.mdx": "delete-tweet",
+  "mutations/mark-tweet-read.mdx": "mark-tweet-read",
+  "objects/media.mdx": "media",
+  "objects/meta.mdx": "meta",
+  "objects/notification.mdx": "notification",
+  "objects/stat.mdx": "stat",
+  "objects/tweet.mdx": "tweet",
+  "objects/user.mdx": "user",
+  "queries/notifications-meta.mdx": "notifications-meta",
+  "queries/tweet.mdx": "tweet",
+  "queries/tweets-meta.mdx": "tweets-meta",
+  "queries/tweets.mdx": "tweets",
+  "queries/user.mdx": "user",
+  "queries/users.mdx": "users",
+  "scalars/boolean.mdx": "boolean",
+  "scalars/date.mdx": "date",
+  "scalars/id.mdx": "id",
+  "scalars/int.mdx": "int",
+  "scalars/sri.mdx": "sri",
+  "scalars/string.mdx": "string",
+  "scalars/url.mdx": "url",
+  "subscriptions/notifications.mdx": "notifications",
 }
 `;
