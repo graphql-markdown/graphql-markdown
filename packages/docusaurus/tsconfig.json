@@ -11,5 +11,9 @@
     }
   },
 
-  "references": [{ "path": "../cli" }, { "path": "../logger" }]
+  "references": [
+    { "path": "../cli" },
+    { "path": "../logger" },
+    { "path": "../utils" }
+  ]
 }
