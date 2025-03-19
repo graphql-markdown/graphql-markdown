@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 /**
  * Alias `path.posix` to normalize URL handling on Windows.
  *
