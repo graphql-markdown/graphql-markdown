@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "@graphql-markdown/cli": "^0.2.0",
+    "@graphql-markdown/utils": "^1.7.1",
     "@docusaurus/utils": ">=3.2.0"
   },
   "devDependencies": {
