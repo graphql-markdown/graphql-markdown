@@ -24,14 +24,15 @@ jobs:
       matrix:
         package:
           [
-            "docusaurus",
+            "cli",
             "core",
             "diff",
-            "printer-legacy",
-            "utils",
+            "docusaurus",
+            "graphql",
             "helpers",
             "logger",
-            "graphql",
+            "printer-legacy",
+            "utils",
           ]
 
     steps:
