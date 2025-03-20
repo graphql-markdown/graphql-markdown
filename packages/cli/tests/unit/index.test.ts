@@ -54,7 +54,7 @@ describe("CLI Module", () => {
 
   describe("getGraphQLMarkdownCli", () => {
     test("returns a configured commander command", () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const options = {
         schema: "./schema.graphql",
@@ -66,6 +66,9 @@ describe("CLI Module", () => {
       const command = getGraphQLMarkdownCli(options, loggerModule, mdxPackage);
 
       expect(command).toBeDefined();
+      expect(command.description()).toBe(
+        "Generate GraphQL Schema Documentation",
+      );
       expect(command.options).toMatchInlineSnapshot(`
 [
   Option {
@@ -299,6 +302,260 @@ describe("CLI Module", () => {
 ]
 `);
     });
+  });
+
+  test("returns a configured commander command with ID", () => {
+    expect.assertions(2);
+
+    const options = {
+      id: "test",
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+    };
+    const loggerModule = "@docusaurus/logger";
+    const mdxPackage = "@graphql-markdown/docusaurus/mdx";
+
+    const command = getGraphQLMarkdownCli(options, loggerModule, mdxPackage);
+
+    expect(command).toBeDefined();
+    expect(command.description()).toBe(
+      "Generate GraphQL Schema Documentation for configuration with id test",
+    );
+  });
+
+  test("returns a configured commander command without customMdxParser", () => {
+    expect.assertions(2);
+
+    const options = {
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+    };
+
+    const command = getGraphQLMarkdownCli(options);
+
+    expect(command).toBeDefined();
+    expect(command.options).toMatchInlineSnapshot(`
+[
+  Option {
+    "defaultValue": undefined,
+    "description": "Schema location",
+    "flags": "-s, --schema <schema>",
+    "long": "--schema",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-s",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Root folder for doc generation",
+    "flags": "-r, --root <rootPath>",
+    "long": "--root",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-r",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Base URL to be used by static generator",
+    "flags": "-b, --base <baseURL>",
+    "long": "--base",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-b",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Root for links in documentation",
+    "flags": "-l, --link <linkRoot>",
+    "long": "--link",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-l",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "File location for doc landing page",
+    "flags": "-h, --homepage <homepage>",
+    "long": "--homepage",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-h",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Schema entity hierarchy: \`api\`, \`entity\`, \`flat\`",
+    "flags": "--hierarchy <hierarchy>",
+    "long": "--hierarchy",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable code section for types",
+    "flags": "--noCode",
+    "long": "--noCode",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable example section for types",
+    "flags": "--noExample",
+    "long": "--noExample",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable parent type name as field prefix",
+    "flags": "--noParentType",
+    "long": "--noParentType",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable related types sections",
+    "flags": "--noRelatedType",
+    "long": "--noRelatedType",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable badges for types",
+    "flags": "--noTypeBadges",
+    "long": "--noTypeBadges",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Enable generated index for categories",
+    "flags": "--index",
+    "long": "--index",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Force document generation",
+    "flags": "-f, --force",
+    "long": "--force",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+    "short": "-f",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Set diff method",
+    "flags": "-d, --diff <diffMethod>",
+    "long": "--diff",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-d",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Set temp dir for schema diff",
+    "flags": "-t, --tmp <tmpDir>",
+    "long": "--tmp",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+    "short": "-t",
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Group documentation by directive",
+    "flags": "--groupByDirective <@directive(field|=fallback)>",
+    "long": "--groupByDirective",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Only print types with matching directive",
+    "flags": "--only <@directive...>",
+    "long": "--only",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Skip types with matching directive",
+    "flags": "--skip <@directive...>",
+    "long": "--skip",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Option for printing deprecated entities: \`default\`, \`group\` or \`skip\`",
+    "flags": "--deprecated <option>",
+    "long": "--deprecated",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": true,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Prettify generated files",
+    "flags": "--pretty",
+    "long": "--pretty",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Print configuration (for debugging)",
+    "flags": "--config",
+    "long": "--config",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+]
+`);
   });
 
   describe("runGraphQLMarkdown", () => {
