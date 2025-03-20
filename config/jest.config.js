@@ -1,31 +1,26 @@
 // jest.config.js
-const { pathsToModuleNameMapper } = require("ts-jest");
-
-const projectConfig = (name) => {
-  const { compilerOptions } = require(`../packages/${name}/tsconfig.test.json`);
-  return {
-    displayName: `@graphql-markdown/${name}`,
-    extensionsToTreatAsEsm: [".ts"],
-    prettierPath: null,
-    rootDir: `./packages/${name}`,
-    roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
-    testEnvironment: "node",
-    transform: {
-      "^.+\\.ts$": [
-        "ts-jest",
-        {
-          tsconfig: "<rootDir>/tsconfig.test.json",
-          isolatedModules: true,
-        },
-      ],
-    },
-    collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-    testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
-    moduleNameMapper: {
-      "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
-    },
-  };
-};
+const projectConfig = (name) => ({
+  displayName: `@graphql-markdown/${name}`,
+  extensionsToTreatAsEsm: [".ts"],
+  prettierPath: null,
+  rootDir: `./packages/${name}`,
+  roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
+  testEnvironment: "node",
+  transform: {
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        tsconfig: "<rootDir>/tsconfig.test.json",
+        isolatedModules: true,
+      },
+    ],
+  },
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
+  testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+  moduleNameMapper: {
+    "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
+  },
+});
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
