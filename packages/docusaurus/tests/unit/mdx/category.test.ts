@@ -1,4 +1,5 @@
-const CATEGORY_YAML = "_category_.yml";
+import path from "node:path";
+
 jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
@@ -12,10 +13,12 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
   };
 });
 import * as Utils from "@graphql-markdown/utils";
-import path from "node:path";
+
 import { generateIndexMetafile } from "../../../src/mdx/category";
 
 describe("generateIndexMetafile()", () => {
+  const CATEGORY_YAML = "_category_.yml";
+
   test("generate _category_.yml file", async () => {
     expect.assertions(1);
 
