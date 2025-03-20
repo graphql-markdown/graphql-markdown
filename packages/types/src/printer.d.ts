@@ -35,7 +35,7 @@ export interface MetaOptions {
 }
 
 export interface AdmonitionType {
-  icon: Maybe<string>;
+  icon?: Maybe<string>;
   text: string;
   title: Maybe<string>;
   type: string;

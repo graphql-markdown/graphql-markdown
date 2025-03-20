@@ -1,5 +1,8 @@
 import path from "node:path";
 
+jest.mock("fs");
+jest.mock("node:fs/promises");
+
 jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
