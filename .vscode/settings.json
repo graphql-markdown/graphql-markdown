@@ -86,5 +86,6 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "graphql-markdown",
     "projectKey": "graphql-markdown_graphql-markdown"
-  }
+  },
+  "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

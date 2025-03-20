@@ -18,7 +18,7 @@ import {
 
 import { DEPRECATED } from "../../src/const/strings";
 
-import { DEFAULT_OPTIONS, SectionLevels } from "../../src/const/options";
+import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("section", () => {
   describe("printSection()", () => {
@@ -48,7 +48,7 @@ describe("section", () => {
 
       const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
-        level: SectionLevels.NONE as SectionLevelValue,
+        level: 0 as SectionLevelValue,
         collapsible: {
           dataOpen: DEPRECATED,
           dataClose: DEPRECATED,
@@ -79,7 +79,7 @@ describe("section", () => {
 
       const section = printSection(content, title, {
         ...DEFAULT_OPTIONS,
-        level: "#" as SectionLevelValue,
+        level: 1 as SectionLevelValue,
       });
 
       expect(section).toMatchInlineSnapshot(`
@@ -399,7 +399,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️</span> **DEPRECATED**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 </span>

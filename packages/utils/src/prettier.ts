@@ -6,10 +6,6 @@
 
 import type { LoggerType } from "@graphql-markdown/types";
 
-/* istanbul ignore file */
-
-// Stryker disable all
-
 /**
  * Prettify a string using {@link https://prettier.io/docs/en/api#prettierformatsource-options | prettier.format}.
  *
@@ -37,7 +33,7 @@ export const prettify = async (
     if ("logger" in global && global.logger) {
       (global.logger as LoggerType)._log("Prettier is not found");
     } else {
-      console.log("Prettier is not found");
+      global.console.log("Prettier is not found");
     }
     return undefined;
   }

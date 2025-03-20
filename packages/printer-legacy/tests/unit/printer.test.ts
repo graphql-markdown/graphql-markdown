@@ -17,12 +17,14 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    slugify: jest.fn(),
     escapeMDX: jest.fn(),
-    pathUrl: { join: posix.join },
+    formatFrontMatterObject: jest.fn(),
     isEmpty: jest.fn(),
+    pathUrl: { join: posix.join },
+    slugify: jest.fn(),
   };
 });
+import * as Utils from "@graphql-markdown/utils";
 
 jest.mock("@graphql-markdown/graphql", () => {
   return {
@@ -182,6 +184,7 @@ describe("Printer", () => {
   "formatMDXBadge": [Function],
   "formatMDXBullet": [Function],
   "formatMDXDetails": [Function],
+  "formatMDXFrontmatter": [Function],
   "formatMDXLink": [Function],
   "formatMDXNameEntity": [Function],
   "formatMDXSpecifiedByLink": [Function],
@@ -192,7 +195,6 @@ describe("Printer", () => {
   },
   "level": undefined,
   "mdxDeclaration": "",
-  "mdxSupport": false,
   "meta": undefined,
   "metatags": [],
   "onlyDocDirectives": [],
@@ -252,6 +254,7 @@ describe("Printer", () => {
   "formatMDXBadge": [Function],
   "formatMDXBullet": [Function],
   "formatMDXDetails": [Function],
+  "formatMDXFrontmatter": [Function],
   "formatMDXLink": [Function],
   "formatMDXNameEntity": [Function],
   "formatMDXSpecifiedByLink": [Function],
@@ -262,7 +265,6 @@ describe("Printer", () => {
   },
   "level": undefined,
   "mdxDeclaration": "",
-  "mdxSupport": false,
   "meta": undefined,
   "metatags": [],
   "onlyDocDirectives": [],
@@ -311,25 +313,36 @@ describe("Printer", () => {
   });
 
   describe("printHeader()", () => {
-    test("returns a empty string if no mdxSupport", () => {
+    test("returns a l1 title if no frontmatter support", () => {
       expect.hasAssertions();
 
       const header = Printer.printHeader(
         "an-object-type-name",
         "An Object Type Name",
-        DEFAULT_OPTIONS,
+        { ...DEFAULT_OPTIONS, frontMatter: false },
       );
 
-      expect(header).toBe("");
+      expect(header).toBe(
+        `# An Object Type Name
+
+`,
+      );
     });
 
     test("returns a MDX frontmatter document header", () => {
       expect.hasAssertions();
 
+      jest
+        .spyOn(Utils, "formatFrontMatterObject")
+        .mockReturnValue([
+          "id: an-object-type-name",
+          "title: An Object Type Name",
+        ]);
+
       const header = Printer.printHeader(
         "an-object-type-name",
         "An Object Type Name",
-        { ...DEFAULT_OPTIONS, mdxSupport: true },
+        DEFAULT_OPTIONS,
       );
 
       expect(header).toMatchInlineSnapshot(`
@@ -343,13 +356,21 @@ describe("Printer", () => {
     test("returns a MDX frontmatter document header with custom info", () => {
       expect.hasAssertions();
 
+      jest
+        .spyOn(Utils, "formatFrontMatterObject")
+        .mockReturnValue([
+          "draft: true",
+          "hide_table_of_contents: null",
+          "id: an-object-type-name",
+          "title: An Object Type Name",
+        ]);
+
       const header = Printer.printHeader(
         "an-object-type-name",
         "An Object Type Name",
         {
           ...DEFAULT_OPTIONS,
           frontMatter: { draft: true, hide_table_of_contents: null },
-          mdxSupport: true,
         },
       );
 

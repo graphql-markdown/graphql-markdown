@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.base.json",
 
   "compilerOptions": {
+    "composite": true,
+
     "rootDir": "src",
     "outDir": "dist",
 
@@ -11,5 +13,9 @@
     }
   },
 
-  "references": [{ "path": "../cli" }, { "path": "../logger" }]
+  "references": [
+    { "path": "../cli" },
+    { "path": "../logger" },
+    { "path": "../utils" }
+  ]
 }

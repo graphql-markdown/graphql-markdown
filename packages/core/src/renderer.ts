@@ -3,6 +3,7 @@ import type {
   Category,
   Maybe,
   MDXString,
+  MDXSupportType,
   Printer,
   RendererDocOptions,
   SchemaEntitiesGroupMap,
@@ -18,7 +19,6 @@ import { isApiType, isDeprecated } from "@graphql-markdown/graphql";
 import {
   copyFile,
   ensureDir,
-  fileExists,
   pathUrl,
   prettifyMarkdown,
   readFile,
@@ -31,7 +31,6 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
 
 const DEPRECATED = "deprecated" as const;
-const CATEGORY_YAML = "_category_.yml" as const;
 const CATEGORY_STYLE_CLASS = "graphql-markdown-api-section" as const;
 
 enum SidebarPosition {
@@ -62,13 +61,21 @@ const isHierarchy = (
   return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
+export interface CategoryMetafileOptions {
+  collapsible?: boolean;
+  collapsed?: boolean;
+  sidebarPosition?: number;
+  styleClass?: string;
+}
+
 export class Renderer {
   group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
   baseURL: string;
   prettify: boolean;
   options: Maybe<RendererDocOptions>;
-  hasMDXSupport: boolean;
+  mdxModule: unknown;
+  mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
 
@@ -79,7 +86,7 @@ export class Renderer {
     group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
     docOptions: Maybe<RendererDocOptions>,
-    mdx: boolean = false,
+    mdxModule?: unknown,
   ) {
     this.printer = printer;
     this.group = group;
@@ -87,42 +94,37 @@ export class Renderer {
     this.baseURL = baseURL;
     this.prettify = prettify;
     this.options = docOptions;
-    this.hasMDXSupport = mdx;
+    this.mdxModule = mdxModule;
+    this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
   }
 
-  async generateCategoryMetafile(
-    category: string,
+  hasMDXIndexFileSupport(
+    module: unknown = this.mdxModule,
+  ): module is Partial<MDXSupportType> &
+    Pick<MDXSupportType, "generateIndexMetafile"> {
+    return !!(
+      module &&
+      typeof module === "object" &&
+      "generateIndexMetafile" in module &&
+      typeof module.generateIndexMetafile === "function"
+    );
+  }
+
+  async generateIndexMetafile(
     dirPath: string,
-    sidebarPosition?: number,
-    styleClass?: string,
-    options: { collapsible: boolean; collapsed: boolean } = {
+    category: string,
+    options: CategoryMetafileOptions = {
       collapsible: true,
       collapsed: true,
     },
   ): Promise<void> {
-    const filePath = join(dirPath, CATEGORY_YAML);
-
-    if (await fileExists(filePath)) {
-      return;
+    if (this.mdxModuleIndexFileSupport) {
+      void (this.mdxModule as MDXSupportType).generateIndexMetafile(
+        dirPath,
+        category,
+        { ...options, index: this.options?.index },
+      );
     }
-
-    await ensureDir(dirPath);
-
-    const label = startCase(category);
-    const link =
-      this.options && this.options.index !== true
-        ? "null"
-        : `\n  type: generated-index\n  title: '${label} overview'`;
-    const className =
-      typeof styleClass === "string" ? `className: ${styleClass}\n` : "";
-    const position =
-      typeof sidebarPosition === "number"
-        ? sidebarPosition
-        : SidebarPosition.FIRST;
-    await saveFile(
-      filePath,
-      `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options.collapsible}\ncollapsed: ${options.collapsed}\n`,
-    );
   }
 
   async generateCategoryMetafileType(
@@ -143,23 +145,19 @@ export class Renderer {
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
       dirPath = join(dirPath, slugify(typeCat));
-      await this.generateCategoryMetafile(
-        typeCat,
-        dirPath,
-        undefined,
-        CATEGORY_STYLE_CLASS,
-        { collapsible: false, collapsed: false },
-      );
+      await this.generateIndexMetafile(dirPath, typeCat, {
+        collapsible: false,
+        collapsed: false,
+        styleClass: CATEGORY_STYLE_CLASS,
+      });
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
       dirPath = join(dirPath, slugify(DEPRECATED));
-      await this.generateCategoryMetafile(
-        DEPRECATED,
-        dirPath,
-        SidebarPosition.LAST,
-        DEPRECATED,
-      );
+      await this.generateIndexMetafile(dirPath, DEPRECATED, {
+        sidebarPosition: SidebarPosition.LAST,
+        styleClass: DEPRECATED,
+      });
     }
 
     if (
@@ -167,15 +165,13 @@ export class Renderer {
       rootTypeName in this.group &&
       name in this.group[rootTypeName]!
     ) {
-      dirPath = join(dirPath, slugify(this.group[rootTypeName]![name] ?? ""));
-      await this.generateCategoryMetafile(
-        this.group[rootTypeName]![name] ?? "",
-        dirPath,
-      );
+      const rootGroup = this.group[rootTypeName]![name] ?? "";
+      dirPath = join(dirPath, slugify(rootGroup));
+      await this.generateIndexMetafile(dirPath, rootGroup);
     }
 
     dirPath = join(dirPath, slugify(rootTypeName));
-    await this.generateCategoryMetafile(rootTypeName, dirPath);
+    await this.generateIndexMetafile(dirPath, rootTypeName);
 
     return dirPath;
   }
@@ -223,7 +219,7 @@ export class Renderer {
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
     const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx?$/;
 
-    const extension = this.hasMDXSupport ? "mdx" : "md";
+    const extension = this.mdxModule ? "mdx" : "md";
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.${extension}`);
 
@@ -296,7 +292,7 @@ export const getRenderer = async (
   group: Maybe<SchemaEntitiesGroupMap>,
   prettify: boolean,
   docOptions: Maybe<RendererDocOptions>,
-  mdx: boolean = false,
+  mdxModule?: unknown,
 ): Promise<InstanceType<typeof Renderer>> => {
   await ensureDir(outputDir, { forceEmpty: docOptions?.force });
   return new Renderer(
@@ -306,6 +302,6 @@ export const getRenderer = async (
     group,
     prettify,
     docOptions,
-    mdx,
+    mdxModule,
   );
 };

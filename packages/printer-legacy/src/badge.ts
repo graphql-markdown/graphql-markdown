@@ -76,7 +76,10 @@ export const printBadge = (
 ): MDXString => {
   const textString = typeof text === "object" ? text.singular : text;
   const formattedText = escapeMDX(textString);
-  return options.formatMDXBadge!({ text: formattedText, classname });
+  return options.formatMDXBadge!({
+    text: formattedText,
+    classname,
+  }) as MDXString;
 };
 
 export const printBadges = (

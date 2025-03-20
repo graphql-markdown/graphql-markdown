@@ -1,28 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   AdmonitionType,
   Badge,
+  FrontMatterOptions,
   Maybe,
   MDXString,
   MDXSupportType,
   MetaOptions,
-  PackageName,
   TypeLink,
 } from "@graphql-markdown/types";
 
-import { MARKDOWN_EOL, MARKDOWN_EOP } from "../const/strings";
+import {
+  FRONT_MATTER_DELIMITER,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} from "../const/strings";
 
-import { log, LogLevel } from "@graphql-markdown/logger";
-
-const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
-  return `<mark class="gqlmd-mdx-badge">${text as string}</mark>` as MDXString;
+const formatMDXBadge = (badge: Badge): MDXString => {
+  return `<mark class="gqlmd-mdx-badge">${badge.text as string}</mark>` as MDXString;
 };
 
 const formatMDXAdmonition = (
   { text, title, type, icon }: AdmonitionType,
-  meta: Maybe<MetaOptions>,
+  _meta: Maybe<MetaOptions>,
 ): MDXString => {
-  return `${MARKDOWN_EOP}<fieldset class="gqlmd-mdx-admonition-fieldset">${MARKDOWN_EOL}<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLocaleLowerCase()}">${icon ?? type.toUpperCase()}</span> **${title}**</legend>${MARKDOWN_EOL}<span>${text}</span>${MARKDOWN_EOL}</fieldset>` as MDXString;
+  return `${MARKDOWN_EOP}<fieldset class="gqlmd-mdx-admonition-fieldset">${MARKDOWN_EOL}<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLocaleLowerCase()}">${icon ?? type.toUpperCase()} ${title}</span></legend>${MARKDOWN_EOL}<span>${text}</span>${MARKDOWN_EOL}</fieldset>` as MDXString;
 };
 
 const formatMDXBullet = (text: string = ""): MDXString => {
@@ -56,6 +57,17 @@ const formatMDXLink = (link: TypeLink): TypeLink => {
   return link;
 };
 
+const formatMDXFrontmatter = (
+  _props: Maybe<FrontMatterOptions>,
+  formatted: Maybe<string[]>,
+): MDXString => {
+  return formatted
+    ? ([FRONT_MATTER_DELIMITER, ...formatted, FRONT_MATTER_DELIMITER].join(
+        MARKDOWN_EOL,
+      ) as MDXString)
+    : ("" as MDXString);
+};
+
 export const mdxDeclaration = "";
 
 const defaultModule = {
@@ -63,42 +75,33 @@ const defaultModule = {
   formatMDXBadge,
   formatMDXBullet,
   formatMDXDetails,
+  formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
   mdxDeclaration,
-  mdxSupport: false,
 } as MDXSupportType;
 
 export const mdxModule = async (
-  mdxPackage?: Maybe<PackageName>,
+  mdxPackage?: Record<string, unknown>,
 ): Promise<Readonly<MDXSupportType>> => {
   if (!mdxPackage) {
     return defaultModule;
   }
-  return import(mdxPackage)
-    .then((_module: Record<string, unknown>) => {
-      const module = (_module.default ?? _module) as Record<string, unknown>;
-      return {
-        formatMDXAdmonition: module.formatMDXAdmonition ?? formatMDXAdmonition,
-        formatMDXBadge: module.formatMDXBadge ?? formatMDXBadge,
-        formatMDXBullet: module.formatMDXBullet ?? formatMDXBullet,
-        formatMDXDetails: module.formatMDXDetails ?? formatMDXDetails,
-        formatMDXLink: module.formatMDXLink ?? formatMDXLink,
-        formatMDXNameEntity: module.formatMDXNameEntity ?? formatMDXNameEntity,
-        formatMDXSpecifiedByLink:
-          module.formatMDXSpecifiedByLink ?? formatMDXSpecifiedByLink,
-        mdxDeclaration: module.mdxDeclaration ?? mdxDeclaration,
-        mdxSupport: true,
-      } as MDXSupportType;
-    })
-    .catch(() => {
-      log(
-        `An error occurred while loading MDX formatter "${mdxPackage}"`,
-        LogLevel.warn,
-      );
-      return defaultModule;
-    });
+
+  const module = (mdxPackage.default ?? mdxPackage) as Record<string, unknown>;
+  return {
+    formatMDXAdmonition: module.formatMDXAdmonition ?? formatMDXAdmonition,
+    formatMDXBadge: module.formatMDXBadge ?? formatMDXBadge,
+    formatMDXBullet: module.formatMDXBullet ?? formatMDXBullet,
+    formatMDXDetails: module.formatMDXDetails ?? formatMDXDetails,
+    formatMDXFrontmatter: module.formatMDXFrontmatter ?? formatMDXFrontmatter,
+    formatMDXLink: module.formatMDXLink ?? formatMDXLink,
+    formatMDXNameEntity: module.formatMDXNameEntity ?? formatMDXNameEntity,
+    formatMDXSpecifiedByLink:
+      module.formatMDXSpecifiedByLink ?? formatMDXSpecifiedByLink,
+    mdxDeclaration: module.mdxDeclaration ?? mdxDeclaration,
+  } as MDXSupportType;
 };
 
 export default defaultModule;

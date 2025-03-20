@@ -20,9 +20,7 @@ export enum TypeHierarchy {
 
 export enum SectionLevels {
   NONE = "",
-  LEVEL_3 = "###",
-  LEVEL_4 = "####",
-  LEVEL_5 = "#####",
+  LEVEL = "#",
 }
 
 export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions> =
@@ -40,7 +38,6 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    // | keyof MDXSupportType
     | "collapsible"
     | "groups"
     | "level"
@@ -54,7 +51,6 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: Maybe<CollapsibleOption>;
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
-  mdxSupport: boolean;
   onlyDocDirectives: GraphQLDirective[];
   parentType: Maybe<string>;
   schema: Maybe<GraphQLSchema>;

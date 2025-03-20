@@ -40,7 +40,10 @@ export const getGraphQLMarkdownCli = (
 ): GraphQLMarkdownCliType => {
   void Logger(loggerModule);
 
-  const isDefaultId = !options.id || options.id === DEFAULT_ID;
+  const isDefaultId =
+    typeof options === "undefined" ||
+    !("id" in options) ||
+    ("id" in options && options.id === DEFAULT_ID);
 
   const cmd = isDefaultId ? COMMAND : `${COMMAND}:${options.id}`;
   const description = isDefaultId

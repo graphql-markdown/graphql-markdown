@@ -23,24 +23,24 @@
   "author": {
     "name": "Gregory Heitz"
   },
-  "main": "dist/cli.js",
-  "types": "dist/cli.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "gqlmd": "./dist/main.js"
   },
   "exports": {
     ".": {
       "require": {
-        "types": "./dist/cli.d.ts",
-        "default": "./dist/cli.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "import": {
-        "types": "./dist/cli.d.ts",
-        "default": "./dist/cli.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "default": {
-        "types": "./dist/cli.d.ts",
-        "default": "./dist/cli.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     },
     "./package.json": "./package.json"

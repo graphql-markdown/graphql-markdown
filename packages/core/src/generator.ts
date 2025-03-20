@@ -4,12 +4,11 @@ import type {
   GeneratorOptions,
   GraphQLDirective,
   Maybe,
-  PackageName,
   SchemaEntity,
   TypeHierarchyObjectType,
 } from "@graphql-markdown/types";
 
-import Logger, { log } from "@graphql-markdown/logger";
+import Logger, { log, LogLevel } from "@graphql-markdown/logger";
 
 import {
   getCustomDirectives,
@@ -54,8 +53,6 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  const hasMDXSupport = mdxParser ? true : false;
-
   await Logger(loggerModule);
 
   const loaders = await getDocumentLoaders(loadersList);
@@ -97,6 +94,17 @@ export const generateDocFromSchema = async ({
   const rootTypes = getSchemaMap(schema);
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
+
+  const mdxModule = await (!mdxParser
+    ? undefined
+    : import(mdxParser).catch(() => {
+        log(
+          `An error occurred while loading MDX formatter "${mdxParser}"`,
+          LogLevel.warn,
+        );
+        return undefined;
+      }));
+
   const printer = await getPrinter(
     // module mandatory
     printerModule,
@@ -121,7 +129,7 @@ export const generateDocFromSchema = async ({
       printTypeOptions,
       skipDocDirectives,
     },
-    mdxParser as PackageName,
+    mdxModule,
   );
   const renderer = await getRenderer(
     printer,
@@ -135,7 +143,7 @@ export const generateDocFromSchema = async ({
       force,
       hierarchy: printTypeOptions?.hierarchy as TypeHierarchyObjectType,
     },
-    hasMDXSupport,
+    mdxModule,
   );
 
   const pages = await Promise.all(

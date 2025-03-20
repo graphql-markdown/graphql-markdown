@@ -8,7 +8,6 @@ import type {
   MDXSupportType,
   Maybe,
   MetaOptions,
-  PackageName,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -102,7 +101,7 @@ export class Printer implements IPrinter {
       customDirectives: undefined,
       groups: undefined,
     },
-    mdxParser?: PackageName,
+    mdxParser?: Record<string, unknown>,
   ): Promise<void> {
     if (typeof Printer.options !== "undefined") {
       return;
@@ -145,13 +144,13 @@ export class Printer implements IPrinter {
     title: string,
     options: PrintTypeOptions,
   ): string => {
-    if (!options.mdxSupport) {
-      return "";
+    if (options.frontMatter === false) {
+      return `# ${title}${MARKDOWN_EOP}`;
     }
 
     const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
-    return printFrontMatter(id, title, fmOptions);
+    return printFrontMatter(title, { ...fmOptions, id }, options);
   };
 
   static readonly printCode = (
@@ -217,7 +216,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    return `${SectionLevels.LEVEL_3} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
+    return `${SectionLevels.LEVEL.repeat(3)} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
   };
 
   static readonly printTypeMetadata = (
@@ -322,6 +321,8 @@ export class Printer implements IPrinter {
       metadata,
       example,
       relations,
-    ].join(MARKDOWN_EOP) as MDXString;
+    ]
+      .join(MARKDOWN_EOP)
+      .trim() as MDXString;
   };
 }

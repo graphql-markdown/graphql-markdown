@@ -1,5 +1,7 @@
+// jest.config.js
 const projectConfig = (name) => ({
   displayName: `@graphql-markdown/${name}`,
+  extensionsToTreatAsEsm: [".ts"],
   prettierPath: null,
   rootDir: `./packages/${name}`,
   roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
@@ -9,6 +11,7 @@ const projectConfig = (name) => ({
       "ts-jest",
       {
         tsconfig: "<rootDir>/tsconfig.test.json",
+        isolatedModules: true,
       },
     ],
   },
@@ -27,6 +30,7 @@ module.exports = {
   coverageReporters: ["json", "lcov"],
   moduleFileExtensions: ["ts", "js"],
   projects: [
+    projectConfig("cli"),
     projectConfig("core"),
     projectConfig("diff"),
     projectConfig("docusaurus"),

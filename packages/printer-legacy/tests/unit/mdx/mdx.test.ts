@@ -1,27 +1,8 @@
-import type { PackageName } from "@graphql-markdown/types";
-
 import MDX, { mdxModule } from "../../../src/mdx";
 
 jest.mock("custom-mdx");
 
 describe("mdx", () => {
-  beforeAll(() => {
-    Object.assign(global, { logger: global.console });
-  });
-
-  beforeEach(() => {
-    // silent console
-    jest.spyOn(global.console, "warn").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  afterAll(() => {
-    delete global.logger;
-  });
-
   describe("formatMDXBadge", () => {
     test("returns a formatted badge using standard markdown", () => {
       expect(MDX.formatMDXBadge({ text: "Test badge", classname: "" })).toBe(
@@ -46,7 +27,7 @@ describe("mdx", () => {
 "
 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">WARNING</span> **Warning**</legend>
+<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">WARNING Warning</span></legend>
 <span>Test admonition</span>
 </fieldset>"
 `);
@@ -90,20 +71,8 @@ describe("mdx", () => {
       await expect(mdxModule()).resolves.toBe(MDX);
     });
 
-    test("returns default markdown formatters if module loading error", async () => {
-      const loggerSpy = jest.spyOn(global.console, "warn");
-      await expect(mdxModule("not-a-module" as PackageName)).resolves.toBe(MDX);
-      expect(loggerSpy.mock.lastCall).toMatchInlineSnapshot(`
-[
-  "An error occurred while loading MDX formatter "not-a-module"",
-]
-`);
-    });
-
     test("returns custom markdown formatters if module defined", async () => {
-      await expect(mdxModule("custom-mdx" as PackageName)).resolves.not.toBe(
-        MDX,
-      );
+      await expect(mdxModule({})).resolves.not.toBe(MDX);
     });
   });
 });

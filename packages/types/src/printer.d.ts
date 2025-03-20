@@ -1,6 +1,7 @@
 import type {
   ConfigPrintTypeOptions,
   FrontMatterOptions,
+  MDXSupportType,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
@@ -12,27 +13,6 @@ import type {
 } from "./graphql";
 import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
-
-export interface MDXSupportType {
-  formatMDXAdmonition: (
-    { text, title, type, icon }: AdmonitionType,
-    meta: Maybe<MetaOptions>,
-  ) => MDXString;
-  formatMDXBadge: ({ text, classname }: Badge) => MDXString;
-  formatMDXBullet: (text?: string) => MDXString;
-  formatMDXDetails: ({
-    dataOpen,
-    dataClose,
-  }: {
-    dataOpen?: Maybe<string>;
-    dataClose?: Maybe<string>;
-  }) => MDXString;
-  formatMDXLink: (link: TypeLink) => TypeLink;
-  formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
-  formatMDXSpecifiedByLink: (url: string) => MDXString;
-  mdxDeclaration: string;
-  mdxSupport: boolean;
-}
 
 export type RootTypeName =
   | "DIRECTIVE"
@@ -55,7 +35,7 @@ export interface MetaOptions {
 }
 
 export interface AdmonitionType {
-  icon: Maybe<string>;
+  icon?: Maybe<string>;
   text: string;
   title: Maybe<string>;
   type: string;
@@ -100,11 +80,10 @@ export type PrintTypeOptions = Partial<MDXSupportType> & {
   withAttributes?: boolean;
 };
 
-export type SectionLevelValue = string & {
+export type SectionLevelValue = {
   _opaque: typeof SECTION_LEVEL_VALUE;
-};
+} & (0 | 3 | 4 | 5);
 declare const SECTION_LEVEL_VALUE: unique symbol;
-export type SectionLevel = SectionLevelValue | "####" | "#####";
 
 export interface Badge {
   text: TypeLocale | string;
@@ -143,7 +122,7 @@ export abstract class IPrinter {
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-    mdxParser?: PackageName,
+    mdxModule?: unknown,
   ): Promise<void>;
   static printHeader(
     id: string,

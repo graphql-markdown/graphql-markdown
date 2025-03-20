@@ -8,7 +8,7 @@ import type {
 import { Command } from "commander";
 import { loadConfig } from "graphql-config";
 
-import { getGraphQLMarkdownCli } from "./cli";
+import { getGraphQLMarkdownCli } from ".";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {

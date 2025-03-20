@@ -5,6 +5,7 @@ import type {
   ApiGroupOverrideType,
   IPrinter,
   MDXString,
+  PackageName,
   RendererDocOptions,
   SchemaEntity,
   TypeDeprecatedOption,
@@ -32,6 +33,7 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
     fileExists: jest.fn(),
     saveFile: jest.fn(),
     copyFile: jest.fn(),
+    readFile: jest.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -41,6 +43,7 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
     __esModule: true,
     ...jest.requireActual("@graphql-markdown/graphql"),
     isDeprecated: jest.fn(),
+    isApiType: jest.fn(),
   };
 });
 import * as GraphQL from "@graphql-markdown/graphql";
@@ -69,6 +72,11 @@ describe("renderer", () => {
         undefined,
         DEFAULT_OPTIONS.pretty!,
         DEFAULT_RENDERER_OPTIONS,
+        {
+          generateIndexMetafile: jest.fn((dirPath, category) => {
+            return path.join(dirPath, category).toLocaleLowerCase();
+          }),
+        },
       );
 
       // silent console
@@ -98,7 +106,7 @@ describe("renderer", () => {
 
         expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
         expect(spy).toHaveBeenCalledWith(
-          `${output}/foo-bar.md`,
+          `${output}/foo-bar.mdx`,
           "Lorem ipsum",
           undefined,
         );
@@ -126,9 +134,49 @@ describe("renderer", () => {
 
         expect(meta).toEqual({ category: "schema", slug: "foo-bar" });
         expect(spy).toHaveBeenCalledWith(
-          `${output}/foo-bar.md`,
+          `${output}/foo-bar.mdx`,
           "Lorem ipsum",
           undefined,
+        );
+      });
+
+      test("creates entity page with MDX extension when hasMDXSupport is true", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        jest.replaceProperty(rendererInstance, "mdxModule", {});
+
+        const output = "/output/foobar";
+        await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
+
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("applies prettify function when prettify is true", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        jest.replaceProperty(rendererInstance, "prettify", true);
+
+        const output = "/output/foobar";
+        await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
+
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          Utils.prettifyMarkdown,
         );
       });
 
@@ -153,9 +201,7 @@ describe("renderer", () => {
           throw new Error();
         });
 
-        const spy = jest
-          .spyOn(global.console, "warn")
-          .mockImplementationOnce(() => {});
+        const spy = jest.spyOn(global.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -186,7 +232,7 @@ describe("renderer", () => {
 
         expect(meta).toBeUndefined();
         expect(spy).toHaveBeenCalledWith(
-          `An error occurred while processing file test/foo-bar.md for type "TestType"`,
+          `An error occurred while processing file test/foo-bar.mdx for type "TestType"`,
         );
       });
     });
@@ -203,6 +249,30 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           "Test Homepage",
+        );
+      });
+
+      test("replaces template variables in homepage content", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Utils, "readFile")
+          .mockResolvedValueOnce(
+            "baseURL: ##baseURL## - Generated: ##generated-date-time##",
+          );
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        // Mock Date to have consistent test results
+        const mockDate = new Date(2023, 0, 1, 12, 0, 0);
+        jest.spyOn(global, "Date").mockImplementation(() => {
+          return mockDate as unknown as Date;
+        });
+
+        await rendererInstance.renderHomepage("/assets/generated.md");
+
+        expect(spy).toHaveBeenCalledWith(
+          "/output/generated.md",
+          `baseURL: /graphql - Generated: ${mockDate.toLocaleString()}`,
         );
       });
     });
@@ -236,146 +306,53 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenNthCalledWith(
           1,
-          "/output/types/objects/foo.md",
+          "/output/types/objects/foo.mdx",
           "content",
           undefined,
         );
         expect(spy).toHaveBeenNthCalledWith(
           2,
-          "/output/types/objects/bar.md",
+          "/output/types/objects/bar.mdx",
           "content",
           undefined,
         );
       });
-    });
 
-    describe("generateCategoryMetafile()", () => {
-      test("generate _category_.yml file", async () => {
+      test("returns undefined if type is not an object", async () => {
         expect.assertions(1);
 
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
+        const result = await rendererInstance.renderRootTypes("objects", null);
 
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        await rendererInstance.generateCategoryMetafile(category, outputPath);
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
-        );
+        expect(result).toBeUndefined();
       });
 
-      test("generate _category_.yml file with options override", async () => {
-        expect.assertions(1);
+      test("renders root types with flat hierarchy", async () => {
+        expect.assertions(2);
 
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
-
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
         const spy = jest.spyOn(Utils, "saveFile");
 
-        await rendererInstance.generateCategoryMetafile(
-          category,
-          outputPath,
+        await rendererInstance.renderRootTypes("objects", {
+          foo: new GraphQLScalarType({
+            name: "foo",
+            astNode: {
+              kind: Kind.SCALAR_TYPE_DEFINITION,
+              name: { kind: Kind.NAME, value: "foo" },
+            },
+          }),
+        });
+
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(
+          "/output/foo.mdx",
+          "content",
           undefined,
-          undefined,
-          { collapsed: false, collapsible: false },
-        );
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 1\nlink: null\ncollapsible: false\ncollapsed: false\n`,
-        );
-      });
-
-      test("generate _category_.yml file with generated index", async () => {
-        expect.assertions(1);
-
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
-
-        rendererInstance.options = {
-          ...DEFAULT_RENDERER_OPTIONS,
-          index: true,
-        };
-
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        await rendererInstance.generateCategoryMetafile(category, outputPath);
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
-        );
-      });
-
-      test("do not generate _category_.yml file if it exists", async () => {
-        expect.assertions(1);
-
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
-
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        await rendererInstance.generateCategoryMetafile(category, outputPath);
-
-        expect(spy).not.toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 1\nlink: \n  type: generated-index\n  title: 'Foobar overview'\ncollapsible: true\ncollapsed: true\n`,
-        );
-      });
-
-      test("generate _category_.yml file with sidebar position", async () => {
-        expect.assertions(1);
-
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
-
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        await rendererInstance.generateCategoryMetafile(
-          category,
-          outputPath,
-          42,
-        );
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 42\nlink: null\ncollapsible: true\ncollapsed: true\n`,
-        );
-      });
-
-      test("generate _category_.yml file with classname", async () => {
-        expect.assertions(1);
-
-        const category = "foobar";
-        const outputPath = "/output/docs";
-        const filePath = path.join(outputPath, "_category_.yml");
-        const styleClass = "foo-baz";
-
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-        const spy = jest.spyOn(Utils, "saveFile");
-
-        await rendererInstance.generateCategoryMetafile(
-          category,
-          outputPath,
-          42,
-          styleClass,
-        );
-
-        expect(spy).toHaveBeenCalledWith(
-          filePath,
-          `label: Foobar\nposition: 42\nclassName: ${styleClass}\nlink: null\ncollapsible: true\ncollapsed: true\n`,
         );
       });
     });
@@ -384,7 +361,7 @@ describe("renderer", () => {
       test("generate type _category_.yml file", async () => {
         expect.assertions(3);
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
@@ -397,7 +374,7 @@ describe("renderer", () => {
         );
 
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith("objects", "/output/objects");
+        expect(spy).toHaveBeenCalledWith("/output/objects", "objects");
         expect(dirPath).toBe("/output/objects");
       });
 
@@ -406,7 +383,7 @@ describe("renderer", () => {
 
         const [type, name, root, group] = [{}, "Foo", "objects", "lorem"];
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
@@ -420,8 +397,8 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledWith("lorem", "/output/lorem");
-        expect(spy).toHaveBeenCalledWith("objects", "/output/lorem/objects");
+        expect(spy).toHaveBeenCalledWith("/output/lorem", "lorem");
+        expect(spy).toHaveBeenCalledWith("/output/lorem/objects", "objects");
         expect(dirPath).toBe(`/output/${group}/${root.toLowerCase()}`);
       });
 
@@ -430,7 +407,7 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
@@ -444,13 +421,11 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledWith(
-          "deprecated",
-          "/output/deprecated",
-          999,
-          "deprecated",
-        );
-        expect(spy).toHaveBeenCalledWith("Baz", "/output/deprecated/baz");
+        expect(spy).toHaveBeenCalledWith("/output/deprecated", "deprecated", {
+          sidebarPosition: 999,
+          styleClass: "deprecated",
+        });
+        expect(spy).toHaveBeenCalledWith("/output/deprecated/baz", "Baz");
         expect(dirPath).toBe(`/output/deprecated/${root.toLowerCase()}`);
       });
 
@@ -459,7 +434,7 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
@@ -473,7 +448,7 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledWith("Baz", "/output/baz");
+        expect(spy).toHaveBeenCalledWith("/output/baz", "Baz");
         expect(dirPath).toBe(`/output/${root.toLowerCase()}`);
       });
 
@@ -482,7 +457,7 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
@@ -496,7 +471,7 @@ describe("renderer", () => {
           root as SchemaEntity,
         );
 
-        expect(spy).toHaveBeenCalledWith("Baz", "/output/baz");
+        expect(spy).toHaveBeenCalledWith("/output/baz", "Baz");
         expect(dirPath).toBe(`/output/${root.toLowerCase()}`);
       });
 
@@ -505,7 +480,7 @@ describe("renderer", () => {
 
         const [type, name, root, group] = [{}, "Foo", "Baz", "lorem"];
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
@@ -531,7 +506,7 @@ describe("renderer", () => {
       test("generate api _category_.yml file", async () => {
         expect.assertions(3);
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
@@ -548,8 +523,8 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledTimes(2);
         expect(spy).toHaveBeenCalledWith(
-          "queries",
           `/output/${API_GROUPS.operations}/queries`,
+          "queries",
         );
         expect(dirPath).toBe(`/output/${API_GROUPS.operations}/queries`);
       });
@@ -557,7 +532,7 @@ describe("renderer", () => {
       test("generate system _category_.yml file", async () => {
         expect.assertions(2);
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
@@ -573,8 +548,8 @@ describe("renderer", () => {
         );
 
         expect(spy).toHaveBeenCalledWith(
-          "objects",
           `/output/${API_GROUPS.types}/objects`,
+          "objects",
         );
         expect(dirPath).toBe(`/output/${API_GROUPS.types}/objects`);
       });
@@ -582,7 +557,7 @@ describe("renderer", () => {
       test("does not generate _category_.yml file if hierarchy is flat", async () => {
         expect.assertions(2);
 
-        const spy = jest.spyOn(rendererInstance, "generateCategoryMetafile");
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
         jest.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
@@ -600,39 +575,132 @@ describe("renderer", () => {
         expect(spy).not.toHaveBeenCalled();
         expect(dirPath).toBe(`/output`);
       });
-    });
-  });
 
-  describe("getApiGroupFolder()", () => {
-    test.each([[null], [undefined], [false], [{}], [true]])(
-      "returns default folders if %s",
-      (apiGroupOption) => {
+      test("handles custom API group names", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+          frontMatter: undefined,
+          hierarchy: {
+            [TypeHierarchy.API]: {
+              operations: "api",
+              types: "entities",
+            },
+          },
+        });
+
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "queries",
+        );
+
+        expect(spy).toHaveBeenCalledWith("/output/api/queries", "queries");
+        expect(dirPath).toBe(`/output/api/queries`);
+      });
+    });
+
+    describe("getApiGroupFolder()", () => {
+      test.each([[null], [undefined], [false], [{}], [true]])(
+        "returns default folders if %s",
+        (apiGroupOption) => {
+          expect.hasAssertions();
+
+          jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+          expect(getApiGroupFolder({}, apiGroupOption)).toBe(
+            API_GROUPS.operations,
+          );
+
+          jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+          expect(getApiGroupFolder({}, apiGroupOption)).toBe(API_GROUPS.types);
+        },
+      );
+
+      test("overrides default names", () => {
         expect.hasAssertions();
+
+        const apiGroupOption: ApiGroupOverrideType = {
+          operations: "api",
+          types: "entities",
+        };
 
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         expect(getApiGroupFolder({}, apiGroupOption)).toBe(
-          API_GROUPS.operations,
+          apiGroupOption.operations,
         );
 
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
-        expect(getApiGroupFolder({}, apiGroupOption)).toBe(API_GROUPS.types);
-      },
-    );
-    test("overrides default names", () => {
-      expect.hasAssertions();
+        expect(getApiGroupFolder({}, apiGroupOption)).toBe(
+          apiGroupOption.types,
+        );
+      });
+    });
 
-      const apiGroupOption: ApiGroupOverrideType = {
-        operations: "api",
-        types: "entities",
-      };
+    describe("getRenderer()", () => {
+      test("creates output directory before initializing renderer", async () => {
+        expect.assertions(1);
 
-      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-      expect(getApiGroupFolder({}, apiGroupOption)).toBe(
-        apiGroupOption.operations,
-      );
+        const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
 
-      jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
-      expect(getApiGroupFolder({}, apiGroupOption)).toBe(apiGroupOption.types);
+        await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          "graphql",
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
+          forceEmpty: undefined,
+        });
+      });
+
+      test("passes force option to ensureDir when provided", async () => {
+        expect.assertions(1);
+
+        const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
+
+        await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          "graphql",
+          undefined,
+          false,
+          { ...DEFAULT_RENDERER_OPTIONS, force: true },
+        );
+
+        expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
+          forceEmpty: true,
+        });
+      });
+
+      test("initializes renderer with correct parameters", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/custom-output",
+          "custom-base-url",
+          { objects: { TestType: "test-group" } },
+          true,
+          DEFAULT_RENDERER_OPTIONS,
+          "@graphql-markdown/mdx-parser" as PackageName,
+        );
+
+        expect(renderer).toMatchObject({
+          printer: Printer,
+          outputDir: "/custom-output",
+          baseURL: "custom-base-url",
+          group: { objects: { TestType: "test-group" } },
+          prettify: true,
+          options: DEFAULT_RENDERER_OPTIONS,
+        });
+      });
     });
   });
 });
