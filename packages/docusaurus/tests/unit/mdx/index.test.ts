@@ -50,7 +50,10 @@ describe("formatMDXBullet", () => {
 
 describe("formatMDXDetails", () => {
   test("returns a formatted MDX details string", () => {
-    const details = { dataOpen: "Open", dataClose: "Close" };
+    const details = {
+      dataOpen: "Open",
+      dataClose: "Close",
+    };
     const result = formatMDXDetails(details);
     expect(result).toBe(
       '\n\n<Details dataOpen="Hide Open" dataClose="Show Close">\n\n\r\n\n</Details>\n\n',

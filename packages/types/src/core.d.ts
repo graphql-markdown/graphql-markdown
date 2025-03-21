@@ -15,6 +15,11 @@ export type GenerateIndexMetafileType = (
   options?: Record<string, unknown>,
 ) => Promise<void> | void;
 
+export interface CollapsibleOption {
+  dataOpen: string;
+  dataClose: string;
+}
+
 export interface MDXSupportType {
   generateIndexMetafile: GenerateIndexMetafileType;
   formatMDXAdmonition: (
@@ -23,13 +28,7 @@ export interface MDXSupportType {
   ) => MDXString;
   formatMDXBadge: ({ text, classname }: Badge) => MDXString;
   formatMDXBullet: (text?: string) => MDXString;
-  formatMDXDetails: ({
-    dataOpen,
-    dataClose,
-  }: {
-    dataOpen?: Maybe<string>;
-    dataClose?: Maybe<string>;
-  }) => MDXString;
+  formatMDXDetails: (option: CollapsibleOption) => MDXString;
   formatMDXLink: (link: TypeLink) => TypeLink;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;

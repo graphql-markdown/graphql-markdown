@@ -1,4 +1,5 @@
 import type {
+  CollapsibleOption,
   ConfigPrintTypeOptions,
   FrontMatterOptions,
   MDXSupportType,
@@ -50,11 +51,6 @@ export interface PrinterConfigPrintTypeOptions {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   typeBadges?: boolean;
-}
-
-export interface CollapsibleOption {
-  dataOpen: string;
-  dataClose: string;
 }
 
 export type PrintTypeOptions = Partial<MDXSupportType> & {
