@@ -10,11 +10,14 @@ import type {
 const MARKDOWN_EOL = "\n" as const;
 const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
 const LINK_MDX_EXTENSION = ".mdx" as const;
+const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 export { mdxDeclaration } from "./components";
 
 export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
-  return `<Badge class="badge ${classname}" text="${text as string}"/>` as MDXString;
+  const style =
+    typeof classname === "string" ? `badge--${classname.toLowerCase()}` : "";
+  return `<Badge class="badge ${DEFAULT_CSS_CLASSNAME} ${style}" text="${text as string}"/>` as MDXString;
 };
 
 export const formatMDXAdmonition = (

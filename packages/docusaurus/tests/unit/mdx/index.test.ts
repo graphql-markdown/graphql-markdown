@@ -12,7 +12,9 @@ describe("formatMDXBadge", () => {
   test("returns a formatted MDX badge string", () => {
     const badge = { text: "Test Badge", classname: "test-class" };
     const result = formatMDXBadge(badge);
-    expect(result).toBe('<Badge class="badge test-class" text="Test Badge"/>');
+    expect(result).toBe(
+      '<Badge class="badge badge--secondary badge--test-class" text="Test Badge"/>',
+    );
   });
 });
 

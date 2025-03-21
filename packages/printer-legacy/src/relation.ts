@@ -18,7 +18,7 @@ import {
 } from "@graphql-markdown/graphql";
 
 import { getRelationLink } from "./link";
-import { DEFAULT_CSS_CLASSNAME, printBadge } from "./badge";
+import { CSS_BADGE_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
@@ -66,7 +66,7 @@ export const printRelationOf = <T>(
     const badge = printBadge(
       {
         text: category,
-        classname: DEFAULT_CSS_CLASSNAME,
+        classname: CSS_BADGE_CLASSNAME.RELATION,
       },
       options,
     );

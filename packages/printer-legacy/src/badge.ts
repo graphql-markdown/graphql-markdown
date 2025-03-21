@@ -20,7 +20,10 @@ import {
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
 
-export const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
+export const CSS_BADGE_CLASSNAME = {
+  DEPRECATED: "DEPRECATED",
+  RELATION: "RELATION",
+};
 
 export const getTypeBadges = (
   type: unknown,
@@ -37,24 +40,23 @@ export const getTypeBadges = (
   if (isDeprecated(type)) {
     badges.push({
       text: "deprecated",
-      classname: "badge--deprecated badge--secondary",
+      classname: CSS_BADGE_CLASSNAME.DEPRECATED,
     } as Badge);
   }
 
   if (isNonNullType(rootType)) {
     badges.push({
       text: "non-null",
-      classname: DEFAULT_CSS_CLASSNAME,
     } as Badge);
   }
 
   if (isListType(rootType)) {
-    badges.push({ text: "list", classname: DEFAULT_CSS_CLASSNAME } as Badge);
+    badges.push({ text: "list" } as Badge);
   }
 
   const category = getCategoryLocale(getNamedType(rootType));
   if (category) {
-    badges.push({ text: category, classname: DEFAULT_CSS_CLASSNAME } as Badge);
+    badges.push({ text: category } as Badge);
   }
 
   if (groups) {
@@ -63,7 +65,7 @@ export const getTypeBadges = (
     ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
     if (group && group !== "") {
-      badges.push({ text: group, classname: DEFAULT_CSS_CLASSNAME } as Badge);
+      badges.push({ text: group } as Badge);
     }
   }
 
