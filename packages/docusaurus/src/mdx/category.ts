@@ -1,19 +1,21 @@
+import { join } from "node:path";
+
 import {
   ensureDir,
   fileExists,
   saveFile,
   startCase,
 } from "@graphql-markdown/utils";
-import { join } from "node:path";
+import type { GenerateIndexMetafileType } from "@graphql-markdown/types";
 
-export const CATEGORY_YAML = "_category_.yml" as const;
+const CATEGORY_YAML = "_category_.yml" as const;
 
 enum SidebarPosition {
   FIRST = 1,
   LAST = 999,
 }
 
-export const generateIndexMetafile = async (
+export const generateIndexMetafile: GenerateIndexMetafileType = async (
   dirPath: string,
   category: string,
   options?: {

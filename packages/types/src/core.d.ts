@@ -9,12 +9,14 @@ import type { Maybe } from "./utils";
 
 export type FrontMatterOptions = Record<string, unknown> | false;
 
+export type GenerateIndexMetafileType = (
+  dirPath: string,
+  category: string,
+  options?: Record<string, unknown>,
+) => Promise<void> | void;
+
 export interface MDXSupportType {
-  generateIndexMetafile: (
-    dirPath: string,
-    category: string,
-    ...args: unknown[]
-  ) => Promise<void> | void;
+  generateIndexMetafile: GenerateIndexMetafileType;
   formatMDXAdmonition: (
     { text, title, type, icon }: AdmonitionType,
     meta: Maybe<MetaOptions>,
