@@ -87,7 +87,7 @@ declare const SECTION_LEVEL_VALUE: unique symbol;
 
 export interface Badge {
   text: TypeLocale | string;
-  classname: string;
+  classname?: string[] | string;
 }
 
 export interface TypeLink {

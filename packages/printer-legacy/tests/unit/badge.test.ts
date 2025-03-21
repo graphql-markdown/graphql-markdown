@@ -115,9 +115,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual([
-        { text: "non-null", classname: "badge--secondary" },
-      ]);
+      expect(badges).toStrictEqual([{ text: "non-null" }]);
     });
 
     test("return list badge is type is list", () => {
@@ -129,9 +127,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual([
-        { text: "list", classname: "badge--secondary" },
-      ]);
+      expect(badges).toStrictEqual([{ text: "list" }]);
     });
 
     test("return category name as badge is type is subtype", () => {
@@ -143,9 +139,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual([
-        { text: "foobar", classname: "badge--secondary" },
-      ]);
+      expect(badges).toStrictEqual([{ text: "foobar" }]);
     });
 
     test("return group name as badge is type has group", () => {
@@ -157,9 +151,7 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type, { queries: {} });
 
-      expect(badges).toStrictEqual([
-        { text: "foobaz", classname: "badge--secondary" },
-      ]);
+      expect(badges).toStrictEqual([{ text: "foobaz" }]);
     });
   });
 });
