@@ -19,10 +19,12 @@ import {
 
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
+import { DEPRECATED, NON_NULL } from "./const/strings";
 
 export const CSS_BADGE_CLASSNAME = {
   DEPRECATED: "DEPRECATED",
   RELATION: "RELATION",
+  NON_NULL: "NON_NULL",
 };
 
 export const getTypeBadges = (
@@ -39,14 +41,15 @@ export const getTypeBadges = (
 
   if (isDeprecated(type)) {
     badges.push({
-      text: "deprecated",
+      text: DEPRECATED,
       classname: CSS_BADGE_CLASSNAME.DEPRECATED,
     } as Badge);
   }
 
   if (isNonNullType(rootType)) {
     badges.push({
-      text: "non-null",
+      text: NON_NULL,
+      classname: CSS_BADGE_CLASSNAME.NON_NULL,
     } as Badge);
   }
 

@@ -9,25 +9,26 @@ import type { Maybe } from "./utils";
 
 export type FrontMatterOptions = Record<string, unknown> | false;
 
+export type GenerateIndexMetafileType = (
+  dirPath: string,
+  category: string,
+  options?: Record<string, unknown>,
+) => Promise<void> | void;
+
+export interface CollapsibleOption {
+  dataOpen: string;
+  dataClose: string;
+}
+
 export interface MDXSupportType {
-  generateIndexMetafile: (
-    dirPath: string,
-    category: string,
-    ...args: unknown[]
-  ) => Promise<void> | void;
+  generateIndexMetafile: GenerateIndexMetafileType;
   formatMDXAdmonition: (
     { text, title, type, icon }: AdmonitionType,
     meta: Maybe<MetaOptions>,
   ) => MDXString;
   formatMDXBadge: ({ text, classname }: Badge) => MDXString;
   formatMDXBullet: (text?: string) => MDXString;
-  formatMDXDetails: ({
-    dataOpen,
-    dataClose,
-  }: {
-    dataOpen?: Maybe<string>;
-    dataClose?: Maybe<string>;
-  }) => MDXString;
+  formatMDXDetails: (option: CollapsibleOption) => MDXString;
   formatMDXLink: (link: TypeLink) => TypeLink;
   formatMDXNameEntity: (name: string, parentType?: Maybe<string>) => MDXString;
   formatMDXSpecifiedByLink: (url: string) => MDXString;

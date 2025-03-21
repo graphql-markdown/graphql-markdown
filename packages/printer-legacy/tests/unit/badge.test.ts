@@ -115,7 +115,9 @@ describe("badge", () => {
 
       const badges = Badge.getTypeBadges(type);
 
-      expect(badges).toStrictEqual([{ text: "non-null" }]);
+      expect(badges).toStrictEqual([
+        { classname: "NON_NULL", text: "non-null" },
+      ]);
     });
 
     test("return list badge is type is list", () => {
