@@ -1,10 +1,54 @@
+<a id="1.29.0"></a>
+# [1.29.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.29.0) - 2025-03-21
+
+✨  One step closer to a stable version of the `cli` package. More Docusaurus specific MDX features have been moved from the base packages to `docusaurus/mdx` 👾👾👾
+
+A demo of `@graphql-markdown/cli` used with other static documentation framework is available in the repo [graphql-markdown/demo-astro-starlight](https://github.com/graphql-markdown/demo-astro-starlight).
+In the demo, you can see how to use it with [Astro Starlight](https://starlight.astro.build/) with a [custom MDX formatting module](https://github.com/graphql-markdown/demo-astro-starlight/blob/main/src/modules/astro-mdx.mjs).
+
+```diff
+export default {
+  schema: "https://graphql.anilist.co/",
+  extensions: {
+    ["graphql-markdown"]: {
+      rootPath: "./src/content/docs",
+      baseURL: ".",
+      linkRoot: "/",
+      loaders: {
+        UrlLoader: {
+          module: "@graphql-tools/url-loader",
+          options: { method: "POST" },
+        },
+      },
+      docOptions: {
+        frontMatter: {
+          prev: false,
+          next: false,
+        },
+      },
+      printTypeOptions: {
+        typeBadges: true,
+      },
++     mdxParser: `${__dirname}/src/modules/astro-mdx.mjs`,
+      homepage: `${__dirname}/src/assets/index.mdx`,
+    },
+  },
+};
+```
+
+<img width="1799" alt="Screenshot 2025-03-22 at 00 30 08" src="https://github.com/user-attachments/assets/b4704023-f129-43b8-b94b-295e2c37d3a6" />
+
+
+[Changes][1.29.0]
+
+
 <a id="1.28.0"></a>
-# [1.28.0 (1.28.0)](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.28.0) - 2025-03-16
+# [1.28.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.28.0) - 2025-03-16
 
-✨ The independent package `cli` is slowly maturing, and it is now the backbone of the `docusaurus` package.
-From now, it should be possible to create customized MDX formatter for Next.js, Gatsby, Astro... using the undocumented setting `mdxParser`. For more information and examples, see the `docusaurus` package's source code.
+✨ The framework independent package `cli` is slowly maturing. It is now the backbone of the `docusaurus` package.
+From now, it should be possible to create customized MDX formatter for Next.js, Gatsby, Astro... using the undocumented [setting `mdxParser`](https://graphql-markdown.dev/docs/settings/#mdxparser). For more information and examples, see the [`docusaurus` package's source code](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/docusaurus/src).
 
-💡 This release also come with a tiny new CLI flag `--config` that will print the compiled config into a JSON format. This can be handy while debugging some of the customization.
+🔧  This release also comes with a tiny [new CLI flag `--config`](https://graphql-markdown.dev/docs/settings#--config) that will print the processed configuration into a JSON format. This can be handy while debugging some of the customization, especially when mixing CLI and GraphQL Config settings.
 
 ## What's Changed
 * 📦 fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate) in [#1976](https://github.com/graphql-markdown/graphql-markdown/pull/1976)
@@ -25,7 +69,7 @@ From now, it should be possible to create customized MDX formatter for Next.js, 
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.8
 
-[Changes][1.28.8]
+[Changes][1.28.0]
 
 
 <a id="1.27.0"></a>
@@ -1821,7 +1865,8 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
-[1.28.8]: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.8
+[1.29.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.28.0...1.29.0
+[1.28.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.0
 [1.27.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.4...1.27.0
 [1.26.4]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.3...1.26.4
 [1.26.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.2...1.26.3
