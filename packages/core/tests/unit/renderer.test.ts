@@ -423,7 +423,7 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith("/output/deprecated", "deprecated", {
           sidebarPosition: 999,
-          styleClass: "deprecated",
+          styleClass: "graphql-markdown-deprecated-section",
         });
         expect(spy).toHaveBeenCalledWith("/output/deprecated/baz", "Baz");
         expect(dirPath).toBe(`/output/deprecated/${root.toLowerCase()}`);

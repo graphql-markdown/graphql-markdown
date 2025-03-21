@@ -15,6 +15,7 @@ export const ROOT_TYPE_LOCALE: RootTypeLocale = {
 } as const;
 
 export const DEPRECATED = "deprecated" as const;
+export const NON_NULL = "non-null" as const;
 export const GRAPHQL = "graphql" as const;
 export const NO_DESCRIPTION_TEXT = "No description" as const;
 export const MARKDOWN_CODE_SNIPPET = "```" as const;

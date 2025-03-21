@@ -1,6 +1,7 @@
 import type {
   AdmonitionType,
   Badge,
+  CollapsibleOption,
   FrontMatterOptions,
   Maybe,
   MDXString,
@@ -30,13 +31,8 @@ const formatMDXBullet = (text: string = ""): MDXString => {
   return `<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>${text}` as MDXString;
 };
 
-const formatMDXDetails = ({
-  dataOpen,
-}: {
-  dataOpen: Maybe<string>;
-  dataClose: Maybe<string>;
-}): MDXString => {
-  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen?.toUpperCase()}</span></summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
+const formatMDXDetails = ({ dataOpen }: CollapsibleOption): MDXString => {
+  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 const formatMDXSpecifiedByLink = (url: string): MDXString => {

@@ -31,7 +31,11 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
 
 const DEPRECATED = "deprecated" as const;
-const CATEGORY_STYLE_CLASS = "graphql-markdown-api-section" as const;
+
+enum CATEGORY_STYLE_CLASS {
+  API = "graphql-markdown-api-section",
+  DEPRECATED = "graphql-markdown-deprecated-section",
+}
 
 enum SidebarPosition {
   FIRST = 1,
@@ -119,7 +123,7 @@ export class Renderer {
     },
   ): Promise<void> {
     if (this.mdxModuleIndexFileSupport) {
-      void (this.mdxModule as MDXSupportType).generateIndexMetafile(
+      await (this.mdxModule as MDXSupportType).generateIndexMetafile(
         dirPath,
         category,
         { ...options, index: this.options?.index },
@@ -148,7 +152,7 @@ export class Renderer {
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
         collapsed: false,
-        styleClass: CATEGORY_STYLE_CLASS,
+        styleClass: CATEGORY_STYLE_CLASS.API,
       });
     }
 
@@ -156,7 +160,7 @@ export class Renderer {
       dirPath = join(dirPath, slugify(DEPRECATED));
       await this.generateIndexMetafile(dirPath, DEPRECATED, {
         sidebarPosition: SidebarPosition.LAST,
-        styleClass: DEPRECATED,
+        styleClass: CATEGORY_STYLE_CLASS.DEPRECATED,
       });
     }
 

@@ -1,6 +1,7 @@
 import type {
   AdmonitionType,
   Badge,
+  CollapsibleOption,
   Maybe,
   MDXString,
   MetaOptions,
@@ -13,6 +14,7 @@ const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 export { mdxDeclaration } from "./components";
+export { generateIndexMetafile } from "./category";
 
 export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
   const style =
@@ -39,10 +41,7 @@ export const formatMDXBullet = (text: string = ""): MDXString => {
 export const formatMDXDetails = ({
   dataOpen,
   dataClose,
-}: {
-  dataOpen: Maybe<string>;
-  dataClose: Maybe<string>;
-}): MDXString => {
+}: CollapsibleOption): MDXString => {
   return `${MARKDOWN_EOP}<Details dataOpen="Hide ${dataOpen}" dataClose="Show ${dataClose}">${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
 };
 

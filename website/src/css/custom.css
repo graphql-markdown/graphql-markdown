@@ -75,10 +75,11 @@ main code {
     no-repeat;
 }
 
-.deprecated {
+.deprecated, .graphql-markdown-deprecated-section {
   padding-top: 1rem;
 }
 
+.graphql-markdown-deprecated-section a::after,
 .deprecated a::after,
 span.deprecated::after {
   content: "⚠️";
