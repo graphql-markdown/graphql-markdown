@@ -18,6 +18,8 @@ npm install -g @graphql-markdown/cli
 
 ## Usage
 
+Create a [GraphQL-Config file](https://graphql-markdown.dev/docs/configuration#graphql-config) and run Graphql-Markdown:
+
 ```shell
 npx gqlmd graphql-to-doc
 ```
