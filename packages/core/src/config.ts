@@ -1,3 +1,14 @@
+/**
+ * Configuration module for GraphQL Markdown.
+ *
+ * This module provides utilities for parsing, validating, and merging configuration
+ * options from different sources (CLI arguments, config files, GraphQL config).
+ * It handles directives, hierarchies, and other settings used for generating
+ * markdown documentation from GraphQL schemas.
+ *
+ * @packageDocumentation
+ */
+
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -27,7 +38,17 @@ import type {
 import { loadConfiguration } from "./graphql-config";
 
 /**
+ * Type hierarchy options for organizing schema documentation.
+ *
+ * - API: Groups types by their role in the API (Query, Mutation, etc.)
+ * - ENTITY: Groups types by their entity relationships
+ * - FLAT: No grouping, all types in a flat structure
+ *
  * @public
+ * @example
+ * ```typescript
+ * const hierarchy = TypeHierarchy.API;
+ * ```
  */
 export enum TypeHierarchy {
   API = "api",
@@ -36,7 +57,16 @@ export enum TypeHierarchy {
 }
 
 /**
+ * Diff methods used to determine how schema changes are processed.
+ *
+ * - NONE: No diffing is performed
+ * - FORCE: Force regeneration of documentation regardless of schema changes
+ *
  * @public
+ * @example
+ * ```typescript
+ * const diffMethod = DiffMethod.FORCE;
+ * ```
  */
 export enum DiffMethod {
   NONE = "NONE",
@@ -44,7 +74,17 @@ export enum DiffMethod {
 }
 
 /**
+ * Options for handling deprecated items in the schema.
+ *
+ * - DEFAULT: Show deprecated items normally
+ * - GROUP: Group deprecated items separately
+ * - SKIP: Exclude deprecated items from documentation
+ *
  * @public
+ * @example
+ * ```typescript
+ * const deprecatedHandling = DeprecatedOption.GROUP;
+ * ```
  */
 export enum DeprecatedOption {
   DEFAULT = "default",
@@ -52,8 +92,22 @@ export enum DeprecatedOption {
   SKIP = "skip",
 }
 
+/**
+ * Documentation website URL for reference in error messages and help text.
+ * @public
+ */
 export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
+
+/**
+ * Default package name used for temporary directory creation and identification.
+ * @public
+ */
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
+
+/**
+ * Location of the default homepage template.
+ * @public
+ */
 export const ASSET_HOMEPAGE_LOCATION = join(
   __dirname,
   "..",
@@ -61,8 +115,19 @@ export const ASSET_HOMEPAGE_LOCATION = join(
   "generated.md",
 );
 
+/**
+ * Default hierarchy configuration using the API hierarchy type.
+ * @public
+ */
 export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
 
+/**
+ * Default configuration options used when no user options are provided.
+ * These values serve as fallbacks for any missing configuration.
+ *
+ * @public
+ * @see {@link Options} for the complete configuration interface
+ */
 export const DEFAULT_OPTIONS: Readonly<
   Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
     Required<
@@ -115,6 +180,22 @@ export const DEFAULT_OPTIONS: Readonly<
   onlyDocDirective: [] as DirectiveName[],
 } as const;
 
+/**
+ * Retrieves a directive name from a string by parsing and validating the format.
+ * Directive names should be prefixed with '@' (e.g., '@example').
+ *
+ * @param name - The directive name as a string, which should follow the format '@directiveName'
+ * @returns The validated directive name without the '@' prefix
+ * @throws Error if the directive name format is invalid
+ * @example
+ * ```typescript
+ * const directive = getDocDirective("@example");
+ * console.log(directive); // "example"
+ *
+ * // Invalid - will throw an error
+ * getDocDirective("example"); // Error: Invalid "example"
+ * ```
+ */
 export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
   const OPTION_REGEX = /^@(?<directive>\w+)$/;
 
@@ -131,6 +212,23 @@ export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
   return directive;
 };
 
+/**
+ * Retrieves the list of "only" directives from CLI and config options.
+ * These directives specify which schema elements should be included in the documentation.
+ *
+ * @param cliOpts - CLI options containing "only" directives
+ * @param configFileOpts - Config file options containing "onlyDocDirective"
+ * @returns An array of validated "only" directives (without '@' prefix)
+ * @example
+ * ```typescript
+ * const cliOptions = { only: ["@example", "@internal"] };
+ * const configOptions = { onlyDocDirective: ["@auth"] };
+ *
+ * const onlyDirectives = getOnlyDocDirectives(cliOptions, configOptions);
+ * console.log(onlyDirectives); // ["example", "internal", "auth"]
+ * ```
+ * @see {@link getDocDirective} for directive name validation
+ */
 export const getOnlyDocDirectives = (
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<Pick<ConfigOptions, "onlyDocDirective">>,
@@ -147,6 +245,25 @@ export const getOnlyDocDirectives = (
   return onlyDirectives;
 };
 
+/**
+ * Retrieves the list of "skip" directives from CLI and config options.
+ * These directives specify which schema elements should be excluded from the documentation.
+ * Additionally, if deprecated handling is set to SKIP, adds the "deprecated" directive.
+ *
+ * @param cliOpts - CLI options containing "skip" directives
+ * @param configFileOpts - Config file options containing "skipDocDirective" and potentially "printTypeOptions.deprecated"
+ * @returns An array of validated "skip" directives (without '@' prefix)
+ * @example
+ * ```typescript
+ * const cliOptions = { skip: ["@internal"], deprecated: "skip" };
+ * const configOptions = { skipDocDirective: ["@auth"] };
+ *
+ * const skipDirectives = getSkipDocDirectives(cliOptions, configOptions);
+ * console.log(skipDirectives); // ["internal", "auth", "deprecated"]
+ * ```
+ * @see {@link getDocDirective} for directive name validation
+ * @see {@link DeprecatedOption} for deprecated handling options
+ */
 export const getSkipDocDirectives = (
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<
@@ -174,6 +291,34 @@ export const getSkipDocDirectives = (
   return skipDirectives;
 };
 
+/**
+ * Combines and validates visibility directives (only and skip) from both CLI and config sources.
+ * Ensures that no directive appears in both "only" and "skip" lists simultaneously.
+ *
+ * @param cliOpts - CLI options containing "only" and "skip" directives
+ * @param configFileOpts - Config file options containing directive configurations
+ * @returns An object with validated "onlyDocDirective" and "skipDocDirective" arrays
+ * @throws Error if the same directive appears in both "only" and "skip" lists
+ * @example
+ * ```typescript
+ * const cliOptions = { only: ["@example"], skip: ["@internal"] };
+ * const configOptions = { onlyDocDirective: ["@auth"] };
+ *
+ * const visibilityDirectives = getVisibilityDirectives(cliOptions, configOptions);
+ * console.log(visibilityDirectives);
+ * // {
+ * //   onlyDocDirective: ["example", "auth"],
+ * //   skipDocDirective: ["internal"]
+ * // }
+ *
+ * // Invalid - will throw an error
+ * getVisibilityDirectives(
+ *   { only: ["@example"], skip: ["@example"] },
+ *   {}
+ * ); // Error: The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.
+ * ```
+ * @see {@link getOnlyDocDirectives} and {@link getSkipDocDirectives} for directive retrieval
+ */
 export const getVisibilityDirectives = (
   cliOpts: Maybe<CliOptions>,
   configFileOpts: Maybe<
@@ -199,6 +344,36 @@ export const getVisibilityDirectives = (
   return { onlyDocDirective, skipDocDirective };
 };
 
+/**
+ * Processes custom directives, filtering out any that should be skipped.
+ * Validates that each custom directive has the correct format with required functions.
+ *
+ * @param customDirectiveOptions - The custom directive configuration object
+ * @param skipDocDirective - Array of directive names that should be skipped
+ * @returns The filtered custom directives object, or undefined if empty/invalid
+ * @throws Error if a custom directive has an invalid format
+ * @example
+ * ```typescript
+ * // Valid custom directive with tag function
+ * const customDirectives = {
+ *   example: {
+ *     tag: (value) => `Example: ${value}`
+ *   },
+ *   todo: {
+ *     descriptor: () => "TODO items"
+ *   }
+ * };
+ *
+ * // Filter out the "example" directive
+ * const filteredDirectives = getCustomDirectives(customDirectives, ["example"]);
+ * console.log(filteredDirectives); // { todo: { descriptor: [Function] } }
+ *
+ * // Invalid format - will throw an error
+ * getCustomDirectives({ example: { invalid: true } }, []);
+ * // Error: Wrong format for plugin custom directive "example"...
+ * ```
+ * @see {@link DOCS_URL}/advanced/custom-directive for custom directive format documentation
+ */
 export const getCustomDirectives = (
   customDirectiveOptions: Maybe<CustomDirective>,
   skipDocDirective?: Maybe<DirectiveName[]>,
@@ -232,6 +407,25 @@ export const getCustomDirectives = (
     : customDirectiveOptions;
 };
 
+/**
+ * Determines the diff method to use based on the configuration and force flag.
+ * If force is true, always returns FORCE regardless of the configured diff method.
+ *
+ * @param diff - The configured diff method
+ * @param force - Whether to force regeneration (overrides diff setting)
+ * @returns The resolved diff method to use
+ * @example
+ * ```typescript
+ * // Normal usage - respects the configured diff method
+ * const method1 = getDiffMethod(DiffMethod.NONE, false);
+ * console.log(method1); // "NONE"
+ *
+ * // Force flag overrides the diff method
+ * const method2 = getDiffMethod(DiffMethod.NONE, true);
+ * console.log(method2); // "FORCE"
+ * ```
+ * @see {@link DiffMethod} for available diff methods
+ */
 export const getDiffMethod = (
   diff: TypeDiffMethod,
   force: boolean = false,
@@ -241,6 +435,15 @@ export const getDiffMethod = (
     : (diff.toLocaleUpperCase() as TypeDiffMethod);
 };
 
+/**
+ * Placeholder function for handling deprecated document options.
+ * Currently returns an empty object as these options are deprecated.
+ *
+ * @param _cliOpts - Deprecated CLI options (unused)
+ * @param _configOptions - Deprecated config options (unused)
+ * @returns An empty object
+ * @deprecated This function handles deprecated options and may be removed in a future version
+ */
 export const parseDeprecatedDocOptions = (
   _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
   _configOptions: Maybe<Omit<DeprecatedConfigDocOptions, "never">>,
@@ -248,6 +451,26 @@ export const parseDeprecatedDocOptions = (
   return {};
 };
 
+/**
+ * Builds the document options by merging CLI options, config file options, and defaults.
+ * Handles index generation flag and front matter configuration.
+ *
+ * @param cliOpts - CLI options for document generation
+ * @param configOptions - Config file options for document generation
+ * @returns The resolved document options with all required fields
+ * @example
+ * ```typescript
+ * const cliOptions = { index: true };
+ * const configOptions = { frontMatter: { sidebar_label: 'API' } };
+ *
+ * const docOptions = getDocOptions(cliOptions, configOptions);
+ * console.log(docOptions);
+ * // {
+ * //   index: true,
+ * //   frontMatter: { sidebar_label: 'API' }
+ * // }
+ * ```
+ */
 export const getDocOptions = (
   cliOpts?: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
   configOptions?: Maybe<
@@ -270,6 +493,30 @@ export const getDocOptions = (
   } as Required<ConfigDocOptions>;
 };
 
+/**
+ * Resolves the type hierarchy configuration by merging CLI and config file options.
+ * Validates that CLI and config don't specify conflicting hierarchy types.
+ *
+ * @param cliOption - The hierarchy option specified via CLI (string value)
+ * @param configOption - The hierarchy option from the config file (string or object)
+ * @returns The resolved type hierarchy object
+ * @throws Error if CLI and config specify conflicting hierarchy types
+ * @example
+ * ```typescript
+ * // Using hierarchy from CLI (string format)
+ * const hierarchy1 = getTypeHierarchyOption("api", undefined);
+ * console.log(hierarchy1); // { api: {} }
+ *
+ * // Using hierarchy from config (object format)
+ * const hierarchy2 = getTypeHierarchyOption(undefined, { entity: { User: ["posts"] } });
+ * console.log(hierarchy2); // { entity: { User: ["posts"] } }
+ *
+ * // Error case - conflicting hierarchies
+ * getTypeHierarchyOption("api", { entity: {} });
+ * // Error: Hierarchy option mismatch in CLI flag 'api' and config 'entity'
+ * ```
+ * @see {@link TypeHierarchy} for available hierarchy types
+ */
 export const getTypeHierarchyOption = (
   cliOption?: Maybe<TypeHierarchyValueType>,
   configOption?: Maybe<TypeHierarchyType>,
@@ -314,6 +561,15 @@ export const getTypeHierarchyOption = (
   return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
 };
 
+/**
+ * Placeholder function for handling deprecated print type options.
+ * Currently returns an empty object as these options are deprecated.
+ *
+ * @param _cliOpts - Deprecated CLI options (unused)
+ * @param _configOptions - Deprecated config options (unused)
+ * @returns An empty object
+ * @deprecated This function handles deprecated options and may be removed in a future version
+ */
 export const parseDeprecatedPrintTypeOptions = (
   _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
   _configOptions: Maybe<Omit<DeprecatedConfigPrintTypeOptions, "never">>,
@@ -321,6 +577,36 @@ export const parseDeprecatedPrintTypeOptions = (
   return {};
 };
 
+/**
+ * Builds the print type options by merging CLI options, config file options, and defaults.
+ * Handles various formatting options for type documentation.
+ *
+ * @param cliOpts - CLI options for print type configuration
+ * @param configOptions - Config file options for print type configuration
+ * @returns The resolved print type options with all required fields
+ * @example
+ * ```typescript
+ * const cliOptions = { noCode: true, deprecated: "group" };
+ * const configOptions = {
+ *   exampleSection: true,
+ *   hierarchy: "entity"
+ * };
+ *
+ * const printOptions = getPrintTypeOptions(cliOptions, configOptions);
+ * console.log(printOptions);
+ * // {
+ * //   codeSection: false,  // Disabled via noCode CLI flag
+ * //   deprecated: "group", // From CLI
+ * //   exampleSection: true, // From config
+ * //   parentTypePrefix: true, // Default value
+ * //   relatedTypeSection: true, // Default value
+ * //   typeBadges: true, // Default value
+ * //   hierarchy: { entity: {} } // Parsed from config
+ * // }
+ * ```
+ * @see {@link DeprecatedOption} for deprecated handling options
+ * @see {@link getTypeHierarchyOption} for hierarchy resolution
+ */
 export const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
   configOptions: Maybe<
@@ -357,6 +643,33 @@ export const getPrintTypeOptions = (
   } as Required<ConfigPrintTypeOptions>;
 };
 
+/**
+ * Parses and validates the groupByDirective option string format.
+ * The format should be @directive(field|=fallback) where:
+ * - directive: Name of the directive to group by
+ * - field: Name of the field in the directive to use for grouping
+ * - fallback: (Optional) Fallback group name for items without the directive
+ *
+ * @param groupOptions - The group directive option as a string
+ * @returns A parsed GroupByDirectiveOptions object or undefined if invalid
+ * @throws Error if the groupByDirective format is invalid
+ * @example
+ * ```typescript
+ * // Basic usage with directive and field
+ * const groupBy1 = parseGroupByOption("@tag(name)");
+ * console.log(groupBy1);
+ * // { directive: "tag", field: "name", fallback: "Miscellaneous" }
+ *
+ * // With custom fallback group
+ * const groupBy2 = parseGroupByOption("@category(name|=Other)");
+ * console.log(groupBy2);
+ * // { directive: "category", field: "name", fallback: "Other" }
+ *
+ * // Invalid format - will throw an error
+ * parseGroupByOption("invalid-format");
+ * // Error: Invalid "invalid-format"
+ * ```
+ */
 export const parseGroupByOption = (
   groupOptions: unknown,
 ): Maybe<GroupByDirectiveOptions> => {
@@ -386,6 +699,40 @@ export const parseGroupByOption = (
   return { directive, field, fallback } as GroupByDirectiveOptions;
 };
 
+/**
+ * Builds the complete configuration object by merging options from multiple sources
+ * in order of precedence:
+ * 1. CLI options (highest priority)
+ * 2. Configuration file options
+ * 3. GraphQL Config options
+ * 4. Default options (lowest priority)
+ *
+ * @param configFileOpts - Options from the configuration file
+ * @param cliOpts - Options from the command line interface
+ * @param id - The configuration ID used when referencing multiple schemas
+ * @returns A promise resolving to the final merged configuration object
+ * @example
+ * ```typescript
+ * // Basic usage with minimal options
+ * const config = await buildConfig(
+ *   { baseURL: "api" }, // Config file options
+ *   { pretty: true }    // CLI options
+ * );
+ *
+ * // With specific config ID
+ * const config = await buildConfig(
+ *   { schema: "./schemas/users.graphql" },
+ *   { force: true },
+ *   "users"
+ * );
+ *
+ * // The resulting config will contain all required options
+ * // with values from CLI taking precedence over config file,
+ * // and defaults filling in any missing values
+ * ```
+ * @see {@link Options} for the complete configuration interface
+ * @see {@link DEFAULT_OPTIONS} for default values
+ */
 export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts?: Maybe<CliOptions>,

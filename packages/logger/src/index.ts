@@ -1,6 +1,8 @@
+// index.ts
 /**
  * Logger singleton module.
  *
+ * @module Logger
  * @packageDocumentation
  */
 

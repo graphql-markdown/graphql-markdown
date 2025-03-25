@@ -45,7 +45,7 @@ export const loadSchema = async (
   options: LoadSchemaOptions & {
     /**
      * @param rootTypes - optional `rootTypes` schema override
-     * @see {@link https://graphql-markdown.dev/docs/advanced/custom-root-types | Custom root types}
+     * @see [Custom root types](https://graphql-markdown.dev/docs/advanced/custom-root-types)
      */
     rootTypes?: Partial<Record<OperationTypeNode, string>>;
   },

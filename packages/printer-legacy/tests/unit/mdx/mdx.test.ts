@@ -36,15 +36,12 @@ describe("mdx", () => {
 
   describe("formatMDXDetails", () => {
     test("returns a formatted details section using standard markdown", () => {
-      expect(MDX.formatMDXDetails({ dataOpen: "This is a summary" }))
-        .toMatchInlineSnapshot(`
+      expect(MDX.formatMDXDetails({ dataOpen: "This is a summary" })).
+toMatchInlineSnapshot(`
 "
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">THIS IS A SUMMARY</span></summary>
-
-
-
 </details>
 
 "

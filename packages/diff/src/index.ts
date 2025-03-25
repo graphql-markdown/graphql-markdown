@@ -17,18 +17,38 @@ import { fileExists, readFile, saveFile } from "@graphql-markdown/utils";
 
 export const SCHEMA_HASH_FILE = ".schema" as const;
 export const SCHEMA_REF = "schema.graphql" as const;
+/**
+ * Comparison methods used to determine if a schema has changed.
+ */
 export enum CompareMethod {
+  /** Compare schemas by diffing the content */
   DIFF = "SCHEMA-DIFF",
+  /** Compare schemas by comparing hash values */
   HASH = "SCHEMA-HASH",
+  /** Force regeneration regardless of changes */
   FORCE = "FORCE",
+  /** Skip comparison and assume no changes */
   NONE = "NONE",
 }
 
+/**
+ * Generates a SHA-256 hash for a GraphQL schema.
+ *
+ * @param schema - The GraphQL schema to generate a hash for
+ * @returns A SHA-256 hash string representing the schema
+ */
 export const getSchemaHash = (schema: GraphQLSchema): string => {
   const printedSchema = printSchema(schema);
   return createHash("sha256").update(printedSchema).digest("hex");
 };
 
+/**
+ * Compares a new schema against an existing schema file and returns the differences.
+ *
+ * @param schemaNew - The new GraphQL schema to compare
+ * @param schemaOldLocation - File path to the old schema
+ * @returns A promise resolving to an array of schema changes
+ */
 export const getDiff = async (
   schemaNew: GraphQLSchema,
   schemaOldLocation: string,
@@ -39,6 +59,15 @@ export const getDiff = async (
   return diff(schemaOld, schemaNew);
 };
 
+/**
+ * Checks if a schema has changed compared to a previous version.
+ * Uses either diff or hash-based comparison methods based on the method parameter.
+ *
+ * @param schema - The current GraphQL schema
+ * @param outputDir - Directory where schema or hash files will be saved
+ * @param method - Comparison method to use (defaults to DIFF)
+ * @returns A promise resolving to a boolean indicating whether the schema has changed
+ */
 export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   schema: GraphQLSchema,
   outputDir: string,

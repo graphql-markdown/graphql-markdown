@@ -1,7 +1,7 @@
 /**
  * Custom directive `descriptor` helper.
  *
- * @see {@link https://graphql-markdown.dev/docs/advanced/custom-directive#descriptor | Option `customDirective.[directive].descriptor`}
+ * @see [Option `customDirective.[directive].descriptor`](https://graphql-markdown.dev/docs/advanced/custom-directive#descriptor)
  *
  * @packageDocumentation
  */
@@ -80,11 +80,11 @@ import { interpolate } from "../utils/interpolate";
  * ```
  *
  */
-export function directiveDescriptor(
+export const directiveDescriptor = (
   directive: GraphQLDirective,
   type?: unknown,
   descriptionTemplate?: string,
-): string {
+): string => {
   const values = getTypeDirectiveValues(directive, type);
   const description = directive.description ?? "";
   const params = { description, ...values };
@@ -92,4 +92,4 @@ export function directiveDescriptor(
     return interpolate(description, params);
   }
   return interpolate(descriptionTemplate, params);
-}
+};

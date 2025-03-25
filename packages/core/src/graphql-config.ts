@@ -1,3 +1,11 @@
+/**
+ * GraphQL Markdown configuration utilities
+ *
+ * This module provides utilities for loading and processing GraphQL configuration
+ * using the graphql-config package.
+ *
+ * @module graphql-config
+ */
 import type {
   ClassName,
   ExtensionProjectConfig,
@@ -10,16 +18,64 @@ import type {
 
 import { log } from "@graphql-markdown/logger";
 
+/**
+ * The name of the GraphQL Markdown extension.
+ * Used to identify the extension in graphql-config.
+ */
 export const EXTENSION_NAME = "graphql-markdown" as const;
+
+/**
+ * GraphQL extension declaration for graphql-config.
+ *
+ * @returns {object} The extension configuration object with name property.
+ *
+ * @example
+ * ```typescript
+ * // In graphql-config setup
+ * const config = await loadConfig({
+ *   extensions: [graphQLConfigExtension],
+ * });
+ * ```
+ */
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as const;
 };
 
+/**
+ * Options for controlling throw behavior when loading configuration.
+ *
+ * @interface ThrowOptions
+ * @property {boolean} throwOnMissing - Whether to throw when the config file is missing.
+ * @property {boolean} throwOnEmpty - Whether to throw when the config is empty.
+ */
 interface ThrowOptions {
   throwOnMissing: boolean;
   throwOnEmpty: boolean;
 }
 
+/**
+ * Sets loader options for GraphQL Markdown loaders.
+ *
+ * This function takes a LoaderOption object and merges the provided options
+ * with any existing options for each loader.
+ *
+ * @param {LoaderOption} loaders - The loader configuration object.
+ * @param {PackageOptionsConfig} options - The package options to apply to loaders.
+ * @returns {LoaderOption} The updated loader configuration.
+ *
+ * @example
+ * ```typescript
+ * const loaders = {
+ *   TypeScriptLoader: {
+ *     module: "@graphql-markdown/typescript-loader",
+ *     options: { baseDir: "./src" }
+ *   }
+ * };
+ * const options = { outputDir: "./docs" };
+ * const updatedLoaders = setLoaderOptions(loaders, options);
+ * // Result: loaders with { baseDir: "./src", outputDir: "./docs" }
+ * ```
+ */
 export const setLoaderOptions = (
   loaders: LoaderOption,
   options: PackageOptionsConfig,
@@ -40,6 +96,36 @@ export const setLoaderOptions = (
   return loaders;
 };
 
+/**
+ * Loads the GraphQL Markdown configuration from graphql-config.
+ *
+ * This function attempts to load the GraphQL config and extract the
+ * GraphQL Markdown extension configuration for the specified project ID.
+ * It also normalizes schema configurations.
+ *
+ * @param id - The project ID to load configuration for.
+ * @param options - Optional package options to apply.
+ * @param throwOptions - Options for controlling throw behavior.
+ * @param {boolean} throwOptions.throwOnMissing - Whether to throw when config file is missing.
+ * @param {boolean} throwOptions.throwOnEmpty - Whether to throw when config is empty.
+ * @returns {Promise<Maybe<Readonly<ExtensionProjectConfig>>>} The extension project configuration if found, otherwise undefined.
+ *
+ * @throws Will throw an error if throwOnMissing or throwOnEmpty is true and
+ * the corresponding condition is met.
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const config = await loadConfiguration("my-project");
+ *
+ * // With options and throw behavior
+ * const config = await loadConfiguration(
+ *   "my-project",
+ *   { baseDir: "./src" },
+ *   { throwOnMissing: true, throwOnEmpty: false }
+ * );
+ * ```
+ */
 export const loadConfiguration = async (
   id: Maybe<string>,
   options?: Maybe<PackageOptionsConfig>,
