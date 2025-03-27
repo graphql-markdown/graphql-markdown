@@ -1,3 +1,12 @@
+/**
+ * @module \@graphql-markdown/docusaurus/mdx
+ * This module provides utilities for generating MDX content in Docusaurus format.
+ * It includes functions for creating badges, admonitions, bullet points, collapsible sections,
+ * specification links, and other MDX-specific formatting for GraphQL documentation.
+ *
+ * @primaryExport
+ */
+
 import type {
   AdmonitionType,
   Badge,
@@ -22,6 +31,12 @@ export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
   return `<Badge class="badge ${DEFAULT_CSS_CLASSNAME} ${style}" text="${text as string}"/>` as MDXString;
 };
 
+/**
+ * Formats an admonition block in MDX format
+ * @param param - The admonition configuration object
+ * @param meta - Optional metadata for generator configuration
+ * @returns Formatted MDX string for the admonition
+ */
 export const formatMDXAdmonition = (
   { text, title, type }: AdmonitionType,
   meta: Maybe<MetaOptions>,
@@ -34,10 +49,22 @@ export const formatMDXAdmonition = (
   return `${MARKDOWN_EOP}:::${type}[${title}]${text}:::` as MDXString;
 };
 
+/**
+ * Creates a bullet point element in MDX format
+ * @param text - Optional text to append after the bullet point
+ * @returns Formatted MDX string for the bullet point
+ */
 export const formatMDXBullet = (text: string = ""): MDXString => {
   return `<Bullet />${text}` as MDXString;
 };
 
+/**
+ * Creates a collapsible details section in MDX format
+ * @param param0 - The collapsible section configuration
+ * @param param0.dataOpen - Text to show when the section is open
+ * @param param0.dataClose - Text to show when the section is closed
+ * @returns Formatted MDX string for the collapsible section
+ */
 export const formatMDXDetails = ({
   dataOpen,
   dataClose,
@@ -45,10 +72,21 @@ export const formatMDXDetails = ({
   return `${MARKDOWN_EOP}<Details dataOpen="Hide ${dataOpen}" dataClose="Show ${dataClose}">${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
 };
 
+/**
+ * Creates a link to the specification documentation
+ * @param url - The URL to the specification
+ * @returns Formatted MDX string for the specification link
+ */
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
   return `<SpecifiedBy url="${url}"/>` as MDXString;
 };
 
+/**
+ * Formats a name entity with optional parent type
+ * @param name - The name to format
+ * @param parentType - Optional parent type to prefix the name
+ * @returns Formatted MDX string for the name entity
+ */
 export const formatMDXNameEntity = (
   name: string,
   parentType?: Maybe<string>,

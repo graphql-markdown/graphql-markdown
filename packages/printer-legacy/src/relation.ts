@@ -22,6 +22,11 @@ import { CSS_BADGE_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
+/**
+ * Converts a string representation of a root type to its corresponding TypeLocale
+ * @param text - The string to convert to a TypeLocale
+ * @returns The matching TypeLocale if found, undefined otherwise
+ */
 export const getRootTypeLocaleFromString = (
   text: string,
 ): Maybe<TypeLocale> => {
@@ -33,6 +38,15 @@ export const getRootTypeLocaleFromString = (
   return undefined;
 };
 
+/**
+ * Prints the relation section for a specific type and relation category
+ * @template T Type of the relation
+ * @param type - The GraphQL type to get relations for
+ * @param section - The section title for the relation
+ * @param getRelation - Function to retrieve relations of type T
+ * @param options - Printing options for type formatting
+ * @returns Formatted MDX string containing the relations or empty string if no relations found
+ */
 export const printRelationOf = <T>(
   type: unknown,
   section: unknown,
@@ -91,11 +105,17 @@ export const printRelationOf = <T>(
   return `${SectionLevels.LEVEL.repeat(3)} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
+/**
+ * Prints all relations (return types, member fields, and implementations) for a given type
+ * @param type - The GraphQL type to get all relations for
+ * @param options - Printing options for type formatting
+ * @returns Formatted MDX string containing all relations or empty string if no relations found
+ */
 export const printRelations = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  const relations: Record<string, RelationOf> = {
+  const relations: Record<string, RelationOf<unknown>> = {
     returnedBy: { section: "Returned By", getRelation: getRelationOfReturn },
     memberOf: { section: "Member Of", getRelation: getRelationOfField },
     implementedBy: {

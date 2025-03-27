@@ -1,3 +1,17 @@
+/**
+ * MDX formatting module for GraphQL-Markdown.
+ *
+ * This module provides a set of utility functions for formatting various MDX components
+ * used in the documentation generation process. It handles the formatting of badges,
+ * admonitions, bullet points, collapsible sections, and other MDX-specific elements.
+ *
+ * The module can be used with default formatters or customized with user-provided
+ * MDX formatting functions through the mdxModule factory function.
+ *
+ * @module printer-legacy/mdx
+ * @packageDocumentation
+ */
+
 import type {
   AdmonitionType,
   Badge,

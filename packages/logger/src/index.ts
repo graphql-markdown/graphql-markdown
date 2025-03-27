@@ -1,6 +1,8 @@
 /**
  * Logger singleton module.
  *
+ * @module \@graphql-markdown/logger
+ *
  * @packageDocumentation
  */
 
@@ -33,7 +35,7 @@ export enum LogLevel {
  *
  * @example
  * ```js
- * import Logger, { log } from "@graphql-markdown/utils/logger";
+ * import Logger, { log } from "@graphql-markdown/logger";
  *
  * log("Info message"); // Expected console output "Info message"
  *
@@ -76,7 +78,7 @@ export const Logger = async (moduleName?: string): Promise<void> => {
  *
  * @example
  * ```js
- * import { log } from "@graphql-markdown/utils/logger";
+ * import { log } from "@graphql-markdown/logger";
  *
  * log("Info message"); // Expected console output "Info message"
  * ```

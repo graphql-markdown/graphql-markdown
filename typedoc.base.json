@@ -26,6 +26,6 @@
   "visibilityFilters": {},
   "sourceLinkExternal": true,
   "gitRevision": "main",
-  "entryFileName": "index",
+  "entryFileName": "generated",
   "excludeTags": ["@alias"]
 }

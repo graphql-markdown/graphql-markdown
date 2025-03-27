@@ -38,6 +38,13 @@ static options: Readonly<Maybe<PrintTypeOptions>>;
 readonly static printCustomDirectives: (type, options) => string;
 ```
 
+<<<<<<< Updated upstream
+=======
+Defined in: [printer.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L77)
+
+Prints custom directives associated with a type
+
+>>>>>>> Stashed changes
 ###### Parameters
 
 • **type**: `unknown`
@@ -48,7 +55,23 @@ readonly static printCustomDirectives: (type, options) => string;
 
 `string`
 
+<<<<<<< Updated upstream
 ###### Defined in
+=======
+###### Param
+
+The GraphQL type to document
+
+###### Param
+
+Combined printer configuration and options
+
+###### Returns
+
+MDX string containing custom directives
+
+###### Example
+>>>>>>> Stashed changes
 
 [printer.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L70)
 
@@ -58,6 +81,13 @@ readonly static printCustomDirectives: (type, options) => string;
 readonly static printCustomTags: (type, options) => string | MDXString;
 ```
 
+<<<<<<< Updated upstream
+=======
+Defined in: [printer.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L79)
+
+Prints custom tags associated with a type
+
+>>>>>>> Stashed changes
 ###### Parameters
 
 • **type**: `unknown`
@@ -68,7 +98,23 @@ readonly static printCustomTags: (type, options) => string | MDXString;
 
 `string` \| `MDXString`
 
+<<<<<<< Updated upstream
 ###### Defined in
+=======
+###### Param
+
+The GraphQL type to document
+
+###### Param
+
+Combined printer configuration and options
+
+###### Returns
+
+MDX string containing custom tags
+
+###### Example
+>>>>>>> Stashed changes
 
 [printer.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L72)
 
@@ -78,6 +124,13 @@ readonly static printCustomTags: (type, options) => string | MDXString;
 readonly static printDescription: (type, options?, noText?) => string | MDXString;
 ```
 
+<<<<<<< Updated upstream
+=======
+Defined in: [printer.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L75)
+
+Prints the description section for a type
+
+>>>>>>> Stashed changes
 ###### Parameters
 
 • **type**: `unknown`
@@ -90,7 +143,27 @@ readonly static printDescription: (type, options?, noText?) => string | MDXStrin
 
 `string` \| `MDXString`
 
+<<<<<<< Updated upstream
 ###### Defined in
+=======
+###### Param
+
+The GraphQL type to document
+
+###### Param
+
+Combined printer configuration and options
+
+###### Param
+
+Text to display when no description is available
+
+###### Returns
+
+Markdown string containing the description
+
+###### Example
+>>>>>>> Stashed changes
 
 [printer.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L68)
 

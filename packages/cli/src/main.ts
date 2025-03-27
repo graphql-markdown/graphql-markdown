@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/**
+ * Entry point for the GraphQL Markdown CLI.
+ * Loads configuration from graphql-config and sets up command-line interface.
+ * @module
+ */
+
 import type {
   ConfigOptions,
   GraphQLExtensionDeclaration,
@@ -10,7 +16,15 @@ import { loadConfig } from "graphql-config";
 
 import { getGraphQLMarkdownCli } from ".";
 
+/**
+ * Name of the GraphQL Markdown extension for graphql-config
+ */
 export const EXTENSION_NAME = "graphql-markdown" as const;
+
+/**
+ * GraphQL config extension declaration for GraphQL Markdown
+ * @returns Extension configuration object
+ */
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as GraphQLExtensionDeclaration;
 };

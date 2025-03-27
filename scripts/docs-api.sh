@@ -8,8 +8,9 @@ npm run build
 # export NODE_OPTIONS=--max_old_space_size=8192
 npm run typedoc -- --skipErrorChecking --logLevel Error --out ${API_DIR}
 
-find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "index.md" \) -delete
+find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "generated.md" \) -delete
 rm -f ${API_DIR}/packages.md
+mv generated.md index.md
 
 for depth in 1 2 3; do
   for folder in $(find ${API_DIR}/*/ -mindepth ${depth} -maxdepth ${depth} -type d); do 
