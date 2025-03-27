@@ -9,15 +9,14 @@ Most documentation frameworks allow you to generate documentation during the bui
 ### Basic Integration Example
 
 ```js
-const { generateMarkdown } = require('@graphql-markdown/core');
+import { runGraphQLMarkdown } from '@graphql-markdown/cli';
 
 const config = {
   schema: './schema.graphql',
   rootPath: './docs',
-  baseURL: 'graphql-api',
 };
 
-generateMarkdown(config);
+await runGraphQLMarkdown(config);
 ```
 
 ## Framework-Specific Integration
@@ -117,16 +116,6 @@ const parser = {
 module.exports = parser;
 ```
 
-Usage in your VuePress configuration:
-
-```js
-const config = {
-  schema: './schema.graphql',
-  rootPath: './docs/api',
-  mdxParser: './src/vuepress-mdx.cjs'
-};
-```
-
 ### Gatsby
 
 For Gatsby integration, implement a custom MDX parser:
@@ -144,53 +133,4 @@ const parser = {
 };
 
 module.exports = parser;
-```
-
-Usage in your Gatsby configuration:
-
-```js
-const config = {
-  schema: './schema.graphql',
-  rootPath: './content/api',
-  mdxParser: './src/gatsby-mdx.cjs'
-};
-```
-
-## Customizing Output
-
-You can customize the output by configuring various options:
-
-```js
-const { GraphQLSchema } = require('graphql');
-
-const config = {
-  // Schema can be a path or custom loader
-  schema: './schema.graphql',
-  // Custom loader must return GraphQLSchema type
-  loader: async (): Promise<GraphQLSchema> => {
-    return new GraphQLSchema({
-      // Your schema definition
-    });
-  },
-  
-  // Output configuration
-  rootPath: './docs/api',
-  groupByDirective: true,
-  
-  // Custom homepage
-  homepage: '/path/to/custom/homepage.md',
-  
-  // Framework-specific MDX parser
-  mdxParser: './src/custom-mdx-parser.js'
-};
-```
-
-## CI/CD Integration
-
-To automate documentation generation in your CI/CD pipeline:
-
-```bash
-# Example CI script
-npm install @graphql-markdown/cli
-npx gqlmd graphql-to-doc
 ```

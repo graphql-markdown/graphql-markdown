@@ -29,17 +29,16 @@ Using the CLI:
 graphql-markdown --schema ./schema.graphql --root ./docs
 ```
 
-For programmatic usage, you can use the core package:
+For programmatic usage, you can use the CLI package:
 ```typescript
-import { GraphQLMarkdown } from '@graphql-markdown/core';
+import { runGraphQLMarkdown } from '@graphql-markdown/cli';
 
 const config = {
   schema: './schema.graphql',
   rootPath: './docs',
 };
 
-const generator = new GraphQLMarkdown(config);
-await generator.generate();
+await runGraphQLMarkdown(config);
 ```
 
 ## Contributing

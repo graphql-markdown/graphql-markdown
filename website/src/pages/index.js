@@ -27,33 +27,12 @@ function HomepageHeader() {
           </a>{" "}
           schemas.
         </p>
-        <div className="hero__subtitle">
-          Supporting multiple frameworks:
-          <div className={styles.frameworkLinks}>
-            <a
-              href="/docs/docusaurus"
-              className={styles.frameworkLink}
-            >
-              <img src="/img/docusaurus.svg" alt="Docusaurus" height="30" />
-              <span>Docusaurus</span>
-            </a>
-            <a
-              href="/docs/mkdocs"
-              className={styles.frameworkLink}
-            >
-              <img src="/img/mkdocs.svg" alt="MkDocs" height="30" />
-              <span>MkDocs</span>
-            </a>
-          </div>
-        </div>
         <p className="hero__subtitle">
           Powered by{" "}
           <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docusaurus.io"
+            href="/docs/advanced/integration-with-frameworks"
           >
-            <span style={{ color: "#36c46f" }}>Docusaurus</span>
+            <span style={{ color: "#36c46f" }}>[put your documentation generator here]</span>
           </a>
           .
         </p>

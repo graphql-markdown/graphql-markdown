@@ -14,12 +14,12 @@ const FeatureList = [
     ),
   },
   {
-    title: "Powered by Docusaurus",
-    Svg: require("@site/static/img/docusaurus.svg").default,
+    title: "Powered by MDX",
+    Svg: require("@site/static/img/mdx.svg").default,
     description: (
       <>
-        Built upon Docusaurus, so go ahead and build developer documentation
-        that goes beyond your schema.
+        Compatible with MDX, GraphQL-Markdown allows you to customize the look
+        and feel of your documentation.
       </>
     ),
   },
