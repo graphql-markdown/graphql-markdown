@@ -1,3 +1,4 @@
+import type { CollapsibleOption } from "@graphql-markdown/types";
 import MDX, { mdxModule } from "../../../src/mdx";
 
 jest.mock("custom-mdx");
@@ -36,8 +37,11 @@ describe("mdx", () => {
 
   describe("formatMDXDetails", () => {
     test("returns a formatted details section using standard markdown", () => {
-      expect(MDX.formatMDXDetails({ dataOpen: "This is a summary" })).
-toMatchInlineSnapshot(`
+      expect(
+        MDX.formatMDXDetails({
+          dataOpen: "This is a summary",
+        } as CollapsibleOption),
+      ).toMatchInlineSnapshot(`
 "
 
 <details class="gqlmd-mdx-details">
