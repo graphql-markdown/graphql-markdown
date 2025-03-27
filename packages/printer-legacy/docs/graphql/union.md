@@ -8,19 +8,21 @@
 function printCodeUnion(type, options?): string
 ```
 
+Defined in: [graphql/union.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L25)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options?**: `PrintTypeOptions`
+`unknown`
+
+##### options?
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[graphql/union.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L25)
 
 ***
 
@@ -30,16 +32,18 @@ function printCodeUnion(type, options?): string
 function printUnionMetadata(type, options): string | MDXString
 ```
 
+Defined in: [graphql/union.ts:11](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L11)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[graphql/union.ts:11](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L11)

@@ -3,27 +3,20 @@
 [![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/docusaurus?style=flat)](https://www.npmjs.com/package/@graphql-markdown/docusaurus)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_docusaurus&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_docusaurus)
+<!--
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_docusaurus&metric=coverage)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_docusaurus)
 [![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgraphql-markdown%2Fgraphql-markdown%2Fmain%3Fmodule%3Ddocusarus)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main?module=docusarus)
+-->
 
 **Docusaurus** [docs feature](https://docusaurus.io/docs/docs-introduction) plugin for generating **Markdown documentation** from a **GraphQL schema**.
 
 ## Installation
 
-**`graphql` package is a peer-dependency, and it should be installed separately.**
-
 ```shell
-npm install @graphql-markdown/docusaurus graphql
+npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 ```
 
-Add `@graphql-markdown/docusaurus` to your site's `docusaurus.config.js` plugins option:
-
-```js
-module.exports = {
-  // ...
-  plugins: ["@graphql-markdown/docusaurus"],
-};
-```
+> _If you already have an existing Docusaurus installation, then see the [documentation](https://graphql-markdown.dev/docs/get-started) for alternative installation._
 
 ## Usage
 

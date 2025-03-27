@@ -8,9 +8,7 @@
 const API_GROUPS: Required<ApiGroupOverrideType>;
 ```
 
-#### Defined in
-
-[link.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L45)
+Defined in: [link.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L42)
 
 ## Functions
 
@@ -20,17 +18,17 @@ const API_GROUPS: Required<ApiGroupOverrideType>;
 function getCategoryLocale(type): Maybe<TypeLocale>
 ```
 
+Defined in: [link.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L86)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
+
+`unknown`
 
 #### Returns
 
 `Maybe`\<`TypeLocale`\>
-
-#### Defined in
-
-[link.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L50)
 
 ***
 
@@ -40,19 +38,21 @@ function getCategoryLocale(type): Maybe<TypeLocale>
 function getLinkApiGroupFolder(type, groups?): string
 ```
 
+Defined in: [link.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L158)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **groups?**: `Maybe`\<`boolean` \| `ApiGroupOverrideType`\>
+`unknown`
+
+##### groups?
+
+`Maybe`\<`boolean` \| `ApiGroupOverrideType`\>
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[link.ts:110](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L110)
 
 ***
 
@@ -62,19 +62,21 @@ function getLinkApiGroupFolder(type, groups?): string
 function getLinkCategoryFolder(type, operationLocale?): Maybe<string>
 ```
 
+Defined in: [link.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L111)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **operationLocale?**: `Maybe`\<`TypeLocale`\>
+`unknown`
+
+##### operationLocale?
+
+`Maybe`\<`TypeLocale`\>
 
 #### Returns
 
 `Maybe`\<`string`\>
-
-#### Defined in
-
-[link.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L72)
 
 ***
 
@@ -84,19 +86,21 @@ function getLinkCategoryFolder(type, operationLocale?): Maybe<string>
 function getLinkDeprecatedFolder(type, option): string
 ```
 
+Defined in: [link.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L172)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **option**: `Maybe`\<`TypeDeprecatedOption`\>
+`unknown`
+
+##### option
+
+`Maybe`\<`TypeDeprecatedOption`\>
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[link.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L121)
 
 ***
 
@@ -109,21 +113,25 @@ function getRelationLink(
 options): Maybe<TypeLink>
 ```
 
+Defined in: [link.ts:261](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L261)
+
 #### Parameters
 
-• **category**: `Maybe`\<`TypeLocale`\>
+##### category
 
-• **type**: `unknown`
+`Maybe`\<`TypeLocale`\>
 
-• **options**: `PrintLinkOptions`
+##### type
+
+`unknown`
+
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `Maybe`\<`TypeLink`\>
-
-#### Defined in
-
-[link.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L198)
 
 ***
 
@@ -133,17 +141,17 @@ options): Maybe<TypeLink>
 function hasOptionParentType(options): boolean
 ```
 
+Defined in: [link.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L146)
+
 #### Parameters
 
-• **options**: `PrintLinkOptions`
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `boolean`
-
-#### Defined in
-
-[link.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L101)
 
 ***
 
@@ -153,17 +161,41 @@ function hasOptionParentType(options): boolean
 function hasOptionWithAttributes(options): boolean
 ```
 
+Defined in: [link.ts:139](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L139)
+
 #### Parameters
 
-• **options**: `PrintLinkOptions`
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `boolean`
 
-#### Defined in
+***
 
-[link.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L97)
+### hasPrintableDirective()
+
+```ts
+function hasPrintableDirective(type, options?): boolean
+```
+
+Defined in: [link.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L50)
+
+#### Parameters
+
+##### type
+
+`unknown`
+
+##### options?
+
+`Pick`\<`PrintTypeOptions`, `"deprecated"` \| `"onlyDocDirectives"` \| `"skipDocDirectives"`\>
+
+#### Returns
+
+`boolean`
 
 ***
 
@@ -173,19 +205,21 @@ function hasOptionWithAttributes(options): boolean
 function printLink(type, options): string
 ```
 
+Defined in: [link.ts:310](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L310)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintLinkOptions`
+`unknown`
+
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[link.ts:241](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L241)
 
 ***
 
@@ -195,19 +229,21 @@ function printLink(type, options): string
 function printLinkAttributes(type, text): string
 ```
 
+Defined in: [link.ts:280](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L280)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **text**: `Maybe`\<`string`\> = `""`
+`unknown`
+
+##### text
+
+`Maybe`\<`string`\> = `""`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[link.ts:214](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L214)
 
 ***
 
@@ -217,19 +253,21 @@ function printLinkAttributes(type, text): string
 function printParentLink(type, options): string | MDXString
 ```
 
+Defined in: [link.ts:338](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L338)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintLinkOptions`
+`unknown`
+
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[link.ts:265](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L265)
 
 ***
 
@@ -243,20 +281,26 @@ function toLink(
    options): TypeLink
 ```
 
+Defined in: [link.ts:189](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L189)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **name**: `string`
+`unknown`
 
-• **operation**: `Maybe`\<`TypeLocale`\>
+##### name
 
-• **options**: `PrintLinkOptions`
+`string`
+
+##### operation
+
+`Maybe`\<`TypeLocale`\>
+
+##### options
+
+`PrintLinkOptions`
 
 #### Returns
 
 `TypeLink`
-
-#### Defined in
-
-[link.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L135)

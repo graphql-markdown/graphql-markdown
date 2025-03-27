@@ -5,7 +5,6 @@
 - [badge](badge.md)
 - [code](code.md)
 - [common](common.md)
-- [const/mdx](const/mdx.md)
 - [const/options](const/options.md)
 - [const/strings](const/strings.md)
 - [directive](directive.md)

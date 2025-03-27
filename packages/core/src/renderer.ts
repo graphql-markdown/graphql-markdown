@@ -30,23 +30,112 @@ import {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
 
+/**
+ * Constant representing the string literal for deprecated entities.
+ * Used for grouping deprecated schema entities when the deprecated option is set to "group".
+ *
+ * @example
+ * ```typescript
+ * // When using the deprecated grouping option
+ * if (isDeprecated(type)) {
+ *   const groupName = DEPRECATED;
+ *   // Handle deprecated type
+ * }
+ * ```
+ */
 const DEPRECATED = "deprecated" as const;
 
+/**
+ * CSS class names used for styling different categories in the generated documentation.
+ * These are applied to the generated index metafiles for different section types.
+ *
+ * @example
+ * ```typescript
+ * // When generating API section metafiles
+ * await generateIndexMetafile(dirPath, typeCat, {
+ *   styleClass: CATEGORY_STYLE_CLASS.API
+ * });
+ * ```
+ */
 enum CATEGORY_STYLE_CLASS {
+  /**
+   * CSS class applied to API sections (operations)
+   */
   API = "graphql-markdown-api-section",
+
+  /**
+   * CSS class applied to deprecated entity sections
+   */
   DEPRECATED = "graphql-markdown-deprecated-section",
 }
 
+/**
+ * Enum defining sidebar position values for ordering categories in the documentation sidebar.
+ * Used to control the relative position of categories in the navigation.
+ *
+ * @example
+ * ```typescript
+ * // Position deprecated entities at the end of the sidebar
+ * await generateIndexMetafile(dirPath, DEPRECATED, {
+ *   sidebarPosition: SidebarPosition.LAST
+ * });
+ * ```
+ */
 enum SidebarPosition {
+  /**
+   * Position at the beginning of the sidebar
+   */
   FIRST = 1,
+
+  /**
+   * Position at the end of the sidebar
+   */
   LAST = 999,
 }
 
+/**
+ * Default group names for API types and non-API types.
+ * This constant provides the base folder structure for organizing GraphQL schema entities.
+ * Can be overridden via ApiGroupOverrideType in configuration.
+ *
+ * @property operations Folder name for GraphQL operations (queries, mutations, subscriptions)
+ * @property types Folder name for GraphQL type definitions
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * // Default structure
+ * const defaultGroups = API_GROUPS;
+ * // { operations: "operations", types: "types" }
+ *
+ * // With custom override
+ * const customGroups = { ...API_GROUPS, operations: "queries-and-mutations" };
+ * ```
+ *
+ * @see {@link getApiGroupFolder} For usage with type categorization
+ */
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
   types: "types",
 } as const;
 
+/**
+ * Determines the appropriate folder for a GraphQL schema entity based on its type.
+ *
+ * @param type - The GraphQL schema entity to categorize
+ * @param groups - Optional custom group naming configuration
+ * @returns The folder name where the entity should be placed
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * // With default groups
+ * const folder = getApiGroupFolder(queryType); // Returns "operations"
+ *
+ * // With custom groups
+ * const folder = getApiGroupFolder(objectType, { operations: "queries" }); // Returns appropriate folder
+ * ```
+ */
 export const getApiGroupFolder = (
   type: unknown,
   groups?: Maybe<ApiGroupOverrideType | boolean>,
@@ -58,6 +147,21 @@ export const getApiGroupFolder = (
   return isApiType(type) ? folderNames.operations : folderNames.types;
 };
 
+/**
+ * Type guard function that checks if the provided options include a specific hierarchy configuration.
+ *
+ * @param options - The renderer options to check
+ * @param hierarchy - The hierarchy type to check for
+ * @returns True if the options contain the specified hierarchy configuration
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * if (isHierarchy(options, TypeHierarchy.FLAT)) {
+ *   // Handle flat hierarchy structure
+ * }
+ * ```
+ */
 const isHierarchy = (
   options: Maybe<RendererDocOptions>,
   hierarchy: TypeHierarchyValueType,
@@ -65,6 +169,27 @@ const isHierarchy = (
   return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
+/**
+ * Configuration options for category metafiles in the documentation.
+ * These options control the appearance and behavior of category sections in the sidebar.
+ *
+ * @interface CategoryMetafileOptions
+ * @property [collapsible] - Whether the category should be collapsible in the sidebar
+ * @property [collapsed] - Whether the category should be initially collapsed
+ * @property [sidebarPosition] - Custom position in the sidebar (lower numbers appear first)
+ * @property [styleClass] - CSS class to apply to the category for styling
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * const options: CategoryMetafileOptions = {
+ *   collapsible: true,
+ *   collapsed: false,
+ *   sidebarPosition: SidebarPosition.FIRST,
+ *   styleClass: CATEGORY_STYLE_CLASS.API
+ * };
+ * ```
+ */
 export interface CategoryMetafileOptions {
   collapsible?: boolean;
   collapsed?: boolean;
@@ -72,6 +197,12 @@ export interface CategoryMetafileOptions {
   styleClass?: string;
 }
 
+/**
+ * Core renderer class responsible for generating documentation files from GraphQL schema entities.
+ * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
+ * @useDeclaredType
+ * @example
+ */
 export class Renderer {
   group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
@@ -83,6 +214,18 @@ export class Renderer {
 
   private readonly printer: Printer;
 
+  /**
+   * Creates a new Renderer instance.
+   *
+   * @param printer - The printer instance used to convert GraphQL types to markdown
+   * @param outputDir - Directory where documentation will be generated
+   * @param baseURL - Base URL for the documentation
+   * @param group - Optional grouping configuration for schema entities
+   * @param prettify - Whether to format the generated markdown
+   * @param docOptions - Additional documentation options
+   * @param mdxModule - Optional MDX module for enhanced documentation features
+   * @example
+   */
   constructor(
     printer: Printer,
     outputDir: string,
@@ -102,6 +245,14 @@ export class Renderer {
     this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
   }
 
+  /**
+   * Checks if the provided module supports MDX index file generation.
+   *
+   * @param module - The module to check for MDX support
+   * @returns True if the module supports index metafile generation
+   * @useDeclaredType
+   * @example
+   */
   hasMDXIndexFileSupport(
     module: unknown = this.mdxModule,
   ): module is Partial<MDXSupportType> &
@@ -114,6 +265,23 @@ export class Renderer {
     );
   }
 
+  /**
+   * Generates an index metafile for a category directory if MDX support is available.
+   *
+   * @param dirPath - The directory path where the index should be created
+   * @param category - The category name
+   * @param options - Configuration options for the index
+   * @returns Promise that resolves when the index is generated
+   * @useDeclaredType
+   *
+   * @example
+   * ```typescript
+   * await renderer.generateIndexMetafile('docs/types', 'Types', {
+   *   collapsible: true,
+   *   collapsed: false
+   * });
+   * ```
+   */
   async generateIndexMetafile(
     dirPath: string,
     category: string,
@@ -131,6 +299,17 @@ export class Renderer {
     }
   }
 
+  /**
+   * Generates the directory path and metafiles for a specific schema entity type.
+   * Creates the appropriate directory structure based on configuration options.
+   *
+   * @param type - The schema entity type
+   * @param name - The name of the schema entity
+   * @param rootTypeName - The root type name this entity belongs to
+   * @returns The generated directory path
+   * @useDeclaredType
+   * @example
+   */
   async generateCategoryMetafileType(
     type: unknown,
     name: string,
@@ -180,6 +359,15 @@ export class Renderer {
     return dirPath;
   }
 
+  /**
+   * Renders all types within a root type category (e.g., all Query types).
+   *
+   * @param rootTypeName - The name of the root type (e.g., "Query", "Mutation")
+   * @param type - The type object containing all entities to render
+   * @returns Array of rendered categories or undefined
+   * @useDeclaredType
+   * @example
+   */
   async renderRootTypes(
     rootTypeName: SchemaEntity,
     type: unknown,
@@ -214,6 +402,16 @@ export class Renderer {
     );
   }
 
+  /**
+   * Renders documentation for a specific type entity and saves it to a file.
+   *
+   * @param dirPath - The directory path where the file should be saved
+   * @param name - The name of the type entity
+   * @param type - The type entity to render
+   * @returns The category information for the rendered entity or undefined
+   * @useDeclaredType
+   * @example
+   */
   async renderTypeEntities(
     dirPath: string,
     name: string,
@@ -271,6 +469,15 @@ export class Renderer {
     } as Category;
   }
 
+  /**
+   * Renders the homepage for the documentation from a template file.
+   * Replaces placeholders in the template with actual values.
+   *
+   * @param homepageLocation - Path to the homepage template file
+   * @returns Promise that resolves when the homepage is rendered
+   * @useDeclaredType
+   * @example
+   */
   async renderHomepage(homepageLocation: string): Promise<void> {
     const homePage = basename(homepageLocation);
     const destLocation = join(this.outputDir, homePage);
@@ -289,6 +496,32 @@ export class Renderer {
   }
 }
 
+/**
+ * Factory function to create and initialize a Renderer instance.
+ * Creates the output directory and returns a configured renderer.
+ *
+ * @param printer - The printer instance to use for rendering types
+ * @param outputDir - The output directory for generated documentation
+ * @param baseURL - The base URL for the documentation
+ * @param group - Optional grouping configuration
+ * @param prettify - Whether to prettify the output markdown
+ * @param docOptions - Additional documentation options
+ * @param mdxModule - Optional MDX module for enhanced features
+ * @returns A configured Renderer instance
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * const renderer = await getRenderer(
+ *   myPrinter,
+ *   './docs',
+ *   '/api',
+ *   groupConfig,
+ *   true,
+ *   { force: true, index: true }
+ * );
+ * ```
+ */
 export const getRenderer = async (
   printer: Printer,
   outputDir: string,

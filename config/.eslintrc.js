@@ -17,6 +17,7 @@ module.exports = {
         "eslint-plugin-tsdoc",
         "jest",
         "prettier",
+        "import",
       ],
       settings: {
         "import/parsers": {
@@ -39,7 +40,11 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       parserOptions: {
         tsconfigRootDir: join(__dirname, ".."),
-        project: ["./packages/*/tsconfig.test.json"],
+        project: [
+          "./tsconfig.json",
+          "./packages/*/tsconfig.json",
+          "./packages/*/tsconfig.test.json",
+        ],
       },
       rules: {
         "prettier/prettier": "error",
@@ -74,8 +79,17 @@ module.exports = {
         "@typescript-eslint/no-redeclare": "error",
         "@typescript-eslint/no-redundant-type-constituents": "error",
         "@typescript-eslint/no-require-imports": "error",
-        "@typescript-eslint/no-restricted-imports": "error",
-        "@typescript-eslint/no-restricted-types": "error",
+        "@typescript-eslint/no-restricted-imports": [
+          "error",
+          {
+            patterns: [
+              {
+                group: ["packages/*/src"],
+                message: "Use package imports instead of direct paths",
+              },
+            ],
+          },
+        ],
         "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
         "@typescript-eslint/no-unnecessary-condition": "error",
         "@typescript-eslint/no-unnecessary-type-constraint": "error",
@@ -83,7 +97,10 @@ module.exports = {
         "@typescript-eslint/no-unsafe-function-type": "error",
         "@typescript-eslint/no-unsafe-return": "error",
         "@typescript-eslint/no-unused-expressions": "error",
-        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          { argsIgnorePattern: "^_" },
+        ],
         "@typescript-eslint/no-use-before-define": "error",
         "@typescript-eslint/no-wrapper-object-types": "error",
         "@typescript-eslint/non-nullable-type-assertion-style": "error",
@@ -105,6 +122,7 @@ module.exports = {
         "arrow-body-style": ["error", "always"],
         eqeqeq: "error",
         "no-else-return": "error",
+        "no-fallthrough": ["error", { allowEmptyCase: true }],
         "no-mixed-operators": "error",
         "no-restricted-imports": "off",
         "no-return-await": "off",
@@ -114,6 +132,10 @@ module.exports = {
         "tsdoc/syntax": "warn",
         "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
         "func-style": ["error", "expression", { allowArrowFunctions: true }],
+        // Disable expensive rules if not critical
+        "import/no-cycle": "off",
+        "import/no-deprecated": "off",
+        "sonarjs/cognitive-complexity": "off",
       },
     },
     {

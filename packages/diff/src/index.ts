@@ -27,23 +27,24 @@ export const SCHEMA_HASH_FILE = ".schema" as const;
 export const SCHEMA_REF = "schema.graphql" as const;
 
 /**
- * Schema comparison methods
+ * Comparison methods used to determine if a schema has changed.
  */
 export enum CompareMethod {
-  /** Compare schemas using GraphQL Inspector diff */
+  /** Compare schemas by diffing the content */
   DIFF = "SCHEMA-DIFF",
-  /** Compare schemas using hash comparison */
+  /** Compare schemas by comparing hash values */
   HASH = "SCHEMA-HASH",
-  /** Force update without comparison */
+  /** Force regeneration regardless of changes */
   FORCE = "FORCE",
-  /** Skip comparison */
+  /** Skip comparison and assume no changes */
   NONE = "NONE",
 }
 
 /**
- * Generates a SHA-256 hash of the schema
- * @param schema - The GraphQL schema to hash
- * @returns The hex encoded hash of the schema
+ * Generates a SHA-256 hash for a GraphQL schema.
+ *
+ * @param schema - The GraphQL schema to generate a hash for
+ * @returns A SHA-256 hash string representing the schema
  */
 export const getSchemaHash = (schema: GraphQLSchema): string => {
   const printedSchema = printSchema(schema);
@@ -51,10 +52,11 @@ export const getSchemaHash = (schema: GraphQLSchema): string => {
 };
 
 /**
- * Compares a new schema with an existing schema file
- * @param schemaNew - The new schema to compare
+ * Compares a new schema against an existing schema file and returns the differences.
+ *
+ * @param schemaNew - The new GraphQL schema to compare
  * @param schemaOldLocation - File path to the old schema
- * @returns Array of detected changes between schemas
+ * @returns A promise resolving to an array of schema changes
  */
 export const getDiff = async (
   schemaNew: GraphQLSchema,
@@ -67,11 +69,13 @@ export const getDiff = async (
 };
 
 /**
- * Checks for changes between schemas using specified comparison method
- * @param schema - The schema to check
- * @param outputDir - Output directory path
- * @param method - Comparison method to use
- * @returns True if changes detected or first run
+ * Checks if a schema has changed compared to a previous version.
+ * Uses either diff or hash-based comparison methods based on the method parameter.
+ *
+ * @param schema - The current GraphQL schema
+ * @param outputDir - Directory where schema or hash files will be saved
+ * @param method - Comparison method to use (defaults to DIFF)
+ * @returns A promise resolving to a boolean indicating whether the schema has changed
  */
 export const checkSchemaChanges: FunctionCheckSchemaChanges = async (
   schema: GraphQLSchema,

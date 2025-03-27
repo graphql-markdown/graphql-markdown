@@ -4,6 +4,10 @@
 
 ### CompareMethod
 
+Defined in: [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L23)
+
+Comparison methods used to determine if a schema has changed.
+
 #### Enumeration Members
 
 ##### DIFF
@@ -12,9 +16,9 @@
 DIFF: "SCHEMA-DIFF";
 ```
 
-###### Defined in
+Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L25)
 
-[diff/src/index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L21)
+Compare schemas by diffing the content
 
 ##### FORCE
 
@@ -22,9 +26,9 @@ DIFF: "SCHEMA-DIFF";
 FORCE: "FORCE";
 ```
 
-###### Defined in
+Defined in: [index.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L29)
 
-[diff/src/index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L23)
+Force regeneration regardless of changes
 
 ##### HASH
 
@@ -32,9 +36,9 @@ FORCE: "FORCE";
 HASH: "SCHEMA-HASH";
 ```
 
-###### Defined in
+Defined in: [index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L27)
 
-[diff/src/index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L22)
+Compare schemas by comparing hash values
 
 ##### NONE
 
@@ -42,11 +46,40 @@ HASH: "SCHEMA-HASH";
 NONE: "NONE";
 ```
 
-###### Defined in
+Defined in: [index.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L31)
 
-[diff/src/index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L24)
+Skip comparison and assume no changes
 
 ## Variables
+
+### checkSchemaChanges
+
+```ts
+const checkSchemaChanges: FunctionCheckSchemaChanges;
+```
+
+Defined in: [index.ts:71](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L71)
+
+Checks if a schema has changed compared to a previous version.
+Uses either diff or hash-based comparison methods based on the method parameter.
+
+#### Param
+
+The current GraphQL schema
+
+#### Param
+
+Directory where schema or hash files will be saved
+
+#### Param
+
+Comparison method to use (defaults to DIFF)
+
+#### Returns
+
+A promise resolving to a boolean indicating whether the schema has changed
+
+***
 
 ### SCHEMA\_HASH\_FILE
 
@@ -54,9 +87,7 @@ NONE: "NONE";
 const SCHEMA_HASH_FILE: ".schema";
 ```
 
-#### Defined in
-
-[diff/src/index.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L18)
+Defined in: [index.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L18)
 
 ***
 
@@ -66,38 +97,9 @@ const SCHEMA_HASH_FILE: ".schema";
 const SCHEMA_REF: "schema.graphql";
 ```
 
-#### Defined in
-
-[diff/src/index.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L19)
+Defined in: [index.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L19)
 
 ## Functions
-
-### checkSchemaChanges()
-
-```ts
-function checkSchemaChanges(
-   schema, 
-   tmpDir, 
-diffMethod?): Promise<boolean>
-```
-
-#### Parameters
-
-• **schema**: `GraphQLSchema`
-
-• **tmpDir**: `string`
-
-• **diffMethod?**: `DiffMethodName`
-
-#### Returns
-
-`Promise`\<`boolean`\>
-
-#### Defined in
-
-[diff/src/index.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L42)
-
-***
 
 ### getDiff()
 
@@ -105,19 +107,29 @@ diffMethod?): Promise<boolean>
 function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>
 ```
 
+Defined in: [index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L52)
+
+Compares a new schema against an existing schema file and returns the differences.
+
 #### Parameters
 
-• **schemaNew**: `GraphQLSchema`
+##### schemaNew
 
-• **schemaOldLocation**: `string`
+`GraphQLSchema`
+
+The new GraphQL schema to compare
+
+##### schemaOldLocation
+
+`string`
+
+File path to the old schema
 
 #### Returns
 
 `Promise`\<`Change`\<`any`\>[]\>
 
-#### Defined in
-
-[diff/src/index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L32)
+A promise resolving to an array of schema changes
 
 ***
 
@@ -127,14 +139,20 @@ function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>
 function getSchemaHash(schema): string
 ```
 
+Defined in: [index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L40)
+
+Generates a SHA-256 hash for a GraphQL schema.
+
 #### Parameters
 
-• **schema**: `GraphQLSchema`
+##### schema
+
+`GraphQLSchema`
+
+The GraphQL schema to generate a hash for
 
 #### Returns
 
 `string`
 
-#### Defined in
-
-[diff/src/index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L27)
+A SHA-256 hash string representing the schema

@@ -19,12 +19,12 @@ Defined in: [main.ts:22](https://github.com/graphql-markdown/graphql-markdown/bl
 Name of the GraphQL Markdown extension for graphql-config
 >>>>>>> Stashed changes
 
-## Functions
+***
 
-### graphQLConfigExtension()
+### graphQLConfigExtension
 
 ```ts
-function graphQLConfigExtension(api): GraphQLConfigExtension
+const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
 <<<<<<< Updated upstream

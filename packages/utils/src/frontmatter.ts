@@ -1,9 +1,41 @@
 import { toString } from "./string";
 
+/**
+ * Generates a string of repeated tab characters based on the given indentation level.
+ *
+ * @param indentation - The number of indentation levels. Defaults to 0.
+ * @returns A string containing repeated tab characters.
+ *
+ * @example
+ * ```typescript
+ * tabs(2); // "    "
+ * tabs(0); // ""
+ * ```
+ */
 const tabs = (indentation: number = 0): string => {
   return "  ".repeat(indentation);
 };
 
+/**
+ * Formats an object into a front matter YAML-like structure as string array.
+ *
+ * @param props - The object to format.
+ * @param indentation - The current indentation level. Defaults to 0.
+ * @param prefix - An optional prefix for each line.
+ * @returns An array of strings representing the formatted front matter.
+ *
+ * @example
+ * ```typescript
+ * const obj = { title: "My Title", tags: ["tag1", "tag2"] };
+ * formatFrontMatterObject(obj);
+ * // [
+ * //   "  title: My Title",
+ * //   "  tags:",
+ * //   "    - tag1",
+ * //   "    - tag2"
+ * // ]
+ * ```
+ */
 export const formatFrontMatterObject = (
   props: unknown,
   indentation: number = 0,
@@ -26,6 +58,24 @@ export const formatFrontMatterObject = (
   return frontMatter;
 };
 
+/**
+ * Formats an array into a front matter YAML-like structure as string array.
+ *
+ * @param prop - The array to format.
+ * @param indentation - The current indentation level. Defaults to 0.
+ * @param prefix - The prefix for each list item. Defaults to "- ".
+ * @returns An array of strings representing the formatted front matter list.
+ *
+ * @example
+ * ```typescript
+ * const list = ["item1", "item2"];
+ * formatFrontMatterList(list);
+ * // [
+ * //   "- item1",
+ * //   "- item2"
+ * // ]
+ * ```
+ */
 export const formatFrontMatterList = (
   prop: unknown,
   indentation: number = 0,
@@ -52,6 +102,23 @@ export const formatFrontMatterList = (
   return frontMatter;
 };
 
+/**
+ * Formats a single property into a front matter YAML-like structure as string array.
+ *
+ * @param prop - The property to format, represented as an object with a single key-value pair.
+ * @param indentation - The current indentation level. Defaults to 0.
+ * @param prefix - An optional prefix for the property.
+ * @returns An array of strings representing the formatted front matter property.
+ *
+ * @example
+ * ```typescript
+ * const prop = { title: "My Title" };
+ * formatFrontMatterProp(prop);
+ * // [
+ * //   "title: My Title"
+ * // ]
+ * ```
+ */
 export const formatFrontMatterProp = (
   prop: unknown,
   indentation: number = 0,

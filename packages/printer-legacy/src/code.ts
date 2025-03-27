@@ -13,6 +13,9 @@ import {
 } from "./const/strings";
 import { hasPrintableDirective } from "./link";
 
+/**
+ *
+ */
 export const printCodeArguments = (
   type: unknown,
   indentationLevel: number = 1,
@@ -47,6 +50,9 @@ export const printCodeArguments = (
   return code;
 };
 
+/**
+ *
+ */
 export const printCodeField = (
   type: unknown,
   options?: PrintTypeOptions,

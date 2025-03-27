@@ -19,6 +19,11 @@ const config = {
   organizationName: "graphql-markdown",
   projectName: "graphql-markdown.dev",
 
+  markdown: {
+    mermaid: true,
+  },
+  themes: ["@docusaurus/theme-mermaid"],
+
   plugins: [
     require.resolve("@cmfcmf/docusaurus-search-local"),
     [
@@ -74,9 +79,10 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        // content: "🚀 Fully compatible with Docusaurus 2 and Docusaurus 3 🚀",
         content:
-          'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
+          '🚀 Now compatible with AstroJS, NextJS and more... <a href="/docs/advanced/integration-with-frameworks">check our documentation</a> 🚀',
+        // content:
+        //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",
         textColor: "#dbf5e6",
         isCloseable: true,

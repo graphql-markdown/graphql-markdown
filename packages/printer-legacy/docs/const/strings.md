@@ -8,9 +8,7 @@
 const DEPRECATED: "deprecated";
 ```
 
-#### Defined in
-
-[const/strings.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L19)
+Defined in: [const/strings.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L17)
 
 ***
 
@@ -20,9 +18,7 @@ const DEPRECATED: "deprecated";
 const FRONT_MATTER_DELIMITER: "---";
 ```
 
-#### Defined in
-
-[const/strings.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L23)
+Defined in: [const/strings.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L22)
 
 ***
 
@@ -32,33 +28,7 @@ const FRONT_MATTER_DELIMITER: "---";
 const GRAPHQL: "graphql";
 ```
 
-#### Defined in
-
-[const/strings.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L20)
-
-***
-
-### HIDE\_DEPRECATED
-
-```ts
-const HIDE_DEPRECATED: "<><span className=\"deprecated\">Hide deprecated</span></>";
-```
-
-#### Defined in
-
-[const/strings.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L33)
-
-***
-
-### LINK\_MDX\_EXTENSION
-
-```ts
-const LINK_MDX_EXTENSION: ".mdx";
-```
-
-#### Defined in
-
-[const/strings.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L17)
+Defined in: [const/strings.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L19)
 
 ***
 
@@ -68,21 +38,17 @@ const LINK_MDX_EXTENSION: ".mdx";
 const MARKDOWN_CODE_INDENTATION: "  ";
 ```
 
-#### Defined in
-
-[const/strings.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L25)
+Defined in: [const/strings.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L24)
 
 ***
 
 ### MARKDOWN\_CODE\_SNIPPET
 
 ```ts
-const MARKDOWN_CODE_SNIPPET: "``";
+const MARKDOWN_CODE_SNIPPET: "``" ;
 ```
 
-#### Defined in
-
-[const/strings.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L22)
+Defined in: [const/strings.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L21)
 
 ***
 
@@ -92,9 +58,7 @@ const MARKDOWN_CODE_SNIPPET: "``";
 const MARKDOWN_EOC: "\n``\n";
 ```
 
-#### Defined in
-
-[const/strings.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L28)
+Defined in: [const/strings.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L27)
 
 ***
 
@@ -104,9 +68,7 @@ const MARKDOWN_EOC: "\n``\n";
 const MARKDOWN_EOL: "\n";
 ```
 
-#### Defined in
-
-[const/strings.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L26)
+Defined in: [const/strings.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L25)
 
 ***
 
@@ -116,9 +78,7 @@ const MARKDOWN_EOL: "\n";
 const MARKDOWN_EOP: string;
 ```
 
-#### Defined in
-
-[const/strings.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L27)
+Defined in: [const/strings.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L26)
 
 ***
 
@@ -128,9 +88,7 @@ const MARKDOWN_EOP: string;
 const MARKDOWN_SOC: "\n``graphql\n";
 ```
 
-#### Defined in
-
-[const/strings.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L30)
+Defined in: [const/strings.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L29)
 
 ***
 
@@ -140,9 +98,17 @@ const MARKDOWN_SOC: "\n``graphql\n";
 const NO_DESCRIPTION_TEXT: "No description";
 ```
 
-#### Defined in
+Defined in: [const/strings.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L20)
 
-[const/strings.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L21)
+***
+
+### NON\_NULL
+
+```ts
+const NON_NULL: "non-null";
+```
+
+Defined in: [const/strings.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L18)
 
 ***
 
@@ -152,18 +118,4 @@ const NO_DESCRIPTION_TEXT: "No description";
 const ROOT_TYPE_LOCALE: RootTypeLocale;
 ```
 
-#### Defined in
-
-[const/strings.ts:3](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L3)
-
-***
-
-### SHOW\_DEPRECATED
-
-```ts
-const SHOW_DEPRECATED: "<><span className=\"deprecated\">Show deprecated</span></>";
-```
-
-#### Defined in
-
-[const/strings.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L35)
+Defined in: [const/strings.ts:3](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L3)

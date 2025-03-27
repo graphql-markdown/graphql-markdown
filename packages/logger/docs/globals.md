@@ -101,42 +101,6 @@ Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/b
 
 ## Functions
 
-### Logger()
-
-```ts
-function Logger(moduleName?): void
-```
-
-Instantiate a logger module.
-By default, the logger module uses `global.console`
-
-#### Parameters
-
-• **moduleName?**: `string`
-
-optional name of the logger package.
-
-#### Returns
-
-`void`
-
-#### Example
-
-```js
-import { Logger, log } from "@graphql-markdown/utils/logger";
-
-log("Info message"); // Expected console output "Info message"
-
-Logger("@docusaurus/logger");
-log("Info message", "info"); // Expected Docusaurus log output "Info message"
-```
-
-#### Defined in
-
-[index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
-
-***
-
 ### log()
 
 ```ts
@@ -152,20 +116,17 @@ Logs a message by calling the active logger instance.
 
 #### Parameters
 
-• **message**: `string`
+##### message
+
+`string`
 
 a string to be logged.
 
-• **level**: 
-  \| `"debug"`
-  \| `"error"`
-  \| `"info"`
-  \| `"log"`
-  \| `"success"`
-  \| `"warn"`
-  \| [`LogLevel`](globals.md#loglevel) = `LogLevel.info`
+##### level
 
 optional log level, `"info"` by default.
+
+`"debug"` | `"error"` | `"info"` | `"log"` | `"success"` | `"warn"` | [`LogLevel`](#loglevel)
 
 #### Returns
 

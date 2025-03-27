@@ -5,20 +5,20 @@
 ### getDirectiveExampleOption()
 
 ```ts
-function getDirectiveExampleOption(options): Maybe<TypeDirectiveExample>
+function getDirectiveExampleOption(__namedParameters): Maybe<TypeDirectiveExample>
 ```
+
+Defined in: [example.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L35)
 
 #### Parameters
 
-• **options**: `PrintTypeOptions`
+##### \_\_namedParameters
+
+`PrintTypeOptions`
 
 #### Returns
 
 `Maybe`\<`TypeDirectiveExample`\>
-
-#### Defined in
-
-[example.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L29)
 
 ***
 
@@ -28,16 +28,18 @@ function getDirectiveExampleOption(options): Maybe<TypeDirectiveExample>
 function printExample(type, options): Maybe<string>
 ```
 
+Defined in: [example.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L200)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `Maybe`\<`string`\>
-
-#### Defined in
-
-[example.ts:171](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L171)

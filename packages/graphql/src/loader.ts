@@ -40,12 +40,15 @@ export { GraphQLSchema } from "graphql";
  * ```
  */
 
+/**
+ *
+ */
 export const loadSchema = async (
   schemaLocation: string,
   options: LoadSchemaOptions & {
     /**
      * @param rootTypes - optional `rootTypes` schema override
-     * @see {@link https://graphql-markdown.dev/docs/advanced/custom-root-types | Custom root types}
+     * @see [Custom root types](https://graphql-markdown.dev/docs/advanced/custom-root-types)
      */
     rootTypes?: Partial<Record<OperationTypeNode, string>>;
   },
@@ -105,6 +108,9 @@ export const loadSchema = async (
  * ```
  */
 
+/**
+ *
+ */
 export const getDocumentLoaders = async (
   loadersList: Maybe<LoaderOption>,
 ): Promise<Maybe<LoadSchemaOptions>> => {

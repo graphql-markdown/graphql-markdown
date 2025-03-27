@@ -12,23 +12,29 @@ function getCustomDirectiveResolver(
 fallback?): Maybe<string>
 ```
 
+Defined in: [directive.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L20)
+
 #### Parameters
 
-• **resolver**: `CustomDirectiveResolver`
+##### resolver
 
-• **type**: `unknown`
+`CustomDirectiveResolver`
 
-• **constDirectiveOption**: `CustomDirectiveMapItem`
+##### type
 
-• **fallback?**: `Maybe`\<`string`\>
+`unknown`
+
+##### constDirectiveOption
+
+`CustomDirectiveMapItem`
+
+##### fallback?
+
+`Maybe`\<`string`\>
 
 #### Returns
 
 `Maybe`\<`string`\>
-
-#### Defined in
-
-[directive.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L17)
 
 ***
 
@@ -38,19 +44,21 @@ fallback?): Maybe<string>
 function getCustomTags(type, options): Badge[]
 ```
 
+Defined in: [directive.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L101)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `Badge`[]
-
-#### Defined in
-
-[directive.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L89)
 
 ***
 
@@ -63,21 +71,25 @@ function printCustomDirective(
 options): Maybe<string>
 ```
 
+Defined in: [directive.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L43)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **constDirectiveOption**: `CustomDirectiveMapItem`
+`unknown`
 
-• **options**: `PrintTypeOptions`
+##### constDirectiveOption
+
+`CustomDirectiveMapItem`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `Maybe`\<`string`\>
-
-#### Defined in
-
-[directive.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L37)
 
 ***
 
@@ -87,19 +99,21 @@ options): Maybe<string>
 function printCustomDirectives(type, options): string
 ```
 
+Defined in: [directive.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L68)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[directive.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L59)
 
 ***
 
@@ -109,16 +123,18 @@ function printCustomDirectives(type, options): string
 function printCustomTags(type, options): string | MDXString
 ```
 
+Defined in: [directive.ts:130](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L130)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[directive.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L115)

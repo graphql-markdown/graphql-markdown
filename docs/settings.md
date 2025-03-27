@@ -1,18 +1,26 @@
 ---
-sidebar_position: 5
+sidebar_position: 50
 ---
 
 # Settings
+
+GraphQL-Markdown can be configured through plugin options in your configuration file and through CLI flags. This page lists all available settings, their CLI equivalents, and default values.
 
 By default, the plugin will use the options as defined in the [configuration](/docs/configuration), and they can be overridden using CLI flags.
 
 ## `--config`
 
-Print the resolved configuration used for generating documentation. This CLI flag is used for debugging purpose.
+Print the resolved configuration used for generating documentation. This CLI flag is used for debugging purposes.
 
-| Setting | CLI flag   | Default  |
-| ------- | ---------- | -------- |
-|         | `--config` |          |
+| Setting | CLI flag   | Default |
+| :------ | :--------- | :------ |
+|         | `--config` | `null`  |
+
+Example:
+
+```bash
+npx docusaurus graphql-to-doc --config
+```
 
 ## `baseURL`
 
@@ -21,7 +29,6 @@ The base URL used by Docusaurus. It will also be used as the folder name under [
 | Setting   | CLI flag               | Default  |
 | --------- | ---------------------- | -------- |
 | `baseURL` | `-b, --base <baseURL>` | `schema` |
-
 
 ## `customDirective`
 
@@ -66,10 +73,10 @@ Use these options to tweak some of the static documentation generator features:
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
 
-| Setting                  | CLI flag         | Default |
-| ------------------------ | ---------------- | ------- |
-| `docOptions.frontMatter` | _not supported_  | `{}`    |
-| `docOptions.index`       | `--index`        | `false` |
+| Setting                  | CLI flag        | Default |
+| ------------------------ | --------------- | ------- |
+| `docOptions.frontMatter` | _not supported_ | `{}`    |
+| `docOptions.index`       | `--index`       | `false` |
 
 <br/>
 
@@ -105,9 +112,9 @@ plugins: [
 
 Force generating documentation in an empty folder and set [`diffMethod`](#diffmethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
 
-| Setting | CLI flag      | Default     |
-| ------- | ------------- | ----------- |
-| `force` | `-f, --force` | `false`     |
+| Setting | CLI flag      | Default |
+| ------- | ------------- | ------- |
+| `force` | `-f, --force` | `false` |
 
 ## `groupByDirective`
 

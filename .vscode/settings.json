@@ -9,6 +9,7 @@
     "Battlestation",
     "browserslist",
     "carolstran",
+    "chakra",
     "changefreq",
     "chmanie",
     "classname",
@@ -27,6 +28,7 @@
     "esbenp",
     "foobaz",
     "frontmatter",
+    "fumadocs",
     "googlebot",
     "gqlmd",
     "GraphQLID",
@@ -67,6 +69,7 @@
     "Repulsorcraft",
     "Snyk",
     "socio",
+    "sonarjs",
     "specifiedby",
     "spectaql",
     "Starfighter",
@@ -83,9 +86,5 @@
   "eslint.workingDirectories": ["./config"],
   "jest.rootPath": ".",
   "jest.jestCommandLine": "npm run test:ci --",
-  "sonarlint.connectedMode.project": {
-    "connectionId": "graphql-markdown",
-    "projectKey": "graphql-markdown_graphql-markdown"
-  },
   "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

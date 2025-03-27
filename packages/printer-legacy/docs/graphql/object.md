@@ -8,19 +8,21 @@
 function printCodeObject(type, options): string
 ```
 
+Defined in: [graphql/object.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L74)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[graphql/object.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L74)
 
 ***
 
@@ -33,21 +35,25 @@ function printCodeType(
    options): string
 ```
 
+Defined in: [graphql/object.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L40)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **entity**: `string`
+`unknown`
 
-• **options**: `PrintTypeOptions`
+##### entity
+
+`string`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[graphql/object.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L40)
 
 ***
 
@@ -57,16 +63,18 @@ function printCodeType(
 function printObjectMetadata(type, options): string
 ```
 
+Defined in: [graphql/object.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L25)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[graphql/object.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L25)

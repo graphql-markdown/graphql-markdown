@@ -8,17 +8,17 @@
 function getRootTypeLocaleFromString(text): Maybe<TypeLocale>
 ```
 
+Defined in: [relation.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L28)
+
 #### Parameters
 
-• **text**: `string`
+##### text
+
+`string`
 
 #### Returns
 
 `Maybe`\<`TypeLocale`\>
-
-#### Defined in
-
-[relation.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L25)
 
 ***
 
@@ -32,27 +32,35 @@ function printRelationOf<T>(
    options): string | MDXString
 ```
 
+Defined in: [relation.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L42)
+
 #### Type Parameters
 
-• **T**
+##### T
+
+`T`
 
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **section**: `unknown`
+`unknown`
 
-• **getRelation**: `Maybe`\<`IGetRelation`\<`T`\>\>
+##### section
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### getRelation
+
+`Maybe`\<`IGetRelation`\<`T`\>\>
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[relation.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L36)
 
 ***
 
@@ -62,16 +70,18 @@ function printRelationOf<T>(
 function printRelations(type, options): string | MDXString
 ```
 
+Defined in: [relation.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L103)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[relation.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L91)
