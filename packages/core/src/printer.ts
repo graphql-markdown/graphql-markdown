@@ -43,7 +43,7 @@ import type {
  * `);
  *
  * const printer = await getPrinter(
- *   '@graphql-markdown/printer-default',
+ *   '@graphql-markdown/printer-legacy',
  *   {
  *     schema,
  *     baseURL: '/docs',

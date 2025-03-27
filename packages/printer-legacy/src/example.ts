@@ -29,6 +29,9 @@ import { toString } from "@graphql-markdown/utils";
 
 import { hasPrintableDirective } from "./link";
 
+/**
+ *
+ */
 export const getDirectiveExampleOption = ({
   exampleSection,
   schema,
@@ -191,6 +194,9 @@ const parseExampleDirective = (
   }
 };
 
+/**
+ *
+ */
 export const printExample = (
   type: unknown,
   options: PrintTypeOptions,

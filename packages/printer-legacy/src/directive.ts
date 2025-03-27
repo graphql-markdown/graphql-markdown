@@ -14,6 +14,9 @@ import { SectionLevels } from "./const/options";
 import { printLink } from "./link";
 import { printBadge } from "./badge";
 
+/**
+ *
+ */
 export const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
   type: unknown,
@@ -34,6 +37,9 @@ export const getCustomDirectiveResolver = (
   ) as Maybe<string>;
 };
 
+/**
+ *
+ */
 export const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
@@ -56,6 +62,9 @@ export const printCustomDirective = (
   return `${SectionLevels.LEVEL.repeat(4)} ${typeNameLink}${MARKDOWN_EOL} ${description}${MARKDOWN_EOL} `;
 };
 
+/**
+ *
+ */
 export const printCustomDirectives = (
   type: unknown,
   options: PrintTypeOptions,
@@ -86,6 +95,9 @@ export const printCustomDirectives = (
   return `${SectionLevels.LEVEL.repeat(3)} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 };
 
+/**
+ *
+ */
 export const getCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
@@ -112,6 +124,9 @@ export const getCustomTags = (
     }) as unknown as Badge[];
 };
 
+/**
+ *
+ */
 export const printCustomTags = (
   type: unknown,
   options: PrintTypeOptions,

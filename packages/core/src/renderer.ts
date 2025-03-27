@@ -98,9 +98,8 @@ enum SidebarPosition {
  * This constant provides the base folder structure for organizing GraphQL schema entities.
  * Can be overridden via ApiGroupOverrideType in configuration.
  *
- * @type {Required<ApiGroupOverrideType>}
- * @property {string} operations - Folder name for GraphQL operations (queries, mutations, subscriptions)
- * @property {string} types - Folder name for GraphQL type definitions
+ * @property operations Folder name for GraphQL operations (queries, mutations, subscriptions)
+ * @property types Folder name for GraphQL type definitions
  * @useDeclaredType
  *
  * @example
@@ -202,6 +201,7 @@ export interface CategoryMetafileOptions {
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
  * @useDeclaredType
+ * @example
  */
 export class Renderer {
   group: Maybe<SchemaEntitiesGroupMap>;
@@ -224,6 +224,7 @@ export class Renderer {
    * @param prettify - Whether to format the generated markdown
    * @param docOptions - Additional documentation options
    * @param mdxModule - Optional MDX module for enhanced documentation features
+   * @example
    */
   constructor(
     printer: Printer,
@@ -250,6 +251,7 @@ export class Renderer {
    * @param module - The module to check for MDX support
    * @returns True if the module supports index metafile generation
    * @useDeclaredType
+   * @example
    */
   hasMDXIndexFileSupport(
     module: unknown = this.mdxModule,
@@ -306,6 +308,7 @@ export class Renderer {
    * @param rootTypeName - The root type name this entity belongs to
    * @returns The generated directory path
    * @useDeclaredType
+   * @example
    */
   async generateCategoryMetafileType(
     type: unknown,
@@ -363,6 +366,7 @@ export class Renderer {
    * @param type - The type object containing all entities to render
    * @returns Array of rendered categories or undefined
    * @useDeclaredType
+   * @example
    */
   async renderRootTypes(
     rootTypeName: SchemaEntity,
@@ -406,6 +410,7 @@ export class Renderer {
    * @param type - The type entity to render
    * @returns The category information for the rendered entity or undefined
    * @useDeclaredType
+   * @example
    */
   async renderTypeEntities(
     dirPath: string,
@@ -471,6 +476,7 @@ export class Renderer {
    * @param homepageLocation - Path to the homepage template file
    * @returns Promise that resolves when the homepage is rendered
    * @useDeclaredType
+   * @example
    */
   async renderHomepage(homepageLocation: string): Promise<void> {
     const homePage = basename(homepageLocation);

@@ -1,8 +1,10 @@
 ---
-sidebar_position: 3
+sidebar_position: 30
 ---
 
 # Getting started
+
+While GraphQL-Markdown was initially developed as a Docusaurus plugin, it now supports various MDX documentation generators. This guide focuses on the Docusaurus integration - for other frameworks, please see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
 
 Get started by [creating a new site](#new-site).
 
@@ -12,9 +14,11 @@ Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
 
 ### Requirements
 
-Node.js version [18.0](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required. 
+Node.js version [16.14](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
-:::info
+:::info Package managers
+
+You can use either `npm`, `yarn`, or `pnpm` as your package manager. The examples in this documentation use `npm`, but you can substitute the commands with your preferred package manager.
 
 When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
@@ -42,7 +46,9 @@ The command also installs all necessary dependencies you need to run Docusaurus.
 
 ### Add a GraphQL schema loader
 
-See [schema loading](/docs/advanced/schema-loading).
+A schema loader is required to load your GraphQL schema. The template comes with `@graphql-tools/url-loader` pre-configured for remote schemas.
+
+See [schema loading](/docs/advanced/schema-loading) for other loaders and configuration options.
 
 :::tip
 
@@ -73,13 +79,15 @@ The `npm run start` command builds your website locally and serves it through a 
 
 ### Requirements
 
-- Node.js version [18.0](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`). 
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
- 
-- [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs](https://docusaurus.io/docs/docs-introduction) feature.
-  - Docs feature is provided by [`@docusaurus/plugin-content-docs`](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs) or `@docusaurus/preset-classic`.
- 
-- [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above. 
+:::note
+These requirements are specific to Docusaurus integration. For other frameworks' requirements, see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
+:::
+
+Your project needs to meet the following requirements:
+
+- Node.js version [16.14](https://nodejs.org/en/download/) or above
+- [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
+- [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above
 
 ### Install the plugin
 

@@ -182,10 +182,10 @@ export const DEFAULT_OPTIONS: Readonly<
 
 /**
  * Retrieves a directive name from a string by parsing and validating the format.
- * Directive names should be prefixed with '@' (e.g., '@example').
+ * Directive names should be prefixed with '\@' (e.g., '\@example').
  *
- * @param name - The directive name as a string, which should follow the format '@directiveName'
- * @returns The validated directive name without the '@' prefix
+ * @param name - The directive name as a string, which should follow the format '\@directiveName'
+ * @returns The validated directive name without the '\@' prefix
  * @throws Error if the directive name format is invalid
  * @example
  * ```typescript
@@ -218,7 +218,7 @@ export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
  *
  * @param cliOpts - CLI options containing "only" directives
  * @param configFileOpts - Config file options containing "onlyDocDirective"
- * @returns An array of validated "only" directives (without '@' prefix)
+ * @returns An array of validated "only" directives (without '\@' prefix)
  * @example
  * ```typescript
  * const cliOptions = { only: ["@example", "@internal"] };
@@ -252,7 +252,7 @@ export const getOnlyDocDirectives = (
  *
  * @param cliOpts - CLI options containing "skip" directives
  * @param configFileOpts - Config file options containing "skipDocDirective" and potentially "printTypeOptions.deprecated"
- * @returns An array of validated "skip" directives (without '@' prefix)
+ * @returns An array of validated "skip" directives (without '\@' prefix)
  * @example
  * ```typescript
  * const cliOptions = { skip: ["@internal"], deprecated: "skip" };
@@ -281,7 +281,6 @@ export const getSkipDocDirectives = (
 
   if (
     (configFileOpts &&
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
     (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
   ) {
@@ -645,7 +644,7 @@ export const getPrintTypeOptions = (
 
 /**
  * Parses and validates the groupByDirective option string format.
- * The format should be @directive(field|=fallback) where:
+ * The format should be \@directive(field|=fallback) where:
  * - directive: Name of the directive to group by
  * - field: Name of the field in the directive to use for grouping
  * - fallback: (Optional) Fallback group name for items without the directive

@@ -1,6 +1,5 @@
 {
   "files": [],
-
   "references": [
     { "path": "packages/cli" },
     { "path": "packages/core" },
@@ -10,6 +9,7 @@
     { "path": "packages/helpers" },
     { "path": "packages/logger" },
     { "path": "packages/printer-legacy" },
-    { "path": "packages/utils" }
+    { "path": "packages/utils" },
+    { "path": "packages/types" }
   ]
 }

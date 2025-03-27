@@ -19,6 +19,11 @@ const config = {
   organizationName: "graphql-markdown",
   projectName: "graphql-markdown.dev",
 
+  markdown: {
+    mermaid: true,
+  },
+  themes: ["@docusaurus/theme-mermaid"],
+
   plugins: [
     require.resolve("@cmfcmf/docusaurus-search-local"),
     [

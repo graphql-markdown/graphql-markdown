@@ -16,7 +16,7 @@ const DEFAULT_ID = "default" as const;
 /**
  * Type representing the GraphQL Markdown CLI.
  *
- * @see {@link https://graphql-markdown.dev|GraphQL Markdown Documentation}
+ * @see {@link https://graphql-markdown.dev | GraphQL Markdown Documentation}
  */
 export type GraphQLMarkdownCliType = CommanderStatic;
 

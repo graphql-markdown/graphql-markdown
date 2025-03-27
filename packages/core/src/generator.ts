@@ -52,56 +52,16 @@ const SEC_DECIMALS = 3 as const;
  * It loads the schema, analyzes it, and generates Markdown files according to the provided options.
  *
  * @param options - Configuration options for the documentation generator
- * @param options.baseURL - Base URL for the documentation links
- * @param options.customDirective - List of custom directives to include in documentation
- * @param options.diffMethod - Method to use for diffing schema changes (from {@link DiffMethodName})
- * @param options.docOptions - Documentation framework specific options
- * @param options.force - Forces regeneration of all files regardless of changes
- * @param options.groupByDirective - Directives used to group schema types
- * @param options.homepageLocation - Location of the homepage content
- * @param options.linkRoot - Root path for generating links
- * @param options.loadersList - List of loaders to use for loading the schema
- * @param options.loggerModule - Logger module to use
- * @param options.mdxParser - MDX parser module to use
- * @param options.metatags - Metadata tags to include in documentation
- * @param options.onlyDocDirective - Only document types with these directives
- * @param options.outputDir - Directory where documentation will be generated
- * @param options.prettify - Whether to prettify the generated output
- * @param options.printerModule - Printer module to use for generating output
- * @param options.printTypeOptions - Options for printing GraphQL types
- * @param options.printTypeOptions.deprecated - Whether to include deprecated types
- * @param options.printTypeOptions.hierarchy - Type hierarchy configuration
- * @param options.schemaLocation - Location of the GraphQL schema
- * @param options.skipDocDirective - Skip documenting types with these directives
- * @param options.tmpDir - Temporary directory for processing
- *
- * @returns Promise that resolves when documentation has been generated successfully. The function performs
- * schema analysis, generates markdown files for all schema entities, and prints a summary of the operation.
+ * @returns Promise that resolves when documentation generation is complete
  *
  * @example
- * // Basic usage
+ * ```typescript
  * await generateDocFromSchema({
- *   baseURL: "/docs/",
- *   schemaLocation: "./schema.graphql",
- *   outputDir: "./docs",
- *   diffMethod: DiffMethod.NONE,
- *   force: false,
- *   linkRoot: "/docs/",
- *   customDirective: [],
- *   groupByDirective: [],
- *   onlyDocDirective: [],
- *   skipDocDirective: [],
- *   loaders: ["@graphql-tools/json-file-loader"],
- *   printer: "@graphql-markdown/printer-docusaurus",
- *   printTypeOptions: {
- *     deprecated: true,
- *     hierarchy: { enabled: true }
- *   }
+ *   baseURL: '/docs',
+ *   outputDir: './docs',
+ *   schemaLocation: './schema.graphql'
  * });
- *
- * @see {@link DiffMethod} - For available diff methods
- * @see {@link GeneratorOptions} - For all available configuration options
- * @see https://graphql-markdown.dev - For more examples and documentation
+ * ```
  */
 export const generateDocFromSchema = async ({
   baseURL,

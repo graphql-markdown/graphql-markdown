@@ -40,6 +40,9 @@ export { GraphQLSchema } from "graphql";
  * ```
  */
 
+/**
+ *
+ */
 export const loadSchema = async (
   schemaLocation: string,
   options: LoadSchemaOptions & {
@@ -105,6 +108,9 @@ export const loadSchema = async (
  * ```
  */
 
+/**
+ *
+ */
 export const getDocumentLoaders = async (
   loadersList: Maybe<LoaderOption>,
 ): Promise<Maybe<LoadSchemaOptions>> => {

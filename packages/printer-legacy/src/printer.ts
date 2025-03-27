@@ -65,6 +65,10 @@ import {
 } from "./const/options";
 import { printExample } from "./example";
 
+/**
+ *
+ * @example
+ */
 export class Printer implements IPrinter {
   static options: Readonly<Maybe<PrintTypeOptions>>;
 
@@ -76,6 +80,10 @@ export class Printer implements IPrinter {
 
   static printMDXModule: Readonly<MDXSupportType>;
 
+  /**
+   *
+   * @example
+   */
   static async init(
     schema: Maybe<GraphQLSchema>,
     baseURL: Maybe<string> = "schema",

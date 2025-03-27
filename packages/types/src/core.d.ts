@@ -114,27 +114,47 @@ export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";
 type Pointer = UnnormalizedTypeDefPointer | string;
 
 export interface ConfigOptions {
+  // Base URL for the documentation links
   baseURL?: Maybe<string>;
+  // List of custom directives to include in documentation
   customDirective?: Maybe<CustomDirective>;
+  // Method to use for diffing schema changes
   diffMethod?: Maybe<TypeDiffMethod>;
+  // Documentation framework specific options
   docOptions?: Maybe<
     ConfigDocOptions & Omit<DeprecatedConfigDocOptions, "never">
   >;
+  // Forces regeneration of all files regardless of changes
   force?: boolean;
+  // Directives used to group schema types
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
+  // Location of the homepage content
   homepage?: Maybe<string>;
+  // Identifier for the project
   id?: Maybe<string>;
+  // Root path for generating links
   linkRoot?: Maybe<string>;
+  //  List of loaders to use for loading the schema
   loaders?: Maybe<LoaderOption>;
+  // Package to be used for generating MDX output
   mdxParser?: Maybe<PackageName | string>;
+  // Metadata tags to include in documentation
   metatags?: Record<string, string>[];
+  // Only document types with these directives
   onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  // Use prettier to make the output pretty
   pretty?: Maybe<boolean>;
+  // Printer module to use for generating output
   printer?: Maybe<PackageName>;
+  // Options for printing GraphQL types
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
+  // Root path for the project
   rootPath?: Maybe<string>;
+  // Location of the GraphQL schema
   schema?: Maybe<Pointer>;
+  // Skip documenting types with these directives
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  // Temporary directory for processing
   tmpDir?: Maybe<string>;
 }
 

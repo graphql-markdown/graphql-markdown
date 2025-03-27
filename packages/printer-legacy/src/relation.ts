@@ -22,6 +22,9 @@ import { CSS_BADGE_CLASSNAME, printBadge } from "./badge";
 import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
+/**
+ *
+ */
 export const getRootTypeLocaleFromString = (
   text: string,
 ): Maybe<TypeLocale> => {
@@ -33,6 +36,9 @@ export const getRootTypeLocaleFromString = (
   return undefined;
 };
 
+/**
+ *
+ */
 export const printRelationOf = <T>(
   type: unknown,
   section: unknown,
@@ -91,6 +97,9 @@ export const printRelationOf = <T>(
   return `${SectionLevels.LEVEL.repeat(3)} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
 };
 
+/**
+ *
+ */
 export const printRelations = (
   type: unknown,
   options: PrintTypeOptions,

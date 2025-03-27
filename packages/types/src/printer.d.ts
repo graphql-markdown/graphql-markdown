@@ -111,8 +111,13 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
 
 /**
  * @public
+ * @example
  */
 export abstract class IPrinter {
+  /**
+   *
+   * @example
+   */
   static async init(
     schema: Maybe<GraphQLSchema>,
     baseURL: string,
@@ -120,36 +125,68 @@ export abstract class IPrinter {
     options: Maybe<PrinterOptions>,
     mdxModule?: unknown,
   ): Promise<void>;
+  /**
+   *
+   * @example
+   */
   static printHeader(
     id: string,
     title: string,
     options: PrinterConfig & PrinterOptions,
   ): string;
+  /**
+   *
+   * @example
+   */
   static printDescription(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
     noText: string,
   ): string;
+  /**
+   *
+   * @example
+   */
   static printCode(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
   ): string;
+  /**
+   *
+   * @example
+   */
   static printCustomDirectives(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
   ): MDXString;
+  /**
+   *
+   * @example
+   */
   static printCustomTags(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
   ): MDXString;
+  /**
+   *
+   * @example
+   */
   static printTypeMetadata(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
   ): MDXString;
+  /**
+   *
+   * @example
+   */
   static printRelations(
     type: unknown,
     options: PrinterConfig & PrinterOptions,
   ): MDXString;
+  /**
+   *
+   * @example
+   */
   static printType(
     name: string,
     type: unknown,

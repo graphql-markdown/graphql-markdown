@@ -44,6 +44,9 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
   types: "types",
 } as const;
 
+/**
+ *
+ */
 export const hasPrintableDirective = (
   type: unknown,
   options?: Pick<
@@ -77,6 +80,9 @@ export const hasPrintableDirective = (
   return !(skipDirective || skipDeprecated) && onlyDirective;
 };
 
+/**
+ *
+ */
 export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
     case isDirectiveType(type):
@@ -99,6 +105,9 @@ export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   return undefined;
 };
 
+/**
+ *
+ */
 export const getLinkCategoryFolder = (
   type: unknown,
   operationLocale?: Maybe<TypeLocale>,
@@ -124,10 +133,16 @@ export const getLinkCategoryFolder = (
     : categoryLocale;
 };
 
+/**
+ *
+ */
 export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
   return "withAttributes" in options && options.withAttributes === true;
 };
 
+/**
+ *
+ */
 export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   return (
     "parentTypePrefix" in options &&
@@ -137,6 +152,9 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   );
 };
 
+/**
+ *
+ */
 export const getLinkApiGroupFolder = (
   type: unknown,
   groups?: Maybe<ApiGroupOverrideType | boolean>,
@@ -148,6 +166,9 @@ export const getLinkApiGroupFolder = (
   return isApiType(type) ? folderNames.operations : folderNames.types;
 };
 
+/**
+ *
+ */
 export const getLinkDeprecatedFolder = (
   type: unknown,
   option: Maybe<TypeDeprecatedOption>,
@@ -162,6 +183,9 @@ const isHierarchy = (
   return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
+/**
+ *
+ */
 export const toLink = (
   type: unknown,
   name: string,
@@ -231,6 +255,9 @@ export const toLink = (
   return link;
 };
 
+/**
+ *
+ */
 export const getRelationLink = (
   category: Maybe<TypeLocale>,
   type: unknown,
@@ -247,6 +274,9 @@ export const getRelationLink = (
   return toLink(type, type.name as string, category, options);
 };
 
+/**
+ *
+ */
 export const printLinkAttributes = (
   type: unknown,
   text: Maybe<string> = "",
@@ -274,6 +304,9 @@ export const printLinkAttributes = (
   return text ?? "";
 };
 
+/**
+ *
+ */
 export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   if (typeof type !== "object" || type === null) {
     return "";
@@ -299,6 +332,9 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   return `[${options.formatMDXNameEntity!(text)}](${link.url})`;
 };
 
+/**
+ *
+ */
 export const printParentLink = (
   type: unknown,
   options: PrintLinkOptions,

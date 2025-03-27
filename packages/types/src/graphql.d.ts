@@ -40,6 +40,13 @@ export type { GraphQLExtensionDeclaration } from "graphql-config";
 
 export type { ASTNode, DirectiveNode } from "graphql/language";
 
+export interface GraphQLSchemaEntity<T> {
+  // GraphQL schema type
+  type: Maybe<GraphQLType>;
+  // GraphQL schema type's value to be formatted.
+  defaultValue: T;
+}
+
 export type DeprecatedType<T> = Partial<{
   deprecationReason: string;
   isDeprecated: boolean;

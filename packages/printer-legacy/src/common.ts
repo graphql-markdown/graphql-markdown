@@ -13,6 +13,9 @@ import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
 import { getCustomDirectiveResolver } from "./directive";
 
+/**
+ *
+ */
 export const printCustomDirectives = (
   type: unknown,
   options?: PrintTypeOptions,
@@ -46,6 +49,9 @@ export const printCustomDirectives = (
   return `${MARKDOWN_EOP}${content}`;
 };
 
+/**
+ *
+ */
 export const formatDescription = (
   type: unknown,
   replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
@@ -61,6 +67,9 @@ export const formatDescription = (
   return `${MARKDOWN_EOP}${escapeMDX(description)}`;
 };
 
+/**
+ *
+ */
 export const printWarning = (
   { text, title }: { text?: string; title?: string },
   options: PrintTypeOptions,
@@ -76,6 +85,9 @@ export const printWarning = (
   ) as string;
 };
 
+/**
+ *
+ */
 export const printDeprecation = (
   type: unknown,
   options: PrintTypeOptions,
@@ -95,6 +107,9 @@ export const printDeprecation = (
   );
 };
 
+/**
+ *
+ */
 export const printDescription = (
   type: unknown,
   options: PrintTypeOptions,

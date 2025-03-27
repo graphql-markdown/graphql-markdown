@@ -27,7 +27,7 @@ export const EXTENSION_NAME = "graphql-markdown" as const;
 /**
  * GraphQL extension declaration for graphql-config.
  *
- * @returns {object} The extension configuration object with name property.
+ * @returns The extension configuration object with name property.
  *
  * @example
  * ```typescript
@@ -45,8 +45,8 @@ export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
  * Options for controlling throw behavior when loading configuration.
  *
  * @interface ThrowOptions
- * @property {boolean} throwOnMissing - Whether to throw when the config file is missing.
- * @property {boolean} throwOnEmpty - Whether to throw when the config is empty.
+ * @property throwOnMissing Whether to throw when the config file is missing.
+ * @property throwOnEmpty Whether to throw when the config is empty.
  */
 interface ThrowOptions {
   throwOnMissing: boolean;
@@ -59,9 +59,9 @@ interface ThrowOptions {
  * This function takes a LoaderOption object and merges the provided options
  * with any existing options for each loader.
  *
- * @param {LoaderOption} loaders - The loader configuration object.
- * @param {PackageOptionsConfig} options - The package options to apply to loaders.
- * @returns {LoaderOption} The updated loader configuration.
+ * @param loaders - The loader configuration object.
+ * @param options - The package options to apply to loaders.
+ * @returns The updated loader configuration.
  *
  * @example
  * ```typescript
@@ -106,9 +106,7 @@ export const setLoaderOptions = (
  * @param id - The project ID to load configuration for.
  * @param options - Optional package options to apply.
  * @param throwOptions - Options for controlling throw behavior.
- * @param {boolean} throwOptions.throwOnMissing - Whether to throw when config file is missing.
- * @param {boolean} throwOptions.throwOnEmpty - Whether to throw when config is empty.
- * @returns {Promise<Maybe<Readonly<ExtensionProjectConfig>>>} The extension project configuration if found, otherwise undefined.
+ * @returns The extension project configuration if found, otherwise undefined.
  *
  * @throws Will throw an error if throwOnMissing or throwOnEmpty is true and
  * the corresponding condition is met.

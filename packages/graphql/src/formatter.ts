@@ -15,7 +15,11 @@ import {
   isListType,
 } from "graphql/type";
 
-import type { GraphQLType, Maybe } from "@graphql-markdown/types";
+import type {
+  GraphQLSchemaEntity,
+  GraphQLType,
+  Maybe,
+} from "@graphql-markdown/types";
 
 /**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
@@ -85,8 +89,6 @@ const _formatListDefaultValues = <T>(
  * This is the generic function.
  *
  * @param entity - the GraphQL schema entity processed.
- * @param entity.type - the GraphQL schema type.
- * @param entity.defaultValue - the GraphQL schema type's value to be formatted.
  *
  * @returns a printable formatted value.
  *
@@ -94,14 +96,10 @@ const _formatListDefaultValues = <T>(
 export const getFormattedDefaultValue = <T>({
   type,
   defaultValue,
-}: {
-  type: Maybe<GraphQLType>;
-  defaultValue: T;
-}): Maybe<T | string> => {
+}: GraphQLSchemaEntity<T>): Maybe<T | string> => {
   if (
     typeof type === "undefined" ||
     type === null ||
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     typeof defaultValue === "undefined" ||
     defaultValue === null
   ) {

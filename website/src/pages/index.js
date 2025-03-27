@@ -27,6 +27,25 @@ function HomepageHeader() {
           </a>{" "}
           schemas.
         </p>
+        <div className="hero__subtitle">
+          Supporting multiple frameworks:
+          <div className={styles.frameworkLinks}>
+            <a
+              href="/docs/docusaurus"
+              className={styles.frameworkLink}
+            >
+              <img src="/img/docusaurus.svg" alt="Docusaurus" height="30" />
+              <span>Docusaurus</span>
+            </a>
+            <a
+              href="/docs/mkdocs"
+              className={styles.frameworkLink}
+            >
+              <img src="/img/mkdocs.svg" alt="MkDocs" height="30" />
+              <span>MkDocs</span>
+            </a>
+          </div>
+        </div>
         <p className="hero__subtitle">
           Powered by{" "}
           <a
