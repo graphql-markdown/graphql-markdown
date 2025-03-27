@@ -8,24 +8,14 @@
 const EXTENSION_NAME: "graphql-markdown";
 ```
 
-Defined in: [packages/cli/src/main.ts:13](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L13)
+Defined in: [main.ts:13](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L13)
 
-## Functions
+***
 
-### graphQLConfigExtension()
+### graphQLConfigExtension
 
 ```ts
-function graphQLConfigExtension(api): GraphQLConfigExtension
+const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-Defined in: [packages/cli/src/main.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L14)
-
-#### Parameters
-
-##### api
-
-`ExtensionAPI`
-
-#### Returns
-
-`GraphQLConfigExtension`
+Defined in: [main.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L17)

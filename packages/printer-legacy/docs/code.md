@@ -8,19 +8,21 @@
 function printCodeArguments(type, indentationLevel): string
 ```
 
+Defined in: [code.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L19)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **indentationLevel**: `number` = `1`
+`unknown`
+
+##### indentationLevel
+
+`number` = `1`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[code.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L16)
 
 ***
 
@@ -33,18 +35,22 @@ function printCodeField(
    indentationLevel?): string | MDXString
 ```
 
+Defined in: [code.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L56)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options?**: `PrintTypeOptions`
+`unknown`
 
-• **indentationLevel?**: `number` = `0`
+##### options?
+
+`PrintTypeOptions`
+
+##### indentationLevel?
+
+`number` = `0`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[code.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L50)

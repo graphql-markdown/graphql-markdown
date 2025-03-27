@@ -1,33 +1,34 @@
 # graphql/operation
 
-## Functions
+## Variables
 
 ### printCodeOperation()
 
 ```ts
-function printCodeOperation(
-   type, 
-   options?, 
-   indentationLevel?): string | MDXString
+const printCodeOperation: (type, options?, indentationLevel) => string | MDXString = printCodeField;
 ```
+
+Defined in: [graphql/operation.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L37)
 
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options?**: `PrintTypeOptions`
+`unknown`
 
-• **indentationLevel?**: `number` = `0`
+##### options?
+
+`PrintTypeOptions`
+
+##### indentationLevel?
+
+`number` = `0`
 
 #### Returns
 
 `string` \| `MDXString`
 
-#### Defined in
-
-[graphql/operation.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L37)
-
-***
+## Functions
 
 ### printOperationMetadata()
 
@@ -35,19 +36,21 @@ function printCodeOperation(
 function printOperationMetadata(type, options): string | MDXString
 ```
 
+Defined in: [graphql/operation.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L23)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[graphql/operation.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L23)
 
 ***
 
@@ -57,16 +60,18 @@ function printOperationMetadata(type, options): string | MDXString
 function printOperationType(type, options): string | MDXString
 ```
 
+Defined in: [graphql/operation.ts:8](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L8)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[graphql/operation.ts:8](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L8)

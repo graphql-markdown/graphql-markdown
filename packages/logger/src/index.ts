@@ -1,14 +1,15 @@
+// index.ts
 /**
  * Logger singleton module.
  *
+ * @module Logger
  * @packageDocumentation
  */
-
-/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, no-var */
 
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
 declare global {
+  // eslint-disable-next-line no-var
   var logger: Maybe<LoggerType>;
 }
 

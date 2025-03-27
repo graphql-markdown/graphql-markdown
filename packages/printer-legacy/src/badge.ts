@@ -27,6 +27,9 @@ export const CSS_BADGE_CLASSNAME = {
   NON_NULL: "NON_NULL",
 };
 
+/**
+ *
+ */
 export const getTypeBadges = (
   type: unknown,
   groups?: Maybe<SchemaEntitiesGroupMap>,
@@ -75,6 +78,9 @@ export const getTypeBadges = (
   return badges;
 };
 
+/**
+ *
+ */
 export const printBadge = (
   { text, classname }: Badge,
   options: PrintTypeOptions,
@@ -87,6 +93,9 @@ export const printBadge = (
   }) as MDXString;
 };
 
+/**
+ *
+ */
 export const printBadges = (
   type: unknown,
   options: PrintTypeOptions,

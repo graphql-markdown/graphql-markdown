@@ -42,6 +42,10 @@ export { printSchema } from "graphql/utilities";
 export { getNamedType, getNullableType, GraphQLSchema } from "graphql/type";
 export { parse, print } from "graphql/language";
 
+/**
+ *
+ * @example
+ */
 export class IntrospectionError extends Error {}
 
 /**
@@ -110,6 +114,9 @@ export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
   return typeof (node as Record<string, unknown>)["astNode"] === "object";
 };
 
+/**
+ *
+ */
 export const getDirectiveLocationForASTPath = (
   appliedTo: Maybe<ASTNode>,
 ): DirectiveLocation => {

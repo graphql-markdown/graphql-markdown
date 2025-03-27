@@ -1,3 +1,8 @@
+/**
+ * @module
+ * Core generator functionality for GraphQL Markdown.
+ * This module contains the main entry point for generating documentation from GraphQL schemas.
+ */
 import type {
   DiffMethodName,
   DirectiveName,
@@ -26,9 +31,38 @@ import { getPrinter } from "./printer";
 import type { Renderer } from "./renderer";
 import { getRenderer } from "./renderer";
 
+/**
+ * Constant representing nanoseconds per second.
+ *
+ * This constant is used for high-precision time measurements and conversions
+ * between seconds and nanoseconds.
+ *
+ */
 const NS_PER_SEC = 1e9 as const;
+/**
+ * The number of decimal places to display when reporting times in seconds.
+ *
+ */
 const SEC_DECIMALS = 3 as const;
 
+/**
+ * Generates Markdown documentation from a GraphQL schema.
+ *
+ * This function is the main entry point for the documentation generation process.
+ * It loads the schema, analyzes it, and generates Markdown files according to the provided options.
+ *
+ * @param options - Configuration options for the documentation generator
+ * @returns Promise that resolves when documentation generation is complete
+ *
+ * @example
+ * ```typescript
+ * await generateDocFromSchema({
+ *   baseURL: '/docs',
+ *   outputDir: './docs',
+ *   schemaLocation: './schema.graphql'
+ * });
+ * ```
+ */
 export const generateDocFromSchema = async ({
   baseURL,
   customDirective,

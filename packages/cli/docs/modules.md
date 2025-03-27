@@ -2,5 +2,5 @@
 
 ## Modules
 
-- [cli](cli.md)
+- [index](index-1.md)
 - [main](main.md)

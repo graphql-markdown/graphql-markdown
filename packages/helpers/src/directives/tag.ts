@@ -1,7 +1,7 @@
 /**
  * Custom directive `tag` helper.
  *
- * @see {@link https://graphql-markdown.dev/docs/advanced/custom-directive#tag | Option `customDirective.[directive].tag`}
+ * @see [Option `customDirective.[directive].tag`](https://graphql-markdown.dev/docs/advanced/custom-directive#tag)
  *
  * @packageDocumentation
  */
@@ -48,13 +48,13 @@ import type { Badge, GraphQLDirective } from "@graphql-markdown/types";
  * ```
  *
  */
-export function directiveTag(
+export const directiveTag = (
   directive: GraphQLDirective,
   type?: unknown,
   classname: string = "badge--secondary",
-): Badge {
+): Badge => {
   return {
     text: `@${directive.name}`,
     classname: classname,
   };
-}
+};

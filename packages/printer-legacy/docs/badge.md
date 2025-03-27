@@ -2,15 +2,33 @@
 
 ## Variables
 
-### DEFAULT\_CSS\_CLASSNAME
+### CSS\_BADGE\_CLASSNAME
 
 ```ts
-const DEFAULT_CSS_CLASSNAME: "badge--secondary";
+const CSS_BADGE_CLASSNAME: object;
 ```
 
-#### Defined in
+Defined in: [badge.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L24)
 
-[badge.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L23)
+#### Type declaration
+
+##### DEPRECATED
+
+```ts
+DEPRECATED: string = "DEPRECATED";
+```
+
+##### NON\_NULL
+
+```ts
+NON_NULL: string = "NON_NULL";
+```
+
+##### RELATION
+
+```ts
+RELATION: string = "RELATION";
+```
 
 ## Functions
 
@@ -20,39 +38,45 @@ const DEFAULT_CSS_CLASSNAME: "badge--secondary";
 function getTypeBadges(type, groups?): Badge[]
 ```
 
+Defined in: [badge.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L33)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **groups?**: `Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`unknown`
+
+##### groups?
+
+`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
 
 #### Returns
 
 `Badge`[]
-
-#### Defined in
-
-[badge.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L25)
 
 ***
 
 ### printBadge()
 
 ```ts
-function printBadge(__namedParameters): MDXString
+function printBadge(__namedParameters, options): MDXString
 ```
+
+Defined in: [badge.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L84)
 
 #### Parameters
 
-• **\_\_namedParameters**: `Badge`
+##### \_\_namedParameters
+
+`Badge`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `MDXString`
-
-#### Defined in
-
-[badge.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L73)
 
 ***
 
@@ -62,16 +86,18 @@ function printBadge(__namedParameters): MDXString
 function printBadges(type, options): string | MDXString
 ```
 
+Defined in: [badge.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L99)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[badge.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L79)

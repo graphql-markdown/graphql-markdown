@@ -11,6 +11,9 @@ import { loadConfig } from "graphql-config";
 import { getGraphQLMarkdownCli } from ".";
 
 export const EXTENSION_NAME = "graphql-markdown" as const;
+/**
+ *
+ */
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as GraphQLExtensionDeclaration;
 };

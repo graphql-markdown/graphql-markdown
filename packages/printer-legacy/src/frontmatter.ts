@@ -5,6 +5,9 @@ import type {
 } from "@graphql-markdown/types";
 import { formatFrontMatterObject } from "@graphql-markdown/utils";
 
+/**
+ *
+ */
 export const printFrontMatter = (
   title: string,
   props: Maybe<FrontMatterOptions>,

@@ -7,14 +7,14 @@
 import type { LoggerType } from "@graphql-markdown/types";
 
 /**
- * Prettify a string using {@link https://prettier.io/docs/en/api#prettierformatsource-options | prettier.format}.
+ * Prettify a string using @see [prettier.format](https://prettier.io/docs/en/api#prettierformatsource-options)
  *
  * @remarks
  * This function logs a warning message on error.
  *
  * @internal
  *
- * @see https://prettier.io/docs/en/options#parser for the list of parsers.
+ * @see [Prettier doc for the list of parsers](https://prettier.io/docs/en/options#parser)
  *
  * @param content - the string to be prettified.
  * @param parser - the `prettier` parser to use.

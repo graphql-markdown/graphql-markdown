@@ -14,6 +14,9 @@ const NAME = "docusaurus-graphql-doc-generator" as const;
 const LOGGER_MODULE = "@docusaurus/logger" as const;
 const MDX_PACKAGE = "@graphql-markdown/docusaurus/mdx" as const;
 
+/**
+ *
+ */
 export default async function pluginGraphQLDocGenerator(
   _: LoadContext,
   options: GraphQLMarkdownCliOptions & Partial<PluginOptions>,

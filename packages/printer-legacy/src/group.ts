@@ -9,6 +9,9 @@ import { getNamedType } from "@graphql-markdown/graphql";
 
 import { slugify } from "@graphql-markdown/utils";
 
+/**
+ *
+ */
 export const getGroup = (
   type: unknown,
   groups: Maybe<SchemaEntitiesGroupMap>,

@@ -21,7 +21,7 @@ import type { Maybe } from "@graphql-markdown/types";
  * replaceDiacritics("Âéêś"); // Expected result: "Aees"
  * ```
  *
- * @see {@link https://stackoverflow.com/a/37511463 | StackOverflow source}.
+ * @see [StackOverflow source](https://stackoverflow.com/a/37511463)
  *
  */
 export const replaceDiacritics = (str: Maybe<string>): string => {

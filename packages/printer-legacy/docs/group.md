@@ -11,18 +11,22 @@ function getGroup(
    typeCategory): string
 ```
 
+Defined in: [group.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L15)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **groups**: `Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`unknown`
 
-• **typeCategory**: `Maybe`\<`SchemaEntity`\>
+##### groups
+
+`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+
+##### typeCategory
+
+`Maybe`\<`SchemaEntity`\>
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[group.ts:12](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L12)

@@ -13,8 +13,29 @@ const COMMAND = "graphql-to-doc" as const;
 const DESCRIPTION = "Generate GraphQL Schema Documentation" as const;
 const DEFAULT_ID = "default" as const;
 
+/**
+ * Type representing the GraphQL Markdown CLI.
+ *
+ * @see {@link https://graphql-markdown.dev | GraphQL Markdown Documentation}
+ */
 export type GraphQLMarkdownCliType = CommanderStatic;
 
+/**
+ * Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
+ *
+ * @param options - Options for configuring the GraphQL Markdown CLI.
+ * @param cliOptions - Command-line options passed to the CLI.
+ * @param loggerModule - Optional logger module to use.
+ *
+ * @example
+ * ```typescript
+ * await runGraphQLMarkdown(
+ *   { id: "custom" },
+ *   { schema: "./schema.graphql", root: "./docs" },
+ *   "custom-logger"
+ * );
+ * ```
+ */
 export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
   cliOptions: CliOptions,
@@ -33,6 +54,25 @@ export const runGraphQLMarkdown = async (
   });
 };
 
+/**
+ * Configures and returns the GraphQL Markdown CLI.
+ *
+ * @param options - Options for configuring the GraphQL Markdown CLI.
+ * @param loggerModule - Optional logger module to use.
+ * @param customMdxParser - Optional MDX parser configuration.
+ *
+ * @returns The configured CLI instance.
+ *
+ * @example
+ * ```typescript
+ * const cli = getGraphQLMarkdownCli(
+ *   { id: "custom" },
+ *   "custom-logger",
+ *   true
+ * );
+ * await cli.parseAsync(process.argv);
+ * ```
+ */
 export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,

@@ -13,19 +13,29 @@ function getObjPath(
    fallback): unknown
 ```
 
+Defined in: [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
+
+**`Internal`**
+
 Returns the value of the specified property or nested property of an object using a string path.
 
 #### Parameters
 
-• **path**: `Maybe`\<`string`\>
+##### path
+
+`Maybe`\<`string`\>
 
 property path as string.
 
-• **obj**: `unknown`
+##### obj
+
+`unknown`
 
 the key/value record object.
 
-• **fallback**: `unknown` = `""`
+##### fallback
+
+`unknown` = `""`
 
 optional fallback value to be returned if the path cannot be resolved.
 
@@ -45,10 +55,6 @@ getObjPath("foo.bar", { foo: { bar: 42 } }); // Returns 42
 getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 ```
 
-#### Defined in
-
-[utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
-
 ***
 
 ### interpolate()
@@ -60,19 +66,27 @@ function interpolate(
    fallback?): string
 ```
 
+Defined in: [utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L64)
+
 Interpolate a template literal-like string.
 
 #### Parameters
 
-• **template**: `string`
+##### template
+
+`string`
 
 a string template literal-like.
 
-• **variables**: `Maybe`\<`Record`\<`string`, `unknown`\> & `object`\>
+##### variables
+
+`Maybe`\<`Record`\<`string`, `unknown`\> & `object`\>
 
 a record map of values with variable's name as key and `description` as directive's description.
 
-• **fallback?**: `string`
+##### fallback?
+
+`string`
 
 optional fallback value if a variable cannot be substituted.
 
@@ -90,7 +104,3 @@ const template = "${foo} is not ${bar.notfound}";
 
 interpolate(template, values, "fallback"); // Expected result: "42 is not fallback",
 ```
-
-#### Defined in
-
-[utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L64)

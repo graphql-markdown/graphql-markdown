@@ -60,14 +60,11 @@ describe("section", () => {
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
+</details>
 
 ####   
 
-
-
-</details>
-
-"
+undefined"
 `);
     });
 

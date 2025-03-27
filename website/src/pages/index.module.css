@@ -53,6 +53,27 @@
   --ifm-button-background-color: #e535ab;
 }
 
+.frameworkLinks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.frameworkLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.frameworkLink:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;

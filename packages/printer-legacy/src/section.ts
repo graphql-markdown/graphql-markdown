@@ -15,6 +15,9 @@ import { printCustomTags } from "./directive";
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
+/**
+ *
+ */
 export const printSectionItem = <T>(
   type: T,
   options: PrintTypeOptions,
@@ -56,6 +59,9 @@ export const printSectionItem = <T>(
   return section as MDXString;
 };
 
+/**
+ *
+ */
 export const printSectionItems = <V>(
   values: V | V[],
   options: PrintTypeOptions,
@@ -81,6 +87,9 @@ export const printSectionItems = <V>(
     .join(MARKDOWN_EOP) as MDXString;
 };
 
+/**
+ *
+ */
 export const printSection = <V>(
   values: V[] | readonly V[],
   section: string,
@@ -120,6 +129,9 @@ export const printSection = <V>(
   return `${SectionLevels.LEVEL.repeat(level)} ${section}${openSection}${items}${closeSection}` as MDXString;
 };
 
+/**
+ *
+ */
 export const printMetadataSection = <T, V>(
   type: T,
   values: V | V[] | readonly V[],
