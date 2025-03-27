@@ -391,9 +391,7 @@ export const buildConfig = async (
   cliOpts?: Maybe<CliOptions>,
   id: Maybe<string> = "default",
 ): Promise<Options> => {
-  if (!cliOpts) {
-    cliOpts = {};
-  }
+  cliOpts ??= {};
 
   const graphqlConfig = await loadConfiguration(id);
   const config: ConfigOptions = {
