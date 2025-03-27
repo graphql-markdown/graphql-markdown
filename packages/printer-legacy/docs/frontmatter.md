@@ -2,54 +2,31 @@
 
 ## Functions
 
-### formatFrontMatterProp()
-
-```ts
-function formatFrontMatterProp(
-   prop, 
-   indentation, 
-   prefix?): string[]
-```
-
-#### Parameters
-
-• **prop**: `unknown`
-
-• **indentation**: `number` = `0`
-
-• **prefix?**: `string`
-
-#### Returns
-
-`string`[]
-
-#### Defined in
-
-[frontmatter.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L60)
-
-***
-
 ### printFrontMatter()
 
 ```ts
 function printFrontMatter(
-   id, 
    title, 
-   props?): string
+   props, 
+   options): string
 ```
+
+Defined in: [frontmatter.ts:11](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L11)
 
 #### Parameters
 
-• **id**: `string`
+##### title
 
-• **title**: `string`
+`string`
 
-• **props?**: `Maybe`\<`FrontMatterOptions`\>
+##### props
+
+`Maybe`\<`FrontMatterOptions`\>
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[frontmatter.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L83)

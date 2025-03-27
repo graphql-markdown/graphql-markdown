@@ -8,41 +8,21 @@
 function formatDescription(type, replacement): string | MDXString
 ```
 
+Defined in: [common.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L55)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **replacement**: `Maybe`\<`string`\> = `NO_DESCRIPTION_TEXT`
+`unknown`
+
+##### replacement
+
+`Maybe`\<`string`\> = `NO_DESCRIPTION_TEXT`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[common.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L56)
-
-***
-
-### hasPrintableDirective()
-
-```ts
-function hasPrintableDirective(type, options?): boolean
-```
-
-#### Parameters
-
-• **type**: `unknown`
-
-• **options?**: `Pick`\<`PrintTypeOptions`, `"deprecated"` \| `"onlyDocDirectives"` \| `"skipDocDirectives"`\>
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[common.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L107)
 
 ***
 
@@ -52,39 +32,45 @@ function hasPrintableDirective(type, options?): boolean
 function printCustomDirectives(type, options?): string
 ```
 
+Defined in: [common.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L19)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options?**: `PrintTypeOptions`
+`unknown`
+
+##### options?
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[common.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L23)
 
 ***
 
 ### printDeprecation()
 
 ```ts
-function printDeprecation(type): string
+function printDeprecation(type, options): string
 ```
+
+Defined in: [common.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L91)
 
 #### Parameters
 
-• **type**: `unknown`
+##### type
+
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[common.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L83)
 
 ***
 
@@ -93,44 +79,56 @@ function printDeprecation(type): string
 ```ts
 function printDescription(
    type, 
-   options?, 
+   options, 
    noText?): string | MDXString
 ```
 
+Defined in: [common.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L113)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options?**: `PrintTypeOptions`
+`unknown`
 
-• **noText?**: `string`
+##### options
+
+`PrintTypeOptions`
+
+##### noText?
+
+`string`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[common.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L96)
 
 ***
 
 ### printWarning()
 
 ```ts
-function printWarning(text?, title?): string
+function printWarning(__namedParameters, options): string
 ```
+
+Defined in: [common.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L73)
 
 #### Parameters
 
-• **text?**: `string`
+##### \_\_namedParameters
 
-• **title?**: `string`
+###### text?
+
+`string`
+
+###### title?
+
+`string`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[common.ts:71](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L71)

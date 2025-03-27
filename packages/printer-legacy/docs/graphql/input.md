@@ -1,5 +1,29 @@
 # graphql/input
 
+## Variables
+
+### printInputMetadata()
+
+```ts
+const printInputMetadata: (type, options) => string = printObjectMetadata;
+```
+
+Defined in: [graphql/input.ts:5](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/input.ts#L5)
+
+#### Parameters
+
+##### type
+
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
+
+#### Returns
+
+`string`
+
 ## Functions
 
 ### printCodeInput()
@@ -8,38 +32,18 @@
 function printCodeInput(type, options): string
 ```
 
+Defined in: [graphql/input.ts:7](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/input.ts#L7)
+
 #### Parameters
 
-• **type**: `unknown`
+##### type
 
-• **options**: `PrintTypeOptions`
+`unknown`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[graphql/input.ts:7](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/input.ts#L7)
-
-***
-
-### printInputMetadata()
-
-```ts
-function printInputMetadata(type, options): string
-```
-
-#### Parameters
-
-• **type**: `unknown`
-
-• **options**: `PrintTypeOptions`
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[graphql/input.ts:5](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/input.ts#L5)

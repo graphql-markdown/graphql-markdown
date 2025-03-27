@@ -1,17 +1,5 @@
 # section
 
-## Variables
-
-### sectionLevels
-
-```ts
-const sectionLevels: SectionLevel[];
-```
-
-#### Defined in
-
-[section.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L24)
-
 ## Functions
 
 ### printMetadataSection()
@@ -24,29 +12,39 @@ function printMetadataSection<T, V>(
    options): string | MDXString
 ```
 
+Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L135)
+
 #### Type Parameters
 
-• **T**
+##### T
 
-• **V**
+`T`
+
+##### V
+
+`V`
 
 #### Parameters
 
-• **type**: `T`
+##### type
 
-• **values**: `V` \| `V`[] \| readonly `V`[]
+`T`
 
-• **section**: `string`
+##### values
 
-• **options**: `PrintTypeOptions`
+`V` | `V`[] | readonly `V`[]
+
+##### section
+
+`string`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[section.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L145)
 
 ***
 
@@ -59,25 +57,31 @@ function printSection<V>(
    options): string | MDXString
 ```
 
+Defined in: [section.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L93)
+
 #### Type Parameters
 
-• **V**
+##### V
+
+`V`
 
 #### Parameters
 
-• **values**: `V`[] \| readonly `V`[]
+##### values
 
-• **section**: `string`
+`V`[] | readonly `V`[]
 
-• **options**: `PrintTypeOptions`
+##### section
+
+`string`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[section.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L100)
 
 ***
 
@@ -87,23 +91,27 @@ function printSection<V>(
 function printSectionItem<T>(type, options): string | MDXString
 ```
 
+Defined in: [section.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L21)
+
 #### Type Parameters
 
-• **T**
+##### T
+
+`T`
 
 #### Parameters
 
-• **type**: `T`
+##### type
 
-• **options**: `PrintTypeOptions`
+`T`
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[section.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L30)
 
 ***
 
@@ -113,20 +121,24 @@ function printSectionItem<T>(type, options): string | MDXString
 function printSectionItems<V>(values, options): string | MDXString
 ```
 
+Defined in: [section.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L65)
+
 #### Type Parameters
 
-• **V**
+##### V
+
+`V`
 
 #### Parameters
 
-• **values**: `V` \| `V`[]
+##### values
 
-• **options**: `PrintTypeOptions`
+`V` | `V`[]
+
+##### options
+
+`PrintTypeOptions`
 
 #### Returns
 
 `string` \| `MDXString`
-
-#### Defined in
-
-[section.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L73)
