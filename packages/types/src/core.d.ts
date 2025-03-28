@@ -24,9 +24,9 @@ export type FrontMatterOptions = Record<string, unknown> | false;
 /**
  * Function type for generating index metafiles.
  * Creates index files for documentation categories.
- * 
+ *
  * @param dirPath - Directory path where the index should be created
- * @param category - Name of the category 
+ * @param category - Name of the category
  * @param options - Optional configuration for index generation
  */
 export type GenerateIndexMetafileType = (
@@ -382,9 +382,9 @@ export type FunctionCheckSchemaChanges = (
  * Generator options that include logger configuration.
  * Extends base options with optional logger module.
  */
-export type GeneratorOptions = Options & { 
+export type GeneratorOptions = Options & {
   /** Module to use for logging */
-  loggerModule?: string 
+  loggerModule?: string;
 };
 
 /**
