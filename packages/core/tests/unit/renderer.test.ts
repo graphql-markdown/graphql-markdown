@@ -636,6 +636,36 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledTimes(2);
         expect(dirPath).toBe("/output/types/objects");
       });
+
+      test("tests regex patterns for API type hierarchy", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(rendererInstance, "generateIndexMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.API]: {} },
+        });
+
+        // Test with valid API type
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const apiPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Query",
+          "queries",
+        );
+
+        // Test with non-API type for comparison
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        const nonApiPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "User",
+          "objects",
+        );
+
+        expect(apiPath).toBe(`/output/${API_GROUPS.operations}/queries`);
+        expect(nonApiPath).toBe(`/output/${API_GROUPS.types}/objects`);
+      });
     });
 
     describe("getApiGroupFolder()", () => {

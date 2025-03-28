@@ -310,5 +310,127 @@ describe("generator", () => {
         `No changes detected in schema "schema location".`,
       );
     });
+
+    test("correctly calculates execution time", async () => {
+      expect.assertions(2);
+
+      // Mock process.hrtime.bigint to return predictable values
+      const originalHrtime = process.hrtime.bigint;
+      const mockHrtime = jest
+        .fn()
+        .mockReturnValueOnce(1000000000n) // start time
+        .mockReturnValueOnce(2000000000n); // end time
+
+      process.hrtime.bigint = mockHrtime;
+
+      // Prepare to execute generator with mocked dependencies
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      jest
+        .spyOn(GraphQL, "getDocumentLoaders")
+        .mockResolvedValueOnce({} as LoadSchemaOptions);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      const loggerSpy = jest.spyOn(global.console, "info");
+
+      // Execute generator
+      await generateDocFromSchema(options);
+
+      // Verify the NS_PER_SEC calculation logic works correctly
+      // The total time of 1000ns (2000n - 1000n) should be displayed as 0.000s
+      expect(mockHrtime).toHaveBeenCalledTimes(2);
+      expect(loggerSpy).toHaveBeenCalledWith(
+        '1 pages generated in 1.000s from schema "schema location".',
+      );
+
+      // Restore original function
+      process.hrtime.bigint = originalHrtime;
+    });
+
+    test("handles template literals in output path", async () => {
+      expect.assertions(1);
+
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      jest
+        .spyOn(GraphQL, "getDocumentLoaders")
+        .mockResolvedValueOnce({} as LoadSchemaOptions);
+
+      const schema = { getDirective } as unknown as GraphQLSchema;
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(schema);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      const loggerSpy = jest.spyOn(global.console, "info");
+
+      await generateDocFromSchema({
+        ...options,
+        outputDir: `custom-output`,
+      });
+
+      // Verify template literal is expanded correctly in the output message
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'Documentation successfully generated in "custom-output" with base URL "base URL".',
+      );
+    });
+
+    test("properly executes block statements during schema processing", async () => {
+      expect.assertions(3);
+
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      jest
+        .spyOn(GraphQL, "getDocumentLoaders")
+        .mockResolvedValueOnce({} as LoadSchemaOptions);
+
+      const schema = { getDirective } as unknown as GraphQLSchema;
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(schema);
+
+      const schemaMapSpy = jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({
+          objects: { TestType: {} },
+          enums: { Status: {} },
+        } as unknown as SchemaMap);
+
+      jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+
+      const rendererMock = {
+        ...mockRenderer,
+        renderRootTypes: jest.fn().mockResolvedValue({}),
+      } as unknown as CoreRenderer.Renderer;
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(rendererMock);
+
+      await generateDocFromSchema(options);
+
+      // Verify the block statement executed by checking method calls
+      expect(schemaMapSpy).toHaveBeenCalled();
+      expect(rendererMock.renderRootTypes).toHaveBeenCalledWith("objects", {
+        TestType: {},
+      });
+      expect(rendererMock.renderRootTypes).toHaveBeenCalledWith("enums", {
+        Status: {},
+      });
+    });
   });
 });

@@ -182,6 +182,27 @@ describe("config", () => {
         return getDocDirective("+NotADirective@" as DirectiveName);
       }).toThrow(`Invalid "+NotADirective@"`);
     });
+
+    test.each([
+      ["example"],
+      ["@example!"],
+      [" @example"],
+      ["@example "],
+      ["prefix@example"],
+      ["@test()"],
+      ["@test(param|=)"],
+      ["@test(|=default)"],
+      ["@test(param|default)"],
+    ])(
+      "correctly handles regex patterns for directive parsing",
+      (directive) => {
+        expect.hasAssertions();
+
+        expect(() => {
+          return getDocDirective(directive as DirectiveName);
+        }).toThrow(`Invalid "${directive}"`);
+      },
+    );
   });
 
   describe("buildConfig()", () => {
@@ -492,6 +513,51 @@ describe("config", () => {
         tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });
+
+    test("correctly handles conditional expressions for homepage option", async () => {
+      expect.hasAssertions();
+
+      // Test with homepage defined
+      const configWithHomepage = await buildConfig({
+        homepage: "custom-homepage.md",
+        loaders: {},
+      });
+
+      expect(configWithHomepage.homepageLocation).toBe("custom-homepage.md");
+
+      // Test with homepage undefined (should use default)
+      const configWithoutHomepage = await buildConfig({
+        loaders: {},
+      });
+
+      expect(configWithoutHomepage.homepageLocation).toEqual(
+        expect.stringMatching(/assets\/generated.md$/),
+      );
+    });
+
+    test("correctly handles string literals in configuration", async () => {
+      expect.hasAssertions();
+
+      // Test with empty string values
+      const config = await buildConfig({
+        baseURL: "",
+        schema: "",
+        loaders: {},
+      });
+
+      expect(config.baseURL).toBe("");
+      expect(config.schemaLocation).toBe("");
+
+      // Test with non-empty values
+      const configWithValues = await buildConfig({
+        baseURL: "docs",
+        schema: "schema.graphql",
+        loaders: {},
+      });
+
+      expect(configWithValues.baseURL).toBe("docs");
+      expect(configWithValues.schemaLocation).toBe("schema.graphql");
+    });
   });
 
   describe("parseGroupByOption()", () => {
@@ -774,5 +840,45 @@ describe("config", () => {
         expect(hierarchy).toStrictEqual({ [cli as string]: {} });
       },
     );
+
+    test("handles string literals in hierarchy configuration", () => {
+      expect.assertions(3);
+
+      // Test with empty string (should use default)
+      const emptyHierarchy = getTypeHierarchyOption(
+        "" as TypeHierarchyValueType,
+      );
+      expect(emptyHierarchy).toStrictEqual(DEFAULT_HIERARCHY);
+
+      // Test with specific hierarchy type
+      const apiHierarchy = getTypeHierarchyOption(TypeHierarchy.API);
+      expect(apiHierarchy).toStrictEqual({ [TypeHierarchy.API]: {} });
+
+      // Test with different type
+      const flatHierarchy = getTypeHierarchyOption(TypeHierarchy.FLAT);
+      expect(flatHierarchy).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    });
+
+    test("handles conditional expressions in config detection", () => {
+      expect.assertions(2);
+
+      // Test with truthy conditional
+      const configHierarchy = {
+        [TypeHierarchy.API]: {
+          operations: "Operations",
+          types: "Types",
+        },
+      };
+
+      const result1 = getTypeHierarchyOption(undefined, configHierarchy);
+      expect(result1).toStrictEqual(configHierarchy);
+
+      // Test with both CLI and config set to same value (should not throw)
+      const result2 = getTypeHierarchyOption(
+        TypeHierarchy.API,
+        TypeHierarchy.API,
+      );
+      expect(result2).toStrictEqual({ [TypeHierarchy.API]: {} });
+    });
   });
 });
