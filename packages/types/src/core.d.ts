@@ -6,7 +6,7 @@ import type { DirectiveName, GraphQLDirective, GraphQLSchema } from "./graphql";
 import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString } from "./utils";
-import { AdmonitionType, Badge, MetaOptions, TypeLink } from "./printer";
+import type { AdmonitionType, Badge, MetaOptions, TypeLink } from "./printer";
 
 /**
  * Core type definitions for configuration and document generation.
