@@ -43,7 +43,7 @@ const config = {
   },
   mutate: ["src/**/*.ts"],
   packageManager: "npm",
-  reporters: ["html"],
+  reporters: ["html", "json"],
   symlinkNodeModules: true,
   testRunner: "jest",
   testRunnerNodeArgs: ["--experimental-vm-modules"],
