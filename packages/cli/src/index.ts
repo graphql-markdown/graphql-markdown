@@ -1,3 +1,11 @@
+/**
+ * This module provides the CLI functionality for generating documentation from GraphQL schemas.
+ * It exports utilities to run the documentation generator both programmatically and via CLI.
+ *
+ * @module cli
+ * @see {@link https://graphql-markdown.dev | GraphQL Markdown Documentation}
+ */
+
 import type {
   CliOptions,
   GraphQLMarkdownCliOptions,

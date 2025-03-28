@@ -1,4 +1,11 @@
-# index
+# cli
+
+This module provides the CLI functionality for generating documentation from GraphQL schemas.
+It exports utilities to run the documentation generator both programmatically and via CLI.
+
+## See
+
+[GraphQL Markdown Documentation](https://graphql-markdown.dev)
 
 ## Type Aliases
 
@@ -8,7 +15,7 @@
 type GraphQLMarkdownCliType = CommanderStatic;
 ```
 
-Defined in: [index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L21)
+Defined in: [index.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L29)
 
 Type representing the GraphQL Markdown CLI.
 
@@ -27,7 +34,7 @@ function getGraphQLMarkdownCli(
    customMdxParser?): CommanderStatic
 ```
 
-Defined in: [index.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L76)
+Defined in: [index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L84)
 
 Configures and returns the GraphQL Markdown CLI.
 
@@ -79,7 +86,7 @@ function runGraphQLMarkdown(
 loggerModule?): Promise<void>
 ```
 
-Defined in: [index.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L39)
+Defined in: [index.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L47)
 
 Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
 

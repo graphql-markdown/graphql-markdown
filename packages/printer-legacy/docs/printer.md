@@ -46,6 +46,8 @@ readonly static printCustomDirectives: (type, options) => string;
 
 Defined in: [printer.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L77)
 
+Prints custom directives associated with a type
+
 ###### Parameters
 
 ###### type
@@ -60,11 +62,17 @@ Defined in: [printer.ts:77](https://github.com/graphql-markdown/graphql-markdown
 
 `string`
 
-###### Example
+###### Param
 
-```ts
+The GraphQL type to document
 
-```
+###### Param
+
+Combined printer configuration and options
+
+###### Returns
+
+MDX string containing custom directives
 
 ##### printCustomTags()
 
@@ -73,6 +81,8 @@ readonly static printCustomTags: (type, options) => string | MDXString;
 ```
 
 Defined in: [printer.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L79)
+
+Prints custom tags associated with a type
 
 ###### Parameters
 
@@ -88,11 +98,17 @@ Defined in: [printer.ts:79](https://github.com/graphql-markdown/graphql-markdown
 
 `string` \| `MDXString`
 
-###### Example
+###### Param
 
-```ts
+The GraphQL type to document
 
-```
+###### Param
+
+Combined printer configuration and options
+
+###### Returns
+
+MDX string containing custom tags
 
 ##### printDescription()
 
@@ -101,6 +117,8 @@ readonly static printDescription: (type, options, noText?) => string | MDXString
 ```
 
 Defined in: [printer.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L75)
+
+Prints the description section for a type
 
 ###### Parameters
 
@@ -120,11 +138,21 @@ Defined in: [printer.ts:75](https://github.com/graphql-markdown/graphql-markdown
 
 `string` \| `MDXString`
 
-###### Example
+###### Param
 
-```ts
+The GraphQL type to document
 
-```
+###### Param
+
+Combined printer configuration and options
+
+###### Param
+
+Text to display when no description is available
+
+###### Returns
+
+Markdown string containing the description
 
 ##### printMDXModule
 

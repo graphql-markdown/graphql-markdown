@@ -97,7 +97,7 @@ If a log level is not supported by the logger instance, then it defaults to `"in
 #### Example
 
 ```js
-import { log } from "@graphql-markdown/utils/logger";
+import { log } from "@graphql-markdown/logger";
 
 log("Info message"); // Expected console output "Info message"
 ```
@@ -130,7 +130,7 @@ optional name of the logger package.
 #### Example
 
 ```js
-import Logger, { log } from "@graphql-markdown/utils/logger";
+import Logger, { log } from "@graphql-markdown/logger";
 
 log("Info message"); // Expected console output "Info message"
 

@@ -26,6 +26,9 @@ export default async function pluginGraphQLDocGenerator(
   return {
     name: NAME,
 
+    /**
+     * @experimental
+     */
     async loadContent(): Promise<void> {
       if (options.runOnBuild !== true) {
         return;
@@ -33,6 +36,14 @@ export default async function pluginGraphQLDocGenerator(
       await runGraphQLMarkdown(options, {}, LOGGER_MODULE);
     },
 
+    /**
+     * Extends Docusaurus CLI with GraphQL Documentation generator command.
+     * This method adds a custom command to generate GraphQL documentation
+     * using the configured options.
+     *
+     * @param cli - The Docusaurus CLI instance to extend
+     * @returns void
+     */
     extendCli(cli): void {
       cli.addCommand(
         getGraphQLMarkdownCli(

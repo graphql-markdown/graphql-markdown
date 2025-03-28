@@ -1,3 +1,8 @@
+/**
+ * @module mdx
+ * This module provides utilities for generating MDX index files in Docusaurus format.
+ */
+
 import { join } from "node:path";
 
 import {

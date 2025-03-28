@@ -1,3 +1,9 @@
+/**
+ * Schema comparison module for GraphQL Markdown.
+ * Provides utilities to compare GraphQL schemas and detect changes.
+ * @module \@graphql-markdown/diff
+ */
+
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 
@@ -15,8 +21,11 @@ import { printSchema } from "@graphql-markdown/graphql";
 
 import { fileExists, readFile, saveFile } from "@graphql-markdown/utils";
 
+/** File name for storing schema hash */
 export const SCHEMA_HASH_FILE = ".schema" as const;
+/** File name for storing schema reference */
 export const SCHEMA_REF = "schema.graphql" as const;
+
 /**
  * Comparison methods used to determine if a schema has changed.
  */

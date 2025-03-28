@@ -7,7 +7,14 @@
   ],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
-  "exclude": ["packages/types"],
+  "exclude": [
+    "packages/types",
+    "packages/core/src/index.ts",
+    "packages/graphql/src/index.ts",
+    "packages/helpers/src/index.ts",
+    "packages/printer-legacy/src/index.ts",
+    "packages/utils/src/index.ts"
+  ],
   "excludeGroups": true,
   "excludeInternal": true,
   "excludeNotDocumented": true,
@@ -21,5 +28,6 @@
   "hidePageTitle": true,
   "name": "API",
   "out": "./api",
+  "entryFileName": "generated",
   "readme": "./docs/__api/__index.md"
 }
