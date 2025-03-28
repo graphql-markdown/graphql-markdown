@@ -1,5 +1,5 @@
 /**
- * @module \@graphql-markdown/docusaurus/mdx
+ * @module mdx
  * This module provides utilities for generating MDX content in Docusaurus format.
  * It includes functions for creating badges, admonitions, bullet points, collapsible sections,
  * specification links, and other MDX-specific formatting for GraphQL documentation.
@@ -60,9 +60,7 @@ export const formatMDXBullet = (text: string = ""): MDXString => {
 
 /**
  * Creates a collapsible details section in MDX format
- * @param param0 - The collapsible section configuration
- * @param param0.dataOpen - Text to show when the section is open
- * @param param0.dataClose - Text to show when the section is closed
+ * @param param - The collapsible section configuration
  * @returns Formatted MDX string for the collapsible section
  */
 export const formatMDXDetails = ({

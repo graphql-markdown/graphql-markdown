@@ -1,7 +1,7 @@
 /**
  * Schema comparison module for GraphQL Markdown.
  * Provides utilities to compare GraphQL schemas and detect changes.
- * @module
+ * @module \@graphql-markdown/diff
  */
 
 import { join } from "node:path";

@@ -44,13 +44,10 @@ Defined in: [printer.ts:73](https://github.com/graphql-markdown/graphql-markdown
 readonly static printCustomDirectives: (type, options) => string;
 ```
 
-<<<<<<< Updated upstream
-=======
 Defined in: [printer.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L77)
 
 Prints custom directives associated with a type
 
->>>>>>> Stashed changes
 ###### Parameters
 
 ###### type
@@ -65,9 +62,6 @@ Prints custom directives associated with a type
 
 `string`
 
-<<<<<<< Updated upstream
-###### Defined in
-=======
 ###### Param
 
 The GraphQL type to document
@@ -80,24 +74,16 @@ Combined printer configuration and options
 
 MDX string containing custom directives
 
-###### Example
->>>>>>> Stashed changes
-
-```
-
 ##### printCustomTags()
 
 ```ts
 readonly static printCustomTags: (type, options) => string | MDXString;
 ```
 
-<<<<<<< Updated upstream
-=======
 Defined in: [printer.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L79)
 
 Prints custom tags associated with a type
 
->>>>>>> Stashed changes
 ###### Parameters
 
 ###### type
@@ -112,9 +98,6 @@ Prints custom tags associated with a type
 
 `string` \| `MDXString`
 
-<<<<<<< Updated upstream
-###### Defined in
-=======
 ###### Param
 
 The GraphQL type to document
@@ -127,24 +110,16 @@ Combined printer configuration and options
 
 MDX string containing custom tags
 
-###### Example
->>>>>>> Stashed changes
-
-```
-
 ##### printDescription()
 
 ```ts
 readonly static printDescription: (type, options, noText?) => string | MDXString;
 ```
 
-<<<<<<< Updated upstream
-=======
 Defined in: [printer.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L75)
 
 Prints the description section for a type
 
->>>>>>> Stashed changes
 ###### Parameters
 
 ###### type
@@ -163,9 +138,6 @@ Prints the description section for a type
 
 `string` \| `MDXString`
 
-<<<<<<< Updated upstream
-###### Defined in
-=======
 ###### Param
 
 The GraphQL type to document
@@ -182,10 +154,13 @@ Text to display when no description is available
 
 Markdown string containing the description
 
-###### Example
->>>>>>> Stashed changes
+##### printMDXModule
 
-[printer.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L68)
+```ts
+static printMDXModule: Readonly<MDXSupportType>;
+```
+
+Defined in: [printer.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L81)
 
 #### Methods
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "plugin": ["typedoc-plugin-markdown"],
-  "exclude": ["**/index.ts"],
+  "exclude": ["**/src/index.ts"],
   "excludeExternals": true,
   "excludeInternal": false,
   "excludePrivate": true,
@@ -26,6 +26,6 @@
   "visibilityFilters": {},
   "sourceLinkExternal": true,
   "gitRevision": "main",
-  "entryFileName": "generated",
+  "entryFileName": "index",
   "excludeTags": ["@alias"]
 }

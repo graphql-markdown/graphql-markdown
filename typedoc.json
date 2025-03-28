@@ -21,5 +21,6 @@
   "hidePageTitle": true,
   "name": "API",
   "out": "./api",
+  "entryFileName": "generated",
   "readme": "./docs/__api/__index.md"
 }

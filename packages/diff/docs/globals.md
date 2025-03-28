@@ -1,10 +1,13 @@
 # @graphql-markdown/diff
 
+Schema comparison module for GraphQL Markdown.
+Provides utilities to compare GraphQL schemas and detect changes.
+
 ## Enumerations
 
 ### CompareMethod
 
-Defined in: [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L23)
+Defined in: [index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L32)
 
 Comparison methods used to determine if a schema has changed.
 
@@ -16,7 +19,7 @@ Comparison methods used to determine if a schema has changed.
 DIFF: "SCHEMA-DIFF";
 ```
 
-Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L25)
+Defined in: [index.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L34)
 
 Compare schemas by diffing the content
 
@@ -26,7 +29,7 @@ Compare schemas by diffing the content
 FORCE: "FORCE";
 ```
 
-Defined in: [index.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L29)
+Defined in: [index.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L38)
 
 Force regeneration regardless of changes
 
@@ -36,7 +39,7 @@ Force regeneration regardless of changes
 HASH: "SCHEMA-HASH";
 ```
 
-Defined in: [index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L27)
+Defined in: [index.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L36)
 
 Compare schemas by comparing hash values
 
@@ -46,7 +49,7 @@ Compare schemas by comparing hash values
 NONE: "NONE";
 ```
 
-Defined in: [index.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L31)
+Defined in: [index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L40)
 
 Skip comparison and assume no changes
 
@@ -58,7 +61,7 @@ Skip comparison and assume no changes
 const checkSchemaChanges: FunctionCheckSchemaChanges;
 ```
 
-Defined in: [index.ts:71](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L71)
+Defined in: [index.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L80)
 
 Checks if a schema has changed compared to a previous version.
 Uses either diff or hash-based comparison methods based on the method parameter.
@@ -87,7 +90,9 @@ A promise resolving to a boolean indicating whether the schema has changed
 const SCHEMA_HASH_FILE: ".schema";
 ```
 
-Defined in: [index.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L18)
+Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L25)
+
+File name for storing schema hash
 
 ***
 
@@ -97,7 +102,9 @@ Defined in: [index.ts:18](https://github.com/graphql-markdown/graphql-markdown/b
 const SCHEMA_REF: "schema.graphql";
 ```
 
-Defined in: [index.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L19)
+Defined in: [index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L27)
+
+File name for storing schema reference
 
 ## Functions
 
@@ -107,7 +114,7 @@ Defined in: [index.ts:19](https://github.com/graphql-markdown/graphql-markdown/b
 function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>
 ```
 
-Defined in: [index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L52)
+Defined in: [index.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L61)
 
 Compares a new schema against an existing schema file and returns the differences.
 
@@ -139,7 +146,7 @@ A promise resolving to an array of schema changes
 function getSchemaHash(schema): string
 ```
 
-Defined in: [index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L40)
+Defined in: [index.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L49)
 
 Generates a SHA-256 hash for a GraphQL schema.
 

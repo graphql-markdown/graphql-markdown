@@ -1,3 +1,8 @@
+/**
+ * @module mdx
+ * This module provides MDX React components.
+ */
+
 import type { MDXString } from "@graphql-markdown/types";
 
 export const mdxDeclaration: MDXString = `

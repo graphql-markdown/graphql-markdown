@@ -8,7 +8,7 @@
  * The module can be used with default formatters or customized with user-provided
  * MDX formatting functions through the mdxModule factory function.
  *
- * @module printer-legacy/mdx
+ * @module mdx
  * @packageDocumentation
  */
 
