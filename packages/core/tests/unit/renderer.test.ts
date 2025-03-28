@@ -235,6 +235,97 @@ describe("renderer", () => {
           `An error occurred while processing file test/foo-bar.mdx for type "TestType"`,
         );
       });
+
+      test("uses frontmatter configuration when available", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: { custom: "value" },
+        });
+
+        const output = "/output/foobar";
+        await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
+
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/foo-bar.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("handles cancelled rendering when printType returns an empty string", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(Printer, "printType").mockReturnValue("" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        const output = "/output/foobar";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "FooBar",
+          "FooBar",
+        );
+
+        expect(meta).toBeUndefined();
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      test("handles both pathname and type name when they are different", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        const output = "/output/foobar";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "CustomTypeName", // name different from actual type name
+          "ActualType", // actual type object
+        );
+
+        expect(meta).toEqual({
+          category: "Foobar",
+          slug: "foobar/custom-type-name",
+        });
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/custom-type-name.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("handles non-alphanumeric characters in type names", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        const output = "/output/special";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "Type_With-Special@Chars!",
+          "SpecialType",
+        );
+
+        expect(meta).toEqual({
+          category: "Special",
+          slug: "special/type-with-special-chars",
+        });
+        expect(spy).toHaveBeenCalledWith(
+          `${output}/type-with-special-chars.mdx`,
+          "Lorem ipsum",
+          undefined,
+        );
+      });
     });
 
     describe("renderHomepage()", () => {
@@ -249,6 +340,7 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           "Test Homepage",
+          undefined,
         );
       });
 
@@ -273,6 +365,120 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           `baseURL: /graphql - Generated: ${mockDate.toLocaleString()}`,
+          undefined,
+        );
+      });
+
+      test("handles errors when reading homepage template", async () => {
+        expect.assertions(2);
+
+        const readFileSpy = jest
+          .spyOn(Utils, "readFile")
+          .mockRejectedValueOnce(new Error("File not found"));
+        const consoleSpy = jest.spyOn(global.console, "warn");
+
+        await rendererInstance.renderHomepage("/assets/nonexistent.md");
+
+        expect(readFileSpy).toHaveBeenCalledWith("/output/nonexistent.md");
+        expect(consoleSpy).toHaveBeenCalledWith(
+          "An error occurred while processing the homepage /assets/nonexistent.md: Error: File not found",
+        );
+      });
+
+      test("handles empty homepage content", async () => {
+        expect.assertions(1);
+
+        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("");
+        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.renderHomepage("/assets/empty.md");
+
+        expect(saveFileSpy).toHaveBeenCalledWith(
+          "/output/empty.md",
+          "",
+          undefined,
+        );
+      });
+
+      test("preserves content without template variables", async () => {
+        expect.assertions(1);
+
+        const content =
+          "# GraphQL API Documentation\n\nThis is static content with no variables.";
+        jest.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
+        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.renderHomepage("/assets/no-variables.md");
+
+        expect(saveFileSpy).toHaveBeenCalledWith(
+          "/output/no-variables.md",
+          content,
+          undefined,
+        );
+      });
+
+      test("handles multiple template variables", async () => {
+        expect.assertions(1);
+
+        const content =
+          "baseURL: ##baseURL##\ngenerated: ##generated-date-time##\nbaseURL again: ##baseURL##";
+        jest.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
+        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+
+        // Mock Date to have consistent test results
+        const mockDate = new Date(2023, 0, 1, 12, 0, 0);
+        jest.spyOn(global, "Date").mockImplementation(() => {
+          return mockDate as unknown as Date;
+        });
+
+        await rendererInstance.renderHomepage("/assets/multiple-vars.md");
+
+        const expected = `baseURL: /graphql\ngenerated: ${mockDate.toLocaleString()}\nbaseURL again: /graphql`;
+        expect(saveFileSpy).toHaveBeenCalledWith(
+          "/output/multiple-vars.md",
+          expected,
+          undefined,
+        );
+      });
+
+      test("handles errors when saving homepage", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("Test content");
+        const saveFileSpy = jest
+          .spyOn(Utils, "saveFile")
+          .mockRejectedValueOnce(new Error("Write error"));
+        const consoleSpy = jest.spyOn(global.console, "warn");
+
+        await rendererInstance.renderHomepage("/assets/error-saving.md");
+
+        expect(saveFileSpy).toHaveBeenCalledWith(
+          "/output/error-saving.md",
+          "Test content",
+          undefined,
+        );
+        expect(consoleSpy).toHaveBeenCalledWith(
+          "An error occurred while processing the homepage /assets/error-saving.md: Error: Write error",
+        );
+      });
+
+      test("applies prettify function when prettify is enabled", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Utils, "readFile")
+          .mockResolvedValueOnce("## Unformatted content");
+        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+
+        // Enable prettify
+        jest.replaceProperty(rendererInstance, "prettify", true);
+
+        await rendererInstance.renderHomepage("/assets/to-prettify.md");
+
+        expect(saveFileSpy).toHaveBeenCalledWith(
+          "/output/to-prettify.md",
+          "## Unformatted content",
+          Utils.prettifyMarkdown,
         );
       });
     });

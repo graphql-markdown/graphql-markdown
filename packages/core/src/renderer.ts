@@ -441,7 +441,7 @@ export class Renderer {
     let content: MDXString;
     try {
       content = this.printer.printType(fileName, type, this.options);
-      if (typeof content !== "string") {
+      if (typeof content !== "string" || content === "") {
         return undefined;
       }
     } catch {
@@ -493,24 +493,39 @@ export class Renderer {
    */
   async renderHomepage(homepageLocation: string): Promise<void> {
     if (typeof homepageLocation !== "string") {
-      log("Homepage location must be a string", LogLevel.warn);
+      log("Homepage location is not a valid string", LogLevel.warn);
       return;
+    }
+
+    if (!isPath(this.outputDir)) {
+      throw new Error("Output directory is empty or not specified");
     }
 
     const homePage = basename(homepageLocation);
     const destLocation = join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
 
-    await copyFile(homepageLocation, destLocation);
+    try {
+      await copyFile(homepageLocation, destLocation);
 
-    const template = await readFile(destLocation);
+      const template = await readFile(destLocation);
 
-    const data = template
-      .toString()
-      .replace(/##baseURL##/gm, slug)
-      .replace(/##generated-date-time##/gm, new Date().toLocaleString());
+      const data = template
+        .toString()
+        .replace(/##baseURL##/gm, slug)
+        .replace(/##generated-date-time##/gm, new Date().toLocaleString());
 
-    await saveFile(destLocation, data);
+      await saveFile(
+        destLocation,
+        data,
+        this.prettify ? prettifyMarkdown : undefined,
+      );
+    } catch (error) {
+      log(
+        `An error occurred while processing the homepage ${homepageLocation}: ${error}`,
+        LogLevel.warn,
+      );
+    }
   }
 }
 
