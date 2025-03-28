@@ -1,3 +1,9 @@
+/**
+ * Module responsible for generating Markdown sections for GraphQL schema documentation.
+ * Handles the printing of section items, metadata, and structured documentation content.
+ * @module section
+ */
+
 import type {
   GraphQLArgument,
   MDXString,
@@ -16,7 +22,13 @@ import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
 /**
+ * Prints a single section item with its associated metadata.
  *
+ * @param type - The GraphQL type or field to print
+ * @param options - Configuration options for printing
+ * @returns Formatted MDX string containing the section item
+ *
+ * @template T - Type of the GraphQL element being printed
  */
 export const printSectionItem = <T>(
   type: T,
@@ -60,7 +72,13 @@ export const printSectionItem = <T>(
 };
 
 /**
+ * Prints an array of section items with consistent formatting.
  *
+ * @param values - Single value or array of values to print as section items
+ * @param options - Configuration options for printing
+ * @returns Formatted MDX string containing all section items
+ *
+ * @template V - Type of the values being printed
  */
 export const printSectionItems = <V>(
   values: V | V[],
@@ -88,7 +106,14 @@ export const printSectionItems = <V>(
 };
 
 /**
+ * Prints a complete section with title and content.
  *
+ * @param values - Array of values to include in the section
+ * @param section - Section title/header
+ * @param options - Configuration options for printing
+ * @returns Formatted MDX string containing the complete section
+ *
+ * @template V - Type of the values being printed
  */
 export const printSection = <V>(
   values: V[] | readonly V[],
@@ -130,7 +155,16 @@ export const printSection = <V>(
 };
 
 /**
+ * Prints a metadata section with special handling for deprecated items.
  *
+ * @param type - The parent type containing the metadata
+ * @param values - Values to include in the metadata section
+ * @param section - Section title/header
+ * @param options - Configuration options for printing
+ * @returns Formatted MDX string containing the metadata section
+ *
+ * @template T - Type of the parent element
+ * @template V - Type of the values being printed
  */
 export const printMetadataSection = <T, V>(
   type: T,

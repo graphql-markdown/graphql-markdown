@@ -13,12 +13,13 @@
     "packages/graphql/src/index.ts",
     "packages/helpers/src/index.ts",
     "packages/printer-legacy/src/index.ts",
+    "packages/printer-legacy/src/graphql/index.ts",
     "packages/utils/src/index.ts"
   ],
   "excludeGroups": true,
-  "excludeInternal": true,
+  "excludeInternal": false,
   "excludeNotDocumented": true,
-  "excludePrivate": true,
+  "excludePrivate": false,
   "excludeReferences": true,
   "frontmatterGlobals": {
     "pagination_prev": null,
@@ -27,7 +28,20 @@
   },
   "hidePageTitle": true,
   "name": "API",
-  "out": "./api",
+  "outputs": [{ "name": "markdown", "path": "./api" }],
   "entryFileName": "generated",
-  "readme": "./docs/__api/__index.md"
+  "readme": "./docs/__api/__index.md",
+  "validation": {
+    "invalidLink": true,
+    "notDocumented": true
+  },
+  "sort": ["visibility", "alphabetical"],
+  "sourceLinkExternal": true,
+  "groupOrder": [
+    "Classes",
+    "Interfaces",
+    "Enumerations",
+    "Functions",
+    "Variables"
+  ]
 }

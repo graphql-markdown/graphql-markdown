@@ -1,3 +1,9 @@
+/**
+ * Module providing utilities for handling GraphQL example directives and printing example values.
+ *
+ * @packageDocumentation
+ */
+
 import type {
   DirectiveExampleParserFunction,
   GraphQLOperationType,
@@ -30,7 +36,10 @@ import { toString } from "@graphql-markdown/utils";
 import { hasPrintableDirective } from "./link";
 
 /**
+ * Retrieves directive example options from the provided print type options.
  *
+ * @param options - Configuration options
+ * @returns The directive example configuration if valid, otherwise `undefined`
  */
 export const getDirectiveExampleOption = ({
   exampleSection,
@@ -66,6 +75,15 @@ export const getDirectiveExampleOption = ({
   } as TypeDirectiveExample;
 };
 
+/**
+ * Parses fields of a GraphQL type to generate example values.
+ *
+ * @internal
+ * @param type - The GraphQL type to parse
+ * @param options - Print type options for configuration
+ * @param mappedTypes - Array of already processed type names to prevent recursion
+ * @returns Record of field names and their example values, or `undefined`
+ */
 const parseTypeFields = (
   type: Maybe<GraphQLType>,
   options: PrintTypeOptions,
@@ -120,6 +138,14 @@ const parseTypeFields = (
   return example;
 };
 
+/**
+ * Parses example value from a string into appropriate type.
+ *
+ * @internal
+ * @param value - The raw example value
+ * @param type - The GraphQL type or operation
+ * @returns Parsed value, or `undefined` if parsing fails
+ */
 const parseExampleValue = (
   value: unknown,
   type: GraphQLOperationType | GraphQLType,
@@ -143,6 +169,15 @@ const parseExampleValue = (
   return value;
 };
 
+/**
+ * Parses example directive from a GraphQL type or operation.
+ *
+ * @internal
+ * @param type - The GraphQL type or operation to parse
+ * @param options - Print type options for configuration
+ * @param mappedTypes - Array of already processed type names to prevent recursion
+ * @returns Parsed example value, or `undefined`
+ */
 const parseExampleDirective = (
   type: Maybe<GraphQLOperationType | GraphQLType>,
   options: PrintTypeOptions,
@@ -195,7 +230,19 @@ const parseExampleDirective = (
 };
 
 /**
+ * Prints an example value for a given GraphQL type or operation.
  *
+ * @param type - The GraphQL type or operation to generate an example for
+ * @param options - Configuration options for printing the example
+ * @returns Stringified example if available, otherwise `undefined`
+ *
+ * @example
+ * ```ts
+ * const example = printExample(type, { schema, exampleSection });
+ * if (example) {
+ *   console.log(example);
+ * }
+ * ```
  */
 export const printExample = (
   type: unknown,

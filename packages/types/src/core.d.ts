@@ -129,7 +129,6 @@ export type RendererDocOptions = ConfigDocOptions & {
   hierarchy?: Maybe<TypeHierarchyObjectType>;
 };
 
-/** @deprecated Use newer config options instead */
 export interface DeprecatedConfigDocOptions {
   never: never;
 }
@@ -137,7 +136,6 @@ export interface DeprecatedConfigDocOptions {
 /** Flag for API group setting */
 export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
 
-/** @deprecated Use newer print type options instead */
 export interface DeprecatedConfigPrintTypeOptions {
   never: never;
 }
@@ -321,7 +319,7 @@ export interface CliOptions {
 }
 
 /**
- * @deprecated Legacy CLI options interface
+ * Legacy CLI options interface
  * Use CliOptions instead
  */
 export interface DeprecatedCliOptions {

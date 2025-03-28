@@ -1,3 +1,13 @@
+/**
+ * GraphQL Schema Printer Module
+ *
+ * This module provides functionality for printing GraphQL schema types into Markdown documentation.
+ * It includes utilities for handling various GraphQL types, custom directives, and formatting options.
+ *
+ * @module printer
+ * @packageDocumentation
+ */
+
 import type {
   CustomDirectiveMap,
   GraphQLDirective,
@@ -66,23 +76,62 @@ import {
 import { printExample } from "./example";
 
 /**
+ * The Printer class implements the core functionality for generating Markdown documentation
+ * from GraphQL schema types.
+ *
+ * @remarks
+ * This class provides static methods for rendering different components of the documentation:
+ * - Headers and frontmatter
+ * - Type descriptions and code blocks
+ * - Custom directives and metadata
+ * - Examples and relations
  *
  * @example
+ * ```typescript
+ * const printer = new Printer();
+ * await printer.init(schema, '/docs', 'graphql', options);
+ * const docs = printer.printType('Query', queryType);
+ * ```
  */
 export class Printer implements IPrinter {
+  /**
+   * Global printer configuration options
+   * @static
+   */
   static options: Readonly<Maybe<PrintTypeOptions>>;
 
+  /**
+   * Prints type descriptions
+   * @static
+   */
   static readonly printDescription = printDescription;
 
+  /**
+   * Prints custom directives
+   * @static
+   */
   static readonly printCustomDirectives = printCustomDirectives;
 
+  /**
+   * Prints custom tags
+   * @static
+   */
   static readonly printCustomTags = printCustomTags;
 
+  /**
+   * MDX module configuration
+   * @static
+   */
   static printMDXModule: Readonly<MDXSupportType>;
 
   /**
+   * Initializes the printer with the given schema and configuration.
    *
-   * @example
+   * @param schema - GraphQL schema to generate documentation for
+   * @param baseURL - Base URL path for documentation, e.g. '/docs'
+   * @param linkRoot - Root path for generating links between types
+   * @param options - Configuration options for the printer
+   * @param mdxParser - Optional MDX parser module for MDX output support
    */
   static async init(
     schema: Maybe<GraphQLSchema>,
@@ -147,6 +196,14 @@ export class Printer implements IPrinter {
     Printer.printMDXModule = await mdxModule(mdxParser);
   }
 
+  /**
+   * Prints the header section of a type documentation
+   *
+   * @param id - Unique identifier for the type
+   * @param title - Display title for the type
+   * @param options - Printer configuration options
+   * @returns Formatted header string with optional frontmatter
+   */
   static readonly printHeader = (
     id: string,
     title: string,
@@ -161,6 +218,13 @@ export class Printer implements IPrinter {
     return printFrontMatter(title, { ...fmOptions, id }, options);
   };
 
+  /**
+   * Prints the GraphQL type definition as code block
+   *
+   * @param type - GraphQL type to print
+   * @param options - Printer configuration options
+   * @returns Formatted code block string with type definition
+   */
   static readonly printCode = (
     type: unknown,
     options: PrintTypeOptions,
@@ -206,6 +270,13 @@ export class Printer implements IPrinter {
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
   };
 
+  /**
+   * Prints example usage of the type if available
+   *
+   * @param type - GraphQL type to generate example for
+   * @param options - Printer configuration options
+   * @returns Formatted example section string or empty string if no example
+   */
   static readonly printExample = (
     type: unknown,
     options: PrintTypeOptions,
@@ -227,6 +298,14 @@ export class Printer implements IPrinter {
     return `${SectionLevels.LEVEL.repeat(3)} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
   };
 
+  /**
+   * Prints metadata information for a GraphQL type
+   *
+   * @param type - GraphQL type to print metadata for
+   * @param options - Printer configuration options
+   * @returns Formatted metadata string as MDX or plain string
+   * @throws {Error} When type is not supported
+   */
   static readonly printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
@@ -256,6 +335,13 @@ export class Printer implements IPrinter {
     }
   };
 
+  /**
+   * Prints related type information
+   *
+   * @param type - GraphQL type to find relations for
+   * @param options - Printer configuration options
+   * @returns Formatted relations section as MDX or plain string
+   */
   static readonly printRelations = (
     type: unknown,
     options: PrintTypeOptions,
@@ -266,6 +352,13 @@ export class Printer implements IPrinter {
     return printRelations(type, options);
   };
 
+  /**
+   * Prints HTML meta tags for the documentation
+   *
+   * @param _type - GraphQL type (unused)
+   * @param options - Printer configuration options containing metatags
+   * @returns Formatted HTML meta tags string
+   */
   static readonly printMetaTags = (
     _type: unknown,
     { metatags }: PrintTypeOptions,
@@ -285,6 +378,33 @@ export class Printer implements IPrinter {
     return ["<head>", ...meta, "</head>"].join(MARKDOWN_EOL);
   };
 
+  /**
+   * Main method to print complete documentation for a GraphQL type
+   *
+   * @param name - Name identifier for the type
+   * @param type - GraphQL type to generate documentation for
+   * @param options - Optional printer configuration options
+   * @returns Complete documentation as MDX string or undefined if type should be skipped
+   *
+   * @example
+   * ```typescript
+   * const doc = Printer.printType('User', UserType, {
+   *   frontMatter: true,
+   *   codeSection: true
+   * });
+   * ```
+   *
+   * @remarks
+   * The method combines multiple sections:
+   * - Header with frontmatter
+   * - Meta tags
+   * - Description
+   * - Code definition
+   * - Custom directives
+   * - Type metadata
+   * - Example usage
+   * - Related types
+   */
   static readonly printType = (
     name: Maybe<string>,
     type: unknown,
