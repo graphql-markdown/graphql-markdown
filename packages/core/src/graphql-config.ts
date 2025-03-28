@@ -49,8 +49,8 @@ export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
  * @property throwOnEmpty Whether to throw when the config is empty.
  */
 interface ThrowOptions {
-  throwOnMissing: boolean;
-  throwOnEmpty: boolean;
+  throwOnMissing?: boolean;
+  throwOnEmpty?: boolean;
 }
 
 /**

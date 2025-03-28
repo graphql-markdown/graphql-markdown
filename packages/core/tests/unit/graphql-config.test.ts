@@ -263,6 +263,65 @@ describe("graphql-config", () => {
         ).resolves.toBeUndefined();
       },
     );
+
+    test("handles conditional expressions in configuration loading", async () => {
+      expect.hasAssertions();
+
+      // Mock loadConfig to simulate different project scenarios
+      const mockLoadConfig = jest.spyOn(GraphQLConfig, "loadConfig");
+
+      // Scenario 1: Project exists and has graphql-markdown extension
+      mockLoadConfig.mockResolvedValueOnce({
+        getProject: jest.fn(() => {
+          return {
+            extension: (): any => {
+              return {
+                schema: "./schema.graphql",
+                baseURL: "docs",
+              };
+            },
+          };
+        }),
+      } as unknown as any);
+
+      const result1 =
+        await CoreGraphQLConfig.loadConfiguration("existing-project");
+      expect(result1).toEqual({
+        schema: "./schema.graphql",
+        baseURL: "docs",
+      });
+
+      // Scenario 2: Project exists but doesn't have graphql-markdown extension
+      mockLoadConfig.mockResolvedValueOnce({
+        getProject: jest.fn(() => {
+          return {
+            extension: (): any => {
+              return undefined;
+            },
+          };
+        }),
+      } as unknown as any);
+
+      const result2 = await CoreGraphQLConfig.loadConfiguration(
+        "project-without-extension",
+      );
+      expect(result2).toBeUndefined();
+
+      // Scenario 3: Project doesn't exist
+      mockLoadConfig.mockResolvedValueOnce({
+        getProject: jest.fn(() => {
+          return undefined;
+        }),
+      } as unknown as any);
+
+      const result3 = await CoreGraphQLConfig.loadConfiguration(
+        "non-existent-project",
+      );
+      expect(result3).toBeUndefined();
+
+      // This ensures the conditional logic is properly tested
+      expect(mockLoadConfig).toHaveBeenCalledTimes(3);
+    });
   });
 });
 

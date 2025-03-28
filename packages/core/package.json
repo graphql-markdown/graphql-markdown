@@ -60,7 +60,8 @@
     "postpack": "pinst --enable",
     "stryker": "stryker run",
     "clean": "rm -rf ./dist",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "suggest:tests": "ts-node ../../scripts/test-suggestions.ts"
   },
   "dependencies": {
     "@graphql-markdown/graphql": "^1.1.6",

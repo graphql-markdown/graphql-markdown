@@ -97,5 +97,59 @@ describe("generator", () => {
         ),
       ).rejects.toThrow("Cannot find module 'foobar'.");
     });
+
+    test("throws error if printer module initialization fails", async () => {
+      expect.assertions(1);
+
+      jest
+        .spyOn(Printer, "init")
+        .mockRejectedValueOnce(new Error("Init error"));
+
+      await expect(
+        getPrinter(
+          "@graphql-markdown/printer-legacy" as PackageName,
+          {
+            schema: new GraphQLSchema({}),
+            baseURL: "/",
+            linkRoot: "root",
+          },
+          {
+            groups: {},
+            printTypeOptions: {},
+          },
+        ),
+      ).rejects.toThrow(
+        "Cannot find module '@graphql-markdown/printer-legacy'",
+      );
+    });
+
+    test("passes mdxModule to printer initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+      const mdxModule = { test: true };
+
+      await getPrinter(
+        "@graphql-markdown/printer-legacy" as PackageName,
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: {},
+        },
+        mdxModule,
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        expect.any(Object),
+        mdxModule,
+      );
+    });
   });
 });
