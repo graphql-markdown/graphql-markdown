@@ -90,5 +90,41 @@ describe("diff", () => {
       expect(typeof result === "boolean").toBeTruthy();
       expect(logSpy).not.toHaveBeenCalled();
     });
+
+    test("returns true if checkSchemaChanges throws error", async () => {
+      expect.assertions(2);
+
+      const logSpy = jest.spyOn(console, "warn");
+      jest
+        .spyOn(diff, "checkSchemaChanges")
+        .mockRejectedValueOnce(new Error("Test error"));
+
+      const result = await hasChanges(
+        new GraphQLSchema({}),
+        "",
+        "breaking" as DiffMethodName,
+      );
+
+      expect(result).toBeTruthy();
+      expect(logSpy).toHaveBeenCalledWith(
+        "Cannot find module '@graphql-markdown/diff' from @graphql-markdown/core!",
+      );
+    });
+
+    test("returns value from checkSchemaChanges if successful", async () => {
+      expect.assertions(2);
+
+      const logSpy = jest.spyOn(console, "warn");
+      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(false);
+
+      const result = await hasChanges(
+        new GraphQLSchema({}),
+        "",
+        "breaking" as DiffMethodName,
+      );
+
+      expect(result).toBeFalsy();
+      expect(logSpy).not.toHaveBeenCalled();
+    });
   });
 });

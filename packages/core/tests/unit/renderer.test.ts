@@ -602,6 +602,40 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith("/output/api/queries", "queries");
         expect(dirPath).toBe(`/output/api/queries`);
       });
+
+      test("handles undefined group configuration", async () => {
+        expect.assertions(2);
+
+        jest.replaceProperty(rendererInstance, "group", undefined);
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "objects",
+        );
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(dirPath).toBe("/output/types/objects");
+      });
+
+      test("handles undefined type hierarchy", async () => {
+        expect.assertions(2);
+
+        jest.replaceProperty(rendererInstance, "options", {
+          hierarchy: undefined,
+        });
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "objects",
+        );
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(dirPath).toBe("/output/types/objects");
+      });
     });
 
     describe("getApiGroupFolder()", () => {
@@ -700,6 +734,38 @@ describe("renderer", () => {
           prettify: true,
           options: DEFAULT_RENDERER_OPTIONS,
         });
+      });
+    });
+
+    describe("hasMDXIndexFileSupport()", () => {
+      test.each([
+        [null],
+        [{}],
+        [{ generateIndexMetafile: null }],
+        [{ generateIndexMetafile: "not-a-function" }],
+      ])("returns false for invalid mdx module %s", (invalidModule) => {
+        expect.assertions(1);
+
+        expect(rendererInstance.hasMDXIndexFileSupport(invalidModule)).toBe(
+          false,
+        );
+      });
+
+      test("returns true for valid mdx module", () => {
+        expect.assertions(1);
+
+        const validModule = {
+          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+          generateIndexMetafile: () => {},
+        };
+
+        expect(rendererInstance.hasMDXIndexFileSupport(validModule)).toBe(true);
+      });
+
+      test("returns true for no mdx module (use default module)", () => {
+        expect.assertions(1);
+
+        expect(rendererInstance.hasMDXIndexFileSupport(undefined)).toBe(true);
       });
     });
   });
