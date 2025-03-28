@@ -1,3 +1,8 @@
+/**
+ * Module for handling frontmatter generation in Markdown documents.
+ * Provides utilities for formatting and printing frontmatter content.
+ * @module
+ */
 import type {
   FrontMatterOptions,
   Maybe,
@@ -6,7 +11,12 @@ import type {
 import { formatFrontMatterObject } from "@graphql-markdown/utils";
 
 /**
+ * Generates a formatted frontmatter string for Markdown/MDX documents.
  *
+ * @param title - The title to be included in the frontmatter
+ * @param props - Additional frontmatter properties to be included
+ * @param options - Configuration options for printing
+ * @returns Formatted frontmatter string, or empty string if formatting is disabled
  */
 export const printFrontMatter = (
   title: string,

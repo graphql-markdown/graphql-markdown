@@ -1,3 +1,9 @@
+/**
+ * This module provides functionality to print relationships between GraphQL types,
+ * including return types, member fields, and implementations, in a formatted MDX string output.
+ * @module
+ */
+
 import type {
   IGetRelation,
   MDXString,
@@ -26,6 +32,10 @@ import { SectionLevels } from "./const/options";
  * Converts a string representation of a root type to its corresponding TypeLocale
  * @param text - The string to convert to a TypeLocale
  * @returns The matching TypeLocale if found, undefined otherwise
+ * @example
+ * ```ts
+ * const locale = getRootTypeLocaleFromString('Query');
+ * ```
  */
 export const getRootTypeLocaleFromString = (
   text: string,
@@ -40,12 +50,17 @@ export const getRootTypeLocaleFromString = (
 
 /**
  * Prints the relation section for a specific type and relation category
- * @template T Type of the relation
+ * @template T - Type of the relation
  * @param type - The GraphQL type to get relations for
  * @param section - The section title for the relation
  * @param getRelation - Function to retrieve relations of type T
  * @param options - Printing options for type formatting
- * @returns Formatted MDX string containing the relations or empty string if no relations found
+ * @returns {MDXString | string} Formatted MDX string containing the relations or empty string if no relations found
+ * @throws {Error} If the schema is not provided in options
+ * @example
+ * ```ts
+ * const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);
+ * ```
  */
 export const printRelationOf = <T>(
   type: unknown,
@@ -110,6 +125,11 @@ export const printRelationOf = <T>(
  * @param type - The GraphQL type to get all relations for
  * @param options - Printing options for type formatting
  * @returns Formatted MDX string containing all relations or empty string if no relations found
+ * @throws If the schema is not provided in options
+ * @example
+ * ```ts
+ * const relations = printRelations(myType, { schema, formatMDXBullet: () => "* " });
+ * ```
  */
 export const printRelations = (
   type: unknown,

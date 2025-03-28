@@ -7,34 +7,46 @@
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/graphql-markdown/graphql-markdown)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-This plugin generates **Markdown pages** from a **GraphQL schema** for ~~**Docusaurus** [docs feature](https://docusaurus.io/docs/docs-introduction)~~ <mark>any Markdown static site generator</mark> (see [release 1.29.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.29.0)).
 
-## Installation (Docusaurus)
+# GraphQL-Markdown
 
-**`graphql` package is a peer-dependency, and should be installed separately.**
+Generate **Markdown documentation** from **GraphQL schemas** for static site generators.
+
+## Installation
+
+Choose your preferred package based on your static site generator:
 
 ```shell
+# For Docusaurus
 npm install @graphql-markdown/docusaurus graphql
+
+# For other static site generators
+npm install @graphql-markdown/cli graphql
 ```
 
-Add `@graphql-markdown/docusaurus` to your site's `docusaurus.config.js` plugins option:
+## Usage
+
+### Docusaurus Plugin
+
+Add to your `docusaurus.config.js`:
 
 ```js
 module.exports = {
-  // ...
   plugins: ["@graphql-markdown/docusaurus"],
 };
 ```
 
-## Usage (Docusaurus)
-
-The plugin adds a new command `graphql-to-doc` to the [Docusaurus CLI](https://docusaurus.io/docs/cli).
+Run the generation command:
 
 ```shell
 npx docusaurus graphql-to-doc
 ```
 
-Command line options are described in the [documentation settings](https://graphql-markdown.dev/docs/settings) page.
+### CLI Usage
+
+```shell
+npx gqlmd graphql-to-doc --schema ./schema.graphql --output ./docs
+```
 
 ## Configuration
 

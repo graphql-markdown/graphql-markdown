@@ -1,10 +1,17 @@
 /**
- * Configuration module for GraphQL Markdown.
+ * Configuration management for GraphQL Markdown.
  *
- * This module provides utilities for parsing, validating, and merging configuration
- * options from different sources (CLI arguments, config files, GraphQL config).
- * It handles directives, hierarchies, and other settings used for generating
- * markdown documentation from GraphQL schemas.
+ * This module handles all aspects of configuration including:
+ * - Loading and merging configuration from multiple sources
+ * - Validating configuration values
+ * - Providing defaults for missing options
+ * - Processing special configuration options (directives, deprecated items, etc)
+ *
+ * The configuration follows this precedence (highest to lowest):
+ * 1. CLI arguments
+ * 2. Config file options
+ * 3. GraphQL Config options
+ * 4. Default values
  *
  * @packageDocumentation
  */
@@ -441,7 +448,6 @@ export const getDiffMethod = (
  * @param _cliOpts - Deprecated CLI options (unused)
  * @param _configOptions - Deprecated config options (unused)
  * @returns An empty object
- * @deprecated This function handles deprecated options and may be removed in a future version
  */
 export const parseDeprecatedDocOptions = (
   _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
@@ -567,7 +573,6 @@ export const getTypeHierarchyOption = (
  * @param _cliOpts - Deprecated CLI options (unused)
  * @param _configOptions - Deprecated config options (unused)
  * @returns An empty object
- * @deprecated This function handles deprecated options and may be removed in a future version
  */
 export const parseDeprecatedPrintTypeOptions = (
   _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,

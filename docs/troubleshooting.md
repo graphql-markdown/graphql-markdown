@@ -8,22 +8,73 @@ pagination_next: null
 
 ## Duplicate "graphql" modules cannot be used at the same time
 
-Add a `resolutions` entry to your `package.json` file:
+Add a `resolutions` entry to your `package.json`:
 
 ```json title="package.json"
-"resolutions": {
+"resolutions": 
+{
   "graphql": "16.9.0"
 }
 ```
 
 ## Unable to find any GraphQL type definitions
 
-Try changing the temporary folder for the plugin by setting `tmpDir: "./.docusaurus"` (see [settings](/docs/settings) for more details).
+There are several potential solutions:
 
-You can also disable the schema diff feature with `diffMethod: "NONE"`.
+1. Change the temporary folder location:
+```js
+{
+  tmpDir: "./.docusaurus"
+}
+```
 
-## Unable to find any GraphQL type definitions for the following pointers
+2. Disable schema diff feature:
+```js
+{
+  diffMethod: "NONE" 
+}
+```
 
-Install and declare the missing GraphQL document loader package, see [schema loading](/docs/advanced/schema-loading).
+3. Check file permissions on the temporary directory
 
-If the error persists, check that you have the correct class name in the configuration declaration.
+### Schema Loading Issues
+
+1. Ensure required loaders are installed:
+```shell
+npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
+```
+
+2. Verify loader configuration:
+```js
+{
+  loaders: {
+    UrlLoader: "@graphql-tools/url-loader",
+    JsonFileLoader: "@graphql-tools/json-file-loader"
+  }
+}
+```
+
+### Memory Issues During Generation
+
+For large schemas, try:
+
+1. Increase Node.js memory limit:
+```shell
+NODE_OPTIONS=--max-old-space-size=4096 npx docusaurus graphql-to-doc
+```
+
+2. Use the `--chunk-size` option to process in batches:
+```shell
+npx docusaurus graphql-to-doc --chunk-size 50
+```
+
+## Getting Help
+
+If you're still having issues:
+
+1. Check the [GitHub issues](https://github.com/graphql-markdown/graphql-markdown/issues)
+2. File a new issue with:
+   - Your configuration
+   - Schema size/complexity
+   - Error messages
+   - Node.js and package versions

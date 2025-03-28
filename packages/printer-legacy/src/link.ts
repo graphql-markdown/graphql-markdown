@@ -1,3 +1,9 @@
+/**
+ * Module for handling links and link-related operations in GraphQL Markdown printer.
+ * Provides utilities for creating, formatting, and managing links to GraphQL types and operations.
+ * @packageDocumentation
+ */
+
 import type {
   ApiGroupOverrideType,
   GraphQLNamedType,
@@ -45,7 +51,14 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
 } as const;
 
 /**
+ * Checks if a type has printable directives based on the provided options.
  *
+ * @param type - The GraphQL type to check
+ * @param options - Configuration options for directive printing
+ * @param options.deprecated - How to handle deprecated types
+ * @param options.onlyDocDirectives - Only print types with specific directives
+ * @param options.skipDocDirectives - Skip types with specific directives
+ * @returns `true` if the type should be printed, `false` otherwise
  */
 export const hasPrintableDirective = (
   type: unknown,
@@ -81,7 +94,10 @@ export const hasPrintableDirective = (
 };
 
 /**
+ * Gets the locale category for a given GraphQL type.
  *
+ * @param type - The GraphQL type to get the category for
+ * @returns The locale category for the type, or `undefined` if not found
  */
 export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
   switch (true) {
@@ -106,7 +122,11 @@ export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
 };
 
 /**
+ * Gets the folder name for a link category based on the GraphQL type and operation locale.
  *
+ * @param type - The GraphQL type to get the folder name for
+ * @param operationLocale - The locale of the operation
+ * @returns The folder name for the link category, or `undefined` if not found
  */
 export const getLinkCategoryFolder = (
   type: unknown,
@@ -134,14 +154,20 @@ export const getLinkCategoryFolder = (
 };
 
 /**
+ * Checks if the options include the `withAttributes` attribute.
  *
+ * @param options - The options to check
+ * @returns `true` if the options include `withAttributes`, `false` otherwise
  */
 export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
   return "withAttributes" in options && options.withAttributes === true;
 };
 
 /**
+ * Checks if the options include the `parentTypePrefix` attribute.
  *
+ * @param options - The options to check
+ * @returns `true` if the options include `parentTypePrefix`, `false` otherwise
  */
 export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   return (
@@ -153,7 +179,11 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
 };
 
 /**
+ * Gets the folder name for an API group based on the GraphQL type and group options.
  *
+ * @param type - The GraphQL type to get the folder name for
+ * @param groups - The group options
+ * @returns The folder name for the API group
  */
 export const getLinkApiGroupFolder = (
   type: unknown,
@@ -167,7 +197,11 @@ export const getLinkApiGroupFolder = (
 };
 
 /**
+ * Gets the folder name for deprecated types based on the GraphQL type and deprecation option.
  *
+ * @param type - The GraphQL type to get the folder name for
+ * @param option - The deprecation option
+ * @returns The folder name for deprecated types
  */
 export const getLinkDeprecatedFolder = (
   type: unknown,
@@ -184,7 +218,13 @@ const isHierarchy = (
 };
 
 /**
+ * Converts a GraphQL type to a link object.
  *
+ * @param type - The GraphQL type to convert
+ * @param name - The name of the type
+ * @param operation - The locale of the operation
+ * @param options - Configuration options for link generation
+ * @returns The link object for the type
  */
 export const toLink = (
   type: unknown,
@@ -256,7 +296,12 @@ export const toLink = (
 };
 
 /**
+ * Gets the link for a relation based on the category, type, and options.
  *
+ * @param category - The locale category of the relation
+ * @param type - The GraphQL type of the relation
+ * @param options - Configuration options for link generation
+ * @returns The link object for the relation, or `undefined` if not found
  */
 export const getRelationLink = (
   category: Maybe<TypeLocale>,
@@ -275,7 +320,11 @@ export const getRelationLink = (
 };
 
 /**
+ * Prints the attributes of a link based on the GraphQL type.
  *
+ * @param type - The GraphQL type to print attributes for
+ * @param text - The text to append attributes to
+ * @returns The text with appended attributes
  */
 export const printLinkAttributes = (
   type: unknown,
@@ -305,7 +354,11 @@ export const printLinkAttributes = (
 };
 
 /**
+ * Prints a link for a GraphQL type based on the provided options.
  *
+ * @param type - The GraphQL type to print a link for
+ * @param options - Configuration options for link generation
+ * @returns The formatted link as a string
  */
 export const printLink = (type: unknown, options: PrintLinkOptions): string => {
   if (typeof type !== "object" || type === null) {
@@ -333,7 +386,11 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
 };
 
 /**
+ * Prints a parent link for a GraphQL type based on the provided options.
  *
+ * @param type - The GraphQL type to print a parent link for
+ * @param options - Configuration options for link generation
+ * @returns The formatted parent link as a string or MDX string
  */
 export const printParentLink = (
   type: unknown,

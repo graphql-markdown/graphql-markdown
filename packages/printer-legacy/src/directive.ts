@@ -1,3 +1,8 @@
+/**
+ * Provides utilities for handling and printing GraphQL directives in Markdown format
+ * @module
+ */
+
 import type {
   Badge,
   PrintTypeOptions,
@@ -15,7 +20,12 @@ import { printLink } from "./link";
 import { printBadge } from "./badge";
 
 /**
- *
+ * Resolves a custom directive using the provided resolver function
+ * @param resolver - The resolver function name to execute
+ * @param type - The GraphQL type to resolve the directive for
+ * @param constDirectiveOption - The directive configuration options
+ * @param fallback - Optional fallback value if resolution fails
+ * @returns The resolved directive value or fallback/undefined
  */
 export const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
@@ -38,7 +48,11 @@ export const getCustomDirectiveResolver = (
 };
 
 /**
- *
+ * Prints a custom directive as a Markdown string
+ * @param type - The GraphQL type to print the directive for
+ * @param constDirectiveOption - The directive configuration options
+ * @param options - General printing options
+ * @returns Formatted Markdown string for the directive or undefined
  */
 export const printCustomDirective = (
   type: unknown,
@@ -63,7 +77,10 @@ export const printCustomDirective = (
 };
 
 /**
- *
+ * Prints all custom directives for a type as a Markdown section
+ * @param type - The GraphQL type to print directives for
+ * @param options - General printing options
+ * @returns Markdown string containing all formatted directives
  */
 export const printCustomDirectives = (
   type: unknown,
@@ -96,7 +113,10 @@ export const printCustomDirectives = (
 };
 
 /**
- *
+ * Extracts custom tags from directives for a given type
+ * @param type - The GraphQL type to get tags for
+ * @param options - General printing options
+ * @returns Array of badge configurations from directive tags
  */
 export const getCustomTags = (
   type: unknown,
@@ -125,7 +145,10 @@ export const getCustomTags = (
 };
 
 /**
- *
+ * Prints custom directive tags as Markdown badges
+ * @param type - The GraphQL type to print tags for
+ * @param options - General printing options
+ * @returns Formatted Markdown string of badges or empty string
  */
 export const printCustomTags = (
   type: unknown,
