@@ -1,3 +1,10 @@
+/**
+ * Module for handling GraphQL type badges in MDX documentation.
+ * Provides functionality to generate and format badges for different GraphQL types
+ * and their properties like deprecation status, nullability, and relationships.
+ * @module
+ */
+
 import type {
   Badge,
   GraphQLType,
@@ -28,7 +35,10 @@ export const CSS_BADGE_CLASSNAME = {
 };
 
 /**
- *
+ * Gets an array of badges for a given GraphQL type.
+ * @param type - The GraphQL type to generate badges for
+ * @param groups - Optional map of schema entities to their groups
+ * @returns Array of Badge objects containing text and optional classnames
  */
 export const getTypeBadges = (
   type: unknown,
@@ -79,7 +89,10 @@ export const getTypeBadges = (
 };
 
 /**
- *
+ * Formats a single badge into MDX string format.
+ * @param badge - The badge object containing text and optional classname
+ * @param options - Options for printing/formatting the badge
+ * @returns Formatted MDX string representation of the badge
  */
 export const printBadge = (
   { text, classname }: Badge,
@@ -94,7 +107,10 @@ export const printBadge = (
 };
 
 /**
- *
+ * Generates and formats all applicable badges for a GraphQL type.
+ * @param type - The GraphQL type to generate badges for
+ * @param options - Options for printing/formatting the badges
+ * @returns Formatted MDX string containing all badges, or empty string if no badges or badges disabled
  */
 export const printBadges = (
   type: unknown,

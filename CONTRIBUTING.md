@@ -23,6 +23,8 @@ Take this document as a set of guidelines, not rules, for contributing to this p
   - [Dependencies](#dependencies)
   - [Tests](#tests)
   - [Build documentation](#build-documentation)
+  - [API Documentation](#api-documentation)
+  - [Troubleshooting](#troubleshooting)
 
 ## First time contributor
 
@@ -51,6 +53,7 @@ If you aim at a code contribution, you will need the following tools:
 - [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)\*
 - [earthly](https://earthly.dev/get-earthly)
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+- [pnpm](https://pnpm.io/installation) (recommended)
 
 This project is fully compatible with [GitHub Codespaces](https://github.com/features/codespaces). However, if you prefer a local environment, then we recommend [VS Code](https://code.visualstudio.com/download) for this project.
 
@@ -125,39 +128,30 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 
 ### Code structure
 
-The quickest way to understand the code structure is to look at the folder structure:
+The project follows a monorepo architecture with the following key packages:
 
-- `packages` contains packages sources
-  - `docusaurus` contains Docusaurus plugin 📦 [`@graphql-markdown/docusaurus`](https://github.com/graphql-markdown/graphql-markdown/tree/main/docusaurus)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-    - `scripts` contains scripts used for running smoke tests.
-  - `core` contains core logic 📦 [`@graphql-markdown/core`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/core)
-    - `assets` folder contains assets used by the plugin, e.g. the default homepage `generated.md`.
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `utils` contains shared libraries 📦 [`@graphql-markdown/utils`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/utils)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `graphql` contains utilities for loading and parsing GraphQL schema 📦 [`@graphql-markdown/graphql`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/graphql)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `logger` contains GraphQL-Markdown 📦 [`@graphql-markdown/logger`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/logger)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `printer-legacy` contains legacy code for exporting markdown 📦 [`@graphql-markdown/printer-legacy`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/printer-legacy)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `diff` contains diff methods (optional) 📦 [`@graphql-markdown/diff`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/diff)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-  - `helpers` contains helpers for customized directives feature (optional) 📦 [`@graphql-markdown/helpers`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/helpers)
-    - `src` contains all TS files used by the package.
-    - `tests` folder contains all tests needed (see [tests](#tests) section).
-- `config` folder configuration files for development tools.
-- `docs` folder contains online documentation.
-- `scripts` folder contains scripts for monorepo (eg. packages version check).
-- `website` folder contains Docusaurus file for generating website.
+Core packages:
+- `core` - Main documentation generation engine
+- `docusaurus` - Official Docusaurus plugin
+- `cli` - Command line interface
+- `types` - Shared TypeScript types
+
+Support packages:
+- `utils` - Common utilities
+- `graphql` - Schema loading and parsing
+- `logger` - Logging functionality
+- `printer-legacy` - Legacy markdown generation
+- `diff` - Schema diffing (optional)
+- `helpers` - Directive helpers (optional)
+
+Each package contains:
+```
+package/
+├── src/         # Source code
+├── tests/       # Test files
+├── docs/        # API documentation
+└── package.json # Package manifest
+```
 
 > The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
 
@@ -221,3 +215,25 @@ You can also create a local container image `graphql-markdown:docs` for tests:
 earthly +build-image
 docker run --rm -it -p 8080:8080 graphql-markdown:docs
 ```
+
+### API Documentation
+
+Generate API documentation for packages:
+
+```shell
+# Generate docs for all packages
+npm run docs:api:all
+```
+
+The generated documentation will be available in each package's `docs/` directory.
+
+### Troubleshooting
+
+Common issues:
+
+- **Build failures**: Run `earthly --interactive [target]` then retry
+- **Type errors**: Check `tsconfig.json` in affected package
+- **Test failures**: Use `--verbose` flag with Jest for details
+- **Dependency issues**: Clean install with `npm ci`
+
+For other issues, please check existing GitHub issues or create a new one.

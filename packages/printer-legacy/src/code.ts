@@ -1,3 +1,11 @@
+/**
+ * Provides utility functions for generating code representations of GraphQL types
+ * in Markdown format. This module handles the formatting of arguments and fields
+ * with proper indentation and deprecation notices.
+ * @module
+ *
+ */
+
 import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
@@ -14,7 +22,19 @@ import {
 import { hasPrintableDirective } from "./link";
 
 /**
+ * Generates a string representation of GraphQL arguments with proper formatting and indentation.
  *
+ * @param type - The GraphQL type object containing arguments to print
+ * @param indentationLevel - The level of indentation to apply (default: 1)
+ * @returns A formatted string of arguments or an empty string if no arguments exist
+ * @example
+ * ```
+ * printCodeArguments({ args: [{ name: 'id', type: 'ID!' }] })
+ * // Returns:
+ * // (
+ * //   id: ID!
+ * // )
+ * ```
  */
 export const printCodeArguments = (
   type: unknown,
@@ -51,7 +71,20 @@ export const printCodeArguments = (
 };
 
 /**
+ * Generates a string representation of a GraphQL field including its arguments,
+ * return type, and deprecation status.
  *
+ * @param type - The GraphQL field type object to print
+ * @param options - Optional configuration for printing the type
+ * @param indentationLevel - The level of indentation to apply (default: 0)
+ * @returns A formatted string representing the field or an empty string if the field should not be printed
+ * @example
+ * ```
+ * printCodeField({ name: 'user', type: 'User!', args: [{ name: 'id', type: 'ID!' }] })
+ * // Returns: user(
+ * //   id: ID!
+ * // ): User!
+ * ```
  */
 export const printCodeField = (
   type: unknown,

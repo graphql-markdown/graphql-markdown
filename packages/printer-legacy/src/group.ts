@@ -1,3 +1,7 @@
+/**
+ * Utility module for handling GraphQL schema entity grouping.
+ * @module
+ */
 import type {
   SchemaEntitiesGroupMap,
   SchemaEntity,
@@ -10,7 +14,12 @@ import { getNamedType } from "@graphql-markdown/graphql";
 import { slugify } from "@graphql-markdown/utils";
 
 /**
+ * Retrieves the group name for a given GraphQL type based on its category and group mapping.
  *
+ * @param type - The GraphQL type to get the group for
+ * @param groups - Mapping of schema entities to their group names
+ * @param typeCategory - The category of the schema entity
+ * @returns The slugified group name or empty string if no group is found
  */
 export const getGroup = (
   type: unknown,

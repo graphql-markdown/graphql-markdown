@@ -1,7 +1,11 @@
 /**
- * @module
- * Core generator functionality for GraphQL Markdown.
- * This module contains the main entry point for generating documentation from GraphQL schemas.
+ * Core generator functionality for GraphQL Markdown documentation.
+ *
+ * This module contains the main functionality for generating markdown documentation
+ * from GraphQL schemas. It handles schema loading, processing, and markdown generation
+ * through appropriate printers and renderers.
+ *
+ * @packageDocumentation
  */
 import type {
   DiffMethodName,
@@ -46,22 +50,17 @@ const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
 
 /**
- * Generates Markdown documentation from a GraphQL schema.
+ * Main entry point for generating Markdown documentation from a GraphQL schema.
  *
- * This function is the main entry point for the documentation generation process.
- * It loads the schema, analyzes it, and generates Markdown files according to the provided options.
+ * This function coordinates the entire documentation generation process:
+ * - Loads and validates the schema
+ * - Checks for schema changes if diffing is enabled
+ * - Processes directives and groups
+ * - Initializes printers and renderers
+ * - Generates markdown files
  *
- * @param options - Configuration options for the documentation generator
- * @returns Promise that resolves when documentation generation is complete
- *
- * @example
- * ```typescript
- * await generateDocFromSchema({
- *   baseURL: '/docs',
- *   outputDir: './docs',
- *   schemaLocation: './schema.graphql'
- * });
- * ```
+ * @param options - Complete configuration for the documentation generation
+ * @returns Promise that resolves when documentation is fully generated
  */
 export const generateDocFromSchema = async ({
   baseURL,
