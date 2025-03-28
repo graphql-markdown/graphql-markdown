@@ -797,6 +797,27 @@ describe("renderer", () => {
 
         expect(rendererInstance.hasMDXIndexFileSupport(undefined)).toBe(true);
       });
+
+      test.each([
+        { module: undefined, expected: true },
+        {
+          module: {
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            generateIndexMetafile: () => {},
+          },
+          expected: true,
+        },
+        { module: { generateIndexMetafile: null }, expected: false },
+      ])(
+        "detects mutation of conditional expression in hasMDXIndexFileSupport when module is $module",
+        ({ module, expected }) => {
+          expect.assertions(1);
+
+          expect(rendererInstance.hasMDXIndexFileSupport(module)).toBe(
+            expected,
+          );
+        },
+      );
     });
   });
 });

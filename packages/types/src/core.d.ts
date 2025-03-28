@@ -439,3 +439,6 @@ declare const PACKAGE_NAME: unique symbol;
 
 export type ClassName = string & { _opaque: typeof CLASS_NAME };
 declare const CLASS_NAME: unique symbol;
+
+export type LocationPath = string & { _opaque: typeof LOCATION_PATH };
+declare const LOCATION_PATH: unique symbol;

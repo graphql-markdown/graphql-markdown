@@ -100,6 +100,16 @@ describe("config", () => {
         ),
       ).toStrictEqual(["deprecated"]);
     });
+
+    // Test for StringLiteral mutations (line 346, 403, etc.)
+    test("handles empty string directive correctly", () => {
+      expect.hasAssertions();
+
+      // Should reject empty string directives
+      expect(() => {
+        getSkipDocDirectives({ skip: "" as DirectiveName }, undefined);
+      }).toThrow();
+    });
   });
 
   describe("getOnlyDocDirectives", () => {
@@ -203,6 +213,16 @@ describe("config", () => {
         }).toThrow(`Invalid "${directive}"`);
       },
     );
+
+    // Test for StringLiteral mutations (various lines)
+    test("handles empty string directive correctly", () => {
+      expect.hasAssertions();
+
+      // Should reject empty string directives
+      expect(() => {
+        getDocDirective("" as DirectiveName);
+      }).toThrow();
+    });
   });
 
   describe("buildConfig()", () => {
@@ -606,6 +626,44 @@ describe("config", () => {
 
       expect(parseGroupByOption(groupOptions)).toBeUndefined();
     });
+
+    // Test for Regex mutation (line 682)
+    test("handles complex directive patterns correctly", () => {
+      expect.hasAssertions();
+
+      // Test normal case
+      expect(parseGroupByOption("@doc(field|=fallback)")).toStrictEqual({
+        directive: "doc",
+        field: "field",
+        fallback: "fallback",
+      });
+
+      // Test non-standard but valid format cases
+      expect(
+        parseGroupByOption("@directive123(field_name|=fallback_value)"),
+      ).toStrictEqual({
+        directive: "directive123",
+        field: "field_name",
+        fallback: "fallback_value",
+      });
+
+      // Should reject malformed directives
+      expect(() => {
+        return parseGroupByOption("@(field|=fallback)");
+      }).toThrow();
+      expect(() => {
+        return parseGroupByOption("@doc(|=fallback)");
+      }).toThrow();
+    });
+
+    test.each([[null], [undefined], [42], [{}]])(
+      "returns undefined if %s not a string",
+      (value: unknown) => {
+        expect.hasAssertions();
+
+        expect(parseGroupByOption(value)).toBeUndefined();
+      },
+    );
   });
 
   describe("getCustomDirectives", () => {
@@ -879,6 +937,18 @@ describe("config", () => {
         TypeHierarchy.API,
       );
       expect(result2).toStrictEqual({ [TypeHierarchy.API]: {} });
+    });
+
+    test.each([
+      [undefined, undefined],
+      [null, undefined],
+    ])("handles type hierarchy edge cases", (cliOption, configOption) => {
+      expect.hasAssertions();
+
+      // Test with undefined/null values
+      expect(getTypeHierarchyOption(cliOption, configOption)).toStrictEqual(
+        DEFAULT_HIERARCHY,
+      );
     });
   });
 });

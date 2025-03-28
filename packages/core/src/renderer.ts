@@ -1,6 +1,7 @@
 import type {
   ApiGroupOverrideType,
   Category,
+  LocationPath,
   Maybe,
   MDXString,
   MDXSupportType,
@@ -169,6 +170,10 @@ const isHierarchy = (
   return (options?.hierarchy?.[hierarchy] && true) as boolean;
 };
 
+const isPath = (path: unknown): path is LocationPath => {
+  return typeof path === "string" && path !== "";
+};
+
 /**
  * Configuration options for category metafiles in the documentation.
  * These options control the appearance and behavior of category sections in the sidebar.
@@ -317,6 +322,10 @@ export class Renderer {
   ): Promise<string> {
     let dirPath = this.outputDir;
 
+    if (!isPath(dirPath)) {
+      throw new Error("Output directory is empty or not specified");
+    }
+
     if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
       return dirPath;
     }
@@ -417,6 +426,10 @@ export class Renderer {
     name: string,
     type: unknown,
   ): Promise<Maybe<Category>> {
+    if (!isPath(dirPath)) {
+      throw new Error("Output directory is empty or not specified");
+    }
+
     const PageRegex =
       /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
     const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx?$/;
@@ -479,6 +492,11 @@ export class Renderer {
    * @example
    */
   async renderHomepage(homepageLocation: string): Promise<void> {
+    if (typeof homepageLocation !== "string") {
+      log("Homepage location must be a string", LogLevel.warn);
+      return;
+    }
+
     const homePage = basename(homepageLocation);
     const destLocation = join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
