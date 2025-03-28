@@ -326,6 +326,18 @@ describe("renderer", () => {
           undefined,
         );
       });
+
+      test("throws error when output directory is empty", async () => {
+        expect.assertions(1);
+
+        await expect(
+          rendererInstance.renderTypeEntities(
+            "", // empty output directory
+            "FooBar",
+            "TestType",
+          ),
+        ).rejects.toThrow("Output directory is empty or not specified");
+      });
     });
 
     describe("renderHomepage()", () => {
@@ -479,6 +491,30 @@ describe("renderer", () => {
           "/output/to-prettify.md",
           "## Unformatted content",
           Utils.prettifyMarkdown,
+        );
+      });
+
+      test("throws error when output directory is empty", async () => {
+        expect.assertions(1);
+
+        // Set renderer's outputDir to empty string
+        jest.replaceProperty(rendererInstance, "outputDir", "");
+
+        await expect(
+          rendererInstance.renderHomepage("/assets/homepage.md"),
+        ).rejects.toThrow("Output directory is empty or not specified");
+      });
+
+      test("logs warning when homepage location is not a valid string", async () => {
+        expect.assertions(1);
+
+        // Pass undefined as the homepage location
+        const consoleSpy = jest.spyOn(global.console, "warn");
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+        await rendererInstance.renderHomepage(undefined as unknown as string);
+
+        expect(consoleSpy).toHaveBeenCalledWith(
+          "Homepage location is not a valid string",
         );
       });
     });
@@ -871,6 +907,21 @@ describe("renderer", () => {
 
         expect(apiPath).toBe(`/output/${API_GROUPS.operations}/queries`);
         expect(nonApiPath).toBe(`/output/${API_GROUPS.types}/objects`);
+      });
+
+      test("throws error when output directory is empty or not specified", async () => {
+        expect.assertions(1);
+
+        // Set renderer's outputDir to empty string
+        jest.replaceProperty(rendererInstance, "outputDir", "");
+
+        await expect(
+          rendererInstance.generateCategoryMetafileType(
+            {},
+            "TestType",
+            "objects",
+          ),
+        ).rejects.toThrow("Output directory is empty or not specified");
       });
     });
 
