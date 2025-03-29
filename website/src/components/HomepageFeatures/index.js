@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
-        GraphQL-Markdown is a Docusaurus plugin that transforms your GraphQL
+        GraphQL-Markdown is command line tool and JS/TS library for turning your GraphQL
         schemas into beautiful documentation without effort.
       </>
     ),
