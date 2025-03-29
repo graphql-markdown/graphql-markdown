@@ -130,11 +130,11 @@ const config = {
             position: "right",
             label: "Release notes",
           },
-          {
-            to: "https://codesandbox.io/s/github/graphql-markdown/demo/",
-            position: "right",
-            label: "CodeSandbox",
-          },
+          // {
+          //   to: "https://codesandbox.io/s/github/graphql-markdown/demo/",
+          //   position: "right",
+          //   label: "CodeSandbox",
+          // },
           {
             to: "https://github.com/graphql-markdown/graphql-markdown",
             position: "right",
