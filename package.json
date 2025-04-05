@@ -173,7 +173,7 @@
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-jsonc": "2.20.0",
-    "eslint-plugin-mdx": "3.3.2",
+    "eslint-plugin-mdx": "3.4.0",
     "eslint-plugin-prettier": "5.2.6",
     "eslint-plugin-tsdoc": "^0.4.0",
     "graphql": "16.10.0",
