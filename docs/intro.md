@@ -22,9 +22,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Full relations information between types
   - Visual representation of type relationships
   - Complete type hierarchy documentation
-- MDX generated are fully compatible with `plugin-content-docs`
-  - Supports all Docusaurus features
-  - Customizable with MDX components
+- MDX generated are fully customizable using MDX components
 - Use any schema loader compatible with `@graphql-tools/load`
   - Support for local schema files
   - Support for remote GraphQL endpoints
