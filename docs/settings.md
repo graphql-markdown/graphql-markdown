@@ -70,7 +70,7 @@ npm install @graphql-markdown/diff
 
 Use these options to tweak some of the static documentation generator features:
 
-- `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as page title.
+- `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
 
 | Setting                  | CLI flag        | Default |
@@ -126,7 +126,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 ## `homepage`
 
-The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/homepage)). The file will be copied at the root folder of the generated documentation.
+The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/homepage)). The file will be copied to the root folder of the generated documentation.
 
 The plugin provides a default page in `assets/generated`.
 
@@ -224,13 +224,13 @@ See also [`skipDocDirective`](#skipdocdirective).
 
 :::info
 
-It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`) then the type will be displayed.
+It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`), then the type will be displayed.
 
 :::
 
 ## `printTypeOptions`
 
-Use these options to toggle type information rendered on pages:
+Use these options to toggle the type of information rendered on pages:
 
 - `codeSection`: display type code section.
 - `deprecated`: option for displaying deprecated entities (fields, values, operations).
@@ -293,13 +293,13 @@ plugins: [
 
 **If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
 
-To resolve this, you can regenerate the documentation using the [`force`](#force) setting; or use `hierarchy: "entity"` to keep the previous behavior.
+To resolve this, you can regenerate the documentation using the [`force`](#force) setting, or use `hierarchy: "entity"` to keep the previous behavior.
 
 :::
 
 :::danger
 
-Declaring the different option type in CLI flag `hierarchy` and config file `hierarchy` will generate an error.
+Declaring a different option type in the CLI flag `hierarchy` and the config file `hierarchy` will generate an error.
 
 :::
 
@@ -370,7 +370,7 @@ If `false`, then the documentation can only be generated with the Docusaurus com
 ## `rootPath`
 
 The output root path for the generated documentation, relative to the current workspace.
-It works in relation to [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
+It works with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
 
 | Setting    | CLI flag                | Default  |
 | ---------- | ----------------------- | -------- |
