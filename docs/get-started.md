@@ -4,13 +4,17 @@ sidebar_position: 30
 
 # Getting started
 
+:::info
+
 While GraphQL-Markdown was initially developed as a Docusaurus plugin, it now supports various MDX documentation generators. This guide focuses on the Docusaurus integration - for other frameworks, please see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
 
-Get started by [creating a new site](#new-site).
+:::
+
+Get started by [creating a new site](#new-docusaurus-site).
 
 Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
 
-## New site
+## New Docusaurus site
 
 ### Requirements
 
@@ -42,7 +46,7 @@ npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 
 You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+The command also installs all the necessary dependencies you need to run Docusaurus.
 
 ### Add a GraphQL schema loader
 
@@ -65,7 +69,7 @@ cd my-website
 npm start
 ```
 
-The `cd` command changes the directory you're working with. To work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+The `cd` command changes the directory you're working in. To work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 
 :::tip
 
@@ -75,12 +79,14 @@ The `npm run doc` is a template shortcut for command line document generation `n
 
 The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
 
-## Existing site
+## Existing Docusaurus site
 
 ### Requirements
 
 :::note
-These requirements are specific to Docusaurus integration. For other frameworks' requirements, see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
+
+These requirements are specific to Docusaurus integration. See our [Framework Integration Guide](/docs/advanced/integration-with-frameworks) for other frameworks' requirements.
+
 :::
 
 Your project needs to meet the following requirements:
