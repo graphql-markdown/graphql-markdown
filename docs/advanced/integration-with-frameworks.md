@@ -51,20 +51,28 @@ For Astro Starlight integration, implement a custom MDX parser:
 
 ```js
 // src/modules/astro-mdx.cjs
-const parser = {
-  generateIndexMetafile: async (dirPath, category, options) => {
-    // Generate index file for a directory
-  },
-  formatMDXAdmonition: ({ text, title, type, icon }, meta) => {
-    return `::: ${type}${title ? ` ${title}` : ''}\n${text}\n:::`;
-  },
-  formatMDXBadge: ({ text, classname }) => {
-    return `<Badge variant="${classname}">${text}</Badge>`;
-  },
-  mdxDeclaration: 'import { Badge } from \'@astrojs/starlight/components\';'
+const mdxDeclaration = `
+import { Aside, Badge } from '@astrojs/starlight/components';
+`;
+
+const formatMDXAdmonition = (
+  { text, title, type },
+  meta,
+) => {
+  const asideType = type === "warning" ? "caution" : "note";
+  return `<Aside type="${asideType}" title="${title}">${text}</Aside>`;
 };
 
-module.exports = parser;
+const formatMDXBadge = ({ text, classname }) => {
+  const variant = classname === "DEPRECATED" ? 'caution' : 'default';
+  return `<Badge variant="${variant}" text="${text}"/>`;
+};
+
+module.exports = {
+  mdxDeclaration,
+  formatMDXAdmonition,
+  formatMDXBadge,
+};
 ```
 
 See complete implementation: [demo-astro-starlight](https://github.com/graphql-markdown/demo-astro-starlight)
@@ -75,62 +83,69 @@ For Next.js using Fumadocs, implement a custom MDX parser:
 
 ```js
 // lib/fumadocs-mdx.cjs
-const parser = {
-  generateIndexMetafile: async (dirPath, category, options) => {
-    // Generate index file for a directory
-  },
-  formatMDXAdmonition: ({ text, title, type }, meta) => {
-    return `<Callout type="${type}">${title ? `**${title}**: ` : ''}${text}</Callout>`;
-  },
-  formatMDXBadge: ({ text, classname }) => {
-    return `<Badge variant="${classname}">${text}</Badge>`;
-  },
-  formatMDXDetails: ({ dataOpen, dataClose }) => {
-    return `<Collapsible summary="${dataOpen}">\n\n${dataClose}\n\n</Collapsible>`;
-  },
-  mdxDeclaration: `import { Callout } from '@fumadocs/core';
-import { Badge, Collapsible } from '@/components';`
+const mdxDeclaration = `
+import { Heading } from 'fumadocs-ui/components/heading';
+import { Callout } from 'fumadocs-ui/components/callout';
+import Chip from '@mui/material/Chip';
+`;
+
+const formatMDXAdmonition = (
+  { text, title, type },
+  meta,
+) => {
+  const asideType = type === "warning" ? "warn" : "info";
+  return `<Callout type="${asideType}" title="${title}">${text}</Callout>`;
 };
 
-module.exports = parser;
+const formatMDXBadge = ({ text, classname }) => {
+  const color = classname === "DEPRECATED" ? 'warning' : 'info';
+  return `<Chip color="${color}" label="${text}" size="small" variant="outlined"/>`;
+};
+
+module.exports = {
+  mdxDeclaration,
+  formatMDXAdmonition,
+  formatMDXBadge,
+};
 ```
 
-Full implementation: [fumadocs-mdx.cjs](https://github.com/graphql-markdown/demo-nextjs-fumadocs/blob/main/lib/fumadoc-mdx.cjs)
+See complete implementation: [demo-nextjs-fumadocs](https://github.com/graphql-markdown/demo-nextjs-fumadocs)
 
-### VuePress
+### Vocs
 
-For VuePress integration, implement a custom MDX parser:
+For Vocs integration, implement a custom MDX parser:
 
 ```js
-// src/vuepress-mdx.cjs
-const parser = {
-  formatMDXAdmonition: ({ text, title, type }, meta) => {
-    return `::: ${type}${title ? ` ${title}` : ''}\n${text}\n:::`;
-  },
-  formatMDXBadge: ({ text, classname }) => {
-    return `<Badge type="${classname}" text="${text}" />`;
-  },
-  mdxDeclaration: `import { Badge } from '@vuepress/theme-default/lib/client/components'`
+// lib/vocs-mdx.cjs
+const mdxDeclaration = `
+import Chip from '@mui/material/Chip';
+
+export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em' }}>&nbsp;●&nbsp;</span></>
+`;
+
+const formatMDXAdmonition = (
+  { text, title, type },
+  meta,
+) => {
+  const calloutType = type === "warning" ? "warning" : "info";
+  return `:::${calloutType}[${title}]${text}:::`;
 };
 
-module.exports = parser;
-```
-
-### Gatsby
-
-For Gatsby integration, implement a custom MDX parser:
-
-```js
-// src/gatsby-mdx.cjs
-const parser = {
-  formatMDXAdmonition: ({ text, title, type }, meta) => {
-    return `<Alert variant="${type}">${title ? `**${title}**: ` : ''}${text}</Alert>`;
-  },
-  formatMDXBadge: ({ text, classname }) => {
-    return `<Badge variant="${classname}">${text}</Badge>`;
-  },
-  mdxDeclaration: `import { Alert, Badge } from '@chakra-ui/react';`
+const formatMDXBadge = ({ text, classname }) => {
+  const color = classname === "DEPRECATED" ? 'warning' : 'info';
+  return `<Chip color="${color}" label="${text}" size="small" variant="outlined"/>`;
 };
 
-module.exports = parser;
+const formatMDXBullet = (text = "") => {
+  return `<Bullet/>${text}`;
+};
+
+module.exports = {
+  mdxDeclaration,
+  formatMDXAdmonition,
+  formatMDXBadge,
+  formatMDXBullet
+};
 ```
+
+See complete implementation: [demo-vite-vocs](https://github.com/graphql-markdown/demo-vite-vocs)
