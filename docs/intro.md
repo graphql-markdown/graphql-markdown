@@ -6,7 +6,7 @@ hide_table_of_contents: true
 
 # Introduction
 
-The `@graphql-markdown/docusaurus` package extends the Docusaurus CLI with commands for generating MDX using a GraphQL schema as the source. It simplifies the process of creating and maintaining GraphQL API documentation by automatically generating well-structured documentation from your schema.
+The `@graphql-markdown/cli` package adds a CLI with commands for generating MDX using a GraphQL schema as the source. It simplifies creating and maintaining GraphQL API documentation by automatically generating well-structured documentation from your schema.
 
 ## Why GraphQL Markdown?
 
@@ -30,7 +30,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
   - Support for remote GraphQL endpoints
 - Group types into categories using directives
   - Organize types logically
-  - Create custom navigation structure
+  - Create a custom navigation structure
 - Support of GraphQL config
   - Integration with existing GraphQL setups
   - Consistent configuration across tools
