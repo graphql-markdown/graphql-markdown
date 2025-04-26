@@ -82,12 +82,12 @@ plugins: [
           directive: "spectaql",
           field: "options",
           /* simplified parser for @spectaql (non production ready) */
-          parser: (options?: unknown, type?: unknown): unknown => {
+          parser: (options, type) => {
             if (!options) {
               return undefined;
             }
 
-            const example = (options as [{ key: string; value: string }]).find(
+            const example = options.find(
               (option) => {
                 return ["example", "examples"].includes(option.key);
               },
@@ -101,7 +101,7 @@ plugins: [
               return example.value;
             }
 
-            return (JSON.parse(example.value) as string[])[0];
+            return JSON.parse(example.value)[0];
           }
         }
       }
