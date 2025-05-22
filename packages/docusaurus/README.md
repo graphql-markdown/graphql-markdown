@@ -14,7 +14,7 @@
 npm init docusaurus my-website https://github.com/graphql-markdown/template.git
 ```
 
-> _If you already have an existing Docusaurus installation, then see the [documentation]([https://graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started/#existing-docusaurus-site)) for an alternative installation._
+> _If you already have an existing Docusaurus installation, then see the [documentation](https://graphql-markdown.dev/docs/get-started/#existing-docusaurus-site) for an alternative installation._
 
 ## Usage
 
