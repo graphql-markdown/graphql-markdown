@@ -33,6 +33,7 @@ jobs:
             "logger",
             "printer-legacy",
             "utils",
+            "codegen",
           ]
 
     steps:

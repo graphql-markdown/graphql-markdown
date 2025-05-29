@@ -1,0 +1,25 @@
+{
+  "name": "@graphql-markdown/codegen",
+  "version": "0.0.1",
+  "description": "Drop-in replacement package for code generation.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "license": "MIT",
+  "author": "",
+  "repository": "",
+  "dependencies": {
+    "@graphql-markdown/graphql": "^1.1.6",
+    "@graphql-codegen/core": "^4.0.0",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4"
+  }
+}
