@@ -92,6 +92,7 @@ setup-docusaurus-project:
   RUN mv ./data/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js
   RUN mv ./data/docusaurus2-graphql-doc-nobuild.js ./docusaurus2-graphql-doc-nobuild.js
   RUN mv ./data/scripts/config-plugin.js ./config-plugin.js
+  RUN npm add ./data/e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
   RUN node config-plugin.js
 
 smoke-docusaurus-test:
@@ -192,12 +193,11 @@ GQLMD:
   ARG id
   ARG options
   ARG command=docusaurus
-  ARG memory=2g
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx --memory=$memory $command graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx --memory=$memory $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 

@@ -38,6 +38,7 @@ module.exports = {
     ],
   ],
   plugins: [
+    "e2e-test-webpack-plugin",
     [
       "@graphql-markdown/docusaurus",
       // override .graphqlrc
