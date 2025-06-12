@@ -16,9 +16,9 @@ jobs:
       github.actor == 'renovate[bot]' || 
       github.actor == 'graphql-markdown-bot'
     env:
+      GH_REPO: ${{ github.repository }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:
-      - run: git config --global --add safe.directory $PWD
       - name: Auto approve
         run: gh pr review --approve "$PR_URL"
       - name: Add label "automerge"
@@ -33,6 +33,7 @@ jobs:
     if: | 
       github.repository == 'graphql-markdown/graphql-markdown'
     env:
+      GH_REPO: ${{ github.repository }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:
       - name: Auto merge
