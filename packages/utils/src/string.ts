@@ -176,7 +176,7 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
  */
 export const escapeMDX = (str: unknown): string => {
   return `${String(str)}`.replace(
-    /(?<!`)([{<>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g,
+    /(?<!`)([{<_*>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g,
     toHTMLUnicode,
   );
 };
