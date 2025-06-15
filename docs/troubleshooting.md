@@ -54,6 +54,30 @@ npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
 }
 ```
 
+### "UrlLoader" does not exist in type "LoaderOption".ts
+
+*Reported in [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213).*
+
+```
+Object literal may only specify known properties, and 'UrlLoader' does not exist in type 'LoaderOption'.ts(2353)
+core.d.ts(128, 3): The expected type comes from property 'loaders' which is declared here on type 'ConfigOptions'
+```
+
+Cast the `loaders` as LoaderOption
+
+```ts
+loaders: {
+  UrlLoader: {
+    module: "@graphql-tools/url-loader",
+    options: {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+      },
+    },
+  },
+} as LoaderOption,
+```
+
 ### Memory Issues During Generation
 
 For large schemas, try:
