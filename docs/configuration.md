@@ -54,7 +54,7 @@ module.exports = {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader", // local file schema
         },
         // Optional advanced settings
-        prettify: true,
+        pretty: true,
         customDirective: true,
       },
     ],
