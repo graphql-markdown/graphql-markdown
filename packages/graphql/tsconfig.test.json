@@ -6,6 +6,8 @@
 
     "noEmit": true,
 
+    "isolatedModules": true,
+
     "types": ["node", "@types/jest"],
 
     "paths": {
