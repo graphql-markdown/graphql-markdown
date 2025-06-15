@@ -86,3 +86,9 @@ plugins: [
   ],
 ],
 ```
+
+:::tip
+
+See our [Troubleshooting section](/docs/troubleshooting) in case of error ['UrlLoader' does not exist in type 'LoaderOption'.ts](/docs/troubleshooting#urlloader-does-not-exist-in-type-loaderoptionts).
+
+:::
