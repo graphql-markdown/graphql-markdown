@@ -29,6 +29,12 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
+      - name: Clean and Install Dependencies
+        run: |
+          npm ci
+          npm rebuild oxc-resolver
+          npx husky install
+
       - name: Install modules
         run: npm ci
 
