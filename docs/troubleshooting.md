@@ -37,7 +37,7 @@ There are several potential solutions:
 
 3. Check file permissions on the temporary directory
 
-### Schema Loading Issues
+## Schema Loading Issues
 
 1. Ensure required loaders are installed:
 ```shell
@@ -54,7 +54,7 @@ npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
 }
 ```
 
-### "UrlLoader" does not exist in type "LoaderOption".ts
+## "UrlLoader" does not exist in type "LoaderOption".ts
 
 *Reported in [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213).*
 
@@ -78,7 +78,7 @@ loaders: {
 } as LoaderOption,
 ```
 
-### Memory Issues During Generation
+## Memory Issues During Generation
 
 For large schemas, try:
 
