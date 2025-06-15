@@ -11,7 +11,6 @@ const projectConfig = (name) => ({
       "ts-jest",
       {
         tsconfig: "<rootDir>/tsconfig.test.json",
-        isolatedModules: true,
       },
     ],
   },
