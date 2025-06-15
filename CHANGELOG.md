@@ -1,43 +1,42 @@
+<a id="1.29.1"></a>
+# [1.29.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.29.1) - 2025-06-15
+
+🐛 This release adds better support of special characters (e.g. _) in entity names, fixing issues like [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213) reported by [@PaulRBerg](https://github.com/PaulRBerg).
+
+📄 The documentation has also got its share of fixes, thanks to [@PaulRBerg](https://github.com/PaulRBerg) reports.
+
+## What's Changed
+* :memo:  more doc update in [#2065](https://github.com/graphql-markdown/graphql-markdown/pull/2065)
+* :bug:  fix mdx compilation error when underscore used with entity name in [#2215](https://github.com/graphql-markdown/graphql-markdown/pull/2215)
+* :memo:  fix pretty param in config docs in [#2220](https://github.com/graphql-markdown/graphql-markdown/pull/2220)
+* :memo:  fix incorrect use of customDirective in example in [#2221](https://github.com/graphql-markdown/graphql-markdown/pull/2221)
+* :memo:  add troubleshooting info linked to [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213) in [#2216](https://github.com/graphql-markdown/graphql-markdown/pull/2216)
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.0...1.29.1
+
+[Changes][1.29.1]
+
+
 <a id="1.29.0"></a>
 # [1.29.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.29.0) - 2025-03-21
 
-✨  One step closer to a stable version of the `cli` package. More Docusaurus specific MDX features have been moved from the base packages to `docusaurus/mdx` 👾👾👾
+✨  One step closer to a stable version of the `@graphql-markdown/cli` package. More Docusaurus specific MDX features have been moved from the base packages to `@graphql-markdown/docusaurus/mdx` 👾👾👾
 
-A demo of `@graphql-markdown/cli` used with other static documentation framework is available in the repo [graphql-markdown/demo-astro-starlight](https://github.com/graphql-markdown/demo-astro-starlight).
-In the demo, you can see how to use it with [Astro Starlight](https://starlight.astro.build/) with a [custom MDX formatting module](https://github.com/graphql-markdown/demo-astro-starlight/blob/main/src/modules/astro-mdx.mjs).
+Demos of [`@graphql-markdown/cli@0.3.0`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/cli) with [other static documentation frameworks](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks/):
 
-```diff
-export default {
-  schema: "https://graphql.anilist.co/",
-  extensions: {
-    ["graphql-markdown"]: {
-      rootPath: "./src/content/docs",
-      baseURL: ".",
-      linkRoot: "/",
-      loaders: {
-        UrlLoader: {
-          module: "@graphql-tools/url-loader",
-          options: { method: "POST" },
-        },
-      },
-      docOptions: {
-        frontMatter: {
-          prev: false,
-          next: false,
-        },
-      },
-      printTypeOptions: {
-        typeBadges: true,
-      },
-+     mdxParser: `${__dirname}/src/modules/astro-mdx.mjs`,
-      homepage: `${__dirname}/src/assets/index.mdx`,
-    },
-  },
-};
-```
+| <img align="center" width="20" height="20" alt="GitHub" src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png">[graphql-markdown/demo-astro-starlight](https://github.com/graphql-markdown/demo-astro-starlight) | <img align="center" width="20" height="20" alt="GitHub" src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png">[graphql-markdown/demo-nextjs-fumadocs](https://github.com/graphql-markdown/demo-nextjs-fumadocs) |
+| --- | --- |
+| <p align="center">[Astro Starlight](https://starlight.astro.build/) with a [custom MDX formatting module](https://github.com/graphql-markdown/demo-astro-starlight/blob/main/src/modules/astro-mdx.cjs).</p> | <p align="center">[Next.js Fumadocs](https://fumadocs.vercel.app/) with a [custom MDX formatting module](https://github.com/graphql-markdown/demo-nextjs-fumadocs/blob/main/lib/fumadoc-mdx.cjs).</p> |
+| ![Screenshot 2025-03-22 at 14 13 06](https://github.com/user-attachments/assets/bffd0292-6192-44aa-a3ed-41a908191310) | ![Screenshot 2025-03-22 at 14 10 57](https://github.com/user-attachments/assets/71dd7fbe-894d-48ad-a469-5c2d183e145b) |
 
-<img width="1799" alt="Screenshot 2025-03-22 at 00 30 08" src="https://github.com/user-attachments/assets/b4704023-f129-43b8-b94b-295e2c37d3a6" />
 
+## What's Changed
+* ✨ extract more docusaurus specifics by [@edno](https://github.com/edno) in [#2035](https://github.com/graphql-markdown/graphql-markdown/pull/2035)
+* :bug:  fix badge classname linked to docusaurus css by [@edno](https://github.com/edno) in [#2038](https://github.com/graphql-markdown/graphql-markdown/pull/2038)
+* 🐛 fix docusaurus category file not exposed by [@edno](https://github.com/edno) in [#2039](https://github.com/graphql-markdown/graphql-markdown/pull/2039)
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.28.0...1.29.0
 
 [Changes][1.29.0]
 
@@ -116,7 +115,7 @@ This is still an early release and it is not yet documented, but you can experim
 <a id="1.26.3"></a>
 # [1.26.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.26.3) - 2024-11-14
 
-🐛 This releases fixes graphql-markdown logs not being reported to Docusaurus 3.
+🐛 This releases fixes graphql-markdown logs not being reported with Docusaurus 3.
 
 ## What's Changed
 
@@ -1865,6 +1864,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.29.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.0...1.29.1
 [1.29.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.28.0...1.29.0
 [1.28.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.0
 [1.27.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.26.4...1.27.0
