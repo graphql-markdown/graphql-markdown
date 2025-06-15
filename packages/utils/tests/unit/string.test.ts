@@ -133,16 +133,18 @@ describe("string", () => {
     test("returns string with HTML &#x0000; format for MDX special characters", () => {
       expect.hasAssertions();
 
-      expect(escapeMDX("{MDX} <special> characters")).toBe(
-        "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters",
+      expect(
+        escapeMDX("{MDX} <special> characters and formatting _test_"),
+      ).toBe(
+        "&#x007B;MDX&#x007D; &#x003C;special&#x003E; characters and formatting &#x005F;test&#x005F;",
       );
     });
 
     test("does not transform MDX special characters enclosed as code", () => {
       expect.hasAssertions();
 
-      expect(escapeMDX(">`{MDX}` `<special>` characters")).toBe(
-        "&#x003E;`{MDX}` `<special>` characters",
+      expect(escapeMDX(">`{MDX}` `<special>` characters `_test_`")).toBe(
+        "&#x003E;`{MDX}` `<special>` characters `_test_`",
       );
     });
 

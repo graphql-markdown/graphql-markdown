@@ -16,6 +16,7 @@ import type {
   MetaOptions,
   TypeLink,
 } from "@graphql-markdown/types";
+import { escapeMDX } from "@graphql-markdown/utils";
 
 const MARKDOWN_EOL = "\n" as const;
 const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
@@ -90,7 +91,7 @@ export const formatMDXNameEntity = (
   parentType?: Maybe<string>,
 ): MDXString => {
   const parentName = parentType ? `${parentType}.` : "";
-  return `<code style={{ fontWeight: 'normal' }}>${parentName}<b>${name}</b></code>` as MDXString;
+  return `<code style={{ fontWeight: 'normal' }}>${escapeMDX(parentName)}<b>${escapeMDX(name)}</b></code>` as MDXString;
 };
 
 export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
