@@ -55,7 +55,6 @@ module.exports = {
         },
         // Optional advanced settings
         pretty: true,
-        customDirective: true,
       },
     ],
   ],
