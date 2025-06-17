@@ -208,8 +208,5 @@
     "@graphql-markdown/printer-legacy": "file:packages/printer-legacy",
     "@graphql-markdown/types": "file:packages/types",
     "@graphql-markdown/utils": "file:packages/utils"
-  },
-  "dependencies": {
-    "oxc-resolver": "^11.2.0"
   }
 }
