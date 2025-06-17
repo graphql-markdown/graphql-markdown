@@ -42,7 +42,10 @@ jobs:
         run: npm run lint
 
       - name: Run Knip
-        run: npm run knip
+        run: |
+          npm i -g oxc-resolver
+          npm i -g knip
+          npm run knip
 
       - name: Run Workspace dependencies check
         run: npm run check
