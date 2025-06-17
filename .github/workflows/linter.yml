@@ -43,8 +43,8 @@ jobs:
 
       - name: Run Knip
         run: |
-          npm i oxc-resolver
-          npm i knip
+          npm i -g oxc-resolver
+          npm i -g knip
           npm run knip
 
       - name: Run Workspace dependencies check
