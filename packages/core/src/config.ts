@@ -704,7 +704,7 @@ export const parseGroupByOption = (
 };
 
 export const parseHomepageOption = (
-  cliHomepage: Maybe<string>,
+  cliHomepage: Maybe<string | false>,
   configHomepage: Maybe<string | false>,
 ): Maybe<string> => {
   if (typeof cliHomepage === "string") {
@@ -719,7 +719,7 @@ export const parseHomepageOption = (
     return configHomepage;
   }
 
-  return DEFAULT_OPTIONS.homepage;
+  return DEFAULT_OPTIONS.homepage as string;
 };
 
 /**
