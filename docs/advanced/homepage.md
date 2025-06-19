@@ -5,9 +5,9 @@ pagination_next: null
 
 # Homepage
 
-If you decide to use your homepage for the GraphQL-generated documentation, then set the page ID to `id: schema` and the sidebar position to `sidebar_position: 1`:
+If you decide to use a custom homepage for the GraphQL-generated documentation, then set the sidebar position to `sidebar_position: 1` to ensure it shows first:
 
-```markdown {2,5} title="schema.md"
+```markdown title="schema.md"
 ---
 id: schema
 slug: /schema
