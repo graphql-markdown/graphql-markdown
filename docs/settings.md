@@ -134,6 +134,12 @@ The plugin provides a default page in `assets/generated`.
 | ---------- | --------------------------- | -------------- |
 | `homepage` | `-h, --homepage <homepage>` | `generated.md` |
 
+:::tip
+
+Set `homepage: false` to disable the homepage generation.
+
+:::
+
 <br/>
 
 :::info

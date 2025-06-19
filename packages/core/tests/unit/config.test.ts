@@ -30,6 +30,7 @@ import {
   parseDeprecatedDocOptions,
   parseDeprecatedPrintTypeOptions,
   parseGroupByOption,
+  parseHomepageOption,
   TypeHierarchy,
 } from "../../src/config";
 
@@ -948,6 +949,42 @@ describe("config", () => {
       // Test with undefined/null values
       expect(getTypeHierarchyOption(cliOption, configOption)).toStrictEqual(
         DEFAULT_HIERARCHY,
+      );
+    });
+  });
+
+  describe("parseHomepageOption", () => {
+    test("returns default homepage no option passed", () => {
+      expect.hasAssertions();
+
+      expect(parseHomepageOption(undefined, undefined)).toStrictEqual(
+        DEFAULT_OPTIONS.homepage,
+      );
+    });
+
+    test("returns cli homepage if set", () => {
+      expect.hasAssertions();
+
+      expect(parseHomepageOption("homepage.md", undefined)).toBe("homepage.md");
+    });
+
+    test("returns config homepage if set", () => {
+      expect.hasAssertions();
+
+      expect(parseHomepageOption(undefined, "config.md")).toBe("config.md");
+    });
+
+    test("returns undefined if config homepage is false", () => {
+      expect.hasAssertions();
+
+      expect(parseHomepageOption(undefined, false)).toBeUndefined();
+    });
+
+    test("returns cli homepage override config homepage", () => {
+      expect.hasAssertions();
+
+      expect(parseHomepageOption("homepage.md", "config.md")).toBe(
+        "homepage.md",
       );
     });
   });

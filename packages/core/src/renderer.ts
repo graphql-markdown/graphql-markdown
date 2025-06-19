@@ -491,9 +491,8 @@ export class Renderer {
    * @useDeclaredType
    * @example
    */
-  async renderHomepage(homepageLocation: string): Promise<void> {
+  async renderHomepage(homepageLocation: Maybe<string>): Promise<void> {
     if (typeof homepageLocation !== "string") {
-      log("Homepage location is not a valid string", LogLevel.warn);
       return;
     }
 

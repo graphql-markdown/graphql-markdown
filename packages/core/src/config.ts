@@ -703,6 +703,25 @@ export const parseGroupByOption = (
   return { directive, field, fallback } as GroupByDirectiveOptions;
 };
 
+export const parseHomepageOption = (
+  cliHomepage: Maybe<string>,
+  configHomepage: Maybe<string | false>,
+): Maybe<string> => {
+  if (typeof cliHomepage === "string") {
+    return cliHomepage;
+  }
+
+  if (configHomepage === false) {
+    return undefined;
+  }
+
+  if (typeof configHomepage === "string") {
+    return configHomepage;
+  }
+
+  return DEFAULT_OPTIONS.homepage;
+};
+
 /**
  * Builds the complete configuration object by merging options from multiple sources
  * in order of precedence:
@@ -770,8 +789,7 @@ export const buildConfig = async (
     force,
     groupByDirective:
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
-    homepageLocation:
-      cliOpts.homepage ?? config.homepage ?? DEFAULT_OPTIONS.homepage,
+    homepageLocation: parseHomepageOption(cliOpts.homepage, config.homepage),
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
     loaders: config.loaders,
