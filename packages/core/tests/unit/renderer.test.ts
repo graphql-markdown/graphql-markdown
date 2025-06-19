@@ -505,17 +505,15 @@ describe("renderer", () => {
         ).rejects.toThrow("Output directory is empty or not specified");
       });
 
-      test("logs warning when homepage location is not a valid string", async () => {
+      test("do not generated homepage if undefined", async () => {
         expect.assertions(1);
 
-        // Pass undefined as the homepage location
-        const consoleSpy = jest.spyOn(global.console, "warn");
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        await rendererInstance.renderHomepage(undefined as unknown as string);
+        const spy = jest.spyOn(Utils, "copyFile");
 
-        expect(consoleSpy).toHaveBeenCalledWith(
-          "Homepage location is not a valid string",
-        );
+        // Pass undefined as the homepage location
+        await rendererInstance.renderHomepage(undefined);
+
+        expect(spy).not.toHaveBeenCalled();
       });
     });
 

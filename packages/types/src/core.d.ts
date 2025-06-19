@@ -208,7 +208,7 @@ export interface ConfigOptions {
   /** Directives used to group schema types */
   groupByDirective?: Maybe<GroupByDirectiveOptions>;
   /** Location of the homepage content */
-  homepage?: Maybe<string>;
+  homepage?: Maybe<string | false>;
   /** Identifier for the project */
   id?: Maybe<string>;
   /** Root path for generating links */
@@ -285,7 +285,7 @@ export interface CliOptions {
   /** Directive for grouping */
   groupByDirective?: string;
   /** Homepage location */
-  homepage?: string;
+  homepage?: string | false;
   /** Generate index files flag */
   index?: boolean;
   /** Root for documentation links */
@@ -348,7 +348,7 @@ export type Options = Omit<
       /** Base URL for documentation */
       baseURL: string;
       /** Homepage file location */
-      homepageLocation: string;
+      homepageLocation: Maybe<string>;
       /** Root for documentation links */
       linkRoot: string;
       /** Directives to only document */
