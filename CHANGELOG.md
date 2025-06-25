@@ -1,7 +1,25 @@
+<a id="1.30.0"></a>
+# [1.30.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.0) - 2025-06-25
+
+🌟  This release improves prettier support config file and now uses MDX parser instead of Markdown reported in [#2236](https://github.com/graphql-markdown/graphql-markdown/issues/2236) by [@PaulRBerg](https://github.com/PaulRBerg). It also comes with a new configuration option for `homepage` that you can now set to `false` to disable its generation report in [#2234](https://github.com/graphql-markdown/graphql-markdown/issues/2234) by [@PaulRBerg](https://github.com/PaulRBerg).
+
+## What's Changed
+* 🗒️  remove id: schema reference from homepage.md by [@edno](https://github.com/edno) in [#2245](https://github.com/graphql-markdown/graphql-markdown/pull/2245)
+* :sparkles:  add support for disabling homepage by [@edno](https://github.com/edno) in [#2246](https://github.com/graphql-markdown/graphql-markdown/pull/2246)
+* chore(deps): update dependency typedoc-plugin-markdown to v4.7.0 by [@renovate](https://github.com/renovate) in [#2247](https://github.com/graphql-markdown/graphql-markdown/pull/2247)
+* :bug:  fix prettier support for mdx with config by [@edno](https://github.com/edno) in [#2255](https://github.com/graphql-markdown/graphql-markdown/pull/2255)
+* :test_tube:  fix utils.prettier tests by [@edno](https://github.com/edno) in [#2258](https://github.com/graphql-markdown/graphql-markdown/pull/2258)
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.1...1.30.0
+
+[Changes][1.30.0]
+
+
 <a id="1.29.1"></a>
 # [1.29.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.29.1) - 2025-06-15
 
-🐛 This release adds better support of special characters (e.g. _) in entity names, fixing issues like [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213) reported by [@PaulRBerg](https://github.com/PaulRBerg).
+🐛 This release adds better support of special characters (e.g. `_`) in entity names, fixing issues like [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213) reported by [@PaulRBerg](https://github.com/PaulRBerg).
 
 📄 The documentation has also got its share of fixes, thanks to [@PaulRBerg](https://github.com/PaulRBerg) reports.
 
@@ -1864,6 +1882,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.30.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.1...1.30.0
 [1.29.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.0...1.29.1
 [1.29.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.28.0...1.29.0
 [1.28.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.27.0...1.28.0
