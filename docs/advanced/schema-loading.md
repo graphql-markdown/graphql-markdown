@@ -77,7 +77,7 @@ plugins: [
           module: "@graphql-tools/url-loader",
           options: {
             headers: {
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+              Authorization: "<API_KEY>" // replace with your key if the gateway needs an auth key
              }
           }
         }
