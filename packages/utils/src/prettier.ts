@@ -53,7 +53,7 @@ export const prettify = async (
  * Prettify a Markdown string using {@link prettify} and `markdown` parser.
  *
  * @remarks
- * Same as `prettify(content, "markdown")`.
+ * Same as `prettify(content, "mdx")`.
  *
  * @see {@link prettify}
  *
