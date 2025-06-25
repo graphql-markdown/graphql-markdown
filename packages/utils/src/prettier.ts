@@ -37,7 +37,7 @@ export const prettify = async (
       options = (await resolveConfig(file)) ?? {};
     }
 
-    return await format(content, { parser, ...options });
+    return await format(content, { ...options, parser });
   } catch {
     const message = `Prettier is not found or not configured. Please install it or disable the "pretty" option.`;
     if ("logger" in global && global.logger) {
