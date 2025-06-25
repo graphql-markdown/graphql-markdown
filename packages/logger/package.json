@@ -42,7 +42,7 @@
     "docs": "typedoc"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.4.0"
+    "@graphql-markdown/types": "^1.8.0"
   },
   "directories": {
     "test": "tests"
