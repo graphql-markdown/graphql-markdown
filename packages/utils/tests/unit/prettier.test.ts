@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 // packages/utils/tests/unit/prettier.test.ts
-import { prettify, prettifyMarkdown } from "../../src/prettier";
+import * as Prettier from "../../src/prettier";
 
 describe("prettier", () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
+
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe("prettify()", () => {
@@ -29,7 +33,7 @@ describe("prettier", () => {
         { virtual: true },
       );
 
-      const result = await prettify("test content", "mdx");
+      const result = await Prettier.prettify("test content", "mdx");
       expect(result).toBe("prettified:test content");
     });
 
@@ -50,14 +54,12 @@ describe("prettier", () => {
         .spyOn(global.console, "log")
         .mockImplementation(() => {});
 
-      const result = await prettify("test content", "mdx");
+      const result = await Prettier.prettify("test content", "mdx");
 
       expect(result).toBeUndefined();
       expect(consoleSpy).toHaveBeenCalledWith(
         'Prettier is not found or not configured. Please install it or disable the "pretty" option.',
       );
-
-      jest.unmock("prettier");
     });
   });
 
@@ -65,10 +67,9 @@ describe("prettier", () => {
     test("calls prettify with markdown parser", async () => {
       expect.assertions(1);
 
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const prettifySpy = jest.spyOn(require("../../src/prettier"), "prettify");
+      const prettifySpy = jest.spyOn(Prettier, "prettify");
 
-      await prettifyMarkdown("# Markdown content");
+      await Prettier.prettifyMarkdown("# Markdown content");
 
       expect(prettifySpy).toHaveBeenCalledWith("# Markdown content", "mdx");
     });
