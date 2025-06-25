@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // packages/utils/tests/unit/prettier.test.ts
 import { prettify, prettifyMarkdown } from "../../src/prettier";
 
@@ -10,27 +11,51 @@ describe("prettier", () => {
     test("formats content using the specified parser", async () => {
       expect.assertions(1);
 
-      const result = await prettify("test content", "markdown");
+      jest.mock(
+        "prettier",
+        () => {
+          return {
+            resolveConfigFile: async () => {
+              return null;
+            },
+            resolveConfig: async () => {
+              return {};
+            },
+            format: async (content: string) => {
+              return `prettified:${content}`;
+            },
+          };
+        },
+        { virtual: true },
+      );
+
+      const result = await prettify("test content", "mdx");
       expect(result).toBe("prettified:test content");
     });
 
-    test.skip("logs error and returns undefined when prettier is not available", async () => {
+    test("logs error and returns undefined when prettier is not available", async () => {
       expect.assertions(2);
 
       jest.mock(
         "prettier",
         () => {
-          throw new Error("Prettier is not found");
+          throw new Error(
+            'Prettier is not found or not configured. Please install it or disable the "pretty" option.',
+          );
         },
         { virtual: true },
       );
 
-      const consoleSpy = jest.spyOn(global.console, "log").mockImplementation();
+      const consoleSpy = jest
+        .spyOn(global.console, "log")
+        .mockImplementation(() => {});
 
-      const result = await prettify("test content", "markdown");
+      const result = await prettify("test content", "mdx");
 
       expect(result).toBeUndefined();
-      expect(consoleSpy).toHaveBeenCalledWith("Prettier is not found");
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Prettier is not found or not configured. Please install it or disable the "pretty" option.',
+      );
 
       jest.unmock("prettier");
     });
@@ -45,10 +70,7 @@ describe("prettier", () => {
 
       await prettifyMarkdown("# Markdown content");
 
-      expect(prettifySpy).toHaveBeenCalledWith(
-        "# Markdown content",
-        "markdown",
-      );
+      expect(prettifySpy).toHaveBeenCalledWith("# Markdown content", "mdx");
     });
   });
 });
