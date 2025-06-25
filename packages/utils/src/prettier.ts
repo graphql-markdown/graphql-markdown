@@ -27,13 +27,23 @@ export const prettify = async (
   parser: string,
 ): Promise<string | undefined> => {
   try {
-    const { format } = await import("prettier");
-    return await format(content, { parser });
+    const { resolveConfigFile, resolveConfig, format } = await import(
+      "prettier"
+    );
+    const file = await resolveConfigFile();
+
+    let options: Record<string, unknown> = {};
+    if (file) {
+      options = (await resolveConfig(file)) ?? {};
+    }
+
+    return await format(content, { ...options, parser });
   } catch {
+    const message = `Prettier is not found or not configured. Please install it or disable the "pretty" option.`;
     if ("logger" in global && global.logger) {
-      (global.logger as LoggerType)._log("Prettier is not found");
+      (global.logger as LoggerType)._log(message);
     } else {
-      global.console.log("Prettier is not found");
+      global.console.log(message);
     }
     return undefined;
   }
@@ -57,5 +67,5 @@ export const prettify = async (
 export const prettifyMarkdown = async (
   content: string,
 ): Promise<string | undefined> => {
-  return prettify(content, "markdown");
+  return prettify(content, "mdx");
 };
