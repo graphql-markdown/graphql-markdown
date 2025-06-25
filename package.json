@@ -169,7 +169,7 @@
     "diff": "8.0.2",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.5",
-    "eslint-import-resolver-typescript": "4.4.3",
+    "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jest": "29.0.1",
     "eslint-plugin-jsonc": "2.20.1",
