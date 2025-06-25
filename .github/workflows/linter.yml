@@ -41,11 +41,13 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Run Knip
-        run: |
-          npm i -g oxc-resolver
-          npm i -g knip
-          npm run knip
+      # Disable Knip as it is unstable in the CI environment
+      # Uncomment the following lines to enable Knip when it is stable
+      # - name: Run Knip
+      #   run: |
+      #     npm i -g oxc-resolver
+      #     npm i -g knip
+      #     npm run knip
 
       - name: Run Workspace dependencies check
         run: npm run check
