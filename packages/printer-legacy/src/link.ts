@@ -15,6 +15,7 @@ import type {
   SchemaEntity,
   TypeDeprecatedOption,
   TypeHierarchyObjectType,
+  TypeHierarchyValueCustomType,
   TypeHierarchyValueType,
   TypeLink,
   TypeLocale,
@@ -210,11 +211,21 @@ export const getLinkDeprecatedFolder = (
   return option === "group" && isDeprecated(type) ? DEPRECATED : "";
 };
 
-const isHierarchy = (
+const isHierarchy = <T extends TypeHierarchyObjectType>(
   options: Maybe<PrintLinkOptions>,
-  hierarchy: TypeHierarchyValueType,
-): options is PrintLinkOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+  hierarchy: TypeHierarchyValueCustomType | TypeHierarchyValueType,
+): options is PrintLinkOptions & {
+  hierarchy: Partial<
+    Record<TypeHierarchyValueCustomType | TypeHierarchyValueType, T>
+  >;
+} => {
+  return (
+    !!options &&
+    "hierarchy" in options &&
+    options.hierarchy !== null &&
+    typeof options.hierarchy === "object" &&
+    (hierarchy as string) in options.hierarchy
+  );
 };
 
 /**

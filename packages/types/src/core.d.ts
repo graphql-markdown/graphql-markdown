@@ -100,23 +100,27 @@ export interface ConfigDocOptions {
  * Can be "api" for API-based, "entity" for entity-based, or "flat" for no hierarchy.
  */
 export type TypeHierarchyValueType = "api" | "entity" | "flat";
+export type TypeHierarchyValueCustomType = "custom";
 
 /**
  * Custom options for each hierarchy type.
  * Allows configuring how each hierarchy organizes types.
  */
-export type TypeHierarchyTypeOptions = Record<string, unknown>;
+export type TypeHierarchyTypeOptions =
+  | Record<TypeHierarchyValueCustomType, TypeHierarchyCustomType>
+  | Record<TypeHierarchyValueType, unknown>;
+
+export type TypeHierarchyCustomType = (type?: unknown) => string;
 
 /**
  * Complete hierarchy configuration object.
  * Maps hierarchy types to their options.
  */
-export type TypeHierarchyObjectType = Partial<
-  Record<TypeHierarchyValueType, TypeHierarchyTypeOptions>
->;
+export type TypeHierarchyObjectType = Partial<TypeHierarchyTypeOptions>;
 
 export type TypeHierarchyType =
   | TypeHierarchyObjectType
+  | TypeHierarchyValueCustomType
   | TypeHierarchyValueType;
 
 export type RendererDocOptions = ConfigDocOptions & {

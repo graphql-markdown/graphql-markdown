@@ -9,7 +9,10 @@ import type {
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
+  TypeHierarchyCustomType,
   TypeHierarchyObjectType,
+  TypeHierarchyTypeOptions,
+  TypeHierarchyValueCustomType,
   TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
@@ -163,11 +166,21 @@ export const getApiGroupFolder = (
  * }
  * ```
  */
-const isHierarchy = (
+const isHierarchy = <T extends TypeHierarchyObjectType>(
   options: Maybe<RendererDocOptions>,
-  hierarchy: TypeHierarchyValueType,
-): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+  hierarchy: TypeHierarchyValueCustomType | TypeHierarchyValueType,
+): options is RendererDocOptions & {
+  hierarchy: Partial<
+    Record<TypeHierarchyValueCustomType | TypeHierarchyValueType, T>
+  >;
+} => {
+  return (
+    !!options &&
+    "hierarchy" in options &&
+    options.hierarchy !== null &&
+    typeof options.hierarchy === "object" &&
+    (hierarchy as string) in options.hierarchy
+  );
 };
 
 const isPath = (path: unknown): path is LocationPath => {
@@ -326,16 +339,31 @@ export class Renderer {
       throw new Error("Output directory is empty or not specified");
     }
 
-    if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+    if (
+      isHierarchy<TypeHierarchyTypeOptions>(this.options, TypeHierarchy.FLAT)
+    ) {
       return dirPath;
     }
 
-    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
-      ? this.options.hierarchy[TypeHierarchy.API]
-      : (!this.options?.hierarchy as boolean);
-
-    if (useApiGroup) {
-      const typeCat = getApiGroupFolder(type, useApiGroup);
+    if (
+      isHierarchy<TypeHierarchyTypeOptions>(this.options, TypeHierarchy.API)
+    ) {
+      // Handle API hierarchy (default behavior)
+      const apiConfig = this.options.hierarchy[
+        TypeHierarchy.API
+      ]! as ApiGroupOverrideType;
+      const typeCat = getApiGroupFolder(type, apiConfig);
+      dirPath = join(dirPath, slugify(typeCat));
+      await this.generateIndexMetafile(dirPath, typeCat, {
+        collapsible: false,
+        collapsed: false,
+        styleClass: CATEGORY_STYLE_CLASS.API,
+      });
+    } else if (
+      typeof this.options?.hierarchy === "undefined" ||
+      this.options.hierarchy === null
+    ) {
+      const typeCat = getApiGroupFolder(type, true);
       dirPath = join(dirPath, slugify(typeCat));
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
@@ -362,7 +390,20 @@ export class Renderer {
       await this.generateIndexMetafile(dirPath, rootGroup);
     }
 
-    dirPath = join(dirPath, slugify(rootTypeName));
+    if (
+      isHierarchy<TypeHierarchyTypeOptions>(this.options, TypeHierarchy.CUSTOM)
+    ) {
+      const customHierarchy = this.options.hierarchy[
+        TypeHierarchy.CUSTOM
+      ] as TypeHierarchyCustomType;
+      if (typeof customHierarchy === "function") {
+        dirPath = join(dirPath, slugify(customHierarchy(rootTypeName)));
+      } else {
+        dirPath = join(dirPath, slugify(rootTypeName));
+      }
+    } else {
+      dirPath = join(dirPath, slugify(rootTypeName));
+    }
     await this.generateIndexMetafile(dirPath, rootTypeName);
 
     return dirPath;

@@ -56,7 +56,7 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
   deprecated: DEFAULT_OPTIONS.printTypeOptions!
     .deprecated! as TypeDeprecatedOption,
-  hierarchy: DEFAULT_OPTIONS.printTypeOptions!.hierarchy!,
+  hierarchy: { [DEFAULT_OPTIONS.printTypeOptions!.hierarchy!]: {} },
 };
 
 describe("renderer", () => {
@@ -841,6 +841,31 @@ describe("renderer", () => {
 
         expect(spy).toHaveBeenCalledWith("/output/api/queries", "queries");
         expect(dirPath).toBe(`/output/api/queries`);
+      });
+
+      test("handles custom user group names", async () => {
+        expect.assertions(2);
+
+        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+        jest.replaceProperty(rendererInstance, "options", {
+          deprecated: "default",
+          frontMatter: undefined,
+          hierarchy: {
+            [TypeHierarchy.CUSTOM]: (type: unknown): string => {
+              global.counter = (global.counter ?? 0) + 1;
+              return `${global.counter.toString().padStart(2, "0")}-${String(type)}` as string;
+            },
+          },
+        });
+
+        const dirPath = await rendererInstance.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "queries",
+        );
+
+        expect(spy).toHaveBeenCalledWith("/output/01-queries", "queries");
+        expect(dirPath).toBe(`/output/01-queries`);
       });
 
       test("handles undefined group configuration", async () => {

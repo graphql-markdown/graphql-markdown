@@ -883,22 +883,16 @@ describe("config", () => {
       { cli: TypeHierarchy.ENTITY, config: undefined },
       { cli: TypeHierarchy.API, config: undefined },
       { cli: TypeHierarchy.FLAT, config: undefined },
-    ])(
-      "returns cli hierarchy if set",
-      ({
+    ])("returns cli hierarchy if set", ({ config, cli }) => {
+      expect.assertions(1);
+
+      const hierarchy = getTypeHierarchyOption(
+        cli as TypeHierarchyValueType,
         config,
-        cli,
-      }: {
-        config: Maybe<TypeHierarchyType>;
-        cli: Maybe<TypeHierarchyValueType>;
-      }) => {
-        expect.assertions(1);
+      );
 
-        const hierarchy = getTypeHierarchyOption(cli, config);
-
-        expect(hierarchy).toStrictEqual({ [cli as string]: {} });
-      },
-    );
+      expect(hierarchy).toStrictEqual({ [cli as string]: {} });
+    });
 
     test("handles string literals in hierarchy configuration", () => {
       expect.assertions(3);
@@ -916,6 +910,22 @@ describe("config", () => {
       // Test with different type
       const flatHierarchy = getTypeHierarchyOption(TypeHierarchy.FLAT);
       expect(flatHierarchy).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    });
+
+    test("handles CUSTOM hierarchy configuration", () => {
+      expect.assertions(1);
+
+      const customHierarchy = (): unknown => {
+        return {}; // Placeholder for custom hierarchy function
+      };
+
+      // Test with specific hierarchy type
+      const apiHierarchy = getTypeHierarchyOption(undefined, {
+        [TypeHierarchy.CUSTOM]: customHierarchy,
+      });
+      expect(apiHierarchy).toStrictEqual({
+        [TypeHierarchy.CUSTOM]: customHierarchy,
+      });
     });
 
     test("handles conditional expressions in config detection", () => {

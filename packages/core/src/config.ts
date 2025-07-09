@@ -50,6 +50,7 @@ import { loadConfiguration } from "./graphql-config";
  * - API: Groups types by their role in the API (Query, Mutation, etc.)
  * - ENTITY: Groups types by their entity relationships
  * - FLAT: No grouping, all types in a flat structure
+ * - CUSTOM: Custom grouping logic defined by JS function
  *
  * @public
  * @example
@@ -61,6 +62,7 @@ export enum TypeHierarchy {
   API = "api",
   ENTITY = "entity",
   FLAT = "flat",
+  CUSTOM = "custom",
 }
 
 /**
@@ -149,7 +151,7 @@ export const DEFAULT_OPTIONS: Readonly<
     >
 > & {
   printTypeOptions: Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
-    hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
+    hierarchy: TypeHierarchy.API;
   };
 } = {
   id: "default" as const,
@@ -177,8 +179,7 @@ export const DEFAULT_OPTIONS: Readonly<
     parentTypePrefix: true as const,
     relatedTypeSection: true as const,
     typeBadges: true as const,
-  } as Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
-    hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
+    hierarchy: TypeHierarchy.API,
   },
   rootPath: "./docs" as const,
   schema: "./schema.graphql" as Pointer,
@@ -537,6 +538,12 @@ export const getTypeHierarchyOption = (
           return { [TypeHierarchy.FLAT]: {} };
         case new RegExp(`^${TypeHierarchy.API}$`, "i").test(config):
           return { [TypeHierarchy.API]: {} };
+        case new RegExp(`^${TypeHierarchy.CUSTOM}$`, "i").test(config):
+          return {
+            [TypeHierarchy.CUSTOM]: (_type?: unknown): string => {
+              return null as unknown as string; // Placeholder for custom hierarchy function
+            },
+          };
         default:
           return undefined;
       }
@@ -764,11 +771,11 @@ export const buildConfig = async (
   cliOpts ??= {};
 
   const graphqlConfig = await loadConfiguration(id);
-  const config: ConfigOptions = {
+  const config = {
     ...DEFAULT_OPTIONS,
     ...graphqlConfig,
     ...configFileOpts,
-  } as const;
+  } as ConfigOptions;
 
   const baseURL: string = cliOpts.base ?? config.baseURL!;
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
