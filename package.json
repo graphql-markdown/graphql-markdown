@@ -195,7 +195,7 @@
     "unionfs": "4.6.0"
   },
   "resolutions": {
-    "chalk": "5.4.1"
+    "chalk": "5.5.0"
   },
   "peerDependencies": {
     "@graphql-markdown/cli": "file:packages/cli",
