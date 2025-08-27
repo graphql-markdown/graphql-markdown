@@ -64,6 +64,7 @@
     "suggest:tests": "ts-node ../../scripts/test-suggestions.ts"
   },
   "dependencies": {
+    "@fastify/deepmerge": "^3.1.0",
     "@graphql-markdown/graphql": "^1.1.9",
     "@graphql-markdown/logger": "^1.0.5",
     "@graphql-markdown/utils": "^1.9.0"
