@@ -1,7 +1,23 @@
+<a id="1.30.3"></a>
+# [1.30.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.3) - 2025-08-27
+
+🧼  Fix lost properties when merging object props from graphql-config with inline config, eg `docOptions.frontMatter`.
+
+## What's Changed
+* :bug: fix merging graphql-config with inline config by [@edno](https://github.com/edno) in [#2362](https://github.com/graphql-markdown/graphql-markdown/pull/2362)
+
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.2...1.30.3
+
+[Changes][1.30.3]
+
+
 <a id="1.30.2"></a>
 # [1.30.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.2) - 2025-08-27
 
-🧹 This release fixes a bug with front matter entities not propagated to generated files ([#2341](https://github.com/graphql-markdown/graphql-markdown/issues/2341)) and a GraphQL code formatting issue for operations using default values with input object fields (https://github.com/graphql-markdown/graphql-markdown/pull/2356). 🧹
+🧹 This release cleans up few bugs:
+- front matter entities declared in Docusaurus plugin config not propagated to generated MDX files ([#2341](https://github.com/graphql-markdown/graphql-markdown/issues/2341))
+- GraphQL code formatting issue for operations using default values with input object fields ([#2356](https://github.com/graphql-markdown/graphql-markdown/pull/2356))
 
 ## What's Changed
 * fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate)[bot] in [#2287](https://github.com/graphql-markdown/graphql-markdown/pull/2287)
@@ -1910,6 +1926,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.30.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.2...1.30.3
 [1.30.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.1...1.30.2
 [1.30.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.0...1.30.1
 [1.30.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.1...1.30.0
