@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.1.12",
+  "version": "1.1.13",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@graphql-inspector/core": "^6.1.0",
-    "@graphql-markdown/graphql": "^1.1.8",
+    "@graphql-markdown/graphql": "^1.1.9",
     "@graphql-markdown/utils": "^1.9.0",
     "@graphql-tools/graphql-file-loader": "^8.0.22",
     "@graphql-tools/load": "^8.1.2"
