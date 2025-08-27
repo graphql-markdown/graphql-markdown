@@ -27,6 +27,7 @@ describe("pluginGraphQLDocGenerator", () => {
   const mockOptions = {
     runOnBuild: true,
     someOtherOption: "value",
+    docOptions: { frontMatter: { draft: true } },
   };
 
   beforeEach(() => {
@@ -80,6 +81,7 @@ describe("pluginGraphQLDocGenerator", () => {
       expect(getGraphQLMarkdownCli).toHaveBeenCalledWith(
         expect.objectContaining({
           docOptions: {
+            frontMatter: { draft: true },
             generatorFrameworkName: "docusaurus",
             generatorFrameworkVersion: expect.any(String),
           },

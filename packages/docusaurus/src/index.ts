@@ -52,6 +52,7 @@ export default async function pluginGraphQLDocGenerator(
             docOptions: {
               generatorFrameworkName: "docusaurus",
               generatorFrameworkVersion: DOCUSAURUS_VERSION,
+              ...options.docOptions,
             },
           },
           LOGGER_MODULE,
