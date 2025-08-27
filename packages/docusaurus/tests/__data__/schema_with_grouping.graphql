@@ -94,6 +94,21 @@ enum Roles {
   USER
 }
 
+enum SortField {
+  SOME_FIELD
+  SOME_FIELD2
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+input EntitySort {
+  field: SortField!
+  direction: SortDirection!
+}
+
 type Query {
   GPA(skip: Int = 0): Int @doc(category: "Grade") @beta
   WeightedGPA(input: String, skip: Int!): Int
@@ -112,7 +127,10 @@ type Query {
   allCourses: [Course] @doc(category: "Course")
   mathCourses: [Course] @doc(category: "Course") @deprecated
   scienceCourses: [Course] @doc(category: "Course") @deprecated
-  searchRole(roles: [Roles!]! = [ADMIN]): Int!
+  searchRole(
+    roles: [Roles!]! = [ADMIN]
+    sort: EntitySort = { field: SOME_FIELD, direction: ASC }
+  ): Int!
     @beta
     @auth
     @complexity(value: 2, multipliers: ["roles"])

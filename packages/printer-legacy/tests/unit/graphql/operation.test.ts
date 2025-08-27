@@ -1,5 +1,10 @@
 import type { GraphQLSchema } from "@graphql-markdown/types";
-import { GraphQLID, GraphQLObjectType, GraphQLString } from "graphql/type";
+import {
+  GraphQLID,
+  GraphQLInputObjectType,
+  GraphQLObjectType,
+  GraphQLString,
+} from "graphql/type";
 
 jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
@@ -185,5 +190,37 @@ undefined### Type
         "
       `);
     });
+  });
+
+  test("returns an operation with fields and default values", () => {
+    expect.hasAssertions();
+
+    const input = new GraphQLInputObjectType({
+      name: "TestInput",
+      fields: {
+        foo: { type: GraphQLString },
+      },
+    });
+
+    const operation = {
+      name: "TestQuery",
+      type: GraphQLID,
+      args: [
+        {
+          name: "ArgFooBar",
+          type: input,
+          defaultValue: { foo: "bar" },
+        },
+      ],
+    };
+
+    const code = printCodeOperation(operation);
+
+    expect(code).toMatchInlineSnapshot(`
+        "TestQuery(
+          ArgFooBar: TestInput = { foo: "bar" }
+        ): ID
+        "
+      `);
   });
 });

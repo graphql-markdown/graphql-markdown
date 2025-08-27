@@ -12,6 +12,7 @@ import {
   GraphQLInt,
   GraphQLString,
   isEnumType,
+  isInputObjectType,
   isListType,
 } from "graphql/type";
 
@@ -20,7 +21,6 @@ import type {
   GraphQLType,
   Maybe,
 } from "@graphql-markdown/types";
-
 /**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
  *
@@ -84,6 +84,36 @@ const _formatListDefaultValues = <T>(
   return `[${defaultValuesString.join(", ")}]`;
 };
 
+const _formatInputDefaultValues = <T>(
+  type: Maybe<GraphQLType>,
+  defaultValue: T,
+): T | string => {
+  if (typeof type === "undefined" || type === null) {
+    return "";
+  }
+  if (isInputObjectType(type) && typeof defaultValue === "object") {
+    const fields = type.getFields();
+    const fieldStrings = Object.entries(defaultValue as Record<string, unknown>)
+      .map(([key, value]) => {
+        if (key in fields) {
+          const fieldType = fields[key].type;
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          const formattedValue = getFormattedDefaultValue({
+            type: fieldType,
+            defaultValue: value,
+          });
+          return `${key}: ${formattedValue}`;
+        }
+        return "";
+      })
+      .filter((str) => {
+        return str !== "";
+      });
+    return `{ ${fieldStrings.join(", ")} }`;
+  }
+  return _formatDefaultValue(type, defaultValue);
+};
+
 /**
  * Returns a printable formatted value for a GraphQL type.
  * This is the generic function.
@@ -108,6 +138,10 @@ export const getFormattedDefaultValue = <T>({
 
   if (isListType(type)) {
     return _formatListDefaultValues(getNamedType(type), defaultValue);
+  }
+
+  if (isInputObjectType(type)) {
+    return _formatInputDefaultValues(type, defaultValue);
   }
 
   return _formatDefaultValue(type, defaultValue);

@@ -3,6 +3,7 @@ import {
   GraphQLEnumType,
   GraphQLFloat,
   GraphQLID,
+  GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
   GraphQLString,
@@ -139,6 +140,36 @@ describe("formatter", () => {
       };
 
       expect(getFormattedDefaultValue(argument)).toBe("[RED]");
+    });
+
+    test("returns object default value unformatted for type InputObject", () => {
+      expect.hasAssertions();
+
+      const enumType = new GraphQLEnumType({
+        name: "RGB",
+        values: {
+          RED: { value: "RED" },
+          GREEN: { value: "GREEN" },
+          BLUE: { value: "BLUE" },
+        },
+      });
+
+      const input = new GraphQLInputObjectType({
+        name: "TestInput",
+        fields: {
+          foo: { type: enumType },
+        },
+      });
+
+      const argument = {
+        name: "color",
+        description: undefined,
+        type: input,
+        defaultValue: { foo: "RED" },
+        extensions: undefined,
+      };
+
+      expect(getFormattedDefaultValue(argument)).toBe("{ foo: RED }");
     });
   });
 });
