@@ -218,7 +218,7 @@ undefined### Type
 
     expect(code).toMatchInlineSnapshot(`
         "TestQuery(
-          ArgFooBar: TestInput = { foo: \\"bar\\" }
+          ArgFooBar: TestInput = { foo: "bar" }
         ): ID
         "
       `);
