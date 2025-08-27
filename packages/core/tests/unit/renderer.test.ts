@@ -242,19 +242,25 @@ describe("renderer", () => {
         jest
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = jest.spyOn(Printer, "printType");
 
-        jest.replaceProperty(rendererInstance, "options", {
+        const optionsWithFrontMatter: RendererDocOptions = {
           frontMatter: { custom: "value" },
-        });
+        };
+
+        jest.replaceProperty(
+          rendererInstance,
+          "options",
+          optionsWithFrontMatter,
+        );
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
 
         expect(spy).toHaveBeenCalledWith(
-          `${output}/foo-bar.mdx`,
-          "Lorem ipsum",
-          undefined,
+          "foo-bar",
+          "FooBar",
+          optionsWithFrontMatter,
         );
       });
 
