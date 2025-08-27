@@ -283,6 +283,7 @@ describe("config", () => {
         pretty: true,
         docOptions: {
           index: false,
+          frontMatter: { draft: true },
         },
         printTypeOptions: {
           codeSection: false,
@@ -312,7 +313,10 @@ describe("config", () => {
         baseURL: configFileOpts.baseURL,
         customDirective: configFileOpts.customDirective,
         diffMethod: configFileOpts.diffMethod,
-        docOptions: { ...configFileOpts.docOptions, frontMatter: {} },
+        docOptions: {
+          ...configFileOpts.docOptions,
+          frontMatter: { draft: true },
+        },
         groupByDirective: configFileOpts.groupByDirective,
         force: DEFAULT_OPTIONS.force,
         homepageLocation: configFileOpts.homepage,
