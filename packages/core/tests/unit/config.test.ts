@@ -4,6 +4,7 @@ import type {
   ConfigOptions,
   CustomDirective,
   DirectiveName,
+  ExtensionProjectConfig,
   GraphQLDirective,
   Maybe,
   PackageName,
@@ -34,7 +35,10 @@ import {
   TypeHierarchy,
 } from "../../src/config";
 
+import * as graphqlConfigModule from "../../src/graphql-config";
+
 jest.mock("@graphql-markdown/utils");
+jest.mock("../../src/graphql-config");
 
 describe("config", () => {
   beforeAll(() => {
@@ -421,6 +425,79 @@ describe("config", () => {
         printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
+        customDirective: DEFAULT_OPTIONS.customDirective,
+      });
+    });
+
+    test("override default config using graphql-config", async () => {
+      expect.hasAssertions();
+
+      const configFileOpts = {
+        baseURL: "docs/schema",
+        schema: "assets/my-schema.graphql",
+        rootPath: "output",
+        linkRoot: "/docs",
+        homepage: "assets/my-homepage.md",
+        diffMethod: "NO-DIFF" as TypeDiffMethod,
+        tmpDir: "./tmp",
+        loaders: {
+          ["UrlLoader" as ClassName]:
+            "@graphql-tools/url-loader" as PackageName,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "Common",
+        },
+        docOptions: {
+          frontMatter: { draft: true },
+          index: true,
+        },
+        printTypeOptions: {
+          exampleSection: true,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+      };
+
+      jest
+        .spyOn(graphqlConfigModule, "loadConfiguration")
+        .mockResolvedValue(
+          configFileOpts as unknown as Readonly<ExtensionProjectConfig>,
+        );
+
+      const config = await buildConfig({}, {});
+
+      expect(config).toStrictEqual({
+        id: DEFAULT_OPTIONS.id,
+        baseURL: configFileOpts.baseURL,
+        diffMethod: configFileOpts.diffMethod,
+        force: DEFAULT_OPTIONS.force,
+        groupByDirective: {
+          directive: "doc",
+          fallback: "Common",
+          field: "category",
+        },
+        homepageLocation: configFileOpts.homepage,
+        linkRoot: configFileOpts.linkRoot,
+        loaders: configFileOpts.loaders,
+        mdxParser: undefined,
+        metatags: DEFAULT_OPTIONS.metatags,
+        outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
+        prettify: DEFAULT_OPTIONS.pretty,
+        schemaLocation: configFileOpts.schema,
+        tmpDir: configFileOpts.tmpDir,
+        docOptions: {
+          frontMatter: { draft: true },
+          index: true,
+        },
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: { entity: {} },
+          exampleSection: true,
+        },
+        printer: DEFAULT_OPTIONS.printer,
+        skipDocDirective: [],
+        onlyDocDirective: [],
         customDirective: DEFAULT_OPTIONS.customDirective,
       });
     });

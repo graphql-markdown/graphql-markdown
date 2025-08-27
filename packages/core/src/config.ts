@@ -19,6 +19,8 @@
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
+import { deepmerge } from "@fastify/deepmerge";
+
 import type {
   CliOptions,
   ConfigDocOptions,
@@ -764,11 +766,10 @@ export const buildConfig = async (
   cliOpts ??= {};
 
   const graphqlConfig = await loadConfiguration(id);
-  const config: ConfigOptions = {
-    ...DEFAULT_OPTIONS,
-    ...graphqlConfig,
-    ...configFileOpts,
-  } as const;
+  const config = deepmerge()(
+    { ...DEFAULT_OPTIONS, ...graphqlConfig },
+    configFileOpts ?? {},
+  );
 
   const baseURL: string = cliOpts.base ?? config.baseURL!;
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
