@@ -1,10 +1,10 @@
 # Contributing guide
 
-First thing first, thank you for taking the time to contribute.
+First things first, thank you for taking the time to contribute.
 
 Take this document as a set of guidelines, not rules, for contributing to this project. In any case, use your best judgment and feel free to propose changes to this document in a pull request.
 
-> If this is your first time contribution to an open source project, then you should start with the section [First time contributor](#first-time-contributor), and then continue with [Getting started](#getting-started).
+> If this is your first time contributing to an open source project, then you should start with the section [First time contributor](#first-time-contributor), and then continue with [Getting started](#getting-started).
 
 **Don't forget to read our [code of conduct](CODE_OF_CONDUCT.md).**
 
@@ -31,10 +31,10 @@ Take this document as a set of guidelines, not rules, for contributing to this p
 We all started somewhere. And, before getting started, you might want to be familiar with some of the basic concepts used in open source projects:
 
 - code versioning with Git
-- project forking with Github
-- pushing a pull request with Github
+- project forking with GitHub
+- pushing a pull request with GitHub
 
-Many people did a great job at explaining those concepts, here a few resources:
+Many people did a great job at explaining those concepts. Here are a few resources:
 
 - [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/): a guide to making open source contributions
 - [Hello Open Source](https://github.com/mazipan/hello-open-source): a repository to learn about open source code contributions flow
@@ -65,10 +65,10 @@ _\* For using `podman` with `earthly`, you need to run `earthly config global.co
 - Create a new branch in your forked repository ([doc](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository))
   - We are using a branch naming convention:
     - feature: `feature/short-description-of-the-change`
-    - fix: `fix/short-description-of-the-fix` , you can also reference an existing issue, eg `fix/issue-456`
+    - fix: `fix/short-description-of-the-fix`, you can also reference an existing issue, eg `fix/issue-456`
     - documentation: `doc/short-description-of-the-change`
 
-If you aim at a code contribution, you will need to perform few additional steps:
+If you aim at a code contribution, you will need to perform a few additional steps:
 
 - checkout your forked repository to your computer ([doc](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)).
 
@@ -93,13 +93,13 @@ If you aim at a code contribution, you will need to perform few additional steps
 
 ## Make your changes
 
-> **Keep changes small and focused.** This means a pull request should only aim at one purpose: fixing typo in the documentation, fixing one bug at a time, changing one behavior.
+> **Keep changes small and focused.** This means a pull request should only aim at one purpose: fixing a typo in the documentation, fixing one bug at a time, changing one behaviour.
 
 ### Documentation
 
 The project uses Markdown for writing documentation ([doc](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/about-writing-and-formatting-on-github)).
 
-You should edit the documentation, or add new documentation files, directly in your branch from your Github fork.
+You should edit the documentation or add new documentation files directly in your branch from your GitHub fork.
 
 ### Code
 
@@ -120,7 +120,7 @@ When you are ready, you should then run the full checks with `earthly +all`.
 
 ### Committing changes
 
-This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered and you should get some prompts on the terminal that help you write a good commit message.
+This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
 
 ## Coding style
 
@@ -153,27 +153,27 @@ package/
 └── package.json # Package manifest
 ```
 
-> The project uses classes, it is for historical reason and that was not necessarily a good choice. So, you should not feel obliged to do the same.
+> The project uses classes; it is for historical reasons, and that was not necessarily a good choice. So, you should not feel obliged to do the same.
 
 ### Dependencies
 
 As a rule of thumb, try to avoid adding external packages unless you have a really good reason.
 
-For example, it is very tempting to use `lodash`, but usually developers only need one or two functions from it. In many cases, this can be replaced by a custom function, but if you cannot then always prefer individual packages, e.g. `lodash.get`.
+For example, it is very tempting to use `lodash`, but usually developers only need one or two functions from it. In many cases, this can be replaced by a custom function, but if you cannot, then always prefer individual packages, e.g. `lodash.get`.
 
 When choosing an external package, always look at the following:
 
-- is it maintained? last release, last commit, last reply to an issue
-- what is the size? the smaller the better
-- how many dependencies? the lesser the merrier
+- Is it maintained? last release, last commit, last reply to an issue
+- What is the size? The smaller the better
+- How many dependencies? the lesser the merrier
 
 ### Tests
 
-There are a lot of ways to test your code, and you should always add tests when making changes into the code.
+There are a lot of ways to test your code, and you should always add tests when making changes to the code.
 
 There are 3 types of tests used in this project, all based on [Jest](https://jestjs.io/):
 
-- `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils` then this is likely where you should add your tests.
+- `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils`, then this is likely where you should add your tests.
 
   > You should always mock external calls (see [Jest mock](https://jestjs.io/docs/mock-functions)).
 
@@ -181,15 +181,15 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
 
   > If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
 
-- `smoke` (aka `e2e`) for testing the whole plugin behavior. If your changes affect the CLI or options then you will need to update those tests.
+- `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests.
 
   > The tests run within a Docker container using Earthly.
 
 #### Mutation testing
 
-The project uses [Stryker Mutator](https://stryker-mutator.io/docs/stryker-js/introduction/) for mutation testing against unit tests. The purpose is to ensure that unit tests are able to capture changes in the code, i.e. not just "always pass".
+The project uses [Stryker Mutator](https://stryker-mutator.io/docs/stryker-js/introduction/) for mutation testing against unit tests. The purpose is to ensure that unit tests can capture changes in the code, i.e. not just "always pass".
 
-As a contributor, you do not need to do anything. However, if the mutation testing score falls below a certain threshold when running mutations tests against your PR, this likely means that you need to improve your tests (even if the test coverage is good).
+As a contributor, you do not need to do anything. However, if the mutation testing score falls below a certain threshold when running mutation tests against your PR, this likely means that you need to improve your tests (even if the test coverage is good).
 
 Mutation testing can be run locally with the command:
 
@@ -232,7 +232,7 @@ The generated documentation will be available in each package's `docs/` director
 Common issues:
 
 - **Build failures**: Run `earthly --interactive [target]` then retry
-- **Type errors**: Check `tsconfig.json` in affected package
+- **Type errors**: Check `tsconfig.json` in the affected package
 - **Test failures**: Use `--verbose` flag with Jest for details
 - **Dependency issues**: Clean install with `npm ci`
 
