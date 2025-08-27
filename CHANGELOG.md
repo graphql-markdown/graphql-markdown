@@ -1,7 +1,25 @@
+<a id="1.30.2"></a>
+# [1.30.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.2) - 2025-08-27
+
+🧹 This release fixes a bug with front matter entities not propagated to generated files ([#2341](https://github.com/graphql-markdown/graphql-markdown/issues/2341)) and a GraphQL code formatting issue for operations using default values with input object fields (https://github.com/graphql-markdown/graphql-markdown/pull/2356). 🧹
+
+## What's Changed
+* fix(deps): update graphql-tools monorepo by [@renovate](https://github.com/renovate)[bot] in [#2287](https://github.com/graphql-markdown/graphql-markdown/pull/2287)
+* 📦 npm(deps): Bump @graphql-tools/load from 8.1.1 to 8.1.2 by [@dependabot](https://github.com/dependabot)[bot] in [#2300](https://github.com/graphql-markdown/graphql-markdown/pull/2300)
+* 📦 npm(deps): Bump @graphql-tools/graphql-file-loader from 8.0.21 to 8.0.22 by [@dependabot](https://github.com/dependabot)[bot] in [#2302](https://github.com/graphql-markdown/graphql-markdown/pull/2302)
+* chore(deps): update dependency @graphql-tools/graphql-file-loader to v8.1.0 by [@renovate](https://github.com/renovate)[bot] in [#2353](https://github.com/graphql-markdown/graphql-markdown/pull/2353)
+* :bug: fix issue with default values for object type fields by [@edno](https://github.com/edno) in [#2356](https://github.com/graphql-markdown/graphql-markdown/pull/2356)
+* :bug: fix overwritten docOptions (Docusaurus plugin config) by [@edno](https://github.com/edno) in [#2357](https://github.com/graphql-markdown/graphql-markdown/pull/2357)
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.1...1.30.2
+
+[Changes][1.30.2]
+
+
 <a id="1.30.1"></a>
 # [1.30.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.1) - 2025-06-26
 
-Fix the "magic" warning when passing `homepage:false` (introduced by some AI assistant on build & publish).
+🧽 Remove the "magic" warning when passing `homepage:false` (introduced in the build code by the AI assistant on build & publish).
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.0...1.30.1
 
@@ -1892,6 +1910,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.30.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.1...1.30.2
 [1.30.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.0...1.30.1
 [1.30.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.1...1.30.0
 [1.29.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.29.0...1.29.1
