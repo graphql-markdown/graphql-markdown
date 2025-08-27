@@ -465,7 +465,10 @@ describe("config", () => {
           configFileOpts as unknown as Readonly<ExtensionProjectConfig>,
         );
 
-      const config = await buildConfig({}, {});
+      const config = await buildConfig(
+        { docOptions: { frontMatter: { page_next: null } } },
+        {},
+      );
 
       expect(config).toStrictEqual({
         id: DEFAULT_OPTIONS.id,
@@ -487,7 +490,7 @@ describe("config", () => {
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: {
-          frontMatter: { draft: true },
+          frontMatter: { draft: true, page_next: null },
           index: true,
         },
         printTypeOptions: {
