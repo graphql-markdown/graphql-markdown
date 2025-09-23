@@ -6,7 +6,7 @@ sidebar_position: 20
 
 ## Docusaurus
 
-Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-markdown/demo-docusaurus/tree/main?file=/.graphqlrc) or fork our [demo repo](https://github.com/graphql-markdown/demo-docusarus) to try with your own GraphQL schema.
+Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-markdown/demo-docusaurus/tree/main?file=/.graphqlrc) or fork our [demo repo](https://github.com/graphql-markdown/demo-docusaurus) to try with your own GraphQL schema.
 
 Edit the configuration in `.graphqlrc`.
 
