@@ -12,7 +12,6 @@ const config = {
   url: "https://graphql-markdown.dev",
   baseUrl: "/",
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "throw",
   favicon: "img/favicon.ico",
 
   // GitHub pages deployment config.
