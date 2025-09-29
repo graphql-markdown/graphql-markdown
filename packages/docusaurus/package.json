@@ -68,7 +68,7 @@
     "@graphql-markdown/cli": "^0.4.3",
     "@graphql-markdown/logger": "^1.0.5",
     "@graphql-markdown/utils": "^1.9.0",
-    "@docusaurus/utils": ">=3.2.0"
+    "@docusaurus/utils": ">=3.9.1"
   },
   "devDependencies": {
     "@docusaurus/types": "^3.7.0",
