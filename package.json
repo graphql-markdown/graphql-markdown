@@ -158,7 +158,7 @@
     "@graphql-tools/json-file-loader": "8.0.20",
     "@stryker-mutator/api": "9.1.1",
     "@stryker-mutator/core": "9.1.1",
-    "@stryker-mutator/jest-runner": "9.1.1",
+    "@stryker-mutator/jest-runner": "9.2.0",
     "@stryker-mutator/typescript-checker": "9.1.1",
     "@types/jest": "29.5.14",
     "@types/node": "24.6.2",
