@@ -186,7 +186,7 @@
     "memfs": "4.47.0",
     "pinst": "3.0.0",
     "prettier": "3.6.2",
-    "ts-jest": "29.4.4",
+    "ts-jest": "29.4.5",
     "ts-node": "^10.9.2",
     "typedoc": "0.28.13",
     "typedoc-plugin-frontmatter": "1.3.0",
