@@ -66,7 +66,7 @@ export const ensureDir = async (
     return;
   }
 
-  if (options && options.forceEmpty === true) {
+  if (options?.forceEmpty === true) {
     await rm(location, { recursive: true });
     await ensureDir(location);
   }
