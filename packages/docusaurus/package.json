@@ -71,7 +71,7 @@
     "@docusaurus/utils": ">=3.9.1"
   },
   "devDependencies": {
-    "@docusaurus/types": "^3.7.0",
+    "@docusaurus/types": "^3.9.2",
     "@graphql-markdown/types": "^1.8.0"
   },
   "peerDependencies": {
