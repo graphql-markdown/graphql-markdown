@@ -37,6 +37,7 @@ const mockRenderer = {
   renderRootTypes: jest.fn(),
   renderTypeEntities: jest.fn(),
   renderHomepage: jest.fn(),
+  preCollectCategories: jest.fn(),
 } as unknown as CoreRenderer.Renderer;
 
 import { generateDocFromSchema } from "../../src";

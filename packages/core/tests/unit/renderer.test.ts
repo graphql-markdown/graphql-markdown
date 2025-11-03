@@ -1080,5 +1080,253 @@ describe("renderer", () => {
         },
       );
     });
+
+    describe("category sorting", () => {
+      test("generates categories with natural alphabetical sorting by default", async () => {
+        expect.assertions(3);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Pre-register all categories before generating files
+        // This simulates knowing all categories upfront
+        renderer["categoryPositionManager"].registerCategories([
+          "zebra",
+          "alpha",
+          "beta",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Generate categories in non-alphabetical order
+        await renderer.generateIndexMetafile("/output/zebra", "zebra");
+        await renderer.generateIndexMetafile("/output/alpha", "alpha");
+        await renderer.generateIndexMetafile("/output/beta", "beta");
+
+        // Verify they are assigned positions in alphabetical order
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          1,
+          "/output/zebra",
+          "zebra",
+          expect.objectContaining({
+            sidebarPosition: 3, // 'zebra' should be third alphabetically
+          }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          2,
+          "/output/alpha",
+          "alpha",
+          expect.objectContaining({
+            sidebarPosition: 1, // 'alpha' should be first alphabetically
+          }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          3,
+          "/output/beta",
+          "beta",
+          expect.objectContaining({
+            sidebarPosition: 2, // 'beta' should be second alphabetically
+          }),
+        );
+      });
+
+      test("generates categories with explicit 'natural' sorting", async () => {
+        expect.assertions(2);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Pre-register categories
+        renderer["categoryPositionManager"].registerCategories([
+          "zebra",
+          "alpha",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        await renderer.generateIndexMetafile("/output/zebra", "zebra");
+        await renderer.generateIndexMetafile("/output/alpha", "alpha");
+
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          1,
+          "/output/zebra",
+          "zebra",
+          expect.objectContaining({
+            sidebarPosition: 2,
+          }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          2,
+          "/output/alpha",
+          "alpha",
+          expect.objectContaining({
+            sidebarPosition: 1,
+          }),
+        );
+      });
+
+      test("generates categories with custom sort function", async () => {
+        expect.assertions(3);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        // Custom sort: reverse alphabetical order
+        const customSort = (a: string, b: string): number => b.localeCompare(a);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: customSort,
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Pre-register categories
+        renderer["categoryPositionManager"].registerCategories([
+          "alpha",
+          "beta",
+          "zebra",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        await renderer.generateIndexMetafile("/output/alpha", "alpha");
+        await renderer.generateIndexMetafile("/output/beta", "beta");
+        await renderer.generateIndexMetafile("/output/zebra", "zebra");
+
+        // With reverse sort, zebra=1, beta=2, alpha=3
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          1,
+          "/output/alpha",
+          "alpha",
+          expect.objectContaining({
+            sidebarPosition: 3,
+          }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          2,
+          "/output/beta",
+          "beta",
+          expect.objectContaining({
+            sidebarPosition: 2,
+          }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          3,
+          "/output/zebra",
+          "zebra",
+          expect.objectContaining({
+            sidebarPosition: 1,
+          }),
+        );
+      });
+
+      test("respects explicit sidebarPosition when provided", async () => {
+        expect.assertions(1);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Provide explicit position (like for deprecated categories)
+        await renderer.generateIndexMetafile("/output/special", "special", {
+          sidebarPosition: 999,
+        });
+
+        expect(mockGenerateIndexMetafile).toHaveBeenCalledWith(
+          "/output/special",
+          "special",
+          expect.objectContaining({
+            sidebarPosition: 999, // Should use explicit position, not calculated
+          }),
+        );
+      });
+
+      test("maintains consistent positions across multiple calls", async () => {
+        expect.assertions(4);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // First call
+        await renderer.generateIndexMetafile("/output/alpha", "alpha");
+        await renderer.generateIndexMetafile("/output/beta", "beta");
+
+        // Second call to same categories
+        await renderer.generateIndexMetafile("/output/alpha", "alpha");
+        await renderer.generateIndexMetafile("/output/beta", "beta");
+
+        // All calls should get the same positions
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          1,
+          "/output/alpha",
+          "alpha",
+          expect.objectContaining({ sidebarPosition: 1 }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          2,
+          "/output/beta",
+          "beta",
+          expect.objectContaining({ sidebarPosition: 2 }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          3,
+          "/output/alpha",
+          "alpha",
+          expect.objectContaining({ sidebarPosition: 1 }),
+        );
+        expect(mockGenerateIndexMetafile).toHaveBeenNthCalledWith(
+          4,
+          "/output/beta",
+          "beta",
+          expect.objectContaining({ sidebarPosition: 2 }),
+        );
+      });
+    });
   });
 });

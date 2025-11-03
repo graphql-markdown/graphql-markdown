@@ -81,6 +81,13 @@ export interface ApiGroupOverrideType {
 }
 
 /**
+ * Category sorting function type.
+ * A compare function similar to Array.sort() that takes two category names
+ * and returns a number indicating their relative order.
+ */
+export type CategorySortFn = (a: string, b: string) => number;
+
+/**
  * Core documentation generation configuration.
  * Controls front matter, indexing and framework metadata.
  */
@@ -93,6 +100,8 @@ export interface ConfigDocOptions {
   generatorFrameworkName?: Maybe<string>;
   /** Version of the documentation generator framework */
   generatorFrameworkVersion?: Maybe<string>;
+  /** Category sorting: "natural" for alphabetical or custom compare function */
+  categorySort?: CategorySortFn | "natural";
 }
 
 /**

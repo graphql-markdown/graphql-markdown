@@ -1,6 +1,7 @@
 import type {
   ApiGroupOverrideType,
   Category,
+  CategorySortFn,
   LocationPath,
   Maybe,
   MDXString,
@@ -203,6 +204,112 @@ export interface CategoryMetafileOptions {
 }
 
 /**
+ * Default natural sorting function for categories.
+ * Sorts categories alphabetically using localeCompare.
+ *
+ * @param a - First category name
+ * @param b - Second category name
+ * @returns Comparison result for sorting
+ */
+const naturalSort: CategorySortFn = (a: string, b: string): number => {
+  return a.localeCompare(b);
+};
+
+/**
+ * Manages category positions for the sidebar.
+ * Supports two modes:
+ * 1. Pre-registration: categories are registered upfront, positions computed once
+ * 2. On-demand: positions are computed as categories are encountered
+ * @useDeclaredType
+ */
+class CategoryPositionManager {
+  private readonly categories = new Set<string>();
+  private readonly positionCache = new Map<string, number>();
+  private positionsComputed: boolean = false;
+  private readonly sortFn: CategorySortFn;
+  private readonly basePosition: number;
+
+  /**
+   * Creates a new CategoryPositionManager.
+   *
+   * @param sortFn - Function to sort categories (defaults to natural/alphabetical)
+   * @param basePosition - Starting position for categories (defaults to 1)
+   */
+  constructor(sortFn?: CategorySortFn | "natural", basePosition = 1) {
+    this.sortFn = sortFn === "natural" || !sortFn ? naturalSort : sortFn;
+    this.basePosition = basePosition;
+  }
+
+  /**
+   * Pre-registers a batch of category names.
+   * This should be called before rendering to ensure consistent positioning.
+   *
+   * @param categoryNames - Array of category names to register
+   */
+  registerCategories(categoryNames: string[]): void {
+    categoryNames.forEach((name) => {
+      this.categories.add(name);
+    });
+  }
+
+  /**
+   * Computes positions for all registered categories.
+   * This is called either manually after registration or automatically on first getPosition call.
+   */
+  computePositions(): void {
+    if (this.positionsComputed) {
+      return;
+    }
+
+    const sorted = Array.from(this.categories).sort(this.sortFn);
+    sorted.forEach((category, index) => {
+      this.positionCache.set(category, this.basePosition + index);
+    });
+
+    this.positionsComputed = true;
+  }
+
+  /**
+   * Gets the assigned position for a category.
+   * If category positions haven't been computed yet, computes them first.
+   *
+   * @param category - The category name
+   * @returns The position assigned to this category
+   */
+  getPosition(category: string): number {
+    // Add to categories if not already present
+    if (!this.categories.has(category)) {
+      this.categories.add(category);
+      // If positions were already computed, we need to recompute
+      if (this.positionsComputed) {
+        this.positionsComputed = false;
+      }
+    }
+
+    // Ensure positions are computed
+    if (!this.positionsComputed) {
+      this.computePositions();
+    }
+
+    return this.positionCache.get(category) ?? this.basePosition;
+  }
+
+  /**
+   * Creates a scoped position manager for nested categories.
+   *
+   * @param sortFn - Function to sort categories (defaults to parent's sort function)
+   * @param basePosition - Starting position for nested categories
+   * @returns A new CategoryPositionManager instance
+   */
+  createScope(
+    sortFn?: CategorySortFn | "natural",
+    basePosition?: number,
+  ): CategoryPositionManager {
+    return new CategoryPositionManager(sortFn ?? this.sortFn, basePosition);
+  }
+}
+
+/**
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
  * @useDeclaredType
@@ -218,6 +325,7 @@ export class Renderer {
   mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
+  private readonly categoryPositionManager: CategoryPositionManager;
 
   /**
    * Creates a new Renderer instance.
@@ -248,6 +356,9 @@ export class Renderer {
     this.options = docOptions;
     this.mdxModule = mdxModule;
     this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
+    this.categoryPositionManager = new CategoryPositionManager(
+      docOptions?.categorySort,
+    );
   }
 
   /**
@@ -296,10 +407,19 @@ export class Renderer {
     },
   ): Promise<void> {
     if (this.mdxModuleIndexFileSupport) {
+      // If no explicit position is provided, use the position manager
+      const sidebarPosition =
+        options.sidebarPosition ??
+        this.categoryPositionManager.getPosition(category);
+
       await (this.mdxModule as MDXSupportType).generateIndexMetafile(
         dirPath,
         category,
-        { ...options, index: this.options?.index },
+        {
+          ...options,
+          sidebarPosition,
+          index: this.options?.index,
+        },
       );
     }
   }
@@ -480,6 +600,63 @@ export class Renderer {
       category,
       slug,
     } as Category;
+  }
+
+  /**
+   * Pre-collects all category names that will be generated during rendering.
+   * This allows the position manager to assign consistent positions before
+   * any files are written.
+   *
+   * @param rootTypeNames - Array of root type names from the schema
+   * @useDeclaredType
+   */
+  preCollectCategories(rootTypeNames: string[]): void {
+    const categories = new Set<string>();
+
+    // Skip if flat hierarchy
+    if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return;
+    }
+
+    // API group categories (operations/types)
+    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
+      ? this.options.hierarchy[TypeHierarchy.API]
+      : (!this.options?.hierarchy as boolean);
+
+    if (useApiGroup) {
+      const apiGroups =
+        typeof useApiGroup === "object"
+          ? { ...API_GROUPS, ...useApiGroup }
+          : API_GROUPS;
+      categories.add(apiGroups.operations);
+      categories.add(apiGroups.types);
+    }
+
+    // Deprecated category
+    if (this.options?.deprecated === "group") {
+      categories.add(DEPRECATED);
+    }
+
+    // Custom group categories
+    if (this.group) {
+      for (const rootTypeName in this.group) {
+        for (const name in this.group[rootTypeName as SchemaEntity]) {
+          const groupName = this.group[rootTypeName as SchemaEntity]![name];
+          if (groupName) {
+            categories.add(groupName);
+          }
+        }
+      }
+    }
+
+    // Root type categories
+    rootTypeNames.forEach((name) => {
+      categories.add(name);
+    });
+
+    // Register all collected categories with the position manager
+    this.categoryPositionManager.registerCategories(Array.from(categories));
+    this.categoryPositionManager.computePositions();
   }
 
   /**
