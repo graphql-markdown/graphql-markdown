@@ -1,3 +1,22 @@
+<a id="unreleased"></a>
+# [Unreleased]
+
+✨ Add `categorySort` option to customize the ordering of auto-generated documentation directories.
+
+## What's Changed
+* feat: Add categorySort option for custom directory ordering
+
+Users can now control how categories are ordered in the sidebar by providing either:
+- `"natural"` - for alphabetical sorting (default behavior)
+- A custom compare function similar to `Array.sort()` - for custom ordering logic
+
+Example usage:
+```js
+docOptions: {
+  categorySort: "natural" // or (a, b) => b.localeCompare(a) for reverse order
+}
+```
+
 <a id="1.30.3"></a>
 # [1.30.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.3) - 2025-08-27
 
