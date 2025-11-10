@@ -159,11 +159,18 @@ export const DEFAULT_OPTIONS: Readonly<
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
+    categorySortPrefix: false as const,
+    categorySort: undefined,
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
   } as Required<
-    Pick<ConfigDocOptions & DeprecatedConfigDocOptions, "frontMatter" | "index">
-  >,
+    Pick<
+      ConfigDocOptions & DeprecatedConfigDocOptions,
+      "categorySortPrefix" | "frontMatter" | "index"
+    >
+  > & {
+    categorySort?: undefined;
+  },
   force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -492,6 +499,11 @@ export const getDocOptions = (
         ? configOptions.index
         : DEFAULT_OPTIONS.docOptions!.index;
   return {
+    categorySortPrefix:
+      typeof configOptions?.categorySortPrefix === "boolean"
+        ? configOptions.categorySortPrefix
+        : DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
+    categorySort: configOptions?.categorySort,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
