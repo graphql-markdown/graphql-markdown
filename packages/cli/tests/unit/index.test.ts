@@ -613,5 +613,32 @@ describe("CLI Module", () => {
         require("@graphql-markdown/core").generateDocFromSchema,
       ).not.toHaveBeenCalled();
     });
+
+    test("passes docOptions with categorySort and categorySortPrefix", async () => {
+      expect.assertions(1);
+
+      const options = {
+        schema: "./schema.graphql",
+        rootPath: "./docs",
+        docOptions: {
+          categorySort: "natural" as const,
+          categorySortPrefix: true,
+        },
+      };
+      const cliOptions = {};
+
+      await runGraphQLMarkdown(options, cliOptions);
+
+      expect(
+        require("@graphql-markdown/core").generateDocFromSchema,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({
+          docOptions: {
+            categorySort: "natural",
+            categorySortPrefix: true,
+          },
+        }),
+      );
+    });
   });
 });
