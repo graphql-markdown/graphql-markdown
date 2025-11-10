@@ -72,11 +72,15 @@ Use these options to tweak some of the static documentation generator features:
 
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
+- `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When not set, the order depends on schema traversal order.
+- `categorySortPrefix`: when enabled with `categorySort`, prefix folder names with zero-padded order numbers (e.g., `01-objects`, `02-queries`). This is useful for ensuring consistent ordering when viewing files in a file explorer or IDE.
 
-| Setting                  | CLI flag        | Default |
-| ------------------------ | --------------- | ------- |
-| `docOptions.frontMatter` | _not supported_ | `{}`    |
-| `docOptions.index`       | `--index`       | `false` |
+| Setting                      | CLI flag        | Default |
+| ---------------------------- | --------------- | ------- |
+| `docOptions.frontMatter`     | _not supported_ | `{}`    |
+| `docOptions.index`           | `--index`       | `false` |
+| `docOptions.categorySort`    | _not supported_ | -       |
+| `docOptions.categorySortPrefix` | _not supported_ | `false` |
 
 <br/>
 
@@ -98,6 +102,8 @@ plugins: [
             hide_table_of_contents: true, // disable page table of content
           },
           index: true, // enable generated index pages, same as CLI flag --index
+          categorySort: "natural", // sort categories alphabetically
+          categorySortPrefix: true, // prefix folder names with order numbers (01-objects, 02-queries, etc.)
         },
         // highlight-end
         loaders: {
@@ -107,6 +113,30 @@ plugins: [
     ],
   ],
 ```
+
+### Compatibility with Other Options
+
+Both `categorySort` and `categorySortPrefix` work seamlessly with:
+
+- **`hierarchy` option**: Works with all hierarchy types (`api`, `entity`, `flat`)
+- **`groupByDirective` option**: When using custom groups, categories are sorted based on group names and prefixed accordingly
+- **`deprecated` option**: Deprecated categories are sorted along with other categories
+
+**Example with groupByDirective:**
+
+```js
+docOptions: {
+  categorySort: "natural",      // Sort groups alphabetically
+  categorySortPrefix: true,     // Prefix with order numbers
+},
+groupByDirective: {
+  directive: "doc",
+  field: "category",
+  fallback: "Common",
+}
+```
+
+This generates folder names like: `01-common`, `02-internal`, `03-public`
 
 ## `force`
 
