@@ -90,5 +90,34 @@ describe("pluginGraphQLDocGenerator", () => {
         "@graphql-markdown/docusaurus/mdx",
       );
     });
+
+    test("passes categorySort and categorySortPrefix through docOptions", async () => {
+      const optionsWithCategorySort = {
+        runOnBuild: false,
+        docOptions: {
+          frontMatter: { draft: true },
+          categorySort: "natural" as const,
+          categorySortPrefix: true,
+        },
+      };
+      const plugin = await pluginGraphQLDocGenerator(
+        {} as LoadContext,
+        optionsWithCategorySort,
+      );
+      plugin.extendCli!(mockCli);
+      expect(getGraphQLMarkdownCli).toHaveBeenCalledWith(
+        expect.objectContaining({
+          docOptions: {
+            categorySort: "natural",
+            categorySortPrefix: true,
+            frontMatter: { draft: true },
+            generatorFrameworkName: "docusaurus",
+            generatorFrameworkVersion: expect.any(String),
+          },
+        }),
+        "@docusaurus/logger",
+        "@graphql-markdown/docusaurus/mdx",
+      );
+    });
   });
 });
