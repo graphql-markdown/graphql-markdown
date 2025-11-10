@@ -456,7 +456,7 @@ export class Renderer {
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
-      dirPath = join(dirPath, slugify(typeCat));
+      dirPath = join(dirPath, this.formatCategoryFolderName(typeCat));
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
         collapsed: false,
@@ -465,7 +465,7 @@ export class Renderer {
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
-      dirPath = join(dirPath, slugify(DEPRECATED));
+      dirPath = join(dirPath, this.formatCategoryFolderName(DEPRECATED));
       await this.generateIndexMetafile(dirPath, DEPRECATED, {
         sidebarPosition: SidebarPosition.LAST,
         styleClass: CATEGORY_STYLE_CLASS.DEPRECATED,
@@ -478,11 +478,11 @@ export class Renderer {
       name in this.group[rootTypeName]!
     ) {
       const rootGroup = this.group[rootTypeName]![name] ?? "";
-      dirPath = join(dirPath, slugify(rootGroup));
+      dirPath = join(dirPath, this.formatCategoryFolderName(rootGroup));
       await this.generateIndexMetafile(dirPath, rootGroup);
     }
 
-    dirPath = join(dirPath, slugify(rootTypeName));
+    dirPath = join(dirPath, this.formatCategoryFolderName(rootTypeName));
     await this.generateIndexMetafile(dirPath, rootTypeName);
 
     return dirPath;
@@ -702,6 +702,25 @@ export class Renderer {
         LogLevel.warn,
       );
     }
+  }
+
+  /**
+   * Formats a category folder name, optionally prefixing with an order number.
+   *
+   * @param categoryName - The category name to format
+   * @returns The formatted folder name (e.g., "01-objects" if prefix is enabled)
+   * @private
+   */
+  private formatCategoryFolderName(categoryName: string): string {
+    if (!this.options?.categorySortPrefix) {
+      return slugify(categoryName);
+    }
+
+    const position = this.categoryPositionManager.getPosition(categoryName);
+    const paddedPosition = String(position).padStart(2, "0");
+    const slugifiedName = slugify(categoryName);
+
+    return `${paddedPosition}-${slugifiedName}`;
   }
 }
 
