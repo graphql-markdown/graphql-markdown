@@ -21,6 +21,8 @@ module.exports = {
             pagination_next: null,
             pagination_prev: null,
           },
+          categorySort: "natural",
+          categorySortPrefix: true,
         },
         metatags: [
           { name: "googlebot", content: "noindex" },
