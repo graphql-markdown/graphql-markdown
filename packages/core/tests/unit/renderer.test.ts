@@ -1191,7 +1191,9 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = jest.fn();
         // Custom sort: reverse alphabetical order
-        const customSort = (a: string, b: string): number => b.localeCompare(a);
+        const customSort = (a: string, b: string): number => {
+          return b.localeCompare(a);
+        };
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1326,6 +1328,306 @@ describe("renderer", () => {
           "beta",
           expect.objectContaining({ sidebarPosition: 2 }),
         );
+      });
+
+      test("prefixes folder names with order numbers when categorySortPrefix is enabled", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Pre-register categories
+        renderer["categoryPositionManager"].registerCategories([
+          "zebra",
+          "alpha",
+          "beta",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Generate categories using generateCategoryMetafileType
+        const alphaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "alpha" as SchemaEntity,
+        );
+        const betaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "beta" as SchemaEntity,
+        );
+        const zebraDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "zebra" as SchemaEntity,
+        );
+
+        // Verify the folder names have order prefixes
+        expect(alphaDirPath).toMatch(/01-alpha/);
+        expect(betaDirPath).toMatch(/02-beta/);
+        expect(zebraDirPath).toMatch(/03-zebra/);
+      });
+
+      test("does not prefix folder names when categorySortPrefix is false", async () => {
+        expect.assertions(6);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: false,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Pre-register categories
+        renderer["categoryPositionManager"].registerCategories([
+          "zebra",
+          "alpha",
+          "beta",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Generate categories using generateCategoryMetafileType
+        const alphaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "alpha" as SchemaEntity,
+        );
+        const betaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "beta" as SchemaEntity,
+        );
+        const zebraDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "zebra" as SchemaEntity,
+        );
+
+        // Verify the folder names do NOT have order prefixes
+        expect(alphaDirPath).toContain("alpha");
+        expect(betaDirPath).toContain("beta");
+        expect(zebraDirPath).toContain("zebra");
+        expect(alphaDirPath).not.toMatch(/01-alpha/);
+        expect(betaDirPath).not.toMatch(/02-beta/);
+        expect(zebraDirPath).not.toMatch(/03-zebra/);
+      });
+
+      test("prefixes folder names with custom sort function when categorySortPrefix is enabled", async () => {
+        expect.assertions(3);
+
+        const customSort = (a: string, b: string): number => {
+          return b.localeCompare(a); // reverse alphabetical
+        };
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: customSort,
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Pre-register categories
+        renderer["categoryPositionManager"].registerCategories([
+          "alpha",
+          "beta",
+          "zebra",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Generate categories using generateCategoryMetafileType
+        // With reverse sort: zebra=1, beta=2, alpha=3
+        const alphaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "alpha" as SchemaEntity,
+        );
+        const betaDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "beta" as SchemaEntity,
+        );
+        const zebraDirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "TestType",
+          "zebra" as SchemaEntity,
+        );
+
+        // Verify the folder names have order prefixes in reverse order
+        expect(alphaDirPath).toMatch(/03-alpha/);
+        expect(betaDirPath).toMatch(/02-beta/);
+        expect(zebraDirPath).toMatch(/01-zebra/);
+      });
+
+      test("works correctly with groupByDirective when categorySortPrefix is enabled", async () => {
+        expect.assertions(6);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Foo: "api-operations", Bar: "api-types" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Pre-register group categories
+        renderer["categoryPositionManager"].registerCategories([
+          "api-types",
+          "api-operations",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Generate categories with grouping enabled
+        const fooPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "objects" as SchemaEntity,
+        );
+        const barPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Bar",
+          "objects" as SchemaEntity,
+        );
+
+        // Verify that group folders are prefixed with order numbers
+        // "api-operations" should come before "api-types" alphabetically, so 01 and 02
+        expect(fooPath).toMatch(/01-api-operations/);
+        expect(fooPath).toMatch(/objects/);
+        expect(barPath).toMatch(/02-api-types/);
+        expect(barPath).toMatch(/objects/);
+        // Verify the full paths contain the order prefixes
+        expect(fooPath).toContain("01-api-operations");
+        expect(barPath).toContain("02-api-types");
+      });
+
+      test("respects hierarchy with categorySortPrefix enabled", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Pre-register the root type categories
+        renderer["categoryPositionManager"].registerCategories([
+          "queries",
+          "objects",
+          "mutations",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Test that prefixes are applied to root type folders
+        // Alphabetically: mutations=1, objects=2, queries=3
+        const mutationsPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Mutation",
+          "mutations" as SchemaEntity,
+        );
+        const objectsPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Objects",
+          "objects" as SchemaEntity,
+        );
+        const queriesPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Query",
+          "queries" as SchemaEntity,
+        );
+
+        // Verify prefixes are applied to root type folder names
+        expect(mutationsPath).toMatch(/01-mutations/);
+        expect(objectsPath).toMatch(/02-objects/);
+        expect(queriesPath).toMatch(/03-queries/);
+      });
+
+      test("disables prefixing when categorySortPrefix is false but categorySort is set", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Foo: "custom-group" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: false, // explicitly false
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        renderer["categoryPositionManager"].registerCategories([
+          "custom-group",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        const fooPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Foo",
+          "objects" as SchemaEntity,
+        );
+
+        // Should NOT have order prefix even though categorySort is set
+        expect(fooPath).toContain("custom-group");
+        expect(fooPath).not.toMatch(/01-custom-group/);
+        expect(fooPath).toMatch(/objects/);
       });
     });
   });
