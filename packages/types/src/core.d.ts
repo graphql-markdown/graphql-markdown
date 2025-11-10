@@ -102,6 +102,8 @@ export interface ConfigDocOptions {
   generatorFrameworkVersion?: Maybe<string>;
   /** Category sorting: "natural" for alphabetical or custom compare function */
   categorySort?: CategorySortFn | "natural";
+  /** Prefix folder names with order numbers when categorySort is enabled */
+  categorySortPrefix?: boolean;
 }
 
 /**
