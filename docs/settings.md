@@ -72,14 +72,14 @@ Use these options to tweak some of the static documentation generator features:
 
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page).
-- `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When not set, the order depends on schema traversal order.
+- `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When not set, the order depends on document generator folders sorting.
 - `categorySortPrefix`: when enabled with `categorySort`, prefix folder names with zero-padded order numbers (e.g., `01-objects`, `02-queries`). This is useful for ensuring consistent ordering when viewing files in a file explorer or IDE.
 
-| Setting                      | CLI flag        | Default |
-| ---------------------------- | --------------- | ------- |
-| `docOptions.frontMatter`     | _not supported_ | `{}`    |
-| `docOptions.index`           | `--index`       | `false` |
-| `docOptions.categorySort`    | _not supported_ | -       |
+| Setting                         | CLI flag        | Default |
+| ------------------------------- | --------------- | ------- |
+| `docOptions.frontMatter`        | _not supported_ | `{}`    |
+| `docOptions.index`              | `--index`       | `false` |
+| `docOptions.categorySort`       | _not supported_ | -       |
 | `docOptions.categorySortPrefix` | _not supported_ | `false` |
 
 <br/>
