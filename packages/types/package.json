@@ -21,8 +21,8 @@
   "types": "src/index.d.ts",
   "devDependencies": {
     "graphql": "16.12.0",
-    "@graphql-tools/load": "8.1.4",
-    "@graphql-tools/utils": "10.10.1",
+    "@graphql-tools/load": "8.1.5",
+    "@graphql-tools/utils": "10.10.2",
     "graphql-config": "5.1.5"
   },
   "publishConfig": {
