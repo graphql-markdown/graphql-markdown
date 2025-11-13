@@ -326,6 +326,7 @@ export class Renderer {
 
   private readonly printer: Printer;
   private readonly categoryPositionManager: CategoryPositionManager;
+  private readonly groupPositionManager: CategoryPositionManager;
 
   /**
    * Creates a new Renderer instance.
@@ -357,6 +358,10 @@ export class Renderer {
     this.mdxModule = mdxModule;
     this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
     this.categoryPositionManager = new CategoryPositionManager(
+      docOptions?.categorySort,
+    );
+    // Create a separate position manager for groups to avoid numbering conflicts
+    this.groupPositionManager = this.categoryPositionManager.createScope(
       docOptions?.categorySort,
     );
   }
@@ -643,13 +648,14 @@ export class Renderer {
       categories.add(DEPRECATED);
     }
 
-    // Custom group categories
+    // Custom group categories - collect separately
+    const groups = new Set<string>();
     if (this.group) {
       for (const rootTypeName in this.group) {
         for (const name in this.group[rootTypeName as SchemaEntity]) {
           const groupName = this.group[rootTypeName as SchemaEntity]![name];
           if (groupName) {
-            categories.add(groupName);
+            groups.add(groupName);
           }
         }
       }
@@ -660,9 +666,15 @@ export class Renderer {
       categories.add(name);
     });
 
-    // Register all collected categories with the position manager
+    // Register categories and groups with separate position managers
     this.categoryPositionManager.registerCategories(Array.from(categories));
     this.categoryPositionManager.computePositions();
+
+    // Register groups with their own position manager
+    if (groups.size > 0) {
+      this.groupPositionManager.registerCategories(Array.from(groups));
+      this.groupPositionManager.computePositions();
+    }
   }
 
   /**
@@ -722,7 +734,18 @@ export class Renderer {
       return slugify(categoryName);
     }
 
-    const position = this.categoryPositionManager.getPosition(categoryName);
+    // Determine which position manager to use based on whether this is a group or category
+    const isGroup =
+      this.group &&
+      Object.values(this.group).some((rootGroup) => {
+        return Object.values(rootGroup).includes(categoryName);
+      });
+
+    const positionManager = isGroup
+      ? this.groupPositionManager
+      : this.categoryPositionManager;
+
+    const position = positionManager.getPosition(categoryName);
     const paddedPosition = String(position).padStart(2, "0");
     const slugifiedName = slugify(categoryName);
 
