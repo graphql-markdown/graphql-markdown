@@ -285,6 +285,10 @@ export interface ExperimentalConfigOptions {
 export interface CliOptions {
   /** Base URL for documentation */
   base?: string;
+  /** Sort categories: 'natural' for alphabetical */
+  categorySort?: string;
+  /** Prefix folder names with order numbers when using categorySort */
+  categorySortPrefix?: boolean;
   /** Whether to output configuration */
   config?: boolean;
   /** How to handle deprecated items */

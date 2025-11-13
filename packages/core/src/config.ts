@@ -500,10 +500,12 @@ export const getDocOptions = (
         : DEFAULT_OPTIONS.docOptions!.index;
   return {
     categorySortPrefix:
-      typeof configOptions?.categorySortPrefix === "boolean"
-        ? configOptions.categorySortPrefix
-        : DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
-    categorySort: configOptions?.categorySort,
+      typeof cliOpts?.categorySortPrefix === "boolean"
+        ? cliOpts.categorySortPrefix
+        : typeof configOptions?.categorySortPrefix === "boolean"
+          ? configOptions.categorySortPrefix
+          : DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
+    categorySort: cliOpts?.categorySort ?? configOptions?.categorySort,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
