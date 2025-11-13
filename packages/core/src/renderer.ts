@@ -247,9 +247,9 @@ class CategoryPositionManager {
    * @param categoryNames - Array of category names to register
    */
   registerCategories(categoryNames: string[]): void {
-    categoryNames.forEach((name) => {
+    for (const name of categoryNames) {
       this.categories.add(name);
-    });
+    }
   }
 
   /**
@@ -262,9 +262,9 @@ class CategoryPositionManager {
     }
 
     const sorted = Array.from(this.categories).sort(this.sortFn);
-    sorted.forEach((category, index) => {
+    for (const [index, category] of sorted.entries()) {
       this.positionCache.set(category, this.basePosition + index);
-    });
+    }
 
     this.positionsComputed = true;
   }
@@ -662,9 +662,9 @@ export class Renderer {
     }
 
     // Root type categories
-    rootTypeNames.forEach((name) => {
+    for (const name of rootTypeNames) {
       categories.add(name);
-    });
+    }
 
     // Register categories and groups with separate position managers
     this.categoryPositionManager.registerCategories(Array.from(categories));
