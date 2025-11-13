@@ -741,6 +741,12 @@ export class Renderer {
         return Object.values(rootGroup).includes(categoryName);
       });
 
+    // When using groups, only number the groups themselves, not the categories
+    // This avoids numbering conflicts and keeps category references clean
+    if (this.group && !isGroup) {
+      return slugify(categoryName);
+    }
+
     const positionManager = isGroup
       ? this.groupPositionManager
       : this.categoryPositionManager;
