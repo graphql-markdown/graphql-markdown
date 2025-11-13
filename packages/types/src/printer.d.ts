@@ -83,6 +83,8 @@ export type PrintTypeOptions = Partial<MDXSupportType> & {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   exampleSection?: Maybe<TypeExampleSectionOption | boolean>;
+  /** Optional function to format category folder names (e.g., for adding prefix numbers) */
+  formatCategoryFolderName?: Maybe<(categoryName: string) => string>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
   hierarchy?: Maybe<TypeHierarchyObjectType>;

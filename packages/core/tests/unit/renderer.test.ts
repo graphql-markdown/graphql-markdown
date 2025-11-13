@@ -260,7 +260,7 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "foo-bar",
           "FooBar",
-          optionsWithFrontMatter,
+          expect.objectContaining(optionsWithFrontMatter),
         );
       });
 

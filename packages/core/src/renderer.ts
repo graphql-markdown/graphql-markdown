@@ -560,7 +560,13 @@ export class Renderer {
 
     let content: MDXString;
     try {
-      content = this.printer.printType(fileName, type, this.options);
+      const printOptions = {
+        ...this.options,
+        formatCategoryFolderName: (categoryName: string): string => {
+          return this.formatCategoryFolderName(categoryName);
+        },
+      };
+      content = this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
         return undefined;
       }
