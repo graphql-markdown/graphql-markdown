@@ -274,16 +274,18 @@ export const toLink = (
 
   const text = graphQLNamedType.name || graphQLNamedType.toString();
 
-  const formattedCategory = options.formatCategoryFolderName
-    ? options.formatCategoryFolderName(category)
-    : category;
+  const formatFolder = (folder: string): string => {
+    return folder && options.formatCategoryFolderName
+      ? options.formatCategoryFolderName(folder)
+      : folder;
+  };
 
   const url = pathUrl.join(
     options.basePath,
-    deprecatedFolder,
-    apiGroupFolder,
-    groupFolder,
-    formattedCategory,
+    formatFolder(deprecatedFolder),
+    formatFolder(apiGroupFolder),
+    formatFolder(groupFolder),
+    formatFolder(category),
     `${slugify(text)}`,
   );
 
