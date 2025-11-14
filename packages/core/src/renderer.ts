@@ -461,7 +461,8 @@ export class Renderer {
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
-      dirPath = join(dirPath, this.formatCategoryFolderName(typeCat));
+      const formattedTypeCat = this.formatCategoryFolderName(typeCat);
+      dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
         collapsed: false,
@@ -470,7 +471,8 @@ export class Renderer {
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
-      dirPath = join(dirPath, this.formatCategoryFolderName(DEPRECATED));
+      const formattedDeprecated = this.formatCategoryFolderName(DEPRECATED);
+      dirPath = join(dirPath, formattedDeprecated);
       await this.generateIndexMetafile(dirPath, DEPRECATED, {
         sidebarPosition: SidebarPosition.LAST,
         styleClass: CATEGORY_STYLE_CLASS.DEPRECATED,
@@ -483,11 +485,13 @@ export class Renderer {
       name in this.group[rootTypeName]!
     ) {
       const rootGroup = this.group[rootTypeName]![name] ?? "";
-      dirPath = join(dirPath, this.formatCategoryFolderName(rootGroup));
+      const formattedRootGroup = this.formatCategoryFolderName(rootGroup);
+      dirPath = join(dirPath, formattedRootGroup);
       await this.generateIndexMetafile(dirPath, rootGroup);
     }
 
-    dirPath = join(dirPath, this.formatCategoryFolderName(rootTypeName));
+    const formattedRootTypeName = this.formatCategoryFolderName(rootTypeName);
+    dirPath = join(dirPath, formattedRootTypeName);
     await this.generateIndexMetafile(dirPath, rootTypeName);
 
     return dirPath;
@@ -767,27 +771,12 @@ export class Renderer {
       const position = this.categoryPositionManager.getPosition(categoryName);
 
       if (!position) {
-        // Debug logging
-        if (process.env.DEBUG_CATEGORY_PREFIX) {
-          console.error(
-            `[DEBUG] formatCategoryFolderName("${categoryName}") -> NO POSITION FOUND!`,
-          );
-        }
         return slugify(categoryName);
       }
 
       const paddedPosition = String(position).padStart(2, "0");
       const slugifiedName = slugify(categoryName);
-      const result = `${paddedPosition}-${slugifiedName}`;
-
-      // Debug logging
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
-        );
-      }
-
-      return result;
+      return `${paddedPosition}-${slugifiedName}`;
     } catch (error) {
       console.error(
         `[ERROR] formatCategoryFolderName("${categoryName}") threw:`,
