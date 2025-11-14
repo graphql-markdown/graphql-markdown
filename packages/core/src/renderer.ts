@@ -667,9 +667,9 @@ export class Renderer {
     });
 
     // When using categorySortPrefix, use unified position manager for all categories
-    // to ensure consistent sequential numbering across both categories and groups
-    if (this.options?.categorySortPrefix && groups.size > 0) {
-      // Merge groups into categories for unified numbering
+    // to ensure consistent sequential numbering across categories, groups, and other special categories
+    if (this.options?.categorySortPrefix) {
+      // Merge all items (categories, groups, deprecated, etc.) for unified numbering
       const allItems = new Set([...categories, ...groups]);
       this.categoryPositionManager.registerCategories(Array.from(allItems));
       this.categoryPositionManager.computePositions();
