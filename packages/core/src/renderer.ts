@@ -623,6 +623,7 @@ export class Renderer {
    */
   preCollectCategories(rootTypeNames: string[]): void {
     const categories = new Set<string>();
+    const groups = new Set<string>();
 
     // Skip if flat hierarchy
     if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
@@ -649,7 +650,6 @@ export class Renderer {
     }
 
     // Custom group categories - collect separately
-    const groups = new Set<string>();
     if (this.group) {
       for (const rootTypeName in this.group) {
         for (const name in this.group[rootTypeName as SchemaEntity]) {
@@ -666,14 +666,24 @@ export class Renderer {
       categories.add(name);
     });
 
-    // Register categories and groups with separate position managers
-    this.categoryPositionManager.registerCategories(Array.from(categories));
-    this.categoryPositionManager.computePositions();
+    // When using categorySortPrefix, use unified position manager for all categories
+    // to ensure consistent sequential numbering across both categories and groups
+    if (this.options?.categorySortPrefix && groups.size > 0) {
+      // Merge groups into categories for unified numbering
+      const allItems = new Set([...categories, ...groups]);
+      this.categoryPositionManager.registerCategories(Array.from(allItems));
+      this.categoryPositionManager.computePositions();
+      // groupPositionManager stays empty/unused in this case
+    } else {
+      // Traditional separate handling: categories and groups use separate managers
+      this.categoryPositionManager.registerCategories(Array.from(categories));
+      this.categoryPositionManager.computePositions();
 
-    // Register groups with their own position manager
-    if (groups.size > 0) {
-      this.groupPositionManager.registerCategories(Array.from(groups));
-      this.groupPositionManager.computePositions();
+      // Register groups with their own position manager
+      if (groups.size > 0) {
+        this.groupPositionManager.registerCategories(Array.from(groups));
+        this.groupPositionManager.computePositions();
+      }
     }
   }
 
@@ -734,18 +744,9 @@ export class Renderer {
       return slugify(categoryName);
     }
 
-    // Determine which position manager to use based on whether this is a group or category
-    const isGroup =
-      this.group &&
-      Object.values(this.group).some((rootGroup) => {
-        return Object.values(rootGroup).includes(categoryName);
-      });
-
-    const positionManager = isGroup
-      ? this.groupPositionManager
-      : this.categoryPositionManager;
-
-    const position = positionManager.getPosition(categoryName);
+    // When using categorySortPrefix with groups, all items are registered in
+    // categoryPositionManager for unified numbering
+    const position = this.categoryPositionManager.getPosition(categoryName);
     const paddedPosition = String(position).padStart(2, "0");
     const slugifiedName = slugify(categoryName);
 
