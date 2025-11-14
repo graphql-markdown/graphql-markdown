@@ -761,21 +761,40 @@ export class Renderer {
       return slugify(categoryName);
     }
 
-    // When using categorySortPrefix with groups, all items are registered in
-    // categoryPositionManager for unified numbering
-    const position = this.categoryPositionManager.getPosition(categoryName);
-    const paddedPosition = String(position).padStart(2, "0");
-    const slugifiedName = slugify(categoryName);
-    const result = `${paddedPosition}-${slugifiedName}`;
+    try {
+      // When using categorySortPrefix with groups, all items are registered in
+      // categoryPositionManager for unified numbering
+      const position = this.categoryPositionManager.getPosition(categoryName);
 
-    // Debug logging
-    if (process.env.DEBUG_CATEGORY_PREFIX) {
+      if (!position) {
+        // Debug logging
+        if (process.env.DEBUG_CATEGORY_PREFIX) {
+          console.error(
+            `[DEBUG] formatCategoryFolderName("${categoryName}") -> NO POSITION FOUND!`,
+          );
+        }
+        return slugify(categoryName);
+      }
+
+      const paddedPosition = String(position).padStart(2, "0");
+      const slugifiedName = slugify(categoryName);
+      const result = `${paddedPosition}-${slugifiedName}`;
+
+      // Debug logging
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
+        );
+      }
+
+      return result;
+    } catch (error) {
       console.error(
-        `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
+        `[ERROR] formatCategoryFolderName("${categoryName}") threw:`,
+        error,
       );
+      return slugify(categoryName);
     }
-
-    return result;
   }
 }
 
