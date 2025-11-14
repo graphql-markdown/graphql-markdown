@@ -671,6 +671,23 @@ export class Renderer {
     if (this.options?.categorySortPrefix) {
       // Merge all items (categories, groups, deprecated, etc.) for unified numbering
       const allItems = new Set([...categories, ...groups]);
+
+      // Debug logging
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] preCollectCategories - categories:`,
+          Array.from(categories).sort(),
+        );
+        console.error(
+          `[DEBUG] preCollectCategories - groups:`,
+          Array.from(groups).sort(),
+        );
+        console.error(
+          `[DEBUG] preCollectCategories - allItems:`,
+          Array.from(allItems).sort(),
+        );
+      }
+
       this.categoryPositionManager.registerCategories(Array.from(allItems));
       this.categoryPositionManager.computePositions();
       // groupPositionManager stays empty/unused in this case
@@ -749,8 +766,16 @@ export class Renderer {
     const position = this.categoryPositionManager.getPosition(categoryName);
     const paddedPosition = String(position).padStart(2, "0");
     const slugifiedName = slugify(categoryName);
+    const result = `${paddedPosition}-${slugifiedName}`;
 
-    return `${paddedPosition}-${slugifiedName}`;
+    // Debug logging
+    if (process.env.DEBUG_CATEGORY_PREFIX) {
+      console.error(
+        `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
+      );
+    }
+
+    return result;
   }
 }
 
