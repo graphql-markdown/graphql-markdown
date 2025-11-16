@@ -592,13 +592,51 @@ export class Renderer {
 
     let content: MDXString;
     try {
-      const printOptions = {
-        ...this.options,
-        formatCategoryFolderName: (categoryName: string): string => {
-          return this.formatCategoryFolderName(categoryName);
-        },
-      };
-      content = this.printer.printType(fileName, type, printOptions);
+      // Get all root type names and API group names to determine hierarchy levels
+      const apiGroups =
+        typeof this.options?.hierarchy?.[TypeHierarchy.API] === "object"
+          ? {
+              ...API_GROUPS,
+              ...this.options.hierarchy[TypeHierarchy.API],
+            }
+          : API_GROUPS;
+      
+      const rootTypeAndApiGroupNames = new Set<string>();
+      if (this.options?.categorySort) {
+        // Track which categories are at root level vs nested
+        const isRootLevel = (catName: string): boolean => {
+          // Root level includes: API groups, root types, deprecated
+          if (
+            catName === apiGroups.operations ||
+            catName === apiGroups.types ||
+            catName === DEPRECATED
+          ) {
+            return false; // These are nested under root types, not root-level
+          }
+          // Everything else (Query, Mutation, etc.) are root-level
+          return this.rootLevelPositionManager.getPosition(catName) !== undefined;
+        };
+        
+        const printOptions = {
+          ...this.options,
+          formatCategoryFolderName: (categoryName: string): string => {
+            // Determine if this category should use root or nested formatting
+            const isRootLevelCat =
+              this.rootLevelPositionManager.getPosition(categoryName) !== undefined;
+            return this.formatCategoryFolderName(categoryName, isRootLevelCat);
+          },
+        };
+        content = this.printer.printType(fileName, type, printOptions);
+      } else {
+        const printOptions = {
+          ...this.options,
+          formatCategoryFolderName: (categoryName: string): string => {
+            return this.formatCategoryFolderName(categoryName);
+          },
+        };
+        content = this.printer.printType(fileName, type, printOptions);
+      }
+      
       if (typeof content !== "string" || content === "") {
         return undefined;
       }
@@ -645,12 +683,16 @@ export class Renderer {
    * This allows the position manager to assign consistent positions before
    * any files are written.
    *
+   * HIERARCHY LEVELS:
+   * - Root level: Query, Mutation, Subscription, Deprecated (when grouped), custom root groups
+   * - Nested level: operations/types (API groups), custom groups under roots
+   *
    * @param rootTypeNames - Array of root type names from the schema
    * @useDeclaredType
    */
   preCollectCategories(rootTypeNames: string[]): void {
-    const categories = new Set<string>();
-    const groups = new Set<string>();
+    const rootCategories = new Set<string>();
+    const nestedCategories = new Set<string>();
 
     if (process.env.DEBUG_CATEGORY_PREFIX) {
       console.error(
@@ -668,7 +710,7 @@ export class Renderer {
       return;
     }
 
-    // API group categories (operations/types)
+    // API group categories (operations/types) - These are NESTED, not root level
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
@@ -678,13 +720,14 @@ export class Renderer {
         typeof useApiGroup === "object"
           ? { ...API_GROUPS, ...useApiGroup }
           : API_GROUPS;
-      categories.add(apiGroups.operations);
-      categories.add(apiGroups.types);
+      // API groups are NESTED under root types, not root-level themselves
+      nestedCategories.add(apiGroups.operations);
+      nestedCategories.add(apiGroups.types);
     }
 
-    // Deprecated category
+    // Deprecated category - when grouped, it's at root level
     if (this.options?.deprecated === "group") {
-      categories.add(DEPRECATED);
+      rootCategories.add(DEPRECATED);
     }
 
     // Custom group categories - collect separately
@@ -693,58 +736,56 @@ export class Renderer {
         for (const name in this.group[rootTypeName as SchemaEntity]) {
           const groupName = this.group[rootTypeName as SchemaEntity]![name];
           if (groupName) {
-            groups.add(groupName);
+            // Custom groups are NESTED under root types
+            nestedCategories.add(groupName);
           }
         }
       }
     }
 
-    // Root type categories
+    // Root type categories (Query, Mutation, Subscription, etc.)
     rootTypeNames.forEach((name) => {
-      categories.add(name);
+      rootCategories.add(name);
     });
 
-    // When using categorySortPrefix, set up hierarchical numbering:
-    // - Root level (Query, Mutation, Deprecated, etc.) gets one manager
-    // - Each category's children (groups) get their own manager
+    // Set up hierarchical numbering for categorySortPrefix
     if (this.options?.categorySortPrefix) {
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
           `[DEBUG] preCollectCategories - categorySortPrefix enabled`,
         );
         console.error(
-          `[DEBUG] preCollectCategories - root level categories:`,
-          Array.from(categories).sort(),
+          `[DEBUG] preCollectCategories - ROOT level categories:`,
+          Array.from(rootCategories).sort(),
         );
         console.error(
-          `[DEBUG] preCollectCategories - nested groups:`,
-          Array.from(groups).sort(),
+          `[DEBUG] preCollectCategories - NESTED level categories:`,
+          Array.from(nestedCategories).sort(),
         );
       }
 
-      // Register root-level categories (Query, Mutation, Deprecated, custom groups at root level)
-      this.rootLevelPositionManager.registerCategories(Array.from(categories));
+      // Register root-level categories (Query, Mutation, Subscription, Deprecated, etc.)
+      this.rootLevelPositionManager.registerCategories(Array.from(rootCategories));
       this.rootLevelPositionManager.computePositions();
 
-      // Register nested groups with their own manager (these are under each root category)
-      this.categoryPositionManager.registerCategories(Array.from(groups));
+      // Register nested categories (operations, types, custom groups under roots)
+      this.categoryPositionManager.registerCategories(Array.from(nestedCategories));
       this.categoryPositionManager.computePositions();
 
       this.debugLogCategoryPositions();
     } else {
-      // Traditional separate handling: categories and groups use separate managers
+      // Traditional separate handling
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
-          `[DEBUG] preCollectCategories - categorySortPrefix disabled, using separate managers`,
+          `[DEBUG] preCollectCategories - categorySortPrefix disabled`,
         );
       }
 
-      this.rootLevelPositionManager.registerCategories(Array.from(categories));
+      this.rootLevelPositionManager.registerCategories(Array.from(rootCategories));
       this.rootLevelPositionManager.computePositions();
 
-      // Register groups with their own position manager
-      if (groups.size > 0) {
-        this.categoryPositionManager.registerCategories(Array.from(groups));
+      if (nestedCategories.size > 0) {
+        this.categoryPositionManager.registerCategories(Array.from(nestedCategories));
         this.categoryPositionManager.computePositions();
       }
     }
