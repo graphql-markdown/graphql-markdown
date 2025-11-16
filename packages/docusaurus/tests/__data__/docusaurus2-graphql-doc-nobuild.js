@@ -49,7 +49,7 @@ module.exports = {
         runOnBuild: false,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: false,
+          categorySortPrefix: true,
         },
       },
     ],
