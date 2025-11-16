@@ -254,5 +254,58 @@ describe("renderer", () => {
       expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
       expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
     });
+
+    test("categorySortPrefix works correctly with grouping", async () => {
+      expect.assertions(1);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-prefix",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.DEFAULT,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-prefix",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+
+      // Verify that folder names are prefixed with numbers
+      // Look for patterns like "01-", "02-", etc. in folder paths
+      const allPaths = Object.keys(outputJson);
+      const prefixedFolders = allPaths.filter((p) => /\/\d{2}-[a-z]/.test(p));
+
+      // Should have at least some folders with numeric prefixes when categorySortPrefix is enabled
+      expect(prefixedFolders.length).toBeGreaterThan(0);
+    });
   });
 });

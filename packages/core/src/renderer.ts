@@ -705,6 +705,7 @@ export class Renderer {
 
       this.categoryPositionManager.registerCategories(Array.from(allItems));
       this.categoryPositionManager.computePositions();
+      this.debugLogCategoryPositions();
       // groupPositionManager stays empty/unused in this case
     } else {
       // Traditional separate handling: categories and groups use separate managers
@@ -818,6 +819,21 @@ export class Renderer {
         error,
       );
       return slugify(categoryName);
+    }
+  }
+
+  /**
+   * Debug helper to log all registered categories and their positions.
+   */
+  private debugLogCategoryPositions(): void {
+    if (process.env.DEBUG_CATEGORY_PREFIX) {
+      const testCategories = ["Common", "Query", "Mutation", "Subscription"];
+      console.error(`[DEBUG] === Category Position Map ===`);
+      testCategories.forEach((cat) => {
+        const pos = this.categoryPositionManager.getPosition(cat);
+        console.error(`[DEBUG]   "${cat}" -> position ${pos}`);
+      });
+      console.error(`[DEBUG] === End Category Position Map ===`);
     }
   }
 }

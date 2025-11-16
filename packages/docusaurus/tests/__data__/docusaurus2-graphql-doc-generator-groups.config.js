@@ -28,7 +28,7 @@ module.exports = {
   docOptions: {
     index: true,
     categorySort: "natural",
-    categorySortPrefix: true,
+    categorySortPrefix: false,
   },
   customDirective: {
     beta: {

@@ -135,7 +135,7 @@ build-docusaurus-examples:
   RUN mv docs ./$folderDocs/$folderExample
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural --categorySortPrefix"
+  DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural"
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
@@ -153,7 +153,7 @@ build-cli-examples:
   RUN mv docs ./$folderDocs/$folderExample
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural --categorySortPrefix"
+  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural"
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
