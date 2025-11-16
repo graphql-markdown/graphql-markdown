@@ -762,6 +762,11 @@ export class Renderer {
    */
   private formatCategoryFolderName(categoryName: string): string {
     if (!this.options?.categorySortPrefix) {
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] formatCategoryFolderName("${categoryName}") -> categorySortPrefix is false, returning unformatted`,
+        );
+      }
       return slugify(categoryName);
     }
 
@@ -771,12 +776,25 @@ export class Renderer {
       const position = this.categoryPositionManager.getPosition(categoryName);
 
       if (!position) {
+        if (process.env.DEBUG_CATEGORY_PREFIX) {
+          console.error(
+            `[DEBUG] formatCategoryFolderName("${categoryName}") -> NO POSITION, returning unformatted`,
+          );
+        }
         return slugify(categoryName);
       }
 
       const paddedPosition = String(position).padStart(2, "0");
       const slugifiedName = slugify(categoryName);
-      return `${paddedPosition}-${slugifiedName}`;
+      const result = `${paddedPosition}-${slugifiedName}`;
+
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
+        );
+      }
+
+      return result;
     } catch (error) {
       console.error(
         `[ERROR] formatCategoryFolderName("${categoryName}") threw:`,
