@@ -296,6 +296,17 @@ class CategoryPositionManager {
   }
 
   /**
+   * Check if a category was pre-registered without triggering recomputation.
+   * Used to determine hierarchy level (root vs nested) without side effects.
+   *
+   * @param category - Category name to check
+   * @returns true if category was pre-registered
+   */
+  isRegistered(category: string): boolean {
+    return this.categories.has(category);
+  }
+
+  /**
    * Creates a scoped position manager for nested categories.
    *
    * @param sortFn - Function to sort categories (defaults to parent's sort function)
@@ -596,11 +607,9 @@ export class Renderer {
         ...this.options,
         formatCategoryFolderName: (categoryName: string): string => {
           // Determine if this category should use root or nested formatting
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          // Check if category was pre-registered as a root-level category
           const isRootLevelCat =
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            this.rootLevelPositionManager.getPosition(categoryName) !==
-            undefined;
+            this.rootLevelPositionManager.isRegistered(categoryName);
           return this.formatCategoryFolderName(categoryName, isRootLevelCat);
         },
       };
