@@ -655,6 +655,13 @@ export class Renderer {
    * - Root level: Query, Mutation, Subscription, Deprecated (when grouped), custom root groups
    * - Nested level: operations/types (API groups), custom groups under roots
    *
+   * CRITICAL: Categories registered must match the NAMES USED BY THE PRINTER
+   * when generating links. The printer uses plural forms from ROOT_TYPE_LOCALE:
+   * "operations", "objects", "directives", "enums", "inputs", "interfaces",
+   * "mutations", "queries", "scalars", "subscriptions", "unions"
+   *
+   * NOT the folder names: "operations", "types"
+   *
    * @param rootTypeNames - Array of root type names from the schema
    * @useDeclaredType
    */
@@ -678,19 +685,28 @@ export class Renderer {
       return;
     }
 
-    // API group categories (operations/types) - These are NESTED, not root level
+    // API group categories - These are NESTED, not root level
+    // The printer uses plural forms: "operations", "objects", "directives", etc.
+    // NOT the folder names: "operations", "types"
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
 
     if (useApiGroup) {
-      const apiGroups =
-        typeof useApiGroup === "object"
-          ? { ...API_GROUPS, ...useApiGroup }
-          : API_GROUPS;
-      // API groups are NESTED under root types, not root-level themselves
-      nestedCategories.add(apiGroups.operations);
-      nestedCategories.add(apiGroups.types);
+      // Register the PRINTER CATEGORY NAMES, not folder names
+      // These match the plural forms used by the printer
+      nestedCategories.add("operations");
+      nestedCategories.add("objects");
+      nestedCategories.add("directives");
+      nestedCategories.add("enums");
+      nestedCategories.add("inputs");
+      nestedCategories.add("interfaces");
+      nestedCategories.add("scalars");
+      nestedCategories.add("unions");
+      // mutations and queries are also possible but depend on schema
+      nestedCategories.add("mutations");
+      nestedCategories.add("queries");
+      nestedCategories.add("subscriptions");
     }
 
     // Deprecated category - when grouped, it's at root level
@@ -738,7 +754,7 @@ export class Renderer {
       );
       this.rootLevelPositionManager.computePositions();
 
-      // Register nested categories (operations, types, custom groups under roots)
+      // Register nested categories (operations, objects, directives, etc., custom groups under roots)
       this.categoryPositionManager.registerCategories(
         Array.from(nestedCategories),
       );
