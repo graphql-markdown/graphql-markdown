@@ -592,51 +592,19 @@ export class Renderer {
 
     let content: MDXString;
     try {
-      // Get all root type names and API group names to determine hierarchy levels
-      const apiGroups =
-        typeof this.options?.hierarchy?.[TypeHierarchy.API] === "object"
-          ? {
-              ...API_GROUPS,
-              ...this.options.hierarchy[TypeHierarchy.API],
-            }
-          : API_GROUPS;
-      
-      const rootTypeAndApiGroupNames = new Set<string>();
-      if (this.options?.categorySort) {
-        // Track which categories are at root level vs nested
-        const isRootLevel = (catName: string): boolean => {
-          // Root level includes: API groups, root types, deprecated
-          if (
-            catName === apiGroups.operations ||
-            catName === apiGroups.types ||
-            catName === DEPRECATED
-          ) {
-            return false; // These are nested under root types, not root-level
-          }
-          // Everything else (Query, Mutation, etc.) are root-level
-          return this.rootLevelPositionManager.getPosition(catName) !== undefined;
-        };
-        
-        const printOptions = {
-          ...this.options,
-          formatCategoryFolderName: (categoryName: string): string => {
-            // Determine if this category should use root or nested formatting
-            const isRootLevelCat =
-              this.rootLevelPositionManager.getPosition(categoryName) !== undefined;
-            return this.formatCategoryFolderName(categoryName, isRootLevelCat);
-          },
-        };
-        content = this.printer.printType(fileName, type, printOptions);
-      } else {
-        const printOptions = {
-          ...this.options,
-          formatCategoryFolderName: (categoryName: string): string => {
-            return this.formatCategoryFolderName(categoryName);
-          },
-        };
-        content = this.printer.printType(fileName, type, printOptions);
-      }
-      
+      const printOptions = {
+        ...this.options,
+        formatCategoryFolderName: (categoryName: string): string => {
+          // Determine if this category should use root or nested formatting
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          const isRootLevelCat =
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            this.rootLevelPositionManager.getPosition(categoryName) !==
+            undefined;
+          return this.formatCategoryFolderName(categoryName, isRootLevelCat);
+        },
+      };
+      content = this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
         return undefined;
       }
@@ -765,11 +733,15 @@ export class Renderer {
       }
 
       // Register root-level categories (Query, Mutation, Subscription, Deprecated, etc.)
-      this.rootLevelPositionManager.registerCategories(Array.from(rootCategories));
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
       this.rootLevelPositionManager.computePositions();
 
       // Register nested categories (operations, types, custom groups under roots)
-      this.categoryPositionManager.registerCategories(Array.from(nestedCategories));
+      this.categoryPositionManager.registerCategories(
+        Array.from(nestedCategories),
+      );
       this.categoryPositionManager.computePositions();
 
       this.debugLogCategoryPositions();
@@ -781,11 +753,15 @@ export class Renderer {
         );
       }
 
-      this.rootLevelPositionManager.registerCategories(Array.from(rootCategories));
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
       this.rootLevelPositionManager.computePositions();
 
       if (nestedCategories.size > 0) {
-        this.categoryPositionManager.registerCategories(Array.from(nestedCategories));
+        this.categoryPositionManager.registerCategories(
+          Array.from(nestedCategories),
+        );
         this.categoryPositionManager.computePositions();
       }
     }
