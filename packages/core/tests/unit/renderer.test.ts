@@ -1351,12 +1351,12 @@ describe("renderer", () => {
         );
 
         // Pre-register categories
-        renderer["categoryPositionManager"].registerCategories([
+        renderer["rootLevelPositionManager"].registerCategories([
           "zebra",
           "alpha",
           "beta",
         ]);
-        renderer["categoryPositionManager"].computePositions();
+        renderer["rootLevelPositionManager"].computePositions();
 
         // Generate categories using generateCategoryMetafileType
         const alphaDirPath = await renderer.generateCategoryMetafileType(
@@ -1460,12 +1460,12 @@ describe("renderer", () => {
         );
 
         // Pre-register categories
-        renderer["categoryPositionManager"].registerCategories([
+        renderer["rootLevelPositionManager"].registerCategories([
           "alpha",
           "beta",
           "zebra",
         ]);
-        renderer["categoryPositionManager"].computePositions();
+        renderer["rootLevelPositionManager"].computePositions();
 
         // Generate categories using generateCategoryMetafileType
         // With reverse sort: zebra=1, beta=2, alpha=3
@@ -1512,7 +1512,7 @@ describe("renderer", () => {
         );
 
         // Pre-register group categories
-        renderer["categoryPositionManager"].registerCategories([
+        renderer["rootLevelPositionManager"].registerCategories([
           "api-types",
           "api-operations",
         ]);

@@ -221,23 +221,6 @@ const naturalSort: CategorySortFn = (a: string, b: string): number => {
  * 1. Pre-registration: categories are registered upfront, positions computed once
  * 2. On-demand: positions are computed as categories are encountered
  *
- * KNOWN ISSUE with categorySortPrefix:
- * Currently uses GLOBAL numbering across all hierarchy levels.
- * This causes mismatched prefixes between links and folders at different levels.
- *
- * EXPECTED BEHAVIOR (TO FIX):
- * Numbering should be SCOPED per hierarchy level:
- * - Root level (Query, Mutation, Common): 01-query, 02-mutation, 03-common
- * - Within each root: 01-directives, 02-enums, 03-scalars (restarts at each level)
- * - NOT: 01-common, 02-course, 03-deprecated, 04-directives, 05-enums...
- *
- * SOLUTION:
- * Each hierarchy level needs its own independent position manager that:
- * 1. Is created at that level
- * 2. Registers only the items at that level
- * 3. Restarts numbering from 1
- * This requires refactoring the position manager to be truly scoped.
- *
  * @useDeclaredType
  */
 class CategoryPositionManager {
@@ -330,6 +313,12 @@ class CategoryPositionManager {
 /**
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
+ *
+ * HIERARCHY LEVELS FOR categorySortPrefix:
+ * - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
+ * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
+ *
+ * Each level has its own CategoryPositionManager that restarts numbering at 1.
  * @useDeclaredType
  * @example
  */
@@ -343,8 +332,8 @@ export class Renderer {
   mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
+  private readonly rootLevelPositionManager: CategoryPositionManager;
   private readonly categoryPositionManager: CategoryPositionManager;
-  private readonly groupPositionManager: CategoryPositionManager;
 
   /**
    * Creates a new Renderer instance.
@@ -368,6 +357,7 @@ export class Renderer {
     mdxModule?: unknown,
   ) {
     this.printer = printer;
+
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
@@ -375,12 +365,18 @@ export class Renderer {
     this.options = docOptions;
     this.mdxModule = mdxModule;
     this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
+
+    // Initialize position managers for different hierarchy levels
+    // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
+    this.rootLevelPositionManager = new CategoryPositionManager(
+      docOptions?.categorySort,
+      1, // Start from 1 at root level
+    );
+
+    // categoryPositionManager: for categories within each root type (e.g., under Query)
     this.categoryPositionManager = new CategoryPositionManager(
       docOptions?.categorySort,
-    );
-    // Create a separate position manager for groups to avoid numbering conflicts
-    this.groupPositionManager = this.categoryPositionManager.createScope(
-      docOptions?.categorySort,
+      1, // Start from 1 for each root type
     );
   }
 
@@ -479,7 +475,7 @@ export class Renderer {
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
-      const formattedTypeCat = this.formatCategoryFolderName(typeCat);
+      const formattedTypeCat = this.formatCategoryFolderName(typeCat, false);
       dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
@@ -489,7 +485,10 @@ export class Renderer {
     }
 
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
-      const formattedDeprecated = this.formatCategoryFolderName(DEPRECATED);
+      const formattedDeprecated = this.formatCategoryFolderName(
+        DEPRECATED,
+        false,
+      );
       dirPath = join(dirPath, formattedDeprecated);
       await this.generateIndexMetafile(dirPath, DEPRECATED, {
         sidebarPosition: SidebarPosition.LAST,
@@ -503,12 +502,18 @@ export class Renderer {
       name in this.group[rootTypeName]!
     ) {
       const rootGroup = this.group[rootTypeName]![name] ?? "";
-      const formattedRootGroup = this.formatCategoryFolderName(rootGroup);
+      const formattedRootGroup = this.formatCategoryFolderName(
+        rootGroup,
+        false,
+      );
       dirPath = join(dirPath, formattedRootGroup);
       await this.generateIndexMetafile(dirPath, rootGroup);
     }
 
-    const formattedRootTypeName = this.formatCategoryFolderName(rootTypeName);
+    const formattedRootTypeName = this.formatCategoryFolderName(
+      rootTypeName,
+      true,
+    );
     dirPath = join(dirPath, formattedRootTypeName);
     await this.generateIndexMetafile(dirPath, rootTypeName);
 
@@ -699,32 +704,33 @@ export class Renderer {
       categories.add(name);
     });
 
-    // When using categorySortPrefix, use unified position manager for all categories
-    // to ensure consistent sequential numbering across categories, groups, and other special categories
+    // When using categorySortPrefix, set up hierarchical numbering:
+    // - Root level (Query, Mutation, Deprecated, etc.) gets one manager
+    // - Each category's children (groups) get their own manager
     if (this.options?.categorySortPrefix) {
-      // Merge all items (categories, groups, deprecated, etc.) for unified numbering
-      const allItems = new Set([...categories, ...groups]);
-
-      // Debug logging
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
-          `[DEBUG] preCollectCategories - categorySortPrefix enabled, categories:`,
+          `[DEBUG] preCollectCategories - categorySortPrefix enabled`,
+        );
+        console.error(
+          `[DEBUG] preCollectCategories - root level categories:`,
           Array.from(categories).sort(),
         );
         console.error(
-          `[DEBUG] preCollectCategories - groups:`,
+          `[DEBUG] preCollectCategories - nested groups:`,
           Array.from(groups).sort(),
-        );
-        console.error(
-          `[DEBUG] preCollectCategories - allItems for unified numbering:`,
-          Array.from(allItems).sort(),
         );
       }
 
-      this.categoryPositionManager.registerCategories(Array.from(allItems));
+      // Register root-level categories (Query, Mutation, Deprecated, custom groups at root level)
+      this.rootLevelPositionManager.registerCategories(Array.from(categories));
+      this.rootLevelPositionManager.computePositions();
+
+      // Register nested groups with their own manager (these are under each root category)
+      this.categoryPositionManager.registerCategories(Array.from(groups));
       this.categoryPositionManager.computePositions();
+
       this.debugLogCategoryPositions();
-      // groupPositionManager stays empty/unused in this case
     } else {
       // Traditional separate handling: categories and groups use separate managers
       if (process.env.DEBUG_CATEGORY_PREFIX) {
@@ -733,13 +739,13 @@ export class Renderer {
         );
       }
 
-      this.categoryPositionManager.registerCategories(Array.from(categories));
-      this.categoryPositionManager.computePositions();
+      this.rootLevelPositionManager.registerCategories(Array.from(categories));
+      this.rootLevelPositionManager.computePositions();
 
       // Register groups with their own position manager
       if (groups.size > 0) {
-        this.groupPositionManager.registerCategories(Array.from(groups));
-        this.groupPositionManager.computePositions();
+        this.categoryPositionManager.registerCategories(Array.from(groups));
+        this.categoryPositionManager.computePositions();
       }
     }
   }
@@ -792,11 +798,19 @@ export class Renderer {
   /**
    * Formats a category folder name, optionally prefixing with an order number.
    *
+   * Supports hierarchical numbering:
+   * - Root level items (Query, Mutation, etc.) use rootLevelPositionManager
+   * - Nested items (groups, types within roots) use categoryPositionManager
+   *
    * @param categoryName - The category name to format
+   * @param isRootLevel - Whether this category is at the root level (default: false for nested)
    * @returns The formatted folder name (e.g., "01-objects" if prefix is enabled)
    * @private
    */
-  private formatCategoryFolderName(categoryName: string): string {
+  private formatCategoryFolderName(
+    categoryName: string,
+    isRootLevel: boolean = false,
+  ): string {
     if (!this.options?.categorySortPrefix) {
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
@@ -807,14 +821,17 @@ export class Renderer {
     }
 
     try {
-      // When using categorySortPrefix with groups, all items are registered in
-      // categoryPositionManager for unified numbering
-      const position = this.categoryPositionManager.getPosition(categoryName);
+      // Choose the appropriate position manager based on hierarchy level
+      const manager = isRootLevel
+        ? this.rootLevelPositionManager
+        : this.categoryPositionManager;
+
+      const position = manager.getPosition(categoryName);
 
       if (!position) {
         if (process.env.DEBUG_CATEGORY_PREFIX) {
           console.error(
-            `[DEBUG] formatCategoryFolderName("${categoryName}") -> NO POSITION, returning unformatted`,
+            `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) -> NO POSITION, returning unformatted`,
           );
         }
         return slugify(categoryName);
@@ -826,14 +843,14 @@ export class Renderer {
 
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
-          `[DEBUG] formatCategoryFolderName("${categoryName}") -> position=${position}, result="${result}"`,
+          `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) -> position=${position}, result="${result}"`,
         );
       }
 
       return result;
     } catch (error) {
       console.error(
-        `[ERROR] formatCategoryFolderName("${categoryName}") threw:`,
+        `[ERROR] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) threw:`,
         error,
       );
       return slugify(categoryName);

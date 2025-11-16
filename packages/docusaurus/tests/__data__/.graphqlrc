@@ -11,7 +11,7 @@ projects:
         docOptions:
           index: true
           categorySort: "natural"
-          categorySortPrefix: false
+          categorySortPrefix: true
         printTypeOptions:
           parentTypePrefix: false
           relatedTypeSection: false
