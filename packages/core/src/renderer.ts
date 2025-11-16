@@ -220,6 +220,24 @@ const naturalSort: CategorySortFn = (a: string, b: string): number => {
  * Supports two modes:
  * 1. Pre-registration: categories are registered upfront, positions computed once
  * 2. On-demand: positions are computed as categories are encountered
+ *
+ * KNOWN ISSUE with categorySortPrefix:
+ * Currently uses GLOBAL numbering across all hierarchy levels.
+ * This causes mismatched prefixes between links and folders at different levels.
+ *
+ * EXPECTED BEHAVIOR (TO FIX):
+ * Numbering should be SCOPED per hierarchy level:
+ * - Root level (Query, Mutation, Common): 01-query, 02-mutation, 03-common
+ * - Within each root: 01-directives, 02-enums, 03-scalars (restarts at each level)
+ * - NOT: 01-common, 02-course, 03-deprecated, 04-directives, 05-enums...
+ *
+ * SOLUTION:
+ * Each hierarchy level needs its own independent position manager that:
+ * 1. Is created at that level
+ * 2. Registers only the items at that level
+ * 3. Restarts numbering from 1
+ * This requires refactoring the position manager to be truly scoped.
+ *
  * @useDeclaredType
  */
 class CategoryPositionManager {
