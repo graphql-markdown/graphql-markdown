@@ -629,8 +629,19 @@ export class Renderer {
     const categories = new Set<string>();
     const groups = new Set<string>();
 
+    if (process.env.DEBUG_CATEGORY_PREFIX) {
+      console.error(
+        `[DEBUG] preCollectCategories called, categorySortPrefix=${this.options?.categorySortPrefix}`,
+      );
+    }
+
     // Skip if flat hierarchy
     if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] preCollectCategories - FLAT hierarchy, skipping`,
+        );
+      }
       return;
     }
 
@@ -679,7 +690,7 @@ export class Renderer {
       // Debug logging
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
-          `[DEBUG] preCollectCategories - categories:`,
+          `[DEBUG] preCollectCategories - categorySortPrefix enabled, categories:`,
           Array.from(categories).sort(),
         );
         console.error(
@@ -687,7 +698,7 @@ export class Renderer {
           Array.from(groups).sort(),
         );
         console.error(
-          `[DEBUG] preCollectCategories - allItems:`,
+          `[DEBUG] preCollectCategories - allItems for unified numbering:`,
           Array.from(allItems).sort(),
         );
       }
@@ -697,6 +708,12 @@ export class Renderer {
       // groupPositionManager stays empty/unused in this case
     } else {
       // Traditional separate handling: categories and groups use separate managers
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] preCollectCategories - categorySortPrefix disabled, using separate managers`,
+        );
+      }
+
       this.categoryPositionManager.registerCategories(Array.from(categories));
       this.categoryPositionManager.computePositions();
 
