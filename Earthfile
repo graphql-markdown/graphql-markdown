@@ -131,11 +131,11 @@ build-docusaurus-examples:
   RUN mkdir $folderDocs
   LET folderExample="default"
   LET idExample="default"
-  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  DO +GQLMD --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group --categorySort natural --categorySortPrefix"
   RUN mv docs ./$folderDocs/$folderExample
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural"
+  DO +GQLMD --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural --categorySortPrefix"
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
@@ -149,11 +149,11 @@ build-cli-examples:
   LET folderExample="default"
   LET idExample="default"
   LET command="gqlmd"
-  DO +GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  DO +GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group --categorySort natural --categorySortPrefix"
   RUN mv docs ./$folderDocs/$folderExample
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural"
+  DO +GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity --categorySort natural --categorySortPrefix"
   RUN mv docs ./$folderDocs/$folderExample
   SAVE ARTIFACT ./$folderDocs
 
