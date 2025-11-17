@@ -195,9 +195,9 @@ GQLMD:
   ARG command=docusaurus
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN DEBUG_CATEGORY_PREFIX=1 npx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN DEBUG_CATEGORY_PREFIX=1 npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
