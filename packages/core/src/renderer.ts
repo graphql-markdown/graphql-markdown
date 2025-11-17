@@ -695,27 +695,16 @@ export class Renderer {
     }
 
     // API group categories - These are NESTED, not root level
-    // The printer uses plural forms: "operations", "objects", "directives", etc.
-    // NOT the folder names: "operations", "types"
+    // These are the top-level API group folders: "operations" and "types"
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
 
     if (useApiGroup) {
-      // Register the PRINTER CATEGORY NAMES, not folder names
-      // These match the plural forms used by the printer
-      nestedCategories.add("operations");
-      nestedCategories.add("objects");
-      nestedCategories.add("directives");
-      nestedCategories.add("enums");
-      nestedCategories.add("inputs");
-      nestedCategories.add("interfaces");
-      nestedCategories.add("scalars");
-      nestedCategories.add("unions");
-      // mutations and queries are also possible but depend on schema
-      nestedCategories.add("mutations");
-      nestedCategories.add("queries");
-      nestedCategories.add("subscriptions");
+      // Register the API GROUP FOLDER NAMES as nested categories
+      // These are the top-level containers: "operations" and "types"
+      nestedCategories.add(API_GROUPS.operations);
+      nestedCategories.add(API_GROUPS.types);
     }
 
     // Deprecated category - when grouped, it's at root level
