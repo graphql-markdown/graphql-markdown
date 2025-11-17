@@ -705,6 +705,20 @@ export class Renderer {
       // These are the top-level containers: "operations" and "types"
       nestedCategories.add(API_GROUPS.operations);
       nestedCategories.add(API_GROUPS.types);
+      
+      // Also register entity category names that appear within "types" folder
+      // These are the plural forms used by the printer for entity types
+      nestedCategories.add("directives");
+      nestedCategories.add("enums");
+      nestedCategories.add("inputs");
+      nestedCategories.add("interfaces");
+      nestedCategories.add("objects");
+      nestedCategories.add("scalars");
+      nestedCategories.add("unions");
+      // Operations-related categories (for operations API group)
+      nestedCategories.add("mutations");
+      nestedCategories.add("queries");
+      nestedCategories.add("subscriptions");
     }
 
     // Deprecated category - when grouped, it's at root level
