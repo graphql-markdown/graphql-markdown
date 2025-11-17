@@ -487,6 +487,11 @@ export class Renderer {
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
       const formattedTypeCat = this.formatCategoryFolderName(typeCat, false);
+      if (process.env.DEBUG_CATEGORY_PREFIX) {
+        console.error(
+          `[DEBUG] preRenderRootTypeDir - typeCat="${typeCat}" -> formattedTypeCat="${formattedTypeCat}"`,
+        );
+      }
       dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
@@ -705,7 +710,7 @@ export class Renderer {
       // These are the top-level containers: "operations" and "types"
       nestedCategories.add(API_GROUPS.operations);
       nestedCategories.add(API_GROUPS.types);
-      
+
       // Also register entity category names that appear within "types" folder
       // These are the plural forms used by the printer for entity types
       nestedCategories.add("directives");
