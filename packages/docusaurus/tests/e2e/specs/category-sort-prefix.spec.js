@@ -34,11 +34,16 @@ describe("categorySortPrefix E2E feature (Earthly only)", () => {
   test("generates documentation with categorySortPrefix without errors", async () => {
     // Note: This test verifies that the categorySortPrefix option
     // can be used in Docusaurus configuration without causing errors.
-    // Actual folder name verification requires inspecting generated
-    // markdown files which are created during the build process.
+    // The build process generates docs in the 'docs' folder.
 
-    const testDocsPath = path.resolve(rootDir, "docs-default");
-    const stat = await fs.stat(testDocsPath);
+    const docsPath = path.resolve(rootDir, "docs");
+    const stat = await fs.stat(docsPath);
     expect(stat.isDirectory()).toBe(true);
+
+    // Verify that categorySortPrefix generated numbered folders
+    const items = await fs.readdir(docsPath);
+    // Should have schema folders like "01-query", "02-mutation", etc.
+    const hasNumberedFolders = items.some((item) => /^\d{2}-/.test(item));
+    expect(hasNumberedFolders).toBe(true);
   }, 120000);
 });
