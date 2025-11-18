@@ -51,6 +51,9 @@ module.exports = {
           categorySort: "natural",
           categorySortPrefix: true,
         },
+        printTypeOptions: {
+          hierarchy: "api",
+        },
       },
     ],
   ],
