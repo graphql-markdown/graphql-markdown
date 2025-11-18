@@ -150,6 +150,29 @@ export const getApiGroupFolder = (
 };
 
 /**
+ * Strips numeric prefix from a folder name if categorySortPrefix is enabled.
+ * Converts folder names like "01-query" back to "query" for category identification.
+ *
+ * This is needed when extracting category names from file paths that were created
+ * with categorySortPrefix enabled. The regex matches leading two-digit numbers
+ * followed by a hyphen.
+ *
+ * @param folderName - The folder name to strip (e.g., "01-query", "02-mutations")
+ * @returns The folder name without prefix (e.g., "query", "mutations")
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * stripNumericPrefix("01-query");      // Returns "query"
+ * stripNumericPrefix("02-mutations");  // Returns "mutations"
+ * stripNumericPrefix("objects");       // Returns "objects" (no prefix to strip)
+ * ```
+ */
+const stripNumericPrefix = (folderName: string): string => {
+  return folderName.replace(/^\d{2}-/, "");
+};
+
+/**
  * Type guard function that checks if the provided options include a specific hierarchy configuration.
  *
  * @param options - The renderer options to check
@@ -644,10 +667,15 @@ export class Renderer {
       return undefined;
     }
 
+    // Strip numeric prefix from category if it was applied by categorySortPrefix
+    const extractedCategory = isFlat
+      ? page.groups.pageId
+      : stripNumericPrefix(page.groups.category);
+
     const slug = isFlat
       ? page.groups.pageId
-      : pathUrl.join(page.groups.category, page.groups.pageId);
-    const category = isFlat ? "schema" : startCase(page.groups.category);
+      : pathUrl.join(extractedCategory, page.groups.pageId);
+    const category = isFlat ? "schema" : startCase(extractedCategory);
 
     return {
       category,
