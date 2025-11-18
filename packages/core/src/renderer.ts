@@ -531,7 +531,7 @@ export class Renderer {
 
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
-      : (!this.options?.hierarchy as boolean);
+      : !isHierarchy(this.options, TypeHierarchy.ENTITY);
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
@@ -549,8 +549,11 @@ export class Renderer {
       });
     }
 
-    // Entity categories are root-level in entity hierarchy, nested in API hierarchy
-    const isRootTypeLevelCat = !useApiGroup;
+    // Entity categories are:
+    // - Root-level in entity hierarchy (only when no custom groups exist)
+    // - Nested in API hierarchy
+    // - Nested in entity hierarchy when custom groups exist
+    const isRootTypeLevelCat = useApiGroup ? false : !this.group;
     const formattedRootTypeName = this.formatCategoryFolderName(
       rootTypeName,
       isRootTypeLevelCat,
@@ -737,7 +740,7 @@ export class Renderer {
     // Determine if using API hierarchy
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
-      : (!this.options?.hierarchy as boolean);
+      : !isHierarchy(this.options, TypeHierarchy.ENTITY);
 
     // Custom groups SUPERSEDE the hierarchy structure - they are at ROOT level when present
     // Then within each custom group, the hierarchy is applied

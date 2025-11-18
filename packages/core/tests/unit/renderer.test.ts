@@ -50,13 +50,17 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 import type { Renderer } from "../../src/renderer";
 import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
-import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/config";
+import {
+  DEFAULT_OPTIONS,
+  DEFAULT_HIERARCHY,
+  TypeHierarchy,
+} from "../../src/config";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
   deprecated: DEFAULT_OPTIONS.printTypeOptions!
     .deprecated! as TypeDeprecatedOption,
-  hierarchy: DEFAULT_OPTIONS.printTypeOptions!.hierarchy!,
+  hierarchy: DEFAULT_HIERARCHY,
 };
 
 describe("renderer", () => {
