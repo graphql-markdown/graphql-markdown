@@ -861,7 +861,15 @@ export class Renderer {
     categoryName: string,
     isRootLevel: boolean = false,
   ): string {
-    if (!this.options?.categorySortPrefix) {
+    const hasPrefixOption = !!this.options?.categorySortPrefix;
+    
+    if (process.env.DEBUG_CATEGORY_PREFIX) {
+      console.error(
+        `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) - categorySortPrefix option value: ${JSON.stringify(this.options?.categorySortPrefix)} (type: ${typeof this.options?.categorySortPrefix})`,
+      );
+    }
+    
+    if (!hasPrefixOption) {
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
           `[DEBUG] formatCategoryFolderName("${categoryName}") -> categorySortPrefix is false, returning unformatted`,
