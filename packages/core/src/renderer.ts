@@ -553,9 +553,11 @@ export class Renderer {
       });
     }
 
+    // Entity categories are root-level in entity hierarchy, nested in API hierarchy
+    const isRootTypeLevelCat = !useApiGroup;
     const formattedRootTypeName = this.formatCategoryFolderName(
       rootTypeName,
-      true,
+      isRootTypeLevelCat,
     );
     dirPath = join(dirPath, formattedRootTypeName);
     await this.generateIndexMetafile(dirPath, rootTypeName);
