@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("node:path");
 const { promises: fs } = require("node:fs");
-const os = require("node:os");
+
+const cli = require("../../helpers/cli");
 
 const rootDir = global["__ROOT_DIR__"] || "/tmp";
 
@@ -12,54 +13,59 @@ describe("categorySortPrefix E2E feature (Earthly only)", () => {
     return;
   }
 
-  const testBaseDir = path.resolve(rootDir, "docs-test-e2e");
-  const testDocsDir = path.resolve(testBaseDir, "docs-category-sort-prefix");
-
-  beforeAll(async () => {
-    try {
-      await fs.mkdir(testDocsDir, { recursive: true });
-    } catch (error) {
-      console.error(`Failed to create test directory: ${error.message}`);
-    }
-  });
-
-  afterAll(async () => {
-    try {
-      await fs.rm(testBaseDir, { recursive: true, force: true });
-    } catch {
-      // Ignore cleanup errors
-    }
-  });
-
   test("generates documentation with categorySortPrefix without errors", async () => {
-    // Note: This test verifies that the categorySortPrefix option
-    // can be used in Docusaurus configuration without causing errors.
-    // The build process generates docs in the 'docs' folder.
+    // Generate documentation using the CLI
+    const generateOutput = await cli({
+      args: [
+        "--schema",
+        "data/tweet.graphql",
+        "--base",
+        ".",
+        "--link",
+        "/test",
+        "--force",
+      ],
+    });
 
+    console.log("Generate output code:", generateOutput.code);
+    console.log("Generate output stdout:", generateOutput.stdout);
+    if (generateOutput.stderr) {
+      console.log("Generate output stderr:", generateOutput.stderr);
+    }
+
+    // Check that generation succeeded
+    expect(generateOutput.code).toBe(0);
+    expect(generateOutput.stdout).toMatch(
+      /Documentation successfully generated/,
+    );
+
+    // Verify that categorySortPrefix generated numbered folders
     const docsPath = path.resolve(rootDir, "docs");
     const stat = await fs.stat(docsPath);
     expect(stat.isDirectory()).toBe(true);
 
-    // Verify that categorySortPrefix generated numbered folders
     const items = await fs.readdir(docsPath);
     console.log("Contents of docs directory:", items);
 
     // Check for numbered folders like "01-query", "02-mutation", etc.
-    // or check for the schema folder with numbered content inside
     const hasNumberedFolders = items.some((item) => /^\d{2}-/.test(item));
 
     if (!hasNumberedFolders) {
       // If not at root level, check inside any schema folders
       for (const item of items) {
         const itemPath = path.resolve(docsPath, item);
-        const itemStat = await fs.stat(itemPath);
-        if (itemStat.isDirectory()) {
-          const subItems = await fs.readdir(itemPath);
-          console.log(`Contents of docs/${item}:`, subItems);
-          if (subItems.some((sub) => /^\d{2}-/.test(sub))) {
-            expect(true).toBe(true);
-            return;
+        try {
+          const itemStat = await fs.stat(itemPath);
+          if (itemStat.isDirectory()) {
+            const subItems = await fs.readdir(itemPath);
+            console.log(`Contents of docs/${item}:`, subItems);
+            if (subItems.some((sub) => /^\d{2}-/.test(sub))) {
+              // Found numbered folders in subdirectory
+              return;
+            }
           }
+        } catch {
+          // Skip items that can't be stat'd
         }
       }
     }
