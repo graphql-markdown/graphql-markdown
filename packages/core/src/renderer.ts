@@ -749,14 +749,23 @@ export class Renderer {
       });
     }
 
-    // API group categories and entity categories go to NESTED level
+    // API group categories and entity categories go to appropriate levels
     if (useApiGroup) {
-      // With API hierarchy, "operations" and "types" are the nested level (under custom groups if any)
-      nestedCategories.add(API_GROUPS.operations);
-      nestedCategories.add(API_GROUPS.types);
+      // With API hierarchy:
+      // - If custom groups exist: operations/types are nested under custom groups
+      // - If no custom groups: operations/types are at ROOT level
+      if (this.group) {
+        // Custom groups exist: operations/types are nested
+        nestedCategories.add(API_GROUPS.operations);
+        nestedCategories.add(API_GROUPS.types);
+      } else {
+        // No custom groups: operations/types are at ROOT level
+        rootCategories.add(API_GROUPS.operations);
+        rootCategories.add(API_GROUPS.types);
+      }
 
       // Entity category names appear within "operations" and "types"
-      // These go to another nested level
+      // These always go to nested level
       nestedCategories.add("directives");
       nestedCategories.add("enums");
       nestedCategories.add("inputs");
