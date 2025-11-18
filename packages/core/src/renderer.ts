@@ -862,13 +862,13 @@ export class Renderer {
     isRootLevel: boolean = false,
   ): string {
     const hasPrefixOption = !!this.options?.categorySortPrefix;
-    
+
     if (process.env.DEBUG_CATEGORY_PREFIX) {
       console.error(
         `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) - categorySortPrefix option value: ${JSON.stringify(this.options?.categorySortPrefix)} (type: ${typeof this.options?.categorySortPrefix})`,
       );
     }
-    
+
     if (!hasPrefixOption) {
       if (process.env.DEBUG_CATEGORY_PREFIX) {
         console.error(
