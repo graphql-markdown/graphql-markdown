@@ -289,7 +289,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/operations/group/directives/test-directive",
+          "url": "docs/graphql/group/operations/directives/test-directive",
         }
       `);
     });

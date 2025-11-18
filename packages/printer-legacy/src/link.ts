@@ -283,8 +283,8 @@ export const toLink = (
   const url = pathUrl.join(
     options.basePath,
     formatFolder(deprecatedFolder),
-    formatFolder(apiGroupFolder),
     formatFolder(groupFolder),
+    formatFolder(apiGroupFolder),
     formatFolder(category),
     `${slugify(text)}`,
   );
