@@ -699,17 +699,17 @@ export class Renderer {
       return;
     }
 
-    // API group categories - These are NESTED, not root level
+    // API group categories - These are ROOT LEVEL containers
     // These are the top-level API group folders: "operations" and "types"
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
 
     if (useApiGroup) {
-      // Register the API GROUP FOLDER NAMES as nested categories
+      // Register the API GROUP FOLDER NAMES as ROOT level categories
       // These are the top-level containers: "operations" and "types"
-      nestedCategories.add(API_GROUPS.operations);
-      nestedCategories.add(API_GROUPS.types);
+      rootCategories.add(API_GROUPS.operations);
+      rootCategories.add(API_GROUPS.types);
 
       // Also register entity category names that appear within "types" folder
       // These are the plural forms used by the printer for entity types
