@@ -539,7 +539,12 @@ export class Renderer {
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
-      const formattedTypeCat = this.formatCategoryFolderName(typeCat, false);
+      // API groups are root-level if no custom groups exist, nested if custom groups exist
+      const isApiGroupRootLevel = !this.group;
+      const formattedTypeCat = this.formatCategoryFolderName(
+        typeCat,
+        isApiGroupRootLevel,
+      );
       dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
@@ -764,19 +769,11 @@ export class Renderer {
         rootCategories.add(API_GROUPS.types);
       }
 
-      // Entity category names appear within "operations" and "types"
-      // These always go to nested level
-      nestedCategories.add("directives");
-      nestedCategories.add("enums");
-      nestedCategories.add("inputs");
-      nestedCategories.add("interfaces");
-      nestedCategories.add("objects");
-      nestedCategories.add("scalars");
-      nestedCategories.add("unions");
-      // Operations-related categories
-      nestedCategories.add("mutations");
-      nestedCategories.add("queries");
-      nestedCategories.add("subscriptions");
+      // NOTE: Entity categories like "queries", "objects", "enums", etc. are NOT registered here
+      // because they are scoped within their parent API group (operations or types).
+      // Each parent group gets its own numbering, so "queries" under "operations" gets
+      // numbered separately from "objects" under "types".
+      // The link formatter will handle these dynamically based on context.
     } else {
       // Entity hierarchy: entity names are at ROOT level (or nested if custom groups exist)
       rootTypeNames.forEach((name) => {
