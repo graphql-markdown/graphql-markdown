@@ -112,7 +112,7 @@ When making your changes, remember to check your code by running:
 - `npm run ts:check` checks that the code is TS compliant
 - `npm run lint` checks that the code respects coding standards (ESLint + Prettier)
 - `npm test` runs the test suites
-- `earthly +smoke-test` runs smoke tests (includes packages build)
+- `earthly +smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
