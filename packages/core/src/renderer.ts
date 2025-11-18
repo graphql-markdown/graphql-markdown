@@ -503,25 +503,11 @@ export class Renderer {
       return dirPath;
     }
 
-    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
-      ? this.options.hierarchy[TypeHierarchy.API]
-      : (!this.options?.hierarchy as boolean);
-
-    if (useApiGroup) {
-      const typeCat = getApiGroupFolder(type, useApiGroup);
-      const formattedTypeCat = this.formatCategoryFolderName(typeCat, true);
-      dirPath = join(dirPath, formattedTypeCat);
-      await this.generateIndexMetafile(dirPath, typeCat, {
-        collapsible: false,
-        collapsed: false,
-        styleClass: CATEGORY_STYLE_CLASS.API,
-      });
-    }
-
+    // Deprecated gets highest priority - at ROOT level before even custom groups
     if (this.options?.deprecated === "group" && isDeprecated(type)) {
       const formattedDeprecated = this.formatCategoryFolderName(
         DEPRECATED,
-        false,
+        true,
       );
       dirPath = join(dirPath, formattedDeprecated);
       await this.generateIndexMetafile(dirPath, DEPRECATED, {
@@ -530,18 +516,36 @@ export class Renderer {
       });
     }
 
+    // Custom groups come after deprecated but before hierarchy levels
     if (
       this.group &&
       rootTypeName in this.group &&
       name in this.group[rootTypeName]!
     ) {
       const rootGroup = this.group[rootTypeName]![name] ?? "";
+      const isRootLevel =
+        !this.options?.deprecated || this.options.deprecated === "default";
       const formattedRootGroup = this.formatCategoryFolderName(
         rootGroup,
-        false,
+        isRootLevel,
       );
       dirPath = join(dirPath, formattedRootGroup);
       await this.generateIndexMetafile(dirPath, rootGroup);
+    }
+
+    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
+      ? this.options.hierarchy[TypeHierarchy.API]
+      : (!this.options?.hierarchy as boolean);
+
+    if (useApiGroup) {
+      const typeCat = getApiGroupFolder(type, useApiGroup);
+      const formattedTypeCat = this.formatCategoryFolderName(typeCat, false);
+      dirPath = join(dirPath, formattedTypeCat);
+      await this.generateIndexMetafile(dirPath, typeCat, {
+        collapsible: false,
+        collapsed: false,
+        styleClass: CATEGORY_STYLE_CLASS.API,
+      });
     }
 
     const formattedRootTypeName = this.formatCategoryFolderName(
@@ -722,20 +726,37 @@ export class Renderer {
       return;
     }
 
-    // API group categories - These are ROOT LEVEL containers
-    // These are the top-level API group folders: "operations" and "types"
+    // Determine if using API hierarchy
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
       : (!this.options?.hierarchy as boolean);
 
-    if (useApiGroup) {
-      // Register the API GROUP FOLDER NAMES as ROOT level categories
-      // These are the top-level containers: "operations" and "types"
-      rootCategories.add(API_GROUPS.operations);
-      rootCategories.add(API_GROUPS.types);
+    // Custom groups SUPERSEDE the hierarchy structure - they are at ROOT level when present
+    // Then within each custom group, the hierarchy is applied
+    if (this.group) {
+      const customGroups = new Set<string>();
+      for (const rootTypeName in this.group) {
+        for (const name in this.group[rootTypeName as SchemaEntity]) {
+          const groupName = this.group[rootTypeName as SchemaEntity]![name];
+          if (groupName) {
+            customGroups.add(groupName);
+          }
+        }
+      }
+      // Custom groups are at the ROOT level
+      customGroups.forEach((groupName) => {
+        rootCategories.add(groupName);
+      });
+    }
 
-      // Also register entity category names that appear within "types" folder
-      // These are the plural forms used by the printer for entity types
+    // API group categories and entity categories go to NESTED level
+    if (useApiGroup) {
+      // With API hierarchy, "operations" and "types" are the nested level (under custom groups if any)
+      nestedCategories.add(API_GROUPS.operations);
+      nestedCategories.add(API_GROUPS.types);
+
+      // Entity category names appear within "operations" and "types"
+      // These go to another nested level
       nestedCategories.add("directives");
       nestedCategories.add("enums");
       nestedCategories.add("inputs");
@@ -743,34 +764,27 @@ export class Renderer {
       nestedCategories.add("objects");
       nestedCategories.add("scalars");
       nestedCategories.add("unions");
-      // Operations-related categories (for operations API group)
+      // Operations-related categories
       nestedCategories.add("mutations");
       nestedCategories.add("queries");
       nestedCategories.add("subscriptions");
+    } else {
+      // Entity hierarchy: entity names are at ROOT level (or nested if custom groups exist)
+      rootTypeNames.forEach((name) => {
+        if (this.group) {
+          // If custom groups exist, entity names go nested under them
+          nestedCategories.add(name);
+        } else {
+          // If no custom groups, entity names are at root
+          rootCategories.add(name);
+        }
+      });
     }
 
-    // Deprecated category - when grouped, it's at root level
+    // Deprecated category - when grouped, it goes to root level
     if (this.options?.deprecated === "group") {
       rootCategories.add(DEPRECATED);
     }
-
-    // Custom group categories - collect separately
-    if (this.group) {
-      for (const rootTypeName in this.group) {
-        for (const name in this.group[rootTypeName as SchemaEntity]) {
-          const groupName = this.group[rootTypeName as SchemaEntity]![name];
-          if (groupName) {
-            // Custom groups are NESTED under root types
-            nestedCategories.add(groupName);
-          }
-        }
-      }
-    }
-
-    // Root type categories (Query, Mutation, Subscription, etc.)
-    rootTypeNames.forEach((name) => {
-      rootCategories.add(name);
-    });
 
     // Set up hierarchical numbering for categorySortPrefix
     if (this.options?.categorySortPrefix) {

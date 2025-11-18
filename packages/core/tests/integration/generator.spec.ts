@@ -351,32 +351,32 @@ describe("renderer", () => {
       const outputJson = vol.toJSON(config.outputDir, undefined, true);
       const allPaths = Object.keys(outputJson);
 
-      // Log all paths to debug
-      console.log("All paths in output:", JSON.stringify(allPaths, null, 2));
+      // With API hierarchy + grouping and categorySortPrefix:
+      // - Custom groups at root: "01-course", "02-grade", "03-misc"
+      // - API groups nested: "01-operations", "02-types", etc.
+      // - Entity categories nested further: "02-directives", "04-queries", etc.
 
-      // With API hierarchy and categorySortPrefix, we should see:
-      // - API group folders numbered: "07-operations", "11-types" or similar
-      const apiGroupFolders = allPaths.filter((p) =>
+      // Check for custom group folders at root
+      const customGroupFolders = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)\//.test(p),
+      );
+
+      // Check for API group folders (should be nested, not at root)
+      const apiGroupFoldersAtRoot = allPaths.filter((p) =>
         /^\d{2}-(operations|types)\//.test(p),
       );
-      console.log("API group folders found:", apiGroupFolders);
 
-      // Check for unnumbered API folders first
-      const unnumberedApiFolders = allPaths.filter((p) =>
-        /^(operations|types)\//.test(p),
+      // API groups should be NESTED under custom groups, not at root
+      expect(apiGroupFoldersAtRoot.length).toBe(0);
+
+      // Should have custom groups at root when using grouping
+      expect(customGroupFolders.length).toBeGreaterThan(0);
+
+      // Check for nested API groups under custom groups
+      const nestedApiGroups = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)\/\d{2}-(operations|types)\//.test(p),
       );
-      console.log("Unnumbered API folders found:", unnumberedApiFolders);
-
-      // For now, just verify that at least some prefixed folders exist
-      const allPrefixedFolders = allPaths.filter(
-        (p) => /^\d{2}-/.test(p) || /\/\d{2}-/.test(p),
-      );
-      console.log("All prefixed folders found:", allPrefixedFolders);
-      expect(allPrefixedFolders.length).toBeGreaterThan(0);
-
-      // API group folders should be prefixed when categorySortPrefix is enabled
-      expect(apiGroupFolders.length).toBeGreaterThan(0);
-      expect(unnumberedApiFolders.length).toBe(0);
+      expect(nestedApiGroups.length).toBeGreaterThan(0);
     });
   });
 });
