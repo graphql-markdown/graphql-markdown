@@ -125,8 +125,8 @@ smoke-docusaurus-run:
 
 build-docusaurus-examples:
   LET folderDocs="examples"
-  FROM +setup-docusaurus-project
-  WORKDIR /$docusaurusProject
+  FROM +setup-docosaurus-project
+  WORKDIR /$docosaurusProject
   RUN npm add prettier
   RUN mkdir $folderDocs
   LET folderExample="default"

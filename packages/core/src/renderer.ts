@@ -487,11 +487,6 @@ export class Renderer {
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
       const formattedTypeCat = this.formatCategoryFolderName(typeCat, true);
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] preRenderRootTypeDir - typeCat="${typeCat}" -> formattedTypeCat="${formattedTypeCat}"`,
-        );
-      }
       dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,

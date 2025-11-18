@@ -340,7 +340,7 @@ describe("renderer", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
-          hierarchy: TypeHierarchy.API,
+          hierarchy: { [TypeHierarchy.API]: {} },
         },
         skipDocDirective: [],
         tmpDir: "/temp-api-prefix",
@@ -355,22 +355,28 @@ describe("renderer", () => {
       console.log("All paths in output:", JSON.stringify(allPaths, null, 2));
 
       // With API hierarchy and categorySortPrefix, we should see:
-      // - API group folders numbered: "01-operations", "02-types"
+      // - API group folders numbered: "07-operations", "11-types" or similar
       const apiGroupFolders = allPaths.filter((p) =>
-        /\/(01|02)-(operations|types)/.test(p),
+        /^\d{2}-(operations|types)\//.test(p),
       );
       console.log("API group folders found:", apiGroupFolders);
 
       // Check for unnumbered API folders first
       const unnumberedApiFolders = allPaths.filter((p) =>
-        /\/(operations|types)(?:\/|$)/.test(p),
+        /^(operations|types)\//.test(p),
       );
       console.log("Unnumbered API folders found:", unnumberedApiFolders);
 
       // For now, just verify that at least some prefixed folders exist
-      const allPrefixedFolders = allPaths.filter((p) => /\/\d{2}-/.test(p));
+      const allPrefixedFolders = allPaths.filter(
+        (p) => /^\d{2}-/.test(p) || /\/\d{2}-/.test(p),
+      );
       console.log("All prefixed folders found:", allPrefixedFolders);
       expect(allPrefixedFolders.length).toBeGreaterThan(0);
+
+      // API group folders should be prefixed when categorySortPrefix is enabled
+      expect(apiGroupFolders.length).toBeGreaterThan(0);
+      expect(unnumberedApiFolders.length).toBe(0);
     });
   });
 });
