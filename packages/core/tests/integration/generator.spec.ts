@@ -458,5 +458,69 @@ describe("renderer", () => {
       );
       expect(unprefixedEntityFolders.length).toBe(0);
     });
+
+    test("backward compatibility: directories are NOT prefixed when categorySortPrefix is not set", async () => {
+      expect.assertions(3);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          // categorySortPrefix is NOT set (defaults to false/undefined)
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-backward-compat",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-backward-compat",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Verify that custom groups are NOT prefixed (backward compatible behavior)
+      // Should have folders like "course/", "grade/", "misc/" WITHOUT numeric prefixes
+      const unprefixedCustomGroups = allPaths.filter((p) =>
+        /^(course|grade|misc)(\/|$)/.test(p),
+      );
+      expect(unprefixedCustomGroups.length).toBeGreaterThan(0);
+
+      // Verify that entity type folders are NOT prefixed
+      // Should have folders like "course/objects/", "course/queries/" WITHOUT numeric prefixes
+      const unprefixedEntityFolders = allPaths.filter((p) =>
+        /^(course|grade|misc)\/[a-z]+\//.test(p),
+      );
+      expect(unprefixedEntityFolders.length).toBeGreaterThan(0);
+
+      // Ensure NO prefixed folders exist
+      const prefixedFolders = allPaths.filter((p) => /^\d{2}-/.test(p));
+      expect(prefixedFolders.length).toBe(0);
+    });
   });
 });
