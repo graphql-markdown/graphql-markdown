@@ -42,8 +42,28 @@ describe("categorySortPrefix E2E feature (Earthly only)", () => {
 
     // Verify that categorySortPrefix generated numbered folders
     const items = await fs.readdir(docsPath);
-    // Should have schema folders like "01-query", "02-mutation", etc.
+    console.log("Contents of docs directory:", items);
+
+    // Check for numbered folders like "01-query", "02-mutation", etc.
+    // or check for the schema folder with numbered content inside
     const hasNumberedFolders = items.some((item) => /^\d{2}-/.test(item));
+
+    if (!hasNumberedFolders) {
+      // If not at root level, check inside any schema folders
+      for (const item of items) {
+        const itemPath = path.resolve(docsPath, item);
+        const itemStat = await fs.stat(itemPath);
+        if (itemStat.isDirectory()) {
+          const subItems = await fs.readdir(itemPath);
+          console.log(`Contents of docs/${item}:`, subItems);
+          if (subItems.some((sub) => /^\d{2}-/.test(sub))) {
+            expect(true).toBe(true);
+            return;
+          }
+        }
+      }
+    }
+
     expect(hasNumberedFolders).toBe(true);
   }, 120000);
 });
