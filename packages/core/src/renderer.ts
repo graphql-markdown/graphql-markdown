@@ -523,12 +523,8 @@ export class Renderer {
       name in this.group[rootTypeName]!
     ) {
       const rootGroup = this.group[rootTypeName]![name] ?? "";
-      const isRootLevel =
-        !this.options?.deprecated || this.options.deprecated === "default";
-      const formattedRootGroup = this.formatCategoryFolderName(
-        rootGroup,
-        isRootLevel,
-      );
+      // Custom groups are always at ROOT level (they come after deprecated in hierarchy priority)
+      const formattedRootGroup = this.formatCategoryFolderName(rootGroup, true);
       dirPath = join(dirPath, formattedRootGroup);
       await this.generateIndexMetafile(dirPath, rootGroup);
     }

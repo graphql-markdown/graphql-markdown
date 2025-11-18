@@ -378,5 +378,85 @@ describe("renderer", () => {
       );
       expect(nestedApiGroups.length).toBeGreaterThan(0);
     });
+
+    test("categorySortPrefix creates correctly prefixed directory structure with grouping and entity hierarchy", async () => {
+      expect.assertions(5);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-strict-test",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-strict-test",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Custom groups (course, grade, misc) should be at ROOT level with prefixes
+      // Pattern: 01-course/, 02-grade/, 03-misc/ (note: no leading /)
+      const customGroupsWithPrefix = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)(\/|$)/.test(p),
+      );
+      expect(customGroupsWithPrefix.length).toBeGreaterThan(0);
+
+      // Entity type folders (objects, scalars, enums, etc.) should be WITHIN custom groups
+      // and should have prefixes when they exist
+      // Pattern: 01-course/01-objects/, 01-course/02-scalars/, etc.
+      const entityFoldersWithinCustomGroups = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+\//.test(p),
+      );
+      expect(entityFoldersWithinCustomGroups.length).toBeGreaterThan(0);
+
+      // Verify that deprecated folder exists and is prefixed at root
+      const deprecatedFolders = allPaths.filter((p) =>
+        /^\d{2}-deprecated(\/|$)/.test(p),
+      );
+      expect(deprecatedFolders.length).toBeGreaterThan(0);
+
+      // Ensure NO unprefixed custom group folders exist at root
+      // (they should all be prefixed)
+      const unprefixedCustomGroups = allPaths.filter((p) =>
+        /^(course|grade|misc)(\/|$)/.test(p),
+      );
+      expect(unprefixedCustomGroups.length).toBe(0);
+
+      // Ensure NO unprefixed entity type folders exist within custom groups
+      const unprefixedEntityFolders = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)\/[a-z]+\//.test(p),
+      );
+      expect(unprefixedEntityFolders.length).toBe(0);
+    });
   });
 });
