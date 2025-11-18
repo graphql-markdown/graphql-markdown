@@ -641,10 +641,15 @@ export class Renderer {
         ...this.options,
         formatCategoryFolderName: (categoryName: string): string => {
           // Determine if this category should use root or nested formatting
-          // Check if category was pre-registered as a root-level category
-          const isRootLevelCat =
-            this.rootLevelPositionManager.isRegistered(categoryName);
-          return this.formatCategoryFolderName(categoryName, isRootLevelCat);
+          // First check if category was pre-registered as a root-level category
+          if (this.rootLevelPositionManager.isRegistered(categoryName)) {
+            return this.formatCategoryFolderName(categoryName, true);
+          }
+          // If not root-level, check if it's a nested category
+          // Nested categories are handled dynamically without pre-registration
+          // in some hierarchies (like API hierarchy where entity categories are
+          // scoped within their parent API group)
+          return this.formatCategoryFolderName(categoryName, false);
         },
       };
       content = this.printer.printType(fileName, type, printOptions);
@@ -771,11 +776,27 @@ export class Renderer {
         rootCategories.add(API_GROUPS.types);
       }
 
-      // NOTE: Entity categories like "queries", "objects", "enums", etc. are NOT registered here
-      // because they are scoped within their parent API group (operations or types).
-      // Each parent group gets its own numbering, so "queries" under "operations" gets
-      // numbered separately from "objects" under "types".
-      // The link formatter will handle these dynamically based on context.
+      // Entity categories like "queries", "objects", "enums", etc. are registered as nested
+      // so the formatter can assign them position numbers when generating links.
+      // Even though conceptually they're scoped within their parent API group,
+      // we register them globally for numbering purposes.
+      // These are the plural forms from ROOT_TYPE_LOCALE
+      const entityCategoryNames = [
+        "directives",
+        "enums",
+        "inputs",
+        "interfaces",
+        "mutations",
+        "objects",
+        "operations",
+        "queries",
+        "scalars",
+        "subscriptions",
+        "unions",
+      ];
+      entityCategoryNames.forEach((categoryName) => {
+        nestedCategories.add(categoryName);
+      });
     } else {
       // Entity hierarchy: entity names are at ROOT level (or nested if custom groups exist)
       rootTypeNames.forEach((name) => {
