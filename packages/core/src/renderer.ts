@@ -788,7 +788,6 @@ export class Renderer {
         "interfaces",
         "mutations",
         "objects",
-        "operations",
         "queries",
         "scalars",
         "subscriptions",
