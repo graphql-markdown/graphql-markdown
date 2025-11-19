@@ -806,6 +806,32 @@ export class Renderer {
           rootCategories.add(name);
         }
       });
+
+      // Type entity categories like "directives", "enums", "inputs", etc. should ALSO be registered
+      // when they appear under root types. These are needed for link generation to work correctly.
+      // When printer generates links to types under different root types, it needs these categories
+      // to have consistent position numbers.
+      const entityCategoryNames = [
+        "directives",
+        "enums",
+        "inputs",
+        "interfaces",
+        "mutations",
+        "objects",
+        "queries",
+        "scalars",
+        "subscriptions",
+        "unions",
+      ];
+      entityCategoryNames.forEach((categoryName) => {
+        if (this.group) {
+          // With custom groups, type categories are nested
+          nestedCategories.add(categoryName);
+        } else {
+          // Without custom groups, they would be at root but we don't add them here
+          // since they're already covered by rootTypeNames iteration above
+        }
+      });
     }
 
     // Deprecated category - when grouped, it goes to root level
