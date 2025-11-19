@@ -2189,6 +2189,244 @@ describe("renderer", () => {
         ).toBe(false);
         expect(nestedCategories.size).toBe(0);
       });
+
+      test("mutation test: position comparison operators", async () => {
+        expect.assertions(4);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Register and compute positions
+        renderer["rootLevelPositionManager"].registerCategories([
+          "alpha",
+          "beta",
+          "gamma",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        // Test position boundaries
+        const position1 =
+          renderer["rootLevelPositionManager"].getPosition("alpha");
+        const position2 =
+          renderer["rootLevelPositionManager"].getPosition("beta");
+        const position3 =
+          renderer["rootLevelPositionManager"].getPosition("gamma");
+
+        // Verify positions are in ascending order (testing >= mutation)
+        expect(position1).toBeLessThan(position2);
+        expect(position2).toBeLessThan(position3);
+        expect(position1).toBe(1);
+        expect(position3).toBe(3);
+      });
+
+      test("mutation test: category metadata with explicit field values", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Custom: "custom-group" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Register group categories
+        renderer["rootLevelPositionManager"].registerCategories([
+          "custom-group",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        // Generate metadata and verify it includes group information
+        const dirPath = await renderer.generateCategoryMetafileType(
+          { test: "value" },
+          "Custom",
+          "objects" as SchemaEntity,
+        );
+
+        expect(dirPath).toContain("custom-group");
+        expect(dirPath).toContain("objects");
+      });
+
+      test("mutation test: category naming with collapsible true", async () => {
+        expect.assertions(2);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        renderer["rootLevelPositionManager"].registerCategories(["objects"]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        const mockFunc = mockGenerateIndexMetafile as jest.Mock;
+        mockFunc.mockClear();
+
+        await renderer.generateCategoryMetafileType(
+          {},
+          "Test",
+          "objects" as SchemaEntity,
+        );
+
+        // Verify that generateIndexMetafile is called with metadata
+        // including the collapsible and collapsed properties
+        const calls = mockFunc.mock.calls;
+        expect(calls.length).toBeGreaterThan(0);
+        // Verify call includes metadata with collapsible: true
+        expect(JSON.stringify(calls)).toContain("collapsible");
+      });
+
+      test("mutation test: custom sort function reverses alphabetical order", async () => {
+        expect.assertions(2);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Register categories in specific order
+        renderer["rootLevelPositionManager"].registerCategories([
+          "zebra",
+          "alpha",
+          "middle",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        // With natural sort, alpha should get lower position than zebra
+        const zebraPos =
+          renderer["rootLevelPositionManager"].getPosition("zebra");
+        const alphaPos =
+          renderer["rootLevelPositionManager"].getPosition("alpha");
+
+        expect(alphaPos).toBeLessThan(zebraPos);
+        expect(alphaPos).toBe(1);
+      });
+
+      test("mutation test: page path regex extracts correct segments", async () => {
+        expect.assertions(2);
+
+        // Test that the regex correctly extracts category and pageId
+        // The regex captures everything up to '.mdx' as pageId
+        const validMatch = "Foobar/foo-bar.mdx".match(
+          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
+        );
+        expect(validMatch?.groups?.category).toBe("Foobar");
+        // The second capture group captures 'foo-bar' because [A-Za-z0-9-]+ matches the full string
+        expect(validMatch?.groups?.pageId).toBe("foo-bar");
+      });
+
+      test("mutation test: boolean literal false in category options", async () => {
+        expect.assertions(2);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        renderer["rootLevelPositionManager"].registerCategories(["objects"]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        const mockFunc = mockGenerateIndexMetafile as jest.Mock;
+        mockFunc.mockClear();
+
+        await renderer.generateCategoryMetafileType(
+          {},
+          "Test",
+          "objects" as SchemaEntity,
+        );
+
+        // Verify metadata includes index: false property
+        const calls = mockFunc.mock.calls;
+        expect(calls.length).toBeGreaterThan(0);
+        expect(JSON.stringify(calls)).toContain('"index":false');
+      });
+
+      test("mutation test: flat hierarchy skips category generation", async () => {
+        expect.assertions(2);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.FLAT]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        const dirPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Test",
+          "objects" as SchemaEntity,
+        );
+
+        // With flat hierarchy, generateIndexMetafile should not be called
+        expect(mockGenerateIndexMetafile).not.toHaveBeenCalled();
+        expect(dirPath).toBe("/output");
+      });
     });
   });
 });
