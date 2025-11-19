@@ -1075,4 +1075,54 @@ describe("config", () => {
       );
     });
   });
+
+  describe("mutation test: edge cases and boundary conditions", () => {
+    test("getTypeHierarchyOption handles case-insensitive hierarchy values", () => {
+      expect.assertions(3);
+
+      // Test case variations
+      const lowercase = getTypeHierarchyOption(
+        "entity" as TypeHierarchyValueType,
+      );
+      const uppercase = getTypeHierarchyOption(
+        "ENTITY" as TypeHierarchyValueType,
+      );
+      const mixedcase = getTypeHierarchyOption(
+        "EnTiTy" as TypeHierarchyValueType,
+      );
+
+      expect(lowercase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+      expect(uppercase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+      expect(mixedcase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    });
+
+    test("getCustomDirectives validates all directive format conditions", () => {
+      expect.assertions(1);
+
+      // Test case where neither tag nor descriptor is present
+      const options = {
+        test: {
+          someOtherProp: "value",
+        } as Maybe<CustomDirective>,
+      };
+
+      expect(() => {
+        getCustomDirectives(options as Maybe<CustomDirective>);
+      }).toThrow();
+    });
+
+    test("getCustomDirectives filters skipped directives correctly", () => {
+      expect.assertions(1);
+
+      const options = {
+        test1: { descriptor: (): void => {} },
+        test2: { descriptor: (): void => {} },
+        test3: { descriptor: (): void => {} },
+      };
+
+      const result = getCustomDirectives(options, ["test2" as DirectiveName]);
+
+      expect(result).not.toHaveProperty("test2");
+    });
+  });
 });
