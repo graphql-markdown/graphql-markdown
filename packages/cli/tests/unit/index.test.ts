@@ -271,26 +271,6 @@ describe("CLI Module", () => {
   },
   Option {
     "defaultValue": undefined,
-    "description": "Sort categories: 'natural' for alphabetical",
-    "flags": "--categorySort <sort>",
-    "long": "--categorySort",
-    "mandatory": false,
-    "negate": false,
-    "optional": false,
-    "required": true,
-  },
-  Option {
-    "defaultValue": undefined,
-    "description": "Prefix folder names with order numbers when using categorySort",
-    "flags": "--categorySortPrefix",
-    "long": "--categorySortPrefix",
-    "mandatory": false,
-    "negate": false,
-    "optional": false,
-    "required": false,
-  },
-  Option {
-    "defaultValue": undefined,
     "description": "Prettify generated files",
     "flags": "--pretty",
     "long": "--pretty",
@@ -556,26 +536,6 @@ describe("CLI Module", () => {
   },
   Option {
     "defaultValue": undefined,
-    "description": "Sort categories: 'natural' for alphabetical",
-    "flags": "--categorySort <sort>",
-    "long": "--categorySort",
-    "mandatory": false,
-    "negate": false,
-    "optional": false,
-    "required": true,
-  },
-  Option {
-    "defaultValue": undefined,
-    "description": "Prefix folder names with order numbers when using categorySort",
-    "flags": "--categorySortPrefix",
-    "long": "--categorySortPrefix",
-    "mandatory": false,
-    "negate": false,
-    "optional": false,
-    "required": false,
-  },
-  Option {
-    "defaultValue": undefined,
     "description": "Prettify generated files",
     "flags": "--pretty",
     "long": "--pretty",
@@ -652,33 +612,6 @@ describe("CLI Module", () => {
       expect(
         require("@graphql-markdown/core").generateDocFromSchema,
       ).not.toHaveBeenCalled();
-    });
-
-    test("passes docOptions with categorySort and categorySortPrefix", async () => {
-      expect.assertions(1);
-
-      const options = {
-        schema: "./schema.graphql",
-        rootPath: "./docs",
-        docOptions: {
-          categorySort: "natural" as const,
-          categorySortPrefix: true,
-        },
-      };
-      const cliOptions = {};
-
-      await runGraphQLMarkdown(options, cliOptions);
-
-      expect(
-        require("@graphql-markdown/core").generateDocFromSchema,
-      ).toHaveBeenCalledWith(
-        expect.objectContaining({
-          docOptions: {
-            categorySort: "natural",
-            categorySortPrefix: true,
-          },
-        }),
-      );
     });
   });
 });

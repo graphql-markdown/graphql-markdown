@@ -132,14 +132,6 @@ export const getGraphQLMarkdownCli = (
       "--deprecated <option>",
       "Option for printing deprecated entities: `default`, `group` or `skip`",
     )
-    .option(
-      "--categorySort <sort>",
-      "Sort categories: 'natural' for alphabetical",
-    )
-    .option(
-      "--categorySortPrefix",
-      "Prefix folder names with order numbers when using categorySort",
-    )
     .option("--pretty", "Prettify generated files")
     .option("--config", "Print configuration (for debugging)");
 

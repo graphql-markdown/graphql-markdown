@@ -498,17 +498,11 @@ export const getDocOptions = (
         ? configOptions.index
         : DEFAULT_OPTIONS.docOptions!.index;
 
-  // Extract nested ternary into independent statement
-  const categorySortPrefix =
-    typeof cliOpts?.categorySortPrefix === "boolean"
-      ? cliOpts.categorySortPrefix
-      : typeof configOptions?.categorySortPrefix === "boolean"
-        ? configOptions.categorySortPrefix
-        : DEFAULT_OPTIONS.docOptions!.categorySortPrefix;
-
   return {
-    categorySortPrefix,
-    categorySort: cliOpts?.categorySort ?? configOptions?.categorySort,
+    categorySortPrefix:
+      configOptions?.categorySortPrefix ??
+      DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
+    categorySort: configOptions?.categorySort,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
