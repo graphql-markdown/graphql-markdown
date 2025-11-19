@@ -1163,6 +1163,66 @@ describe("mutation test: ensure all hierarchy types are tested", () => {
       expect(result).toStrictEqual({ [hierarchyType]: {} });
     },
   );
+
+  test("getTypeHierarchyOption with case-insensitive entity hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerEntity = getTypeHierarchyOption(
+      "entity" as TypeHierarchyValueType,
+    );
+    const upperEntity = getTypeHierarchyOption(
+      "ENTITY" as TypeHierarchyValueType,
+    );
+    const mixedEntity = getTypeHierarchyOption(
+      "EnTiTy" as TypeHierarchyValueType,
+    );
+
+    expect(lowerEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    expect(upperEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    expect(mixedEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+  });
+
+  test("getTypeHierarchyOption with case-insensitive flat hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerFlat = getTypeHierarchyOption("flat" as TypeHierarchyValueType);
+    const upperFlat = getTypeHierarchyOption("FLAT" as TypeHierarchyValueType);
+    const mixedFlat = getTypeHierarchyOption("FlaT" as TypeHierarchyValueType);
+
+    expect(lowerFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(upperFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(mixedFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+  });
+
+  test("getTypeHierarchyOption with case-insensitive api hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerApi = getTypeHierarchyOption("api" as TypeHierarchyValueType);
+    const upperApi = getTypeHierarchyOption("API" as TypeHierarchyValueType);
+    const mixedApi = getTypeHierarchyOption("Api" as TypeHierarchyValueType);
+
+    expect(lowerApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(upperApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(mixedApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+  });
+
+  test("getTypeHierarchyOption with numeric config returns it as-is", () => {
+    expect.assertions(1);
+
+    const config = 123 as any;
+    const result = getTypeHierarchyOption(undefined, config);
+
+    expect(result).toStrictEqual(123);
+  });
+
+  test("getTypeHierarchyOption with object config returns it as-is", () => {
+    expect.assertions(1);
+
+    const config = { [TypeHierarchy.API]: { operations: "Operations" } };
+    const result = getTypeHierarchyOption(undefined, config);
+
+    expect(result).toStrictEqual(config);
+  });
 });
 
 describe("mutation test: getCustomDirectives edge cases", () => {
