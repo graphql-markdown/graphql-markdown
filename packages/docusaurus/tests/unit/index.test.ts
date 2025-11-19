@@ -91,13 +91,12 @@ describe("pluginGraphQLDocGenerator", () => {
       );
     });
 
-    test("passes categorySort and categorySortPrefix through docOptions", async () => {
+    test("passes categorySort through docOptions", async () => {
       const optionsWithCategorySort = {
         runOnBuild: false,
         docOptions: {
           frontMatter: { draft: true },
           categorySort: "natural" as const,
-          categorySortPrefix: true,
         },
       };
       const plugin = await pluginGraphQLDocGenerator(
@@ -109,7 +108,6 @@ describe("pluginGraphQLDocGenerator", () => {
         expect.objectContaining({
           docOptions: {
             categorySort: "natural",
-            categorySortPrefix: true,
             frontMatter: { draft: true },
             generatorFrameworkName: "docusaurus",
             generatorFrameworkVersion: expect.any(String),

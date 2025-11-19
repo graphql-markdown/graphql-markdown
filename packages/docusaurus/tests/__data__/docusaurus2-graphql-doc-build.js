@@ -49,7 +49,6 @@ module.exports = {
         runOnBuild: true,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         printTypeOptions: {
           hierarchy: "api",

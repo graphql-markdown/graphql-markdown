@@ -255,7 +255,7 @@ describe("renderer", () => {
       expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
     });
 
-    test("categorySortPrefix works correctly with grouping", async () => {
+    test("categorySort automatically prefixes folders when enabled (with grouping)", async () => {
       expect.assertions(1);
 
       const config: GeneratorOptions = {
@@ -267,7 +267,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -304,11 +303,11 @@ describe("renderer", () => {
       const allPaths = Object.keys(outputJson);
       const prefixedFolders = allPaths.filter((p) => /\/\d{2}-[a-z]/.test(p));
 
-      // Should have at least some folders with numeric prefixes when categorySortPrefix is enabled
+      // Should have at least some folders with numeric prefixes when categorySort is enabled
       expect(prefixedFolders.length).toBeGreaterThan(0);
     });
 
-    test("categorySortPrefix works correctly with API hierarchy", async () => {
+    test("categorySort automatically prefixes folders when enabled (with API hierarchy)", async () => {
       const config: GeneratorOptions = {
         baseURL: "graphql",
         schemaLocation: join(
@@ -318,7 +317,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -351,7 +349,7 @@ describe("renderer", () => {
       const outputJson = vol.toJSON(config.outputDir, undefined, true);
       const allPaths = Object.keys(outputJson);
 
-      // With API hierarchy + grouping and categorySortPrefix:
+      // With API hierarchy + grouping and categorySort:
       // - Custom groups at root: "01-course", "02-grade", "03-misc"
       // - API groups nested: "01-operations", "02-types", etc.
       // - Entity categories nested further: "02-directives", "04-queries", etc.
@@ -379,7 +377,7 @@ describe("renderer", () => {
       expect(nestedApiGroups.length).toBeGreaterThan(0);
     });
 
-    test("categorySortPrefix creates correctly prefixed directory structure with grouping and entity hierarchy", async () => {
+    test("categorySort creates correctly prefixed directory structure with grouping and entity hierarchy", async () => {
       expect.assertions(5);
 
       const config: GeneratorOptions = {
@@ -391,7 +389,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -459,7 +456,7 @@ describe("renderer", () => {
       expect(unprefixedEntityFolders.length).toBe(0);
     });
 
-    test("backward compatibility: directories are NOT prefixed when categorySortPrefix is not set", async () => {
+    test("backward compatibility: directories are NOT prefixed when categorySort is not set", async () => {
       expect.assertions(3);
 
       const config: GeneratorOptions = {
@@ -470,8 +467,7 @@ describe("renderer", () => {
         ),
         diffMethod: DiffMethod.NONE,
         docOptions: {
-          categorySort: "natural",
-          // categorySortPrefix is NOT set (defaults to false/undefined)
+          // categorySort is NOT set - no prefixes should be added
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,

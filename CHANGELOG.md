@@ -7,15 +7,19 @@
 * feat: Add categorySort option for custom directory ordering
 
 Users can now control how categories are ordered in the sidebar by providing either:
-- `"natural"` - for alphabetical sorting (default behavior)
+- `"natural"` - for alphabetical sorting
 - A custom compare function similar to `Array.sort()` - for custom ordering logic
+
+**Important**: When `categorySort` is defined, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). This ensures consistent ordering when viewing files in a file explorer or IDE. When `categorySort` is not set, no prefixes are added (default behavior).
 
 Example usage:
 ```js
 docOptions: {
-  categorySort: "natural" // or (a, b) => b.localeCompare(a) for reverse order
+  categorySort: "natural" // Sorts alphabetically and adds prefixes: 01-objects, 02-queries, etc.
 }
 ```
+
+**Breaking Change**: The `categorySortPrefix` option has been removed. Prefixing is now automatic when `categorySort` is enabled.
 
 <a id="1.30.3"></a>
 # [1.30.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.3) - 2025-08-27

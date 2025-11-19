@@ -150,11 +150,11 @@ export const getApiGroupFolder = (
 };
 
 /**
- * Strips numeric prefix from a folder name if categorySortPrefix is enabled.
+ * Strips numeric prefix from a folder name if categorySort is enabled.
  * Converts folder names like "01-query" back to "query" for category identification.
  *
  * This is needed when extracting category names from file paths that were created
- * with categorySortPrefix enabled. The regex matches leading two-digit numbers
+ * with categorySort enabled. The regex matches leading two-digit numbers
  * followed by a hyphen.
  *
  * @param folderName - The folder name to strip (e.g., "01-query", "02-mutations")
@@ -329,7 +329,7 @@ class CategoryPositionManager {
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
  *
- * HIERARCHY LEVELS FOR categorySortPrefix:
+ * HIERARCHY LEVELS WHEN categorySort IS ENABLED:
  * - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
  * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
  *
@@ -662,7 +662,7 @@ export class Renderer {
       return undefined;
     }
 
-    // Strip numeric prefix from category if it was applied by categorySortPrefix
+    // Strip numeric prefix from category if it was applied when categorySort is enabled
     const extractedCategory = isFlat
       ? page.groups.pageId
       : stripNumericPrefix(page.groups.category);
@@ -872,7 +872,7 @@ export class Renderer {
 
   /**
    * Registers collected categories with appropriate position managers.
-   * Handles both hierarchical numbering (categorySortPrefix) and traditional modes.
+   * Handles both hierarchical numbering (when categorySort is enabled) and traditional modes.
    *
    * @param rootCategories - Set of root-level categories
    * @param nestedCategories - Set of nested-level categories
@@ -881,8 +881,10 @@ export class Renderer {
     rootCategories: Set<string>,
     nestedCategories: Set<string>,
   ): void {
-    if (this.options?.categorySortPrefix) {
-      // Register with hierarchical numbering
+    const hasCategorySort = this.options?.categorySort !== undefined;
+    
+    if (hasCategorySort) {
+      // Register with hierarchical numbering when categorySort is enabled
       this.rootLevelPositionManager.registerCategories(
         Array.from(rootCategories),
       );
@@ -893,7 +895,7 @@ export class Renderer {
       );
       this.categoryPositionManager.computePositions();
     } else {
-      // Traditional separate handling
+      // Traditional separate handling when categorySort is not defined
       this.rootLevelPositionManager.registerCategories(
         Array.from(rootCategories),
       );
@@ -924,9 +926,9 @@ export class Renderer {
     categoryName: string,
     isRootLevel: boolean = false,
   ): string {
-    const hasPrefixOption = !!this.options?.categorySortPrefix;
+    const hasCategorySort = this.options?.categorySort !== undefined;
 
-    if (!hasPrefixOption) {
+    if (!hasCategorySort) {
       return slugify(categoryName);
     }
 
