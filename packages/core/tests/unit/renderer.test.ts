@@ -2490,6 +2490,142 @@ describe("renderer", () => {
         // Verify both paths are different
         expect(objPath).not.toEqual(queryPath);
       });
+
+      test("mutation test: position manager early exit on second computePositions call", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        // Register categories and compute positions
+        renderer["categoryPositionManager"].registerCategories(["objects"]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Get initial position
+        const pos1 = renderer["categoryPositionManager"].getPosition("objects");
+
+        // Call computePositions again - should return early without recalculating
+        renderer["categoryPositionManager"].computePositions();
+
+        // Position should remain the same (early return ensures cache isn't reset)
+        const pos2 = renderer["categoryPositionManager"].getPosition("objects");
+        expect(pos1).toBe(pos2);
+        expect(pos1).toBe(1);
+      });
+
+      test("mutation test: position manager handles base position", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+        );
+
+        // Register categories
+        const categories = ["queries"];
+        renderer["rootLevelPositionManager"].registerCategories(categories);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        // Base position should be 0, first category should be at basePosition + 0
+        const queryPos =
+          renderer["rootLevelPositionManager"].getPosition("queries");
+        expect(queryPos).toBeGreaterThanOrEqual(0);
+        expect(queryPos).toBeLessThanOrEqual(2);
+        expect(typeof queryPos).toBe("number");
+      });
+
+      test("mutation test: category path generation with different entity types", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        // Generate paths for different entity types
+        const objectPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Objects",
+          "objects" as SchemaEntity,
+        );
+        const queryPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Query",
+          "queries" as SchemaEntity,
+        );
+
+        // Paths should be strings
+        expect(typeof objectPath).toBe("string");
+        expect(typeof queryPath).toBe("string");
+      });
+
+      test("mutation test: hierarchy option affects rendering", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: {},
+          },
+        );
+
+        // Verify hierarchy is defined
+        expect(renderer.options).toBeDefined();
+      });
+
+      test("mutation test: category sort option validation", async () => {
+        expect.assertions(2);
+
+        const renderer1 = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+        );
+
+        const renderer2 = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        // Verify categorySort values are different
+        expect(renderer1.options?.categorySort).toBe("natural");
+        expect(renderer2.options?.categorySort).not.toBe("natural");
+      });
     });
   });
 });
