@@ -1126,3 +1126,26 @@ describe("config", () => {
     });
   });
 });
+
+// Additional mutation tests for coverage
+describe("mutation test: additional config edge cases", () => {
+  test("getTypeHierarchyOption with flat hierarchy string", () => {
+    expect.assertions(2);
+
+    const flat = getTypeHierarchyOption("flat" as TypeHierarchyValueType);
+    const flatUpper = getTypeHierarchyOption("FLAT" as TypeHierarchyValueType);
+
+    expect(flat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(flatUpper).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+  });
+
+  test("getTypeHierarchyOption with api hierarchy string", () => {
+    expect.assertions(2);
+
+    const api = getTypeHierarchyOption("api" as TypeHierarchyValueType);
+    const apiUpper = getTypeHierarchyOption("API" as TypeHierarchyValueType);
+
+    expect(api).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(apiUpper).toStrictEqual({ [TypeHierarchy.API]: {} });
+  });
+});
