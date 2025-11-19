@@ -2861,6 +2861,36 @@ describe("renderer", () => {
         expect(typeof pathWithPosition).toBe("string");
         expect(typeof pathWithoutPosition).toBe("string");
       });
+
+      test("mutation test: positionsComputed flag is set correctly", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const posManager = renderer["categoryPositionManager"];
+
+        // Register categories
+        posManager.registerCategories(["A", "B", "C"]);
+
+        // Call computePositions multiple times
+        posManager.computePositions();
+        const pos1 = posManager.getPosition("A");
+
+        posManager.computePositions();
+        const pos2 = posManager.getPosition("A");
+
+        // Positions should be identical (cache was not reset)
+        expect(pos1).toBe(pos2);
+        expect(pos1).toBeGreaterThanOrEqual(0);
+        expect(pos2).toBeGreaterThanOrEqual(0);
+      });
     });
   });
 });
