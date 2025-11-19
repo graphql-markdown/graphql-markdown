@@ -1164,3 +1164,135 @@ describe("mutation test: ensure all hierarchy types are tested", () => {
     },
   );
 });
+
+describe("mutation test: getCustomDirectives edge cases", () => {
+  test("returns undefined when all directives are filtered by skipDocDirective", () => {
+    expect.assertions(1);
+
+    const options = {
+      testA: { descriptor: (): void => {} },
+      testB: { descriptor: (): void => {} },
+    };
+
+    const result = getCustomDirectives(options, [
+      "testA" as DirectiveName,
+      "testB" as DirectiveName,
+    ]);
+
+    expect(result).toBeUndefined();
+  });
+
+  test("returns remaining directives when some are filtered", () => {
+    expect.assertions(2);
+
+    const descriptor = (): void => {};
+    const options = {
+      testA: { descriptor },
+      testB: { descriptor },
+      testC: { descriptor },
+    };
+
+    const result = getCustomDirectives(options, [
+      "testA" as DirectiveName,
+      "testB" as DirectiveName,
+    ]);
+
+    expect(result).toHaveProperty("testC");
+    expect(result).not.toHaveProperty("testA");
+  });
+
+  test("throws when descriptor exists but is not a function", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        descriptor: "not a function",
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("throws when tag exists but is not a function", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        tag: "not a function",
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("throws when neither tag nor descriptor exists", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        invalid: true,
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("returns custom directive with valid tag function", () => {
+    expect.assertions(1);
+
+    const tag = (): string => "test";
+    const options = {
+      test: { tag },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { tag } });
+  });
+
+  test("returns custom directive with valid descriptor function", () => {
+    expect.assertions(1);
+
+    const descriptor = (): string => "test";
+    const options = {
+      test: { descriptor },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { descriptor } });
+  });
+
+  test("returns custom directive with both tag and descriptor functions", () => {
+    expect.assertions(1);
+
+    const tag = (): string => "tag";
+    const descriptor = (): string => "descriptor";
+    const options = {
+      test: { tag, descriptor },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { tag, descriptor } });
+  });
+
+  test("respects skipDocDirective for first directive but validates others", () => {
+    expect.assertions(1);
+
+    const options = {
+      testA: { descriptor: (): void => {} },
+      testB: { invalid: true } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options, ["testA" as DirectiveName]);
+    }).toThrow('Wrong format for plugin custom directive "testB"');
+  });
+});
