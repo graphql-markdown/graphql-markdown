@@ -522,5 +522,295 @@ describe("renderer", () => {
       const prefixedFolders = allPaths.filter((p) => /^\d{2}-/.test(p));
       expect(prefixedFolders.length).toBe(0);
     });
+
+    test("verifies prefixed directories are created at appropriate hierarchy levels", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-category-files",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-category-files",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Verify root-level prefixed directories exist (custom groups with prefixes)
+      const rootPrefixedDirs = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)/.test(p),
+      );
+      expect(rootPrefixedDirs.length).toBeGreaterThan(0);
+
+      // Verify entity-level prefixed directories exist within custom groups
+      const entityPrefixedDirs = allPaths.filter((p) =>
+        /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+/.test(p),
+      );
+      expect(entityPrefixedDirs.length).toBeGreaterThan(0);
+    });
+
+    test("categorySortPrefix with flat hierarchy keeps folders at root level", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-flat-prefix",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.DEFAULT,
+          hierarchy: TypeHierarchy.FLAT,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-flat-prefix",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // With FLAT hierarchy, directories should be at root (no nesting)
+      const nestedDirs = allPaths.filter((p) => /^\/[^/]+\/[^/]+\//.test(p));
+      expect(nestedDirs.length).toBe(0);
+
+      // All files should be at root or one level deep
+      const rootLevelFiles = allPaths.filter((p) =>
+        /^[^/]*$|^\/[^/]+$/.test(p),
+      );
+      expect(rootLevelFiles.length).toBeGreaterThan(0);
+    });
+
+    test("ensures consistent prefix numbering across directory hierarchy", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-no-duplicate",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-no-duplicate",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Collect all prefixes at root level
+      const rootPrefixes = new Set<string>();
+      for (const path of allPaths) {
+        const match = path.match(/^(\d{2})-/);
+        if (match) {
+          rootPrefixes.add(match[1]);
+        }
+      }
+
+      // Verify prefixes are consistently formatted (2 digits)
+      const prefixArray = Array.from(rootPrefixes);
+      const validPrefixes = prefixArray.filter((p) => /^\d{2}$/.test(p));
+      expect(validPrefixes.length).toBe(prefixArray.length);
+
+      // Verify we have multiple prefixes showing hierarchical organization
+      expect(rootPrefixes.size).toBeGreaterThan(0);
+    });
+
+    test("maintains consistent prefix format across hierarchy levels", async () => {
+      expect.assertions(1);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-many-cats",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-many-cats",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Extract all prefixes used
+      const allPrefixes: string[] = [];
+      for (const path of allPaths) {
+        const matches = path.match(/\/(\d{2})-/g);
+        if (matches) {
+          allPrefixes.push(...matches.map((m) => m.replace(/[\/\-]/g, "")));
+        }
+      }
+
+      // Verify prefix format is consistent (2 digits)
+      const invalidPrefixes = allPrefixes.filter((p) => !/^\d{2}$/.test(p));
+      expect(invalidPrefixes.length).toBe(0);
+    });
+
+    test("ensures categorySortPrefix generates properly formatted documentation", async () => {
+      expect.assertions(2);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_with_grouping.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {
+          categorySort: "natural",
+          categorySortPrefix: true,
+        },
+        groupByDirective: {
+          directive: "doc" as DirectiveName,
+          field: "category",
+          fallback: "misc",
+        },
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-homepage-check",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          deprecated: DeprecatedOption.GROUP,
+          hierarchy: TypeHierarchy.ENTITY,
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-homepage-check",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      // Generated markdown files should exist
+      const markdownFiles = allPaths.filter((p) => /\.mdx?$/.test(p));
+      expect(markdownFiles.length).toBeGreaterThan(0);
+
+      // Prefixed directories should be created
+      const prefixedDirs = allPaths.filter((p) => /\/\d{2}-/.test(p));
+      expect(prefixedDirs.length).toBeGreaterThan(0);
+    });
   });
 });

@@ -298,23 +298,18 @@ class CategoryPositionManager {
    * If category positions haven't been computed yet, computes them first.
    *
    * @param category - The category name
-   * @returns The position assigned to this category
+   * @returns The position assigned to this category or basePosition if not found
    */
   getPosition(category: string): number {
-    // Add to categories if not already present
-    if (!this.categories.has(category)) {
-      this.categories.add(category);
-      // If positions were already computed, we need to recompute
-      if (this.positionsComputed) {
-        this.positionsComputed = false;
-      }
-    }
-
-    // Ensure positions are computed
+    // Ensure positions are computed first (uses pre-registered categories)
     if (!this.positionsComputed) {
       this.computePositions();
     }
 
+    // Return cached position or base position if not found
+    // NOTE: We don't dynamically add categories here to avoid breaking
+    // pre-computed positions. This ensures consistent positioning even if
+    // getPosition is called for categories that weren't pre-registered.
     return this.positionCache.get(category) ?? this.basePosition;
   }
 
@@ -804,32 +799,6 @@ export class Renderer {
         } else {
           // If no custom groups, entity names are at root
           rootCategories.add(name);
-        }
-      });
-
-      // Type entity categories like "directives", "enums", "inputs", etc. should ALSO be registered
-      // when they appear under root types. These are needed for link generation to work correctly.
-      // When printer generates links to types under different root types, it needs these categories
-      // to have consistent position numbers.
-      const entityCategoryNames = [
-        "directives",
-        "enums",
-        "inputs",
-        "interfaces",
-        "mutations",
-        "objects",
-        "queries",
-        "scalars",
-        "subscriptions",
-        "unions",
-      ];
-      entityCategoryNames.forEach((categoryName) => {
-        if (this.group) {
-          // With custom groups, type categories are nested
-          nestedCategories.add(categoryName);
-        } else {
-          // Without custom groups, they would be at root but we don't add them here
-          // since they're already covered by rootTypeNames iteration above
         }
       });
     }
