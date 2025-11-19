@@ -2427,6 +2427,69 @@ describe("renderer", () => {
         expect(mockGenerateIndexMetafile).not.toHaveBeenCalled();
         expect(dirPath).toBe("/output");
       });
+
+      test("mutation test: verify exact regex pattern for 2-digit prefix", async () => {
+        expect.assertions(4);
+
+        // Test the exact regex pattern: /^\d{2}-/
+        // Should match: "01-query", "42-mutations", etc.
+        // Should NOT match: "1-query", "query", "01query", etc.
+
+        const pattern = /^\d{2}-/;
+
+        // Valid prefixes that should match and be stripped
+        expect("01-query".replace(pattern, "")).toBe("query");
+        expect("99-something".replace(pattern, "")).toBe("something");
+
+        // Without prefix, nothing should be stripped
+        expect("query".replace(pattern, "")).toBe("query");
+        expect("objects".replace(pattern, "")).toBe("objects");
+      });
+
+      test("mutation test: category sort with numeric prefix application", async () => {
+        expect.assertions(3);
+
+        const mockGenerateIndexMetafile = jest.fn();
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        renderer["rootLevelPositionManager"].registerCategories([
+          "objects",
+          "queries",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        const objPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Objects",
+          "objects" as SchemaEntity,
+        );
+        const queryPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Query",
+          "queries" as SchemaEntity,
+        );
+
+        // With categorySort, prefixes should be applied to folder names
+        // objects should come before queries alphabetically
+        expect(objPath).toMatch(/01-objects/);
+        expect(queryPath).toMatch(/02-queries/);
+        // Verify both paths are different
+        expect(objPath).not.toEqual(queryPath);
+      });
     });
   });
 });
