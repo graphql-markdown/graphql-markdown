@@ -1353,7 +1353,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1392,8 +1391,8 @@ describe("renderer", () => {
         expect(zebraDirPath).toMatch(/03-zebra/);
       });
 
-      test("does not prefix folder names when categorySortPrefix is false", async () => {
-        expect.assertions(6);
+      test("does not prefix folder names when categorySort is not set", async () => {
+        expect.assertions(3);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1403,8 +1402,7 @@ describe("renderer", () => {
           false,
           {
             ...DEFAULT_RENDERER_OPTIONS,
-            categorySort: "natural",
-            categorySortPrefix: false,
+            // categorySort not set - no prefixing should happen
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1437,10 +1435,7 @@ describe("renderer", () => {
           "zebra" as SchemaEntity,
         );
 
-        // Verify the folder names do NOT have order prefixes
-        expect(alphaDirPath).toContain("alpha");
-        expect(betaDirPath).toContain("beta");
-        expect(zebraDirPath).toContain("zebra");
+        // Verify the folder names do NOT have order prefixes when categorySort is not set
         expect(alphaDirPath).not.toMatch(/01-alpha/);
         expect(betaDirPath).not.toMatch(/02-beta/);
         expect(zebraDirPath).not.toMatch(/03-zebra/);
@@ -1462,7 +1457,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: customSort,
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1514,7 +1508,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1564,7 +1557,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1604,8 +1596,8 @@ describe("renderer", () => {
         expect(queriesPath).toMatch(/03-queries/);
       });
 
-      test("disables prefixing when categorySortPrefix is false but categorySort is set", async () => {
-        expect.assertions(3);
+      test("automatically prefixes when categorySort is set", async () => {
+        expect.assertions(2);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1616,7 +1608,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: false, // explicitly false
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1635,10 +1626,9 @@ describe("renderer", () => {
           "objects" as SchemaEntity,
         );
 
-        // Should NOT have order prefix even though categorySort is set
+        // Should have automatic prefix because categorySort is set
         expect(fooPath).toContain("custom-group");
-        expect(fooPath).not.toMatch(/01-custom-group/);
-        expect(fooPath).toMatch(/objects/);
+        expect(fooPath).toMatch(/01-objects/);
       });
 
       test("handles single category correctly with categorySortPrefix enabled", async () => {
@@ -1653,7 +1643,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1688,7 +1677,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1759,7 +1747,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: reverseSort,
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1805,7 +1792,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
@@ -1828,7 +1814,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
@@ -1864,7 +1849,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1915,7 +1899,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: undefined,
-            categorySortPrefix: true, // should be ignored if categorySort is not set
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -1961,7 +1944,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -2005,7 +1987,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -2048,7 +2029,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -2136,7 +2116,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: true,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {
@@ -2185,7 +2164,6 @@ describe("renderer", () => {
           {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
-            categorySortPrefix: false,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
           {

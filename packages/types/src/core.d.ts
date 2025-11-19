@@ -100,7 +100,7 @@ export interface ConfigDocOptions {
   generatorFrameworkName?: Maybe<string>;
   /** Version of the documentation generator framework */
   generatorFrameworkVersion?: Maybe<string>;
-  /** 
+  /**
    * Category sorting: "natural" for alphabetical or custom compare function.
    * When enabled, folder names are automatically prefixed with order numbers (e.g., 01-objects, 02-queries).
    */

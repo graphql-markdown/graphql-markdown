@@ -882,7 +882,7 @@ export class Renderer {
     nestedCategories: Set<string>,
   ): void {
     const hasCategorySort = this.options?.categorySort !== undefined;
-    
+
     if (hasCategorySort) {
       // Register with hierarchical numbering when categorySort is enabled
       this.rootLevelPositionManager.registerCategories(
