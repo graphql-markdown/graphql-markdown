@@ -167,10 +167,7 @@ export const loadConfiguration = async (
         projectConfig.schema = schema;
       }
 
-      if (
-        typeof projectConfig.schema === "object" &&
-        projectConfig.schema !== null
-      ) {
+      if (typeof projectConfig.schema === "object") {
         projectConfig.schema = Object.keys(schema)[0];
 
         if (projectConfig.loaders) {
