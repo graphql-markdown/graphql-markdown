@@ -707,7 +707,7 @@ export const parseGroupByOption = (
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions === "undefined" || parsedOptions === null) {
+  if (parsedOptions === null) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 

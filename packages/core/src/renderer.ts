@@ -271,9 +271,9 @@ class CategoryPositionManager {
    * @param categoryNames - Array of category names to register
    */
   registerCategories(categoryNames: string[]): void {
-    categoryNames.forEach((name) => {
+    for (const name of categoryNames) {
       this.categories.add(name);
-    });
+    }
   }
 
   /**
@@ -286,9 +286,9 @@ class CategoryPositionManager {
     }
 
     const sorted = Array.from(this.categories).sort(this.sortFn);
-    sorted.forEach((category, index) => {
-      this.positionCache.set(category, this.basePosition + index);
-    });
+    for (let index = 0; index < sorted.length; index++) {
+      this.positionCache.set(sorted[index], this.basePosition + index);
+    }
 
     this.positionsComputed = true;
   }
@@ -564,27 +564,23 @@ export class Renderer {
 
     const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
     return Promise.all(
-      Object.keys(type)
-        .map(async (name) => {
-          let dirPath = this.outputDir;
+      Object.keys(type).map(async (name) => {
+        let dirPath = this.outputDir;
 
-          if (!isFlat) {
-            dirPath = await this.generateCategoryMetafileType(
-              (type as Record<string, unknown>)[name],
-              name,
-              rootTypeName,
-            );
-          }
-
-          return this.renderTypeEntities(
-            dirPath,
-            name,
+        if (!isFlat) {
+          dirPath = await this.generateCategoryMetafileType(
             (type as Record<string, unknown>)[name],
+            name,
+            rootTypeName,
           );
-        })
-        .filter((res) => {
-          return typeof res !== "undefined";
-        }),
+        }
+
+        return this.renderTypeEntities(
+          dirPath,
+          name,
+          (type as Record<string, unknown>)[name],
+        );
+      }),
     );
   }
 
@@ -769,8 +765,8 @@ export class Renderer {
 
       const data = template
         .toString()
-        .replace(/##baseURL##/gm, slug)
-        .replace(/##generated-date-time##/gm, new Date().toLocaleString());
+        .replaceAll("##baseURL##", slug)
+        .replaceAll("##generated-date-time##", new Date().toLocaleString());
 
       await saveFile(
         destLocation,
@@ -841,9 +837,9 @@ export class Renderer {
       "subscriptions",
       "unions",
     ];
-    entityCategoryNames.forEach((categoryName) => {
+    for (const categoryName of entityCategoryNames) {
       nestedCategories.add(categoryName);
-    });
+    }
   }
 
   /**
@@ -860,7 +856,7 @@ export class Renderer {
     rootTypeNames: string[],
     hasCustomGroups: boolean,
   ): void {
-    rootTypeNames.forEach((name) => {
+    for (const name of rootTypeNames) {
       if (hasCustomGroups) {
         // If custom groups exist, entity names go nested under them
         nestedCategories.add(name);
@@ -868,7 +864,7 @@ export class Renderer {
         // If no custom groups, entity names are at root
         rootCategories.add(name);
       }
-    });
+    }
   }
 
   /**
