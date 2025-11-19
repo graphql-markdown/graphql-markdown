@@ -716,7 +716,9 @@ export const parseGroupByOption = (
 
   const {
     groups: { directive, field, fallback = DEFAULT_GROUP },
-  } = parsedOptions;
+  } = parsedOptions as unknown as {
+    groups: { directive: string; field: string; fallback?: string };
+  };
   return { directive, field, fallback } as GroupByDirectiveOptions;
 };
 
