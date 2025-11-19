@@ -167,12 +167,15 @@ export const loadConfiguration = async (
         projectConfig.schema = schema;
       }
 
-      if (typeof projectConfig.schema === "object") {
+      if (
+        typeof projectConfig.schema === "object" &&
+        projectConfig.schema !== null
+      ) {
         projectConfig.schema = Object.keys(schema)[0];
 
-        if (typeof projectConfig.loaders !== "undefined") {
+        if (projectConfig.loaders) {
           projectConfig.loaders = setLoaderOptions(
-            projectConfig.loaders ?? {},
+            projectConfig.loaders,
             Object.values(schema)[0] as PackageOptionsConfig,
           );
         }
