@@ -153,7 +153,7 @@ describe("generateIndexMetafile()", () => {
 
     expect(spy).toHaveBeenCalledWith(
       filePath,
-      `id: 01-common\nlabel: Common\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
+      `label: Common\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
     );
   });
 

@@ -38,11 +38,8 @@ export const generateIndexMetafile: GenerateIndexMetafileType = async (
   }
 
   const label = startCase(category);
-  // Use the directory basename as the id to ensure Docusaurus uses the correct URL slug
-  // This is crucial when numeric prefixes are added (e.g., "01-common") - the id ensures
-  // that Docusaurus generates URLs that match the actual directory structure
-  const directoryId = basename(dirPath);
-  const id = directoryId !== category ? `id: ${directoryId}\n` : "";
+  // Docusaurus 3.x uses the directory name as the id automatically
+  // No need to explicitly set id field in _category_.yml
   const link =
     options?.index !== true
       ? "null"
@@ -55,7 +52,7 @@ export const generateIndexMetafile: GenerateIndexMetafileType = async (
     typeof options?.sidebarPosition === "number"
       ? options.sidebarPosition
       : SidebarPosition.FIRST;
-  const content = `${id}label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options?.collapsible ?? true}\ncollapsed: ${options?.collapsed ?? true}\n`;
+  const content = `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options?.collapsible ?? true}\ncollapsed: ${options?.collapsed ?? true}\n`;
 
   await ensureDir(dirPath);
   await saveFile(filePath, content);
