@@ -598,5 +598,84 @@ describe("generator", () => {
         expect.stringContaining("Documentation successfully generated"),
       );
     });
+
+    test("handles MDX parser import error gracefully", async () => {
+      expect.assertions(1);
+
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      jest
+        .spyOn(GraphQL, "getDocumentLoaders")
+        .mockResolvedValueOnce({} as LoadSchemaOptions);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
+      jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      const loggerSpy = jest.spyOn(globalThis.console, "warn");
+
+      // Test with an mdxParser that fails to import
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "non-existent-mdx-parser",
+      });
+
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'An error occurred while loading MDX formatter "non-existent-mdx-parser"',
+        ),
+      );
+    });
+
+    test("handles MDX parser import failure with undefined fallback", async () => {
+      expect.assertions(2);
+
+      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      jest
+        .spyOn(GraphQL, "getDocumentLoaders")
+        .mockResolvedValueOnce({} as LoadSchemaOptions);
+      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce({
+        getDirective,
+      } as unknown as GraphQLSchema);
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
+      const getPrinterSpy = jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      const loggerSpy = jest.spyOn(globalThis.console, "warn");
+
+      // Test with invalid mdxParser
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "invalid-parser-123",
+      });
+
+      expect(loggerSpy).toHaveBeenCalled();
+      // Verify that undefined was passed to printer when mdxParser fails
+      expect(getPrinterSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        undefined,
+      );
+    });
   });
 });
