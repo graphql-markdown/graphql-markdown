@@ -163,14 +163,13 @@ export const DEFAULT_OPTIONS: Readonly<
     categorySort: undefined,
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
-  } as Required<
-    Pick<
-      ConfigDocOptions & DeprecatedConfigDocOptions,
-      "categorySortPrefix" | "frontMatter" | "index"
-    >
-  > & {
-    categorySort?: undefined;
-  },
+  } as Pick<ConfigDocOptions, "categorySort"> &
+    Required<
+      Pick<
+        ConfigDocOptions & DeprecatedConfigDocOptions,
+        "categorySortPrefix" | "frontMatter" | "index"
+      >
+    >,
   force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -369,19 +368,19 @@ export const getVisibilityDirectives = (
  * @throws Error if a custom directive has an invalid format
  * @example
  * ```typescript
- * // Valid custom directive with tag function
+ * // Valid custom directive with descriptor function
  * const customDirectives = {
  *   example: {
  *     tag: (value) => `Example: ${value}`
  *   },
- *   todo: {
- *     descriptor: () => "TODO items"
+ *   note: {
+ *     descriptor: () => "Note items"
  *   }
  * };
  *
- * // Filter out the "example" directive
+ * // Filter out the "example" directive, keeping "note"
  * const filteredDirectives = getCustomDirectives(customDirectives, ["example"]);
- * console.log(filteredDirectives); // { todo: { descriptor: [Function] } }
+ * console.log(filteredDirectives); // { note: { descriptor: [Function] } }
  *
  * // Invalid format - will throw an error
  * getCustomDirectives({ example: { invalid: true } }, []);
@@ -716,10 +715,8 @@ export const parseGroupByOption = (
   }
 
   const {
-    directive,
-    field,
-    fallback = DEFAULT_GROUP,
-  } = parsedOptions.groups as unknown as GroupByDirectiveOptions;
+    groups: { directive, field, fallback = DEFAULT_GROUP },
+  } = parsedOptions;
   return { directive, field, fallback } as GroupByDirectiveOptions;
 };
 

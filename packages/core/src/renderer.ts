@@ -435,22 +435,25 @@ export class Renderer {
   async generateIndexMetafile(
     dirPath: string,
     category: string,
-    options: CategoryMetafileOptions = {
+    options?: CategoryMetafileOptions,
+  ): Promise<void> {
+    const defaultOptions: CategoryMetafileOptions = {
       collapsible: true,
       collapsed: true,
-    },
-  ): Promise<void> {
+    };
+    const finalOptions = options ?? defaultOptions;
+
     if (this.mdxModuleIndexFileSupport) {
       // If no explicit position is provided, use the position manager
       const sidebarPosition =
-        options.sidebarPosition ??
+        finalOptions.sidebarPosition ??
         this.categoryPositionManager.getPosition(category);
 
       await (this.mdxModule as MDXSupportType).generateIndexMetafile(
         dirPath,
         category,
         {
-          ...options,
+          ...finalOptions,
           sidebarPosition,
           index: this.options?.index,
         },
