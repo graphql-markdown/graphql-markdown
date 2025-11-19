@@ -3,7 +3,7 @@
  * This module provides utilities for generating MDX index files in Docusaurus format.
  */
 
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 import {
   ensureDir,
@@ -38,6 +38,11 @@ export const generateIndexMetafile: GenerateIndexMetafileType = async (
   }
 
   const label = startCase(category);
+  // Use the directory basename as the id to ensure Docusaurus uses the correct URL slug
+  // This is crucial when numeric prefixes are added (e.g., "01-common") - the id ensures
+  // that Docusaurus generates URLs that match the actual directory structure
+  const directoryId = basename(dirPath);
+  const id = directoryId !== category ? `id: ${directoryId}\n` : "";
   const link =
     options?.index !== true
       ? "null"
@@ -50,7 +55,7 @@ export const generateIndexMetafile: GenerateIndexMetafileType = async (
     typeof options?.sidebarPosition === "number"
       ? options.sidebarPosition
       : SidebarPosition.FIRST;
-  const content = `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options?.collapsible ?? true}\ncollapsed: ${options?.collapsed ?? true}\n`;
+  const content = `${id}label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options?.collapsible ?? true}\ncollapsed: ${options?.collapsed ?? true}\n`;
 
   await ensureDir(dirPath);
   await saveFile(filePath, content);
