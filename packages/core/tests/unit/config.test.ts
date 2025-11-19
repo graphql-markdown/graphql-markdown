@@ -1149,3 +1149,18 @@ describe("mutation test: additional config edge cases", () => {
     expect(apiUpper).toStrictEqual({ [TypeHierarchy.API]: {} });
   });
 });
+
+describe("mutation test: ensure all hierarchy types are tested", () => {
+  test.each([TypeHierarchy.ENTITY, TypeHierarchy.FLAT, TypeHierarchy.API])(
+    "getTypeHierarchyOption recognizes %s hierarchy type",
+    (hierarchyType) => {
+      expect.assertions(1);
+
+      const result = getTypeHierarchyOption(
+        hierarchyType as TypeHierarchyValueType,
+      );
+
+      expect(result).toStrictEqual({ [hierarchyType]: {} });
+    },
+  );
+});
