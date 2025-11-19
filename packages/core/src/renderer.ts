@@ -716,19 +716,8 @@ export class Renderer {
     const rootCategories = new Set<string>();
     const nestedCategories = new Set<string>();
 
-    if (process.env.DEBUG_CATEGORY_PREFIX) {
-      console.error(
-        `[DEBUG] preCollectCategories called, categorySortPrefix=${this.options?.categorySortPrefix}`,
-      );
-    }
-
     // Skip if flat hierarchy
     if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] preCollectCategories - FLAT hierarchy, skipping`,
-        );
-      }
       return;
     }
 
@@ -810,20 +799,6 @@ export class Renderer {
 
     // Set up hierarchical numbering for categorySortPrefix
     if (this.options?.categorySortPrefix) {
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] preCollectCategories - categorySortPrefix enabled`,
-        );
-        console.error(
-          `[DEBUG] preCollectCategories - ROOT level categories:`,
-          Array.from(rootCategories).sort(),
-        );
-        console.error(
-          `[DEBUG] preCollectCategories - NESTED level categories:`,
-          Array.from(nestedCategories).sort(),
-        );
-      }
-
       // Register root-level categories (Query, Mutation, Subscription, Deprecated, etc.)
       this.rootLevelPositionManager.registerCategories(
         Array.from(rootCategories),
@@ -835,16 +810,8 @@ export class Renderer {
         Array.from(nestedCategories),
       );
       this.categoryPositionManager.computePositions();
-
-      this.debugLogCategoryPositions();
     } else {
       // Traditional separate handling
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] preCollectCategories - categorySortPrefix disabled`,
-        );
-      }
-
       this.rootLevelPositionManager.registerCategories(
         Array.from(rootCategories),
       );
@@ -922,18 +889,7 @@ export class Renderer {
   ): string {
     const hasPrefixOption = !!this.options?.categorySortPrefix;
 
-    if (process.env.DEBUG_CATEGORY_PREFIX) {
-      console.error(
-        `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) - categorySortPrefix option value: ${JSON.stringify(this.options?.categorySortPrefix)} (type: ${typeof this.options?.categorySortPrefix})`,
-      );
-    }
-
     if (!hasPrefixOption) {
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] formatCategoryFolderName("${categoryName}") -> categorySortPrefix is false, returning unformatted`,
-        );
-      }
       return slugify(categoryName);
     }
 
@@ -946,11 +902,6 @@ export class Renderer {
       const position = manager.getPosition(categoryName);
 
       if (!position) {
-        if (process.env.DEBUG_CATEGORY_PREFIX) {
-          console.error(
-            `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) -> NO POSITION, returning unformatted`,
-          );
-        }
         return slugify(categoryName);
       }
 
@@ -958,34 +909,9 @@ export class Renderer {
       const slugifiedName = slugify(categoryName);
       const result = `${paddedPosition}-${slugifiedName}`;
 
-      if (process.env.DEBUG_CATEGORY_PREFIX) {
-        console.error(
-          `[DEBUG] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) -> position=${position}, result="${result}"`,
-        );
-      }
-
       return result;
-    } catch (error) {
-      console.error(
-        `[ERROR] formatCategoryFolderName("${categoryName}", isRootLevel=${isRootLevel}) threw:`,
-        error,
-      );
+    } catch {
       return slugify(categoryName);
-    }
-  }
-
-  /**
-   * Debug helper to log all registered categories and their positions.
-   */
-  private debugLogCategoryPositions(): void {
-    if (process.env.DEBUG_CATEGORY_PREFIX) {
-      const testCategories = ["Common", "Query", "Mutation", "Subscription"];
-      console.error(`[DEBUG] === Category Position Map ===`);
-      testCategories.forEach((cat) => {
-        const pos = this.categoryPositionManager.getPosition(cat);
-        console.error(`[DEBUG]   "${cat}" -> position ${pos}`);
-      });
-      console.error(`[DEBUG] === End Category Position Map ===`);
     }
   }
 }

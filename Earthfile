@@ -170,7 +170,7 @@ build-docs:
   COPY --dir docs .
   RUN npm install --legacy-peer-deps
   RUN npx update-browserslist-db@latest
-  RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true DEBUG_CATEGORY_PREFIX=1 npm run build
+  RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
@@ -195,9 +195,9 @@ GQLMD:
   ARG command=docusaurus
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN DEBUG_CATEGORY_PREFIX=1 npx $command graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN DEBUG_CATEGORY_PREFIX=1 npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
