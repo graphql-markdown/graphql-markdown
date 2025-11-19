@@ -7,9 +7,11 @@ const cli = require("../../helpers/cli");
 const rootDir = global["__ROOT_DIR__"] || "/tmp";
 
 describe("categorySortPrefix E2E feature (Earthly only)", () => {
-  // This test suite only runs in Earthly where /docusaurus-gqlmd exists
-  if (rootDir === "/tmp") {
-    test.skip("E2E tests require Earthly environment", () => {});
+  // E2E tests only run in Earthly where __ROOT_DIR__ is set to /docusaurus-gqlmd
+  // and the necessary test data and infrastructure exist. This check skips the test
+  // in non-Earthly environments. See Earthfile for smoke-test target that runs E2E tests.
+  if (!rootDir || rootDir === "/tmp") {
+    test.skip("E2E tests require Earthly environment with __ROOT_DIR__ set", () => {});
     return;
   }
 
