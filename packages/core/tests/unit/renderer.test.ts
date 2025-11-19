@@ -2080,6 +2080,137 @@ describe("renderer", () => {
         );
         expect(objectsPath).toMatch(/01-objects/);
       });
+
+      test("renderTypeEntities correctly parses category from nested file paths", async () => {
+        expect.assertions(1);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+
+        const output = "/output/foobar";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "FooBar",
+          "FooBar",
+        );
+
+        // Regex pattern /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
+        // should capture category='foobar' and pageId='foo-bar'
+        expect(meta?.slug).toBe("foobar/foo-bar");
+      });
+
+      test("renderTypeEntities uses correct regex for hierarchical paths", async () => {
+        expect.assertions(2);
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockReturnValue("Lorem ipsum" as MDXString);
+        const spy = jest.spyOn(Utils, "saveFile");
+
+        const output = "/output/api-types/objects";
+        const meta = await rendererInstance.renderTypeEntities(
+          output,
+          "MyObject",
+          "MyObject",
+        );
+
+        // Should extract category from path and create proper slug
+        expect(meta?.category).toBeDefined();
+        expect(spy).toHaveBeenCalledWith(
+          expect.stringMatching(/my-object\.mdx$/),
+          "Lorem ipsum",
+          undefined,
+        );
+      });
+
+      test("registerCategoriesWithManagers registers both root and nested when categorySortPrefix is true", async () => {
+        expect.assertions(6);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        const rootCategories = new Set(["query", "mutation", "subscription"]);
+        const nestedCategories = new Set(["objects", "enums", "scalars"]);
+
+        renderer["registerCategoriesWithManagers"](
+          rootCategories,
+          nestedCategories,
+        );
+
+        // Verify both managers have registered their categories
+        expect(renderer["rootLevelPositionManager"].isRegistered("query")).toBe(
+          true,
+        );
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("mutation"),
+        ).toBe(true);
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("subscription"),
+        ).toBe(true);
+        expect(
+          renderer["categoryPositionManager"].isRegistered("objects"),
+        ).toBe(true);
+        expect(renderer["categoryPositionManager"].isRegistered("enums")).toBe(
+          true,
+        );
+        expect(
+          renderer["categoryPositionManager"].isRegistered("scalars"),
+        ).toBe(true);
+      });
+
+      test("registerCategoriesWithManagers respects categorySortPrefix false with empty nested", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: false,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        const rootCategories = new Set(["query"]);
+        const nestedCategories = new Set<string>();
+
+        renderer["registerCategoriesWithManagers"](
+          rootCategories,
+          nestedCategories,
+        );
+
+        // Root should be registered
+        expect(renderer["rootLevelPositionManager"].isRegistered("query")).toBe(
+          true,
+        );
+        // Nested should not be called when empty and categorySortPrefix is false
+        expect(
+          renderer["categoryPositionManager"].isRegistered("objects"),
+        ).toBe(false);
+        expect(nestedCategories.size).toBe(0);
+      });
     });
   });
 });
