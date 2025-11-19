@@ -319,7 +319,6 @@ describe("config", () => {
         diffMethod: configFileOpts.diffMethod,
         docOptions: {
           ...configFileOpts.docOptions,
-          categorySortPrefix: DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true },
         },
@@ -414,7 +413,6 @@ describe("config", () => {
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
         docOptions: {
-          categorySortPrefix: DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: {},
           index: true,
@@ -494,7 +492,6 @@ describe("config", () => {
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: {
-          categorySortPrefix: DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true, page_next: null },
           index: true,

@@ -1341,7 +1341,7 @@ describe("renderer", () => {
         );
       });
 
-      test("prefixes folder names with order numbers when categorySortPrefix is enabled", async () => {
+      test("prefixes folder names with order numbers when categorySort is set", async () => {
         expect.assertions(3);
 
         const renderer = await getRenderer(
@@ -1441,7 +1441,7 @@ describe("renderer", () => {
         expect(zebraDirPath).not.toMatch(/03-zebra/);
       });
 
-      test("prefixes folder names with custom sort function when categorySortPrefix is enabled", async () => {
+      test("prefixes folder names with custom sort function when categorySort is set", async () => {
         expect.assertions(3);
 
         const customSort = (a: string, b: string): number => {
@@ -1496,7 +1496,7 @@ describe("renderer", () => {
         expect(zebraDirPath).toMatch(/01-zebra/);
       });
 
-      test("works correctly with groupByDirective when categorySortPrefix is enabled", async () => {
+      test("works correctly with groupByDirective when categorySort is set", async () => {
         expect.assertions(6);
 
         const renderer = await getRenderer(
@@ -1545,7 +1545,7 @@ describe("renderer", () => {
         expect(barPath).toContain("02-api-types");
       });
 
-      test("respects hierarchy with categorySortPrefix enabled", async () => {
+      test("respects hierarchy with categorySort set", async () => {
         expect.assertions(3);
 
         const renderer = await getRenderer(
@@ -1631,7 +1631,7 @@ describe("renderer", () => {
         expect(fooPath).toMatch(/01-objects/);
       });
 
-      test("handles single category correctly with categorySortPrefix enabled", async () => {
+      test("handles single category correctly with categorySort set", async () => {
         expect.assertions(2);
 
         const renderer = await getRenderer(
@@ -1780,7 +1780,7 @@ describe("renderer", () => {
         expect(gammaPath).toMatch(/01-gamma/);
       });
 
-      test("deprecated folder gets last position when categorySortPrefix is enabled", async () => {
+      test("deprecated folder gets last position when categorySort is set", async () => {
         expect.assertions(2);
 
         const renderer = await getRenderer(
@@ -1887,7 +1887,7 @@ describe("renderer", () => {
         expect(pos4).toBeLessThanOrEqual(3);
       });
 
-      test("categorySortPrefix does not affect behavior when categorySort is not set", async () => {
+      test("automatically prefixes when categorySort is set", async () => {
         expect.assertions(2);
 
         const renderer = await getRenderer(
@@ -1923,7 +1923,7 @@ describe("renderer", () => {
           "beta" as SchemaEntity,
         );
 
-        // Without categorySort, prefixes should still be applied if categorySortPrefix is true
+        // Without categorySort, prefixes should still be applied if categorySort is set
         // but behavior depends on implementation
         expect(alphaPath).toContain("alpha");
         expect(betaPath).toContain("beta");
@@ -2104,7 +2104,7 @@ describe("renderer", () => {
         );
       });
 
-      test("registerCategoriesWithManagers registers both root and nested when categorySortPrefix is true", async () => {
+      test("registerCategoriesWithManagers registers both root and nested when categorySort is set", async () => {
         expect.assertions(6);
 
         const renderer = await getRenderer(
@@ -2152,7 +2152,7 @@ describe("renderer", () => {
         ).toBe(true);
       });
 
-      test("registerCategoriesWithManagers respects categorySortPrefix false with empty nested", async () => {
+      test("registerCategoriesWithManagers respects categorySort not set with empty nested", async () => {
         expect.assertions(3);
 
         const renderer = await getRenderer(
@@ -2183,7 +2183,7 @@ describe("renderer", () => {
         expect(renderer["rootLevelPositionManager"].isRegistered("query")).toBe(
           true,
         );
-        // Nested should not be called when empty and categorySortPrefix is false
+        // Nested should not be called when empty and categorySort is not set
         expect(
           renderer["categoryPositionManager"].isRegistered("objects"),
         ).toBe(false);

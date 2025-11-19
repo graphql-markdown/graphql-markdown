@@ -531,7 +531,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -577,7 +576,7 @@ describe("renderer", () => {
       expect(entityPrefixedDirs.length).toBeGreaterThan(0);
     });
 
-    test("categorySortPrefix with flat hierarchy keeps folders at root level", async () => {
+    test("categorySort with flat hierarchy keeps folders at root level", async () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
@@ -589,7 +588,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -645,7 +643,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -708,7 +705,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,
@@ -755,7 +751,7 @@ describe("renderer", () => {
       expect(invalidPrefixes.length).toBe(0);
     });
 
-    test("ensures categorySortPrefix generates properly formatted documentation", async () => {
+    test("ensures categorySort generates properly formatted documentation", async () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
@@ -767,7 +763,6 @@ describe("renderer", () => {
         diffMethod: DiffMethod.NONE,
         docOptions: {
           categorySort: "natural",
-          categorySortPrefix: true,
         },
         groupByDirective: {
           directive: "doc" as DirectiveName,

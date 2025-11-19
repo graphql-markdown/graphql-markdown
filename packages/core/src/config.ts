@@ -159,7 +159,6 @@ export const DEFAULT_OPTIONS: Readonly<
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
-    categorySortPrefix: false as const,
     categorySort: undefined,
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
@@ -167,7 +166,7 @@ export const DEFAULT_OPTIONS: Readonly<
     Required<
       Pick<
         ConfigDocOptions & DeprecatedConfigDocOptions,
-        "categorySortPrefix" | "frontMatter" | "index"
+        "frontMatter" | "index"
       >
     >,
   force: false as const,
@@ -499,9 +498,6 @@ export const getDocOptions = (
         : DEFAULT_OPTIONS.docOptions!.index;
 
   return {
-    categorySortPrefix:
-      configOptions?.categorySortPrefix ??
-      DEFAULT_OPTIONS.docOptions!.categorySortPrefix,
     categorySort: configOptions?.categorySort,
     frontMatter: {
       ...deprecated,
