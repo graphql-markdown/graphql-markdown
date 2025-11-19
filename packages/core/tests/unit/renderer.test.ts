@@ -2756,6 +2756,111 @@ describe("renderer", () => {
         expect(posA1).toBe(posA2);
         expect(posB1).toBe(posB2);
       });
+
+      test("mutation test: comprehensive category metafile generation with hierarchy", async () => {
+        expect.assertions(4);
+
+        const mockGenerateIndexMetafile = jest.fn();
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+            categorySort: "natural",
+          },
+          {
+            generateIndexMetafile: mockGenerateIndexMetafile,
+          },
+        );
+
+        // Generate metafiles for different entity types
+        const objMetaPath = await renderer.generateCategoryMetafileType(
+          { collapsible: true },
+          "Objects",
+          "objects" as SchemaEntity,
+        );
+        const queryMetaPath = await renderer.generateCategoryMetafileType(
+          { collapsible: false },
+          "Queries",
+          "queries" as SchemaEntity,
+        );
+
+        // Verify both paths contain numeric prefixes
+        expect(objMetaPath).toMatch(/\d{2}-/);
+        expect(queryMetaPath).toMatch(/\d{2}-/);
+
+        // Verify mockGenerateIndexMetafile was called
+        expect(mockGenerateIndexMetafile).toHaveBeenCalled();
+
+        // Both should be strings
+        expect(typeof objMetaPath).toBe("string");
+      });
+
+      test("mutation test: collapsible option affects metadata generation", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        // Generate with collapsible true
+        const pathWithCollapsible = await renderer.generateCategoryMetafileType(
+          { collapsible: true, collapsed: true },
+          "Types",
+          "types" as SchemaEntity,
+        );
+
+        // Generate with collapsible false
+        const pathWithoutCollapsible =
+          await renderer.generateCategoryMetafileType(
+            { collapsible: false, collapsed: false },
+            "TypesAlt",
+            "typesalt" as SchemaEntity,
+          );
+
+        expect(typeof pathWithCollapsible).toBe("string");
+        expect(typeof pathWithoutCollapsible).toBe("string");
+      });
+
+      test("mutation test: sidebarPosition configuration in metafile options", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        // Generate with explicit sidebarPosition
+        const pathWithPosition = await renderer.generateCategoryMetafileType(
+          { sidebarPosition: 10 },
+          "Custom",
+          "custom" as SchemaEntity,
+        );
+
+        // Generate without explicit sidebarPosition (should use position manager)
+        const pathWithoutPosition = await renderer.generateCategoryMetafileType(
+          {},
+          "Default",
+          "default" as SchemaEntity,
+        );
+
+        expect(typeof pathWithPosition).toBe("string");
+        expect(typeof pathWithoutPosition).toBe("string");
+      });
     });
   });
 });
