@@ -2626,6 +2626,136 @@ describe("renderer", () => {
         expect(renderer1.options?.categorySort).toBe("natural");
         expect(renderer2.options?.categorySort).not.toBe("natural");
       });
+
+      test("mutation test: position retrieval without precomputed state", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        // Register categories
+        renderer["categoryPositionManager"].registerCategories(["test"]);
+
+        // Get position WITHOUT calling computePositions first
+        // This tests the branch at line 305-310 where it auto-computes
+        const pos = renderer["categoryPositionManager"].getPosition("test");
+        expect(pos).toBe(1);
+        expect(typeof pos).toBe("number");
+      });
+
+      test("mutation test: regex prefix stripping with boundary values", async () => {
+        expect.assertions(8);
+
+        // Test exact regex /^\d{2}-/
+        const regex = /^\d{2}-/;
+
+        // Should match and strip 00-99 prefixes
+        expect("00-test".replace(regex, "")).toBe("test");
+        expect("50-middle".replace(regex, "")).toBe("middle");
+        expect("99-end".replace(regex, "")).toBe("end");
+
+        // Should NOT match single digit
+        expect("1-single".replace(regex, "")).toBe("1-single");
+
+        // Should NOT match without leading digit
+        expect("a1-letter".replace(regex, "")).toBe("a1-letter");
+
+        // Should NOT match without dash
+        expect("01test".replace(regex, "")).toBe("01test");
+
+        // Should NOT match if not at start
+        expect("test-01-prefix".replace(regex, "")).toBe("test-01-prefix");
+
+        // Should NOT match three digits
+        expect("001-three".replace(regex, "")).toBe("001-three");
+      });
+
+      test("mutation test: category folderName formatting edge cases", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+        );
+
+        // Test multiple categories to verify all get prefixes when categorySort set
+        renderer["rootLevelPositionManager"].registerCategories([
+          "queries",
+          "mutations",
+          "objects",
+        ]);
+
+        const queryPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Query",
+          "queries" as SchemaEntity,
+        );
+        const mutPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Mutation",
+          "mutations" as SchemaEntity,
+        );
+        const objPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Object",
+          "objects" as SchemaEntity,
+        );
+
+        // All paths should contain numeric prefixes when categorySort is set
+        expect(queryPath).toMatch(/\d{2}-/);
+        expect(mutPath).toMatch(/\d{2}-/);
+        expect(objPath).toMatch(/\d{2}-/);
+      });
+
+      test("mutation test: boolean position cache state management", async () => {
+        expect.assertions(5);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const posManager = renderer["categoryPositionManager"];
+
+        // Initially positionsComputed should be false (or internally managed)
+        // Registering categories
+        posManager.registerCategories(["A", "B", "C"]);
+
+        // Getting position should trigger computation
+        const posA1 = posManager.getPosition("A");
+        const posB1 = posManager.getPosition("B");
+        const posC1 = posManager.getPosition("C");
+
+        // All positions should be valid numbers
+        expect(typeof posA1).toBe("number");
+        expect(typeof posB1).toBe("number");
+        expect(typeof posC1).toBe("number");
+
+        // Getting positions again should return same values (from cache)
+        const posA2 = posManager.getPosition("A");
+        const posB2 = posManager.getPosition("B");
+
+        // Should be consistent
+        expect(posA1).toBe(posA2);
+        expect(posB1).toBe(posB2);
+      });
     });
   });
 });
