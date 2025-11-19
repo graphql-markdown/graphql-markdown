@@ -1992,6 +1992,94 @@ describe("renderer", () => {
         expect(nodePath).toMatch(/02-system/);
         expect(nodePath).toContain("interfaces");
       });
+
+      test("isRegistered() correctly identifies pre-registered categories", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Before registration, categories should not be registered
+        expect(renderer["rootLevelPositionManager"].isRegistered("alpha")).toBe(
+          false,
+        );
+        expect(renderer["rootLevelPositionManager"].isRegistered("beta")).toBe(
+          false,
+        );
+
+        // Register categories
+        renderer["rootLevelPositionManager"].registerCategories([
+          "alpha",
+          "beta",
+        ]);
+
+        // After registration, categories should be registered
+        expect(renderer["rootLevelPositionManager"].isRegistered("alpha")).toBe(
+          true,
+        );
+        expect(renderer["rootLevelPositionManager"].isRegistered("beta")).toBe(
+          true,
+        );
+      });
+
+      test("formatCategoryFolderName uses isRegistered to determine hierarchy level", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            categorySortPrefix: true,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Register at root level
+        renderer["rootLevelPositionManager"].registerCategories(["Query"]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        // Register at nested level
+        renderer["categoryPositionManager"].registerCategories(["objects"]);
+        renderer["categoryPositionManager"].computePositions();
+
+        // Query is at root level, should use root position manager
+        const queryPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Query",
+          "query" as SchemaEntity,
+        );
+        expect(queryPath).toMatch(/01-query/);
+
+        // objects is at nested level, should use nested position manager
+        const objectsPath = await renderer.generateCategoryMetafileType(
+          {},
+          "Objects",
+          "objects" as SchemaEntity,
+        );
+        expect(objectsPath).toMatch(/01-objects/);
+      });
     });
   });
 });

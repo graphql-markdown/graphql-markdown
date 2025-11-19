@@ -323,20 +323,6 @@ class CategoryPositionManager {
   isRegistered(category: string): boolean {
     return this.categories.has(category);
   }
-
-  /**
-   * Creates a scoped position manager for nested categories.
-   *
-   * @param sortFn - Function to sort categories (defaults to parent's sort function)
-   * @param basePosition - Starting position for nested categories
-   * @returns A new CategoryPositionManager instance
-   */
-  createScope(
-    sortFn?: CategorySortFn | "natural",
-    basePosition?: number,
-  ): CategoryPositionManager {
-    return new CategoryPositionManager(sortFn ?? this.sortFn, basePosition);
-  }
 }
 
 /**
