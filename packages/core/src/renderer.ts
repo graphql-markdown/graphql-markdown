@@ -712,70 +712,23 @@ export class Renderer {
       ? this.options.hierarchy[TypeHierarchy.API]
       : !isHierarchy(this.options, TypeHierarchy.ENTITY);
 
-    // Custom groups SUPERSEDE the hierarchy structure - they are at ROOT level when present
-    // Then within each custom group, the hierarchy is applied
-    if (this.group) {
-      const customGroups = new Set<string>();
-      for (const rootTypeName in this.group) {
-        for (const name in this.group[rootTypeName as SchemaEntity]) {
-          const groupName = this.group[rootTypeName as SchemaEntity]![name];
-          if (groupName) {
-            customGroups.add(groupName);
-          }
-        }
-      }
-      // Custom groups are at the ROOT level
-      customGroups.forEach((groupName) => {
-        rootCategories.add(groupName);
-      });
-    }
+    // Register custom groups at root level
+    this.registerCustomGroups(rootCategories);
 
-    // API group categories and entity categories go to appropriate levels
+    // Register categories based on hierarchy type
     if (useApiGroup) {
-      // With API hierarchy:
-      // - If custom groups exist: operations/types are nested under custom groups
-      // - If no custom groups: operations/types are at ROOT level
-      if (this.group) {
-        // Custom groups exist: operations/types are nested
-        nestedCategories.add(API_GROUPS.operations);
-        nestedCategories.add(API_GROUPS.types);
-      } else {
-        // No custom groups: operations/types are at ROOT level
-        rootCategories.add(API_GROUPS.operations);
-        rootCategories.add(API_GROUPS.types);
-      }
-
-      // Entity categories like "queries", "objects", "enums", etc. are registered as nested
-      // so the formatter can assign them position numbers when generating links.
-      // Even though conceptually they're scoped within their parent API group,
-      // we register them globally for numbering purposes.
-      // These are the plural forms from ROOT_TYPE_LOCALE
-      const entityCategoryNames = [
-        "directives",
-        "enums",
-        "inputs",
-        "interfaces",
-        "mutations",
-        "objects",
-        "queries",
-        "scalars",
-        "subscriptions",
-        "unions",
-      ];
-      entityCategoryNames.forEach((categoryName) => {
-        nestedCategories.add(categoryName);
-      });
+      this.registerApiGroupCategories(
+        rootCategories,
+        nestedCategories,
+        this.group !== undefined,
+      );
     } else {
-      // Entity hierarchy: entity names are at ROOT level (or nested if custom groups exist)
-      rootTypeNames.forEach((name) => {
-        if (this.group) {
-          // If custom groups exist, entity names go nested under them
-          nestedCategories.add(name);
-        } else {
-          // If no custom groups, entity names are at root
-          rootCategories.add(name);
-        }
-      });
+      this.registerEntityCategories(
+        rootCategories,
+        nestedCategories,
+        rootTypeNames,
+        this.group !== undefined,
+      );
     }
 
     // Deprecated category - when grouped, it goes to root level
@@ -783,33 +736,8 @@ export class Renderer {
       rootCategories.add(DEPRECATED);
     }
 
-    // Set up hierarchical numbering for categorySortPrefix
-    if (this.options?.categorySortPrefix) {
-      // Register root-level categories (Query, Mutation, Subscription, Deprecated, etc.)
-      this.rootLevelPositionManager.registerCategories(
-        Array.from(rootCategories),
-      );
-      this.rootLevelPositionManager.computePositions();
-
-      // Register nested categories (operations, objects, directives, etc., custom groups under roots)
-      this.categoryPositionManager.registerCategories(
-        Array.from(nestedCategories),
-      );
-      this.categoryPositionManager.computePositions();
-    } else {
-      // Traditional separate handling
-      this.rootLevelPositionManager.registerCategories(
-        Array.from(rootCategories),
-      );
-      this.rootLevelPositionManager.computePositions();
-
-      if (nestedCategories.size > 0) {
-        this.categoryPositionManager.registerCategories(
-          Array.from(nestedCategories),
-        );
-        this.categoryPositionManager.computePositions();
-      }
-    }
+    // Register collected categories with position managers
+    this.registerCategoriesWithManagers(rootCategories, nestedCategories);
   }
 
   /**
@@ -854,6 +782,130 @@ export class Renderer {
         `An error occurred while processing the homepage ${homepageLocation}: ${error}`,
         LogLevel.warn,
       );
+    }
+  }
+
+  /**
+   * Registers custom group names from the current group configuration.
+   * Custom groups are always registered at the ROOT level.
+   *
+   * @param rootCategories - Set to add custom group names to
+   */
+  private registerCustomGroups(rootCategories: Set<string>): void {
+    if (!this.group) {
+      return;
+    }
+
+    for (const rootTypeName in this.group) {
+      for (const name in this.group[rootTypeName as SchemaEntity]) {
+        const groupName = this.group[rootTypeName as SchemaEntity]![name];
+        if (groupName) {
+          rootCategories.add(groupName);
+        }
+      }
+    }
+  }
+
+  /**
+   * Registers API group categories (operations/types) based on hierarchy and group configuration.
+   *
+   * @param rootCategories - Set to add root-level categories
+   * @param nestedCategories - Set to add nested-level categories
+   * @param hasCustomGroups - Whether custom groups are configured
+   */
+  private registerApiGroupCategories(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+    hasCustomGroups: boolean,
+  ): void {
+    if (hasCustomGroups) {
+      // Custom groups exist: operations/types are nested
+      nestedCategories.add(API_GROUPS.operations);
+      nestedCategories.add(API_GROUPS.types);
+    } else {
+      // No custom groups: operations/types are at ROOT level
+      rootCategories.add(API_GROUPS.operations);
+      rootCategories.add(API_GROUPS.types);
+    }
+
+    // Entity categories for API group - plural forms from ROOT_TYPE_LOCALE
+    const entityCategoryNames = [
+      "directives",
+      "enums",
+      "inputs",
+      "interfaces",
+      "mutations",
+      "objects",
+      "queries",
+      "scalars",
+      "subscriptions",
+      "unions",
+    ];
+    entityCategoryNames.forEach((categoryName) => {
+      nestedCategories.add(categoryName);
+    });
+  }
+
+  /**
+   * Registers entity hierarchy categories based on configuration.
+   *
+   * @param rootCategories - Set to add root-level categories
+   * @param nestedCategories - Set to add nested-level categories
+   * @param rootTypeNames - Array of root type names from schema
+   * @param hasCustomGroups - Whether custom groups are configured
+   */
+  private registerEntityCategories(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+    rootTypeNames: string[],
+    hasCustomGroups: boolean,
+  ): void {
+    rootTypeNames.forEach((name) => {
+      if (hasCustomGroups) {
+        // If custom groups exist, entity names go nested under them
+        nestedCategories.add(name);
+      } else {
+        // If no custom groups, entity names are at root
+        rootCategories.add(name);
+      }
+    });
+  }
+
+  /**
+   * Registers collected categories with appropriate position managers.
+   * Handles both hierarchical numbering (categorySortPrefix) and traditional modes.
+   *
+   * @param rootCategories - Set of root-level categories
+   * @param nestedCategories - Set of nested-level categories
+   */
+  private registerCategoriesWithManagers(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+  ): void {
+    if (this.options?.categorySortPrefix) {
+      // Register with hierarchical numbering
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
+      this.rootLevelPositionManager.computePositions();
+
+      this.categoryPositionManager.registerCategories(
+        Array.from(nestedCategories),
+      );
+      this.categoryPositionManager.computePositions();
+    } else {
+      // Traditional separate handling
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
+      this.rootLevelPositionManager.computePositions();
+
+      if (nestedCategories.size > 0) {
+        this.categoryPositionManager.registerCategories(
+          Array.from(nestedCategories),
+        );
+        this.categoryPositionManager.computePositions();
+      }
     }
   }
 
