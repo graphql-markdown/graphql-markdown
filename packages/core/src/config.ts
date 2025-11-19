@@ -112,22 +112,6 @@ export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
  * @public
  */
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
-
-/**
- * Helper function to check if an object is empty (has no enumerable properties).
- * More explicit and robust than falsy checks.
- *
- * @param obj - The object to check
- * @returns True if the object has no enumerable properties
- * @internal
- */
-const isEmpty = (obj: Record<string, unknown> | null | undefined): boolean => {
-  if (obj === null || obj === undefined) {
-    return true;
-  }
-  return Object.keys(obj).length === 0;
-};
-
 /**
  * Location of the default homepage template.
  * @public
@@ -406,7 +390,10 @@ export const getCustomDirectives = (
   customDirectiveOptions: Maybe<CustomDirective>,
   skipDocDirective?: Maybe<DirectiveName[]>,
 ): Maybe<CustomDirective> => {
-  if (isEmpty(customDirectiveOptions)) {
+  if (
+    !customDirectiveOptions ||
+    Object.keys(customDirectiveOptions).length === 0
+  ) {
     return undefined;
   }
 
@@ -427,7 +414,9 @@ export const getCustomDirectives = (
     }
   }
 
-  return isEmpty(customDirectiveOptions) ? undefined : customDirectiveOptions;
+  return Object.keys(customDirectiveOptions).length > 0
+    ? customDirectiveOptions
+    : undefined;
 };
 
 /**
