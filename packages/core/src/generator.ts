@@ -130,7 +130,7 @@ export const generateDocFromSchema = async ({
 
   const mdxModule = await (mdxParser === undefined
     ? undefined
-    : import(mdxParser).catch(() => {
+    : import(mdxParser as string).catch(() => {
         log(
           `An error occurred while loading MDX formatter "${mdxParser}"`,
           LogLevel.warn,
