@@ -86,5 +86,9 @@
   "eslint.workingDirectories": ["./config"],
   "jest.rootPath": ".",
   "jest.jestCommandLine": "npm run test:ci --",
-  "CodeGPT.apiKey": "CodeGPT Plus Beta"
+  "CodeGPT.apiKey": "CodeGPT Plus Beta",
+  "sonarlint.connectedMode.project": {
+    "connectionId": "graphql-markdown",
+    "projectKey": "graphql-markdown_printer-legacy"
+  }
 }
