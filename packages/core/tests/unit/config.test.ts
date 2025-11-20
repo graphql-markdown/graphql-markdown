@@ -21,6 +21,7 @@ import {
   DEFAULT_HIERARCHY,
   DEFAULT_OPTIONS,
   DiffMethod,
+  getDiffMethod,
   getCustomDirectives,
   getDocDirective,
   getDocOptions,
@@ -319,6 +320,7 @@ describe("config", () => {
         diffMethod: configFileOpts.diffMethod,
         docOptions: {
           ...configFileOpts.docOptions,
+          categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true },
         },
         groupByDirective: configFileOpts.groupByDirective,
@@ -412,6 +414,7 @@ describe("config", () => {
         schemaLocation: cliOpts.schema,
         tmpDir: cliOpts.tmp,
         docOptions: {
+          categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: {},
           index: true,
         },
@@ -490,6 +493,7 @@ describe("config", () => {
         schemaLocation: configFileOpts.schema,
         tmpDir: configFileOpts.tmpDir,
         docOptions: {
+          categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true, page_next: null },
           index: true,
         },
@@ -1071,5 +1075,378 @@ describe("config", () => {
         "homepage.md",
       );
     });
+  });
+
+  describe("mutation test: edge cases and boundary conditions", () => {
+    test("getTypeHierarchyOption handles case-insensitive hierarchy values", () => {
+      expect.assertions(3);
+
+      // Test case variations
+      const lowercase = getTypeHierarchyOption(
+        "entity" as TypeHierarchyValueType,
+      );
+      const uppercase = getTypeHierarchyOption(
+        "ENTITY" as TypeHierarchyValueType,
+      );
+      const mixedcase = getTypeHierarchyOption(
+        "EnTiTy" as TypeHierarchyValueType,
+      );
+
+      expect(lowercase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+      expect(uppercase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+      expect(mixedcase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    });
+
+    test("getCustomDirectives validates all directive format conditions", () => {
+      expect.assertions(1);
+
+      // Test case where neither tag nor descriptor is present
+      const options = {
+        test: {
+          someOtherProp: "value",
+        } as Maybe<CustomDirective>,
+      };
+
+      expect(() => {
+        getCustomDirectives(options as Maybe<CustomDirective>);
+      }).toThrow();
+    });
+
+    test("getCustomDirectives filters skipped directives correctly", () => {
+      expect.assertions(1);
+
+      const options = {
+        test1: { descriptor: (): void => {} },
+        test2: { descriptor: (): void => {} },
+        test3: { descriptor: (): void => {} },
+      };
+
+      const result = getCustomDirectives(options, ["test2" as DirectiveName]);
+
+      expect(result).not.toHaveProperty("test2");
+    });
+  });
+});
+
+// Additional mutation tests for coverage
+describe("mutation test: additional config edge cases", () => {
+  test("getTypeHierarchyOption with flat hierarchy string", () => {
+    expect.assertions(2);
+
+    const flat = getTypeHierarchyOption("flat" as TypeHierarchyValueType);
+    const flatUpper = getTypeHierarchyOption("FLAT" as TypeHierarchyValueType);
+
+    expect(flat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(flatUpper).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+  });
+
+  test("getTypeHierarchyOption with api hierarchy string", () => {
+    expect.assertions(2);
+
+    const api = getTypeHierarchyOption("api" as TypeHierarchyValueType);
+    const apiUpper = getTypeHierarchyOption("API" as TypeHierarchyValueType);
+
+    expect(api).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(apiUpper).toStrictEqual({ [TypeHierarchy.API]: {} });
+  });
+});
+
+describe("mutation test: ensure all hierarchy types are tested", () => {
+  test.each([TypeHierarchy.ENTITY, TypeHierarchy.FLAT, TypeHierarchy.API])(
+    "getTypeHierarchyOption recognizes %s hierarchy type",
+    (hierarchyType) => {
+      expect.assertions(1);
+
+      const result = getTypeHierarchyOption(
+        hierarchyType as TypeHierarchyValueType,
+      );
+
+      expect(result).toStrictEqual({ [hierarchyType]: {} });
+    },
+  );
+
+  test("getTypeHierarchyOption with case-insensitive entity hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerEntity = getTypeHierarchyOption(
+      "entity" as TypeHierarchyValueType,
+    );
+    const upperEntity = getTypeHierarchyOption(
+      "ENTITY" as TypeHierarchyValueType,
+    );
+    const mixedEntity = getTypeHierarchyOption(
+      "EnTiTy" as TypeHierarchyValueType,
+    );
+
+    expect(lowerEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    expect(upperEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+    expect(mixedEntity).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
+  });
+
+  test("getTypeHierarchyOption with case-insensitive flat hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerFlat = getTypeHierarchyOption("flat" as TypeHierarchyValueType);
+    const upperFlat = getTypeHierarchyOption("FLAT" as TypeHierarchyValueType);
+    const mixedFlat = getTypeHierarchyOption("FlaT" as TypeHierarchyValueType);
+
+    expect(lowerFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(upperFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+    expect(mixedFlat).toStrictEqual({ [TypeHierarchy.FLAT]: {} });
+  });
+
+  test("getTypeHierarchyOption with case-insensitive api hierarchy", () => {
+    expect.assertions(3);
+
+    const lowerApi = getTypeHierarchyOption("api" as TypeHierarchyValueType);
+    const upperApi = getTypeHierarchyOption("API" as TypeHierarchyValueType);
+    const mixedApi = getTypeHierarchyOption("Api" as TypeHierarchyValueType);
+
+    expect(lowerApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(upperApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+    expect(mixedApi).toStrictEqual({ [TypeHierarchy.API]: {} });
+  });
+
+  test("getTypeHierarchyOption with numeric config returns it as-is", () => {
+    expect.assertions(1);
+
+    const config = 123 as any;
+    const result = getTypeHierarchyOption(undefined, config);
+
+    expect(result).toStrictEqual(123);
+  });
+
+  test("getTypeHierarchyOption with object config returns it as-is", () => {
+    expect.assertions(1);
+
+    const config = { [TypeHierarchy.API]: { operations: "Operations" } };
+    const result = getTypeHierarchyOption(undefined, config);
+
+    expect(result).toStrictEqual(config);
+  });
+});
+
+describe("mutation test: getCustomDirectives edge cases", () => {
+  test("returns undefined when all directives are filtered by skipDocDirective", () => {
+    expect.assertions(1);
+
+    const options = {
+      testA: { descriptor: (): void => {} },
+      testB: { descriptor: (): void => {} },
+    };
+
+    const result = getCustomDirectives(options, [
+      "testA" as DirectiveName,
+      "testB" as DirectiveName,
+    ]);
+
+    expect(result).toBeUndefined();
+  });
+
+  test("returns remaining directives when some are filtered", () => {
+    expect.assertions(2);
+
+    const descriptor = (): void => {};
+    const options = {
+      testA: { descriptor },
+      testB: { descriptor },
+      testC: { descriptor },
+    };
+
+    const result = getCustomDirectives(options, [
+      "testA" as DirectiveName,
+      "testB" as DirectiveName,
+    ]);
+
+    expect(result).toHaveProperty("testC");
+    expect(result).not.toHaveProperty("testA");
+  });
+
+  test("throws when descriptor exists but is not a function", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        descriptor: "not a function",
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("throws when tag exists but is not a function", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        tag: "not a function",
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("throws when neither tag nor descriptor exists", () => {
+    expect.assertions(1);
+
+    const options = {
+      test: {
+        invalid: true,
+      } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options);
+    }).toThrow("Wrong format for plugin custom directive");
+  });
+
+  test("returns custom directive with valid tag function", () => {
+    expect.assertions(1);
+
+    const tag = (): string => "test";
+    const options = {
+      test: { tag },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { tag } });
+  });
+
+  test("returns custom directive with valid descriptor function", () => {
+    expect.assertions(1);
+
+    const descriptor = (): string => "test";
+    const options = {
+      test: { descriptor },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { descriptor } });
+  });
+
+  test("returns custom directive with both tag and descriptor functions", () => {
+    expect.assertions(1);
+
+    const tag = (): string => "tag";
+    const descriptor = (): string => "descriptor";
+    const options = {
+      test: { tag, descriptor },
+    };
+
+    const result = getCustomDirectives(options);
+
+    expect(result).toStrictEqual({ test: { tag, descriptor } });
+  });
+
+  test("respects skipDocDirective for first directive but validates others", () => {
+    expect.assertions(1);
+
+    const options = {
+      testA: { descriptor: (): void => {} },
+      testB: { invalid: true } as Maybe<CustomDirective>,
+    };
+
+    expect(() => {
+      getCustomDirectives(options, ["testA" as DirectiveName]);
+    }).toThrow('Wrong format for plugin custom directive "testB"');
+  });
+
+  test("validates conflict detection message format", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@admin" as DirectiveName] },
+        {
+          skipDocDirective: ["@admin" as DirectiveName],
+        },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+});
+
+describe("getDiffMethod", () => {
+  test("returns DiffMethod.FORCE when force parameter is true", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE, true);
+
+    expect(result).toBe(DiffMethod.FORCE);
+  });
+
+  test("returns provided method when force parameter is false", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE, false);
+
+    expect(result).toBe(DiffMethod.NONE);
+  });
+
+  test("defaults force to false when not provided", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE);
+
+    expect(result).toBe(DiffMethod.NONE);
+  });
+
+  test("returns DiffMethod.FORCE even when input method is FORCE and force is true", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.FORCE, true);
+
+    expect(result).toBe(DiffMethod.FORCE);
+  });
+});
+
+describe("getVisibilityDirectives additional validation", () => {
+  test("validates correct error message when directive appears in both lists", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@public" as DirectiveName] },
+        { skipDocDirective: ["@public" as DirectiveName] },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+
+  test("detects conflict with multiple directives in only list", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@admin" as DirectiveName, "@public" as DirectiveName] },
+        { skipDocDirective: ["@admin" as DirectiveName] },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+
+  test("error message exact format must be validated", () => {
+    expect.assertions(2);
+
+    const thrown = expect(() => {
+      getVisibilityDirectives(
+        { only: ["@deprecated" as DirectiveName] },
+        { skipDocDirective: ["@deprecated" as DirectiveName] },
+      );
+    });
+
+    thrown.toThrow();
+    thrown.toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
   });
 });

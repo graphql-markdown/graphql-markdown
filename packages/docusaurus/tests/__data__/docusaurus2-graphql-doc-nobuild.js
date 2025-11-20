@@ -47,6 +47,9 @@ module.exports = {
         rootPath: "./docs",
         linkRoot: "/",
         runOnBuild: false,
+        docOptions: {
+          categorySort: "natural",
+        },
       },
     ],
   ],

@@ -1,4 +1,25 @@
-# Unreleased
+<a id="unreleased"></a>
+# [Unreleased]
+
+✨ Add `categorySort` option to customize the ordering of auto-generated documentation directories.
+
+## What's Changed
+* feat: Add categorySort option for custom directory ordering
+
+Users can now control how categories are ordered in the sidebar by providing either:
+- `"natural"` - for alphabetical sorting
+- A custom compare function similar to `Array.sort()` - for custom ordering logic
+
+**Important**: When `categorySort` is defined, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). This ensures consistent ordering when viewing files in a file explorer or IDE. When `categorySort` is not set, no prefixes are added (default behavior).
+
+Example usage:
+```js
+docOptions: {
+  categorySort: "natural" // Sorts alphabetically and adds prefixes: 01-objects, 02-queries, etc.
+}
+```
+
+**Breaking Change**: The `categorySortPrefix` option has been removed. Prefixing is now automatic when `categorySort` is enabled.
 
 ## What's Changed
 * :bug: Fix: guard husky prepare hook to skip in CI and avoid EPIPE failures in GitHub Actions

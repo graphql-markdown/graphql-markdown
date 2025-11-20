@@ -112,7 +112,6 @@ export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
  * @public
  */
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
-
 /**
  * Location of the default homepage template.
  * @public
@@ -159,11 +158,16 @@ export const DEFAULT_OPTIONS: Readonly<
   customDirective: undefined,
   diffMethod: DiffMethod.NONE as TypeDiffMethod,
   docOptions: {
+    categorySort: undefined,
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
-  } as Required<
-    Pick<ConfigDocOptions & DeprecatedConfigDocOptions, "frontMatter" | "index">
-  >,
+  } as Pick<ConfigDocOptions, "categorySort"> &
+    Required<
+      Pick<
+        ConfigDocOptions & DeprecatedConfigDocOptions,
+        "frontMatter" | "index"
+      >
+    >,
   force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -362,19 +366,19 @@ export const getVisibilityDirectives = (
  * @throws Error if a custom directive has an invalid format
  * @example
  * ```typescript
- * // Valid custom directive with tag function
+ * // Valid custom directive with descriptor function
  * const customDirectives = {
  *   example: {
  *     tag: (value) => `Example: ${value}`
  *   },
- *   todo: {
- *     descriptor: () => "TODO items"
+ *   note: {
+ *     descriptor: () => "Note items"
  *   }
  * };
  *
- * // Filter out the "example" directive
+ * // Filter out the "example" directive, keeping "note"
  * const filteredDirectives = getCustomDirectives(customDirectives, ["example"]);
- * console.log(filteredDirectives); // { todo: { descriptor: [Function] } }
+ * console.log(filteredDirectives); // { note: { descriptor: [Function] } }
  *
  * // Invalid format - will throw an error
  * getCustomDirectives({ example: { invalid: true } }, []);
@@ -410,9 +414,9 @@ export const getCustomDirectives = (
     }
   }
 
-  return Object.keys(customDirectiveOptions).length === 0
-    ? undefined
-    : customDirectiveOptions;
+  return Object.keys(customDirectiveOptions).length > 0
+    ? customDirectiveOptions
+    : undefined;
 };
 
 /**
@@ -491,7 +495,9 @@ export const getDocOptions = (
       : typeof configOptions?.index === "boolean"
         ? configOptions.index
         : DEFAULT_OPTIONS.docOptions!.index;
+
   return {
+    categorySort: configOptions?.categorySort,
     frontMatter: {
       ...deprecated,
       ...configOptions?.frontMatter,
@@ -689,7 +695,7 @@ export const parseGroupByOption = (
 
   const parsedOptions = OPTION_REGEX.exec(groupOptions);
 
-  if (typeof parsedOptions === "undefined" || parsedOptions === null) {
+  if (parsedOptions === null) {
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
@@ -698,10 +704,10 @@ export const parseGroupByOption = (
   }
 
   const {
-    directive,
-    field,
-    fallback = DEFAULT_GROUP,
-  } = parsedOptions.groups as unknown as GroupByDirectiveOptions;
+    groups: { directive, field, fallback = DEFAULT_GROUP },
+  } = parsedOptions as unknown as {
+    groups: { directive: string; field: string; fallback?: string };
+  };
   return { directive, field, fallback } as GroupByDirectiveOptions;
 };
 

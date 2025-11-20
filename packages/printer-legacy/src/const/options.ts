@@ -39,6 +39,7 @@ export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
+    | "formatCategoryFolderName"
     | "groups"
     | "level"
     | "meta"

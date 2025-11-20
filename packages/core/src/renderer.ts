@@ -1,6 +1,7 @@
 import type {
   ApiGroupOverrideType,
   Category,
+  CategorySortFn,
   LocationPath,
   Maybe,
   MDXString,
@@ -149,6 +150,29 @@ export const getApiGroupFolder = (
 };
 
 /**
+ * Strips numeric prefix from a folder name if categorySort is enabled.
+ * Converts folder names like "01-query" back to "query" for category identification.
+ *
+ * This is needed when extracting category names from file paths that were created
+ * with categorySort enabled. The regex matches leading two-digit numbers
+ * followed by a hyphen.
+ *
+ * @param folderName - The folder name to strip (e.g., "01-query", "02-mutations")
+ * @returns The folder name without prefix (e.g., "query", "mutations")
+ * @useDeclaredType
+ *
+ * @example
+ * ```typescript
+ * stripNumericPrefix("01-query");      // Returns "query"
+ * stripNumericPrefix("02-mutations");  // Returns "mutations"
+ * stripNumericPrefix("objects");       // Returns "objects" (no prefix to strip)
+ * ```
+ */
+const stripNumericPrefix = (folderName: string): string => {
+  return folderName.replace(/^\d{2}-/, "");
+};
+
+/**
  * Type guard function that checks if the provided options include a specific hierarchy configuration.
  *
  * @param options - The renderer options to check
@@ -203,8 +227,113 @@ export interface CategoryMetafileOptions {
 }
 
 /**
+ * Default natural sorting function for categories.
+ * Sorts categories alphabetically using localeCompare.
+ *
+ * @param a - First category name
+ * @param b - Second category name
+ * @returns Comparison result for sorting
+ */
+const naturalSort: CategorySortFn = (a: string, b: string): number => {
+  return a.localeCompare(b);
+};
+
+/**
+ * Manages category positions for the sidebar.
+ * Supports two modes:
+ * 1. Pre-registration: categories are registered upfront, positions computed once
+ * 2. On-demand: positions are computed as categories are encountered
+ *
+ * @useDeclaredType
+ */
+class CategoryPositionManager {
+  private readonly categories = new Set<string>();
+  private readonly positionCache = new Map<string, number>();
+  private positionsComputed: boolean = false;
+  private readonly sortFn: CategorySortFn;
+  private readonly basePosition: number;
+
+  /**
+   * Creates a new CategoryPositionManager.
+   *
+   * @param sortFn - Function to sort categories (defaults to natural/alphabetical)
+   * @param basePosition - Starting position for categories (defaults to 1)
+   */
+  constructor(sortFn?: CategorySortFn | "natural", basePosition = 1) {
+    this.sortFn = sortFn === "natural" || !sortFn ? naturalSort : sortFn;
+    this.basePosition = basePosition;
+  }
+
+  /**
+   * Pre-registers a batch of category names.
+   * This should be called before rendering to ensure consistent positioning.
+   *
+   * @param categoryNames - Array of category names to register
+   */
+  registerCategories(categoryNames: string[]): void {
+    for (const name of categoryNames) {
+      this.categories.add(name);
+    }
+  }
+
+  /**
+   * Computes positions for all registered categories.
+   * This is called either manually after registration or automatically on first getPosition call.
+   */
+  computePositions(): void {
+    if (this.positionsComputed) {
+      return;
+    }
+
+    const sorted = Array.from(this.categories).sort(this.sortFn);
+    for (let index = 0; index < sorted.length; index++) {
+      this.positionCache.set(sorted[index], this.basePosition + index);
+    }
+
+    this.positionsComputed = true;
+  }
+
+  /**
+   * Gets the assigned position for a category.
+   * If category positions haven't been computed yet, computes them first.
+   *
+   * @param category - The category name
+   * @returns The position assigned to this category or basePosition if not found
+   */
+  getPosition(category: string): number {
+    // Ensure positions are computed first (uses pre-registered categories)
+    if (!this.positionsComputed) {
+      this.computePositions();
+    }
+
+    // Return cached position or base position if not found
+    // NOTE: We don't dynamically add categories here to avoid breaking
+    // pre-computed positions. This ensures consistent positioning even if
+    // getPosition is called for categories that weren't pre-registered.
+    return this.positionCache.get(category) ?? this.basePosition;
+  }
+
+  /**
+   * Check if a category was pre-registered without triggering recomputation.
+   * Used to determine hierarchy level (root vs nested) without side effects.
+   *
+   * @param category - Category name to check
+   * @returns true if category was pre-registered
+   */
+  isRegistered(category: string): boolean {
+    return this.categories.has(category);
+  }
+}
+
+/**
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
+ *
+ * HIERARCHY LEVELS WHEN categorySort IS ENABLED:
+ * - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
+ * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
+ *
+ * Each level has its own CategoryPositionManager that restarts numbering at 1.
  * @useDeclaredType
  * @example
  */
@@ -218,6 +347,8 @@ export class Renderer {
   mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
+  private readonly rootLevelPositionManager: CategoryPositionManager;
+  private readonly categoryPositionManager: CategoryPositionManager;
 
   /**
    * Creates a new Renderer instance.
@@ -241,6 +372,7 @@ export class Renderer {
     mdxModule?: unknown,
   ) {
     this.printer = printer;
+
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
@@ -248,6 +380,19 @@ export class Renderer {
     this.options = docOptions;
     this.mdxModule = mdxModule;
     this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
+
+    // Initialize position managers for different hierarchy levels
+    // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
+    this.rootLevelPositionManager = new CategoryPositionManager(
+      docOptions?.categorySort,
+      1, // Start from 1 at root level
+    );
+
+    // categoryPositionManager: for categories within each root type (e.g., under Query)
+    this.categoryPositionManager = new CategoryPositionManager(
+      docOptions?.categorySort,
+      1, // Start from 1 for each root type
+    );
   }
 
   /**
@@ -290,16 +435,28 @@ export class Renderer {
   async generateIndexMetafile(
     dirPath: string,
     category: string,
-    options: CategoryMetafileOptions = {
+    options?: CategoryMetafileOptions,
+  ): Promise<void> {
+    const defaultOptions: CategoryMetafileOptions = {
       collapsible: true,
       collapsed: true,
-    },
-  ): Promise<void> {
+    };
+    const finalOptions = options ?? defaultOptions;
+
     if (this.mdxModuleIndexFileSupport) {
+      // If no explicit position is provided, use the position manager
+      const sidebarPosition =
+        finalOptions.sidebarPosition ??
+        this.categoryPositionManager.getPosition(category);
+
       await (this.mdxModule as MDXSupportType).generateIndexMetafile(
         dirPath,
         category,
-        { ...options, index: this.options?.index },
+        {
+          ...finalOptions,
+          sidebarPosition,
+          index: this.options?.index,
+        },
       );
     }
   }
@@ -330,13 +487,45 @@ export class Renderer {
       return dirPath;
     }
 
+    // Deprecated gets highest priority - at ROOT level before even custom groups
+    if (this.options?.deprecated === "group" && isDeprecated(type)) {
+      const formattedDeprecated = this.formatCategoryFolderName(
+        DEPRECATED,
+        true,
+      );
+      dirPath = join(dirPath, formattedDeprecated);
+      await this.generateIndexMetafile(dirPath, DEPRECATED, {
+        sidebarPosition: SidebarPosition.LAST,
+        styleClass: CATEGORY_STYLE_CLASS.DEPRECATED,
+      });
+    }
+
+    // Custom groups come after deprecated but before hierarchy levels
+    if (
+      this.group &&
+      rootTypeName in this.group &&
+      name in this.group[rootTypeName]!
+    ) {
+      const rootGroup = this.group[rootTypeName]![name] ?? "";
+      // Custom groups are always at ROOT level (they come after deprecated in hierarchy priority)
+      const formattedRootGroup = this.formatCategoryFolderName(rootGroup, true);
+      dirPath = join(dirPath, formattedRootGroup);
+      await this.generateIndexMetafile(dirPath, rootGroup);
+    }
+
     const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
       ? this.options.hierarchy[TypeHierarchy.API]
-      : (!this.options?.hierarchy as boolean);
+      : !isHierarchy(this.options, TypeHierarchy.ENTITY);
 
     if (useApiGroup) {
       const typeCat = getApiGroupFolder(type, useApiGroup);
-      dirPath = join(dirPath, slugify(typeCat));
+      // API groups are root-level if no custom groups exist, nested if custom groups exist
+      const isApiGroupRootLevel = !this.group;
+      const formattedTypeCat = this.formatCategoryFolderName(
+        typeCat,
+        isApiGroupRootLevel,
+      );
+      dirPath = join(dirPath, formattedTypeCat);
       await this.generateIndexMetafile(dirPath, typeCat, {
         collapsible: false,
         collapsed: false,
@@ -344,25 +533,16 @@ export class Renderer {
       });
     }
 
-    if (this.options?.deprecated === "group" && isDeprecated(type)) {
-      dirPath = join(dirPath, slugify(DEPRECATED));
-      await this.generateIndexMetafile(dirPath, DEPRECATED, {
-        sidebarPosition: SidebarPosition.LAST,
-        styleClass: CATEGORY_STYLE_CLASS.DEPRECATED,
-      });
-    }
-
-    if (
-      this.group &&
-      rootTypeName in this.group &&
-      name in this.group[rootTypeName]!
-    ) {
-      const rootGroup = this.group[rootTypeName]![name] ?? "";
-      dirPath = join(dirPath, slugify(rootGroup));
-      await this.generateIndexMetafile(dirPath, rootGroup);
-    }
-
-    dirPath = join(dirPath, slugify(rootTypeName));
+    // Entity categories are:
+    // - Root-level in entity hierarchy (only when no custom groups exist)
+    // - Nested in API hierarchy
+    // - Nested in entity hierarchy when custom groups exist
+    const isRootTypeLevelCat = useApiGroup ? false : !this.group;
+    const formattedRootTypeName = this.formatCategoryFolderName(
+      rootTypeName,
+      isRootTypeLevelCat,
+    );
+    dirPath = join(dirPath, formattedRootTypeName);
     await this.generateIndexMetafile(dirPath, rootTypeName);
 
     return dirPath;
@@ -387,27 +567,23 @@ export class Renderer {
 
     const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
     return Promise.all(
-      Object.keys(type)
-        .map(async (name) => {
-          let dirPath = this.outputDir;
+      Object.keys(type).map(async (name) => {
+        let dirPath = this.outputDir;
 
-          if (!isFlat) {
-            dirPath = await this.generateCategoryMetafileType(
-              (type as Record<string, unknown>)[name],
-              name,
-              rootTypeName,
-            );
-          }
-
-          return this.renderTypeEntities(
-            dirPath,
-            name,
+        if (!isFlat) {
+          dirPath = await this.generateCategoryMetafileType(
             (type as Record<string, unknown>)[name],
+            name,
+            rootTypeName,
           );
-        })
-        .filter((res) => {
-          return typeof res !== "undefined";
-        }),
+        }
+
+        return this.renderTypeEntities(
+          dirPath,
+          name,
+          (type as Record<string, unknown>)[name],
+        );
+      }),
     );
   }
 
@@ -440,7 +616,22 @@ export class Renderer {
 
     let content: MDXString;
     try {
-      content = this.printer.printType(fileName, type, this.options);
+      const printOptions = {
+        ...this.options,
+        formatCategoryFolderName: (categoryName: string): string => {
+          // Determine if this category should use root or nested formatting
+          // First check if category was pre-registered as a root-level category
+          if (this.rootLevelPositionManager.isRegistered(categoryName)) {
+            return this.formatCategoryFolderName(categoryName, true);
+          }
+          // If not root-level, check if it's a nested category
+          // Nested categories are handled dynamically without pre-registration
+          // in some hierarchies (like API hierarchy where entity categories are
+          // scoped within their parent API group)
+          return this.formatCategoryFolderName(categoryName, false);
+        },
+      };
+      content = this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
         return undefined;
       }
@@ -471,15 +662,81 @@ export class Renderer {
       return undefined;
     }
 
+    // Strip numeric prefix from category if it was applied when categorySort is enabled
+    const extractedCategory = isFlat
+      ? page.groups.pageId
+      : stripNumericPrefix(page.groups.category);
+
     const slug = isFlat
       ? page.groups.pageId
-      : pathUrl.join(page.groups.category, page.groups.pageId);
-    const category = isFlat ? "schema" : startCase(page.groups.category);
+      : pathUrl.join(extractedCategory, page.groups.pageId);
+    const category = isFlat ? "schema" : startCase(extractedCategory);
 
     return {
       category,
       slug,
     } as Category;
+  }
+
+  /**
+   * Pre-collects all category names that will be generated during rendering.
+   * This allows the position manager to assign consistent positions before
+   * any files are written.
+   *
+   * HIERARCHY LEVELS:
+   * - Root level: Query, Mutation, Subscription, Deprecated (when grouped), custom root groups
+   * - Nested level: operations/types (API groups), custom groups under roots
+   *
+   * CRITICAL: Categories registered must match the NAMES USED BY THE PRINTER
+   * when generating links. The printer uses plural forms from ROOT_TYPE_LOCALE:
+   * "operations", "objects", "directives", "enums", "inputs", "interfaces",
+   * "mutations", "queries", "scalars", "subscriptions", "unions"
+   *
+   * NOT the folder names: "operations", "types"
+   *
+   * @param rootTypeNames - Array of root type names from the schema
+   * @useDeclaredType
+   */
+  preCollectCategories(rootTypeNames: string[]): void {
+    const rootCategories = new Set<string>();
+    const nestedCategories = new Set<string>();
+
+    // Skip if flat hierarchy
+    if (isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return;
+    }
+
+    // Determine if using API hierarchy
+    const useApiGroup = isHierarchy(this.options, TypeHierarchy.API)
+      ? this.options.hierarchy[TypeHierarchy.API]
+      : !isHierarchy(this.options, TypeHierarchy.ENTITY);
+
+    // Register custom groups at root level
+    this.registerCustomGroups(rootCategories);
+
+    // Register categories based on hierarchy type
+    if (useApiGroup) {
+      this.registerApiGroupCategories(
+        rootCategories,
+        nestedCategories,
+        this.group !== undefined,
+      );
+    } else {
+      this.registerEntityCategories(
+        rootCategories,
+        nestedCategories,
+        rootTypeNames,
+        this.group !== undefined,
+      );
+    }
+
+    // Deprecated category - when grouped, it goes to root level
+    if (this.options?.deprecated === "group") {
+      rootCategories.add(DEPRECATED);
+    }
+
+    // Register collected categories with position managers
+    this.registerCategoriesWithManagers(rootCategories, nestedCategories);
   }
 
   /**
@@ -511,8 +768,8 @@ export class Renderer {
 
       const data = template
         .toString()
-        .replace(/##baseURL##/gm, slug)
-        .replace(/##generated-date-time##/gm, new Date().toLocaleString());
+        .replaceAll("##baseURL##", slug)
+        .replaceAll("##generated-date-time##", new Date().toLocaleString());
 
       await saveFile(
         destLocation,
@@ -524,6 +781,176 @@ export class Renderer {
         `An error occurred while processing the homepage ${homepageLocation}: ${error}`,
         LogLevel.warn,
       );
+    }
+  }
+
+  /**
+   * Registers custom group names from the current group configuration.
+   * Custom groups are always registered at the ROOT level.
+   *
+   * @param rootCategories - Set to add custom group names to
+   */
+  private registerCustomGroups(rootCategories: Set<string>): void {
+    if (!this.group) {
+      return;
+    }
+
+    for (const rootTypeName in this.group) {
+      for (const name in this.group[rootTypeName as SchemaEntity]) {
+        const groupName = this.group[rootTypeName as SchemaEntity]![name];
+        if (groupName) {
+          rootCategories.add(groupName);
+        }
+      }
+    }
+  }
+
+  /**
+   * Registers API group categories (operations/types) based on hierarchy and group configuration.
+   *
+   * @param rootCategories - Set to add root-level categories
+   * @param nestedCategories - Set to add nested-level categories
+   * @param hasCustomGroups - Whether custom groups are configured
+   */
+  private registerApiGroupCategories(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+    hasCustomGroups: boolean,
+  ): void {
+    if (hasCustomGroups) {
+      // Custom groups exist: operations/types are nested
+      nestedCategories.add(API_GROUPS.operations);
+      nestedCategories.add(API_GROUPS.types);
+    } else {
+      // No custom groups: operations/types are at ROOT level
+      rootCategories.add(API_GROUPS.operations);
+      rootCategories.add(API_GROUPS.types);
+    }
+
+    // Entity categories for API group - plural forms from ROOT_TYPE_LOCALE
+    const entityCategoryNames = [
+      "directives",
+      "enums",
+      "inputs",
+      "interfaces",
+      "mutations",
+      "objects",
+      "queries",
+      "scalars",
+      "subscriptions",
+      "unions",
+    ];
+    for (const categoryName of entityCategoryNames) {
+      nestedCategories.add(categoryName);
+    }
+  }
+
+  /**
+   * Registers entity hierarchy categories based on configuration.
+   *
+   * @param rootCategories - Set to add root-level categories
+   * @param nestedCategories - Set to add nested-level categories
+   * @param rootTypeNames - Array of root type names from schema
+   * @param hasCustomGroups - Whether custom groups are configured
+   */
+  private registerEntityCategories(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+    rootTypeNames: string[],
+    hasCustomGroups: boolean,
+  ): void {
+    for (const name of rootTypeNames) {
+      if (hasCustomGroups) {
+        // If custom groups exist, entity names go nested under them
+        nestedCategories.add(name);
+      } else {
+        // If no custom groups, entity names are at root
+        rootCategories.add(name);
+      }
+    }
+  }
+
+  /**
+   * Registers collected categories with appropriate position managers.
+   * Handles both hierarchical numbering (when categorySort is enabled) and traditional modes.
+   *
+   * @param rootCategories - Set of root-level categories
+   * @param nestedCategories - Set of nested-level categories
+   */
+  private registerCategoriesWithManagers(
+    rootCategories: Set<string>,
+    nestedCategories: Set<string>,
+  ): void {
+    const hasCategorySort = this.options?.categorySort !== undefined;
+
+    if (hasCategorySort) {
+      // Register with hierarchical numbering when categorySort is enabled
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
+      this.rootLevelPositionManager.computePositions();
+
+      this.categoryPositionManager.registerCategories(
+        Array.from(nestedCategories),
+      );
+      this.categoryPositionManager.computePositions();
+    } else {
+      // Traditional separate handling when categorySort is not defined
+      this.rootLevelPositionManager.registerCategories(
+        Array.from(rootCategories),
+      );
+      this.rootLevelPositionManager.computePositions();
+
+      if (nestedCategories.size > 0) {
+        this.categoryPositionManager.registerCategories(
+          Array.from(nestedCategories),
+        );
+        this.categoryPositionManager.computePositions();
+      }
+    }
+  }
+
+  /**
+   * Formats a category folder name, optionally prefixing with an order number.
+   *
+   * Supports hierarchical numbering:
+   * - Root level items (Query, Mutation, etc.) use rootLevelPositionManager
+   * - Nested items (groups, types within roots) use categoryPositionManager
+   *
+   * @param categoryName - The category name to format
+   * @param isRootLevel - Whether this category is at the root level (default: false for nested)
+   * @returns The formatted folder name (e.g., "01-objects" if prefix is enabled)
+   * @private
+   */
+  private formatCategoryFolderName(
+    categoryName: string,
+    isRootLevel: boolean = false,
+  ): string {
+    const hasCategorySort = this.options?.categorySort !== undefined;
+
+    if (!hasCategorySort) {
+      return slugify(categoryName);
+    }
+
+    try {
+      // Choose the appropriate position manager based on hierarchy level
+      const manager = isRootLevel
+        ? this.rootLevelPositionManager
+        : this.categoryPositionManager;
+
+      const position = manager.getPosition(categoryName);
+
+      if (!position) {
+        return slugify(categoryName);
+      }
+
+      const paddedPosition = String(position).padStart(2, "0");
+      const slugifiedName = slugify(categoryName);
+      const result = `${paddedPosition}-${slugifiedName}`;
+
+      return result;
+    } catch {
+      return slugify(categoryName);
     }
   }
 }

@@ -10,6 +10,7 @@ projects:
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
         docOptions:
           index: true
+          categorySort: "natural"
         printTypeOptions:
           parentTypePrefix: false
           relatedTypeSection: false

@@ -179,6 +179,9 @@ export const generateDocFromSchema = async ({
     mdxModule,
   );
 
+  // Pre-collect all categories before rendering to ensure consistent positions
+  renderer.preCollectCategories(Object.keys(rootTypes));
+
   const pages = await Promise.all(
     Object.keys(rootTypes).map(async (name) => {
       const typeName = name as SchemaEntity;

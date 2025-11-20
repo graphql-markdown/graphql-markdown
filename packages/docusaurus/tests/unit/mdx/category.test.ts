@@ -139,6 +139,24 @@ describe("generateIndexMetafile()", () => {
     );
   });
 
+  test("generate _category_.yml file with numeric prefix in directory name", async () => {
+    expect.assertions(1);
+
+    const category = "common";
+    const outputPath = path.join("/output/docs", "01-common");
+    const filePath = path.join(outputPath, CATEGORY_YAML);
+
+    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = jest.spyOn(Utils, "saveFile");
+
+    await generateIndexMetafile(outputPath, category);
+
+    expect(spy).toHaveBeenCalledWith(
+      filePath,
+      `label: Common\nposition: 1\nlink: null\ncollapsible: true\ncollapsed: true\n`,
+    );
+  });
+
   test("ensures directory exists before saving file", async () => {
     expect.assertions(2);
 
