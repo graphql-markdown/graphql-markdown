@@ -44,14 +44,14 @@ export enum LogLevel {
  *
  */
 export const Logger = async (moduleName?: string): Promise<void> => {
-  if (global.logger?.instance && typeof moduleName === "undefined") {
+  if (globalThis.logger?.instance && moduleName === undefined) {
     return;
   }
 
   const instance: LoggerType["instance"] =
     typeof moduleName === "string" && moduleName !== ""
       ? (await import(moduleName)).default
-      : global.console;
+      : globalThis.console;
 
   const _log = (
     message: string,
@@ -63,7 +63,7 @@ export const Logger = async (moduleName?: string): Promise<void> => {
     callback?.apply(this, [message]);
   };
 
-  global.logger = { instance, _log };
+  globalThis.logger = { instance, _log };
 };
 
 /**
@@ -90,7 +90,7 @@ export const log = (
   new Promise((resolve) => {
     resolve(Logger());
   }).catch(() => {});
-  global.logger?._log(message, level);
+  globalThis.logger?._log(message, level);
 };
 
 /**

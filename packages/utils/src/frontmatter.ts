@@ -124,7 +124,7 @@ export const formatFrontMatterProp = (
   indentation: number = 0,
   prefix?: string,
 ): string[] => {
-  if (typeof prop === "undefined" || prop === null) {
+  if (prop === undefined || prop === null) {
     return [];
   }
 

@@ -277,7 +277,7 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     if (
-      typeof options.exampleSection === "undefined" ||
+      options.exampleSection === undefined ||
       options.exampleSection === null ||
       options.exampleSection === false
     ) {

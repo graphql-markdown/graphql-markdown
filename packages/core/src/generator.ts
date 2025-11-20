@@ -128,7 +128,7 @@ export const generateDocFromSchema = async ({
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
 
-  const mdxModule = await (!mdxParser
+  const mdxModule = await (mdxParser === undefined
     ? undefined
     : import(mdxParser).catch(() => {
         log(

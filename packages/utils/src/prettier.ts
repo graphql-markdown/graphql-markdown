@@ -40,10 +40,10 @@ export const prettify = async (
     return await format(content, { ...options, parser });
   } catch {
     const message = `Prettier is not found or not configured. Please install it or disable the "pretty" option.`;
-    if ("logger" in global && global.logger) {
-      (global.logger as LoggerType)._log(message);
+    if ("logger" in globalThis && globalThis.logger) {
+      (globalThis.logger as LoggerType)._log(message);
     } else {
-      global.console.log(message);
+      globalThis.console.log(message);
     }
     return undefined;
   }

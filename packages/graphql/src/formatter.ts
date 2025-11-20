@@ -88,10 +88,14 @@ const _formatInputDefaultValues = <T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
 ): T | string => {
-  if (typeof type === "undefined" || type === null) {
+  if (type === undefined || type === null) {
     return "";
   }
-  if (isInputObjectType(type) && typeof defaultValue === "object") {
+  if (
+    isInputObjectType(type) &&
+    defaultValue !== null &&
+    typeof defaultValue === "object"
+  ) {
     const fields = type.getFields();
     const fieldStrings = Object.entries(defaultValue as Record<string, unknown>)
       .map(([key, value]) => {
@@ -128,9 +132,9 @@ export const getFormattedDefaultValue = <T>({
   defaultValue,
 }: GraphQLSchemaEntity<T>): Maybe<T | string> => {
   if (
-    typeof type === "undefined" ||
+    type === undefined ||
     type === null ||
-    typeof defaultValue === "undefined" ||
+    defaultValue === undefined ||
     defaultValue === null
   ) {
     return undefined;

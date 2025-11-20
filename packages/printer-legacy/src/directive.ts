@@ -34,7 +34,6 @@ export const getCustomDirectiveResolver = (
   fallback?: Maybe<string>,
 ): Maybe<string> => {
   if (
-    typeof constDirectiveOption === "undefined" ||
     typeof constDirectiveOption.type !== "object" ||
     typeof constDirectiveOption[resolver] !== "function"
   ) {
@@ -100,7 +99,7 @@ export const printCustomDirectives = (
       return printCustomDirective(type, constDirectiveOption, options);
     })
     .filter((value): boolean => {
-      return typeof value !== "undefined";
+      return value !== undefined;
     });
 
   if (directives.length === 0) {
@@ -140,7 +139,7 @@ export const getCustomTags = (
       return getCustomDirectiveResolver("tag", type, constDirectiveOption);
     })
     .filter((value): boolean => {
-      return typeof value !== "undefined";
+      return value !== undefined;
     }) as unknown as Badge[];
 };
 

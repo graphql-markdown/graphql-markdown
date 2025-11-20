@@ -234,10 +234,7 @@ export const toLink = (
     url: "#",
   };
 
-  if (
-    typeof type !== "object" ||
-    (typeof options !== "undefined" && !hasPrintableDirective(type, options))
-  ) {
+  if (typeof type !== "object" || !hasPrintableDirective(type, options)) {
     return fallback;
   }
 
@@ -337,11 +334,7 @@ export const printLinkAttributes = (
     return text ?? "";
   }
 
-  if (
-    !isLeafType(type) &&
-    "ofType" in type &&
-    typeof type.ofType !== "undefined"
-  ) {
+  if (!isLeafType(type) && "ofType" in type && type.ofType !== undefined) {
     text = printLinkAttributes(type.ofType as GraphQLNamedType, text);
   }
 
@@ -375,7 +368,7 @@ export const printLink = (type: unknown, options: PrintLinkOptions): string => {
     options,
   );
 
-  if (typeof options !== "undefined" && !hasOptionWithAttributes(options)) {
+  if (!hasOptionWithAttributes(options)) {
     const textWithAttribute = options.formatMDXNameEntity!(
       link.text,
       options.parentType,
