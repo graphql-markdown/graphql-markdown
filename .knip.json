@@ -5,13 +5,10 @@
       "project": ["{config,scripts}/**/*.js"]
     },
     "packages/*": {
-      "entry": ["src/index.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"]
     },
     "packages/core": {
-      "entry": ["src/index.ts!"],
-      "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": [
         "@graphql-markdown/diff",
@@ -20,18 +17,15 @@
       ]
     },
     "packages/utils": {
-      "entry": ["src/index.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": ["prettier"]
     },
     "packages/cli": {
-      "entry": ["src/main.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"]
     },
     "packages/docusaurus": {
-      "entry": ["src/index.ts!", "src/mdx/index.ts!"],
       "project": ["**/*.ts!"],
       "ignore": ["**/__mocks__/**/*.ts"]
     }
@@ -39,7 +33,7 @@
   "rules": {
     "enumMembers": "warn"
   },
-  "ignoreDependencies": ["danger", "commitizen", "diff", "lodash.filter"],
+  "ignoreDependencies": ["danger", "commitizen", "husky"],
   "ignoreBinaries": ["danger"],
   "ignoreExportsUsedInFile": true,
   "jest": {
