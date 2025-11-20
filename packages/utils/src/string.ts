@@ -290,6 +290,4 @@ export const slugify = kebabCase;
  *
  * @returns a string
  */
-export const toString = (variable: unknown): string => {
-  return String(variable);
-};
+export const toString = String;

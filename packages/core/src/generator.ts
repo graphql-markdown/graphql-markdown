@@ -128,15 +128,15 @@ export const generateDocFromSchema = async ({
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
 
-  const mdxModule = await (mdxParser === undefined
-    ? undefined
-    : import(mdxParser as string).catch(() => {
+  const mdxModule = await (mdxParser !== undefined
+    ? import(mdxParser as string).catch(() => {
         log(
           `An error occurred while loading MDX formatter "${mdxParser}"`,
           LogLevel.warn,
         );
         return undefined;
-      }));
+      })
+    : undefined);
 
   const printer = await getPrinter(
     // module mandatory

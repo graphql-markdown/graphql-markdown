@@ -129,7 +129,7 @@ export const getDocumentLoaders = async (
       loaders.push(new Loader());
     } else {
       if (typeof graphqlDocumentLoader.module === "undefined") {
-        throw new Error(
+        throw new TypeError(
           `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
         );
       }
