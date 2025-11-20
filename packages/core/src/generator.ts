@@ -128,7 +128,7 @@ export const generateDocFromSchema = async ({
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
   const groups = getGroups(rootTypes, groupByDirective);
 
-  const mdxModule = await (mdxParser !== undefined
+  const mdxModule = await (mdxParser !== undefined && mdxParser !== null
     ? import(mdxParser as string).catch(() => {
         log(
           `An error occurred while loading MDX formatter "${mdxParser}"`,
