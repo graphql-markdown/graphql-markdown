@@ -31,7 +31,7 @@ export const replaceDiacritics = (str: Maybe<string>): string => {
   return str
     .toString()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replaceAll(/[\u0300-\u036f]/g, "");
 };
 
 /**
@@ -112,9 +112,9 @@ export const stringCaseBuilder = (
   }
 
   const stringCase = replaceDiacritics(str)
-    .replace(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
-    .replace(/([a-z]+)(\d)/g, "$1 $2")
-    .replace(/(\d+)([a-z])/g, "$1 $2")
+    .replaceAll(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
+    .replaceAll(/([a-z]+)(\d)/g, "$1 $2")
+    .replaceAll(/(\d+)([a-z])/g, "$1 $2")
     .split(splitter)
     .filter((word) => {
       return word.length > 0;

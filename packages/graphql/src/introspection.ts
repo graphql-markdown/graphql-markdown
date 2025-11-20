@@ -205,20 +205,17 @@ export const hasDirective = (
   ) {
     return fallback;
   }
-  return (
-    directives.findIndex((directive) => {
-      // if the directive location is not applicable to entity then skip it
-      if (!isValidDirectiveLocation(entity, directive)) {
-        return fallback;
-      }
-      return (
-        entity.astNode.directives &&
-        entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
-          return directive.name === directiveNode.name.value;
-        }) > -1
-      );
-    }) > -1
-  );
+  return directives.some((directive) => {
+    // if the directive location is not applicable to entity then return fallback
+    if (!isValidDirectiveLocation(entity, directive)) {
+      return fallback;
+    }
+    return (
+      entity.astNode.directives?.some((directiveNode: DirectiveNode) => {
+        return directive.name === directiveNode.name.value;
+      }) ?? false
+    );
+  });
 };
 
 /**
@@ -244,11 +241,9 @@ export const getDirective = (
 
   return directives.filter((directive): boolean => {
     return (
-      (entity.astNode.directives &&
-        entity.astNode.directives.findIndex((directiveNode: DirectiveNode) => {
-          return directiveNode.name.value === directive.name;
-        }) > -1) ??
-      false
+      entity.astNode.directives?.some((directiveNode: DirectiveNode) => {
+        return directiveNode.name.value === directive.name;
+      }) ?? false
     );
   });
 };

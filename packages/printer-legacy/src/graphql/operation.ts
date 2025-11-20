@@ -23,7 +23,7 @@ export const printOperationType = (
     return "";
   }
 
-  const queryType = getTypeName(type.type).replace(/[![\]]*/g, "");
+  const queryType = getTypeName(type.type).replaceAll(/[![\]]*/g, "");
   return printSection([options.schema!.getType(queryType)], "Type", {
     ...options,
     parentTypePrefix: false,
@@ -54,4 +54,4 @@ export const printOperationMetadata = (
  * Prints the code representation of an operation.
  * @see printCodeField
  */
-export const printCodeOperation = printCodeField;
+export { printCodeField as printCodeOperation } from "../code";
