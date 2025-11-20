@@ -234,6 +234,10 @@
     {
       "tagName": "@sortStrategy",
       "syntaxKind": "block"
+    },
+    {
+      "tagName": "@alias",
+      "syntaxKind": "modifier"
     }
   ]
 }

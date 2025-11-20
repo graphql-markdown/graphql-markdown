@@ -62,7 +62,7 @@
     "compile": "tsc --build",
     "docs:api:all": "npm run docs --workspaces --if-present",
     "docs:api": "sh ./scripts/docs-api.sh",
-    "knip": "knip --exclude duplicates",
+    "knip": "knip",
     "lint": "eslint \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
     "prepare": "node ./scripts/prepare-husky.js",
     "prettier": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\"",
