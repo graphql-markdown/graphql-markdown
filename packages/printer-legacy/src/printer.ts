@@ -304,7 +304,7 @@ export class Printer implements IPrinter {
    * @param type - GraphQL type to print metadata for
    * @param options - Printer configuration options
    * @returns Formatted metadata string as MDX or plain string
-   * @throws {Error} When type is not supported
+   * @throws When type is not supported
    */
   static readonly printTypeMetadata = (
     type: unknown,

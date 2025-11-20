@@ -54,10 +54,7 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
  * Checks if a type has printable directives based on the provided options.
  *
  * @param type - The GraphQL type to check
- * @param options - Configuration options for directive printing
- * @param options.deprecated - How to handle deprecated types
- * @param options.onlyDocDirectives - Only print types with specific directives
- * @param options.skipDocDirectives - Skip types with specific directives
+ * @param options - Configuration options for directive printing. Includes `deprecated`, `onlyDocDirectives`, and `skipDocDirectives` properties.
  * @returns `true` if the type should be printed, `false` otherwise
  */
 export const hasPrintableDirective = (

@@ -55,8 +55,8 @@ export const getRootTypeLocaleFromString = (
  * @param section - The section title for the relation
  * @param getRelation - Function to retrieve relations of type T
  * @param options - Printing options for type formatting
- * @returns {MDXString | string} Formatted MDX string containing the relations or empty string if no relations found
- * @throws {Error} If the schema is not provided in options
+ * @returns Formatted MDX string containing the relations or empty string if no relations found
+ * @throws If the schema is not provided in options
  * @example
  * ```ts
  * const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);

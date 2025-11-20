@@ -82,9 +82,7 @@ export const formatDescription = (
 
 /**
  * Generates a warning message block in MDX format.
- * @param param0 - Warning configuration object
- * @param param0.text - The warning message text
- * @param param0.title - Optional title for the warning block
+ * @param warningConfig - Warning configuration object with optional `text` and `title` properties
  * @param options - Configuration options for printing
  * @returns Formatted warning message as MDX string
  */
