@@ -17,6 +17,7 @@ RUN npm config set update-notifier false
 deps:
     COPY package*.json ./
     COPY --dir config ./config
+    COPY --dir scripts ./scripts
     COPY --dir packages/*/package*.json ./packages/
     RUN --mount=type=cache,target=/root/.npm HUSKY=0 npm ci
     # Cache node_modules
