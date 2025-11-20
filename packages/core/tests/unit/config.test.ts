@@ -21,6 +21,7 @@ import {
   DEFAULT_HIERARCHY,
   DEFAULT_OPTIONS,
   DiffMethod,
+  getDiffMethod,
   getCustomDirectives,
   getDocDirective,
   getDocOptions,
@@ -1367,6 +1368,84 @@ describe("mutation test: getCustomDirectives edge cases", () => {
         },
       );
     }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+});
+
+describe("getDiffMethod", () => {
+  test("returns DiffMethod.FORCE when force parameter is true", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE, true);
+
+    expect(result).toBe(DiffMethod.FORCE);
+  });
+
+  test("returns provided method when force parameter is false", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE, false);
+
+    expect(result).toBe(DiffMethod.NONE);
+  });
+
+  test("defaults force to false when not provided", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.NONE);
+
+    expect(result).toBe(DiffMethod.NONE);
+  });
+
+  test("returns DiffMethod.FORCE even when input method is FORCE and force is true", () => {
+    expect.assertions(1);
+
+    const result = getDiffMethod(DiffMethod.FORCE, true);
+
+    expect(result).toBe(DiffMethod.FORCE);
+  });
+});
+
+describe("getVisibilityDirectives additional validation", () => {
+  test("validates correct error message when directive appears in both lists", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@public" as DirectiveName] },
+        { skipDocDirective: ["@public" as DirectiveName] },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+
+  test("detects conflict with multiple directives in only list", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@admin" as DirectiveName, "@public" as DirectiveName] },
+        { skipDocDirective: ["@admin" as DirectiveName] },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
+
+  test("error message exact format must be validated", () => {
+    expect.assertions(2);
+
+    const thrown = expect(() => {
+      getVisibilityDirectives(
+        { only: ["@deprecated" as DirectiveName] },
+        { skipDocDirective: ["@deprecated" as DirectiveName] },
+      );
+    });
+
+    thrown.toThrow();
+    thrown.toThrow(
       "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
     );
   });
