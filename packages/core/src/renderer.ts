@@ -102,7 +102,6 @@ enum SidebarPosition {
  *
  * @property operations Folder name for GraphQL operations (queries, mutations, subscriptions)
  * @property types Folder name for GraphQL type definitions
- * @useDeclaredType
  *
  * @example
  * ```typescript
@@ -127,7 +126,6 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
  * @param type - The GraphQL schema entity to categorize
  * @param groups - Optional custom group naming configuration
  * @returns The folder name where the entity should be placed
- * @useDeclaredType
  *
  * @example
  * ```typescript
@@ -159,7 +157,6 @@ export const getApiGroupFolder = (
  *
  * @param folderName - The folder name to strip (e.g., "01-query", "02-mutations")
  * @returns The folder name without prefix (e.g., "query", "mutations")
- * @useDeclaredType
  *
  * @example
  * ```typescript
@@ -178,7 +175,6 @@ const stripNumericPrefix = (folderName: string): string => {
  * @param options - The renderer options to check
  * @param hierarchy - The hierarchy type to check for
  * @returns True if the options contain the specified hierarchy configuration
- * @useDeclaredType
  *
  * @example
  * ```typescript
@@ -207,7 +203,6 @@ const isPath = (path: unknown): path is LocationPath => {
  * @property [collapsed] - Whether the category should be initially collapsed
  * @property [sidebarPosition] - Custom position in the sidebar (lower numbers appear first)
  * @property [styleClass] - CSS class to apply to the category for styling
- * @useDeclaredType
  *
  * @example
  * ```typescript
@@ -244,7 +239,6 @@ const naturalSort: CategorySortFn = (a: string, b: string): number => {
  * 1. Pre-registration: categories are registered upfront, positions computed once
  * 2. On-demand: positions are computed as categories are encountered
  *
- * @useDeclaredType
  */
 class CategoryPositionManager {
   private readonly categories = new Set<string>();
@@ -334,7 +328,6 @@ class CategoryPositionManager {
  * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
  *
  * Each level has its own CategoryPositionManager that restarts numbering at 1.
- * @useDeclaredType
  * @example
  */
 export class Renderer {
@@ -400,7 +393,6 @@ export class Renderer {
    *
    * @param module - The module to check for MDX support
    * @returns True if the module supports index metafile generation
-   * @useDeclaredType
    * @example
    */
   hasMDXIndexFileSupport(
@@ -422,7 +414,6 @@ export class Renderer {
    * @param category - The category name
    * @param options - Configuration options for the index
    * @returns Promise that resolves when the index is generated
-   * @useDeclaredType
    *
    * @example
    * ```typescript
@@ -469,7 +460,6 @@ export class Renderer {
    * @param name - The name of the schema entity
    * @param rootTypeName - The root type name this entity belongs to
    * @returns The generated directory path
-   * @useDeclaredType
    * @example
    */
   async generateCategoryMetafileType(
@@ -554,7 +544,6 @@ export class Renderer {
    * @param rootTypeName - The name of the root type (e.g., "Query", "Mutation")
    * @param type - The type object containing all entities to render
    * @returns Array of rendered categories or undefined
-   * @useDeclaredType
    * @example
    */
   async renderRootTypes(
@@ -594,7 +583,6 @@ export class Renderer {
    * @param name - The name of the type entity
    * @param type - The type entity to render
    * @returns The category information for the rendered entity or undefined
-   * @useDeclaredType
    * @example
    */
   async renderTypeEntities(
@@ -695,7 +683,6 @@ export class Renderer {
    * NOT the folder names: "operations", "types"
    *
    * @param rootTypeNames - Array of root type names from the schema
-   * @useDeclaredType
    */
   preCollectCategories(rootTypeNames: string[]): void {
     const rootCategories = new Set<string>();
@@ -745,7 +732,6 @@ export class Renderer {
    *
    * @param homepageLocation - Path to the homepage template file
    * @returns Promise that resolves when the homepage is rendered
-   * @useDeclaredType
    * @example
    */
   async renderHomepage(homepageLocation: Maybe<string>): Promise<void> {
@@ -967,7 +953,6 @@ export class Renderer {
  * @param docOptions - Additional documentation options
  * @param mdxModule - Optional MDX module for enhanced features
  * @returns A configured Renderer instance
- * @useDeclaredType
  *
  * @example
  * ```typescript
