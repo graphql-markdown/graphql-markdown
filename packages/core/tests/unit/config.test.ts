@@ -1355,4 +1355,19 @@ describe("mutation test: getCustomDirectives edge cases", () => {
       getCustomDirectives(options, ["testA" as DirectiveName]);
     }).toThrow('Wrong format for plugin custom directive "testB"');
   });
+
+  test("validates conflict detection message format", () => {
+    expect.assertions(1);
+
+    expect(() => {
+      getVisibilityDirectives(
+        { only: ["@admin" as DirectiveName] },
+        {
+          skipDocDirective: ["@admin" as DirectiveName],
+        },
+      );
+    }).toThrow(
+      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
+    );
+  });
 });
