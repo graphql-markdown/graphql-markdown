@@ -147,7 +147,7 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
   if (typeof char !== "string") {
     return "";
   }
-  const unicodeChar = char.charCodeAt(0).toString(16).padStart(4, "0");
+  const unicodeChar = char.codePointAt(0)?.toString(16).padStart(4, "0") ?? "";
   return `&#x${unicodeChar.toUpperCase()};`;
 };
 
@@ -175,7 +175,7 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
  *
  */
 export const escapeMDX = (str: unknown): string => {
-  return `${String(str)}`.replace(
+  return `${String(str)}`.replaceAll(
     /(?<!`)([{<_*>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g,
     toHTMLUnicode,
   );

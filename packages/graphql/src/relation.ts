@@ -254,12 +254,12 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
     if (
       isNamedType(type) &&
       isUnionType(relationType) &&
-      relationType.getTypes().find((subType) => {
+      relationType.getTypes().some((subType) => {
         return subType.name === type.name;
       })
     ) {
       if (
-        !results.find((r) => {
+        !results.some((r) => {
           return (
             typeof r === "object" && "name" in r && r.name === relationName
           );
@@ -311,12 +311,12 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
     if (
       isNamedType(type) &&
       (isObjectType(relationType) || isInterfaceType(relationType)) &&
-      relationType.getInterfaces().find((subType) => {
+      relationType.getInterfaces().some((subType) => {
         return subType.name === type.name;
       })
     ) {
       if (
-        !results.find((r) => {
+        !results.some((r) => {
           return (
             typeof r === "object" && "name" in r && r.name === relationName
           );

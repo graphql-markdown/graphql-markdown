@@ -171,7 +171,7 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
     "parentTypePrefix" in options &&
     options.parentTypePrefix === true &&
     "parentType" in options &&
-    typeof options.parentType !== "undefined"
+    options.parentType !== undefined
   );
 };
 

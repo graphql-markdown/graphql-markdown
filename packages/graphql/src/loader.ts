@@ -54,8 +54,8 @@ export const loadSchema = async (
   },
 ): Promise<GraphQLSchema> => {
   let rootTypes = undefined;
-
-  if (typeof options !== "undefined" && "rootTypes" in options) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (options !== null && "rootTypes" in options) {
     rootTypes = options.rootTypes;
     delete options.rootTypes;
   }
@@ -128,7 +128,12 @@ export const getDocumentLoaders = async (
       const { [className]: Loader } = await import(graphqlDocumentLoader);
       loaders.push(new Loader());
     } else {
-      if (typeof graphqlDocumentLoader.module === "undefined") {
+      if (
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        graphqlDocumentLoader.module === undefined ||
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        graphqlDocumentLoader.module === null
+      ) {
         throw new TypeError(
           `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
         );

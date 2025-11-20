@@ -54,6 +54,15 @@ interface ThrowOptions {
 }
 
 /**
+ * Default throw options for loading configuration.
+ * @internal
+ */
+const DEFAULT_THROW_OPTIONS: ThrowOptions = {
+  throwOnMissing: false,
+  throwOnEmpty: false,
+};
+
+/**
  * Sets loader options for GraphQL Markdown loaders.
  *
  * This function takes a LoaderOption object and merges the provided options
@@ -127,10 +136,7 @@ export const setLoaderOptions = (
 export const loadConfiguration = async (
   id: Maybe<string>,
   options?: Maybe<PackageOptionsConfig>,
-  { throwOnMissing, throwOnEmpty }: ThrowOptions = {
-    throwOnMissing: false,
-    throwOnEmpty: false,
-  },
+  { throwOnMissing, throwOnEmpty }: ThrowOptions = DEFAULT_THROW_OPTIONS,
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>> => {
   let graphQLConfig;
 
