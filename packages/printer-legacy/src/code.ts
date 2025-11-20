@@ -56,8 +56,7 @@ export const printCodeArguments = (
   let code = `(${MARKDOWN_EOL}`;
   code += type.args.reduce((r, v) => {
     const defaultValue = getFormattedDefaultValue(v);
-    const hasDefaultValue =
-      typeof defaultValue !== "undefined" && defaultValue !== null;
+    const hasDefaultValue = defaultValue !== undefined && defaultValue !== null;
     const printedDefault = hasDefaultValue
       ? ` = ${getFormattedDefaultValue(v)}`
       : "";

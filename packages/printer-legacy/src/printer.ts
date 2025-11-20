@@ -76,6 +76,15 @@ import {
 import { printExample } from "./example";
 
 /**
+ * Default initialization options for the Printer class.
+ * @internal
+ */
+const DEFAULT_INIT_OPTIONS = {
+  customDirectives: undefined,
+  groups: undefined,
+};
+
+/**
  * The Printer class implements the core functionality for generating Markdown documentation
  * from GraphQL schema types.
  *
@@ -149,13 +158,10 @@ export class Printer implements IPrinter {
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
-    } = {
-      customDirectives: undefined,
-      groups: undefined,
-    },
+    } = DEFAULT_INIT_OPTIONS,
     mdxParser?: Record<string, unknown>,
   ): Promise<void> {
-    if (typeof Printer.options !== "undefined") {
+    if (Printer.options !== undefined) {
       return;
     }
 
@@ -226,10 +232,7 @@ export class Printer implements IPrinter {
   ): string => {
     let code = "";
 
-    if (
-      typeof options.codeSection === "undefined" ||
-      options.codeSection !== true
-    ) {
+    if (options.codeSection === undefined || options.codeSection !== true) {
       return code;
     }
 

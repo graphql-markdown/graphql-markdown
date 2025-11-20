@@ -24,7 +24,7 @@ import { printCodeArguments } from "../code";
  * @returns A formatted string of directive locations or empty string if no locations defined
  */
 const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
-  if (typeof type.locations === "undefined" || type.locations.length === 0) {
+  if (type.locations === undefined || type.locations.length === 0) {
     return "";
   }
 

@@ -68,7 +68,7 @@ const _formatListDefaultValues = <T>(
   type: Maybe<GraphQLType>,
   defaultValue: T,
 ): string => {
-  if (typeof type === "undefined" || type === null) {
+  if (type === undefined || type === null) {
     return "";
   }
 

@@ -120,7 +120,7 @@ export const generateDocFromSchema = async ({
         return schema.getDirective(name);
       })
       .filter((directive: Maybe<GraphQLDirective>) => {
-        return typeof directive !== "undefined";
+        return directive !== undefined;
       }) as GraphQLDirective[];
   });
 

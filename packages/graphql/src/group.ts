@@ -183,7 +183,7 @@ export const getGroups = (
   Object.keys(schemaMap).forEach((typeName) => {
     const rootType = schemaMap[typeName as SchemaEntity];
     if (rootType) {
-      if (typeof groups[typeName as SchemaEntity] === "undefined") {
+      if (groups[typeName as SchemaEntity] === undefined) {
         groups[typeName as SchemaEntity] = {};
       }
       Object.keys(rootType).forEach((type) => {
