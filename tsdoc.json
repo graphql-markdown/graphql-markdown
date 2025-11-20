@@ -1,10 +1,44 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
-  "extends": ["typedoc/tsdoc.json"],
   "noStandardTags": false,
   "tagDefinitions": [
     {
-      "tagName": "@alias",
+      "tagName": "@module",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@abstract",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@property",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@private",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@category",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@interface",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@primaryExport",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@since",
       "syntaxKind": "block"
     }
   ]

@@ -95,6 +95,5 @@ export const log = (
 
 /**
  * @see log
- * @alias log
  */
 export default Logger;
