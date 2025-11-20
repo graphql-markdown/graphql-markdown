@@ -2,6 +2,7 @@
 
 ## What's Changed
 * :bug: Fix: guard husky prepare hook to skip in CI and avoid EPIPE failures in GitHub Actions
+* :wrench: Remove earthly --ci +all from pre-push hook to prevent blocking git push operations
 
 <a id="1.30.3"></a>
 # [1.30.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.3) - 2025-08-27
