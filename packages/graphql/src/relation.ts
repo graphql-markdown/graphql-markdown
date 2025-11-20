@@ -127,7 +127,7 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
         type.name
     ) {
       if (
-        !results.find((r: unknown) => {
+        !results.some((r: unknown) => {
           return (
             typeof r === "object" &&
             r !== null &&
@@ -201,7 +201,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
         getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
       ) {
         if (
-          !results.find((r) => {
+          !results.some((r) => {
             return (
               toString(r) === key ||
               (typeof r === "object" && "name" in r && r.name === key)

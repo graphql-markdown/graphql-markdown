@@ -62,7 +62,7 @@ export const printSectionItem = <T>(
       ...options,
       level: 5 as SectionLevelValue,
       parentType:
-        typeof options.parentType === "undefined"
+        options.parentType === undefined
           ? type.name
           : `${options.parentType}.${type.name}`,
     });

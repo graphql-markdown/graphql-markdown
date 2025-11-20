@@ -66,8 +66,8 @@ export const interpolate = (
   variables: Maybe<Record<string, unknown> & { description?: string }>,
   fallback?: string,
 ): string => {
-  const regex = /\${[^{]+}/g;
-  return template.replace(regex, (match) => {
+  const regex = /\$\{[^{]+\}/g;
+  return template.replaceAll(regex, (match) => {
     const objPath = match.slice(2, -1).trim();
     return getObjPath(objPath, variables, fallback) as string;
   });

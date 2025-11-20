@@ -64,7 +64,7 @@ export const getPrinter = async (
   mdxModule?: unknown,
 ): Promise<Printer> => {
   if (typeof printerModule !== "string") {
-    throw new Error("Invalid printer module name.");
+    throw new TypeError("Invalid printer module name.");
   }
 
   if (!config) {
