@@ -96,31 +96,26 @@ import { printExample } from "./example";
 export class Printer implements IPrinter {
   /**
    * Global printer configuration options
-   * @static
    */
   static options: Readonly<Maybe<PrintTypeOptions>>;
 
   /**
    * Prints type descriptions
-   * @static
    */
   static readonly printDescription = printDescription;
 
   /**
    * Prints custom directives
-   * @static
    */
   static readonly printCustomDirectives = printCustomDirectives;
 
   /**
    * Prints custom tags
-   * @static
    */
   static readonly printCustomTags = printCustomTags;
 
   /**
    * MDX module configuration
-   * @static
    */
   static printMDXModule: Readonly<MDXSupportType>;
 
@@ -304,7 +299,7 @@ export class Printer implements IPrinter {
    * @param type - GraphQL type to print metadata for
    * @param options - Printer configuration options
    * @returns Formatted metadata string as MDX or plain string
-   * @throws {Error} When type is not supported
+   * @throws When type is not supported
    */
   static readonly printTypeMetadata = (
     type: unknown,
