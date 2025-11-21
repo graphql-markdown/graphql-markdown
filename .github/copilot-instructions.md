@@ -19,6 +19,7 @@
    cd graphql-markdown
    nvm install  # Install Node version from .nvmrc
    nvm use      # Use the correct Node version
+   npm install -g bun  # Install bun globally
    bun install  # Install dependencies
    ```
 
@@ -34,7 +35,7 @@
 3. **Build Packages**
 
    ```bash
-   bun build     # Compile TypeScript for all packages
+   bun build:all     # Compile TypeScript for all packages
    ```
 
 4. **Optional: Run Full CI Locally**
@@ -209,9 +210,8 @@ bun test          # Run all tests
 bun test:ci       # Run tests in CI mode
 
 # Build
-bun build         # Compile all packages
-bun clean         # Clean build artifacts
-bun compile       # Compile TypeScript
+bun build:all         # Compile all packages
+bun clean:all         # Clean build artifacts
 
 # Documentation
 bun docs:api:all  # Generate API docs for all packages
@@ -241,7 +241,7 @@ earthly +build-image   # Build Docker image for docs
 
 1. `+deps` - Install dependencies
 2. `+lint` - Type check, Prettier, ESLint
-3. `+build` - Compile TypeScript
+3. `+build` - Build all packages
 4. `+unit-test` - Run unit tests
 5. `+integration-test` - Run integration tests
 6. `+smoke-cli-test` - Run E2E tests for default CLI
