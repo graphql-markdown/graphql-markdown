@@ -34,7 +34,7 @@ Defined in: [mdx/index.ts:195](https://github.com/graphql-markdown/graphql-markd
 ### mdxModule()
 
 ```ts
-function mdxModule(mdxPackage?): Promise<Readonly<MDXSupportType>>
+function mdxModule(mdxPackage?): Promise<Readonly<MDXSupportType>>;
 ```
 
 Defined in: [mdx/index.ts:208](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/mdx/index.ts#L208)

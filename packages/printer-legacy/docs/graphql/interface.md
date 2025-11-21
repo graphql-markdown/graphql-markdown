@@ -1,38 +1,18 @@
 # graphql/interface
 
-## Variables
-
-### printInterfaceMetadata()
-
-```ts
-const printInterfaceMetadata: (type, options) => string = printObjectMetadata;
-```
-
-Defined in: [graphql/interface.ts:5](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L5)
-
-#### Parameters
-
-##### type
-
-`unknown`
-
-##### options
-
-`PrintTypeOptions`
-
-#### Returns
-
-`string`
+Contains utilities for printing GraphQL interface types as Markdown documentation.
 
 ## Functions
 
 ### printCodeInterface()
 
 ```ts
-function printCodeInterface(type, options): string
+function printCodeInterface(type, options): string;
 ```
 
-Defined in: [graphql/interface.ts:7](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L7)
+Defined in: [graphql/interface.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L23)
+
+Generates a code block representation of a GraphQL interface type.
 
 #### Parameters
 
@@ -40,10 +20,16 @@ Defined in: [graphql/interface.ts:7](https://github.com/graphql-markdown/graphql
 
 `unknown`
 
+The GraphQL interface type to print
+
 ##### options
 
 `PrintTypeOptions`
 
+Configuration options for printing the type
+
 #### Returns
 
 `string`
+
+A string containing the Markdown code block representation

@@ -25,7 +25,7 @@ See [getCustomDirectiveOptions](#getcustomdirectiveoptions), [isCustomDirective]
 ### getConstDirectiveMap()
 
 ```ts
-function getConstDirectiveMap(entity, customDirectiveMap): Maybe<CustomDirectiveMap>
+function getConstDirectiveMap(entity, customDirectiveMap): Maybe<CustomDirectiveMap>;
 ```
 
 Defined in: [packages/graphql/src/directive.ts:249](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L249)
@@ -106,7 +106,7 @@ const map = getConstDirectiveMap(schema.getType("Test"), customDirectives);
 ### getCustomDirectiveOptions()
 
 ```ts
-function getCustomDirectiveOptions(schemaDirectiveName, customDirectiveOptions): Maybe<Partial<Record<CustomDirectiveResolver, CustomDirectiveFunction>>>
+function getCustomDirectiveOptions(schemaDirectiveName, customDirectiveOptions): Maybe<Partial<Record<CustomDirectiveResolver, CustomDirectiveFunction>>>;
 ```
 
 Defined in: [packages/graphql/src/directive.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L77)
@@ -157,7 +157,7 @@ const customDirectives = getCustomDirectiveOptions("testB", customDirectiveOptio
 ### getCustomDirectives()
 
 ```ts
-function getCustomDirectives(schemaMap, customDirectiveOptions?): Maybe<CustomDirectiveMap>
+function getCustomDirectives(schemaMap, customDirectiveOptions?): Maybe<CustomDirectiveMap>;
 ```
 
 Defined in: [packages/graphql/src/directive.ts:151](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L151)
@@ -170,7 +170,7 @@ Returns a custom directives map with custom handlers from `customDirective`.
 
 `Pick`\<`SchemaMap`, `"directives"`\>
 
-the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
+the GraphQL schema map returned by getSchemaMap
 
 ##### customDirectiveOptions?
 
@@ -240,7 +240,7 @@ const customDirectives = getCustomDirectives(schemaMap, customDirectiveOptions);
 ### isCustomDirective()
 
 ```ts
-function isCustomDirective(schemaDirectiveName, customDirectiveOptions): boolean
+function isCustomDirective(schemaDirectiveName, customDirectiveOptions): boolean;
 ```
 
 Defined in: [packages/graphql/src/directive.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/directive.ts#L40)

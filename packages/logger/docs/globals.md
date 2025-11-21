@@ -65,7 +65,7 @@ Defined in: [index.ts:26](https://github.com/graphql-markdown/graphql-markdown/b
 ### log()
 
 ```ts
-function log(message, level): void
+function log(message, level): void;
 ```
 
 Defined in: [index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L86)
@@ -107,7 +107,7 @@ log("Info message"); // Expected console output "Info message"
 ### Logger()
 
 ```ts
-function Logger(moduleName?): Promise<void>
+function Logger(moduleName?): Promise<void>;
 ```
 
 Defined in: [index.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L46)

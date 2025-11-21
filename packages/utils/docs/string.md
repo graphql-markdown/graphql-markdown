@@ -12,8 +12,6 @@ const slugify: (str) => string = kebabCase;
 
 Defined in: [string.ts:283](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L283)
 
-Alias of [kebabCase](#kebabcase).
-
 Returns a lowercase string with `-` as replacement for non alphanum characters using [stringCaseBuilder](#stringcasebuilder).
 
 #### Parameters
@@ -39,16 +37,32 @@ kebabCase("The quick brown Fox");
 // Expected result: "the-quick-brown-fox"
 ```
 
-#### See
+***
 
-kebabCase
+### toString
+
+```ts
+const toString: StringConstructor = String;
+```
+
+Defined in: [string.ts:293](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L293)
+
+Returns a stringified version of the variable.
+
+#### Param
+
+the variable to be transformed.
+
+#### Returns
+
+a string
 
 ## Functions
 
 ### capitalize()
 
 ```ts
-function capitalize(str): string
+function capitalize(str): string;
 ```
 
 Defined in: [string.ts:224](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L224)
@@ -83,7 +97,7 @@ capitalize("the quick Brown Fox");
 ### escapeMDX()
 
 ```ts
-function escapeMDX(str): string
+function escapeMDX(str): string;
 ```
 
 Defined in: [string.ts:177](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L177)
@@ -125,7 +139,7 @@ escapeMDX("`{MDX}` `<special>` characters");
 ### firstUppercase()
 
 ```ts
-function firstUppercase(str): string
+function firstUppercase(str): string;
 ```
 
 Defined in: [string.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L200)
@@ -160,7 +174,7 @@ firstUppercase("the quick Brown Fox");
 ### kebabCase()
 
 ```ts
-function kebabCase(str): string
+function kebabCase(str): string;
 ```
 
 Defined in: [string.ts:267](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L267)
@@ -195,7 +209,7 @@ kebabCase("The quick brown Fox");
 ### prune()
 
 ```ts
-function prune(str, substr): string
+function prune(str, substr): string;
 ```
 
 Defined in: [string.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L58)
@@ -240,7 +254,7 @@ prune(text, "**");
 ### replaceDiacritics()
 
 ```ts
-function replaceDiacritics(str): string
+function replaceDiacritics(str): string;
 ```
 
 Defined in: [string.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L27)
@@ -280,7 +294,7 @@ replaceDiacritics("Âéêś"); // Expected result: "Aees"
 ### startCase()
 
 ```ts
-function startCase(str): string
+function startCase(str): string;
 ```
 
 Defined in: [string.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L246)
@@ -319,7 +333,7 @@ function stringCaseBuilder(
    str, 
    transformation?, 
    separator?, 
-   splitter?): string
+   splitter?): string;
 ```
 
 Defined in: [string.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L100)
@@ -380,7 +394,7 @@ stringCaseBuilder(text, transformation, " ");
 ### toHTMLUnicode()
 
 ```ts
-function toHTMLUnicode(char): string
+function toHTMLUnicode(char): string;
 ```
 
 Defined in: [string.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L146)
@@ -410,29 +424,3 @@ import { toHTMLUnicode } from "@graphql-markdown/utils/string";
 
 toHTMLUnicode("%"); // Expected result: "&#x0025;"
 ```
-
-***
-
-### toString()
-
-```ts
-function toString(variable): string
-```
-
-Defined in: [string.ts:293](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L293)
-
-Returns a stringified version of the variable.
-
-#### Parameters
-
-##### variable
-
-`unknown`
-
-the variable to be transformed.
-
-#### Returns
-
-`string`
-
-a string

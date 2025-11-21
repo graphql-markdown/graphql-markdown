@@ -111,7 +111,7 @@ File name for storing schema reference
 ### getDiff()
 
 ```ts
-function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>
+function getDiff(schemaNew, schemaOldLocation): Promise<Change<any>[]>;
 ```
 
 Defined in: [index.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L61)
@@ -143,7 +143,7 @@ A promise resolving to an array of schema changes
 ### getSchemaHash()
 
 ```ts
-function getSchemaHash(schema): string
+function getSchemaHash(schema): string;
 ```
 
 Defined in: [index.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/diff/src/index.ts#L49)

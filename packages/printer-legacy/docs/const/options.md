@@ -63,6 +63,7 @@ Defined in: [const/options.ts:18](https://github.com/graphql-markdown/graphql-ma
 ```ts
 const DEFAULT_OPTIONS: Required<Omit<PrintTypeOptions, 
   | "collapsible"
+  | "formatCategoryFolderName"
   | "groups"
   | "level"
   | "meta"
@@ -74,7 +75,7 @@ const DEFAULT_OPTIONS: Required<Omit<PrintTypeOptions,
 
 Defined in: [const/options.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L38)
 
-#### Type declaration
+#### Type Declaration
 
 ##### collapsible
 

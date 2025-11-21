@@ -1,42 +1,19 @@
 # graphql/operation
 
-## Variables
-
-### printCodeOperation()
-
-```ts
-const printCodeOperation: (type, options?, indentationLevel) => string | MDXString = printCodeField;
-```
-
-Defined in: [graphql/operation.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L37)
-
-#### Parameters
-
-##### type
-
-`unknown`
-
-##### options?
-
-`PrintTypeOptions`
-
-##### indentationLevel?
-
-`number` = `0`
-
-#### Returns
-
-`string` \| `MDXString`
+Module for handling GraphQL operation printing functionality.
+Provides utilities to print operation types, metadata, and code representations.
 
 ## Functions
 
 ### printOperationMetadata()
 
 ```ts
-function printOperationMetadata(type, options): string | MDXString
+function printOperationMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/operation.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L23)
+Defined in: [graphql/operation.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L39)
+
+Prints the operation metadata including arguments and type information.
 
 #### Parameters
 
@@ -44,23 +21,31 @@ Defined in: [graphql/operation.ts:23](https://github.com/graphql-markdown/graphq
 
 `unknown`
 
+The operation type to print metadata for
+
 ##### options
 
 `PrintTypeOptions`
 
+Print type options for customizing output
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted string containing operation metadata or empty string if invalid
 
 ***
 
 ### printOperationType()
 
 ```ts
-function printOperationType(type, options): string | MDXString
+function printOperationType(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/operation.ts:8](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L8)
+Defined in: [graphql/operation.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L18)
+
+Prints the operation type information.
 
 #### Parameters
 
@@ -68,10 +53,16 @@ Defined in: [graphql/operation.ts:8](https://github.com/graphql-markdown/graphql
 
 `unknown`
 
+The operation type to print
+
 ##### options
 
 `PrintTypeOptions`
 
+Print type options for customizing output
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted string representation of the operation type or empty string if invalid

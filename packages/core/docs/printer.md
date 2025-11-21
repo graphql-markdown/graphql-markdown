@@ -9,7 +9,7 @@ function getPrinter(
    printerModule?, 
    config?, 
    options?, 
-mdxModule?): Promise<typeof IPrinter>
+mdxModule?): Promise<typeof IPrinter>;
 ```
 
 Defined in: [printer.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L60)

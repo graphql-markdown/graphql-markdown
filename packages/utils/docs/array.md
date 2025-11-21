@@ -7,7 +7,7 @@ Internal library of helpers for manipulating array and list.
 ### convertArrayToMapObject()
 
 ```ts
-function convertArrayToMapObject<T>(list): Maybe<Record<string, T>>
+function convertArrayToMapObject<T>(list): Maybe<Record<string, T>>;
 ```
 
 Defined in: [array.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L77)
@@ -62,7 +62,7 @@ convertArrayToMapObject([
 ### toArray()
 
 ```ts
-function toArray(recordMap): Maybe<unknown[]>
+function toArray(recordMap): Maybe<unknown[]>;
 ```
 
 Defined in: [array.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L35)
