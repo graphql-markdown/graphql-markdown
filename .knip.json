@@ -1,8 +1,8 @@
 {
   "workspaces": {
     ".": {
-      "entry": ["scripts/*.js", "dangerfile.js", "config/*.js"],
-      "project": ["{config,scripts}/**/*.js"]
+      "entry": ["scripts/*.js", "dangerfile.js", "config/*.js", "commitlint.config.js"],
+      "project": ["{config,scripts}/**/*.js", "commitlint.config.js"]
     },
     "packages/*": {
       "project": ["**/*.ts!"],
@@ -36,7 +36,13 @@
   "ignoreDependencies": [
     "danger",
     "commitizen",
+    "cz-emoji",
     "husky",
+    "pinst",
+    "@changesets/cli",
+    "@changesets/changelog-github",
+    "@commitlint/cli",
+    "@commitlint/config-conventional",
     "@docusaurus/logger",
     "jest-environment-node"
   ],
