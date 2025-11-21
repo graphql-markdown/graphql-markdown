@@ -5,7 +5,8 @@ This checklist helps maintainers complete the setup after merging the build chai
 ## 1. Configure Repository Secrets
 
 ### 1.1 Create npm Token
-- [ ] Go to https://www.npmjs.com/settings/YOUR_USERNAME/tokens
+- [ ] Go to https://www.npmjs.com/settings/{your-npm-username}/tokens
+  (Replace `{your-npm-username}` with your actual npm username)
 - [ ] Click "Generate New Token" → Select "Automation"
 - [ ] Name: `graphql-markdown-automation`
 - [ ] Copy the token (you won't see it again!)

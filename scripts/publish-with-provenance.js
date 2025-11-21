@@ -56,7 +56,6 @@ function getPackagesToPublish() {
 
 async function publishWithProvenance() {
   const packages = getPackagesToPublish();
-  const originalCwd = process.cwd();
   
   if (packages.length === 0) {
     console.log('No packages to publish');
@@ -103,14 +102,10 @@ async function publishWithProvenance() {
     } catch (error) {
       console.error(`  ❌ Failed to publish ${pkg.name}@${pkg.version}`);
       console.error(error.message);
-      // Restore original directory before exiting
-      process.chdir(originalCwd);
       process.exit(1);
     }
   }
   
-  // Restore original directory
-  process.chdir(originalCwd);
   console.log('\n✨ All packages published successfully!');
 }
 

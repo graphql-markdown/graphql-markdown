@@ -68,8 +68,12 @@ jobs:
             
             echo "Creating release for $tag"
             
+            # Extract package directory name from scoped or unscoped package name
+            # For @scope/package → package, for package → package
+            package_dir=$(echo "$name" | sed 's|^@[^/]*/||')
+            
             # Extract changelog for this version
-            changelog_file="packages/${name#@graphql-markdown/}/CHANGELOG.md"
+            changelog_file="packages/${package_dir}/CHANGELOG.md"
             if [ -f "$changelog_file" ]; then
               # Extract the changelog section for this version
               awk "/^## ${version}/,/^## / {if (/^## ${version}/) p=1; else if (/^## /) p=0; if (p) print}" "$changelog_file" > /tmp/release-notes.md

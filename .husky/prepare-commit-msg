@@ -6,8 +6,15 @@ if [ ! -t 0 ]; then
   exit 0
 fi
 
-# Only run if /dev/tty exists (interactive terminal) and not amending
-if [ -e /dev/tty ] && [ -z "$2" ]; then
+COMMIT_SOURCE="$2"
+
+# Skip for merge commits, amend, rebase, etc.
+if [ -n "$COMMIT_SOURCE" ]; then
+  exit 0
+fi
+
+# Only run if /dev/tty exists (interactive terminal)
+if [ -e /dev/tty ]; then
   # Run commitizen for interactive commit message creation
   if command -v bunx > /dev/null 2>&1; then
     exec < /dev/tty && bunx --bun cz --hook || true
