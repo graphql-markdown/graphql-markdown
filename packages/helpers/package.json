@@ -52,18 +52,20 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist",
-    "docs": "typedoc"
+    "clean": "tsc --build --clean && rm -rf ./dist",
+    "docs": "typedoc",
+    "build": "tsc --build",
+    "pack": "bun pm pack"
   },
   "dependencies": {
-    "@graphql-markdown/graphql": "^1.1.9",
-    "@graphql-markdown/utils": "^1.9.0"
+    "@graphql-markdown/graphql": "workspace:^",
+    "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
     "graphql": "^16.0"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.8.0"
+    "@graphql-markdown/types": "workspace:^"
   },
   "directories": {
     "test": "tests"

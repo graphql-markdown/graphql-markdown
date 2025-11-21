@@ -41,19 +41,31 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Setup NodeJS LTS
         uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
-          cache: "npm"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
 
       - name: Install modules
-        run: npm ci
+        run: bun ci
 
       - name: Run Unit Tests
         id: unit
         run: |
-          npm run test:ci /unit/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
+          bun test:ci /unit/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/unit
           mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
@@ -61,7 +73,7 @@ jobs:
       - name: Run Integration Tests
         id: integration
         run: |
-          npm run test:ci /integration/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
+          bun test:ci /integration/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
           mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
@@ -72,8 +84,8 @@ jobs:
         run: |
           [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           cd packages/${{ matrix.package }}
-          npx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
-          npx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
+          bunx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
+          bunx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
 
       - name: SonarCloud Scan
         id: sonarcloud
@@ -101,10 +113,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
-          cache: "npm"
+      
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
 
       - name: Install modules
-        run: npm ci
+        run: bun ci
 
       - name: TS Build
-        run: npm run build
+        run: bun run build:all

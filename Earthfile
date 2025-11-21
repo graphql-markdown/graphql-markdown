@@ -11,42 +11,43 @@ ARG --global coverage="true"
 FROM docker.io/library/node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
-RUN npm install -g npm@$npmVersion && npm cache clean --force
-RUN npm config set update-notifier false
+ENV HUSKY=0
+ENV NODE_OPTIONS=--dns-result-order=ipv4first
+RUN --mount=type=cache,target=/root/.bun npm install --global npm@$npmVersion bun
 
 deps:
-    COPY package*.json ./
+    COPY . .
     COPY --dir config ./config
     COPY --dir scripts ./scripts
     COPY --dir packages/*/package*.json ./packages/
-    RUN --mount=type=cache,target=/root/.npm HUSKY=0 npm ci
+    RUN --mount=type=cache,target=/root/.bun bun ci --silent
     # Cache node_modules
     SAVE ARTIFACT node_modules AS LOCAL node_modules
-    COPY . .
 
 lint: 
   FROM +deps
-    RUN npm run ts:check || (echo "TypeScript check failed" && exit 1)
-    RUN npm run prettier -- --check || (echo "Prettier check failed" && exit 1)
-    RUN npm run lint || (echo "ESLint check failed" && exit 1)
+    RUN bun run ts:check
+    RUN bun run prettier
+    RUN bun run lint
 
 build:
   FROM +lint
-    RUN --mount=type=cache,target=/graphql-markdown/.npm npm run build
+    RUN bun run clean:all
+    RUN bun run build:all
 
 unit-test:
   FROM +build
-  RUN npm install -g jest
-  RUN --parallel --memory=2g npm run test:ci /unit
+  RUN bun install --silent --global jest
+  RUN bun run test:ci /unit
 
 integration-test:
   FROM +build
-  RUN npm install -g jest
-  RUN --parallel --memory=2g npm run test:ci /integration
+  RUN bun install --silent --global jest
+  RUN bun run test:ci /integration
 
 mutation-test:
   FROM +build
-  RUN npm run stryker --workspaces --if-present -- --allowEmpty --reporters progress,html
+  RUN bun run stryker
   IF [ ! $(EARTHLY_CI) ]
     SAVE ARTIFACT reports AS LOCAL ./reports
   END
@@ -55,16 +56,17 @@ build-package:
   FROM +build
   ARG --required package
   WORKDIR /graphql-markdown
-  RUN npm pack --workspace @graphql-markdown/$package | tail -n 1 | xargs -t -I{} mv {} graphql-markdown-$package.tgz
+  RUN bun run --filter "@graphql-markdown/$package" build
+  RUN bun run --filter "@graphql-markdown/$package" pack --filename graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus-project:
   FROM +build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
-    RUN npx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+    RUN bunx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
   ELSE
-    RUN npx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
+    RUN bunx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
@@ -76,7 +78,7 @@ setup-cli-project:
   WORKDIR /$gqlmdCliProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
-  RUN npm add ./graphql-markdown-cli.tgz
+  RUN bun add ./graphql-markdown-cli.tgz
   COPY --dir ./packages/cli/tests/__data__ ./data
 
 setup-docusaurus-project:
@@ -84,8 +86,8 @@ setup-docusaurus-project:
   WORKDIR /$docusaurusProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
-  RUN npm add ./graphql-markdown-cli.tgz
-  RUN npm add ./graphql-markdown-docusaurus.tgz
+  RUN bun add ./graphql-markdown-cli.tgz
+  RUN bun add ./graphql-markdown-docusaurus.tgz
   COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir ./website/static/img ./static/img
   COPY --dir ./website/src/css ./src/css
@@ -93,42 +95,42 @@ setup-docusaurus-project:
   RUN mv ./data/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js
   RUN mv ./data/docusaurus2-graphql-doc-nobuild.js ./docusaurus2-graphql-doc-nobuild.js
   RUN mv ./data/scripts/config-plugin.js ./config-plugin.js
-  RUN npm add ./data/e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
+  RUN bun add ./data/e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
   RUN node config-plugin.js
 
 smoke-docusaurus-test:
   FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
-  RUN npm install -g jest 
-  RUN npm add graphql-config
+  RUN bun install --silent --global jest
+  RUN bun add graphql-config
   COPY --dir ./packages/docusaurus/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/docusaurus/tests/helpers ./__tests__/helpers
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
-  RUN npx jest --runInBand
+  RUN bunx jest --runInBand
 
 smoke-cli-test:
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
-  RUN npm install -g jest 
+  RUN bun install --silent --global jest
   COPY --dir ./packages/cli/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/cli/tests/helpers ./__tests__/helpers
   RUN mv ./__tests__/e2e/jest.config.js ./jest.config.js
   RUN mv ./data/cli-graphql-doc-generator-multi-instance.config.js ./graphql.config.js
-  RUN npx jest --runInBand
+  RUN bunx jest --runInBand
 
 smoke-docusaurus-run:
   ARG options=
   FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
   DO +GQLMD --options=$options
-  RUN npm run build
-  RUN npm run clear
+  RUN bun run build
+  RUN bun run clear
 
 build-docusaurus-examples:
   LET folderDocs="examples"
   FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
-  RUN npm add prettier
+  RUN bun add prettier
   RUN mkdir $folderDocs
   LET folderExample="default"
   LET idExample="default"
@@ -144,7 +146,7 @@ build-cli-examples:
   LET folderDocs="examples"
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
-  RUN npm add prettier
+  RUN bun add prettier
   RUN mv ./data/graphql.config.js ./graphql.config.js
   RUN mkdir $folderDocs
   LET folderExample="default"
@@ -161,7 +163,7 @@ build-cli-examples:
 build-api-docs:
   FROM +deps
   COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
-  RUN npm run docs:api
+  RUN bun run docs:api
   SAVE ARTIFACT ./api
 
 build-docs:
@@ -196,9 +198,9 @@ GQLMD:
   ARG command=docusaurus
   RUN mkdir -p docs
   IF [ ! $id ]
-    RUN npx $command graphql-to-doc $options 2>&1 | tee ./run.log
+    RUN bunx $command graphql-to-doc $options 2>&1 | tee ./run.log
   ELSE
-    RUN npx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+    RUN bunx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
   END
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1) 
 
@@ -207,15 +209,15 @@ INSTALL_GQLMD:
   FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
     IF [ "$package" != "cli" ] && [ "$package" != "docusaurus" ]
-      RUN npm add ./graphql-markdown-${package}.tgz
+      RUN bun add ./graphql-markdown-${package}.tgz
     END
   END
 
 INSTALL_DOCUSAURUS:
   FUNCTION
-  RUN npm install --legacy-peer-deps
-  RUN npm upgrade @docusaurus/core @docusaurus/preset-classic
+  RUN bun install --legacy-peer-deps
+  RUN bun update @docusaurus/core @docusaurus/preset-classic
 
 INSTALL_GRAPHQL:
   FUNCTION
-  RUN npm add graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader
+  RUN bun add graphql @graphql-tools/url-loader @graphql-tools/graphql-file-loader

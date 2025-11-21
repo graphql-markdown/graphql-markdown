@@ -33,8 +33,7 @@
   "rules": {
     "enumMembers": "warn"
   },
-  "ignoreDependencies": ["danger", "commitizen", "husky"],
-  "ignoreBinaries": ["danger"],
+  "ignoreDependencies": ["danger", "commitizen", "husky", "@docusaurus/logger"],
   "ignoreExportsUsedInFile": true,
   "jest": {
     "config": ["config/jest.config.js"],

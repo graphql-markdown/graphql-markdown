@@ -16,12 +16,15 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
-          cache: "npm"
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
 
       - name: Install modules
-        run: npm ci
+        run: bun ci
 
       - name: Danger
-        run: npx danger ci -b main
+        run: bunx danger ci -b main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

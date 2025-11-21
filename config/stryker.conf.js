@@ -6,6 +6,10 @@
 const config = {
   buildCommand: "tsc --build",
   checkers: ["typescript"],
+  plugins: [
+    "@stryker-mutator/jest-runner",
+    "@stryker-mutator/typescript-checker"
+  ],
   commandRunner: { command: "npm run test:ci" },
   coverageAnalysis: "perTest",
   dashboard: {},

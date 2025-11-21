@@ -5,7 +5,7 @@
 ### Prerequisites
 
 - Node.js (version specified in `.nvmrc`)
-- npm (latest version recommended)
+- bun (latest version recommended)
 - Git
 - Docker or Podman (optional, for Earthly builds)
 - Earthly (optional, for containerized builds)
@@ -19,21 +19,23 @@
    cd graphql-markdown
    nvm install  # Install Node version from .nvmrc
    nvm use      # Use the correct Node version
-   npm install  # Install dependencies
+   npm install -g bun  # Install bun globally
+   bun install  # Install dependencies
    ```
 
 2. **Verify Setup**
 
    ```bash
-   npm run ts:check  # Type check all packages
-   npm run lint      # Run linting
-   npm test          # Run all tests
+   bun run ts:check  # Type check all packages
+   bun run lint      # Run linting
+   bun run prettier  # Run formatting check
+   bun test          # Run all tests
    ```
 
 3. **Build Packages**
 
    ```bash
-   npm run build     # Compile TypeScript for all packages
+   bun build:all     # Compile TypeScript for all packages
    ```
 
 4. **Optional: Run Full CI Locally**
@@ -135,7 +137,7 @@ The project uses [Jest](https://jestjs.io/) for all testing with three distinct 
 - Test individual units of code (functions, class methods)
 - Must mock all external calls (use Jest mocks)
 - Should be fast and isolated
-- Run with: `npm test` (runs all test types)
+- Run with: `bun test` (runs all test types)
 - Naming: `*.test.ts` or `*.spec.ts`
 
 **Example Unit Test Pattern:**
@@ -160,15 +162,15 @@ describe("functionToTest", () => {
 - Located in `packages/*/tests/integration/`
 - Test the logic of main classes and their interactions
 - Use filesystem mocking with `memfs` when needed
-- Run with: `npm test` (included in all tests)
+- Run with: `bun test` (included in all tests)
 - May use snapshots for complex output validation
 
 ### Smoke Tests (E2E)
 
 - Test the complete plugin behavior end-to-end
 - Run within Docker containers using Earthly
-- Validate CLI options and complete workflows
-- Run with: `earthly +smoke-test`
+- Validate CLI options and complete workflows with `earthly +smoke-cli-test`
+- Run with: `earthly +smoke-docusaurus-test` for Docusaurus plugin
 - Update when making changes to CLI or plugin options
 
 ### Test Requirements
@@ -186,7 +188,7 @@ The project uses [Stryker Mutator](https://stryker-mutator.io/) to validate test
 
 - Run with: `earthly +mutation-test`
 - Ensures tests can catch code changes
-- Mutation score must meet project thresholds
+- Mutation score must meet project thresholds (CI checks)
 - Not required for contributors but may be run on PRs
 
 ## Build Workflows
@@ -195,30 +197,28 @@ The project uses [Stryker Mutator](https://stryker-mutator.io/) to validate test
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Type checking
-npm run ts:check
+bun ts:check
 
-# Linting
-npm run lint
+# Linting and formatting
+bun lint
 
 # Testing
-npm test              # Run all tests
-npm run test:ci       # Run tests in CI mode
-npm run test:watch    # Run tests in watch mode
+bun test          # Run all tests
+bun test:ci       # Run tests in CI mode
 
 # Build
-npm run build         # Compile all packages
-npm run clean         # Clean build artifacts
-npm run compile       # Compile TypeScript
+bun build:all         # Compile all packages
+bun clean:all         # Clean build artifacts
 
 # Documentation
-npm run docs:api:all  # Generate API docs for all packages
+bun docs:api:all  # Generate API docs for all packages
 
 # Code quality
-npm run prettier      # Check code formatting
-npm run knip          # Check for unused dependencies
+bun prettier      # Check code formatting
+bun knip          # Check for unused dependencies
 ```
 
 ### Earthly Workflows
@@ -241,10 +241,13 @@ earthly +build-image   # Build Docker image for docs
 
 1. `+deps` - Install dependencies
 2. `+lint` - Type check, Prettier, ESLint
-3. `+build` - Compile TypeScript
+3. `+build` - Build all packages
 4. `+unit-test` - Run unit tests
 5. `+integration-test` - Run integration tests
-6. `+smoke-test` - Run E2E tests
+6. `+smoke-cli-test` - Run E2E tests for default CLI
+7. `+smoke-docusaurus-test` - Run E2E tests for Docusaurus plugin
+8. `+mutation-test` - Run mutation testing
+9. `+build-docs` - Build documentation site
 
 ## Repository-Specific Conventions
 
@@ -268,11 +271,10 @@ earthly +build-image   # Build Docker image for docs
 
 ### Commit Standards
 
-The project uses [Conventional Commits](https://www.conventionalcommits.org/) with [Commitizen](https://commitizen.github.io/cz-cli/):
+The project uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) with emojis for commit messages:
 
 - Commits are made via `git commit` which triggers interactive prompts
-- Commitizen automatically formats commit messages
-- Available commit types:
+- Available commit types to choose from and prefix with emojis:
   - `feat` ✨ - New feature
   - `fix` 🐛 - Bug fix
   - `build` 📦️ - Update dependencies
@@ -294,10 +296,10 @@ The project uses [Conventional Commits](https://www.conventionalcommits.org/) wi
 
 ### Before Submitting a PR
 
-1. Run type checking: `npm run ts:check`
-2. Run linting: `npm run lint`
-3. Run tests: `npm test`
-4. Run smoke tests: `earthly +smoke-test` (if applicable)
+1. Run type checking: `bun ts:check`
+2. Run linting: `bun lint`
+3. Run tests: `bun test`
+4. Run smoke tests: `earthly +smoke-cli-test` and/or `earthly +smoke-docusaurus-test` (if applicable)
 5. Update documentation if needed
 6. Use the PR template (`.github/pull_request_template.md`)
 
