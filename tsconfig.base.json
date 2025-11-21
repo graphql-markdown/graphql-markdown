@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node10",
     "target": "esnext",
 
     "ignoreDeprecations": "5.0",
