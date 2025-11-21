@@ -1,22 +1,24 @@
 const { chdir } = require("node:process");
+const { readdirSync } = require("node:fs");
 chdir(__dirname);
 
 const rootDir = "../..";
-const { peerDependencies: packages } = require(`${rootDir}/package.json`);
+const {
+  workspaces: [packages],
+} = require(`${rootDir}/package.json`);
 
-const getWorkspacePackagesMap = (orgName) => {
+const getWorkspacePackagesMap = () => {
+  const packagesPath = `${rootDir}/${packages.slice(0, -2)}`;
   const map = {};
-  Object.entries(packages).forEach(([packageName, packagePath]) => {
-    if (!packageName.startsWith(orgName)) {
-      return;
-    }
-
-    const packageJson =
-      packagePath.replace("file:", `${rootDir}/`) + "/package.json";
-    const { version, dependencies, peerDependencies } = require(packageJson);
+  const folders = readdirSync(packagesPath, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+  folders.forEach((packageFolder) => {
+    const packageJson = `${packagesPath}/${packageFolder}/package.json`;
+    const { name, version, dependencies, peerDependencies } = require(packageJson);
 
     Object.assign(map, {
-      [packageName]: {
+      [name]: {
         version,
         dependencies,
         peerDependencies,

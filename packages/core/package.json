@@ -59,24 +59,25 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist",
+    "clean": "tsc --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "suggest:tests": "ts-node ../../scripts/test-suggestions.ts"
+    "build": "tsc --build",
+    "pack": "bun pm pack"
   },
   "dependencies": {
     "@fastify/deepmerge": "^3.1.0",
-    "@graphql-markdown/graphql": "^1.1.9",
-    "@graphql-markdown/logger": "^1.0.5",
-    "@graphql-markdown/utils": "^1.9.0"
+    "@graphql-markdown/graphql": "workspace:^",
+    "@graphql-markdown/logger": "workspace:^",
+    "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
-    "@graphql-markdown/diff": "^1.1.13",
-    "@graphql-markdown/helpers": "^1.0.12",
-    "@graphql-markdown/printer-legacy": "^1.12.3",
+    "@graphql-markdown/diff": "workspace:^",
+    "@graphql-markdown/helpers": "workspace:^",
+    "@graphql-markdown/printer-legacy": "workspace:^",
     "graphql-config": "^5.1.0"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.8.0"
+    "@graphql-markdown/types": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@graphql-markdown/printer-legacy": {

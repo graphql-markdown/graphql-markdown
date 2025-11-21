@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "target": "esnext",
+
+    "ignoreDeprecations": "5.0",
 
     "composite": true,
     "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
 
     "paths": {
       "@graphql-markdown/types": ["./packages/types/src/index.d.ts"],

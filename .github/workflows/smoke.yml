@@ -58,8 +58,7 @@ jobs:
     name: Smoke Tests on CLI
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
-    strategy:
-      fail-fast: false
+
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1
@@ -68,6 +67,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run CLI Smoke Tests
-        run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-cli-test
+        run: earthly --ci github.com/graphql-markdown/graphql-markdown:${GITHUB_REF#refs/heads/}+smoke-cli-test
         env:
           EARTHLY_NO_CACHE: true

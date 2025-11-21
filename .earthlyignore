@@ -1,9 +1,13 @@
 .DS_Store
 .nyc_output
 .stryker-tmp
+.turbo
+.tmp-earthly-out
 build
 output
+coverage
 packages/*/.stryker-tmp
 packages/*/coverage
 packages/*/dist
 packages/*/reports
+node_modules

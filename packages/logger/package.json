@@ -38,11 +38,14 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "rm -rf ./dist",
-    "docs": "typedoc"
+    "clean": "tsc --build --clean && rm -rf ./dist",
+    "docs": "typedoc",
+    "build": "tsc --build",
+    "pack": "bun pm pack"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "^1.8.0"
+    "@graphql-markdown/types": "workspace:^",
+    "@docusaurus/logger": "*"
   },
   "directories": {
     "test": "tests"

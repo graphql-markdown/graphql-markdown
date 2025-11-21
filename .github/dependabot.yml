@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
+  - package-ecosystem: "bun" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -9,7 +9,7 @@ updates:
       - "automerge"
       - "dependencies"
     commit-message:
-      prefix: "📦 npm"
+      prefix: "📦 bun"
       include: "scope"
     ignore:
       - dependency-name: "@graphql-markdown/*"

@@ -1,7 +1,7 @@
 const { getWorkspacePackagesMap } = require("./shared/dependencies-utils");
 
 const orgName = "@graphql-markdown";
-const packagesMap = getWorkspacePackagesMap(orgName);
+const packagesMap = getWorkspacePackagesMap();
 
 const getBuildDependency = () => {
   const buildSequence = [];
@@ -30,7 +30,7 @@ const getBuildDependency = () => {
         buildSequence.push(dependency);
         return buildSequence.length - 1;
       }
-      return pos > index ? pos : index;
+      return Math.max(pos, index);
     }, 0);
     buildSequence.splice(position + 1, 0, packageName);
   }

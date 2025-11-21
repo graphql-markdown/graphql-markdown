@@ -29,25 +29,18 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "latest"
+
       - name: Install modules
-        run: npm ci
+        run: bun ci
 
       - name: Run TS Check
-        run: npm run ts:check
+        run: bun ts:check
 
       - name: Run Prettier
-        run: npm run prettier -- --check
+        run: bun prettier
 
       - name: Run ESLint
-        run: npm run lint
-
-      # Disable Knip as it is unstable in the CI environment
-      # Uncomment the following lines to enable Knip when it is stable
-      # - name: Run Knip
-      #   run: |
-      #     npm i -g oxc-resolver
-      #     npm i -g knip
-      #     npm run knip
-
-      - name: Run Workspace dependencies check
-        run: npm run check
+        run: bun lint

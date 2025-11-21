@@ -3,10 +3,10 @@
 API_DIR=./api
 WORKSPACE=@graphql-markdown
 
-npm run build
+bun build
 
 # export NODE_OPTIONS=--max_old_space_size=8192
-npm run typedoc -- --skipErrorChecking --logLevel Error --out ${API_DIR}
+bun typedoc -- --skipErrorChecking --logLevel Error --out ${API_DIR}
 
 find ${API_DIR}/*/ -type f \( -name "modules.md" -or -name "generated.md" \) -delete
 rm -f ${API_DIR}/packages.md
