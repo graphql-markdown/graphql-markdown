@@ -1,4 +1,4 @@
-// jest.config.js
+// jest.unit.config.js - Optimized for fast unit test runs
 const projectConfig = (name) => ({
   displayName: `@graphql-markdown/${name}`,
   extensionsToTreatAsEsm: [".ts"],
@@ -11,6 +11,7 @@ const projectConfig = (name) => ({
   },
   testPathIgnorePatterns: ["/node_modules/", "/dist/", "/__data__/"],
   cacheDirectory: "<rootDir>/node_modules/.jest-cache",
+  testTimeout: 5000,
   transform: {
     "^.+\\.ts$": [
       "ts-jest",
@@ -20,7 +21,7 @@ const projectConfig = (name) => ({
     ],
   },
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-  testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+  testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
   moduleNameMapper: {
     "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
   },
@@ -30,8 +31,7 @@ const projectConfig = (name) => ({
 module.exports = {
   rootDir: "../",
   preset: "ts-jest",
-  collectCoverage: true,
-  coverageReporters: ["json", "lcov"],
+  collectCoverage: false,
   moduleFileExtensions: ["ts", "js"],
   maxWorkers: "50%",
   workerIdleMemoryLimit: "512M",
