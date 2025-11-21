@@ -172,15 +172,15 @@ build-docs:
   COPY (+build-docusaurus-examples/examples) ./examples
   COPY (+build-api-docs/api) ./api
   COPY --dir docs .
-  RUN bun install --legacy-peer-deps
-  RUN bunx update-browserslist-db@latest
+  RUN npm install --legacy-peer-deps
+  RUN npx update-browserslist-db@latest
   RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true bun run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
   FROM +build-docs
   EXPOSE 8080
-  ENTRYPOINT ["bun", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
+  ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
   SAVE IMAGE graphql-markdown:docs
 
 all:

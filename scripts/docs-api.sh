@@ -3,7 +3,7 @@
 API_DIR=./api
 WORKSPACE=@graphql-markdown
 
-bun build
+bun run build:all
 
 # export NODE_OPTIONS=--max_old_space_size=8192
 bun typedoc -- --skipErrorChecking --logLevel Error --out ${API_DIR}
