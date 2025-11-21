@@ -174,7 +174,7 @@ build-docs:
   COPY --dir docs .
   RUN npm install --legacy-peer-deps
   RUN npx update-browserslist-db@latest
-  RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true bun run build
+  RUN DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
