@@ -122,6 +122,18 @@ When you are ready, you should then run the full checks with `earthly +all`.
 
 This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
 
+Commit messages are validated using [commitlint](https://commitlint.js.org/) to ensure they follow the conventional format. The allowed types are: `feat`, `fix`, `build`, `conf`, `refactor`, `test`, `ci`, `docs`, `tag`, and `other`.
+
+### Creating Changesets
+
+When you make changes to packages, you should create a changeset to document the change:
+
+```bash
+bun changeset
+```
+
+This will prompt you to select which packages were affected and describe the change. Changesets are used for automatic versioning and changelog generation. See [docs/RELEASE.md](docs/RELEASE.md) for more details on the release process.
+
 ## Coding style
 
 > You will certainly find awkward constructions and patterns, and you should feel free to improve the existing code.

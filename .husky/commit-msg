@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Exit early if not in interactive mode (CI/CD environments)
+if [ ! -t 0 ]; then
+  exit 0
+fi
+
+# Only run commitlint if the commit message file exists
+if [ -f "$1" ]; then
+  # Check if commitlint is available (dependencies installed)
+  if command -v bunx > /dev/null 2>&1; then
+    bunx --bun commitlint --edit "$1"
+  elif command -v npx > /dev/null 2>&1; then
+    npx --no -- commitlint --edit "$1"
+  else
+    echo "Warning: commitlint not found, skipping commit message validation"
+  fi
+fi

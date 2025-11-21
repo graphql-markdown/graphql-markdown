@@ -1,0 +1,58 @@
+name: Close Inactive Issues
+run-name: Close inactive issues
+
+on:
+  schedule:
+    # Run every Monday at 9:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  close-inactive:
+    name: Close stale issues and PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Issue settings
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity. 
+            It will be closed in 7 days if no further activity occurs.
+            
+            If this issue is still relevant, please add a comment to keep it open.
+            Thank you for your contributions!
+          close-issue-message: |
+            This issue has been automatically closed due to inactivity.
+            
+            If you believe this issue is still relevant, please feel free to reopen it or create a new issue.
+          days-before-issue-stale: 60
+          days-before-issue-close: 7
+          stale-issue-label: 'stale'
+          exempt-issue-labels: 'pinned,security,help wanted,good first issue'
+          
+          # PR settings
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+            It will be closed in 14 days if no further activity occurs.
+            
+            If this PR is still relevant, please add a comment or push new commits to keep it open.
+            Thank you for your contributions!
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity.
+            
+            If you would like to continue working on this PR, please feel free to reopen it.
+          days-before-pr-stale: 90
+          days-before-pr-close: 14
+          stale-pr-label: 'stale'
+          exempt-pr-labels: 'pinned,security,help wanted,good first issue,work in progress'
+          
+          # General settings
+          operations-per-run: 100
+          remove-stale-when-updated: true
+          ascending: true

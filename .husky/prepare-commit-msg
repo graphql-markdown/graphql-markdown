@@ -6,12 +6,13 @@ if [ ! -t 0 ]; then
   exit 0
 fi
 
-# Only run if /dev/tty exists (interactive terminal)
-if [ -e /dev/tty ]; then
-  # Your prepare-commit-msg logic here
-  echo "Running prepare-commit-msg hook"
-else
-  echo "Skipping prepare-commit-msg hook - not in interactive mode"
-  exit 0
+# Only run if /dev/tty exists (interactive terminal) and not amending
+if [ -e /dev/tty ] && [ -z "$2" ]; then
+  # Run commitizen for interactive commit message creation
+  if command -v bunx > /dev/null 2>&1; then
+    exec < /dev/tty && bunx --bun cz --hook || true
+  elif command -v npx > /dev/null 2>&1; then
+    exec < /dev/tty && npx --no -- cz --hook || true
+  fi
 fi
 

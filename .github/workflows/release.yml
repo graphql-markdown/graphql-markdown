@@ -1,0 +1,87 @@
+name: Release
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('Release workflow triggered by @{0}', github.actor) || 'Release workflow' }}
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Create Release PR or Publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.BOT_PAT || github.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: 'package.json'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build packages
+        run: bun run build:all
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: bun run changeset:version
+          publish: bun run changeset:publish
+          commit: ':bookmark: release packages'
+          title: 'Release: Version Packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Releases
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+        run: |
+          echo "Creating GitHub releases for published packages..."
+          echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -c '.[]' | while read package; do
+            name=$(echo $package | jq -r '.name')
+            version=$(echo $package | jq -r '.version')
+            tag="${name}@${version}"
+            
+            echo "Creating release for $tag"
+            
+            # Extract changelog for this version
+            changelog_file="packages/${name#@graphql-markdown/}/CHANGELOG.md"
+            if [ -f "$changelog_file" ]; then
+              # Extract the changelog section for this version
+              awk "/^## ${version}/,/^## / {if (/^## ${version}/) p=1; else if (/^## /) p=0; if (p) print}" "$changelog_file" > /tmp/release-notes.md
+              
+              gh release create "$tag" \
+                --title "$tag" \
+                --notes-file /tmp/release-notes.md \
+                --verify-tag || echo "Release already exists or failed to create"
+            else
+              gh release create "$tag" \
+                --title "$tag" \
+                --notes "Release $tag" \
+                --verify-tag || echo "Release already exists or failed to create"
+            fi
+          done

@@ -58,6 +58,9 @@
   ],
   "scripts": {
     "build:all": "turbo build",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "node ./scripts/publish-with-provenance.js",
     "clean:all": "bun run --if-present --workspaces clean",
     "docs:api:all": "bun run --if-present --workspaces docs",
     "docs:api": "sh ./scripts/docs-api.sh",
