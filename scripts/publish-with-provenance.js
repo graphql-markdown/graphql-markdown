@@ -56,6 +56,7 @@ function getPackagesToPublish() {
 
 async function publishWithProvenance() {
   const packages = getPackagesToPublish();
+  const originalCwd = process.cwd();
   
   if (packages.length === 0) {
     console.log('No packages to publish');
@@ -68,9 +69,8 @@ async function publishWithProvenance() {
     console.log(`\n📦 Publishing ${pkg.name}@${pkg.version}`);
     
     try {
-      // Navigate to package directory
+      // Get publish path
       const publishPath = path.join(pkg.path, pkg.directory);
-      process.chdir(publishPath);
       
       // Step 1: Create tarball with bun
       console.log('  Creating tarball...');
@@ -103,15 +103,23 @@ async function publishWithProvenance() {
     } catch (error) {
       console.error(`  ❌ Failed to publish ${pkg.name}@${pkg.version}`);
       console.error(error.message);
+      // Restore original directory before exiting
+      process.chdir(originalCwd);
       process.exit(1);
     }
   }
   
+  // Restore original directory
+  process.chdir(originalCwd);
   console.log('\n✨ All packages published successfully!');
 }
 
-// Run the publish process
-publishWithProvenance().catch(error => {
-  console.error('Publish failed:', error);
-  process.exit(1);
-});
+// Run the publish process with proper async handling
+(async () => {
+  try {
+    await publishWithProvenance();
+  } catch (error) {
+    console.error('Publish failed:', error);
+    process.exit(1);
+  }
+})();
