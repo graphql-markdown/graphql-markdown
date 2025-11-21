@@ -5,13 +5,16 @@ const filter = require("lodash.filter");
 const PACKAGE_LOCK = "package-lock.json";
 const PACKAGE_JSON = "package.json";
 const YARN_LOCK = "yarn.lock";
+const BUN_LOCK = "bun.lock";
 const LICENSE_FILE = "LICENSE";
 const README_FILE = "README.md";
 const DANGER_FILE = "dangerfile.js";
 const JEST_SNAPSHOT = /^.+\.snap$/;
 
+const packageJson = danger.git.fileMatch(PACKAGE_JSON);
 const packageLock = danger.git.fileMatch(PACKAGE_LOCK);
 const yarnLock = danger.git.fileMatch(YARN_LOCK);
+const bunLock = danger.git.fileMatch(BUN_LOCK);
 const licenseFile = danger.git.fileMatch(LICENSE_FILE);
 const readmeFile = danger.git.fileMatch(README_FILE);
 const dangerFile = danger.git.fileMatch(DANGER_FILE);
@@ -31,12 +34,17 @@ if (yarnLock.modified || yarnLock.created) {
 }
 
 // rule-npm-lock-deleted
-if (packageLock.deleted) {
+if (packageLock.modified || packageLock.created) {
+  fail(`\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`);
+}
+
+// rule-bun-lock-deleted
+if (bunLock.deleted) {
   fail(`This PR deleted the \`${PACKAGE_LOCK}\` file.`);
 }
 
-// rule-npm-lock-not-updated
-if (yarnLock.modified && !(packageLock.modified || packageLock.created)) {
+// rule-bun-lock-not-updated
+if (packageJson.modified && !(bunLock.modified || bunLock.created)) {
   schedule(async () => {
     const packageDiff = await danger.git.JSONDiffForFile(PACKAGE_JSON);
     if (packageDiff.dependencies) {
