@@ -1,29 +1,8 @@
 // jest.config.js
-const projectConfig = (name) => ({
-  displayName: `@graphql-markdown/${name}`,
-  extensionsToTreatAsEsm: [".ts"],
-  prettierPath: null,
-  rootDir: `./packages/${name}`,
-  roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
-  testEnvironment: "node",
-  testEnvironmentOptions: {
-    globalsCleanup: 'on',
-  },
-  testPathIgnorePatterns: ["/node_modules/", "/dist/", "/__data__/"],
-  cacheDirectory: "<rootDir>/node_modules/.jest-cache",
-  transform: {
-    "^.+\\.ts$": [
-      "ts-jest",
-      {
-        tsconfig: "<rootDir>/tsconfig.test.json",
-      },
-    ],
-  },
-  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
+const { createProjectConfig } = require("./jest.base.config.js");
+
+const projectConfig = (name) => createProjectConfig(name, {
   testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
-  moduleNameMapper: {
-    "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
-  },
 });
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -33,7 +12,6 @@ module.exports = {
   collectCoverage: true,
   coverageReporters: ["json", "lcov"],
   moduleFileExtensions: ["ts", "js"],
-  maxWorkers: "50%",
   workerIdleMemoryLimit: "512M",
   projects: [
     projectConfig("cli"),
