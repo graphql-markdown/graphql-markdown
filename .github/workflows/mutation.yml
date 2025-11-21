@@ -67,4 +67,4 @@ jobs:
         run: bun run build:all
 
       - name: Run Mutations Tests
-        run: bun run --filter '@graphql-markdown/${{matrix.package}} stryker --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}
+        run: bun run --filter '@graphql-markdown/${{matrix.package}}' stryker --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}
