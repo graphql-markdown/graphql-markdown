@@ -12,6 +12,7 @@ FROM docker.io/library/node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
 ENV HUSKY=0
+ENV NODE_OPTIONS=--dns-result-order=ipv4first
 RUN --mount=type=cache,target=/root/.bun npm install --global npm@$npmVersion bun
 
 deps:
@@ -32,6 +33,7 @@ lint:
 
 build:
   FROM +lint
+    RUN bun run clean:all
     RUN bun run build:all
 
 unit-test:
@@ -55,6 +57,7 @@ build-package:
   FROM +build
   ARG --required package
   WORKDIR /graphql-markdown
+  RUN bun run --filter "@graphql-markdown/$package" build
   RUN bun run --filter "@graphql-markdown/$package" pack --filename graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 

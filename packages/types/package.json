@@ -20,6 +20,9 @@
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
   "types": "src/index.d.ts",
   "scripts": {
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "build": "tsc --build",
     "pack": "bun pm pack"
   },
   "devDependencies": {
