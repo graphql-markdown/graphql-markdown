@@ -30,17 +30,17 @@ const getDiffDependencies = (dependencies) => {
 
 // rule-yarn-lock-detected
 if (yarnLock.modified || yarnLock.created) {
-  fail(`\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`);
+  fail(`\`${YARN_LOCK}\` detected, you must used 'bun' for dependencies.`);
 }
 
 // rule-npm-lock-deleted
 if (packageLock.modified || packageLock.created) {
-  fail(`\`${YARN_LOCK}\` detected, you must used 'npm' for dependencies.`);
+  fail(`\`${PACKAGE_LOCK}\` detected, you must used 'bun' for dependencies.`);
 }
 
 // rule-bun-lock-deleted
 if (bunLock.deleted) {
-  fail(`This PR deleted the \`${PACKAGE_LOCK}\` file.`);
+  fail(`This PR deleted the \`${BUN_LOCK}\` file.`);
 }
 
 // rule-bun-lock-not-updated
