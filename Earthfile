@@ -17,7 +17,6 @@ RUN --mount=type=cache,target=/root/.bun npm install --global npm@$npmVersion bu
 
 deps:
     COPY . .
-    COPY *.json ./
     COPY --dir config ./config
     COPY --dir scripts ./scripts
     COPY --dir packages/*/package*.json ./packages/
