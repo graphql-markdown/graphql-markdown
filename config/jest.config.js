@@ -6,6 +6,9 @@ const projectConfig = (name) => ({
   rootDir: `./packages/${name}`,
   roots: ["<rootDir>/src/", "<rootDir>/tests/", "<rootDir>/tests/__mocks__"],
   testEnvironment: "node",
+  testEnvironmentOptions: {
+    globalsCleanup: 'on',
+  },
   transform: {
     "^.+\\.ts$": [
       "ts-jest",

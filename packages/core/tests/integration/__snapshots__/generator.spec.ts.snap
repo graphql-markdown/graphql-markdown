@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 1`] = `
 {
