@@ -10,7 +10,7 @@ Helpers utility functions library.
 function getObjPath(
    path, 
    obj, 
-   fallback): unknown
+   fallback): unknown;
 ```
 
 Defined in: [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
@@ -63,7 +63,7 @@ getObjPath("foo.bak", { foo: { bar: 42 } }, "fallback"); // Returns "fallback"
 function interpolate(
    template, 
    variables, 
-   fallback?): string
+   fallback?): string;
 ```
 
 Defined in: [utils/interpolate.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L64)

@@ -14,7 +14,7 @@ Custom directive `tag` helper.
 function directiveTag(
    directive, 
    type?, 
-   classname?): Badge
+   classname?): Badge;
 ```
 
 Defined in: [directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)

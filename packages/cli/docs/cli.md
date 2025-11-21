@@ -31,7 +31,7 @@ Type representing the GraphQL Markdown CLI.
 function getGraphQLMarkdownCli(
    options, 
    loggerModule?, 
-   customMdxParser?): CommanderStatic
+   customMdxParser?): CommanderStatic;
 ```
 
 Defined in: [index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L84)
@@ -83,7 +83,7 @@ await cli.parseAsync(process.argv);
 function runGraphQLMarkdown(
    options, 
    cliOptions, 
-loggerModule?): Promise<void>
+loggerModule?): Promise<void>;
 ```
 
 Defined in: [index.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L47)

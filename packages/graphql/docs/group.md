@@ -11,7 +11,7 @@ Library supporting `groupByDirective` for grouping GraphQL schema entities.
 ### getGroupName()
 
 ```ts
-function getGroupName<T>(type, groupByDirective): Maybe<string>
+function getGroupName<T>(type, groupByDirective): Maybe<string>;
 ```
 
 Defined in: [packages/graphql/src/group.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L72)
@@ -88,7 +88,7 @@ getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "comm
 ### getGroups()
 
 ```ts
-function getGroups(schemaMap, groupByDirective): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>
+function getGroups(schemaMap, groupByDirective): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 ```
 
 Defined in: [packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L173)
@@ -101,7 +101,7 @@ Parses a GraphQL schema to build a map of entities with matching `groupByDirecti
 
 `SchemaMap`
 
-the GraphQL schema map returned by [introspection!getSchemaMap](introspection.md#getschemamap)
+the GraphQL schema map returned by getSchemaMap
 
 ##### groupByDirective
 

@@ -7,7 +7,7 @@ Library of helper functions for handling files and folders.
 ### ensureDir()
 
 ```ts
-function ensureDir(location, options?): Promise<void>
+function ensureDir(location, options?): Promise<void>;
 ```
 
 Defined in: [fs.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L60)
@@ -45,7 +45,7 @@ await ensureDir("./.temp/local")
 ### fileExists()
 
 ```ts
-function fileExists(location): Promise<boolean>
+function fileExists(location): Promise<boolean>;
 ```
 
 Defined in: [fs.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L35)
@@ -84,7 +84,7 @@ await fileExists("./.temp/local")
 function saveFile(
    location, 
    content, 
-prettify?): Promise<void>
+prettify?): Promise<void>;
 ```
 
 Defined in: [fs.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L97)

@@ -36,7 +36,7 @@ the GraphQL schema type being processed.
 
 #### Param
 
-a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)).
+a GraphQL schema map (see getSchemaMap).
 
 #### Returns
 
@@ -72,7 +72,7 @@ the GraphQL schema type being processed.
 
 #### Param
 
-a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)).
+a GraphQL schema map (see getSchemaMap).
 
 #### Returns
 
@@ -108,7 +108,7 @@ the GraphQL schema type being processed.
 
 #### Param
 
-a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)).
+a GraphQL schema map (see getSchemaMap).
 
 #### Returns
 
@@ -144,7 +144,7 @@ the GraphQL schema type being processed.
 
 #### Param
 
-a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)).
+a GraphQL schema map (see getSchemaMap).
 
 #### Returns
 
@@ -180,7 +180,7 @@ the GraphQL schema type being processed.
 
 #### Param
 
-a GraphQL schema map (see [introspection!getSchemaMap](introspection.md#getschemamap)).
+a GraphQL schema map (see getSchemaMap).
 
 #### Returns
 

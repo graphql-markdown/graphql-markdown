@@ -14,7 +14,7 @@ Custom directive `descriptor` helper.
 function directiveDescriptor(
    directive, 
    type?, 
-   descriptionTemplate?): string
+   descriptionTemplate?): string;
 ```
 
 Defined in: [directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)

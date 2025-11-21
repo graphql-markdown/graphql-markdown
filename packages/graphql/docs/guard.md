@@ -7,7 +7,7 @@ Custom GraphQL type guards and property guards.
 ### executableDirectiveLocation()
 
 ```ts
-function executableDirectiveLocation(directive): boolean
+function executableDirectiveLocation(directive): boolean;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L104)
@@ -29,7 +29,7 @@ Checks if a directive is executable (related to operations).
 ### instanceOf()
 
 ```ts
-function instanceOf<T>(obj, type): obj is () => T
+function instanceOf<T>(obj, type): obj is () => T;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L58)
@@ -67,7 +67,7 @@ the GraphQL type `T`.
 ### isApiType()
 
 ```ts
-function isApiType(type): boolean
+function isApiType(type): boolean;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L140)
@@ -91,7 +91,7 @@ a GraphQL type.
 ### isDeprecated()
 
 ```ts
-function isDeprecated<T>(obj): obj is DeprecatedType<T>
+function isDeprecated<T>(obj): obj is DeprecatedType<T>;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L79)
@@ -123,7 +123,7 @@ an instance of `T`.
 ### isGraphQLFieldType()
 
 ```ts
-function isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>
+function isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L39)
@@ -147,7 +147,7 @@ a GraphQL type.
 ### isOperation()
 
 ```ts
-function isOperation(type): type is GraphQLOperationType
+function isOperation(type): type is GraphQLOperationType;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L94)
@@ -171,7 +171,7 @@ a GraphQL type.
 ### isSystemType()
 
 ```ts
-function isSystemType(type): boolean
+function isSystemType(type): boolean;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:153](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L153)
@@ -195,7 +195,7 @@ a GraphQL type.
 ### typeSystemDirectiveLocation()
 
 ```ts
-function typeSystemDirectiveLocation(directive): boolean
+function typeSystemDirectiveLocation(directive): boolean;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L127)

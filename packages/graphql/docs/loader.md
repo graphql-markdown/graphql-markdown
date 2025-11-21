@@ -7,7 +7,7 @@ Library for GraphQL schema loading and `loaders` config processing.
 ### getDocumentLoaders()
 
 ```ts
-function getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>
+function getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>;
 ```
 
 Defined in: [packages/graphql/src/loader.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L114)
@@ -27,7 +27,7 @@ Defined in: [packages/graphql/src/loader.ts:114](https://github.com/graphql-mark
 ### loadSchema()
 
 ```ts
-function loadSchema(schemaLocation, options): Promise<GraphQLSchema>
+function loadSchema(schemaLocation, options): Promise<GraphQLSchema>;
 ```
 
 Defined in: [packages/graphql/src/loader.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L46)

@@ -9,7 +9,7 @@ function hasChanges(
    schema, 
    tmpDir, 
    diffMethod, 
-diffModule): Promise<boolean>
+diffModule): Promise<boolean>;
 ```
 
 Defined in: [diff.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L62)

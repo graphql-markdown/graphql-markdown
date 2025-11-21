@@ -7,7 +7,7 @@ Internal library for prettifying files using `prettier`.
 ### prettify()
 
 ```ts
-function prettify(content, parser): Promise<undefined | string>
+function prettify(content, parser): Promise<string | undefined>;
 ```
 
 Defined in: [prettier.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L25)
@@ -32,7 +32,7 @@ the `prettier` parser to use.
 
 #### Returns
 
-`Promise`\<`undefined` \| `string`\>
+`Promise`\<`string` \| `undefined`\>
 
 a prettified string, or undefined if an error occurred.
 
@@ -50,10 +50,10 @@ This function logs a warning message on error.
 ### prettifyMarkdown()
 
 ```ts
-function prettifyMarkdown(content): Promise<undefined | string>
+function prettifyMarkdown(content): Promise<string | undefined>;
 ```
 
-Defined in: [prettier.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L57)
+Defined in: [prettier.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L68)
 
 **`Internal`**
 
@@ -69,13 +69,13 @@ the string to be prettified.
 
 #### Returns
 
-`Promise`\<`undefined` \| `string`\>
+`Promise`\<`string` \| `undefined`\>
 
 a prettified string, or undefined if an error occurred.
 
 #### Remarks
 
-Same as `prettify(content, "markdown")`.
+Same as `prettify(content, "mdx")`.
 
 #### See
 

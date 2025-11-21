@@ -1,5 +1,8 @@
 # section
 
+Module responsible for generating Markdown sections for GraphQL schema documentation.
+Handles the printing of section items, metadata, and structured documentation content.
+
 ## Functions
 
 ### printMetadataSection()
@@ -9,10 +12,12 @@ function printMetadataSection<T, V>(
    type, 
    values, 
    section, 
-   options): string | MDXString
+   options): string | MDXString;
 ```
 
-Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L135)
+Defined in: [section.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L169)
+
+Prints a metadata section with special handling for deprecated items.
 
 #### Type Parameters
 
@@ -20,9 +25,13 @@ Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdow
 
 `T`
 
+Type of the parent element
+
 ##### V
 
 `V`
+
+Type of the values being printed
 
 #### Parameters
 
@@ -30,7 +39,11 @@ Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdow
 
 `T`
 
+The parent type containing the metadata
+
 ##### values
+
+Values to include in the metadata section
 
 `V` | `V`[] | readonly `V`[]
 
@@ -38,13 +51,19 @@ Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdow
 
 `string`
 
+Section title/header
+
 ##### options
 
 `PrintTypeOptions`
 
+Configuration options for printing
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted MDX string containing the metadata section
 
 ***
 
@@ -54,10 +73,12 @@ Defined in: [section.ts:135](https://github.com/graphql-markdown/graphql-markdow
 function printSection<V>(
    values, 
    section, 
-   options): string | MDXString
+   options): string | MDXString;
 ```
 
-Defined in: [section.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L93)
+Defined in: [section.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L118)
+
+Prints a complete section with title and content.
 
 #### Type Parameters
 
@@ -65,9 +86,13 @@ Defined in: [section.ts:93](https://github.com/graphql-markdown/graphql-markdown
 
 `V`
 
+Type of the values being printed
+
 #### Parameters
 
 ##### values
+
+Array of values to include in the section
 
 `V`[] | readonly `V`[]
 
@@ -75,23 +100,31 @@ Defined in: [section.ts:93](https://github.com/graphql-markdown/graphql-markdown
 
 `string`
 
+Section title/header
+
 ##### options
 
 `PrintTypeOptions`
 
+Configuration options for printing
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted MDX string containing the complete section
 
 ***
 
 ### printSectionItem()
 
 ```ts
-function printSectionItem<T>(type, options): string | MDXString
+function printSectionItem<T>(type, options): string | MDXString;
 ```
 
-Defined in: [section.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L21)
+Defined in: [section.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L33)
+
+Prints a single section item with its associated metadata.
 
 #### Type Parameters
 
@@ -99,29 +132,39 @@ Defined in: [section.ts:21](https://github.com/graphql-markdown/graphql-markdown
 
 `T`
 
+Type of the GraphQL element being printed
+
 #### Parameters
 
 ##### type
 
 `T`
 
+The GraphQL type or field to print
+
 ##### options
 
 `PrintTypeOptions`
 
+Configuration options for printing
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted MDX string containing the section item
 
 ***
 
 ### printSectionItems()
 
 ```ts
-function printSectionItems<V>(values, options): string | MDXString
+function printSectionItems<V>(values, options): string | MDXString;
 ```
 
-Defined in: [section.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L65)
+Defined in: [section.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L83)
+
+Prints an array of section items with consistent formatting.
 
 #### Type Parameters
 
@@ -129,9 +172,13 @@ Defined in: [section.ts:65](https://github.com/graphql-markdown/graphql-markdown
 
 `V`
 
+Type of the values being printed
+
 #### Parameters
 
 ##### values
+
+Single value or array of values to print as section items
 
 `V` | `V`[]
 
@@ -139,6 +186,10 @@ Defined in: [section.ts:65](https://github.com/graphql-markdown/graphql-markdown
 
 `PrintTypeOptions`
 
+Configuration options for printing
+
 #### Returns
 
 `string` \| `MDXString`
+
+Formatted MDX string containing all section items

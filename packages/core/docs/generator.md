@@ -1,19 +1,29 @@
 # generator
 
+Core generator functionality for GraphQL Markdown documentation.
+
+This module contains the main functionality for generating markdown documentation
+from GraphQL schemas. It handles schema loading, processing, and markdown generation
+through appropriate printers and renderers.
+
 ## Functions
 
 ### generateDocFromSchema()
 
 ```ts
-function generateDocFromSchema(options): Promise<void>
+function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [generator.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L66)
+Defined in: [generator.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L65)
 
-Generates Markdown documentation from a GraphQL schema.
+Main entry point for generating Markdown documentation from a GraphQL schema.
 
-This function is the main entry point for the documentation generation process.
-It loads the schema, analyzes it, and generates Markdown files according to the provided options.
+This function coordinates the entire documentation generation process:
+- Loads and validates the schema
+- Checks for schema changes if diffing is enabled
+- Processes directives and groups
+- Initializes printers and renderers
+- Generates markdown files
 
 #### Parameters
 
@@ -21,20 +31,10 @@ It loads the schema, analyzes it, and generates Markdown files according to the 
 
 `GeneratorOptions`
 
-Configuration options for the documentation generator
+Complete configuration for the documentation generation
 
 #### Returns
 
 `Promise`\<`void`\>
 
-Promise that resolves when documentation generation is complete
-
-#### Example
-
-```typescript
-await generateDocFromSchema({
-  baseURL: '/docs',
-  outputDir: './docs',
-  schemaLocation: './schema.graphql'
-});
-```
+Promise that resolves when documentation is fully generated
