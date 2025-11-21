@@ -1,16 +1,16 @@
-// jest.config.js
+// jest.integration.config.js - Optimized for integration tests
 const { createProjectConfig } = require("./jest.base.config.js");
 
 const projectConfig = (name) => createProjectConfig(name, {
-  testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+  testTimeout: 30000,
+  testMatch: ["<rootDir>/tests/integration/**/(*.)+(spec|test).ts"],
 });
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   rootDir: "../",
   preset: "ts-jest",
-  collectCoverage: true,
-  coverageReporters: ["json", "lcov"],
+  collectCoverage: false,
   moduleFileExtensions: ["ts", "js"],
   workerIdleMemoryLimit: "512M",
   projects: [

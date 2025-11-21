@@ -65,7 +65,7 @@ jobs:
       - name: Run Unit Tests
         id: unit
         run: |
-          bun test:ci /unit/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
+          bun test:ci -- --coverage --reporters="github-actions" --reporters="summary" --testPathPatterns="/unit/" --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/unit
           mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
@@ -73,7 +73,7 @@ jobs:
       - name: Run Integration Tests
         id: integration
         run: |
-          bun test:ci /integration/ -- --coverage --reporters="github-actions" --reporters="summary" --selectProjects @graphql-markdown/${{ matrix.package }}
+          bun test:ci -- --coverage --reporters="github-actions" --reporters="summary" --testPathPatterns="/integration/" --selectProjects @graphql-markdown/${{ matrix.package }}
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
           mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json

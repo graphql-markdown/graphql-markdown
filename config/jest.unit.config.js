@@ -1,16 +1,16 @@
-// jest.config.js
+// jest.unit.config.js - Optimized for fast unit test runs
 const { createProjectConfig } = require("./jest.base.config.js");
 
 const projectConfig = (name) => createProjectConfig(name, {
-  testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+  testTimeout: 5000,
+  testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
 });
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   rootDir: "../",
   preset: "ts-jest",
-  collectCoverage: true,
-  coverageReporters: ["json", "lcov"],
+  collectCoverage: false,
   moduleFileExtensions: ["ts", "js"],
   workerIdleMemoryLimit: "512M",
   projects: [
