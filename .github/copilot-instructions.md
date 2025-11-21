@@ -299,7 +299,7 @@ The project uses [Conventional Commits](https://www.conventionalcommits.org/en/v
 1. Run type checking: `bun ts:check`
 2. Run linting: `bun lint`
 3. Run tests: `bun test`
-4. Run smoke tests: `earthly +smoke-test` (if applicable)
+4. Run smoke tests: `earthly +smoke-cli-test` and/or `earthly +smoke-docusaurus-test` (if applicable)
 5. Update documentation if needed
 6. Use the PR template (`.github/pull_request_template.md`)
 
