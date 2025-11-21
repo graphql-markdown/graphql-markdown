@@ -53,7 +53,7 @@ If you aim at a code contribution, you will need the following tools:
 - [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)\*
 - [earthly](https://earthly.dev/get-earthly)
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
-- [pnpm](https://pnpm.io/installation) (recommended)
+- [bun](https://bun.com/docs)
 
 This project is fully compatible with [GitHub Codespaces](https://github.com/features/codespaces). However, if you prefer a local environment, then we recommend [VS Code](https://code.visualstudio.com/download) for this project.
 
@@ -82,7 +82,7 @@ If you aim at a code contribution, you will need to perform a few additional ste
 - from the local folder, install repository packages
 
   ```shell
-  npm install
+  bun install
   ```
 
 - from the local folder, check that everything is working
@@ -109,14 +109,14 @@ The code base is full TypeScript using NodeJS, and Jest for tests. The codebase 
 
 When making your changes, remember to check your code by running:
 
-- `npm run ts:check` checks that the code is TS compliant
-- `npm run lint` checks that the code respects coding standards (ESLint + Prettier)
-- `npm test` runs the test suites
+- `bun run ts:check` checks that the code is TS compliant
+- `bun run lint` checks that the code respects coding standards (ESLint + Prettier)
+- `bun run test` runs the test suites
 - `earthly +smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `npm run ts:check`, `npm run lint` and `npm test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `bun run ts:check`, `bun run lint` and `bun run test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
@@ -222,7 +222,7 @@ Generate API documentation for packages:
 
 ```shell
 # Generate docs for all packages
-npm run docs:api:all
+bun run docs:api:all
 ```
 
 The generated documentation will be available in each package's `docs/` directory.
@@ -234,6 +234,6 @@ Common issues:
 - **Build failures**: Run `earthly --interactive [target]` then retry
 - **Type errors**: Check `tsconfig.json` in the affected package
 - **Test failures**: Use `--verbose` flag with Jest for details
-- **Dependency issues**: Clean install with `npm ci`
+- **Dependency issues**: Clean install with `bun ci`
 
 For other issues, please check existing GitHub issues or create a new one.
