@@ -3,7 +3,11 @@ import path, { join } from "node:path";
 
 import { vol } from "memfs";
 jest.mock("fs");
-jest.mock("node:fs/promises");
+jest.mock("node:fs/promises", () => {
+  // Return the memfs vol promises directly
+  const { vol: fsVol } = require("memfs");
+  return fsVol.promises;
+});
 
 import type {
   ClassName,

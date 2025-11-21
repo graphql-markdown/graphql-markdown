@@ -1,5 +1,12 @@
 import { vol } from "memfs";
-jest.mock("node:fs/promises");
+
+// Jest.mock must be called before importing the module that uses the mocked dependency
+// In Jest 30+, we need to ensure the mock is properly set up before the fs module is loaded
+jest.mock("node:fs/promises", () => {
+  // Return the memfs vol promises directly
+  const { vol: fsVol } = require("memfs");
+  return fsVol.promises;
+});
 
 import { ensureDir, fileExists, saveFile } from "../../src/fs";
 
@@ -116,7 +123,7 @@ describe("fs", () => {
         "/foo/bar/test/prettify.test",
         "foobar file for test",
         async () => {
-          return Promise.resolve("prettify hello");
+          return "prettify hello";
         },
       );
 
