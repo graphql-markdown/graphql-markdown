@@ -211,7 +211,7 @@ const isHierarchy = (
   options: Maybe<PrintLinkOptions>,
   hierarchy: TypeHierarchyValueType,
 ): options is PrintLinkOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return !!options?.hierarchy?.[hierarchy];
+  return options?.hierarchy?.[hierarchy] !== undefined;
 };
 
 /**
