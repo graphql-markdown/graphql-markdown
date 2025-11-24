@@ -2,7 +2,9 @@
 import path, { join } from "node:path";
 
 import { vol } from "memfs";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("fs");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
   const { vol: fsVol } = require("memfs");
@@ -19,9 +21,11 @@ import type {
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 

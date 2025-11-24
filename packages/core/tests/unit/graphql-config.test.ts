@@ -11,6 +11,7 @@ import {
   DEFAULT_OPTIONS,
 } from "../../src/config";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("graphql-config");
 import * as GraphQLConfig from "graphql-config";
 
