@@ -13,8 +13,6 @@ WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
 ENV HUSKY=0
 ENV NODE_OPTIONS=--dns-result-order=ipv4first
-# Enable tsgo TypeScript compiler (Go-based native implementation) instead of tsc
-ENV TS_COMPILER_ENABLED=true
 RUN --mount=type=cache,target=/root/.bun npm install --global npm@$npmVersion bun
 RUN node --version
 RUN npm --version
