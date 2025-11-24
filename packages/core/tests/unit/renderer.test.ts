@@ -206,7 +206,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         jest.spyOn(Printer, "printType").mockImplementationOnce(() => {
-          throw new Error();
+          throw new Error("Test error");
         });
 
         const spy = jest.spyOn(globalThis.console, "warn");
