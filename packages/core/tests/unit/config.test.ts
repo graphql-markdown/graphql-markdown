@@ -248,7 +248,7 @@ describe("config", () => {
           docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           force: DEFAULT_OPTIONS.force,
-          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
+          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/), //NOSONAR
           id: DEFAULT_OPTIONS.id,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
@@ -263,7 +263,7 @@ describe("config", () => {
           },
           schemaLocation: DEFAULT_OPTIONS.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
-          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/), //NOSONAR
         }),
       );
     });
