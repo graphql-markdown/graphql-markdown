@@ -369,7 +369,7 @@ export const getOperation = (
     (fieldMap) => {
       const result: Record<string, GraphQLOperationType> = {};
       for (const key in fieldMap) {
-        if (Object.prototype.hasOwnProperty.call(fieldMap, key)) {
+        if (Object.hasOwn(fieldMap, key)) {
           result[key] = fieldMap[key] as GraphQLOperationType;
         }
       }
