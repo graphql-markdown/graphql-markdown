@@ -20,13 +20,11 @@ jest.mock(
 );
 
 jest.mock("@graphql-markdown/logger", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      info: jest.fn(),
-      error: jest.fn(),
-      warn: jest.fn(),
-      debug: jest.fn(),
-    };
+  return jest.fn().mockResolvedValue({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
   });
 });
 

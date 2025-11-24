@@ -87,8 +87,9 @@ export const getGraphQLMarkdownCli = (
   customMdxParser?: boolean | string,
 ): GraphQLMarkdownCliType => {
   // Initialize logger asynchronously without blocking - non-critical operation
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
-  Logger(loggerModule);
+  Logger(loggerModule).catch(() => {
+    // Logger initialization failure is non-critical, ignore it
+  });
 
   const isDefaultId =
     !("id" in options) || ("id" in options && options.id === DEFAULT_ID);
