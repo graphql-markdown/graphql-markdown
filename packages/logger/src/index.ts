@@ -9,7 +9,7 @@
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
 declare global {
-  const logger: Maybe<LoggerType>;
+  var logger: Maybe<LoggerType>;
 }
 
 /**
@@ -86,9 +86,7 @@ export const log = (
   message: string,
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
-  new Promise((resolve) => {
-    resolve(Logger());
-  }).catch(() => {});
+  Promise.resolve(Logger()).catch(() => {});
   globalThis.logger?._log(message, level);
 };
 
