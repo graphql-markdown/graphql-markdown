@@ -192,7 +192,7 @@ export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
 declare const DIFF_METHOD_NAME: unique symbol;
 export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";
 
-type Pointer = UnnormalizedTypeDefPointer | string;
+type Pointer = UnnormalizedTypeDefPointer;
 
 export interface ConfigOptions {
   /** Base URL for the documentation links */
