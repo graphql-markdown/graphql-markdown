@@ -46,7 +46,7 @@ jest.mock("../../src/graphql-config");
 
 describe("config", () => {
   beforeAll(() => {
-    Object.assign(global, { logger: globalThis.console });
+    Object.assign(globalThis, { logger: globalThis.console });
   });
 
   afterEach(() => {
