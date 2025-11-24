@@ -194,10 +194,13 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
       : {};
     const fieldMap = _getFields(relationType, undefined, {});
 
-    const fields = Object.assign({}, paramFieldArgs, fieldMap);
+    const fields = { ...paramFieldArgs, ...fieldMap };
     for (const fieldDef of Object.values(fields)) {
       if (
         isNamedType(type) &&
+        fieldDef &&
+        typeof fieldDef === "object" &&
+        "type" in fieldDef &&
         getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
       ) {
         if (

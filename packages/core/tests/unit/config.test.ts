@@ -22,6 +22,7 @@ import {
   DEFAULT_OPTIONS,
   DiffMethod,
   getDiffMethod,
+  getForcedDiffMethod,
   getCustomDirectives,
   getDocDirective,
   getDocOptions,
@@ -45,7 +46,7 @@ jest.mock("../../src/graphql-config");
 
 describe("config", () => {
   beforeAll(() => {
-    Object.assign(global, { logger: global.console });
+    Object.assign(globalThis, { logger: globalThis.console });
   });
 
   afterEach(() => {
@@ -54,7 +55,7 @@ describe("config", () => {
   });
 
   afterAll(() => {
-    delete global.logger;
+    delete globalThis.logger;
   });
 
   describe("getSkipDocDirectives", () => {
@@ -247,7 +248,7 @@ describe("config", () => {
           docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           force: DEFAULT_OPTIONS.force,
-          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
+          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/), //NOSONAR
           id: DEFAULT_OPTIONS.id,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
@@ -262,7 +263,7 @@ describe("config", () => {
           },
           schemaLocation: DEFAULT_OPTIONS.schema,
           skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
-          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/),
+          tmpDir: expect.stringMatching(/.+@graphql-markdown\/docusaurus$/), //NOSONAR
         }),
       );
     });
@@ -893,7 +894,7 @@ describe("config", () => {
       const cliOpt = {},
         configOptions = undefined;
 
-      const spyConsole = jest.spyOn(global.console, "warn");
+      const spyConsole = jest.spyOn(globalThis.console, "warn");
 
       expect(
         parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
@@ -909,7 +910,7 @@ describe("config", () => {
       const cliOpt = {},
         configOptions = undefined;
 
-      const spyConsole = jest.spyOn(global.console, "warn");
+      const spyConsole = jest.spyOn(globalThis.console, "warn");
 
       expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
         {},
@@ -1376,23 +1377,15 @@ describe("mutation test: getCustomDirectives edge cases", () => {
 });
 
 describe("getDiffMethod", () => {
-  test("returns DiffMethod.FORCE when force parameter is true", () => {
+  test("returns DiffMethod.FORCE when using getForcedDiffMethod", () => {
     expect.assertions(1);
 
-    const result = getDiffMethod(DiffMethod.NONE, true);
+    const result = getForcedDiffMethod();
 
     expect(result).toBe(DiffMethod.FORCE);
   });
 
-  test("returns provided method when force parameter is false", () => {
-    expect.assertions(1);
-
-    const result = getDiffMethod(DiffMethod.NONE, false);
-
-    expect(result).toBe(DiffMethod.NONE);
-  });
-
-  test("defaults force to false when not provided", () => {
+  test("returns provided method via getDiffMethod", () => {
     expect.assertions(1);
 
     const result = getDiffMethod(DiffMethod.NONE);
@@ -1400,10 +1393,10 @@ describe("getDiffMethod", () => {
     expect(result).toBe(DiffMethod.NONE);
   });
 
-  test("returns DiffMethod.FORCE even when input method is FORCE and force is true", () => {
+  test("normalizes diff method to uppercase", () => {
     expect.assertions(1);
 
-    const result = getDiffMethod(DiffMethod.FORCE, true);
+    const result = getDiffMethod(DiffMethod.FORCE);
 
     expect(result).toBe(DiffMethod.FORCE);
   });

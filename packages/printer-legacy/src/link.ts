@@ -211,7 +211,7 @@ const isHierarchy = (
   options: Maybe<PrintLinkOptions>,
   hierarchy: TypeHierarchyValueType,
 ): options is PrintLinkOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+  return options?.hierarchy?.[hierarchy] !== undefined;
 };
 
 /**
@@ -289,7 +289,7 @@ export const toLink = (
   } as TypeLink;
 
   if (options.formatMDXLink) {
-    return options.formatMDXLink(link) as TypeLink;
+    return options.formatMDXLink(link);
   }
 
   return link;
@@ -401,5 +401,5 @@ export const printParentLink = (
       ...options,
       withAttributes: true,
     }),
-  ) as MDXString;
+  );
 };

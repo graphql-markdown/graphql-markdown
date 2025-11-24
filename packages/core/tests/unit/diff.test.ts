@@ -12,7 +12,7 @@ describe("diff", () => {
   describe("hasChanges()", () => {
     beforeEach(() => {
       // silent console
-      jest.spyOn(global.console, "warn").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {

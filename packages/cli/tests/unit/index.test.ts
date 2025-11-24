@@ -11,7 +11,7 @@ jest.mock(
       buildConfig: jest
         .fn()
         .mockImplementation(async (config): Promise<Options> => {
-          return Promise.resolve(config);
+          return config;
         }),
       generateDocFromSchema: jest.fn().mockResolvedValue(undefined),
     };
@@ -20,13 +20,11 @@ jest.mock(
 );
 
 jest.mock("@graphql-markdown/logger", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      info: jest.fn(),
-      error: jest.fn(),
-      warn: jest.fn(),
-      debug: jest.fn(),
-    };
+  return jest.fn().mockResolvedValue({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
   });
 });
 
@@ -603,7 +601,7 @@ describe("CLI Module", () => {
       const cliOptions = { config: true };
 
       const spy = jest
-        .spyOn(global.console, "dir")
+        .spyOn(globalThis.console, "dir")
         .mockImplementation(() => {});
 
       await runGraphQLMarkdown(options, cliOptions);

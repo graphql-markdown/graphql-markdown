@@ -424,27 +424,31 @@ export const getCustomDirectives = (
  * If force is true, always returns FORCE regardless of the configured diff method.
  *
  * @param diff - The configured diff method
- * @param force - Whether to force regeneration (overrides diff setting)
- * @returns The resolved diff method to use
+ * @returns The normalized diff method to use
  * @example
  * ```typescript
  * // Normal usage - respects the configured diff method
- * const method1 = getDiffMethod(DiffMethod.NONE, false);
+ * const method1 = getDiffMethod(DiffMethod.NONE);
  * console.log(method1); // "NONE"
  *
- * // Force flag overrides the diff method
- * const method2 = getDiffMethod(DiffMethod.NONE, true);
+ * // Use getForcedDiffMethod when force flag is needed
+ * const method2 = getForcedDiffMethod();
  * console.log(method2); // "FORCE"
  * ```
  * @see {@link DiffMethod} for available diff methods
  */
-export const getDiffMethod = (
+export const getForcedDiffMethod = (): TypeDiffMethod => {
+  return DiffMethod.FORCE;
+};
+
+export const getNormalizedDiffMethod = (
   diff: TypeDiffMethod,
-  force: boolean = false,
 ): TypeDiffMethod => {
-  return force
-    ? DiffMethod.FORCE
-    : (diff.toLocaleUpperCase() as TypeDiffMethod);
+  return diff.toLocaleUpperCase() as TypeDiffMethod;
+};
+
+export const getDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
+  return getNormalizedDiffMethod(diff);
 };
 
 /**
@@ -489,12 +493,11 @@ export const getDocOptions = (
   >,
 ): Required<ConfigDocOptions> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
-  const index =
-    typeof cliOpts?.index === "boolean"
-      ? cliOpts.index
-      : typeof configOptions?.index === "boolean"
-        ? configOptions.index
-        : DEFAULT_OPTIONS.docOptions!.index;
+  const cliIndex =
+    typeof cliOpts?.index === "boolean" ? cliOpts.index : undefined;
+  const configIndex =
+    typeof configOptions?.index === "boolean" ? configOptions.index : undefined;
+  const index = cliIndex ?? configIndex ?? DEFAULT_OPTIONS.docOptions!.index;
 
   return {
     categorySort: configOptions?.categorySort,
@@ -686,8 +689,7 @@ export const parseGroupByOption = (
   groupOptions: unknown,
 ): Maybe<GroupByDirectiveOptions> => {
   const DEFAULT_GROUP = "Miscellaneous";
-  const OPTION_REGEX =
-    /^@(?<directive>\w+)\((?<field>\w+)(?:\|=(?<fallback>\w+))?\)/;
+  const OPTION_REGEX = /^@(\w+)\((\w+)(?:\|=(\w+))?\)/;
 
   if (typeof groupOptions !== "string") {
     return undefined;
@@ -699,16 +701,11 @@ export const parseGroupByOption = (
     throw new Error(`Invalid "${groupOptions}"`);
   }
 
-  if (!("groups" in parsedOptions)) {
-    return undefined;
-  }
-
-  const {
-    groups: { directive, field, fallback = DEFAULT_GROUP },
-  } = parsedOptions as unknown as {
-    groups: { directive: string; field: string; fallback?: string };
-  };
-  return { directive, field, fallback } as GroupByDirectiveOptions;
+  return {
+    directive: parsedOptions[1],
+    field: parsedOptions[2],
+    fallback: parsedOptions[3] || DEFAULT_GROUP,
+  } as GroupByDirectiveOptions;
 };
 
 export const parseHomepageOption = (
@@ -791,7 +788,9 @@ export const buildConfig = async (
       config.customDirective,
       skipDocDirective,
     ),
-    diffMethod: getDiffMethod(cliOpts.diff ?? config.diffMethod!, force),
+    diffMethod: force
+      ? getForcedDiffMethod()
+      : getDiffMethod(cliOpts.diff ?? config.diffMethod!),
     docOptions: getDocOptions(cliOpts, config.docOptions),
     force,
     groupByDirective:

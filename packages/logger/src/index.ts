@@ -27,7 +27,7 @@ export enum LogLevel {
 
 /**
  * Instantiate a logger module.
- * By default, the logger module uses `global.console`
+ * By default, the logger module uses `globalThis.console`
  *
  * @param moduleName - optional name of the logger package.
  *

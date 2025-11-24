@@ -88,7 +88,7 @@ describe("renderer", () => {
       );
 
       // silent console
-      jest.spyOn(global.console, "warn").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -206,10 +206,10 @@ describe("renderer", () => {
         expect.assertions(2);
 
         jest.spyOn(Printer, "printType").mockImplementationOnce(() => {
-          throw new Error();
+          throw new Error("Test error");
         });
 
-        const spy = jest.spyOn(global.console, "warn");
+        const spy = jest.spyOn(globalThis.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -230,7 +230,7 @@ describe("renderer", () => {
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
         jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
-        const spy = jest.spyOn(global.console, "warn");
+        const spy = jest.spyOn(globalThis.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -382,7 +382,7 @@ describe("renderer", () => {
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(global, "Date").mockImplementation(() => {
+        jest.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 
@@ -401,7 +401,7 @@ describe("renderer", () => {
         const readFileSpy = jest
           .spyOn(Utils, "readFile")
           .mockRejectedValueOnce(new Error("File not found"));
-        const consoleSpy = jest.spyOn(global.console, "warn");
+        const consoleSpy = jest.spyOn(globalThis.console, "warn");
 
         await rendererInstance.renderHomepage("/assets/nonexistent.md");
 
@@ -453,7 +453,7 @@ describe("renderer", () => {
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(global, "Date").mockImplementation(() => {
+        jest.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 
@@ -474,7 +474,7 @@ describe("renderer", () => {
         const saveFileSpy = jest
           .spyOn(Utils, "saveFile")
           .mockRejectedValueOnce(new Error("Write error"));
-        const consoleSpy = jest.spyOn(global.console, "warn");
+        const consoleSpy = jest.spyOn(globalThis.console, "warn");
 
         await rendererInstance.renderHomepage("/assets/error-saving.md");
 
@@ -1785,7 +1785,7 @@ describe("renderer", () => {
       });
 
       test("deprecated folder gets last position when categorySort is set", async () => {
-        expect.assertions(2);
+        expect.assertions(4);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1805,9 +1805,25 @@ describe("renderer", () => {
         );
 
         // Mock a deprecated type
-        const deprecatedType: Partial<GraphQLScalarType> = {
-          description: "@deprecated since v2.0",
-        };
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+
+        // Pre-register categories including deprecated
+        renderer["rootLevelPositionManager"].registerCategories([
+          "queries",
+          "objects",
+          "deprecated",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        const deprecatedPath = await renderer.generateCategoryMetafileType(
+          {},
+          "DeprecatedType",
+          "objects" as SchemaEntity,
+        );
+
+        // Verify deprecated folder is created and has expected position
+        expect(deprecatedPath).toMatch(/deprecated/);
+        expect(deprecatedPath).toMatch(/objects/);
 
         const renderer2 = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1833,8 +1849,11 @@ describe("renderer", () => {
         renderer2["rootLevelPositionManager"].computePositions();
 
         // generateIndexMetafile should be called with sidebarPosition: 999 for deprecated
-        const mockGenerateIndexMetafile = renderer2["mdxModule"]
-          .generateIndexMetafile as jest.Mock;
+        const mockGenerateIndexMetafile = (
+          renderer2["mdxModule"] as {
+            generateIndexMetafile: jest.Mock;
+          }
+        ).generateIndexMetafile;
 
         // Verify generateIndexMetafile was set up correctly
         expect(mockGenerateIndexMetafile).toBeDefined();
@@ -2357,7 +2376,7 @@ describe("renderer", () => {
         // Test that the regex correctly extracts category and pageId
         // The regex captures everything up to '.mdx' as pageId
         const validMatch = "Foobar/foo-bar.mdx".match(
-          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
+          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/, //NOSONAR
         );
         expect(validMatch?.groups?.category).toBe("Foobar");
         // The second capture group captures 'foo-bar' because [A-Za-z0-9-]+ matches the full string

@@ -32,7 +32,6 @@ import { toString } from "@graphql-markdown/utils";
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import type { Renderer } from "./renderer";
 import { getRenderer } from "./renderer";
 
 /**
@@ -185,10 +184,7 @@ export const generateDocFromSchema = async ({
   const pages = await Promise.all(
     Object.keys(rootTypes).map(async (name) => {
       const typeName = name as SchemaEntity;
-      return renderer.renderRootTypes(
-        typeName,
-        rootTypes[typeName],
-      ) as ReturnType<Renderer["renderRootTypes"]>;
+      return renderer.renderRootTypes(typeName, rootTypes[typeName]);
     }),
   );
 

@@ -187,7 +187,7 @@ const isHierarchy = (
   options: Maybe<RendererDocOptions>,
   hierarchy: TypeHierarchyValueType,
 ): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return (options?.hierarchy?.[hierarchy] && true) as boolean;
+  return options?.hierarchy?.[hierarchy] !== undefined;
 };
 
 const isPath = (path: unknown): path is LocationPath => {
@@ -594,9 +594,13 @@ export class Renderer {
       throw new Error("Output directory is empty or not specified");
     }
 
+    // Regex patterns to parse page metadata from file paths
+    // Matches: path/to/category/page-name.md(x) or path\to\category\page-name.md(x)
+    // Only allows alphanumeric and hyphens in category and page names
+    // NOSONAR - pattern is safe, hyphen in character class doesn't cause backtracking
     const PageRegex =
-      /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/;
-    const PageRegexFlat = /(?<pageId>[A-Za-z0-9-]+).mdx?$/;
+      /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
+    const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
     const extension = this.mdxModule ? "mdx" : "md";
     const fileName = slugify(name);

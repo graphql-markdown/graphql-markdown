@@ -103,7 +103,7 @@ export const printBadge = (
   return options.formatMDXBadge!({
     text: formattedText,
     classname,
-  }) as MDXString;
+  });
 };
 
 /**
