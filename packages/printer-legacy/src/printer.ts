@@ -230,39 +230,39 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): string => {
-    let code = "";
-
     if (options.codeSection === undefined || options.codeSection !== true) {
-      return code;
+      return "";
     }
+
+    let code: string;
 
     switch (true) {
       case isOperation(type):
-        code += printCodeOperation(type, options);
+        code = printCodeOperation(type, options);
         break;
       case isEnumType(type):
-        code += printCodeEnum(type, options);
+        code = printCodeEnum(type, options);
         break;
       case isUnionType(type):
-        code += printCodeUnion(type, options);
+        code = printCodeUnion(type, options);
         break;
       case isInterfaceType(type):
-        code += printCodeInterface(type, options);
+        code = printCodeInterface(type, options);
         break;
       case isObjectType(type):
-        code += printCodeObject(type, options);
+        code = printCodeObject(type, options);
         break;
       case isInputType(type):
-        code += printCodeInput(type, options);
+        code = printCodeInput(type, options);
         break;
       case isScalarType(type):
-        code += printCodeScalar(type, options);
+        code = printCodeScalar(type, options);
         break;
       case isDirectiveType(type):
-        code += printCodeDirective(type, options);
+        code = printCodeDirective(type, options);
         break;
       default:
-        code += `"${getTypeName(type)}" not supported`;
+        code = `"${getTypeName(type)}" not supported`;
     }
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;

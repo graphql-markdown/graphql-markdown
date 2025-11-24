@@ -85,7 +85,7 @@ export const printRelationOf = <T>(
     return "";
   }
 
-  let data: string[] = [];
+  const data: string[] = [];
   for (const [relation, types] of Object.entries(relations)) {
     if (types.length === 0) {
       continue;
@@ -99,8 +99,8 @@ export const printRelationOf = <T>(
       },
       options,
     );
-    data = data.concat(
-      types.map((t: unknown): string => {
+    data.push(
+      ...types.map((t: unknown): string => {
         const link = getRelationLink(category, t, options);
         return link ? `[\`${link.text}\`](${link.url})  ${badge}` : "";
       }),
@@ -111,8 +111,8 @@ export const printRelationOf = <T>(
     return "";
   }
 
-  const content = [...data]
-    .sort((a, b) => {
+  const content = data
+    .toSorted((a, b) => {
       return a.localeCompare(b);
     })
     .join(options.formatMDXBullet!()) as MDXString;

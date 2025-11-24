@@ -53,8 +53,7 @@ export const printCodeArguments = (
   const argIndentation = MARKDOWN_CODE_INDENTATION.repeat(indentationLevel);
   const parentIndentation =
     indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
-  let code = `(${MARKDOWN_EOL}`;
-  code += type.args.reduce((r, v) => {
+  const argLines = type.args.map((v) => {
     const defaultValue = getFormattedDefaultValue(v);
     const hasDefaultValue = defaultValue !== undefined && defaultValue !== null;
     const printedDefault = hasDefaultValue
@@ -62,11 +61,10 @@ export const printCodeArguments = (
       : "";
     const propType = String(v.type);
     const propName = String(v.name);
-    return `${r}${argIndentation}${propName}: ${propType}${printedDefault}${MARKDOWN_EOL}`;
-  }, "");
-  code += `${parentIndentation})`;
+    return `${argIndentation}${propName}: ${propType}${printedDefault}`;
+  });
 
-  return code;
+  return [`(`, ...argLines, `${parentIndentation})`].join(MARKDOWN_EOL);
 };
 
 /**
@@ -98,11 +96,15 @@ export const printCodeField = (
     return "";
   }
 
-  let code = `${getTypeName(type)}`;
-  code += printCodeArguments(type, indentationLevel + 1);
-  code += `: ${getTypeName(type.type)}`;
-  code += isDeprecated(type) ? ` @${DEPRECATED}` : "";
-  code += MARKDOWN_EOL;
+  const parts = [
+    getTypeName(type),
+    printCodeArguments(type, indentationLevel + 1),
+    `: ${getTypeName(type.type)}`,
+  ];
 
-  return code;
+  if (isDeprecated(type)) {
+    parts.push(` @${DEPRECATED}`);
+  }
+
+  return parts.join("") + MARKDOWN_EOL;
 };
