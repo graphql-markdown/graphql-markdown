@@ -51,8 +51,7 @@ export const loadSchema = async (
   schemaLocation: string,
   options: LoadSchemaConfig,
 ): Promise<GraphQLSchema> => {
-  let rootTypes: Partial<Record<OperationTypeNode, string>> | undefined =
-    undefined;
+  let rootTypes: Partial<Record<OperationTypeNode, string>> | undefined;
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (options !== null && "rootTypes" in options) {
     rootTypes = options.rootTypes;
