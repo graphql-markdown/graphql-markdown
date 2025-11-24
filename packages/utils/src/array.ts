@@ -39,9 +39,7 @@ export const toArray = (
     return undefined;
   }
 
-  return Object.keys(recordMap).map((key: string): unknown => {
-    return recordMap[key];
-  });
+  return Object.values(recordMap);
 };
 
 /**
