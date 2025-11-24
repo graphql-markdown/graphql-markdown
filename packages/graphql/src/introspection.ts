@@ -367,9 +367,7 @@ export const getOperation = (
   return _getFields(
     operationType,
     (fieldMap) => {
-      return Object.keys(fieldMap).reduce((res, key) => {
-        return { ...res, [key]: fieldMap[key] };
-      }, {});
+      return { ...fieldMap } as Record<string, GraphQLOperationType>;
     },
     {},
   ) as Record<string, GraphQLOperationType>;
@@ -389,11 +387,7 @@ export const getFields = (type: unknown): unknown[] => {
   return _getFields(
     type,
     (fieldMap) => {
-      const res: unknown[] = [];
-      Object.keys(fieldMap).forEach((name: string) => {
-        return res.push(fieldMap[name]);
-      });
-      return res;
+      return Object.values(fieldMap);
     },
     [],
   ) as unknown[];

@@ -44,12 +44,11 @@ export const getTypeBadges = (
   type: unknown,
   groups?: Maybe<SchemaEntitiesGroupMap>,
 ): Badge[] => {
-  const badges: Badge[] = [];
-
   if (typeof type !== "object" || type === null) {
-    return badges;
+    return [];
   }
 
+  const badges: Badge[] = [];
   const rootType = ("type" in type ? type.type : type) as Maybe<GraphQLType>;
 
   if (isDeprecated(type)) {

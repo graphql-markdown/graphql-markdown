@@ -64,8 +64,9 @@ export const loadSchema = async (
     return schema;
   }
 
+  const schemaConfig = schema.toConfig();
   const config: Readonly<GraphQLSchemaConfig> = {
-    ...schema.toConfig(),
+    ...schemaConfig,
     query: schema.getType(
       rootTypes.query ?? OperationTypeNode.QUERY,
     ) as GraphQLObjectType<unknown, unknown>,

@@ -90,7 +90,7 @@ export const printCustomDirectives = (
     options.customDirectives,
   );
 
-  if (!constDirectiveMap || Object.keys(constDirectiveMap).length < 1) {
+  if (!constDirectiveMap || Object.keys(constDirectiveMap).length === 0) {
     return "";
   }
 
@@ -129,7 +129,7 @@ export const getCustomTags = (
   if (
     typeof constDirectiveMap !== "object" ||
     constDirectiveMap === null ||
-    !Object.keys(constDirectiveMap).length
+    Object.keys(constDirectiveMap).length === 0
   ) {
     return [];
   }
