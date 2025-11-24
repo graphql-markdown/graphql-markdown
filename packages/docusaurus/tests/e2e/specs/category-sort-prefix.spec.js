@@ -11,6 +11,7 @@ const rootDir = global["__ROOT_DIR__"] || "/tmp";
 // the entire suite is skipped. See Earthfile for smoke-test target that runs E2E tests.
 const isInEarthlyEnvironment = rootDir && rootDir !== "/tmp";
 
+// Skip E2E tests when not in Earthly environment due to missing test infrastructure
 const describe_conditional = isInEarthlyEnvironment ? describe : describe.skip;
 
 describe_conditional("categorySort E2E feature (Earthly only)", () => {
