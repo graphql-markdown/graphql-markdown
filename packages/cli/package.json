@@ -68,7 +68,7 @@
     "test": "tests"
   },
   "engines": {
-    "node": ">=16.14"
+    "node": ">=20"
   },
   "publishConfig": {
     "directory": "dist",
