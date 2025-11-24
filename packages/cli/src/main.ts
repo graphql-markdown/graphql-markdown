@@ -29,7 +29,7 @@ export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as GraphQLExtensionDeclaration;
 };
 
-void (async (): Promise<void> => {
+const main = async (): Promise<void> => {
   const config = await loadConfig({
     extensions: [graphQLConfigExtension],
     throwOnMissing: true,
@@ -54,4 +54,6 @@ void (async (): Promise<void> => {
   }
 
   await program.parseAsync(process.argv);
-})();
+};
+
+await main();
