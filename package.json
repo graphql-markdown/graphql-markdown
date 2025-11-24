@@ -78,11 +78,6 @@
     "stryker": "bun run --if-present --workspaces stryker --allowEmpty --reporters progress,html"
   },
   "prettier": "./config/.prettierrc.js",
-  "eslintConfig": {
-    "extends": [
-      "./config/.eslintrc.js"
-    ]
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-emoji"
@@ -158,6 +153,7 @@
     }
   },
   "devDependencies": {
+    "@eslint/js": "9.39.1",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@graphql-tools/graphql-file-loader": "8.1.7",
     "@graphql-tools/json-file-loader": "8.0.24",
