@@ -1785,7 +1785,7 @@ describe("renderer", () => {
       });
 
       test("deprecated folder gets last position when categorySort is set", async () => {
-        expect.assertions(2);
+        expect.assertions(4);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1805,9 +1805,25 @@ describe("renderer", () => {
         );
 
         // Mock a deprecated type
-        const deprecatedType: Partial<GraphQLScalarType> = {
-          description: "@deprecated since v2.0",
-        };
+        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+
+        // Pre-register categories including deprecated
+        renderer["rootLevelPositionManager"].registerCategories([
+          "queries",
+          "objects",
+          "deprecated",
+        ]);
+        renderer["rootLevelPositionManager"].computePositions();
+
+        const deprecatedPath = await renderer.generateCategoryMetafileType(
+          {},
+          "DeprecatedType",
+          "objects" as SchemaEntity,
+        );
+
+        // Verify deprecated folder is created and has expected position
+        expect(deprecatedPath).toMatch(/deprecated/);
+        expect(deprecatedPath).toMatch(/objects/);
 
         const renderer2 = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1833,8 +1849,11 @@ describe("renderer", () => {
         renderer2["rootLevelPositionManager"].computePositions();
 
         // generateIndexMetafile should be called with sidebarPosition: 999 for deprecated
-        const mockGenerateIndexMetafile = renderer2["mdxModule"]
-          .generateIndexMetafile as jest.Mock;
+        const mockGenerateIndexMetafile = (
+          renderer2["mdxModule"] as {
+            generateIndexMetafile: jest.Mock;
+          }
+        ).generateIndexMetafile;
 
         // Verify generateIndexMetafile was set up correctly
         expect(mockGenerateIndexMetafile).toBeDefined();
