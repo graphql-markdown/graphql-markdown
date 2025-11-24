@@ -9,8 +9,7 @@
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
 declare global {
-  // eslint-disable-next-line no-var
-  var logger: Maybe<LoggerType>;
+  const logger: Maybe<LoggerType>;
 }
 
 /**

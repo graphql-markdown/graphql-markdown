@@ -22,6 +22,7 @@
  */
 
 import { join } from "node:path";
+import globals from "globals";
 import js from "@eslint/js";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
@@ -32,7 +33,7 @@ import importPlugin from "eslint-plugin-import";
 import tsdocPlugin from "eslint-plugin-tsdoc";
 import jsoncPlugin from "eslint-plugin-jsonc";
 import jsoncParser from "jsonc-eslint-parser";
-import mdxPlugin from "eslint-plugin-mdx";
+import * as mdxPlugin from "eslint-plugin-mdx";
 import graphqlPlugin from "@graphql-eslint/eslint-plugin";
 import type { Linter } from "eslint";
 
@@ -41,6 +42,11 @@ const projectRoot = join(import.meta.dirname, "..");
 
 export default [
   // Global ignores
+  {
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
   {
     ignores: [
       "**/node_modules/**",

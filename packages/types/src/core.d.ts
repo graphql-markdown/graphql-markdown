@@ -188,16 +188,6 @@ export type TypeExampleSectionOption = Partial<
   Omit<TypeDirectiveExample, "directive"> & { directive: string }
 >;
 
-export interface ConfigPrintTypeOptions {
-  codeSection?: boolean;
-  deprecated?: TypeDeprecatedOption;
-  exampleSection?: TypeExampleSectionOption | boolean;
-  hierarchy?: TypeHierarchyType;
-  parentTypePrefix?: boolean;
-  relatedTypeSection?: boolean;
-  typeBadges?: boolean;
-}
-
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
 declare const DIFF_METHOD_NAME: unique symbol;
 export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";

@@ -34,10 +34,11 @@
     "enumMembers": "warn"
   },
   "ignoreDependencies": [
-    "danger",
-    "commitizen",
-    "husky",
     "@docusaurus/logger",
+    "commitizen",
+    "danger",
+    "globals",
+    "husky",
     "jest-environment-node"
   ],
   "ignoreExportsUsedInFile": true,
