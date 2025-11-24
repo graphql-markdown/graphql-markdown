@@ -4,7 +4,7 @@
  */
 
 const config = {
-  buildCommand: "tsc --build",
+  buildCommand: "tsgo --build",
   checkers: ["typescript"],
   plugins: [
     "@stryker-mutator/jest-runner",
