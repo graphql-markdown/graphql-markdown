@@ -136,7 +136,7 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new GraphQLSchema({}));
+            return new GraphQLSchema({});
           });
         const changes: Change[] = [];
         changes.push({
@@ -146,7 +146,7 @@ describe("lib", () => {
           criticality: { level: inspector.CriticalityLevel.Breaking },
         });
         jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
-          return Promise.resolve(changes);
+          return changes;
         });
 
         vol.fromJSON({
@@ -171,10 +171,10 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new GraphQLSchema({}));
+            return new GraphQLSchema({});
           });
         jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
-          return Promise.resolve([]);
+          return [];
         });
 
         vol.fromJSON({
@@ -199,10 +199,10 @@ describe("lib", () => {
         jest
           .spyOn(graphqlLoad, "loadSchema")
           .mockImplementationOnce(async () => {
-            return Promise.resolve(new GraphQLSchema({}));
+            return new GraphQLSchema({});
           });
         jest.spyOn(inspector, "diff").mockImplementationOnce(async () => {
-          return Promise.resolve([]);
+          return [];
         });
 
         const check = await checkSchemaChanges(

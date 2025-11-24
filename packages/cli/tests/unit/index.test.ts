@@ -11,7 +11,7 @@ jest.mock(
       buildConfig: jest
         .fn()
         .mockImplementation(async (config): Promise<Options> => {
-          return Promise.resolve(config);
+          return config;
         }),
       generateDocFromSchema: jest.fn().mockResolvedValue(undefined),
     };
