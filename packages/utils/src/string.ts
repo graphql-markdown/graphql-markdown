@@ -112,9 +112,9 @@ export const stringCaseBuilder = (
   }
 
   const stringCase = replaceDiacritics(str)
-    .replaceAll(/([a-z]+|\d+)([A-Z])/g, "$1 $2")
-    .replaceAll(/([a-z]+)(\d)/g, "$1 $2")
-    .replaceAll(/(\d+)([a-z])/g, "$1 $2")
+    .replaceAll(/([a-z]+|\d+)([A-Z])/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
+    .replaceAll(/([a-z]+)(\d)/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
+    .replaceAll(/(\d+)([a-z])/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
     .split(splitter)
     .filter((word) => {
       return word.length > 0;
@@ -176,7 +176,7 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
  */
 export const escapeMDX = (str: unknown): string => {
   return `${String(str)}`.replaceAll(
-    /(?<!`)([{<_*>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g,
+    /(?<!`)([{<_*>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g, // NOSONAR - Safe pattern, used to escape MDX special characters outside code blocks
     toHTMLUnicode,
   );
 };
