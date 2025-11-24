@@ -1,11 +1,10 @@
-// @ts-check
 /**
  * ESLint 9 Flat Configuration
  * 
  * This configuration migrates from ESLint 8 .eslintrc.js to ESLint 9 flat config format.
  * 
  * Key changes from ESLint 8:
- * - Uses flat config format (eslint.config.js) instead of .eslintrc.js
+ * - Uses flat config format (eslint.config.ts) instead of .eslintrc.js
  * - Requires @eslint/js package for base configurations
  * - Plugins are specified in the `plugins` object, not as strings
  * - Config extends are now spread into the array
@@ -14,23 +13,33 @@
  * Dependencies required:
  * - @eslint/js (peer dependency of ESLint 9)
  * 
+ * Note: This file uses TypeScript for better type safety and IDE support.
+ * - Bun (used by this project) natively supports TypeScript config files
+ * - Node.js >= 22.10.0 supports TypeScript with --experimental-strip-types flag
+ * - Node.js < 22.10.0 requires 'jiti' package (v2.0.0+) for TypeScript support
+ * 
  * Run `bun install` to install missing dependencies.
  */
 
-const js = require("@eslint/js");
-const tsPlugin = require("@typescript-eslint/eslint-plugin");
-const tsParser = require("@typescript-eslint/parser");
-const prettierConfig = require("eslint-config-prettier");
-const prettierPlugin = require("eslint-plugin-prettier");
-const jestPlugin = require("eslint-plugin-jest");
-const importPlugin = require("eslint-plugin-import");
-const tsdocPlugin = require("eslint-plugin-tsdoc");
-const jsoncPlugin = require("eslint-plugin-jsonc");
-const jsoncParser = require("jsonc-eslint-parser");
-const mdxPlugin = require("eslint-plugin-mdx");
-const graphqlPlugin = require("@graphql-eslint/eslint-plugin");
+import { join } from "node:path";
+import js from "@eslint/js";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+import prettierConfig from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier";
+import jestPlugin from "eslint-plugin-jest";
+import importPlugin from "eslint-plugin-import";
+import tsdocPlugin from "eslint-plugin-tsdoc";
+import jsoncPlugin from "eslint-plugin-jsonc";
+import jsoncParser from "jsonc-eslint-parser";
+import mdxPlugin from "eslint-plugin-mdx";
+import graphqlPlugin from "@graphql-eslint/eslint-plugin";
+import type { Linter } from "eslint";
 
-module.exports = [
+// Get the project root directory (parent of config/)
+const projectRoot = join(import.meta.dirname, "..");
+
+export default [
   // Global ignores
   {
     ignores: [
@@ -61,7 +70,7 @@ module.exports = [
       parser: tsParser,
       parserOptions: {
         project: true,
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: projectRoot,
       },
     },
     settings: {
@@ -245,4 +254,4 @@ module.exports = [
 
   // Apply prettier config last to override any conflicting rules
   prettierConfig,
-];
+] satisfies Linter.FlatConfig[];

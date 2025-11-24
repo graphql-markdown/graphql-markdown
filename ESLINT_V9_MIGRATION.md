@@ -10,8 +10,21 @@ ESLint 9 introduces a new "flat config" format that replaces the traditional `.e
 
 ### 1. New Configuration File
 
-- **Created**: `eslint.config.js` - New flat config format
+- **Created**: `config/eslint.config.ts` - New flat config format in TypeScript (in config folder alongside other configs)
 - **To be removed**: `config/.eslintrc.js` - Old config format (after validation)
+- **Updated**: `package.json` scripts to use `--config config/eslint.config.ts`
+
+**Why TypeScript?**
+- **Type Safety**: Provides autocomplete and type checking in IDEs for ESLint configuration
+- **Consistency**: Aligns with the project's TypeScript-first approach
+- **Native Support**: Bun (the project's package manager) natively supports TypeScript without any additional setup
+- **Modern**: Takes advantage of ESLint 9's native TypeScript config support
+- **Better DX**: Catch configuration errors at development time, not runtime
+
+**Compatibility**:
+- ✅ **Bun** (project default): Native TypeScript support, no additional dependencies needed
+- ✅ **Node.js >= 22.10.0**: Native support with `--experimental-strip-types` flag
+- ⚠️ **Node.js < 22.10.0**: Requires `jiti` package (v2.0.0+) - add if needed: `bun add -d jiti`
 
 ### 2. Package Dependencies
 
@@ -95,12 +108,14 @@ All plugins have been verified for ESLint 9 compatibility:
    - Solution: Run `bun install` to install the new dependency
 
 2. **Config file not found**
-   - ESLint 9 automatically looks for `eslint.config.js` in the project root
-   - Ensure the file is in the correct location
+   - The config file is now located at `config/eslint.config.ts`
+   - Package.json scripts use `--config config/eslint.config.ts` to specify the location
+   - This keeps all config files in one place, consistent with Jest, Prettier, etc.
 
-3. **Plugin not compatible**
-   - Check if the plugin supports ESLint 9 flat config
-   - Update the plugin to the latest version if needed
+3. **TypeScript config not loading (Node.js users)**
+   - For Node.js < 22.10.0: Install jiti with `bun add -d jiti`
+   - For Node.js >= 22.10.0: Use `NODE_OPTIONS='--experimental-strip-types' bun lint`
+   - For Bun users (default): No action needed, TypeScript is natively supported
 
 4. **Rules not working**
    - Ensure rules are properly namespaced (e.g., `@typescript-eslint/rule-name`)
@@ -110,14 +125,14 @@ All plugins have been verified for ESLint 9 compatibility:
 
 If issues arise, you can temporarily rollback:
 
-1. Restore the old config:
+1. Restore the old config (it's still in the config folder):
    ```bash
-   git checkout HEAD~1 -- config/.eslintrc.js
+   # The old config is still there, just restore it in package.json
    ```
 
 2. Remove the new config:
    ```bash
-   git rm eslint.config.js
+   git rm config/eslint.config.ts
    ```
 
 3. Revert package.json changes:
@@ -145,14 +160,27 @@ After successful validation:
 
 - [ESLint 9 Migration Guide](https://eslint.org/docs/latest/use/migrate-to-9.0.0)
 - [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files-new)
+- [ESLint TypeScript Configuration Files](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files)
 - [TypeScript-ESLint Flat Config Guide](https://typescript-eslint.io/getting-started)
 - [ESLint 9 Release Notes](https://eslint.org/blog/2024/04/eslint-v9.0.0-released/)
+- [Node.js TypeScript Support](https://nodejs.org/api/typescript.html)
 
 ## Next Steps
 
-1. ✅ Create new flat config file
+1. ✅ Create new flat config file in TypeScript
 2. ✅ Update package.json dependencies  
 3. ⏳ Test with `bun install` and `bun lint`
 4. ⏳ Validate in CI pipeline
 5. ⏳ Remove old config file
 6. ⏳ Update documentation if needed
+
+## Additional Notes
+
+### Why TypeScript for Config?
+
+The config file uses TypeScript (`.ts`) for several benefits:
+- **Type Safety**: Autocomplete and validation in IDEs (VS Code, WebStorm, etc.)
+- **Early Error Detection**: Catch configuration mistakes before running ESLint
+- **Better Documentation**: Types serve as inline documentation
+- **Consistency**: Matches the project's TypeScript-first approach
+- **Future-Proof**: Native support in modern runtimes (Bun, Deno, Node 22+)
