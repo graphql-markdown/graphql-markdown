@@ -13,8 +13,7 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    // Disabled for tsgo compatibility (tsgo stricter checks require looser initialization in some cases)
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": true,
     "noEmitOnError": true,
 
     // Some stricter flags (disabled by default)
