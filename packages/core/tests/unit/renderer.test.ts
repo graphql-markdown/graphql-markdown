@@ -2376,7 +2376,7 @@ describe("renderer", () => {
         // Test that the regex correctly extracts category and pageId
         // The regex captures everything up to '.mdx' as pageId
         const validMatch = "Foobar/foo-bar.mdx".match(
-          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/,
+          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/, //NOSONAR
         );
         expect(validMatch?.groups?.category).toBe("Foobar");
         // The second capture group captures 'foo-bar' because [A-Za-z0-9-]+ matches the full string
