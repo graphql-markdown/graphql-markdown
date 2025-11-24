@@ -104,9 +104,9 @@ const DEFAULT_INIT_OPTIONS = {
  */
 export class Printer implements IPrinter {
   /**
-   * globalThis printer configuration options
+   * Global printer configuration options
    */
-  static readonly options: Readonly<Maybe<PrintTypeOptions>>;
+  static options: Readonly<Maybe<PrintTypeOptions>>;
 
   /**
    * Prints type descriptions
@@ -126,7 +126,7 @@ export class Printer implements IPrinter {
   /**
    * MDX module configuration
    */
-  static readonly printMDXModule: Readonly<MDXSupportType>;
+  static printMDXModule: Readonly<MDXSupportType>;
 
   /**
    * Initializes the printer with the given schema and configuration.
