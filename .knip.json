@@ -37,7 +37,6 @@
     "@docusaurus/logger",
     "commitizen",
     "danger",
-    "globals",
     "husky",
     "jest-environment-node"
   ],

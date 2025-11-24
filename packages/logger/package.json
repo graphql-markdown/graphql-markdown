@@ -38,9 +38,9 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "tsc --build --clean && rm -rf ./dist",
+    "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsc --build",
+    "build": "tsgo --build",
     "pack": "bun pm pack"
   },
   "devDependencies": {

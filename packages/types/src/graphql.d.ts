@@ -44,6 +44,11 @@ export type {
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";
 
+export type LoadSchemaOptionsOverride = Record<string, unknown> & {
+  [key: string]: unknown;
+  loaders?: unknown[];
+};
+
 export type { GraphQLExtensionDeclaration } from "graphql-config";
 
 export type { ASTNode, DirectiveNode } from "graphql/language";
