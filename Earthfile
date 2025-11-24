@@ -165,7 +165,7 @@ build-cli-examples:
   SAVE ARTIFACT ./$folderDocs
 
 build-api-docs:
-  FROM +deps
+  FROM +build
   COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
   RUN bun run docs:api
   SAVE ARTIFACT ./api
