@@ -196,18 +196,21 @@ module.exports = [
   },
 
   // JSON files
-  ...jsoncPlugin.configs["flat/recommended-with-jsonc"],
   {
     files: ["**/*.json"],
     plugins: {
+      jsonc: jsoncPlugin,
       prettier: prettierPlugin,
+    },
+    languageOptions: {
+      parser: jsoncParser,
     },
     rules: {
       "prettier/prettier": "error",
     },
   },
 
-  // MDX files
+  // MDX files - using legacy config approach
   {
     files: ["**/*.mdx"],
     plugins: {
@@ -221,13 +224,6 @@ module.exports = [
     rules: {
       ...prettierConfig.rules,
       "prettier/prettier": "error",
-      "brace-style": [
-        "error",
-        "1tbs",
-        {
-          allowSingleLine: false,
-        },
-      ],
     },
   },
 
