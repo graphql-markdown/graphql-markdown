@@ -52,7 +52,11 @@ export const Logger = async (moduleName?: string): Promise<void> => {
       ? (await import(moduleName)).default
       : globalThis.console;
 
-  const _log = (message: string, level: LogLevel = LogLevel.info): void => {
+  const _log = (
+    message: string,
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- Enum type needs explicit union with keyof for compatibility with LoggerType interface
+    level: LogLevel | keyof typeof LogLevel = LogLevel.info,
+  ): void => {
     const fallback = instance[LogLevel.info];
     const callback =
       typeof instance[level] === "function" ? instance[level] : fallback;
@@ -79,7 +83,11 @@ export const Logger = async (moduleName?: string): Promise<void> => {
  * ```
  *
  */
-export const log = (message: string, level: LogLevel = LogLevel.info): void => {
+export const log = (
+  message: string,
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- Enum type needs explicit union with keyof for compatibility with LoggerType interface
+  level: LogLevel | keyof typeof LogLevel = LogLevel.info,
+): void => {
   Promise.resolve(Logger()).catch(() => {});
   globalThis.logger?._log(message, level);
 };
