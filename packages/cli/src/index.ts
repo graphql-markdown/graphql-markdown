@@ -89,6 +89,7 @@ export const getGraphQLMarkdownCli = (
   // Initialize logger asynchronously without blocking - non-critical operation
   Logger(loggerModule).catch(() => {
     // Logger initialization failure is non-critical, ignore it
+    console.debug("Warning: Logger initialization failed:", error);
   });
 
   const isDefaultId =
