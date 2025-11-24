@@ -210,7 +210,6 @@ module.exports = [
   // MDX files
   {
     files: ["**/*.mdx"],
-    ...mdxPlugin.flat,
     plugins: {
       mdx: mdxPlugin,
       prettier: prettierPlugin,
