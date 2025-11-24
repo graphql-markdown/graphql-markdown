@@ -106,7 +106,7 @@ export class Printer implements IPrinter {
   /**
    * Global printer configuration options
    */
-  static options: Readonly<Maybe<PrintTypeOptions>>;
+  static readonly options: Readonly<Maybe<PrintTypeOptions>>;
 
   /**
    * Prints type descriptions
@@ -126,7 +126,7 @@ export class Printer implements IPrinter {
   /**
    * MDX module configuration
    */
-  static printMDXModule: Readonly<MDXSupportType>;
+  static readonly printMDXModule: Readonly<MDXSupportType>;
 
   /**
    * Initializes the printer with the given schema and configuration.
