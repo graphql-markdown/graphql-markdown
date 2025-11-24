@@ -13,6 +13,8 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "noEmitOnError": true,
 
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,

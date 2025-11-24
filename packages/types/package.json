@@ -22,7 +22,7 @@
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "build": "tsc --build",
+    "build": "tsgo --build",
     "pack": "bun pm pack"
   },
   "devDependencies": {

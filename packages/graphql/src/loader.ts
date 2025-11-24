@@ -19,6 +19,10 @@ import type {
 
 export { GraphQLSchema } from "graphql";
 
+interface LoadSchemaConfig extends LoadSchemaOptions {
+  rootTypes?: Partial<Record<OperationTypeNode, string>>;
+}
+
 /**
  * Wrapper method for `@graphql-tools/load.loadSchema` to load asynchronously a GraphQL Schema from a source.
  * The wrapper will load the schema using the loader declared in `options`.
@@ -45,22 +49,17 @@ export { GraphQLSchema } from "graphql";
  */
 export const loadSchema = async (
   schemaLocation: string,
-  options: LoadSchemaOptions & {
-    /**
-     * @param rootTypes - optional `rootTypes` schema override
-     * @see [Custom root types](https://graphql-markdown.dev/docs/advanced/custom-root-types)
-     */
-    rootTypes?: Partial<Record<OperationTypeNode, string>>;
-  },
+  options: LoadSchemaConfig,
 ): Promise<GraphQLSchema> => {
-  let rootTypes = undefined;
+  let rootTypes: Partial<Record<OperationTypeNode, string>> | undefined =
+    undefined;
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (options !== null && "rootTypes" in options) {
     rootTypes = options.rootTypes;
     delete options.rootTypes;
   }
 
-  const schema = await asyncLoadSchema(schemaLocation, options);
+  const schema: GraphQLSchema = await asyncLoadSchema(schemaLocation, options);
 
   if (!rootTypes) {
     return schema;

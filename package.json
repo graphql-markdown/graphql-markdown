@@ -73,7 +73,7 @@
     "test:integration": "jest --config=./config/jest.integration.config.js --maxWorkers=25% --randomize",
     "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests --ci --silent --randomize",
     "test:watch": "jest --config=./config/jest.unit.config.js --watch --maxWorkers=25% --bail --onlyChanged",
-    "ts:check": "tsc --noEmit",
+    "ts:check": "tsgo --noEmit",
     "typedoc": "typedoc",
     "stryker": "bun run --if-present --workspaces stryker --allowEmpty --reporters progress,html"
   },
@@ -177,7 +177,6 @@
     "eslint-plugin-mdx": "3.6.2",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-tsdoc": "0.5.0",
-    "globals": "^16.5.0",
     "graphql": "16.12.0",
     "graphql-config": "5.1.5",
     "husky": "9.1.7",
@@ -190,11 +189,11 @@
     "pinst": "3.0.0",
     "prettier": "3.6.2",
     "ts-jest": "29.4.5",
-    "turbo": "2.6.1",
+    "tsgo-dev": "^2025.11.24",
+    "turbo": "^2.6.1",
     "typedoc": "0.28.14",
     "typedoc-plugin-frontmatter": "1.3.1",
     "typedoc-plugin-markdown": "4.9.0",
-    "typescript": "5.9.3",
     "unionfs": "4.6.0"
   }
 }
