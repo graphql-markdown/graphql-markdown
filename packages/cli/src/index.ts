@@ -87,7 +87,7 @@ export const getGraphQLMarkdownCli = (
   customMdxParser?: boolean | string,
 ): GraphQLMarkdownCliType => {
   // Initialize logger asynchronously without blocking - non-critical operation
-  Logger(loggerModule).catch(() => {
+  Logger(loggerModule).catch((error: Error) => {
     // Logger initialization failure is non-critical, ignore it
     console.debug("Warning: Logger initialization failed:", error);
   });
