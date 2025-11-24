@@ -367,13 +367,7 @@ export const getOperation = (
   return _getFields(
     operationType,
     (fieldMap) => {
-      const result: Record<string, GraphQLOperationType> = {};
-      for (const key in fieldMap) {
-        if (Object.hasOwn(fieldMap, key)) {
-          result[key] = fieldMap[key] as GraphQLOperationType;
-        }
-      }
-      return result;
+      return { ...fieldMap } as Record<string, GraphQLOperationType>;
     },
     {},
   ) as Record<string, GraphQLOperationType>;
