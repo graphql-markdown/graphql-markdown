@@ -88,7 +88,7 @@ describe("renderer", () => {
       );
 
       // silent console
-      jest.spyOn(global.console, "warn").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -209,7 +209,7 @@ describe("renderer", () => {
           throw new Error();
         });
 
-        const spy = jest.spyOn(global.console, "warn");
+        const spy = jest.spyOn(globalThis.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -230,7 +230,7 @@ describe("renderer", () => {
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
         jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
-        const spy = jest.spyOn(global.console, "warn");
+        const spy = jest.spyOn(globalThis.console, "warn");
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -401,7 +401,7 @@ describe("renderer", () => {
         const readFileSpy = jest
           .spyOn(Utils, "readFile")
           .mockRejectedValueOnce(new Error("File not found"));
-        const consoleSpy = jest.spyOn(global.console, "warn");
+        const consoleSpy = jest.spyOn(globalThis.console, "warn");
 
         await rendererInstance.renderHomepage("/assets/nonexistent.md");
 
@@ -474,7 +474,7 @@ describe("renderer", () => {
         const saveFileSpy = jest
           .spyOn(Utils, "saveFile")
           .mockRejectedValueOnce(new Error("Write error"));
-        const consoleSpy = jest.spyOn(global.console, "warn");
+        const consoleSpy = jest.spyOn(globalThis.console, "warn");
 
         await rendererInstance.renderHomepage("/assets/error-saving.md");
 

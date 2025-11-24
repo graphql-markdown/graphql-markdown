@@ -51,7 +51,7 @@ describe("prettier", () => {
       );
 
       const consoleSpy = jest
-        .spyOn(global.console, "log")
+        .spyOn(globalThis.console, "log")
         .mockImplementation(() => {});
 
       const result = await Prettier.prettify("test content", "mdx");

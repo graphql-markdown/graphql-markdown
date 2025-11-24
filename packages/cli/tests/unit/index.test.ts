@@ -601,7 +601,7 @@ describe("CLI Module", () => {
       const cliOptions = { config: true };
 
       const spy = jest
-        .spyOn(global.console, "dir")
+        .spyOn(globalThis.console, "dir")
         .mockImplementation(() => {});
 
       await runGraphQLMarkdown(options, cliOptions);

@@ -52,8 +52,8 @@ import {
 describe("renderer", () => {
   beforeEach(() => {
     // silent console
-    jest.spyOn(global.console, "info").mockImplementation(() => {});
-    jest.spyOn(global.console, "error").mockImplementation(() => {});
+    jest.spyOn(globalThis.console, "info").mockImplementation(() => {});
+    jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
 
     jest.spyOn(Printer, "printType").mockImplementation((value) => {
       return value as MDXString;

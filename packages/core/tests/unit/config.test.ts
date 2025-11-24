@@ -46,7 +46,7 @@ jest.mock("../../src/graphql-config");
 
 describe("config", () => {
   beforeAll(() => {
-    Object.assign(global, { logger: global.console });
+    Object.assign(global, { logger: globalThis.console });
   });
 
   afterEach(() => {
@@ -55,7 +55,7 @@ describe("config", () => {
   });
 
   afterAll(() => {
-    delete global.logger;
+    delete globalThis.logger;
   });
 
   describe("getSkipDocDirectives", () => {
@@ -894,7 +894,7 @@ describe("config", () => {
       const cliOpt = {},
         configOptions = undefined;
 
-      const spyConsole = jest.spyOn(global.console, "warn");
+      const spyConsole = jest.spyOn(globalThis.console, "warn");
 
       expect(
         parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
@@ -910,7 +910,7 @@ describe("config", () => {
       const cliOpt = {},
         configOptions = undefined;
 
-      const spyConsole = jest.spyOn(global.console, "warn");
+      const spyConsole = jest.spyOn(globalThis.console, "warn");
 
       expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
         {},

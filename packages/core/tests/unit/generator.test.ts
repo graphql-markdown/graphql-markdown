@@ -76,14 +76,14 @@ describe("generator", () => {
     };
 
     beforeAll(() => {
-      Object.assign(global, { logger: global.console });
+      Object.assign(global, { logger: globalThis.console });
     });
 
     beforeEach(() => {
       // silent console
-      jest.spyOn(global.console, "info").mockImplementation(() => {});
-      jest.spyOn(global.console, "warn").mockImplementation(() => {});
-      jest.spyOn(global.console, "error").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "info").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
+      jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -91,7 +91,7 @@ describe("generator", () => {
     });
 
     afterAll(() => {
-      delete global.logger;
+      delete globalThis.logger;
     });
 
     const getDirective = (name: string): GraphQLDirective => {
@@ -188,7 +188,7 @@ describe("generator", () => {
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(global.console, "info");
+      const loggerSpy = jest.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema(options);
 
@@ -345,7 +345,7 @@ describe("generator", () => {
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(global.console, "info");
+      const loggerSpy = jest.spyOn(globalThis.console, "info");
 
       // Execute generator
       await generateDocFromSchema(options);
@@ -382,7 +382,7 @@ describe("generator", () => {
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(global.console, "info");
+      const loggerSpy = jest.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema({
         ...options,
@@ -592,7 +592,7 @@ describe("generator", () => {
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(global.console, "info");
+      const loggerSpy = jest.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema(options);
 
