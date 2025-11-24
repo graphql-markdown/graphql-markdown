@@ -113,7 +113,7 @@ declare const SECTION_LEVEL_VALUE: unique symbol;
  * Represents a badge with text and optional styling
  */
 export interface Badge {
-  text: TypeLocale | string;
+  text: TypeLocale;
   classname?: string[] | string;
 }
 

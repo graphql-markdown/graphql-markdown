@@ -54,6 +54,7 @@ export const Logger = async (moduleName?: string): Promise<void> => {
 
   const _log = (
     message: string,
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- Union required for enum/string literal compatibility with LoggerType
     level: LogLevel | keyof typeof LogLevel = LogLevel.info,
   ): void => {
     const fallback = instance[LogLevel.info];
@@ -84,6 +85,7 @@ export const Logger = async (moduleName?: string): Promise<void> => {
  */
 export const log = (
   message: string,
+  // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents -- Union required for enum/string literal compatibility with LoggerType
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
   Promise.resolve(Logger()).catch(() => {});
