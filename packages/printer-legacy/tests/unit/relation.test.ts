@@ -1,4 +1,5 @@
 import { GraphQLScalarType } from "graphql/type";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("graphql");
 
 import type {

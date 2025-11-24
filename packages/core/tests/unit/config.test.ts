@@ -38,7 +38,9 @@ import {
 
 import * as graphqlConfigModule from "../../src/graphql-config";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/utils");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("../../src/graphql-config");
 
 describe("config", () => {

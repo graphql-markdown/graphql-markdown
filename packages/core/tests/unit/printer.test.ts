@@ -5,6 +5,7 @@ import type { PackageName } from "@graphql-markdown/types";
 import { getPrinter } from "../../src/printer";
 
 import { Printer } from "@graphql-markdown/printer-legacy";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 
 describe("generator", () => {

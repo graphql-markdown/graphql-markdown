@@ -25,10 +25,13 @@ jest.mock("@graphql-markdown/graphql", () => {
 
 import { DiffMethod, TypeHierarchy } from "../../src/config";
 import * as CoreDiff from "../../src/diff";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("../../src/printer");
 
 const mockRenderer = {

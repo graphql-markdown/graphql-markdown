@@ -4,8 +4,10 @@ import type {
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:fs/promises");
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:path", (): unknown => {
   return {
     __esModule: true,
@@ -13,9 +15,11 @@ jest.mock("node:path", (): unknown => {
   };
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
@@ -29,6 +33,7 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
   };
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     __esModule: true,
