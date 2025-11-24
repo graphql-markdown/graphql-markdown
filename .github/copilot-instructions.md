@@ -29,7 +29,7 @@
    bun run ts:check  # Type check all packages
    bun run lint      # Run linting
    bun run prettier  # Run formatting check
-   bun test          # Run all tests
+   bun run test      # Run all tests
    ```
 
 3. **Build Packages**
@@ -137,7 +137,7 @@ The project uses [Jest](https://jestjs.io/) for all testing with three distinct 
 - Test individual units of code (functions, class methods)
 - Must mock all external calls (use Jest mocks)
 - Should be fast and isolated
-- Run with: `bun test` (runs all test types)
+- Run with: `bun run test` (runs all test types)
 - Naming: `*.test.ts` or `*.spec.ts`
 
 **Example Unit Test Pattern:**
@@ -162,7 +162,7 @@ describe("functionToTest", () => {
 - Located in `packages/*/tests/integration/`
 - Test the logic of main classes and their interactions
 - Use filesystem mocking with `memfs` when needed
-- Run with: `bun test` (included in all tests)
+- Run with: `bun run test` (included in all tests)
 - May use snapshots for complex output validation
 
 ### Smoke Tests (E2E)
@@ -206,8 +206,8 @@ bun ts:check
 bun lint
 
 # Testing
-bun test          # Run all tests
-bun test:ci       # Run tests in CI mode
+bun run test          # Run all tests
+bun run test:ci       # Run tests in CI mode
 
 # Build
 bun build:all         # Compile all packages
@@ -298,7 +298,7 @@ The project uses [Conventional Commits](https://www.conventionalcommits.org/en/v
 
 1. Run type checking: `bun ts:check`
 2. Run linting: `bun lint`
-3. Run tests: `bun test`
+3. Run tests: `bun run test`
 4. Run smoke tests: `earthly +smoke-cli-test` and/or `earthly +smoke-docusaurus-test` (if applicable)
 5. Update documentation if needed
 6. Use the PR template (`.github/pull_request_template.md`)
