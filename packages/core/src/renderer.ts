@@ -599,7 +599,7 @@ export class Renderer {
     // Only allows alphanumeric and hyphens in category and page names
     // NOSONAR - pattern is safe, hyphen in character class doesn't cause backtracking
     const PageRegex =
-      /(?<category>[a-z0-9-]+)[\\/](?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
+      /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
     const extension = this.mdxModule ? "mdx" : "md";
