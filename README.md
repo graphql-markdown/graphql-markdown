@@ -48,6 +48,22 @@ npx docusaurus graphql-to-doc
 npx gqlmd graphql-to-doc --schema ./schema.graphql --output ./docs
 ```
 
+### API Usage
+
+For programmatic usage, you can use the CLI package:
+```typescript
+import { runGraphQLMarkdown } from '@graphql-markdown/cli';
+
+const config = {
+  schema: './schema.graphql',
+  rootPath: './docs',
+};
+
+await runGraphQLMarkdown(config);
+```
+
+See [API documentation](https://graphql-markdown.dev/api/) and our [Framework Integration page](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks) for more details.
+
 ## Configuration
 
 See [documentation configuration](https://graphql-markdown.dev/docs/configuration) page.
