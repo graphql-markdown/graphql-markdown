@@ -234,7 +234,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    let code: string;
+    let code = "";
 
     switch (true) {
       case isOperation(type):
