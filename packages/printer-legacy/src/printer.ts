@@ -104,7 +104,7 @@ const DEFAULT_INIT_OPTIONS = {
  */
 export class Printer implements IPrinter {
   /**
-   * Global printer configuration options
+   * globalThis printer configuration options
    */
   static readonly options: Readonly<Maybe<PrintTypeOptions>>;
 

@@ -382,7 +382,7 @@ describe("renderer", () => {
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(global, "Date").mockImplementation(() => {
+        jest.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 
@@ -453,7 +453,7 @@ describe("renderer", () => {
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(global, "Date").mockImplementation(() => {
+        jest.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 

@@ -76,7 +76,7 @@ describe("generator", () => {
     };
 
     beforeAll(() => {
-      Object.assign(global, { logger: globalThis.console });
+      Object.assign(globalThis, { logger: globalThis.console });
     });
 
     beforeEach(() => {
