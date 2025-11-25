@@ -55,10 +55,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * ```
    */
   addDefault<K extends keyof T>(value: Maybe<T[K]>, key: K): this {
-    if (value !== null && value !== undefined) {
-      this.merged[key] = value;
-    }
-    return this;
+    return this.setIfProvided(value, key);
   }
 
   /**
@@ -75,10 +72,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * ```
    */
   addFromConfig<K extends keyof T>(value: Maybe<T[K]>, key: K): this {
-    if (value !== null && value !== undefined) {
-      this.merged[key] = value;
-    }
-    return this;
+    return this.setIfProvided(value, key);
   }
 
   /**
@@ -95,6 +89,18 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * ```
    */
   addFromCli<K extends keyof T>(value: Maybe<T[K]>, key: K): this {
+    return this.setIfProvided(value, key);
+  }
+
+  /**
+   * Sets a value if it's not null or undefined.
+   * Internal helper method used by addDefault, addFromConfig, and addFromCli.
+   *
+   * @param value - The value to set
+   * @param key - The key to set
+   * @returns This builder for method chaining
+   */
+  private setIfProvided<K extends keyof T>(value: Maybe<T[K]>, key: K): this {
     if (value !== null && value !== undefined) {
       this.merged[key] = value;
     }

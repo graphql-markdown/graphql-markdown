@@ -778,47 +778,45 @@ export const buildConfig = async (
   );
 
   // Build options using consistent precedence: CLI > Config > Default
-  const baseURL = new OptionBuilder<{ baseURL: string }>()
+  const {
+    baseURL,
+    force,
+    linkRoot,
+    prettify,
+    rootPath,
+    schemaLocation,
+    tmpDir,
+  } = new OptionBuilder<{
+    baseURL: string;
+    force: boolean;
+    linkRoot: string;
+    prettify: boolean;
+    rootPath: string;
+    schemaLocation: Pointer;
+    tmpDir: string;
+  }>()
     .addDefault(DEFAULT_OPTIONS.baseURL, "baseURL")
     .addFromConfig(config.baseURL!, "baseURL")
     .addFromCli(cliOpts.base, "baseURL")
-    .build().baseURL;
-
-  const force = new OptionBuilder<{ force: boolean }>()
     .addDefault(DEFAULT_OPTIONS.force, "force")
-    .addFromConfig(config.force ?? DEFAULT_OPTIONS.force, "force")
+    .addFromConfig(config.force, "force")
     .addFromCli(cliOpts.force, "force")
-    .build().force;
-
-  const linkRoot = new OptionBuilder<{ linkRoot: string }>()
     .addDefault(DEFAULT_OPTIONS.linkRoot, "linkRoot")
     .addFromConfig(config.linkRoot, "linkRoot")
     .addFromCli(cliOpts.link, "linkRoot")
-    .build().linkRoot;
-
-  const prettify = new OptionBuilder<{ prettify: boolean }>()
     .addDefault(DEFAULT_OPTIONS.pretty, "prettify")
     .addFromConfig(config.pretty, "prettify")
     .addFromCli(cliOpts.pretty, "prettify")
-    .build().prettify;
-
-  const rootPath = new OptionBuilder<{ rootPath: string }>()
     .addDefault(DEFAULT_OPTIONS.rootPath, "rootPath")
     .addFromConfig(config.rootPath!, "rootPath")
     .addFromCli(cliOpts.root, "rootPath")
-    .build().rootPath;
-
-  const schemaLocation = new OptionBuilder<{ schemaLocation: Pointer }>()
     .addDefault(DEFAULT_OPTIONS.schema, "schemaLocation")
     .addFromConfig(config.schema!, "schemaLocation")
     .addFromCli(cliOpts.schema, "schemaLocation")
-    .build().schemaLocation;
-
-  const tmpDir = new OptionBuilder<{ tmpDir: string }>()
     .addDefault(DEFAULT_OPTIONS.tmpDir, "tmpDir")
     .addFromConfig(config.tmpDir, "tmpDir")
     .addFromCli(cliOpts.tmp, "tmpDir")
-    .build().tmpDir;
+    .build();
 
   return {
     baseURL,
