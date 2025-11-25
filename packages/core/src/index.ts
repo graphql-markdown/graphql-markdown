@@ -5,4 +5,3 @@
 
 export { generateDocFromSchema } from "./generator";
 export { buildConfig } from "./config";
-
