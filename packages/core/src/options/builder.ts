@@ -172,12 +172,20 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   /**
    * Gets the current value for a key without building.
    * Useful for conditional logic during building.
+   * Returns a shallow copy for arrays and objects to prevent external mutations.
    *
    * @param key - The key to get
    * @returns The current value for the key, or undefined if not set
    */
   get<K extends keyof T>(key: K): T[K] | undefined {
-    return this.merged[key] as T[K] | undefined;
+    const value = this.merged[key] as T[K] | undefined;
+    if (Array.isArray(value)) {
+      return [...value] as T[K];
+    }
+    if (value && typeof value === "object") {
+      return { ...(value as object) } as T[K];
+    }
+    return value;
   }
 
   /**
@@ -186,10 +194,11 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    *
    * Note: The returned object may be a partial object containing only the keys
    * that were set. Callers should handle potentially missing properties.
+   * Returns a shallow copy to prevent external mutations of internal state.
    *
    * @returns The constructed options object (may not have all properties of T)
    */
   build(): Partial<T> {
-    return this.merged;
+    return { ...this.merged };
   }
 }
