@@ -49,14 +49,18 @@ export const printCodeArguments = (
   const argIndentation = MARKDOWN_CODE_INDENTATION.repeat(indentationLevel);
   const parentIndentation =
     indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
-  const argLines = type.args.map((v) => {
-    const defaultValue = getFormattedDefaultValue(v);
+  const argLines = type.args.map((v: unknown) => {
+    const defaultValue = getFormattedDefaultValue(
+      v as Parameters<typeof getFormattedDefaultValue>[0],
+    );
     const hasDefaultValue = defaultValue !== undefined && defaultValue !== null;
     const printedDefault = hasDefaultValue
-      ? ` = ${getFormattedDefaultValue(v)}`
+      ? ` = ${getFormattedDefaultValue(
+          v as Parameters<typeof getFormattedDefaultValue>[0],
+        )}`
       : "";
-    const propType = String(v.type);
-    const propName = String(v.name);
+    const propType = String((v as Record<string, unknown>).type);
+    const propName = String((v as Record<string, unknown>).name);
     return `${argIndentation}${propName}: ${propType}${printedDefault}`;
   });
 

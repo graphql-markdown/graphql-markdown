@@ -44,12 +44,22 @@ export const isTypeObject = (obj: unknown): obj is Record<string, unknown> => {
  * }
  * ```
  */
-export const hasProperty = <K extends PropertyKey>(
+export function hasProperty<K extends PropertyKey>(
   obj: unknown,
   key: K,
-): obj is Record<K, unknown> => {
+): obj is Record<K, unknown>;
+// eslint-disable-next-line no-redeclare
+export function hasProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, unknown>;
+// eslint-disable-next-line no-redeclare
+export function hasProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, unknown> {
   return isTypeObject(obj) && key in obj;
-};
+}
 
 /**
  * Type guard to check if an object has multiple specific properties.
@@ -97,12 +107,22 @@ export const hasProperties = <K extends PropertyKey>(
  * }
  * ```
  */
-export const hasArrayProperty = (
+export function hasArrayProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, unknown[]>;
+// eslint-disable-next-line no-redeclare
+export function hasArrayProperty(
   obj: unknown,
   key: PropertyKey,
-): obj is Record<PropertyKey, unknown[]> => {
+): obj is Record<PropertyKey, unknown[]>;
+// eslint-disable-next-line no-redeclare
+export function hasArrayProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, unknown[]> {
   return hasProperty(obj, key) && Array.isArray(obj[key]);
-};
+}
 
 /**
  * Type guard to check if an object has a non-empty array property.
@@ -121,12 +141,22 @@ export const hasArrayProperty = (
  * }
  * ```
  */
-export const hasNonEmptyArrayProperty = (
+export function hasNonEmptyArrayProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, unknown[]>;
+// eslint-disable-next-line no-redeclare
+export function hasNonEmptyArrayProperty(
   obj: unknown,
   key: PropertyKey,
-): obj is Record<PropertyKey, unknown[]> => {
+): obj is Record<PropertyKey, unknown[]>;
+// eslint-disable-next-line no-redeclare
+export function hasNonEmptyArrayProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, unknown[]> {
   return hasArrayProperty(obj, key) && obj[key].length > 0;
-};
+}
 
 /**
  * Type guard to check if an object has a string property.
@@ -145,12 +175,22 @@ export const hasNonEmptyArrayProperty = (
  * }
  * ```
  */
-export const hasStringProperty = (
+export function hasStringProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, string>;
+// eslint-disable-next-line no-redeclare
+export function hasStringProperty(
   obj: unknown,
   key: PropertyKey,
-): obj is Record<PropertyKey, string> => {
+): obj is Record<PropertyKey, string>;
+// eslint-disable-next-line no-redeclare
+export function hasStringProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, string> {
   return hasProperty(obj, key) && typeof obj[key] === "string";
-};
+}
 
 /**
  * Type guard to check if an object has a function property.
