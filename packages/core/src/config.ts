@@ -759,6 +759,21 @@ export const parseHomepageOption = (
  * @see {@link Options} for the complete configuration interface
  * @see {@link DEFAULT_OPTIONS} for default values
  */
+
+/**
+ * Type definition for options built by buildConfig.
+ * @internal
+ */
+interface BuildConfigOptions {
+  baseURL: string;
+  force: boolean;
+  linkRoot: string;
+  prettify: boolean;
+  rootPath: string;
+  schemaLocation: Pointer;
+  tmpDir: string;
+}
+
 export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts?: Maybe<CliOptions>,
@@ -788,15 +803,7 @@ export const buildConfig = async (
     rootPath,
     schemaLocation,
     tmpDir,
-  } = new OptionBuilder<{
-    baseURL: string;
-    force: boolean;
-    linkRoot: string;
-    prettify: boolean;
-    rootPath: string;
-    schemaLocation: Pointer;
-    tmpDir: string;
-  }>()
+  } = new OptionBuilder<BuildConfigOptions>()
     .addDefault(DEFAULT_OPTIONS.baseURL, "baseURL")
     .addFromConfig(config.baseURL, "baseURL")
     .addFromCli(cliOpts.base, "baseURL")
@@ -818,15 +825,7 @@ export const buildConfig = async (
     .addDefault(DEFAULT_OPTIONS.tmpDir, "tmpDir")
     .addFromConfig(config.tmpDir, "tmpDir")
     .addFromCli(cliOpts.tmp, "tmpDir")
-    .build() as {
-    baseURL: string;
-    force: boolean;
-    linkRoot: string;
-    prettify: boolean;
-    rootPath: string;
-    schemaLocation: Pointer;
-    tmpDir: string;
-  };
+    .build() as BuildConfigOptions;
 
   return {
     baseURL,
