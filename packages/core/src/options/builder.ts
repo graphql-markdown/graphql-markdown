@@ -191,6 +191,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * Gets the current value for a key without building.
    * Useful for conditional logic during building.
    * Returns a shallow copy for arrays and objects to prevent external mutations.
+   * Note: Nested objects and arrays are not deep copied.
    *
    * @param key - The key to get
    * @returns The current value for the key, or undefined if not set
