@@ -46,6 +46,7 @@ import type {
 
 import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
+import { isInvalidFunctionProperty } from "./directives/validation";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -403,8 +404,8 @@ export const getCustomDirectives = (
     ) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      ("descriptor" in option && typeof option.descriptor !== "function") ||
-      ("tag" in option && typeof option.tag !== "function") ||
+      isInvalidFunctionProperty(option, "descriptor") ||
+      isInvalidFunctionProperty(option, "tag") ||
       !("tag" in option || "descriptor" in option)
     ) {
       throw new Error(
