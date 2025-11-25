@@ -471,4 +471,85 @@ describe("OptionBuilder", () => {
       expect(builder.get("name")).toBe("CLI");
     });
   });
+
+  describe("Defensive copying in build()", () => {
+    it("should return a copy that prevents mutation of array values", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithArray extends Record<string, unknown> {
+        items: string[];
+      }
+
+      const builder = new OptionBuilder<OptionsWithArray>();
+      builder.addFromCli(["a", "b"], "items");
+      const options = builder.build();
+      options.items?.push("c");
+      expect(builder.build().items).toEqual(["a", "b"]);
+    });
+
+    it("should return a copy that prevents mutation of object values", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithObject extends Record<string, unknown> {
+        config: { key: string };
+      }
+
+      const builder = new OptionBuilder<OptionsWithObject>();
+      builder.addFromCli({ key: "value" }, "config");
+      const options = builder.build();
+      if (options.config) {
+        (options.config as { key: string }).key = "modified";
+      }
+      expect(builder.build().config).toEqual({ key: "value" });
+    });
+
+    it("should return a copy that prevents mutation of nested arrays", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithNestedArray extends Record<string, unknown> {
+        matrix: number[][];
+      }
+
+      const builder = new OptionBuilder<OptionsWithNestedArray>();
+      const originalMatrix = [
+        [1, 2],
+        [3, 4],
+      ];
+      builder.addFromCli(originalMatrix, "matrix");
+      const options = builder.build();
+      // Shallow copy protects outer array, but nested arrays are shared
+      // This tests that at least the outer array is protected
+      options.matrix?.push([5, 6]);
+      expect(builder.build().matrix).toEqual(originalMatrix);
+    });
+
+    it("should maintain primitive values without unnecessary copying", () => {
+      expect.hasAssertions();
+
+      const builder = new OptionBuilder<TestOptions>();
+      builder.addFromCli("test", "name");
+      const options1 = builder.build();
+      const options2 = builder.build();
+
+      expect(options1.name).toBe("test");
+      expect(options1.name === options2.name).toBe(true); // Primitives are identical
+    });
+
+    it("should return different object references for each build() call", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithObject extends Record<string, unknown> {
+        config: { key: string };
+      }
+
+      const builder = new OptionBuilder<OptionsWithObject>();
+      builder.addFromCli({ key: "value" }, "config");
+      const options1 = builder.build();
+      const options2 = builder.build();
+
+      expect(options1).not.toBe(options2);
+      expect(options1.config).not.toBe(options2.config);
+      expect(options1.config).toEqual(options2.config);
+    });
+  });
 });

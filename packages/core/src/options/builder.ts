@@ -47,6 +47,12 @@ type OptionSource = "default" | "config" | "cli";
  * ```
  */
 export class OptionBuilder<T extends Record<string, unknown>> {
+  private static readonly PRECEDENCE_ORDER: Record<OptionSource, number> = {
+    default: 0,
+    config: 1,
+    cli: 2,
+  };
+
   private merged: Partial<T> = {};
   private readonly sources: Map<keyof T, OptionSource> = new Map();
 
@@ -122,15 +128,11 @@ export class OptionBuilder<T extends Record<string, unknown>> {
     source: OptionSource,
   ): this {
     if (value !== null && value !== undefined) {
-      const precedenceOrder: Record<OptionSource, number> = {
-        default: 0,
-        config: 1,
-        cli: 2,
-      };
       const currentSource = this.sources.get(key);
       const shouldUpdate =
         !currentSource ||
-        precedenceOrder[source] >= precedenceOrder[currentSource];
+        OptionBuilder.PRECEDENCE_ORDER[source] >=
+          OptionBuilder.PRECEDENCE_ORDER[currentSource];
 
       if (shouldUpdate) {
         this.merged[key] = value;
@@ -179,7 +181,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
     predicate: (merged: Partial<T>) => boolean,
     fn: (v: T[K]) => T[K],
   ): this {
-    if (key in this.merged && predicate(this.merged)) {
+    if (key in this.merged && predicate({ ...this.merged })) {
       this.merged[key] = fn(this.merged[key] as T[K]);
     }
     return this;
@@ -210,11 +212,24 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    *
    * Note: The returned object may be a partial object containing only the keys
    * that were set. Callers should handle potentially missing properties.
-   * Returns a shallow copy to prevent external mutations of internal state.
+   * Returns a defensive copy of the object to prevent external mutations of
+   * internal state. Arrays and objects are shallow-copied to protect against
+   * external modifications.
    *
    * @returns The constructed options object with type Partial<T> (may not have all properties of T)
    */
   build(): Partial<T> {
-    return { ...this.merged };
+    const result: Partial<T> = {};
+    for (const key in this.merged) {
+      const value = this.merged[key];
+      if (Array.isArray(value)) {
+        result[key as keyof T] = [...value] as T[keyof T];
+      } else if (value && typeof value === "object") {
+        result[key as keyof T] = { ...(value as object) } as T[keyof T];
+      } else {
+        result[key as keyof T] = value;
+      }
+    }
+    return result;
   }
 }
