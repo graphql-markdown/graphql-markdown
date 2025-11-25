@@ -49,12 +49,12 @@ export const printCodeArguments = (
   const argIndentation = MARKDOWN_CODE_INDENTATION.repeat(indentationLevel);
   const parentIndentation =
     indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
-  const argLines = (type.args as unknown[]).map((v: unknown) => {
+  const argLines = (type.args as unknown[]).map((v) => {
     if (!hasProperty(v, "type") || !hasProperty(v, "name")) {
       return "";
     }
 
-    const defaultValue = getFormattedDefaultValue(v);
+    const defaultValue = getFormattedDefaultValue(v as never);
     let printedDefault = "";
     if (defaultValue !== undefined && defaultValue !== null) {
       // eslint-disable-next-line @typescript-eslint/no-base-to-string
