@@ -22,6 +22,11 @@ import type { Maybe } from "@graphql-markdown/types";
 /**
  * Builder for constructing options from multiple sources with priority precedence.
  *
+ * IMPORTANT: Methods must be called in the correct order for precedence to work:
+ * 1. addDefault() - lowest priority (set first)
+ * 2. addFromConfig() - medium priority
+ * 3. addFromCli() - highest priority (set last)
+ *
  * @template T - The type of the options object being built
  *
  * @example
@@ -29,11 +34,11 @@ import type { Maybe } from "@graphql-markdown/types";
  * const options = new OptionBuilder<MyOptions>()
  *   // Add in order: default -> config -> cli
  *   .addDefault(false, "pretty")
- *   .addFromConfig(config.pretty, "pretty")
- *   .addFromCli(cliOpts.pretty, "pretty")
+ *   .addFromConfig(undefined, "pretty")
+ *   .addFromCli(true, "pretty")  // CLI overrides default
  *   .addDefault("/", "baseURL")
- *   .addFromConfig(config.baseURL, "baseURL")
- *   .addFromCli(cliOpts.base, "baseURL")
+ *   .addFromConfig("/api", "baseURL")  // Config overrides default
+ *   .addFromCli(undefined, "baseURL")
  *   .build();
  * // Result: { pretty: true, baseURL: "/api" }
  * ```
@@ -177,11 +182,14 @@ export class OptionBuilder<T extends Record<string, unknown>> {
 
   /**
    * Returns the built options object with all accumulated values.
-   * The object contains all keys that were set, with types enforced by T.
+   * The object contains all keys that were set during the building process.
    *
-   * @returns The fully constructed options object
+   * Note: The returned object may be a partial object containing only the keys
+   * that were set. Callers should handle potentially missing properties.
+   *
+   * @returns The constructed options object (may not have all properties of T)
    */
-  build(): T {
-    return this.merged as T;
+  build(): Partial<T> {
+    return this.merged;
   }
 }
