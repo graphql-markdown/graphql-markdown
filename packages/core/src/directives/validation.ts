@@ -7,8 +7,6 @@
  * @packageDocumentation
  */
 
-import type { Maybe } from "@graphql-markdown/types";
-
 /**
  * Type guard to check if an object is a proper type object (not null, not an array).
  *
