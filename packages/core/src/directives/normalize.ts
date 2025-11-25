@@ -11,18 +11,18 @@
 import type { DirectiveName, Maybe } from "@graphql-markdown/types";
 
 /**
- * Normalizes directive names from multiple sources into a single deduplicated array.
+ * Normalizes directive names from multiple sources into a single flattened array.
  *
  * This function:
  * 1. Accepts multiple directive name arrays from different sources
- * 2. Flattens them into a single array
- * 3. Removes null/undefined values
- * 4. Returns the normalized array
+ * 2. Filters out null/undefined values and empty arrays
+ * 3. Flattens them into a single array
+ * 4. Returns the normalized array (may contain duplicates)
  *
  * Useful when combining directives from CLI, config file, and environment sources.
  *
  * @param sources - Multiple arrays of directive names or undefined/null values
- * @returns A single array of normalized directive names
+ * @returns A single array of normalized directive names (may contain duplicates)
  *
  * @example
  * ```typescript
