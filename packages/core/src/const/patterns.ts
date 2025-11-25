@@ -115,9 +115,4 @@ export const CONFIG_CONSTANTS = {
    * Items without the grouping directive are assigned to this group.
    */
   DEFAULT_GROUP: "Miscellaneous" as const,
-
-  /**
-   * Default formatter/framework name for documentation metadata.
-   */
-  DEFAULT_FRAMEWORK_NAME: "@graphql-markdown/docusaurus" as const,
 } as const;
