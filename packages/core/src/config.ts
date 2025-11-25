@@ -47,6 +47,7 @@ import type {
 import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
+import { OptionBuilder } from "./options/builder";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -758,6 +759,21 @@ export const parseHomepageOption = (
  * @see {@link Options} for the complete configuration interface
  * @see {@link DEFAULT_OPTIONS} for default values
  */
+
+/**
+ * Type definition for options built by buildConfig.
+ * @internal
+ */
+interface BuildConfigOptions extends Record<string, unknown> {
+  baseURL: string;
+  force: boolean;
+  linkRoot: string;
+  prettify: boolean;
+  rootPath: string;
+  schemaLocation: Pointer;
+  tmpDir: string;
+}
+
 export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts?: Maybe<CliOptions>,
@@ -771,13 +787,45 @@ export const buildConfig = async (
     configFileOpts ?? {},
   );
 
-  const baseURL: string = cliOpts.base ?? config.baseURL!;
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
     cliOpts,
     config,
   );
 
-  const force = cliOpts.force ?? config.force ?? DEFAULT_OPTIONS.force;
+  // Build options using consistent precedence: CLI > Config > Default
+  // The precedence is enforced by the OptionBuilder's setIfProvided method
+  // which only updates values if the source has higher precedence than the current source
+  const {
+    baseURL,
+    force,
+    linkRoot,
+    prettify,
+    rootPath,
+    schemaLocation,
+    tmpDir,
+  } = new OptionBuilder<BuildConfigOptions>()
+    .addDefault(DEFAULT_OPTIONS.baseURL, "baseURL")
+    .addFromConfig(config.baseURL, "baseURL")
+    .addFromCli(cliOpts.base, "baseURL")
+    .addDefault(DEFAULT_OPTIONS.force, "force")
+    .addFromConfig(config.force, "force")
+    .addFromCli(cliOpts.force, "force")
+    .addDefault(DEFAULT_OPTIONS.linkRoot, "linkRoot")
+    .addFromConfig(config.linkRoot, "linkRoot")
+    .addFromCli(cliOpts.link, "linkRoot")
+    .addDefault(DEFAULT_OPTIONS.pretty, "prettify")
+    .addFromConfig(config.pretty, "prettify")
+    .addFromCli(cliOpts.pretty, "prettify")
+    .addDefault(DEFAULT_OPTIONS.rootPath, "rootPath")
+    .addFromConfig(config.rootPath, "rootPath")
+    .addFromCli(cliOpts.root, "rootPath")
+    .addDefault(DEFAULT_OPTIONS.schema, "schemaLocation")
+    .addFromConfig(config.schema, "schemaLocation")
+    .addFromCli(cliOpts.schema, "schemaLocation")
+    .addDefault(DEFAULT_OPTIONS.tmpDir, "tmpDir")
+    .addFromConfig(config.tmpDir, "tmpDir")
+    .addFromCli(cliOpts.tmp, "tmpDir")
+    .build() as BuildConfigOptions;
 
   return {
     baseURL,
@@ -794,17 +842,17 @@ export const buildConfig = async (
       parseGroupByOption(cliOpts.groupByDirective) ?? config.groupByDirective,
     homepageLocation: parseHomepageOption(cliOpts.homepage, config.homepage),
     id: id ?? DEFAULT_OPTIONS.id,
-    linkRoot: cliOpts.link ?? config.linkRoot ?? DEFAULT_OPTIONS.linkRoot,
+    linkRoot,
     loaders: config.loaders,
     mdxParser: cliOpts.mdxParser ?? config.mdxParser,
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
-    outputDir: join(cliOpts.root ?? config.rootPath!, baseURL),
-    prettify: cliOpts.pretty ?? config.pretty ?? DEFAULT_OPTIONS.pretty,
+    outputDir: join(rootPath, baseURL),
+    prettify,
     printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
-    schemaLocation: cliOpts.schema ?? config.schema ?? DEFAULT_OPTIONS.schema,
+    schemaLocation,
     skipDocDirective,
-    tmpDir: cliOpts.tmp ?? config.tmpDir ?? DEFAULT_OPTIONS.tmpDir,
+    tmpDir,
   } as Options;
 };
