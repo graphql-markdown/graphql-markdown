@@ -8,10 +8,10 @@
  */
 
 /**
- * Type guard to check if a value is a plain object (not null, not an array).
+ * Type guard to check if a value is an object but not an array.
  *
  * @param obj - The value to check
- * @returns True if the value is a non-null, non-array object
+ * @returns True if the value is a non-null object but not an array, false otherwise
  *
  * @example
  * ```typescript
@@ -19,6 +19,7 @@
  *
  * if (isTypeObject(value)) {
  *   // value is now typed as Record<string, unknown> and is not an array
+ *   // (includes Date, Map, and other object types)
  *   console.log(Object.keys(value));
  * }
  * ```

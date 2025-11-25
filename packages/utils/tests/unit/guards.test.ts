@@ -16,7 +16,7 @@ import {
 
 describe("Type Guard Utilities", () => {
   describe("isTypeObject", () => {
-    it("should return true for plain objects", () => {
+    it("should return true for objects (excluding arrays)", () => {
       expect(isTypeObject({})).toBe(true);
       expect(isTypeObject({ key: "value" })).toBe(true);
       expect(isTypeObject(new Date())).toBe(true);
