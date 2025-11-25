@@ -2,7 +2,6 @@ import type {
   ApiGroupOverrideType,
   Category,
   CategorySortFn,
-  LocationPath,
   Maybe,
   MDXString,
   MDXSupportType,
@@ -31,6 +30,7 @@ import {
 
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
+import { isGroupsObject, isPath } from "./directives/validation";
 
 /**
  * Constant representing the string literal for deprecated entities.
@@ -141,7 +141,7 @@ export const getApiGroupFolder = (
   groups?: Maybe<ApiGroupOverrideType | boolean>,
 ): string => {
   let folderNames = API_GROUPS;
-  if (groups && typeof groups === "object") {
+  if (isGroupsObject(groups)) {
     folderNames = { ...API_GROUPS, ...groups };
   }
   return isApiType(type) ? folderNames.operations : folderNames.types;
@@ -188,10 +188,6 @@ const isHierarchy = (
   hierarchy: TypeHierarchyValueType,
 ): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
   return options?.hierarchy?.[hierarchy] !== undefined;
-};
-
-const isPath = (path: unknown): path is LocationPath => {
-  return typeof path === "string" && path !== "";
 };
 
 /**

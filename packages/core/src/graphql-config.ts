@@ -18,6 +18,12 @@ import type {
 
 import { log } from "@graphql-markdown/logger";
 
+import {
+  isLoaderString,
+  isSchemaString,
+  isSchemaObject,
+} from "./directives/validation";
+
 /**
  * The name of the GraphQL Markdown extension.
  * Used to identify the extension in graphql-config.
@@ -90,7 +96,7 @@ export const setLoaderOptions = (
   options: PackageOptionsConfig,
 ): LoaderOption => {
   for (const loader in loaders) {
-    if (typeof loaders[loader as ClassName] === "string") {
+    if (isLoaderString(loaders[loader as ClassName])) {
       loaders[loader as ClassName] = {
         module: loaders[loader as ClassName],
         options,
@@ -169,11 +175,9 @@ export const loadConfiguration = async (
 
     if (Array.isArray(projectConfig.schema)) {
       const schema = projectConfig.schema[0];
-      if (typeof schema === "string") {
+      if (isSchemaString(schema)) {
         projectConfig.schema = schema;
-      }
-
-      if (typeof projectConfig.schema === "object") {
+      } else if (isSchemaObject(schema)) {
         projectConfig.schema = Object.keys(schema)[0];
 
         if (projectConfig.loaders) {

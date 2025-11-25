@@ -28,7 +28,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { toString } from "@graphql-markdown/utils";
+import { toString, hasProperty, isTypeObject } from "@graphql-markdown/utils";
 
 import { _getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
@@ -120,19 +120,16 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
     results,
   ) => {
     if (
-      typeof relationType === "object" &&
+      isTypeObject(relationType) &&
       isNamedType(type) &&
-      "type" in relationType &&
+      hasProperty(relationType, "type") &&
       getNamedType(relationType.type as unknown as Maybe<GraphQLType>)?.name ===
         type.name
     ) {
       if (
         !results.some((r: unknown) => {
           return (
-            typeof r === "object" &&
-            r !== null &&
-            "name" in r &&
-            r.name === relationName
+            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
           );
         })
       ) {
@@ -199,15 +196,15 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
       if (
         isNamedType(type) &&
         fieldDef &&
-        typeof fieldDef === "object" &&
-        "type" in fieldDef &&
+        isTypeObject(fieldDef) &&
+        hasProperty(fieldDef, "type") &&
         getNamedType(fieldDef.type as Maybe<GraphQLType>)?.name === type.name
       ) {
         if (
           !results.some((r) => {
             return (
               toString(r) === key ||
-              (typeof r === "object" && "name" in r && r.name === key)
+              (isTypeObject(r) && hasProperty(r, "name") && r.name === key)
             );
           })
         ) {
@@ -264,7 +261,7 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
       if (
         !results.some((r) => {
           return (
-            typeof r === "object" && "name" in r && r.name === relationName
+            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
           );
         })
       ) {
@@ -321,7 +318,7 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
       if (
         !results.some((r) => {
           return (
-            typeof r === "object" && "name" in r && r.name === relationName
+            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
           );
         })
       ) {
