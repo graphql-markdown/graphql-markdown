@@ -11,7 +11,12 @@ import type {
   PrintTypeOptions,
 } from "@graphql-markdown/types";
 
-import { isEmpty, escapeMDX } from "@graphql-markdown/utils";
+import {
+  isEmpty,
+  escapeMDX,
+  isTypeObject,
+  hasStringProperty,
+} from "@graphql-markdown/utils";
 
 import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
@@ -69,14 +74,13 @@ export const formatDescription = (
   type: unknown,
   replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
 ): MDXString | string => {
-  if (typeof type !== "object" || type === null) {
+  if (!isTypeObject(type)) {
     return `${MARKDOWN_EOP}${escapeMDX(replacement)}`;
   }
 
-  const description =
-    "description" in type && typeof type.description === "string"
-      ? type.description
-      : replacement;
+  const description = hasStringProperty(type, "description")
+    ? type.description
+    : replacement;
   return `${MARKDOWN_EOP}${escapeMDX(description)}`;
 };
 

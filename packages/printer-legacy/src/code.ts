@@ -14,6 +14,8 @@ import {
   isDeprecated,
 } from "@graphql-markdown/graphql";
 
+import { hasNonEmptyArrayProperty, hasProperty } from "@graphql-markdown/utils";
+
 import {
   MARKDOWN_EOL,
   DEPRECATED,
@@ -40,13 +42,7 @@ export const printCodeArguments = (
   type: unknown,
   indentationLevel: number = 1,
 ): string => {
-  if (
-    typeof type !== "object" ||
-    type === null ||
-    !("args" in type) ||
-    !Array.isArray(type.args) ||
-    type.args.length === 0
-  ) {
+  if (!hasNonEmptyArrayProperty(type, "args")) {
     return "";
   }
 
@@ -88,7 +84,7 @@ export const printCodeField = (
   options?: PrintTypeOptions,
   indentationLevel: number = 0,
 ): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
+  if (!hasProperty(type, "type")) {
     return "";
   }
 
