@@ -385,4 +385,90 @@ describe("OptionBuilder", () => {
       expect(builder.get("name")).toBe("Config");
     });
   });
+
+  describe("Defensive copying in get()", () => {
+    it("should return a copy of array values to prevent mutations", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithArray extends Record<string, unknown> {
+        items: string[];
+      }
+
+      const builder = new OptionBuilder<OptionsWithArray>();
+      builder.addFromCli(["a", "b"], "items");
+      const items = builder.get("items");
+      items?.push("c");
+      expect(builder.get("items")).toEqual(["a", "b"]);
+    });
+
+    it("should return a copy of object values to prevent mutations", () => {
+      expect.hasAssertions();
+
+      interface OptionsWithObject extends Record<string, unknown> {
+        config: { key: string };
+      }
+
+      const builder = new OptionBuilder<OptionsWithObject>();
+      builder.addFromCli({ key: "value" }, "config");
+      const config = builder.get("config");
+      if (config) {
+        config.key = "modified";
+      }
+      expect(builder.get("config")).toEqual({ key: "value" });
+    });
+
+    it("should return primitive values directly", () => {
+      expect.hasAssertions();
+
+      const builder = new OptionBuilder<TestOptions>();
+      builder.addFromCli("test", "name");
+      const name1 = builder.get("name");
+      const name2 = builder.get("name");
+
+      expect(name1).toBe("test");
+      expect(name2).toBe("test");
+      expect(name1 === name2).toBe(true); // Primitives can be same reference
+    });
+  });
+
+  describe("Precedence enforcement regardless of call order", () => {
+    it("should respect CLI precedence even when called before config", () => {
+      expect.hasAssertions();
+
+      const builder = new OptionBuilder<TestOptions>();
+      builder
+        .addDefault("Default", "name")
+        .addFromCli("CLI", "name")
+        .addFromConfig("Config", "name"); // Config called after CLI
+
+      // CLI should still win because it has higher precedence
+      expect(builder.get("name")).toBe("CLI");
+    });
+
+    it("should respect Config precedence when CLI is undefined", () => {
+      expect.hasAssertions();
+
+      const builder = new OptionBuilder<TestOptions>();
+      builder
+        .addDefault("Default", "name")
+        .addFromConfig("Config", "name")
+        .addFromCli(undefined, "name"); // CLI is undefined
+
+      // Config should be used since CLI is undefined
+      expect(builder.get("name")).toBe("Config");
+    });
+
+    it("should maintain precedence when methods are called in reverse order", () => {
+      expect.hasAssertions();
+
+      const builder = new OptionBuilder<TestOptions>();
+      builder
+        .addFromCli("CLI", "name") // Called first (should be last)
+        .addFromConfig("Config", "name")
+        .addDefault("Default", "name"); // Called last (should be first)
+
+      // CLI should still win regardless of call order
+      expect(builder.get("name")).toBe("CLI");
+    });
+  });
 });
