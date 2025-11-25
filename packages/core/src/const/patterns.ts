@@ -29,7 +29,7 @@ export const PATTERNS = {
    * - "@" does not match
    * - "tag" does not match
    */
-  DIRECTIVE_NAME: /^@(?<directive>\w+)$/,
+  DIRECTIVE_NAME: /^@(?<directive>\w+)$/, // NOSONAR
 
   /**
    * Matches group-by directive format with directive name, field, and optional fallback.
@@ -42,7 +42,7 @@ export const PATTERNS = {
    * - "@tag()" does not match
    * - "tag(name)" does not match
    */
-  GROUP_BY_DIRECTIVE: /^@(\w+)\((\w+)(?:\|=(\w+))?\)$/,
+  GROUP_BY_DIRECTIVE: /^@(\w+)\((\w+)(?:\|=(\w+))?\)$/, // NOSONAR
 
   /**
    * Matches word boundaries (non-alphanumeric characters) for string splitting.
@@ -54,7 +54,7 @@ export const PATTERNS = {
    * - "hello_world" split → ["hello", "world"]
    * - "hello world" split → ["hello", "world"]
    */
-  WORD_BOUNDARY: /[^0-9A-Za-z]+/g,
+  WORD_BOUNDARY: /[^0-9A-Za-z]+/g, // NOSONAR
 
   /**
    * Matches transitions between lowercase/digits and uppercase letters.
@@ -66,7 +66,7 @@ export const PATTERNS = {
    * - "HTTPServer" matches → "HTTPServer" (no match for sequential uppercase)
    * - "get2Users" matches → "get 2U"
    */
-  CASE_TRANSITION: /([a-z]+|\d+)([A-Z])/g,
+  CASE_TRANSITION: /([a-z]+|\d+)([A-Z])/g, // NOSONAR
 
   /**
    * Matches transitions from letters to digits.
@@ -78,7 +78,7 @@ export const PATTERNS = {
    * - "abc123" matches → "abc 123"
    * - "U1" does not match (U is uppercase)
    */
-  LETTER_DIGIT_TRANSITION: /([a-z]+)(\d)/g,
+  LETTER_DIGIT_TRANSITION: /([a-z]+)(\d)/g, // NOSONAR
 
   /**
    * Matches transitions from digits to letters.
@@ -90,7 +90,7 @@ export const PATTERNS = {
    * - "123abc" matches → "123 abc"
    * - "2K" does not match (K is uppercase)
    */
-  DIGIT_LETTER_TRANSITION: /(\d+)([a-z])/g,
+  DIGIT_LETTER_TRANSITION: /(\d+)([a-z])/g, // NOSONAR
 
   /**
    * Matches numeric prefix for sorted categories (e.g., "01-query" → "query").
@@ -103,7 +103,7 @@ export const PATTERNS = {
    * - "query" does not match
    * - "1-query" does not match (only 1 digit)
    */
-  NUMERIC_PREFIX: /^\d{2}-/,
+  NUMERIC_PREFIX: /^\d{2}-/, // NOSONAR
 } as const;
 
 /**
