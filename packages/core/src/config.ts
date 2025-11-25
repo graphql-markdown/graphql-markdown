@@ -778,6 +778,7 @@ export const buildConfig = async (
   );
 
   // Build options using consistent precedence: CLI > Config > Default
+  // All properties are guaranteed to be set due to .addDefault() calls, so cast is safe
   const {
     baseURL,
     force,
@@ -816,7 +817,15 @@ export const buildConfig = async (
     .addDefault(DEFAULT_OPTIONS.tmpDir, "tmpDir")
     .addFromConfig(config.tmpDir, "tmpDir")
     .addFromCli(cliOpts.tmp, "tmpDir")
-    .build();
+    .build() as {
+    baseURL: string;
+    force: boolean;
+    linkRoot: string;
+    prettify: boolean;
+    rootPath: string;
+    schemaLocation: Pointer;
+    tmpDir: string;
+  };
 
   return {
     baseURL,
