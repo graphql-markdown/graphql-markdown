@@ -20,6 +20,11 @@
 import type { Maybe } from "@graphql-markdown/types";
 
 /**
+ * Type representing the source of an option value.
+ */
+type OptionSource = "default" | "config" | "cli";
+
+/**
  * Builder for constructing options from multiple sources with priority precedence.
  *
  * IMPORTANT: Methods must be called in the correct order for precedence to work:
@@ -45,7 +50,7 @@ import type { Maybe } from "@graphql-markdown/types";
  */
 export class OptionBuilder<T extends Record<string, unknown>> {
   private merged: Partial<T> = {};
-  private sources: Map<keyof T, "default" | "config" | "cli"> = new Map();
+  private readonly sources: Map<keyof T, OptionSource> = new Map();
 
   /**
    * Adds a default value (lowest priority, added first).
@@ -113,10 +118,10 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   private setIfProvided<K extends keyof T>(
     value: Maybe<T[K]>,
     key: K,
-    source: "default" | "config" | "cli",
+    source: OptionSource,
   ): this {
     if (value !== null && value !== undefined) {
-      const precedenceOrder: Record<"default" | "config" | "cli", number> = {
+      const precedenceOrder: Record<OptionSource, number> = {
         default: 0,
         config: 1,
         cli: 2,

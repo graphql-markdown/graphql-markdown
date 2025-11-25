@@ -764,7 +764,7 @@ export const parseHomepageOption = (
  * Type definition for options built by buildConfig.
  * @internal
  */
-interface BuildConfigOptions {
+interface BuildConfigOptions extends Record<string, unknown> {
   baseURL: string;
   force: boolean;
   linkRoot: string;
