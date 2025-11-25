@@ -62,6 +62,12 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * Adds a value from config file if provided (medium priority, added second).
    * Overwrites the default value for this key if the config value exists.
    *
+   * Implementation note: This method has identical implementation to addFromCli
+   * and addDefault by design. They all delegate to setIfProvided() which handles
+   * the null/undefined check. The semantic difference is in precedence order and
+   * documentation - callers should invoke methods in order: addDefault ->
+   * addFromConfig -> addFromCli for correct precedence.
+   *
    * @param value - The config file option value
    * @param key - The key to store the value under
    * @returns This builder for method chaining
@@ -78,6 +84,12 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   /**
    * Adds a value from CLI options if provided (highest priority, added last).
    * Overwrites both default and config values for this key if the CLI value exists.
+   *
+   * Implementation note: This method has identical implementation to addFromConfig
+   * and addDefault by design. They all delegate to setIfProvided() which handles
+   * the null/undefined check. The semantic difference is in precedence order and
+   * documentation - callers should invoke methods in order: addDefault ->
+   * addFromConfig -> addFromCli for correct precedence.
    *
    * @param value - The CLI option value
    * @param key - The key to store the value under
