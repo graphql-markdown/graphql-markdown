@@ -209,9 +209,19 @@ export function hasStringProperty(
  * }
  * ```
  */
-export const hasFunctionProperty = (
+export function hasFunctionProperty<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, (...args: unknown[]) => unknown>;
+// eslint-disable-next-line no-redeclare
+export function hasFunctionProperty(
   obj: unknown,
   key: PropertyKey,
-): obj is Record<PropertyKey, (...args: unknown[]) => unknown> => {
+): obj is Record<PropertyKey, (...args: unknown[]) => unknown>;
+// eslint-disable-next-line no-redeclare
+export function hasFunctionProperty(
+  obj: unknown,
+  key: PropertyKey,
+): obj is Record<PropertyKey, (...args: unknown[]) => unknown> {
   return hasProperty(obj, key) && typeof obj[key] === "function";
-};
+}

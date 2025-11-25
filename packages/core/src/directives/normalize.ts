@@ -17,7 +17,7 @@ import type { DirectiveName, Maybe } from "@graphql-markdown/types";
  * 1. Accepts multiple directive name arrays from different sources
  * 2. Filters out null/undefined values and empty arrays
  * 3. Flattens them into a single array
- * 4. Returns the normalized array (may contain duplicates)
+ * 4. Returns the normalized array (may contain duplicates if sources contain duplicates)
  *
  * Useful when combining directives from CLI, config file, and environment sources.
  *

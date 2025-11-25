@@ -53,12 +53,11 @@ export const printCodeArguments = (
     const defaultValue = getFormattedDefaultValue(
       v as Parameters<typeof getFormattedDefaultValue>[0],
     );
-    const hasDefaultValue = defaultValue !== undefined && defaultValue !== null;
-    const printedDefault = hasDefaultValue
-      ? ` = ${getFormattedDefaultValue(
-          v as Parameters<typeof getFormattedDefaultValue>[0],
-        )}`
-      : "";
+    let printedDefault = "";
+    if (defaultValue !== undefined && defaultValue !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      printedDefault = ` = ${defaultValue}`;
+    }
     const propType = String((v as Record<string, unknown>).type);
     const propName = String((v as Record<string, unknown>).name);
     return `${argIndentation}${propName}: ${propType}${printedDefault}`;
