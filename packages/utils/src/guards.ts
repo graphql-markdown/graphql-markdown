@@ -245,31 +245,3 @@ export function hasFunctionProperty(
 export const isNonEmptyArray = (value: unknown): value is unknown[] => {
   return Array.isArray(value) && value.length > 0;
 };
-
-/**
- * Type guard to check if an object is deprecated.
- *
- * Checks for either `isDeprecated` property (set to true) or `deprecationReason` property (is a string).
- * This pattern is used throughout the GraphQL schema to mark deprecated types and fields.
- *
- * @param obj - The value to check
- * @returns True if the object has deprecation markers
- *
- * @example
- * ```typescript
- * import { isDeprecated } from "@graphql-markdown/utils/guards";
- *
- * if (isDeprecated(field)) {
- *   console.log("This field is deprecated:", field.deprecationReason);
- * }
- * ```
- */
-export const isDeprecated = <T extends Record<string, unknown>>(
-  obj: unknown,
-): obj is T & ({ deprecationReason: string } | { isDeprecated: true }) => {
-  return (
-    isTypeObject(obj) &&
-    (("isDeprecated" in obj && obj.isDeprecated === true) ||
-      hasStringProperty(obj, "deprecationReason"))
-  );
-};

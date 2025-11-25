@@ -11,6 +11,7 @@ import {
   hasNonEmptyArrayProperty,
   hasStringProperty,
   hasFunctionProperty,
+  isNonEmptyArray,
 } from "../../src/guards";
 
 describe("Type Guard Utilities", () => {
@@ -243,6 +244,60 @@ describe("Type Guard Utilities", () => {
       if (hasFunctionProperty(obj, "callback")) {
         expect(typeof obj.callback).toBe("function");
       }
+    });
+  });
+
+  describe("isNonEmptyArray", () => {
+    it("should return true for non-empty arrays", () => {
+      expect(isNonEmptyArray([1])).toBe(true);
+      expect(isNonEmptyArray([1, 2, 3])).toBe(true);
+      expect(isNonEmptyArray(["string"])).toBe(true);
+      expect(isNonEmptyArray([null])).toBe(true);
+      expect(isNonEmptyArray([undefined])).toBe(true);
+      expect(isNonEmptyArray([{}])).toBe(true);
+      expect(isNonEmptyArray([[]])).toBe(true);
+    });
+
+    it("should return false for empty arrays", () => {
+      expect(isNonEmptyArray([])).toBe(false);
+    });
+
+    it("should return false for non-array values", () => {
+      expect(isNonEmptyArray(null)).toBe(false);
+      expect(isNonEmptyArray(undefined)).toBe(false);
+      expect(isNonEmptyArray("string")).toBe(false);
+      expect(isNonEmptyArray(42)).toBe(false);
+      expect(isNonEmptyArray(true)).toBe(false);
+      expect(isNonEmptyArray({})).toBe(false);
+    });
+
+    it("should narrow type to array with elements", () => {
+      const value: unknown = [1, 2, 3];
+      if (isNonEmptyArray(value)) {
+        expect(Array.isArray(value)).toBe(true);
+        expect(value.length).toBeGreaterThan(0);
+      }
+    });
+
+    it("should handle arrays with mixed types", () => {
+      const value: unknown = [1, "string", true, null, {}];
+      if (isNonEmptyArray(value)) {
+        expect(value.length).toBe(5);
+        expect(value[0]).toBe(1);
+        expect(value[1]).toBe("string");
+      }
+    });
+
+    it("should handle large arrays", () => {
+      const largeArray = Array(1000).fill(0);
+      expect(isNonEmptyArray(largeArray)).toBe(true);
+    });
+
+    it("should properly distinguish empty from non-empty", () => {
+      const empty: unknown = [];
+      const nonEmpty: unknown = [undefined];
+      expect(isNonEmptyArray(empty)).toBe(false);
+      expect(isNonEmptyArray(nonEmpty)).toBe(true);
     });
   });
 });
