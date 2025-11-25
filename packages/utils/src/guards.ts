@@ -8,23 +8,23 @@
  */
 
 /**
- * Type guard to check if a value is a plain object.
+ * Type guard to check if a value is a plain object (not null, not an array).
  *
  * @param obj - The value to check
- * @returns True if the value is a non-null object, false otherwise
+ * @returns True if the value is a non-null, non-array object
  *
  * @example
  * ```typescript
  * import { isTypeObject } from "@graphql-markdown/utils/guards";
  *
  * if (isTypeObject(value)) {
- *   // value is now typed as Record<string, unknown>
+ *   // value is now typed as Record<string, unknown> and is not an array
  *   console.log(Object.keys(value));
  * }
  * ```
  */
 export const isTypeObject = (obj: unknown): obj is Record<string, unknown> => {
-  return typeof obj === "object" && obj !== null;
+  return typeof obj === "object" && obj !== null && !Array.isArray(obj);
 };
 
 /**

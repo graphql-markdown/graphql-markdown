@@ -19,9 +19,13 @@ describe("Type Guard Utilities", () => {
     it("should return true for plain objects", () => {
       expect(isTypeObject({})).toBe(true);
       expect(isTypeObject({ key: "value" })).toBe(true);
-      expect(isTypeObject([])).toBe(true);
       expect(isTypeObject(new Date())).toBe(true);
       expect(isTypeObject(new Map())).toBe(true);
+    });
+
+    it("should return false for arrays", () => {
+      expect(isTypeObject([])).toBe(false);
+      expect(isTypeObject([1, 2, 3])).toBe(false);
     });
 
     it("should return false for non-objects", () => {

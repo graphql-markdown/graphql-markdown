@@ -38,7 +38,7 @@ const isTypeObject = (
  */
 export const hasDescriptor = (
   config: unknown,
-): config is Record<"descriptor", Function> => {
+): config is Record<"descriptor", (...args: unknown[]) => unknown> => {
   return (
     isTypeObject(config) &&
     "descriptor" in config &&
@@ -62,7 +62,9 @@ export const hasDescriptor = (
  * }
  * ```
  */
-export const hasTag = (config: unknown): config is Record<"tag", Function> => {
+export const hasTag = (
+  config: unknown,
+): config is Record<"tag", (...args: unknown[]) => unknown> => {
   return (
     isTypeObject(config) &&
     "tag" in config &&
@@ -109,7 +111,7 @@ export const isSchemaString = (schema: unknown): schema is string => {
 export const isSchemaObject = (
   schema: unknown,
 ): schema is Record<string, unknown> => {
-  return isTypeObject(schema) && !Array.isArray(schema);
+  return isTypeObject(schema);
 };
 
 /**
@@ -151,7 +153,7 @@ export const isPath = (path: unknown): path is string => {
 export const isGroupsObject = (
   groups: unknown,
 ): groups is Record<string, string> => {
-  return isTypeObject(groups) && !Array.isArray(groups);
+  return isTypeObject(groups);
 };
 
 /**

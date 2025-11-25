@@ -58,7 +58,7 @@ export const printCodeArguments = (
     let printedDefault = "";
     if (defaultValue !== undefined && defaultValue !== null) {
       // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      printedDefault = ` = ${defaultValue}`;
+      printedDefault = ` = ${String(defaultValue)}`;
     }
     const propType = String(v.type);
     const propName = String(v.name);
