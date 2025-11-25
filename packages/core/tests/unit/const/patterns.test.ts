@@ -191,18 +191,6 @@ describe("Configuration Constants", () => {
     });
   });
 
-  describe("DEFAULT_FRAMEWORK_NAME", () => {
-    it("should have correct default framework name", () => {
-      expect(CONFIG_CONSTANTS.DEFAULT_FRAMEWORK_NAME).toBe(
-        "@graphql-markdown/docusaurus",
-      );
-    });
-
-    it("should be a constant string", () => {
-      expect(typeof CONFIG_CONSTANTS.DEFAULT_FRAMEWORK_NAME).toBe("string");
-    });
-  });
-
   describe("Constants immutability", () => {
     it("should be typed as const for compile-time immutability", () => {
       // TypeScript's 'as const' provides compile-time immutability
