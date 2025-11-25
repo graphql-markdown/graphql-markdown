@@ -45,6 +45,8 @@ import type {
 } from "@graphql-markdown/types";
 
 import { loadConfiguration } from "./graphql-config";
+import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
+import { isInvalidFunctionProperty } from "./directives/validation";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -210,15 +212,13 @@ export const DEFAULT_OPTIONS: Readonly<
  * ```
  */
 export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
-  const OPTION_REGEX = /^@(?<directive>\w+)$/;
-
-  if (typeof name !== "string" || !OPTION_REGEX.test(name)) {
+  if (typeof name !== "string" || !PATTERNS.DIRECTIVE_NAME.test(name)) {
     throw new Error(`Invalid "${name}"`);
   }
 
   const {
     groups: { directive },
-  } = OPTION_REGEX.exec(name) as RegExpExecArray & {
+  } = PATTERNS.DIRECTIVE_NAME.exec(name) as RegExpExecArray & {
     groups: { directive: DirectiveName };
   };
 
@@ -404,8 +404,8 @@ export const getCustomDirectives = (
     ) {
       delete customDirectiveOptions[name as DirectiveName];
     } else if (
-      ("descriptor" in option && typeof option.descriptor !== "function") ||
-      ("tag" in option && typeof option.tag !== "function") ||
+      isInvalidFunctionProperty(option, "descriptor") ||
+      isInvalidFunctionProperty(option, "tag") ||
       !("tag" in option || "descriptor" in option)
     ) {
       throw new Error(
@@ -688,14 +688,11 @@ export const getPrintTypeOptions = (
 export const parseGroupByOption = (
   groupOptions: unknown,
 ): Maybe<GroupByDirectiveOptions> => {
-  const DEFAULT_GROUP = "Miscellaneous";
-  const OPTION_REGEX = /^@(\w+)\((\w+)(?:\|=(\w+))?\)/;
-
   if (typeof groupOptions !== "string") {
     return undefined;
   }
 
-  const parsedOptions = OPTION_REGEX.exec(groupOptions);
+  const parsedOptions = PATTERNS.GROUP_BY_DIRECTIVE.exec(groupOptions);
 
   if (parsedOptions === null) {
     throw new Error(`Invalid "${groupOptions}"`);
@@ -704,7 +701,7 @@ export const parseGroupByOption = (
   return {
     directive: parsedOptions[1],
     field: parsedOptions[2],
-    fallback: parsedOptions[3] || DEFAULT_GROUP,
+    fallback: parsedOptions[3] || CONFIG_CONSTANTS.DEFAULT_GROUP,
   } as GroupByDirectiveOptions;
 };
 

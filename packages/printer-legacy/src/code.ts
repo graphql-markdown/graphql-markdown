@@ -14,6 +14,8 @@ import {
   isDeprecated,
 } from "@graphql-markdown/graphql";
 
+import { hasNonEmptyArrayProperty, hasProperty } from "@graphql-markdown/utils";
+
 import {
   MARKDOWN_EOL,
   DEPRECATED,
@@ -40,13 +42,7 @@ export const printCodeArguments = (
   type: unknown,
   indentationLevel: number = 1,
 ): string => {
-  if (
-    typeof type !== "object" ||
-    type === null ||
-    !("args" in type) ||
-    !Array.isArray(type.args) ||
-    type.args.length === 0
-  ) {
+  if (!hasNonEmptyArrayProperty(type, "args")) {
     return "";
   }
 
@@ -54,11 +50,16 @@ export const printCodeArguments = (
   const parentIndentation =
     indentationLevel === 1 ? "" : MARKDOWN_CODE_INDENTATION;
   const argLines = type.args.map((v) => {
-    const defaultValue = getFormattedDefaultValue(v);
-    const hasDefaultValue = defaultValue !== undefined && defaultValue !== null;
-    const printedDefault = hasDefaultValue
-      ? ` = ${getFormattedDefaultValue(v)}`
-      : "";
+    if (!hasProperty(v, "type") || !hasProperty(v, "name")) {
+      return "";
+    }
+
+    const defaultValue = getFormattedDefaultValue(v as never);
+    let printedDefault = "";
+    if (defaultValue !== undefined && defaultValue !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      printedDefault = ` = ${String(defaultValue)}`;
+    }
     const propType = String(v.type);
     const propName = String(v.name);
     return `${argIndentation}${propName}: ${propType}${printedDefault}`;
@@ -88,7 +89,7 @@ export const printCodeField = (
   options?: PrintTypeOptions,
   indentationLevel: number = 0,
 ): MDXString | string => {
-  if (typeof type !== "object" || type === null || !("type" in type)) {
+  if (!hasProperty(type, "type")) {
     return "";
   }
 
