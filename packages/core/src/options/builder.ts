@@ -7,10 +7,9 @@
  * 2. Config file options
  * 3. Default values (lowest priority)
  *
- * IMPORTANT: Add values in this order for proper precedence:
- * 1. addDefault() first
- * 2. addFromConfig() second
- * 3. addFromCli() last
+ * Precedence is enforced semantically via the setIfProvided() method,
+ * regardless of the order in which methods are called. Each value tracks its
+ * source, and only higher-precedence sources can override existing values.
  *
  * Eliminates repetitive if/coalesce patterns throughout the codebase.
  *
@@ -27,10 +26,9 @@ type OptionSource = "default" | "config" | "cli";
 /**
  * Builder for constructing options from multiple sources with priority precedence.
  *
- * IMPORTANT: Methods must be called in the correct order for precedence to work:
- * 1. addDefault() - lowest priority (set first)
- * 2. addFromConfig() - medium priority
- * 3. addFromCli() - highest priority (set last)
+ * Precedence is enforced semantically via source tracking, not by call order.
+ * CLI values always override config values, which always override defaults,
+ * regardless of the order in which methods are called.
  *
  * @template T - The type of the options object being built
  *
@@ -53,8 +51,9 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   private readonly sources: Map<keyof T, OptionSource> = new Map();
 
   /**
-   * Adds a default value (lowest priority, added first).
-   * Sets a value that will be overwritten by config or CLI options.
+   * Adds a default value (lowest priority).
+   * Sets a value that can be overwritten by config or CLI options.
+   * This method can be called at any time; precedence is enforced semantically.
    *
    * @param value - The default value
    * @param key - The key to store the value under
@@ -70,8 +69,9 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   }
 
   /**
-   * Adds a value from config file if provided (medium priority, added second).
-   * Overwrites the default value for this key if the config value exists.
+   * Adds a value from config file if provided (medium priority).
+   * Can override default values if the config value exists.
+   * This method can be called at any time; precedence is enforced semantically.
    *
    * @param value - The config file option value
    * @param key - The key to store the value under
@@ -87,8 +87,9 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   }
 
   /**
-   * Adds a value from CLI options if provided (highest priority, added last).
-   * Overwrites both default and config values for this key if the CLI value exists.
+   * Adds a value from CLI options if provided (highest priority).
+   * Can override both default and config values for this key.
+   * This method can be called at any time; precedence is enforced semantically.
    *
    * @param value - The CLI option value
    * @param key - The key to store the value under
