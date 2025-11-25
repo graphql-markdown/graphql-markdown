@@ -778,7 +778,8 @@ export const buildConfig = async (
   );
 
   // Build options using consistent precedence: CLI > Config > Default
-  // All properties are guaranteed to be set due to .addDefault() calls, so cast is safe
+  // The precedence is enforced by the OptionBuilder's setIfProvided method
+  // which only updates values if the source has higher precedence than the current source
   const {
     baseURL,
     force,
