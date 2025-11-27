@@ -7,9 +7,8 @@ import type { LoaderOption } from "@graphql-markdown/types";
 import { getDocumentLoaders, loadSchema } from "../../src/loader";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
-const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../__data__/schema_with_custom_root_types.graphql",
-);
+const SCHEMA_CUSTOM_ROOT_FILE =
+  require.resolve("../__data__/schema_with_custom_root_types.graphql");
 
 describe("loader", () => {
   let schema: GraphQLSchema;

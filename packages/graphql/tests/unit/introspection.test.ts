@@ -44,16 +44,13 @@ import {
 import { loadSchema } from "../../src/loader";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
-const SCHEMA_CUSTOM_ROOT_FILE = require.resolve(
-  "../__data__/schema_with_custom_root_types.graphql",
-);
-const INTROSPECTION_SCHEMA_FILE = require.resolve(
-  "../__data__/introspection.json",
-);
+const SCHEMA_CUSTOM_ROOT_FILE =
+  require.resolve("../__data__/schema_with_custom_root_types.graphql");
+const INTROSPECTION_SCHEMA_FILE =
+  require.resolve("../__data__/introspection.json");
 const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
-const SCHEMA_ISSUE_1907_FILE = require.resolve(
-  "../__data__/schema_1907.graphql",
-);
+const SCHEMA_ISSUE_1907_FILE =
+  require.resolve("../__data__/schema_1907.graphql");
 
 describe("introspection", () => {
   let schema: GraphQLSchema;
