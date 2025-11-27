@@ -27,9 +27,8 @@ export const prettify = async (
   parser: string,
 ): Promise<string | undefined> => {
   try {
-    const { resolveConfigFile, resolveConfig, format } = await import(
-      "prettier"
-    );
+    const { resolveConfigFile, resolveConfig, format } =
+      await import("prettier");
     const file = await resolveConfigFile();
 
     let options: Record<string, unknown> = {};
