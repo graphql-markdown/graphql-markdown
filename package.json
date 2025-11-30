@@ -186,7 +186,7 @@
     "jsonc-eslint-parser": "2.4.1",
     "knip": "5.70.2",
     "lodash.filter": "4.6.0",
-    "memfs": "4.51.0",
+    "memfs": "4.51.1",
     "pinst": "3.0.0",
     "prettier": "3.7.3",
     "ts-jest": "29.4.5",
