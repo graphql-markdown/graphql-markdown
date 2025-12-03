@@ -188,7 +188,7 @@
     "lodash.filter": "4.6.0",
     "memfs": "4.51.1",
     "pinst": "3.0.0",
-    "prettier": "3.7.3",
+    "prettier": "3.7.4",
     "ts-jest": "29.4.6",
     "tsgo-dev": "^2025.12.1",
     "turbo": "^2.6.1",
