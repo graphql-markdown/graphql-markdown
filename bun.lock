@@ -42,7 +42,7 @@
         "pinst": "3.0.0",
         "prettier": "3.7.4",
         "ts-jest": "29.4.6",
-        "tsgo-dev": "^2025.12.1",
+        "tsgo-dev": "^2025.12.2",
         "turbo": "^2.6.1",
         "typedoc": "0.28.15",
         "typedoc-plugin-frontmatter": "1.3.1",
@@ -639,17 +639,17 @@
 
     "@theguild/federation-composition": ["@theguild/federation-composition@0.21.0", "", { "dependencies": { "constant-case": "^3.0.4", "debug": "4.4.3", "json5": "^2.2.3", "lodash.sortby": "^4.7.0" }, "peerDependencies": { "graphql": "^16.0.0" } }, "sha512-cdQ9rDEtBpT553DLLtcsSjtSDIadibIxAD3K5r0eUuDOfxx+es7Uk+aOucfqMlNOM3eybsgJN3T2SQmEsINwmw=="],
 
-    "@tsgo-dev/darwin-amd64": ["@tsgo-dev/darwin-amd64@2025.12.1", "", { "os": "darwin", "cpu": "x64", "bin": { "tsgo": "tsgo" } }, "sha512-sr43H0QPDVnKKk59k+Q5SwylJVuxPBbRG4Lo1/10EzbgeU2YiIXMEh/c3MYloQ9vQlEjiZmCeOfT9c7ifQlv/g=="],
+    "@tsgo-dev/darwin-amd64": ["@tsgo-dev/darwin-amd64@2025.12.2", "", { "os": "darwin", "cpu": "x64", "bin": { "tsgo": "tsgo" } }, "sha512-N0t3Q+nq1qQKlfQZvY9ILa5mPQedVZNcISRqtYk/aaH3D84AKKqPLPRhjDaCMKQ173hT4ifyxfsZ67XrzbxfVA=="],
 
-    "@tsgo-dev/darwin-arm64": ["@tsgo-dev/darwin-arm64@2025.12.1", "", { "os": "darwin", "cpu": "arm64", "bin": { "tsgo": "tsgo" } }, "sha512-37UxcNTFEfDpcYLqfCdzqV/h4Why6fzEv6GGplpnAOQb8Z/MQ1mpMZOvKjly8vK5ImzyrViNkOhfO5+QYnV2tg=="],
+    "@tsgo-dev/darwin-arm64": ["@tsgo-dev/darwin-arm64@2025.12.2", "", { "os": "darwin", "cpu": "arm64", "bin": { "tsgo": "tsgo" } }, "sha512-P9v/gtFUIlXhUrQ5N3Y/qFHVoafK/hFdPnvg949yZEXw41T8P9+OvnTjhbgnA8S6omDXh5DufNbmTaRH7i3FdA=="],
 
-    "@tsgo-dev/linux-amd64": ["@tsgo-dev/linux-amd64@2025.12.1", "", { "os": "linux", "cpu": "x64", "bin": { "tsgo": "tsgo" } }, "sha512-hyMzZ/1Eh5bzEt1yZg78Ag08ud4j9ApOO8LH6A517JNBKmt1o6/43ON622VRb1vBzoiwVJ9R8sJq3KOVFchG8Q=="],
+    "@tsgo-dev/linux-amd64": ["@tsgo-dev/linux-amd64@2025.12.2", "", { "os": "linux", "cpu": "x64", "bin": { "tsgo": "tsgo" } }, "sha512-bIY4aWL/LpwAHTJUKaHiBQj7cQD/bnKOr//vxferquYUOFTNdv8W7RhE/vRKVoVV5/QR+MZo7a/q6OOC/uPS7Q=="],
 
-    "@tsgo-dev/linux-arm64": ["@tsgo-dev/linux-arm64@2025.12.1", "", { "os": "linux", "cpu": "arm64", "bin": { "tsgo": "tsgo" } }, "sha512-qToUcl4Z9c+IPwcej+vbgkGIMZY/BZNl1jlTaZHGTgqU4OKjJDc6DQqpz7poShchzdaX5hjOVHYA4R7nRB7NSA=="],
+    "@tsgo-dev/linux-arm64": ["@tsgo-dev/linux-arm64@2025.12.2", "", { "os": "linux", "cpu": "arm64", "bin": { "tsgo": "tsgo" } }, "sha512-QeLtEtCfzrlKretW8j1KbLUaY5ebdwhefpYU2l16+rbUwhvvheFw5HXFguwE6Mm9yF5No0H4KOarK7o0sIcWSw=="],
 
-    "@tsgo-dev/windows-amd64": ["@tsgo-dev/windows-amd64@2025.12.1", "", { "os": "win32", "cpu": "x64", "bin": { "tsgo": "tsgo.exe" } }, "sha512-Bx9bfrKUA/r+L7g2kIzHZ6vOCeYSojHnkMF3HbVA1VWZFR+u2VI2talJ1/ESpTswjjlgqqXD30R/EhD5aF06ZQ=="],
+    "@tsgo-dev/windows-amd64": ["@tsgo-dev/windows-amd64@2025.12.2", "", { "os": "win32", "cpu": "x64", "bin": { "tsgo": "tsgo.exe" } }, "sha512-j1KnYiICQpSVBvC16Fm5TwR9++FgoXQxH6jIaxAsJOfSpwbVhzfFE2quFfL3r2mA/BETkcvuFtTdNaOi8Yx89g=="],
 
-    "@tsgo-dev/windows-arm64": ["@tsgo-dev/windows-arm64@2025.12.1", "", { "os": "win32", "cpu": "arm64", "bin": { "tsgo": "tsgo.exe" } }, "sha512-P0c9zAL7O+M3I8l19g0414wdxaThd3z4RcwSBPyJmka2UAorXX+9qQMVdT6l/Al1GQzRrjP6rr5ye3V7EoZmSw=="],
+    "@tsgo-dev/windows-arm64": ["@tsgo-dev/windows-arm64@2025.12.2", "", { "os": "win32", "cpu": "arm64", "bin": { "tsgo": "tsgo.exe" } }, "sha512-x8QMD1dCTxQQNJMBB5GnTYhGo0pM7g98czcOaD2r2w295r86R2ofmsRpmhFZODfsFwa+BW4Wpu4EiIzGxdJ0rw=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.10.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg=="],
 
@@ -2119,7 +2119,7 @@
 
     "tsconfig-paths": ["tsconfig-paths@3.15.0", "", { "dependencies": { "@types/json5": "^0.0.29", "json5": "^1.0.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg=="],
 
-    "tsgo-dev": ["tsgo-dev@2025.12.1", "", { "optionalDependencies": { "@tsgo-dev/darwin-amd64": "2025.12.1", "@tsgo-dev/darwin-arm64": "2025.12.1", "@tsgo-dev/linux-amd64": "2025.12.1", "@tsgo-dev/linux-arm64": "2025.12.1", "@tsgo-dev/windows-amd64": "2025.12.1", "@tsgo-dev/windows-arm64": "2025.12.1" }, "bin": { "tsgo": "tsgo" } }, "sha512-1DxafLN36H8IgqouU07Lza+0tXIV2T7p3wbmdWPBYXZe/dY2L6J4o4+rBYqStf4N3qgUyxD4LjbistahvkEYAA=="],
+    "tsgo-dev": ["tsgo-dev@2025.12.2", "", { "optionalDependencies": { "@tsgo-dev/darwin-amd64": "2025.12.2", "@tsgo-dev/darwin-arm64": "2025.12.2", "@tsgo-dev/linux-amd64": "2025.12.2", "@tsgo-dev/linux-arm64": "2025.12.2", "@tsgo-dev/windows-amd64": "2025.12.2", "@tsgo-dev/windows-arm64": "2025.12.2" }, "bin": { "tsgo": "tsgo" } }, "sha512-lsFRSoYKQORDYM96CAla2o5jTHijtxEyQFeSaJAj1Wzs08Wchs5bwvQ81e7hBLVIrrh340F9Crdd/FaQOE4HBg=="],
 
     "tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
 
