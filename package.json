@@ -184,7 +184,7 @@
     "jest": "30.2.0",
     "jest-environment-node": "^30.2.0",
     "jsonc-eslint-parser": "2.4.2",
-    "knip": "5.76.2",
+    "knip": "5.76.3",
     "lodash.filter": "4.6.0",
     "memfs": "4.51.1",
     "pinst": "3.0.0",
