@@ -296,7 +296,7 @@ export const getSkipDocDirectives = (
   if (
     (configFileOpts &&
       configFileOpts.printTypeOptions?.deprecated === DeprecatedOption.SKIP) ||
-    (cliOpts && cliOpts.deprecated === DeprecatedOption.SKIP)
+    cliOpts?.deprecated === DeprecatedOption.SKIP
   ) {
     skipDirectives.push("deprecated" as DirectiveName);
   }
