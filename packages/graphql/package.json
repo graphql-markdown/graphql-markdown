@@ -58,7 +58,7 @@
     "pack": "bun pm pack"
   },
   "dependencies": {
-    "@graphql-tools/load": "^8.1.7",
+    "@graphql-tools/load": "^8.1.8",
     "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
