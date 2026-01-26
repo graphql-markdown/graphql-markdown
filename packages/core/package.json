@@ -65,7 +65,7 @@
     "pack": "bun pm pack"
   },
   "dependencies": {
-    "@fastify/deepmerge": "^3.1.0",
+    "@fastify/deepmerge": "^3.2.0",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
