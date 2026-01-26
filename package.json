@@ -177,7 +177,7 @@
     "eslint-plugin-mdx": "3.6.2",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-tsdoc": "0.5.0",
-    "globals": "^17.0.0",
+    "globals": "^17.1.0",
     "graphql": "16.12.0",
     "graphql-config": "5.1.5",
     "husky": "9.1.7",
