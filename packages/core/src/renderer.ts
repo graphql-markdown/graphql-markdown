@@ -654,10 +654,10 @@ export class Renderer extends Hookable {
     if (
       this.mdxModule &&
       typeof this.mdxModule === "object" &&
-      "ext" in this.mdxModule &&
-      typeof this.mdxModule.ext === "string"
+      "extension" in this.mdxModule &&
+      typeof this.mdxModule.extension === "string"
     ) {
-      extension = this.mdxModule.ext;
+      extension = this.mdxModule.extension;
     } else if (this.mdxModule) {
       extension = "mdx";
     }
