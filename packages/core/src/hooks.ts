@@ -12,7 +12,7 @@ export abstract class Hookable {
     arr.push(callback);
 
     return {
-      unsubscribe: () => {
+      unsubscribe: (): void => {
         const index = arr.indexOf(callback);
         if (index === -1) {
           return;
