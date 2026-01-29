@@ -445,7 +445,7 @@ export class Renderer extends Hookable {
           hookName,
           (this.mdxModule as MDXSupportType)[hookName] as Callback,
         );
-        subscribedHooks.add(hookName);
+        subscribedHooks.add(`${this.constructor.name}.${hookName}`);
       }
     }
     if (subscribedHooks.size === 0) {
