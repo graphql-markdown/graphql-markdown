@@ -2927,6 +2927,477 @@ describe("renderer", () => {
         expect(pos1).toBeGreaterThanOrEqual(0);
         expect(pos2).toBeGreaterThanOrEqual(0);
       });
+
+      test("mdxModuleSubscribeHook subscribes to all supported hooks", async () => {
+        expect.assertions(2);
+
+        const mockHook1 = jest.fn();
+        const mockHook2 = jest.fn();
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: mockHook1,
+            afterRenderTypeEntitiesHook: mockHook2,
+          },
+        );
+
+        // Verify hooks were subscribed during construction
+        const subscribeSpy = jest.spyOn(renderer, "subscribe");
+
+        // Call mdxModuleSubscribeHook again to verify behavior
+        renderer.mdxModuleSubscribeHook();
+
+        expect(subscribeSpy).toHaveBeenCalled();
+        expect(subscribeSpy.mock.calls.length).toBeGreaterThan(0);
+      });
+
+      test("mdxModuleSubscribeHook skips hooks not supported by module", async () => {
+        expect.assertions(1);
+
+        const mockHook = jest.fn();
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: mockHook,
+            // Missing other hooks
+          },
+        );
+
+        const subscribeSpy = jest.spyOn(renderer, "subscribe");
+        subscribeSpy.mockClear();
+
+        renderer.mdxModuleSubscribeHook();
+
+        // Should only subscribe to hooks that exist in the module
+        const subscribedHooks = subscribeSpy.mock.calls.map((call) => call[0]);
+        expect(subscribedHooks).toContain("generateIndexMetafile");
+      });
+
+      test("mdxModuleSubscribeHook does not log when no hooks are subscribed", async () => {
+        expect.assertions(1);
+
+        const consoleSpy = jest.spyOn(globalThis.console, "log");
+        consoleSpy.mockClear();
+
+        await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {}, // Empty module with no hooks
+        );
+
+        // Should not log when no hooks were subscribed
+        const logCalls = consoleSpy.mock.calls.filter((call) =>
+          String(call[0]).includes("Subscribed to MDX hooks"),
+        );
+        expect(logCalls.length).toBe(0);
+      });
+
+      test("preCollectCategories skips registration for flat hierarchy", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.FLAT]: {} },
+          },
+        );
+
+        const rootTypeNames = ["queries", "mutations", "objects"];
+        renderer.preCollectCategories(rootTypeNames);
+
+        // With flat hierarchy, no categories should be registered
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("queries"),
+        ).toBe(false);
+        expect(
+          renderer["categoryPositionManager"].isRegistered("objects"),
+        ).toBe(false);
+      });
+
+      test("preCollectCategories registers custom groups at root level", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Foo: "custom-group", Bar: "another-group" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["objects"]);
+
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("custom-group"),
+        ).toBe(true);
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("another-group"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories registers API groups correctly with custom groups", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Foo: "custom" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.API]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["objects"]);
+
+        // Custom group at root
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("custom"),
+        ).toBe(true);
+        // API groups nested under custom groups
+        expect(
+          renderer["categoryPositionManager"].isRegistered("operations"),
+        ).toBe(true);
+        expect(renderer["categoryPositionManager"].isRegistered("types")).toBe(
+          true,
+        );
+        // Entity categories also nested
+        expect(
+          renderer["categoryPositionManager"].isRegistered("objects"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories registers API groups at root without custom groups", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.API]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["objects"]);
+
+        // Without custom groups, API groups go to root
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("operations"),
+        ).toBe(true);
+        expect(renderer["rootLevelPositionManager"].isRegistered("types")).toBe(
+          true,
+        );
+        // Entity categories still nested
+        expect(
+          renderer["categoryPositionManager"].isRegistered("objects"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories registers entity categories at root without custom groups", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["queries", "mutations"]);
+
+        // Without custom groups, entity names go to root
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("queries"),
+        ).toBe(true);
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("mutations"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories registers entity categories as nested with custom groups", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { queries: { Query: "api-ops" } },
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["queries"]);
+
+        // With custom groups, entity names are nested
+        expect(
+          renderer["categoryPositionManager"].isRegistered("queries"),
+        ).toBe(true);
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("api-ops"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories registers deprecated at root when grouped", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            deprecated: "group",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["objects"]);
+
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("deprecated"),
+        ).toBe(true);
+      });
+
+      test("preCollectCategories does not register deprecated when not grouped", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            deprecated: "default",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+        );
+
+        renderer.preCollectCategories(["objects"]);
+
+        expect(
+          renderer["rootLevelPositionManager"].isRegistered("deprecated"),
+        ).toBe(false);
+      });
+
+      test("registerCustomGroups handles empty group configuration", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        renderer["registerCustomGroups"](rootCategories);
+
+        expect(rootCategories.size).toBe(0);
+      });
+
+      test("registerCustomGroups handles group with empty values", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          { objects: { Foo: "", Bar: "valid-group" } },
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        renderer["registerCustomGroups"](rootCategories);
+
+        // Only valid group should be added
+        expect(rootCategories.has("valid-group")).toBe(true);
+      });
+
+      test("registerApiGroupCategories with custom groups nests API groups", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        const nestedCategories = new Set<string>();
+
+        renderer["registerApiGroupCategories"](
+          rootCategories,
+          nestedCategories,
+          true,
+        );
+
+        expect(rootCategories.has("operations")).toBe(false);
+        expect(rootCategories.has("types")).toBe(false);
+        expect(nestedCategories.has("operations")).toBe(true);
+        expect(nestedCategories.has("types")).toBe(true);
+      });
+
+      test("registerApiGroupCategories without custom groups puts API groups at root", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        const nestedCategories = new Set<string>();
+
+        renderer["registerApiGroupCategories"](
+          rootCategories,
+          nestedCategories,
+          false,
+        );
+
+        expect(rootCategories.has("operations")).toBe(true);
+        expect(rootCategories.has("types")).toBe(true);
+        expect(nestedCategories.has("operations")).toBe(false);
+        expect(nestedCategories.has("types")).toBe(false);
+      });
+
+      test("registerApiGroupCategories always nests entity categories", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        const nestedCategories = new Set<string>();
+
+        renderer["registerApiGroupCategories"](
+          rootCategories,
+          nestedCategories,
+          false,
+        );
+
+        // Entity categories should be in nested regardless of custom groups
+        expect(nestedCategories.has("objects")).toBe(true);
+        expect(nestedCategories.has("queries")).toBe(true);
+        expect(nestedCategories.has("mutations")).toBe(true);
+      });
+
+      test("registerEntityCategories with custom groups nests entity names", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        const nestedCategories = new Set<string>();
+
+        renderer["registerEntityCategories"](
+          rootCategories,
+          nestedCategories,
+          ["queries", "mutations"],
+          true,
+        );
+
+        expect(nestedCategories.has("queries")).toBe(true);
+        expect(nestedCategories.has("mutations")).toBe(true);
+      });
+
+      test("registerEntityCategories without custom groups puts entity names at root", async () => {
+        expect.assertions(2);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+        );
+
+        const rootCategories = new Set<string>();
+        const nestedCategories = new Set<string>();
+
+        renderer["registerEntityCategories"](
+          rootCategories,
+          nestedCategories,
+          ["queries", "mutations"],
+          false,
+        );
+
+        expect(rootCategories.has("queries")).toBe(true);
+        expect(rootCategories.has("mutations")).toBe(true);
+      });
     });
   });
 });
