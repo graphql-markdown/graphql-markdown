@@ -422,6 +422,20 @@ export class Renderer extends Hookable {
     );
   }
 
+  /**
+   * Subscribes to MDX module hooks that are supported by the current MDX module.
+   * 
+   * Iterates through all available renderer hooks and registers callbacks for those
+   * that are supported by the MDX module. Logs the list of successfully subscribed
+   * hooks at debug level if any subscriptions were made.
+   * 
+   * @remarks
+   * This method checks each hook in `RendererHooks` against the MDX module's capabilities
+   * using `hasMDXHookSupport()` before subscribing. Only hooks that are both defined in
+   * `RendererHooks` and supported by the MDX module will be subscribed to.
+   * 
+   * @returns void
+   */
   mdxModuleSubscribeHook(): void {
     const hookNames: readonly (keyof MDXSupportType)[] = RendererHooks;
     const subscribedHooks = new Set<string>();
