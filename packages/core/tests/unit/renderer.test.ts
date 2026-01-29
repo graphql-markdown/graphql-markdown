@@ -1036,7 +1036,7 @@ describe("renderer", () => {
       });
     });
 
-    describe("hasMDXIndexFileSupport()", () => {
+    describe("hasMDXHookSupport()", () => {
       test.each([
         [null],
         [{}],
@@ -1045,9 +1045,12 @@ describe("renderer", () => {
       ])("returns false for invalid mdx module %s", (invalidModule) => {
         expect.assertions(1);
 
-        expect(rendererInstance.hasMDXIndexFileSupport(invalidModule)).toBe(
-          false,
-        );
+        expect(
+          rendererInstance.hasMDXHookSupport(
+            "generateIndexMetafile",
+            invalidModule,
+          ),
+        ).toBe(false);
       });
 
       test("returns true for valid mdx module", () => {
@@ -1058,13 +1061,23 @@ describe("renderer", () => {
           generateIndexMetafile: () => {},
         };
 
-        expect(rendererInstance.hasMDXIndexFileSupport(validModule)).toBe(true);
+        expect(
+          rendererInstance.hasMDXHookSupport(
+            "generateIndexMetafile",
+            validModule,
+          ),
+        ).toBe(true);
       });
 
       test("returns true for no mdx module (use default module)", () => {
         expect.assertions(1);
 
-        expect(rendererInstance.hasMDXIndexFileSupport(undefined)).toBe(true);
+        expect(
+          rendererInstance.hasMDXHookSupport(
+            "generateIndexMetafile",
+            undefined,
+          ),
+        ).toBe(true);
       });
 
       test.each([
@@ -1082,9 +1095,9 @@ describe("renderer", () => {
         ({ module, expected }) => {
           expect.assertions(1);
 
-          expect(rendererInstance.hasMDXIndexFileSupport(module)).toBe(
-            expected,
-          );
+          expect(
+            rendererInstance.hasMDXHookSupport("generateIndexMetafile", module),
+          ).toBe(expected);
         },
       );
     });

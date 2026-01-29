@@ -67,6 +67,10 @@ export interface MDXSupportType {
     formatted: Maybe<string[]>,
   ) => MDXString;
   mdxDeclaration: string;
+  afterRenderTypeEntitiesHook: (
+    name: string,
+    filePath: string,
+  ) => Promise<void> | void;
 }
 
 /**
