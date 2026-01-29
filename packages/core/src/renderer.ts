@@ -424,16 +424,16 @@ export class Renderer extends Hookable {
 
   /**
    * Subscribes to MDX module hooks that are supported by the current MDX module.
-   * 
+   *
    * Iterates through all available renderer hooks and registers callbacks for those
    * that are supported by the MDX module. Logs the list of successfully subscribed
    * hooks at debug level if any subscriptions were made.
-   * 
+   *
    * @remarks
    * This method checks each hook in `RendererHooks` against the MDX module's capabilities
    * using `hasMDXHookSupport()` before subscribing. Only hooks that are both defined in
    * `RendererHooks` and supported by the MDX module will be subscribed to.
-   * 
+   *
    * @returns void
    */
   mdxModuleSubscribeHook(): void {
@@ -649,7 +649,19 @@ export class Renderer extends Hookable {
       /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
-    const extension = this.mdxModule ? "mdx" : "md";
+    // allow mdxModule to specify custom extension
+    let extension = "md";
+    if (
+      this.mdxModule &&
+      typeof this.mdxModule === "object" &&
+      "ext" in this.mdxModule &&
+      typeof this.mdxModule.ext === "string"
+    ) {
+      extension = this.mdxModule.ext;
+    } else if (this.mdxModule) {
+      extension = "mdx";
+    }
+
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.${extension}`);
 
