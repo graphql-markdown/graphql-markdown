@@ -18,7 +18,7 @@ The configuration follows this precedence (highest to lowest):
 
 ### DeprecatedOption
 
-Defined in: [config.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L98)
+Defined in: [config.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L101)
 
 Options for handling deprecated items in the schema.
 
@@ -40,7 +40,7 @@ const deprecatedHandling = DeprecatedOption.GROUP;
 DEFAULT: "default";
 ```
 
-Defined in: [config.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L99)
+Defined in: [config.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L102)
 
 ##### GROUP
 
@@ -48,7 +48,7 @@ Defined in: [config.ts:99](https://github.com/graphql-markdown/graphql-markdown/
 GROUP: "group";
 ```
 
-Defined in: [config.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L100)
+Defined in: [config.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L103)
 
 ##### SKIP
 
@@ -56,13 +56,13 @@ Defined in: [config.ts:100](https://github.com/graphql-markdown/graphql-markdown
 SKIP: "skip";
 ```
 
-Defined in: [config.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L101)
+Defined in: [config.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L104)
 
 ***
 
 ### DiffMethod
 
-Defined in: [config.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L80)
+Defined in: [config.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L83)
 
 Diff methods used to determine how schema changes are processed.
 
@@ -83,7 +83,7 @@ const diffMethod = DiffMethod.FORCE;
 FORCE: "FORCE";
 ```
 
-Defined in: [config.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L82)
+Defined in: [config.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L85)
 
 ##### NONE
 
@@ -91,13 +91,13 @@ Defined in: [config.ts:82](https://github.com/graphql-markdown/graphql-markdown/
 NONE: "NONE";
 ```
 
-Defined in: [config.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L81)
+Defined in: [config.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L84)
 
 ***
 
 ### TypeHierarchy
 
-Defined in: [config.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L62)
+Defined in: [config.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L65)
 
 Type hierarchy options for organizing schema documentation.
 
@@ -119,7 +119,7 @@ const hierarchy = TypeHierarchy.API;
 API: "api";
 ```
 
-Defined in: [config.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L63)
+Defined in: [config.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L66)
 
 ##### ENTITY
 
@@ -127,7 +127,7 @@ Defined in: [config.ts:63](https://github.com/graphql-markdown/graphql-markdown/
 ENTITY: "entity";
 ```
 
-Defined in: [config.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L64)
+Defined in: [config.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L67)
 
 ##### FLAT
 
@@ -135,7 +135,7 @@ Defined in: [config.ts:64](https://github.com/graphql-markdown/graphql-markdown/
 FLAT: "flat";
 ```
 
-Defined in: [config.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L65)
+Defined in: [config.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L68)
 
 ## Variables
 
@@ -145,7 +145,7 @@ Defined in: [config.ts:65](https://github.com/graphql-markdown/graphql-markdown/
 const ASSET_HOMEPAGE_LOCATION: string;
 ```
 
-Defined in: [config.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L119)
+Defined in: [config.ts:122](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L122)
 
 Location of the default homepage template.
 
@@ -157,7 +157,7 @@ Location of the default homepage template.
 const DEFAULT_HIERARCHY: object;
 ```
 
-Defined in: [config.ts:130](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L130)
+Defined in: [config.ts:133](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L133)
 
 Default hierarchy configuration using the API hierarchy type.
 
@@ -182,7 +182,7 @@ const DEFAULT_OPTIONS: Readonly<Pick<ConfigOptions, "customDirective" | "groupBy
   | "printTypeOptions">>> & object;
 ```
 
-Defined in: [config.ts:139](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L139)
+Defined in: [config.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L142)
 
 Default configuration options used when no user options are provided.
 These values serve as fallbacks for any missing configuration.
@@ -215,7 +215,7 @@ Options for the complete configuration interface
 const DOCS_URL: "https://graphql-markdown.dev/docs";
 ```
 
-Defined in: [config.ts:108](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L108)
+Defined in: [config.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L111)
 
 Documentation website URL for reference in error messages and help text.
 
@@ -227,7 +227,7 @@ Documentation website URL for reference in error messages and help text.
 const PACKAGE_NAME: "@graphql-markdown/docusaurus";
 ```
 
-Defined in: [config.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L114)
+Defined in: [config.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L117)
 
 Default package name used for temporary directory creation and identification.
 
@@ -242,14 +242,7 @@ function buildConfig(
 id?): Promise<Options>;
 ```
 
-Defined in: [config.ts:767](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L767)
-
-Builds the complete configuration object by merging options from multiple sources
-in order of precedence:
-1. CLI options (highest priority)
-2. Configuration file options
-3. GraphQL Config options
-4. Default options (lowest priority)
+Defined in: [config.ts:777](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L777)
 
 #### Parameters
 
@@ -257,51 +250,17 @@ in order of precedence:
 
 `Maybe`\<`ConfigOptions`\>
 
-Options from the configuration file
-
 ##### cliOpts?
 
 `Maybe`\<`CliOptions`\>
-
-Options from the command line interface
 
 ##### id?
 
 `Maybe`\<`string`\> = `"default"`
 
-The configuration ID used when referencing multiple schemas
-
 #### Returns
 
 `Promise`\<`Options`\>
-
-A promise resolving to the final merged configuration object
-
-#### Example
-
-```typescript
-// Basic usage with minimal options
-const config = await buildConfig(
-  { baseURL: "api" }, // Config file options
-  { pretty: true }    // CLI options
-);
-
-// With specific config ID
-const config = await buildConfig(
-  { schema: "./schemas/users.graphql" },
-  { force: true },
-  "users"
-);
-
-// The resulting config will contain all required options
-// with values from CLI taking precedence over config file,
-// and defaults filling in any missing values
-```
-
-#### See
-
- - Options for the complete configuration interface
- - [DEFAULT\_OPTIONS](#default_options) for default values
 
 ***
 
@@ -311,7 +270,7 @@ const config = await buildConfig(
 function getCustomDirectives(customDirectiveOptions, skipDocDirective?): Maybe<CustomDirective>;
 ```
 
-Defined in: [config.ts:389](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L389)
+Defined in: [config.ts:390](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L390)
 
 Processes custom directives, filtering out any that should be skipped.
 Validates that each custom directive has the correct format with required functions.
@@ -371,13 +330,10 @@ getCustomDirectives({ example: { invalid: true } }, []);
 ### getDiffMethod()
 
 ```ts
-function getDiffMethod(diff, force): TypeDiffMethod;
+function getDiffMethod(diff): TypeDiffMethod;
 ```
 
-Defined in: [config.ts:441](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L441)
-
-Determines the diff method to use based on the configuration and force flag.
-If force is true, always returns FORCE regardless of the configured diff method.
+Defined in: [config.ts:451](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L451)
 
 #### Parameters
 
@@ -385,35 +341,9 @@ If force is true, always returns FORCE regardless of the configured diff method.
 
 `TypeDiffMethod`
 
-The configured diff method
-
-##### force
-
-`boolean` = `false`
-
-Whether to force regeneration (overrides diff setting)
-
 #### Returns
 
 `TypeDiffMethod`
-
-The resolved diff method to use
-
-#### Example
-
-```typescript
-// Normal usage - respects the configured diff method
-const method1 = getDiffMethod(DiffMethod.NONE, false);
-console.log(method1); // "NONE"
-
-// Force flag overrides the diff method
-const method2 = getDiffMethod(DiffMethod.NONE, true);
-console.log(method2); // "FORCE"
-```
-
-#### See
-
-[DiffMethod](#diffmethod) for available diff methods
 
 ***
 
@@ -423,7 +353,7 @@ console.log(method2); // "FORCE"
 function getDocDirective(name): DirectiveName;
 ```
 
-Defined in: [config.ts:212](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L212)
+Defined in: [config.ts:215](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L215)
 
 Retrieves a directive name from a string by parsing and validating the format.
 Directive names should be prefixed with '@' (e.g., '@example').
@@ -464,7 +394,7 @@ getDocDirective("example"); // Error: Invalid "example"
 function getDocOptions(cliOpts?, configOptions?): Required<ConfigDocOptions>;
 ```
 
-Defined in: [config.ts:485](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L485)
+Defined in: [config.ts:490](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L490)
 
 Builds the document options by merging CLI options, config file options, and defaults.
 Handles index generation flag and front matter configuration.
@@ -505,13 +435,68 @@ console.log(docOptions);
 
 ***
 
+### getForcedDiffMethod()
+
+```ts
+function getForcedDiffMethod(): TypeDiffMethod;
+```
+
+Defined in: [config.ts:441](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L441)
+
+Determines the diff method to use based on the configuration and force flag.
+If force is true, always returns FORCE regardless of the configured diff method.
+
+#### Returns
+
+`TypeDiffMethod`
+
+The normalized diff method to use
+
+#### Example
+
+```typescript
+// Normal usage - respects the configured diff method
+const method1 = getDiffMethod(DiffMethod.NONE);
+console.log(method1); // "NONE"
+
+// Use getForcedDiffMethod when force flag is needed
+const method2 = getForcedDiffMethod();
+console.log(method2); // "FORCE"
+```
+
+#### See
+
+[DiffMethod](#diffmethod) for available diff methods
+
+***
+
+### getNormalizedDiffMethod()
+
+```ts
+function getNormalizedDiffMethod(diff): TypeDiffMethod;
+```
+
+Defined in: [config.ts:445](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L445)
+
+#### Parameters
+
+##### diff
+
+`TypeDiffMethod`
+
+#### Returns
+
+`TypeDiffMethod`
+
+***
+
 ### getOnlyDocDirectives()
 
 ```ts
 function getOnlyDocDirectives(cliOpts, configFileOpts): DirectiveName[];
 ```
 
-Defined in: [config.ts:245](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L245)
+Defined in: [config.ts:246](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L246)
 
 Retrieves the list of "only" directives from CLI and config options.
 These directives specify which schema elements should be included in the documentation.
@@ -558,7 +543,7 @@ console.log(onlyDirectives); // ["example", "internal", "auth"]
 function getPrintTypeOptions(cliOpts, configOptions): Required<ConfigPrintTypeOptions>;
 ```
 
-Defined in: [config.ts:622](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L622)
+Defined in: [config.ts:626](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L626)
 
 Builds the print type options by merging CLI options, config file options, and defaults.
 Handles various formatting options for type documentation.
@@ -618,7 +603,7 @@ console.log(printOptions);
 function getSkipDocDirectives(cliOpts, configFileOpts): DirectiveName[];
 ```
 
-Defined in: [config.ts:280](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L280)
+Defined in: [config.ts:281](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L281)
 
 Retrieves the list of "skip" directives from CLI and config options.
 These directives specify which schema elements should be excluded from the documentation.
@@ -667,7 +652,7 @@ console.log(skipDirectives); // ["internal", "auth", "deprecated"]
 function getTypeHierarchyOption(cliOption?, configOption?): Maybe<Partial<Record<TypeHierarchyValueType, TypeHierarchyTypeOptions>>>;
 ```
 
-Defined in: [config.ts:533](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L533)
+Defined in: [config.ts:537](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L537)
 
 Resolves the type hierarchy configuration by merging CLI and config file options.
 Validates that CLI and config don't specify conflicting hierarchy types.
@@ -724,7 +709,7 @@ getTypeHierarchyOption("api", { entity: {} });
 function getVisibilityDirectives(cliOpts, configFileOpts): object;
 ```
 
-Defined in: [config.ts:334](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L334)
+Defined in: [config.ts:335](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L335)
 
 Combines and validates visibility directives (only and skip) from both CLI and config sources.
 Ensures that no directive appears in both "only" and "skip" lists simultaneously.
@@ -797,7 +782,7 @@ getVisibilityDirectives(
 function parseDeprecatedDocOptions(_cliOpts, _configOptions): Record<string, never>;
 ```
 
-Defined in: [config.ts:458](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L458)
+Defined in: [config.ts:463](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L463)
 
 Placeholder function for handling deprecated document options.
 Currently returns an empty object as these options are deprecated.
@@ -830,7 +815,7 @@ An empty object
 function parseDeprecatedPrintTypeOptions(_cliOpts, _configOptions): Record<string, never>;
 ```
 
-Defined in: [config.ts:585](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L585)
+Defined in: [config.ts:589](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L589)
 
 Placeholder function for handling deprecated print type options.
 Currently returns an empty object as these options are deprecated.
@@ -863,7 +848,7 @@ An empty object
 function parseGroupByOption(groupOptions): Maybe<GroupByDirectiveOptions>;
 ```
 
-Defined in: [config.ts:685](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L685)
+Defined in: [config.ts:689](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L689)
 
 Parses and validates the groupByDirective option string format.
 The format should be @directive(field|=fallback) where:
@@ -915,7 +900,7 @@ parseGroupByOption("invalid-format");
 function parseHomepageOption(cliHomepage, configHomepage): Maybe<string>;
 ```
 
-Defined in: [config.ts:714](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L714)
+Defined in: [config.ts:709](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L709)
 
 #### Parameters
 

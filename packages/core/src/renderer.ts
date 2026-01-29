@@ -31,6 +31,22 @@ import {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
 import { isGroupsObject, isPath } from "./directives/validation";
+import type { Callback } from "./hooks";
+import { Hookable } from "./hooks";
+
+/**
+ * Array of hook names available in the renderer lifecycle.
+ *
+ * @remarks
+ * These hooks allow customization at different stages of the rendering process:
+ * - `generateIndexMetafile`: Hook called during index metadata file generation
+ * - `afterRenderTypeEntitiesHook`: Hook called after rendering type entities
+ *
+ */
+export const RendererHooks = [
+  "generateIndexMetafile",
+  "afterRenderTypeEntitiesHook",
+] as const;
 
 /**
  * Constant representing the string literal for deprecated entities.
@@ -326,14 +342,14 @@ class CategoryPositionManager {
  * Each level has its own CategoryPositionManager that restarts numbering at 1.
  * @example
  */
-export class Renderer {
+export class Renderer extends Hookable {
   group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
   baseURL: string;
   prettify: boolean;
   options: Maybe<RendererDocOptions>;
   mdxModule: unknown;
-  mdxModuleIndexFileSupport: boolean;
+  // mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
   private readonly rootLevelPositionManager: CategoryPositionManager;
@@ -360,6 +376,8 @@ export class Renderer {
     docOptions: Maybe<RendererDocOptions>,
     mdxModule?: unknown,
   ) {
+    super();
+
     this.printer = printer;
 
     this.group = group;
@@ -368,7 +386,8 @@ export class Renderer {
     this.prettify = prettify;
     this.options = docOptions;
     this.mdxModule = mdxModule;
-    this.mdxModuleIndexFileSupport = this.hasMDXIndexFileSupport(mdxModule);
+
+    this.mdxModuleSubscribeHook();
 
     // Initialize position managers for different hierarchy levels
     // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
@@ -391,15 +410,50 @@ export class Renderer {
    * @returns True if the module supports index metafile generation
    * @example
    */
-  hasMDXIndexFileSupport(
+  hasMDXHookSupport(
+    hookName: keyof MDXSupportType,
     module: unknown = this.mdxModule,
-  ): module is Partial<MDXSupportType> &
-    Pick<MDXSupportType, "generateIndexMetafile"> {
+  ): module is Partial<MDXSupportType> & Pick<MDXSupportType, typeof hookName> {
     return !!(
       module &&
       typeof module === "object" &&
-      "generateIndexMetafile" in module &&
-      typeof module.generateIndexMetafile === "function"
+      hookName in module &&
+      typeof (module as Record<string, unknown>)[hookName] === "function"
+    );
+  }
+
+  /**
+   * Subscribes to MDX module hooks that are supported by the current MDX module.
+   *
+   * Iterates through all available renderer hooks and registers callbacks for those
+   * that are supported by the MDX module. Logs the list of successfully subscribed
+   * hooks at debug level if any subscriptions were made.
+   *
+   * @remarks
+   * This method checks each hook in `RendererHooks` against the MDX module's capabilities
+   * using `hasMDXHookSupport()` before subscribing. Only hooks that are both defined in
+   * `RendererHooks` and supported by the MDX module will be subscribed to.
+   *
+   * @returns void
+   */
+  mdxModuleSubscribeHook(): void {
+    const hookNames: readonly (keyof MDXSupportType)[] = RendererHooks;
+    const subscribedHooks = new Set<string>();
+    for (const hookName of hookNames) {
+      if (this.hasMDXHookSupport(hookName)) {
+        this.subscribe(
+          hookName,
+          (this.mdxModule as MDXSupportType)[hookName] as Callback,
+        );
+        subscribedHooks.add(`${this.constructor.name}.${hookName}`);
+      }
+    }
+    if (subscribedHooks.size === 0) {
+      return;
+    }
+    log(
+      `Subscribed to MDX hooks: ${[...subscribedHooks].join(", ")}`,
+      LogLevel.debug,
     );
   }
 
@@ -430,22 +484,19 @@ export class Renderer {
     };
     const finalOptions = options ?? defaultOptions;
 
-    if (this.mdxModuleIndexFileSupport) {
-      // If no explicit position is provided, use the position manager
-      const sidebarPosition =
-        finalOptions.sidebarPosition ??
-        this.categoryPositionManager.getPosition(category);
+    const sidebarPosition =
+      finalOptions.sidebarPosition ??
+      this.categoryPositionManager.getPosition(category);
 
-      await (this.mdxModule as MDXSupportType).generateIndexMetafile(
-        dirPath,
-        category,
-        {
-          ...finalOptions,
-          sidebarPosition,
-          index: this.options?.index,
-        },
-      );
-    }
+    this.emit("generateIndexMetafile", [
+      dirPath,
+      category,
+      {
+        ...finalOptions,
+        sidebarPosition,
+        index: this.options?.index,
+      },
+    ]);
   }
 
   /**
@@ -598,7 +649,19 @@ export class Renderer {
       /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
-    const extension = this.mdxModule ? "mdx" : "md";
+    // allow mdxModule to specify custom extension
+    let extension = "md";
+    if (
+      this.mdxModule &&
+      typeof this.mdxModule === "object" &&
+      "extension" in this.mdxModule &&
+      typeof this.mdxModule.extension === "string"
+    ) {
+      extension = this.mdxModule.extension;
+    } else if (this.mdxModule) {
+      extension = "mdx";
+    }
+
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.${extension}`);
 
@@ -659,6 +722,8 @@ export class Renderer {
       ? page.groups.pageId
       : pathUrl.join(extractedCategory, page.groups.pageId);
     const category = isFlat ? "schema" : startCase(extractedCategory);
+
+    this.emit("afterRenderTypeEntitiesHook", [name, filePath]);
 
     return {
       category,
