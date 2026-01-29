@@ -52,6 +52,22 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+jest.mock("@graphql-markdown/logger", (): unknown => {
+  return {
+    __esModule: true,
+    ...jest.requireActual("@graphql-markdown/logger"),
+    log: jest.fn(),
+    LogLevel: {
+      debug: "debug",
+      warn: "warn",
+      info: "info",
+      error: "error",
+    },
+  };
+});
+import { log } from "@graphql-markdown/logger";
+
 import type { Renderer } from "../../src/renderer";
 import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
 import {
@@ -209,7 +225,8 @@ describe("renderer", () => {
           throw new Error("Test error");
         });
 
-        const spy = jest.spyOn(globalThis.console, "warn");
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -218,8 +235,9 @@ describe("renderer", () => {
         );
 
         expect(meta).toBeUndefined();
-        expect(spy).toHaveBeenCalledWith(
+        expect(logSpy).toHaveBeenCalledWith(
           `An error occurred while processing "TestType"`,
+          "warn",
         );
       });
 
@@ -230,7 +248,8 @@ describe("renderer", () => {
           .spyOn(Printer, "printType")
           .mockReturnValue("Lorem ipsum" as MDXString);
         jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
-        const spy = jest.spyOn(globalThis.console, "warn");
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -239,8 +258,9 @@ describe("renderer", () => {
         );
 
         expect(meta).toBeUndefined();
-        expect(spy).toHaveBeenCalledWith(
+        expect(logSpy).toHaveBeenCalledWith(
           `An error occurred while processing file test/foo-bar.mdx for type "TestType"`,
+          "warn",
         );
       });
 
@@ -401,13 +421,15 @@ describe("renderer", () => {
         const readFileSpy = jest
           .spyOn(Utils, "readFile")
           .mockRejectedValueOnce(new Error("File not found"));
-        const consoleSpy = jest.spyOn(globalThis.console, "warn");
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
 
         await rendererInstance.renderHomepage("/assets/nonexistent.md");
 
         expect(readFileSpy).toHaveBeenCalledWith("/output/nonexistent.md");
-        expect(consoleSpy).toHaveBeenCalledWith(
+        expect(logSpy).toHaveBeenCalledWith(
           "An error occurred while processing the homepage /assets/nonexistent.md: Error: File not found",
+          "warn",
         );
       });
 
@@ -474,7 +496,8 @@ describe("renderer", () => {
         const saveFileSpy = jest
           .spyOn(Utils, "saveFile")
           .mockRejectedValueOnce(new Error("Write error"));
-        const consoleSpy = jest.spyOn(globalThis.console, "warn");
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
 
         await rendererInstance.renderHomepage("/assets/error-saving.md");
 
@@ -483,8 +506,9 @@ describe("renderer", () => {
           "Test content",
           undefined,
         );
-        expect(consoleSpy).toHaveBeenCalledWith(
+        expect(logSpy).toHaveBeenCalledWith(
           "An error occurred while processing the homepage /assets/error-saving.md: Error: Write error",
+          "warn",
         );
       });
 
@@ -2985,11 +3009,38 @@ describe("renderer", () => {
         expect(subscribedHooks).toContain("generateIndexMetafile");
       });
 
+      test("mdxModuleSubscribeHook logs subscribed hooks when any exist", async () => {
+        expect.assertions(2);
+
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          DEFAULT_RENDERER_OPTIONS,
+          {
+            generateIndexMetafile: jest.fn(),
+          },
+        );
+
+        // Clear previous logs and call again
+        logSpy.mockClear();
+        renderer.mdxModuleSubscribeHook();
+
+        // Verify logging occurred
+        expect(logSpy).toHaveBeenCalled();
+        expect(logSpy.mock.calls[0][0]).toContain("Subscribed to MDX hooks");
+      });
+
       test("mdxModuleSubscribeHook does not log when no hooks are subscribed", async () => {
         expect.assertions(1);
 
-        const consoleSpy = jest.spyOn(globalThis.console, "log");
-        consoleSpy.mockClear();
+        const logSpy = jest.mocked(log);
+        logSpy.mockClear();
 
         await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -3002,10 +3053,7 @@ describe("renderer", () => {
         );
 
         // Should not log when no hooks were subscribed
-        const logCalls = consoleSpy.mock.calls.filter((call) =>
-          String(call[0]).includes("Subscribed to MDX hooks"),
-        );
-        expect(logCalls.length).toBe(0);
+        expect(logSpy).not.toHaveBeenCalled();
       });
 
       test("preCollectCategories skips registration for flat hierarchy", async () => {
