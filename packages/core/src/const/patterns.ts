@@ -96,12 +96,15 @@ export const PATTERNS = {
    * Matches numeric prefix for sorted categories (e.g., "01-query" → "query").
    * Used to extract category names from numbered folder names.
    *
-   * @pattern `^\d{2}-`
+   * Pattern: `^\d{2}-`
+   *
    * @example
+   * ```typescript
    * - "01-query" matches → remove "01-" → "query"
    * - "02-mutations" matches → remove "02-" → "mutations"
    * - "query" does not match
    * - "1-query" does not match (only 1 digit)
+   * ```
    */
   NUMERIC_PREFIX: /^\d{2}-/, // NOSONAR: S5843
 } as const;
