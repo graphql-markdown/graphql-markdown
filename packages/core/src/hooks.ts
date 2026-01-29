@@ -12,8 +12,15 @@ export abstract class Hookable {
     arr.push(callback);
 
     return {
-      unsubscribe: (): Callback[] => {
-        return arr.splice(arr.indexOf(callback), 1);
+      unsubscribe: () => {
+        const index = arr.indexOf(callback);
+        if (index === -1) {
+          return;
+        }
+        arr.splice(index, 1);
+        if (arr.length === 0) {
+          this.map.delete(hookName);
+        }
       },
     };
   }
