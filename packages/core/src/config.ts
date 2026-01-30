@@ -363,7 +363,7 @@ export const getVisibilityDirectives = (
  *
  * @param customDirectiveOptions - The custom directive configuration object
  * @param skipDocDirective - Array of directive names that should be skipped
- * @returns The filtered custom directives object, or undefined if empty/invalid
+ * @returns The filtered custom directives object, or `undefined` if empty/invalid
  * @throws Error if a custom directive has an invalid format
  * @example
  * ```typescript
@@ -661,7 +661,7 @@ export const getPrintTypeOptions = (
  * - fallback: (Optional) Fallback group name for items without the directive
  *
  * @param groupOptions - The group directive option as a string
- * @returns A parsed GroupByDirectiveOptions object or undefined if invalid
+ * @returns A parsed `GroupByDirectiveOptions` object or `undefined` if invalid
  * @throws Error if the groupByDirective format is invalid
  * @example
  * ```typescript

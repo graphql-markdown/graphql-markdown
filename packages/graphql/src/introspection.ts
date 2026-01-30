@@ -59,7 +59,7 @@ export class IntrospectionError extends Error {}
  * @param schema - a GraphQL schema.
  * @param type - a GraphQL type, eg `GraphQLObjectType`.
  *
- * @returns a map of GraphQL named types for the matching GraphQL type, or undefined if no match.
+ * @returns a map of GraphQL named types for the matching GraphQL type, or `undefined` if no match.
  *
  */
 export const getTypeFromSchema = <T>(

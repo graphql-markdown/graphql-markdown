@@ -19,7 +19,7 @@ import type { LoggerType } from "@graphql-markdown/types";
  * @param content - the string to be prettified.
  * @param parser - the `prettier` parser to use.
  *
- * @returns a prettified string, or undefined if an error occurred.
+ * @returns a prettified string, or `undefined` if an error occurred.
  *
  */
 export const prettify = async (
@@ -61,7 +61,7 @@ export const prettify = async (
  *
  * @param content - the string to be prettified.
  *
- * @returns a prettified string, or undefined if an error occurred.
+ * @returns a prettified string, or `undefined` if an error occurred.
  *
  */
 export const prettifyMarkdown = async (

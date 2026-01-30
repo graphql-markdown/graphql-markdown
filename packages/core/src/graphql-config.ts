@@ -121,7 +121,7 @@ export const setLoaderOptions = (
  * @param id - The project ID to load configuration for.
  * @param options - Optional package options to apply.
  * @param throwOptions - Options for controlling throw behavior.
- * @returns The extension project configuration if found, otherwise undefined.
+ * @returns The extension project configuration if found, otherwise `undefined`.
  *
  * @throws Will throw an error if throwOnMissing or throwOnEmpty is true and
  * the corresponding condition is met.

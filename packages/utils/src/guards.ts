@@ -11,7 +11,7 @@
  * Type guard to check if a value is an object but not an array.
  *
  * @param obj - The value to check
- * @returns True if the value is a non-null object but not an array, false otherwise
+ * @returns `true` if the value is a non-null object but not an array, `false` otherwise
  *
  * @example
  * ```typescript
@@ -33,7 +33,7 @@ export const isTypeObject = (obj: unknown): obj is Record<string, unknown> => {
  *
  * @param obj - The object to check
  * @param key - The property name to look for
- * @returns True if the object has the property, false otherwise
+ * @returns `true` if the object has the property, `false` otherwise
  *
  * @example
  * ```typescript
@@ -67,7 +67,7 @@ export function hasProperty(
  *
  * @param obj - The object to check
  * @param keys - The property names to look for
- * @returns True if the object has all the properties, false otherwise
+ * @returns `true` if the object has all the properties, `false` otherwise
  *
  * @example
  * ```typescript
@@ -96,7 +96,7 @@ export const hasProperties = <K extends PropertyKey>(
  *
  * @param obj - The object to check
  * @param key - The property name to look for
- * @returns True if the property exists and is an array, false otherwise
+ * @returns `true` if the property exists and is an array, `false` otherwise
  *
  * @example
  * ```typescript
@@ -130,7 +130,7 @@ export function hasArrayProperty(
  *
  * @param obj - The object to check
  * @param key - The property name to look for
- * @returns True if the property exists, is an array, and is non-empty, false otherwise
+ * @returns `true` if the property exists, is an array, and is non-empty, `false` otherwise
  *
  * @example
  * ```typescript
@@ -164,7 +164,7 @@ export function hasNonEmptyArrayProperty(
  *
  * @param obj - The object to check
  * @param key - The property name to look for
- * @returns True if the property exists and is a string, false otherwise
+ * @returns `true` if the property exists and is a string, `false` otherwise
  *
  * @example
  * ```typescript
@@ -198,7 +198,7 @@ export function hasStringProperty(
  *
  * @param obj - The object to check
  * @param key - The property name to look for
- * @returns True if the property exists and is a function, false otherwise
+ * @returns `true` if the property exists and is a function, `false` otherwise
  *
  * @example
  * ```typescript
@@ -231,7 +231,7 @@ export function hasFunctionProperty(
  * Type guard to check if a value is a non-empty array.
  *
  * @param value - The value to check
- * @returns True if the value is an array with at least one element
+ * @returns `true` if the value is an array with at least one element
  *
  * @example
  * ```typescript
