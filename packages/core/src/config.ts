@@ -421,20 +421,14 @@ export const getCustomDirectives = (
 };
 
 /**
- * Determines the diff method to use based on the configuration and force flag.
- * If force is true, always returns FORCE regardless of the configured diff method.
+ * Returns FORCE as the diff method.
+ * This function is used when documentation should be forcefully regenerated.
  *
- * @param diff - The configured diff method
- * @returns The normalized diff method to use
+ * @returns The FORCE diff method
  * @example
  * ```typescript
- * // Normal usage - respects the configured diff method
- * const method1 = getDiffMethod(DiffMethod.NONE);
- * console.log(method1); // "NONE"
- *
- * // Use getForcedDiffMethod when force flag is needed
- * const method2 = getForcedDiffMethod();
- * console.log(method2); // "FORCE"
+ * const method = getForcedDiffMethod();
+ * console.log(method); // "FORCE"
  * ```
  * @see {@link DiffMethod} for available diff methods
  */
