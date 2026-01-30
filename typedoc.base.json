@@ -1,11 +1,13 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "plugin": ["typedoc-plugin-markdown"],
+  "plugin": ["typedoc-plugin-markdown", "./scripts/typedoc/no-media-plugin.mjs"],
+  "cleanOutputDir": true,
   "excludeExternals": true,
   "excludeInternal": false,
   "excludePrivate": true,
   "excludeReferences": true,
   "excludeNotDocumented": false,
+  "formatWithPrettier": true,
   "githubPages": false,
   "hideBreadcrumbs": true,
   "hideGenerator": true,
@@ -14,7 +16,9 @@
   "useCodeBlocks": true,
   "outputFileStrategy": "modules",
   "pretty": true,
+  "prettierConfigFile": "./config/.prettierrc.js",
   "theme": "default",
+  "useHTMLEncodedBrackets": true,
   "validation": {
     "notExported": false,
     "invalidLink": false,
@@ -26,5 +30,7 @@
   "sourceLinkExternal": true,
   "gitRevision": "main",
   "entryFileName": "index",
+  "readme": "none",
+  "mergeReadme": false,
   "excludeTags": ["@alias"]
 }
