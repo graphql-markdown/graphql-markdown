@@ -11,10 +11,7 @@ Custom directive `tag` helper.
 ### directiveTag()
 
 ```ts
-function directiveTag(
-   directive, 
-   type?, 
-   classname?): Badge;
+function directiveTag(directive, type?, classname?): Badge;
 ```
 
 Defined in: [directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)
@@ -60,19 +57,22 @@ const directive = new GraphQLDirective({
   locations: [],
 });
 
-const type = new GraphQLScalarType<string>({
-  name: "FooBar",
-  astNode: {
-    kind: Kind.SCALAR_TYPE_DEFINITION,
-    name: { kind: Kind.NAME, value: "FooBar" },
-    directives: [
-      {
-        kind: Kind.DIRECTIVE,
-        name: { kind: Kind.NAME, value: "auth" },
-      },
-    ],
-  },
-});
+const type =
+  new GraphQLScalarType() <
+  string >
+  {
+    name: "FooBar",
+    astNode: {
+      kind: Kind.SCALAR_TYPE_DEFINITION,
+      name: { kind: Kind.NAME, value: "FooBar" },
+      directives: [
+        {
+          kind: Kind.DIRECTIVE,
+          name: { kind: Kind.NAME, value: "auth" },
+        },
+      ],
+    },
+  };
 
 directiveTag(directive, type);
 // Expected result: { text: "@auth", classname: "badge--secondary" }

@@ -5,7 +5,7 @@ Loads configuration from graphql-config and sets up command-line interface.
 
 ## Variables
 
-### EXTENSION\_NAME
+### EXTENSION_NAME
 
 ```ts
 const EXTENSION_NAME: "graphql-markdown";
@@ -15,7 +15,7 @@ Defined in: [main.ts:22](https://github.com/graphql-markdown/graphql-markdown/bl
 
 Name of the GraphQL Markdown extension for graphql-config
 
-***
+---
 
 ### graphQLConfigExtension
 

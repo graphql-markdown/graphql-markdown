@@ -8,10 +8,7 @@ Provides utilities for formatting and printing frontmatter content.
 ### printFrontMatter()
 
 ```ts
-function printFrontMatter(
-   title, 
-   props, 
-   options): string;
+function printFrontMatter(title, props, options): string;
 ```
 
 Defined in: [frontmatter.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L21)
@@ -28,7 +25,7 @@ The title to be included in the frontmatter
 
 ##### props
 
-`Maybe`\<`FrontMatterOptions`\>
+`Maybe`&lt;`FrontMatterOptions`&gt;
 
 Additional frontmatter properties to be included
 

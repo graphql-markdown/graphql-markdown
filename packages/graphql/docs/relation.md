@@ -14,7 +14,7 @@ Library supporting `relatedTypeSection` for displaying relations between GraphQL
 const getRelationOfField: IGetRelation<RelationOfField>;
 ```
 
-Defined in: [packages/graphql/src/relation.ts:167](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L167)
+Defined in: [packages/graphql/src/relation.ts:164](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L164)
 
 Returns a map of fields and arguments where the GraphQL schema type matches the type.
 
@@ -42,7 +42,7 @@ a GraphQL schema map (see getSchemaMap).
 
 a record map of fields and arguments relations.
 
-***
+---
 
 ### getRelationOfImplementation
 
@@ -78,7 +78,7 @@ a GraphQL schema map (see getSchemaMap).
 
 a record map of unions or interfaces relations.
 
-***
+---
 
 ### getRelationOfInterface
 
@@ -114,7 +114,7 @@ a GraphQL schema map (see getSchemaMap).
 
 a record map of interfaces relations.
 
-***
+---
 
 ### getRelationOfReturn
 
@@ -150,7 +150,7 @@ a GraphQL schema map (see getSchemaMap).
 
 a record map of operations relations.
 
-***
+---
 
 ### getRelationOfUnion
 

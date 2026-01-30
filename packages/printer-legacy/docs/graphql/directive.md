@@ -36,7 +36,7 @@ Configuration options for printing the directive (optional)
 
 A formatted string containing the complete directive definition
 
-***
+---
 
 ### printDirectiveMetadata()
 

@@ -10,19 +10,19 @@ Library for GraphQL schema loading and `loaders` config processing.
 function getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>;
 ```
 
-Defined in: [packages/graphql/src/loader.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L114)
+Defined in: [packages/graphql/src/loader.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L113)
 
 #### Parameters
 
 ##### loadersList
 
-`Maybe`\<`LoaderOption`\>
+`Maybe`&lt;`LoaderOption`&gt;
 
 #### Returns
 
-`Promise`\<`Maybe`\<`LoadSchemaOptions`\>\>
+`Promise`&lt;`Maybe`&lt;`LoadSchemaOptions`&gt;&gt;
 
-***
+---
 
 ### loadSchema()
 
@@ -30,7 +30,7 @@ Defined in: [packages/graphql/src/loader.ts:114](https://github.com/graphql-mark
 function loadSchema(schemaLocation, options): Promise<GraphQLSchema>;
 ```
 
-Defined in: [packages/graphql/src/loader.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L46)
+Defined in: [packages/graphql/src/loader.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L50)
 
 #### Parameters
 
@@ -40,8 +40,8 @@ Defined in: [packages/graphql/src/loader.ts:46](https://github.com/graphql-markd
 
 ##### options
 
-`BuildSchemaOptions` & `GraphQLParseOptions` & `object` & `object` & `object` & `Partial`\<`IExecutableSchemaDefinition`\<`any`\>\> & `object` & `object`
+`LoadSchemaConfig`
 
 #### Returns
 
-`Promise`\<`GraphQLSchema`\>
+`Promise`&lt;`GraphQLSchema`&gt;

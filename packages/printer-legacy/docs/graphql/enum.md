@@ -34,7 +34,7 @@ Optional printing options that control directive handling
 
 A string containing the enum type definition in GraphQL SDL, or empty string if type is not an enum
 
-***
+---
 
 ### printEnumMetadata()
 

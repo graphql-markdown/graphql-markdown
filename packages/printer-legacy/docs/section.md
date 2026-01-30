@@ -9,10 +9,11 @@ Handles the printing of section items, metadata, and structured documentation co
 
 ```ts
 function printMetadataSection<T, V>(
-   type, 
-   values, 
-   section, 
-   options): string | MDXString;
+  type,
+  values,
+  section,
+  options,
+): string | MDXString;
 ```
 
 Defined in: [section.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L169)
@@ -65,15 +66,12 @@ Configuration options for printing
 
 Formatted MDX string containing the metadata section
 
-***
+---
 
 ### printSection()
 
 ```ts
-function printSection<V>(
-   values, 
-   section, 
-   options): string | MDXString;
+function printSection<V>(values, section, options): string | MDXString;
 ```
 
 Defined in: [section.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L118)
@@ -114,7 +112,7 @@ Configuration options for printing
 
 Formatted MDX string containing the complete section
 
-***
+---
 
 ### printSectionItem()
 
@@ -154,7 +152,7 @@ Configuration options for printing
 
 Formatted MDX string containing the section item
 
-***
+---
 
 ### printSectionItems()
 

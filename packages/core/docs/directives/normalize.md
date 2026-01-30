@@ -26,7 +26,7 @@ normalization and deduplication.
 
 ##### sources
 
-...`Maybe`\<`DirectiveName`[]\>[]
+...`Maybe`&lt;`DirectiveName`[]&gt;[]
 
 Multiple arrays of directive names or undefined/null values
 
@@ -48,7 +48,7 @@ const all = combineDirectiveNames(cliDirectives, configDirectives);
 // Result: ["@example", "@internal", "@auth"]
 ```
 
-***
+---
 
 ### normalizeDirectiveNames()
 
@@ -61,6 +61,7 @@ Defined in: [directives/normalize.ts:42](https://github.com/graphql-markdown/gra
 Normalizes directive names from multiple sources into a single flattened array.
 
 This function:
+
 1. Accepts multiple directive name arrays from different sources
 2. Filters out null/undefined values and empty arrays
 3. Flattens them into a single array
@@ -72,7 +73,7 @@ Useful when combining directives from CLI, config file, and environment sources.
 
 ##### sources
 
-...`Maybe`\<`DirectiveName`[]\>[]
+...`Maybe`&lt;`DirectiveName`[]&gt;[]
 
 Multiple arrays of directive names or undefined/null values
 
@@ -94,11 +95,15 @@ const all = normalizeDirectiveNames(cliDirectives, configDirectives);
 // Result: ["@example", "@internal", "@auth"]
 
 // Safely handles undefined:
-const safe = normalizeDirectiveNames(cliDirectives, undefined, configDirectives);
+const safe = normalizeDirectiveNames(
+  cliDirectives,
+  undefined,
+  configDirectives,
+);
 // Result: ["@example", "@internal", "@auth"]
 ```
 
-***
+---
 
 ### uniqueDirectiveNames()
 

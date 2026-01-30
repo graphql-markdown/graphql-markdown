@@ -8,10 +8,11 @@ Provides utilities for handling and printing GraphQL directives in Markdown form
 
 ```ts
 function getCustomDirectiveResolver(
-   resolver, 
-   type, 
-   constDirectiveOption, 
-fallback?): Maybe<string>;
+  resolver,
+  type,
+  constDirectiveOption,
+  fallback?,
+): Maybe<string>;
 ```
 
 Defined in: [directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L30)
@@ -40,17 +41,17 @@ The directive configuration options
 
 ##### fallback?
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 Optional fallback value if resolution fails
 
 #### Returns
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
-The resolved directive value or fallback/undefined
+The resolved directive value or `fallback`/`undefined`
 
-***
+---
 
 ### getCustomTags()
 
@@ -82,15 +83,16 @@ General printing options
 
 Array of badge configurations from directive tags
 
-***
+---
 
 ### printCustomDirective()
 
 ```ts
 function printCustomDirective(
-   type, 
-   constDirectiveOption, 
-options): Maybe<string>;
+  type,
+  constDirectiveOption,
+  options,
+): Maybe<string>;
 ```
 
 Defined in: [directive.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L56)
@@ -119,11 +121,11 @@ General printing options
 
 #### Returns
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
-Formatted Markdown string for the directive or undefined
+Formatted Markdown string for the directive or `undefined`
 
-***
+---
 
 ### printCustomDirectives()
 
@@ -155,7 +157,7 @@ General printing options
 
 Markdown string containing all formatted directives
 
-***
+---
 
 ### printCustomTags()
 

@@ -10,7 +10,9 @@ function types, and property existence patterns commonly used across the codebas
 ### hasDescriptor()
 
 ```ts
-function hasDescriptor(config): config is Record<"descriptor", (args: unknown[]) => unknown>;
+function hasDescriptor(
+  config,
+): config is Record<"descriptor", (args: unknown[]) => unknown>;
 ```
 
 Defined in: [directives/validation.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L39)
@@ -42,7 +44,7 @@ if (hasDescriptor(option)) {
 }
 ```
 
-***
+---
 
 ### hasTag()
 
@@ -79,7 +81,7 @@ if (hasTag(option)) {
 }
 ```
 
-***
+---
 
 ### isGroupsObject()
 
@@ -116,12 +118,15 @@ if (isGroupsObject(options.groups)) {
 }
 ```
 
-***
+---
 
 ### isInvalidFunctionProperty()
 
 ```ts
-function isInvalidFunctionProperty(config, property): config is Record<string, unknown>;
+function isInvalidFunctionProperty(
+  config,
+  property,
+): config is Record<string, unknown>;
 ```
 
 Defined in: [directives/validation.ts:196](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L196)
@@ -159,7 +164,7 @@ if (isInvalidFunctionProperty(option, "descriptor")) {
 }
 ```
 
-***
+---
 
 ### isLoaderString()
 
@@ -196,7 +201,7 @@ if (isLoaderString(loaders[name])) {
 }
 ```
 
-***
+---
 
 ### isPath()
 
@@ -233,7 +238,7 @@ if (isPath(folderPath)) {
 }
 ```
 
-***
+---
 
 ### isSchemaObject()
 
@@ -270,7 +275,7 @@ if (isSchemaObject(projectConfig.schema)) {
 }
 ```
 
-***
+---
 
 ### isSchemaString()
 

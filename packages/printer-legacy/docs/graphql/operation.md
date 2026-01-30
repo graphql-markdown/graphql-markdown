@@ -35,7 +35,7 @@ Print type options for customizing output
 
 Formatted string containing operation metadata or empty string if invalid
 
-***
+---
 
 ### printOperationType()
 

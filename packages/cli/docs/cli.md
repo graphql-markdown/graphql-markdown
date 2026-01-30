@@ -29,9 +29,10 @@ Type representing the GraphQL Markdown CLI.
 
 ```ts
 function getGraphQLMarkdownCli(
-   options, 
-   loggerModule?, 
-   customMdxParser?): CommanderStatic;
+  options,
+  loggerModule?,
+  customMdxParser?,
+): CommanderStatic;
 ```
 
 Defined in: [index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L84)
@@ -67,23 +68,16 @@ The configured CLI instance.
 #### Example
 
 ```typescript
-const cli = getGraphQLMarkdownCli(
-  { id: "custom" },
-  "custom-logger",
-  true
-);
+const cli = getGraphQLMarkdownCli({ id: "custom" }, "custom-logger", true);
 await cli.parseAsync(process.argv);
 ```
 
-***
+---
 
 ### runGraphQLMarkdown()
 
 ```ts
-function runGraphQLMarkdown(
-   options, 
-   cliOptions, 
-loggerModule?): Promise<void>;
+function runGraphQLMarkdown(options, cliOptions, loggerModule?): Promise<void>;
 ```
 
 Defined in: [index.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L47)
@@ -112,7 +106,7 @@ Optional logger module to use.
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`&lt;`void`&gt;
 
 #### Example
 
@@ -120,6 +114,6 @@ Optional logger module to use.
 await runGraphQLMarkdown(
   { id: "custom" },
   { schema: "./schema.graphql", root: "./docs" },
-  "custom-logger"
+  "custom-logger",
 );
 ```
