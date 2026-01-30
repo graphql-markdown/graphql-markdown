@@ -48,6 +48,7 @@ import {
   DiffMethod,
   TypeHierarchy,
 } from "../../src/config";
+import { resetEvents } from "../../src/event-emitter";
 
 describe("renderer", () => {
   beforeEach(() => {
@@ -70,6 +71,7 @@ describe("renderer", () => {
     vol.reset();
     jest.restoreAllMocks();
     jest.resetAllMocks();
+    resetEvents();
   });
 
   describe("generateDocFromSchema()", () => {

@@ -45,6 +45,8 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
 import * as GraphQL from "@graphql-markdown/graphql";
 
 import { getRenderer, API_GROUPS } from "../../src/renderer";
+import { resetEvents, getEvents } from "../../src/event-emitter";
+import { GenerateIndexMetafileEvents } from "../../src/events";
 import {
   DEFAULT_OPTIONS,
   DEFAULT_HIERARCHY,
@@ -58,12 +60,23 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   hierarchy: DEFAULT_HIERARCHY,
 };
 
+/**
+ * Helper function to create a renderer with a mock generateIndexMetafile hook.
+ * Registers the mock as an event handler instead of passing it as legacy mdxModule.
+ */
+function mockGenerateIndexMetafileHook(mockFn: jest.Mock): void {
+  getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
+    mockFn(event.dirPath, event.category, event.options);
+  });
+}
+
 describe("generateCategoryMetafileType - focused tests", () => {
   const baseURL = "graphql";
 
   afterEach(() => {
     jest.restoreAllMocks();
     jest.resetAllMocks();
+    resetEvents();
   });
 
   test("throws when outputDir is empty", async () => {
@@ -88,6 +101,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     expect.assertions(2);
 
     const mockGenerateIndexMetafile = jest.fn();
+    mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
       "/output",
@@ -98,7 +112,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
         ...DEFAULT_RENDERER_OPTIONS,
         hierarchy: { [TypeHierarchy.FLAT]: {} },
       },
-      { generateIndexMetafile: mockGenerateIndexMetafile },
+      undefined, // mdxModule not needed - using event system
     );
 
     const dir = await renderer.generateCategoryMetafileType(
@@ -115,6 +129,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     expect.assertions(3);
 
     const mockGenerateIndexMetafile = jest.fn();
+    mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
       "/output",
@@ -122,12 +137,11 @@ describe("generateCategoryMetafileType - focused tests", () => {
       undefined,
       false,
       DEFAULT_RENDERER_OPTIONS,
-      { generateIndexMetafile: mockGenerateIndexMetafile },
+      undefined, // mdxModule not needed - using event system
     );
 
     // enable MDX forwarding
     renderer.mdxModuleIndexFileSupport = true;
-    renderer.mdxModule = { generateIndexMetafile: mockGenerateIndexMetafile };
     renderer.categoryPositionManager = {
       getPosition: jest.fn().mockReturnValue(42),
     };
@@ -146,6 +160,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     expect.assertions(4);
 
     const mockGenerateIndexMetafile = jest.fn();
+    mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
       "/output",
@@ -157,11 +172,10 @@ describe("generateCategoryMetafileType - focused tests", () => {
         deprecated: "group",
         hierarchy: { [TypeHierarchy.ENTITY]: {} },
       },
-      { generateIndexMetafile: mockGenerateIndexMetafile },
+      undefined, // mdxModule not needed - using event system
     );
 
     renderer.mdxModuleIndexFileSupport = true;
-    renderer.mdxModule = { generateIndexMetafile: mockGenerateIndexMetafile };
     jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
     await renderer.generateCategoryMetafileType({}, "Foo", "objects");
@@ -177,6 +191,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     expect.assertions(1);
 
     const mockGenerateIndexMetafile = jest.fn();
+    mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
       "/output",
@@ -188,11 +203,10 @@ describe("generateCategoryMetafileType - focused tests", () => {
         index: false,
         hierarchy: { [TypeHierarchy.ENTITY]: {} },
       },
-      { generateIndexMetafile: mockGenerateIndexMetafile },
+      undefined, // mdxModule not needed - using event system
     );
 
     renderer.mdxModuleIndexFileSupport = true;
-    renderer.mdxModule = { generateIndexMetafile: mockGenerateIndexMetafile };
 
     await renderer.generateCategoryMetafileType({}, "Test", "objects");
 

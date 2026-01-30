@@ -75,6 +75,8 @@ import {
   DEFAULT_HIERARCHY,
   TypeHierarchy,
 } from "../../src/config";
+import { resetEvents, getEvents } from "../../src/event-emitter";
+import { GenerateIndexMetafileEvents } from "../../src/events";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
@@ -82,6 +84,16 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
     .deprecated! as TypeDeprecatedOption,
   hierarchy: DEFAULT_HIERARCHY,
 };
+
+/**
+ * Helper function to create a renderer with a mock generateIndexMetafile hook.
+ * Registers the mock as an event handler instead of passing it as legacy mdxModule.
+ */
+function mockGenerateIndexMetafileHook(mockFn: jest.Mock): void {
+  getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
+    mockFn(event.dirPath, event.category, event.options);
+  });
+}
 
 describe("renderer", () => {
   describe("class Renderer", () => {
@@ -110,6 +122,7 @@ describe("renderer", () => {
     afterEach(() => {
       jest.restoreAllMocks();
       jest.resetAllMocks();
+      resetEvents();
     });
 
     describe("renderTypeEntities()", () => {
@@ -1131,6 +1144,7 @@ describe("renderer", () => {
         expect.assertions(3);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -1138,9 +1152,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          undefined, // mdxModule not needed - using event system
         );
 
         // Pre-register all categories before generating files
@@ -1188,6 +1200,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -1235,6 +1248,7 @@ describe("renderer", () => {
         expect.assertions(3);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         // Custom sort: reverse alphabetical order
         const customSort = (a: string, b: string): number => {
           return b.localeCompare(a);
@@ -1298,6 +1312,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -1305,9 +1320,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          undefined, // mdxModule not needed - using event system
         );
 
         // Provide explicit position (like for deprecated categories)
@@ -1328,6 +1341,7 @@ describe("renderer", () => {
         expect.assertions(4);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -1335,9 +1349,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          undefined, // mdxModule not needed - using event system
         );
 
         // Pre-register categories to ensure consistent positions
@@ -2254,6 +2266,7 @@ describe("renderer", () => {
         expect.assertions(4);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2333,6 +2346,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2373,6 +2387,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2424,6 +2439,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2462,6 +2478,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2510,6 +2527,7 @@ describe("renderer", () => {
         expect.assertions(3);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
           "/output",
@@ -2821,6 +2839,7 @@ describe("renderer", () => {
         expect.assertions(4);
 
         const mockGenerateIndexMetafile = jest.fn();
+        mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2950,110 +2969,6 @@ describe("renderer", () => {
         expect(pos1).toBe(pos2);
         expect(pos1).toBeGreaterThanOrEqual(0);
         expect(pos2).toBeGreaterThanOrEqual(0);
-      });
-
-      test("mdxModuleSubscribeHook subscribes to all supported hooks", async () => {
-        expect.assertions(2);
-
-        const mockHook1 = jest.fn();
-        const mockHook2 = jest.fn();
-
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: mockHook1,
-            afterRenderTypeEntitiesHook: mockHook2,
-          },
-        );
-
-        // Verify hooks were subscribed during construction
-        const subscribeSpy = jest.spyOn(renderer, "subscribe");
-
-        // Call mdxModuleSubscribeHook again to verify behavior
-        renderer.mdxModuleSubscribeHook();
-
-        expect(subscribeSpy).toHaveBeenCalled();
-        expect(subscribeSpy.mock.calls.length).toBeGreaterThan(0);
-      });
-
-      test("mdxModuleSubscribeHook skips hooks not supported by module", async () => {
-        expect.assertions(1);
-
-        const mockHook = jest.fn();
-
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: mockHook,
-            // Missing other hooks
-          },
-        );
-
-        const subscribeSpy = jest.spyOn(renderer, "subscribe");
-        subscribeSpy.mockClear();
-
-        renderer.mdxModuleSubscribeHook();
-
-        // Should only subscribe to hooks that exist in the module
-        const subscribedHooks = subscribeSpy.mock.calls.map((call) => call[0]);
-        expect(subscribedHooks).toContain("generateIndexMetafile");
-      });
-
-      test("mdxModuleSubscribeHook logs subscribed hooks when any exist", async () => {
-        expect.assertions(2);
-
-        const logSpy = jest.mocked(log);
-        logSpy.mockClear();
-
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          {
-            generateIndexMetafile: jest.fn(),
-          },
-        );
-
-        // Clear previous logs and call again
-        logSpy.mockClear();
-        renderer.mdxModuleSubscribeHook();
-
-        // Verify logging occurred
-        expect(logSpy).toHaveBeenCalled();
-        expect(logSpy.mock.calls[0][0]).toContain("Subscribed to MDX hooks");
-      });
-
-      test("mdxModuleSubscribeHook does not log when no hooks are subscribed", async () => {
-        expect.assertions(1);
-
-        const logSpy = jest.mocked(log);
-        logSpy.mockClear();
-
-        await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          {}, // Empty module with no hooks
-        );
-
-        // Should not log when no hooks were subscribed
-        expect(logSpy).not.toHaveBeenCalled();
       });
 
       test("preCollectCategories skips registration for flat hierarchy", async () => {

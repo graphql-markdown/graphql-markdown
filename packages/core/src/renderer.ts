@@ -31,22 +31,13 @@ import {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { TypeHierarchy } from "./config";
 import { isGroupsObject, isPath } from "./directives/validation";
-import type { Callback } from "./hooks";
-import { Hookable } from "./hooks";
-
-/**
- * Array of hook names available in the renderer lifecycle.
- *
- * @remarks
- * These hooks allow customization at different stages of the rendering process:
- * - `generateIndexMetafile`: Hook called during index metadata file generation
- * - `afterRenderTypeEntitiesHook`: Hook called after rendering type entities
- *
- */
-export const RendererHooks = [
-  "generateIndexMetafile",
-  "afterRenderTypeEntitiesHook",
-] as const;
+import { getEvents } from "./event-emitter";
+import {
+  GenerateIndexMetafileEvent,
+  GenerateIndexMetafileEvents,
+  RenderTypeEntitiesEvent,
+  RenderTypeEntitiesEvents,
+} from "./events";
 
 /**
  * Constant representing the string literal for deprecated entities.
@@ -342,7 +333,7 @@ class CategoryPositionManager {
  * Each level has its own CategoryPositionManager that restarts numbering at 1.
  * @example
  */
-export class Renderer extends Hookable {
+export class Renderer {
   group: Maybe<SchemaEntitiesGroupMap>;
   outputDir: string;
   baseURL: string;
@@ -376,8 +367,6 @@ export class Renderer extends Hookable {
     docOptions: Maybe<RendererDocOptions>,
     mdxModule?: unknown,
   ) {
-    super();
-
     this.printer = printer;
 
     this.group = group;
@@ -386,8 +375,6 @@ export class Renderer extends Hookable {
     this.prettify = prettify;
     this.options = docOptions;
     this.mdxModule = mdxModule;
-
-    this.mdxModuleSubscribeHook();
 
     // Initialize position managers for different hierarchy levels
     // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
@@ -423,41 +410,6 @@ export class Renderer extends Hookable {
   }
 
   /**
-   * Subscribes to MDX module hooks that are supported by the current MDX module.
-   *
-   * Iterates through all available renderer hooks and registers callbacks for those
-   * that are supported by the MDX module. Logs the list of successfully subscribed
-   * hooks at debug level if any subscriptions were made.
-   *
-   * @remarks
-   * This method checks each hook in `RendererHooks` against the MDX module's capabilities
-   * using `hasMDXHookSupport()` before subscribing. Only hooks that are both defined in
-   * `RendererHooks` and supported by the MDX module will be subscribed to.
-   *
-   * @returns void
-   */
-  mdxModuleSubscribeHook(): void {
-    const hookNames: readonly (keyof MDXSupportType)[] = RendererHooks;
-    const subscribedHooks = new Set<string>();
-    for (const hookName of hookNames) {
-      if (this.hasMDXHookSupport(hookName)) {
-        this.subscribe(
-          hookName,
-          (this.mdxModule as MDXSupportType)[hookName] as Callback,
-        );
-        subscribedHooks.add(`${this.constructor.name}.${hookName}`);
-      }
-    }
-    if (subscribedHooks.size === 0) {
-      return;
-    }
-    log(
-      `Subscribed to MDX hooks: ${[...subscribedHooks].join(", ")}`,
-      LogLevel.debug,
-    );
-  }
-
-  /**
    * Generates an index metafile for a category directory if MDX support is available.
    *
    * @param dirPath - The directory path where the index should be created
@@ -488,15 +440,17 @@ export class Renderer extends Hookable {
       finalOptions.sidebarPosition ??
       this.categoryPositionManager.getPosition(category);
 
-    this.emit("generateIndexMetafile", [
+    const events = getEvents();
+    const event = new GenerateIndexMetafileEvent({
       dirPath,
       category,
-      {
+      options: {
         ...finalOptions,
         sidebarPosition,
         index: this.options?.index,
       },
-    ]);
+    });
+    await events.emitAsync(GenerateIndexMetafileEvents.BEFORE_GENERATE, event);
   }
 
   /**
@@ -723,7 +677,12 @@ export class Renderer extends Hookable {
       : pathUrl.join(extractedCategory, page.groups.pageId);
     const category = isFlat ? "schema" : startCase(extractedCategory);
 
-    this.emit("afterRenderTypeEntitiesHook", [name, filePath]);
+    const events = getEvents();
+    const event = new RenderTypeEntitiesEvent({
+      name,
+      filePath,
+    });
+    await events.emitAsync(RenderTypeEntitiesEvents.AFTER_RENDER, event);
 
     return {
       category,

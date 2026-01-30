@@ -34,6 +34,8 @@ import * as CorePrinter from "../../src/printer";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("../../src/printer");
 
+import { resetEvents } from "../../src/event-emitter";
+
 const mockRenderer = {
   generateCategoryMetafile: jest.fn(),
   generateCategoryMetafileType: jest.fn(),
@@ -88,6 +90,7 @@ describe("generator", () => {
 
     afterEach(() => {
       jest.clearAllMocks();
+      resetEvents();
     });
 
     afterAll(() => {
