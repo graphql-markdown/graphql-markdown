@@ -282,7 +282,7 @@ export const getTypeDirectiveValues = (
  * It calls {@link getTypeDirectiveValues} and returns a matching record.
  *
  * @param directive - a GraphQL directive defined in the schema.
- * @param type - the GraphQL schema type to parse.
+ * @param node - the GraphQL schema type to parse.
  * @param argName - the name of the GraphQL directive argument to fetch the value from.
  *
  * @returns a record k/v with `argName` as key and the argument's value.
@@ -396,7 +396,7 @@ export const getFields = (type: unknown): unknown[] => {
 /**
  * Resolves the name of a GraphQL schema type.
  *
- * @param getTypeName - the GraphQL schema type to parse.
+ * @param type - the GraphQL schema type to parse.
  * @param defaultName - optional fallback value if the name resolution fails.
  *
  * @returns the type's name, or `defaultName`.
