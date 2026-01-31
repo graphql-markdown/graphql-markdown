@@ -61,7 +61,7 @@ build-package:
   WORKDIR /graphql-markdown
   RUN bun run --filter "@graphql-markdown/$package" build
   # Use npm pack instead of bun pack to properly resolve workspace dependencies
-  RUN cd packages/$package && npm pack && mv *.tgz /graphql-markdown/graphql-markdown-$package.tgz
+  RUN cd packages/$package && TARBALL=$(npm pack) && mv "$TARBALL" /graphql-markdown/graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus-project:
