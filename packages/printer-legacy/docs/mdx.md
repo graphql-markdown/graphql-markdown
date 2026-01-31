@@ -19,7 +19,7 @@ const default: MDXSupportType;
 
 Defined in: [mdx/index.ts:197](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/mdx/index.ts#L197)
 
-***
+---
 
 ### mdxDeclaration
 
@@ -43,8 +43,8 @@ Defined in: [mdx/index.ts:208](https://github.com/graphql-markdown/graphql-markd
 
 ##### mdxPackage?
 
-`Record`\<`string`, `unknown`\>
+`Record`&lt;`string`, `unknown`&gt;
 
 #### Returns
 
-`Promise`\<`Readonly`\<`MDXSupportType`\>\>
+`Promise`&lt;`Readonly`&lt;`MDXSupportType`&gt;&gt;

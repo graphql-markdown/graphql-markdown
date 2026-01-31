@@ -363,7 +363,7 @@ export const getVisibilityDirectives = (
  *
  * @param customDirectiveOptions - The custom directive configuration object
  * @param skipDocDirective - Array of directive names that should be skipped
- * @returns The filtered custom directives object, or undefined if empty/invalid
+ * @returns The filtered custom directives object, or `undefined` if empty/invalid
  * @throws Error if a custom directive has an invalid format
  * @example
  * ```typescript
@@ -421,20 +421,14 @@ export const getCustomDirectives = (
 };
 
 /**
- * Determines the diff method to use based on the configuration and force flag.
- * If force is true, always returns FORCE regardless of the configured diff method.
+ * Returns FORCE as the diff method.
+ * This function is used when documentation should be forcefully regenerated.
  *
- * @param diff - The configured diff method
- * @returns The normalized diff method to use
+ * @returns The FORCE diff method
  * @example
  * ```typescript
- * // Normal usage - respects the configured diff method
- * const method1 = getDiffMethod(DiffMethod.NONE);
- * console.log(method1); // "NONE"
- *
- * // Use getForcedDiffMethod when force flag is needed
- * const method2 = getForcedDiffMethod();
- * console.log(method2); // "FORCE"
+ * const method = getForcedDiffMethod();
+ * console.log(method); // "FORCE"
  * ```
  * @see {@link DiffMethod} for available diff methods
  */
@@ -667,7 +661,7 @@ export const getPrintTypeOptions = (
  * - fallback: (Optional) Fallback group name for items without the directive
  *
  * @param groupOptions - The group directive option as a string
- * @returns A parsed GroupByDirectiveOptions object or undefined if invalid
+ * @returns A parsed `GroupByDirectiveOptions` object or `undefined` if invalid
  * @throws Error if the groupByDirective format is invalid
  * @example
  * ```typescript

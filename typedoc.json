@@ -3,7 +3,9 @@
   "plugin": [
     "typedoc-plugin-markdown",
     "typedoc-plugin-frontmatter",
-    "./scripts/custom-frontmatter.mjs"
+    "typedoc-docusaurus-theme",
+    "./scripts/typedoc/custom-frontmatter.mjs",
+    "./scripts/typedoc/no-media-plugin.mjs"
   ],
   "entryPoints": ["packages/*"],
   "entryPointStrategy": "packages",
@@ -31,6 +33,11 @@
   "outputs": [{ "name": "markdown", "path": "./api" }],
   "entryFileName": "generated",
   "readme": "./docs/__api/__index.md",
+  "mergeReadme": false,
+  "useHTMLEncodedBrackets": true,
+  "useCustomAnchors": true,
+  "customAnchorsFormat": "escapedCurlyBrace",
+  "sanitizeComments": true,
   "validation": {
     "invalidLink": true,
     "notDocumented": true

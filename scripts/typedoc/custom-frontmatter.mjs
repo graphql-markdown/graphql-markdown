@@ -14,7 +14,7 @@ export function load(app) {
       // add a title
       title: path.basename(event.model?.name),
       // add sidebar position for root project page
-      ...(event.model?.kindOf(ReflectionKind.Project) && {
+      ...(event.model?.kind === ReflectionKind.Project && {
         sidebar_position: 1,
       }),
       // spread the existing frontmatter

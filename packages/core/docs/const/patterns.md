@@ -7,19 +7,19 @@ and simplify maintenance when patterns need to be updated.
 
 ## Variables
 
-### CONFIG\_CONSTANTS
+### CONFIG_CONSTANTS
 
 ```ts
 const CONFIG_CONSTANTS: object;
 ```
 
-Defined in: [const/patterns.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L112)
+Defined in: [const/patterns.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L115)
 
 String constants used for configuration parsing and defaults.
 
 #### Type Declaration
 
-##### DEFAULT\_GROUP
+##### DEFAULT_GROUP
 
 ```ts
 readonly DEFAULT_GROUP: "Miscellaneous";
@@ -28,7 +28,7 @@ readonly DEFAULT_GROUP: "Miscellaneous";
 Default fallback group name used when groupByDirective is configured.
 Items without the grouping directive are assigned to this group.
 
-***
+---
 
 ### PATTERNS
 
@@ -42,7 +42,7 @@ Central repository of regex patterns used for configuration parsing and string t
 
 #### Type Declaration
 
-##### CASE\_TRANSITION
+##### CASE_TRANSITION
 
 ```ts
 readonly CASE_TRANSITION: RegExp;
@@ -63,7 +63,7 @@ Used to insert spaces in camelCase strings (e.g., "userId" → "user Id").
 - "get2Users" matches → insert space between "2" and "U" → "get 2 Users"
 ```
 
-##### DIGIT\_LETTER\_TRANSITION
+##### DIGIT_LETTER_TRANSITION
 
 ```ts
 readonly DIGIT_LETTER_TRANSITION: RegExp;
@@ -84,7 +84,7 @@ Used to insert spaces between numbers and letters (e.g., "2k" → "2 k").
 - "2K" does not match (K is uppercase)
 ```
 
-##### DIRECTIVE\_NAME
+##### DIRECTIVE_NAME
 
 ```ts
 readonly DIRECTIVE_NAME: RegExp;
@@ -106,7 +106,7 @@ Captures the directive name after the @ symbol.
 - "tag" does not match
 ```
 
-##### GROUP\_BY\_DIRECTIVE
+##### GROUP_BY_DIRECTIVE
 
 ```ts
 readonly GROUP_BY_DIRECTIVE: RegExp;
@@ -128,7 +128,7 @@ Groups: (1) directive name, (2) field name, (3) optional fallback
 - "tag(name)" does not match
 ```
 
-##### LETTER\_DIGIT\_TRANSITION
+##### LETTER_DIGIT_TRANSITION
 
 ```ts
 readonly LETTER_DIGIT_TRANSITION: RegExp;
@@ -149,7 +149,7 @@ Used to insert spaces between letters and numbers (e.g., "user1" → "user 1").
 - "U1" does not match (U is uppercase)
 ```
 
-##### NUMERIC\_PREFIX
+##### NUMERIC_PREFIX
 
 ```ts
 readonly NUMERIC_PREFIX: RegExp;
@@ -158,20 +158,18 @@ readonly NUMERIC_PREFIX: RegExp;
 Matches numeric prefix for sorted categories (e.g., "01-query" → "query").
 Used to extract category names from numbered folder names.
 
-###### Pattern
-
-`^\d{2}-`
+Pattern: `^\d{2}-`
 
 ###### Example
 
-```ts
+```typescript
 - "01-query" matches → remove "01-" → "query"
 - "02-mutations" matches → remove "02-" → "mutations"
 - "query" does not match
 - "1-query" does not match (only 1 digit)
 ```
 
-##### WORD\_BOUNDARY
+##### WORD_BOUNDARY
 
 ```ts
 readonly WORD_BOUNDARY: RegExp;

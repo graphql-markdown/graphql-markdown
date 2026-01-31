@@ -6,10 +6,11 @@
 
 ```ts
 function getPrinter(
-   printerModule?, 
-   config?, 
-   options?, 
-mdxModule?): Promise<typeof IPrinter>;
+  printerModule?,
+  config?,
+  options?,
+  mdxModule?,
+): Promise<typeof IPrinter>;
 ```
 
 Defined in: [printer.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L60)
@@ -24,19 +25,19 @@ GraphQL schema documentation in the desired format.
 
 ##### printerModule?
 
-`Maybe`\<`PackageName`\>
+`Maybe`&lt;`PackageName`&gt;
 
 The name/path of the printer module to load
 
 ##### config?
 
-`Maybe`\<`PrinterConfig`\>
+`Maybe`&lt;`PrinterConfig`&gt;
 
 Configuration for the printer including schema, baseURL, and linkRoot
 
 ##### options?
 
-`Maybe`\<`PrinterOptions`\>
+`Maybe`&lt;`PrinterOptions`&gt;
 
 Additional options for customizing the printer's behavior
 
@@ -48,7 +49,7 @@ Optional MDX module for MDX-specific functionality
 
 #### Returns
 
-`Promise`\<*typeof* `IPrinter`\>
+`Promise`&lt;_typeof_ `IPrinter`&gt;
 
 A promise that resolves to the initialized Printer instance
 
@@ -67,8 +68,8 @@ Will throw an error if the module specified by printerModule cannot be found
 #### Example
 
 ```typescript
-import { getPrinter } from '@graphql-markdown/core';
-import { buildSchema } from 'graphql';
+import { getPrinter } from "@graphql-markdown/core";
+import { buildSchema } from "graphql";
 
 const schema = buildSchema(`
   type Query {
@@ -77,15 +78,15 @@ const schema = buildSchema(`
 `);
 
 const printer = await getPrinter(
-  '@graphql-markdown/printer-legacy',
+  "@graphql-markdown/printer-legacy",
   {
     schema,
-    baseURL: '/docs',
-    linkRoot: 'graphql'
+    baseURL: "/docs",
+    linkRoot: "graphql",
   },
   {
-    printTypeOptions: { includeDeprecationReasons: true }
-  }
+    printTypeOptions: { includeDeprecationReasons: true },
+  },
 );
 
 const output = printer.printSchema();

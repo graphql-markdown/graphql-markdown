@@ -7,7 +7,7 @@ using the graphql-config package.
 
 ## Variables
 
-### EXTENSION\_NAME
+### EXTENSION_NAME
 
 ```ts
 const EXTENSION_NAME: "graphql-markdown";
@@ -18,7 +18,7 @@ Defined in: [graphql-config.ts:31](https://github.com/graphql-markdown/graphql-m
 The name of the GraphQL Markdown extension.
 Used to identify the extension in graphql-config.
 
-***
+---
 
 ### graphQLConfigExtension
 
@@ -49,9 +49,10 @@ const config = await loadConfig({
 
 ```ts
 function loadConfiguration(
-   id, 
-   options?, 
-throwOptions?): Promise<Maybe<Readonly<ExtensionProjectConfig>>>;
+  id,
+  options?,
+  throwOptions?,
+): Promise<Maybe<Readonly<ExtensionProjectConfig>>>;
 ```
 
 Defined in: [graphql-config.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L142)
@@ -66,13 +67,13 @@ It also normalizes schema configurations.
 
 ##### id
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 The project ID to load configuration for.
 
 ##### options?
 
-`Maybe`\<`PackageOptionsConfig`\>
+`Maybe`&lt;`PackageOptionsConfig`&gt;
 
 Optional package options to apply.
 
@@ -84,9 +85,9 @@ Options for controlling throw behavior.
 
 #### Returns
 
-`Promise`\<`Maybe`\<`Readonly`\<`ExtensionProjectConfig`\>\>\>
+`Promise`&lt;`Maybe`&lt;`Readonly`&lt;`ExtensionProjectConfig`&gt;&gt;&gt;
 
-The extension project configuration if found, otherwise undefined.
+The extension project configuration if found, otherwise `undefined`.
 
 #### Throws
 
@@ -103,11 +104,11 @@ const config = await loadConfiguration("my-project");
 const config = await loadConfiguration(
   "my-project",
   { baseDir: "./src" },
-  { throwOnMissing: true, throwOnEmpty: false }
+  { throwOnMissing: true, throwOnEmpty: false },
 );
 ```
 
-***
+---
 
 ### setLoaderOptions()
 
@@ -148,8 +149,8 @@ The updated loader configuration.
 const loaders = {
   TypeScriptLoader: {
     module: "@graphql-markdown/typescript-loader",
-    options: { baseDir: "./src" }
-  }
+    options: { baseDir: "./src" },
+  },
 };
 const options = { outputDir: "./docs" };
 const updatedLoaders = setLoaderOptions(loaders, options);

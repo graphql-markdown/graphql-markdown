@@ -25,12 +25,12 @@ This is the generic function.
 
 ##### entity
 
-`GraphQLSchemaEntity`\<`T`\>
+`GraphQLSchemaEntity`&lt;`T`&gt;
 
 the GraphQL schema entity processed.
 
 #### Returns
 
-`Maybe`\<`string` \| `T`\>
+`Maybe`&lt;`string` \| `T`&gt;
 
 a printable formatted value.

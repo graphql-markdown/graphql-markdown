@@ -24,7 +24,7 @@ NONE: "";
 
 Defined in: [const/options.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L22)
 
-***
+---
 
 ### TypeHierarchy
 
@@ -58,19 +58,24 @@ Defined in: [const/options.ts:18](https://github.com/graphql-markdown/graphql-ma
 
 ## Variables
 
-### DEFAULT\_OPTIONS
+### DEFAULT_OPTIONS
 
 ```ts
-const DEFAULT_OPTIONS: Required<Omit<PrintTypeOptions, 
-  | "collapsible"
-  | "formatCategoryFolderName"
-  | "groups"
-  | "level"
-  | "meta"
-  | "onlyDocDirectives"
-  | "parentType"
-  | "schema"
-  | "skipDocDirectives">> & object;
+const DEFAULT_OPTIONS: Required<
+  Omit<
+    PrintTypeOptions,
+    | "collapsible"
+    | "formatCategoryFolderName"
+    | "groups"
+    | "level"
+    | "meta"
+    | "onlyDocDirectives"
+    | "parentType"
+    | "schema"
+    | "skipDocDirectives"
+  >
+> &
+  object;
 ```
 
 Defined in: [const/options.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L38)
@@ -119,9 +124,9 @@ schema: Maybe<GraphQLSchema>;
 skipDocDirectives: GraphQLDirective[];
 ```
 
-***
+---
 
-### PRINT\_TYPE\_DEFAULT\_OPTIONS
+### PRINT_TYPE_DEFAULT_OPTIONS
 
 ```ts
 const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions>;

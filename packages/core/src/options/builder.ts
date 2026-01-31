@@ -194,7 +194,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * Note: Nested objects and arrays are not deep copied.
    *
    * @param key - The key to get
-   * @returns The current value for the key, or undefined if not set
+   * @returns The current value for the key, or `undefined` if not set
    */
   get<K extends keyof T>(key: K): T[K] | undefined {
     const value = this.merged[key] as T[K] | undefined;
@@ -217,7 +217,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * internal state. Arrays and objects are shallow-copied to protect against
    * external modifications.
    *
-   * @returns The constructed options object with type Partial<T> (may not have all properties of T)
+   * @returns The constructed options object with type `Partial<T>` (may not have all properties of `T`)
    */
   build(): Partial<T> {
     const result: Partial<T> = {};

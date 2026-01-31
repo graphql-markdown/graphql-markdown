@@ -98,7 +98,7 @@ export const isOperation = (type: unknown): type is GraphQLOperationType => {
 /**
  * Checks if a directive is executable (related to operations).
  *
- * @param type - a GraphQL directive.
+ * @param directive - a GraphQL directive.
  *
  */
 export const executableDirectiveLocation = (
@@ -121,7 +121,7 @@ export const executableDirectiveLocation = (
 /**
  * Checks if a directive is system (related to schema definition).
  *
- * @param type - a GraphQL directive.
+ * @param directive - a GraphQL directive.
  *
  */
 export const typeSystemDirectiveLocation = (

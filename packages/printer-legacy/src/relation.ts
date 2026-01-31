@@ -29,9 +29,9 @@ import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
 import { SectionLevels } from "./const/options";
 
 /**
- * Converts a string representation of a root type to its corresponding TypeLocale
- * @param text - The string to convert to a TypeLocale
- * @returns The matching TypeLocale if found, undefined otherwise
+ * Converts a string representation of a root type to its corresponding `TypeLocale`
+ * @param text - The string to convert to a `TypeLocale`
+ * @returns The matching `TypeLocale` if found, `undefined` otherwise
  * @example
  * ```ts
  * const locale = getRootTypeLocaleFromString('Query');

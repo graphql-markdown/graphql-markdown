@@ -10,7 +10,7 @@ Internal library of helpers for manipulating array and list.
 function convertArrayToMapObject<T>(list): Maybe<Record<string, T>>;
 ```
 
-Defined in: [array.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L77)
+Defined in: [array.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/array.ts#L75)
 
 **`Internal`**
 
@@ -28,27 +28,27 @@ the type of objects the list contains.
 
 ##### list
 
-`Maybe`\<`T`[]\>
+`Maybe`&lt;`T`[]&gt;
 
 the list of objects of type `{ name: any }` to be converted.
 
 #### Returns
 
-`Maybe`\<`Record`\<`string`, `T`\>\>
+`Maybe`&lt;`Record`&lt;`string`, `T`&gt;&gt;
 
 an array of object values with `name` as key, or `undefined` if `list` is not a valid array.
 
 #### Example
 
 ```js
-import { convertArrayToMapObject } from '@graphql-markdown/utils/array';
+import { convertArrayToMapObject } from "@graphql-markdown/utils/array";
 
 convertArrayToMapObject([
-    { name: true },
-    { name: "test" },
-    { name: 123 },
-    { name2: 1234 },
-  ]);
+  { name: true },
+  { name: "test" },
+  { name: 123 },
+  { name2: 1234 },
+]);
 
 // Expected result: {
 //   true: { name: true },
@@ -57,7 +57,7 @@ convertArrayToMapObject([
 // }
 ```
 
-***
+---
 
 ### toArray()
 
@@ -75,28 +75,28 @@ Returns an array of values from a k/v object.
 
 ##### recordMap
 
-`Maybe`\<`Record`\<`string`, `unknown`\>\>
+`Maybe`&lt;`Record`&lt;`string`, `unknown`&gt;&gt;
 
 the key/value record object to be converted.
 
 #### Returns
 
-`Maybe`\<`unknown`[]\>
+`Maybe`&lt;`unknown`[]&gt;
 
 an array of object values, or `undefined` if `recordMap` is not a valid object.
 
 #### Example
 
 ```js
-import { toArray } from '@graphql-markdown/utils/array';
+import { toArray } from "@graphql-markdown/utils/array";
 
 toArray({
-    bool: true,
-    string: "test",
-    number: 123,
-    array: ["one", "two"],
-    child: { key: "value" },
-  });
+  bool: true,
+  string: "test",
+  number: 123,
+  array: ["one", "two"],
+  child: { key: "value" },
+});
 
 // Expected result: [true, "test", 123, ["one", "two"], { key: "value" }]
 ```

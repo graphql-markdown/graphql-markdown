@@ -24,11 +24,11 @@ Configuration options
 
 #### Returns
 
-`Maybe`\<`TypeDirectiveExample`\>
+`Maybe`&lt;`TypeDirectiveExample`&gt;
 
 The directive example configuration if valid, otherwise `undefined`
 
-***
+---
 
 ### printExample()
 
@@ -56,7 +56,7 @@ Configuration options for printing the example
 
 #### Returns
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 Stringified example if available, otherwise `undefined`
 

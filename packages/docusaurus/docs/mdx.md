@@ -22,7 +22,7 @@ The admonition configuration object
 
 ##### meta
 
-`Maybe`\<`MetaOptions`\>
+`Maybe`&lt;`MetaOptions`&gt;
 
 Optional metadata for generator configuration
 
@@ -32,7 +32,7 @@ Optional metadata for generator configuration
 
 Formatted MDX string for the admonition
 
-***
+---
 
 ### formatMDXBadge()
 
@@ -52,7 +52,7 @@ Defined in: [mdx/index.ts:29](https://github.com/graphql-markdown/graphql-markdo
 
 `MDXString`
 
-***
+---
 
 ### formatMDXBullet()
 
@@ -78,7 +78,7 @@ Optional text to append after the bullet point
 
 Formatted MDX string for the bullet point
 
-***
+---
 
 ### formatMDXDetails()
 
@@ -104,7 +104,7 @@ The collapsible section configuration
 
 Formatted MDX string for the collapsible section
 
-***
+---
 
 ### formatMDXLink()
 
@@ -124,7 +124,7 @@ Defined in: [mdx/index.ts:97](https://github.com/graphql-markdown/graphql-markdo
 
 `TypeLink`
 
-***
+---
 
 ### formatMDXNameEntity()
 
@@ -146,7 +146,7 @@ The name to format
 
 ##### parentType?
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 Optional parent type to prefix the name
 
@@ -156,7 +156,7 @@ Optional parent type to prefix the name
 
 Formatted MDX string for the name entity
 
-***
+---
 
 ### formatMDXSpecifiedByLink()
 

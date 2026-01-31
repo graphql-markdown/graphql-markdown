@@ -7,10 +7,7 @@ Utility module for handling GraphQL schema entity grouping.
 ### getGroup()
 
 ```ts
-function getGroup(
-   type, 
-   groups, 
-   typeCategory): string;
+function getGroup(type, groups, typeCategory): string;
 ```
 
 Defined in: [group.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L24)
@@ -27,13 +24,13 @@ The GraphQL type to get the group for
 
 ##### groups
 
-`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
 
 Mapping of schema entities to their group names
 
 ##### typeCategory
 
-`Maybe`\<`SchemaEntity`\>
+`Maybe`&lt;`SchemaEntity`&gt;
 
 The category of the schema entity
 

@@ -158,8 +158,8 @@ const formatMDXNameEntity = (
  * Currently, this function returns the link as is without modification.
  * This may serve as a placeholder for future formatting logic.
  *
- * @param link - The TypeLink object to format
- * @returns The formatted TypeLink object
+ * @param link - The `TypeLink` object to format
+ * @returns The formatted `TypeLink` object
  */
 const formatMDXLink = (link: TypeLink): TypeLink => {
   return link;

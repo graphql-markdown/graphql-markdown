@@ -40,7 +40,7 @@ Defined in: [hooks.ts:7](https://github.com/graphql-markdown/graphql-markdown/bl
 protected emit(hookName, args): unknown[];
 ```
 
-Defined in: [hooks.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/hooks.ts#L21)
+Defined in: [hooks.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/hooks.ts#L28)
 
 ###### Parameters
 

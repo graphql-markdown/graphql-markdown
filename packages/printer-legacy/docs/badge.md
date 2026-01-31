@@ -6,7 +6,7 @@ and their properties like deprecation status, nullability, and relationships.
 
 ## Variables
 
-### CSS\_BADGE\_CLASSNAME
+### CSS_BADGE_CLASSNAME
 
 ```ts
 const CSS_BADGE_CLASSNAME: object;
@@ -22,7 +22,7 @@ Defined in: [badge.ts:31](https://github.com/graphql-markdown/graphql-markdown/b
 DEPRECATED: string = "DEPRECATED";
 ```
 
-##### NON\_NULL
+##### NON_NULL
 
 ```ts
 NON_NULL: string = "NON_NULL";
@@ -56,7 +56,7 @@ The GraphQL type to generate badges for
 
 ##### groups?
 
-`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
 
 Optional map of schema entities to their groups
 
@@ -66,7 +66,7 @@ Optional map of schema entities to their groups
 
 Array of Badge objects containing text and optional classnames
 
-***
+---
 
 ### printBadge()
 
@@ -74,7 +74,7 @@ Array of Badge objects containing text and optional classnames
 function printBadge(badge, options): MDXString;
 ```
 
-Defined in: [badge.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L97)
+Defined in: [badge.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L96)
 
 Formats a single badge into MDX string format.
 
@@ -98,7 +98,7 @@ Options for printing/formatting the badge
 
 Formatted MDX string representation of the badge
 
-***
+---
 
 ### printBadges()
 
@@ -106,7 +106,7 @@ Formatted MDX string representation of the badge
 function printBadges(type, options): string | MDXString;
 ```
 
-Defined in: [badge.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L115)
+Defined in: [badge.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L114)
 
 Generates and formats all applicable badges for a GraphQL type.
 
