@@ -61,7 +61,7 @@ build-package:
   WORKDIR /graphql-markdown
   RUN bun run --filter "@graphql-markdown/$package" build
   # Use npm pack instead of bun pack to properly resolve workspace dependencies
-  RUN cd packages/$package && npm pack --pack-destination /graphql-markdown && mv *.tgz /graphql-markdown/graphql-markdown-$package.tgz
+  RUN cd packages/$package && npm pack && mv *.tgz /graphql-markdown/graphql-markdown-$package.tgz
   SAVE ARTIFACT graphql-markdown-$package.tgz
 
 build-docusaurus-project:
@@ -210,8 +210,12 @@ GQLMD:
 
 INSTALL_GQLMD:
   FUNCTION
+  # Copy all package tarballs first
   FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
+  END
+  # Then install them all at once (excluding cli and docusaurus)
+  FOR package IN $(node /graphql-markdown/scripts/build-packages.js)
     IF [ "$package" != "cli" ] && [ "$package" != "docusaurus" ]
       RUN bun add ./graphql-markdown-${package}.tgz
     END
