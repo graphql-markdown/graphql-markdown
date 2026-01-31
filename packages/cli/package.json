@@ -72,7 +72,8 @@
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "typescript": {
     "definition": "dist/cli.d.ts"

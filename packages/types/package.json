@@ -33,7 +33,8 @@
   },
   "publishConfig": {
     "directory": "src",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "files": [
     "src"
