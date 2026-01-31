@@ -21,23 +21,6 @@ export interface EmitResult {
 }
 
 /**
- * Type guard that checks if a listener function is asynchronous.
- *
- * @param listener - The listener function to check.
- * @returns `true` if the listener is an async function, `false` otherwise.
- *
- * @remarks
- * This function determines if a listener is asynchronous by checking if its
- * constructor name is "AsyncFunction". This is useful for distinguishing between
- * synchronous and asynchronous event listeners.
- */
-const isAsyncListener = (
-  listener: (...args: any[]) => void,
-): listener is (...args: any[]) => Promise<void> => {
-  return listener.constructor.name === "AsyncFunction";
-};
-
-/**
  * Custom EventEmitter that supports cancellable events with sequential handler execution.
  *
  * Features:
@@ -94,11 +77,9 @@ class CancellableEventEmitter extends EventEmitter {
     for (const listener of listeners) {
       try {
         // Call the handler - await to support async handlers
-        if (isAsyncListener(listener)) {
-          await listener(event);
-        } else {
+        await Promise.resolve().then(() => {
           listener(event);
-        }
+        });
 
         // Check if handler stopped propagation to remaining handlers
         if (event.propagationStopped) {
