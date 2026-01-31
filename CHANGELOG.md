@@ -1,34 +1,238 @@
-<a id="unreleased"></a>
-# [Unreleased]
+<a id="1.31.0"></a>
+# [1.31.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.31.0) - 2026-01-31
 
-✨ Add `categorySort` option to customize the ordering of auto-generated documentation directories.
+## 🎯 New Feature: Custom Category Sorting
 
-## What's Changed
-* feat: Add categorySort option for custom directory ordering
+We're excited to introduce the `categorySort` option, giving you full control over how your GraphQL documentation categories are organized in the sidebar!
 
-Users can now control how categories are ordered in the sidebar by providing either:
-- `"natural"` - for alphabetical sorting
-- A custom compare function similar to `Array.sort()` - for custom ordering logic
+### What's New
 
-**Important**: When `categorySort` is defined, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). This ensures consistent ordering when viewing files in a file explorer or IDE. When `categorySort` is not set, no prefixes are added (default behavior).
+The new `categorySort` option allows you to define custom ordering for auto-generated documentation categories. Choose between:
 
-Example usage:
-```js
-docOptions: {
-  categorySort: "natural" // Sorts alphabetically and adds prefixes: 01-objects, 02-queries, etc.
-}
+- `"natural"` - Alphabetical sorting of categories
+- Custom compare function: define your own sorting logic (similar to `Array.sort()`)
+
+**Bonus:** When `categorySort` is enabled, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`, `03-mutations`), ensuring consistent ordering across your file explorer, IDE, and documentation sidebar.
+
+### Usage Examples
+
+#### Simple Alphabetical Sorting
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+      baseURL: "api",
+      // highlight-start
+      docOptions: {
+        categorySort: "natural", // Alphabetical sorting with auto-prefixing
+      },
+      // highlight-end
+    },
+  ],
+];
 ```
 
-**Breaking Change**: The `categorySortPrefix` option has been removed. Prefixing is now automatic when `categorySort` is enabled.
+**Result:** Categories are sorted alphabetically and folders are prefixed:
+```
+docs/api/
+├── 01-objects/
+├── 02-enums/
+├── 03-queries/
+└── 04-mutations/
+```
 
-## What's Changed
-* :bug: Fix: guard husky prepare hook to skip in CI and avoid EPIPE failures in GitHub Actions
-* :wrench: Remove earthly --ci +all from pre-push hook to prevent blocking git push operations
+#### Custom Sort Function
+
+Define your own category ordering logic:
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+      baseURL: "api",
+      // highlight-start
+      docOptions: {
+        categorySort: (a, b) => {
+          // Custom order: queries first, then mutations, then everything else alphabetically
+          const order = { queries: 1, mutations: 2 };
+          const aOrder = order[a.toLowerCase()] || 999;
+          const bOrder = order[b.toLowerCase()] || 999;
+          
+          if (aOrder !== bOrder) {
+            return aOrder - bOrder;
+          }
+          return a.localeCompare(b); // Alphabetical for others
+        },
+      },
+      // highlight-end
+    },
+  ],
+];
+```
+
+**Result:** Custom-ordered categories with auto-prefixes:
+```
+docs/api/
+├── 01-queries/
+├── 02-mutations/
+├── 03-enums/
+└── 04-objects/
+```
+
+#### Works with Group-by-Directive
+
+The `categorySort` option integrates seamlessly with the `groupByDirective` feature:
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+      baseURL: "api",
+      // highlight-start
+      groupByDirective: {
+        directive: "doc",
+        field: "category",
+        fallback: "Common",
+      },
+      docOptions: {
+        categorySort: "natural", // Sort custom groups alphabetically
+      },
+      // highlight-end
+    },
+  ],
+];
+```
+
+**Result:** Custom groups are sorted and prefixed:
+```
+docs/api/
+├── 01-authentication/
+├── 02-common/
+├── 03-payments/
+└── 04-users/
+```
+
+### Why Use Category Sorting?
+
+- **Better Organization**: Control exactly how your API documentation is organized
+- **Consistent Experience**: Same ordering across sidebar, file explorer, and IDE
+- **Flexible**: Use built-in alphabetical sorting or define custom logic
+- **No Manual Work**: Auto-prefixing eliminates the need to manually name folders with numbers
+
+### Documentation
+
+For complete details and advanced use cases, see:
+- [Settings: docOptions.categorySort](https://graphql-markdown.dev/docs/settings#docoptions)
+- [Configuration Cheatsheet](https://graphql-markdown.dev/docs/configuration-cheatsheet)
+
+---
+
+## 🎣 Preview: Enhanced Hooks & Event System
+
+We're excited to introduce the foundation of a more extensible GraphQL-Markdown! This release migrates to native Node.js events and lays the groundwork for **comprehensive hooks at every stage of the documentation generation lifecycle**.
+
+### What's Here Now
+
+- **Lifecycle Event Hooks**: Initial hooks for key generation stages (schema loading, rendering, index generation) using Node.js native `EventEmitter`
+- **Type-Safe Events**: Full TypeScript definitions for safer custom implementations
+
+### What's Coming Next
+
+This is just the beginning! Future releases will expose **more hooks and events** throughout the entire documentation generation process:
+
+- Pre/post hooks for **schema processing and validation**
+- Events during **type discovery and categorization**
+- Hooks for **frontmatter and metadata manipulation**
+- Integration points for **custom renderers and formatters**
+- Real-time **progress tracking and logging events**
+
+Our goal is to give you complete control over the documentation generation lifecycle, enabling deep customization at every step.
+
+### What You Can Do Today
+
+The current hooks system allows you to:
+
+- **Generate custom index files** for documentation categories
+- **Append metadata** to rendered pages automatically
+
+### Example
+
+Create custom index.md files using the new hooks:
+
+```js title="custom-mdx.mjs"
+import { join } from "node:path";
+import { ensureDir, saveFile, startCase } from "@graphql-markdown/utils";
+
+/**
+ * Hook executed before generating index metadata files
+ */
+const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
+  const filePath = join(dirPath, "index.md");
+  const label = startCase(category);
+  const content = `---\ntitle: "${label}"\n---\n\n`;
+  
+  await ensureDir(dirPath);
+  await saveFile(filePath, content);
+};
+
+export { beforeGenerateIndexMetafileHook };
+```
+
+Configure in your Docusaurus plugin:
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      schema: "./schema.graphql",
+      mdxParser: "./custom-mdx.mjs", // Load your custom hooks
+      // ... other options
+    },
+  ],
+];
+```
+
+### Documentation
+
+For complete hook recipes and API reference:
+- [Hooks Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes)
+- [Events API Documentation](https://graphql-markdown.dev/api/category/events)
+
+---
+
+## 📦 Package Versions
+
+This release includes updates to the following packages:
+
+- `@graphql-markdown/docusaurus@1.31.0`
+- `@graphql-markdown/core@1.17.0`
+- `@graphql-markdown/types@1.9.0`
+- `@graphql-markdown/cli@0.5.0`
+- `@graphql-markdown/printer-legacy@1.12.4`
+- `@graphql-markdown/utils@1.9.1`
+
+---
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.3...1.31.0
+
+[Changes][1.31.0]
+
 
 <a id="1.30.3"></a>
 # [1.30.3](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.30.3) - 2025-08-27
 
-🧼  Fix lost properties when merging object props from graphql-config with inline config, eg `docOptions.frontMatter`.
+🧼  Fix lost deep properties when merging object props from graphql-config with inline config, eg `docOptions.frontMatter`.
 
 ## What's Changed
 * :bug: fix merging graphql-config with inline config by [@edno](https://github.com/edno) in [#2362](https://github.com/graphql-markdown/graphql-markdown/pull/2362)
@@ -1953,6 +2157,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.31.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.3...1.31.0
 [1.30.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.2...1.30.3
 [1.30.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.1...1.30.2
 [1.30.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.0...1.30.1
@@ -2038,4 +2243,4 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [1.1.0-beta]: https://github.com/graphql-markdown/graphql-markdown/compare/1.0.0-beta...1.1.0-beta
 [1.0.0-beta]: https://github.com/graphql-markdown/graphql-markdown/tree/1.0.0-beta
 
-<!-- Generated by https://github.com/rhysd/changelog-from-release v3.9.0 -->
+<!-- Generated by https://github.com/rhysd/changelog-from-release v3.9.1 -->
