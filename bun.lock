@@ -179,6 +179,7 @@
         "@graphql-tools/utils": "catalog:graphql-tools",
         "graphql": "catalog:",
         "graphql-config": "catalog:",
+        "pinst": "^3.0.0",
       },
     },
     "packages/utils": {

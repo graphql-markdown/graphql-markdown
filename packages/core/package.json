@@ -56,8 +56,8 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
+    "prepack": "bunx pinst --disable",
+    "postpack": "bunx pinst --enable",
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
