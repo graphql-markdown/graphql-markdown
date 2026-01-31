@@ -5,7 +5,7 @@ Provides utilities for creating, formatting, and managing links to GraphQL types
 
 ## Variables
 
-### API\_GROUPS
+### API_GROUPS
 
 ```ts
 const API_GROUPS: Required<ApiGroupOverrideType>;
@@ -35,11 +35,11 @@ The GraphQL type to get the category for
 
 #### Returns
 
-`Maybe`\<`TypeLocale`\>
+`Maybe`&lt;`TypeLocale`&gt;
 
 The locale category for the type, or `undefined` if not found
 
-***
+---
 
 ### getLinkApiGroupFolder()
 
@@ -61,7 +61,7 @@ The GraphQL type to get the folder name for
 
 ##### groups?
 
-`Maybe`\<`boolean` \| `ApiGroupOverrideType`\>
+`Maybe`&lt;`boolean` \| `ApiGroupOverrideType`&gt;
 
 The group options
 
@@ -71,7 +71,7 @@ The group options
 
 The folder name for the API group
 
-***
+---
 
 ### getLinkCategoryFolder()
 
@@ -93,17 +93,17 @@ The GraphQL type to get the folder name for
 
 ##### operationLocale?
 
-`Maybe`\<`TypeLocale`\>
+`Maybe`&lt;`TypeLocale`&gt;
 
 The locale of the operation
 
 #### Returns
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 The folder name for the link category, or `undefined` if not found
 
-***
+---
 
 ### getLinkDeprecatedFolder()
 
@@ -125,7 +125,7 @@ The GraphQL type to get the folder name for
 
 ##### option
 
-`Maybe`\<`TypeDeprecatedOption`\>
+`Maybe`&lt;`TypeDeprecatedOption`&gt;
 
 The deprecation option
 
@@ -135,15 +135,12 @@ The deprecation option
 
 The folder name for deprecated types
 
-***
+---
 
 ### getRelationLink()
 
 ```ts
-function getRelationLink(
-   category, 
-   type, 
-options): Maybe<TypeLink>;
+function getRelationLink(category, type, options): Maybe<TypeLink>;
 ```
 
 Defined in: [link.ts:306](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L306)
@@ -154,7 +151,7 @@ Gets the link for a relation based on the category, type, and options.
 
 ##### category
 
-`Maybe`\<`TypeLocale`\>
+`Maybe`&lt;`TypeLocale`&gt;
 
 The locale category of the relation
 
@@ -172,11 +169,11 @@ Configuration options for link generation
 
 #### Returns
 
-`Maybe`\<`TypeLink`\>
+`Maybe`&lt;`TypeLink`&gt;
 
 The link object for the relation, or `undefined` if not found
 
-***
+---
 
 ### hasOptionParentType()
 
@@ -202,7 +199,7 @@ The options to check
 
 `true` if the options include `parentTypePrefix`, `false` otherwise
 
-***
+---
 
 ### hasOptionWithAttributes()
 
@@ -228,7 +225,7 @@ The options to check
 
 `true` if the options include `withAttributes`, `false` otherwise
 
-***
+---
 
 ### hasPrintableDirective()
 
@@ -250,7 +247,7 @@ The GraphQL type to check
 
 ##### options?
 
-`Pick`\<`PrintTypeOptions`, `"deprecated"` \| `"onlyDocDirectives"` \| `"skipDocDirectives"`\>
+`Pick`&lt;`PrintTypeOptions`, `"deprecated"` \| `"onlyDocDirectives"` \| `"skipDocDirectives"`&gt;
 
 Configuration options for directive printing (`deprecated`, `onlyDocDirectives`, `skipDocDirectives`)
 
@@ -260,7 +257,7 @@ Configuration options for directive printing (`deprecated`, `onlyDocDirectives`,
 
 `true` if the type should be printed, `false` otherwise
 
-***
+---
 
 ### printLink()
 
@@ -292,7 +289,7 @@ Configuration options for link generation
 
 The formatted link as a string
 
-***
+---
 
 ### printLinkAttributes()
 
@@ -314,7 +311,7 @@ The GraphQL type to print attributes for
 
 ##### text
 
-`Maybe`\<`string`\> = `""`
+`Maybe`&lt;`string`&gt; = `""`
 
 The text to append attributes to
 
@@ -324,7 +321,7 @@ The text to append attributes to
 
 The text with appended attributes
 
-***
+---
 
 ### printParentLink()
 
@@ -356,16 +353,12 @@ Configuration options for link generation
 
 The formatted parent link as a string or MDX string
 
-***
+---
 
 ### toLink()
 
 ```ts
-function toLink(
-   type, 
-   name, 
-   operation, 
-   options): TypeLink;
+function toLink(type, name, operation, options): TypeLink;
 ```
 
 Defined in: [link.ts:226](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L226)
@@ -388,7 +381,7 @@ The name of the type
 
 ##### operation
 
-`Maybe`\<`TypeLocale`\>
+`Maybe`&lt;`TypeLocale`&gt;
 
 The locale of the operation
 

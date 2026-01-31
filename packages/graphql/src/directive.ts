@@ -53,7 +53,7 @@ export const isCustomDirective = (
  * @param schemaDirectiveName - the GraphQL directive name.
  * @param customDirectiveOptions - the `customDirective` option.
  *
- * @returns a record set of custom handlers for the matching directive (or if `*` is declared), or undefined if no match.
+ * @returns a record set of custom handlers for the matching directive (or if `*` is declared), or `undefined` if no match.
  *
  * @example
  * ```js
@@ -95,7 +95,7 @@ export const getCustomDirectiveOptions = (
  * @param schemaMap - the GraphQL schema map returned by {@link getSchemaMap}
  * @param customDirectiveOptions - the `customDirective` option.
  *
- * @returns a custom directive map, or undefined if no match.
+ * @returns a custom directive map, or `undefined` if no match.
  *
  * @example
  * ```js
@@ -196,7 +196,7 @@ export const getCustomDirectives = (
  * @param entity - a GraphQL schema entity.
  * @param customDirectiveMap - a custom directive map (see {@link getCustomDirectives}).
  *
- * @returns a map of GraphQL directives matching the custom directives defined, else `undefined`.
+ * @returns A map of GraphQL directives matching the custom directives defined, else `undefined`.
  *
  * @example
  * ```js

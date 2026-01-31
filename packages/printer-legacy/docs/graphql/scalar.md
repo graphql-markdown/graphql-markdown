@@ -34,7 +34,7 @@ Options for printing type information (unused)
 
 SDL string representation of the scalar type
 
-***
+---
 
 ### printScalarMetadata()
 
@@ -67,7 +67,7 @@ Options for printing type information
 
 Markdown string containing the scalar metadata
 
-***
+---
 
 ### printSpecification()
 

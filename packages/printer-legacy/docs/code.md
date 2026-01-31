@@ -12,7 +12,7 @@ with proper indentation and deprecation notices.
 function printCodeArguments(type, indentationLevel): string;
 ```
 
-Defined in: [code.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L39)
+Defined in: [code.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L41)
 
 Generates a string representation of GraphQL arguments with proper formatting and indentation.
 
@@ -46,18 +46,15 @@ printCodeArguments({ args: [{ name: 'id', type: 'ID!' }] })
 // )
 ```
 
-***
+---
 
 ### printCodeField()
 
 ```ts
-function printCodeField(
-   type, 
-   options?, 
-   indentationLevel?): string | MDXString;
+function printCodeField(type, options?, indentationLevel?): string | MDXString;
 ```
 
-Defined in: [code.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L88)
+Defined in: [code.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L87)
 
 Generates a string representation of a GraphQL field including its arguments,
 return type, and deprecation status.

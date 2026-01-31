@@ -4,6 +4,7 @@ Option builder for handling CLI/config/default option precedence.
 
 This utility provides a fluent interface for merging options from multiple
 sources (CLI, config file, defaults) with consistent precedence rules:
+
 1. CLI options (highest priority)
 2. Config file options
 3. Default values (lowest priority)
@@ -33,9 +34,9 @@ const options = new OptionBuilder<MyOptions>()
   // Add in order: default -> config -> cli
   .addDefault(false, "pretty")
   .addFromConfig(undefined, "pretty")
-  .addFromCli(true, "pretty")  // CLI overrides default
+  .addFromCli(true, "pretty") // CLI overrides default
   .addDefault("/", "baseURL")
-  .addFromConfig("/api", "baseURL")  // Config overrides default
+  .addFromConfig("/api", "baseURL") // Config overrides default
   .addFromCli(undefined, "baseURL")
   .build();
 // Result: { pretty: true, baseURL: "/api" }
@@ -45,7 +46,7 @@ const options = new OptionBuilder<MyOptions>()
 
 ##### T
 
-`T` *extends* `Record`\<`string`, `unknown`\>
+`T` _extends_ `Record`&lt;`string`, `unknown`&gt;
 
 The type of the options object being built
 
@@ -59,7 +60,7 @@ new OptionBuilder<T>(): OptionBuilder<T>;
 
 ###### Returns
 
-[`OptionBuilder`](#optionbuilder)\<`T`\>
+[`OptionBuilder`](#optionbuilder)&lt;`T`&gt;
 
 #### Methods
 
@@ -79,13 +80,13 @@ This method can be called at any time; precedence is enforced semantically.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
 ###### value
 
-`Maybe`\<`T`\[`K`\]\>
+`Maybe`&lt;`T`\[`K`\]&gt;
 
 The default value
 
@@ -104,7 +105,7 @@ This builder for method chaining
 ###### Example
 
 ```typescript
-builder.addDefault(3000, "port")
+builder.addDefault(3000, "port");
 ```
 
 ##### addFromCli()
@@ -123,13 +124,13 @@ This method can be called at any time; precedence is enforced semantically.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
 ###### value
 
-`Maybe`\<`T`\[`K`\]\>
+`Maybe`&lt;`T`\[`K`\]&gt;
 
 The CLI option value
 
@@ -148,7 +149,7 @@ This builder for method chaining
 ###### Example
 
 ```typescript
-builder.addFromCli(cliOpts.port, "port")
+builder.addFromCli(cliOpts.port, "port");
 ```
 
 ##### addFromConfig()
@@ -167,13 +168,13 @@ This method can be called at any time; precedence is enforced semantically.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
 ###### value
 
-`Maybe`\<`T`\[`K`\]\>
+`Maybe`&lt;`T`\[`K`\]&gt;
 
 The config file option value
 
@@ -192,7 +193,7 @@ This builder for method chaining
 ###### Example
 
 ```typescript
-builder.addFromConfig(config.port, "port")
+builder.addFromConfig(config.port, "port");
 ```
 
 ##### build()
@@ -214,9 +215,9 @@ external modifications.
 
 ###### Returns
 
-`Partial`\<`T`\>
+`Partial`&lt;`T`&gt;
 
-The constructed options object with type Partial<T> (may not have all properties of T)
+The constructed options object with type `Partial<T>` (may not have all properties of `T`)
 
 ##### get()
 
@@ -235,7 +236,7 @@ Note: Nested objects and arrays are not deep copied.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
@@ -249,7 +250,7 @@ The key to get
 
 `T`\[`K`\] \| `undefined`
 
-The current value for the key, or undefined if not set
+The current value for the key, or `undefined` if not set
 
 ##### transform()
 
@@ -266,7 +267,7 @@ Useful for processing values after they've been set.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
@@ -291,15 +292,15 @@ This builder for method chaining
 ###### Example
 
 ```typescript
-builder.transform("path", (p) => resolve(p))
+builder.transform("path", (p) => resolve(p));
 ```
 
 ##### transformIf()
 
 ```ts
 transformIf<K>(
-   key, 
-   predicate, 
+   key,
+   predicate,
    fn): this;
 ```
 
@@ -312,7 +313,7 @@ Useful for applying different transformations based on other values.
 
 ###### K
 
-`K` *extends* `string` \| `number` \| `symbol`
+`K` _extends_ `string` \| `number` \| `symbol`
 
 ###### Parameters
 
@@ -343,5 +344,9 @@ This builder for method chaining
 ###### Example
 
 ```typescript
-builder.transformIf("path", () => force, (p) => resolve(p))
+builder.transformIf(
+  "path",
+  () => force,
+  (p) => resolve(p),
+);
 ```

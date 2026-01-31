@@ -18,7 +18,7 @@ Returns a lowercase string with `-` as replacement for non alphanum characters u
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -37,7 +37,7 @@ kebabCase("The quick brown Fox");
 // Expected result: "the-quick-brown-fox"
 ```
 
-***
+---
 
 ### toString
 
@@ -73,7 +73,7 @@ Returns a string in lowercase excepted for the 1st character capitalized using [
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -92,7 +92,7 @@ capitalize("the quick Brown Fox");
 // Expected result: "The quick brown fox"
 ```
 
-***
+---
 
 ### escapeMDX()
 
@@ -134,7 +134,7 @@ escapeMDX("`{MDX}` `<special>` characters");
 // Expected result: "`{MDX}` `<special>` characters"
 ```
 
-***
+---
 
 ### firstUppercase()
 
@@ -150,7 +150,7 @@ Returns a string with the 1st character in uppercase.
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -169,7 +169,7 @@ firstUppercase("the quick Brown Fox");
 // Expected result: "The quick Brown Fox"
 ```
 
-***
+---
 
 ### kebabCase()
 
@@ -185,7 +185,7 @@ Returns a lowercase string with `-` as replacement for non alphanum characters u
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -204,7 +204,7 @@ kebabCase("The quick brown Fox");
 // Expected result: "the-quick-brown-fox"
 ```
 
-***
+---
 
 ### prune()
 
@@ -222,7 +222,7 @@ Returns a string pruned on both start and end, similar to `trim()` but with any 
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be pruned.
 
@@ -249,7 +249,7 @@ prune(text, "**");
 // Expected result: "The quick brown fox jumps over the lazy dog."
 ```
 
-***
+---
 
 ### replaceDiacritics()
 
@@ -265,7 +265,7 @@ Replaces diacritics by non-diacritic equivalent characters.
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -275,7 +275,7 @@ the string to be transformed.
 
 a string with diacritic characters replaced, or an empty string if `str` is not a valid string.
 
- *
+-
 
 #### Example
 
@@ -289,7 +289,7 @@ replaceDiacritics("Âéêś"); // Expected result: "Aees"
 
 [StackOverflow source](https://stackoverflow.com/a/37511463)
 
-***
+---
 
 ### startCase()
 
@@ -305,7 +305,7 @@ Applies [firstUppercase](#firstuppercase) using [stringCaseBuilder](#stringcaseb
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
@@ -324,16 +324,12 @@ startCase("the quick Brown Fox");
 // Expected result: "The Quick Brown Fox"
 ```
 
-***
+---
 
 ### stringCaseBuilder()
 
 ```ts
-function stringCaseBuilder(
-   str, 
-   transformation?, 
-   separator?, 
-   splitter?): string;
+function stringCaseBuilder(str, transformation?, separator?, splitter?): string;
 ```
 
 Defined in: [string.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L100)
@@ -349,13 +345,13 @@ By default `splitter` expression will split the string into words, where non-alp
 
 ##### str
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the string to be transformed.
 
 ##### transformation?
 
-`Maybe`\<(`word`) => `string`\>
+`Maybe`&lt;(`word`) => `string`&gt;
 
 optional transformation callback function.
 
@@ -389,7 +385,7 @@ stringCaseBuilder(text, transformation, " ");
 // Expected result: "*The* *quick* *brown* *fox* *jumps* *over* *the* *lazy* *dog*"
 ```
 
-***
+---
 
 ### toHTMLUnicode()
 
@@ -407,7 +403,7 @@ Converts a character to its equivalent HTML unicode representation `&#x0000`.
 
 ##### char
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the character to be transformed.
 

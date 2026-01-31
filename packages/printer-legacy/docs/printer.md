@@ -17,6 +17,7 @@ from GraphQL schema types.
 #### Remarks
 
 This class provides static methods for rendering different components of the documentation:
+
 - Headers and frontmatter
 - Type descriptions and code blocks
 - Custom directives and metadata
@@ -26,8 +27,8 @@ This class provides static methods for rendering different components of the doc
 
 ```typescript
 const printer = new Printer();
-await printer.init(schema, '/docs', 'graphql', options);
-const docs = printer.printType('Query', queryType);
+await printer.init(schema, "/docs", "graphql", options);
+const docs = printer.printType("Query", queryType);
 ```
 
 #### Implements
@@ -176,11 +177,11 @@ MDX module configuration
 
 ```ts
 static init(
-   schema, 
-   baseURL, 
-   linkRoot, 
-   options, 
-mdxParser?): Promise<void>;
+   schema,
+   baseURL,
+   linkRoot,
+   options,
+   mdxParser?): Promise<void>;
 ```
 
 Defined in: [printer.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L140)
@@ -191,19 +192,19 @@ Initializes the printer with the given schema and configuration.
 
 ###### schema
 
-`Maybe`\<`GraphQLSchema`\>
+`Maybe`&lt;`GraphQLSchema`&gt;
 
 GraphQL schema to generate documentation for
 
 ###### baseURL
 
-`Maybe`\<`string`\> = `"schema"`
+`Maybe`&lt;`string`&gt; = `"schema"`
 
 Base URL path for documentation, e.g. '/docs'
 
 ###### linkRoot
 
-`Maybe`\<`string`\> = `"/"`
+`Maybe`&lt;`string`&gt; = `"/"`
 
 Root path for generating links between types
 
@@ -221,15 +222,15 @@ Configuration options for the printer
 
 ###### groups?
 
-`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>
+`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;
 
 ###### meta?
 
-`Maybe`\<`MetaOptions`\>
+`Maybe`&lt;`MetaOptions`&gt;
 
 ###### metatags?
 
-`Record`\<`string`, `string`\>[]
+`Record`&lt;`string`, `string`&gt;[]
 
 ###### onlyDocDirectives?
 
@@ -245,13 +246,13 @@ Configuration options for the printer
 
 ###### mdxParser?
 
-`Record`\<`string`, `unknown`\>
+`Record`&lt;`string`, `unknown`&gt;
 
 Optional MDX parser module for MDX output support
 
 ###### Returns
 
-`Promise`\<`void`\>
+`Promise`&lt;`void`&gt;
 
 ##### printCode()
 
@@ -317,8 +318,8 @@ Formatted example section string or empty string if no example
 
 ```ts
 readonly static printHeader(
-   id, 
-   title, 
+   id,
+   title,
    options): string;
 ```
 
@@ -416,9 +417,9 @@ Formatted relations section as MDX or plain string
 
 ```ts
 readonly static printType(
-   name, 
-   type, 
-options?): Maybe<MDXString>;
+   name,
+   type,
+   options?): Maybe<MDXString>;
 ```
 
 Defined in: [printer.ts:406](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L406)
@@ -429,7 +430,7 @@ Main method to print complete documentation for a GraphQL type
 
 ###### name
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 Name identifier for the type
 
@@ -441,28 +442,29 @@ GraphQL type to generate documentation for
 
 ###### options?
 
-`Maybe`\<`Partial`\<`PrintTypeOptions`\>\>
+`Maybe`&lt;`Partial`&lt;`PrintTypeOptions`&gt;&gt;
 
 Optional printer configuration options
 
 ###### Returns
 
-`Maybe`\<`MDXString`\>
+`Maybe`&lt;`MDXString`&gt;
 
 Complete documentation as MDX string or undefined if type should be skipped
 
 ###### Example
 
 ```typescript
-const doc = Printer.printType('User', UserType, {
+const doc = Printer.printType("User", UserType, {
   frontMatter: true,
-  codeSection: true
+  codeSection: true,
 });
 ```
 
 ###### Remarks
 
 The method combines multiple sections:
+
 - Header with frontmatter
 - Meta tags
 - Description

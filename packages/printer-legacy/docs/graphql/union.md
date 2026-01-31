@@ -34,7 +34,7 @@ Configuration options for printing (unused)
 
 SDL string representation of the union type
 
-***
+---
 
 ### printUnionMetadata()
 

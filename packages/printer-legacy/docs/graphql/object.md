@@ -34,15 +34,12 @@ Printing options
 
 GraphQL object type definition as a code block string
 
-***
+---
 
 ### printCodeType()
 
 ```ts
-function printCodeType(
-   type, 
-   entity, 
-   options): string;
+function printCodeType(type, entity, options): string;
 ```
 
 Defined in: [graphql/object.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L64)
@@ -75,7 +72,7 @@ Printing options
 
 GraphQL type definition as a code block string
 
-***
+---
 
 ### printObjectMetadata()
 

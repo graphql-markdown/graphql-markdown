@@ -5,11 +5,7 @@
 ### hasChanges()
 
 ```ts
-function hasChanges(
-   schema, 
-   tmpDir, 
-   diffMethod, 
-diffModule): Promise<boolean>;
+function hasChanges(schema, tmpDir, diffMethod, diffModule): Promise<boolean>;
 ```
 
 Defined in: [diff.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L62)
@@ -32,19 +28,19 @@ The temporary directory to store intermediate files during the diff process.
 
 ##### diffMethod
 
-`Maybe`\<`DiffMethodName`\>
+`Maybe`&lt;`DiffMethodName`&gt;
 
 The name of the diff method to use. Must be a string or `null`.
 
 ##### diffModule
 
-`Maybe`\<`string`\> = `"@graphql-markdown/diff"`
+`Maybe`&lt;`string`&gt; = `"@graphql-markdown/diff"`
 
 The module to import for performing the diff. Defaults to `@graphql-markdown/diff`.
 
 #### Returns
 
-`Promise`\<`boolean`\>
+`Promise`&lt;`boolean`&gt;
 
 A promise that resolves to `true` if changes are detected or if the diff method/module is invalid, otherwise `false`.
 
@@ -72,7 +68,7 @@ const result = await hasChanges(
   schema,
   "/tmp/schema-diff",
   "breaking",
-  "./my-custom-diff-module"
+  "./my-custom-diff-module",
 );
 ```
 
@@ -82,8 +78,8 @@ Will log a warning if the specified diff module cannot be found.
 
 #### See
 
- - DiffMethodName for available diff methods
- - FunctionCheckSchemaChanges for the signature of the function imported from the diff module
+- DiffMethodName for available diff methods
+- FunctionCheckSchemaChanges for the signature of the function imported from the diff module
 
 #### Since
 

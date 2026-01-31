@@ -20,7 +20,7 @@ Check if an object contains key/value records.
 
 ##### T
 
-`T` *extends* `Record`\<`string`, `unknown`\>
+`T` _extends_ `Record`&lt;`string`, `unknown`&gt;
 
 #### Parameters
 
@@ -39,7 +39,7 @@ the key/value record object.
 #### Example
 
 ```js
-import { isEmpty } from '@graphql-markdown/utils/object';
+import { isEmpty } from "@graphql-markdown/utils/object";
 
 const obj = {
   bool: true,

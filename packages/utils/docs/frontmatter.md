@@ -5,10 +5,7 @@
 ### formatFrontMatterList()
 
 ```ts
-function formatFrontMatterList(
-   prop, 
-   indentation, 
-   prefix): string[];
+function formatFrontMatterList(prop, indentation, prefix): string[];
 ```
 
 Defined in: [frontmatter.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L79)
@@ -52,15 +49,12 @@ formatFrontMatterList(list);
 // ]
 ```
 
-***
+---
 
 ### formatFrontMatterObject()
 
 ```ts
-function formatFrontMatterObject(
-   props, 
-   indentation, 
-   prefix?): string[];
+function formatFrontMatterObject(props, indentation, prefix?): string[];
 ```
 
 Defined in: [frontmatter.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L39)
@@ -106,15 +100,12 @@ formatFrontMatterObject(obj);
 // ]
 ```
 
-***
+---
 
 ### formatFrontMatterProp()
 
 ```ts
-function formatFrontMatterProp(
-   prop, 
-   indentation, 
-   prefix?): string[];
+function formatFrontMatterProp(prop, indentation, prefix?): string[];
 ```
 
 Defined in: [frontmatter.ts:122](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L122)

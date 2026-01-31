@@ -20,11 +20,13 @@ Checks if a directive is executable (related to operations).
 
 `GraphQLDirective`
 
+a GraphQL directive.
+
 #### Returns
 
 `boolean`
 
-***
+---
 
 ### instanceOf()
 
@@ -62,7 +64,7 @@ the GraphQL type `T`.
 
 `obj is () => T`
 
-***
+---
 
 ### isApiType()
 
@@ -86,7 +88,7 @@ a GraphQL type.
 
 `boolean`
 
-***
+---
 
 ### isDeprecated()
 
@@ -118,12 +120,14 @@ an instance of `T`.
 
 `obj is DeprecatedType<T>`
 
-***
+---
 
 ### isGraphQLFieldType()
 
 ```ts
-function isGraphQLFieldType(type): type is GraphQLField<unknown, unknown, unknown>;
+function isGraphQLFieldType(
+  type,
+): type is GraphQLField<unknown, unknown, unknown>;
 ```
 
 Defined in: [packages/graphql/src/guard.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/guard.ts#L39)
@@ -142,7 +146,7 @@ a GraphQL type.
 
 `type is GraphQLField<unknown, unknown, unknown>`
 
-***
+---
 
 ### isOperation()
 
@@ -166,7 +170,7 @@ a GraphQL type.
 
 `type is GraphQLOperationType`
 
-***
+---
 
 ### isSystemType()
 
@@ -190,7 +194,7 @@ a GraphQL type.
 
 `boolean`
 
-***
+---
 
 ### typeSystemDirectiveLocation()
 
@@ -207,6 +211,8 @@ Checks if a directive is system (related to schema definition).
 ##### directive
 
 `GraphQLDirective`
+
+a GraphQL directive.
 
 #### Returns
 

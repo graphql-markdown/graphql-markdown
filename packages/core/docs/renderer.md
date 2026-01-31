@@ -10,6 +10,7 @@ Core renderer class responsible for generating documentation files from GraphQL 
 Handles the conversion of schema types to markdown/MDX documentation with proper organization.
 
 HIERARCHY LEVELS WHEN categorySort IS ENABLED:
+
 - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
 - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
 
@@ -31,12 +32,12 @@ Each level has its own CategoryPositionManager that restarts numbering at 1.
 
 ```ts
 new Renderer(
-   printer, 
-   outputDir, 
-   baseURL, 
-   group, 
-   prettify, 
-   docOptions, 
+   printer,
+   outputDir,
+   baseURL,
+   group,
+   prettify,
+   docOptions,
    mdxModule?): Renderer;
 ```
 
@@ -48,7 +49,7 @@ Creates a new Renderer instance.
 
 ###### printer
 
-*typeof* `IPrinter`
+_typeof_ `IPrinter`
 
 The printer instance used to convert GraphQL types to markdown
 
@@ -66,7 +67,7 @@ Base URL for the documentation
 
 ###### group
 
-`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
 
 Optional grouping configuration for schema entities
 
@@ -78,7 +79,7 @@ Whether to format the generated markdown
 
 ###### docOptions
 
-`Maybe`\<`RendererDocOptions`\>
+`Maybe`&lt;`RendererDocOptions`&gt;
 
 Additional documentation options
 
@@ -172,7 +173,7 @@ Defined in: [renderer.ts:349](https://github.com/graphql-markdown/graphql-markdo
 protected emit(hookName, args): unknown[];
 ```
 
-Defined in: [hooks.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/hooks.ts#L21)
+Defined in: [hooks.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/hooks.ts#L28)
 
 ###### Parameters
 
@@ -196,9 +197,9 @@ Defined in: [hooks.ts:21](https://github.com/graphql-markdown/graphql-markdown/b
 
 ```ts
 generateCategoryMetafileType(
-   type, 
-   name, 
-rootTypeName): Promise<string>;
+   type,
+   name,
+   rootTypeName): Promise<string>;
 ```
 
 Defined in: [renderer.ts:512](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L512)
@@ -228,7 +229,7 @@ The root type name this entity belongs to
 
 ###### Returns
 
-`Promise`\<`string`\>
+`Promise`&lt;`string`&gt;
 
 The generated directory path
 
@@ -242,9 +243,9 @@ The generated directory path
 
 ```ts
 generateIndexMetafile(
-   dirPath, 
-   category, 
-options?): Promise<void>;
+   dirPath,
+   category,
+   options?): Promise<void>;
 ```
 
 Defined in: [renderer.ts:476](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L476)
@@ -273,16 +274,16 @@ Configuration options for the index
 
 ###### Returns
 
-`Promise`\<`void`\>
+`Promise`&lt;`void`&gt;
 
 Promise that resolves when the index is generated
 
 ###### Example
 
 ```typescript
-await renderer.generateIndexMetafile('docs/types', 'Types', {
+await renderer.generateIndexMetafile("docs/types", "Types", {
   collapsible: true,
-  collapsed: false
+  collapsed: false,
 });
 ```
 
@@ -359,6 +360,7 @@ This allows the position manager to assign consistent positions before
 any files are written.
 
 HIERARCHY LEVELS:
+
 - Root level: Query, Mutation, Subscription, Deprecated (when grouped), custom root groups
 - Nested level: operations/types (API groups), custom groups under roots
 
@@ -396,13 +398,13 @@ Replaces placeholders in the template with actual values.
 
 ###### homepageLocation
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 Path to the homepage template file
 
 ###### Returns
 
-`Promise`\<`void`\>
+`Promise`&lt;`void`&gt;
 
 Promise that resolves when the homepage is rendered
 
@@ -438,7 +440,7 @@ The type object containing all entities to render
 
 ###### Returns
 
-`Promise`\<`Maybe`\<`Maybe`\<`Category`\>[]\>\>
+`Promise`&lt;`Maybe`&lt;`Maybe`&lt;`Category`&gt;[]&gt;&gt;
 
 Array of rendered categories or undefined
 
@@ -452,9 +454,9 @@ Array of rendered categories or undefined
 
 ```ts
 renderTypeEntities(
-   dirPath, 
-   name, 
-type): Promise<Maybe<Category>>;
+   dirPath,
+   name,
+   type): Promise<Maybe<Category>>;
 ```
 
 Defined in: [renderer.ts:635](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L635)
@@ -483,7 +485,7 @@ The type entity to render
 
 ###### Returns
 
-`Promise`\<`Maybe`\<`Category`\>\>
+`Promise`&lt;`Maybe`&lt;`Category`&gt;&gt;
 
 The category information for the rendered entity or undefined
 
@@ -528,7 +530,7 @@ Defined in: [renderer.ts:229](https://github.com/graphql-markdown/graphql-markdo
 Configuration options for category metafiles in the documentation.
 These options control the appearance and behavior of category sections in the sidebar.
 
- CategoryMetafileOptions
+CategoryMetafileOptions
 
 #### Example
 
@@ -537,7 +539,7 @@ const options: CategoryMetafileOptions = {
   collapsible: true,
   collapsed: false,
   sidebarPosition: SidebarPosition.FIRST,
-  styleClass: CATEGORY_STYLE_CLASS.API
+  styleClass: CATEGORY_STYLE_CLASS.API,
 };
 ```
 
@@ -585,7 +587,7 @@ CSS class to apply to the category for styling
 
 ## Variables
 
-### API\_GROUPS
+### API_GROUPS
 
 ```ts
 const API_GROUPS: Required<ApiGroupOverrideType>;
@@ -612,12 +614,15 @@ const customGroups = { ...API_GROUPS, operations: "queries-and-mutations" };
 
 [getApiGroupFolder](#getapigroupfolder) For usage with type categorization
 
-***
+---
 
 ### RendererHooks
 
 ```ts
-const RendererHooks: readonly ["generateIndexMetafile", "afterRenderTypeEntitiesHook"];
+const RendererHooks: readonly [
+  "generateIndexMetafile",
+  "afterRenderTypeEntitiesHook",
+];
 ```
 
 Defined in: [renderer.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L46)
@@ -627,6 +632,7 @@ Array of hook names available in the renderer lifecycle.
 #### Remarks
 
 These hooks allow customization at different stages of the rendering process:
+
 - `generateIndexMetafile`: Hook called during index metadata file generation
 - `afterRenderTypeEntitiesHook`: Hook called after rendering type entities
 
@@ -652,7 +658,7 @@ The GraphQL schema entity to categorize
 
 ##### groups?
 
-`Maybe`\<`boolean` \| `ApiGroupOverrideType`\>
+`Maybe`&lt;`boolean` \| `ApiGroupOverrideType`&gt;
 
 Optional custom group naming configuration
 
@@ -672,19 +678,20 @@ const folder = getApiGroupFolder(queryType); // Returns "operations"
 const folder = getApiGroupFolder(objectType, { operations: "queries" }); // Returns appropriate folder
 ```
 
-***
+---
 
 ### getRenderer()
 
 ```ts
 function getRenderer(
-   printer, 
-   outputDir, 
-   baseURL, 
-   group, 
-   prettify, 
-   docOptions, 
-mdxModule?): Promise<Renderer>;
+  printer,
+  outputDir,
+  baseURL,
+  group,
+  prettify,
+  docOptions,
+  mdxModule?,
+): Promise<Renderer>;
 ```
 
 Defined in: [renderer.ts:1034](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L1034)
@@ -696,7 +703,7 @@ Creates the output directory and returns a configured renderer.
 
 ##### printer
 
-*typeof* `IPrinter`
+_typeof_ `IPrinter`
 
 The printer instance to use for rendering types
 
@@ -714,7 +721,7 @@ The base URL for the documentation
 
 ##### group
 
-`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
 
 Optional grouping configuration
 
@@ -726,7 +733,7 @@ Whether to prettify the output markdown
 
 ##### docOptions
 
-`Maybe`\<`RendererDocOptions`\>
+`Maybe`&lt;`RendererDocOptions`&gt;
 
 Additional documentation options
 
@@ -738,7 +745,7 @@ Optional MDX module for enhanced features
 
 #### Returns
 
-`Promise`\<[`Renderer`](#renderer)\>
+`Promise`&lt;[`Renderer`](#renderer)&gt;
 
 A configured Renderer instance
 
@@ -747,10 +754,10 @@ A configured Renderer instance
 ```typescript
 const renderer = await getRenderer(
   myPrinter,
-  './docs',
-  '/api',
+  "./docs",
+  "/api",
   groupConfig,
   true,
-  { force: true, index: true }
+  { force: true, index: true },
 );
 ```

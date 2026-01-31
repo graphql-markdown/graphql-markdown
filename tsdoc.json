@@ -238,6 +238,11 @@
     {
       "tagName": "@alias",
       "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@pattern",
+      "syntaxKind": "block",
+      "allowMultiple": true
     }
   ]
 }

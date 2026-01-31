@@ -34,13 +34,13 @@ a GraphQL schema named type
 
 ##### groupByDirective
 
-`Maybe`\<`GroupByDirectiveOptions`\>
+`Maybe`&lt;`GroupByDirectiveOptions`&gt;
 
 the `groupByDirective` option.
 
 #### Returns
 
-`Maybe`\<`string`\>
+`Maybe`&lt;`string`&gt;
 
 the group name matching the type, or `groupByDirective.fallback` if no match found.
 
@@ -75,20 +75,22 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 getGroupName(schema.getType("Bird"), groupOptions); // Expected result: "animal"
 
 getGroupName(schema.getType("Unicorn"), groupOptions); // Expected result: "common"
-
 ```
 
-***
+---
 
 ### getGroups()
 
 ```ts
-function getGroups(schemaMap, groupByDirective): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
+function getGroups(
+  schemaMap,
+  groupByDirective,
+): Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 ```
 
 Defined in: [packages/graphql/src/group.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/group.ts#L173)
@@ -105,13 +107,13 @@ the GraphQL schema map returned by getSchemaMap
 
 ##### groupByDirective
 
-`Maybe`\<`GroupByDirectiveOptions`\>
+`Maybe`&lt;`GroupByDirectiveOptions`&gt;
 
 the `groupByDirective` option.
 
 #### Returns
 
-`Maybe`\<`Partial`\<`Record`\<`SchemaEntity`, `Record`\<`string`, `Maybe`\<`string`\>\>\>\>\>
+`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
 
 a map of entities with matching group name.
 
@@ -151,7 +153,7 @@ const groupOptions = {
   fallback: "common",
   directive: "doc",
   field: "category",
-}
+};
 
 const groupsMap = getGroups(schemaMap, groupOptions);
 

@@ -19,6 +19,7 @@ Defined in: [generator.ts:64](https://github.com/graphql-markdown/graphql-markdo
 Main entry point for generating Markdown documentation from a GraphQL schema.
 
 This function coordinates the entire documentation generation process:
+
 - Loads and validates the schema
 - Checks for schema changes if diffing is enabled
 - Processes directives and groups
@@ -35,6 +36,6 @@ Complete configuration for the documentation generation
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`&lt;`void`&gt;
 
 Promise that resolves when documentation is fully generated

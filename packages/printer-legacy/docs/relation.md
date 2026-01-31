@@ -13,7 +13,7 @@ function getRootTypeLocaleFromString(text): Maybe<TypeLocale>;
 
 Defined in: [relation.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L40)
 
-Converts a string representation of a root type to its corresponding TypeLocale
+Converts a string representation of a root type to its corresponding `TypeLocale`
 
 #### Parameters
 
@@ -21,30 +21,31 @@ Converts a string representation of a root type to its corresponding TypeLocale
 
 `string`
 
-The string to convert to a TypeLocale
+The string to convert to a `TypeLocale`
 
 #### Returns
 
-`Maybe`\<`TypeLocale`\>
+`Maybe`&lt;`TypeLocale`&gt;
 
-The matching TypeLocale if found, undefined otherwise
+The matching `TypeLocale` if found, `undefined` otherwise
 
 #### Example
 
 ```ts
-const locale = getRootTypeLocaleFromString('Query');
+const locale = getRootTypeLocaleFromString("Query");
 ```
 
-***
+---
 
 ### printRelationOf()
 
 ```ts
 function printRelationOf<T>(
-   type, 
-   section, 
-   getRelation, 
-   options): string | MDXString;
+  type,
+  section,
+  getRelation,
+  options,
+): string | MDXString;
 ```
 
 Defined in: [relation.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L65)
@@ -75,7 +76,7 @@ The section title for the relation
 
 ##### getRelation
 
-`Maybe`\<`IGetRelation`\<`T`\>\>
+`Maybe`&lt;`IGetRelation`&lt;`T`&gt;&gt;
 
 Function to retrieve relations of type T
 
@@ -101,7 +102,7 @@ If the schema is not provided in options
 const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);
 ```
 
-***
+---
 
 ### printRelations()
 
@@ -140,5 +141,8 @@ If the schema is not provided in options
 #### Example
 
 ```ts
-const relations = printRelations(myType, { schema, formatMDXBullet: () => "* " });
+const relations = printRelations(myType, {
+  schema,
+  formatMDXBullet: () => "* ",
+});
 ```

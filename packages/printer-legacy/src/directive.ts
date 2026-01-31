@@ -25,7 +25,7 @@ import { printBadge } from "./badge";
  * @param type - The GraphQL type to resolve the directive for
  * @param constDirectiveOption - The directive configuration options
  * @param fallback - Optional fallback value if resolution fails
- * @returns The resolved directive value or fallback/undefined
+ * @returns The resolved directive value or `fallback`/`undefined`
  */
 export const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
@@ -51,7 +51,7 @@ export const getCustomDirectiveResolver = (
  * @param type - The GraphQL type to print the directive for
  * @param constDirectiveOption - The directive configuration options
  * @param options - General printing options
- * @returns Formatted Markdown string for the directive or undefined
+ * @returns Formatted Markdown string for the directive or `undefined`
  */
 export const printCustomDirective = (
   type: unknown,
