@@ -1,21 +1,11 @@
 /**
- * Diff checking event and constants.
+ * Diff checking event class.
  *
  * @packageDocumentation
  */
 
 import type { DefaultAction } from "@graphql-markdown/types";
 import { CancellableEvent } from "./base";
-
-/**
- * Event names for diff checking lifecycle.
- */
-export const DiffEvents = {
-  /** Emitted before checking schema differences */
-  BEFORE_CHECK: "beforeCheckDiff",
-  /** Emitted after checking schema differences */
-  AFTER_CHECK: "afterCheckDiff",
-} as const;
 
 /**
  * Event emitted before/after checking schema differences.

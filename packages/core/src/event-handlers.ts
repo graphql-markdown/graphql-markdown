@@ -10,39 +10,7 @@
 import { log, LogLevel } from "@graphql-markdown/logger";
 
 import { getEvents, resetEvents } from "./event-emitter";
-import {
-  SchemaEvents,
-  DiffEvents,
-  RenderRootTypesEvents,
-  RenderHomepageEvents,
-  RenderTypeEntitiesEvents,
-  GenerateIndexMetafileEvents,
-} from "./events";
-
-/**
- * Event callback mapping configuration.
- * Maps event names to their corresponding callback names in mdxModule.
- */
-export const EVENT_CALLBACK_MAP = {
-  [SchemaEvents.BEFORE_LOAD]: "beforeLoadSchemaHook",
-  [SchemaEvents.AFTER_LOAD]: "afterLoadSchemaHook",
-  [DiffEvents.BEFORE_CHECK]: "beforeCheckDiffHook",
-  [DiffEvents.AFTER_CHECK]: "afterCheckDiffHook",
-  [RenderRootTypesEvents.BEFORE_RENDER]: "beforeRenderRootTypesHook",
-  [RenderRootTypesEvents.AFTER_RENDER]: "afterRenderRootTypesHook",
-  [RenderHomepageEvents.BEFORE_RENDER]: "beforeRenderHomepageHook",
-  [RenderHomepageEvents.AFTER_RENDER]: "afterRenderHomepageHook",
-  [RenderTypeEntitiesEvents.BEFORE_RENDER]: "beforeRenderTypeEntitiesHook",
-  [RenderTypeEntitiesEvents.AFTER_RENDER]: "afterRenderTypeEntitiesHook",
-  [GenerateIndexMetafileEvents.BEFORE_GENERATE]:
-    "beforeGenerateIndexMetafileHook",
-  [GenerateIndexMetafileEvents.AFTER_GENERATE]:
-    "afterGenerateIndexMetafileHook",
-} as const;
-
-export const LEGACY_EVENT_CALLBACK_MAP = {
-  [GenerateIndexMetafileEvents.BEFORE_GENERATE]: "generateIndexMetafile",
-} as const;
+import { EVENT_CALLBACK_MAP } from "./event-map";
 
 /**
  * Registers MDX module event handlers with the event emitter.
@@ -71,13 +39,8 @@ export const registerMDXEventHandlers = (mdxModule: unknown): void => {
   const events = getEvents();
   const registeredHandlers = new Set<string>();
 
-  const combinedEventMap = {
-    ...EVENT_CALLBACK_MAP,
-    ...LEGACY_EVENT_CALLBACK_MAP,
-  };
-
   // Iterate through event callback mappings
-  for (const [eventName, callbackName] of Object.entries(combinedEventMap)) {
+  for (const [eventName, callbackName] of Object.entries(EVENT_CALLBACK_MAP)) {
     // Check if mdxModule has this callback function
     if (
       callbackName in mdxModule &&

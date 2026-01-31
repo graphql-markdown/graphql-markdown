@@ -1,21 +1,11 @@
 /**
- * Render root types event and constants.
+ * Render root types event class.
  *
  * @packageDocumentation
  */
 
 import type { DefaultAction } from "@graphql-markdown/types";
 import { CancellableEvent } from "./base";
-
-/**
- * Event names for rendering root types.
- */
-export const RenderRootTypesEvents = {
-  /** Emitted before rendering root types */
-  BEFORE_RENDER: "beforeRenderRootTypes",
-  /** Emitted after rendering root types */
-  AFTER_RENDER: "afterRenderRootTypes",
-} as const;
 
 /**
  * Event emitted before/after rendering root types.

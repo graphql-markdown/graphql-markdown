@@ -99,9 +99,6 @@ export const generateDocFromSchema = async ({
 
   await Logger(loggerModule);
 
-  // Register MDX event handlers if mdxParser module is provided
-  registerMDXEventHandlers(mdxParser);
-
   const loaders = await getDocumentLoaders(loadersList);
 
   if (!loaders) {
@@ -174,6 +171,9 @@ export const generateDocFromSchema = async ({
         return undefined;
       })
     : undefined);
+
+  // Register MDX event handlers if mdxModule loaded successfully
+  registerMDXEventHandlers(mdxModule);
 
   const printer = await getPrinter(
     // module mandatory

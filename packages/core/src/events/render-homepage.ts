@@ -1,21 +1,11 @@
 /**
- * Render homepage event and constants.
+ * Render homepage event class.
  *
  * @packageDocumentation
  */
 
 import type { DefaultAction } from "@graphql-markdown/types";
 import { CancellableEvent } from "./base";
-
-/**
- * Event names for rendering homepage.
- */
-export const RenderHomepageEvents = {
-  /** Emitted before rendering homepage */
-  BEFORE_RENDER: "beforeRenderHomepage",
-  /** Emitted after rendering homepage */
-  AFTER_RENDER: "afterRenderHomepage",
-} as const;
 
 /**
  * Event emitted before/after rendering homepage.

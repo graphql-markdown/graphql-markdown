@@ -1,21 +1,11 @@
 /**
- * Generate index metafile event and constants.
+ * Generate index metafile event class.
  *
  * @packageDocumentation
  */
 
 import type { DefaultAction } from "@graphql-markdown/types";
 import { CancellableEvent } from "./base";
-
-/**
- * Event names for generating index metafile.
- */
-export const GenerateIndexMetafileEvents = {
-  /** Emitted before generating index metafile */
-  BEFORE_GENERATE: "beforeGenerateIndexMetafile",
-  /** Emitted after generating index metafile */
-  AFTER_GENERATE: "afterGenerateIndexMetafile",
-} as const;
 
 /**
  * Event emitted before/after generating index metafile.
