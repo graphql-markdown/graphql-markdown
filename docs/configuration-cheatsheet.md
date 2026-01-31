@@ -18,13 +18,14 @@ This is a quick reference guide. All settings are thoroughly documented in the [
 
 ## Document Structure
 
-| Option      | Type      | Default | Description                                         |
-| ----------- | --------- | ------- | --------------------------------------------------- |
-| `linkRoot`  | `boolean` | `false` | Link types to root documentation                    |
-| `homepage`  | `string`  | —       | Custom homepage content file                        |
-| `hierarchy` | `string`  | `api`   | Documentation structure: `api`, `entity`, or `flat` |
-| `index`     | `boolean` | `false` | Generate category indices                           |
-| `pretty`    | `boolean` | `false` | Format generated Markdown files                     |
+| Option         | Type                     | Default | Description                                                           |
+| -------------- | ------------------------ | ------- | --------------------------------------------------------------------- |
+| `linkRoot`     | `boolean`                | `false` | Link types to root documentation                                      |
+| `homepage`     | `string`                 | —       | Custom homepage content file                                          |
+| `hierarchy`    | `string`                 | `api`   | Documentation structure: `api`, `entity`, or `flat`                   |
+| `index`        | `boolean`                | `false` | Generate category indices                                             |
+| `categorySort` | `string` \| `function`   | —       | Sort categories: `"natural"` for alphabetical or custom function      |
+| `pretty`       | `boolean`                | `false` | Format generated Markdown files                                       |
 
 ## Content Options
 
