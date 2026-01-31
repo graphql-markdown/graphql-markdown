@@ -437,21 +437,17 @@ export class Renderer {
 
     if (Array.isArray(handlerErrors) && handlerErrors.length > 0) {
       handlerErrors.forEach((error) => {
-        if (error instanceof Error) {
-          log(
-            LogLevel.ERROR,
-            `Error in BEFORE_GENERATE handler for GenerateIndexMetafileEvent: ${error.message}`,
-            error,
-          );
-        } else {
-          log(
-            LogLevel.ERROR,
-            "Error in BEFORE_GENERATE handler for GenerateIndexMetafileEvent (non-Error value).",
-            { error },
-          );
-        }
+        log(
+          `Error handler for ${GenerateIndexMetafileEvents.BEFORE_GENERATE}: ${error.message}`,
+          LogLevel.error,
+        );
       });
     }
+
+    await events.emitAsync(
+      GenerateIndexMetafileEvents.AFTER_GENERATE,
+      new GenerateIndexMetafileEvent({ dirPath, category }),
+    );
   }
 
   /**
