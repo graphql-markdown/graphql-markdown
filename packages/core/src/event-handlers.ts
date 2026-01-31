@@ -40,6 +40,10 @@ export const EVENT_CALLBACK_MAP = {
     "afterGenerateIndexMetafileHook",
 } as const;
 
+export const LEGACY_EVENT_CALLBACK_MAP = {
+  [GenerateIndexMetafileEvents.BEFORE_GENERATE]: "generateIndexMetafile",
+} as const;
+
 /**
  * Registers MDX module event handlers with the event emitter.
  *
@@ -65,8 +69,13 @@ export const registerMDXEventHandlers = (mdxModule: unknown): void => {
   const events = getEvents();
   const registeredHandlers = new Set<string>();
 
+  const combinedEventMap = {
+    ...EVENT_CALLBACK_MAP,
+    ...LEGACY_EVENT_CALLBACK_MAP,
+  };
+
   // Iterate through event callback mappings
-  for (const [eventName, callbackName] of Object.entries(EVENT_CALLBACK_MAP)) {
+  for (const [eventName, callbackName] of Object.entries(combinedEventMap)) {
     // Check if mdxModule has this callback function
     if (
       callbackName in mdxModule &&
