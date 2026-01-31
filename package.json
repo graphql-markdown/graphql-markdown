@@ -206,7 +206,6 @@
     "knip": "5.82.1",
     "lodash.filter": "4.6.0",
     "memfs": "4.56.10",
-    "pinst": "3.0.0",
     "prettier": "3.8.1",
     "ts-jest": "29.4.6",
     "tsgo-dev": "^2025.12.2",

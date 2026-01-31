@@ -39,7 +39,6 @@
         "knip": "5.82.1",
         "lodash.filter": "4.6.0",
         "memfs": "4.56.10",
-        "pinst": "3.0.0",
         "prettier": "3.8.1",
         "ts-jest": "29.4.6",
         "tsgo-dev": "^2025.12.2",
@@ -179,7 +178,6 @@
         "@graphql-tools/utils": "catalog:graphql-tools",
         "graphql": "catalog:",
         "graphql-config": "catalog:",
-        "pinst": "^3.0.0",
       },
     },
     "packages/utils": {
@@ -1879,8 +1877,6 @@
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "picomatch": ["picomatch@4.0.3", "", {}, "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q=="],
-
-    "pinst": ["pinst@3.0.0", "", { "bin": { "pinst": "bin.js" } }, "sha512-cengSmBxtCyaJqtRSvJorIIZXMXg+lJ3sIljGmtBGUVonMnMsVJbnzl6jGN1HkOWwxNuJynCJ2hXxxqCQrFDdw=="],
 
     "pirates": ["pirates@4.0.7", "", {}, "sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA=="],
 

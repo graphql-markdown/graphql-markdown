@@ -20,16 +20,13 @@
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
   "types": "src/index.d.ts",
   "scripts": {
-    "prepack": "bunx pinst --disable",
-    "postpack": "bunx pinst --enable",
     "build": "tsgo --build"
   },
   "devDependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",
     "@graphql-tools/utils": "catalog:graphql-tools",
     "graphql": "catalog:",
-    "graphql-config": "catalog:",
-    "pinst": "^3.0.0"
+    "graphql-config": "catalog:"
   },
   "publishConfig": {
     "directory": "src",
