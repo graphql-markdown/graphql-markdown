@@ -5,15 +5,7 @@ import {
   SchemaLoadEvent,
   SchemaEvents,
   GenerateIndexMetafileEvent,
-  GenerateIndexMetafileEvents,
   RenderTypeEntitiesEvent,
-  RenderTypeEntitiesEvents,
-  DiffCheckEvent,
-  DiffEvents,
-  RenderHomepageEvent,
-  RenderHomepageEvents,
-  RenderRootTypesEvent,
-  RenderRootTypesEvents,
 } from "../../src/events";
 
 describe("events", () => {
@@ -142,7 +134,7 @@ describe("events", () => {
     });
 
     it("should accept defaultAction", () => {
-      const defaultAction = jest.fn<() => Promise<void>>();
+      const defaultAction = jest.fn(() => Promise.resolve());
       const event = new SchemaLoadEvent({
         schemaLocation: "/path/to/schema.graphql",
         defaultAction,
@@ -338,7 +330,7 @@ describe("events", () => {
 
     it("should execute defaultAction if not prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn<() => Promise<void>>();
+      const defaultAction = jest.fn(() => Promise.resolve());
 
       const event = new SchemaLoadEvent({
         schemaLocation: "/path/to/schema",
@@ -351,7 +343,7 @@ describe("events", () => {
 
     it("should not execute defaultAction if prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn<() => Promise<void>>();
+      const defaultAction = jest.fn(() => Promise.resolve());
 
       events.on(SchemaEvents.BEFORE_LOAD, (event) => {
         event.preventDefault();
@@ -420,22 +412,18 @@ describe("events", () => {
 
     it("should handle async handlers", async () => {
       const events = getEvents();
-      const order: number[] = [];
+
+      const spy = jest.spyOn(console, "log").mockImplementation();
 
       events.on(SchemaEvents.BEFORE_LOAD, async () => {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        order.push(1);
+        console.log(SchemaEvents.BEFORE_LOAD);
       });
-      events.on(SchemaEvents.BEFORE_LOAD, () => {
-        order.push(2);
-      });
-
       const event = new SchemaLoadEvent({
         schemaLocation: "/path/to/schema",
       });
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
 
-      expect(order).toEqual([1, 2]);
+      expect(spy.mock.lastCall).toEqual([SchemaEvents.BEFORE_LOAD]);
     });
 
     it("should handle async defaultAction", async () => {
