@@ -35,17 +35,14 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^",
-    "@docusaurus/logger": "*"
+    "@docusaurus/logger": "catalog:docusaurus"
   },
   "directories": {
     "test": "tests"
@@ -55,7 +52,8 @@
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "typescript": {
     "definition": "dist/index.d.ts"

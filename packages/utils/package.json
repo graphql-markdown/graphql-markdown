@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.9.0",
+  "version": "1.9.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -49,19 +49,16 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"
   },
   "peerDependencies": {
-    "prettier": "^2.8 || ^3.0"
+    "prettier": "catalog:"
   },
   "peerDependenciesMeta": {
     "prettier": {
@@ -76,7 +73,8 @@
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "typescript": {
     "definition": "dist/index.d.ts"

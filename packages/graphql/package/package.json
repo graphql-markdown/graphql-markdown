@@ -1,16 +1,16 @@
 {
-  "name": "@graphql-markdown/diff",
+  "name": "@graphql-markdown/graphql",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown diff package.",
+  "description": "GraphQL-Markdown GraphQL utilities.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.1.13",
+  "version": "1.1.9",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/graphql-markdown/graphql-markdown.git",
-    "directory": "packages/diff"
+    "directory": "packages/graphql"
   },
   "author": {
     "name": "Gregory Heitz"
@@ -34,49 +34,48 @@
     },
     "./*": {
       "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       },
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       },
       "default": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       }
     },
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
     "stryker": "stryker run",
-    "clean": "tsgo --build --clean && rm -rf ./dist",
+    "clean": "tsc --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build"
+    "build": "tsc --build",
+    "pack": "bun pm pack"
   },
   "dependencies": {
-    "@graphql-inspector/core": "^7.1.1",
-    "@graphql-markdown/graphql": "workspace:^",
-    "@graphql-markdown/utils": "workspace:^",
-    "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
-    "@graphql-tools/load": "catalog:graphql-tools"
+    "@graphql-tools/load": "^8.1.2",
+    "@graphql-markdown/utils": "^1.9.0"
+  },
+  "peerDependencies": {
+    "graphql": "^16.0"
   },
   "devDependencies": {
-    "@graphql-markdown/types": "workspace:^"
-  },
-  "resolutions": {
-    "braces": "3.0.3"
+    "@graphql-markdown/types": "^1.8.0"
   },
   "directories": {
     "test": "tests"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=16.14"
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public",
-    "scripts": {}
+    "access": "public"
   },
   "typescript": {
     "definition": "dist/index.d.ts"

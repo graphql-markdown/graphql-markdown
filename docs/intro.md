@@ -22,7 +22,13 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Full relations information between types
   - Visual representation of type relationships
   - Complete type hierarchy documentation
+- Custom category sorting and organization
+  - Alphabetical or custom ordering logic
+  - Automatic folder numbering for consistent navigation
 - MDX generated are fully customizable using MDX components
+- Extensible hooks and events system
+  - Native Node.js EventEmitter integration
+  - Lifecycle hooks for custom workflows
 - Use any schema loader compatible with `@graphql-tools/load`
   - Support for local schema files
   - Support for remote GraphQL endpoints

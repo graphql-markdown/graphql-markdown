@@ -5,7 +5,7 @@
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.30.3",
+  "version": "1.31.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -58,26 +58,23 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "dependencies": {
     "@graphql-markdown/cli": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/utils": "workspace:^",
-    "@docusaurus/utils": ">=3.9.2"
+    "@docusaurus/utils": "catalog:docusaurus"
   },
   "devDependencies": {
-    "@docusaurus/types": "^3.7.0",
+    "@docusaurus/types": "catalog:docusaurus",
     "@graphql-markdown/types": "workspace:^"
   },
   "peerDependencies": {
-    "@docusaurus/logger": "*"
+    "@docusaurus/logger": "catalog:docusaurus"
   },
   "directories": {
     "test": "tests"
@@ -87,7 +84,8 @@
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "typescript": {
     "definition": "dist/index.d.ts"

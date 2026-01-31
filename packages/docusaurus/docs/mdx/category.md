@@ -1,11 +1,31 @@
 # mdx/category
 
-## Variables
+## Functions
 
-### generateIndexMetafile
+### beforeGenerateIndexMetafileHook()
 
 ```ts
-const generateIndexMetafile: GenerateIndexMetafileType;
+function beforeGenerateIndexMetafileHook(event): Promise<void>;
 ```
 
-Defined in: [mdx/category.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L23)
+Defined in: [mdx/category.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L22)
+
+#### Parameters
+
+##### event
+
+###### category
+
+`string`
+
+###### dirPath
+
+`string`
+
+###### options?
+
+`Record`&lt;`string`, `unknown`&gt;
+
+#### Returns
+
+`Promise`&lt;`void`&gt;

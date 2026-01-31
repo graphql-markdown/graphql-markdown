@@ -49,20 +49,17 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "dependencies": {
-    "@graphql-tools/load": "^8.1.8",
+    "@graphql-tools/load": "catalog:graphql-tools",
     "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
-    "graphql": "^16.0"
+    "graphql": "catalog:"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"
@@ -75,7 +72,8 @@
   },
   "publishConfig": {
     "directory": "dist",
-    "access": "public"
+    "access": "public",
+    "scripts": {}
   },
   "typescript": {
     "definition": "dist/index.d.ts"
