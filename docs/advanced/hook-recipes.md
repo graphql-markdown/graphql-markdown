@@ -37,7 +37,7 @@ import {
 
 const indexFilename = "index.md";
 
-const generateIndexMetafile = async (dirPath, category, _options) => {
+const beforeGenerateIndexMetafileHook = async (dirPath, category, _options) => {
   const filePath = join(dirPath, indexFilename);
 
   if (await fileExists(filePath)) {
