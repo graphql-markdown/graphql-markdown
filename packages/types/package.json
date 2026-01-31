@@ -25,10 +25,10 @@
     "build": "tsgo --build"
   },
   "devDependencies": {
-    "graphql": "16.12.0",
-    "@graphql-tools/load": "8.1.8",
-    "@graphql-tools/utils": "11.0.0",
-    "graphql-config": "5.1.5"
+    "graphql": "catalog:",
+    "@graphql-tools/load": "catalog:graphql-tools",
+    "@graphql-tools/utils": "catalog:graphql-tools",
+    "graphql-config": "catalog:"
   },
   "publishConfig": {
     "directory": "src",

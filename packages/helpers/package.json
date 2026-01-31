@@ -61,7 +61,7 @@
     "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
-    "graphql": "^16.0"
+    "graphql": "catalog:"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"

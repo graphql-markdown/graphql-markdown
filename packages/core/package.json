@@ -73,7 +73,7 @@
     "@graphql-markdown/diff": "workspace:^",
     "@graphql-markdown/helpers": "workspace:^",
     "@graphql-markdown/printer-legacy": "workspace:^",
-    "graphql-config": "^5.1.0"
+    "graphql-config": "catalog:"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"

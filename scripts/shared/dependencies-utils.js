@@ -4,7 +4,9 @@ chdir(__dirname);
 
 const rootDir = "../..";
 const {
-  workspaces: [packages],
+  workspaces: {
+    packages: [packages],
+  },
 } = require(`${rootDir}/package.json`);
 
 const getWorkspacePackagesMap = () => {
@@ -15,7 +17,9 @@ const getWorkspacePackagesMap = () => {
     .map((dirent) => dirent.name);
   folders.forEach((packageFolder) => {
     const packageJson = `${packagesPath}/${packageFolder}/package.json`;
-    const { name, version, dependencies, peerDependencies } = require(packageJson);
+    const { name, version, dependencies, peerDependencies } = require(
+      packageJson,
+    );
 
     Object.assign(map, {
       [name]: {

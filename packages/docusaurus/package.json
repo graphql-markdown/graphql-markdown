@@ -69,14 +69,14 @@
     "@graphql-markdown/cli": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/utils": "workspace:^",
-    "@docusaurus/utils": ">=3.9.2"
+    "@docusaurus/utils": "catalog:docusaurus"
   },
   "devDependencies": {
-    "@docusaurus/types": "^3.7.0",
+    "@docusaurus/types": "catalog:docusaurus",
     "@graphql-markdown/types": "workspace:^"
   },
   "peerDependencies": {
-    "@docusaurus/logger": "*"
+    "@docusaurus/logger": "catalog:docusaurus"
   },
   "directories": {
     "test": "tests"

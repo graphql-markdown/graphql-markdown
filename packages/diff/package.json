@@ -60,8 +60,8 @@
     "@graphql-inspector/core": "^7.1.1",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/utils": "workspace:^",
-    "@graphql-tools/graphql-file-loader": "^8.0.22",
-    "@graphql-tools/load": "^8.1.8"
+    "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
+    "@graphql-tools/load": "catalog:graphql-tools"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"

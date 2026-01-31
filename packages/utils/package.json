@@ -60,7 +60,7 @@
     "@graphql-markdown/types": "workspace:^"
   },
   "peerDependencies": {
-    "prettier": "^2.8 || ^3.0"
+    "prettier": "catalog:"
   },
   "peerDependenciesMeta": {
     "prettier": {

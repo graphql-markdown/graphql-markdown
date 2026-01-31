@@ -57,11 +57,11 @@
     "build": "tsgo --build"
   },
   "dependencies": {
-    "@graphql-tools/load": "^8.1.8",
+    "@graphql-tools/load": "catalog:graphql-tools",
     "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
-    "graphql": "^16.0"
+    "graphql": "catalog:"
   },
   "devDependencies": {
     "@graphql-markdown/types": "workspace:^"
