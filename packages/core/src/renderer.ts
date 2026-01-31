@@ -450,7 +450,28 @@ export class Renderer {
         index: this.options?.index,
       },
     });
-    await events.emitAsync(GenerateIndexMetafileEvents.BEFORE_GENERATE, event);
+    const handlerErrors = await events.emitAsync(
+      GenerateIndexMetafileEvents.BEFORE_GENERATE,
+      event,
+    );
+
+    if (Array.isArray(handlerErrors) && handlerErrors.length > 0) {
+      handlerErrors.forEach((error) => {
+        if (error instanceof Error) {
+          log(
+            LogLevel.ERROR,
+            `Error in BEFORE_GENERATE handler for GenerateIndexMetafileEvent: ${error.message}`,
+            error,
+          );
+        } else {
+          log(
+            LogLevel.ERROR,
+            "Error in BEFORE_GENERATE handler for GenerateIndexMetafileEvent (non-Error value).",
+            { error },
+          );
+        }
+      });
+    }
   }
 
   /**
