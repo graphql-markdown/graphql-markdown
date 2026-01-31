@@ -9,7 +9,7 @@
  */
 import { log, LogLevel } from "@graphql-markdown/logger";
 
-import { getEvents } from "./event-emitter";
+import { getEvents, resetEvents } from "./event-emitter";
 import {
   SchemaEvents,
   DiffEvents,
@@ -65,6 +65,8 @@ export const registerMDXEventHandlers = (mdxModule: unknown): void => {
   if (!mdxModule || typeof mdxModule !== "object") {
     return;
   }
+
+  resetEvents(); // reset event to avoid duplicate registrations
 
   const events = getEvents();
   const registeredHandlers = new Set<string>();
