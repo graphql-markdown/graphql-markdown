@@ -448,3 +448,43 @@ declare const CLASS_NAME: unique symbol;
 
 export type LocationPath = string & { _opaque: typeof LOCATION_PATH };
 declare const LOCATION_PATH: unique symbol;
+
+/**
+ * Event system type declarations
+ */
+
+/**
+ * Type for default action function that can be executed by events.
+ * Returns a Promise to support both sync and async actions.
+ */
+export type DefaultAction = () => Promise<void>;
+
+/**
+ * Hook callback for schema loading events.
+ */
+export type SchemaLoadHook = (event: unknown) => Promise<void>;
+
+/**
+ * Hook callback for diff check events.
+ */
+export type DiffCheckHook = (event: unknown) => Promise<void>;
+
+/**
+ * Hook callback for render root types events.
+ */
+export type RenderRootTypesHook = (event: unknown) => Promise<void>;
+
+/**
+ * Hook callback for render homepage events.
+ */
+export type RenderHomepageHook = (event: unknown) => Promise<void>;
+
+/**
+ * Hook callback for render type entities events.
+ */
+export type RenderTypeEntitiesHook = (event: unknown) => Promise<void>;
+
+/**
+ * Hook callback for generate index metafile events.
+ */
+export type GenerateIndexMetafileHook = (event: unknown) => Promise<void>;

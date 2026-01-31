@@ -33,6 +33,18 @@ import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
 import { getRenderer } from "./renderer";
+import { getEvents } from "./event-emitter";
+import {
+  SchemaLoadEvent,
+  SchemaEvents,
+  DiffCheckEvent,
+  DiffEvents,
+  RenderRootTypesEvent,
+  RenderRootTypesEvents,
+  RenderHomepageEvent,
+  RenderHomepageEvents,
+} from "./events";
+import { registerMDXEventHandlers } from "./event-handlers";
 
 /**
  * Constant representing nanoseconds per second.
@@ -97,9 +109,26 @@ export const generateDocFromSchema = async ({
     return;
   }
 
+  const events = getEvents();
+  const beforeLoadEvent = new SchemaLoadEvent({
+    schemaLocation: schemaLocation as string,
+  });
+  await events.emitAsync(SchemaEvents.BEFORE_LOAD, beforeLoadEvent);
+
   const schema = await loadSchema(schemaLocation as string, loaders);
 
+  const afterLoadEvent = new SchemaLoadEvent({
+    schemaLocation: schemaLocation as string,
+  });
+  await events.emitAsync(SchemaEvents.AFTER_LOAD, afterLoadEvent);
+
   if (diffMethod !== DiffMethod.NONE) {
+    const beforeDiffEvent = new DiffCheckEvent({
+      schema,
+      outputDir: tmpDir,
+    });
+    await events.emitAsync(DiffEvents.BEFORE_CHECK, beforeDiffEvent);
+
     const changed = await hasChanges(
       schema,
       tmpDir,
@@ -108,6 +137,12 @@ export const generateDocFromSchema = async ({
     if (!changed) {
       log(`No changes detected in schema "${toString(schemaLocation)}".`);
     }
+
+    const afterDiffEvent = new DiffCheckEvent({
+      schema,
+      outputDir: tmpDir,
+    });
+    await events.emitAsync(DiffEvents.AFTER_CHECK, afterDiffEvent);
   }
 
   const [onlyDocDirectives, skipDocDirectives] = [
@@ -136,6 +171,9 @@ export const generateDocFromSchema = async ({
         return undefined;
       })
     : undefined);
+
+  // Register MDX event handlers if mdxModule loaded successfully
+  registerMDXEventHandlers(mdxModule);
 
   const printer = await getPrinter(
     // module mandatory
@@ -181,6 +219,14 @@ export const generateDocFromSchema = async ({
   // Pre-collect all categories before rendering to ensure consistent positions
   renderer.preCollectCategories(Object.keys(rootTypes));
 
+  const beforeRenderRootTypesEvent = new RenderRootTypesEvent({
+    rootTypes,
+  });
+  await events.emitAsync(
+    RenderRootTypesEvents.BEFORE_RENDER,
+    beforeRenderRootTypesEvent,
+  );
+
   const pages = await Promise.all(
     Object.keys(rootTypes).map(async (name) => {
       const typeName = name as SchemaEntity;
@@ -188,7 +234,31 @@ export const generateDocFromSchema = async ({
     }),
   );
 
+  const afterRenderRootTypesEvent = new RenderRootTypesEvent({
+    rootTypes,
+  });
+  await events.emitAsync(
+    RenderRootTypesEvents.AFTER_RENDER,
+    afterRenderRootTypesEvent,
+  );
+
+  const beforeRenderHomepageEvent = new RenderHomepageEvent({
+    outputDir,
+  });
+  await events.emitAsync(
+    RenderHomepageEvents.BEFORE_RENDER,
+    beforeRenderHomepageEvent,
+  );
+
   await renderer.renderHomepage(homepageLocation);
+
+  const afterRenderHomepageEvent = new RenderHomepageEvent({
+    outputDir,
+  });
+  await events.emitAsync(
+    RenderHomepageEvents.AFTER_RENDER,
+    afterRenderHomepageEvent,
+  );
 
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC

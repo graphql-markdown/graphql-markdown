@@ -24,7 +24,7 @@ const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 export { mdxDeclaration } from "./components";
-export { generateIndexMetafile } from "./category";
+export { beforeGenerateIndexMetafileHook } from "./category";
 
 export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
   const style =
