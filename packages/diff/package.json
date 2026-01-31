@@ -54,8 +54,7 @@
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "docs": "typedoc",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "dependencies": {
     "@graphql-inspector/core": "^7.1.1",

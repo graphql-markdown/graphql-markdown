@@ -22,8 +22,7 @@
   "scripts": {
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "build": "tsgo --build",
-    "pack": "bun pm pack"
+    "build": "tsgo --build"
   },
   "devDependencies": {
     "graphql": "16.12.0",
