@@ -1,6 +1,6 @@
 # Hooks Recipes
 
-This page lists examples of usage of hooks.
+This page lists examples of usage of [hooks](/api/category/events).
 
 :::info
 
@@ -38,7 +38,6 @@ import {
 
 const INDEX_MD = "index.md";
 
-
 /**
  * Hook that generates an index metadata file for a category directory.
  * 
@@ -54,7 +53,7 @@ const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
   }
 
   const label = startCase(category);
-  const content = `<!-- ${dirPath} -->\n---\n"title": ${label}\n---\n`;
+  const content = `---\n"title": ${label}\n---\n\n`;
   await ensureDir(dirPath);
   await saveFile(filePath, content);
 };
@@ -66,7 +65,7 @@ const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
  * It checks if an index file exists in the same directory as the 
  * rendered entity, and if so, appends a markdown link to the entity's page.
  */
-const afterRenderTypeEntitiesHook = async ({ name, filePath }) => {
+const afterRenderTypeEntitiesHook = async ({ filePath, name }) => {
   const indexFilePath = resolve(dirname(filePath), INDEX_MD);
   const pageFileName = basename(filePath);
   if (await fileExists(indexFilePath)) {
