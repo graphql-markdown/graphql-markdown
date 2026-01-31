@@ -16,7 +16,6 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
   };
 });
 import * as Utils from "@graphql-markdown/utils";
-
 import { beforeGenerateIndexMetafileHook } from "../../../src/mdx/category";
 
 describe("beforeGenerateIndexMetafileHook()", () => {
@@ -32,7 +31,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category);
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+    });
 
     expect(spy).toHaveBeenCalledWith(
       filePath,
@@ -50,9 +52,13 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category, {
-      collapsed: false,
-      collapsible: false,
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+      options: {
+        collapsed: false,
+        collapsible: false,
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -71,8 +77,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category, {
-      index: true,
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+      options: { index: true },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -91,7 +99,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category);
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+    });
 
     expect(spy).not.toHaveBeenCalledWith(
       filePath,
@@ -109,8 +120,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category, {
-      sidebarPosition: 42,
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+      options: { sidebarPosition: 42 },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -130,9 +143,13 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category, {
-      sidebarPosition: 42,
-      styleClass,
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+      options: {
+        sidebarPosition: 42,
+        styleClass,
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -151,7 +168,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
     const spy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category);
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+    });
 
     expect(spy).toHaveBeenCalledWith(
       filePath,
@@ -169,7 +189,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
     const saveFileSpy = jest.spyOn(Utils, "saveFile");
 
-    await beforeGenerateIndexMetafileHook(outputPath, category);
+    await beforeGenerateIndexMetafileHook({
+      dirPath: outputPath,
+      category,
+    });
 
     expect(ensureDirSpy).toHaveBeenCalledWith(outputPath);
     expect(saveFileSpy).toHaveBeenCalled();
