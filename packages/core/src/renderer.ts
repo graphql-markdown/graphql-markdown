@@ -4,7 +4,6 @@ import type {
   CategorySortFn,
   Maybe,
   MDXString,
-  MDXSupportType,
   Printer,
   RendererDocOptions,
   SchemaEntitiesGroupMap,
@@ -387,25 +386,6 @@ export class Renderer {
     this.categoryPositionManager = new CategoryPositionManager(
       docOptions?.categorySort,
       1, // Start from 1 for each root type
-    );
-  }
-
-  /**
-   * Checks if the provided module supports MDX index file generation.
-   *
-   * @param module - The module to check for MDX support
-   * @returns True if the module supports index metafile generation
-   * @example
-   */
-  hasMDXHookSupport(
-    hookName: keyof MDXSupportType,
-    module: unknown = this.mdxModule,
-  ): module is Partial<MDXSupportType> & Pick<MDXSupportType, typeof hookName> {
-    return !!(
-      module &&
-      typeof module === "object" &&
-      hookName in module &&
-      typeof (module as Record<string, unknown>)[hookName] === "function"
     );
   }
 
