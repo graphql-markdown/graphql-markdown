@@ -38,9 +38,6 @@ export const getObjPath = (
   }
 
   return path.split(".").reduce((res: unknown, key: string): unknown => {
-    if (typeof res !== "object" || res === null) {
-      return String(fallback);
-    }
     return (res as Record<string, unknown>)[key] ?? String(fallback);
   }, obj);
 };
