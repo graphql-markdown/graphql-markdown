@@ -14,7 +14,7 @@ through appropriate printers and renderers.
 function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [generator.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L64)
+Defined in: [generator.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L76)
 
 Main entry point for generating Markdown documentation from a GraphQL schema.
 

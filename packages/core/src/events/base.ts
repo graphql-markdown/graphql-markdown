@@ -144,12 +144,11 @@ export abstract class CancellableEvent {
   /**
    * Executes the default action for an event if it hasn't been prevented.
    *
-   * @param event - The cancellable event to check for default prevention
    * @returns A promise that resolves when the default action completes, or void if the action was prevented or no default action is defined
    *
    * @remarks
    * This method will only execute the `_defaultAction` if:
-   * - The event's default has not been prevented (`event._defaultPrevented` is false)
+   * - The event's default has not been prevented (`_defaultPrevented` is false)
    * - A default action function has been defined (`_defaultAction` is a function)
    */
   async runDefaultAction(): Promise<void> {
