@@ -35,23 +35,23 @@ import {
   startCase,
 } from "@graphql-markdown/utils";
 
-const indexFilename = "index.md";
+const INDEX_MD = "index.md";
 
-const beforeGenerateIndexMetafileHook = async (dirPath, category, _options) => {
-  const filePath = join(dirPath, indexFilename);
+const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
+  const filePath = join(dirPath, INDEX_MD);
 
   if (await fileExists(filePath)) {
     return;
   }
 
   const label = startCase(category);
-  const content = `---\ntitle: "${label}"\n---\n\n`;
+  const content = `<!-- ${dirPath} -->\n---\n"title": ${label}\n---\n`;
   await ensureDir(dirPath);
   await saveFile(filePath, content);
 };
 
-const afterRenderTypeEntitiesHook = async (name, filePath) => {
-  const indexFilePath = resolve(dirname(filePath), indexFilename);
+const afterRenderTypeEntitiesHook = async ({ name, filePath }) => {
+  const indexFilePath = resolve(dirname(filePath), INDEX_MD);
   const pageFileName = basename(filePath);
   if (await fileExists(indexFilePath)) {
     const entryLine = `- [${name}](./${pageFileName})\n`;
@@ -59,7 +59,10 @@ const afterRenderTypeEntitiesHook = async (name, filePath) => {
   }
 };
 
-export { generateIndexMetafile, afterRenderTypeEntitiesHook };
+export { 
+  beforeGenerateIndexMetafileHook, 
+  afterRenderTypeEntitiesHook 
+};
 ```
 
 Declare the custom module in GraphQL-Markdown configuration `mdxParser: "./src/modules/astro-mdx.mjs"`.
