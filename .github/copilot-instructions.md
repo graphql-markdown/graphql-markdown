@@ -4,7 +4,7 @@
 
 ### Prerequisites
 
-- Node.js (version specified in `.nvmrc`)
+- Node.js (version specified in `.nvmrc` - currently `lts/*`)
 - bun (latest version recommended)
 - Git
 - Docker or Podman (optional, for Earthly builds)
@@ -46,6 +46,22 @@
 ## Project Overview
 
 GraphQL-Markdown is a flexible tool for generating Markdown documentation from GraphQL schemas, designed for static site generators like Docusaurus. This is a monorepo project containing multiple packages that work together to parse GraphQL schemas, generate documentation, and integrate with various static site generators.
+
+### Core Architecture & Data Flow
+
+The documentation generation follows an event-driven architecture with three main stages:
+
+1. **Schema Loading** (`@graphql-markdown/graphql`) - Loads GraphQL schema from various sources (files, URLs, introspection)
+2. **Documentation Generation** (`@graphql-markdown/core`) - Processes schema through a pipeline:
+   - Event-driven processing using `CancellableEventEmitter` (singleton pattern)
+   - Custom directives processing (e.g., `@doc`, `@noDoc`)
+   - Grouping directives to organize types
+   - Schema diffing to detect changes (when enabled)
+   - Printer selection (legacy or modern)
+   - Renderer creates Markdown files with frontmatter
+3. **Integration Layer** (`@graphql-markdown/cli` or `@graphql-markdown/docusaurus`) - Exposes functionality via CLI or Docusaurus plugin
+
+**Key Design Pattern**: Events are cancellable and execute handlers sequentially, allowing plugins to modify or prevent operations (see [core/src/event-emitter.ts](packages/core/src/event-emitter.ts)).
 
 ### Monorepo Architecture
 
