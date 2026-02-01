@@ -15,7 +15,6 @@ import type {
   GraphQLSchema,
   IPrinter,
   MDXString,
-  MDXSupportType,
   Maybe,
   MetaOptions,
   PrintTypeOptions,
@@ -36,6 +35,7 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 import { pathUrl } from "@graphql-markdown/utils";
+import { registerMDXEventHandlers } from "@graphql-markdown/core";
 
 import { printRelations } from "./relation";
 import { printDescription } from "./common";
@@ -124,11 +124,6 @@ export class Printer implements IPrinter {
   static readonly printCustomTags = printCustomTags;
 
   /**
-   * MDX module configuration
-   */
-  static printMDXModule: Readonly<MDXSupportType>;
-
-  /**
    * Initializes the printer with the given schema and configuration.
    *
    * @param schema - GraphQL schema to generate documentation for
@@ -194,7 +189,9 @@ export class Printer implements IPrinter {
       meta: meta,
     };
 
-    Printer.printMDXModule = await mdxModule(mdxParser);
+    // Register MDX event handlers if mdxParser provided
+    const mdxModuleInstance = await mdxModule(mdxParser);
+    registerMDXEventHandlers(mdxModuleInstance);
   }
 
   /**
@@ -412,7 +409,6 @@ export class Printer implements IPrinter {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,
-      ...Printer.printMDXModule,
     };
 
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
@@ -439,7 +435,6 @@ export class Printer implements IPrinter {
     return [
       header,
       metatags,
-      Printer.printMDXModule.mdxDeclaration,
       tags,
       description,
       code,
