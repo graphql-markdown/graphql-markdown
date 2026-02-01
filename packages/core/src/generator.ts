@@ -74,7 +74,7 @@ const SEC_DECIMALS = 3 as const;
  *
  * @internal
  */
-const loadMDXModule = async (
+export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
   return mdxParser !== undefined && mdxParser !== null
@@ -100,7 +100,7 @@ const loadMDXModule = async (
  *
  * @internal
  */
-const loadGraphqlSchema = async (
+export const loadGraphqlSchema = async (
   schemaLocation: string,
   loadersList: Maybe<LoaderOption>,
 ): Promise<Maybe<GraphQLSchema>> => {
@@ -131,7 +131,7 @@ const loadGraphqlSchema = async (
  * @remarks
  * When no changes are detected, a log message is generated indicating that the schema is unchanged.
  */
-const checkSchemaDifferences = async (
+export const checkSchemaDifferences = async (
   schema: GraphQLSchema,
   schemaLocation: string,
   diffMethod: Maybe<TypeDiffMethod>,
@@ -162,7 +162,7 @@ const checkSchemaDifferences = async (
  * @returns A tuple containing two arrays: the first with resolved "only" directives,
  *          the second with resolved "skip" directives. Only defined directives are included.
  */
-const resolveSkipAndOnlyDirectives = (
+export const resolveSkipAndOnlyDirectives = (
   onlyDocDirective: Maybe<DirectiveName | DirectiveName[]>,
   skipDocDirective: Maybe<DirectiveName | DirectiveName[]>,
   schema: GraphQLSchema,
