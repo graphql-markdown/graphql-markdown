@@ -149,19 +149,19 @@ export const getCustomTags = (
  * @param options - General printing options
  * @returns Formatted Markdown string of badges or empty string
  */
-export const printCustomTags = (
+export const printCustomTags = async (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   const badges = getCustomTags(type, options);
 
   if (badges.length === 0) {
     return "";
   }
 
-  return badges
-    .map((badge): MDXString => {
-      return printBadge(badge, options);
-    })
-    .join(" ") as MDXString;
+  const badgePromises = badges.map(async (badge) => {
+    return printBadge(badge, options);
+  });
+  const formattedBadges = await Promise.all(badgePromises);
+  return formattedBadges.join(" ") as MDXString;
 };

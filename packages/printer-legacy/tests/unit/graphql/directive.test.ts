@@ -10,7 +10,7 @@ import {
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {
-    test("returns directive metadata without params", () => {
+    test("returns directive metadata without params", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -18,12 +18,12 @@ describe("directive", () => {
         locations: [],
       });
 
-      const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
+      const code = await printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`""`);
     });
 
-    test("returns directive metadata", () => {
+    test("returns directive metadata", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -36,7 +36,7 @@ describe("directive", () => {
         },
       });
 
-      const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
+      const code = await printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`
 "### Arguments
@@ -49,7 +49,7 @@ describe("directive", () => {
 `);
     });
 
-    test("returns directive metadata with grouped deprecated", () => {
+    test("returns directive metadata with grouped deprecated", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -66,7 +66,7 @@ describe("directive", () => {
         },
       });
 
-      const code = printDirectiveMetadata(type, {
+      const code = await printDirectiveMetadata(type, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
       });

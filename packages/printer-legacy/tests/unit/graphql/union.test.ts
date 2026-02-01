@@ -18,10 +18,10 @@ describe("union", () => {
   });
 
   describe("printUnionMetadata", () => {
-    test("returns union metadata", () => {
+    test("returns union metadata", async () => {
       expect.hasAssertions();
 
-      const code = printUnionMetadata(type, DEFAULT_OPTIONS);
+      const code = await printUnionMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toBe(`### Possible types
 

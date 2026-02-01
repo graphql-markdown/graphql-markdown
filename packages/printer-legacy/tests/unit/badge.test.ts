@@ -47,9 +47,20 @@ jest.mock("../../src/group", () => {
 });
 import * as Group from "../../src/group";
 
-import * as Badge from "../../src/badge";
+jest.mock("../../src/format-helpers", () => {
+  return {
+    emitFormatBadgeEvent: jest.fn(
+      async (badge: { text: string; classname?: string }) => {
+        const classAttr = badge.classname
+          ? ` class="gqlmd-mdx-badge gqlmd-mdx-badge--${badge.classname.toLowerCase()}"`
+          : ' class="gqlmd-mdx-badge"';
+        return `<mark${classAttr}>${badge.text}</mark>` as any;
+      },
+    ),
+  };
+});
 
-import { DEFAULT_OPTIONS } from "../../src/const/options";
+import * as Badge from "../../src/badge";
 
 describe("badge", () => {
   afterAll(() => {
@@ -58,47 +69,52 @@ describe("badge", () => {
   });
 
   describe("printBadges", () => {
-    test("returns a MDX string of Badge components", () => {
+    test("returns a MDX string of Badge components", async () => {
       expect.assertions(1);
 
       jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
       jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
-      const badges = Badge.printBadges(
+      const badges = await Badge.printBadges(
         {},
-        { ...DEFAULT_OPTIONS, typeBadges: true },
+        { typeBadges: true, groups: undefined },
       );
 
-      expect(badges).toBe('<mark class="gqlmd-mdx-badge">non-null</mark>');
+      expect(badges).toBe(
+        '<mark class="gqlmd-mdx-badge gqlmd-mdx-badge--non_null">non-null</mark>',
+      );
     });
 
-    test("returns an empty string if typeBadges is not enabled", () => {
+    test("returns an empty string if typeBadges is not enabled", async () => {
       expect.assertions(1);
 
-      const badges = Badge.printBadges(
+      const badges = await Badge.printBadges(
         {},
-        { ...DEFAULT_OPTIONS, typeBadges: false },
+        { typeBadges: false, groups: undefined },
       );
 
       expect(badges).toBe("");
     });
 
-    test("returns an empty string if no typeBadges option", () => {
+    test("returns an empty string if no typeBadges option", async () => {
       expect.assertions(1);
 
-      const badges = Badge.printBadges({}, {} as unknown as PrintTypeOptions);
+      const badges = await Badge.printBadges(
+        {},
+        {} as unknown as PrintTypeOptions,
+      );
 
       expect(badges).toBe("");
     });
 
-    test("returns an empty string if getTypeBadges returns empty list", () => {
+    test("returns an empty string if getTypeBadges returns empty list", async () => {
       expect.assertions(1);
 
       jest.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
 
-      const badges = Badge.printBadges(
+      const badges = await Badge.printBadges(
         {},
-        { ...DEFAULT_OPTIONS, typeBadges: true },
+        { typeBadges: true, groups: undefined },
       );
 
       expect(badges).toBe("");

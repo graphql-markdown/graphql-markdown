@@ -30,10 +30,10 @@ import { SectionLevels } from "./const/options";
  *
  * @template T - Type of the GraphQL element being printed
  */
-export const printSectionItem = <T>(
+export const printSectionItem = async <T>(
   type: T,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   const level =
     "level" in options && typeof options.level === "number" ? options.level : 4;
 
@@ -46,8 +46,8 @@ export const printSectionItem = <T>(
     withAttributes: false,
   });
 
-  const badges = printBadges(type, options);
-  const tags = printCustomTags(type, options);
+  const badges = await printBadges(type, options);
+  const tags = await printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
   const title = `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
 
@@ -58,7 +58,7 @@ export const printSectionItem = <T>(
   let section = `${title}${description}${MARKDOWN_EOL}`;
   if (isGraphQLFieldType(type)) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    section += printSectionItems(type.args as GraphQLArgument[], {
+    section += await printSectionItems(type.args as GraphQLArgument[], {
       ...options,
       level: 5 as SectionLevelValue,
       parentType:
@@ -80,10 +80,10 @@ export const printSectionItem = <T>(
  *
  * @template V - Type of the values being printed
  */
-export const printSectionItems = <V>(
+export const printSectionItems = async <V>(
   values: V | V[],
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
@@ -92,17 +92,19 @@ export const printSectionItems = <V>(
     "level" in options && typeof options.level === "number" ? options.level : 4
   ) as SectionLevelValue;
 
-  return values
-    .map((v: V): MDXString => {
-      return (
-        v &&
-        (printSectionItem(v, {
-          ...options,
-          level,
-        }) as MDXString)
-      );
+  const itemPromises = values
+    .filter((v) => {
+      return v;
     })
-    .join(MARKDOWN_EOP) as MDXString;
+    .map(async (v: V) => {
+      return printSectionItem(v, {
+        ...options,
+        level,
+      });
+    });
+
+  const items = await Promise.all(itemPromises);
+  return items.join(MARKDOWN_EOP) as MDXString;
 };
 
 /**
@@ -115,11 +117,11 @@ export const printSectionItems = <V>(
  *
  * @template V - Type of the values being printed
  */
-export const printSection = <V>(
+export const printSection = async <V>(
   values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
@@ -140,7 +142,7 @@ export const printSection = <V>(
     return [MARKDOWN_EOP, MARKDOWN_EOP];
   })();
 
-  const items = printSectionItems(values, {
+  const items = await printSectionItems(values, {
     ...options,
     collapsible: undefined, // do not propagate collapsible
     level:
@@ -166,12 +168,12 @@ export const printSection = <V>(
  * @template T - Type of the parent element
  * @template V - Type of the values being printed
  */
-export const printMetadataSection = <T, V>(
+export const printMetadataSection = async <T, V>(
   type: T,
   values: V | V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -196,11 +198,11 @@ export const printMetadataSection = <T, V>(
         { fields: [] as V[], deprecated: [] as V[] },
       );
 
-      const meta = printSection(fields, section, {
+      const meta = await printSection(fields, section, {
         ...options,
         parentType: type.name as string,
       });
-      const deprecatedMeta = printSection(deprecated, "", {
+      const deprecatedMeta = await printSection(deprecated, "", {
         ...options,
         parentType: type.name as string,
         level: 0 as SectionLevelValue,

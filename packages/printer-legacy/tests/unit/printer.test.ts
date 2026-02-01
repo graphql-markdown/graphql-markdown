@@ -437,12 +437,12 @@ describe("Printer", () => {
       },
     );
 
-    test("returns empty string with non supported message for unsupported type", () => {
+    test("returns empty string with non supported message for unsupported type", async () => {
       expect.hasAssertions();
 
       const type = "TestFooBarType";
 
-      const code = Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
+      const code = await Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toBe("");
     });
@@ -461,7 +461,7 @@ describe("Printer", () => {
 
     test.each(types)(
       "returns a Markdown formatted content for type $name",
-      ({ name, type }) => {
+      async ({ name, type }) => {
         expect.hasAssertions();
 
         jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
@@ -470,7 +470,7 @@ describe("Printer", () => {
           return jest.spyOn(Printer, method).mockReturnValue("");
         });
 
-        Printer.printType(name, type);
+        await Printer.printType(name, type);
 
         spies.forEach((spy) => {
           expect(spy).toHaveBeenCalledTimes(1);
@@ -478,26 +478,26 @@ describe("Printer", () => {
       },
     );
 
-    test("returns undefined if no type", () => {
+    test("returns undefined if no type", async () => {
       expect.hasAssertions();
 
-      const printedType = Printer.printType("any", null);
+      const printedType = await Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if no name", () => {
+    test("returns undefined if no name", async () => {
       expect.hasAssertions();
 
-      const printedType = Printer.printType(undefined, "any");
+      const printedType = await Printer.printType(undefined, "any");
 
       expect(printedType).toBeUndefined();
     });
 
-    test("returns undefined if type has no printable directive", () => {
+    test("returns undefined if type has no printable directive", async () => {
       expect.hasAssertions();
       jest.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
-      const printedType = Printer.printType("any", null);
+      const printedType = await Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();
     });

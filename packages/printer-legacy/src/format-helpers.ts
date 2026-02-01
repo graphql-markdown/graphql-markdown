@@ -18,8 +18,8 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 
-import { getEvents } from "@graphql-markdown/core";
 import {
+  getEvents,
   FormatEvents,
   FormatBadgeEvent,
   FormatAdmonitionEvent,

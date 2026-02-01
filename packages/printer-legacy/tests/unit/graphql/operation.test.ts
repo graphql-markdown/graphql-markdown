@@ -26,7 +26,7 @@ import {
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
-    test("returns operation metadata", () => {
+    test("returns operation metadata", async () => {
       expect.hasAssertions();
 
       const operation = {
@@ -35,7 +35,7 @@ describe("operation", () => {
         args: [],
       };
 
-      const metadata = printOperationMetadata(operation, {
+      const metadata = await printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -58,7 +58,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments", () => {
+    test("returns operation metadata with arguments", async () => {
       expect.hasAssertions();
 
       const operation = {
@@ -72,7 +72,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = printOperationMetadata(operation, {
+      const metadata = await printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -101,7 +101,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments with grouped deprecated", () => {
+    test("returns operation metadata with arguments with grouped deprecated", async () => {
       expect.hasAssertions();
 
       const operation = {
@@ -120,7 +120,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = printOperationMetadata(operation, {
+      const metadata = await printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
         schema: {

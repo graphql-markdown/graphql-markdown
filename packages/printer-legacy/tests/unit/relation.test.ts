@@ -56,13 +56,13 @@ describe("relation", () => {
   describe("printRelationOf()", () => {
     test.concurrent.each([[true], [false]])(
       "returns empty string if type is undefined and isOperation is %p",
-      (isOperationMockedValue: boolean) => {
+      async (isOperationMockedValue: boolean) => {
         expect.hasAssertions();
 
         mockGraphQL.isNamedType.mockReturnValue(false);
         mockGraphQL.isOperation.mockReturnValue(isOperationMockedValue);
 
-        const relation = printRelationOf(
+        const relation = await printRelationOf(
           undefined,
           "RelationOf",
           GraphQL.getRelationOfReturn,
@@ -75,7 +75,7 @@ describe("relation", () => {
 
     test.concurrent.each([[true], [false]])(
       "returns empty string if type is operation and isNamedType is %p",
-      (isNamedTypeMockedValue: boolean) => {
+      async (isNamedTypeMockedValue: boolean) => {
         expect.hasAssertions();
 
         const type = new GraphQLScalarType({
@@ -86,7 +86,7 @@ describe("relation", () => {
         mockGraphQL.isNamedType.mockReturnValue(isNamedTypeMockedValue);
         mockGraphQL.isOperation.mockReturnValue(true);
 
-        const relation = printRelationOf(
+        const relation = await printRelationOf(
           type,
           "RelationOf",
           GraphQL.getRelationOfReturn,
@@ -97,7 +97,7 @@ describe("relation", () => {
       },
     );
 
-    test("returns empty string if getRelation is not a function", () => {
+    test("returns empty string if getRelation is not a function", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType<string, string>({
@@ -108,7 +108,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = printRelationOf(type, "RelationOf", undefined, {
+      const relation = await printRelationOf(type, "RelationOf", undefined, {
         ...DEFAULT_OPTIONS,
         schema: {} as GraphQLSchema,
       });
@@ -116,7 +116,7 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
-    test("returns empty string if schema is not defined", () => {
+    test("returns empty string if schema is not defined", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType({
@@ -127,7 +127,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = printRelationOf(type, "RelationOf", jest.fn(), {
+      const relation = await printRelationOf(type, "RelationOf", jest.fn(), {
         ...DEFAULT_OPTIONS,
         schema: undefined,
       });
@@ -135,7 +135,7 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
-    test("returns empty string if getRelation returns undefined", () => {
+    test("returns empty string if getRelation returns undefined", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType({
@@ -146,7 +146,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = printRelationOf(
+      const relation = await printRelationOf(
         type,
         "RelationOf",
         (): ReturnType<IGetRelation<unknown>> => {
@@ -158,7 +158,7 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
-    test("returns empty string if getRelation returns empty map", () => {
+    test("returns empty string if getRelation returns empty map", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType({
@@ -166,7 +166,7 @@ describe("relation", () => {
         description: "Lorem Ipsum",
       });
 
-      const relation = printRelationOf(
+      const relation = await printRelationOf(
         type,
         "RelationOf",
         () => {
@@ -178,7 +178,7 @@ describe("relation", () => {
       expect(relation).toBe("");
     });
 
-    test("prints type relations", () => {
+    test("prints type relations", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLScalarType({
@@ -197,7 +197,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = printRelationOf(
+      const relation = await printRelationOf(
         type,
         "RelationOf",
         getRelationOfReturn,
