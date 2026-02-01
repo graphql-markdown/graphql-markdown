@@ -2,7 +2,7 @@ import { getEvents, resetEvents } from "../../src/event-emitter";
 import {
   CancellableEvent,
   deepFreeze,
-  SchemaLoadEvent,
+  SchemaEvent,
   SchemaEvents,
   GenerateIndexMetafileEvent,
   RenderTypeEntitiesEvent,
@@ -124,9 +124,9 @@ describe("events", () => {
     });
   });
 
-  describe("SchemaLoadEvent", () => {
+  describe("SchemaEvent", () => {
     it("should store schemaLocation", () => {
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema.graphql",
       });
 
@@ -135,7 +135,7 @@ describe("events", () => {
 
     it("should accept defaultAction", () => {
       const defaultAction = jest.fn(() => Promise.resolve());
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema.graphql",
         defaultAction,
       });
@@ -144,7 +144,7 @@ describe("events", () => {
     });
 
     it("should be cancellable by default", () => {
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema.graphql",
       });
 
@@ -154,7 +154,7 @@ describe("events", () => {
     });
 
     it("should respect cancellable parameter", () => {
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema.graphql",
         cancellable: false,
       });
@@ -258,7 +258,7 @@ describe("events", () => {
         order.push(3);
       });
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
@@ -278,7 +278,7 @@ describe("events", () => {
         throw error2;
       });
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       const { errors } = await events.emitAsync(
@@ -300,7 +300,7 @@ describe("events", () => {
       });
       events.on(SchemaEvents.BEFORE_LOAD, handler2);
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
@@ -319,7 +319,7 @@ describe("events", () => {
       events.on(SchemaEvents.BEFORE_LOAD, handler2);
       events.on(SchemaEvents.BEFORE_LOAD, handler3);
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
@@ -332,7 +332,7 @@ describe("events", () => {
       const events = getEvents();
       const defaultAction = jest.fn(() => Promise.resolve());
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
         defaultAction,
       });
@@ -349,7 +349,7 @@ describe("events", () => {
         event.preventDefault();
       });
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
         defaultAction,
       });
@@ -365,7 +365,7 @@ describe("events", () => {
         event.preventDefault();
       });
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       const { defaultPrevented } = await events.emitAsync(
@@ -380,7 +380,7 @@ describe("events", () => {
       const events = getEvents();
       const error = new Error("Default action failed");
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
         defaultAction: () => {
           throw error;
@@ -398,7 +398,7 @@ describe("events", () => {
     it("should work with no handlers registered", async () => {
       const events = getEvents();
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       const { errors, defaultPrevented } = await events.emitAsync(
@@ -418,7 +418,7 @@ describe("events", () => {
       events.on(SchemaEvents.BEFORE_LOAD, async () => {
         console.log(SchemaEvents.BEFORE_LOAD);
       });
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
@@ -430,7 +430,7 @@ describe("events", () => {
       const events = getEvents();
       let executed = false;
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
         defaultAction: async () => {
           await new Promise((resolve) => setTimeout(resolve, 10));
@@ -449,7 +449,7 @@ describe("events", () => {
         throw new Error("string error");
       });
 
-      const event = new SchemaLoadEvent({
+      const event = new SchemaEvent({
         schemaLocation: "/path/to/schema",
       });
       const { errors } = await events.emitAsync(

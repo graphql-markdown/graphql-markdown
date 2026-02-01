@@ -13,7 +13,7 @@ export { EVENT_CALLBACK_MAP } from "./event-map";
 
 // Event types exports
 export type { CancellableEvent } from "./events/base";
-export type { SchemaLoadEvent } from "./events/schema-load";
+export type { SchemaEvent as SchemaLoadEvent } from "./events/schema-load";
 export type { DiffCheckEvent } from "./events/diff-check";
 export type { RenderRootTypesEvent } from "./events/render-root-types";
 export type { RenderHomepageEvent } from "./events/render-homepage";

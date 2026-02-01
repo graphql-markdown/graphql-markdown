@@ -16,7 +16,7 @@ export { RenderTypeEntitiesEvents } from "./render-type-entities-events";
 export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events";
 
 // Event classes
-export { SchemaLoadEvent } from "./schema-load";
+export { SchemaEvent } from "./schema-load";
 export { DiffCheckEvent } from "./diff-check";
 export { RenderRootTypesEvent } from "./render-root-types";
 export { RenderHomepageEvent } from "./render-homepage";
