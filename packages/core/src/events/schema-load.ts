@@ -19,7 +19,7 @@ import { CancellableEvent } from "./base";
  */
 export class SchemaEvent extends CancellableEvent {
   /** Path or pointer to the schema location */
-  readonly schemaLocation: string;
+  readonly schemaLocation?: string;
   /**
    * The GraphQL schema object.
    *
