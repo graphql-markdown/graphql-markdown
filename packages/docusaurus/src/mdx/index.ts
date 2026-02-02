@@ -29,6 +29,11 @@ const FRONT_MATTER_DELIMITER = "---" as const;
 export { mdxDeclaration } from "./components";
 export { beforeGenerateIndexMetafileHook } from "./category";
 
+/**
+ * Formats a Badge inline-block in MDX format
+ * @param param - The badge configuration object
+ * @returns Formatted MDX string for the badge
+ */
 export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
   const style =
     typeof classname === "string" ? `badge--${classname.toLowerCase()}` : "";
@@ -97,6 +102,11 @@ export const formatMDXNameEntity = (
   return `<code style={{ fontWeight: 'normal' }}>${escapeMDX(parentName)}<b>${escapeMDX(name)}</b></code>` as MDXString;
 };
 
+/**
+ * Formats a link in MDX format
+ * @param param - The link configuration object
+ * @returns Formatted MDX link object
+ */
 export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   return {
     text,
@@ -142,15 +152,15 @@ export const formatMDXFrontmatter = (
  * ```
  */
 export const createMDXFormatter = (meta?: Maybe<MetaOptions>): Formatter => ({
-  formatMDXBadge: formatMDXBadge,
+  formatMDXBadge,
   formatMDXAdmonition: (
     admonition: AdmonitionType,
     _meta: Maybe<MetaOptions>,
   ) => formatMDXAdmonition(admonition, meta ?? _meta),
-  formatMDXBullet: formatMDXBullet,
-  formatMDXDetails: formatMDXDetails,
-  formatMDXFrontmatter: formatMDXFrontmatter,
-  formatMDXLink: formatMDXLink,
-  formatMDXNameEntity: formatMDXNameEntity,
-  formatMDXSpecifiedByLink: formatMDXSpecifiedByLink,
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXLink,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
 });

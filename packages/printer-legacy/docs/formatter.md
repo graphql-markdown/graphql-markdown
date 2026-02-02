@@ -33,5 +33,5 @@ A complete Formatter implementation
 import { createDefaultFormatter } from "@graphql-markdown/printer-legacy";
 
 const formatter = createDefaultFormatter();
-const badge = formatter.formatBadge({ text: "Required" });
+const badge = formatter.formatMDXBadge({ text: "Required" });
 ```
