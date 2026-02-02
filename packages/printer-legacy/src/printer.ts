@@ -35,7 +35,6 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 import { pathUrl } from "@graphql-markdown/utils";
-import { registerMDXEventHandlers } from "@graphql-markdown/core";
 
 import { printRelations } from "./relation";
 import { printDescription } from "./common";
@@ -189,9 +188,8 @@ export class Printer implements IPrinter {
       meta: meta,
     };
 
-    // Register MDX event handlers if mdxParser provided
-    const mdxModuleInstance = await mdxModule(mdxParser);
-    registerMDXEventHandlers(mdxModuleInstance);
+    // Load MDX module instance for potential future use
+    await mdxModule(mdxParser);
   }
 
   /**
