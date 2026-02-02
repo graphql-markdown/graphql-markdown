@@ -603,7 +603,7 @@ export class Renderer {
     const fileName = slugify(name);
     const filePath = join(normalize(dirPath), `${fileName}.${this.mdxExtension}`);
 
-    let content: MDXString;
+    let content: Maybe<MDXString>;
     try {
       const printOptions = {
         ...this.options,
