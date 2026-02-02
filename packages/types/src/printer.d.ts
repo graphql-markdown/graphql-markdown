@@ -2,11 +2,11 @@ import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
   FrontMatterOptions,
-  MDXSupportType,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
 } from "./core";
+import type { Formatter } from "./formatter";
 import type {
   GraphQLDirective,
   GraphQLSchema,
@@ -76,7 +76,7 @@ export interface PrinterConfigPrintTypeOptions {
 /**
  * Comprehensive options for printing type documentation
  */
-export type PrintTypeOptions = Partial<MDXSupportType> & {
+export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;

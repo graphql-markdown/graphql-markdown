@@ -10,6 +10,7 @@
 import type {
   DiffMethodName,
   DirectiveName,
+  Formatter,
   GeneratorOptions,
   GraphQLDirective,
   GraphQLSchema,
@@ -86,6 +87,54 @@ export const loadMDXModule = async (
         return undefined;
       })
     : undefined;
+};
+
+/**
+ * Extracts a formatter from an MDX module.
+ *
+ * Checks if the MDX module exports a `createMDXFormatter` factory function and calls it
+ * to create a Formatter. If no factory function is found, returns undefined.
+ *
+ * @param mdxModule - The loaded MDX module that may contain a createMDXFormatter export
+ * @param meta - Optional metadata to pass to the formatter factory
+ * @returns A Formatter if the module has a factory function, undefined otherwise
+ *
+ * @internal
+ */
+export const getFormatterFromMDXModule = (
+  mdxModule: unknown,
+  meta?: Maybe<{
+    generatorFrameworkName?: Maybe<string>;
+    generatorFrameworkVersion?: Maybe<string>;
+  }>,
+): Partial<Formatter> | undefined => {
+  if (!mdxModule || typeof mdxModule !== "object") {
+    return undefined;
+  }
+
+  const module = mdxModule as Record<string, unknown>;
+
+  // Check for createMDXFormatter on the module directly
+  if (
+    "createMDXFormatter" in module &&
+    typeof module.createMDXFormatter === "function"
+  ) {
+    return (module.createMDXFormatter as (meta?: unknown) => Formatter)(meta);
+  }
+
+  // Check for createMDXFormatter on module.default (ESM default export)
+  const defaultExport = module.default as Record<string, unknown> | undefined;
+  if (
+    defaultExport &&
+    "createMDXFormatter" in defaultExport &&
+    typeof defaultExport.createMDXFormatter === "function"
+  ) {
+    return (defaultExport.createMDXFormatter as (meta?: unknown) => Formatter)(
+      meta,
+    );
+  }
+
+  return undefined;
 };
 
 /**
@@ -232,8 +281,13 @@ export const generateDocFromSchema = async ({
   await Logger(loggerModule);
 
   const mdxModule = await loadMDXModule(mdxParser);
-  // Register MDX event handlers if mdxModule loaded successfully
+  // Register MDX lifecycle event handlers if mdxModule loaded successfully
   registerMDXEventHandlers(mdxModule);
+  // Extract formatter from the MDX module (for direct function calls)
+  const formatter = getFormatterFromMDXModule(
+    mdxModule,
+    docOptions ?? undefined,
+  );
 
   await events.emitAsync(
     SchemaEvents.BEFORE_LOAD,
@@ -315,7 +369,7 @@ export const generateDocFromSchema = async ({
       printTypeOptions,
       skipDocDirectives,
     },
-    mdxModule,
+    formatter,
   );
 
   const renderer = await getRenderer(

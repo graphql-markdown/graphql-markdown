@@ -11,6 +11,8 @@ import type {
   AdmonitionType,
   Badge,
   CollapsibleOption,
+  Formatter,
+  FrontMatterOptions,
   Maybe,
   MDXString,
   MetaOptions,
@@ -22,6 +24,7 @@ const MARKDOWN_EOL = "\n" as const;
 const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
+const FRONT_MATTER_DELIMITER = "---" as const;
 
 export { mdxDeclaration } from "./components";
 export { beforeGenerateIndexMetafileHook } from "./category";
@@ -100,3 +103,54 @@ export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
     url: `${url}${LINK_MDX_EXTENSION}`,
   };
 };
+
+/**
+ * Default frontmatter formatter for MDX.
+ *
+ * @param _props - The front matter options (unused)
+ * @param formatted - The formatted front matter as an array of strings
+ * @returns Formatted MDX string for the front matter
+ */
+export const formatMDXFrontmatter = (
+  _props: Maybe<FrontMatterOptions>,
+  formatted: Maybe<string[]>,
+): MDXString => {
+  return formatted
+    ? ([FRONT_MATTER_DELIMITER, ...formatted, FRONT_MATTER_DELIMITER].join(
+        MARKDOWN_EOL,
+      ) as MDXString)
+    : ("" as MDXString);
+};
+
+/**
+ * Creates an MDX formatter for Docusaurus documentation.
+ *
+ * The MDX formatter produces React component-based markup compatible
+ * with Docusaurus MDX rendering. It uses components like `<Badge>`,
+ * `<Bullet>`, `<Details>`, and `<SpecifiedBy>`.
+ *
+ * @param meta - Optional metadata for framework-specific formatting
+ * @returns A complete Formatter implementation for MDX output
+ *
+ * @example
+ * ```typescript
+ * import { createMDXFormatter } from '@graphql-markdown/docusaurus';
+ *
+ * const formatter = createMDXFormatter({ generatorFrameworkName: 'docusaurus' });
+ * const badge = formatter.formatMDXBadge({ text: 'Required' });
+ * // '<Badge class="badge badge--secondary " text="Required"/>'
+ * ```
+ */
+export const createMDXFormatter = (meta?: Maybe<MetaOptions>): Formatter => ({
+  formatMDXBadge: formatMDXBadge,
+  formatMDXAdmonition: (
+    admonition: AdmonitionType,
+    _meta: Maybe<MetaOptions>,
+  ) => formatMDXAdmonition(admonition, meta ?? _meta),
+  formatMDXBullet: formatMDXBullet,
+  formatMDXDetails: formatMDXDetails,
+  formatMDXFrontmatter: formatMDXFrontmatter,
+  formatMDXLink: formatMDXLink,
+  formatMDXNameEntity: formatMDXNameEntity,
+  formatMDXSpecifiedByLink: formatMDXSpecifiedByLink,
+});

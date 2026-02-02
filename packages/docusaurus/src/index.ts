@@ -62,3 +62,5 @@ export default async function pluginGraphQLDocGenerator(
     },
   };
 }
+
+export { createMDXFormatter } from "./mdx";

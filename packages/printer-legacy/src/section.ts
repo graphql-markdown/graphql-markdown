@@ -46,7 +46,7 @@ export const printSectionItem = async <T>(
     withAttributes: false,
   });
 
-  const badges = await printBadges(type, options);
+  const badges = printBadges(type, options);
   const tags = await printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
   const title = `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;

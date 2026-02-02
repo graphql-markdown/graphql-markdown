@@ -55,7 +55,6 @@
     "build": "tsgo --build"
   },
   "dependencies": {
-    "@graphql-markdown/core": "workspace:^",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
   },

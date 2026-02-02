@@ -10,6 +10,7 @@
 
 import type {
   CustomDirectiveMap,
+  Formatter,
   GraphQLDirective,
   GraphQLField,
   GraphQLSchema,
@@ -66,7 +67,7 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { mdxModule } from "./mdx";
+import { createDefaultFormatter } from "./formatter";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
@@ -153,7 +154,7 @@ export class Printer implements IPrinter {
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
     } = DEFAULT_INIT_OPTIONS,
-    mdxParser?: Record<string, unknown>,
+    formatter?: Partial<Formatter>,
   ): Promise<void> {
     if (Printer.options !== undefined) {
       return;
@@ -186,13 +187,9 @@ export class Printer implements IPrinter {
       hierarchy:
         printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
       meta: meta,
-    };
-
-    // Load MDX module instance and merge into options
-    const mdxModuleInstance = await mdxModule(mdxParser);
-    Printer.options = {
-      ...Printer.options,
-      ...mdxModuleInstance,
+      // Merge formatter functions: default formatter with any overrides
+      ...createDefaultFormatter(),
+      ...formatter,
     };
   }
 

@@ -12,11 +12,13 @@ import { RenderRootTypesEvents } from "./events/render-root-types-events";
 import { RenderHomepageEvents } from "./events/render-homepage-events";
 import { RenderTypeEntitiesEvents } from "./events/render-type-entities-events";
 import { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events";
-import { FormatEvents } from "./events/format-events";
 
 /**
  * Event callback mapping configuration.
  * Maps event names to their corresponding callback names in mdxModule.
+ *
+ * Note: Format functions (formatMDXBadge, formatMDXAdmonition, etc.) are NOT included here.
+ * They are pure transformations handled via the Formatter interface, not events.
  */
 export const EVENT_CALLBACK_MAP = {
   [SchemaEvents.BEFORE_LOAD]: "beforeLoadSchemaHook",
@@ -33,12 +35,4 @@ export const EVENT_CALLBACK_MAP = {
     "beforeGenerateIndexMetafileHook",
   [GenerateIndexMetafileEvents.AFTER_GENERATE]:
     "afterGenerateIndexMetafileHook",
-  [FormatEvents.FORMAT_BADGE]: "formatMDXBadge",
-  [FormatEvents.FORMAT_ADMONITION]: "formatMDXAdmonition",
-  [FormatEvents.FORMAT_BULLET]: "formatMDXBullet",
-  [FormatEvents.FORMAT_DETAILS]: "formatMDXDetails",
-  [FormatEvents.FORMAT_FRONTMATTER]: "formatMDXFrontmatter",
-  [FormatEvents.FORMAT_LINK]: "formatMDXLink",
-  [FormatEvents.FORMAT_NAME_ENTITY]: "formatMDXNameEntity",
-  [FormatEvents.FORMAT_SPECIFIED_BY_LINK]: "formatMDXSpecifiedByLink",
 } as const;
