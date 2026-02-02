@@ -36,6 +36,11 @@ export const deepFreeze = <T extends Record<PropertyKey, any>>(obj: T): T => {
   return Object.freeze(obj);
 };
 
+export interface CancellableEventOptions {
+  defaultAction?: DefaultAction;
+  cancellable?: boolean;
+}
+
 /**
  * Base class for all cancellable events in GraphQL-Markdown.
  *
@@ -75,12 +80,13 @@ export abstract class CancellableEvent {
   /**
    * Creates a new CancellableEvent.
    *
-   * @param cancellable - Whether this event can be cancelled (default: true)
-   * @param defaultAction - Optional function to execute as default action
+   * @param options - Configuration options for the event
+   * @param options.cancellable - Whether this event can be cancelled (default: true)
+   * @param options.defaultAction - Optional function to execute as default action
    */
-  constructor(cancellable = true, defaultAction?: DefaultAction) {
-    this._cancellable = cancellable;
-    this._defaultAction = defaultAction;
+  constructor(options?: CancellableEventOptions) {
+    this._cancellable = options?.cancellable ?? true;
+    this._defaultAction = options?.defaultAction;
   }
 
   /**

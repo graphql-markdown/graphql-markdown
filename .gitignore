@@ -31,3 +31,4 @@ bin
 *.code-workspace
 
 .turbo
+.sonarlint

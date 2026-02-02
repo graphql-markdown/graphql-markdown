@@ -12,8 +12,12 @@ import type {
   DirectiveName,
   GeneratorOptions,
   GraphQLDirective,
+  GraphQLSchema,
+  LoaderOption,
   Maybe,
+  PackageName,
   SchemaEntity,
+  TypeDiffMethod,
   TypeHierarchyObjectType,
 } from "@graphql-markdown/types";
 
@@ -35,7 +39,7 @@ import { getPrinter } from "./printer";
 import { getRenderer } from "./renderer";
 import { getEvents } from "./event-emitter";
 import {
-  SchemaLoadEvent,
+  SchemaEvent,
   SchemaEvents,
   DiffCheckEvent,
   DiffEvents,
@@ -59,6 +63,132 @@ const NS_PER_SEC = 1e9 as const;
  *
  */
 const SEC_DECIMALS = 3 as const;
+
+/**
+ * Asynchronously loads an MDX module dynamically.
+ *
+ * @param mdxParser - The MDX parser package name or path to import. Can be null or undefined.
+ * @returns A promise that resolves to the imported module, or undefined if:
+ *   - The mdxParser parameter is null or undefined
+ *   - An error occurs during import (logs a warning and returns undefined)
+ *
+ * @internal
+ */
+export const loadMDXModule = async (
+  mdxParser: Maybe<PackageName | string>,
+): Promise<unknown> => {
+  return mdxParser !== undefined && mdxParser !== null
+    ? import(mdxParser as string).catch(() => {
+        log(
+          `An error occurred while loading MDX formatter "${mdxParser}"`,
+          LogLevel.warn,
+        );
+        return undefined;
+      })
+    : undefined;
+};
+
+/**
+ * Loads a GraphQL schema from the specified location using configured document loaders.
+ *
+ * @param schemaLocation - The location/path of the GraphQL schema to load (e.g., file path, URL, or glob pattern).
+ * @param loadersList - Optional loader configuration for customizing how the schema is loaded.
+ *
+ * @returns A promise that resolves to the loaded GraphQL schema, or undefined if:
+ *   - The loaders cannot be initialized
+ *   - An error occurs during schema loading
+ *
+ * @internal
+ */
+export const loadGraphqlSchema = async (
+  schemaLocation: string,
+  loadersList: Maybe<LoaderOption>,
+): Promise<Maybe<GraphQLSchema>> => {
+  const loaders = await getDocumentLoaders(loadersList);
+
+  if (!loaders) {
+    log(
+      `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+      "error",
+    );
+    return undefined;
+  }
+
+  return loadSchema(schemaLocation, loaders);
+};
+
+/**
+ * Checks if there are differences in the GraphQL schema compared to a previous version.
+ *
+ * @param schema - The GraphQL schema to check for differences.
+ * @param schemaLocation - The location/path of the schema file for logging purposes.
+ * @param diffMethod - The method to use for detecting differences. If set to `NONE`, changes detection is skipped.
+ * @param tmpDir - The temporary directory path used for storing and comparing schema versions.
+ *
+ * @returns A promise that resolves to `true` if changes are detected or if diff method is `NONE`,
+ *          or `false` if no changes are detected.
+ *
+ * @remarks
+ * When no changes are detected, a log message is generated indicating that the schema is unchanged.
+ */
+export const checkSchemaDifferences = async (
+  schema: GraphQLSchema,
+  schemaLocation: string,
+  diffMethod: Maybe<TypeDiffMethod>,
+  tmpDir: string,
+): Promise<boolean> => {
+  let changed = true;
+
+  if (diffMethod !== DiffMethod.NONE) {
+    changed = await hasChanges(schema, tmpDir, diffMethod as DiffMethodName);
+    if (!changed) {
+      log(`No changes detected in schema "${toString(schemaLocation)}".`);
+    }
+  }
+
+  return changed;
+};
+
+/**
+ * Resolves and retrieves GraphQL directive objects from the schema based on their names.
+ *
+ * Takes two lists of directive names (for "only" and "skip" documentation directives),
+ * looks them up in the provided GraphQL schema, and returns the resolved directive objects.
+ *
+ * @param onlyDocDirective - A directive name or array of directive names for "only" documentation filtering
+ * @param skipDocDirective - A directive name or array of directive names for "skip" documentation filtering
+ * @param schema - The GraphQL schema to resolve directives from
+ *
+ * @returns A tuple containing two arrays: the first with resolved "only" directives,
+ *          the second with resolved "skip" directives. Only defined directives are included.
+ */
+export const resolveSkipAndOnlyDirectives = (
+  onlyDocDirective: Maybe<DirectiveName | DirectiveName[]>,
+  skipDocDirective: Maybe<DirectiveName | DirectiveName[]>,
+  schema: GraphQLSchema,
+): GraphQLDirective[][] => {
+  return [onlyDocDirective, skipDocDirective].map(
+    (directive: Maybe<DirectiveName | DirectiveName[]>) => {
+      // Normalize to array and filter out null/undefined
+      let directiveList: DirectiveName[];
+      if (Array.isArray(directive)) {
+        directiveList = directive;
+      } else if (directive) {
+        directiveList = [directive];
+      } else {
+        directiveList = [];
+      }
+
+      return directiveList
+        .map((name: string) => {
+          return schema.getDirective(name);
+        })
+        .filter((directive): directive is GraphQLDirective => {
+          return directive !== undefined;
+        });
+    },
+  );
+};
 
 /**
  * Main entry point for generating Markdown documentation from a GraphQL schema.
@@ -97,83 +227,69 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
+  const events = getEvents();
+
   await Logger(loggerModule);
 
-  const loaders = await getDocumentLoaders(loadersList);
+  const mdxModule = await loadMDXModule(mdxParser);
+  // Register MDX event handlers if mdxModule loaded successfully
+  registerMDXEventHandlers(mdxModule);
 
-  if (!loaders) {
+  await events.emitAsync(
+    SchemaEvents.BEFORE_LOAD,
+    new SchemaEvent({
+      schemaLocation: schemaLocation as string,
+    }),
+  );
+  const schema = await loadGraphqlSchema(schemaLocation as string, loadersList);
+  await events.emitAsync(
+    SchemaEvents.AFTER_LOAD,
+    new SchemaEvent({
+      schemaLocation: schemaLocation as string,
+      schema,
+    }),
+  );
+  if (!schema) {
     log(
-      `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+      `Failed to load GraphQL schema from location "${toString(
+        schemaLocation,
+      )}".`,
       "error",
     );
     return;
   }
 
-  const events = getEvents();
-  const beforeLoadEvent = new SchemaLoadEvent({
-    schemaLocation: schemaLocation as string,
-  });
-  await events.emitAsync(SchemaEvents.BEFORE_LOAD, beforeLoadEvent);
-
-  const schema = await loadSchema(schemaLocation as string, loaders);
-
-  const afterLoadEvent = new SchemaLoadEvent({
-    schemaLocation: schemaLocation as string,
-  });
-  await events.emitAsync(SchemaEvents.AFTER_LOAD, afterLoadEvent);
-
-  if (diffMethod !== DiffMethod.NONE) {
-    const beforeDiffEvent = new DiffCheckEvent({
+  await events.emitAsync(
+    DiffEvents.BEFORE_CHECK,
+    new DiffCheckEvent({
       schema,
       outputDir: tmpDir,
-    });
-    await events.emitAsync(DiffEvents.BEFORE_CHECK, beforeDiffEvent);
+    }),
+  );
+  const schemaHasChanges = await checkSchemaDifferences(
+    schema,
+    schemaLocation as string,
+    diffMethod,
+    tmpDir,
+  );
+  await events.emitAsync(
+    DiffEvents.AFTER_CHECK,
+    new DiffCheckEvent({ schemaHasChanges }),
+  );
 
-    const changed = await hasChanges(
-      schema,
-      tmpDir,
-      diffMethod as DiffMethodName,
-    );
-    if (!changed) {
-      log(`No changes detected in schema "${toString(schemaLocation)}".`);
-    }
-
-    const afterDiffEvent = new DiffCheckEvent({
-      schema,
-      outputDir: tmpDir,
-    });
-    await events.emitAsync(DiffEvents.AFTER_CHECK, afterDiffEvent);
-  }
-
-  const [onlyDocDirectives, skipDocDirectives] = [
+  const [onlyDocDirectives, skipDocDirectives] = resolveSkipAndOnlyDirectives(
     onlyDocDirective,
     skipDocDirective,
-  ].map((directiveList: DirectiveName[]) => {
-    return directiveList
-      .map((name: string) => {
-        return schema.getDirective(name);
-      })
-      .filter((directive: Maybe<GraphQLDirective>) => {
-        return directive !== undefined;
-      }) as GraphQLDirective[];
-  });
+    schema,
+  );
 
+  events.emit(SchemaEvents.BEFORE_MAP, new SchemaEvent({ schema }));
   const rootTypes = getSchemaMap(schema);
+  events.emit(SchemaEvents.AFTER_MAP, new SchemaEvent({ schema, rootTypes }));
+
   const customDirectives = getCustomDirectives(rootTypes, customDirective);
+
   const groups = getGroups(rootTypes, groupByDirective);
-
-  const mdxModule = await (mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser as string).catch(() => {
-        log(
-          `An error occurred while loading MDX formatter "${mdxParser}"`,
-          LogLevel.warn,
-        );
-        return undefined;
-      })
-    : undefined);
-
-  // Register MDX event handlers if mdxModule loaded successfully
-  registerMDXEventHandlers(mdxModule);
 
   const printer = await getPrinter(
     // module mandatory
@@ -201,6 +317,7 @@ export const generateDocFromSchema = async ({
     },
     mdxModule,
   );
+
   const renderer = await getRenderer(
     printer,
     outputDir,

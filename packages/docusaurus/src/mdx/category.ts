@@ -20,11 +20,13 @@ enum SidebarPosition {
 }
 
 export const beforeGenerateIndexMetafileHook = async (event: {
-  dirPath: string;
-  category: string;
-  options?: Record<string, unknown>;
+  data: {
+    dirPath: string;
+    category: string;
+    options?: Record<string, unknown>;
+  };
 }): Promise<void> => {
-  const { dirPath, category, options } = event;
+  const { dirPath, category, options } = event.data;
   const filePath = join(dirPath, CATEGORY_YAML);
 
   if (await fileExists(filePath)) {

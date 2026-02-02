@@ -19,15 +19,15 @@ import { printSection } from "../section";
  * @param options - Configuration options for printing
  * @returns Formatted MDX string containing the union type's possible types
  */
-export const printUnionMetadata = (
+export const printUnionMetadata = async (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   if (!isUnionType(type)) {
     return "";
   }
 
-  return printSection(type.getTypes(), "Possible types", {
+  return await printSection(type.getTypes(), "Possible types", {
     ...options,
     parentType: type.name,
   });

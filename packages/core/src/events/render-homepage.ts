@@ -4,8 +4,7 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction } from "@graphql-markdown/types";
-import { CancellableEvent } from "./base";
+import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
  * Event emitted before/after rendering homepage.
@@ -13,15 +12,18 @@ import { CancellableEvent } from "./base";
  * @category Events
  */
 export class RenderHomepageEvent extends CancellableEvent {
-  /** Output directory for homepage */
-  readonly outputDir: string;
-
-  constructor(data: {
+  /** Event data containing output directory */
+  readonly data: {
     outputDir: string;
-    defaultAction?: DefaultAction;
-    cancellable?: boolean;
-  }) {
-    super(data.cancellable, data.defaultAction);
-    this.outputDir = data.outputDir;
+  };
+
+  constructor(
+    data: {
+      outputDir: string;
+    },
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
   }
 }

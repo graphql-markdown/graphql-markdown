@@ -29,10 +29,10 @@ describe("interface", () => {
   });
 
   describe("printInterfaceMetadata()", () => {
-    test("returns interface metadata", () => {
+    test("returns interface metadata", async () => {
       expect.hasAssertions();
 
-      const metadata = printInterfaceMetadata(type, DEFAULT_OPTIONS);
+      const metadata = await printInterfaceMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
 "### Fields

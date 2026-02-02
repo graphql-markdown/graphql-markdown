@@ -14,10 +14,10 @@ describe("enum", () => {
   });
 
   describe("printEnumMetadata()", () => {
-    test("returns enum metadata", () => {
+    test("returns enum metadata", async () => {
       expect.hasAssertions();
 
-      const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
+      const metadata = await printEnumMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(`
 "### Values
@@ -41,10 +41,10 @@ Deprecated
 `);
     });
 
-    test("returns enum metadata with grouped deprecated", () => {
+    test("returns enum metadata with grouped deprecated", async () => {
       expect.hasAssertions();
 
-      const metadata = printEnumMetadata(type, {
+      const metadata = await printEnumMetadata(type, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
       });

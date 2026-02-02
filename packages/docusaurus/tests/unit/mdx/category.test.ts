@@ -32,8 +32,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
+      data: {
+        dirPath: outputPath,
+        category,
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -53,11 +55,13 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
-      options: {
-        collapsed: false,
-        collapsible: false,
+      data: {
+        dirPath: outputPath,
+        category,
+        options: {
+          collapsed: false,
+          collapsible: false,
+        },
       },
     });
 
@@ -78,9 +82,11 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
-      options: { index: true },
+      data: {
+        dirPath: outputPath,
+        category,
+        options: { index: true },
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -100,8 +106,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
+      data: {
+        dirPath: outputPath,
+        category,
+      },
     });
 
     expect(spy).not.toHaveBeenCalledWith(
@@ -121,9 +129,11 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
-      options: { sidebarPosition: 42 },
+      data: {
+        dirPath: outputPath,
+        category,
+        options: { sidebarPosition: 42 },
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -144,11 +154,13 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
-      options: {
-        sidebarPosition: 42,
-        styleClass,
+      data: {
+        dirPath: outputPath,
+        category,
+        options: {
+          sidebarPosition: 42,
+          styleClass,
+        },
       },
     });
 
@@ -169,8 +181,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const spy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
+      data: {
+        dirPath: outputPath,
+        category,
+      },
     });
 
     expect(spy).toHaveBeenCalledWith(
@@ -190,8 +204,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const saveFileSpy = jest.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
-      dirPath: outputPath,
-      category,
+      data: {
+        dirPath: outputPath,
+        category,
+      },
     });
 
     expect(ensureDirSpy).toHaveBeenCalledWith(outputPath);

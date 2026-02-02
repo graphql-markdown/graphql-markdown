@@ -45,7 +45,8 @@ const INDEX_MD = "index.md";
  * It checks if an index.md file exists in the specified directory. 
  * If not, it creates one with a title derived from the category name.
  */
-const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
+const beforeGenerateIndexMetafileHook = async (event) => {
+  const { dirPath, category } = event.data;
   const filePath = join(dirPath, INDEX_MD);
 
   if (await fileExists(filePath)) {
@@ -65,7 +66,8 @@ const beforeGenerateIndexMetafileHook = async ({ dirPath, category }) => {
  * It checks if an index file exists in the same directory as the 
  * rendered entity, and if so, appends a markdown link to the entity's page.
  */
-const afterRenderTypeEntitiesHook = async ({ filePath, name }) => {
+const afterRenderTypeEntitiesHook = async (event) => {
+  const { filePath, name } = event.data;
   const indexFilePath = resolve(dirname(filePath), INDEX_MD);
   const pageFileName = basename(filePath);
   if (await fileExists(indexFilePath)) {

@@ -4,24 +4,31 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction } from "@graphql-markdown/types";
-import { CancellableEvent } from "./base";
+import type { GraphQLSchema, Maybe, SchemaMap } from "@graphql-markdown/types";
+import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
  * Event emitted before/after loading a GraphQL schema.
  *
  * @category Events
  */
-export class SchemaLoadEvent extends CancellableEvent {
-  /** Path or pointer to the schema location */
-  readonly schemaLocation: string;
+export class SchemaEvent extends CancellableEvent {
+  /** Event data containing schema location, schema, and root types */
+  readonly data: {
+    schemaLocation?: string;
+    schema?: Maybe<GraphQLSchema>;
+    rootTypes?: Maybe<SchemaMap>;
+  };
 
-  constructor(data: {
-    schemaLocation: string;
-    defaultAction?: DefaultAction;
-    cancellable?: boolean;
-  }) {
-    super(data.cancellable, data.defaultAction);
-    this.schemaLocation = data.schemaLocation;
+  constructor(
+    data: {
+      schemaLocation?: string;
+      schema?: Maybe<GraphQLSchema>;
+      rootTypes?: Maybe<SchemaMap>;
+    },
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
   }
 }

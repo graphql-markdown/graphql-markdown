@@ -15,7 +15,6 @@ import type {
   GraphQLSchema,
   IPrinter,
   MDXString,
-  MDXSupportType,
   Maybe,
   MetaOptions,
   PrintTypeOptions,
@@ -124,11 +123,6 @@ export class Printer implements IPrinter {
   static readonly printCustomTags = printCustomTags;
 
   /**
-   * MDX module configuration
-   */
-  static printMDXModule: Readonly<MDXSupportType>;
-
-  /**
    * Initializes the printer with the given schema and configuration.
    *
    * @param schema - GraphQL schema to generate documentation for
@@ -194,7 +188,12 @@ export class Printer implements IPrinter {
       meta: meta,
     };
 
-    Printer.printMDXModule = await mdxModule(mdxParser);
+    // Load MDX module instance and merge into options
+    const mdxModuleInstance = await mdxModule(mdxParser);
+    Printer.options = {
+      ...Printer.options,
+      ...mdxModuleInstance,
+    };
   }
 
   /**
@@ -304,10 +303,10 @@ export class Printer implements IPrinter {
    * @returns Formatted metadata string as MDX or plain string
    * @throws When type is not supported
    */
-  static readonly printTypeMetadata = (
+  static readonly printTypeMetadata = async (
     type: unknown,
     options: PrintTypeOptions,
-  ): MDXString | string => {
+  ): Promise<MDXString | string> => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type, options);
@@ -340,10 +339,10 @@ export class Printer implements IPrinter {
    * @param options - Printer configuration options
    * @returns Formatted relations section as MDX or plain string
    */
-  static readonly printRelations = (
+  static readonly printRelations = async (
     type: unknown,
     options: PrintTypeOptions,
-  ): MDXString | string => {
+  ): Promise<MDXString | string> => {
     if (options.relatedTypeSection !== true) {
       return "";
     }
@@ -403,16 +402,15 @@ export class Printer implements IPrinter {
    * - Example usage
    * - Related types
    */
-  static readonly printType = (
+  static readonly printType = async (
     name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Maybe<MDXString> => {
+  ): Promise<Maybe<MDXString>> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
       ...options,
-      ...Printer.printMDXModule,
     };
 
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
@@ -431,15 +429,14 @@ export class Printer implements IPrinter {
       type,
       printTypeOptions,
     );
-    const tags = Printer.printCustomTags(type, printTypeOptions);
-    const metadata = Printer.printTypeMetadata(type, printTypeOptions);
-    const relations = Printer.printRelations(type, printTypeOptions);
+    const tags = await Printer.printCustomTags(type, printTypeOptions);
+    const metadata = await Printer.printTypeMetadata(type, printTypeOptions);
+    const relations = await Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
     return [
       header,
       metatags,
-      Printer.printMDXModule.mdxDeclaration,
       tags,
       description,
       code,

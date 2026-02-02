@@ -62,12 +62,12 @@ export const getRootTypeLocaleFromString = (
  * const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);
  * ```
  */
-export const printRelationOf = <T>(
+export const printRelationOf = async <T>(
   type: unknown,
   section: unknown,
   getRelation: Maybe<IGetRelation<T>>,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   if (
     !isNamedType(type) ||
     isOperation(type) ||
@@ -92,7 +92,7 @@ export const printRelationOf = <T>(
     }
 
     const category = getRootTypeLocaleFromString(relation)!;
-    const badge = printBadge(
+    const badge = await printBadge(
       {
         text: category,
         classname: CSS_BADGE_CLASSNAME.RELATION,
@@ -131,10 +131,10 @@ export const printRelationOf = <T>(
  * const relations = printRelations(myType, { schema, formatMDXBullet: () => "* " });
  * ```
  */
-export const printRelations = (
+export const printRelations = async (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Promise<MDXString | string> => {
   const relations: Record<string, RelationOf<unknown>> = {
     returnedBy: { section: "Returned By", getRelation: getRelationOfReturn },
     memberOf: { section: "Member Of", getRelation: getRelationOfField },
@@ -144,10 +144,11 @@ export const printRelations = (
     },
   };
 
-  let data = "";
-  for (const { section, getRelation } of Object.values(relations)) {
-    data += printRelationOf(type, section, getRelation, options);
-  }
-
-  return data as MDXString;
+  const relationPromises = Object.values(relations).map(
+    async ({ section, getRelation }) => {
+      return printRelationOf(type, section, getRelation, options);
+    },
+  );
+  const relationResults = await Promise.all(relationPromises);
+  return relationResults.join("") as MDXString;
 };

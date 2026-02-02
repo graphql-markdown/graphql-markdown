@@ -222,16 +222,16 @@ describe("directive", () => {
   });
 
   describe("printCustomTags()", () => {
-    test("prints empty string if type has no matching directive", () => {
+    test("prints empty string if type has no matching directive", async () => {
       expect.hasAssertions();
 
       jest.spyOn(Utils, "isEmpty").mockReturnValue(true);
 
-      const tags = printCustomTags(type, options);
+      const tags = await printCustomTags(type, options);
 
       expect(tags).toBe("");
     });
-    test("prints MDX badge for tags matching directives", () => {
+    test("prints MDX badge for tags matching directives", async () => {
       expect.hasAssertions();
 
       const mockConstDirectiveMap = {
@@ -245,7 +245,7 @@ describe("directive", () => {
         return text as string;
       });
 
-      const tags = printCustomTags(type, options);
+      const tags = await printCustomTags(type, options);
 
       expect(tags).toBe('<mark class="gqlmd-mdx-badge">@testA</mark>');
     });

@@ -67,10 +67,19 @@ export interface MDXSupportType {
     formatted: Maybe<string[]>,
   ) => MDXString;
   mdxDeclaration: string;
-  afterRenderTypeEntitiesHook: (
-    name: string,
-    filePath: string,
-  ) => Promise<void> | void;
+  // Event hooks
+  beforeSchemaLoadHook?: SchemaLoadHook;
+  afterSchemaLoadHook?: SchemaLoadHook;
+  beforeDiffCheckHook?: DiffCheckHook;
+  afterDiffCheckHook?: DiffCheckHook;
+  beforeRenderRootTypesHook?: RenderRootTypesHook;
+  afterRenderRootTypesHook?: RenderRootTypesHook;
+  beforeRenderHomepageHook?: RenderHomepageHook;
+  afterRenderHomepageHook?: RenderHomepageHook;
+  beforeRenderTypeEntitiesHook?: RenderTypeEntitiesHook;
+  afterRenderTypeEntitiesHook?: RenderTypeEntitiesHook;
+  beforeGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
+  afterGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
 }
 
 /**

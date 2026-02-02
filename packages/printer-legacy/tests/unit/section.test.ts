@@ -22,13 +22,13 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("section", () => {
   describe("printSection()", () => {
-    test("returns Markdown ### section by default", () => {
+    test("returns Markdown ### section by default", async () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content = ["section content"];
 
-      const section = printSection(content, title, DEFAULT_OPTIONS);
+      const section = await printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "### section title
@@ -41,12 +41,12 @@ describe("section", () => {
 `);
     });
 
-    test("returns Markdown ### section with collapsible content", () => {
+    test("returns Markdown ### section with collapsible content", async () => {
       expect.hasAssertions();
 
       const content = ["section content"];
 
-      const section = printSection(content, "", {
+      const section = await printSection(content, "", {
         ...DEFAULT_OPTIONS,
         level: 0 as SectionLevelValue,
         collapsible: {
@@ -68,13 +68,13 @@ undefined"
 `);
     });
 
-    test("returns Markdown custom section level", () => {
+    test("returns Markdown custom section level", async () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content = ["section content"];
 
-      const section = printSection(content, title, {
+      const section = await printSection(content, title, {
         ...DEFAULT_OPTIONS,
         level: 1 as SectionLevelValue,
       });
@@ -90,25 +90,25 @@ undefined"
 `);
     });
 
-    test("returns empty string if content is empty", () => {
+    test("returns empty string if content is empty", async () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content: unknown[] = [];
 
-      const section = printSection(content, title, DEFAULT_OPTIONS);
+      const section = await printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toBe("");
     });
   });
 
   describe("printSectionItems()", () => {
-    test("returns Markdown one line per item", () => {
+    test("returns Markdown one line per item", async () => {
       expect.hasAssertions();
 
       const itemList = ["one", "two", "three"];
 
-      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
+      const section = await printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "####   
@@ -125,12 +125,12 @@ undefined"
 `);
     });
 
-    test("returns empty text if not a list", () => {
+    test("returns empty text if not a list", async () => {
       expect.hasAssertions();
 
       const itemList = "list";
 
-      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
+      const section = await printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatch("");
     });
@@ -142,7 +142,7 @@ undefined"
       locations: [DirectiveLocation.FIELD],
     });
 
-    test("returns Markdown #### link section with description", () => {
+    test("returns Markdown #### link section with description", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLObjectType({
@@ -151,7 +151,7 @@ undefined"
         fields: {},
       });
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
@@ -160,7 +160,7 @@ Lorem ipsum
 `);
     });
 
-    test("returns Markdown #### link section with multi-lines description", () => {
+    test("returns Markdown #### link section with multi-lines description", async () => {
       expect.hasAssertions();
 
       const type = new GraphQLObjectType({
@@ -178,7 +178,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         fields: {},
       });
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
@@ -196,7 +196,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with sub type is non-nullable", () => {
+    test("returns Markdown #### link section with sub type is non-nullable", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -209,7 +209,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
@@ -218,7 +218,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with sub type list and non-nullable", () => {
+    test("returns Markdown #### link section with sub type list and non-nullable", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -233,7 +233,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
@@ -242,14 +242,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with parent type prefix", () => {
+    test("returns Markdown #### link section with parent type prefix", async () => {
       expect.hasAssertions();
 
       const type = {
         name: "EntityTypeName",
       };
 
-      const section = printSectionItem(type, {
+      const section = await printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         parentType: "parentTypePrefix",
       });
@@ -261,7 +261,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with field parameters", () => {
+    test("returns Markdown #### link section with field parameters", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -273,7 +273,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
           },
         ],
       };
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
@@ -284,7 +284,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with non empty nullable list [!]", () => {
+    test("returns Markdown #### link section with non empty nullable list [!]", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -292,7 +292,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
@@ -301,7 +301,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with non empty no nullable list [!]!", () => {
+    test("returns Markdown #### link section with non empty no nullable list [!]!", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -311,7 +311,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = printSectionItem(type, DEFAULT_OPTIONS);
+      const section = await printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
@@ -320,7 +320,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns no section if item matches skipDocDirective", () => {
+    test("returns no section if item matches skipDocDirective", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -331,7 +331,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         },
       };
 
-      const section = printSectionItem(type, {
+      const section = await printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
       });
@@ -339,7 +339,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toBe("");
     });
 
-    test("returns no section if item deprecated and SKIP", () => {
+    test("returns no section if item deprecated and SKIP", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -351,7 +351,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         },
       };
 
-      const section = printSectionItem(type, {
+      const section = await printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
         deprecated: "skip",
@@ -360,7 +360,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toBe("");
     });
 
-    test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
+    test("returns Markdown #### link section without field parameters matching skipDocDirective", async () => {
       expect.hasAssertions();
 
       const type = {
@@ -388,7 +388,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ],
       };
 
-      const section = printSectionItem(type, {
+      const section = await printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
       });
