@@ -17,7 +17,7 @@ import type {
   IPrinter,
   MDXString,
   Maybe,
-  MetaOptions,
+  MetaInfo,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
@@ -149,7 +149,7 @@ export class Printer implements IPrinter {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
       groups?: SchemaEntitiesGroupMap;
-      meta?: Maybe<MetaOptions>;
+      meta?: Maybe<MetaInfo>;
       metatags?: Record<string, string>[];
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;

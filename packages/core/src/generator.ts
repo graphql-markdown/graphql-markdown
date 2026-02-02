@@ -16,6 +16,7 @@ import type {
   GraphQLSchema,
   LoaderOption,
   Maybe,
+  MetaInfo,
   PackageName,
   SchemaEntity,
   TypeDiffMethod,
@@ -130,10 +131,7 @@ const FORMATTER_FUNCTION_NAMES = [
  */
 export const getFormatterFromMDXModule = (
   mdxModule: unknown,
-  meta?: Maybe<{
-    generatorFrameworkName?: Maybe<string>;
-    generatorFrameworkVersion?: Maybe<string>;
-  }>,
+  meta?: MetaInfo,
 ): Partial<Formatter> | undefined => {
   if (!mdxModule || typeof mdxModule !== "object") {
     return undefined;
@@ -146,7 +144,7 @@ export const getFormatterFromMDXModule = (
     "createMDXFormatter" in module &&
     typeof module.createMDXFormatter === "function"
   ) {
-    return (module.createMDXFormatter as (meta?: unknown) => Formatter)(meta);
+    return (module.createMDXFormatter as (meta?: MetaInfo) => Formatter)(meta);
   }
 
   // Check for createMDXFormatter on module.default (ESM default export)
@@ -156,7 +154,7 @@ export const getFormatterFromMDXModule = (
     "createMDXFormatter" in defaultExport &&
     typeof defaultExport.createMDXFormatter === "function"
   ) {
-    return (defaultExport.createMDXFormatter as (meta?: unknown) => Formatter)(
+    return (defaultExport.createMDXFormatter as (meta?: MetaInfo) => Formatter)(
       meta,
     );
   }

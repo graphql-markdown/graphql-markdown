@@ -61,7 +61,7 @@ describe("generator", () => {
   describe("generateDocFromSchema()", () => {
     const options: GeneratorOptions = {
       baseURL: "base URL",
-      diffMethod: "diff method" as DiffMethod,
+      diffMethod: "NONE" as DiffMethod,
       docOptions: {
         index: true,
         frontMatter: {},
@@ -283,7 +283,7 @@ describe("generator", () => {
       expect(checkDiffSpy).toHaveBeenCalledWith(
         mockSchema,
         "schema location",
-        "diff method",
+        "NONE",
         "temp dir",
       );
       expect(loggerSpy).not.toHaveBeenCalledWith(

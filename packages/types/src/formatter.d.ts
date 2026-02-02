@@ -9,7 +9,7 @@
  */
 
 import type { Maybe, MDXString } from "./utils";
-import type { AdmonitionType, Badge, MetaOptions, TypeLink } from "./printer";
+import type { AdmonitionType, Badge, MetaInfo, TypeLink } from "./printer";
 import type { CollapsibleOption, FrontMatterOptions } from "./core";
 
 /**
@@ -48,7 +48,7 @@ export interface Formatter {
    */
   formatMDXAdmonition: (
     admonition: AdmonitionType,
-    meta: Maybe<MetaOptions>,
+    meta: Maybe<MetaInfo>,
   ) => MDXString;
 
   /**

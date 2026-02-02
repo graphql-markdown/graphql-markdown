@@ -15,7 +15,7 @@ import type {
   FrontMatterOptions,
   Maybe,
   MDXString,
-  MetaOptions,
+  MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
 import {
@@ -50,7 +50,7 @@ export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
  */
 export const formatMDXAdmonition = (
   { text, title, type }: AdmonitionType,
-  meta: Maybe<MetaOptions>,
+  meta: Maybe<MetaInfo>,
 ): MDXString => {
   const isDocusaurus = meta?.generatorFrameworkName === "docusaurus";
   if (isDocusaurus && meta.generatorFrameworkVersion?.startsWith("2")) {
@@ -153,12 +153,10 @@ export const formatMDXFrontmatter = (
  * // '<Badge class="badge badge--secondary " text="Required"/>'
  * ```
  */
-export const createMDXFormatter = (meta?: Maybe<MetaOptions>): Formatter => ({
+export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => ({
   formatMDXBadge,
-  formatMDXAdmonition: (
-    admonition: AdmonitionType,
-    _meta: Maybe<MetaOptions>,
-  ) => formatMDXAdmonition(admonition, meta ?? _meta),
+  formatMDXAdmonition: (admonition: AdmonitionType, _meta: Maybe<MetaInfo>) =>
+    formatMDXAdmonition(admonition, meta ?? _meta),
   formatMDXBullet,
   formatMDXDetails,
   formatMDXFrontmatter,

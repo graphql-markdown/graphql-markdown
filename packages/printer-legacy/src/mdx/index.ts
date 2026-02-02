@@ -20,7 +20,7 @@ import type {
   Maybe,
   MDXString,
   MDXSupportType,
-  MetaOptions,
+  MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
 
@@ -67,7 +67,7 @@ const formatMDXBadge = (badge: Badge): MDXString => {
  */
 const formatMDXAdmonition = (
   { text, title, type, icon }: AdmonitionType,
-  _meta: Maybe<MetaOptions>,
+  _meta: Maybe<MetaInfo>,
 ): MDXString => {
   return `${MARKDOWN_EOP}<fieldset class="gqlmd-mdx-admonition-fieldset">${MARKDOWN_EOL}<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLocaleLowerCase()}">${icon ?? type.toUpperCase()} ${title}</span></legend>${MARKDOWN_EOL}<span>${text}</span>${MARKDOWN_EOL}</fieldset>` as MDXString;
 };

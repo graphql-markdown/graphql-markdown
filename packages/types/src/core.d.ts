@@ -6,7 +6,7 @@ import type { DirectiveName, GraphQLDirective, GraphQLSchema } from "./graphql";
 import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString } from "./utils";
-import type { AdmonitionType, Badge, MetaOptions, TypeLink } from "./printer";
+import type { AdmonitionType, Badge, TypeLink } from "./printer";
 
 /**
  * Core type definitions for configuration and document generation.
@@ -54,7 +54,7 @@ export interface MDXSupportType {
   generateIndexMetafile: GenerateIndexMetafileType;
   formatMDXAdmonition: (
     { text, title, type, icon }: AdmonitionType,
-    meta: Maybe<MetaOptions>,
+    meta: Maybe<MetaInfo>,
   ) => MDXString;
   formatMDXBadge: ({ text, classname }: Badge) => MDXString;
   formatMDXBullet: (text?: string) => MDXString;
@@ -497,3 +497,18 @@ export type RenderTypeEntitiesHook = (event: unknown) => Promise<void>;
  * Hook callback for generate index metafile events.
  */
 export type GenerateIndexMetafileHook = (event: unknown) => Promise<void>;
+
+/**
+ * Metadata information about the documentation generator framework.
+ *
+ * @remarks
+ * This type contains optional information about the framework used to generate
+ * the GraphQL documentation, including its name and version.
+ *
+ * @property generatorFrameworkName - The name of the generator framework (e.g., "docusaurus", "vuepress")
+ * @property generatorFrameworkVersion - The version of the generator framework
+ */
+export type MetaInfo = Maybe<{
+  generatorFrameworkName?: Maybe<string>;
+  generatorFrameworkVersion?: Maybe<string>;
+}>;
