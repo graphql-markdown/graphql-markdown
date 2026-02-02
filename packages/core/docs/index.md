@@ -14,8 +14,6 @@
 - [events/base](events/base.md)
 - [events/diff-check](events/diff-check.md)
 - [events/diff-events](events/diff-events.md)
-- [events/format](events/format.md)
-- [events/format-events](events/format-events.md)
 - [events/generate-index-metafile](events/generate-index-metafile.md)
 - [events/generate-index-metafile-events](events/generate-index-metafile-events.md)
 - [events/render-homepage](events/render-homepage.md)

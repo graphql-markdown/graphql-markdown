@@ -20,7 +20,6 @@ Provides common functionality:
 #### Extended by
 
 - [`DiffCheckEvent`](diff-check.md#diffcheckevent)
-- [`FormatEvent`](format.md#formatevent)
 - [`GenerateIndexMetafileEvent`](generate-index-metafile.md#generateindexmetafileevent)
 - [`RenderHomepageEvent`](render-homepage.md#renderhomepageevent)
 - [`RenderRootTypesEvent`](render-root-types.md#renderroottypesevent)
