@@ -26,6 +26,7 @@ import {
 
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
+import { createDefaultFormatter } from "./formatter";
 import { DEPRECATED, NON_NULL } from "./const/strings";
 
 export const CSS_BADGE_CLASSNAME = {
@@ -105,8 +106,8 @@ export const printBadge = (
     return options.formatMDXBadge(badge);
   }
 
-  // Fallback (should not happen if Printer.init was called)
-  return `<mark class="gqlmd-mdx-badge">${badge.text as string}</mark>` as MDXString;
+  // Fallback to default formatter (should not happen if Printer.init was called)
+  return createDefaultFormatter().formatMDXBadge(badge);
 };
 
 /**
