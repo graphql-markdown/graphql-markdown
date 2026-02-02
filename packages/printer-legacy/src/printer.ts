@@ -304,10 +304,10 @@ export class Printer implements IPrinter {
    * @returns Formatted metadata string as MDX or plain string
    * @throws When type is not supported
    */
-  static readonly printTypeMetadata = async (
+  static readonly printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
-  ): Promise<MDXString | string> => {
+  ): MDXString | string => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type, options);
@@ -340,10 +340,10 @@ export class Printer implements IPrinter {
    * @param options - Printer configuration options
    * @returns Formatted relations section as MDX or plain string
    */
-  static readonly printRelations = async (
+  static readonly printRelations = (
     type: unknown,
     options: PrintTypeOptions,
-  ): Promise<MDXString | string> => {
+  ): MDXString | string => {
     if (options.relatedTypeSection !== true) {
       return "";
     }
@@ -403,11 +403,11 @@ export class Printer implements IPrinter {
    * - Example usage
    * - Related types
    */
-  static readonly printType = async (
+  static readonly printType = (
     name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Promise<Maybe<MDXString>> => {
+  ): Maybe<MDXString> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
@@ -430,9 +430,9 @@ export class Printer implements IPrinter {
       type,
       printTypeOptions,
     );
-    const tags = await Printer.printCustomTags(type, printTypeOptions);
-    const metadata = await Printer.printTypeMetadata(type, printTypeOptions);
-    const relations = await Printer.printRelations(type, printTypeOptions);
+    const tags = Printer.printCustomTags(type, printTypeOptions);
+    const metadata = Printer.printTypeMetadata(type, printTypeOptions);
+    const relations = Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
     return [

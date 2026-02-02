@@ -17,10 +17,10 @@ import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
  * @param options - Printing options
  * @returns Markdown formatted string of implemented interfaces
  */
-const printImplementedInterfaceMetadata = async (
+const printImplementedInterfaceMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<string> => {
+): string => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -30,7 +30,7 @@ const printImplementedInterfaceMetadata = async (
     return "";
   }
 
-  return await printSection(type.getInterfaces(), "Interfaces", options);
+  return printSection(type.getInterfaces(), "Interfaces", options) as string;
 };
 
 /**
@@ -39,12 +39,12 @@ const printImplementedInterfaceMetadata = async (
  * @param options - Printing options
  * @returns Markdown formatted string containing fields and interfaces metadata
  */
-export const printObjectMetadata = async (
+export const printObjectMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<string> => {
-  const interfaceMeta = await printImplementedInterfaceMetadata(type, options);
-  const metadata = await printMetadataSection(
+): string => {
+  const interfaceMeta = printImplementedInterfaceMetadata(type, options);
+  const metadata = printMetadataSection(
     type,
     getFields(type),
     "Fields",

@@ -22,15 +22,15 @@ import { hasPrintableDirective } from "../link";
  * @param options - Options for printing the type
  * @returns A string containing the metadata section in MDX format, or empty string if type is not an enum
  */
-export const printEnumMetadata = async (
+export const printEnumMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!isEnumType(type)) {
     return "";
   }
 
-  return await printMetadataSection(type, type.getValues(), "Values", options);
+  return printMetadataSection(type, type.getValues(), "Values", options);
 };
 
 /**

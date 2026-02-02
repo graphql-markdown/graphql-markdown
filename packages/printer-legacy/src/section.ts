@@ -30,10 +30,10 @@ import { SectionLevels } from "./const/options";
  *
  * @template T - Type of the GraphQL element being printed
  */
-export const printSectionItem = async <T>(
+export const printSectionItem = <T>(
   type: T,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   const level =
     "level" in options && typeof options.level === "number" ? options.level : 4;
 
@@ -47,7 +47,7 @@ export const printSectionItem = async <T>(
   });
 
   const badges = printBadges(type, options);
-  const tags = await printCustomTags(type, options);
+  const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
   const title = `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
 
@@ -58,7 +58,7 @@ export const printSectionItem = async <T>(
   let section = `${title}${description}${MARKDOWN_EOL}`;
   if (isGraphQLFieldType(type)) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    section += await printSectionItems(type.args as GraphQLArgument[], {
+    section += printSectionItems(type.args as GraphQLArgument[], {
       ...options,
       level: 5 as SectionLevelValue,
       parentType:
@@ -80,10 +80,10 @@ export const printSectionItem = async <T>(
  *
  * @template V - Type of the values being printed
  */
-export const printSectionItems = async <V>(
+export const printSectionItems = <V>(
   values: V | V[],
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
@@ -92,18 +92,17 @@ export const printSectionItems = async <V>(
     "level" in options && typeof options.level === "number" ? options.level : 4
   ) as SectionLevelValue;
 
-  const itemPromises = values
+  const items = values
     .filter((v) => {
       return v;
     })
-    .map(async (v: V) => {
+    .map((v: V) => {
       return printSectionItem(v, {
         ...options,
         level,
       });
     });
 
-  const items = await Promise.all(itemPromises);
   return items.join(MARKDOWN_EOP) as MDXString;
 };
 
@@ -117,11 +116,11 @@ export const printSectionItems = async <V>(
  *
  * @template V - Type of the values being printed
  */
-export const printSection = async <V>(
+export const printSection = <V>(
   values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!Array.isArray(values) || values.length === 0) {
     return "";
   }
@@ -142,7 +141,7 @@ export const printSection = async <V>(
     return [MARKDOWN_EOP, MARKDOWN_EOP];
   })();
 
-  const items = await printSectionItems(values, {
+  const items = printSectionItems(values, {
     ...options,
     collapsible: undefined, // do not propagate collapsible
     level:
@@ -168,12 +167,12 @@ export const printSection = async <V>(
  * @template T - Type of the parent element
  * @template V - Type of the values being printed
  */
-export const printMetadataSection = async <T, V>(
+export const printMetadataSection = <T, V>(
   type: T,
   values: V | V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -198,11 +197,11 @@ export const printMetadataSection = async <T, V>(
         { fields: [] as V[], deprecated: [] as V[] },
       );
 
-      const meta = await printSection(fields, section, {
+      const meta = printSection(fields, section, {
         ...options,
         parentType: type.name as string,
       });
-      const deprecatedMeta = await printSection(deprecated, "", {
+      const deprecatedMeta = printSection(deprecated, "", {
         ...options,
         parentType: type.name as string,
         level: 0 as SectionLevelValue,
