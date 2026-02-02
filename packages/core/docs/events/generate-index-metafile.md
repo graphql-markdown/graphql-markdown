@@ -6,7 +6,7 @@ Generate index metafile event class.
 
 ### GenerateIndexMetafileEvent
 
-Defined in: [events/generate-index-metafile.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L15)
+Defined in: [events/generate-index-metafile.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L14)
 
 Event emitted before/after generating index metafile.
 
@@ -19,26 +19,18 @@ Event emitted before/after generating index metafile.
 ##### Constructor
 
 ```ts
-new GenerateIndexMetafileEvent(data): GenerateIndexMetafileEvent;
+new GenerateIndexMetafileEvent(data, options?): GenerateIndexMetafileEvent;
 ```
 
-Defined in: [events/generate-index-metafile.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L23)
+Defined in: [events/generate-index-metafile.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L22)
 
 ###### Parameters
 
 ###### data
 
-###### cancellable?
-
-`boolean`
-
 ###### category
 
 `string`
-
-###### defaultAction?
-
-`DefaultAction`
 
 ###### dirPath
 
@@ -47,6 +39,10 @@ Defined in: [events/generate-index-metafile.ts:23](https://github.com/graphql-ma
 ###### options?
 
 `Record`&lt;`string`, `unknown`&gt;
+
+###### options?
+
+[`CancellableEventOptions`](base.md#cancellableeventoptions)
 
 ###### Returns
 
@@ -58,35 +54,33 @@ Defined in: [events/generate-index-metafile.ts:23](https://github.com/graphql-ma
 
 #### Properties
 
-##### category
+##### data
 
 ```ts
-readonly category: string;
+readonly data: object;
 ```
 
-Defined in: [events/generate-index-metafile.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L19)
+Defined in: [events/generate-index-metafile.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L16)
 
-Category name
+Event data containing directory path, category, and options
 
-##### dirPath
+###### category
 
 ```ts
-readonly dirPath: string;
+category: string;
 ```
 
-Defined in: [events/generate-index-metafile.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L17)
-
-Directory path for the index file
-
-##### options?
+###### dirPath
 
 ```ts
-readonly optional options: Record<string, unknown>;
+dirPath: string;
 ```
 
-Defined in: [events/generate-index-metafile.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L21)
+###### options?
 
-Optional configuration options
+```ts
+optional options: Record<string, unknown>;
+```
 
 #### Accessors
 
@@ -98,7 +92,7 @@ Optional configuration options
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: [events/base.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L103)
+Defined in: [events/base.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L109)
 
 Gets the default action function if one was provided.
 
@@ -118,7 +112,7 @@ Gets the default action function if one was provided.
 get defaultPrevented(): boolean;
 ```
 
-Defined in: [events/base.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L89)
+Defined in: [events/base.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L95)
 
 Gets whether the default action has been prevented.
 
@@ -138,7 +132,7 @@ Gets whether the default action has been prevented.
 get propagationStopped(): boolean;
 ```
 
-Defined in: [events/base.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L96)
+Defined in: [events/base.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L102)
 
 Gets whether propagation has been stopped.
 
@@ -158,7 +152,7 @@ Gets whether propagation has been stopped.
 preventDefault(): void;
 ```
 
-Defined in: [events/base.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L121)
+Defined in: [events/base.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L127)
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -188,7 +182,7 @@ events.on("beforeLoadSchema", (event) => {
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: [events/base.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L154)
+Defined in: [events/base.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L160)
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -215,7 +209,7 @@ This method will only execute the `_defaultAction` if:
 stopPropagation(): void;
 ```
 
-Defined in: [events/base.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L140)
+Defined in: [events/base.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L146)
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.

@@ -10,6 +10,7 @@
 import type {
   DiffMethodName,
   DirectiveName,
+  Formatter,
   GeneratorOptions,
   GraphQLDirective,
   GraphQLSchema,
@@ -51,6 +52,18 @@ import {
 import { registerMDXEventHandlers } from "./event-handlers";
 
 /**
+ * Supported file extensions for generated documentation files.
+ *
+ * @remarks
+ * - MDX: MDX file extension (.mdx) for React component-enabled markdown
+ * - MD: Standard markdown file extension (.md)
+ */
+export const FILE_EXTENSION = {
+  MDX: ".mdx",
+  MD: ".md",
+} as const;
+
+/**
  * Constant representing nanoseconds per second.
  *
  * This constant is used for high-precision time measurements and conversions
@@ -86,6 +99,88 @@ export const loadMDXModule = async (
         return undefined;
       })
     : undefined;
+};
+
+/**
+ * List of formatter function names that can be exported individually from an MDX module.
+ */
+const FORMATTER_FUNCTION_NAMES = [
+  "formatMDXBadge",
+  "formatMDXAdmonition",
+  "formatMDXBullet",
+  "formatMDXDetails",
+  "formatMDXFrontmatter",
+  "formatMDXLink",
+  "formatMDXNameEntity",
+  "formatMDXSpecifiedByLink",
+] as const;
+
+/**
+ * Extracts a formatter from an MDX module.
+ *
+ * Checks for formatter functions in the following order:
+ * 1. A `createMDXFormatter` factory function (for internal/advanced usage)
+ * 2. Individual exported formatter functions (e.g., `formatMDXBadge`, `formatMDXAdmonition`)
+ *
+ * @param mdxModule - The loaded MDX module that may contain formatter exports
+ * @param meta - Optional metadata to pass to the formatter factory
+ * @returns A partial Formatter with the found functions, or undefined if none found
+ *
+ * @internal
+ */
+export const getFormatterFromMDXModule = (
+  mdxModule: unknown,
+  meta?: Maybe<{
+    generatorFrameworkName?: Maybe<string>;
+    generatorFrameworkVersion?: Maybe<string>;
+  }>,
+): Partial<Formatter> | undefined => {
+  if (!mdxModule || typeof mdxModule !== "object") {
+    return undefined;
+  }
+
+  const module = mdxModule as Record<string, unknown>;
+
+  // Check for createMDXFormatter on the module directly (internal/advanced usage)
+  if (
+    "createMDXFormatter" in module &&
+    typeof module.createMDXFormatter === "function"
+  ) {
+    return (module.createMDXFormatter as (meta?: unknown) => Formatter)(meta);
+  }
+
+  // Check for createMDXFormatter on module.default (ESM default export)
+  const defaultExport = module.default as Record<string, unknown> | undefined;
+  if (
+    defaultExport &&
+    "createMDXFormatter" in defaultExport &&
+    typeof defaultExport.createMDXFormatter === "function"
+  ) {
+    return (defaultExport.createMDXFormatter as (meta?: unknown) => Formatter)(
+      meta,
+    );
+  }
+
+  // Check for individual formatter functions
+  const formatter: Partial<Formatter> = {};
+  let hasFormatter = false;
+
+  for (const funcName of FORMATTER_FUNCTION_NAMES) {
+    if (funcName in module && typeof module[funcName] === "function") {
+      (formatter as Record<string, unknown>)[funcName] = module[funcName];
+      hasFormatter = true;
+    } else if (
+      defaultExport &&
+      funcName in defaultExport &&
+      typeof defaultExport[funcName] === "function"
+    ) {
+      (formatter as Record<string, unknown>)[funcName] =
+        defaultExport[funcName];
+      hasFormatter = true;
+    }
+  }
+
+  return hasFormatter ? formatter : undefined;
 };
 
 /**
@@ -232,7 +327,7 @@ export const generateDocFromSchema = async ({
   await Logger(loggerModule);
 
   const mdxModule = await loadMDXModule(mdxParser);
-  // Register MDX event handlers if mdxModule loaded successfully
+  // Register MDX lifecycle event handlers if mdxModule loaded successfully
   registerMDXEventHandlers(mdxModule);
 
   await events.emitAsync(
@@ -291,6 +386,20 @@ export const generateDocFromSchema = async ({
 
   const groups = getGroups(rootTypes, groupByDirective);
 
+  // Extract formatter from the MDX module (for direct function calls)
+  const formatter = getFormatterFromMDXModule(
+    mdxModule,
+    docOptions ?? undefined,
+  );
+
+  // Extract mdxDeclaration from the MDX module (if available)
+  const mdxDeclaration =
+    mdxModule && typeof mdxModule === "object" && "mdxDeclaration" in mdxModule
+      ? ((mdxModule as Record<string, unknown>).mdxDeclaration as
+          | string
+          | undefined)
+      : undefined;
+
   const printer = await getPrinter(
     // module mandatory
     printerModule,
@@ -315,8 +424,24 @@ export const generateDocFromSchema = async ({
       printTypeOptions,
       skipDocDirectives,
     },
-    mdxModule,
+    formatter,
+    mdxDeclaration,
   );
+
+  // allow mdxModule to specify custom extension
+  let mdxExtension: string;
+  if (
+    mdxModule &&
+    typeof mdxModule === "object" &&
+    "mdxExtension" in mdxModule
+  ) {
+    mdxExtension = (mdxModule as Record<string, unknown>)
+      .mdxExtension as string;
+  } else if (mdxModule) {
+    mdxExtension = FILE_EXTENSION.MDX;
+  } else {
+    mdxExtension = FILE_EXTENSION.MD;
+  }
 
   const renderer = await getRenderer(
     printer,
@@ -330,7 +455,7 @@ export const generateDocFromSchema = async ({
       force,
       hierarchy: printTypeOptions?.hierarchy as TypeHierarchyObjectType,
     },
-    mdxModule,
+    mdxExtension,
   );
 
   // Pre-collect all categories before rendering to ensure consistent positions

@@ -9,6 +9,8 @@
 - [const/strings](const/strings.md)
 - [directive](directive.md)
 - [example](example.md)
+- [format-helpers](format-helpers.md)
+- [formatter](formatter.md)
 - [frontmatter](frontmatter.md)
 - [graphql](graphql.md)
 - [graphql/directive](graphql/directive.md)

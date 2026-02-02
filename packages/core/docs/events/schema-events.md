@@ -24,6 +24,14 @@ readonly AFTER_LOAD: "schema:afterLoad" = "schema:afterLoad";
 
 Emitted after loading GraphQL schema
 
+##### AFTER_MAP
+
+```ts
+readonly AFTER_MAP: "schema:afterMap" = "schema:afterMap";
+```
+
+Emitted after mapping GraphQL schema
+
 ##### BEFORE_LOAD
 
 ```ts
@@ -31,3 +39,11 @@ readonly BEFORE_LOAD: "schema:beforeLoad" = "schema:beforeLoad";
 ```
 
 Emitted before loading GraphQL schema
+
+##### BEFORE_MAP
+
+```ts
+readonly BEFORE_MAP: "schema:beforeMap" = "schema:beforeMap";
+```
+
+Emitted before mapping GraphQL schema

@@ -73,6 +73,18 @@ const DEFAULT_OPTIONS: Required<
     | "parentType"
     | "schema"
     | "skipDocDirectives"
+    | "beforeSchemaLoadHook"
+    | "afterSchemaLoadHook"
+    | "beforeDiffCheckHook"
+    | "afterDiffCheckHook"
+    | "beforeRenderRootTypesHook"
+    | "afterRenderRootTypesHook"
+    | "beforeRenderHomepageHook"
+    | "afterRenderHomepageHook"
+    | "beforeRenderTypeEntitiesHook"
+    | "afterRenderTypeEntitiesHook"
+    | "beforeGenerateIndexMetafileHook"
+    | "afterGenerateIndexMetafileHook"
   >
 > &
   object;

@@ -6,7 +6,92 @@ This module contains the main functionality for generating markdown documentatio
 from GraphQL schemas. It handles schema loading, processing, and markdown generation
 through appropriate printers and renderers.
 
+## Variables
+
+### FILE_EXTENSION
+
+```ts
+const FILE_EXTENSION: object;
+```
+
+Defined in: [generator.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L61)
+
+Supported file extensions for generated documentation files.
+
+#### Type Declaration
+
+##### MD
+
+```ts
+readonly MD: ".md" = ".md";
+```
+
+##### MDX
+
+```ts
+readonly MDX: ".mdx" = ".mdx";
+```
+
+#### Remarks
+
+- MDX: MDX file extension (.mdx) for React component-enabled markdown
+- MD: Standard markdown file extension (.md)
+
 ## Functions
+
+### checkSchemaDifferences()
+
+```ts
+function checkSchemaDifferences(
+  schema,
+  schemaLocation,
+  diffMethod,
+  tmpDir,
+): Promise<boolean>;
+```
+
+Defined in: [generator.ts:229](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L229)
+
+Checks if there are differences in the GraphQL schema compared to a previous version.
+
+#### Parameters
+
+##### schema
+
+`GraphQLSchema`
+
+The GraphQL schema to check for differences.
+
+##### schemaLocation
+
+`string`
+
+The location/path of the schema file for logging purposes.
+
+##### diffMethod
+
+`Maybe`&lt;`TypeDiffMethod`&gt;
+
+The method to use for detecting differences. If set to `NONE`, changes detection is skipped.
+
+##### tmpDir
+
+`string`
+
+The temporary directory path used for storing and comparing schema versions.
+
+#### Returns
+
+`Promise`&lt;`boolean`&gt;
+
+A promise that resolves to `true` if changes are detected or if diff method is `NONE`,
+or `false` if no changes are detected.
+
+#### Remarks
+
+When no changes are detected, a log message is generated indicating that the schema is unchanged.
+
+---
 
 ### generateDocFromSchema()
 
@@ -14,7 +99,7 @@ through appropriate printers and renderers.
 function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [generator.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L76)
+Defined in: [generator.ts:301](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L301)
 
 Main entry point for generating Markdown documentation from a GraphQL schema.
 
@@ -39,3 +124,165 @@ Complete configuration for the documentation generation
 `Promise`&lt;`void`&gt;
 
 Promise that resolves when documentation is fully generated
+
+---
+
+### getFormatterFromMDXModule()
+
+```ts
+function getFormatterFromMDXModule(
+  mdxModule,
+  meta?,
+): Partial<Formatter> | undefined;
+```
+
+Defined in: [generator.ts:131](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L131)
+
+**`Internal`**
+
+Extracts a formatter from an MDX module.
+
+Checks for formatter functions in the following order:
+
+1. A `createMDXFormatter` factory function (for internal/advanced usage)
+2. Individual exported formatter functions (e.g., `formatMDXBadge`, `formatMDXAdmonition`)
+
+#### Parameters
+
+##### mdxModule
+
+`unknown`
+
+The loaded MDX module that may contain formatter exports
+
+##### meta?
+
+`Maybe`&lt;\{
+`generatorFrameworkName?`: `Maybe`&lt;`string`&gt;;
+`generatorFrameworkVersion?`: `Maybe`&lt;`string`&gt;;
+\}&gt;
+
+Optional metadata to pass to the formatter factory
+
+#### Returns
+
+`Partial`&lt;`Formatter`&gt; \| `undefined`
+
+A partial Formatter with the found functions, or undefined if none found
+
+---
+
+### loadGraphqlSchema()
+
+```ts
+function loadGraphqlSchema(
+  schemaLocation,
+  loadersList,
+): Promise<Maybe<GraphQLSchema>>;
+```
+
+Defined in: [generator.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L198)
+
+**`Internal`**
+
+Loads a GraphQL schema from the specified location using configured document loaders.
+
+#### Parameters
+
+##### schemaLocation
+
+`string`
+
+The location/path of the GraphQL schema to load (e.g., file path, URL, or glob pattern).
+
+##### loadersList
+
+`Maybe`&lt;`LoaderOption`&gt;
+
+Optional loader configuration for customizing how the schema is loaded.
+
+#### Returns
+
+`Promise`&lt;`Maybe`&lt;`GraphQLSchema`&gt;&gt;
+
+A promise that resolves to the loaded GraphQL schema, or undefined if:
+
+- The loaders cannot be initialized
+- An error occurs during schema loading
+
+---
+
+### loadMDXModule()
+
+```ts
+function loadMDXModule(mdxParser): Promise<unknown>;
+```
+
+Defined in: [generator.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L90)
+
+**`Internal`**
+
+Asynchronously loads an MDX module dynamically.
+
+#### Parameters
+
+##### mdxParser
+
+`Maybe`&lt;`string` \| `PackageName`&gt;
+
+The MDX parser package name or path to import. Can be null or undefined.
+
+#### Returns
+
+`Promise`&lt;`unknown`&gt;
+
+A promise that resolves to the imported module, or undefined if:
+
+- The mdxParser parameter is null or undefined
+- An error occurs during import (logs a warning and returns undefined)
+
+---
+
+### resolveSkipAndOnlyDirectives()
+
+```ts
+function resolveSkipAndOnlyDirectives(
+  onlyDocDirective,
+  skipDocDirective,
+  schema,
+): GraphQLDirective[][];
+```
+
+Defined in: [generator.ts:260](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L260)
+
+Resolves and retrieves GraphQL directive objects from the schema based on their names.
+
+Takes two lists of directive names (for "only" and "skip" documentation directives),
+looks them up in the provided GraphQL schema, and returns the resolved directive objects.
+
+#### Parameters
+
+##### onlyDocDirective
+
+`Maybe`&lt;`DirectiveName` \| `DirectiveName`[]&gt;
+
+A directive name or array of directive names for "only" documentation filtering
+
+##### skipDocDirective
+
+`Maybe`&lt;`DirectiveName` \| `DirectiveName`[]&gt;
+
+A directive name or array of directive names for "skip" documentation filtering
+
+##### schema
+
+`GraphQLSchema`
+
+The GraphQL schema to resolve directives from
+
+#### Returns
+
+`GraphQLDirective`[][]
+
+A tuple containing two arrays: the first with resolved "only" directives,
+the second with resolved "skip" directives. Only defined directives are included.

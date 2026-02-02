@@ -108,11 +108,7 @@ describe("renderer", () => {
         undefined,
         DEFAULT_OPTIONS.pretty!,
         DEFAULT_RENDERER_OPTIONS,
-        {
-          generateIndexMetafile: jest.fn((dirPath, category) => {
-            return path.join(dirPath, category).toLocaleLowerCase();
-          }),
-        },
+        ".mdx",
       );
 
       // silent console
@@ -177,7 +173,7 @@ describe("renderer", () => {
         );
       });
 
-      test("creates entity page with MDX extension when hasMDXSupport is true", async () => {
+      test("creates entity page with MDX extension when mdxExtension is .mdx", async () => {
         expect.assertions(1);
 
         jest
@@ -185,7 +181,7 @@ describe("renderer", () => {
           .mockReturnValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
-        jest.replaceProperty(rendererInstance, "mdxModule", {});
+        jest.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -1023,6 +1019,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
@@ -1042,6 +1039,7 @@ describe("renderer", () => {
           undefined,
           false,
           { ...DEFAULT_RENDERER_OPTIONS, force: true },
+          "mdx",
         );
 
         expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
@@ -1086,7 +1084,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          undefined, // mdxModule not needed - using event system
+          "mdx",
         );
 
         // Pre-register all categories before generating files
@@ -1145,9 +1143,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         // Pre-register categories
@@ -1198,9 +1194,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: customSort,
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         // Pre-register categories
@@ -1254,7 +1248,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          undefined, // mdxModule not needed - using event system
+          "mdx",
         );
 
         // Provide explicit position (like for deprecated categories)
@@ -1283,7 +1277,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
-          undefined, // mdxModule not needed - using event system
+          "mdx",
         );
 
         // Pre-register categories to ensure consistent positions
@@ -1342,9 +1336,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Pre-register categories
@@ -1392,9 +1384,7 @@ describe("renderer", () => {
             // categorySort not set - no prefixing should happen
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Pre-register categories
@@ -1446,9 +1436,7 @@ describe("renderer", () => {
             categorySort: customSort,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Pre-register categories
@@ -1497,9 +1485,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Pre-register group categories
@@ -1546,9 +1532,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Pre-register the root type categories at ROOT level (entity hierarchy with no custom groups)
@@ -1597,9 +1581,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         renderer["categoryPositionManager"].registerCategories([
@@ -1632,9 +1614,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Register only one category
@@ -1666,9 +1646,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         const categories = [
@@ -1736,9 +1714,7 @@ describe("renderer", () => {
             categorySort: reverseSort,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         const categories = ["alpha", "beta", "gamma"];
@@ -1768,7 +1744,7 @@ describe("renderer", () => {
       });
 
       test("deprecated folder gets last position when categorySort is set", async () => {
-        expect.assertions(4);
+        expect.assertions(2);
 
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1782,9 +1758,7 @@ describe("renderer", () => {
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "md",
         );
 
         // Mock a deprecated type
@@ -1807,40 +1781,6 @@ describe("renderer", () => {
         // Verify deprecated folder is created and has expected position
         expect(deprecatedPath).toMatch(/deprecated/);
         expect(deprecatedPath).toMatch(/objects/);
-
-        const renderer2 = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
-            ...DEFAULT_RENDERER_OPTIONS,
-            categorySort: "natural",
-            deprecated: "group",
-            hierarchy: { [TypeHierarchy.ENTITY]: {} },
-          },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
-        );
-
-        renderer2["rootLevelPositionManager"].registerCategories([
-          "queries",
-          "objects",
-        ]);
-        renderer2["rootLevelPositionManager"].computePositions();
-
-        // generateIndexMetafile should be called with sidebarPosition: 999 for deprecated
-        const mockGenerateIndexMetafile = (
-          renderer2["mdxModule"] as {
-            generateIndexMetafile: jest.Mock;
-          }
-        ).generateIndexMetafile;
-
-        // Verify generateIndexMetafile was set up correctly
-        expect(mockGenerateIndexMetafile).toBeDefined();
-        expect(typeof mockGenerateIndexMetafile).toBe("function");
       });
 
       test("handles hierarchical position management with multiple levels", async () => {
@@ -1857,9 +1797,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Register root-level groups
@@ -1907,9 +1845,7 @@ describe("renderer", () => {
             categorySort: undefined,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         renderer["rootLevelPositionManager"].registerCategories([
@@ -1952,9 +1888,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "md",
         );
 
         renderer["rootLevelPositionManager"].registerCategories([
@@ -1995,9 +1929,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Before registration, categories should not be registered
@@ -2037,9 +1969,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Register at root level
@@ -2124,9 +2054,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "md",
         );
 
         const rootCategories = new Set(["query", "mutation", "subscription"]);
@@ -2172,9 +2100,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         const rootCategories = new Set(["query"]);
@@ -2212,9 +2138,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         // Register and compute positions
@@ -2254,9 +2178,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: jest.fn(),
-          },
+          "mdx",
         );
 
         // Register group categories
@@ -2292,9 +2214,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
@@ -2333,9 +2253,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         // Register categories in specific order
@@ -2385,9 +2303,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
@@ -2423,9 +2339,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.FLAT]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         const dirPath = await renderer.generateCategoryMetafileType(
@@ -2473,9 +2387,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2513,6 +2425,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         // Register categories and compute positions
@@ -2544,6 +2457,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
+          "mdx",
         );
 
         // Register categories
@@ -2572,6 +2486,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         // Generate paths for different entity types
@@ -2604,6 +2519,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: {},
           },
+          "mdx",
         );
 
         // Verify hierarchy is defined
@@ -2623,6 +2539,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
+          "mdx",
         );
 
         const renderer2 = await getRenderer(
@@ -2632,6 +2549,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         // Verify categorySort values are different
@@ -2649,6 +2567,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         // Register categories
@@ -2701,6 +2620,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
+          "mdx",
         );
 
         // Test multiple categories to verify all get prefixes when categorySort set
@@ -2742,6 +2662,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const posManager = renderer["categoryPositionManager"];
@@ -2786,9 +2707,7 @@ describe("renderer", () => {
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
             categorySort: "natural",
           },
-          {
-            generateIndexMetafile: mockGenerateIndexMetafile,
-          },
+          "mdx",
         );
 
         // Generate metafiles for different entity types
@@ -2824,6 +2743,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         // Generate with collapsible true
@@ -2855,6 +2775,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         // Generate with explicit sidebarPosition
@@ -2885,6 +2806,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const posManager = renderer["categoryPositionManager"];
@@ -2918,6 +2840,7 @@ describe("renderer", () => {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.FLAT]: {} },
           },
+          "mdx",
         );
 
         const rootTypeNames = ["queries", "mutations", "objects"];
@@ -2946,6 +2869,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["objects"]);
@@ -2972,6 +2896,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.API]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["objects"]);
@@ -3007,6 +2932,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.API]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["objects"]);
@@ -3038,6 +2964,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["queries", "mutations"]);
@@ -3065,6 +2992,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["queries"]);
@@ -3093,6 +3021,7 @@ describe("renderer", () => {
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["objects"]);
@@ -3117,6 +3046,7 @@ describe("renderer", () => {
             deprecated: "default",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
+          "mdx",
         );
 
         renderer.preCollectCategories(["objects"]);
@@ -3136,6 +3066,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3154,6 +3085,7 @@ describe("renderer", () => {
           { objects: { Foo: "", Bar: "valid-group" } },
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3173,6 +3105,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3200,6 +3133,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3227,6 +3161,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3254,6 +3189,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();
@@ -3280,6 +3216,7 @@ describe("renderer", () => {
           undefined,
           false,
           DEFAULT_RENDERER_OPTIONS,
+          "mdx",
         );
 
         const rootCategories = new Set<string>();

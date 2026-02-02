@@ -49,6 +49,14 @@ new Printer(): Printer;
 
 #### Properties
 
+##### mdxDeclaration
+
+```ts
+static mdxDeclaration: Maybe<string>;
+```
+
+Defined in: [printer.ts:125](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L125)
+
 ##### options
 
 ```ts
@@ -161,16 +169,6 @@ Optional text to display when no description exists
 
 Combined description, deprecation notices, and custom directives as MDX content
 
-##### printMDXModule
-
-```ts
-static printMDXModule: Readonly<MDXSupportType>;
-```
-
-Defined in: [printer.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L129)
-
-MDX module configuration
-
 #### Methods
 
 ##### init()
@@ -181,10 +179,11 @@ static init(
    baseURL,
    linkRoot,
    options,
-   mdxParser?): Promise<void>;
+   formatter?,
+   mdxDeclaration?): Promise<void>;
 ```
 
-Defined in: [printer.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L140)
+Defined in: [printer.ts:136](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L136)
 
 Initializes the printer with the given schema and configuration.
 
@@ -244,11 +243,15 @@ Configuration options for the printer
 
 `GraphQLDirective`[]
 
-###### mdxParser?
+###### formatter?
 
-`Record`&lt;`string`, `unknown`&gt;
+`Partial`&lt;`Formatter`&gt;
 
-Optional MDX parser module for MDX output support
+Optional formatter functions for customizing output format
+
+###### mdxDeclaration?
+
+`Maybe`&lt;`string`&gt;
 
 ###### Returns
 

@@ -5,6 +5,7 @@
  * It dynamically imports a printer module and configures it with the provided schema and options.
  */
 import type {
+  Formatter,
   IPrinter,
   Maybe,
   PackageName,
@@ -23,7 +24,7 @@ import type {
  * @param printerModule - The name/path of the printer module to load
  * @param config - Configuration for the printer including schema, baseURL, and linkRoot
  * @param options - Additional options for customizing the printer's behavior
- * @param mdxModule - Optional MDX module for MDX-specific functionality
+ * @param formatter - Optional formatter functions for customizing output format (e.g., MDX)
  *
  * @returns A promise that resolves to the initialized Printer instance
  *
@@ -61,7 +62,8 @@ export const getPrinter = async (
   printerModule?: Maybe<PackageName>,
   config?: Maybe<PrinterConfig>,
   options?: Maybe<PrinterOptions>,
-  mdxModule?: unknown,
+  formatter?: Partial<Formatter>,
+  mdxDeclaration?: Maybe<string>,
 ): Promise<Printer> => {
   if (typeof printerModule !== "string") {
     throw new TypeError("Invalid printer module name.");
@@ -77,7 +79,14 @@ export const getPrinter = async (
     );
 
     const { schema, baseURL, linkRoot } = config;
-    await Printer.init(schema, baseURL, linkRoot, { ...options }, mdxModule);
+    await Printer.init(
+      schema,
+      baseURL,
+      linkRoot,
+      { ...options },
+      formatter,
+      mdxDeclaration,
+    );
 
     return Printer;
   } catch {

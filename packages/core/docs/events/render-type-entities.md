@@ -6,7 +6,7 @@ Render type entities event class.
 
 ### RenderTypeEntitiesEvent
 
-Defined in: [events/render-type-entities.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L15)
+Defined in: [events/render-type-entities.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L14)
 
 Event emitted before/after rendering type entities.
 
@@ -19,7 +19,7 @@ Event emitted before/after rendering type entities.
 ##### Constructor
 
 ```ts
-new RenderTypeEntitiesEvent(data): RenderTypeEntitiesEvent;
+new RenderTypeEntitiesEvent(data, options?): RenderTypeEntitiesEvent;
 ```
 
 Defined in: [events/render-type-entities.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L21)
@@ -28,14 +28,6 @@ Defined in: [events/render-type-entities.ts:21](https://github.com/graphql-markd
 
 ###### data
 
-###### cancellable?
-
-`boolean`
-
-###### defaultAction?
-
-`DefaultAction`
-
 ###### filePath
 
 `string`
@@ -43,6 +35,10 @@ Defined in: [events/render-type-entities.ts:21](https://github.com/graphql-markd
 ###### name
 
 `string`
+
+###### options?
+
+[`CancellableEventOptions`](base.md#cancellableeventoptions)
 
 ###### Returns
 
@@ -54,25 +50,27 @@ Defined in: [events/render-type-entities.ts:21](https://github.com/graphql-markd
 
 #### Properties
 
-##### filePath
+##### data
 
 ```ts
-readonly filePath: string;
+readonly data: object;
 ```
 
-Defined in: [events/render-type-entities.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L19)
+Defined in: [events/render-type-entities.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L16)
 
-File path where entity will be rendered
+Event data containing name and file path
 
-##### name
+###### filePath
 
 ```ts
-readonly name: string;
+filePath: string;
 ```
 
-Defined in: [events/render-type-entities.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L17)
+###### name
 
-Name of the type entity
+```ts
+name: string;
+```
 
 #### Accessors
 
@@ -84,7 +82,7 @@ Name of the type entity
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: [events/base.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L103)
+Defined in: [events/base.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L109)
 
 Gets the default action function if one was provided.
 
@@ -104,7 +102,7 @@ Gets the default action function if one was provided.
 get defaultPrevented(): boolean;
 ```
 
-Defined in: [events/base.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L89)
+Defined in: [events/base.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L95)
 
 Gets whether the default action has been prevented.
 
@@ -124,7 +122,7 @@ Gets whether the default action has been prevented.
 get propagationStopped(): boolean;
 ```
 
-Defined in: [events/base.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L96)
+Defined in: [events/base.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L102)
 
 Gets whether propagation has been stopped.
 
@@ -144,7 +142,7 @@ Gets whether propagation has been stopped.
 preventDefault(): void;
 ```
 
-Defined in: [events/base.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L121)
+Defined in: [events/base.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L127)
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -174,7 +172,7 @@ events.on("beforeLoadSchema", (event) => {
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: [events/base.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L154)
+Defined in: [events/base.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L160)
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -201,7 +199,7 @@ This method will only execute the `_defaultAction` if:
 stopPropagation(): void;
 ```
 
-Defined in: [events/base.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L140)
+Defined in: [events/base.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L146)
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.

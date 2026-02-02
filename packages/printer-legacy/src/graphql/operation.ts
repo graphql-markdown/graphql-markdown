@@ -15,16 +15,16 @@ import { printCodeField } from "../code";
  * @param options - Print type options for customizing output
  * @returns Formatted string representation of the operation type or empty string if invalid
  */
-export const printOperationType = async (
+export const printOperationType = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!isOperation(type)) {
     return "";
   }
 
   const queryType = getTypeName(type.type).replaceAll(/[![\]]*/g, "");
-  return await printSection([options.schema!.getType(queryType)], "Type", {
+  return printSection([options.schema!.getType(queryType)], "Type", {
     ...options,
     parentTypePrefix: false,
   });
@@ -36,21 +36,16 @@ export const printOperationType = async (
  * @param options - Print type options for customizing output
  * @returns Formatted string containing operation metadata or empty string if invalid
  */
-export const printOperationMetadata = async (
+export const printOperationMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!isOperation(type)) {
     return "";
   }
 
-  const response = await printOperationType(type, options);
-  const metadata = await printMetadataSection(
-    type,
-    type.args,
-    "Arguments",
-    options,
-  );
+  const response = printOperationType(type, options);
+  const metadata = printMetadataSection(type, type.args, "Arguments", options);
 
   return `${metadata}${response}` as MDXString;
 };

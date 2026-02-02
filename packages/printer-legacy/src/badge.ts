@@ -24,9 +24,6 @@ import {
   isNonNullType,
 } from "@graphql-markdown/graphql";
 
-import { FormatEvents } from "@graphql-markdown/core";
-import { emitFormatEvent } from "./format-event";
-
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
 import { DEPRECATED, NON_NULL } from "./const/strings";
@@ -93,21 +90,23 @@ export const getTypeBadges = (
 /**
  * Formats a single badge into MDX string format.
  * @param badge - The badge object containing text and optional classname
- * @param options - Options for printing/formatting the badge (currently unused, kept for API compatibility)
+ * @param options - Options containing the formatter for badges
  * @returns Formatted MDX string representation of the badge
  */
-export const printBadge = async (
+export const printBadge = (
   { text, classname }: Badge,
-  _options: PrintTypeOptions,
-): Promise<MDXString> => {
+  options: PrintTypeOptions,
+): MDXString => {
   const textString = escapeMDX(typeof text === "object" ? text.singular : text);
-  return emitFormatEvent(
-    FormatEvents.FORMAT_BADGE,
-    { badge: { text: textString, classname } as Badge },
-    ({ badge }) => {
-      return `<mark class="gqlmd-mdx-badge">${badge.text as string}</mark>` as MDXString;
-    },
-  );
+  const badge = { text: textString, classname } as Badge;
+
+  // Use the formatter from options (either custom or default)
+  if (options.formatMDXBadge) {
+    return options.formatMDXBadge(badge);
+  }
+
+  // Fallback (should not happen if Printer.init was called)
+  return `<mark class="gqlmd-mdx-badge">${badge.text as string}</mark>` as MDXString;
 };
 
 /**
@@ -116,10 +115,10 @@ export const printBadge = async (
  * @param options - Options for printing/formatting the badges
  * @returns Formatted MDX string containing all badges, or empty string if no badges or badges disabled
  */
-export const printBadges = async (
+export const printBadges = (
   type: unknown,
   options: PrintTypeOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (
     !("typeBadges" in options) ||
     typeof options.typeBadges !== "boolean" ||
@@ -134,9 +133,8 @@ export const printBadges = async (
     return "";
   }
 
-  const badgePromises = badges.map(async (badge) => {
+  const formattedBadges = badges.map((badge) => {
     return printBadge(badge, options);
   });
-  const formattedBadges = await Promise.all(badgePromises);
   return formattedBadges.join(" ") as MDXString;
 };

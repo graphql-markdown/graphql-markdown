@@ -153,7 +153,6 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    Printer.printMDXModule = mdxModule;
     jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
       return value as string;
     });
@@ -185,6 +184,7 @@ describe("Printer", () => {
   "formatMDXBullet": [Function],
   "formatMDXDetails": [Function],
   "formatMDXFrontmatter": [Function],
+  "formatMDXLink": [Function],
   "formatMDXNameEntity": [Function],
   "formatMDXSpecifiedByLink": [Function],
   "frontMatter": {},
@@ -254,6 +254,7 @@ describe("Printer", () => {
   "formatMDXBullet": [Function],
   "formatMDXDetails": [Function],
   "formatMDXFrontmatter": [Function],
+  "formatMDXLink": [Function],
   "formatMDXNameEntity": [Function],
   "formatMDXSpecifiedByLink": [Function],
   "frontMatter": {},

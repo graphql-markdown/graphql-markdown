@@ -14,12 +14,15 @@ automatically detects and registers matching callbacks from MDX modules.
 function registerMDXEventHandlers(mdxModule): void;
 ```
 
-Defined in: [event-handlers.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-handlers.ts#L32)
+Defined in: [event-handlers.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-handlers.ts#L35)
 
-Registers MDX module event handlers with the event emitter.
+Registers MDX module lifecycle event handlers with the event emitter.
 
-Automatically detects and registers any event callback functions defined in the mdxModule
+Automatically detects and registers any lifecycle hook functions defined in the mdxModule
 that match the event callback naming convention. Logs registered handlers at debug level.
+
+Note: Format functions (formatMDXBadge, etc.) are NOT registered as events.
+They are pure transformations handled via the Formatter interface directly.
 
 #### Parameters
 

@@ -16,7 +16,7 @@ function printMetadataSection<T, V>(
 ): string | MDXString;
 ```
 
-Defined in: [section.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L169)
+Defined in: [section.ts:170](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L170)
 
 Prints a metadata section with special handling for deprecated items.
 
@@ -74,7 +74,7 @@ Formatted MDX string containing the metadata section
 function printSection<V>(values, section, options): string | MDXString;
 ```
 
-Defined in: [section.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L118)
+Defined in: [section.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L119)
 
 Prints a complete section with title and content.
 

@@ -19,30 +19,30 @@ Event emitted before/after checking schema differences.
 ##### Constructor
 
 ```ts
-new DiffCheckEvent(data): DiffCheckEvent;
+new DiffCheckEvent(data, options?): DiffCheckEvent;
 ```
 
-Defined in: [events/diff-check.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-check.ts#L21)
+Defined in: [events/diff-check.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-check.ts#L23)
 
 ###### Parameters
 
 ###### data
 
-###### cancellable?
-
-`boolean`
-
-###### defaultAction?
-
-`DefaultAction`
-
-###### outputDir
+###### outputDir?
 
 `string`
 
-###### schema
+###### schema?
 
 `unknown`
+
+###### schemaHasChanges?
+
+`boolean`
+
+###### options?
+
+[`CancellableEventOptions`](base.md#cancellableeventoptions)
 
 ###### Returns
 
@@ -54,25 +54,33 @@ Defined in: [events/diff-check.ts:21](https://github.com/graphql-markdown/graphq
 
 #### Properties
 
-##### outputDir
+##### data
 
 ```ts
-readonly outputDir: string;
-```
-
-Defined in: [events/diff-check.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-check.ts#L19)
-
-Path to output directory for diff results
-
-##### schema
-
-```ts
-readonly schema: unknown;
+readonly data: object;
 ```
 
 Defined in: [events/diff-check.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-check.ts#L17)
 
-Current schema being checked
+Event data containing schema, output directory, and change status
+
+###### outputDir?
+
+```ts
+optional outputDir: string;
+```
+
+###### schema?
+
+```ts
+optional schema: unknown;
+```
+
+###### schemaHasChanges?
+
+```ts
+optional schemaHasChanges: boolean;
+```
 
 #### Accessors
 
@@ -84,7 +92,7 @@ Current schema being checked
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: [events/base.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L103)
+Defined in: [events/base.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L109)
 
 Gets the default action function if one was provided.
 
@@ -104,7 +112,7 @@ Gets the default action function if one was provided.
 get defaultPrevented(): boolean;
 ```
 
-Defined in: [events/base.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L89)
+Defined in: [events/base.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L95)
 
 Gets whether the default action has been prevented.
 
@@ -124,7 +132,7 @@ Gets whether the default action has been prevented.
 get propagationStopped(): boolean;
 ```
 
-Defined in: [events/base.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L96)
+Defined in: [events/base.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L102)
 
 Gets whether propagation has been stopped.
 
@@ -144,7 +152,7 @@ Gets whether propagation has been stopped.
 preventDefault(): void;
 ```
 
-Defined in: [events/base.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L121)
+Defined in: [events/base.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L127)
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -174,7 +182,7 @@ events.on("beforeLoadSchema", (event) => {
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: [events/base.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L154)
+Defined in: [events/base.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L160)
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -201,7 +209,7 @@ This method will only execute the `_defaultAction` if:
 stopPropagation(): void;
 ```
 
-Defined in: [events/base.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L140)
+Defined in: [events/base.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L146)
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.

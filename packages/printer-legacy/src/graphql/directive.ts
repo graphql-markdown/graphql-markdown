@@ -45,15 +45,15 @@ const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
  * @param options - Configuration options for printing directive metadata
  * @returns Formatted metadata string in MDX format or empty string if no arguments
  */
-export const printDirectiveMetadata = async (
+export const printDirectiveMetadata = (
   type: GraphQLDirective,
   options: PrintDirectiveOptions,
-): Promise<MDXString | string> => {
+): MDXString | string => {
   if (!("args" in type)) {
     return "";
   }
 
-  return await printMetadataSection(type, type.args, "Arguments", options);
+  return printMetadataSection(type, type.args, "Arguments", options);
 };
 
 /**

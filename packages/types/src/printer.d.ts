@@ -2,11 +2,11 @@ import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
   FrontMatterOptions,
-  MDXSupportType,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
 } from "./core";
+import type { Formatter } from "./formatter";
 import type {
   GraphQLDirective,
   GraphQLSchema,
@@ -76,7 +76,7 @@ export interface PrinterConfigPrintTypeOptions {
 /**
  * Comprehensive options for printing type documentation
  */
-export type PrintTypeOptions = Partial<MDXSupportType> & {
+export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
@@ -169,7 +169,8 @@ export abstract class IPrinter {
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-    mdxModule?: unknown,
+    mdxModule?: Partial<Formatter>,
+    mdxDeclaration?: Maybe<string>,
   ): Promise<void>;
 
   /**
@@ -260,11 +261,11 @@ export abstract class IPrinter {
    * @param options - Optional configuration options for printing
    * @returns MDX string containing complete type documentation
    */
-  static async printType(
+  static printType(
     name: string,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Promise<MDXString>;
+  ): Maybe<MDXString>;
 }
 
 /**

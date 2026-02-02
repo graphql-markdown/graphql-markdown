@@ -43,6 +43,7 @@ const {
   loadGraphqlSchema,
   checkSchemaDifferences,
   resolveSkipAndOnlyDirectives,
+  getFormatterFromMDXModule,
 } = GeneratorModule;
 
 const mockRenderer = {
@@ -173,6 +174,7 @@ describe("generator", () => {
             skipDocDirectives: [mockDirective],
           },
           undefined,
+          undefined,
         );
         expect(rendererSpy).toHaveBeenCalledWith(
           {},
@@ -185,7 +187,7 @@ describe("generator", () => {
             deprecated: options.printTypeOptions!.deprecated,
             hierarchy: options.printTypeOptions!.hierarchy,
           },
-          undefined,
+          ".md",
         );
       },
     );
@@ -414,6 +416,7 @@ describe("generator", () => {
           skipDocDirectives: expect.any(Array),
         }),
         undefined,
+        undefined,
       );
 
       // Verify that the meta object contains expected properties
@@ -557,6 +560,114 @@ describe("generator", () => {
       });
 
       expect(loadMDXSpy).toHaveBeenCalledWith("custom-mdx-parser");
+    });
+
+    test("uses .mdx extension when mdxModule is loaded", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      jest
+        .spyOn(GeneratorModule, "loadMDXModule")
+        .mockResolvedValueOnce({ createMDXFormatter: jest.fn() });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Verify the last argument (mdxExtension) is .mdx
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
+    });
+
+    test("uses custom mdxExtension from mdxModule when provided", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
+        createMDXFormatter: jest.fn(),
+        mdxExtension: ".custom",
+      });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Verify the last argument (mdxExtension) is the custom extension
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".custom");
+    });
+
+    test("does not use mdxDeclaration as file extension (regression test)", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      // This simulates a module that has both mdxDeclaration and mdxExtension
+      // The code should use mdxExtension, not mdxDeclaration
+      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
+        createMDXFormatter: jest.fn(),
+        mdxExtension: ".mdx",
+        mdxDeclaration:
+          "import { Badge } from '@astrojs/starlight/components';",
+      });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Should use mdxExtension (.mdx), not mdxDeclaration (the import statement)
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
     });
 
     test("calls resolveSkipAndOnlyDirectives with directive options and schema", async () => {
@@ -855,6 +966,149 @@ describe("generator", () => {
         `An error occurred while loading MDX formatter "${invalidModule}"`,
       );
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe("getFormatterFromMDXModule()", () => {
+    test("returns undefined when mdxModule is null", () => {
+      expect.assertions(1);
+
+      const result = getFormatterFromMDXModule(null);
+
+      expect(result).toBeUndefined();
+    });
+
+    test("returns undefined when mdxModule is undefined", () => {
+      expect.assertions(1);
+
+      const result = getFormatterFromMDXModule(undefined);
+
+      expect(result).toBeUndefined();
+    });
+
+    test("returns undefined when mdxModule is not an object", () => {
+      expect.assertions(1);
+
+      const result = getFormatterFromMDXModule("not an object");
+
+      expect(result).toBeUndefined();
+    });
+
+    test("uses createMDXFormatter factory if available", () => {
+      expect.assertions(2);
+
+      const mockFormatter = {
+        formatMDXBadge: jest.fn(),
+        formatMDXAdmonition: jest.fn(),
+      };
+      const createMDXFormatter = jest.fn().mockReturnValue(mockFormatter);
+      const mdxModule = { createMDXFormatter };
+
+      const result = getFormatterFromMDXModule(mdxModule, {
+        generatorFrameworkName: "test",
+      });
+
+      expect(createMDXFormatter).toHaveBeenCalledWith({
+        generatorFrameworkName: "test",
+      });
+      expect(result).toBe(mockFormatter);
+    });
+
+    test("uses createMDXFormatter from default export (ESM)", () => {
+      expect.assertions(2);
+
+      const mockFormatter = {
+        formatMDXBadge: jest.fn(),
+      };
+      const createMDXFormatter = jest.fn().mockReturnValue(mockFormatter);
+      const mdxModule = { default: { createMDXFormatter } };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(createMDXFormatter).toHaveBeenCalled();
+      expect(result).toBe(mockFormatter);
+    });
+
+    test("detects individual formatter functions from module", () => {
+      expect.assertions(3);
+
+      const formatMDXBadge = jest.fn();
+      const formatMDXAdmonition = jest.fn();
+      const mdxModule = { formatMDXBadge, formatMDXAdmonition };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(result).toBeDefined();
+      expect(result!.formatMDXBadge).toBe(formatMDXBadge);
+      expect(result!.formatMDXAdmonition).toBe(formatMDXAdmonition);
+    });
+
+    test("detects individual formatter functions from default export", () => {
+      expect.assertions(2);
+
+      const formatMDXBullet = jest.fn();
+      const mdxModule = { default: { formatMDXBullet } };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(result).toBeDefined();
+      expect(result!.formatMDXBullet).toBe(formatMDXBullet);
+    });
+
+    test("returns undefined when no formatter functions are found", () => {
+      expect.assertions(1);
+
+      const mdxModule = { mdxDeclaration: "import something;" };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(result).toBeUndefined();
+    });
+
+    test("prefers createMDXFormatter over individual functions", () => {
+      expect.assertions(2);
+
+      const factoryFormatter = { formatMDXBadge: jest.fn() };
+      const createMDXFormatter = jest.fn().mockReturnValue(factoryFormatter);
+      const individualBadge = jest.fn();
+      const mdxModule = {
+        createMDXFormatter,
+        formatMDXBadge: individualBadge,
+      };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(createMDXFormatter).toHaveBeenCalled();
+      expect(result).toBe(factoryFormatter);
+    });
+
+    test("detects all 8 formatter function types", () => {
+      expect.assertions(9);
+
+      const mdxModule = {
+        formatMDXBadge: jest.fn(),
+        formatMDXAdmonition: jest.fn(),
+        formatMDXBullet: jest.fn(),
+        formatMDXDetails: jest.fn(),
+        formatMDXFrontmatter: jest.fn(),
+        formatMDXLink: jest.fn(),
+        formatMDXNameEntity: jest.fn(),
+        formatMDXSpecifiedByLink: jest.fn(),
+      };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(result).toBeDefined();
+      expect(result!.formatMDXBadge).toBe(mdxModule.formatMDXBadge);
+      expect(result!.formatMDXAdmonition).toBe(mdxModule.formatMDXAdmonition);
+      expect(result!.formatMDXBullet).toBe(mdxModule.formatMDXBullet);
+      expect(result!.formatMDXDetails).toBe(mdxModule.formatMDXDetails);
+      expect(result!.formatMDXFrontmatter).toBe(mdxModule.formatMDXFrontmatter);
+      expect(result!.formatMDXLink).toBe(mdxModule.formatMDXLink);
+      expect(result!.formatMDXNameEntity).toBe(mdxModule.formatMDXNameEntity);
+      expect(result!.formatMDXSpecifiedByLink).toBe(
+        mdxModule.formatMDXSpecifiedByLink,
+      );
     });
   });
 

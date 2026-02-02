@@ -163,7 +163,6 @@
       "name": "@graphql-markdown/printer-legacy",
       "version": "1.12.4",
       "dependencies": {
-        "@graphql-markdown/core": "workspace:^",
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
       },

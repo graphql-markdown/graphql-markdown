@@ -10,6 +10,7 @@
 
 import type {
   CustomDirectiveMap,
+  Formatter,
   GraphQLDirective,
   GraphQLField,
   GraphQLSchema,
@@ -66,7 +67,7 @@ import {
   MARKDOWN_EOP,
   MARKDOWN_SOC,
 } from "./const/strings";
-import { mdxModule } from "./mdx";
+import { createDefaultFormatter } from "./formatter";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
@@ -121,6 +122,7 @@ export class Printer implements IPrinter {
    * Prints custom tags
    */
   static readonly printCustomTags = printCustomTags;
+  static mdxDeclaration: Maybe<string>;
 
   /**
    * Initializes the printer with the given schema and configuration.
@@ -129,7 +131,7 @@ export class Printer implements IPrinter {
    * @param baseURL - Base URL path for documentation, e.g. '/docs'
    * @param linkRoot - Root path for generating links between types
    * @param options - Configuration options for the printer
-   * @param mdxParser - Optional MDX parser module for MDX output support
+   * @param formatter - Optional formatter functions for customizing output format
    */
   static async init(
     schema: Maybe<GraphQLSchema>,
@@ -153,7 +155,8 @@ export class Printer implements IPrinter {
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
     } = DEFAULT_INIT_OPTIONS,
-    mdxParser?: Record<string, unknown>,
+    formatter?: Partial<Formatter>,
+    mdxDeclaration?: Maybe<string>,
   ): Promise<void> {
     if (Printer.options !== undefined) {
       return;
@@ -186,14 +189,12 @@ export class Printer implements IPrinter {
       hierarchy:
         printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
       meta: meta,
+      // Merge formatter functions: default formatter with any overrides
+      ...createDefaultFormatter(),
+      ...formatter,
     };
 
-    // Load MDX module instance and merge into options
-    const mdxModuleInstance = await mdxModule(mdxParser);
-    Printer.options = {
-      ...Printer.options,
-      ...mdxModuleInstance,
-    };
+    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
@@ -303,10 +304,10 @@ export class Printer implements IPrinter {
    * @returns Formatted metadata string as MDX or plain string
    * @throws When type is not supported
    */
-  static readonly printTypeMetadata = async (
+  static readonly printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
-  ): Promise<MDXString | string> => {
+  ): MDXString | string => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type, options);
@@ -339,10 +340,10 @@ export class Printer implements IPrinter {
    * @param options - Printer configuration options
    * @returns Formatted relations section as MDX or plain string
    */
-  static readonly printRelations = async (
+  static readonly printRelations = (
     type: unknown,
     options: PrintTypeOptions,
-  ): Promise<MDXString | string> => {
+  ): MDXString | string => {
     if (options.relatedTypeSection !== true) {
       return "";
     }
@@ -402,11 +403,11 @@ export class Printer implements IPrinter {
    * - Example usage
    * - Related types
    */
-  static readonly printType = async (
+  static readonly printType = (
     name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Promise<Maybe<MDXString>> => {
+  ): Maybe<MDXString> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
@@ -429,14 +430,15 @@ export class Printer implements IPrinter {
       type,
       printTypeOptions,
     );
-    const tags = await Printer.printCustomTags(type, printTypeOptions);
-    const metadata = await Printer.printTypeMetadata(type, printTypeOptions);
-    const relations = await Printer.printRelations(type, printTypeOptions);
+    const tags = Printer.printCustomTags(type, printTypeOptions);
+    const metadata = Printer.printTypeMetadata(type, printTypeOptions);
+    const relations = Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
     return [
       header,
       metatags,
+      Printer.mdxDeclaration,
       tags,
       description,
       code,
