@@ -10,7 +10,7 @@ Common printer utility functions for handling descriptions, directives, and warn
 function formatDescription(type, replacement): string | MDXString;
 ```
 
-Defined in: [common.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L73)
+Defined in: [printer-legacy/src/common.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L73)
 
 Formats a GraphQL type description or falls back to a default message.
 
@@ -42,7 +42,7 @@ Formatted description string or MDX content
 function printCustomDirectives(type, options?): string;
 ```
 
-Defined in: [common.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L33)
+Defined in: [printer-legacy/src/common.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L33)
 
 Prints documentation for custom directives applied to a type.
 
@@ -74,7 +74,7 @@ Formatted directive documentation string
 function printDeprecation(type, options): string;
 ```
 
-Defined in: [common.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L114)
+Defined in: [printer-legacy/src/common.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L114)
 
 Prints deprecation information for a GraphQL type if it is deprecated.
 
@@ -106,7 +106,7 @@ Formatted deprecation warning as MDX string, or empty string if not deprecated
 function printDescription(type, options, noText?): string | MDXString;
 ```
 
-Defined in: [common.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L140)
+Defined in: [printer-legacy/src/common.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L140)
 
 Prints the complete description for a GraphQL type, including deprecation warnings and custom directives.
 
@@ -144,7 +144,7 @@ Combined description, deprecation notices, and custom directives as MDX content
 function printWarning(warningConfig, options): string;
 ```
 
-Defined in: [common.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L93)
+Defined in: [printer-legacy/src/common.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L93)
 
 Generates a warning message block in MDX format.
 

@@ -10,7 +10,7 @@ Contains utilities for printing GraphQL interface types as Markdown documentatio
 function printCodeInterface(type, options): string;
 ```
 
-Defined in: [graphql/interface.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L23)
+Defined in: [printer-legacy/src/graphql/interface.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/interface.ts#L23)
 
 Generates a code block representation of a GraphQL interface type.
 

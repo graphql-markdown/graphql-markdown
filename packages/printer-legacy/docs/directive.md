@@ -15,7 +15,7 @@ function getCustomDirectiveResolver(
 ): Maybe<string>;
 ```
 
-Defined in: [directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L30)
+Defined in: [printer-legacy/src/directive.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L30)
 
 Resolves a custom directive using the provided resolver function
 
@@ -59,7 +59,7 @@ The resolved directive value or `fallback`/`undefined`
 function getCustomTags(type, options): Badge[];
 ```
 
-Defined in: [directive.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L120)
+Defined in: [printer-legacy/src/directive.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L120)
 
 Extracts custom tags from directives for a given type
 
@@ -95,7 +95,7 @@ function printCustomDirective(
 ): Maybe<string>;
 ```
 
-Defined in: [directive.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L56)
+Defined in: [printer-legacy/src/directive.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L56)
 
 Prints a custom directive as a Markdown string
 
@@ -133,7 +133,7 @@ Formatted Markdown string for the directive or `undefined`
 function printCustomDirectives(type, options): string;
 ```
 
-Defined in: [directive.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L84)
+Defined in: [printer-legacy/src/directive.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L84)
 
 Prints all custom directives for a type as a Markdown section
 
@@ -165,7 +165,7 @@ Markdown string containing all formatted directives
 function printCustomTags(type, options): string | MDXString;
 ```
 
-Defined in: [directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L152)
+Defined in: [printer-legacy/src/directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L152)
 
 Prints custom directive tags as Markdown badges
 

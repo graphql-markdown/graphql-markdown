@@ -11,7 +11,7 @@ Provides utilities for creating, formatting, and managing links to GraphQL types
 const API_GROUPS: Required<ApiGroupOverrideType>;
 ```
 
-Defined in: [link.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L48)
+Defined in: [printer-legacy/src/link.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L48)
 
 ## Functions
 
@@ -21,7 +21,7 @@ Defined in: [link.ts:48](https://github.com/graphql-markdown/graphql-markdown/bl
 function getCategoryLocale(type): Maybe<TypeLocale>;
 ```
 
-Defined in: [link.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L99)
+Defined in: [printer-legacy/src/link.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L99)
 
 Gets the locale category for a given GraphQL type.
 
@@ -47,7 +47,7 @@ The locale category for the type, or `undefined` if not found
 function getLinkApiGroupFolder(type, groups?): string;
 ```
 
-Defined in: [link.ts:185](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L185)
+Defined in: [printer-legacy/src/link.ts:185](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L185)
 
 Gets the folder name for an API group based on the GraphQL type and group options.
 
@@ -79,7 +79,7 @@ The folder name for the API group
 function getLinkCategoryFolder(type, operationLocale?): Maybe<string>;
 ```
 
-Defined in: [link.ts:128](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L128)
+Defined in: [printer-legacy/src/link.ts:128](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L128)
 
 Gets the folder name for a link category based on the GraphQL type and operation locale.
 
@@ -111,7 +111,7 @@ The folder name for the link category, or `undefined` if not found
 function getLinkDeprecatedFolder(type, option): string;
 ```
 
-Defined in: [link.ts:203](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L203)
+Defined in: [printer-legacy/src/link.ts:203](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L203)
 
 Gets the folder name for deprecated types based on the GraphQL type and deprecation option.
 
@@ -143,7 +143,7 @@ The folder name for deprecated types
 function getRelationLink(category, type, options): Maybe<TypeLink>;
 ```
 
-Defined in: [link.ts:306](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L306)
+Defined in: [printer-legacy/src/link.ts:306](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L306)
 
 Gets the link for a relation based on the category, type, and options.
 
@@ -181,7 +181,7 @@ The link object for the relation, or `undefined` if not found
 function hasOptionParentType(options): boolean;
 ```
 
-Defined in: [link.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L169)
+Defined in: [printer-legacy/src/link.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L169)
 
 Checks if the options include the `parentTypePrefix` attribute.
 
@@ -207,7 +207,7 @@ The options to check
 function hasOptionWithAttributes(options): boolean;
 ```
 
-Defined in: [link.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L159)
+Defined in: [printer-legacy/src/link.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L159)
 
 Checks if the options include the `withAttributes` attribute.
 
@@ -233,7 +233,7 @@ The options to check
 function hasPrintableDirective(type, options?): boolean;
 ```
 
-Defined in: [link.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L60)
+Defined in: [printer-legacy/src/link.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L60)
 
 Checks if a type has printable directives based on the provided options.
 
@@ -265,7 +265,7 @@ Configuration options for directive printing (`deprecated`, `onlyDocDirectives`,
 function printLink(type, options): string;
 ```
 
-Defined in: [link.ts:359](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L359)
+Defined in: [printer-legacy/src/link.ts:359](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L359)
 
 Prints a link for a GraphQL type based on the provided options.
 
@@ -297,7 +297,7 @@ The formatted link as a string
 function printLinkAttributes(type, text): string;
 ```
 
-Defined in: [link.ts:329](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L329)
+Defined in: [printer-legacy/src/link.ts:329](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L329)
 
 Prints the attributes of a link based on the GraphQL type.
 
@@ -329,7 +329,7 @@ The text with appended attributes
 function printParentLink(type, options): string | MDXString;
 ```
 
-Defined in: [link.ts:391](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L391)
+Defined in: [printer-legacy/src/link.ts:391](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L391)
 
 Prints a parent link for a GraphQL type based on the provided options.
 
@@ -361,7 +361,7 @@ The formatted parent link as a string or MDX string
 function toLink(type, name, operation, options): TypeLink;
 ```
 
-Defined in: [link.ts:226](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L226)
+Defined in: [printer-legacy/src/link.ts:226](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/link.ts#L226)
 
 Converts a GraphQL type to a link object.
 

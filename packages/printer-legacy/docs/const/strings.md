@@ -8,7 +8,7 @@
 const DEPRECATED: "deprecated";
 ```
 
-Defined in: [const/strings.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L17)
+Defined in: [printer-legacy/src/const/strings.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L26)
 
 ---
 
@@ -18,7 +18,9 @@ Defined in: [const/strings.ts:17](https://github.com/graphql-markdown/graphql-ma
 const FRONT_MATTER_DELIMITER: "---";
 ```
 
-Defined in: [const/strings.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L22)
+Defined in: utils/dist/markdown.d.ts:17
+
+Frontmatter delimiter for YAML frontmatter blocks.
 
 ---
 
@@ -28,7 +30,7 @@ Defined in: [const/strings.ts:22](https://github.com/graphql-markdown/graphql-ma
 const GRAPHQL: "graphql";
 ```
 
-Defined in: [const/strings.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L19)
+Defined in: [printer-legacy/src/const/strings.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L28)
 
 ---
 
@@ -38,7 +40,9 @@ Defined in: [const/strings.ts:19](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_CODE_INDENTATION: "  ";
 ```
 
-Defined in: [const/strings.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L24)
+Defined in: utils/dist/markdown.d.ts:25
+
+Standard indentation for code blocks (2 spaces).
 
 ---
 
@@ -48,7 +52,9 @@ Defined in: [const/strings.ts:24](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_CODE_SNIPPET: "``";
 ```
 
-Defined in: [const/strings.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L21)
+Defined in: utils/dist/markdown.d.ts:21
+
+Code snippet delimiter for fenced code blocks.
 
 ---
 
@@ -58,7 +64,7 @@ Defined in: [const/strings.ts:21](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_EOC: "\n``\n";
 ```
 
-Defined in: [const/strings.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L27)
+Defined in: [printer-legacy/src/const/strings.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L31)
 
 ---
 
@@ -68,7 +74,9 @@ Defined in: [const/strings.ts:27](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_EOL: "\n";
 ```
 
-Defined in: [const/strings.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L25)
+Defined in: utils/dist/markdown.d.ts:9
+
+End of line character for Markdown.
 
 ---
 
@@ -78,7 +86,9 @@ Defined in: [const/strings.ts:25](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_EOP: string;
 ```
 
-Defined in: [const/strings.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L26)
+Defined in: utils/dist/markdown.d.ts:13
+
+End of paragraph (double newline) for Markdown.
 
 ---
 
@@ -88,7 +98,7 @@ Defined in: [const/strings.ts:26](https://github.com/graphql-markdown/graphql-ma
 const MARKDOWN_SOC: "\n``graphql\n";
 ```
 
-Defined in: [const/strings.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L29)
+Defined in: [printer-legacy/src/const/strings.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L33)
 
 ---
 
@@ -98,7 +108,7 @@ Defined in: [const/strings.ts:29](https://github.com/graphql-markdown/graphql-ma
 const NO_DESCRIPTION_TEXT: "No description";
 ```
 
-Defined in: [const/strings.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L20)
+Defined in: [printer-legacy/src/const/strings.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L29)
 
 ---
 
@@ -108,7 +118,7 @@ Defined in: [const/strings.ts:20](https://github.com/graphql-markdown/graphql-ma
 const NON_NULL: "non-null";
 ```
 
-Defined in: [const/strings.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L18)
+Defined in: [printer-legacy/src/const/strings.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L27)
 
 ---
 
@@ -118,4 +128,4 @@ Defined in: [const/strings.ts:18](https://github.com/graphql-markdown/graphql-ma
 const ROOT_TYPE_LOCALE: RootTypeLocale;
 ```
 
-Defined in: [const/strings.ts:3](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L3)
+Defined in: [printer-legacy/src/const/strings.ts:12](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L12)

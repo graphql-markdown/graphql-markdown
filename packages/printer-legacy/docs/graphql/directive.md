@@ -12,7 +12,7 @@ including their metadata, arguments, and locations.
 function printCodeDirective(type, options?): string;
 ```
 
-Defined in: [graphql/directive.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L66)
+Defined in: [printer-legacy/src/graphql/directive.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L66)
 
 Generates a string representation of a complete GraphQL directive definition.
 
@@ -44,7 +44,7 @@ A formatted string containing the complete directive definition
 function printDirectiveMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/directive.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L48)
+Defined in: [printer-legacy/src/graphql/directive.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L48)
 
 Prints metadata information for a GraphQL directive, focusing on its arguments.
 
