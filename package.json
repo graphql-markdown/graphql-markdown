@@ -179,7 +179,7 @@
     "@stryker-mutator/api": "9.5.1",
     "@stryker-mutator/core": "9.5.1",
     "@stryker-mutator/jest-runner": "9.5.1",
-    "@stryker-mutator/typescript-checker": "9.5.0",
+    "@stryker-mutator/typescript-checker": "9.5.1",
     "@types/jest": "30.0.0",
     "@types/node": "25.2.0",
     "@typescript-eslint/eslint-plugin": "8.54.0",
