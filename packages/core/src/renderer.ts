@@ -333,12 +333,12 @@ class CategoryPositionManager {
  * @example
  */
 export class Renderer {
-  group: Maybe<SchemaEntitiesGroupMap>;
-  outputDir: string;
-  baseURL: string;
-  prettify: boolean;
-  options: Maybe<RendererDocOptions>;
-  mdxModule: unknown;
+  readonly group: Maybe<SchemaEntitiesGroupMap>;
+  readonly outputDir: string;
+  readonly baseURL: string;
+  readonly prettify: boolean;
+  readonly options: Maybe<RendererDocOptions>;
+  readonly mdxExtension: string;
   // mdxModuleIndexFileSupport: boolean;
 
   private readonly printer: Printer;
@@ -354,7 +354,7 @@ export class Renderer {
    * @param group - Optional grouping configuration for schema entities
    * @param prettify - Whether to format the generated markdown
    * @param docOptions - Additional documentation options
-   * @param mdxModule - Optional MDX module for enhanced documentation features
+   * @param mdxExtension - Optional MDX file extension to use
    * @example
    */
   constructor(
@@ -364,7 +364,7 @@ export class Renderer {
     group: Maybe<SchemaEntitiesGroupMap>,
     prettify: boolean,
     docOptions: Maybe<RendererDocOptions>,
-    mdxModule?: unknown,
+    mdxExtension: string,
   ) {
     this.printer = printer;
 
@@ -373,7 +373,7 @@ export class Renderer {
     this.baseURL = baseURL;
     this.prettify = prettify;
     this.options = docOptions;
-    this.mdxModule = mdxModule;
+    this.mdxExtension = mdxExtension;
 
     // Initialize position managers for different hierarchy levels
     // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
@@ -600,21 +600,8 @@ export class Renderer {
       /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
-    // allow mdxModule to specify custom extension
-    let extension = "md";
-    if (
-      this.mdxModule &&
-      typeof this.mdxModule === "object" &&
-      "extension" in this.mdxModule &&
-      typeof this.mdxModule.extension === "string"
-    ) {
-      extension = this.mdxModule.extension;
-    } else if (this.mdxModule) {
-      extension = "mdx";
-    }
-
     const fileName = slugify(name);
-    const filePath = join(normalize(dirPath), `${fileName}.${extension}`);
+    const filePath = join(normalize(dirPath), `${fileName}.${this.mdxExtension}`);
 
     let content: MDXString;
     try {
@@ -979,7 +966,7 @@ export class Renderer {
  * @param group - Optional grouping configuration
  * @param prettify - Whether to prettify the output markdown
  * @param docOptions - Additional documentation options
- * @param mdxModule - Optional MDX module for enhanced features
+ * @param mdxExtension - Extension to use for MDX files
  * @returns A configured Renderer instance
  *
  * @example
@@ -1001,7 +988,7 @@ export const getRenderer = async (
   group: Maybe<SchemaEntitiesGroupMap>,
   prettify: boolean,
   docOptions: Maybe<RendererDocOptions>,
-  mdxModule?: unknown,
+  mdxExtension: string,
 ): Promise<InstanceType<typeof Renderer>> => {
   await ensureDir(outputDir, { forceEmpty: docOptions?.force });
   return new Renderer(
@@ -1011,6 +998,6 @@ export const getRenderer = async (
     group,
     prettify,
     docOptions,
-    mdxModule,
+    mdxExtension,
   );
 };
