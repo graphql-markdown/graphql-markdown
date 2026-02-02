@@ -173,6 +173,7 @@ describe("generator", () => {
             skipDocDirectives: [mockDirective],
           },
           undefined,
+          undefined,
         );
         expect(rendererSpy).toHaveBeenCalledWith(
           {},
@@ -413,6 +414,7 @@ describe("generator", () => {
           onlyDocDirectives: expect.any(Array),
           skipDocDirectives: expect.any(Array),
         }),
+        undefined,
         undefined,
       );
 

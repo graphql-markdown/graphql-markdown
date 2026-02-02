@@ -169,7 +169,8 @@ export abstract class IPrinter {
     baseURL: string,
     linkRoot: string,
     options: Maybe<PrinterOptions>,
-    mdxModule?: unknown,
+    mdxModule?: Partial<Formatter>,
+    mdxDeclaration?: Maybe<string>,
   ): Promise<void>;
 
   /**

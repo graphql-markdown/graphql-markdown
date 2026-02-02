@@ -122,6 +122,7 @@ export class Printer implements IPrinter {
    * Prints custom tags
    */
   static readonly printCustomTags = printCustomTags;
+  static mdxDeclaration: Maybe<string>;
 
   /**
    * Initializes the printer with the given schema and configuration.
@@ -155,6 +156,7 @@ export class Printer implements IPrinter {
       skipDocDirectives?: GraphQLDirective[];
     } = DEFAULT_INIT_OPTIONS,
     formatter?: Partial<Formatter>,
+    mdxDeclaration?: Maybe<string>,
   ): Promise<void> {
     if (Printer.options !== undefined) {
       return;
@@ -191,6 +193,8 @@ export class Printer implements IPrinter {
       ...createDefaultFormatter(),
       ...formatter,
     };
+
+    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
@@ -434,6 +438,7 @@ export class Printer implements IPrinter {
     return [
       header,
       metatags,
+      Printer.mdxDeclaration,
       tags,
       description,
       code,

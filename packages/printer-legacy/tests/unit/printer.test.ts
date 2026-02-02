@@ -153,7 +153,6 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    Printer.printMDXModule = mdxModule;
     jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
       return value as string;
     });

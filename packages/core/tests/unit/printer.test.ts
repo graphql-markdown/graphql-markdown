@@ -1,6 +1,6 @@
 import { GraphQLSchema } from "graphql/type";
 
-import type { PackageName } from "@graphql-markdown/types";
+import type { Formatter, PackageName } from "@graphql-markdown/types";
 
 import { getPrinter } from "../../src/printer";
 
@@ -39,6 +39,7 @@ describe("generator", () => {
         printerConfig.baseURL,
         printerConfig.linkRoot,
         printerOptions,
+        undefined,
         undefined,
       );
     });
@@ -128,7 +129,7 @@ describe("generator", () => {
       expect.assertions(1);
 
       const spy = jest.spyOn(Printer, "init");
-      const mdxModule = { test: true };
+      const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
         "@graphql-markdown/printer-legacy" as PackageName,
@@ -150,6 +151,38 @@ describe("generator", () => {
         "root",
         expect.any(Object),
         mdxModule,
+        undefined,
+      );
+    });
+
+    test("passes mdxDeclaration to printer initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+      const mdxModule = { test: true } as Partial<Formatter>;
+
+      await getPrinter(
+        "@graphql-markdown/printer-legacy" as PackageName,
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: {},
+        },
+        mdxModule,
+        "mdx declaration string",
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        expect.any(Object),
+        mdxModule,
+        "mdx declaration string",
       );
     });
   });

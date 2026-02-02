@@ -283,11 +283,6 @@ export const generateDocFromSchema = async ({
   const mdxModule = await loadMDXModule(mdxParser);
   // Register MDX lifecycle event handlers if mdxModule loaded successfully
   registerMDXEventHandlers(mdxModule);
-  // Extract formatter from the MDX module (for direct function calls)
-  const formatter = getFormatterFromMDXModule(
-    mdxModule,
-    docOptions ?? undefined,
-  );
 
   await events.emitAsync(
     SchemaEvents.BEFORE_LOAD,
@@ -345,6 +340,20 @@ export const generateDocFromSchema = async ({
 
   const groups = getGroups(rootTypes, groupByDirective);
 
+  // Extract formatter from the MDX module (for direct function calls)
+  const formatter = getFormatterFromMDXModule(
+    mdxModule,
+    docOptions ?? undefined,
+  );
+
+  // Extract mdxDeclaration from the MDX module (if available)
+  const mdxDeclaration =
+    mdxModule && typeof mdxModule === "object" && "mdxDeclaration" in mdxModule
+      ? ((mdxModule as Record<string, unknown>).mdxDeclaration as
+          | string
+          | undefined)
+      : undefined;
+
   const printer = await getPrinter(
     // module mandatory
     printerModule,
@@ -370,6 +379,7 @@ export const generateDocFromSchema = async ({
       skipDocDirectives,
     },
     formatter,
+    mdxDeclaration,
   );
 
   const renderer = await getRenderer(
