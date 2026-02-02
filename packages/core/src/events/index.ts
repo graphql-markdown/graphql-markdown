@@ -14,7 +14,6 @@ export { RenderRootTypesEvents } from "./render-root-types-events";
 export { RenderHomepageEvents } from "./render-homepage-events";
 export { RenderTypeEntitiesEvents } from "./render-type-entities-events";
 export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events";
-export { FormatEvents } from "./format-events";
 
 // Event classes
 export { SchemaEvent } from "./schema-load";
@@ -23,4 +22,3 @@ export { RenderRootTypesEvent } from "./render-root-types";
 export { RenderHomepageEvent } from "./render-homepage";
 export { RenderTypeEntitiesEvent } from "./render-type-entities";
 export { GenerateIndexMetafileEvent } from "./generate-index-metafile";
-export { FormatEvent } from "./format";
