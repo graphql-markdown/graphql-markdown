@@ -1,4 +1,13 @@
 import type { RootTypeLocale } from "@graphql-markdown/types";
+import { MARKDOWN_CODE_SNIPPET, MARKDOWN_EOL } from "@graphql-markdown/utils";
+
+export {
+  FRONT_MATTER_DELIMITER,
+  MARKDOWN_CODE_INDENTATION,
+  MARKDOWN_CODE_SNIPPET,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} from "@graphql-markdown/utils";
 
 export const ROOT_TYPE_LOCALE: RootTypeLocale = {
   DIRECTIVE: { singular: "directive", plural: "directives" },
@@ -18,12 +27,7 @@ export const DEPRECATED = "deprecated" as const;
 export const NON_NULL = "non-null" as const;
 export const GRAPHQL = "graphql" as const;
 export const NO_DESCRIPTION_TEXT = "No description" as const;
-export const MARKDOWN_CODE_SNIPPET = "```" as const;
-export const FRONT_MATTER_DELIMITER = "---" as const;
 
-export const MARKDOWN_CODE_INDENTATION = "  " as const;
-export const MARKDOWN_EOL = "\n" as const;
-export const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
 export const MARKDOWN_EOC =
   `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${MARKDOWN_EOL}` as const;
 export const MARKDOWN_SOC =

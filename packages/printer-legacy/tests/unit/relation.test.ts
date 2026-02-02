@@ -10,6 +10,7 @@ import type {
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    ...jest.requireActual("@graphql-markdown/utils"),
     escapeMDX: jest.fn((s): string => {
       return s as string;
     }),

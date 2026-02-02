@@ -18,13 +18,15 @@ import type {
   MetaOptions,
   TypeLink,
 } from "@graphql-markdown/types";
-import { escapeMDX } from "@graphql-markdown/utils";
+import {
+  escapeMDX,
+  FRONT_MATTER_DELIMITER,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} from "@graphql-markdown/utils";
 
-const MARKDOWN_EOL = "\n" as const;
-const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
-const FRONT_MATTER_DELIMITER = "---" as const;
 
 export { mdxDeclaration } from "./components";
 export { beforeGenerateIndexMetafileHook } from "./category";
