@@ -10,7 +10,7 @@ Module for handling GraphQL Union type printing operations.
 function printCodeUnion(type, options?): string;
 ```
 
-Defined in: [graphql/union.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L42)
+Defined in: [printer-legacy/src/graphql/union.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L42)
 
 Generates GraphQL SDL code representation of a Union type.
 
@@ -42,7 +42,7 @@ SDL string representation of the union type
 function printUnionMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/union.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L22)
+Defined in: [printer-legacy/src/graphql/union.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L22)
 
 Generates metadata documentation for a GraphQL Union type.
 

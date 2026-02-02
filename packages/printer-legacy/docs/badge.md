@@ -12,7 +12,7 @@ and their properties like deprecation status, nullability, and relationships.
 const CSS_BADGE_CLASSNAME: object;
 ```
 
-Defined in: [badge.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L31)
+Defined in: [printer-legacy/src/badge.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L32)
 
 #### Type Declaration
 
@@ -42,7 +42,7 @@ RELATION: string = "RELATION";
 function getTypeBadges(type, groups?): Badge[];
 ```
 
-Defined in: [badge.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L43)
+Defined in: [printer-legacy/src/badge.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L44)
 
 Gets an array of badges for a given GraphQL type.
 
@@ -74,7 +74,7 @@ Array of Badge objects containing text and optional classnames
 function printBadge(badge, options): MDXString;
 ```
 
-Defined in: [badge.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L96)
+Defined in: [printer-legacy/src/badge.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L97)
 
 Formats a single badge into MDX string format.
 
@@ -106,7 +106,7 @@ Formatted MDX string representation of the badge
 function printBadges(type, options): string | MDXString;
 ```
 
-Defined in: [badge.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L118)
+Defined in: [printer-legacy/src/badge.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L119)
 
 Generates and formats all applicable badges for a GraphQL type.
 

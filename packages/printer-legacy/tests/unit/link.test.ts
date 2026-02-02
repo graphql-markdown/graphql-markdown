@@ -20,6 +20,7 @@ import type {
 import * as Utils from "@graphql-markdown/utils";
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    ...jest.requireActual("@graphql-markdown/utils"),
     slugify: jest.fn(),
     pathUrl: jest.requireActual("path").posix,
   };

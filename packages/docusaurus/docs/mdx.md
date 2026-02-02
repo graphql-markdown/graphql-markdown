@@ -8,7 +8,7 @@
 function createMDXFormatter(meta?): Formatter;
 ```
 
-Defined in: [mdx/index.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L154)
+Defined in: [mdx/index.ts:156](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L156)
 
 Creates an MDX formatter for Docusaurus documentation.
 
@@ -20,7 +20,7 @@ with Docusaurus MDX rendering. It uses components like `<Badge>`,
 
 ##### meta?
 
-`Maybe`&lt;`MetaOptions`&gt;
+`Maybe`&lt;`MetaInfo`&gt;
 
 Optional metadata for framework-specific formatting
 
@@ -48,7 +48,7 @@ const badge = formatter.formatMDXBadge({ text: "Required" });
 function formatMDXAdmonition(param, meta): MDXString;
 ```
 
-Defined in: [mdx/index.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L49)
+Defined in: [mdx/index.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L51)
 
 Formats an admonition block in MDX format
 
@@ -62,7 +62,7 @@ The admonition configuration object
 
 ##### meta
 
-`Maybe`&lt;`MetaOptions`&gt;
+`Maybe`&lt;`MetaInfo`&gt;
 
 Optional metadata for generator configuration
 
@@ -80,7 +80,7 @@ Formatted MDX string for the admonition
 function formatMDXBadge(param): MDXString;
 ```
 
-Defined in: [mdx/index.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L37)
+Defined in: [mdx/index.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L39)
 
 Formats a Badge inline-block in MDX format
 
@@ -106,7 +106,7 @@ Formatted MDX string for the badge
 function formatMDXBullet(text): MDXString;
 ```
 
-Defined in: [mdx/index.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L66)
+Defined in: [mdx/index.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L68)
 
 Creates a bullet point element in MDX format
 
@@ -132,7 +132,7 @@ Formatted MDX string for the bullet point
 function formatMDXDetails(param): MDXString;
 ```
 
-Defined in: [mdx/index.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L75)
+Defined in: [mdx/index.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L77)
 
 Creates a collapsible details section in MDX format
 
@@ -158,7 +158,7 @@ Formatted MDX string for the collapsible section
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [mdx/index.ts:124](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L124)
+Defined in: [mdx/index.ts:126](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L126)
 
 Default frontmatter formatter for MDX.
 
@@ -190,7 +190,7 @@ Formatted MDX string for the front matter
 function formatMDXLink(param): TypeLink;
 ```
 
-Defined in: [mdx/index.ts:110](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L110)
+Defined in: [mdx/index.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L112)
 
 Formats a link in MDX format
 
@@ -216,7 +216,7 @@ Formatted MDX link object
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [mdx/index.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L97)
+Defined in: [mdx/index.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L99)
 
 Formats a name entity with optional parent type
 
@@ -248,7 +248,7 @@ Formatted MDX string for the name entity
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [mdx/index.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L87)
+Defined in: [mdx/index.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L89)
 
 Creates a link to the specification documentation
 

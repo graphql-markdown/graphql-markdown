@@ -10,7 +10,7 @@ GraphQL Object Type printing utilities
 function printCodeObject(type, options): string;
 ```
 
-Defined in: [graphql/object.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L104)
+Defined in: [printer-legacy/src/graphql/object.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L104)
 
 Prints a GraphQL object type definition as a code block
 
@@ -42,7 +42,7 @@ GraphQL object type definition as a code block string
 function printCodeType(type, entity, options): string;
 ```
 
-Defined in: [graphql/object.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L64)
+Defined in: [printer-legacy/src/graphql/object.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L64)
 
 Prints the GraphQL type definition as a code block
 
@@ -80,7 +80,7 @@ GraphQL type definition as a code block string
 function printObjectMetadata(type, options): string;
 ```
 
-Defined in: [graphql/object.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L42)
+Defined in: [printer-legacy/src/graphql/object.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L42)
 
 Prints the complete metadata section for a GraphQL object type
 

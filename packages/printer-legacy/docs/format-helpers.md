@@ -13,7 +13,7 @@ fallback to default formatters when no custom handlers are registered.
 function formatMDXAdmonition(__namedParameters, _meta): MDXString;
 ```
 
-Defined in: [format-helpers.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L38)
+Defined in: [printer-legacy/src/format-helpers.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L38)
 
 Default admonition formatter.
 
@@ -25,7 +25,7 @@ Default admonition formatter.
 
 ##### \_meta
 
-`Maybe`&lt;`MetaOptions`&gt;
+`Maybe`&lt;`MetaInfo`&gt;
 
 #### Returns
 
@@ -39,7 +39,7 @@ Default admonition formatter.
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [format-helpers.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L31)
+Defined in: [printer-legacy/src/format-helpers.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L31)
 
 Default badge formatter.
 
@@ -61,7 +61,7 @@ Default badge formatter.
 function formatMDXBullet(text): MDXString;
 ```
 
-Defined in: [format-helpers.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L48)
+Defined in: [printer-legacy/src/format-helpers.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L48)
 
 Default bullet formatter.
 
@@ -83,7 +83,7 @@ Default bullet formatter.
 function formatMDXDetails(__namedParameters): MDXString;
 ```
 
-Defined in: [format-helpers.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L55)
+Defined in: [printer-legacy/src/format-helpers.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L55)
 
 Default details formatter.
 
@@ -105,7 +105,7 @@ Default details formatter.
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [format-helpers.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L64)
+Defined in: [printer-legacy/src/format-helpers.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L64)
 
 Default frontmatter formatter.
 
@@ -131,7 +131,7 @@ Default frontmatter formatter.
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [format-helpers.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L78)
+Defined in: [printer-legacy/src/format-helpers.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L78)
 
 Default link formatter.
 
@@ -153,7 +153,7 @@ Default link formatter.
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [format-helpers.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L85)
+Defined in: [printer-legacy/src/format-helpers.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L85)
 
 Default name entity formatter.
 
@@ -179,7 +179,7 @@ Default name entity formatter.
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [format-helpers.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L98)
+Defined in: [printer-legacy/src/format-helpers.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L98)
 
 Default specified-by link formatter.
 

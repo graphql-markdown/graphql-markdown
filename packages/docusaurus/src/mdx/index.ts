@@ -15,16 +15,18 @@ import type {
   FrontMatterOptions,
   Maybe,
   MDXString,
-  MetaOptions,
+  MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
-import { escapeMDX } from "@graphql-markdown/utils";
+import {
+  escapeMDX,
+  FRONT_MATTER_DELIMITER,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+} from "@graphql-markdown/utils";
 
-const MARKDOWN_EOL = "\n" as const;
-const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
-const FRONT_MATTER_DELIMITER = "---" as const;
 
 export { mdxDeclaration } from "./components";
 export { beforeGenerateIndexMetafileHook } from "./category";
@@ -48,7 +50,7 @@ export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
  */
 export const formatMDXAdmonition = (
   { text, title, type }: AdmonitionType,
-  meta: Maybe<MetaOptions>,
+  meta: Maybe<MetaInfo>,
 ): MDXString => {
   const isDocusaurus = meta?.generatorFrameworkName === "docusaurus";
   if (isDocusaurus && meta.generatorFrameworkVersion?.startsWith("2")) {
@@ -151,12 +153,10 @@ export const formatMDXFrontmatter = (
  * // '<Badge class="badge badge--secondary " text="Required"/>'
  * ```
  */
-export const createMDXFormatter = (meta?: Maybe<MetaOptions>): Formatter => ({
+export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => ({
   formatMDXBadge,
-  formatMDXAdmonition: (
-    admonition: AdmonitionType,
-    _meta: Maybe<MetaOptions>,
-  ) => formatMDXAdmonition(admonition, meta ?? _meta),
+  formatMDXAdmonition: (admonition: AdmonitionType, _meta: Maybe<MetaInfo>) =>
+    formatMDXAdmonition(admonition, meta ?? _meta),
   formatMDXBullet,
   formatMDXDetails,
   formatMDXFrontmatter,

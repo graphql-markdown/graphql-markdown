@@ -2,6 +2,7 @@ import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
   FrontMatterOptions,
+  MetaInfo,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
@@ -40,14 +41,6 @@ export type TypeLocale = string | { singular: string; plural: string };
  * Maps root type names to their localized representations
  */
 export type RootTypeLocale = Record<RootTypeName, TypeLocale>;
-
-/**
- * Configuration options for generator metadata
- */
-export interface MetaOptions {
-  generatorFrameworkName?: Maybe<string>;
-  generatorFrameworkVersion?: Maybe<string>;
-}
 
 /**
  * Represents an admonition (notice/warning) block in the documentation
@@ -89,7 +82,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   groups?: Maybe<SchemaEntitiesGroupMap>;
   hierarchy?: Maybe<TypeHierarchyObjectType>;
   level?: Maybe<SectionLevelValue>;
-  meta?: Maybe<MetaOptions>;
+  meta?: Maybe<MetaInfo>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
   parentType?: Maybe<string>;
@@ -297,7 +290,7 @@ export interface PrinterOptions {
   /** Schema entity grouping configuration */
   groups?: Maybe<SchemaEntitiesGroupMap>;
   /** Generator metadata options */
-  meta?: Maybe<MetaOptions>;
+  meta?: Maybe<MetaInfo>;
   /** Custom metatags to include in documentation */
   metatags?: Maybe<Record<string, string>[]>;
   /** List of directives to exclusively include in documentation */

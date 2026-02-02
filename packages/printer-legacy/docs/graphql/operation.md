@@ -11,7 +11,7 @@ Provides utilities to print operation types, metadata, and code representations.
 function printOperationMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/operation.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L39)
+Defined in: [printer-legacy/src/graphql/operation.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L39)
 
 Prints the operation metadata including arguments and type information.
 
@@ -43,7 +43,7 @@ Formatted string containing operation metadata or empty string if invalid
 function printOperationType(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/operation.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L18)
+Defined in: [printer-legacy/src/graphql/operation.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L18)
 
 Prints the operation type information.
 

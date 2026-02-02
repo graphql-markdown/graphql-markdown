@@ -11,7 +11,7 @@ Provides utilities for formatting and printing frontmatter content.
 function printFrontMatter(title, props, options): string;
 ```
 
-Defined in: [frontmatter.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L21)
+Defined in: [printer-legacy/src/frontmatter.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/frontmatter.ts#L21)
 
 Generates a formatted frontmatter string for Markdown/MDX documents.
 

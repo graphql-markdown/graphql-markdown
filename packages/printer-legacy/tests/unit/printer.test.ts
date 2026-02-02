@@ -17,6 +17,7 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    ...jest.requireActual("@graphql-markdown/utils"),
     escapeMDX: jest.fn(),
     formatFrontMatterObject: jest.fn(),
     isEmpty: jest.fn(),

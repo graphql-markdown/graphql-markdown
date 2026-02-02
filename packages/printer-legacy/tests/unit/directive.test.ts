@@ -13,7 +13,7 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
-    // ...jest.requireActual("@graphql-markdown/utils"),
+    ...jest.requireActual("@graphql-markdown/utils"),
     isEmpty: jest.fn(),
     getConstDirectiveMap: jest.fn(),
     escapeMDX: jest.fn(),

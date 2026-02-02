@@ -2,6 +2,7 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
+    ...jest.requireActual("@graphql-markdown/utils"),
     slugify: jest.fn(),
     escapeMDX: jest.fn(<T>(t: T): T => {
       return t;

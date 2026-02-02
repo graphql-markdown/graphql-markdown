@@ -1,4 +1,4 @@
-import type { MetaOptions, PrintTypeOptions } from "@graphql-markdown/types";
+import type { MetaInfo, PrintTypeOptions } from "@graphql-markdown/types";
 
 import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
 import { DirectiveLocation } from "graphql/language";
@@ -329,7 +329,7 @@ test
     test.skip("prints admonition caution for Docusaurus v2", () => {
       expect.assertions(1);
 
-      const meta: MetaOptions = {
+      const meta: MetaInfo = {
         generatorFrameworkName: "docusaurus",
         generatorFrameworkVersion: "2.4.2",
       };
@@ -352,7 +352,7 @@ test
     test.skip("prints admonition warning for Docusaurus v3", () => {
       expect.assertions(1);
 
-      const meta: MetaOptions = {
+      const meta: MetaInfo = {
         generatorFrameworkName: "docusaurus",
         generatorFrameworkVersion: "3.0.0",
       };

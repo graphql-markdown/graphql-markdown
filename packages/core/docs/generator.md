@@ -14,7 +14,7 @@ through appropriate printers and renderers.
 const FILE_EXTENSION: object;
 ```
 
-Defined in: [generator.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L61)
+Defined in: [generator.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L62)
 
 Supported file extensions for generated documentation files.
 
@@ -50,7 +50,7 @@ function checkSchemaDifferences(
 ): Promise<boolean>;
 ```
 
-Defined in: [generator.ts:229](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L229)
+Defined in: [generator.ts:227](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L227)
 
 Checks if there are differences in the GraphQL schema compared to a previous version.
 
@@ -99,7 +99,7 @@ When no changes are detected, a log message is generated indicating that the sch
 function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [generator.ts:301](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L301)
+Defined in: [generator.ts:299](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L299)
 
 Main entry point for generating Markdown documentation from a GraphQL schema.
 
@@ -136,7 +136,7 @@ function getFormatterFromMDXModule(
 ): Partial<Formatter> | undefined;
 ```
 
-Defined in: [generator.ts:131](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L131)
+Defined in: [generator.ts:132](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L132)
 
 **`Internal`**
 
@@ -157,10 +157,7 @@ The loaded MDX module that may contain formatter exports
 
 ##### meta?
 
-`Maybe`&lt;\{
-`generatorFrameworkName?`: `Maybe`&lt;`string`&gt;;
-`generatorFrameworkVersion?`: `Maybe`&lt;`string`&gt;;
-\}&gt;
+`MetaInfo`
 
 Optional metadata to pass to the formatter factory
 
@@ -181,7 +178,7 @@ function loadGraphqlSchema(
 ): Promise<Maybe<GraphQLSchema>>;
 ```
 
-Defined in: [generator.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L198)
+Defined in: [generator.ts:196](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L196)
 
 **`Internal`**
 
@@ -218,7 +215,7 @@ A promise that resolves to the loaded GraphQL schema, or undefined if:
 function loadMDXModule(mdxParser): Promise<unknown>;
 ```
 
-Defined in: [generator.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L90)
+Defined in: [generator.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L91)
 
 **`Internal`**
 
@@ -253,7 +250,7 @@ function resolveSkipAndOnlyDirectives(
 ): GraphQLDirective[][];
 ```
 
-Defined in: [generator.ts:260](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L260)
+Defined in: [generator.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L258)
 
 Resolves and retrieves GraphQL directive objects from the schema based on their names.
 

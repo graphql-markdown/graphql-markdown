@@ -10,7 +10,7 @@ Utility module for handling GraphQL schema entity grouping.
 function getGroup(type, groups, typeCategory): string;
 ```
 
-Defined in: [group.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L24)
+Defined in: [printer-legacy/src/group.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/group.ts#L24)
 
 Retrieves the group name for a given GraphQL type based on its category and group mapping.
 

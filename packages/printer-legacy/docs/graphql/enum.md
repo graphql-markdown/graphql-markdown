@@ -10,7 +10,7 @@ Provides utilities for printing GraphQL enum types to Markdown/MDX format
 function printCodeEnum(type, options?): string;
 ```
 
-Defined in: [graphql/enum.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L43)
+Defined in: [printer-legacy/src/graphql/enum.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L43)
 
 Generates a GraphQL SDL code block for an enum type.
 
@@ -42,7 +42,7 @@ A string containing the enum type definition in GraphQL SDL, or empty string if 
 function printEnumMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [graphql/enum.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L25)
+Defined in: [printer-legacy/src/graphql/enum.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L25)
 
 Prints the metadata section for a GraphQL enum type.
 
