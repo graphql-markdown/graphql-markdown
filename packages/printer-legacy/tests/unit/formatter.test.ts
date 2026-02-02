@@ -1,4 +1,9 @@
-import type { AdmonitionType, Badge, TypeLink } from "@graphql-markdown/types";
+import type {
+  AdmonitionType,
+  Badge,
+  CollapsibleOption,
+  TypeLink,
+} from "@graphql-markdown/types";
 
 import { createDefaultFormatter } from "../../src/formatter";
 
@@ -65,7 +70,9 @@ describe("formatter", () => {
 
     describe("formatMDXDetails", () => {
       it("formats a details element", () => {
-        const result = formatter.formatMDXDetails({ dataOpen: "show" });
+        const result = formatter.formatMDXDetails({
+          dataOpen: "show",
+        } as CollapsibleOption);
         expect(result).toContain("gqlmd-mdx-details");
         expect(result).toContain("gqlmd-mdx-details-summary");
         expect(result).toContain("SHOW");
