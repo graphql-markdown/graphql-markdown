@@ -122,7 +122,11 @@ export class Printer implements IPrinter {
    * Prints custom tags
    */
   static readonly printCustomTags = printCustomTags;
-  static mdxDeclaration: Maybe<string>;
+
+  /**
+   * Prints mdx modules import declaration
+   */
+  static mdxDeclaration: Readonly<Maybe<string>>;
 
   /**
    * Initializes the printer with the given schema and configuration.
