@@ -192,17 +192,56 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 ## `mdxParser`
 
-:::warning[EXPERIMENTAL]
-
-`mdxParser` is an experimental and undocumented feature, and it should not be used in production.
-
-:::
-
-Provide a custom package for formatting MDX content.
+Provide a custom module for formatting MDX content. This allows integration with frameworks other than Docusaurus by defining custom formatter functions.
 
 | Setting     | CLI flag      | Default                            |
 | ----------- | ------------- | ---------------------------------- |
 | `mdxParser` | `--mdxParser` | `@graphql-markdown/docusaurus/mdx` |
+
+The custom module can export individual formatter functions:
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `formatMDXBadge` | `(badge: { text, classname? }) => string` | Format type badges |
+| `formatMDXAdmonition` | `(admonition, meta?) => string` | Format callout/warning blocks |
+| `formatMDXBullet` | `(text?: string) => string` | Format bullet point separators |
+| `formatMDXDetails` | `(option) => string` | Format collapsible sections |
+| `formatMDXFrontmatter` | `(props?, formatted?) => string` | Format page frontmatter |
+| `formatMDXLink` | `(link) => { text, url }` | Transform type links |
+| `formatMDXNameEntity` | `(name, parentType?) => string` | Format named entity references |
+| `formatMDXSpecifiedByLink` | `(url) => string` | Format scalar specification links |
+
+Additionally, the module can export:
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `mdxDeclaration` | `string` | Import statements prepended to generated files |
+| `mdxExtension` | `string` | Custom file extension (defaults to `.mdx`) |
+
+For detailed examples, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
+
+<br/>
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        // highlight-start
+        mdxParser: "./lib/custom-mdx.cjs",
+        // highlight-end
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
+      },
+    ],
+  ],
+```
 
 ## `metatags`
 
