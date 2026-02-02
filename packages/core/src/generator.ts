@@ -105,14 +105,29 @@ export const loadMDXModule = async (
 };
 
 /**
+ * List of formatter function names that can be exported individually from an MDX module.
+ */
+const FORMATTER_FUNCTION_NAMES = [
+  "formatMDXBadge",
+  "formatMDXAdmonition",
+  "formatMDXBullet",
+  "formatMDXDetails",
+  "formatMDXFrontmatter",
+  "formatMDXLink",
+  "formatMDXNameEntity",
+  "formatMDXSpecifiedByLink",
+] as const;
+
+/**
  * Extracts a formatter from an MDX module.
  *
- * Checks if the MDX module exports a `createMDXFormatter` factory function and calls it
- * to create a Formatter. If no factory function is found, returns undefined.
+ * Checks for formatter functions in the following order:
+ * 1. A `createMDXFormatter` factory function (for internal/advanced usage)
+ * 2. Individual exported formatter functions (e.g., `formatMDXBadge`, `formatMDXAdmonition`)
  *
- * @param mdxModule - The loaded MDX module that may contain a createMDXFormatter export
+ * @param mdxModule - The loaded MDX module that may contain formatter exports
  * @param meta - Optional metadata to pass to the formatter factory
- * @returns A Formatter if the module has a factory function, undefined otherwise
+ * @returns A partial Formatter with the found functions, or undefined if none found
  *
  * @internal
  */
@@ -129,7 +144,7 @@ export const getFormatterFromMDXModule = (
 
   const module = mdxModule as Record<string, unknown>;
 
-  // Check for createMDXFormatter on the module directly
+  // Check for createMDXFormatter on the module directly (internal/advanced usage)
   if (
     "createMDXFormatter" in module &&
     typeof module.createMDXFormatter === "function"
@@ -149,7 +164,26 @@ export const getFormatterFromMDXModule = (
     );
   }
 
-  return undefined;
+  // Check for individual formatter functions
+  const formatter: Partial<Formatter> = {};
+  let hasFormatter = false;
+
+  for (const funcName of FORMATTER_FUNCTION_NAMES) {
+    if (funcName in module && typeof module[funcName] === "function") {
+      (formatter as Record<string, unknown>)[funcName] = module[funcName];
+      hasFormatter = true;
+    } else if (
+      defaultExport &&
+      funcName in defaultExport &&
+      typeof defaultExport[funcName] === "function"
+    ) {
+      (formatter as Record<string, unknown>)[funcName] =
+        defaultExport[funcName];
+      hasFormatter = true;
+    }
+  }
+
+  return hasFormatter ? formatter : undefined;
 };
 
 /**
