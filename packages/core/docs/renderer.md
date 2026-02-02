@@ -34,7 +34,7 @@ new Renderer(
    group,
    prettify,
    docOptions,
-   mdxModule?): Renderer;
+   mdxExtension): Renderer;
 ```
 
 Defined in: [renderer.ts:360](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L360)
@@ -79,11 +79,11 @@ Whether to format the generated markdown
 
 Additional documentation options
 
-###### mdxModule?
+###### mdxExtension
 
-`unknown`
+`string`
 
-Optional MDX module for enhanced documentation features
+Optional MDX file extension to use
 
 ###### Returns
 
@@ -100,7 +100,7 @@ Optional MDX module for enhanced documentation features
 ##### baseURL
 
 ```ts
-baseURL: string;
+readonly baseURL: string;
 ```
 
 Defined in: [renderer.ts:338](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L338)
@@ -108,15 +108,15 @@ Defined in: [renderer.ts:338](https://github.com/graphql-markdown/graphql-markdo
 ##### group
 
 ```ts
-group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
+readonly group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 ```
 
 Defined in: [renderer.ts:336](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L336)
 
-##### mdxModule
+##### mdxExtension
 
 ```ts
-mdxModule: unknown;
+readonly mdxExtension: string;
 ```
 
 Defined in: [renderer.ts:341](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L341)
@@ -124,7 +124,7 @@ Defined in: [renderer.ts:341](https://github.com/graphql-markdown/graphql-markdo
 ##### options
 
 ```ts
-options: Maybe<RendererDocOptions>;
+readonly options: Maybe<RendererDocOptions>;
 ```
 
 Defined in: [renderer.ts:340](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L340)
@@ -132,7 +132,7 @@ Defined in: [renderer.ts:340](https://github.com/graphql-markdown/graphql-markdo
 ##### outputDir
 
 ```ts
-outputDir: string;
+readonly outputDir: string;
 ```
 
 Defined in: [renderer.ts:337](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L337)
@@ -140,7 +140,7 @@ Defined in: [renderer.ts:337](https://github.com/graphql-markdown/graphql-markdo
 ##### prettify
 
 ```ts
-prettify: boolean;
+readonly prettify: boolean;
 ```
 
 Defined in: [renderer.ts:339](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L339)
@@ -247,7 +247,7 @@ await renderer.generateIndexMetafile("docs/types", "Types", {
 preCollectCategories(rootTypeNames): void;
 ```
 
-Defined in: [renderer.ts:715](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L715)
+Defined in: [renderer.ts:705](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L705)
 
 Pre-collects all category names that will be generated during rendering.
 This allows the position manager to assign consistent positions before
@@ -283,7 +283,7 @@ Array of root type names from the schema
 renderHomepage(homepageLocation): Promise<void>;
 ```
 
-Defined in: [renderer.ts:765](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L765)
+Defined in: [renderer.ts:755](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L755)
 
 Renders the homepage for the documentation from a template file.
 Replaces placeholders in the template with actual values.
@@ -536,11 +536,11 @@ function getRenderer(
   group,
   prettify,
   docOptions,
-  mdxModule?,
+  mdxExtension,
 ): Promise<Renderer>;
 ```
 
-Defined in: [renderer.ts:997](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L997)
+Defined in: [renderer.ts:987](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L987)
 
 Factory function to create and initialize a Renderer instance.
 Creates the output directory and returns a configured renderer.
@@ -583,11 +583,11 @@ Whether to prettify the output markdown
 
 Additional documentation options
 
-##### mdxModule?
+##### mdxExtension
 
-`unknown`
+`string`
 
-Optional MDX module for enhanced features
+Extension to use for MDX files
 
 #### Returns
 

@@ -41,7 +41,7 @@ A formatted string containing the complete directive definition
 ### printDirectiveMetadata()
 
 ```ts
-function printDirectiveMetadata(type, options): Promise<string | MDXString>;
+function printDirectiveMetadata(type, options): string | MDXString;
 ```
 
 Defined in: [graphql/directive.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/directive.ts#L48)
@@ -64,6 +64,6 @@ Configuration options for printing directive metadata
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted metadata string in MDX format or empty string if no arguments

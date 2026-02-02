@@ -10,6 +10,7 @@ function getPrinter(
   config?,
   options?,
   formatter?,
+  mdxDeclaration?,
 ): Promise<typeof IPrinter>;
 ```
 
@@ -46,6 +47,10 @@ Additional options for customizing the printer's behavior
 `Partial`&lt;`Formatter`&gt;
 
 Optional formatter functions for customizing output format (e.g., MDX)
+
+##### mdxDeclaration?
+
+`Maybe`&lt;`string`&gt;
 
 #### Returns
 

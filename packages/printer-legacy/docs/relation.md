@@ -45,7 +45,7 @@ function printRelationOf<T>(
   section,
   getRelation,
   options,
-): Promise<string | MDXString>;
+): string | MDXString;
 ```
 
 Defined in: [relation.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L65)
@@ -88,7 +88,7 @@ Printing options for type formatting
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted MDX string containing the relations or empty string if no relations found
 
@@ -107,7 +107,7 @@ const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);
 ### printRelations()
 
 ```ts
-function printRelations(type, options): Promise<string | MDXString>;
+function printRelations(type, options): string | MDXString;
 ```
 
 Defined in: [relation.ts:134](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L134)
@@ -130,7 +130,7 @@ Printing options for type formatting
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted MDX string containing all relations or empty string if no relations found
 

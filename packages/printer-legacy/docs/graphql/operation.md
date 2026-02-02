@@ -8,7 +8,7 @@ Provides utilities to print operation types, metadata, and code representations.
 ### printOperationMetadata()
 
 ```ts
-function printOperationMetadata(type, options): Promise<string | MDXString>;
+function printOperationMetadata(type, options): string | MDXString;
 ```
 
 Defined in: [graphql/operation.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L39)
@@ -31,7 +31,7 @@ Print type options for customizing output
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted string containing operation metadata or empty string if invalid
 
@@ -40,7 +40,7 @@ Formatted string containing operation metadata or empty string if invalid
 ### printOperationType()
 
 ```ts
-function printOperationType(type, options): Promise<string | MDXString>;
+function printOperationType(type, options): string | MDXString;
 ```
 
 Defined in: [graphql/operation.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L18)
@@ -63,6 +63,6 @@ Print type options for customizing output
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted string representation of the operation type or empty string if invalid

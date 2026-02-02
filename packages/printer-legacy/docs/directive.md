@@ -162,7 +162,7 @@ Markdown string containing all formatted directives
 ### printCustomTags()
 
 ```ts
-function printCustomTags(type, options): Promise<string | MDXString>;
+function printCustomTags(type, options): string | MDXString;
 ```
 
 Defined in: [directive.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L152)
@@ -185,6 +185,6 @@ General printing options
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted Markdown string of badges or empty string

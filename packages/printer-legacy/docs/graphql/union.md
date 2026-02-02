@@ -39,7 +39,7 @@ SDL string representation of the union type
 ### printUnionMetadata()
 
 ```ts
-function printUnionMetadata(type, options): Promise<string | MDXString>;
+function printUnionMetadata(type, options): string | MDXString;
 ```
 
 Defined in: [graphql/union.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/union.ts#L22)
@@ -62,6 +62,6 @@ Configuration options for printing
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 Formatted MDX string containing the union type's possible types

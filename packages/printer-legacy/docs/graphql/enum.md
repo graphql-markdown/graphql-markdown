@@ -39,7 +39,7 @@ A string containing the enum type definition in GraphQL SDL, or empty string if 
 ### printEnumMetadata()
 
 ```ts
-function printEnumMetadata(type, options): Promise<string | MDXString>;
+function printEnumMetadata(type, options): string | MDXString;
 ```
 
 Defined in: [graphql/enum.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L25)
@@ -62,6 +62,6 @@ Options for printing the type
 
 #### Returns
 
-`Promise`&lt;`string` \| `MDXString`&gt;
+`string` \| `MDXString`
 
 A string containing the metadata section in MDX format, or empty string if type is not an enum
