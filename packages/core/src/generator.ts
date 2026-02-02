@@ -54,12 +54,9 @@ import { registerMDXEventHandlers } from "./event-handlers";
 /**
  * Supported file extensions for generated documentation files.
  *
- * @constant
- * @readonly
- * @type {{ MDX: ".mdx", MD: ".md" }}
- *
- * @property {string} MDX - MDX file extension (.mdx) for React component-enabled markdown
- * @property {string} MD - Standard markdown file extension (.md)
+ * @remarks
+ * - MDX: MDX file extension (.mdx) for React component-enabled markdown
+ * - MD: Standard markdown file extension (.md)
  */
 export const FILE_EXTENSION = {
   MDX: ".mdx",
