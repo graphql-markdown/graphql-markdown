@@ -1,44 +1,52 @@
-# events/render-root-types
+# events/format
 
-Render root types event class.
+MDX formatting event classes.
 
 ## Events
 
-### RenderRootTypesEvent
+### FormatEvent
 
-Defined in: [events/render-root-types.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-root-types.ts#L14)
+Defined in: [events/format.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/format.ts#L14)
 
-Event emitted before/after rendering root types.
+Generic format event with typed data and result.
 
 #### Extends
 
 - [`CancellableEvent`](base.md#cancellableevent)
+
+#### Type Parameters
+
+##### U
+
+`U`
+
+##### V
+
+`V`
 
 #### Constructors
 
 ##### Constructor
 
 ```ts
-new RenderRootTypesEvent(data, options?): RenderRootTypesEvent;
+new FormatEvent<U, V>(data, options): FormatEvent<U, V>;
 ```
 
-Defined in: [events/render-root-types.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-root-types.ts#L20)
+Defined in: [events/format.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/format.ts#L20)
 
 ###### Parameters
 
 ###### data
 
-###### rootTypes
+`U`
 
-`unknown`
-
-###### options?
+###### options
 
 [`CancellableEventOptions`](base.md#cancellableeventoptions)
 
 ###### Returns
 
-[`RenderRootTypesEvent`](#renderroottypesevent)
+[`FormatEvent`](#formatevent)&lt;`U`, `V`&gt;
 
 ###### Overrides
 
@@ -49,18 +57,22 @@ Defined in: [events/render-root-types.ts:20](https://github.com/graphql-markdown
 ##### data
 
 ```ts
-readonly data: object;
+readonly data: U;
 ```
 
-Defined in: [events/render-root-types.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-root-types.ts#L16)
+Defined in: [events/format.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/format.ts#L16)
 
-Event data containing root types
+The event data
 
-###### rootTypes
+##### result?
 
 ```ts
-rootTypes: unknown;
+optional result: V;
 ```
+
+Defined in: [events/format.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/format.ts#L18)
+
+The formatted result. Set by event handlers.
 
 #### Accessors
 

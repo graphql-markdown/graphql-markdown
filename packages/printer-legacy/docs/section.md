@@ -13,10 +13,10 @@ function printMetadataSection<T, V>(
   values,
   section,
   options,
-): string | MDXString;
+): Promise<string | MDXString>;
 ```
 
-Defined in: [section.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L169)
+Defined in: [section.ts:171](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L171)
 
 Prints a metadata section with special handling for deprecated items.
 
@@ -62,7 +62,7 @@ Configuration options for printing
 
 #### Returns
 
-`string` \| `MDXString`
+`Promise`&lt;`string` \| `MDXString`&gt;
 
 Formatted MDX string containing the metadata section
 
@@ -71,10 +71,10 @@ Formatted MDX string containing the metadata section
 ### printSection()
 
 ```ts
-function printSection<V>(values, section, options): string | MDXString;
+function printSection<V>(values, section, options): Promise<string | MDXString>;
 ```
 
-Defined in: [section.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L118)
+Defined in: [section.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L120)
 
 Prints a complete section with title and content.
 
@@ -108,7 +108,7 @@ Configuration options for printing
 
 #### Returns
 
-`string` \| `MDXString`
+`Promise`&lt;`string` \| `MDXString`&gt;
 
 Formatted MDX string containing the complete section
 
@@ -117,7 +117,7 @@ Formatted MDX string containing the complete section
 ### printSectionItem()
 
 ```ts
-function printSectionItem<T>(type, options): string | MDXString;
+function printSectionItem<T>(type, options): Promise<string | MDXString>;
 ```
 
 Defined in: [section.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L33)
@@ -148,7 +148,7 @@ Configuration options for printing
 
 #### Returns
 
-`string` \| `MDXString`
+`Promise`&lt;`string` \| `MDXString`&gt;
 
 Formatted MDX string containing the section item
 
@@ -157,7 +157,7 @@ Formatted MDX string containing the section item
 ### printSectionItems()
 
 ```ts
-function printSectionItems<V>(values, options): string | MDXString;
+function printSectionItems<V>(values, options): Promise<string | MDXString>;
 ```
 
 Defined in: [section.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L83)
@@ -188,6 +188,6 @@ Configuration options for printing
 
 #### Returns
 
-`string` \| `MDXString`
+`Promise`&lt;`string` \| `MDXString`&gt;
 
 Formatted MDX string containing all section items

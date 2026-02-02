@@ -14,15 +14,23 @@ Defined in: [mdx/category.ts:22](https://github.com/graphql-markdown/graphql-mar
 
 ##### event
 
-###### category
+###### data
+
+\{
+`category`: `string`;
+`dirPath`: `string`;
+`options?`: `Record`&lt;`string`, `unknown`&gt;;
+\}
+
+###### data.category
 
 `string`
 
-###### dirPath
+###### data.dirPath
 
 `string`
 
-###### options?
+###### data.options?
 
 `Record`&lt;`string`, `unknown`&gt;
 

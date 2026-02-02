@@ -6,7 +6,7 @@ Base event class and utilities for GraphQL-Markdown events.
 
 ### `abstract` CancellableEvent
 
-Defined in: [events/base.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L50)
+Defined in: [events/base.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L55)
 
 Base class for all cancellable events in GraphQL-Markdown.
 
@@ -20,37 +20,32 @@ Provides common functionality:
 #### Extended by
 
 - [`DiffCheckEvent`](diff-check.md#diffcheckevent)
+- [`FormatEvent`](format.md#formatevent)
 - [`GenerateIndexMetafileEvent`](generate-index-metafile.md#generateindexmetafileevent)
 - [`RenderHomepageEvent`](render-homepage.md#renderhomepageevent)
 - [`RenderRootTypesEvent`](render-root-types.md#renderroottypesevent)
 - [`RenderTypeEntitiesEvent`](render-type-entities.md#rendertypeentitiesevent)
-- [`SchemaLoadEvent`](schema-load.md#schemaloadevent)
+- [`SchemaEvent`](schema-load.md#schemaevent)
 
 #### Constructors
 
 ##### Constructor
 
 ```ts
-new CancellableEvent(cancellable, defaultAction?): CancellableEvent;
+new CancellableEvent(options?): CancellableEvent;
 ```
 
-Defined in: [events/base.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L81)
+Defined in: [events/base.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L87)
 
 Creates a new CancellableEvent.
 
 ###### Parameters
 
-###### cancellable
+###### options?
 
-`boolean` = `true`
+[`CancellableEventOptions`](#cancellableeventoptions)
 
-Whether this event can be cancelled (default: true)
-
-###### defaultAction?
-
-`DefaultAction`
-
-Optional function to execute as default action
+Configuration options for the event
 
 ###### Returns
 
@@ -66,7 +61,7 @@ Optional function to execute as default action
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: [events/base.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L103)
+Defined in: [events/base.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L109)
 
 Gets the default action function if one was provided.
 
@@ -82,7 +77,7 @@ Gets the default action function if one was provided.
 get defaultPrevented(): boolean;
 ```
 
-Defined in: [events/base.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L89)
+Defined in: [events/base.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L95)
 
 Gets whether the default action has been prevented.
 
@@ -98,7 +93,7 @@ Gets whether the default action has been prevented.
 get propagationStopped(): boolean;
 ```
 
-Defined in: [events/base.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L96)
+Defined in: [events/base.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L102)
 
 Gets whether propagation has been stopped.
 
@@ -114,7 +109,7 @@ Gets whether propagation has been stopped.
 preventDefault(): void;
 ```
 
-Defined in: [events/base.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L121)
+Defined in: [events/base.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L127)
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -140,7 +135,7 @@ events.on("beforeLoadSchema", (event) => {
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: [events/base.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L154)
+Defined in: [events/base.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L160)
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -163,7 +158,7 @@ This method will only execute the `_defaultAction` if:
 stopPropagation(): void;
 ```
 
-Defined in: [events/base.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L140)
+Defined in: [events/base.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L146)
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.
@@ -183,6 +178,30 @@ events.on("beforeLoadSchema", (event) => {
 ```
 
 ## Other
+
+### CancellableEventOptions
+
+Defined in: [events/base.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L39)
+
+#### Properties
+
+##### cancellable?
+
+```ts
+optional cancellable: boolean;
+```
+
+Defined in: [events/base.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L41)
+
+##### defaultAction?
+
+```ts
+optional defaultAction: DefaultAction;
+```
+
+Defined in: [events/base.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L40)
+
+---
 
 ### deepFreeze()
 

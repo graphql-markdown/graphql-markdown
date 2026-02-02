@@ -13,10 +13,13 @@ callback names in MDX modules. Kept separate to avoid circular dependencies.
 const EVENT_CALLBACK_MAP: object;
 ```
 
-Defined in: [event-map.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L20)
+Defined in: [event-map.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L23)
 
 Event callback mapping configuration.
 Maps event names to their corresponding callback names in mdxModule.
+
+Note: Format functions (formatMDXBadge, formatMDXAdmonition, etc.) are NOT included here.
+They are pure transformations handled via the Formatter interface, not events.
 
 #### Type Declaration
 

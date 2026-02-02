@@ -90,7 +90,7 @@ The badge object containing text and optional classname
 
 `PrintTypeOptions`
 
-Options for printing/formatting the badge
+Options containing the formatter for badges
 
 #### Returns
 
@@ -106,7 +106,7 @@ Formatted MDX string representation of the badge
 function printBadges(type, options): string | MDXString;
 ```
 
-Defined in: [badge.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L114)
+Defined in: [badge.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L118)
 
 Generates and formats all applicable badges for a GraphQL type.
 

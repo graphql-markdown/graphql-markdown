@@ -77,7 +77,7 @@ GraphQL type definition as a code block string
 ### printObjectMetadata()
 
 ```ts
-function printObjectMetadata(type, options): string;
+function printObjectMetadata(type, options): Promise<string>;
 ```
 
 Defined in: [graphql/object.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/object.ts#L42)
@@ -100,6 +100,6 @@ Printing options
 
 #### Returns
 
-`string`
+`Promise`&lt;`string`&gt;
 
 Markdown formatted string containing fields and interfaces metadata

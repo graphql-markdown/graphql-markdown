@@ -130,7 +130,7 @@ export class Printer implements IPrinter {
    * @param baseURL - Base URL path for documentation, e.g. '/docs'
    * @param linkRoot - Root path for generating links between types
    * @param options - Configuration options for the printer
-   * @param mdxParser - Optional MDX parser module for MDX output support
+   * @param formatter - Optional formatter functions for customizing output format
    */
   static async init(
     schema: Maybe<GraphQLSchema>,

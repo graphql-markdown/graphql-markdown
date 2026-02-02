@@ -9,11 +9,11 @@ function getPrinter(
   printerModule?,
   config?,
   options?,
-  mdxModule?,
+  formatter?,
 ): Promise<typeof IPrinter>;
 ```
 
-Defined in: [printer.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L60)
+Defined in: [printer.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L61)
 
 Loads and initializes a printer module for GraphQL schema documentation.
 
@@ -41,11 +41,11 @@ Configuration for the printer including schema, baseURL, and linkRoot
 
 Additional options for customizing the printer's behavior
 
-##### mdxModule?
+##### formatter?
 
-`unknown`
+`Partial`&lt;`Formatter`&gt;
 
-Optional MDX module for MDX-specific functionality
+Optional formatter functions for customizing output format (e.g., MDX)
 
 #### Returns
 
