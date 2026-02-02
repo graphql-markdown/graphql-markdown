@@ -260,11 +260,11 @@ export abstract class IPrinter {
    * @param options - Optional configuration options for printing
    * @returns MDX string containing complete type documentation
    */
-  static printType(
+  static async printType(
     name: string,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): MDXString;
+  ): Promise<MDXString>;
 }
 
 /**

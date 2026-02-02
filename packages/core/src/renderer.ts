@@ -633,12 +633,19 @@ export class Renderer {
           return this.formatCategoryFolderName(categoryName, false);
         },
       };
-      content = this.printer.printType(fileName, type, printOptions);
+      content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
+        log(
+          `No content generated for "${name}" - printType returned empty`,
+          LogLevel.warn,
+        );
         return undefined;
       }
-    } catch {
-      log(`An error occurred while processing "${type}"`, LogLevel.warn);
+    } catch (error) {
+      log(
+        `An error occurred while processing "${name}": ${error instanceof Error ? error.message : String(error)}`,
+        LogLevel.warn,
+      );
       return undefined;
     }
 

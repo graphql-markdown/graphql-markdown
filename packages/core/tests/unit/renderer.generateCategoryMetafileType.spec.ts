@@ -66,7 +66,7 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
  */
 function mockGenerateIndexMetafileHook(mockFn: jest.Mock): void {
   getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
-    mockFn(event.dirPath, event.category, event.options);
+    mockFn(event.data.dirPath, event.data.category, event.data.options);
   });
 }
 

@@ -4,8 +4,7 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction } from "@graphql-markdown/types";
-import { CancellableEvent } from "./base";
+import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
  * Event emitted before/after rendering root types.
@@ -13,15 +12,18 @@ import { CancellableEvent } from "./base";
  * @category Events
  */
 export class RenderRootTypesEvent extends CancellableEvent {
-  /** Root types to render */
-  readonly rootTypes: unknown;
-
-  constructor(data: {
+  /** Event data containing root types */
+  readonly data: {
     rootTypes: unknown;
-    defaultAction?: DefaultAction;
-    cancellable?: boolean;
-  }) {
-    super(data.cancellable, data.defaultAction);
-    this.rootTypes = data.rootTypes;
+  };
+
+  constructor(
+    data: {
+      rootTypes: unknown;
+    },
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
   }
 }

@@ -23,13 +23,4 @@ export { RenderRootTypesEvent } from "./render-root-types";
 export { RenderHomepageEvent } from "./render-homepage";
 export { RenderTypeEntitiesEvent } from "./render-type-entities";
 export { GenerateIndexMetafileEvent } from "./generate-index-metafile";
-export {
-  FormatBadgeEvent,
-  FormatAdmonitionEvent,
-  FormatBulletEvent,
-  FormatDetailsEvent,
-  FormatFrontmatterEvent,
-  FormatLinkEvent,
-  FormatNameEntityEvent,
-  FormatSpecifiedByLinkEvent,
-} from "./format";
+export { FormatEvent } from "./format";

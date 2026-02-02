@@ -7,6 +7,7 @@ import {
   GenerateIndexMetafileEvent,
   RenderTypeEntitiesEvent,
 } from "../../src/events";
+import { CancellableEventOptions } from "../../src/events/base";
 
 describe("events", () => {
   afterEach(() => {
@@ -54,8 +55,11 @@ describe("events", () => {
     class TestEvent extends CancellableEvent {
       readonly data: string;
 
-      constructor(data: string, cancellable = true) {
-        super(cancellable);
+      constructor(
+        data: string,
+        options?: { cancellable?: boolean; defaultAction?: () => void },
+      ) {
+        super(options as CancellableEventOptions);
         this.data = data;
         // Don't freeze - it prevents preventDefault/stopPropagation from working
       }
@@ -90,7 +94,7 @@ describe("events", () => {
     });
 
     it("should not prevent default if event is not cancellable", () => {
-      const event = new TestEvent("test", false);
+      const event = new TestEvent("test", { cancellable: false });
 
       event.preventDefault();
 
@@ -98,7 +102,7 @@ describe("events", () => {
     });
 
     it("should always stop propagation regardless of cancellable flag", () => {
-      const event = new TestEvent("test", false);
+      const event = new TestEvent("test", { cancellable: false });
 
       event.stopPropagation();
 
@@ -130,15 +134,17 @@ describe("events", () => {
         schemaLocation: "/path/to/schema.graphql",
       });
 
-      expect(event.schemaLocation).toBe("/path/to/schema.graphql");
+      expect(event.data.schemaLocation).toBe("/path/to/schema.graphql");
     });
 
     it("should accept defaultAction", () => {
       const defaultAction = jest.fn(() => Promise.resolve());
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema.graphql",
-        defaultAction,
-      });
+      const event = new SchemaEvent(
+        {
+          schemaLocation: "/path/to/schema.graphql",
+        },
+        { defaultAction },
+      );
 
       expect(event.defaultAction).toBe(defaultAction);
     });
@@ -154,10 +160,12 @@ describe("events", () => {
     });
 
     it("should respect cancellable parameter", () => {
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema.graphql",
-        cancellable: false,
-      });
+      const event = new SchemaEvent(
+        {
+          schemaLocation: "/path/to/schema.graphql",
+        },
+        { cancellable: false },
+      );
 
       event.preventDefault();
 
@@ -174,9 +182,9 @@ describe("events", () => {
         options,
       });
 
-      expect(event.dirPath).toBe("/docs/api");
-      expect(event.category).toBe("types");
-      expect(event.options).toBe(options);
+      expect(event.data.dirPath).toBe("/docs/api");
+      expect(event.data.category).toBe("types");
+      expect(event.data.options).toBe(options);
     });
 
     it("should work without options", () => {
@@ -185,7 +193,7 @@ describe("events", () => {
         category: "types",
       });
 
-      expect(event.options).toBeUndefined();
+      expect(event.data.options).toBeUndefined();
     });
   });
 
@@ -196,8 +204,8 @@ describe("events", () => {
         filePath: "/docs/types/user.md",
       });
 
-      expect(event.name).toBe("User");
-      expect(event.filePath).toBe("/docs/types/user.md");
+      expect(event.data.name).toBe("User");
+      expect(event.data.filePath).toBe("/docs/types/user.md");
     });
   });
 
@@ -332,10 +340,10 @@ describe("events", () => {
       const events = getEvents();
       const defaultAction = jest.fn(() => Promise.resolve());
 
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema",
-        defaultAction,
-      });
+      const event = new SchemaEvent(
+        { schemaLocation: "/path/to/schema" },
+        { defaultAction },
+      );
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
 
       expect(defaultAction).toHaveBeenCalled();
@@ -349,10 +357,10 @@ describe("events", () => {
         event.preventDefault();
       });
 
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema",
-        defaultAction,
-      });
+      const event = new SchemaEvent(
+        { schemaLocation: "/path/to/schema" },
+        { defaultAction },
+      );
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
 
       expect(defaultAction).not.toHaveBeenCalled();
@@ -380,12 +388,14 @@ describe("events", () => {
       const events = getEvents();
       const error = new Error("Default action failed");
 
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema",
-        defaultAction: () => {
-          throw error;
+      const event = new SchemaEvent(
+        { schemaLocation: "/path/to/schema" },
+        {
+          defaultAction: () => {
+            throw error;
+          },
         },
-      });
+      );
       const { errors } = await events.emitAsync(
         SchemaEvents.BEFORE_LOAD,
         event,
@@ -430,13 +440,15 @@ describe("events", () => {
       const events = getEvents();
       let executed = false;
 
-      const event = new SchemaEvent({
-        schemaLocation: "/path/to/schema",
-        defaultAction: async () => {
-          await new Promise((resolve) => setTimeout(resolve, 10));
-          executed = true;
+      const event = new SchemaEvent(
+        { schemaLocation: "/path/to/schema" },
+        {
+          defaultAction: async () => {
+            await new Promise((resolve) => setTimeout(resolve, 10));
+            executed = true;
+          },
         },
-      });
+      );
       await events.emitAsync(SchemaEvents.BEFORE_LOAD, event);
 
       expect(executed).toBe(true);

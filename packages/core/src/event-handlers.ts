@@ -11,6 +11,13 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 
 import { getEvents, resetEvents } from "./event-emitter";
 import { EVENT_CALLBACK_MAP } from "./event-map";
+import { FormatEvents } from "./events/format-events";
+
+/**
+ * Set of format event names that require special handling.
+ * Format events wrap the formatter function to extract event.data and set event.result.
+ */
+const FORMAT_EVENT_NAMES = new Set<string>(Object.values(FormatEvents));
 
 /**
  * Registers MDX module event handlers with the event emitter.
@@ -24,7 +31,7 @@ import { EVENT_CALLBACK_MAP } from "./event-map";
  * ```typescript
  * const mdxModule = {
  *   beforeLoadSchemaHook: async (event) => { console.log('Loading schema...'); },
- *   afterRenderTypeEntitiesHook: async (event) => { console.log('Rendered:', event.name); }
+ *   afterRenderTypeEntitiesHook: async (event) => { console.log('Rendered:', event.data.name); }
  * };
  * registerMDXEventHandlers(mdxModule);
  * ```
@@ -46,10 +53,27 @@ export const registerMDXEventHandlers = (mdxModule: unknown): void => {
       callbackName in mdxModule &&
       typeof (mdxModule as Record<string, unknown>)[callbackName] === "function"
     ) {
-      const handler = (mdxModule as Record<string, (...args: any[]) => void>)[
-        callbackName
-      ];
-      events.on(eventName, handler);
+      const mdxFunction = (
+        mdxModule as Record<string, (...args: any[]) => any>
+      )[callbackName];
+
+      // For format events, wrap the formatter to handle event.data
+      if (FORMAT_EVENT_NAMES.has(eventName)) {
+        events.on(eventName, (event: any) => {
+          try {
+            event.result = mdxFunction(event.data);
+          } catch (error) {
+            log(
+              `Error in format function ${callbackName}: ${error instanceof Error ? error.message : String(error)}`,
+              LogLevel.error,
+            );
+            throw error;
+          }
+        });
+      } else {
+        // For regular hooks, pass the event directly
+        events.on(eventName, mdxFunction);
+      }
       registeredHandlers.add(callbackName);
     }
   }

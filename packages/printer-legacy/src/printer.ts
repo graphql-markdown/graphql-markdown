@@ -188,8 +188,12 @@ export class Printer implements IPrinter {
       meta: meta,
     };
 
-    // Load MDX module instance for potential future use
-    await mdxModule(mdxParser);
+    // Load MDX module instance and merge into options
+    const mdxModuleInstance = await mdxModule(mdxParser);
+    Printer.options = {
+      ...Printer.options,
+      ...mdxModuleInstance,
+    };
   }
 
   /**

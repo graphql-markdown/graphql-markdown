@@ -4,8 +4,8 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction, Maybe } from "@graphql-markdown/types";
-import { CancellableEvent } from "./base";
+import type { Maybe } from "@graphql-markdown/types";
+import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
  * Event emitted before/after checking schema differences.
@@ -13,26 +13,22 @@ import { CancellableEvent } from "./base";
  * @category Events
  */
 export class DiffCheckEvent extends CancellableEvent {
-  /** Current schema being checked */
-  readonly schema: Maybe<unknown>;
-  /** Path to output directory for diff results */
-  readonly outputDir: Maybe<string>;
-  /**
-   * Indicates whether changes have been detected in the diff check.
-   * Returns `true` if changes exist, `false` if no changes, or `null`/`undefined` if the check hasn't been performed or is unavailable.
-   */
-  readonly hasChanges: Maybe<boolean>;
-
-  constructor(data: {
+  /** Event data containing schema, output directory, and change status */
+  readonly data: {
     schema?: unknown;
     outputDir?: string;
     schemaHasChanges?: boolean;
-    defaultAction?: DefaultAction;
-    cancellable?: boolean;
-  }) {
-    super(data.cancellable, data.defaultAction);
-    this.schema = data.schema;
-    this.outputDir = data.outputDir;
-    this.hasChanges = data.schemaHasChanges;
+  };
+
+  constructor(
+    data: {
+      schema?: unknown;
+      outputDir?: string;
+      schemaHasChanges?: boolean;
+    },
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
   }
 }

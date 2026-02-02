@@ -47,10 +47,15 @@ jest.mock("../../src/group", () => {
 });
 import * as Group from "../../src/group";
 
-jest.mock("../../src/format-helpers", () => {
+jest.mock("../../src/format-event", () => {
   return {
-    emitFormatBadgeEvent: jest.fn(
-      async (badge: { text: string; classname?: string }) => {
+    emitFormatEvent: jest.fn(
+      async (
+        _eventName: string,
+        data: { badge: { text: string; classname?: string } },
+        _formatter: any,
+      ) => {
+        const badge = data.badge;
         const classAttr = badge.classname
           ? ` class="gqlmd-mdx-badge gqlmd-mdx-badge--${badge.classname.toLowerCase()}"`
           : ' class="gqlmd-mdx-badge"';
@@ -75,10 +80,10 @@ describe("badge", () => {
       jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
       jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
-      const badges = await Badge.printBadges(
-        {},
-        { typeBadges: true, groups: undefined },
-      );
+      const badges = await Badge.printBadges({}, {
+        typeBadges: true,
+        groups: undefined,
+      } as PrintTypeOptions);
 
       expect(badges).toBe(
         '<mark class="gqlmd-mdx-badge gqlmd-mdx-badge--non_null">non-null</mark>',
@@ -88,10 +93,10 @@ describe("badge", () => {
     test("returns an empty string if typeBadges is not enabled", async () => {
       expect.assertions(1);
 
-      const badges = await Badge.printBadges(
-        {},
-        { typeBadges: false, groups: undefined },
-      );
+      const badges = await Badge.printBadges({}, {
+        typeBadges: false,
+        groups: undefined,
+      } as PrintTypeOptions);
 
       expect(badges).toBe("");
     });
@@ -112,10 +117,10 @@ describe("badge", () => {
 
       jest.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
 
-      const badges = await Badge.printBadges(
-        {},
-        { typeBadges: true, groups: undefined },
-      );
+      const badges = await Badge.printBadges({}, {
+        typeBadges: true,
+        groups: undefined,
+      } as PrintTypeOptions);
 
       expect(badges).toBe("");
     });

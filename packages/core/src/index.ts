@@ -30,13 +30,4 @@ export type { RenderTypeEntitiesEvent } from "./events/render-type-entities";
 export type { GenerateIndexMetafileEvent } from "./events/generate-index-metafile";
 
 // Event class exports (as values for instantiation)
-export {
-  FormatBadgeEvent,
-  FormatAdmonitionEvent,
-  FormatBulletEvent,
-  FormatDetailsEvent,
-  FormatFrontmatterEvent,
-  FormatLinkEvent,
-  FormatNameEntityEvent,
-  FormatSpecifiedByLinkEvent,
-} from "./events/format";
+export { FormatEvent } from "./events/format";

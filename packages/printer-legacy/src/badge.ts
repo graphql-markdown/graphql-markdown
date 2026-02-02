@@ -24,7 +24,8 @@ import {
   isNonNullType,
 } from "@graphql-markdown/graphql";
 
-import { emitFormatBadgeEvent } from "./format-helpers";
+import { FormatEvents } from "@graphql-markdown/core";
+import { emitFormatEvent } from "./format-event";
 
 import { getCategoryLocale } from "./link";
 import { getGroup } from "./group";
@@ -99,12 +100,14 @@ export const printBadge = async (
   { text, classname }: Badge,
   _options: PrintTypeOptions,
 ): Promise<MDXString> => {
-  const textString = typeof text === "object" ? text.singular : text;
-  const formattedText = escapeMDX(textString);
-  return emitFormatBadgeEvent({
-    text: formattedText,
-    classname,
-  });
+  const textString = escapeMDX(typeof text === "object" ? text.singular : text);
+  return emitFormatEvent(
+    FormatEvents.FORMAT_BADGE,
+    { badge: { text: textString, classname } as Badge },
+    ({ badge }) => {
+      return `<mark class="gqlmd-mdx-badge">${badge.text as string}</mark>` as MDXString;
+    },
+  );
 };
 
 /**

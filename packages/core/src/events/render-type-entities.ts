@@ -4,8 +4,7 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction } from "@graphql-markdown/types";
-import { CancellableEvent } from "./base";
+import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
  * Event emitted before/after rendering type entities.
@@ -13,19 +12,20 @@ import { CancellableEvent } from "./base";
  * @category Events
  */
 export class RenderTypeEntitiesEvent extends CancellableEvent {
-  /** Name of the type entity */
-  readonly name: string;
-  /** File path where entity will be rendered */
-  readonly filePath: string;
-
-  constructor(data: {
+  /** Event data containing name and file path */
+  readonly data: {
     name: string;
     filePath: string;
-    defaultAction?: DefaultAction;
-    cancellable?: boolean;
-  }) {
-    super(data.cancellable, data.defaultAction);
-    this.name = data.name;
-    this.filePath = data.filePath;
+  };
+
+  constructor(
+    data: {
+      name: string;
+      filePath: string;
+    },
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
   }
 }

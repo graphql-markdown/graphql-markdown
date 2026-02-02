@@ -41,7 +41,7 @@ const mdxModule = {
     console.log("Loading schema...");
   },
   afterRenderTypeEntitiesHook: async (event) => {
-    console.log("Rendered:", event.name);
+    console.log("Rendered:", event.data.name);
   },
 };
 registerMDXEventHandlers(mdxModule);
