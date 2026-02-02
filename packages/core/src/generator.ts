@@ -385,10 +385,7 @@ export const generateDocFromSchema = async ({
   const groups = getGroups(rootTypes, groupByDirective);
 
   // Extract formatter from the MDX module (for direct function calls)
-  const formatter = getFormatterFromMDXModule(
-    mdxModule,
-    docOptions ?? undefined,
-  );
+  const formatter = getFormatterFromMDXModule(mdxModule, docOptions);
 
   // Extract mdxDeclaration from the MDX module (if available)
   const mdxDeclaration =
