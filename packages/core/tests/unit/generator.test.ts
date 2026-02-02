@@ -561,6 +561,114 @@ describe("generator", () => {
       expect(loadMDXSpy).toHaveBeenCalledWith("custom-mdx-parser");
     });
 
+    test("uses .mdx extension when mdxModule is loaded", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      jest
+        .spyOn(GeneratorModule, "loadMDXModule")
+        .mockResolvedValueOnce({ createMDXFormatter: jest.fn() });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Verify the last argument (mdxExtension) is .mdx
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
+    });
+
+    test("uses custom mdxExtension from mdxModule when provided", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
+        createMDXFormatter: jest.fn(),
+        mdxExtension: ".custom",
+      });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Verify the last argument (mdxExtension) is the custom extension
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".custom");
+    });
+
+    test("does not use mdxDeclaration as file extension (regression test)", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      // This simulates a module that has both mdxDeclaration and mdxExtension
+      // The code should use mdxExtension, not mdxDeclaration
+      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
+        createMDXFormatter: jest.fn(),
+        mdxExtension: ".mdx",
+        mdxDeclaration:
+          "import { Badge } from '@astrojs/starlight/components';",
+      });
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      const rendererSpy = jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        mdxParser: "custom-mdx-parser",
+      });
+
+      // Should use mdxExtension (.mdx), not mdxDeclaration (the import statement)
+      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
+    });
+
     test("calls resolveSkipAndOnlyDirectives with directive options and schema", async () => {
       expect.assertions(1);
 

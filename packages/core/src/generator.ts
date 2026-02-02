@@ -405,7 +405,7 @@ export const generateDocFromSchema = async ({
     "mdxExtension" in mdxModule
   ) {
     mdxExtension = (mdxModule as Record<string, unknown>)
-      .mdxDeclaration as string;
+      .mdxExtension as string;
   } else if (mdxModule) {
     mdxExtension = FILE_EXTENSION.MDX;
   } else {
