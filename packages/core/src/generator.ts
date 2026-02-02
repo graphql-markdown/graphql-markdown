@@ -53,11 +53,11 @@ import { registerMDXEventHandlers } from "./event-handlers";
 
 /**
  * Supported file extensions for generated documentation files.
- * 
+ *
  * @constant
  * @readonly
  * @type {{ MDX: ".mdx", MD: ".md" }}
- * 
+ *
  * @property {string} MDX - MDX file extension (.mdx) for React component-enabled markdown
  * @property {string} MD - Standard markdown file extension (.md)
  */
@@ -397,15 +397,20 @@ export const generateDocFromSchema = async ({
     mdxDeclaration,
   );
 
-    // allow mdxModule to specify custom extension
-    let mdxExtension: string;
-    if (mdxModule && typeof mdxModule === "object" && "mdxExtension" in mdxModule) {
-      mdxExtension = (mdxModule as Record<string, unknown>).mdxDeclaration as string;
-    } else if (mdxModule) {
-      mdxExtension = FILE_EXTENSION.MDX;
-    } else {
-      mdxExtension = FILE_EXTENSION.MD;
-    }
+  // allow mdxModule to specify custom extension
+  let mdxExtension: string;
+  if (
+    mdxModule &&
+    typeof mdxModule === "object" &&
+    "mdxExtension" in mdxModule
+  ) {
+    mdxExtension = (mdxModule as Record<string, unknown>)
+      .mdxDeclaration as string;
+  } else if (mdxModule) {
+    mdxExtension = FILE_EXTENSION.MDX;
+  } else {
+    mdxExtension = FILE_EXTENSION.MD;
+  }
 
   const renderer = await getRenderer(
     printer,

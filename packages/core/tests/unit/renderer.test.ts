@@ -108,7 +108,7 @@ describe("renderer", () => {
         undefined,
         DEFAULT_OPTIONS.pretty!,
         DEFAULT_RENDERER_OPTIONS,
-        "mdx",
+        ".mdx",
       );
 
       // silent console
@@ -173,7 +173,7 @@ describe("renderer", () => {
         );
       });
 
-      test("creates entity page with MDX extension when hasMDXSupport is true", async () => {
+      test("creates entity page with MDX extension when mdxExtension is .mdx", async () => {
         expect.assertions(1);
 
         jest
@@ -181,7 +181,7 @@ describe("renderer", () => {
           .mockReturnValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
-        jest.replaceProperty(rendererInstance, "mdxModule", {});
+        jest.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -1797,7 +1797,7 @@ describe("renderer", () => {
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx"
+          "mdx",
         );
 
         // Register root-level groups
@@ -2002,7 +2002,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnPromise("Lorem ipsum" as MDXString);
+          .mockReturnValue("Lorem ipsum" as MDXString);
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(

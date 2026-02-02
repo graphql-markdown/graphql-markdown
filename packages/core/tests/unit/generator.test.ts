@@ -186,7 +186,7 @@ describe("generator", () => {
             deprecated: options.printTypeOptions!.deprecated,
             hierarchy: options.printTypeOptions!.hierarchy,
           },
-          undefined,
+          ".md",
         );
       },
     );

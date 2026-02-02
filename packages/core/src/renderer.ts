@@ -601,7 +601,10 @@ export class Renderer {
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
     const fileName = slugify(name);
-    const filePath = join(normalize(dirPath), `${fileName}.${this.mdxExtension}`);
+    const filePath = join(
+      normalize(dirPath),
+      `${fileName}${this.mdxExtension}`,
+    );
 
     let content: Maybe<MDXString>;
     try {
