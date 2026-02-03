@@ -1,3 +1,44 @@
+<a id="1.32.0"></a>
+# [1.32.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.32.0) - 2026-02-03
+
+Introducing **Printer Hooks**, giving you full control over the generated code and documentation output!
+
+### What's New
+
+New lifecycle hooks allow you to intercept and modify the printer output:
+
+- `beforePrintCodeHook` / `afterPrintCodeHook` - Customize code block generation
+- `beforePrintTypeHook` / `afterPrintTypeHook` - Customize type documentation generation
+
+### Usage Example
+
+```js title="custom-mdx.cjs"
+const DocusaurusMDX = require("@graphql-markdown/docusaurus/mdx");
+
+const afterPrintCodeHook = async (event) => {
+  // Add response type information after operations
+  event.output = `${event.output}\n\n<!-- Custom content -->`;
+};
+
+module.exports = {
+  ...DocusaurusMDX,  // Keep all default formatters
+  afterPrintCodeHook, // Add your custom hook
+};
+```
+
+See the [Hooks Recipes](/docs/advanced/hook-recipes) documentation for detailed examples including how to display response types for operations.
+
+### Other Changes
+
+- 🐛 Fixed missing MDX import declaration in generated files when using custom `mdxParser`
+- 📝 Updated documentation for hooks and framework integration
+- ♻️ Moved to more event-driven architecture for better extensibility
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.0...1.32.0
+
+[Changes][1.32.0]
+
+
 <a id="1.31.2"></a>
 # [1.31.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.31.2) - 2026-02-03
 
@@ -2165,6 +2206,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.32.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.2...1.32.0
 [1.31.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.0...1.31.2
 [1.31.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.3...1.31.0
 [1.30.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.2...1.30.3
