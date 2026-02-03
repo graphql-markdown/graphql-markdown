@@ -77,6 +77,7 @@ class CancellableEventEmitter extends EventEmitter {
     for (const listener of listeners) {
       try {
         // Call the handler - await to support async handlers
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         await listener(event);
 
         // Check if handler stopped propagation to remaining handlers

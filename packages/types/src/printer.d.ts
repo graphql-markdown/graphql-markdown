@@ -47,8 +47,7 @@ export interface PrinterEventEmitter {
    */
   emitAsync: (
     eventName: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    event: any,
+    event: unknown,
   ) => Promise<{ errors: Error[]; defaultPrevented: boolean }>;
 }
 

@@ -606,7 +606,9 @@ describe("Printer", () => {
 
   describe("printCodeAsync()", () => {
     const mockEventEmitter = {
-      emitAsync: jest.fn().mockResolvedValue({ errors: [], defaultPrevented: false }),
+      emitAsync: jest
+        .fn()
+        .mockResolvedValue({ errors: [], defaultPrevented: false }),
     };
 
     beforeEach(() => {
@@ -622,13 +624,14 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+      jest
+        .spyOn(GraphQLPrinter, "printCodeEnum")
+        .mockReturnValue("enum Test { }");
 
-      const result = await Printer.printCodeAsync(
-        { name: "Test" },
-        "test",
-        { ...DEFAULT_OPTIONS, codeSection: true },
-      );
+      const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
+        ...DEFAULT_OPTIONS,
+        codeSection: true,
+      });
 
       expect(result).toContain("enum Test { }");
     });
@@ -638,13 +641,14 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = mockEventEmitter;
       jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+      jest
+        .spyOn(GraphQLPrinter, "printCodeEnum")
+        .mockReturnValue("enum Test { }");
 
-      await Printer.printCodeAsync(
-        { name: "Test" },
-        "test",
-        { ...DEFAULT_OPTIONS, codeSection: true },
-      );
+      await Printer.printCodeAsync({ name: "Test" }, "test", {
+        ...DEFAULT_OPTIONS,
+        codeSection: true,
+      });
 
       expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(2);
       expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
@@ -677,13 +681,14 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = modifiedEmitter;
       jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+      jest
+        .spyOn(GraphQLPrinter, "printCodeEnum")
+        .mockReturnValue("enum Test { }");
 
-      const result = await Printer.printCodeAsync(
-        { name: "Test" },
-        "test",
-        { ...DEFAULT_OPTIONS, codeSection: true },
-      );
+      const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
+        ...DEFAULT_OPTIONS,
+        codeSection: true,
+      });
 
       expect(result).toContain("MODIFIED:");
     });
@@ -703,13 +708,14 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = preventingEmitter;
       jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+      jest
+        .spyOn(GraphQLPrinter, "printCodeEnum")
+        .mockReturnValue("enum Test { }");
 
-      const result = await Printer.printCodeAsync(
-        { name: "Test" },
-        "test",
-        { ...DEFAULT_OPTIONS, codeSection: true },
-      );
+      const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
+        ...DEFAULT_OPTIONS,
+        codeSection: true,
+      });
 
       expect(result).toBe("CUSTOM OUTPUT");
     });
@@ -717,7 +723,9 @@ describe("Printer", () => {
 
   describe("printType() with events", () => {
     const mockEventEmitter = {
-      emitAsync: jest.fn().mockResolvedValue({ errors: [], defaultPrevented: false }),
+      emitAsync: jest
+        .fn()
+        .mockResolvedValue({ errors: [], defaultPrevented: false }),
     };
 
     beforeEach(() => {

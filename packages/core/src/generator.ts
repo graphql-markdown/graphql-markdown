@@ -51,7 +51,6 @@ import {
   RenderHomepageEvents,
 } from "./events";
 import { registerMDXEventHandlers } from "./event-handlers";
-import { error } from "node:console";
 
 /**
  * Supported file extensions for generated documentation files.
@@ -93,11 +92,11 @@ export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
   return mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser as string).catch((err: unknown) => {
+    ? import(mdxParser as string).catch((error: unknown) => {
         const errorMessage =
-          err instanceof Error ? err.message : String(err ?? "Unknown error");
+          error instanceof Error ? error.message : String(error);
         log(
-          `An error occurred while loading MDX formatter "${mdxParser}"\n${errorMessage}`,
+          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
           LogLevel.warn,
         );
         return undefined;
@@ -118,6 +117,41 @@ const FORMATTER_FUNCTION_NAMES = [
   "formatMDXNameEntity",
   "formatMDXSpecifiedByLink",
 ] as const;
+
+/**
+ * Gets a property from an MDX module, checking both the module directly and `module.default`.
+ *
+ * This handles the differences between ESM and CommonJS module exports when dynamically importing.
+ *
+ * @param mdxModule - The loaded MDX module
+ * @param propertyName - The name of the property to extract
+ * @returns The property value if found, otherwise undefined
+ *
+ * @internal
+ */
+export const getMDXModuleProperty = <T>(
+  mdxModule: unknown,
+  propertyName: string,
+): T | undefined => {
+  if (!mdxModule || typeof mdxModule !== "object") {
+    return undefined;
+  }
+
+  const module = mdxModule as Record<string, unknown>;
+
+  // Check for property directly on the module
+  if (propertyName in module) {
+    return module[propertyName] as T;
+  }
+
+  // Check for property on module.default (ESM default export)
+  const defaultExport = module.default as Record<string, unknown> | undefined;
+  if (defaultExport && propertyName in defaultExport) {
+    return defaultExport[propertyName] as T;
+  }
+
+  return undefined;
+};
 
 /**
  * Extracts a formatter from an MDX module.
@@ -393,12 +427,10 @@ export const generateDocFromSchema = async ({
   const formatter = getFormatterFromMDXModule(mdxModule, docOptions);
 
   // Extract mdxDeclaration from the MDX module (if available)
-  const mdxDeclaration =
-    mdxModule && typeof mdxModule === "object" && "mdxDeclaration" in mdxModule
-      ? ((mdxModule as Record<string, unknown>).mdxDeclaration as
-          | string
-          | undefined)
-      : undefined;
+  const mdxDeclaration = getMDXModuleProperty<string>(
+    mdxModule,
+    "mdxDeclaration",
+  );
 
   const printer = await getPrinter(
     // module mandatory
@@ -431,14 +463,13 @@ export const generateDocFromSchema = async ({
   );
 
   // allow mdxModule to specify custom extension
+  const mdxExtensionFromModule = getMDXModuleProperty<string>(
+    mdxModule,
+    "mdxExtension",
+  );
   let mdxExtension: string;
-  if (
-    mdxModule &&
-    typeof mdxModule === "object" &&
-    "mdxExtension" in mdxModule
-  ) {
-    mdxExtension = (mdxModule as Record<string, unknown>)
-      .mdxExtension as string;
+  if (mdxExtensionFromModule) {
+    mdxExtension = mdxExtensionFromModule;
   } else if (mdxModule) {
     mdxExtension = FILE_EXTENSION.MDX;
   } else {

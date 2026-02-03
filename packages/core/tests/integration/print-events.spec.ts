@@ -36,7 +36,10 @@ describe("Print Events Integration", () => {
 
       // Verify the handler was registered
       const listeners = events.listeners(PrintTypeEvents.AFTER_PRINT_TYPE);
-      console.log("Registered listeners for print:afterPrintType:", listeners.length);
+      console.log(
+        "Registered listeners for print:afterPrintType:",
+        listeners.length,
+      );
       expect(listeners.length).toBe(1);
 
       // Create a mock event similar to what Printer would create
@@ -88,7 +91,7 @@ describe("Print Events Integration", () => {
 
       // Register handlers first
       registerMDXEventHandlers(mdxModule);
-      
+
       // Then get the events singleton (after reset)
       const events = getEvents();
 
@@ -98,9 +101,15 @@ describe("Print Events Integration", () => {
         output: "",
         defaultPrevented: false,
         propagationStopped: false,
-        preventDefault(): void { this.defaultPrevented = true; },
-        stopPropagation(): void { this.propagationStopped = true; },
-        async runDefaultAction(): Promise<void> { return void 0; },
+        preventDefault(): void {
+          this.defaultPrevented = true;
+        },
+        stopPropagation(): void {
+          this.propagationStopped = true;
+        },
+        async runDefaultAction(): Promise<void> {
+          return void 0;
+        },
       };
 
       await events.emitAsync(PrintTypeEvents.BEFORE_PRINT_TYPE, mockEvent);
