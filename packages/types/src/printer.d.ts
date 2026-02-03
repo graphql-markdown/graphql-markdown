@@ -7,6 +7,7 @@ import type {
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
 } from "./core";
+import type { ICancellableEvent } from "./event";
 import type { Formatter } from "./formatter";
 import type {
   GraphQLDirective,
@@ -51,12 +52,12 @@ export interface PrinterEventEmitter {
    * Handlers can modify the event's mutable properties.
    *
    * @param eventName - The event name to emit
-   * @param event - The event object with data and mutable output
+   * @param event - The event object (PrinterEvent or CancellableEvent instance)
    * @returns Promise that resolves when all handlers have executed
    */
-  emitAsync: <E extends PrinterEvent>(
+  emitAsync: (
     eventName: string,
-    event: E,
+    event: ICancellableEvent | PrinterEvent,
   ) => Promise<{ errors: Error[]; defaultPrevented: boolean }>;
 }
 

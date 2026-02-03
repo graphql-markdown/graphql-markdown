@@ -1,5 +1,5 @@
 import { EventEmitter } from "node:events";
-import type { CancellableEvent } from "./events/base";
+import type { ICancellableEvent, PrinterEvent } from "@graphql-markdown/types";
 
 /**
  * Result object returned when emitting a cancellable event.
@@ -66,12 +66,15 @@ class CancellableEventEmitter extends EventEmitter {
    */
   async emitAsync(
     eventName: string,
-    event: CancellableEvent,
+    event: ICancellableEvent | PrinterEvent,
   ): Promise<EmitResult> {
     const errors: Error[] = [];
 
     // Get all registered listeners for this event
     const listeners = this.listeners(eventName);
+
+    // Check if event is a full cancellable event (has propagationStopped property)
+    const isCancellable = "propagationStopped" in event;
 
     // Execute each handler sequentially
     for (const listener of listeners) {
@@ -81,7 +84,10 @@ class CancellableEventEmitter extends EventEmitter {
         await listener(event);
 
         // Check if handler stopped propagation to remaining handlers
-        if (event.propagationStopped) {
+        if (
+          isCancellable &&
+          (event as { propagationStopped?: boolean }).propagationStopped
+        ) {
           break; // Exit the loop, skipping remaining handlers
         }
       } catch (error) {
@@ -91,15 +97,25 @@ class CancellableEventEmitter extends EventEmitter {
     }
 
     // Execute default action if not prevented and event has one
-    try {
-      // Call defaultAction - await to support async
-      await event.runDefaultAction();
-    } catch (error) {
-      // Collect error from default action
-      errors.push(error instanceof Error ? error : new Error(String(error)));
+    if ("runDefaultAction" in event) {
+      try {
+        // Call defaultAction - await to support async
+        await (
+          event as { runDefaultAction: () => Promise<void> }
+        ).runDefaultAction();
+      } catch (error) {
+        // Collect error from default action
+        errors.push(error instanceof Error ? error : new Error(String(error)));
+      }
     }
 
-    return { errors, defaultPrevented: event.defaultPrevented };
+    // Check defaultPrevented - simple events may have this property
+    const defaultPrevented =
+      "defaultPrevented" in event
+        ? !!(event as { defaultPrevented?: boolean }).defaultPrevented
+        : false;
+
+    return { errors, defaultPrevented };
   }
 }
 
