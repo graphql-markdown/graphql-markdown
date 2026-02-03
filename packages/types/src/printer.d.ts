@@ -17,6 +17,15 @@ import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
 
 /**
+ * Base interface for printer events.
+ * All print events must have a mutable output property.
+ */
+export interface PrinterEvent {
+  /** The generated output that handlers can modify */
+  output: Maybe<MDXString> | MDXString | string;
+}
+
+/**
  * Minimal event emitter interface for printer event emission.
  *
  * This interface allows the printer to emit events without depending on the core package.
@@ -45,9 +54,9 @@ export interface PrinterEventEmitter {
    * @param event - The event object with data and mutable output
    * @returns Promise that resolves when all handlers have executed
    */
-  emitAsync: (
+  emitAsync: <E extends PrinterEvent>(
     eventName: string,
-    event: unknown,
+    event: E,
   ) => Promise<{ errors: Error[]; defaultPrevented: boolean }>;
 }
 

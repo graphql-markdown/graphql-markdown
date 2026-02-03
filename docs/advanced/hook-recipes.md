@@ -81,3 +81,96 @@ export {
   afterRenderTypeEntitiesHook 
 };
 ```
+
+## Display response types for operations
+
+You can use this hook to automatically add the response type's SDL (Schema Definition Language) after each GraphQL operation (query, mutation, subscription).
+
+This is useful when you want your documentation to show not just the operation signature but also the structure of the data it returns.
+
+**Before (default output):**
+
+```graphql
+query user(id: ID!): User
+```
+
+**After (with hook):**
+
+The hook appends a "Response Type" section after the operation's code block:
+
+```graphql
+query user(id: ID!): User
+```
+
+### Response Type
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  email: String
+  posts: [Post!]!
+}
+```
+
+Declare the custom module in GraphQL-Markdown configuration `mdxParser: "./custom-mdx.mjs"`.
+
+```js title="custom-mdx.mjs"
+import { 
+  isOperation, 
+  isScalarType, 
+  getNamedType 
+} from "@graphql-markdown/graphql";
+import { Printer } from "@graphql-markdown/printer-legacy";
+
+/**
+ * Hook that adds the response type's SDL after operation code blocks.
+ *
+ * This hook is executed after generating the code block for a GraphQL type.
+ * For operations (queries, mutations, subscriptions), it appends a second
+ * code block showing the structure of the return type.
+ */
+const afterPrintCodeHook = async (event) => {
+  const { type, options } = event.data;
+
+  // Only process operations (types with a `type` property for return type)
+  if (!isOperation(type)) {
+    return;
+  }
+
+  // Get the unwrapped return type (removes NonNull and List wrappers)
+  const returnType = getNamedType(type.type);
+  if (!returnType) {
+    return;
+  }
+
+  // Skip scalar types - they don't need expanded documentation
+  if (isScalarType(returnType)) {
+    return;
+  }
+
+  // Generate the SDL code block for the return type
+  const returnTypeCode = Printer.printCode(returnType, {
+    ...options,
+    codeSection: true,
+  });
+
+  if (returnTypeCode) {
+    event.output = `${event.output}\n\n### Response Type\n\n${returnTypeCode}`;
+  }
+};
+
+export { afterPrintCodeHook };
+```
+
+:::tip
+
+You can customize the heading level or text by changing `### Response Type` to match your documentation style.
+
+:::
+
+:::note
+
+The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL type wrappers like `NonNull` and `List`. For example, `[User!]!` becomes `User`.
+
+:::
