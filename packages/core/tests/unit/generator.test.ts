@@ -44,6 +44,7 @@ const {
   checkSchemaDifferences,
   resolveSkipAndOnlyDirectives,
   getFormatterFromMDXModule,
+  getMDXModuleProperty,
 } = GeneratorModule;
 
 const mockRenderer = {
@@ -963,7 +964,9 @@ describe("generator", () => {
       const result = await loadMDXModule(invalidModule);
 
       expect(warnSpy).toHaveBeenCalledWith(
-        `An error occurred while loading MDX formatter "${invalidModule}"`,
+        expect.stringContaining(
+          `An error occurred while loading MDX formatter "${invalidModule}"`,
+        ),
       );
       expect(result).toBeUndefined();
     });
@@ -1109,6 +1112,102 @@ describe("generator", () => {
       expect(result!.formatMDXSpecifiedByLink).toBe(
         mdxModule.formatMDXSpecifiedByLink,
       );
+    });
+  });
+
+  describe("getMDXModuleProperty()", () => {
+    test("returns undefined when mdxModule is undefined", () => {
+      expect.assertions(1);
+
+      const result = getMDXModuleProperty(undefined, "mdxDeclaration");
+
+      expect(result).toBeUndefined();
+    });
+
+    test("returns undefined when mdxModule is null", () => {
+      expect.assertions(1);
+
+      const result = getMDXModuleProperty(null, "mdxDeclaration");
+
+      expect(result).toBeUndefined();
+    });
+
+    test("returns undefined when mdxModule is not an object", () => {
+      expect.assertions(1);
+
+      const result = getMDXModuleProperty("string", "mdxDeclaration");
+
+      expect(result).toBeUndefined();
+    });
+
+    test("returns property value when property exists directly on module", () => {
+      expect.assertions(1);
+
+      const mdxDeclaration = "import { Component } from 'react';";
+      const mdxModule = { mdxDeclaration };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxDeclaration");
+
+      expect(result).toBe(mdxDeclaration);
+    });
+
+    test("returns property value when property exists on module.default (ESM)", () => {
+      expect.assertions(1);
+
+      const mdxDeclaration =
+        "import { Aside } from '@astrojs/starlight/components';";
+      const mdxModule = { default: { mdxDeclaration } };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxDeclaration");
+
+      expect(result).toBe(mdxDeclaration);
+    });
+
+    test("prefers direct property over module.default property", () => {
+      expect.assertions(1);
+
+      const directValue = "direct value";
+      const defaultValue = "default value";
+      const mdxModule = {
+        mdxDeclaration: directValue,
+        default: { mdxDeclaration: defaultValue },
+      };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxDeclaration");
+
+      expect(result).toBe(directValue);
+    });
+
+    test("returns undefined when property does not exist", () => {
+      expect.assertions(1);
+
+      const mdxModule = { otherProperty: "value" };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxDeclaration");
+
+      expect(result).toBeUndefined();
+    });
+
+    test("works with mdxExtension property", () => {
+      expect.assertions(1);
+
+      const mdxExtension = ".mdx";
+      const mdxModule = { mdxExtension };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxExtension");
+
+      expect(result).toBe(mdxExtension);
+    });
+
+    test("works with mdxExtension from module.default", () => {
+      expect.assertions(1);
+
+      const mdxExtension = ".custom";
+      const mdxModule = { default: { mdxExtension } };
+
+      const result = getMDXModuleProperty<string>(mdxModule, "mdxExtension");
+
+      expect(result).toBe(mdxExtension);
     });
   });
 
