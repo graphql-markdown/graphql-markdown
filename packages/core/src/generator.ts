@@ -51,6 +51,7 @@ import {
   RenderHomepageEvents,
 } from "./events";
 import { registerMDXEventHandlers } from "./event-handlers";
+import { error } from "node:console";
 
 /**
  * Supported file extensions for generated documentation files.
@@ -92,9 +93,11 @@ export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
   return mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser as string).catch(() => {
+    ? import(mdxParser as string).catch((err: unknown) => {
+        const errorMessage =
+          err instanceof Error ? err.message : String(err ?? "Unknown error");
         log(
-          `An error occurred while loading MDX formatter "${mdxParser}"`,
+          `An error occurred while loading MDX formatter "${mdxParser}"\n${errorMessage}`,
           LogLevel.warn,
         );
         return undefined;
@@ -320,13 +323,15 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  const events = getEvents();
-
   await Logger(loggerModule);
 
   const mdxModule = await loadMDXModule(mdxParser);
   // Register MDX lifecycle event handlers if mdxModule loaded successfully
+  // This must be called BEFORE getEvents() because it resets the singleton
   registerMDXEventHandlers(mdxModule);
+
+  // Get events AFTER registration (registerMDXEventHandlers resets and recreates the singleton)
+  const events = getEvents();
 
   await events.emitAsync(
     SchemaEvents.BEFORE_LOAD,
@@ -421,6 +426,8 @@ export const generateDocFromSchema = async ({
     },
     formatter,
     mdxDeclaration,
+    // Pass event emitter to enable print events
+    events,
   );
 
   // allow mdxModule to specify custom extension

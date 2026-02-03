@@ -603,4 +603,232 @@ describe("Printer", () => {
       expect(code).toBe("");
     });
   });
+
+  describe("printCodeAsync()", () => {
+    const mockEventEmitter = {
+      emitAsync: jest.fn().mockResolvedValue({ errors: [], defaultPrevented: false }),
+    };
+
+    beforeEach(() => {
+      // Reset eventEmitter before each test
+      (Printer as any).eventEmitter = null;
+    });
+
+    afterEach(() => {
+      (Printer as any).eventEmitter = null;
+    });
+
+    test("returns printCode output when no event emitter is configured", async () => {
+      expect.hasAssertions();
+
+      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+
+      const result = await Printer.printCodeAsync(
+        { name: "Test" },
+        "test",
+        { ...DEFAULT_OPTIONS, codeSection: true },
+      );
+
+      expect(result).toContain("enum Test { }");
+    });
+
+    test("emits BEFORE_PRINT_CODE and AFTER_PRINT_CODE events when emitter is configured", async () => {
+      expect.hasAssertions();
+
+      (Printer as any).eventEmitter = mockEventEmitter;
+      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+
+      await Printer.printCodeAsync(
+        { name: "Test" },
+        "test",
+        { ...DEFAULT_OPTIONS, codeSection: true },
+      );
+
+      expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(2);
+      expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+        "print:beforePrintCode",
+        expect.objectContaining({
+          data: expect.objectContaining({
+            typeName: "test",
+          }),
+        }),
+      );
+      expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+        "print:afterPrintCode",
+        expect.objectContaining({
+          output: expect.any(String),
+        }),
+      );
+    });
+
+    test("returns modified output from event handler", async () => {
+      expect.hasAssertions();
+
+      const modifiedEmitter = {
+        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
+          if (_eventName === "print:afterPrintCode") {
+            event.output = "MODIFIED: " + event.output;
+          }
+          return { errors: [], defaultPrevented: false };
+        }),
+      };
+
+      (Printer as any).eventEmitter = modifiedEmitter;
+      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+
+      const result = await Printer.printCodeAsync(
+        { name: "Test" },
+        "test",
+        { ...DEFAULT_OPTIONS, codeSection: true },
+      );
+
+      expect(result).toContain("MODIFIED:");
+    });
+
+    test("returns output from beforeEvent when default is prevented", async () => {
+      expect.hasAssertions();
+
+      const preventingEmitter = {
+        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
+          if (_eventName === "print:beforePrintCode") {
+            event.output = "CUSTOM OUTPUT";
+            event.defaultPrevented = true;
+          }
+          return { errors: [], defaultPrevented: event.defaultPrevented };
+        }),
+      };
+
+      (Printer as any).eventEmitter = preventingEmitter;
+      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      jest.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue("enum Test { }");
+
+      const result = await Printer.printCodeAsync(
+        { name: "Test" },
+        "test",
+        { ...DEFAULT_OPTIONS, codeSection: true },
+      );
+
+      expect(result).toBe("CUSTOM OUTPUT");
+    });
+  });
+
+  describe("printType() with events", () => {
+    const mockEventEmitter = {
+      emitAsync: jest.fn().mockResolvedValue({ errors: [], defaultPrevented: false }),
+    };
+
+    beforeEach(() => {
+      (Printer as any).eventEmitter = null;
+      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+      // Mock printDescription since it's a static property pointing to external function
+      (Printer as any).printDescription = jest.fn().mockReturnValue("");
+      (Printer as any).printCustomDirectives = jest.fn().mockReturnValue("");
+      (Printer as any).printCustomTags = jest.fn().mockReturnValue("");
+    });
+
+    afterEach(() => {
+      (Printer as any).eventEmitter = null;
+    });
+
+    test("emits BEFORE_PRINT_TYPE and AFTER_PRINT_TYPE events when emitter is configured", async () => {
+      expect.hasAssertions();
+
+      (Printer as any).eventEmitter = mockEventEmitter;
+
+      // Mock all the print methods to return empty strings
+      jest.spyOn(Printer, "printHeader").mockReturnValue("");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      await Printer.printType("test", { name: "Test" });
+
+      expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+        "print:beforePrintType",
+        expect.objectContaining({
+          data: expect.objectContaining({
+            name: "test",
+          }),
+        }),
+      );
+      expect(mockEventEmitter.emitAsync).toHaveBeenCalledWith(
+        "print:afterPrintType",
+        expect.objectContaining({
+          output: expect.any(String),
+        }),
+      );
+    });
+
+    test("returns modified output from AFTER_PRINT_TYPE event handler", async () => {
+      expect.hasAssertions();
+
+      const modifiedEmitter = {
+        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
+          if (_eventName === "print:afterPrintType") {
+            event.output = "COMPLETELY REPLACED OUTPUT";
+          }
+          return { errors: [], defaultPrevented: false };
+        }),
+      };
+
+      (Printer as any).eventEmitter = modifiedEmitter;
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result).toBe("COMPLETELY REPLACED OUTPUT");
+    });
+
+    test("returns output from BEFORE_PRINT_TYPE when default is prevented", async () => {
+      expect.hasAssertions();
+
+      const preventingEmitter = {
+        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
+          if (_eventName === "print:beforePrintType") {
+            event.output = "SKIPPED - Custom docs";
+            event.defaultPrevented = true;
+          }
+          return { errors: [], defaultPrevented: event.defaultPrevented };
+        }),
+      };
+
+      (Printer as any).eventEmitter = preventingEmitter;
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result).toBe("SKIPPED - Custom docs");
+      // Should only have called beforePrintType, not afterPrintType
+      expect(preventingEmitter.emitAsync).toHaveBeenCalledTimes(1);
+    });
+
+    test("does not emit events when no event emitter is configured", async () => {
+      expect.hasAssertions();
+
+      // Ensure no emitter
+      (Printer as any).eventEmitter = null;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      // Should still produce output
+      expect(result).toBeDefined();
+      expect(typeof result).toBe("string");
+    });
+  });
 });

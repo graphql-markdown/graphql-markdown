@@ -18,6 +18,7 @@ export { RenderRootTypesEvents } from "./events/render-root-types-events";
 export { RenderHomepageEvents } from "./events/render-homepage-events";
 export { RenderTypeEntitiesEvents } from "./events/render-type-entities-events";
 export { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events";
+export { PrintTypeEvents } from "./events/print-type-events";
 
 // Event types exports
 export type { CancellableEvent } from "./events/base";
@@ -27,3 +28,9 @@ export type { RenderRootTypesEvent } from "./events/render-root-types";
 export type { RenderHomepageEvent } from "./events/render-homepage";
 export type { RenderTypeEntitiesEvent } from "./events/render-type-entities";
 export type { GenerateIndexMetafileEvent } from "./events/generate-index-metafile";
+export type {
+  PrintCodeEvent,
+  PrintCodeEventData,
+  PrintTypeEvent,
+  PrintTypeEventData,
+} from "./events/print-type";

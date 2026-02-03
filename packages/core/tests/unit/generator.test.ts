@@ -175,6 +175,7 @@ describe("generator", () => {
           },
           undefined,
           undefined,
+          expect.anything(), // event emitter
         );
         expect(rendererSpy).toHaveBeenCalledWith(
           {},
@@ -417,6 +418,7 @@ describe("generator", () => {
         }),
         undefined,
         undefined,
+        expect.anything(), // event emitter
       );
 
       // Verify that the meta object contains expected properties
@@ -963,7 +965,9 @@ describe("generator", () => {
       const result = await loadMDXModule(invalidModule);
 
       expect(warnSpy).toHaveBeenCalledWith(
-        `An error occurred while loading MDX formatter "${invalidModule}"`,
+        expect.stringContaining(
+          `An error occurred while loading MDX formatter "${invalidModule}"`,
+        ),
       );
       expect(result).toBeUndefined();
     });

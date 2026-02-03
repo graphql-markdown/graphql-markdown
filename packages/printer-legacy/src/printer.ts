@@ -18,11 +18,24 @@ import type {
   MDXString,
   Maybe,
   MetaInfo,
+  PrinterEventEmitter,
   PrintTypeOptions,
   PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
+
+/**
+ * Print type event constants.
+ * Duplicated here to avoid circular dependency with \@graphql-markdown/core.
+ * These must match the values in core/src/events/print-type-events.ts
+ */
+const PrintTypeEvents = {
+  BEFORE_PRINT_CODE: "print:beforePrintCode",
+  AFTER_PRINT_CODE: "print:afterPrintCode",
+  BEFORE_PRINT_TYPE: "print:beforePrintType",
+  AFTER_PRINT_TYPE: "print:afterPrintType",
+} as const;
 
 import {
   getTypeName,
@@ -109,6 +122,13 @@ export class Printer implements IPrinter {
   static options: Readonly<Maybe<PrintTypeOptions>>;
 
   /**
+   * Optional event emitter for print events.
+   * When set, the printer will emit events before/after printCode and printType,
+   * allowing external code to intercept and modify the output.
+   */
+  static eventEmitter: Maybe<PrinterEventEmitter>;
+
+  /**
    * Prints type descriptions
    */
   static readonly printDescription = printDescription;
@@ -136,6 +156,8 @@ export class Printer implements IPrinter {
    * @param linkRoot - Root path for generating links between types
    * @param options - Configuration options for the printer
    * @param formatter - Optional formatter functions for customizing output format
+   * @param mdxDeclaration - Optional MDX import declaration
+   * @param eventEmitter - Optional event emitter for print events interception
    */
   static async init(
     schema: Maybe<GraphQLSchema>,
@@ -161,7 +183,11 @@ export class Printer implements IPrinter {
     } = DEFAULT_INIT_OPTIONS,
     formatter?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
+    eventEmitter?: Maybe<PrinterEventEmitter>,
   ): Promise<void> {
+    // Always update eventEmitter regardless of initialization state
+    Printer.eventEmitter = eventEmitter ?? null;
+
     if (Printer.options !== undefined) {
       return;
     }
@@ -270,6 +296,72 @@ export class Printer implements IPrinter {
     }
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
+  };
+
+  /**
+   * Prints the GraphQL type definition as code block with event emission support.
+   *
+   * @param type - GraphQL type to print
+   * @param typeName - Name of the type being printed
+   * @param options - Printer configuration options
+   * @returns Promise resolving to formatted code block string with type definition
+   *
+   * @remarks
+   * This async version emits events before and after code generation:
+   * - `print:beforePrintCode` - Emitted before generating code (can modify inputs or prevent default)
+   * - `print:afterPrintCode` - Emitted after generating code (can modify output)
+   *
+   * Event handlers can:
+   * - Modify `event.data.options` in BEFORE to affect code generation
+   * - Call `event.preventDefault()` in BEFORE to skip default generation and provide custom output
+   * - Modify `event.output` in AFTER to change the final result
+   */
+  static readonly printCodeAsync = async (
+    type: unknown,
+    typeName: string,
+    options: PrintTypeOptions,
+  ): Promise<string> => {
+    // If no event emitter, just run sync method
+    if (!Printer.eventEmitter) {
+      return Printer.printCode(type, options);
+    }
+
+    // Create mutable event data - handlers can modify options
+    const eventData = { type, typeName, options: { ...options } };
+
+    // Emit BEFORE event - handlers can modify inputs or prevent default
+    const beforeEvent = {
+      data: eventData,
+      output: "" as string,
+      defaultPrevented: false,
+      preventDefault(): void {
+        this.defaultPrevented = true;
+      },
+    };
+    await Printer.eventEmitter.emitAsync(
+      PrintTypeEvents.BEFORE_PRINT_CODE,
+      beforeEvent,
+    );
+
+    // If prevented, handlers should have set the output they want
+    if (beforeEvent.defaultPrevented) {
+      return beforeEvent.output;
+    }
+
+    // Generate code using the (potentially modified) options from event data
+    const output = Printer.printCode(type, eventData.options);
+
+    // Emit AFTER event - handlers can modify the output
+    const afterEvent = {
+      data: eventData,
+      output,
+    };
+    await Printer.eventEmitter.emitAsync(
+      PrintTypeEvents.AFTER_PRINT_CODE,
+      afterEvent,
+    );
+
+    return afterEvent.output;
   };
 
   /**
@@ -390,7 +482,7 @@ export class Printer implements IPrinter {
    *
    * @example
    * ```typescript
-   * const doc = Printer.printType('User', UserType, {
+   * const doc = await Printer.printType('User', UserType, {
    *   frontMatter: true,
    *   codeSection: true
    * });
@@ -406,12 +498,16 @@ export class Printer implements IPrinter {
    * - Type metadata
    * - Example usage
    * - Related types
+   *
+   * When an event emitter is configured, emits events:
+   * - `print:beforePrintType` - Before generating documentation
+   * - `print:afterPrintType` - After generating documentation (output can be modified)
    */
-  static readonly printType = (
+  static readonly printType = async (
     name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Maybe<MDXString> => {
+  ): Promise<Maybe<MDXString>> => {
     const printTypeOptions: PrintTypeOptions = {
       ...DEFAULT_OPTIONS,
       ...Printer.options,
@@ -422,6 +518,37 @@ export class Printer implements IPrinter {
       return undefined;
     }
 
+    // Create event data for potential before event
+    const eventData = { type, name, options: printTypeOptions };
+
+    // Emit BEFORE_PRINT_TYPE event if emitter is configured
+    if (Printer.eventEmitter) {
+      const beforeEvent = {
+        data: eventData,
+        output: undefined as Maybe<MDXString>,
+        defaultPrevented: false,
+        propagationStopped: false,
+        preventDefault(): void {
+          this.defaultPrevented = true;
+        },
+        stopPropagation(): void {
+          this.propagationStopped = true;
+        },
+        async runDefaultAction(): Promise<void> {
+          return void 0;
+        },
+      };
+      await Printer.eventEmitter.emitAsync(
+        PrintTypeEvents.BEFORE_PRINT_TYPE,
+        beforeEvent,
+      );
+
+      // If prevented, return the output set by handlers (or undefined)
+      if (beforeEvent.defaultPrevented) {
+        return beforeEvent.output;
+      }
+    }
+
     const header = Printer.printHeader(
       name,
       getTypeName(type),
@@ -429,7 +556,12 @@ export class Printer implements IPrinter {
     );
     const metatags = Printer.printMetaTags(type, printTypeOptions);
     const description = Printer.printDescription(type, printTypeOptions);
-    const code = Printer.printCode(type, printTypeOptions);
+
+    // Use async code printing when event emitter is configured
+    const code = Printer.eventEmitter
+      ? await Printer.printCodeAsync(type, name, printTypeOptions)
+      : Printer.printCode(type, printTypeOptions);
+
     const customDirectives = Printer.printCustomDirectives(
       type,
       printTypeOptions,
@@ -439,7 +571,7 @@ export class Printer implements IPrinter {
     const relations = Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
-    return [
+    let output = [
       header,
       metatags,
       Printer.mdxDeclaration,
@@ -453,5 +585,31 @@ export class Printer implements IPrinter {
     ]
       .join(MARKDOWN_EOP)
       .trim() as MDXString;
+
+    // Emit AFTER_PRINT_TYPE event if emitter is configured
+    if (Printer.eventEmitter) {
+      const afterEvent = {
+        data: eventData,
+        output,
+        defaultPrevented: false,
+        propagationStopped: false,
+        preventDefault(): void {
+          this.defaultPrevented = true;
+        },
+        stopPropagation(): void {
+          this.propagationStopped = true;
+        },
+        async runDefaultAction(): Promise<void> {
+          return void 0;
+        },
+      };
+      await Printer.eventEmitter.emitAsync(
+        PrintTypeEvents.AFTER_PRINT_TYPE,
+        afterEvent,
+      );
+      output = afterEvent.output as MDXString;
+    }
+
+    return output;
   };
 }

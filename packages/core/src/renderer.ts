@@ -623,7 +623,7 @@ export class Renderer {
           return this.formatCategoryFolderName(categoryName, false);
         },
       };
-      content = this.printer.printType(fileName, type, printOptions);
+      content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
         log(
           `No content generated for "${name}" - printType returned empty`,

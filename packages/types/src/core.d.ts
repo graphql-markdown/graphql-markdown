@@ -499,6 +499,18 @@ export type RenderTypeEntitiesHook = (event: unknown) => Promise<void>;
 export type GenerateIndexMetafileHook = (event: unknown) => Promise<void>;
 
 /**
+ * Hook callback for print code events.
+ * Receives an event with mutable `output` property for modifying generated code.
+ */
+export type PrintCodeHook = (event: unknown) => Promise<void> | void;
+
+/**
+ * Hook callback for print type events.
+ * Receives an event with mutable `output` property for modifying generated documentation.
+ */
+export type PrintTypeHook = (event: unknown) => Promise<void> | void;
+
+/**
  * Metadata information about the documentation generator framework.
  *
  * @remarks
