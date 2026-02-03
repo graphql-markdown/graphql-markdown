@@ -74,11 +74,11 @@ Use these options to tweak some of the static documentation generator features:
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) &mdash; **ONLY FOR DOCUSAURUS**
 - `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When enabled, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). When not set, the order depends on document generator folders sorting and no prefixes are added.
 
-| Setting                         | CLI flag        | Default |
-| ------------------------------- | --------------- | ------- |
-| `docOptions.frontMatter`        | _not supported_ | `{}`    |
-| `docOptions.index`              | `--index`       | `false` |
-| `docOptions.categorySort`       | _not supported_ | -       |
+| Setting                   | CLI flag        | Default |
+| ------------------------- | --------------- | ------- |
+| `docOptions.frontMatter`  | _not supported_ | `{}`    |
+| `docOptions.index`        | `--index`       | `false` |
+| `docOptions.categorySort` | _not supported_ | -       |
 
 <br/>
 
@@ -200,26 +200,25 @@ Provide a custom module for formatting MDX content. This allows integration with
 
 The custom module can export individual formatter functions:
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `formatMDXBadge` | `(badge: { text, classname? }) => string` | Format type badges |
-| `formatMDXAdmonition` | `(admonition, meta?) => string` | Format callout/warning blocks |
-| `formatMDXBullet` | `(text?: string) => string` | Format bullet point separators |
-| `formatMDXDetails` | `(option) => string` | Format collapsible sections |
-| `formatMDXFrontmatter` | `(props?, formatted?) => string` | Format page frontmatter |
-| `formatMDXLink` | `(link) => { text, url }` | Transform type links |
-| `formatMDXNameEntity` | `(name, parentType?) => string` | Format named entity references |
-| `formatMDXSpecifiedByLink` | `(url) => string` | Format scalar specification links |
+| Export                     | Type                                      | Description                       |
+| -------------------------- | ----------------------------------------- | --------------------------------- |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string` | Format type badges                |
+| `formatMDXAdmonition`      | `(admonition, meta?) => string`           | Format callout/warning blocks     |
+| `formatMDXBullet`          | `(text?: string) => string`               | Format bullet point separators    |
+| `formatMDXDetails`         | `(option) => string`                      | Format collapsible sections       |
+| `formatMDXFrontmatter`     | `(props?, formatted?) => string`          | Format page frontmatter           |
+| `formatMDXLink`            | `(link) => { text, url }`                 | Transform type links              |
+| `formatMDXNameEntity`      | `(name, parentType?) => string`           | Format named entity references    |
+| `formatMDXSpecifiedByLink` | `(url) => string`                         | Format scalar specification links |
 
 For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
 
 Additionally, the module can export:
 
-| Export | Type | Description |
-|--------|------|-------------|
+| Export           | Type     | Description                                    |
+| ---------------- | -------- | ---------------------------------------------- |
 | `mdxDeclaration` | `string` | Import statements prepended to generated files |
-| `mdxExtension` | `string` | Custom file extension (defaults to `.mdx`) |
-
+| `mdxExtension`   | `string` | Custom file extension (defaults to `.mdx`)     |
 
 The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/advanced/hook-recipes)**.
 

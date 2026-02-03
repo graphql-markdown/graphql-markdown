@@ -26,6 +26,40 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 
 All hooks receive an `event` object with a `data` property containing context-specific information. Printer hooks also have an `output` property that can be modified.
 
+## Using Hooks with Docusaurus
+
+When using Docusaurus, you can extend the default MDX module to add custom hooks while keeping all the built-in formatters:
+
+```js title="custom-mdx.cjs"
+const DocusaurusMDX = require("@graphql-markdown/docusaurus/mdx");
+
+const afterPrintCodeHook = async (event) => {
+  // Your custom logic here
+  event.output = `${event.output}\n\n<!-- Custom content -->`;
+};
+
+module.exports = {
+  ...DocusaurusMDX,  // Keep all default formatters
+  afterPrintCodeHook, // Add your custom hook
+};
+```
+
+Then configure your Docusaurus plugin to use the custom module:
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      schema: "./schema.graphql",
+      // highlight-next-line
+      mdxParser: require.resolve("./custom-mdx.cjs"),
+      // ... other options
+    },
+  ],
+],
+```
+
 ## Generate index.md files
 
 You can use this hook to generate `index.md` files.
