@@ -356,3 +356,4 @@ The project uses [Conventional Commits](https://www.conventionalcommits.org/en/v
 - **Performance:** Consider performance implications of changes
 - **Security:** Never commit secrets; follow security best practices
 - **Monorepo:** Respect package boundaries and dependencies
+- **Publishing:** Never use `npm publish` directly; always use `./scripts/publish-package.sh` or `bun pm pack` + `npm publish <tarball>` to resolve workspace dependencies

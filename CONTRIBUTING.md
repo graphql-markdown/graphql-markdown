@@ -24,6 +24,7 @@ Take this document as a set of guidelines, not rules, for contributing to this p
   - [Tests](#tests)
   - [Build documentation](#build-documentation)
   - [API Documentation](#api-documentation)
+  - [Publishing Packages](#publishing-packages)
   - [Troubleshooting](#troubleshooting)
 
 ## First time contributor
@@ -226,6 +227,53 @@ bun run docs:api:all
 ```
 
 The generated documentation will be available in each package's `docs/` directory.
+
+### Publishing Packages
+
+> **Important**: This section is for maintainers with npm publish access.
+
+The monorepo uses `workspace:^` protocol for inter-package dependencies. These must be resolved to actual version numbers before publishing to npm.
+
+**⚠️ Never use `npm publish` directly from a package directory** - it will publish unresolved `workspace:^` dependencies, breaking the package for users.
+
+#### Correct Publishing Process
+
+1. **Build all packages first**:
+   ```shell
+   bun run build:all
+   ```
+
+2. **Use the publish scripts** (recommended):
+   ```shell
+   # Single package
+   ./scripts/publish-package.sh <package-name>
+   
+   # All packages for a release
+   ./scripts/publish-release.sh
+   ```
+
+3. **Or manually with bun pack + npm publish tarball**:
+   ```shell
+   cd packages/<package-name>
+   bun pm pack                    # Creates tarball with resolved deps
+   npm publish <tarball.tgz> --access public
+   ```
+
+The publish scripts will:
+- Pack with `bun pm pack` (resolves `workspace:^` to versions)
+- Verify no `workspace:` references remain in the tarball
+- Publish using the tarball (not from directory)
+- Publish in correct dependency order
+
+#### Dependency Order for Publishing
+
+Packages must be published in dependency order:
+1. `types` (no internal deps)
+2. `utils`, `logger`, `graphql`
+3. `helpers`, `diff`, `printer-legacy`
+4. `core`
+5. `cli`
+6. `docusaurus`
 
 ### Troubleshooting
 
