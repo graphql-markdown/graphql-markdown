@@ -1,3 +1,11 @@
+<a id="1.32.1"></a>
+# [1.32.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.32.1) - 2026-02-03
+
+🐛 This release fixes broken packages from 1.32.0 due to issues with introducing `bun` in the development flow.
+
+[Changes][1.32.1]
+
+
 <a id="1.32.0"></a>
 # [1.32.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.32.0) - 2026-02-03
 
@@ -26,7 +34,7 @@ module.exports = {
 };
 ```
 
-See the [Hooks Recipes](/docs/advanced/hook-recipes) documentation for detailed examples including how to display response types for operations.
+See the [Hooks Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes) documentation for detailed examples including how to display response types for operations.
 
 ### Other Changes
 
@@ -2206,6 +2214,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.32.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.0...1.32.1
 [1.32.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.2...1.32.0
 [1.31.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.0...1.31.2
 [1.31.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.3...1.31.0
