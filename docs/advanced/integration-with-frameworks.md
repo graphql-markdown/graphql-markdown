@@ -45,6 +45,40 @@ Additionally, the module can export:
 | `mdxDeclaration` | `string` | Import statements prepended to generated files |
 | `mdxExtension` | `string` | Custom file extension (defaults to `.mdx`) |
 
+### Lifecycle Hooks
+
+The custom MDX module can also export lifecycle hooks to customize the generation process. These hooks are executed at specific points during documentation generation:
+
+**Generation Hooks:**
+
+| Export | Description |
+|--------|-------------|
+| `beforeSchemaLoadHook` | Called before loading the GraphQL schema |
+| `afterSchemaLoadHook` | Called after loading the GraphQL schema |
+| `beforeDiffCheckHook` | Called before checking schema differences |
+| `afterDiffCheckHook` | Called after checking schema differences |
+| `beforeRenderRootTypesHook` | Called before rendering root types |
+| `afterRenderRootTypesHook` | Called after rendering root types |
+| `beforeRenderHomepageHook` | Called before rendering the homepage |
+| `afterRenderHomepageHook` | Called after rendering the homepage |
+| `beforeRenderTypeEntitiesHook` | Called before rendering type entities |
+| `afterRenderTypeEntitiesHook` | Called after rendering type entities |
+| `beforeGenerateIndexMetafileHook` | Called before generating index metafiles |
+| `afterGenerateIndexMetafileHook` | Called after generating index metafiles |
+
+**Printer Hooks:**
+
+| Export | Description |
+|--------|-------------|
+| `beforePrintCodeHook` | Called before generating code blocks - can modify options or prevent default generation |
+| `afterPrintCodeHook` | Called after generating code blocks - can modify the generated output |
+| `beforePrintTypeHook` | Called before generating type documentation - can modify options or prevent default |
+| `afterPrintTypeHook` | Called after generating type documentation - can modify the generated output |
+
+:::tip
+Printer hooks are useful for extending the generated documentation. For example, you can use `afterPrintCodeHook` to append response type information after operation code blocks. See **[Hooks Recipes](/docs/advanced/hook-recipes)** for examples.
+:::
+
 :::tip
 You only need to export the formatter functions your framework requires. Any missing functions will use the default HTML-like implementation.
 :::

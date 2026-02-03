@@ -211,6 +211,8 @@ The custom module can export individual formatter functions:
 | `formatMDXNameEntity` | `(name, parentType?) => string` | Format named entity references |
 | `formatMDXSpecifiedByLink` | `(url) => string` | Format scalar specification links |
 
+For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
+
 Additionally, the module can export:
 
 | Export | Type | Description |
@@ -218,7 +220,8 @@ Additionally, the module can export:
 | `mdxDeclaration` | `string` | Import statements prepended to generated files |
 | `mdxExtension` | `string` | Custom file extension (defaults to `.mdx`) |
 
-For detailed examples, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
+
+The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/advanced/hook-recipes)**.
 
 <br/>
 

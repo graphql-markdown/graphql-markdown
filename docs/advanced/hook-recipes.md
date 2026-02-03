@@ -8,6 +8,24 @@ Hooks are part of the [documentation frameworks integration](./integration-with-
 
 :::
 
+## Available Hooks
+
+GraphQL-Markdown provides lifecycle hooks for customizing the documentation generation process:
+
+**Generation Hooks:**
+- `beforeSchemaLoadHook` / `afterSchemaLoadHook` - Schema loading
+- `beforeDiffCheckHook` / `afterDiffCheckHook` - Schema diff checking
+- `beforeRenderRootTypesHook` / `afterRenderRootTypesHook` - Root types rendering
+- `beforeRenderHomepageHook` / `afterRenderHomepageHook` - Homepage rendering
+- `beforeRenderTypeEntitiesHook` / `afterRenderTypeEntitiesHook` - Type entities rendering
+- `beforeGenerateIndexMetafileHook` / `afterGenerateIndexMetafileHook` - Index metafile generation
+
+**Printer Hooks:**
+- `beforePrintCodeHook` / `afterPrintCodeHook` - Code block generation
+- `beforePrintTypeHook` / `afterPrintTypeHook` - Type documentation generation
+
+All hooks receive an `event` object with a `data` property containing context-specific information. Printer hooks also have an `output` property that can be modified.
+
 ## Generate index.md files
 
 You can use this hook to generate `index.md` files.
