@@ -176,6 +176,7 @@ describe("generator", () => {
           },
           undefined,
           undefined,
+          expect.anything(), // event emitter
         );
         expect(rendererSpy).toHaveBeenCalledWith(
           {},
@@ -418,6 +419,7 @@ describe("generator", () => {
         }),
         undefined,
         undefined,
+        expect.anything(), // event emitter
       );
 
       // Verify that the meta object contains expected properties

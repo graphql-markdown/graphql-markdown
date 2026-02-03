@@ -56,7 +56,7 @@ export default async function pluginGraphQLDocGenerator(
             },
           },
           LOGGER_MODULE,
-          MDX_PACKAGE,
+          options.mdxParser ?? MDX_PACKAGE,
         ),
       );
     },

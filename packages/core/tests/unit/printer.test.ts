@@ -41,6 +41,7 @@ describe("generator", () => {
         printerOptions,
         undefined,
         undefined,
+        undefined,
       );
     });
 
@@ -152,6 +153,7 @@ describe("generator", () => {
         expect.any(Object),
         mdxModule,
         undefined,
+        undefined,
       );
     });
 
@@ -183,6 +185,7 @@ describe("generator", () => {
         expect.any(Object),
         mdxModule,
         "mdx declaration string",
+        undefined,
       );
     });
   });

@@ -7,6 +7,14 @@ import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString } from "./utils";
 import type { AdmonitionType, Badge, TypeLink } from "./printer";
+import type {
+  DiffCheckHook,
+  GenerateIndexMetafileHook,
+  RenderHomepageHook,
+  RenderRootTypesHook,
+  RenderTypeEntitiesHook,
+  SchemaLoadHook,
+} from "./event";
 
 /**
  * Core type definitions for configuration and document generation.
@@ -202,10 +210,11 @@ export type TypeExampleSectionOption = Partial<
 >;
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
 declare const DIFF_METHOD_NAME: unique symbol;
 export type TypeDiffMethod = DiffMethodName | "FORCE" | "NONE";
 
-type Pointer = UnnormalizedTypeDefPointer;
+export type Pointer = UnnormalizedTypeDefPointer;
 
 export interface ConfigOptions {
   /** Base URL for the documentation links */
@@ -450,53 +459,30 @@ export interface RootTypes {
 }
 
 export type PackageName = string & { _opaque: typeof PACKAGE_NAME };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
 declare const PACKAGE_NAME: unique symbol;
 
 export type ClassName = string & { _opaque: typeof CLASS_NAME };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
 declare const CLASS_NAME: unique symbol;
 
 export type LocationPath = string & { _opaque: typeof LOCATION_PATH };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
 declare const LOCATION_PATH: unique symbol;
 
-/**
- * Event system type declarations
- */
-
-/**
- * Type for default action function that can be executed by events.
- * Returns a Promise to support both sync and async actions.
- */
-export type DefaultAction = () => Promise<void>;
-
-/**
- * Hook callback for schema loading events.
- */
-export type SchemaLoadHook = (event: unknown) => Promise<void>;
-
-/**
- * Hook callback for diff check events.
- */
-export type DiffCheckHook = (event: unknown) => Promise<void>;
-
-/**
- * Hook callback for render root types events.
- */
-export type RenderRootTypesHook = (event: unknown) => Promise<void>;
-
-/**
- * Hook callback for render homepage events.
- */
-export type RenderHomepageHook = (event: unknown) => Promise<void>;
-
-/**
- * Hook callback for render type entities events.
- */
-export type RenderTypeEntitiesHook = (event: unknown) => Promise<void>;
-
-/**
- * Hook callback for generate index metafile events.
- */
-export type GenerateIndexMetafileHook = (event: unknown) => Promise<void>;
+// Re-export event system types from event.d.ts
+export type {
+  DefaultAction,
+  DiffCheckHook,
+  GenerateIndexMetafileHook,
+  ICancellableEvent,
+  PrintCodeHook,
+  PrintTypeHook,
+  RenderHomepageHook,
+  RenderRootTypesHook,
+  RenderTypeEntitiesHook,
+  SchemaLoadHook,
+} from "./event";
 
 /**
  * Metadata information about the documentation generator framework.

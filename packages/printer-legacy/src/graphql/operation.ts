@@ -7,7 +7,6 @@
 import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
 import { getTypeName, isOperation } from "@graphql-markdown/graphql";
 import { printSection, printMetadataSection } from "../section";
-import { printCodeField } from "../code";
 
 /**
  * Prints the operation type information.

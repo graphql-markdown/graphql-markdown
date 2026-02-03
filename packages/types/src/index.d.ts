@@ -4,6 +4,9 @@ export type * from "./cli";
 // @graphql-markdown/core
 export type * from "./core";
 
+// @graphql-markdown/core - Events
+export type * from "./event";
+
 // @graphql-markdown/core - Formatter
 export type * from "./formatter";
 

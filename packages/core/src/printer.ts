@@ -11,6 +11,7 @@ import type {
   PackageName,
   Printer,
   PrinterConfig,
+  PrinterEventEmitter,
   PrinterOptions,
 } from "@graphql-markdown/types";
 
@@ -64,6 +65,7 @@ export const getPrinter = async (
   options?: Maybe<PrinterOptions>,
   formatter?: Partial<Formatter>,
   mdxDeclaration?: Maybe<string>,
+  eventEmitter?: Maybe<PrinterEventEmitter>,
 ): Promise<Printer> => {
   if (typeof printerModule !== "string") {
     throw new TypeError("Invalid printer module name.");
@@ -86,6 +88,7 @@ export const getPrinter = async (
       { ...options },
       formatter,
       mdxDeclaration,
+      eventEmitter,
     );
 
     return Printer;

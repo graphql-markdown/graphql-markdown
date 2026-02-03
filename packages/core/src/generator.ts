@@ -96,7 +96,7 @@ export const loadMDXModule = async (
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         log(
-          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
+          `An error occurred while loading MDX formatter "${mdxParser as string}": ${errorMessage}`,
           LogLevel.warn,
         );
         return undefined;
@@ -357,13 +357,15 @@ export const generateDocFromSchema = async ({
 }: GeneratorOptions): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  const events = getEvents();
-
   await Logger(loggerModule);
 
   const mdxModule = await loadMDXModule(mdxParser);
   // Register MDX lifecycle event handlers if mdxModule loaded successfully
+  // This must be called BEFORE getEvents() because it resets the singleton
   registerMDXEventHandlers(mdxModule);
+
+  // Get events AFTER registration (registerMDXEventHandlers resets and recreates the singleton)
+  const events = getEvents();
 
   await events.emitAsync(
     SchemaEvents.BEFORE_LOAD,
@@ -456,6 +458,8 @@ export const generateDocFromSchema = async ({
     },
     formatter,
     mdxDeclaration,
+    // Pass event emitter to enable print events
+    events,
   );
 
   // allow mdxModule to specify custom extension

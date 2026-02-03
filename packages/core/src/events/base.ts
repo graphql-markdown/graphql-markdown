@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import type { DefaultAction } from "@graphql-markdown/types";
+import type { DefaultAction, ICancellableEvent } from "@graphql-markdown/types";
 
 /**
  * Deep freezes an object to make it immutable at runtime.
@@ -52,7 +52,7 @@ export interface CancellableEventOptions {
  *
  * @category Events
  */
-export abstract class CancellableEvent {
+export abstract class CancellableEvent implements ICancellableEvent {
   /**
    * Whether the default action has been prevented.
    * Set to true when preventDefault() is called.

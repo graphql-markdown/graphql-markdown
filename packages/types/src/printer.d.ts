@@ -7,6 +7,7 @@ import type {
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
 } from "./core";
+import type { ICancellableEvent } from "./event";
 import type { Formatter } from "./formatter";
 import type {
   GraphQLDirective,
@@ -15,6 +16,50 @@ import type {
 } from "./graphql";
 import type { CustomDirectiveMap } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
+
+/**
+ * Base interface for printer events.
+ * All print events must have a mutable output property.
+ */
+export interface PrinterEvent {
+  /** The generated output that handlers can modify */
+  output: Maybe<MDXString> | MDXString | string;
+}
+
+/**
+ * Minimal event emitter interface for printer event emission.
+ *
+ * This interface allows the printer to emit events without depending on the core package.
+ * The actual implementation is provided by the CancellableEventEmitter from \@graphql-markdown/core.
+ *
+ * @example
+ * ```typescript
+ * // In core package
+ * const events = getEvents(); // Returns CancellableEventEmitter
+ * await Printer.init(schema, baseURL, linkRoot, options, formatter, mdxDeclaration, events);
+ *
+ * // In printer
+ * if (this.eventEmitter) {
+ *   const event = new PrintCodeEvent({ type, typeName, options }, output);
+ *   await this.eventEmitter.emitAsync(PrintTypeEvents.AFTER_PRINT_CODE, event);
+ *   output = event.output; // Use potentially modified output
+ * }
+ * ```
+ */
+export interface PrinterEventEmitter {
+  /**
+   * Emit an async event with support for cancellable events.
+   * Handlers can modify the event's mutable properties.
+   *
+   * @param eventName - The event name to emit
+   * @param event - The event object (PrinterEvent or CancellableEvent instance)
+   * @returns Promise that resolves when all handlers have executed
+   */
+  emitAsync: (
+    eventName: string,
+    event: ICancellableEvent | PrinterEvent,
+  ) => Promise<{ errors: Error[]; defaultPrevented: boolean }>;
+}
 
 /**
  * Represents the root GraphQL type names supported by the documentation generator
@@ -156,6 +201,8 @@ export abstract class IPrinter {
    * @param linkRoot - The root path for relative links
    * @param options - Printer configuration options
    * @param mdxModule - Optional MDX module for rendering
+   * @param mdxDeclaration - Optional MDX import declaration
+   * @param eventEmitter - Optional event emitter for print events
    */
   static init(
     schema: Maybe<GraphQLSchema>,
@@ -164,6 +211,7 @@ export abstract class IPrinter {
     options: Maybe<PrinterOptions>,
     mdxModule?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
+    eventEmitter?: Maybe<PrinterEventEmitter>,
   ): Promise<void>;
 
   /**
@@ -252,13 +300,13 @@ export abstract class IPrinter {
    * @param name - The name of the type
    * @param type - The GraphQL type to document
    * @param options - Optional configuration options for printing
-   * @returns MDX string containing complete type documentation
+   * @returns Promise resolving to MDX string containing complete type documentation
    */
   static printType(
     name: string,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
-  ): Maybe<MDXString>;
+  ): Promise<Maybe<MDXString>>;
 }
 
 /**

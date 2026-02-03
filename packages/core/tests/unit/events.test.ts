@@ -6,6 +6,9 @@ import {
   SchemaEvents,
   GenerateIndexMetafileEvent,
   RenderTypeEntitiesEvent,
+  PrintCodeEvent,
+  PrintTypeEvent,
+  PrintTypeEvents,
 } from "../../src/events";
 import { CancellableEventOptions } from "../../src/events/base";
 
@@ -472,6 +475,243 @@ describe("events", () => {
       expect(errors).toHaveLength(1);
       expect(errors[0]).toBeInstanceOf(Error);
       expect(errors[0].message).toBe("string error");
+    });
+  });
+
+  describe("PrintTypeEvents", () => {
+    it("should have correct event names", () => {
+      expect(PrintTypeEvents.BEFORE_PRINT_CODE).toBe("print:beforePrintCode");
+      expect(PrintTypeEvents.AFTER_PRINT_CODE).toBe("print:afterPrintCode");
+      expect(PrintTypeEvents.BEFORE_PRINT_TYPE).toBe("print:beforePrintType");
+      expect(PrintTypeEvents.AFTER_PRINT_TYPE).toBe("print:afterPrintType");
+    });
+  });
+
+  describe("PrintCodeEvent", () => {
+    const mockOptions = { basePath: "/docs" } as any;
+
+    it("should store data and initial output", () => {
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "```graphql\ntype User { }\n```",
+      );
+
+      expect(event.data.type).toEqual({ name: "User" });
+      expect(event.data.typeName).toBe("user");
+      expect(event.data.options).toBe(mockOptions);
+      expect(event.output).toBe("```graphql\ntype User { }\n```");
+    });
+
+    it("should allow output to be modified", () => {
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "original output",
+      );
+
+      event.output = "modified output";
+
+      expect(event.output).toBe("modified output");
+    });
+
+    it("should be cancellable by default", () => {
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "",
+      );
+
+      event.preventDefault();
+
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it("should support stopPropagation", () => {
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "",
+      );
+
+      event.stopPropagation();
+
+      expect(event.propagationStopped).toBe(true);
+    });
+
+    it("should work with event emitter to modify output", async () => {
+      const events = getEvents();
+
+      events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
+        event.output = `# Modified\n${event.output}`;
+      });
+
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "original",
+      );
+      await events.emitAsync(PrintTypeEvents.AFTER_PRINT_CODE, event);
+
+      expect(event.output).toBe("# Modified\noriginal");
+    });
+
+    it("should allow multiple handlers to chain modifications", async () => {
+      const events = getEvents();
+
+      events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
+        event.output = `[prefix]${event.output}`;
+      });
+      events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
+        event.output = `${event.output}[suffix]`;
+      });
+
+      const event = new PrintCodeEvent(
+        {
+          type: { name: "User" },
+          typeName: "user",
+          options: mockOptions,
+        },
+        "content",
+      );
+      await events.emitAsync(PrintTypeEvents.AFTER_PRINT_CODE, event);
+
+      expect(event.output).toBe("[prefix]content[suffix]");
+    });
+  });
+
+  describe("PrintTypeEvent", () => {
+    const mockOptions = { basePath: "/docs" } as any;
+
+    it("should store data and initial output", () => {
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        "# User\n\nA user type" as any,
+      );
+
+      expect(event.data.type).toEqual({ name: "User" });
+      expect(event.data.name).toBe("user");
+      expect(event.data.options).toBe(mockOptions);
+      expect(event.output).toBe("# User\n\nA user type");
+    });
+
+    it("should allow output to be modified", () => {
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        "original" as any,
+      );
+
+      event.output = "modified" as any;
+
+      expect(event.output).toBe("modified");
+    });
+
+    it("should allow undefined output", () => {
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        undefined,
+      );
+
+      expect(event.output).toBeUndefined();
+    });
+
+    it("should allow null name", () => {
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: null,
+          options: mockOptions,
+        },
+        undefined,
+      );
+
+      expect(event.data.name).toBeNull();
+    });
+
+    it("should be cancellable by default", () => {
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        undefined,
+      );
+
+      event.preventDefault();
+
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it("should work with event emitter to modify output", async () => {
+      const events = getEvents();
+
+      events.on(PrintTypeEvents.AFTER_PRINT_TYPE, (event: PrintTypeEvent) => {
+        if (event.output) {
+          event.output = `${event.output}\n\n---\nFooter` as any;
+        }
+      });
+
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        "# User" as any,
+      );
+      await events.emitAsync(PrintTypeEvents.AFTER_PRINT_TYPE, event);
+
+      expect(event.output).toBe("# User\n\n---\nFooter");
+    });
+
+    it("should allow handler to replace output entirely", async () => {
+      const events = getEvents();
+
+      events.on(PrintTypeEvents.BEFORE_PRINT_TYPE, (event: PrintTypeEvent) => {
+        event.output = "Custom documentation" as any;
+        event.preventDefault();
+      });
+
+      const event = new PrintTypeEvent(
+        {
+          type: { name: "User" },
+          name: "user",
+          options: mockOptions,
+        },
+        undefined,
+      );
+      await events.emitAsync(PrintTypeEvents.BEFORE_PRINT_TYPE, event);
+
+      expect(event.output).toBe("Custom documentation");
+      expect(event.defaultPrevented).toBe(true);
     });
   });
 });

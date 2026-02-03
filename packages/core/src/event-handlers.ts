@@ -42,16 +42,24 @@ export const registerMDXEventHandlers = (mdxModule: unknown): void => {
   const events = getEvents();
   const registeredHandlers = new Set<string>();
 
+  // Get the actual module object, handling ESM default export wrapping
+  // When using dynamic import() on a CommonJS module, exports may be under .default
+  const module = mdxModule as Record<string, unknown>;
+  const effectiveModule =
+    module.default && typeof module.default === "object"
+      ? (module.default as Record<string, unknown>)
+      : module;
+
   // Iterate through event callback mappings (lifecycle hooks only)
   for (const [eventName, callbackName] of Object.entries(EVENT_CALLBACK_MAP)) {
     // Check if mdxModule has this callback function
     if (
-      callbackName in mdxModule &&
-      typeof (mdxModule as Record<string, unknown>)[callbackName] === "function"
+      callbackName in effectiveModule &&
+      typeof effectiveModule[callbackName] === "function"
     ) {
-      const mdxFunction = (
-        mdxModule as Record<string, (...args: any[]) => any>
-      )[callbackName];
+      const mdxFunction = effectiveModule[callbackName] as (
+        ...args: unknown[]
+      ) => unknown;
 
       events.on(eventName, mdxFunction);
       registeredHandlers.add(callbackName);
