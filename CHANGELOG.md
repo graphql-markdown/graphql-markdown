@@ -1,3 +1,11 @@
+<a id="1.31.2"></a>
+# [1.31.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.31.2) - 2026-02-03
+
+🐛 This release fixes broken packages from 1.31.0
+
+[Changes][1.31.2]
+
+
 <a id="1.31.0"></a>
 # [1.31.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.31.0) - 2026-01-31
 
@@ -2157,6 +2165,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.31.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.0...1.31.2
 [1.31.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.3...1.31.0
 [1.30.3]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.2...1.30.3
 [1.30.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.30.1...1.30.2
