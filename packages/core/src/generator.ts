@@ -96,7 +96,7 @@ export const loadMDXModule = async (
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         log(
-          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
+          `An error occurred while loading MDX formatter "${mdxParser as string}": ${errorMessage}`,
           LogLevel.warn,
         );
         return undefined;
