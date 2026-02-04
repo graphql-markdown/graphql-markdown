@@ -74,8 +74,6 @@ const config = {
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
           exclude: ["**/__*.md"],
-          showLastUpdateTime: true,
-          showLastUpdateAuthor: false,
         },
         theme: {
           customCss: ["./src/css/custom.css"],
