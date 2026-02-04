@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Organize GraphQL documentation into categories using directives. Group queries, mutations, and types for better navigation.
+keywords:
+  - GraphQL documentation categories
+  - group by directive
+  - organize documentation
+  - navigation structure
+  - type grouping
 ---
 
 # Documentation categories

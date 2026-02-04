@@ -1,0 +1,21 @@
+{
+  "name": "GraphQL-Markdown Documentation",
+  "short_name": "GraphQL-MD",
+  "description": "Generate human-friendly Markdown/MDX documentation from GraphQL schemas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#485e58",
+  "icons": [
+    {
+      "src": "/img/graphql-markdown.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/graphql-markdown.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

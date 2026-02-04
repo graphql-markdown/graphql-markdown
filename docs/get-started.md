@@ -1,5 +1,12 @@
 ---
 sidebar_position: 30
+description: Quick start guide for installing and configuring GraphQL-Markdown with Docusaurus. Generate documentation from your GraphQL schema in minutes.
+keywords:
+  - GraphQL-Markdown installation
+  - Docusaurus setup
+  - GraphQL documentation
+  - getting started
+  - configuration
 ---
 
 # Getting started

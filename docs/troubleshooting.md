@@ -2,6 +2,13 @@
 position: 90
 pagination_prev: null
 pagination_next: null
+description: Solutions for common GraphQL-Markdown issues including duplicate graphql modules, missing type definitions, and configuration problems.
+keywords:
+  - GraphQL-Markdown troubleshooting
+  - common errors
+  - debugging
+  - graphql module errors
+  - type definitions
 ---
 
 # Troubleshooting

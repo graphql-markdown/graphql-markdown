@@ -1,5 +1,12 @@
 ---
 sidebar_position: 40
+description: Learn how to configure GraphQL-Markdown using GraphQL Config, Docusaurus plugin options, or CLI arguments. Supports multiple frameworks.
+keywords:
+  - GraphQL-Markdown configuration
+  - GraphQL Config
+  - Docusaurus plugin
+  - MDX settings
+  - schema configuration
 ---
 
 # Configuration

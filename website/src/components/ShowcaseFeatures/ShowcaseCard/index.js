@@ -14,7 +14,12 @@ const ShowcaseCard = ({ name, href, image }) => {
             <div className="avatar__name">{name}</div>
           </div>
         </CardHeader>
-        <CardImage cardImageUrl={cardImageUrl} />
+        <CardImage
+          cardImageUrl={cardImageUrl}
+          alt={`${name} showcase screenshot`}
+          width={240}
+          height={160}
+        />
       </Link>
     </Card>
   );

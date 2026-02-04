@@ -19,6 +19,6 @@ projects:
         skipDocDirective:
         - "@noDoc"
         metatags:
-        - name: googlebot
+        - name: robots
           content: noindex
         - charset: utf-8

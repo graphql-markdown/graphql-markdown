@@ -2,6 +2,13 @@
 id: custom-directive
 pagination_prev: null
 pagination_next: null
+description: Handle custom GraphQL schema directives in your documentation. Configure which directives to render and customize their display.
+keywords:
+  - GraphQL directives
+  - custom directives
+  - schema directives
+  - directive documentation
+  - auth directive
 ---
 
 # Custom schema directives handling

@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Configure multiple GraphQL schemas in a single project. Set up separate documentation instances for different APIs.
+keywords:
+  - multiple schemas
+  - multi-schema
+  - GraphQL documentation
+  - multiple APIs
+  - schema instances
 ---
 
 # Additional schemas

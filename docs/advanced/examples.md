@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Add usage examples to your GraphQL type documentation using the @example directive. Show real-world usage patterns.
+keywords:
+  - GraphQL examples
+  - example directive
+  - usage examples
+  - code samples
+  - documentation examples
 ---
 
 # Examples

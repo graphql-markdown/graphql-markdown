@@ -14,7 +14,7 @@ function HomepageHeader() {
         <img
           className={clsx("hero", styles.heroImage)}
           src="/img/preview.svg"
-          alt=""
+          alt="GraphQL-Markdown documentation generator"
         />
         <p className="hero__subtitle">
           <span style={{ color: "#36c46f" }}>Flexible</span> documentation for{" "}
@@ -29,10 +29,10 @@ function HomepageHeader() {
         </p>
         <p className="hero__subtitle">
           Powered by{" "}
-          <a
-            href="/docs/advanced/integration-with-frameworks"
-          >
-            <span style={{ color: "#36c46f" }}>[put your documentation generator here]</span>
+          <a href="/docs/advanced/integration-with-frameworks">
+            <span style={{ color: "#36c46f" }}>
+              [put your documentation generator here]
+            </span>
           </a>
           .
         </p>
@@ -71,6 +71,9 @@ function Thanks() {
           <img
             src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8"
             alt="contributors"
+            width={540}
+            height={200}
+            loading="lazy"
           />
         </a>
       </div>
