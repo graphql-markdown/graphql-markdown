@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Create a custom homepage for your generated GraphQL documentation with proper sidebar positioning and navigation.
+keywords:
+  - documentation homepage
+  - custom landing page
+  - sidebar position
+  - GraphQL docs home
+  - documentation structure
 ---
 
 # Homepage

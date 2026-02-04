@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Customize how deprecated fields and types are displayed in your GraphQL documentation using CSS styling.
+keywords:
+  - deprecated fields
+  - GraphQL deprecation
+  - custom styling
+  - CSS customization
+  - deprecated types
 ---
 
 # Customize deprecated sections

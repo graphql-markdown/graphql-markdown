@@ -1,5 +1,12 @@
 ---
 sidebar_position: 80
+description: Understand how GraphQL-Markdown transforms your GraphQL schema into comprehensive Markdown documentation through parsing, rendering, and output.
+keywords:
+  - GraphQL-Markdown architecture
+  - documentation generation
+  - schema parsing
+  - MDX rendering
+  - how it works
 ---
 
 # How It Works

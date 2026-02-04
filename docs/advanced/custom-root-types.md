@@ -1,6 +1,13 @@
 ---
 pagination_prev: null
 pagination_next: null
+description: Configure custom root types for Query, Mutation, and Subscription operations in your GraphQL schema documentation.
+keywords:
+  - custom root types
+  - GraphQL operations
+  - Query type
+  - Mutation type
+  - Subscription type
 ---
 
 # Custom root types

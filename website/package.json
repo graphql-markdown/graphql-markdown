@@ -11,22 +11,16 @@
     "serve": "docusaurus serve"
   },
   "dependencies": {
-    "@cmfcmf/docusaurus-search-local": "1.1.0",
-    "@docusaurus/core": "3.7.0",
-    "@docusaurus/faster": "^3.7.0",
-    "@docusaurus/preset-classic": "3.7.0",
-    "@docusaurus/theme-mermaid": "^3.7.0",
+    "@cmfcmf/docusaurus-search-local": "2.0.1",
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/faster": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "@docusaurus/theme-mermaid": "^3.9.2",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  },
-  "overrides": {
-    "@cmfcmf/docusaurus-search-local": {
-      "@docusaurus/core": "^3.7.0"
-    },
-    "serialize-javascript": "^6.0.2"
   },
   "browserslist": {
     "production": [

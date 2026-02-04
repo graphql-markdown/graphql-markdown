@@ -1,3 +1,13 @@
+---
+description: Customize GraphQL-Markdown with lifecycle hooks. Examples for modifying output, adding custom processing, and integrating with build pipelines.
+keywords:
+  - GraphQL-Markdown hooks
+  - lifecycle events
+  - custom processing
+  - build integration
+  - documentation hooks
+---
+
 # Hooks Recipes
 
 This page lists examples of usage of [hooks](/api/category/events).

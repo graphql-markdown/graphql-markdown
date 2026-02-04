@@ -1,5 +1,12 @@
 ---
 sidebar_position: 50
+description: Complete reference of all GraphQL-Markdown settings, CLI flags, and configuration options with default values and examples.
+keywords:
+  - GraphQL-Markdown settings
+  - CLI options
+  - configuration reference
+  - plugin options
+  - documentation settings
 ---
 
 # Settings

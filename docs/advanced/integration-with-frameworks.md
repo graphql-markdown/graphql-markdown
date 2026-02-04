@@ -1,3 +1,14 @@
+---
+description: Integrate GraphQL-Markdown with Docusaurus, Astro, Next.js, VitePress, and other documentation frameworks. Complete setup guides and examples.
+keywords:
+  - GraphQL-Markdown integration
+  - Docusaurus
+  - Astro
+  - Next.js
+  - VitePress
+  - framework integration
+---
+
 # Integration with Frameworks
 
 This guide provides examples for integrating GraphQL-Markdown with popular documentation frameworks.

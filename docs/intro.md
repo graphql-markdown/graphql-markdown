@@ -2,6 +2,14 @@
 sidebar_position: 10
 pagination_next: get-started
 hide_table_of_contents: true
+description: Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Easy setup, customizable output, and seamless Docusaurus integration.
+keywords:
+  - GraphQL
+  - documentation generator
+  - MDX
+  - Docusaurus
+  - API documentation
+  - schema documentation
 ---
 
 # Introduction

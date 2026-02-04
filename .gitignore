@@ -11,6 +11,8 @@ build
 .dccache
 .docusaurus
 api
+website/examples
+website/api
 
 # stryker temp files
 .stryker-tmp

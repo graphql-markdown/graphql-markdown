@@ -1,5 +1,12 @@
 ---
 sidebar_position: 20
+description: Try GraphQL-Markdown instantly with interactive CodeSandbox demos for Docusaurus, Astro, Next.js, and other frameworks.
+keywords:
+  - GraphQL-Markdown demo
+  - CodeSandbox
+  - try online
+  - interactive example
+  - Docusaurus demo
 ---
 
 # Try it

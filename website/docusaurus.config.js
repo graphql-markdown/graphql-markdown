@@ -13,7 +13,7 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "throw",
   favicon: "img/favicon.ico",
-
+  trailingSlash: false,
   // GitHub pages deployment config.
   organizationName: "graphql-markdown",
   projectName: "graphql-markdown.dev",
@@ -23,14 +23,26 @@ const config = {
   },
   themes: ["@docusaurus/theme-mermaid"],
 
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en"],
+  },
+
   plugins: [
-    require.resolve("@cmfcmf/docusaurus-search-local"),
+    [
+      require.resolve("@cmfcmf/docusaurus-search-local"),
+      {
+        indexBlog: false,
+        indexPages: false,
+      },
+    ],
     [
       "@docusaurus/plugin-content-docs",
       {
         id: "example-default",
         path: "./examples/default",
         routeBasePath: "examples/default",
+        sidebarCollapsed: true,
       },
     ],
     [
@@ -39,6 +51,7 @@ const config = {
         id: "example-group-by",
         path: "./examples/group-by",
         routeBasePath: "examples/group-by",
+        sidebarCollapsed: true,
       },
     ],
     [
@@ -57,31 +70,111 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          path: "../docs",
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
           exclude: ["**/__*.md"],
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
         },
         theme: {
           customCss: ["./src/css/custom.css"],
         },
         sitemap: {
-          changefreq: "monthly",
+          lastmod: "date",
+          changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ["/examples/default/**", "/examples/group-by/**"],
+          ignorePatterns: ["/examples/**", "/search/**"],
           filename: "sitemap.xml",
         },
       }),
     ],
   ],
 
+  headTags: [
+    {
+      tagName: "script",
+      attributes: {
+        type: "application/ld+json",
+      },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "GraphQL-Markdown",
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Any",
+        description:
+          "Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular frameworks.",
+        url: "https://graphql-markdown.dev",
+        author: {
+          "@type": "Person",
+          name: "Grégory Heitz",
+        },
+        license: "https://opensource.org/licenses/MIT",
+      }),
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "manifest",
+        href: "/manifest.json",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "theme-color",
+        content: "#485e58",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "apple-touch-icon",
+        href: "/img/graphql-markdown.png",
+      },
+    },
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: "img/social-card.png",
+      metadata: [
+        {
+          name: "description",
+          content:
+            "Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular frameworks.",
+        },
+        {
+          name: "keywords",
+          content:
+            "GraphQL, Markdown, MDX, documentation, Docusaurus, API documentation, schema, generator, GraphQL schema",
+        },
+        { name: "author", content: "Grégory Heitz" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: "GraphQL-Markdown" },
+        {
+          name: "twitter:description",
+          content:
+            "Generate human-friendly Markdown/MDX documentation from GraphQL schemas.",
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "GraphQL-Markdown" },
+        { property: "og:locale", content: "en_US" },
+      ],
       announcementBar: {
-        content:
-          '🚀 Now compatible with AstroJS, NextJS and more... <a href="/docs/advanced/integration-with-frameworks">check our documentation</a> 🚀',
         // content:
-        //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
+        //   '🚀 Now compatible with AstroJS, NextJS and more... <a href="/docs/advanced/integration-with-frameworks">check our documentation</a> 🚀',
+        content:
+          'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",
         textColor: "#dbf5e6",
         isCloseable: true,
@@ -129,11 +222,6 @@ const config = {
             position: "right",
             label: "Release notes",
           },
-          // {
-          //   to: "https://codesandbox.io/s/github/graphql-markdown/demo/",
-          //   position: "right",
-          //   label: "CodeSandbox",
-          // },
           {
             to: "https://github.com/graphql-markdown/graphql-markdown",
             position: "right",
@@ -152,9 +240,7 @@ const config = {
       },
     }),
 
-  future: {
-    experimental_faster: true, // turns Docusaurus Faster on globally
-  },
+  future: {v4: true}
 };
 
 module.exports = config;

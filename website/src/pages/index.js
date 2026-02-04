@@ -14,7 +14,7 @@ function HomepageHeader() {
         <img
           className={clsx("hero", styles.heroImage)}
           src="/img/preview.svg"
-          alt=""
+          alt="GraphQL-Markdown documentation generator"
         />
         <p className="hero__subtitle">
           <span style={{ color: "#36c46f" }}>Flexible</span> documentation for{" "}
