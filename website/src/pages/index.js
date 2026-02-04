@@ -71,6 +71,9 @@ function Thanks() {
           <img
             src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8"
             alt="contributors"
+            width={540}
+            height={200}
+            loading="lazy"
           />
         </a>
       </div>
