@@ -19,7 +19,7 @@
 
 :global([data-theme="dark"]) .heroButton:hover {
   --ifm-button-background-color: var(--ifm-color-primary-darkest);
-  --ifm-button-border-color: var(--ifm-button-background-color);  
+  --ifm-button-border-color: var(--ifm-button-background-color);
   color: var(--ifm-background-color) !important;
 }
 
@@ -30,7 +30,7 @@
 
 .heroButtonSecondary:hover {
   --ifm-button-background-color: #e535ab;
-  color:  white !important;
+  color: white !important;
 }
 
 :global([data-theme="dark"]) .heroButtonSecondary {

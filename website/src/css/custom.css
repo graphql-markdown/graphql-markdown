@@ -1,10 +1,11 @@
 :root {
   --ifm-link-color: #e535ab !important;
   --ifm-global-spacing: 0.4rem;
-  --ifm-font-family-base: "Jost", "Segoe UI", "Roboto", "Ubuntu", "Cantarell",
-    "Noto Sans", sans-serif;
-  --ifm-font-family-monospace: "Victor Mono", "SFMono-Regular", "Menlo",
-    "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+  --ifm-font-family-base:
+    "Jost", "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", sans-serif;
+  --ifm-font-family-monospace:
+    "Victor Mono", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", monospace;
   --ifm-color-primary: #374844;
   --ifm-color-primary-dark: #32413d;
   --ifm-color-primary-darker: #2f3d3a;
@@ -75,7 +76,8 @@ main code {
     no-repeat;
 }
 
-.deprecated, .graphql-markdown-deprecated-section {
+.deprecated,
+.graphql-markdown-deprecated-section {
   padding-top: 1rem;
 }
 

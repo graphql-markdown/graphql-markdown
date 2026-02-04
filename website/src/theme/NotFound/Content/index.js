@@ -26,10 +26,7 @@ export default function NotFoundContent({ className }) {
           404
         </Translate>
       </Heading>
-      <Heading
-        as="h2"
-        style={{ marginBottom: "1.5rem", fontWeight: "normal" }}
-      >
+      <Heading as="h2" style={{ marginBottom: "1.5rem", fontWeight: "normal" }}>
         <Translate
           id="theme.NotFound.p1"
           description="The first paragraph of the 404 page"

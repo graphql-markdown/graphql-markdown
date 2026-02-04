@@ -240,7 +240,7 @@ const config = {
       },
     }),
 
-  future: {v4: true}
+  future: { v4: true },
 };
 
 module.exports = config;

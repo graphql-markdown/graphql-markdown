@@ -29,10 +29,10 @@ function HomepageHeader() {
         </p>
         <p className="hero__subtitle">
           Powered by{" "}
-          <a
-            href="/docs/advanced/integration-with-frameworks"
-          >
-            <span style={{ color: "#36c46f" }}>[put your documentation generator here]</span>
+          <a href="/docs/advanced/integration-with-frameworks">
+            <span style={{ color: "#36c46f" }}>
+              [put your documentation generator here]
+            </span>
           </a>
           .
         </p>
