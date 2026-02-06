@@ -46,7 +46,7 @@
         "typedoc": "0.28.16",
         "typedoc-docusaurus-theme": "1.4.2",
         "typedoc-plugin-frontmatter": "1.3.1",
-        "typedoc-plugin-markdown": "4.9.0",
+        "typedoc-plugin-markdown": "4.10.0",
         "unionfs": "4.6.0",
       },
     },
@@ -2196,7 +2196,7 @@
 
     "typedoc-plugin-frontmatter": ["typedoc-plugin-frontmatter@1.3.1", "", { "dependencies": { "yaml": "^2.8.1" }, "peerDependencies": { "typedoc-plugin-markdown": ">=4.9.0" } }, "sha512-wXKnhpiOuG3lY9GGKiKcXNrhKbPYm/jA5wbzGE/kKdwlSu8++ZbEuKA0K2dvIna3F+5EQrv+3AeObHkS1QP7JA=="],
 
-    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.9.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-9Uu4WR9L7ZBgAl60N/h+jqmPxxvnC9nQAlnnO/OujtG2ubjnKTVUFY1XDhcMY+pCqlX3N2HsQM2QTYZIU9tJuw=="],
+    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.10.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-psrg8Rtnv4HPWCsoxId+MzEN8TVK5jeKCnTbnGAbTBqcDapR9hM41bJT/9eAyKn9C2MDG9Qjh3MkltAYuLDoXg=="],
 
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
