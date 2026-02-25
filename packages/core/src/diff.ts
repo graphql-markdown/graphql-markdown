@@ -1,3 +1,8 @@
+/**
+ * Diff utilities for detecting schema changes between builds.
+ *
+ * @packageDocumentation
+ */
 import type {
   DiffMethodName,
   FunctionCheckSchemaChanges,

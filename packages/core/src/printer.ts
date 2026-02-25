@@ -1,4 +1,9 @@
 /**
+ * Printer loader helpers for bootstrapping GraphQL-Markdown renderers.
+ *
+ * @packageDocumentation
+ */
+/**
  * @module printer
  *
  * This module provides the functionality to load and initialize a printer for GraphQL schema documentation.

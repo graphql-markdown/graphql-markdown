@@ -5,6 +5,7 @@
  * specification links, and other MDX-specific formatting for GraphQL documentation.
  *
  * @primaryExport
+ * @packageDocumentation
  */
 
 import type {

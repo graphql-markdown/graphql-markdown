@@ -1,3 +1,8 @@
+/**
+ * Docusaurus integration for running GraphQL-Markdown and wiring CLI commands.
+ *
+ * @packageDocumentation
+ */
 /* istanbul ignore file */
 import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
 import type { GraphQLMarkdownCliOptions } from "@graphql-markdown/types";
@@ -15,7 +20,13 @@ const LOGGER_MODULE = "@docusaurus/logger" as const;
 const MDX_PACKAGE = "@graphql-markdown/docusaurus/mdx" as const;
 
 /**
+ * Docusaurus plugin wrapper that wires GraphQL-Markdown into the build,
+ * optionally running the CLI during `docusaurus build` and registering
+ * the `graphql-to-doc` command on the local CLI.
  *
+ * @param _ - Load context (unused).
+ * @param options - GraphQL-Markdown CLI options plus Docusaurus plugin options.
+ * @returns A configured Docusaurus plugin instance.
  */
 export default async function pluginGraphQLDocGenerator(
   _: LoadContext,

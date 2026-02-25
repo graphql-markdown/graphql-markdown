@@ -1,6 +1,8 @@
 /**
  * @module mdx
  * This module provides utilities for generating MDX index files in Docusaurus format.
+ *
+ * @packageDocumentation
  */
 
 import { join } from "node:path";
@@ -19,6 +21,13 @@ enum SidebarPosition {
   LAST = 999,
 }
 
+/**
+ * Hook that materializes a `_category_.yml` file before Docusaurus indexes
+ * a directory, ensuring generated bundles have labels, ordering, and
+ * optional generated-index metadata even when the folder was produced by the CLI.
+ *
+ * @param event - Hook payload containing the target directory, category name, and generator options.
+ */
 export const beforeGenerateIndexMetafileHook = async (event: {
   data: {
     dirPath: string;

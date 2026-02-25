@@ -5,6 +5,13 @@
 
 import type { MDXString } from "@graphql-markdown/types";
 
+/**
+ * MDX helper components injected into generated documents so Docusaurus
+ * can render badges, bullets, details, and SpecifiedBy links without
+ * requiring manual component registration in every project.
+ *
+ * @packageDocumentation
+ */
 export const mdxDeclaration: MDXString = `
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
 

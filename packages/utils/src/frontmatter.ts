@@ -1,3 +1,8 @@
+/**
+ * Routines for serializing data structures into Markdown frontmatter blocks.
+ *
+ * @packageDocumentation
+ */
 import { toString } from "./string";
 
 /**
