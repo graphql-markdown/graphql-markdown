@@ -1,4 +1,5 @@
 User-agent: *
-Allow: /
+Disallow: /examples/
+Disallow: /search/
 
 Sitemap: https://graphql-markdown.dev/sitemap.xml

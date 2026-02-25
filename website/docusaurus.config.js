@@ -43,6 +43,7 @@ const config = {
         path: "./examples/default",
         routeBasePath: "examples/default",
         sidebarCollapsed: true,
+        versions: { current: { noIndex: true } },
       },
     ],
     [
@@ -52,6 +53,7 @@ const config = {
         path: "./examples/group-by",
         routeBasePath: "examples/group-by",
         sidebarCollapsed: true,
+        versions: { current: { noIndex: true } },
       },
     ],
     [
