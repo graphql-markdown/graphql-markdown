@@ -19,6 +19,7 @@ The `@graphql-markdown/cli` package adds a CLI with commands for generating MDX 
 ## Why GraphQL Markdown?
 
 Managing API documentation can be time-consuming and prone to becoming outdated. This package solves these challenges by:
+
 - Automatically generating documentation from your schema
 - Keeping documentation in sync with your API
 - Providing a consistent documentation structure
