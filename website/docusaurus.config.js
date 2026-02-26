@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const { themes } = require("prism-react-renderer");
+const createLLMSPluginConfig = require("./llms.config");
 const lightCodeTheme = themes.github,
   darkCodeTheme = themes.dracula;
 
@@ -64,6 +65,21 @@ const config = {
         routeBasePath: "api",
       },
     ],
+    ["docusaurus-plugin-llms", createLLMSPluginConfig()],
+    // Disabling due to known bug which causes slowdowns in the build process
+    // https://github.com/facebook/docusaurus/discussions/11199
+    function disableExpensiveBundlerOptimizationPlugin() {
+      return {
+        name: "disable-expensive-bundler-optimizations",
+        configureWebpack(_config, isServer) {
+          return {
+            optimization: {
+              concatenateModules: false,
+            },
+          };
+        },
+      };
+    },
   ],
 
   presets: [
