@@ -12,13 +12,26 @@
 }
 
 .heroImage {
-  height: 300px;
-  width: 800px;
-  object-fit: cover;
-  text-align: center;
-  padding: 0;
+  /* ✅ responsive image: no fixed 800x300 */
+  display: block;
+  width: min(800px, 100%);
+  height: auto;
   margin-left: auto;
   margin-right: auto;
+  padding: 0;
+}
+
+.heroSubtitle {
+  max-width: 52rem;
+  margin: 0.75rem auto 0;
+  line-height: 1.4;
+}
+
+.heroSubtitleSecondary {
+  max-width: 52rem;
+  margin: 0.25rem auto 0;
+  line-height: 1.4;
+  opacity: 0.92; /* makes it feel secondary without changing font size */
 }
 
 .buttons {
@@ -76,17 +89,17 @@
 
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 2rem;
+    padding: 2rem 1rem;
   }
+
   .heroImage {
-    padding: 0;
-    height: auto;
-    width: auto;
-    object-fit: fill;
+    width: 100%;
   }
+
   .buttons {
     flex-direction: column;
   }
+
   .heroButton {
     width: 80%;
     margin-top: 1rem;

@@ -8,8 +8,8 @@ const lightCodeTheme = themes.github,
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "GraphQL-Markdown",
-  tagline: "Human-friendly documentation for GraphQL schemas.",
+  title: "GraphQL-Markdown — GraphQL schema documentation generator",
+  tagline: "Customizable Markdown/MDX documentation for GraphQL schemas.",
   url: "https://graphql-markdown.dev",
   baseUrl: "/",
   onBrokenLinks: "throw",
@@ -120,7 +120,7 @@ const config = {
         applicationCategory: "DeveloperApplication",
         operatingSystem: "Any",
         description:
-          "Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular frameworks.",
+          "Generate customizable Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular MDX frameworks.",
         url: "https://graphql-markdown.dev",
         author: {
           "@type": "Person",
@@ -134,6 +134,14 @@ const config = {
       attributes: {
         rel: "preconnect",
         href: "https://fonts.googleapis.com",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
       },
     },
     {

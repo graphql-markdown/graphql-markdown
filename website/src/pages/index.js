@@ -16,8 +16,13 @@ function HomepageHeader() {
           src="/img/preview.svg"
           alt="GraphQL-Markdown documentation generator"
         />
-        <p className="hero__subtitle">
-          <span style={{ color: "#36c46f" }}>Flexible</span> documentation for{" "}
+
+        <p className={clsx("hero__subtitle", styles.heroSubtitle)}>
+          Customizable{" "}
+          <span style={{ color: "#36c46f", whiteSpace: "nowrap" }}>
+            Markdown + MDX
+          </span>{" "}
+          documentation for{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -27,15 +32,19 @@ function HomepageHeader() {
           </a>{" "}
           schemas.
         </p>
-        <p className="hero__subtitle">
-          Powered by{" "}
+
+        <p className={clsx("hero__subtitle", styles.heroSubtitleSecondary)}>
+          One{" "}
+          <Link to="/docs/get-started" style={{ color: "#e535ab" }}>
+            CLI
+          </Link>{" "}
+          to generate docs for{" "}
           <a href="/docs/advanced/integration-with-frameworks">
-            <span style={{ color: "#36c46f" }}>
-              [put your documentation generator here]
-            </span>
+            <span style={{ color: "#36c46f" }}>any MDX framework</span>
           </a>
           .
         </p>
+
         <div className={clsx("margin-vert--lg", styles.buttons)}>
           <Link
             className={clsx(
@@ -82,9 +91,13 @@ function Thanks() {
 }
 
 export default function Home() {
-  const { siteConfig } = useDocusaurusContext();
+  useDocusaurusContext(); // keep hook in case you rely on it later
+
   return (
-    <Layout title={`${siteConfig.title}`} description={`${siteConfig.tagline}`}>
+    <Layout
+      title="GraphQL-Markdown — GraphQL schema documentation generator"
+      description="Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Use the CLI to produce docs that integrate with any MDX framework."
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />

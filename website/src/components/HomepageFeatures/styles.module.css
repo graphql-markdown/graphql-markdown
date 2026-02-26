@@ -1,21 +1,64 @@
 .features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
   width: 100%;
+  padding: 2.25rem 0;
+}
+
+.featureRow {
+  align-items: center;
+  padding: 1.5rem 0;
+}
+
+/* subtle separation without “giant gaps” */
+.featureRow + .featureRow {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.iconCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .featureSvg {
-  height: 200px;
-  width: 200px;
+  width: 140px;
+  height: 140px;
+}
+
+.featureTitle {
+  margin: 0 0 0.5rem 0;
+}
+
+.featureText {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.inlineCta {
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 996px) {
   .features {
-    padding: 2rem;
-    justify-content: center;
+    padding: 2rem 1rem;
   }
-  .feature {
+
+  .featureRow {
     text-align: center;
+    padding: 1.25rem 0;
+  }
+
+  .featureTitle,
+  .featureText {
+    text-align: left;
+  }
+
+  .featureSvg {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 0.75rem;
+  }
+
+  .iconCol {
+    justify-content: flex-start;
   }
 }
