@@ -12,6 +12,11 @@ import type { MDXString } from "@graphql-markdown/types";
  *
  * @packageDocumentation
  */
+
+/**
+ * String literal that declares the React helpers (`Bullet`, `SpecifiedBy`, etc.)
+ * which GraphQL-Markdown prepends to every generated MDX file.
+ */
 export const mdxDeclaration: MDXString = `
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em', color: 'var(--ifm-color-secondary-darkest)' }}>&nbsp;●&nbsp;</span></>
 
