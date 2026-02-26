@@ -28,7 +28,7 @@
         "eslint-plugin-jsonc": "3.1.1",
         "eslint-plugin-mdx": "3.6.2",
         "eslint-plugin-prettier": "5.5.5",
-        "eslint-plugin-tsdoc": "0.5.1",
+        "eslint-plugin-tsdoc": "0.5.2",
         "globals": "17.3.0",
         "graphql": "16.13.0",
         "graphql-config": "5.1.5",
@@ -1156,7 +1156,7 @@
 
     "eslint-plugin-prettier": ["eslint-plugin-prettier@5.5.5", "", { "dependencies": { "prettier-linter-helpers": "^1.0.1", "synckit": "^0.11.12" }, "peerDependencies": { "@types/eslint": ">=8.0.0", "eslint": ">=8.0.0", "eslint-config-prettier": ">= 7.0.0 <10.0.0 || >=10.1.0", "prettier": ">=3.0.0" }, "optionalPeers": ["@types/eslint", "eslint-config-prettier"] }, "sha512-hscXkbqUZ2sPithAuLm5MXL+Wph+U7wHngPBv9OMWwlP8iaflyxpjTYZkmdgB4/vPIhemRlBEoLrH7UC1n7aUw=="],
 
-    "eslint-plugin-tsdoc": ["eslint-plugin-tsdoc@0.5.1", "", { "dependencies": { "@microsoft/tsdoc": "0.16.0", "@microsoft/tsdoc-config": "0.18.1", "@typescript-eslint/utils": "~8.56.0" } }, "sha512-+EFu9XAFzogfoRspo2slmHZZ10amXqLAhmgCG0nbR6RZHNZK2XmsE7gfZ8gBjaO/p6C2DOGn09UpTGOlYy6OdQ=="],
+    "eslint-plugin-tsdoc": ["eslint-plugin-tsdoc@0.5.2", "", { "dependencies": { "@microsoft/tsdoc": "0.16.0", "@microsoft/tsdoc-config": "0.18.1", "@typescript-eslint/utils": "~8.56.0" } }, "sha512-BlvqjWZdBJDIPO/YU3zcPCF23CvjYT3gyu63yo6b609NNV3D1b6zceAREy2xnweuBoDpZcLNuPyAUq9cvx6bbQ=="],
 
     "eslint-scope": ["eslint-scope@8.4.0", "", { "dependencies": { "esrecurse": "^4.3.0", "estraverse": "^5.2.0" } }, "sha512-sNXOfKCn74rt8RICKMvJS7XKV/Xk9kA7DyJr8mJik3S7Cwgy3qlkkmyS2uQB3jiJg6VNdZd/pDBJu0nvG2NlTg=="],
 
