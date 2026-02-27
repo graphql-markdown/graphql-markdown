@@ -44,7 +44,7 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-import { getRenderer, API_GROUPS } from "../../src/renderer";
+import { getRenderer } from "../../src/renderer";
 import { resetEvents, getEvents } from "../../src/event-emitter";
 import { GenerateIndexMetafileEvents } from "../../src/events";
 import {

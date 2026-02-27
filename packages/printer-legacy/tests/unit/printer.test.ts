@@ -55,8 +55,6 @@ import * as Link from "../../src/link";
 import { Printer } from "../../src/printer";
 import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
 
-import mdxModule from "../../src/mdx";
-
 describe("Printer", () => {
   enum TypeGuard {
     DIRECTIVE = "isDirectiveType",

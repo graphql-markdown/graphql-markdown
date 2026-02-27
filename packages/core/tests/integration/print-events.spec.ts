@@ -6,7 +6,6 @@
 import { getEvents, resetEvents } from "../../src/event-emitter";
 import { registerMDXEventHandlers } from "../../src/event-handlers";
 import { PrintTypeEvents } from "../../src/events/print-type-events";
-import { getPrinter } from "../../src/printer";
 
 describe("Print Events Integration", () => {
   beforeEach(() => {
