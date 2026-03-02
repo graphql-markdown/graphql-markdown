@@ -124,7 +124,7 @@ describe("link", () => {
   describe("getLinkCategoryFolder()", () => {
     test.each(types)(
       "returns a category object matching the graphLQLNamedType $name",
-      ({ guard }) => {
+      ({ guard }: { guard: TypeGuard }) => {
         expect.assertions(1);
 
         jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
@@ -158,7 +158,15 @@ describe("link", () => {
 
     test.each(types)(
       "returns markdown link for GraphQL $name",
-      ({ name, guard, operation }) => {
+      ({
+        name,
+        guard,
+        operation,
+      }: {
+        name: string;
+        guard: TypeGuard;
+        operation?: TypeLocale;
+      }) => {
         expect.hasAssertions();
 
         const entityName = `Test${name}`;
@@ -173,7 +181,7 @@ describe("link", () => {
         );
         mockGraphQL[guard].mockReturnValueOnce(true);
         mockGraphQL.isApiType.mockReturnValue(true);
-        mockUtils.slugify.mockReturnValueOnce(slug);
+        mockUtils.slugify.mockReturnValue(slug);
 
         const link = Link.toLink(type, entityName, operation, {
           ...DEFAULT_OPTIONS,
@@ -201,7 +209,7 @@ describe("link", () => {
       );
       mockGraphQL.isObjectType.mockReturnValueOnce(true);
       mockGraphQL.isApiType.mockReturnValueOnce(false);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -221,6 +229,9 @@ describe("link", () => {
 
       const type = "any";
       const entityName = "fooBar";
+      const slug = "foobar";
+
+      mockUtils.slugify.mockReturnValueOnce(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -229,6 +240,7 @@ describe("link", () => {
 
       expect(link).toMatchInlineSnapshot(`
         {
+          "id": "foobar",
           "text": "fooBar",
           "url": "#",
         }
@@ -243,12 +255,14 @@ describe("link", () => {
         name: entityName,
         locations: [],
       });
+      const slug = `test`;
 
       mockGraphQL.getNamedType.mockReturnValue(
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL[TypeGuard.DIRECTIVE].mockReturnValue(true);
       jest.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -257,6 +271,7 @@ describe("link", () => {
 
       expect(link).toMatchInlineSnapshot(`
         {
+          "id": "test",
           "text": "Test",
           "url": "#",
         }
@@ -278,7 +293,7 @@ describe("link", () => {
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
       mockGraphQL.isApiType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
       mockGroup.getGroup.mockReturnValueOnce("group");
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -310,7 +325,7 @@ describe("link", () => {
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
       mockGraphQL.isApiType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
       mockGraphQL.isDeprecated.mockReturnValue(true);
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -341,7 +356,7 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -371,7 +386,7 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -624,7 +639,7 @@ describe("link", () => {
       );
       mockGraphQL.isScalarType.mockReturnValue(true);
       mockGraphQL.isApiType.mockReturnValueOnce(false);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.getRelationLink("foo", type, {
         ...DEFAULT_OPTIONS,
@@ -650,7 +665,7 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isScalarType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValueOnce(slug);
+      mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.getRelationLink(undefined, type, {
         ...DEFAULT_OPTIONS,

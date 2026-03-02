@@ -11,11 +11,22 @@ import type {
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
-import { isGraphQLFieldType, isDeprecated } from "@graphql-markdown/graphql";
+import { toString } from "@graphql-markdown/utils";
+
+import {
+  isGraphQLFieldType,
+  isDeprecated,
+  getTypeName,
+} from "@graphql-markdown/graphql";
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";
-import { hasPrintableDirective, printLink, printParentLink } from "./link";
+import {
+  hasPrintableDirective,
+  printLink,
+  printParentLink,
+  toLink,
+} from "./link";
 import { printCustomTags } from "./directive";
 
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
@@ -41,7 +52,13 @@ export const printSectionItem = <T>(
     return "";
   }
 
-  const typeNameLink = printLink(type, {
+  const link = toLink(
+    type,
+    getTypeName(type, toString(type)),
+    undefined,
+    options,
+  );
+  const typeNameLink = printLink(link, {
     ...options,
     withAttributes: false,
   });
@@ -49,7 +66,10 @@ export const printSectionItem = <T>(
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
-  const title = `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${badges} ${tags}${MARKDOWN_EOL}`;
+  const permalink = link.id ? String.raw`\{#${link.id}\}` : undefined; // use raw string to prevent MDX from interpreting the curly braces as JSX
+  const metadata = [badges, tags, permalink].filter(Boolean).join(" ");
+  const title =
+    `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${metadata} ${MARKDOWN_EOL}` as MDXString;
 
   const description = printDescription(type, options, "")
     .trim()

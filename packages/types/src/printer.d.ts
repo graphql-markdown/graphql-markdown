@@ -161,6 +161,7 @@ export interface Badge {
 export interface TypeLink {
   text: string;
   url: string;
+  id?: Maybe<string>;
 }
 
 /**

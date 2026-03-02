@@ -232,6 +232,7 @@ export const toLink = (
   const fallback: TypeLink = {
     text: name,
     url: "#",
+    id: slugify(name),
   };
 
   if (typeof type !== "object" || !hasPrintableDirective(type, options)) {
@@ -350,35 +351,66 @@ export const printLinkAttributes = (
 };
 
 /**
+ * Determines whether the provided argument is a valid {@link TypeLink} object.
+ *
+ * Checks that the argument is a non-null object containing both `text` and `url` properties,
+ * and that both properties are strings.
+ *
+ * @param arg - The value to check.
+ * @returns `true` if the argument is a {@link TypeLink}, otherwise `false`.
+ */
+const isLinkType = (arg: unknown): arg is TypeLink => {
+  return (
+    typeof arg === "object" &&
+    arg !== null &&
+    "text" in arg &&
+    "url" in arg &&
+    typeof arg.text === "string" &&
+    typeof arg.url === "string"
+  );
+};
+
+/**
  * Prints a link for a GraphQL type based on the provided options.
  *
  * @param type - The GraphQL type to print a link for
  * @param options - Configuration options for link generation
  * @returns The formatted link as a string
  */
-export const printLink = (type: unknown, options: PrintLinkOptions): string => {
-  if (typeof type !== "object" || type === null) {
+export const printLink = <T>(
+  arg: Maybe<TypeLink> | T,
+  options: PrintLinkOptions,
+): string => {
+  if (typeof arg !== "object" || arg === null) {
     return "";
   }
 
-  const link = toLink(
-    type,
-    getTypeName(type, toString(type)),
-    undefined,
-    options,
-  );
+  let link: TypeLink;
+  if (isLinkType(arg)) {
+    link = arg;
+  } else {
+    link = toLink(arg, getTypeName(arg, toString(arg)), undefined, options);
+  }
+
+  let printFormattedLink = (text: string, link: TypeLink): string => {
+    // create a permalink if url is not provided or is just a hash
+    if ((!link.url || link.url === "#") && typeof link.id === "string") {
+      return `[${text}](#${link.id})`;
+    }
+    return `[${text}](${link.url})`;
+  };
 
   if (!hasOptionWithAttributes(options)) {
     const textWithAttribute = options.formatMDXNameEntity!(
       link.text,
       options.parentType,
     );
-    return `[${textWithAttribute}](${link.url})`;
+    return printFormattedLink(textWithAttribute, link);
   }
 
-  const text = printLinkAttributes(type, link.text);
+  const text = printLinkAttributes(arg, link.text);
 
-  return `[${options.formatMDXNameEntity!(text)}](${link.url})`;
+  return printFormattedLink(options.formatMDXNameEntity!(text), link);
 };
 
 /**
