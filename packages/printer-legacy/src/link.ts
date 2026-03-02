@@ -39,7 +39,12 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 
-import { pathUrl, slugify, toString } from "@graphql-markdown/utils";
+import {
+  hasStringProperty,
+  pathUrl,
+  slugify,
+  toString,
+} from "@graphql-markdown/utils";
 
 import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
@@ -359,18 +364,6 @@ export const printLinkAttributes = (
  * @param arg - The value to check.
  * @returns `true` if the argument is a {@link TypeLink}, otherwise `false`.
  */
-const hasStringProperty = (
-  value: unknown,
-  property: string,
-): value is { [key in typeof property]: string } => {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const record = value as Record<string, unknown>;
-  return typeof record[property] === "string";
-};
-
 const isLinkType = (arg: unknown): arg is TypeLink => {
   return (
     typeof arg === "object" &&
