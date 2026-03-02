@@ -66,7 +66,10 @@ export const printSectionItem = <T>(
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
-  const permalink = link.id ? String.raw`\{#${link.id}\}` : undefined; // use raw string to prevent MDX from interpreting the curly braces as JSX
+  const permalink =
+    options.sectionHeaderId && link.id
+      ? String.raw`\{#${link.id}\}`
+      : undefined; // use raw string to prevent MDX from interpreting the curly braces as JSX
   const metadata = [badges, tags, permalink].filter(Boolean).join(" ");
   const title =
     `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${metadata} ${MARKDOWN_EOL}` as MDXString;

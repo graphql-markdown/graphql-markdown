@@ -395,7 +395,8 @@ export const printLink = <T>(
   let printFormattedLink = (text: string, link: TypeLink): string => {
     // create a permalink if url is not provided or is just a hash
     if ((!link.url || link.url === "#") && typeof link.id === "string") {
-      return `[${text}](#${link.id})`;
+      const linkUrl = options.sectionHeaderId ? link.id : "";
+      return `[${text}](#${linkUrl})`;
     }
     return `[${text}](${link.url})`;
   };

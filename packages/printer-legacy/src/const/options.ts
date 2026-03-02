@@ -82,5 +82,6 @@ export const DEFAULT_OPTIONS: Required<
   schema: undefined,
   skipDocDirectives: [] as const,
   withAttributes: false as const,
+  sectionHeaderId: true as const,
   ...MDXModule,
 };

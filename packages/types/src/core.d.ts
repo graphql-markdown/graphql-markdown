@@ -126,6 +126,12 @@ export interface ConfigDocOptions {
    * When enabled, folder names are automatically prefixed with order numbers (e.g., 01-objects, 02-queries).
    */
   categorySort?: CategorySortFn | "natural";
+  /**
+   * Whether to use section header IDs for generating permalinks using format \{#id\}.
+   * If true, links will be generated with IDs that can be used as anchors in the documentation.
+   * This is useful for enabling direct linking to specific sections of the documentation.
+   */
+  sectionHeaderId?: boolean;
 }
 
 /**
@@ -328,6 +334,8 @@ export interface CliOptions {
   noRelatedType?: boolean;
   /** Disable type badges flag */
   noTypeBadges?: boolean;
+  /** Disable custom section header IDs for permalinks */
+  noSectionId?: boolean;
   /** Prettify output flag */
   pretty?: boolean;
   /** Output root directory */

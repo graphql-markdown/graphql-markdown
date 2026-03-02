@@ -164,6 +164,7 @@ export const DEFAULT_OPTIONS: Readonly<
     categorySort: undefined,
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
+    sectionHeaderId: true as const,
   } as Pick<ConfigDocOptions, "categorySort"> &
     Required<
       Pick<
@@ -493,7 +494,16 @@ export const getDocOptions = (
   const configIndex =
     typeof configOptions?.index === "boolean" ? configOptions.index : undefined;
   const index = cliIndex ?? configIndex ?? DEFAULT_OPTIONS.docOptions!.index;
-
+  const cliSectionHeaderId =
+    typeof cliOpts?.noSectionId === "boolean" ? cliOpts.noSectionId : undefined;
+  const configSectionHeaderId =
+    typeof configOptions?.sectionHeaderId === "boolean"
+      ? configOptions.sectionHeaderId
+      : undefined;
+  const sectionHeaderId =
+    cliSectionHeaderId ??
+    configSectionHeaderId ??
+    DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
@@ -501,6 +511,7 @@ export const getDocOptions = (
       ...configOptions?.frontMatter,
     },
     index,
+    sectionHeaderId,
   } as Required<ConfigDocOptions>;
 };
 

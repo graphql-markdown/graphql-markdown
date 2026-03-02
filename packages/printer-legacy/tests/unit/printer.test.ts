@@ -200,6 +200,7 @@ describe("Printer", () => {
   "parentTypePrefix": true,
   "relatedTypeSection": true,
   "schema": undefined,
+  "sectionHeaderId": true,
   "skipDocDirectives": [],
   "typeBadges": true,
   "withAttributes": false,
@@ -300,6 +301,7 @@ describe("Printer", () => {
     "extensionASTNodes": [],
     "extensions": {},
   },
+  "sectionHeaderId": true,
   "skipDocDirectives": [
     "@test",
   ],

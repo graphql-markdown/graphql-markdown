@@ -292,6 +292,7 @@ describe("config", () => {
         docOptions: {
           index: false,
           frontMatter: { draft: true },
+          sectionHeaderId: false,
         },
         printTypeOptions: {
           codeSection: false,
@@ -420,6 +421,7 @@ describe("config", () => {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: {},
           index: true,
+          sectionHeaderId: true,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -499,6 +501,7 @@ describe("config", () => {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true, page_next: null },
           index: true,
+          sectionHeaderId: true,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,

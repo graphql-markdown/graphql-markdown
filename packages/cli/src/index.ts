@@ -119,6 +119,7 @@ export const getGraphQLMarkdownCli = (
     .option("--noParentType", "Disable parent type name as field prefix")
     .option("--noRelatedType", "Disable related types sections")
     .option("--noTypeBadges", "Disable badges for types")
+    .option("--noSectionId", "Disable custom section header IDs for permalinks")
     .option("--index", "Enable generated index for categories")
     .option("-f, --force", "Force document generation")
     .option("-d, --diff <diffMethod>", "Set diff method")
