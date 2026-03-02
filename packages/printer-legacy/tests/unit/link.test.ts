@@ -512,6 +512,26 @@ describe("link", () => {
         '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">barfoo</code></span>](/bar)',
       );
     });
+
+    test("does not include section header id in hash link when disabled", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "toLink").mockReturnValue({
+        id: "foo-id",
+        text: "foo",
+        url: "#",
+      });
+      jest.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
+
+      const result = Link.printLink(
+        {},
+        { ...DEFAULT_OPTIONS, sectionHeaderId: false },
+      );
+
+      expect(result).toBe(
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](#)',
+      );
+    });
   });
 
   describe("hasOptionWithAttributes()", () => {

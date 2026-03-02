@@ -631,5 +631,23 @@ describe("CLI Module", () => {
         require("@graphql-markdown/core").generateDocFromSchema,
       ).not.toHaveBeenCalled();
     });
+
+    test("forwards noSectionId CLI option to buildConfig", async () => {
+      expect.assertions(1);
+
+      const options = {
+        schema: "./schema.graphql",
+        rootPath: "./docs",
+      };
+      const cliOptions = {
+        noSectionId: true,
+      };
+
+      await runGraphQLMarkdown(options, cliOptions);
+
+      expect(
+        require("@graphql-markdown/core").buildConfig,
+      ).toHaveBeenCalledWith(options, cliOptions, undefined);
+    });
   });
 });
