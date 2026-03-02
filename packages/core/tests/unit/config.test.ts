@@ -388,6 +388,7 @@ describe("config", () => {
         link: "/cli",
         noCode: true,
         noExample: true,
+        noSectionId: true,
         only: "@public",
         pretty: true,
         root: "cli",
@@ -421,7 +422,7 @@ describe("config", () => {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: {},
           index: true,
-          sectionHeaderId: true,
+          sectionHeaderId: false,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,

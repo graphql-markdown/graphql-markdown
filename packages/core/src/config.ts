@@ -495,7 +495,9 @@ export const getDocOptions = (
     typeof configOptions?.index === "boolean" ? configOptions.index : undefined;
   const index = cliIndex ?? configIndex ?? DEFAULT_OPTIONS.docOptions!.index;
   const cliSectionHeaderId =
-    typeof cliOpts?.noSectionId === "boolean" ? cliOpts.noSectionId : undefined;
+    typeof cliOpts?.noSectionId === "boolean"
+      ? !cliOpts.noSectionId
+      : undefined;
   const configSectionHeaderId =
     typeof configOptions?.sectionHeaderId === "boolean"
       ? configOptions.sectionHeaderId

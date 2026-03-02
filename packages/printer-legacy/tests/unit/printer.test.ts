@@ -310,6 +310,18 @@ describe("Printer", () => {
 }
 `);
     });
+
+    test("uses explicit sectionHeaderId option", async () => {
+      expect.hasAssertions();
+
+      Printer.options = undefined;
+
+      await Printer.init(undefined, undefined, undefined, {
+        sectionHeaderId: false,
+      });
+
+      expect(Printer.options?.sectionHeaderId).toBe(false);
+    });
   });
 
   describe("printHeader()", () => {

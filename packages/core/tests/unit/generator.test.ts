@@ -66,6 +66,7 @@ describe("generator", () => {
       docOptions: {
         index: true,
         frontMatter: {},
+        sectionHeaderId: false,
       },
       homepageLocation: "homepage location",
       linkRoot: "link root",
@@ -172,6 +173,7 @@ describe("generator", () => {
             metatags: [],
             printTypeOptions: options.printTypeOptions,
             onlyDocDirectives: [],
+            sectionHeaderId: false,
             skipDocDirectives: [mockDirective],
           },
           undefined,
