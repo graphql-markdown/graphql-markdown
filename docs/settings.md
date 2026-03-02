@@ -110,7 +110,7 @@ plugins: [
           },
           index: true, // enable generated index pages, same as CLI flag --index
           categorySort: "natural", // sort categories alphabetically and prefix with order numbers (01-objects, 02-queries, etc.)
-          sectionHeaderId: false, // disabled for backward compatibility
+          sectionHeaderId: false, // disable custom section header IDs (restores previous behavior)
         },
         // highlight-end
         loaders: {
