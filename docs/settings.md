@@ -87,7 +87,7 @@ Use these options to tweak some of the static documentation generator features:
 | `docOptions.categorySort`    | _not supported_ | -       |
 | `docOptions.frontMatter`     | _not supported_ | `{}`    |
 | `docOptions.index`           | `--index`       | `false` |
-| `docOptions.sectionHeaderId` | --noSectionId   | `true`  |
+| `docOptions.sectionHeaderId` | `--noSectionId` | `true`  |
 
 <br/>
 
