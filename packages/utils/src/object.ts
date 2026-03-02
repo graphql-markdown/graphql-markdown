@@ -40,31 +40,3 @@ export const isEmpty = <T extends Record<string, unknown>>(
     Object.keys(obj).length > 0
   );
 };
-
-/**
- * Type guard that checks if a value is an object with a string property.
- *
- * @template Property - The name of the property to check
- * @param value - The value to check
- * @param property - The name of the property that should be a string
- * @returns `true` if value is an object with the specified property as a string, `false` otherwise
- *
- * @example
- * ```typescript
- * const obj: unknown = { name: "John" };
- * if (hasStringProperty(obj, "name")) {
- *   console.log(obj.name); // TypeScript knows obj.name is a string
- * }
- * ```
- */
-export const hasStringProperty = (
-  value: unknown,
-  property: string,
-): value is Record<typeof property, string> => {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const record = value as Record<string, unknown>;
-  return typeof record[property] === "string";
-};
