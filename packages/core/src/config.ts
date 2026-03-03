@@ -494,18 +494,12 @@ export const getDocOptions = (
   const configIndex =
     typeof configOptions?.index === "boolean" ? configOptions.index : undefined;
   const index = cliIndex ?? configIndex ?? DEFAULT_OPTIONS.docOptions!.index;
-  const cliSectionHeaderId =
-    typeof cliOpts?.noSectionId === "boolean"
-      ? !cliOpts.noSectionId
-      : undefined;
   const configSectionHeaderId =
     typeof configOptions?.sectionHeaderId === "boolean"
       ? configOptions.sectionHeaderId
-      : undefined;
+      : DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
   const sectionHeaderId =
-    cliSectionHeaderId ??
-    configSectionHeaderId ??
-    DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
+    cliOpts?.noSectionId === true ? false : configSectionHeaderId;
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
