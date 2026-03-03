@@ -80,7 +80,7 @@ Use these options to tweak some of the static documentation generator features:
 - `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When enabled, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). When not set, the order depends on document generator folders sorting and no prefixes are added.
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) &mdash; **ONLY FOR DOCUSAURUS**
-- `sectionHeaderId`: enable/disable the generation of custom header ID for permalinks (`### Section {#ID}`).
+- `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. Conceptually this uses the syntax `### Section {#ID}`, but the generated MDX will escape the braces as in `### Section \{#id\}` so that MDX does not treat `{...}` as an expression.
 
 | Setting                      | CLI flag        | Default |
 | ---------------------------- | --------------- | ------- |
