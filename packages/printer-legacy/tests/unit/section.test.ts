@@ -22,18 +22,18 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("section", () => {
   describe("printSection()", () => {
-    test("returns Markdown ### section by default", async () => {
+    test("returns Markdown ### section by default", () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content = ["section content"];
 
-      const section = await printSection(content, title, DEFAULT_OPTIONS);
+      const section = printSection(content, title, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
+      expect(section).toMatchInlineSnapshot(String.raw`
 "### section title
 
-####   
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 
@@ -41,12 +41,12 @@ describe("section", () => {
 `);
     });
 
-    test("returns Markdown ### section with collapsible content", async () => {
+    test("returns Markdown ### section with collapsible content", () => {
       expect.hasAssertions();
 
       const content = ["section content"];
 
-      const section = await printSection(content, "", {
+      const section = printSection(content, "", {
         ...DEFAULT_OPTIONS,
         level: 0 as SectionLevelValue,
         collapsible: {
@@ -55,34 +55,34 @@ describe("section", () => {
         },
       });
 
-      expect(section).toMatchInlineSnapshot(`
+      expect(section).toMatchInlineSnapshot(String.raw`
 " 
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 </details>
 
-####   
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 undefined"
 `);
     });
 
-    test("returns Markdown custom section level", async () => {
+    test("returns Markdown custom section level", () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content = ["section content"];
 
-      const section = await printSection(content, title, {
+      const section = printSection(content, title, {
         ...DEFAULT_OPTIONS,
         level: 1 as SectionLevelValue,
       });
 
-      expect(section).toMatchInlineSnapshot(`
+      expect(section).toMatchInlineSnapshot(String.raw`
 "# section title
 
-####   
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 
@@ -90,47 +90,47 @@ undefined"
 `);
     });
 
-    test("returns empty string if content is empty", async () => {
+    test("returns empty string if content is empty", () => {
       expect.hasAssertions();
 
       const title = "section title";
       const content: unknown[] = [];
 
-      const section = await printSection(content, title, DEFAULT_OPTIONS);
+      const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toBe("");
     });
   });
 
   describe("printSectionItems()", () => {
-    test("returns Markdown one line per item", async () => {
+    test("returns Markdown one line per item", () => {
       expect.hasAssertions();
 
       const itemList = ["one", "two", "three"];
 
-      const section = await printSectionItems(itemList, DEFAULT_OPTIONS);
+      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"####   
-
-
-
-####   
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
 
 
 
-####   
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">two</code></span>](#two) \{#two\} 
+
+
+
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">three</code></span>](#three) \{#three\} 
 
 "
 `);
     });
 
-    test("returns empty text if not a list", async () => {
+    test("returns empty text if not a list", () => {
       expect.hasAssertions();
 
       const itemList = "list";
 
-      const section = await printSectionItems(itemList, DEFAULT_OPTIONS);
+      const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatch("");
     });
@@ -142,7 +142,7 @@ undefined"
       locations: [DirectiveLocation.FIELD],
     });
 
-    test("returns Markdown #### link section with description", async () => {
+    test("returns Markdown #### link section with description", () => {
       expect.hasAssertions();
 
       const type = new GraphQLObjectType({
@@ -151,16 +151,16 @@ undefined"
         fields: {},
       });
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
+      expect(section).toMatchInlineSnapshot(String.raw`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum
 "
 `);
     });
 
-    test("returns Markdown #### link section with multi-lines description", async () => {
+    test("returns Markdown #### link section with multi-lines description", () => {
       expect.hasAssertions();
 
       const type = new GraphQLObjectType({
@@ -178,9 +178,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
         fields: {},
       });
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
+      expect(section).toMatchInlineSnapshot(String.raw`
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
 Lorem ipsum dolor sit amet, 
 consectetur adipiscing elit, 
@@ -196,7 +196,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
-    test("returns Markdown #### link section with sub type is non-nullable", async () => {
+    test("returns Markdown #### link section with sub type is non-nullable", () => {
       expect.hasAssertions();
 
       const type = {
@@ -209,16 +209,16 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> \{#entity-type-name\} 
 
 "
 `);
     });
 
-    test("returns Markdown #### link section with sub type list and non-nullable", async () => {
+    test("returns Markdown #### link section with sub type list and non-nullable", () => {
       expect.hasAssertions();
 
       const type = {
@@ -233,35 +233,35 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> 
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> \{#entity-type-name\} 
 
 "
 `);
     });
 
-    test("returns Markdown #### link section with parent type prefix", async () => {
+    test("returns Markdown #### link section with parent type prefix", () => {
       expect.hasAssertions();
 
       const type = {
         name: "EntityTypeName",
       };
 
-      const section = await printSectionItem(type, {
+      const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         parentType: "parentTypePrefix",
       });
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) \{#entity-type-name\} 
 
 "
 `);
     });
 
-    test("returns Markdown #### link section with field parameters", async () => {
+    test("returns Markdown #### link section with field parameters", () => {
       expect.hasAssertions();
 
       const type = {
@@ -273,18 +273,51 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
           },
         ],
       };
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#)  
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) \{#entity-type-name\} 
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#parameter-type-name\} 
 
 "
 `);
     });
 
-    test("returns Markdown #### link section with non empty nullable list [!]", async () => {
+    test("generates unique anchor ids for same argument name under different parents", () => {
+      expect.hasAssertions();
+
+      const first = printSectionItem(
+        {
+          name: "id",
+          type: GraphQLString,
+        },
+        {
+          ...DEFAULT_OPTIONS,
+          parentType: "EntityTypeName.fieldOne",
+          level: 5 as SectionLevelValue,
+        },
+      );
+
+      const second = printSectionItem(
+        {
+          name: "id",
+          type: GraphQLString,
+        },
+        {
+          ...DEFAULT_OPTIONS,
+          parentType: "EntityTypeName.fieldTwo",
+          level: 5 as SectionLevelValue,
+        },
+      );
+
+      expect(first).toContain("(#entity-type-name-field-one-id)");
+      expect(first).toContain(String.raw`\{#entity-type-name-field-one-id\}`);
+      expect(second).toContain("(#entity-type-name-field-two-id)");
+      expect(second).toContain(String.raw`\{#entity-type-name-field-two-id\}`);
+    });
+
+    test("returns Markdown #### link section with non empty nullable list [!]", () => {
       expect.hasAssertions();
 
       const type = {
@@ -292,16 +325,16 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       };
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#entity-type-name-list\} 
 
 "
 `);
     });
 
-    test("returns Markdown #### link section with non empty no nullable list [!]!", async () => {
+    test("returns Markdown #### link section with non empty no nullable list [!]!", () => {
       expect.hasAssertions();
 
       const type = {
@@ -311,16 +344,16 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ),
       };
 
-      const section = await printSectionItem(type, DEFAULT_OPTIONS);
+      const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#entity-type-name-list\} 
 
 "
 `);
     });
 
-    test("returns no section if item matches skipDocDirective", async () => {
+    test("returns no section if item matches skipDocDirective", () => {
       expect.hasAssertions();
 
       const type = {
@@ -331,7 +364,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         },
       };
 
-      const section = await printSectionItem(type, {
+      const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
       });
@@ -339,7 +372,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toBe("");
     });
 
-    test("returns no section if item deprecated and SKIP", async () => {
+    test("returns no section if item deprecated and SKIP", () => {
       expect.hasAssertions();
 
       const type = {
@@ -351,7 +384,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         },
       };
 
-      const section = await printSectionItem(type, {
+      const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
         deprecated: "skip",
@@ -360,7 +393,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       expect(section).toBe("");
     });
 
-    test("returns Markdown #### link section without field parameters matching skipDocDirective", async () => {
+    test("returns Markdown #### link section without field parameters matching skipDocDirective", () => {
       expect.hasAssertions();
 
       const type = {
@@ -388,20 +421,20 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         ],
       };
 
-      const section = await printSectionItem(type, {
+      const section = printSectionItem(type, {
         ...DEFAULT_OPTIONS,
         skipDocDirectives: [noDoc],
       });
 
-      expect(section).toMatchInlineSnapshot(`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#) <mark class="gqlmd-mdx-badge">deprecated</mark> 
+      expect(section).toMatchInlineSnapshot(String.raw`
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> \{#entity-type-name\} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 </span>
 </fieldset>
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#parameter-type-name\} 
 
 
 

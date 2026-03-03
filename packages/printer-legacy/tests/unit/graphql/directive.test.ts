@@ -10,7 +10,7 @@ import {
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {
-    test("returns directive metadata without params", async () => {
+    test("returns directive metadata without params", () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -18,12 +18,12 @@ describe("directive", () => {
         locations: [],
       });
 
-      const code = await printDirectiveMetadata(type, DEFAULT_OPTIONS);
+      const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(`""`);
     });
 
-    test("returns directive metadata", async () => {
+    test("returns directive metadata", () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -36,12 +36,12 @@ describe("directive", () => {
         },
       });
 
-      const code = await printDirectiveMetadata(type, DEFAULT_OPTIONS);
+      const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toMatchInlineSnapshot(`
+      expect(code).toMatchInlineSnapshot(String.raw`
 "### Arguments
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
 
 
 
@@ -49,7 +49,7 @@ describe("directive", () => {
 `);
     });
 
-    test("returns directive metadata with grouped deprecated", async () => {
+    test("returns directive metadata with grouped deprecated", () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -66,15 +66,15 @@ describe("directive", () => {
         },
       });
 
-      const code = await printDirectiveMetadata(type, {
+      const code = printDirectiveMetadata(type, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
       });
 
-      expect(code).toMatchInlineSnapshot(`
+      expect(code).toMatchInlineSnapshot(String.raw`
 "### Arguments
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
 
 
 
@@ -84,7 +84,7 @@ describe("directive", () => {
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 </details>
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#bar\} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>

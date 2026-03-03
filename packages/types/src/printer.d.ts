@@ -121,7 +121,6 @@ export type PrintTypeOptions = Partial<Formatter> & {
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   exampleSection?: Maybe<TypeExampleSectionOption | boolean>;
-  /** Optional function to format category folder names (e.g., for adding prefix numbers) */
   formatCategoryFolderName?: Maybe<(categoryName: string) => string>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
@@ -134,6 +133,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
   schema?: Maybe<GraphQLSchema>;
+  sectionHeaderId?: boolean;
   skipDocDirectives?: GraphQLDirective[];
   typeBadges?: boolean;
   withAttributes?: boolean;
@@ -161,6 +161,7 @@ export interface Badge {
 export interface TypeLink {
   text: string;
   url: string;
+  id?: Maybe<string>;
 }
 
 /**
@@ -347,4 +348,6 @@ export interface PrinterOptions {
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   /** List of directives to exclude from documentation */
   skipDocDirectives?: GraphQLDirective[];
+  /** Flag to disable custom header section ID for permalink */
+  sectionHeaderId?: boolean;
 }

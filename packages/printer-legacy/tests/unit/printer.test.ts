@@ -200,6 +200,7 @@ describe("Printer", () => {
   "parentTypePrefix": true,
   "relatedTypeSection": true,
   "schema": undefined,
+  "sectionHeaderId": true,
   "skipDocDirectives": [],
   "typeBadges": true,
   "withAttributes": false,
@@ -300,6 +301,7 @@ describe("Printer", () => {
     "extensionASTNodes": [],
     "extensions": {},
   },
+  "sectionHeaderId": true,
   "skipDocDirectives": [
     "@test",
   ],
@@ -307,6 +309,18 @@ describe("Printer", () => {
   "withAttributes": false,
 }
 `);
+    });
+
+    test("uses explicit sectionHeaderId option", async () => {
+      expect.hasAssertions();
+
+      Printer.options = undefined;
+
+      await Printer.init(undefined, undefined, undefined, {
+        sectionHeaderId: false,
+      });
+
+      expect(Printer.options?.sectionHeaderId).toBe(false);
     });
   });
 

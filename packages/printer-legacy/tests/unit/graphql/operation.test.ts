@@ -12,7 +12,7 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
     isDirectiveType: jest.fn(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isDeprecated: jest.fn((T: any): boolean => {
-      return ("deprecationReason" in T) as boolean;
+      return "deprecationReason" in T;
     }),
   };
 });
@@ -26,7 +26,7 @@ import {
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
-    test("returns operation metadata", async () => {
+    test("returns operation metadata", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -35,7 +35,7 @@ describe("operation", () => {
         args: [],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -47,7 +47,7 @@ describe("operation", () => {
         } as unknown as GraphQLSchema,
       });
 
-      expect(metadata).toMatchInlineSnapshot(`
+      expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Type
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
@@ -58,7 +58,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments", async () => {
+    test("returns operation metadata with arguments", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -72,7 +72,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -84,10 +84,10 @@ describe("operation", () => {
         } as unknown as GraphQLSchema,
       });
 
-      expect(metadata).toMatchInlineSnapshot(`
+      expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Arguments
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
 
 
 
@@ -101,7 +101,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments with grouped deprecated", async () => {
+    test("returns operation metadata with arguments with grouped deprecated", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -120,7 +120,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
         schema: {
@@ -133,10 +133,10 @@ describe("operation", () => {
         } as unknown as GraphQLSchema,
       });
 
-      expect(metadata).toMatchInlineSnapshot(`
+      expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Arguments
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
 
 
 
@@ -146,7 +146,7 @@ describe("operation", () => {
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 </details>
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#bar\} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>

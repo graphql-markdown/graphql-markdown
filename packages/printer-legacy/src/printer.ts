@@ -95,6 +95,7 @@ import { printExample } from "./example";
 const DEFAULT_INIT_OPTIONS = {
   customDirectives: undefined,
   groups: undefined,
+  sectionHeaderId: true,
 };
 
 /**
@@ -171,6 +172,7 @@ export class Printer implements IPrinter {
       onlyDocDirectives,
       printTypeOptions,
       skipDocDirectives,
+      sectionHeaderId,
     }: {
       customDirectives?: CustomDirectiveMap;
       deprecated?: TypeDeprecatedOption;
@@ -180,6 +182,7 @@ export class Printer implements IPrinter {
       onlyDocDirectives?: GraphQLDirective[];
       printTypeOptions?: PrinterConfigPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
+      sectionHeaderId?: boolean;
     } = DEFAULT_INIT_OPTIONS,
     formatter?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
@@ -213,6 +216,7 @@ export class Printer implements IPrinter {
       schema,
       onlyDocDirectives: onlyDocDirectives ?? [],
       skipDocDirectives: skipDocDirectives ?? [],
+      sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
       typeBadges:
         printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
       metatags: metatags ?? [],

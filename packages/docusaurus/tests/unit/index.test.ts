@@ -117,5 +117,32 @@ describe("pluginGraphQLDocGenerator", () => {
         "@graphql-markdown/docusaurus/mdx",
       );
     });
+
+    test("passes sectionHeaderId through docOptions", async () => {
+      const optionsWithSectionHeaderId = {
+        runOnBuild: false,
+        docOptions: {
+          frontMatter: { draft: true },
+          sectionHeaderId: false,
+        },
+      };
+      const plugin = await pluginGraphQLDocGenerator(
+        {} as LoadContext,
+        optionsWithSectionHeaderId,
+      );
+      plugin.extendCli!(mockCli);
+      expect(getGraphQLMarkdownCli).toHaveBeenCalledWith(
+        expect.objectContaining({
+          docOptions: {
+            frontMatter: { draft: true },
+            generatorFrameworkName: "docusaurus",
+            generatorFrameworkVersion: expect.any(String),
+            sectionHeaderId: false,
+          },
+        }),
+        "@docusaurus/logger",
+        "@graphql-markdown/docusaurus/mdx",
+      );
+    });
   });
 });

@@ -10,7 +10,7 @@ jest.mock(
     return {
       buildConfig: jest
         .fn()
-        .mockImplementation(async (config): Promise<Options> => {
+        .mockImplementation(async (config: Options): Promise<Options> => {
           return config;
         }),
       generateDocFromSchema: jest.fn().mockResolvedValue(undefined),
@@ -179,6 +179,16 @@ describe("CLI Module", () => {
     "description": "Disable badges for types",
     "flags": "--noTypeBadges",
     "long": "--noTypeBadges",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
+    "description": "Disable custom section header IDs for permalinks",
+    "flags": "--noSectionId",
+    "long": "--noSectionId",
     "mandatory": false,
     "negate": false,
     "optional": false,
@@ -451,6 +461,16 @@ describe("CLI Module", () => {
   },
   Option {
     "defaultValue": undefined,
+    "description": "Disable custom section header IDs for permalinks",
+    "flags": "--noSectionId",
+    "long": "--noSectionId",
+    "mandatory": false,
+    "negate": false,
+    "optional": false,
+    "required": false,
+  },
+  Option {
+    "defaultValue": undefined,
     "description": "Enable generated index for categories",
     "flags": "--index",
     "long": "--index",
@@ -610,6 +630,24 @@ describe("CLI Module", () => {
       expect(
         require("@graphql-markdown/core").generateDocFromSchema,
       ).not.toHaveBeenCalled();
+    });
+
+    test("forwards noSectionId CLI option to buildConfig", async () => {
+      expect.assertions(1);
+
+      const options = {
+        schema: "./schema.graphql",
+        rootPath: "./docs",
+      };
+      const cliOptions = {
+        noSectionId: true,
+      };
+
+      await runGraphQLMarkdown(options, cliOptions);
+
+      expect(
+        require("@graphql-markdown/core").buildConfig,
+      ).toHaveBeenCalledWith(options, cliOptions, undefined);
     });
   });
 });

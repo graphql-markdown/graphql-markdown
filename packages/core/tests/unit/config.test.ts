@@ -292,6 +292,7 @@ describe("config", () => {
         docOptions: {
           index: false,
           frontMatter: { draft: true },
+          sectionHeaderId: false,
         },
         printTypeOptions: {
           codeSection: false,
@@ -387,6 +388,7 @@ describe("config", () => {
         link: "/cli",
         noCode: true,
         noExample: true,
+        noSectionId: true,
         only: "@public",
         pretty: true,
         root: "cli",
@@ -420,6 +422,7 @@ describe("config", () => {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: {},
           index: true,
+          sectionHeaderId: false,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -499,6 +502,7 @@ describe("config", () => {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
           frontMatter: { draft: true, page_next: null },
           index: true,
+          sectionHeaderId: true,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,

@@ -29,25 +29,25 @@ describe("interface", () => {
   });
 
   describe("printInterfaceMetadata()", () => {
-    test("returns interface metadata", async () => {
+    test("returns interface metadata", () => {
       expect.hasAssertions();
 
-      const metadata = await printInterfaceMetadata(type, DEFAULT_OPTIONS);
+      const metadata = printInterfaceMetadata(type, DEFAULT_OPTIONS);
 
-      expect(metadata).toMatchInlineSnapshot(`
+      expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Fields
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#one\} 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> \{#two\} 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#three\} 
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-interface-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#test-interface-name-three-four\} 
 
 
 

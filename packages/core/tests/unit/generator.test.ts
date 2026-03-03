@@ -66,6 +66,7 @@ describe("generator", () => {
       docOptions: {
         index: true,
         frontMatter: {},
+        sectionHeaderId: false,
       },
       homepageLocation: "homepage location",
       linkRoot: "link root",
@@ -172,6 +173,7 @@ describe("generator", () => {
             metatags: [],
             printTypeOptions: options.printTypeOptions,
             onlyDocDirectives: [],
+            sectionHeaderId: false,
             skipDocDirectives: [mockDirective],
           },
           undefined,
@@ -431,6 +433,53 @@ describe("generator", () => {
       // Verify printTypeOptions are passed intact
       expect(getPrinterSpy.mock.calls[0][2]?.printTypeOptions).toEqual(
         options.printTypeOptions,
+      );
+    });
+
+    test("propagates docOptions.sectionHeaderId to printer options", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      jest
+        .spyOn(GeneratorModule, "loadGraphqlSchema")
+        .mockResolvedValueOnce(mockSchema);
+      jest
+        .spyOn(GeneratorModule, "checkSchemaDifferences")
+        .mockResolvedValueOnce(true);
+      jest
+        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
+        .mockReturnValueOnce([[], []]);
+
+      jest
+        .spyOn(GraphQL, "getSchemaMap")
+        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+      const getPrinterSpy = jest
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      jest
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({
+        ...options,
+        docOptions: {
+          ...options.docOptions,
+          sectionHeaderId: false,
+        },
+      });
+
+      expect(getPrinterSpy).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(Object),
+        expect.objectContaining({
+          sectionHeaderId: false,
+        }),
+        undefined,
+        undefined,
+        expect.anything(),
       );
     });
 
