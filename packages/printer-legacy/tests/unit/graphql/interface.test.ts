@@ -47,7 +47,7 @@ describe("interface", () => {
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#three\} 
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#four\} 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-interface-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#test-interface-name-three-four\} 
 
 
 

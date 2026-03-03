@@ -235,9 +235,7 @@ export const toLink = (
   options: PrintLinkOptions,
 ): TypeLink => {
   const qualifiedName =
-    typeof options.parentType === "string" &&
-    options.parentType.includes(".") &&
-    name.toLowerCase() === "id"
+    typeof options.parentType === "string" && options.parentType.includes(".")
       ? `${options.parentType}.${name}`
       : name;
 
@@ -402,7 +400,7 @@ export const printLink = <T>(
     link = toLink(arg, getTypeName(arg, toString(arg)), undefined, options);
   }
 
-  let printFormattedLink = (text: string, link: TypeLink): string => {
+  const printFormattedLink = (text: string, link: TypeLink): string => {
     // create a permalink if url is not provided or is just a hash
     if ((!link.url || link.url === "#") && typeof link.id === "string") {
       const linkUrl = options.sectionHeaderId ? link.id : "";
