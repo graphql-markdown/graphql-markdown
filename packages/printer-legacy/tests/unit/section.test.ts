@@ -284,6 +284,39 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
+    test("generates unique anchor ids for same argument name under different parents", async () => {
+      expect.hasAssertions();
+
+      const first = await printSectionItem(
+        {
+          name: "id",
+          type: GraphQLString,
+        },
+        {
+          ...DEFAULT_OPTIONS,
+          parentType: "EntityTypeName.fieldOne",
+          level: 5 as SectionLevelValue,
+        },
+      );
+
+      const second = await printSectionItem(
+        {
+          name: "id",
+          type: GraphQLString,
+        },
+        {
+          ...DEFAULT_OPTIONS,
+          parentType: "EntityTypeName.fieldTwo",
+          level: 5 as SectionLevelValue,
+        },
+      );
+
+      expect(first).toContain("(#entity-type-name-field-one-id)");
+      expect(first).toContain(String.raw`\{#entity-type-name-field-one-id\}`);
+      expect(second).toContain("(#entity-type-name-field-two-id)");
+      expect(second).toContain(String.raw`\{#entity-type-name-field-two-id\}`);
+    });
+
     test("returns Markdown #### link section with non empty nullable list [!]", async () => {
       expect.hasAssertions();
 

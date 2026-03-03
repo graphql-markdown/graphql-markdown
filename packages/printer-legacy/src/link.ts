@@ -234,10 +234,17 @@ export const toLink = (
   operation: Maybe<TypeLocale>,
   options: PrintLinkOptions,
 ): TypeLink => {
+  const qualifiedName =
+    typeof options.parentType === "string" &&
+    options.parentType.includes(".") &&
+    name.toLowerCase() === "id"
+      ? `${options.parentType}.${name}`
+      : name;
+
   const fallback: TypeLink = {
     text: name,
     url: "#",
-    id: slugify(name),
+    id: slugify(qualifiedName),
   };
 
   if (typeof type !== "object" || !hasPrintableDirective(type, options)) {

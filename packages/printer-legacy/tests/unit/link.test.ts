@@ -247,6 +247,30 @@ describe("link", () => {
       `);
     });
 
+    test("returns parent-qualified id for unknown entities when parentType is provided", () => {
+      expect.hasAssertions();
+
+      const type = "any";
+      const entityName = "id";
+
+      mockUtils.slugify.mockReturnValueOnce("query-user-id");
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+        parentType: "Query.user",
+      });
+
+      expect(mockUtils.slugify).toHaveBeenCalledWith("Query.user.id");
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "id": "query-user-id",
+          "text": "id",
+          "url": "#",
+        }
+      `);
+    });
+
     test("returns plain text for type without printable directive", () => {
       expect.hasAssertions();
 
