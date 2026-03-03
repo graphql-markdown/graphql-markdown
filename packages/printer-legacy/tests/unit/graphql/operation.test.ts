@@ -12,7 +12,7 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
     isDirectiveType: jest.fn(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isDeprecated: jest.fn((T: any): boolean => {
-      return ("deprecationReason" in T) as boolean;
+      return "deprecationReason" in T;
     }),
   };
 });
@@ -26,7 +26,7 @@ import {
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
-    test("returns operation metadata", async () => {
+    test("returns operation metadata", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -35,7 +35,7 @@ describe("operation", () => {
         args: [],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -58,7 +58,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments", async () => {
+    test("returns operation metadata with arguments", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -72,7 +72,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         schema: {
           getType: () => {
@@ -101,7 +101,7 @@ describe("operation", () => {
 `);
     });
 
-    test("returns operation metadata with arguments with grouped deprecated", async () => {
+    test("returns operation metadata with arguments with grouped deprecated", () => {
       expect.hasAssertions();
 
       const operation = {
@@ -120,7 +120,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = await printOperationMetadata(operation, {
+      const metadata = printOperationMetadata(operation, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
         schema: {

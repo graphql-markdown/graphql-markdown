@@ -35,10 +35,10 @@ describe("object", () => {
   });
 
   describe("printObjectMetadata", () => {
-    test("returns object metadata", async () => {
+    test("returns object metadata", () => {
       expect.hasAssertions();
 
-      const metadata = await printObjectMetadata(type, DEFAULT_OPTIONS);
+      const metadata = printObjectMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Fields
@@ -74,10 +74,10 @@ Deprecated
 `);
     });
 
-    test("returns object metadata with grouped deprecated", async () => {
+    test("returns object metadata with grouped deprecated", () => {
       expect.hasAssertions();
 
-      const metadata = await printObjectMetadata(type, {
+      const metadata = printObjectMetadata(type, {
         ...DEFAULT_OPTIONS,
         deprecated: "group",
       });

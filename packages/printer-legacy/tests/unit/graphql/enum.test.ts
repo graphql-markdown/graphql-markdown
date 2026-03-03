@@ -14,10 +14,10 @@ describe("enum", () => {
   });
 
   describe("printEnumMetadata()", () => {
-    test("returns enum metadata", async () => {
+    test("returns enum metadata", () => {
       expect.hasAssertions();
 
-      const metadata = await printEnumMetadata(type, DEFAULT_OPTIONS);
+      const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Values

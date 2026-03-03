@@ -18,10 +18,10 @@ describe("input", () => {
   });
 
   describe("printInputMetadata()", () => {
-    test("returns input metadata", async () => {
+    test("returns input metadata", () => {
       expect.hasAssertions();
 
-      const metadata = await printInputMetadata(type, DEFAULT_OPTIONS);
+      const metadata = printInputMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
 "### Fields
