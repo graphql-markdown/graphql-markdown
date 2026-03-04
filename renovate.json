@@ -1,6 +1,17 @@
 {
   "extends": ["config:recommended"],
   "semanticCommits": "enabled",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Bun workspaces catalog and catalogs dependency versions",
+      "managerFilePatterns": ["/^package\\.json$/"],
+      "matchStrings": [
+        "^\\s{6,}\"(?<depName>@?[\\w./-]+)\"\\s*:\\s*\"(?<currentValue>(?:\\^|~|>=)?\\d[^\"]*)\""
+      ],
+      "datasourceTemplate": "npm"
+    }
+  ],
   "packageRules": [
     {
       "enabled": false,
