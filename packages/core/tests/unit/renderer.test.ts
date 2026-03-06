@@ -771,6 +771,39 @@ describe("renderer", () => {
           "analytics",
         );
       });
+
+      test("does not apply category formatting to namespace folders", async () => {
+        expect.assertions(1);
+
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        jest
+          .spyOn(rendererInstance, "formatCategoryFolderName")
+          .mockImplementation(
+            (categoryName: string, isRootTypeLevel: boolean) => {
+              if (!isRootTypeLevel && categoryName === "analytics") {
+                return "99-analytics";
+              }
+              return categoryName.toLowerCase();
+            },
+          );
+
+        const saveSpy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(saveSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics/aggregate-tournaments.mdx",
+          "content",
+          undefined,
+        );
+      });
     });
 
     describe("generateCategoryMetafileType()", () => {

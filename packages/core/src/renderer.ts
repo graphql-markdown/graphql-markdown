@@ -577,10 +577,7 @@ export class Renderer {
               entityName = namespaceParts.at(-1) ?? entityName;
 
               for (const namespace of namespaceParts.slice(0, -1)) {
-                const formattedNamespace = this.formatCategoryFolderName(
-                  namespace,
-                  false,
-                );
+                const formattedNamespace = slugify(namespace);
                 dirPath = join(dirPath, formattedNamespace);
                 await this.generateIndexMetafile(dirPath, namespace);
               }
