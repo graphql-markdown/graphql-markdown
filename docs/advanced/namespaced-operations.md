@@ -1,18 +1,20 @@
 ---
 pagination_prev: null
 pagination_next: null
-description: Documents namespaced GraphQL operations for nested query fields.
+description: Documents namespaced GraphQL operations for nested query, mutation, and subscription fields.
 keywords:
   - namespaced operations
-  - GraphQL Query namespaces
+  - GraphQL operation namespaces
   - operation grouping
 ---
 
 # Namespaced operations
 
-Grouping also works with namespaced operations (for example, `Query.analytics.*`).
+Grouping also works with namespaced operations (for example, `Query.analytics.*`, `Mutation.admin.*`, or `Subscription.events.*`).
 
 If a root operation returns a namespace object, nested fields are generated as operation pages and can be grouped with `@doc(category: ...)` the same way as top-level operations.
+
+Namespace object type names must follow the corresponding operation suffix convention (`*Query`, `*Mutation`, `*Subscription`).
 
 ```graphql
 type Query {

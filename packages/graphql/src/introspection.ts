@@ -13,8 +13,10 @@ import {
   GraphQLScalarType,
   GraphQLUnionType,
   getNamedType,
+  isObjectType,
   isNamedType,
 } from "graphql/type";
+import type { GraphQLType } from "graphql/type";
 
 import { DirectiveLocation, Kind, OperationTypeNode } from "graphql/language";
 
@@ -414,14 +416,7 @@ const isNestedOperationNamespaceType = (
   type: unknown,
   operationKind: Maybe<OperationKind>,
 ): type is GraphQLObjectType => {
-  // Use constructor-name check to remain compatible across graphql realms.
-  if (
-    !(
-      typeof type === "object" &&
-      type !== null &&
-      type.constructor.name === GraphQLObjectType.name
-    )
-  ) {
+  if (!isObjectType(type)) {
     return false;
   }
 
@@ -465,7 +460,7 @@ const collectOperationFields = (
       return;
     }
 
-    const nestedType = getNamedType(operation.type as GraphQLNamedType);
+    const nestedType = getNamedType(operation.type as GraphQLType);
     const nestedTypeName = getTypeName(nestedType);
     const isNamespaceType = isNestedOperationNamespaceType(
       nestedType,
