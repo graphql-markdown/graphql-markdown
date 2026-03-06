@@ -93,6 +93,49 @@ describe("introspection", () => {
 
       expect(list).toMatchObject({});
     });
+
+    test("returns nested query namespaces as dotted operation keys", () => {
+      expect.hasAssertions();
+
+      const nestedSchema = buildSchema(`
+        type Query {
+          tournaments: [String!]!
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          aggregateTournaments: [String!]!
+          topPlayers: [String!]!
+        }
+      `);
+
+      const list = getOperation(nestedSchema.getQueryType()!);
+
+      expect(Object.keys(list)).toEqual([
+        "tournaments",
+        "analytics.aggregateTournaments",
+        "analytics.topPlayers",
+      ]);
+    });
+
+    test("does not recurse infinitely for self-referential query namespaces", () => {
+      expect.hasAssertions();
+
+      const cyclicSchema = buildSchema(`
+        type Query {
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          self: AnalyticsQuery!
+          aggregateTournaments: [String!]!
+        }
+      `);
+
+      const list = getOperation(cyclicSchema.getQueryType()!);
+
+      expect(Object.keys(list)).toEqual(["analytics.aggregateTournaments"]);
+    });
   });
 
   describe("getFields()", () => {
@@ -110,6 +153,27 @@ describe("introspection", () => {
       const fields = getFields("test");
 
       expect(fields).toStrictEqual([]);
+    });
+  });
+
+  describe("getSchemaMap()", () => {
+    test("does not include namespace container object types", () => {
+      expect.hasAssertions();
+
+      const namespaceSchema = buildSchema(`
+        type Query {
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          semesterGPA: Int
+        }
+      `);
+
+      const schemaMap = getSchemaMap(namespaceSchema);
+
+      expect(Object.keys(schemaMap.queries)).toContain("analytics.semesterGPA");
+      expect(schemaMap.objects).not.toHaveProperty("AnalyticsQuery");
     });
   });
 
@@ -294,6 +358,34 @@ describe("introspection", () => {
       const schemaTypeMap = getSchemaMap(testSchema);
 
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+    });
+
+    test("resolves nested namespaces with custom root type names", () => {
+      expect.hasAssertions();
+
+      const customRootSchema = buildSchema(`
+        schema {
+          query: Root
+        }
+
+        type Root {
+          users: [String!]!
+          admin: AdminQuery!
+        }
+
+        type AdminQuery {
+          userById(id: ID!): String
+          listRoles: [String!]!
+        }
+      `);
+
+      const schemaTypeMap = getSchemaMap(customRootSchema);
+
+      expect(Object.keys(schemaTypeMap.queries ?? {})).toEqual([
+        "users",
+        "admin.userById",
+        "admin.listRoles",
+      ]);
     });
 
     test("returns schema types map with defined root types", async () => {

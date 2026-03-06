@@ -150,7 +150,7 @@ describe("renderer", () => {
     });
 
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
@@ -190,6 +190,13 @@ describe("renderer", () => {
 
       expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
       expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
+      expect(
+        Object.keys(vol.toJSON(config.outputDir, undefined, true)).some(
+          (pathName) => {
+            return pathName.endsWith("grade/objects/analytics-query.mdx");
+          },
+        ),
+      ).toBe(false);
     });
 
     test("Markdown document structure from GraphQL schema is correct when using api hierarchy", async () => {
@@ -227,6 +234,68 @@ describe("renderer", () => {
 
       expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
       expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
+    });
+
+    test("generates nested query namespace pages under operations hierarchy", async () => {
+      expect.assertions(4);
+
+      const config: GeneratorOptions = {
+        baseURL: "graphql",
+        schemaLocation: join(
+          __dirname,
+          "../__data__/schema_nested_query_namespace.graphql",
+        ),
+        diffMethod: DiffMethod.NONE,
+        docOptions: {},
+        homepageLocation: "/assets/generated.md",
+        linkRoot: "docs",
+        loaders: {
+          ["GraphQLFileLoader" as ClassName]:
+            "@graphql-tools/graphql-file-loader" as PackageName,
+        },
+        mdxParser: "mdx-parser-mock" as PackageName,
+        metatags: [],
+        onlyDocDirective: [],
+        outputDir: "/output-nested-namespace",
+        prettify: false,
+        printer: "@graphql-markdown/printer-legacy" as PackageName,
+        printTypeOptions: {
+          ...DEFAULT_OPTIONS.printTypeOptions,
+          hierarchy: { [TypeHierarchy.API]: {} },
+        },
+        skipDocDirective: [],
+        tmpDir: "/temp-nested-namespace",
+      };
+
+      await generateDocFromSchema(config);
+
+      const outputJson = vol.toJSON(config.outputDir, undefined, true);
+      const allPaths = Object.keys(outputJson);
+
+      expect(
+        allPaths.some((pathName) => {
+          return pathName.endsWith(
+            "operations/queries/analytics/aggregate-tournaments.mdx",
+          );
+        }),
+      ).toBe(true);
+      expect(
+        allPaths.some((pathName) => {
+          return pathName.endsWith(
+            "operations/queries/analytics/top-players.mdx",
+          );
+        }),
+      ).toBe(true);
+      expect(
+        allPaths.some((pathName) => {
+          return pathName.includes("operations/queries/analytics");
+        }),
+      ).toBe(true);
+      expect(
+        allPaths.some((pathName) => {
+          return pathName.endsWith("operations/queries/analytics.mdx");
+        }),
+      ).toBe(false);
     });
 
     test("Markdown document structure from GraphQL schema is correct when using flat hierarchy", async () => {

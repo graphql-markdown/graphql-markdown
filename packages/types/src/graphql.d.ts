@@ -204,3 +204,6 @@ export interface RelationOf<T> {
 type Writeable<T> = {
   -readonly [P in keyof T]: T[P];
 };
+
+/** Supported GraphQL root operation kinds used for namespace discovery. */
+export type OperationKind = "mutation" | "query" | "subscription";

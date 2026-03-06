@@ -12,8 +12,11 @@ import {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLUnionType,
+  getNamedType,
+  isObjectType,
   isNamedType,
 } from "graphql/type";
+import type { GraphQLType } from "graphql/type";
 
 import { DirectiveLocation, Kind, OperationTypeNode } from "graphql/language";
 
@@ -30,6 +33,7 @@ import type {
   GraphQLOperationType,
   GraphQLSchema,
   Maybe,
+  OperationKind,
   SchemaEntity,
   SchemaMap,
 } from "@graphql-markdown/types";
@@ -350,47 +354,27 @@ export const _getFields = <T, V>(
 };
 
 /**
- * Returns fields map for a GraphQL operation type (query, mutation, subscription...).
+ * Derives a root operation kind from a GraphQL type name.
  *
- * @internal
- *
- * see {@link getSchemaMap}
- *
- * @param operationType - the operation type to parse.
- *
- * @returns a map of fields as k/v records.
- *
+ * @param typeName - Root operation type name (for example `Query`).
+ * @returns The operation kind or `undefined` when it cannot be inferred.
  */
-export const getOperation = (
-  operationType?: unknown,
-): Record<string, GraphQLOperationType> => {
-  return _getFields(
-    operationType,
-    (fieldMap) => {
-      return { ...fieldMap } as Record<string, GraphQLOperationType>;
-    },
-    {},
-  ) as Record<string, GraphQLOperationType>;
-};
+const getOperationKindFromTypeName = (
+  typeName: string,
+): Maybe<OperationKind> => {
+  const lowerTypeName = typeName.toLowerCase();
 
-/**
- * Returns fields map for a GraphQL schema type.
- *
- * see {@link getSchemaMap}
- *
- * @param type - the GraphQL schema type to parse.
- *
- * @returns a list of fields of type object.
- *
- */
-export const getFields = (type: unknown): unknown[] => {
-  return _getFields(
-    type,
-    (fieldMap) => {
-      return Object.values(fieldMap);
-    },
-    [],
-  ) as unknown[];
+  if (lowerTypeName.includes("query")) {
+    return "query";
+  }
+  if (lowerTypeName.includes("mutation")) {
+    return "mutation";
+  }
+  if (lowerTypeName.includes("subscription")) {
+    return "subscription";
+  }
+
+  return undefined;
 };
 
 /**
@@ -419,6 +403,184 @@ export const getTypeName = (
   }
 
   return defaultName;
+};
+
+/**
+ * Checks whether a named type can be used as an operation namespace.
+ *
+ * @param type - GraphQL named type candidate.
+ * @param operationKind - Root operation kind currently being traversed.
+ * @returns `true` when the type is an object namespace compatible with the root kind.
+ */
+const isNestedOperationNamespaceType = (
+  type: unknown,
+  operationKind: Maybe<OperationKind>,
+): type is GraphQLObjectType => {
+  if (!isObjectType(type)) {
+    return false;
+  }
+
+  const typeName = getTypeName(type);
+  if (typeName.startsWith("__") || !operationKind) {
+    return false;
+  }
+
+  return typeName.toLowerCase().endsWith(operationKind);
+};
+
+/**
+ * Recursively collects operation fields, including nested namespace fields,
+ * into a flattened dotted-key map.
+ *
+ * @param fieldMap - Current GraphQL field map to process.
+ * @param list - Accumulator receiving flattened operation fields.
+ * @param prefix - Current namespace prefix.
+ * @param operationKind - Root operation kind currently being traversed.
+ * @param visitedTypeNames - Set used to prevent cyclic recursion.
+ */
+const collectOperationFields = (
+  fieldMap: Record<string, unknown>,
+  list: Record<string, GraphQLOperationType>,
+  prefix: string,
+  operationKind: Maybe<OperationKind>,
+  visitedTypeNames: Set<string>,
+  namespaceTypeNames: Set<string> = new Set<string>(),
+): void => {
+  Object.entries(fieldMap).forEach(([name, operation]) => {
+    const key = prefix ? `${prefix}.${name}` : name;
+
+    if (
+      !(
+        typeof operation === "object" &&
+        operation !== null &&
+        "type" in operation
+      )
+    ) {
+      list[key] = operation as GraphQLOperationType;
+      return;
+    }
+
+    const nestedType = getNamedType(operation.type as GraphQLType);
+    const nestedTypeName = getTypeName(nestedType);
+    const isNamespaceType = isNestedOperationNamespaceType(
+      nestedType,
+      operationKind,
+    );
+
+    if (!isNamespaceType) {
+      list[key] = operation as GraphQLOperationType;
+    } else if (nestedTypeName) {
+      namespaceTypeNames.add(nestedTypeName);
+    }
+
+    if (
+      !isNamespaceType ||
+      !nestedTypeName ||
+      visitedTypeNames.has(nestedTypeName)
+    ) {
+      return;
+    }
+
+    collectOperationFields(
+      nestedType.getFields() as Record<string, unknown>,
+      list,
+      key,
+      operationKind,
+      new Set([...visitedTypeNames, nestedTypeName]),
+      namespaceTypeNames,
+    );
+  });
+};
+
+/**
+ * Returns names of namespace container object types for a root operation type.
+ *
+ * @param operationType - root operation type to inspect.
+ * @returns set of namespace container type names.
+ */
+const getOperationNamespaceTypeNames = (
+  operationType?: unknown,
+  operationKind?: Maybe<OperationKind>,
+): Set<string> => {
+  return _getFields(
+    operationType,
+    (fieldMap) => {
+      const namespaceTypeNames = new Set<string>();
+      const rootTypeName = getTypeName(operationType);
+      const resolvedOperationKind =
+        operationKind ?? getOperationKindFromTypeName(rootTypeName);
+
+      collectOperationFields(
+        fieldMap,
+        {},
+        "",
+        resolvedOperationKind,
+        rootTypeName ? new Set([rootTypeName]) : new Set(),
+        namespaceTypeNames,
+      );
+
+      return namespaceTypeNames;
+    },
+    new Set<string>(),
+  ) as Set<string>;
+};
+
+/**
+ * Returns fields map for a GraphQL operation type (query, mutation, subscription...).
+ *
+ * @internal
+ *
+ * see {@link getSchemaMap}
+ *
+ * @param operationType - the operation type to parse.
+ *
+ * @returns a map of fields as k/v records.
+ *
+ */
+export const getOperation = (
+  operationType?: unknown,
+  operationKind?: Maybe<OperationKind>,
+): Record<string, GraphQLOperationType> => {
+  return _getFields(
+    operationType,
+    (fieldMap) => {
+      const list: Record<string, GraphQLOperationType> = {};
+      const rootTypeName = getTypeName(operationType);
+      const resolvedOperationKind =
+        operationKind ?? getOperationKindFromTypeName(rootTypeName);
+
+      collectOperationFields(
+        fieldMap,
+        list,
+        "",
+        resolvedOperationKind,
+        rootTypeName ? new Set([rootTypeName]) : new Set(),
+      );
+
+      return list;
+    },
+    {},
+  ) as Record<string, GraphQLOperationType>;
+};
+
+/**
+ * Returns fields map for a GraphQL schema type.
+ *
+ * see {@link getSchemaMap}
+ *
+ * @param type - the GraphQL schema type to parse.
+ *
+ * @returns a list of fields of type object.
+ *
+ */
+export const getFields = (type: unknown): unknown[] => {
+  return _getFields(
+    type,
+    (fieldMap) => {
+      return Object.values(fieldMap);
+    },
+    [],
+  ) as unknown[];
 };
 
 /**
@@ -490,23 +652,50 @@ export const getTypeName = (
  *
  */
 export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
+  const namespaceTypeNames = new Set<string>([
+    ...getOperationNamespaceTypeNames(
+      schema?.getQueryType() ?? undefined,
+      "query",
+    ),
+    ...getOperationNamespaceTypeNames(
+      schema?.getMutationType() ?? undefined,
+      "mutation",
+    ),
+    ...getOperationNamespaceTypeNames(
+      schema?.getSubscriptionType() ?? undefined,
+      "subscription",
+    ),
+  ]);
+
+  const objects = getTypeFromSchema<GraphQLObjectType>(
+    schema,
+    GraphQLObjectType,
+  );
+  const filteredObjects = objects
+    ? (Object.fromEntries(
+        Object.entries(objects).filter(([typeName]) => {
+          return !namespaceTypeNames.has(typeName);
+        }),
+      ) as Record<string, GraphQLObjectType>)
+    : undefined;
+
   return {
     ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
+      "query",
     ),
     ["mutations" as SchemaEntity]: getOperation(
       schema?.getMutationType() ?? undefined,
+      "mutation",
     ),
     ["subscriptions" as SchemaEntity]: getOperation(
       schema?.getSubscriptionType() ?? undefined,
+      "subscription",
     ),
     ["directives" as SchemaEntity]: convertArrayToMapObject<GraphQLDirective>(
       schema?.getDirectives() as GraphQLDirective[],
     ),
-    ["objects" as SchemaEntity]: getTypeFromSchema<GraphQLObjectType>(
-      schema,
-      GraphQLObjectType,
-    ),
+    ["objects" as SchemaEntity]: filteredObjects,
     ["unions" as SchemaEntity]: getTypeFromSchema<GraphQLUnionType>(
       schema,
       GraphQLUnionType,

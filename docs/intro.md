@@ -44,6 +44,9 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Group types into categories using directives
   - Organize types logically
   - Create a custom navigation structure
+- Support namespaced operations (nested query/mutation/subscription objects)
+  - Generate nested operation pages automatically
+  - Keep grouped navigation working with namespaced operations
 - Support of GraphQL config
   - Integration with existing GraphQL setups
   - Consistent configuration across tools

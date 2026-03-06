@@ -133,7 +133,12 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
           );
         })
       ) {
-        results.push(relationType);
+        const relationTypeWithQualifiedName = {
+          ...(relationType as Record<string, unknown>),
+          name: relationName,
+        } as unknown as GraphQLOperationType;
+
+        results.push(relationTypeWithQualifiedName);
       }
     }
     return results;
@@ -208,7 +213,20 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
             );
           })
         ) {
-          results.push(relationType);
+          if (
+            isTypeObject(relationType) &&
+            hasProperty(relationType, "name") &&
+            relationType.name !== key
+          ) {
+            const relationTypeWithQualifiedName = {
+              ...(relationType as Record<string, unknown>),
+              name: key,
+            } as unknown as RelationOfField;
+
+            results.push(relationTypeWithQualifiedName);
+          } else {
+            results.push(relationType);
+          }
         }
       }
     }

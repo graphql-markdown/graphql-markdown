@@ -285,13 +285,23 @@ export const toLink = (
       : folder;
   };
 
+  const operationNameParts =
+    isOperation(type) && name.includes(".")
+      ? name.split(".").filter(Boolean)
+      : [];
+  const operationNamespaceFolders = operationNameParts.slice(0, -1);
+  const operationLeafName = operationNameParts.at(-1) ?? text;
+
   const url = pathUrl.join(
     options.basePath,
     formatFolder(deprecatedFolder),
     formatFolder(groupFolder),
     formatFolder(apiGroupFolder),
     formatFolder(category),
-    `${slugify(text)}`,
+    ...operationNamespaceFolders.map((folder) => {
+      return slugify(folder);
+    }),
+    `${slugify(operationLeafName)}`,
   );
 
   const link = {

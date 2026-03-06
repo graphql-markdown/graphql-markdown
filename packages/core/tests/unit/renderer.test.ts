@@ -301,6 +301,108 @@ describe("renderer", () => {
         );
       });
 
+      test("uses root-level categorySort index for slugified custom group names", async () => {
+        expect.assertions(2);
+
+        const group = {
+          queries: {
+            analytics: "Grade",
+          },
+        };
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          group as unknown as Record<SchemaEntity, Record<string, string>>,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+          ".mdx",
+        );
+
+        // Generator pre-collects categories before rendering.
+        renderer.preCollectCategories(["queries", "objects"]);
+
+        let formattedLowercaseGroup = "";
+        let formattedOriginalGroup = "";
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockImplementation((_, __, options) => {
+            formattedLowercaseGroup =
+              options.formatCategoryFolderName?.("grade") ?? "";
+            formattedOriginalGroup =
+              options.formatCategoryFolderName?.("Grade") ?? "";
+            return "Lorem ipsum" as MDXString;
+          });
+
+        await renderer.renderTypeEntities(
+          "/output/04-grade/07-queries",
+          "analytics",
+          "AnalyticsQuery",
+        );
+
+        expect(formattedOriginalGroup).toMatch(/^\d{2}-grade$/);
+        expect(formattedLowercaseGroup).toBe(formattedOriginalGroup);
+      });
+
+      test("formats category folders by registration scope and falls back to slugify for unknown names", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          ".mdx",
+        );
+
+        renderer["rootLevelPositionManager"].registerCategories(["Query"]);
+        renderer["rootLevelPositionManager"].computePositions();
+        renderer["categoryPositionManager"].registerCategories([
+          "objects",
+          "Mutations",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        let rootDirect = "";
+        let nestedDirect = "";
+        let nestedFallback = "";
+        let unknownCategory = "";
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockImplementation((_, __, options) => {
+            rootDirect = options.formatCategoryFolderName?.("Query") ?? "";
+            nestedDirect = options.formatCategoryFolderName?.("objects") ?? "";
+            nestedFallback =
+              options.formatCategoryFolderName?.("mutations") ?? "";
+            unknownCategory =
+              options.formatCategoryFolderName?.("AnalyticsNamespace") ?? "";
+            return "Lorem ipsum" as MDXString;
+          });
+
+        await renderer.renderTypeEntities(
+          "/output/queries",
+          "QueryField",
+          "QueryType",
+        );
+
+        expect(rootDirect).toMatch(/^\d{2}-query$/);
+        expect(nestedDirect).toMatch(/^\d{2}-objects$/);
+        expect(nestedFallback).toMatch(/^\d{2}-mutations$/);
+        expect(unknownCategory).toBe("analytics-namespace");
+      });
+
       test("handles cancelled rendering when printType returns an empty string", async () => {
         expect.assertions(2);
 
@@ -638,6 +740,66 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledWith(
           "/output/foo.mdx",
+          "content",
+          undefined,
+        );
+      });
+
+      test("renders nested operation namespaces into nested category folders", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const saveSpy = jest.spyOn(Utils, "saveFile");
+        const indexSpy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(saveSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics/aggregate-tournaments.mdx",
+          "content",
+          undefined,
+        );
+        expect(indexSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics",
+          "analytics",
+        );
+      });
+
+      test("does not apply category formatting to namespace folders", async () => {
+        expect.assertions(1);
+
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        jest
+          .spyOn(rendererInstance, "formatCategoryFolderName")
+          .mockImplementation(
+            (categoryName: string, isRootTypeLevel: boolean) => {
+              if (!isRootTypeLevel && categoryName === "analytics") {
+                return "99-analytics";
+              }
+              return categoryName.toLowerCase();
+            },
+          );
+
+        const saveSpy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(saveSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics/aggregate-tournaments.mdx",
           "content",
           undefined,
         );
