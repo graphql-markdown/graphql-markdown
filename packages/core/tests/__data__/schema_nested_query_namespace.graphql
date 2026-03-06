@@ -1,0 +1,21 @@
+type Query {
+  tournaments: [Tournament!]!
+  analytics: AnalyticsQuery!
+}
+
+type AnalyticsQuery {
+  aggregateTournaments: [AggregateGroup!]!
+  topPlayers: [Player!]!
+}
+
+type Tournament {
+  id: ID!
+}
+
+type AggregateGroup {
+  key: String!
+}
+
+type Player {
+  id: ID!
+}
