@@ -93,6 +93,54 @@ describe("introspection", () => {
 
       expect(list).toMatchObject({});
     });
+
+    test("returns nested query namespaces as dotted operation keys", () => {
+      expect.hasAssertions();
+
+      const nestedSchema = buildSchema(`
+        type Query {
+          tournaments: [String!]!
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          aggregateTournaments: [String!]!
+          topPlayers: [String!]!
+        }
+      `);
+
+      const list = getOperation(nestedSchema.getQueryType()!);
+
+      expect(Object.keys(list)).toEqual([
+        "tournaments",
+        "analytics",
+        "analytics.aggregateTournaments",
+        "analytics.topPlayers",
+      ]);
+    });
+
+    test("does not recurse infinitely for self-referential query namespaces", () => {
+      expect.hasAssertions();
+
+      const cyclicSchema = buildSchema(`
+        type Query {
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          self: AnalyticsQuery!
+          aggregateTournaments: [String!]!
+        }
+      `);
+
+      const list = getOperation(cyclicSchema.getQueryType()!);
+
+      expect(Object.keys(list)).toEqual([
+        "analytics",
+        "analytics.self",
+        "analytics.aggregateTournaments",
+      ]);
+    });
   });
 
   describe("getFields()", () => {
