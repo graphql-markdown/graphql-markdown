@@ -1,7 +1,23 @@
+<a id="1.33.0"></a>
+# [1.33.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.33.0) - 2026-03-06
+
+🌻 Your GraphQL docs are getting better with a 1st class support for [namespaced operations](https://graphql-markdown.dev/docs/advanced/namespaced-operations) and improved section permalink anchors.
+
+## What's New
+
+- Nested operation namespaces are now supported, allowing operation trees to be rendered with dotted namespaces and structured output ([#2717](https://github.com/graphql-markdown/graphql-markdown/issues/2717)).
+
+- Section links can now use predefined header IDs through [`docOptions.sectionHeaderId`](https://graphql-markdown.dev/docs/settings#docoptions) (enabled by default), with CLI opt-out via `noSectionId` ([#2713](https://github.com/graphql-markdown/graphql-markdown/issues/2713)).
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.1...1.33.0
+
+[Changes][1.33.0]
+
+
 <a id="1.32.1"></a>
 # [1.32.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.32.1) - 2026-02-03
 
-🐛 This release fixes broken packages from 1.32.0 due to issues with introducing `bun` in the development flow.
+🐛 This release fixes broken packages from [1.32.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.32.0) due to issues with introducing `bun` in the development flow.
 
 [Changes][1.32.1]
 
@@ -2214,6 +2230,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.33.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.1...1.33.0
 [1.32.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.0...1.32.1
 [1.32.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.2...1.32.0
 [1.31.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.0...1.31.2
