@@ -299,7 +299,7 @@ export const toLink = (
     formatFolder(apiGroupFolder),
     formatFolder(category),
     ...operationNamespaceFolders.map((folder) => {
-      return formatFolder(folder);
+      return slugify(folder);
     }),
     `${slugify(operationLeafName)}`,
   );
