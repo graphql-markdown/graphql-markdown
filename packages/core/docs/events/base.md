@@ -21,10 +21,16 @@ Provides common functionality:
 
 - [`DiffCheckEvent`](diff-check.md#diffcheckevent)
 - [`GenerateIndexMetafileEvent`](generate-index-metafile.md#generateindexmetafileevent)
+- [`PrintCodeEvent`](print-type.md#printcodeevent)
+- [`PrintTypeEvent`](print-type.md#printtypeevent)
 - [`RenderHomepageEvent`](render-homepage.md#renderhomepageevent)
 - [`RenderRootTypesEvent`](render-root-types.md#renderroottypesevent)
 - [`RenderTypeEntitiesEvent`](render-type-entities.md#rendertypeentitiesevent)
 - [`SchemaEvent`](schema-load.md#schemaevent)
+
+#### Implements
+
+- `ICancellableEvent`
 
 #### Constructors
 
@@ -48,7 +54,7 @@ Configuration options for the event
 
 ###### Returns
 
-[`CancellableEvent`](#cancellableevent)
+[`CancellableEvent`](#abstract-cancellableevent)
 
 #### Accessors
 
@@ -68,6 +74,12 @@ Gets the default action function if one was provided.
 
 `DefaultAction` \| `undefined`
 
+###### Implementation of
+
+```ts
+ICancellableEvent.defaultAction;
+```
+
 ##### defaultPrevented
 
 ###### Get Signature
@@ -84,6 +96,12 @@ Gets whether the default action has been prevented.
 
 `boolean`
 
+###### Implementation of
+
+```ts
+ICancellableEvent.defaultPrevented;
+```
+
 ##### propagationStopped
 
 ###### Get Signature
@@ -99,6 +117,12 @@ Gets whether propagation has been stopped.
 ###### Returns
 
 `boolean`
+
+###### Implementation of
+
+```ts
+ICancellableEvent.propagationStopped;
+```
 
 #### Methods
 
@@ -128,6 +152,12 @@ events.on("beforeLoadSchema", (event) => {
 });
 ```
 
+###### Implementation of
+
+```ts
+ICancellableEvent.preventDefault;
+```
+
 ##### runDefaultAction()
 
 ```ts
@@ -150,6 +180,12 @@ This method will only execute the `_defaultAction` if:
 
 - The event's default has not been prevented (`_defaultPrevented` is false)
 - A default action function has been defined (`_defaultAction` is a function)
+
+###### Implementation of
+
+```ts
+ICancellableEvent.runDefaultAction;
+```
 
 ##### stopPropagation()
 
@@ -174,6 +210,12 @@ events.on("beforeLoadSchema", (event) => {
     event.stopPropagation(); // No more handlers run
   }
 });
+```
+
+###### Implementation of
+
+```ts
+ICancellableEvent.stopPropagation;
 ```
 
 ## Other

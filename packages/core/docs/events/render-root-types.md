@@ -12,7 +12,7 @@ Event emitted before/after rendering root types.
 
 #### Extends
 
-- [`CancellableEvent`](base.md#cancellableevent)
+- [`CancellableEvent`](base.md#abstract-cancellableevent)
 
 #### Constructors
 
@@ -42,7 +42,7 @@ Defined in: [events/render-root-types.ts:20](https://github.com/graphql-markdown
 
 ###### Overrides
 
-[`CancellableEvent`](base.md#cancellableevent).[`constructor`](base.md#constructor)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`constructor`](base.md#constructor)
 
 #### Properties
 
@@ -82,7 +82,7 @@ Gets the default action function if one was provided.
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`defaultAction`](base.md#defaultaction)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`defaultAction`](base.md#defaultaction)
 
 ##### defaultPrevented
 
@@ -102,7 +102,7 @@ Gets whether the default action has been prevented.
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`defaultPrevented`](base.md#defaultprevented)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`defaultPrevented`](base.md#defaultprevented)
 
 ##### propagationStopped
 
@@ -122,7 +122,7 @@ Gets whether propagation has been stopped.
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`propagationStopped`](base.md#propagationstopped)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`propagationStopped`](base.md#propagationstopped)
 
 #### Methods
 
@@ -154,7 +154,7 @@ events.on("beforeLoadSchema", (event) => {
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`preventDefault`](base.md#preventdefault)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`preventDefault`](base.md#preventdefault)
 
 ##### runDefaultAction()
 
@@ -181,7 +181,7 @@ This method will only execute the `_defaultAction` if:
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`runDefaultAction`](base.md#rundefaultaction)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`runDefaultAction`](base.md#rundefaultaction)
 
 ##### stopPropagation()
 
@@ -210,4 +210,4 @@ events.on("beforeLoadSchema", (event) => {
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#cancellableevent).[`stopPropagation`](base.md#stoppropagation)
+[`CancellableEvent`](base.md#abstract-cancellableevent).[`stopPropagation`](base.md#stoppropagation)

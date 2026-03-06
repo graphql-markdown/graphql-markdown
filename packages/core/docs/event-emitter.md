@@ -40,7 +40,7 @@ Handlers continue executing even if previous handlers throw errors.
 function getEvents(): CancellableEventEmitter;
 ```
 
-Defined in: [event-emitter.ts:134](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L134)
+Defined in: [event-emitter.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L149)
 
 Get the singleton event emitter instance.
 
@@ -73,7 +73,7 @@ await events.emitAsync("beforeLoadSchema", event);
 function resetEvents(): void;
 ```
 
-Defined in: [event-emitter.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L158)
+Defined in: [event-emitter.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L173)
 
 Reset the event emitter singleton.
 

@@ -50,7 +50,7 @@ function checkSchemaDifferences(
 ): Promise<boolean>;
 ```
 
-Defined in: [generator.ts:227](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L227)
+Defined in: [generator.ts:264](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L264)
 
 Checks if there are differences in the GraphQL schema compared to a previous version.
 
@@ -99,7 +99,7 @@ When no changes are detected, a log message is generated indicating that the sch
 function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [generator.ts:299](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L299)
+Defined in: [generator.ts:336](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L336)
 
 Main entry point for generating Markdown documentation from a GraphQL schema.
 
@@ -136,7 +136,7 @@ function getFormatterFromMDXModule(
 ): Partial<Formatter> | undefined;
 ```
 
-Defined in: [generator.ts:132](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L132)
+Defined in: [generator.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L169)
 
 **`Internal`**
 
@@ -169,6 +169,48 @@ A partial Formatter with the found functions, or undefined if none found
 
 ---
 
+### getMDXModuleProperty()
+
+```ts
+function getMDXModuleProperty<T>(mdxModule, propertyName): T | undefined;
+```
+
+Defined in: [generator.ts:132](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L132)
+
+**`Internal`**
+
+Gets a property from an MDX module, checking both the module directly and `module.default`.
+
+This handles the differences between ESM and CommonJS module exports when dynamically importing.
+
+#### Type Parameters
+
+##### T
+
+`T`
+
+#### Parameters
+
+##### mdxModule
+
+`unknown`
+
+The loaded MDX module
+
+##### propertyName
+
+`string`
+
+The name of the property to extract
+
+#### Returns
+
+`T` \| `undefined`
+
+The property value if found, otherwise undefined
+
+---
+
 ### loadGraphqlSchema()
 
 ```ts
@@ -178,7 +220,7 @@ function loadGraphqlSchema(
 ): Promise<Maybe<GraphQLSchema>>;
 ```
 
-Defined in: [generator.ts:196](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L196)
+Defined in: [generator.ts:233](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L233)
 
 **`Internal`**
 
@@ -250,7 +292,7 @@ function resolveSkipAndOnlyDirectives(
 ): GraphQLDirective[][];
 ```
 
-Defined in: [generator.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L258)
+Defined in: [generator.ts:295](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L295)
 
 Resolves and retrieves GraphQL directive objects from the schema based on their names.
 

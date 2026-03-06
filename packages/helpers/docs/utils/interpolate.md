@@ -7,7 +7,7 @@ Helpers utility functions library.
 ### getObjPath()
 
 ```ts
-function getObjPath(path, obj, fallback): unknown;
+function getObjPath(path, obj, fallback?): unknown;
 ```
 
 Defined in: [utils/interpolate.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/utils/interpolate.ts#L31)
@@ -30,7 +30,7 @@ property path as string.
 
 the key/value record object.
 
-##### fallback
+##### fallback?
 
 `unknown` = `""`
 

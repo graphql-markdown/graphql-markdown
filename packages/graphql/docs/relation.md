@@ -14,7 +14,7 @@ Library supporting `relatedTypeSection` for displaying relations between GraphQL
 const getRelationOfField: IGetRelation<RelationOfField>;
 ```
 
-Defined in: [packages/graphql/src/relation.ts:164](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L164)
+Defined in: [packages/graphql/src/relation.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L169)
 
 Returns a map of fields and arguments where the GraphQL schema type matches the type.
 
@@ -50,7 +50,7 @@ a record map of fields and arguments relations.
 const getRelationOfImplementation: IGetRelation<RelationOfImplementation>;
 ```
 
-Defined in: [packages/graphql/src/relation.ts:353](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L353)
+Defined in: [packages/graphql/src/relation.ts:371](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L371)
 
 Returns a map of types (unions or interfaces) where the GraphQL schema type is implemented.
 
@@ -86,7 +86,7 @@ a record map of unions or interfaces relations.
 const getRelationOfInterface: IGetRelation<RelationOfInterface>;
 ```
 
-Defined in: [packages/graphql/src/relation.ts:296](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L296)
+Defined in: [packages/graphql/src/relation.ts:314](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L314)
 
 Returns a map of interfaces where the GraphQL schema type is extended.
 
@@ -158,7 +158,7 @@ a record map of operations relations.
 const getRelationOfUnion: IGetRelation<GraphQLUnionType>;
 ```
 
-Defined in: [packages/graphql/src/relation.ts:240](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L240)
+Defined in: [packages/graphql/src/relation.ts:258](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/relation.ts#L258)
 
 Returns a map of unions where the GraphQL schema type is part of it.
 

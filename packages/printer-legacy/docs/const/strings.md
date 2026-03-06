@@ -1,5 +1,8 @@
 # const/strings
 
+String constants and helpers shared by the legacy printer when composing
+Markdown fragments for GraphQL schemas.
+
 ## Variables
 
 ### DEPRECATED
@@ -8,7 +11,9 @@
 const DEPRECATED: "deprecated";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L26)
+Defined in: [printer-legacy/src/const/strings.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L36)
+
+Label used when a schema element is flagged as deprecated.
 
 ---
 
@@ -30,7 +35,9 @@ Frontmatter delimiter for YAML frontmatter blocks.
 const GRAPHQL: "graphql";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L28)
+Defined in: [printer-legacy/src/const/strings.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L42)
+
+Short identifier for the GraphQL language tag used in fenced blocks.
 
 ---
 
@@ -64,7 +71,9 @@ Code snippet delimiter for fenced code blocks.
 const MARKDOWN_EOC: "\n``\n";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L31)
+Defined in: [printer-legacy/src/const/strings.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L48)
+
+Helper for inserting the code-block end delimiter in generated Markdown.
 
 ---
 
@@ -98,7 +107,9 @@ End of paragraph (double newline) for Markdown.
 const MARKDOWN_SOC: "\n``graphql\n";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L33)
+Defined in: [printer-legacy/src/const/strings.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L52)
+
+Helper for inserting the code-block start delimiter targeting GraphQL syntax.
 
 ---
 
@@ -108,7 +119,9 @@ Defined in: [printer-legacy/src/const/strings.ts:33](https://github.com/graphql-
 const NO_DESCRIPTION_TEXT: "No description";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L29)
+Defined in: [printer-legacy/src/const/strings.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L45)
+
+Default placeholder when no schema description is provided.
 
 ---
 
@@ -118,7 +131,9 @@ Defined in: [printer-legacy/src/const/strings.ts:29](https://github.com/graphql-
 const NON_NULL: "non-null";
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L27)
+Defined in: [printer-legacy/src/const/strings.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L39)
+
+Copy fragment describing a non-null GraphQL modifier.
 
 ---
 
@@ -128,4 +143,6 @@ Defined in: [printer-legacy/src/const/strings.ts:27](https://github.com/graphql-
 const ROOT_TYPE_LOCALE: RootTypeLocale;
 ```
 
-Defined in: [printer-legacy/src/const/strings.ts:12](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L12)
+Defined in: [printer-legacy/src/const/strings.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L21)
+
+Human-readable labels for each GraphQL root type used when rendering copy or badges.

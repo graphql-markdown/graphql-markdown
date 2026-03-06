@@ -9,7 +9,7 @@ It includes utilities for handling various GraphQL types, custom directives, and
 
 ### Printer
 
-Defined in: [printer-legacy/src/printer.ts:105](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L105)
+Defined in: [printer-legacy/src/printer.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L119)
 
 The Printer class implements the core functionality for generating Markdown documentation
 from GraphQL schema types.
@@ -49,13 +49,25 @@ new Printer(): Printer;
 
 #### Properties
 
+##### eventEmitter
+
+```ts
+static eventEmitter: Maybe<PrinterEventEmitter>;
+```
+
+Defined in: [printer-legacy/src/printer.ts:130](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L130)
+
+Optional event emitter for print events.
+When set, the printer will emit events before/after printCode and printType,
+allowing external code to intercept and modify the output.
+
 ##### mdxDeclaration
 
 ```ts
 static mdxDeclaration: Readonly<Maybe<string>>;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L129)
+Defined in: [printer-legacy/src/printer.ts:150](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L150)
 
 Prints mdx modules import declaration
 
@@ -65,7 +77,7 @@ Prints mdx modules import declaration
 static options: Readonly<Maybe<PrintTypeOptions>>;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L109)
+Defined in: [printer-legacy/src/printer.ts:123](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L123)
 
 Global printer configuration options
 
@@ -75,7 +87,7 @@ Global printer configuration options
 readonly static printCustomDirectives: (type, options) => string;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L119)
+Defined in: [printer-legacy/src/printer.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L140)
 
 Prints custom directives
 
@@ -107,7 +119,7 @@ Markdown string containing all formatted directives
 readonly static printCustomTags: (type, options) => string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:124](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L124)
+Defined in: [printer-legacy/src/printer.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L145)
 
 Prints custom tags
 
@@ -139,7 +151,7 @@ Formatted Markdown string of badges or empty string
 readonly static printDescription: (type, options, noText?) => string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L114)
+Defined in: [printer-legacy/src/printer.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L135)
 
 Prints type descriptions
 
@@ -178,14 +190,15 @@ Combined description, deprecation notices, and custom directives as MDX content
 ```ts
 static init(
    schema,
-   baseURL,
-   linkRoot,
-   options,
+   baseURL?,
+   linkRoot?,
+   options?,
    formatter?,
-   mdxDeclaration?): Promise<void>;
+   mdxDeclaration?,
+   eventEmitter?): Promise<void>;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L140)
+Defined in: [printer-legacy/src/printer.ts:163](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L163)
 
 Initializes the printer with the given schema and configuration.
 
@@ -197,19 +210,19 @@ Initializes the printer with the given schema and configuration.
 
 GraphQL schema to generate documentation for
 
-###### baseURL
+###### baseURL?
 
 `Maybe`&lt;`string`&gt; = `"schema"`
 
 Base URL path for documentation, e.g. '/docs'
 
-###### linkRoot
+###### linkRoot?
 
 `Maybe`&lt;`string`&gt; = `"/"`
 
 Root path for generating links between types
 
-###### options
+###### options?
 
 Configuration options for the printer
 
@@ -241,6 +254,10 @@ Configuration options for the printer
 
 `PrinterConfigPrintTypeOptions`
 
+###### sectionHeaderId?
+
+`boolean`
+
 ###### skipDocDirectives?
 
 `GraphQLDirective`[]
@@ -255,6 +272,14 @@ Optional formatter functions for customizing output format
 
 `Maybe`&lt;`string`&gt;
 
+Optional MDX import declaration
+
+###### eventEmitter?
+
+`Maybe`&lt;`PrinterEventEmitter`&gt;
+
+Optional event emitter for print events interception
+
 ###### Returns
 
 `Promise`&lt;`void`&gt;
@@ -265,7 +290,7 @@ Optional formatter functions for customizing output format
 readonly static printCode(type, options): string;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:233](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L233)
+Defined in: [printer-legacy/src/printer.ts:263](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L263)
 
 Prints the GraphQL type definition as code block
 
@@ -289,13 +314,65 @@ Printer configuration options
 
 Formatted code block string with type definition
 
+##### printCodeAsync()
+
+```ts
+readonly static printCodeAsync(
+   type,
+   typeName,
+   options): Promise<string>;
+```
+
+Defined in: [printer-legacy/src/printer.ts:323](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L323)
+
+Prints the GraphQL type definition as code block with event emission support.
+
+###### Parameters
+
+###### type
+
+`unknown`
+
+GraphQL type to print
+
+###### typeName
+
+`string`
+
+Name of the type being printed
+
+###### options
+
+`PrintTypeOptions`
+
+Printer configuration options
+
+###### Returns
+
+`Promise`&lt;`string`&gt;
+
+Promise resolving to formatted code block string with type definition
+
+###### Remarks
+
+This async version emits events before and after code generation:
+
+- `print:beforePrintCode` - Emitted before generating code (can modify inputs or prevent default)
+- `print:afterPrintCode` - Emitted after generating code (can modify output)
+
+Event handlers can:
+
+- Modify `event.data.options` in BEFORE to affect code generation
+- Call `event.preventDefault()` in BEFORE to skip default generation and provide custom output
+- Modify `event.output` in AFTER to change the final result
+
 ##### printExample()
 
 ```ts
 readonly static printExample(type, options): string;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:282](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L282)
+Defined in: [printer-legacy/src/printer.ts:378](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L378)
 
 Prints example usage of the type if available
 
@@ -328,7 +405,7 @@ readonly static printHeader(
    options): string;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:212](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L212)
+Defined in: [printer-legacy/src/printer.ts:242](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L242)
 
 Prints the header section of a type documentation
 
@@ -364,7 +441,7 @@ Formatted header string with optional frontmatter
 readonly static printMetaTags(_type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:364](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L364)
+Defined in: [printer-legacy/src/printer.ts:460](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L460)
 
 Prints HTML meta tags for the documentation
 
@@ -394,7 +471,7 @@ Formatted HTML meta tags string
 readonly static printRelations(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:347](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L347)
+Defined in: [printer-legacy/src/printer.ts:443](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L443)
 
 Prints related type information
 
@@ -424,10 +501,10 @@ Formatted relations section as MDX or plain string
 readonly static printType(
    name,
    type,
-   options?): Maybe<MDXString>;
+   options?): Promise<Maybe<MDXString>>;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:410](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L410)
+Defined in: [printer-legacy/src/printer.ts:510](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L510)
 
 Main method to print complete documentation for a GraphQL type
 
@@ -453,14 +530,14 @@ Optional printer configuration options
 
 ###### Returns
 
-`Maybe`&lt;`MDXString`&gt;
+`Promise`&lt;`Maybe`&lt;`MDXString`&gt;&gt;
 
 Complete documentation as MDX string or undefined if type should be skipped
 
 ###### Example
 
 ```typescript
-const doc = Printer.printType("User", UserType, {
+const doc = await Printer.printType("User", UserType, {
   frontMatter: true,
   codeSection: true,
 });
@@ -479,13 +556,18 @@ The method combines multiple sections:
 - Example usage
 - Related types
 
+When an event emitter is configured, emits events:
+
+- `print:beforePrintType` - Before generating documentation
+- `print:afterPrintType` - After generating documentation (output can be modified)
+
 ##### printTypeMetadata()
 
 ```ts
 readonly static printTypeMetadata(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/printer.ts:311](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L311)
+Defined in: [printer-legacy/src/printer.ts:407](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/printer.ts#L407)
 
 Prints metadata information for a GraphQL type
 

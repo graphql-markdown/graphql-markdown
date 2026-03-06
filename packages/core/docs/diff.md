@@ -1,14 +1,16 @@
 # diff
 
+Diff utilities for detecting schema changes between builds.
+
 ## Schema
 
 ### hasChanges()
 
 ```ts
-function hasChanges(schema, tmpDir, diffMethod, diffModule): Promise<boolean>;
+function hasChanges(schema, tmpDir, diffMethod, diffModule?): Promise<boolean>;
 ```
 
-Defined in: [diff.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L62)
+Defined in: [diff.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L67)
 
 Determines if there are changes in the GraphQL schema by using a specified diff method and module.
 
@@ -32,7 +34,7 @@ The temporary directory to store intermediate files during the diff process.
 
 The name of the diff method to use. Must be a string or `null`.
 
-##### diffModule
+##### diffModule?
 
 `Maybe`&lt;`string`&gt; = `"@graphql-markdown/diff"`
 

@@ -58,7 +58,7 @@ Default badge formatter.
 ### formatMDXBullet()
 
 ```ts
-function formatMDXBullet(text): MDXString;
+function formatMDXBullet(text?): MDXString;
 ```
 
 Defined in: [printer-legacy/src/format-helpers.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L48)
@@ -67,7 +67,7 @@ Default bullet formatter.
 
 #### Parameters
 
-##### text
+##### text?
 
 `string` = `""`
 

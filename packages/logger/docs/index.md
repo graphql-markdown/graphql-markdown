@@ -65,7 +65,7 @@ Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/b
 ### log()
 
 ```ts
-function log(message, level): void;
+function log(message, level?): void;
 ```
 
 Defined in: [index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L86)
@@ -80,7 +80,7 @@ Logs a message by calling the active logger instance.
 
 a string to be logged.
 
-##### level
+##### level?
 
 optional log level, `"info"` by default.
 
