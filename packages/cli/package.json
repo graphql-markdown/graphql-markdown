@@ -68,9 +68,7 @@
     "node": ">=20"
   },
   "publishConfig": {
-    "directory": "dist",
-    "access": "public",
-    "scripts": {}
+    "access": "public"
   },
   "typescript": {
     "definition": "dist/cli.d.ts"

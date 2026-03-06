@@ -74,9 +74,7 @@
     "node": ">=20"
   },
   "publishConfig": {
-    "directory": "dist",
-    "access": "public",
-    "scripts": {}
+    "access": "public"
   },
   "typescript": {
     "definition": "dist/index.d.ts"

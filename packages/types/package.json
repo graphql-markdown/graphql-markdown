@@ -29,9 +29,7 @@
     "graphql-config": "catalog:"
   },
   "publishConfig": {
-    "directory": "src",
-    "access": "public",
-    "scripts": {}
+    "access": "public"
   },
   "files": [
     "src"
