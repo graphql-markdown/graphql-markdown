@@ -301,6 +301,54 @@ describe("renderer", () => {
         );
       });
 
+      test("uses root-level categorySort index for slugified custom group names", async () => {
+        expect.assertions(2);
+
+        const group = {
+          queries: {
+            analytics: "Grade",
+          },
+        };
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          group as unknown as Record<SchemaEntity, Record<string, string>>,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+          },
+          ".mdx",
+        );
+
+        // Generator pre-collects categories before rendering.
+        renderer.preCollectCategories(["queries", "objects"]);
+
+        let formattedLowercaseGroup = "";
+        let formattedOriginalGroup = "";
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockImplementation((_, __, options) => {
+            formattedLowercaseGroup =
+              options.formatCategoryFolderName?.("grade") ?? "";
+            formattedOriginalGroup =
+              options.formatCategoryFolderName?.("Grade") ?? "";
+            return "Lorem ipsum" as MDXString;
+          });
+
+        await renderer.renderTypeEntities(
+          "/output/04-grade/07-queries",
+          "analytics",
+          "AnalyticsQuery",
+        );
+
+        expect(formattedOriginalGroup).toMatch(/^\d{2}-grade$/);
+        expect(formattedLowercaseGroup).toBe(formattedOriginalGroup);
+      });
+
       test("handles cancelled rendering when printType returns an empty string", async () => {
         expect.assertions(2);
 

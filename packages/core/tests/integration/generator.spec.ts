@@ -150,7 +150,7 @@ describe("renderer", () => {
     });
 
     test("Markdown document structure from GraphQL schema is correct when using grouping", async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
@@ -190,6 +190,13 @@ describe("renderer", () => {
 
       expect(vol.toJSON(config.outputDir, undefined, true)).toMatchSnapshot();
       expect(vol.toJSON(config.tmpDir, undefined, true)).toMatchSnapshot();
+      expect(
+        Object.keys(vol.toJSON(config.outputDir, undefined, true)).some(
+          (pathName) => {
+            return pathName.endsWith("grade/objects/analytics-query.mdx");
+          },
+        ),
+      ).toBe(false);
     });
 
     test("Markdown document structure from GraphQL schema is correct when using api hierarchy", async () => {
@@ -230,7 +237,7 @@ describe("renderer", () => {
     });
 
     test("generates nested query namespace pages under operations hierarchy", async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
@@ -284,6 +291,11 @@ describe("renderer", () => {
           return pathName.includes("operations/queries/analytics");
         }),
       ).toBe(true);
+      expect(
+        allPaths.some((pathName) => {
+          return pathName.endsWith("operations/queries/analytics.mdx");
+        }),
+      ).toBe(false);
     });
 
     test("Markdown document structure from GraphQL schema is correct when using flat hierarchy", async () => {

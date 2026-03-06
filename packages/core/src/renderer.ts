@@ -634,16 +634,32 @@ export class Renderer {
       const printOptions = {
         ...this.options,
         formatCategoryFolderName: (categoryName: string): string => {
-          // Determine if this category should use root or nested formatting
-          // First check if category was pre-registered as a root-level category
-          if (this.rootLevelPositionManager.isRegistered(categoryName)) {
-            return this.formatCategoryFolderName(categoryName, true);
+          // Resolve root-level category names first. Group names can be stored in
+          // their original case in pre-collected categories, while link generation
+          // may provide slugified lowercase variants.
+          const rootCategory = this.rootLevelPositionManager.isRegistered(
+            categoryName,
+          )
+            ? categoryName
+            : startCase(categoryName);
+
+          if (this.rootLevelPositionManager.isRegistered(rootCategory)) {
+            return this.formatCategoryFolderName(rootCategory, true);
           }
-          // If not root-level, check if it's a nested category
-          // Nested categories are handled dynamically without pre-registration
-          // in some hierarchies (like API hierarchy where entity categories are
-          // scoped within their parent API group)
-          return this.formatCategoryFolderName(categoryName, false);
+
+          // Nested categories can also be registered in either raw or start-cased
+          // forms depending on hierarchy inputs.
+          if (this.categoryPositionManager.isRegistered(categoryName)) {
+            return this.formatCategoryFolderName(categoryName, false);
+          }
+
+          const nestedCategory = startCase(categoryName);
+          if (this.categoryPositionManager.isRegistered(nestedCategory)) {
+            return this.formatCategoryFolderName(nestedCategory, false);
+          }
+
+          // Unknown categories should not receive synthetic numeric prefixes.
+          return slugify(categoryName);
         },
       };
       content = await this.printer.printType(fileName, type, printOptions);

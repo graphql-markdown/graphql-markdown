@@ -113,7 +113,6 @@ describe("introspection", () => {
 
       expect(Object.keys(list)).toEqual([
         "tournaments",
-        "analytics",
         "analytics.aggregateTournaments",
         "analytics.topPlayers",
       ]);
@@ -135,11 +134,7 @@ describe("introspection", () => {
 
       const list = getOperation(cyclicSchema.getQueryType()!);
 
-      expect(Object.keys(list)).toEqual([
-        "analytics",
-        "analytics.self",
-        "analytics.aggregateTournaments",
-      ]);
+      expect(Object.keys(list)).toEqual(["analytics.aggregateTournaments"]);
     });
   });
 
@@ -158,6 +153,27 @@ describe("introspection", () => {
       const fields = getFields("test");
 
       expect(fields).toStrictEqual([]);
+    });
+  });
+
+  describe("getSchemaMap()", () => {
+    test("does not include namespace container object types", () => {
+      expect.hasAssertions();
+
+      const namespaceSchema = buildSchema(`
+        type Query {
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          semesterGPA: Int
+        }
+      `);
+
+      const schemaMap = getSchemaMap(namespaceSchema);
+
+      expect(Object.keys(schemaMap.queries)).toContain("analytics.semesterGPA");
+      expect(schemaMap.objects).not.toHaveProperty("AnalyticsQuery");
     });
   });
 

@@ -414,7 +414,14 @@ const isNestedOperationNamespaceType = (
   type: unknown,
   operationKind: Maybe<OperationKind>,
 ): type is GraphQLObjectType => {
-  if (!(type instanceof GraphQLObjectType)) {
+  // Use constructor-name check to remain compatible across graphql realms.
+  if (
+    !(
+      typeof type === "object" &&
+      type !== null &&
+      type.constructor.name === GraphQLObjectType.name
+    )
+  ) {
     return false;
   }
 
@@ -442,10 +449,10 @@ const collectOperationFields = (
   prefix: string,
   operationKind: Maybe<OperationKind>,
   visitedTypeNames: Set<string>,
+  namespaceTypeNames: Set<string> = new Set<string>(),
 ): void => {
   Object.entries(fieldMap).forEach(([name, operation]) => {
     const key = prefix ? `${prefix}.${name}` : name;
-    list[key] = operation as GraphQLOperationType;
 
     if (
       !(
@@ -454,14 +461,25 @@ const collectOperationFields = (
         "type" in operation
       )
     ) {
+      list[key] = operation as GraphQLOperationType;
       return;
     }
 
     const nestedType = getNamedType(operation.type as GraphQLNamedType);
     const nestedTypeName = getTypeName(nestedType);
+    const isNamespaceType = isNestedOperationNamespaceType(
+      nestedType,
+      operationKind,
+    );
+
+    if (!isNamespaceType) {
+      list[key] = operation as GraphQLOperationType;
+    } else if (nestedTypeName) {
+      namespaceTypeNames.add(nestedTypeName);
+    }
 
     if (
-      !isNestedOperationNamespaceType(nestedType, operationKind) ||
+      !isNamespaceType ||
       !nestedTypeName ||
       visitedTypeNames.has(nestedTypeName)
     ) {
@@ -474,8 +492,40 @@ const collectOperationFields = (
       key,
       operationKind,
       new Set([...visitedTypeNames, nestedTypeName]),
+      namespaceTypeNames,
     );
   });
+};
+
+/**
+ * Returns names of namespace container object types for a root operation type.
+ *
+ * @param operationType - root operation type to inspect.
+ * @returns set of namespace container type names.
+ */
+const getOperationNamespaceTypeNames = (
+  operationType?: unknown,
+): Set<string> => {
+  return _getFields(
+    operationType,
+    (fieldMap) => {
+      const namespaceTypeNames = new Set<string>();
+      const rootTypeName = getTypeName(operationType);
+      const operationKind = getOperationKindFromTypeName(rootTypeName);
+
+      collectOperationFields(
+        fieldMap,
+        {},
+        "",
+        operationKind,
+        rootTypeName ? new Set([rootTypeName]) : new Set(),
+        namespaceTypeNames,
+      );
+
+      return namespaceTypeNames;
+    },
+    new Set<string>(),
+  ) as Set<string>;
 };
 
 /**
@@ -603,6 +653,26 @@ export const getFields = (type: unknown): unknown[] => {
  *
  */
 export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
+  const namespaceTypeNames = new Set<string>([
+    ...getOperationNamespaceTypeNames(schema?.getQueryType() ?? undefined),
+    ...getOperationNamespaceTypeNames(schema?.getMutationType() ?? undefined),
+    ...getOperationNamespaceTypeNames(
+      schema?.getSubscriptionType() ?? undefined,
+    ),
+  ]);
+
+  const objects = getTypeFromSchema<GraphQLObjectType>(
+    schema,
+    GraphQLObjectType,
+  );
+  const filteredObjects = objects
+    ? (Object.fromEntries(
+        Object.entries(objects).filter(([typeName]) => {
+          return !namespaceTypeNames.has(typeName);
+        }),
+      ) as Record<string, GraphQLObjectType>)
+    : undefined;
+
   return {
     ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
@@ -616,10 +686,7 @@ export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
     ["directives" as SchemaEntity]: convertArrayToMapObject<GraphQLDirective>(
       schema?.getDirectives() as GraphQLDirective[],
     ),
-    ["objects" as SchemaEntity]: getTypeFromSchema<GraphQLObjectType>(
-      schema,
-      GraphQLObjectType,
-    ),
+    ["objects" as SchemaEntity]: filteredObjects,
     ["unions" as SchemaEntity]: getTypeFromSchema<GraphQLUnionType>(
       schema,
       GraphQLUnionType,
