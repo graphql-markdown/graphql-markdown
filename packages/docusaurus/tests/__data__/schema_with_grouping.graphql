@@ -111,6 +111,7 @@ input EntitySort {
 
 type Query {
   GPA(skip: Int = 0): Int @doc(category: "Grade") @beta
+  analytics: AnalyticsQuery @doc(category: "Grade") @beta
   WeightedGPA(input: String, skip: Int!): Int
     @doc(category: "Grade")
     @complexity(value: 3)
@@ -134,6 +135,15 @@ type Query {
     @beta
     @auth
     @complexity(value: 2, multipliers: ["roles"])
+}
+
+type AnalyticsQuery @doc(category: "Grade") {
+  semesterGPA(semesterId: ID!): Int
+    @doc(category: "Grade")
+    @complexity(value: 2)
+  coursesByDepartment(departmentId: ID!): [Course!]!
+    @doc(category: "Course")
+    @auth
 }
 
 type UnusedType implements Record @noDoc {
