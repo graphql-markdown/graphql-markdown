@@ -1,7 +1,7 @@
 ---
 pagination_prev: null
 pagination_next: null
-description: Document namespaced GraphQL operations for nested query fields.
+description: Documents namespaced GraphQL operations for nested query fields.
 keywords:
   - namespaced operations
   - GraphQL Query namespaces
