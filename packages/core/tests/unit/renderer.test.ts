@@ -642,6 +642,33 @@ describe("renderer", () => {
           undefined,
         );
       });
+
+      test("renders nested operation namespaces into nested category folders", async () => {
+        expect.assertions(2);
+
+        jest.spyOn(Printer, "printType").mockImplementation(() => {
+          return "content" as MDXString;
+        });
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const saveSpy = jest.spyOn(Utils, "saveFile");
+        const indexSpy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(saveSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics/aggregate-tournaments.mdx",
+          "content",
+          undefined,
+        );
+        expect(indexSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics",
+          "analytics",
+        );
+      });
     });
 
     describe("generateCategoryMetafileType()", () => {

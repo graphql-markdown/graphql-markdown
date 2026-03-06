@@ -553,9 +553,15 @@ export class Renderer {
     }
 
     const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
+    const isOperationRootType =
+      rootTypeName === "queries" ||
+      rootTypeName === "mutations" ||
+      rootTypeName === "subscriptions";
+
     return Promise.all(
       Object.keys(type).map(async (name) => {
         let dirPath = this.outputDir;
+        let entityName = name;
 
         if (!isFlat) {
           dirPath = await this.generateCategoryMetafileType(
@@ -563,11 +569,28 @@ export class Renderer {
             name,
             rootTypeName,
           );
+
+          if (isOperationRootType && name.includes(".")) {
+            const namespaceParts = name.split(".").filter(Boolean);
+
+            if (namespaceParts.length > 1) {
+              entityName = namespaceParts.at(-1) ?? entityName;
+
+              for (const namespace of namespaceParts.slice(0, -1)) {
+                const formattedNamespace = this.formatCategoryFolderName(
+                  namespace,
+                  false,
+                );
+                dirPath = join(dirPath, formattedNamespace);
+                await this.generateIndexMetafile(dirPath, namespace);
+              }
+            }
+          }
         }
 
         return this.renderTypeEntities(
           dirPath,
-          name,
+          entityName,
           (type as Record<string, unknown>)[name],
         );
       }),
