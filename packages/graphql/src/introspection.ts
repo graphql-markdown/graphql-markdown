@@ -505,19 +505,21 @@ const collectOperationFields = (
  */
 const getOperationNamespaceTypeNames = (
   operationType?: unknown,
+  operationKind?: Maybe<OperationKind>,
 ): Set<string> => {
   return _getFields(
     operationType,
     (fieldMap) => {
       const namespaceTypeNames = new Set<string>();
       const rootTypeName = getTypeName(operationType);
-      const operationKind = getOperationKindFromTypeName(rootTypeName);
+      const resolvedOperationKind =
+        operationKind ?? getOperationKindFromTypeName(rootTypeName);
 
       collectOperationFields(
         fieldMap,
         {},
         "",
-        operationKind,
+        resolvedOperationKind,
         rootTypeName ? new Set([rootTypeName]) : new Set(),
         namespaceTypeNames,
       );
@@ -542,19 +544,21 @@ const getOperationNamespaceTypeNames = (
  */
 export const getOperation = (
   operationType?: unknown,
+  operationKind?: Maybe<OperationKind>,
 ): Record<string, GraphQLOperationType> => {
   return _getFields(
     operationType,
     (fieldMap) => {
       const list: Record<string, GraphQLOperationType> = {};
       const rootTypeName = getTypeName(operationType);
-      const operationKind = getOperationKindFromTypeName(rootTypeName);
+      const resolvedOperationKind =
+        operationKind ?? getOperationKindFromTypeName(rootTypeName);
 
       collectOperationFields(
         fieldMap,
         list,
         "",
-        operationKind,
+        resolvedOperationKind,
         rootTypeName ? new Set([rootTypeName]) : new Set(),
       );
 
@@ -654,10 +658,17 @@ export const getFields = (type: unknown): unknown[] => {
  */
 export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
   const namespaceTypeNames = new Set<string>([
-    ...getOperationNamespaceTypeNames(schema?.getQueryType() ?? undefined),
-    ...getOperationNamespaceTypeNames(schema?.getMutationType() ?? undefined),
+    ...getOperationNamespaceTypeNames(
+      schema?.getQueryType() ?? undefined,
+      "query",
+    ),
+    ...getOperationNamespaceTypeNames(
+      schema?.getMutationType() ?? undefined,
+      "mutation",
+    ),
     ...getOperationNamespaceTypeNames(
       schema?.getSubscriptionType() ?? undefined,
+      "subscription",
     ),
   ]);
 
@@ -676,12 +687,15 @@ export const getSchemaMap = (schema: Maybe<GraphQLSchema>): SchemaMap => {
   return {
     ["queries" as SchemaEntity]: getOperation(
       schema?.getQueryType() ?? undefined,
+      "query",
     ),
     ["mutations" as SchemaEntity]: getOperation(
       schema?.getMutationType() ?? undefined,
+      "mutation",
     ),
     ["subscriptions" as SchemaEntity]: getOperation(
       schema?.getSubscriptionType() ?? undefined,
+      "subscription",
     ),
     ["directives" as SchemaEntity]: convertArrayToMapObject<GraphQLDirective>(
       schema?.getDirectives() as GraphQLDirective[],

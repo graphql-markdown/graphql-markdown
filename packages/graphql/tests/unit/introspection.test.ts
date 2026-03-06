@@ -360,6 +360,34 @@ describe("introspection", () => {
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
     });
 
+    test("resolves nested namespaces with custom root type names", () => {
+      expect.hasAssertions();
+
+      const customRootSchema = buildSchema(`
+        schema {
+          query: Root
+        }
+
+        type Root {
+          users: [String!]!
+          admin: AdminQuery!
+        }
+
+        type AdminQuery {
+          userById(id: ID!): String
+          listRoles: [String!]!
+        }
+      `);
+
+      const schemaTypeMap = getSchemaMap(customRootSchema);
+
+      expect(Object.keys(schemaTypeMap.queries ?? {})).toEqual([
+        "users",
+        "admin.userById",
+        "admin.listRoles",
+      ]);
+    });
+
     test("returns schema types map with defined root types", async () => {
       expect.hasAssertions();
 
