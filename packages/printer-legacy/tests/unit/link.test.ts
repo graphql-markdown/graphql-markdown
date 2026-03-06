@@ -334,6 +334,46 @@ describe("link", () => {
       `);
     });
 
+    test("returns markdown link with nested operation namespace path", () => {
+      expect.hasAssertions();
+
+      const entityName = "analytics.aggregateTournaments";
+      const type = {
+        name: "aggregateTournaments",
+        type: {
+          name: "AggregateGroup",
+        },
+      };
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isOperation.mockReturnValue(true);
+      mockGraphQL.isApiType.mockReturnValue(true);
+      mockUtils.slugify.mockImplementation((value: unknown) => {
+        return value === "aggregateTournaments"
+          ? "aggregate-tournaments"
+          : String(value);
+      });
+
+      const link = Link.toLink(
+        type,
+        entityName,
+        { singular: "query", plural: "queries" },
+        {
+          ...DEFAULT_OPTIONS,
+          basePath,
+        },
+      );
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "analytics.aggregateTournaments",
+          "url": "docs/graphql/operations/queries/analytics/aggregate-tournaments",
+        }
+      `);
+    });
+
     test("returns markdown link with deprecated in path", () => {
       expect.hasAssertions();
 

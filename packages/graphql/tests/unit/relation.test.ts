@@ -198,6 +198,33 @@ describe("relation", () => {
 
       expect(relations).toMatchSnapshot();
     });
+
+    test("preserves nested query namespace name for operation relations", () => {
+      expect.hasAssertions();
+
+      const schema = buildSchema(`
+        type StudyItem {
+          id: ID!
+        }
+
+        type Query {
+          analytics: AnalyticsQuery!
+        }
+
+        type AnalyticsQuery {
+          getStudyItem: StudyItem
+        }
+      `);
+
+      const schemaMap = getSchemaMap(schema);
+      const compositeType = schema.getType("StudyItem");
+
+      const relations = getRelationOfReturn(compositeType, schemaMap);
+
+      expect(relations.queries.map((q) => q.name)).toEqual([
+        "analytics.getStudyItem",
+      ]);
+    });
   });
 
   describe("getRelationOfField", () => {

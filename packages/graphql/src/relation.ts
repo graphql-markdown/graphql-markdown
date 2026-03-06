@@ -133,7 +133,12 @@ export const getRelationOfReturn: IGetRelation<GraphQLOperationType> = (
           );
         })
       ) {
-        results.push(relationType);
+        const relationTypeWithQualifiedName = {
+          ...(relationType as Record<string, unknown>),
+          name: relationName,
+        } as unknown as GraphQLOperationType;
+
+        results.push(relationTypeWithQualifiedName);
       }
     }
     return results;
