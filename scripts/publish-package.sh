@@ -69,7 +69,7 @@ echo ""
 
 # Publish using the tarball
 echo "🚀 Publishing to npm..."
-npm publish "$TARBALL_NAME" --access public
+npm publish "$TARBALL_NAME" --access public --workspaces=false
 
 echo ""
 echo "✅ Successfully published $FULL_NAME@$VERSION"
