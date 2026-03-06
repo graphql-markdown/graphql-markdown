@@ -325,7 +325,7 @@ Use these options to toggle the type of information rendered on pages:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
   - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)).
-  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/examples))._
+  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/namespaced-operations))._
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `relatedTypeSection`: display related type sections.
 - `typeBadges`: add field type attributes badges.
