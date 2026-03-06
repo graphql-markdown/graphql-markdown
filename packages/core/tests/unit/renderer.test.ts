@@ -349,6 +349,60 @@ describe("renderer", () => {
         expect(formattedLowercaseGroup).toBe(formattedOriginalGroup);
       });
 
+      test("formats category folders by registration scope and falls back to slugify for unknown names", async () => {
+        expect.assertions(4);
+
+        const renderer = await getRenderer(
+          Printer as unknown as typeof IPrinter,
+          "/output",
+          baseURL,
+          undefined,
+          false,
+          {
+            ...DEFAULT_RENDERER_OPTIONS,
+            categorySort: "natural",
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          ".mdx",
+        );
+
+        renderer["rootLevelPositionManager"].registerCategories(["Query"]);
+        renderer["rootLevelPositionManager"].computePositions();
+        renderer["categoryPositionManager"].registerCategories([
+          "objects",
+          "Mutations",
+        ]);
+        renderer["categoryPositionManager"].computePositions();
+
+        let rootDirect = "";
+        let nestedDirect = "";
+        let nestedFallback = "";
+        let unknownCategory = "";
+
+        jest
+          .spyOn(Printer, "printType")
+          .mockImplementation((_, __, options) => {
+            rootDirect = options.formatCategoryFolderName?.("Query") ?? "";
+            nestedDirect = options.formatCategoryFolderName?.("objects") ?? "";
+            nestedFallback =
+              options.formatCategoryFolderName?.("mutations") ?? "";
+            unknownCategory =
+              options.formatCategoryFolderName?.("AnalyticsNamespace") ?? "";
+            return "Lorem ipsum" as MDXString;
+          });
+
+        await renderer.renderTypeEntities(
+          "/output/queries",
+          "QueryField",
+          "QueryType",
+        );
+
+        expect(rootDirect).toMatch(/^\d{2}-query$/);
+        expect(nestedDirect).toMatch(/^\d{2}-objects$/);
+        expect(nestedFallback).toMatch(/^\d{2}-mutations$/);
+        expect(unknownCategory).toBe("analytics-namespace");
+      });
+
       test("handles cancelled rendering when printType returns an empty string", async () => {
         expect.assertions(2);
 
