@@ -1,14 +1,16 @@
 # frontmatter
 
+Routines for serializing data structures into Markdown frontmatter blocks.
+
 ## Functions
 
 ### formatFrontMatterList()
 
 ```ts
-function formatFrontMatterList(prop, indentation, prefix): string[];
+function formatFrontMatterList(prop, indentation?, prefix?): string[];
 ```
 
-Defined in: [frontmatter.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L79)
+Defined in: [frontmatter.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L84)
 
 Formats an array into a front matter YAML-like structure as string array.
 
@@ -20,13 +22,13 @@ Formats an array into a front matter YAML-like structure as string array.
 
 The array to format.
 
-##### indentation
+##### indentation?
 
 `number` = `0`
 
 The current indentation level. Defaults to 0.
 
-##### prefix
+##### prefix?
 
 `string` = `"- "`
 
@@ -54,10 +56,10 @@ formatFrontMatterList(list);
 ### formatFrontMatterObject()
 
 ```ts
-function formatFrontMatterObject(props, indentation, prefix?): string[];
+function formatFrontMatterObject(props, indentation?, prefix?): string[];
 ```
 
-Defined in: [frontmatter.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L39)
+Defined in: [frontmatter.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L44)
 
 Formats an object into a front matter YAML-like structure as string array.
 
@@ -69,7 +71,7 @@ Formats an object into a front matter YAML-like structure as string array.
 
 The object to format.
 
-##### indentation
+##### indentation?
 
 `number` = `0`
 
@@ -105,10 +107,10 @@ formatFrontMatterObject(obj);
 ### formatFrontMatterProp()
 
 ```ts
-function formatFrontMatterProp(prop, indentation, prefix?): string[];
+function formatFrontMatterProp(prop, indentation?, prefix?): string[];
 ```
 
-Defined in: [frontmatter.ts:122](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L122)
+Defined in: [frontmatter.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/frontmatter.ts#L127)
 
 Formats a single property into a front matter YAML-like structure as string array.
 
@@ -120,7 +122,7 @@ Formats a single property into a front matter YAML-like structure as string arra
 
 The property to format, represented as an object with a single key-value pair.
 
-##### indentation
+##### indentation?
 
 `number` = `0`
 

@@ -247,7 +247,7 @@ await renderer.generateIndexMetafile("docs/types", "Types", {
 preCollectCategories(rootTypeNames): void;
 ```
 
-Defined in: [renderer.ts:705](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L705)
+Defined in: [renderer.ts:741](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L741)
 
 Pre-collects all category names that will be generated during rendering.
 This allows the position manager to assign consistent positions before
@@ -283,7 +283,7 @@ Array of root type names from the schema
 renderHomepage(homepageLocation): Promise<void>;
 ```
 
-Defined in: [renderer.ts:755](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L755)
+Defined in: [renderer.ts:791](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L791)
 
 Renders the homepage for the documentation from a template file.
 Replaces placeholders in the template with actual values.
@@ -353,7 +353,7 @@ renderTypeEntities(
    type): Promise<Maybe<Category>>;
 ```
 
-Defined in: [renderer.ts:586](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L586)
+Defined in: [renderer.ts:606](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L606)
 
 Renders documentation for a specific type entity and saves it to a file.
 
@@ -540,7 +540,7 @@ function getRenderer(
 ): Promise<Renderer>;
 ```
 
-Defined in: [renderer.ts:987](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L987)
+Defined in: [renderer.ts:1023](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L1023)
 
 Factory function to create and initialize a Renderer instance.
 Creates the output directory and returns a configured renderer.

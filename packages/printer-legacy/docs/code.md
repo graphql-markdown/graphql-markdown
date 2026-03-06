@@ -9,7 +9,7 @@ with proper indentation and deprecation notices.
 ### printCodeArguments()
 
 ```ts
-function printCodeArguments(type, indentationLevel): string;
+function printCodeArguments(type, indentationLevel?): string;
 ```
 
 Defined in: [printer-legacy/src/code.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/code.ts#L41)
@@ -24,7 +24,7 @@ Generates a string representation of GraphQL arguments with proper formatting an
 
 The GraphQL type object containing arguments to print
 
-##### indentationLevel
+##### indentationLevel?
 
 `number` = `1`
 

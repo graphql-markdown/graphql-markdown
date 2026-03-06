@@ -209,7 +209,7 @@ kebabCase("The quick brown Fox");
 ### prune()
 
 ```ts
-function prune(str, substr): string;
+function prune(str, substr?): string;
 ```
 
 Defined in: [string.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/string.ts#L58)
@@ -226,7 +226,7 @@ Returns a string pruned on both start and end, similar to `trim()` but with any 
 
 the string to be pruned.
 
-##### substr
+##### substr?
 
 `string` = `""`
 

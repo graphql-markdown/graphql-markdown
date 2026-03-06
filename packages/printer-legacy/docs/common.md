@@ -7,7 +7,7 @@ Common printer utility functions for handling descriptions, directives, and warn
 ### formatDescription()
 
 ```ts
-function formatDescription(type, replacement): string | MDXString;
+function formatDescription(type, replacement?): string | MDXString;
 ```
 
 Defined in: [printer-legacy/src/common.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L73)
@@ -22,7 +22,7 @@ Formats a GraphQL type description or falls back to a default message.
 
 GraphQL type to get description from
 
-##### replacement
+##### replacement?
 
 `Maybe`&lt;`string`&gt; = `NO_DESCRIPTION_TEXT`
 

@@ -8,11 +8,17 @@
 function beforeGenerateIndexMetafileHook(event): Promise<void>;
 ```
 
-Defined in: [mdx/category.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L22)
+Defined in: [mdx/category.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L31)
+
+Hook that materializes a `_category_.yml` file before Docusaurus indexes
+a directory, ensuring generated bundles have labels, ordering, and
+optional generated-index metadata even when the folder was produced by the CLI.
 
 #### Parameters
 
 ##### event
+
+Hook payload containing the target directory, category name, and generator options.
 
 ###### data
 

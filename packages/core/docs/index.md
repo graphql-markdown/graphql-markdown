@@ -16,6 +16,8 @@
 - [events/diff-events](events/diff-events.md)
 - [events/generate-index-metafile](events/generate-index-metafile.md)
 - [events/generate-index-metafile-events](events/generate-index-metafile-events.md)
+- [events/print-type](events/print-type.md)
+- [events/print-type-events](events/print-type-events.md)
 - [events/render-homepage](events/render-homepage.md)
 - [events/render-homepage-events](events/render-homepage-events.md)
 - [events/render-root-types](events/render-root-types.md)

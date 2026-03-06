@@ -1,5 +1,7 @@
 # printer
 
+Printer loader helpers for bootstrapping GraphQL-Markdown renderers.
+
 ## Functions
 
 ### getPrinter()
@@ -11,10 +13,11 @@ function getPrinter(
   options?,
   formatter?,
   mdxDeclaration?,
+  eventEmitter?,
 ): Promise<typeof IPrinter>;
 ```
 
-Defined in: [printer.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L61)
+Defined in: [printer.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L67)
 
 Loads and initializes a printer module for GraphQL schema documentation.
 
@@ -51,6 +54,10 @@ Optional formatter functions for customizing output format (e.g., MDX)
 ##### mdxDeclaration?
 
 `Maybe`&lt;`string`&gt;
+
+##### eventEmitter?
+
+`Maybe`&lt;`PrinterEventEmitter`&gt;
 
 #### Returns
 
