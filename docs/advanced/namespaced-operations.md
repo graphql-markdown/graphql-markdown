@@ -6,7 +6,6 @@ keywords:
   - namespaced operations
   - GraphQL Query namespaces
   - operation grouping
-
 ---
 
 # Namespaced operations
@@ -31,4 +30,4 @@ Generated operation pages include nested paths such as:
 - `operations/queries/analytics/semester-gpa`
 - `operations/queries/analytics/courses-by-department`
 
-When `groupByDirective` is enabled, these namespaced operations are still grouped by their directive category.
+When [`groupByDirective`](/docs/advanced/group-by-directive) is enabled, these namespaced operations are still grouped by their directive category.
