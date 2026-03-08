@@ -12,7 +12,7 @@ keywords:
 
 Grouping also works with namespaced operations (for example, `Query.analytics.*`, `Mutation.admin.*`, or `Subscription.events.*`).
 
-If a root operation returns a namespace object, nested fields are generated as operation pages and can be grouped with `@doc(category: ...)` the same way as top-level operations.
+If a root operation returns a namespace object, nested fields are generated as operation pages.
 
 Namespace object type names must follow the corresponding operation suffix convention (`*Query`, `*Mutation`, `*Subscription`).
 
