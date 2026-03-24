@@ -8,17 +8,13 @@
       "project": ["**/*.ts!"]
     },
     "packages/core": {
-      "ignoreDependencies": [
-        "@graphql-markdown/diff",
-        "@graphql-markdown/printer-legacy",
-        "graphql-config"
-      ]
+      "ignoreDependencies": ["graphql-config"]
     },
     "packages/utils": {
       "project": ["**/*.ts!"],
       "ignoreDependencies": ["prettier"]
     }
-  },     
+  },
   "ignoreDependencies": [
     "@docusaurus/logger",
     "commitizen",
@@ -26,7 +22,6 @@
     "husky",
     "jest-environment-node"
   ],
-  "ignoreExportsUsedInFile": true,
   "jest": {
     "config": ["config/jest.config.js"],
     "entry": ["**/tests/**/*.ts"]
