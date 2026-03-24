@@ -325,51 +325,5 @@ test
 </fieldset>"
 `);
     });
-    // eslint-disable-next-line jest/no-disabled-tests
-    test.skip("prints admonition caution for Docusaurus v2", () => {
-      expect.assertions(1);
-
-      const meta: MetaInfo = {
-        generatorFrameworkName: "docusaurus",
-        generatorFrameworkVersion: "2.4.2",
-      };
-
-      expect(
-        printWarning({ text: "test", title: "DEPRECATED" }, {
-          meta,
-        } as unknown as PrintTypeOptions),
-      ).toMatchInlineSnapshot(`
-        "
-
-        :::caution DEPRECATED
-
-        test
-
-        :::"
-      `);
-    });
-    // eslint-disable-next-line jest/no-disabled-tests
-    test.skip("prints admonition warning for Docusaurus v3", () => {
-      expect.assertions(1);
-
-      const meta: MetaInfo = {
-        generatorFrameworkName: "docusaurus",
-        generatorFrameworkVersion: "3.0.0",
-      };
-
-      expect(
-        printWarning({ text: "test", title: "DEPRECATED" }, {
-          meta,
-        } as unknown as PrintTypeOptions),
-      ).toMatchInlineSnapshot(`
-        "
-
-        :::warning[DEPRECATED]
-
-        test
-
-        :::"
-      `);
-    });
   });
 });
