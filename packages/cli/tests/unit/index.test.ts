@@ -576,6 +576,24 @@ describe("CLI Module", () => {
 `);
   });
 
+  test("executes the configured command action", async () => {
+    expect.assertions(1);
+
+    const options = {
+      schema: "./schema.graphql",
+      rootPath: "./docs",
+    };
+    const command = getGraphQLMarkdownCli(options);
+
+    await command.parseAsync(["node", "graphql-to-doc", "--config"]);
+
+    expect(require("@graphql-markdown/core").buildConfig).toHaveBeenCalledWith(
+      options,
+      expect.objectContaining({ config: true }),
+      undefined,
+    );
+  });
+
   describe("runGraphQLMarkdown", () => {
     test("runs documentation generation with provided options", async () => {
       expect.assertions(1);
