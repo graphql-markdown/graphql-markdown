@@ -4,6 +4,8 @@
     "moduleResolution": "node",
     "target": "esnext",
 
+    "types": ["node"],
+
     "composite": true,
     "declaration": true,
     "declarationMap": true,
