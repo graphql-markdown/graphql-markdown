@@ -5,11 +5,9 @@
       "project": ["{config,scripts}/**/*.js"]
     },
     "packages/*": {
-      "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"]
+      "project": ["**/*.ts!"]
     },
     "packages/core": {
-      "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": [
         "@graphql-markdown/diff",
         "@graphql-markdown/printer-legacy",
@@ -18,16 +16,7 @@
     },
     "packages/utils": {
       "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"],
       "ignoreDependencies": ["prettier"]
-    },
-    "packages/cli": {
-      "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"]
-    },
-    "packages/docusaurus": {
-      "project": ["**/*.ts!"],
-      "ignore": ["**/__mocks__/**/*.ts"]
     }
   },
   "rules": {
