@@ -56,10 +56,8 @@
   },
   "dependencies": {
     "@graphql-markdown/graphql": "workspace:^",
+    "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
-  },
-  "devDependencies": {
-    "@graphql-markdown/types": "workspace:^"
   },
   "resolutions": {
     "micromatch": "4.0.8"

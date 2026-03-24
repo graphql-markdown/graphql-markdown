@@ -80,7 +80,7 @@
     "clean:all": "bun run --if-present --workspaces clean",
     "docs:api:all": "bun run --if-present --workspaces docs",
     "docs:api": "sh ./scripts/docs-api.sh",
-    "knip": "knip",
+    "knip": "knip --strict",
     "lint": "eslint --config config/eslint.config.ts \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
     "lint:fix": "eslint --config config/eslint.config.ts \"packages/*/{src,tests}/**.{ts,js,json,gql}\" --fix",
     "prepare": "node ./scripts/prepare-husky.js",

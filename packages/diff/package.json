@@ -57,12 +57,10 @@
   "dependencies": {
     "@graphql-inspector/core": "^7.1.1",
     "@graphql-markdown/graphql": "workspace:^",
+    "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^",
     "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
     "@graphql-tools/load": "catalog:graphql-tools"
-  },
-  "devDependencies": {
-    "@graphql-markdown/types": "workspace:^"
   },
   "resolutions": {
     "braces": "3.0.3"

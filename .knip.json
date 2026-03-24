@@ -18,10 +18,7 @@
       "project": ["**/*.ts!"],
       "ignoreDependencies": ["prettier"]
     }
-  },
-  "rules": {
-    "enumMembers": "warn"
-  },
+  },     
   "ignoreDependencies": [
     "@docusaurus/logger",
     "commitizen",

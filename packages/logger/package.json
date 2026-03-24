@@ -40,8 +40,10 @@
     "docs": "typedoc",
     "build": "tsgo --build"
   },
+  "dependencies": {
+    "@graphql-markdown/types": "workspace:^"
+  },
   "devDependencies": {
-    "@graphql-markdown/types": "workspace:^",
     "@docusaurus/logger": "catalog:docusaurus"
   },
   "directories": {
