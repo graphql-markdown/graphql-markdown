@@ -225,6 +225,32 @@ describe("relation", () => {
         "analytics.getStudyItem",
       ]);
     });
+
+    test("ignores operation entries with unresolved return types", () => {
+      expect.hasAssertions();
+
+      const schema = buildSchema(`
+        type StudyItem {
+          id: ID!
+        }
+      `);
+
+      const compositeType = schema.getType("StudyItem");
+
+      const relations = getRelationOfReturn(compositeType, {
+        queries: {
+          brokenStudyItem: {
+            type: undefined,
+          },
+        },
+      } as never);
+
+      expect(relations).toEqual({
+        queries: [],
+        mutations: [],
+        subscriptions: [],
+      });
+    });
   });
 
   describe("getRelationOfField", () => {
@@ -296,6 +322,41 @@ describe("relation", () => {
             return (q as { name: string }).name;
           }),
       ).toContain("analytics.getStudyItem");
+    });
+
+    test("ignores field entries with unresolved argument types", () => {
+      expect.hasAssertions();
+
+      const schema = buildSchema(`
+        type Query {
+          noop: String
+        }
+      `);
+
+      const compositeType = schema.getType("String");
+
+      const relations = getRelationOfField(compositeType, {
+        queries: {
+          brokenQuery: {
+            args: [
+              {
+                name: "id",
+                type: undefined,
+              },
+            ],
+          },
+        },
+      } as never);
+
+      expect(relations).toEqual({
+        queries: [],
+        mutations: [],
+        subscriptions: [],
+        objects: [],
+        interfaces: [],
+        inputs: [],
+        directives: [],
+      });
     });
   });
 });
