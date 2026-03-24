@@ -18,7 +18,7 @@ import {
 } from "graphql/type";
 import type { GraphQLType } from "graphql/type";
 
-import { DirectiveLocation, Kind, OperationTypeNode } from "graphql/language";
+import { DirectiveLocation, OperationTypeNode } from "graphql/language";
 
 import { getDirectiveValues } from "graphql/execution";
 
@@ -27,8 +27,6 @@ import type {
   AstNodeType,
   DirectiveNode,
   GraphQLDirective,
-  GraphQLFieldMap,
-  GraphQLInputFieldMap,
   GraphQLNamedType,
   GraphQLOperationType,
   GraphQLSchema,
@@ -128,43 +126,34 @@ export const getDirectiveLocationForASTPath = (
     throw new IntrospectionError("Unexpected kind: " + String(appliedTo));
   }
 
-  switch (appliedTo.kind) {
-    case Kind.FIELD:
-      return DirectiveLocation.FIELD;
-    case Kind.SCHEMA_DEFINITION:
-    case Kind.SCHEMA_EXTENSION:
-      return DirectiveLocation.SCHEMA;
-    case Kind.SCALAR_TYPE_DEFINITION:
-    case Kind.SCALAR_TYPE_EXTENSION:
-      return DirectiveLocation.SCALAR;
-    case Kind.OBJECT_TYPE_DEFINITION:
-    case Kind.OBJECT_TYPE_EXTENSION:
-      return DirectiveLocation.OBJECT;
-    case Kind.FIELD_DEFINITION:
-      return DirectiveLocation.FIELD_DEFINITION;
-    case Kind.INTERFACE_TYPE_DEFINITION:
-    case Kind.INTERFACE_TYPE_EXTENSION:
-      return DirectiveLocation.INTERFACE;
-    case Kind.UNION_TYPE_DEFINITION:
-    case Kind.UNION_TYPE_EXTENSION:
-      return DirectiveLocation.UNION;
-    case Kind.ENUM_TYPE_DEFINITION:
-    case Kind.ENUM_TYPE_EXTENSION:
-      return DirectiveLocation.ENUM;
-    case Kind.ENUM_VALUE_DEFINITION:
-      return DirectiveLocation.ENUM_VALUE;
-    case Kind.INPUT_OBJECT_TYPE_DEFINITION:
-    case Kind.INPUT_OBJECT_TYPE_EXTENSION:
-      return DirectiveLocation.INPUT_OBJECT;
-    case Kind.INPUT_VALUE_DEFINITION:
-    case Kind.ARGUMENT:
-      return DirectiveLocation.ARGUMENT_DEFINITION;
-    // Not reachable, all possible types have been considered.
-    default:
-      throw new IntrospectionError(
-        "Unexpected kind: " + String(appliedTo.kind),
-      );
+  const kindToLocation: Partial<Record<ASTNode["kind"], DirectiveLocation>> = {
+    Field: DirectiveLocation.FIELD,
+    SchemaDefinition: DirectiveLocation.SCHEMA,
+    SchemaExtension: DirectiveLocation.SCHEMA,
+    ScalarTypeDefinition: DirectiveLocation.SCALAR,
+    ScalarTypeExtension: DirectiveLocation.SCALAR,
+    ObjectTypeDefinition: DirectiveLocation.OBJECT,
+    ObjectTypeExtension: DirectiveLocation.OBJECT,
+    FieldDefinition: DirectiveLocation.FIELD_DEFINITION,
+    InterfaceTypeDefinition: DirectiveLocation.INTERFACE,
+    InterfaceTypeExtension: DirectiveLocation.INTERFACE,
+    UnionTypeDefinition: DirectiveLocation.UNION,
+    UnionTypeExtension: DirectiveLocation.UNION,
+    EnumTypeDefinition: DirectiveLocation.ENUM,
+    EnumTypeExtension: DirectiveLocation.ENUM,
+    EnumValueDefinition: DirectiveLocation.ENUM_VALUE,
+    InputObjectTypeDefinition: DirectiveLocation.INPUT_OBJECT,
+    InputObjectTypeExtension: DirectiveLocation.INPUT_OBJECT,
+    InputValueDefinition: DirectiveLocation.ARGUMENT_DEFINITION,
+    Argument: DirectiveLocation.ARGUMENT_DEFINITION,
+  };
+
+  const location = kindToLocation[appliedTo.kind];
+  if (!location) {
+    throw new IntrospectionError("Unexpected kind: " + String(appliedTo.kind));
   }
+
+  return location;
 };
 
 /** Check if a directive can be applied to specific schema entity location.
@@ -267,14 +256,14 @@ export const getTypeDirectiveValues = (
 ): Maybe<Record<string, unknown>> => {
   if (hasAstNode(type)) {
     return getDirectiveValues(
-      directive,
+      directive as never,
       (type as GraphQLNamedType).astNode as {
         readonly directives?: readonly DirectiveNode[];
       },
     );
   }
   return getDirectiveValues(
-    directive,
+    directive as never,
     type as ASTNode as {
       readonly directives?: readonly DirectiveNode[];
     },
@@ -328,11 +317,7 @@ export const _getFields = <T, V>(
    */
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
-):
-  | GraphQLFieldMap<unknown, unknown>
-  | GraphQLInputFieldMap
-  | GraphQLObjectType
-  | V => {
+): Record<string, unknown> | V => {
   if (
     !(
       typeof type === "object" &&
@@ -344,7 +329,7 @@ export const _getFields = <T, V>(
     return fallback as V;
   }
 
-  const fieldMap = type.getFields();
+  const fieldMap = type.getFields() as Record<string, unknown>;
 
   if (typeof processor === "function") {
     return processor(fieldMap);

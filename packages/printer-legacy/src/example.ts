@@ -31,7 +31,7 @@ import {
   print,
 } from "@graphql-markdown/graphql";
 
-import { toString } from "@graphql-markdown/utils";
+import { hasStringProperty, toString } from "@graphql-markdown/utils";
 
 import { hasPrintableDirective } from "./link";
 
@@ -113,16 +113,20 @@ const parseTypeFields = (
       const fieldType = hasDirective(field, [directiveExample.directive])
         ? field
         : field.type;
+      const graphQLFieldType = fieldType as GraphQLType;
+      // GraphQL overload resolution can include a void branch in this monorepo; runtime value is used only for list checks.
+      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+      const nullableFieldType = getNullableType(graphQLFieldType as never);
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const value = parseExampleDirective(
-        fieldType as Maybe<GraphQLType>,
+        graphQLFieldType,
         options,
         mappedTypes,
       );
 
       let structuredValue: unknown = value;
-      if (isListType(getNullableType(fieldType as Maybe<GraphQLType>))) {
-        if (!value && isNonNullType(fieldType as Maybe<GraphQLType>)) {
+      if (isListType(nullableFieldType)) {
+        if (!value && isNonNullType(graphQLFieldType)) {
           structuredValue = [];
         } else {
           structuredValue = value ? [value] : undefined;
@@ -200,9 +204,9 @@ const parseExampleDirective = (
   }
 
   // get type name
-  const typename = isType(namedType)
-    ? toString(namedType)
-    : toString(namedType.name);
+  const typename = hasStringProperty(namedType, "name")
+    ? toString(namedType.name)
+    : toString(namedType);
 
   // recursion check
   if (mappedTypes.includes(typename)) {
@@ -217,13 +221,14 @@ const parseExampleDirective = (
       directiveExample.field,
     ) as unknown;
 
-    return parser(arg, namedType);
+    const parsedValue = parser(arg, namedType as never);
+    return parsedValue;
   } catch (err: unknown) {
     if (err instanceof IntrospectionError) {
       if (!isType(namedType)) {
         return undefined;
       }
-      return parseTypeFields(namedType, options, mappedTypes);
+      return parseTypeFields(namedType as never, options, mappedTypes);
     }
     throw err;
   }
@@ -252,7 +257,7 @@ export const printExample = (
     return undefined;
   }
 
-  const example = parseExampleDirective(type, options);
+  const example = parseExampleDirective(type as never, options);
 
   if (!example) {
     return undefined;

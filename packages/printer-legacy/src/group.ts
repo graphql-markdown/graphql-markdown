@@ -11,7 +11,7 @@ import type {
 
 import { getNamedType } from "@graphql-markdown/graphql";
 
-import { slugify } from "@graphql-markdown/utils";
+import { hasStringProperty, slugify } from "@graphql-markdown/utils";
 
 /**
  * Retrieves the group name for a given GraphQL type based on its category and group mapping.
@@ -37,19 +37,17 @@ export const getGroup = (
   }
 
   const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
-
-  if (!graphQLNamedType) {
+  const typeName = hasStringProperty(graphQLNamedType, "name")
+    ? graphQLNamedType.name
+    : "";
+  if (!typeName) {
     return "";
   }
 
-  const typeName =
-    "name" in graphQLNamedType
-      ? graphQLNamedType.name
-      : String(graphQLNamedType);
-
-  if (!(typeCategory in groups && typeName in groups[typeCategory]!)) {
+  const categoryGroups = groups[typeCategory];
+  if (!categoryGroups || !(typeName in categoryGroups)) {
     return "";
   }
 
-  return slugify(groups[typeCategory]![typeName]);
+  return slugify(categoryGroups[typeName]);
 };
