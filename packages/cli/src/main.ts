@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* istanbul ignore file */
+
 /**
  * Entry point for the GraphQL Markdown CLI.
  * Loads configuration from graphql-config and sets up command-line interface.
