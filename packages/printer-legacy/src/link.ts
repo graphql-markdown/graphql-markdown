@@ -7,7 +7,6 @@
 import type {
   ApiGroupOverrideType,
   GraphQLNamedType,
-  GraphQLType,
   MDXString,
   Maybe,
   PrintLinkOptions,
@@ -249,10 +248,9 @@ export const toLink = (
     return fallback;
   }
 
-  const graphQLNamedType = getNamedType(type as Maybe<GraphQLType>);
-  if (!graphQLNamedType) {
-    return fallback;
-  }
+  // GraphQL overload resolution can include a void branch in this monorepo; runtime value is a named type here.
+  // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+  const graphQLNamedType = getNamedType(type as never);
 
   let category: Maybe<string> = "";
   let deprecatedFolder = "";
@@ -277,7 +275,9 @@ export const toLink = (
       : "";
   }
 
-  const text = graphQLNamedType.name || graphQLNamedType.toString();
+  const text = hasStringProperty(graphQLNamedType, "name")
+    ? graphQLNamedType.name
+    : toString(graphQLNamedType);
 
   const formatFolder = (folder: string): string => {
     return folder && options.formatCategoryFolderName
