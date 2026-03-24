@@ -56,13 +56,11 @@
   },
   "dependencies": {
     "@graphql-markdown/graphql": "workspace:^",
+    "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
   },
   "peerDependencies": {
     "graphql": "catalog:"
-  },
-  "devDependencies": {
-    "@graphql-markdown/types": "workspace:^"
   },
   "directories": {
     "test": "tests"

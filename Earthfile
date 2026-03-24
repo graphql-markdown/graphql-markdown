@@ -68,9 +68,9 @@ build-docusaurus-project:
   FROM +build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
-    RUN npx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
   ELSE
-    RUN npx --quiet --legacy-peer-deps create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
+    RUN npx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
@@ -175,7 +175,7 @@ build-docs:
   COPY (+build-docusaurus-examples/examples) ./examples
   COPY (+build-api-docs/api) ./api
   COPY --dir docs .
-  RUN npm install --legacy-peer-deps
+  RUN npm install
   RUN npx update-browserslist-db@latest
   RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
@@ -219,7 +219,7 @@ INSTALL_GQLMD:
 
 INSTALL_DOCUSAURUS:
   FUNCTION
-  RUN npm install --legacy-peer-deps
+  RUN npm install
   RUN npm update @docusaurus/core @docusaurus/preset-classic
 
 INSTALL_GRAPHQL:

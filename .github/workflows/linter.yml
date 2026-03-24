@@ -43,3 +43,6 @@ jobs:
 
       - name: Run ESLint
         run: bun lint
+
+      - name: Run knip
+        run: bun knip --no-config-hints --reporter github-actions

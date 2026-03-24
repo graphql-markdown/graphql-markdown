@@ -54,7 +54,7 @@
     "docs": "typedoc",
     "build": "tsgo --build"
   },
-  "devDependencies": {
+  "dependencies": {
     "@graphql-markdown/types": "workspace:^"
   },
   "peerDependencies": {

@@ -55,11 +55,9 @@
     "@graphql-markdown/core": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/printer-legacy": "workspace:^",
+    "@graphql-markdown/types": "workspace:^",
     "commander": "^5.1.0",
     "graphql-config": "catalog:"
-  },
-  "devDependencies": {
-    "@graphql-markdown/types": "workspace:^"
   },
   "directories": {
     "test": "tests"
