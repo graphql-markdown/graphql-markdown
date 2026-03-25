@@ -94,6 +94,7 @@
     "typedoc",
     "typeof",
     "unionfs",
+    "Vocs",
     "Yavin"
   ],
   "eslint.workingDirectories": ["./config"],
