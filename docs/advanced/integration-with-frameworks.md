@@ -245,3 +245,6 @@ module.exports = {
 
 See complete implementation: [demo-vite-vocs](https://github.com/graphql-markdown/demo-vite-vocs)
 
+### VitePress
+
+For [VitePress](https://vitepress.dev/) support check the package **[graphql-markdown-vitepress](https://www.npmjs.com/package/graphql-markdown-vitepress)**.
