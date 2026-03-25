@@ -554,9 +554,6 @@ export class Printer implements IPrinter {
         stopPropagation(): void {
           this.propagationStopped = true;
         },
-        async runDefaultAction(): Promise<void> {
-          return void 0;
-        },
       };
       await Printer.eventEmitter.emitAsync(
         PrintTypeEvents.BEFORE_PRINT_TYPE,
@@ -618,9 +615,6 @@ export class Printer implements IPrinter {
         },
         stopPropagation(): void {
           this.propagationStopped = true;
-        },
-        async runDefaultAction(): Promise<void> {
-          return void 0;
         },
       };
       await Printer.eventEmitter.emitAsync(
