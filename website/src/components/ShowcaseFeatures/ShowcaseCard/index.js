@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "@docusaurus/Link";
 import Card from "@site/src/components/ShowcaseFeatures/Card";
 import CardHeader from "@site/src/components/ShowcaseFeatures/CardHeader";
