@@ -91,8 +91,10 @@ export class PrintTypeEvent
  * Event emitted before composing page sections for a GraphQL type.
  *
  * This event fires after section content is generated and before sections are joined into final output.
- * The `output` property contains an array of section keys that will be included in the final page.
- * Handlers can reorder, filter, or append to this array to control the final page structure.
+ * The `output` property contains an array of content section keys that will be included in the final page,
+ * in addition to fixed header sections (`header`, `metatags`, `mdxDeclaration`) which are managed separately
+ * by the printer and always prepended. Handlers can reorder, filter, or append to this array to control the
+ * structure of the content portion of the page.
  *
  * @example
  * ```typescript
