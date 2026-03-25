@@ -61,7 +61,10 @@ const createOptionsWithFormatter = (
     groups: undefined,
     formatMDXBadge: (badge) => {
       const classAttr = badge.classname
-        ? ` class="gqlmd-mdx-badge gqlmd-mdx-badge--${String(badge.classname).toLowerCase()}"`
+        ? ` class="gqlmd-mdx-badge ${[badge.classname]
+            .flat()
+            .map((c) => `gqlmd-mdx-badge--${c.toLowerCase()}`)
+            .join(" ")}"`
         : ' class="gqlmd-mdx-badge"';
       return `<mark${classAttr}>${badge.text}</mark>` as any;
     },
