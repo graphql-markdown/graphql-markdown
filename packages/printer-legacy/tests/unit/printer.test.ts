@@ -938,7 +938,7 @@ describe("Printer", () => {
       expect(result).toContain("EXAMPLE");
     });
 
-    test("ignores invalid compose section keys from event output", async () => {
+    test("ignores prototype and header compose keys from event output", async () => {
       expect.hasAssertions();
 
       const filteringEmitter = {
@@ -947,7 +947,23 @@ describe("Printer", () => {
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
               if (_eventName === "print:beforeComposePageType") {
-                event.output = ["header", "code", "unknown"];
+                const typedEvent = event as {
+                  data: { sections: PageSections };
+                  output: string[];
+                };
+                typedEvent.data.sections["customSection"] = {
+                  title: "Custom Section",
+                  content: "CUSTOM CONTENT",
+                };
+                typedEvent.output = [
+                  "header",
+                  "metatags",
+                  "mdxDeclaration",
+                  "code",
+                  "customSection",
+                  "toString",
+                  "unknown",
+                ];
               }
               return { errors: [], defaultPrevented: false };
             },
@@ -957,9 +973,10 @@ describe("Printer", () => {
       Printer.eventEmitter = filteringEmitter;
 
       jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("HEAD META TAGS");
       jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("META");
+      (Printer as any).mdxDeclaration = "MDX DECLARATION";
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("TYPE METADATA");
       jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
       jest.spyOn(Printer, "printExample").mockReturnValue({
         title: "Example",
@@ -968,11 +985,16 @@ describe("Printer", () => {
 
       const result = await Printer.printType("test", { name: "Test" });
 
+      expect(result.match(/# Test/g)).toHaveLength(1);
+      expect(result.match(/HEAD META TAGS/g)).toHaveLength(1);
+      expect(result.match(/MDX DECLARATION/g)).toHaveLength(1);
       expect(result).toContain("# Test");
       expect(result).toContain("CODE");
-      expect(result).not.toContain("META");
+      expect(result).toContain("CUSTOM CONTENT");
+      expect(result).not.toContain("TYPE METADATA");
       expect(result).not.toContain("RELATIONS");
       expect(result).not.toContain("EXAMPLE");
+      expect(result).not.toContain("toString");
     });
 
     test("event handler can inject and render custom sections via index key", async () => {
@@ -1032,6 +1054,56 @@ describe("Printer", () => {
       expect(result).toContain("CODE");
       // Verify null section is not rendered
       expect(result).not.toContain("nullableSection");
+    });
+
+    test("ignores invalid injected section values from compose hooks", async () => {
+      expect.hasAssertions();
+
+      const invalidSectionEmitter = {
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforeComposePageType") {
+                const typedEvent = event as {
+                  data: { sections: Record<string, unknown> };
+                  output: string[];
+                };
+                typedEvent.data.sections["invalidNumber"] = 42;
+                typedEvent.data.sections["invalidFunction"] = () => {
+                  return "nope";
+                };
+                typedEvent.data.sections["titleOnlySection"] = {
+                  title: "Title Only",
+                  level: 3,
+                };
+                typedEvent.output = [
+                  "code",
+                  "invalidNumber",
+                  "invalidFunction",
+                  "titleOnlySection",
+                ];
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      Printer.eventEmitter = invalidSectionEmitter;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result).toContain("CODE");
+      expect(result).toContain("### Title Only");
+      expect(result).not.toContain("invalidNumber");
+      expect(result).not.toContain("invalidFunction");
     });
   });
 });

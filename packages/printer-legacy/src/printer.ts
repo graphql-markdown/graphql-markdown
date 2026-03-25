@@ -60,6 +60,8 @@ const TYPE_PAGE_SECTION_ORDER = [
 
 type TypePageContentSection = (typeof TYPE_PAGE_SECTION_ORDER)[number];
 
+type TypePageHeaderSection = (typeof TYPE_PAGE_HEADER_ORDER)[number];
+
 import {
   getTypeName,
   isDirectiveType,
@@ -708,12 +710,17 @@ export class Printer implements IPrinter {
   private static readonly renderPageSection = (
     section: Maybe<PageSections[keyof PageSections]>,
   ): string => {
-    if (!section) {
+    if (
+      !section ||
+      typeof section !== "object" ||
+      Array.isArray(section) ||
+      (!("content" in section) && !("title" in section))
+    ) {
       return "";
     }
 
     let content: string;
-    if (!section.content) {
+    if (!("content" in section) || !section.content) {
       content = "";
     } else if (Array.isArray(section.content)) {
       content = section.content
@@ -730,11 +737,15 @@ export class Printer implements IPrinter {
       content = Printer.renderPageSection(section.content);
     }
 
-    if (
-      !("title" in section) ||
-      !section.title ||
-      section.title.trim().length === 0
-    ) {
+    if (!("title" in section) || typeof section.title !== "string") {
+      if (!content || content.trim().length === 0) {
+        return "";
+      }
+
+      return content;
+    }
+
+    if (!section.title || section.title.trim().length === 0) {
       if (!content || content.trim().length === 0) {
         return "";
       }
@@ -791,6 +802,18 @@ export class Printer implements IPrinter {
   };
 
   /**
+   * Runtime guard for header-only page section keys.
+   */
+  private static readonly isTypePageHeaderSection = (
+    section: unknown,
+  ): section is TypePageHeaderSection => {
+    return (
+      typeof section === "string" &&
+      (TYPE_PAGE_HEADER_ORDER as readonly string[]).includes(section)
+    );
+  };
+
+  /**
    * Normalizes event-driven section order, allowing built-in section keys and
    * any custom keys that were added to the sections map by an event handler.
    * Keys that are neither built-in nor present in the sections map are dropped.
@@ -806,7 +829,9 @@ export class Printer implements IPrinter {
     return sectionOrder.filter((section): section is string => {
       return (
         typeof section === "string" &&
-        (Printer.isTypePageContentSection(section) || section in sections)
+        !Printer.isTypePageHeaderSection(section) &&
+        (Printer.isTypePageContentSection(section) ||
+          Object.prototype.hasOwnProperty.call(sections, section))
       );
     });
   };
