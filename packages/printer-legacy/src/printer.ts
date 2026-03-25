@@ -831,7 +831,7 @@ export class Printer implements IPrinter {
         typeof section === "string" &&
         !Printer.isTypePageHeaderSection(section) &&
         (Printer.isTypePageContentSection(section) ||
-          Object.prototype.hasOwnProperty.call(sections, section))
+          Object.hasOwn(sections, section))
       );
     });
   };
