@@ -13,10 +13,7 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-import type {
-  ICancellableEvent,
-  PrintTypeOptions,
-} from "@graphql-markdown/types";
+import type { PageSections, PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -976,6 +973,65 @@ describe("Printer", () => {
       expect(result).not.toContain("META");
       expect(result).not.toContain("RELATIONS");
       expect(result).not.toContain("EXAMPLE");
+    });
+
+    test("event handler can inject and render custom sections via index key", async () => {
+      expect.hasAssertions();
+
+      let capturedSections: PageSections | undefined;
+
+      const customSectionEmitter = {
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforeComposePageType") {
+                const typedEvent = event as {
+                  data: { sections: PageSections };
+                  output: string[];
+                };
+                // Inject a custom section into the sections map
+                typedEvent.data.sections["customSection"] = {
+                  title: "Custom Section",
+                  content: "CUSTOM CONTENT",
+                };
+                // Inject a null custom section (Maybe allows null/undefined)
+                typedEvent.data.sections["nullableSection"] = null;
+                capturedSections = typedEvent.data.sections;
+                // Include custom section and a known key in the output order
+                typedEvent.output = ["code", "customSection"];
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      Printer.eventEmitter = customSectionEmitter;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      // Verify the sections object accepted custom keys via the index signature
+      expect(capturedSections).toBeDefined();
+      expect(capturedSections!["customSection"]).toEqual({
+        title: "Custom Section",
+        content: "CUSTOM CONTENT",
+      });
+      // Verify Maybe allows null values for custom keys
+      expect(capturedSections!["nullableSection"]).toBeNull();
+      // Verify known sections are still accessible
+      expect(capturedSections!["code"]).toBeDefined();
+      // Verify the custom section content is rendered in the final output
+      expect(result).toContain("CUSTOM CONTENT");
+      expect(result).toContain("CODE");
+      // Verify null section is not rendered
+      expect(result).not.toContain("nullableSection");
     });
   });
 });

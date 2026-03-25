@@ -34,6 +34,8 @@ export interface PageSection {
  * Map of all available sections in a type page.
  */
 export interface PageSections {
+  /** Additional custom sections can be added by event handlers */
+  [key: string]: Maybe<PageHeader | PageSection>;
   /** YAML frontmatter or top-level heading */
   header?: PageHeader;
   /** HTML meta tags */

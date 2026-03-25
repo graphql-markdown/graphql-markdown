@@ -662,6 +662,7 @@ export class Printer implements IPrinter {
       );
       sectionOrder = Printer.sanitizeTypePageSectionOrder(
         beforeComposeEvent.output,
+        sections,
       );
     }
 
@@ -767,7 +768,7 @@ export class Printer implements IPrinter {
   };
 
   /**
-   * Runtime guard for page content section keys emitted by events.
+   * Runtime guard for built-in page content section keys.
    */
   private static readonly isTypePageContentSection = (
     section: unknown,
@@ -779,17 +780,23 @@ export class Printer implements IPrinter {
   };
 
   /**
-   * Normalizes event-driven section order to known content sections only.
+   * Normalizes event-driven section order, allowing built-in section keys and
+   * any custom keys that were added to the sections map by an event handler.
+   * Keys that are neither built-in nor present in the sections map are dropped.
    */
   private static readonly sanitizeTypePageSectionOrder = (
     sectionOrder: Maybe<(keyof PageSections)[]>,
-  ): TypePageContentSection[] => {
+    sections: PageSections,
+  ): string[] => {
     if (!Array.isArray(sectionOrder)) {
       return [];
     }
 
-    return sectionOrder.filter((section): section is TypePageContentSection => {
-      return Printer.isTypePageContentSection(section);
+    return sectionOrder.filter((section): section is string => {
+      return (
+        typeof section === "string" &&
+        (Printer.isTypePageContentSection(section) || section in sections)
+      );
     });
   };
 
