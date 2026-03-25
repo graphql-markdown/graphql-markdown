@@ -48,6 +48,7 @@ import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
 import { OptionBuilder } from "./options/builder";
+import { log, LogLevel } from "@graphql-markdown/logger";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -599,32 +600,38 @@ export const parseDeprecatedPrintTypeOptions = (
   >,
 ): Record<string, never> => {
   if (cliOpts?.noCode) {
-    console.warn(
+    log(
       `[DEPRECATED] CLI option '--noCode' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+      LogLevel.warn,
     );
   } else if (typeof configOptions?.codeSection === "boolean") {
-    console.warn(
+    log(
       `[DEPRECATED] config option 'printTypeOptions.codeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+      LogLevel.warn,
     );
   }
 
   if (cliOpts?.noExample) {
-    console.warn(
+    log(
       `[DEPRECATED] CLI option '--noExample' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+      LogLevel.warn,
     );
   } else if (typeof configOptions?.exampleSection === "boolean") {
-    console.warn(
+    log(
       `[DEPRECATED] config option 'printTypeOptions.exampleSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+      LogLevel.warn,
     );
   }
 
   if (cliOpts?.noRelatedType) {
-    console.warn(
+    log(
       `[DEPRECATED] CLI option '--noRelatedType' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+      LogLevel.warn,
     );
   } else if (typeof configOptions?.relatedTypeSection === "boolean") {
-    console.warn(
+    log(
       `[DEPRECATED] config option 'printTypeOptions.relatedTypeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+      LogLevel.warn,
     );
   }
 
@@ -667,10 +674,7 @@ export const getPrintTypeOptions = (
     ConfigPrintTypeOptions & Omit<DeprecatedConfigPrintTypeOptions, "never">
   >,
 ): Required<ConfigPrintTypeOptions> => {
-  const deprecated = parseDeprecatedPrintTypeOptions(cliOpts, configOptions);
-
   return {
-    ...deprecated,
     codeSection:
       (!cliOpts?.noCode && configOptions?.codeSection) ??
       DEFAULT_OPTIONS.printTypeOptions.codeSection,
@@ -821,6 +825,14 @@ export const buildConfig = async (
   cliOpts ??= {};
 
   const graphqlConfig = await loadConfiguration(id);
+
+  // Emit deprecation warnings using raw user-provided options only (no defaults merged in),
+  // so we don't spuriously warn for projects that never set these options.
+  parseDeprecatedPrintTypeOptions(cliOpts, {
+    ...(graphqlConfig as Maybe<ConfigOptions>)?.printTypeOptions,
+    ...configFileOpts?.printTypeOptions,
+  });
+
   const config = deepmerge()(
     { ...DEFAULT_OPTIONS, ...graphqlConfig },
     configFileOpts ?? {},
