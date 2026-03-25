@@ -78,3 +78,19 @@ export type PrintCodeHook = (event: unknown) => Promise<void> | void;
  * Receives an event with mutable `output` property for modifying generated documentation.
  */
 export type PrintTypeHook = (event: unknown) => Promise<void> | void;
+
+/**
+ * Hook callback for before composing page type sections.
+ * Allows modification of individual section content before composition.
+ * Handlers can mutate event.data.sections to add, modify, or remove section content.
+ */
+export type BeforeComposePageTypeHook = (
+  event: unknown,
+) => Promise<void> | void;
+
+/**
+ * Hook callback for after composing page type sections.
+ * Allows reordering and filtering of sections in the final page output.
+ * Handlers can mutate event.output array to control section order and visibility.
+ */
+export type AfterComposePageTypeHook = (event: unknown) => Promise<void> | void;

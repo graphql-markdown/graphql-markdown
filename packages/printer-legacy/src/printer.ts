@@ -35,6 +35,8 @@ const PrintTypeEvents = {
   AFTER_PRINT_CODE: "print:afterPrintCode",
   BEFORE_PRINT_TYPE: "print:beforePrintType",
   AFTER_PRINT_TYPE: "print:afterPrintType",
+  BEFORE_COMPOSE_PAGE_TYPE: "print:beforeComposePageType",
+  AFTER_COMPOSE_PAGE_TYPE: "print:afterComposePageType",
 } as const;
 
 import {
@@ -522,6 +524,23 @@ export class Printer implements IPrinter {
       return undefined;
     }
 
+    // Check for deprecated options and emit warnings
+    if (printTypeOptions.codeSection === false) {
+      console.warn(
+        `[DEPRECATED] PrintTypeOptions.codeSection is deprecated. Use the 'afterComposePageTypeHook' event to filter sections instead. Remove 'code' from event.output array to hide the code section.`,
+      );
+    }
+    if (printTypeOptions.exampleSection === false) {
+      console.warn(
+        `[DEPRECATED] PrintTypeOptions.exampleSection is deprecated. Use the 'afterComposePageTypeHook' event to filter sections instead. Remove 'example' from event.output array to hide the example section.`,
+      );
+    }
+    if (printTypeOptions.relatedTypeSection === false) {
+      console.warn(
+        `[DEPRECATED] PrintTypeOptions.relatedTypeSection is deprecated. Use the 'afterComposePageTypeHook' event to filter sections instead. Remove 'relations' from event.output array to hide the relations section.`,
+      );
+    }
+
     // Create event data for potential before event
     const eventData = { type, name, options: printTypeOptions };
 
@@ -575,10 +594,11 @@ export class Printer implements IPrinter {
     const relations = Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
-    let output = [
+    // Create sections map for composition events
+    const sections: Record<string, MDXString | string> = {
       header,
       metatags,
-      Printer.mdxDeclaration,
+      mdxDeclaration: Printer.mdxDeclaration ?? "",
       tags,
       description,
       code,
@@ -586,7 +606,80 @@ export class Printer implements IPrinter {
       metadata,
       example,
       relations,
-    ]
+    };
+
+    // Emit BEFORE_COMPOSE_PAGE_TYPE event if emitter is configured
+    if (Printer.eventEmitter) {
+      const beforeComposeEvent = {
+        data: { type, name, options: printTypeOptions, sections },
+        defaultPrevented: false,
+        propagationStopped: false,
+        defaultAction: undefined,
+        preventDefault(): void {
+          this.defaultPrevented = true;
+        },
+        stopPropagation(): void {
+          this.propagationStopped = true;
+        },
+        async runDefaultAction(): Promise<void> {
+          return void 0;
+        },
+      };
+      await Printer.eventEmitter.emitAsync(
+        PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE,
+        beforeComposeEvent,
+      );
+    }
+
+    // Default section order
+    const defaultOrder: (keyof typeof sections)[] = [
+      "header",
+      "metatags",
+      "mdxDeclaration",
+      "tags",
+      "description",
+      "code",
+      "customDirectives",
+      "metadata",
+      "example",
+      "relations",
+    ];
+
+    let sectionOrder = defaultOrder;
+
+    // Emit AFTER_COMPOSE_PAGE_TYPE event if emitter is configured
+    if (Printer.eventEmitter) {
+      const afterComposeEvent = {
+        data: { type, name, options: printTypeOptions, sections },
+        output: defaultOrder,
+        defaultPrevented: false,
+        propagationStopped: false,
+        defaultAction: undefined,
+        preventDefault(): void {
+          this.defaultPrevented = true;
+        },
+        stopPropagation(): void {
+          this.propagationStopped = true;
+        },
+        async runDefaultAction(): Promise<void> {
+          return void 0;
+        },
+      };
+      await Printer.eventEmitter.emitAsync(
+        PrintTypeEvents.AFTER_COMPOSE_PAGE_TYPE,
+        afterComposeEvent,
+      );
+      sectionOrder = afterComposeEvent.output;
+    }
+
+    // Compose output based on section order
+    let output = sectionOrder
+      .map((key) => {
+        return sections[key];
+      })
+      .filter((section) => {
+        return section && section.trim().length > 0;
+      })
       .join(MARKDOWN_EOP)
       .trim() as MDXString;
 

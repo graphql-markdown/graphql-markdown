@@ -15,6 +15,42 @@ import type {
 import { CancellableEvent, CancellableEventOptions } from "./base";
 
 /**
+ * Represents a single section of a page with optional title and content.
+ */
+export interface PageSection {
+  /** Optional title/heading for the section */
+  title?: MDXString;
+  /** The section content */
+  content?: MDXString;
+}
+
+/**
+ * Map of all available sections in a type page.
+ */
+export interface PageSections {
+  /** YAML frontmatter or top-level heading */
+  header?: PageSection;
+  /** HTML meta tags */
+  metatags?: PageSection;
+  /** MDX import declarations */
+  mdxDeclaration?: PageSection;
+  /** Custom tags (e.g., @deprecated) */
+  tags?: PageSection;
+  /** Type description from GraphQL comments */
+  description?: PageSection;
+  /** GraphQL code block */
+  code?: PageSection;
+  /** Custom directives */
+  customDirectives?: PageSection;
+  /** Type metadata (fields, arguments, etc.) */
+  metadata?: PageSection;
+  /** Usage examples */
+  example?: PageSection;
+  /** Related types */
+  relations?: PageSection;
+}
+
+/**
  * Data payload for print code events.
  */
 export interface PrintCodeEventData {
@@ -104,6 +140,95 @@ export class PrintTypeEvent extends CancellableEvent {
   constructor(
     data: PrintTypeEventData,
     initialOutput: Maybe<MDXString>,
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
+    this.output = initialOutput;
+  }
+}
+
+/**
+ * Data payload for compose page type events.
+ */
+export interface ComposePageTypeEventData {
+  /** The GraphQL type being composed */
+  readonly type: unknown;
+  /** The name identifier for the type */
+  readonly name: Maybe<string>;
+  /** The print options in effect */
+  readonly options: PrintTypeOptions;
+  /** The map of all page sections (mutable in BEFORE event) */
+  readonly sections: PageSections;
+}
+
+/**
+ * Event emitted before composing page sections for a GraphQL type.
+ *
+ * This event fires after individual sections are rendered but before they are ordered and joined.
+ * Handlers can modify the `sections` object to add, modify, or remove section content.
+ *
+ * @example
+ * ```typescript
+ * events.on(PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE, (event: BeforeComposePageTypeEvent) => {
+ *   // Modify a section's content
+ *   if (event.data.sections.example?.content) {
+ *     event.data.sections.example.content = `Updated: ${event.data.sections.example.content}`;
+ *   }
+ * });
+ * ```
+ *
+ * @category Events
+ */
+export class BeforeComposePageTypeEvent extends CancellableEvent {
+  /** Read-only event data (but data.sections is mutable) */
+  readonly data: ComposePageTypeEventData;
+
+  constructor(
+    data: ComposePageTypeEventData,
+    options?: CancellableEventOptions,
+  ) {
+    super(options);
+    this.data = data;
+  }
+}
+
+/**
+ * Event emitted after composing page sections for a GraphQL type.
+ *
+ * This event fires after sections have been ordered but before they are joined into the final output.
+ * The `output` property contains an array of section keys that will be included in the final page.
+ * Handlers can reorder, filter, or append to this array to control the final page structure.
+ *
+ * @example
+ * ```typescript
+ * events.on(PrintTypeEvents.AFTER_COMPOSE_PAGE_TYPE, (event: AfterComposePageTypeEvent) => {
+ *   // Move relations section before metadata
+ *   const idx = event.output.indexOf('relations');
+ *   if (idx > -1) {
+ *     event.output.splice(idx, 1);
+ *     const metaidx = event.output.indexOf('metadata');
+ *     event.output.splice(metaidx, 0, 'relations');
+ *   }
+ * });
+ * ```
+ *
+ * @category Events
+ */
+export class AfterComposePageTypeEvent extends CancellableEvent {
+  /** Read-only event data */
+  readonly data: ComposePageTypeEventData;
+
+  /**
+   * The ordered array of section keys to include in the output.
+   * Handlers can modify this array to reorder, filter, or append sections.
+   * Only keys with truthy content will be included in the final output.
+   */
+  output: (keyof PageSections)[];
+
+  constructor(
+    data: ComposePageTypeEventData,
+    initialOutput: (keyof PageSections)[],
     options?: CancellableEventOptions,
   ) {
     super(options);

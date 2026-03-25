@@ -30,4 +30,8 @@ export const PrintTypeEvents = {
   BEFORE_PRINT_TYPE: "print:beforePrintType",
   /** Emitted after generating the full type documentation (output can be modified) */
   AFTER_PRINT_TYPE: "print:afterPrintType",
+  /** Emitted before composing page sections (can modify section content) */
+  BEFORE_COMPOSE_PAGE_TYPE: "print:beforeComposePageType",
+  /** Emitted after composing page sections (can reorder/filter sections) */
+  AFTER_COMPOSE_PAGE_TYPE: "print:afterComposePageType",
 } as const;

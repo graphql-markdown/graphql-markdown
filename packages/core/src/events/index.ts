@@ -23,5 +23,16 @@ export { RenderRootTypesEvent } from "./render-root-types";
 export { RenderHomepageEvent } from "./render-homepage";
 export { RenderTypeEntitiesEvent } from "./render-type-entities";
 export { GenerateIndexMetafileEvent } from "./generate-index-metafile";
-export { PrintCodeEvent, PrintTypeEvent } from "./print-type";
-export type { PrintCodeEventData, PrintTypeEventData } from "./print-type";
+export {
+  PrintCodeEvent,
+  PrintTypeEvent,
+  BeforeComposePageTypeEvent,
+  AfterComposePageTypeEvent,
+} from "./print-type";
+export type {
+  PrintCodeEventData,
+  PrintTypeEventData,
+  ComposePageTypeEventData,
+  PageSection,
+  PageSections,
+} from "./print-type";
