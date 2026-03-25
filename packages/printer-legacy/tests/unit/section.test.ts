@@ -12,6 +12,7 @@ import { Kind, DirectiveLocation } from "graphql/language";
 
 import {
   printSection,
+  printMetadataSection,
   printSectionItem,
   printSectionItems,
 } from "../../src/section";
@@ -111,6 +112,41 @@ undefined",
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toBeUndefined();
+    });
+  });
+
+  describe("printMetadataSection()", () => {
+    test("keeps the section heading when all items are deprecated", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLObjectType({
+        name: "TestName",
+        fields: {
+          deprecatedField: {
+            type: GraphQLString,
+            deprecationReason: "Use another field",
+          },
+        },
+      });
+
+      const section = printMetadataSection(
+        type,
+        Object.values(type.getFields()),
+        "Fields",
+        {
+          ...DEFAULT_OPTIONS,
+          deprecated: "group",
+        },
+      );
+
+      expect(section).toEqual(
+        expect.objectContaining({
+          title: "Fields",
+          level: 3,
+        }),
+      );
+      expect(section?.content).toContain("DEPRECATED");
+      expect(section?.content).toContain("deprecatedField");
     });
   });
 

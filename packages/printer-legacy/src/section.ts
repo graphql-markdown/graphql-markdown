@@ -246,10 +246,20 @@ export const printMetadataSection = <T, V>(
         })
         .join("");
 
+      if (content.trim().length === 0) {
+        return undefined;
+      }
+
+      const level = (
+        "level" in options && typeof options.level === "number"
+          ? options.level
+          : 3
+      ) as SectionLevelValue;
+
       return {
-        title: meta?.title,
+        title: section,
         content,
-        level: meta?.level,
+        level,
       };
     }
 
