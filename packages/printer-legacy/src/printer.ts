@@ -205,7 +205,7 @@ export class Printer implements IPrinter {
     eventEmitter?: Maybe<PrinterEventEmitter>,
   ): Promise<void> {
     // Always update eventEmitter regardless of initialization state
-    Printer._eventEmitter = eventEmitter ?? null;
+    Printer.eventEmitter = eventEmitter ?? null;
 
     if (Printer.options !== undefined) {
       return;
@@ -244,7 +244,7 @@ export class Printer implements IPrinter {
       ...formatter,
     };
 
-    Printer._mdxDeclaration = mdxDeclaration ?? "";
+    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
