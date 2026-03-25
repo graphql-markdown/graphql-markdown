@@ -322,7 +322,7 @@ describe("Printer", () => {
         sectionHeaderId: false,
       });
 
-      expect(Printer.options?.sectionHeaderId).toBe(false);
+      expect(Printer.options!.sectionHeaderId).toBe(false);
     });
   });
 

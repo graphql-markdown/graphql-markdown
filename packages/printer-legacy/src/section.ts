@@ -115,16 +115,12 @@ export const printSectionItems = <V>(
     "level" in options && typeof options.level === "number" ? options.level : 4
   ) as SectionLevelValue;
 
-  const items = values
-    .filter((v) => {
-      return v;
-    })
-    .map((v: V) => {
-      return printSectionItem(v, {
-        ...options,
-        level,
-      });
+  const items = values.filter(Boolean).map((v: V) => {
+    return printSectionItem(v, {
+      ...options,
+      level,
     });
+  });
 
   return items.join(MARKDOWN_EOP) as MDXString;
 };

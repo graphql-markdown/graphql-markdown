@@ -164,3 +164,47 @@ export abstract class CancellableEvent implements ICancellableEvent {
     return void 0;
   }
 }
+
+/**
+ * Abstract base for events that carry a typed, read-only data payload.
+ *
+ * @template TData - Type of the event data payload.
+ *
+ * @category Events
+ */
+export abstract class DataEvent<TData> extends CancellableEvent {
+  /** Read-only event data payload. */
+  readonly data: TData;
+
+  constructor(data: TData, options?: CancellableEventOptions) {
+    super(options);
+    this.data = data;
+  }
+}
+
+/**
+ * Abstract base for events that carry typed data **and** a mutable output value.
+ *
+ * Handlers may read and rewrite `output` to modify what gets produced.
+ *
+ * @template TData   - Type of the event data payload.
+ * @template TOutput - Type of the mutable output value.
+ *
+ * @category Events
+ */
+export abstract class DataOutputEvent<TData, TOutput> extends DataEvent<TData> {
+  /**
+   * The generated output.
+   * Handlers can modify this property to change the final result.
+   */
+  output: TOutput;
+
+  constructor(
+    data: TData,
+    initialOutput: TOutput,
+    options?: CancellableEventOptions,
+  ) {
+    super(data, options);
+    this.output = initialOutput;
+  }
+}
