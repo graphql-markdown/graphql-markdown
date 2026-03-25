@@ -81,8 +81,9 @@ export abstract class CancellableEvent implements ICancellableEvent {
    * Creates a new CancellableEvent.
    *
    * @param options - Configuration options for the event
-   * @param options.cancellable - Whether this event can be cancelled (default: true)
-   * @param options.defaultAction - Optional function to execute as default action
+   * @remarks
+   * options.cancellable controls whether this event can be cancelled (default: true).
+   * options.defaultAction defines an optional function to execute as default action.
    */
   constructor(options?: CancellableEventOptions) {
     this._cancellable = options?.cancellable ?? true;
@@ -97,6 +98,20 @@ export abstract class CancellableEvent implements ICancellableEvent {
   }
 
   /**
+   * Gets whether propagation has been stopped.
+   */
+  get propagationStopped(): boolean {
+    return this._propagationStopped;
+  }
+
+  /**
+   * Gets the default action function if one was provided.
+   */
+  get defaultAction(): DefaultAction | undefined {
+    return this._defaultAction;
+  }
+
+  /**
    * Allows setting defaultPrevented to true directly.
    */
   set defaultPrevented(value: boolean) {
@@ -106,26 +121,12 @@ export abstract class CancellableEvent implements ICancellableEvent {
   }
 
   /**
-   * Gets whether propagation has been stopped.
-   */
-  get propagationStopped(): boolean {
-    return this._propagationStopped;
-  }
-
-  /**
    * Allows setting propagationStopped to true directly.
    */
   set propagationStopped(value: boolean) {
     if (value) {
       this.stopPropagation();
     }
-  }
-
-  /**
-   * Gets the default action function if one was provided.
-   */
-  get defaultAction(): DefaultAction | undefined {
-    return this._defaultAction;
   }
 
   /**

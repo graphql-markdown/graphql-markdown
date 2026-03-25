@@ -27,7 +27,7 @@ export interface PageSection {
   /** Optional section level for hierarchical structuring */
   level?: number;
   /** The section content */
-  content?: MDXString | string | PageSection | PageSection[];
+  content?: MDXString | PageSection | PageSection[] | string;
 }
 
 /**
@@ -40,7 +40,7 @@ export interface PageSections {
   metatags?: PageHeader;
   /** MDX import declarations */
   mdxDeclaration?: PageHeader;
-  /** Custom tags (e.g., @deprecated) */
+  /** Custom tags (e.g., \@deprecated) */
   tags?: PageSection;
   /** Type description from GraphQL comments */
   description?: PageSection;

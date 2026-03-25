@@ -600,31 +600,31 @@ export const parseDeprecatedPrintTypeOptions = (
 ): Record<string, never> => {
   if (cliOpts?.noCode) {
     console.warn(
-      `[DEPRECATED] CLI option '--noCode' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+      `[DEPRECATED] CLI option '--noCode' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
     );
   } else if (typeof configOptions?.codeSection === "boolean") {
     console.warn(
-      `[DEPRECATED] config option 'printTypeOptions.codeSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+      `[DEPRECATED] config option 'printTypeOptions.codeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
     );
   }
 
   if (cliOpts?.noExample) {
     console.warn(
-      `[DEPRECATED] CLI option '--noExample' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+      `[DEPRECATED] CLI option '--noExample' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
     );
   } else if (typeof configOptions?.exampleSection === "boolean") {
     console.warn(
-      `[DEPRECATED] config option 'printTypeOptions.exampleSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+      `[DEPRECATED] config option 'printTypeOptions.exampleSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
     );
   }
 
   if (cliOpts?.noRelatedType) {
     console.warn(
-      `[DEPRECATED] CLI option '--noRelatedType' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+      `[DEPRECATED] CLI option '--noRelatedType' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
     );
   } else if (typeof configOptions?.relatedTypeSection === "boolean") {
     console.warn(
-      `[DEPRECATED] config option 'printTypeOptions.relatedTypeSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+      `[DEPRECATED] config option 'printTypeOptions.relatedTypeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
     );
   }
 

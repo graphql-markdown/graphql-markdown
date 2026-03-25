@@ -87,10 +87,3 @@ export type PrintTypeHook = (event: unknown) => Promise<void> | void;
 export type BeforeComposePageTypeHook = (
   event: unknown,
 ) => Promise<void> | void;
-
-/**
- * Hook callback for after composing page type sections.
- * Allows reordering and filtering of sections in the final page output.
- * Handlers can mutate event.output array to control section order and visibility.
- */
-export type AfterComposePageTypeHook = (event: unknown) => Promise<void> | void;
