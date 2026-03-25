@@ -1,0 +1,200 @@
+/**
+ * Base event class and utilities for GraphQL-Markdown events.
+ *
+ * @packageDocumentation
+ */
+
+import type { DefaultAction, ICancellableEvent } from "@graphql-markdown/types";
+
+/**
+ * Deep freezes an object to make it immutable at runtime.
+ * Recursively freezes all nested objects and arrays.
+ *
+ * @param obj - The object to freeze
+ * @returns The frozen object (same reference)
+ *
+ * @example
+ * ```typescript
+ * const data = { user: { name: 'John' } };
+ * deepFreeze(data);
+ * data.user.name = 'Jane'; // Throws error in strict mode
+ * ```
+ */
+export const deepFreeze = <T extends Record<PropertyKey, any>>(obj: T): T => {
+  // Get all property names including symbols
+  const propNames = Reflect.ownKeys(obj);
+
+  // Freeze properties before freezing self
+  for (const name of propNames) {
+    const value = obj[name];
+
+    if ((value && typeof value === "object") || typeof value === "function") {
+      deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(obj);
+};
+
+export interface CancellableEventOptions {
+  defaultAction?: DefaultAction;
+  cancellable?: boolean;
+}
+
+/**
+ * Base class for all cancellable events in GraphQL-Markdown.
+ *
+ * Provides common functionality:
+ * - preventDefault() to cancel default actions
+ * - stopPropagation() to halt handler chain
+ * - Configurable cancellability
+ * - Optional default action function
+ *
+ * @category Events
+ */
+export abstract class CancellableEvent implements ICancellableEvent {
+  /**
+   * Whether the default action has been prevented.
+   * Set to true when preventDefault() is called.
+   */
+  private _defaultPrevented = false;
+
+  /**
+   * Whether propagation to remaining handlers has been stopped.
+   * Set to true when stopPropagation() is called.
+   */
+  private _propagationStopped = false;
+
+  /**
+   * Whether this event can be cancelled.
+   * If false, preventDefault() has no effect.
+   */
+  private readonly _cancellable: boolean;
+
+  /**
+   * Optional function to execute as the default action.
+   * Only runs if preventDefault() was not called.
+   */
+  private readonly _defaultAction?: DefaultAction;
+
+  /**
+   * Creates a new CancellableEvent.
+   *
+   * @param options - Configuration options for the event
+   * @param options.cancellable - Whether this event can be cancelled (default: true)
+   * @param options.defaultAction - Optional function to execute as default action
+   */
+  constructor(options?: CancellableEventOptions) {
+    this._cancellable = options?.cancellable ?? true;
+    this._defaultAction = options?.defaultAction;
+  }
+
+  /**
+   * Gets whether the default action has been prevented.
+   */
+  get defaultPrevented(): boolean {
+    return this._defaultPrevented;
+  }
+
+  /**
+   * Allows setting defaultPrevented to true directly.
+   */
+  set defaultPrevented(value: boolean) {
+    if (value) {
+      this.preventDefault();
+    }
+  }
+
+  /**
+   * Gets whether propagation has been stopped.
+   */
+  get propagationStopped(): boolean {
+    return this._propagationStopped;
+  }
+
+  /**
+   * Allows setting propagationStopped to true directly.
+   */
+  set propagationStopped(value: boolean) {
+    if (value) {
+      this.stopPropagation();
+    }
+  }
+
+  /**
+   * Gets the default action function if one was provided.
+   */
+  get defaultAction(): DefaultAction | undefined {
+    return this._defaultAction;
+  }
+
+  /**
+   * Prevents the default action from executing.
+   * Only works if the event is cancellable.
+   */
+  preventDefault(): void {
+    if (this._cancellable) {
+      this._defaultPrevented = true;
+    }
+  }
+
+  /**
+   * Stops propagation to remaining event handlers.
+   * Handlers registered after the current one will not execute.
+   */
+  stopPropagation(): void {
+    this._propagationStopped = true;
+  }
+
+  /**
+   * Executes the default action for an event if it hasn't been prevented.
+   */
+  async runDefaultAction(): Promise<void> {
+    if (!this._defaultPrevented && typeof this._defaultAction === "function") {
+      return this._defaultAction();
+    }
+    return void 0;
+  }
+}
+
+/**
+ * Abstract base for events that carry a typed, read-only data payload.
+ *
+ * @template TData - Type of the event data payload.
+ *
+ * @category Events
+ */
+export abstract class DataEvent<TData> extends CancellableEvent {
+  /** Read-only event data payload. */
+  readonly data: TData;
+
+  constructor(data: TData, options?: CancellableEventOptions) {
+    super(options);
+    this.data = data;
+  }
+}
+
+/**
+ * Abstract base for events that carry typed data and a mutable output value.
+ *
+ * @template TData   - Type of the event data payload.
+ * @template TOutput - Type of the mutable output value.
+ *
+ * @category Events
+ */
+export abstract class DataOutputEvent<TData, TOutput> extends DataEvent<TData> {
+  /**
+   * The generated output.
+   * Handlers can modify this property to change the final result.
+   */
+  output: TOutput;
+
+  constructor(
+    data: TData,
+    initialOutput: TOutput,
+    options?: CancellableEventOptions,
+  ) {
+    super(data, options);
+    this.output = initialOutput;
+  }
+}
