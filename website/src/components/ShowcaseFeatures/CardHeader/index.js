@@ -1,4 +1,3 @@
-import React from "react"; // CSSProperties allows inline styling with better type checking.
 import clsx from "clsx"; // clsx helps manage conditional className names in a clean and concise manner.
 
 const CardHeader = ({
