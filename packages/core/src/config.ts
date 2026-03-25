@@ -580,17 +580,54 @@ export const getTypeHierarchyOption = (
 };
 
 /**
- * Placeholder function for handling deprecated print type options.
- * Currently returns an empty object as these options are deprecated.
+ * Handles deprecated print type options.
  *
- * @param _cliOpts - Deprecated CLI options (unused)
- * @param _configOptions - Deprecated config options (unused)
- * @returns An empty object
+ * Emits deprecation warnings when legacy section toggle options are detected
+ * from CLI flags or config file values.
+ *
+ * @param cliOpts - CLI options containing deprecated print type flags
+ * @param configOptions - Config options containing deprecated print type settings
+ * @returns An empty object reserved for backward compatibility
  */
 export const parseDeprecatedPrintTypeOptions = (
-  _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
-  _configOptions: Maybe<Omit<DeprecatedConfigPrintTypeOptions, "never">>,
+  cliOpts: Maybe<Pick<CliOptions, "noCode" | "noExample" | "noRelatedType">>,
+  configOptions: Maybe<
+    Pick<
+      ConfigPrintTypeOptions,
+      "codeSection" | "exampleSection" | "relatedTypeSection"
+    >
+  >,
 ): Record<string, never> => {
+  if (cliOpts?.noCode) {
+    console.warn(
+      `[DEPRECATED] CLI option '--noCode' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+    );
+  } else if (typeof configOptions?.codeSection === "boolean") {
+    console.warn(
+      `[DEPRECATED] config option 'printTypeOptions.codeSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
+    );
+  }
+
+  if (cliOpts?.noExample) {
+    console.warn(
+      `[DEPRECATED] CLI option '--noExample' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+    );
+  } else if (typeof configOptions?.exampleSection === "boolean") {
+    console.warn(
+      `[DEPRECATED] config option 'printTypeOptions.exampleSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
+    );
+  }
+
+  if (cliOpts?.noRelatedType) {
+    console.warn(
+      `[DEPRECATED] CLI option '--noRelatedType' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+    );
+  } else if (typeof configOptions?.relatedTypeSection === "boolean") {
+    console.warn(
+      `[DEPRECATED] config option 'printTypeOptions.relatedTypeSection' is deprecated. Use the 'afterComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
+    );
+  }
+
   return {};
 };
 
@@ -631,6 +668,7 @@ export const getPrintTypeOptions = (
   >,
 ): Required<ConfigPrintTypeOptions> => {
   const deprecated = parseDeprecatedPrintTypeOptions(cliOpts, configOptions);
+
   return {
     ...deprecated,
     codeSection:
