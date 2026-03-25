@@ -13,10 +13,10 @@
  * @example
  * ```typescript
  * import { getEvents, PrintTypeEvents } from "@graphql-markdown/core";
- * import { PrintTypeEvent } from "@graphql-markdown/printer-legacy";
+ * import { PrintCodeEvent } from "@graphql-markdown/printer-legacy";
  *
  * const events = getEvents();
- * events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintTypeEvent) => {
+ * events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
  *   // Modify the generated code
  *   event.output = event.output.toUpperCase();
  * });
