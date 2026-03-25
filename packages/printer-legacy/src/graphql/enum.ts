@@ -3,7 +3,12 @@
  * @module
  */
 
-import type { MDXString, PrintTypeOptions } from "@graphql-markdown/types";
+import type {
+  Maybe,
+  MDXString,
+  PageSection,
+  PrintTypeOptions,
+} from "@graphql-markdown/types";
 
 import {
   isEnumType,
@@ -20,14 +25,14 @@ import { hasPrintableDirective } from "../link";
  *
  * @param type - The GraphQL enum type to process
  * @param options - Options for printing the type
- * @returns A string containing the metadata section in MDX format, or empty string if type is not an enum
+ * @returns A "Values" PageSection, or undefined when `type` is not an enum
  */
 export const printEnumMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!isEnumType(type)) {
-    return "";
+    return undefined;
   }
 
   return printMetadataSection(type, type.getValues(), "Values", options);

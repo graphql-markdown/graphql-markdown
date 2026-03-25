@@ -41,7 +41,9 @@ describe("object", () => {
       const metadata = printObjectMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Fields
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#one\} 
 
@@ -64,13 +66,22 @@ Deprecated
 
 
 
-### Interfaces
+",
+    "level": 3,
+    "title": "Fields",
+  },
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark> 
 
 
 
-"
+",
+    "level": 3,
+    "title": "Interfaces",
+  },
+]
 `);
     });
 
@@ -83,7 +94,9 @@ Deprecated
       });
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Fields
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#one\} 
 
@@ -95,7 +108,7 @@ Deprecated
 
 
 
- 
+
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
@@ -110,13 +123,22 @@ Deprecated
 
 </span>
 </fieldset>
-undefined### Interfaces
+undefined",
+    "level": 3,
+    "title": "Fields",
+  },
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark> 
 
 
 
-"
+",
+    "level": 3,
+    "title": "Interfaces",
+  },
+]
 `);
     });
   });

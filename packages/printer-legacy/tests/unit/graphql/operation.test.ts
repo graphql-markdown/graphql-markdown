@@ -48,13 +48,19 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Type
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
-"
+",
+    "level": 3,
+    "title": "Type",
+  },
+]
 `);
     });
 
@@ -85,19 +91,30 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Arguments
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
 
 
 
-### Type
+",
+    "level": 3,
+    "title": "Arguments",
+  },
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
-"
+",
+    "level": 3,
+    "title": "Type",
+  },
+]
 `);
     });
 
@@ -134,13 +151,15 @@ describe("operation", () => {
       });
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Arguments
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
 
 
 
- 
+
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
@@ -155,13 +174,22 @@ Deprecated
 
 </span>
 </fieldset>
-undefined### Type
+undefined",
+    "level": 3,
+    "title": "Arguments",
+  },
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
-"
+",
+    "level": 3,
+    "title": "Type",
+  },
+]
 `);
     });
   });

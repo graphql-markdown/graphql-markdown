@@ -6,7 +6,9 @@
 
 import type {
   GraphQLArgument,
+  Maybe,
   MDXString,
+  PageSection,
   PrintTypeOptions,
   SectionLevelValue,
 } from "@graphql-markdown/types";
@@ -139,9 +141,9 @@ export const printSection = <V>(
   values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!Array.isArray(values) || values.length === 0) {
-    return "";
+    return undefined;
   }
 
   const level = (
@@ -168,10 +170,14 @@ export const printSection = <V>(
   });
 
   if (items === "") {
-    return ""; // do not print section is no items printed
+    return undefined; // do not print section is no items printed
   }
 
-  return `${SectionLevels.LEVEL.repeat(level)} ${section}${openSection}${items}${closeSection}` as MDXString;
+  return {
+    title: section,
+    content: `${openSection}${items}${closeSection}`,
+    level,
+  };
 };
 
 /**
@@ -191,7 +197,7 @@ export const printMetadataSection = <T, V>(
   values: V | V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -199,7 +205,7 @@ export const printMetadataSection = <T, V>(
     !Array.isArray(values) ||
     values.length === 0
   ) {
-    return "";
+    return undefined;
   }
 
   switch (options.deprecated) {
@@ -230,7 +236,17 @@ export const printMetadataSection = <T, V>(
         },
       });
 
-      return `${meta}${deprecatedMeta}`;
+      const content = [meta?.content, deprecatedMeta?.content]
+        .filter((entry): entry is string => {
+          return typeof entry === "string";
+        })
+        .join("");
+
+      return {
+        title: meta?.title,
+        content,
+        level: meta?.level,
+      };
     }
 
     case "default":

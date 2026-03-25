@@ -1,5 +1,6 @@
 import type {
   CollapsibleOption,
+  DeprecatedPrintTypeOptions,
   FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
@@ -23,22 +24,38 @@ export enum SectionLevels {
   LEVEL = "#",
 }
 
-export const PRINT_TYPE_DEFAULT_OPTIONS: Required<PrinterConfigPrintTypeOptions> =
-  {
-    codeSection: true as const,
-    deprecated: "default" as const,
-    exampleSection: false as const,
-    metatags: [] as const,
-    parentTypePrefix: true as const,
-    relatedTypeSection: true as const,
-    typeBadges: true as const,
-    hierarchy: { [TypeHierarchy.API]: {} } as const,
-  };
+export const PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS = {
+  codeSection: true as const,
+  exampleSection: false as const,
+  relatedTypeSection: true as const,
+} satisfies Pick<
+  Required<DeprecatedPrintTypeOptions>,
+  "codeSection" | "exampleSection" | "relatedTypeSection"
+>;
 
+export const PRINT_TYPE_DEFAULT_OPTIONS: Required<
+  Omit<PrinterConfigPrintTypeOptions, "exampleSection">
+> & {
+  exampleSection: PrintTypeOptions["exampleSection"];
+} = {
+  deprecated: "default" as const,
+  exampleSection: undefined,
+  metatags: [] as const,
+  parentTypePrefix: true as const,
+  typeBadges: true as const,
+  hierarchy: { [TypeHierarchy.API]: {} } as const,
+};
+
+/**
+ * Clean runtime options passed through the printer.
+ *
+ * Deprecated section toggles are excluded and handled via backward-compat paths.
+ */
 export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
+    | "exampleSection"
     | "formatCategoryFolderName"
     | "groups"
     | "level"
@@ -62,6 +79,7 @@ export const DEFAULT_OPTIONS: Required<
   >
 > & {
   collapsible: Maybe<CollapsibleOption>;
+  exampleSection: PrintTypeOptions["exampleSection"];
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
   onlyDocDirectives: GraphQLDirective[];
@@ -69,20 +87,24 @@ export const DEFAULT_OPTIONS: Required<
   schema: Maybe<GraphQLSchema>;
   skipDocDirectives: GraphQLDirective[];
 } = {
-  ...PRINT_TYPE_DEFAULT_OPTIONS,
+  deprecated: PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
   basePath: "/" as const,
   collapsible: undefined,
   customDirectives: {} as const,
+  exampleSection: undefined,
   groups: undefined,
   frontMatter: {} as FrontMatterOptions,
   level: undefined,
-  metatags: [] as const,
+  metatags: PRINT_TYPE_DEFAULT_OPTIONS.metatags,
   onlyDocDirectives: [] as const,
   operationNamespaceParts: null,
   parentType: undefined,
+  parentTypePrefix: PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
   schema: undefined,
   skipDocDirectives: [] as const,
+  typeBadges: PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
   withAttributes: false as const,
   sectionHeaderId: true as const,
+  hierarchy: PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
   ...MDXModule,
 };

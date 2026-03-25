@@ -4,7 +4,12 @@
  * @module
  */
 
-import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
+import type {
+  PrintTypeOptions,
+  MDXString,
+  Maybe,
+  PageSection,
+} from "@graphql-markdown/types";
 import { getTypeName, isOperation } from "@graphql-markdown/graphql";
 import { MARKDOWN_CODE_INDENTATION, MARKDOWN_EOL } from "../const/strings";
 import { printCodeField } from "../code";
@@ -14,14 +19,14 @@ import { printSection, printMetadataSection } from "../section";
  * Prints the operation type information.
  * @param type - The operation type to print
  * @param options - Print type options for customizing output
- * @returns Formatted string representation of the operation type or empty string if invalid
+ * @returns A "Type" PageSection, or undefined when `type` is not an operation
  */
 export const printOperationType = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!isOperation(type)) {
-    return "";
+    return undefined;
   }
 
   const queryType = getTypeName(type.type).replaceAll(/[![\]]*/g, "");
@@ -35,20 +40,20 @@ export const printOperationType = (
  * Prints the operation metadata including arguments and type information.
  * @param type - The operation type to print metadata for
  * @param options - Print type options for customizing output
- * @returns Formatted string containing operation metadata or empty string if invalid
+ * @returns Ordered operation metadata sections, or undefined when `type` is not an operation
  */
 export const printOperationMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection[]> => {
   if (!isOperation(type)) {
-    return "";
+    return undefined;
   }
 
   const response = printOperationType(type, options);
   const metadata = printMetadataSection(type, type.args, "Arguments", options);
 
-  return `${metadata}${response}` as MDXString;
+  return [metadata, response].filter(Boolean) as PageSection[];
 };
 
 /**

@@ -5,8 +5,9 @@
 
 import type {
   PrintTypeOptions,
-  MDXString,
   GraphQLObjectType,
+  PageSection,
+  Maybe,
 } from "@graphql-markdown/types";
 
 import { isUnionType, getTypeName } from "@graphql-markdown/graphql";
@@ -17,14 +18,14 @@ import { printSection } from "../section";
  * Generates metadata documentation for a GraphQL Union type.
  * @param type - The GraphQL type to process
  * @param options - Configuration options for printing
- * @returns Formatted MDX string containing the union type's possible types
+ * @returns A "Possible types" PageSection, or undefined when `type` is not a union
  */
 export const printUnionMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!isUnionType(type)) {
-    return "";
+    return undefined;
   }
 
   return printSection(type.getTypes(), "Possible types", {

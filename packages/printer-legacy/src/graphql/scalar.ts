@@ -2,36 +2,39 @@
  * Provides utility functions for handling GraphQL scalar types in markdown generation.
  * @module
  */
-import type { PrintTypeOptions, MDXString } from "@graphql-markdown/types";
+import type {
+  PrintTypeOptions,
+  PageSection,
+  Maybe,
+} from "@graphql-markdown/types";
 
 import { getTypeName } from "@graphql-markdown/graphql";
-
-import { MARKDOWN_EOP } from "../const/strings";
-import { SectionLevels } from "../const/options";
 
 /**
  * Generates markdown documentation for a scalar type's specification URL.
  * @param type - The GraphQL scalar type object
  * @param options - Options for printing type information
- * @returns Markdown string containing the specification link, or empty string if no URL exists
+ * @returns A specification PageSection, or undefined when no URL exists
  */
 export const printSpecification = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (
     typeof type !== "object" ||
     type === null ||
     !("specifiedByURL" in type) ||
     typeof type.specifiedByURL !== "string"
   ) {
-    return "";
+    return undefined;
   }
 
   const url = type.specifiedByURL;
 
-  // Needs newline between "export const specifiedByLinkCss" and markdown header to prevent compilation error in docusaurus
-  return `${SectionLevels.LEVEL.repeat(3)} ${options.formatMDXSpecifiedByLink!(url)}${MARKDOWN_EOP}` as MDXString;
+  return {
+    title: options.formatMDXSpecifiedByLink!(url),
+    level: 3,
+  };
 };
 
 /**
@@ -39,12 +42,12 @@ export const printSpecification = (
  * Currently only includes the specification URL if available.
  * @param type - The GraphQL scalar type object
  * @param options - Options for printing type information
- * @returns Markdown string containing the scalar metadata
+ * @returns A scalar metadata PageSection, or undefined when not available
  */
 export const printScalarMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   return printSpecification(type, options);
 };
 
