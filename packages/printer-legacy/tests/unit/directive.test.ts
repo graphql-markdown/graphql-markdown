@@ -141,14 +141,14 @@ describe("directive", () => {
   });
 
   describe("printCustomDirectives()", () => {
-    test("returns empty string when config is not set", () => {
+    test("returns undefined when config is not set", () => {
       expect.assertions(1);
 
       jest.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(undefined);
 
       expect(
         printCustomDirectives(type, {} as unknown as PrintTypeOptions),
-      ).toBe("");
+      ).toBeUndefined();
     });
 
     test("returns a MDX string of Directive components", () => {
@@ -165,13 +165,15 @@ describe("directive", () => {
         .mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
-"### Directives
-
-#### [\`foo\`](/bar)
+{
+  "content": "#### [\`foo\`](/bar)
  Test testA
  
 
-"
+",
+  "level": 3,
+  "title": "Directives",
+}
 `);
     });
 
@@ -188,7 +190,7 @@ describe("directive", () => {
         .spyOn(Link, "printLink")
         .mockReturnValue("[`foo`](/bar)" as MDXString);
 
-      expect(printCustomDirectives(type, options)).toBe("");
+      expect(printCustomDirectives(type, options)).toBeUndefined();
     });
   });
 

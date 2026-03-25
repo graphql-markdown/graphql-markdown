@@ -13,7 +13,7 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-import type { PrintTypeOptions } from "@graphql-markdown/types";
+import type { PageSections, PrintTypeOptions } from "@graphql-markdown/types";
 
 jest.mock("@graphql-markdown/utils", () => {
   return {
@@ -152,7 +152,8 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    jest.spyOn(GraphQL, "getTypeName").mockImplementation((value) => {
+    (Printer as any)._deprecatedOptions = undefined;
+    jest.spyOn(GraphQL, "getTypeName").mockImplementation((value: unknown) => {
       return value as string;
     });
   });
@@ -173,11 +174,10 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
 {
   "basePath": "/schema",
-  "codeSection": true,
   "collapsible": undefined,
   "customDirectives": undefined,
   "deprecated": "default",
-  "exampleSection": false,
+  "exampleSection": undefined,
   "formatMDXAdmonition": [Function],
   "formatMDXBadge": [Function],
   "formatMDXBullet": [Function],
@@ -199,7 +199,6 @@ describe("Printer", () => {
   "operationNamespaceParts": null,
   "parentType": undefined,
   "parentTypePrefix": true,
-  "relatedTypeSection": true,
   "schema": undefined,
   "sectionHeaderId": true,
   "skipDocDirectives": [],
@@ -245,11 +244,10 @@ describe("Printer", () => {
       expect(Printer.options).toMatchInlineSnapshot(`
 {
   "basePath": "/test",
-  "codeSection": false,
   "collapsible": undefined,
   "customDirectives": undefined,
   "deprecated": "default",
-  "exampleSection": true,
+  "exampleSection": undefined,
   "formatMDXAdmonition": [Function],
   "formatMDXBadge": [Function],
   "formatMDXBullet": [Function],
@@ -271,7 +269,6 @@ describe("Printer", () => {
   "operationNamespaceParts": null,
   "parentType": undefined,
   "parentTypePrefix": false,
-  "relatedTypeSection": false,
   "schema": GraphQLSchema {
     "__validationErrors": undefined,
     "_directives": [
@@ -402,7 +399,7 @@ describe("Printer", () => {
   describe("printCode()", () => {
     test.each(types)(
       "returns a Markdown graphql codeblock with type $name",
-      ({ type, printCode, name, guard }) => {
+      ({ type, printCode, name, guard }: Record<string, unknown>) => {
         expect.hasAssertions();
 
         jest.spyOn(GraphQL, guard).mockReturnValue(true);
@@ -422,19 +419,6 @@ describe("Printer", () => {
       const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchSnapshot();
-    });
-
-    test("returns an empty string if printTypeOptions.code is false", () => {
-      expect.hasAssertions();
-
-      const type = "TestFooBarType";
-
-      const code = Printer.printCode(type, {
-        ...DEFAULT_OPTIONS,
-        codeSection: false,
-      });
-
-      expect(code).toBe("");
     });
 
     test("passes namespace parts to printCodeOperation", () => {
@@ -465,7 +449,7 @@ describe("Printer", () => {
   describe("printTypeMetadata()", () => {
     test.each(types)(
       "returns a Markdown graphql codeblock with type $name",
-      ({ type, printMeta, name, guard }) => {
+      ({ type, printMeta, name, guard }: Record<string, unknown>) => {
         expect.hasAssertions();
 
         jest.spyOn(GraphQL, guard).mockReturnValue(true);
@@ -477,14 +461,14 @@ describe("Printer", () => {
       },
     );
 
-    test("returns empty string with non supported message for unsupported type", async () => {
+    test("returns undefined for unsupported type", async () => {
       expect.hasAssertions();
 
       const type = "TestFooBarType";
 
       const code = await Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toBe("");
+      expect(code).toBeUndefined();
     });
   });
 
@@ -501,7 +485,7 @@ describe("Printer", () => {
 
     test.each(types)(
       "returns a Markdown formatted content for type $name",
-      async ({ name, type }) => {
+      async ({ name, type }: { name: string; type: unknown }) => {
         expect.hasAssertions();
 
         jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
@@ -548,11 +532,14 @@ describe("Printer", () => {
       { options: {} },
       { options: { metatags: undefined } },
       { options: { metatags: [] } },
-    ])("return empty string if no metatags set", ({ options }) => {
-      expect.assertions(1);
+    ])(
+      "return empty string if no metatags set",
+      ({ options }: Record<string, unknown>) => {
+        expect.assertions(1);
 
-      expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe("");
-    });
+        expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe("");
+      },
+    );
 
     test("returns a formatted head tag with meta tags", () => {
       expect.assertions(1);
@@ -577,7 +564,6 @@ describe("Printer", () => {
 
       const options = {
         ...DEFAULT_OPTIONS,
-        exampleSection: true,
         schema: {
           getDirective: (name: string) => {
             return { name } as GraphQLDirective;
@@ -595,38 +581,22 @@ describe("Printer", () => {
       expect(code).toMatchSnapshot();
     });
 
-    test("returns an empty string if printTypeOptions.exampleSection is false", () => {
-      expect.hasAssertions();
-
-      const spy = jest
-        .spyOn(ExamplePrinter, "printExample")
-        .mockReturnValue("This is an example");
-
-      const code = Printer.printExample(GraphQLString, {
-        ...DEFAULT_OPTIONS,
-        exampleSection: false,
-      });
-
-      expect(spy).not.toHaveBeenCalled();
-      expect(code).toBe("");
-    });
-
-    test("returns an empty string if printExample returns undefined", () => {
+    test("returns undefined if printExample returns undefined", () => {
       expect.hasAssertions();
 
       jest.spyOn(ExamplePrinter, "printExample").mockReturnValue(undefined);
 
       const code = Printer.printExample(GraphQLString, DEFAULT_OPTIONS);
 
-      expect(code).toBe("");
+      expect(code).toBeUndefined();
     });
 
-    test("returns an empty string if printTypeOptions.exampleSection directive is invalid", () => {
+    test("returns undefined if printTypeOptions.exampleSection directive is invalid", () => {
       expect.hasAssertions();
 
       const spy = jest
         .spyOn(ExamplePrinter, "printExample")
-        .mockReturnValue("This is an example");
+        .mockReturnValue(undefined);
 
       const code = Printer.printExample(GraphQLString, {
         ...DEFAULT_OPTIONS,
@@ -637,8 +607,80 @@ describe("Printer", () => {
         } as unknown as GraphQLSchema,
       });
 
-      expect(spy).not.toHaveBeenCalled();
-      expect(code).toBe("");
+      expect(spy).toHaveBeenCalled();
+      expect(code).toBeUndefined();
+    });
+
+    test("removes example from section order when deprecated exampleSection is false", async () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+      jest.spyOn(Printer, "printHeader").mockReturnValue("");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("");
+      jest.spyOn(Printer, "printDescription").mockReturnValue("");
+      jest.spyOn(Printer, "printCustomDirectives").mockReturnValue("");
+      jest.spyOn(Printer, "printCustomTags").mockReturnValue("");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("EXAMPLE");
+
+      const emitter = {
+        emitAsync: jest.fn().mockResolvedValue({
+          errors: [],
+          defaultPrevented: false,
+        }),
+      };
+
+      (Printer as any)._deprecatedOptions = { exampleSection: false };
+      (Printer as any).eventEmitter = emitter;
+
+      await Printer.printType("test", { name: "Test" });
+
+      expect(emitter.emitAsync).toHaveBeenCalledWith(
+        "print:beforeComposePageType",
+        expect.objectContaining({
+          output: expect.not.arrayContaining(["example"]),
+        }),
+      );
+    });
+
+    test("removes code and relations from section order when deprecated options are false", async () => {
+      expect.hasAssertions();
+
+      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+      jest.spyOn(Printer, "printHeader").mockReturnValue("");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      jest.spyOn(Printer, "printDescription").mockReturnValue("");
+      jest.spyOn(Printer, "printCustomDirectives").mockReturnValue("");
+      jest.spyOn(Printer, "printCustomTags").mockReturnValue("");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const emitter = {
+        emitAsync: jest.fn().mockResolvedValue({
+          errors: [],
+          defaultPrevented: false,
+        }),
+      };
+
+      (Printer as any)._deprecatedOptions = {
+        codeSection: false,
+        exampleSection: false,
+        relatedTypeSection: false,
+      };
+      (Printer as any).eventEmitter = emitter;
+
+      await Printer.printType("test", { name: "Test" });
+
+      expect(emitter.emitAsync).toHaveBeenCalledWith(
+        "print:beforeComposePageType",
+        expect.objectContaining({
+          output: expect.not.arrayContaining(["code", "relations"]),
+        }),
+      );
     });
   });
 
@@ -668,7 +710,6 @@ describe("Printer", () => {
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
-        codeSection: true,
       });
 
       expect(result).toContain("enum Test { }");
@@ -685,7 +726,6 @@ describe("Printer", () => {
 
       await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
-        codeSection: true,
       });
 
       expect(mockEventEmitter.emitAsync).toHaveBeenCalledTimes(2);
@@ -709,12 +749,16 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const modifiedEmitter = {
-        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
-          if (_eventName === "print:afterPrintCode") {
-            event.output = "MODIFIED: " + event.output;
-          }
-          return { errors: [], defaultPrevented: false };
-        }),
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:afterPrintCode") {
+                event.output = "MODIFIED: " + event.output;
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
       };
 
       (Printer as any).eventEmitter = modifiedEmitter;
@@ -725,7 +769,6 @@ describe("Printer", () => {
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
-        codeSection: true,
       });
 
       expect(result).toContain("MODIFIED:");
@@ -735,13 +778,17 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const preventingEmitter = {
-        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
-          if (_eventName === "print:beforePrintCode") {
-            event.output = "CUSTOM OUTPUT";
-            event.defaultPrevented = true;
-          }
-          return { errors: [], defaultPrevented: event.defaultPrevented };
-        }),
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforePrintCode") {
+                event.output = "CUSTOM OUTPUT";
+                event.defaultPrevented = true;
+              }
+              return { errors: [], defaultPrevented: event.defaultPrevented };
+            },
+          ),
       };
 
       (Printer as any).eventEmitter = preventingEmitter;
@@ -752,7 +799,6 @@ describe("Printer", () => {
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
-        codeSection: true,
       });
 
       expect(result).toBe("CUSTOM OUTPUT");
@@ -814,12 +860,16 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const modifiedEmitter = {
-        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
-          if (_eventName === "print:afterPrintType") {
-            event.output = "COMPLETELY REPLACED OUTPUT";
-          }
-          return { errors: [], defaultPrevented: false };
-        }),
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:afterPrintType") {
+                event.output = "COMPLETELY REPLACED OUTPUT";
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
       };
 
       (Printer as any).eventEmitter = modifiedEmitter;
@@ -839,16 +889,20 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const preventingEmitter = {
-        emitAsync: jest.fn().mockImplementation(async (_eventName, event) => {
-          if (_eventName === "print:beforePrintType") {
-            event.output = "SKIPPED - Custom docs";
-            event.defaultPrevented = true;
-          }
-          return { errors: [], defaultPrevented: event.defaultPrevented };
-        }),
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforePrintType") {
+                event.output = "SKIPPED - Custom docs";
+                event.defaultPrevented = true;
+              }
+              return { errors: [], defaultPrevented: event.defaultPrevented };
+            },
+          ),
       };
 
-      (Printer as any).eventEmitter = preventingEmitter;
+      Printer.eventEmitter = preventingEmitter;
 
       const result = await Printer.printType("test", { name: "Test" });
 
@@ -857,24 +911,199 @@ describe("Printer", () => {
       expect(preventingEmitter.emitAsync).toHaveBeenCalledTimes(1);
     });
 
-    test("does not emit events when no event emitter is configured", async () => {
+    test("renders content sections when no event emitter is configured", async () => {
       expect.hasAssertions();
 
       // Ensure no emitter
-      (Printer as any).eventEmitter = null;
+      Printer.eventEmitter = null;
 
       jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
       jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("META");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
+      jest.spyOn(Printer, "printExample").mockReturnValue({
+        title: "Example",
+        content: "EXAMPLE",
+      });
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result).toBeDefined();
+      expect(typeof result).toBe("string");
+      expect(result).toContain("CODE");
+      expect(result).toContain("META");
+      expect(result).toContain("RELATIONS");
+      expect(result).toContain("Example");
+      expect(result).toContain("EXAMPLE");
+    });
+
+    test("ignores prototype and header compose keys from event output", async () => {
+      expect.hasAssertions();
+
+      const filteringEmitter = {
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforeComposePageType") {
+                const typedEvent = event as {
+                  data: { sections: PageSections };
+                  output: string[];
+                };
+                typedEvent.data.sections["customSection"] = {
+                  title: "Custom Section",
+                  content: "CUSTOM CONTENT",
+                };
+                typedEvent.output = [
+                  "header",
+                  "metatags",
+                  "mdxDeclaration",
+                  "code",
+                  "customSection",
+                  "toString",
+                  "unknown",
+                ];
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      Printer.eventEmitter = filteringEmitter;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("HEAD META TAGS");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      (Printer as any).mdxDeclaration = "MDX DECLARATION";
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("TYPE METADATA");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
+      jest.spyOn(Printer, "printExample").mockReturnValue({
+        title: "Example",
+        content: "EXAMPLE",
+      });
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result.match(/# Test/g)).toHaveLength(1);
+      expect(result.match(/HEAD META TAGS/g)).toHaveLength(1);
+      expect(result.match(/MDX DECLARATION/g)).toHaveLength(1);
+      expect(result).toContain("# Test");
+      expect(result).toContain("CODE");
+      expect(result).toContain("CUSTOM CONTENT");
+      expect(result).not.toContain("TYPE METADATA");
+      expect(result).not.toContain("RELATIONS");
+      expect(result).not.toContain("EXAMPLE");
+      expect(result).not.toContain("toString");
+    });
+
+    test("event handler can inject and render custom sections via index key", async () => {
+      expect.hasAssertions();
+
+      let capturedSections: PageSections | undefined;
+
+      const customSectionEmitter = {
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforeComposePageType") {
+                const typedEvent = event as {
+                  data: { sections: PageSections };
+                  output: string[];
+                };
+                // Inject a custom section into the sections map
+                typedEvent.data.sections["customSection"] = {
+                  title: "Custom Section",
+                  content: "CUSTOM CONTENT",
+                };
+                // Inject a null custom section (Maybe allows null/undefined)
+                typedEvent.data.sections["nullableSection"] = null;
+                capturedSections = typedEvent.data.sections;
+                // Include custom section and a known key in the output order
+                typedEvent.output = ["code", "customSection"];
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      Printer.eventEmitter = customSectionEmitter;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
       jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
       jest.spyOn(Printer, "printRelations").mockReturnValue("");
       jest.spyOn(Printer, "printExample").mockReturnValue("");
 
       const result = await Printer.printType("test", { name: "Test" });
 
-      // Should still produce output
-      expect(result).toBeDefined();
-      expect(typeof result).toBe("string");
+      // Verify the sections object accepted custom keys via the index signature
+      expect(capturedSections).toBeDefined();
+      expect(capturedSections!["customSection"]).toEqual({
+        title: "Custom Section",
+        content: "CUSTOM CONTENT",
+      });
+      // Verify Maybe allows null values for custom keys
+      expect(capturedSections!["nullableSection"]).toBeNull();
+      // Verify known sections are still accessible
+      expect(capturedSections!["code"]).toBeDefined();
+      // Verify the custom section content is rendered in the final output
+      expect(result).toContain("CUSTOM CONTENT");
+      expect(result).toContain("CODE");
+      // Verify null section is not rendered
+      expect(result).not.toContain("nullableSection");
+    });
+
+    test("ignores invalid injected section values from compose hooks", async () => {
+      expect.hasAssertions();
+
+      const invalidSectionEmitter = {
+        emitAsync: jest
+          .fn()
+          .mockImplementation(
+            async (_eventName: string, event: Record<string, unknown>) => {
+              if (_eventName === "print:beforeComposePageType") {
+                const typedEvent = event as {
+                  data: { sections: Record<string, unknown> };
+                  output: string[];
+                };
+                typedEvent.data.sections["invalidNumber"] = 42;
+                typedEvent.data.sections["invalidFunction"] = () => {
+                  return "nope";
+                };
+                typedEvent.data.sections["titleOnlySection"] = {
+                  title: "Title Only",
+                  level: 3,
+                };
+                typedEvent.output = [
+                  "code",
+                  "invalidNumber",
+                  "invalidFunction",
+                  "titleOnlySection",
+                ];
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      Printer.eventEmitter = invalidSectionEmitter;
+
+      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      jest.spyOn(Printer, "printRelations").mockReturnValue("");
+      jest.spyOn(Printer, "printExample").mockReturnValue("");
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(result).toContain("CODE");
+      expect(result).toContain("### Title Only");
+      expect(result).not.toContain("invalidNumber");
+      expect(result).not.toContain("invalidFunction");
     });
   });
 });

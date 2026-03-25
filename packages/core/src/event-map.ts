@@ -40,4 +40,5 @@ export const EVENT_CALLBACK_MAP = {
   [PrintTypeEvents.AFTER_PRINT_CODE]: "afterPrintCodeHook",
   [PrintTypeEvents.BEFORE_PRINT_TYPE]: "beforePrintTypeHook",
   [PrintTypeEvents.AFTER_PRINT_TYPE]: "afterPrintTypeHook",
+  [PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE]: "beforeComposePageTypeHook",
 } as const;

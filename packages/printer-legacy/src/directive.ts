@@ -10,6 +10,7 @@ import type {
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
   Maybe,
+  PageSection,
 } from "@graphql-markdown/types";
 
 import { getConstDirectiveMap } from "@graphql-markdown/graphql";
@@ -79,19 +80,19 @@ export const printCustomDirective = (
  * Prints all custom directives for a type as a Markdown section
  * @param type - The GraphQL type to print directives for
  * @param options - General printing options
- * @returns Markdown string containing all formatted directives
+ * @returns A "Directives" PageSection, or undefined when no directives are printable
  */
 export const printCustomDirectives = (
   type: unknown,
   options: PrintTypeOptions,
-): string => {
+): Maybe<PageSection> => {
   const constDirectiveMap = getConstDirectiveMap(
     type,
     options.customDirectives,
   );
 
   if (!constDirectiveMap || Object.keys(constDirectiveMap).length === 0) {
-    return "";
+    return undefined;
   }
 
   const directives = Object.values(constDirectiveMap)
@@ -103,12 +104,16 @@ export const printCustomDirectives = (
     });
 
   if (directives.length === 0) {
-    return "";
+    return undefined;
   }
 
   const content = directives.join(MARKDOWN_EOP);
 
-  return `${SectionLevels.LEVEL.repeat(3)} Directives${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
+  return {
+    title: "Directives",
+    content: `${content}${MARKDOWN_EOP}`,
+    level: 3,
+  };
 };
 
 /**

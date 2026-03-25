@@ -9,7 +9,8 @@
 import type {
   PrintDirectiveOptions,
   GraphQLDirective,
-  MDXString,
+  Maybe,
+  PageSection,
 } from "@graphql-markdown/types";
 
 import { getTypeName } from "@graphql-markdown/graphql";
@@ -43,14 +44,14 @@ const printCodeDirectiveLocation = (type: GraphQLDirective): string => {
  *
  * @param type - The GraphQL directive to process
  * @param options - Configuration options for printing directive metadata
- * @returns Formatted metadata string in MDX format or empty string if no arguments
+ * @returns An "Arguments" PageSection, or undefined when no arguments are available
  */
 export const printDirectiveMetadata = (
   type: GraphQLDirective,
   options: PrintDirectiveOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!("args" in type)) {
-    return "";
+    return undefined;
   }
 
   return printMetadataSection(type, type.args, "Arguments", options);

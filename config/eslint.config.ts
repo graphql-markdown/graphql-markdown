@@ -85,7 +85,7 @@ export default [
       },
       "import/resolver": {
         typescript: {
-          project: ["./tsconfig.json", "./packages/*/tsconfig.json"],
+          project: ["./tsconfig.json", "./packages/*/tsconfig.json", "./packages/*/tsconfig.test.json"],
         },
       },
     },
@@ -183,6 +183,29 @@ export default [
     },
   },
 
+  // TypeScript test files - use tsconfig.test.json
+  {
+    files: ["**/tests/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ["./packages/*/tsconfig.test.json"],
+        tsconfigRootDir: projectRoot,
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+      globals: {
+        ...globals.jest,
+      },
+    },
+    rules: {
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-confusing-void-expression": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+    },
+  },
+
   // JavaScript files
   {
     files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
@@ -261,3 +284,4 @@ export default [
   // Apply prettier config last to override any conflicting rules
   prettierConfig,
 ] satisfies Linter.FlatConfig[];
+

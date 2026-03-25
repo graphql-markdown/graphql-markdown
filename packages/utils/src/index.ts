@@ -1,4 +1,5 @@
 export * from "./array";
+export * from "./events";
 export * from "./frontmatter";
 export * from "./fs";
 export * from "./guards";

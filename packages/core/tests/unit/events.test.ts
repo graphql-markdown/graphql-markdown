@@ -1,16 +1,20 @@
 import { getEvents, resetEvents } from "../../src/event-emitter";
 import {
-  CancellableEvent,
-  deepFreeze,
   SchemaEvent,
   SchemaEvents,
   GenerateIndexMetafileEvent,
   RenderTypeEntitiesEvent,
-  PrintCodeEvent,
-  PrintTypeEvent,
   PrintTypeEvents,
 } from "../../src/events";
-import { CancellableEventOptions } from "../../src/events/base";
+import {
+  CancellableEvent,
+  CancellableEventOptions,
+  deepFreeze,
+} from "@graphql-markdown/utils";
+import {
+  PrintCodeEvent,
+  PrintTypeEvent,
+} from "@graphql-markdown/printer-legacy";
 
 describe("events", () => {
   afterEach(() => {

@@ -35,7 +35,9 @@ describe("interface", () => {
       const metadata = printInterfaceMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Fields
+[
+  {
+    "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestInterfaceName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#one\} 
 
@@ -51,7 +53,11 @@ describe("interface", () => {
 
 
 
-"
+",
+    "level": 3,
+    "title": "Fields",
+  },
+]
 `);
     });
   });

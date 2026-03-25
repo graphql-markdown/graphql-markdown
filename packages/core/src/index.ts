@@ -21,7 +21,6 @@ export { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-ev
 export { PrintTypeEvents } from "./events/print-type-events";
 
 // Event types exports
-export type { CancellableEvent } from "./events/base";
 export type { SchemaEvent as SchemaLoadEvent } from "./events/schema-load";
 export type { DiffCheckEvent } from "./events/diff-check";
 export type { RenderRootTypesEvent } from "./events/render-root-types";
@@ -29,8 +28,15 @@ export type { RenderHomepageEvent } from "./events/render-homepage";
 export type { RenderTypeEntitiesEvent } from "./events/render-type-entities";
 export type { GenerateIndexMetafileEvent } from "./events/generate-index-metafile";
 export type {
+  ComposePageTypeEventData,
+  IPrintCodeEvent,
+  IPrintTypeEvent,
+  PageSection,
+  PageSections,
   PrintCodeEvent,
   PrintCodeEventData,
   PrintTypeEvent,
   PrintTypeEventData,
-} from "./events/print-type";
+} from "@graphql-markdown/types";
+
+export { CancellableEvent } from "@graphql-markdown/utils";

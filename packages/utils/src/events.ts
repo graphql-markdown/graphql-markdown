@@ -81,8 +81,9 @@ export abstract class CancellableEvent implements ICancellableEvent {
    * Creates a new CancellableEvent.
    *
    * @param options - Configuration options for the event
-   * @param options.cancellable - Whether this event can be cancelled (default: true)
-   * @param options.defaultAction - Optional function to execute as default action
+   * @remarks
+   * options.cancellable controls whether this event can be cancelled (default: true).
+   * options.defaultAction defines an optional function to execute as default action.
    */
   constructor(options?: CancellableEventOptions) {
     this._cancellable = options?.cancellable ?? true;
@@ -111,18 +112,26 @@ export abstract class CancellableEvent implements ICancellableEvent {
   }
 
   /**
+   * Allows setting defaultPrevented to true directly.
+   */
+  set defaultPrevented(value: boolean) {
+    if (value) {
+      this.preventDefault();
+    }
+  }
+
+  /**
+   * Allows setting propagationStopped to true directly.
+   */
+  set propagationStopped(value: boolean) {
+    if (value) {
+      this.stopPropagation();
+    }
+  }
+
+  /**
    * Prevents the default action from executing.
    * Only works if the event is cancellable.
-   *
-   * @example
-   * ```typescript
-   * events.on('beforeLoadSchema', (event) => {
-   *   if (shouldUseCustomLoader) {
-   *     event.preventDefault(); // Stops default schema loading
-   *     // Custom logic here
-   *   }
-   * });
-   * ```
    */
   preventDefault(): void {
     if (this._cancellable) {
@@ -133,15 +142,6 @@ export abstract class CancellableEvent implements ICancellableEvent {
   /**
    * Stops propagation to remaining event handlers.
    * Handlers registered after the current one will not execute.
-   *
-   * @example
-   * ```typescript
-   * events.on('beforeLoadSchema', (event) => {
-   *   if (criticalError) {
-   *     event.stopPropagation(); // No more handlers run
-   *   }
-   * });
-   * ```
    */
   stopPropagation(): void {
     this._propagationStopped = true;
@@ -149,13 +149,6 @@ export abstract class CancellableEvent implements ICancellableEvent {
 
   /**
    * Executes the default action for an event if it hasn't been prevented.
-   *
-   * @returns A promise that resolves when the default action completes, or void if the action was prevented or no default action is defined
-   *
-   * @remarks
-   * This method will only execute the `_defaultAction` if:
-   * - The event's default has not been prevented (`_defaultPrevented` is false)
-   * - A default action function has been defined (`_defaultAction` is a function)
    */
   async runDefaultAction(): Promise<void> {
     if (!this._defaultPrevented && typeof this._defaultAction === "function") {
@@ -183,9 +176,7 @@ export abstract class DataEvent<TData> extends CancellableEvent {
 }
 
 /**
- * Abstract base for events that carry typed data **and** a mutable output value.
- *
- * Handlers may read and rewrite `output` to modify what gets produced.
+ * Abstract base for events that carry typed data and a mutable output value.
  *
  * @template TData   - Type of the event data payload.
  * @template TOutput - Type of the mutable output value.

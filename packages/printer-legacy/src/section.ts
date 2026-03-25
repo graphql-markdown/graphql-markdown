@@ -6,7 +6,9 @@
 
 import type {
   GraphQLArgument,
+  Maybe,
   MDXString,
+  PageSection,
   PrintTypeOptions,
   SectionLevelValue,
 } from "@graphql-markdown/types";
@@ -139,15 +141,19 @@ export const printSection = <V>(
   values: V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (!Array.isArray(values) || values.length === 0) {
-    return "";
+    return undefined;
   }
 
   const level = (
     "level" in options && typeof options.level === "number" ? options.level : 3
   ) as SectionLevelValue;
 
+  // TODO(spacing): Non-collapsible sections with openSection=MARKDOWN_EOP will
+  // result in doubled paragraph breaks with renderPageSection which adds
+  // MARKDOWN_EOP after headings. Consider using empty string for non-collapsible
+  // openSection to eliminate duplicate spacing.
   const [openSection, closeSection] = ((): MDXString[] | string[] => {
     if (
       typeof options.collapsible?.dataOpen === "string" &&
@@ -168,10 +174,14 @@ export const printSection = <V>(
   });
 
   if (items === "") {
-    return ""; // do not print section is no items printed
+    return undefined; // do not print section is no items printed
   }
 
-  return `${SectionLevels.LEVEL.repeat(level)} ${section}${openSection}${items}${closeSection}` as MDXString;
+  return {
+    title: section,
+    content: `${openSection}${items}${closeSection}`,
+    level,
+  };
 };
 
 /**
@@ -191,7 +201,7 @@ export const printMetadataSection = <T, V>(
   values: V | V[] | readonly V[],
   section: string,
   options: PrintTypeOptions,
-): MDXString | string => {
+): Maybe<PageSection> => {
   if (
     typeof type !== "object" ||
     type === null ||
@@ -199,7 +209,7 @@ export const printMetadataSection = <T, V>(
     !Array.isArray(values) ||
     values.length === 0
   ) {
-    return "";
+    return undefined;
   }
 
   switch (options.deprecated) {
@@ -230,7 +240,27 @@ export const printMetadataSection = <T, V>(
         },
       });
 
-      return `${meta}${deprecatedMeta}`;
+      const content = [meta?.content, deprecatedMeta?.content]
+        .filter((entry): entry is string => {
+          return typeof entry === "string";
+        })
+        .join("");
+
+      if (content.trim().length === 0) {
+        return undefined;
+      }
+
+      const level = (
+        "level" in options && typeof options.level === "number"
+          ? options.level
+          : 3
+      ) as SectionLevelValue;
+
+      return {
+        title: section,
+        content,
+        level,
+      };
     }
 
     case "default":

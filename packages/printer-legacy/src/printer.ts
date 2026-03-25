@@ -10,17 +10,21 @@
 
 import type {
   CustomDirectiveMap,
+  DeprecatedPrintTypeOptions,
   Formatter,
   GraphQLDirective,
   GraphQLField,
   GraphQLSchema,
   IPrinter,
-  MDXString,
   Maybe,
+  MDXString,
   MetaInfo,
+  PageHeader,
+  PageSection,
+  PageSections,
+  PrinterConfigPrintTypeOptions,
   PrinterEventEmitter,
   PrintTypeOptions,
-  PrinterConfigPrintTypeOptions,
   SchemaEntitiesGroupMap,
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
@@ -35,7 +39,28 @@ const PrintTypeEvents = {
   AFTER_PRINT_CODE: "print:afterPrintCode",
   BEFORE_PRINT_TYPE: "print:beforePrintType",
   AFTER_PRINT_TYPE: "print:afterPrintType",
+  BEFORE_COMPOSE_PAGE_TYPE: "print:beforeComposePageType",
 } as const;
+
+const TYPE_PAGE_HEADER_ORDER = [
+  "header",
+  "metatags",
+  "mdxDeclaration",
+] as const;
+
+const TYPE_PAGE_SECTION_ORDER = [
+  "tags",
+  "description",
+  "code",
+  "customDirectives",
+  "metadata",
+  "example",
+  "relations",
+] as const;
+
+type TypePageContentSection = (typeof TYPE_PAGE_SECTION_ORDER)[number];
+
+type TypePageHeaderSection = (typeof TYPE_PAGE_HEADER_ORDER)[number];
 
 import {
   getTypeName,
@@ -83,10 +108,16 @@ import {
 import { createDefaultFormatter } from "./formatter";
 import {
   DEFAULT_OPTIONS,
+  PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
   SectionLevels,
 } from "./const/options";
 import { printExample } from "./example";
+import {
+  PrintCodeEvent,
+  PrintTypeEvent,
+  BeforeComposePageTypeEvent,
+} from "./events";
 
 /**
  * Default initialization options for the Printer class.
@@ -97,6 +128,13 @@ const DEFAULT_INIT_OPTIONS = {
   groups: undefined,
   sectionHeaderId: true,
 };
+
+type InitPrintTypeOptions = DeprecatedPrintTypeOptions &
+  Omit<PrinterConfigPrintTypeOptions, "exampleSection"> & {
+    exampleSection?:
+      | DeprecatedPrintTypeOptions["exampleSection"]
+      | PrinterConfigPrintTypeOptions["exampleSection"];
+  };
 
 /**
  * The Printer class implements the core functionality for generating Markdown documentation
@@ -118,11 +156,6 @@ const DEFAULT_INIT_OPTIONS = {
  */
 export class Printer implements IPrinter {
   /**
-   * Global printer configuration options
-   */
-  static options: Readonly<Maybe<PrintTypeOptions>>;
-
-  /**
    * Prints type descriptions
    */
   static readonly printDescription = printDescription;
@@ -139,7 +172,29 @@ export class Printer implements IPrinter {
 
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 
+  private static _options: Readonly<Maybe<PrintTypeOptions>>;
+
+  private static _deprecatedOptions: Readonly<
+    Maybe<DeprecatedPrintTypeOptions>
+  >;
+
   private static _mdxDeclaration: Readonly<Maybe<string>>;
+
+  /**
+   * Global printer configuration options
+   */
+  static get options(): Readonly<Maybe<PrintTypeOptions>> {
+    return Printer._options;
+  }
+
+  /**
+   * Backward-compat section toggles extracted from legacy config options.
+   *
+   * These flags are applied only during section order composition.
+   */
+  static get deprecatedOptions(): Readonly<Maybe<DeprecatedPrintTypeOptions>> {
+    return Printer._deprecatedOptions;
+  }
 
   /**
    * Optional event emitter for print events.
@@ -155,6 +210,10 @@ export class Printer implements IPrinter {
    */
   static get mdxDeclaration(): Readonly<Maybe<string>> {
     return Printer._mdxDeclaration;
+  }
+
+  static set options(options: Readonly<Maybe<PrintTypeOptions>>) {
+    Printer._options = options;
   }
 
   static set eventEmitter(eventEmitter: Maybe<PrinterEventEmitter>) {
@@ -196,7 +255,7 @@ export class Printer implements IPrinter {
       meta?: Maybe<MetaInfo>;
       metatags?: Record<string, string>[];
       onlyDocDirectives?: GraphQLDirective[];
-      printTypeOptions?: PrinterConfigPrintTypeOptions;
+      printTypeOptions?: InitPrintTypeOptions;
       skipDocDirectives?: GraphQLDirective[];
       sectionHeaderId?: boolean;
     } = DEFAULT_INIT_OPTIONS,
@@ -207,44 +266,60 @@ export class Printer implements IPrinter {
     // Always update eventEmitter regardless of initialization state
     Printer.eventEmitter = eventEmitter ?? null;
 
-    if (Printer.options !== undefined) {
-      return;
+    if (Printer.options === undefined) {
+      Printer.options = {
+        ...DEFAULT_OPTIONS,
+        basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
+        customDirectives,
+        exampleSection:
+          typeof printTypeOptions?.exampleSection === "object"
+            ? printTypeOptions.exampleSection
+            : undefined,
+        groups,
+        parentTypePrefix:
+          printTypeOptions?.parentTypePrefix ??
+          PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
+        deprecated:
+          printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+        schema,
+        onlyDocDirectives: onlyDocDirectives ?? [],
+        skipDocDirectives: skipDocDirectives ?? [],
+        sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
+        typeBadges:
+          printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
+        metatags: metatags ?? [],
+        hierarchy:
+          printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+        meta: meta,
+        // Merge formatter functions: default formatter with any overrides
+        ...createDefaultFormatter(),
+        ...formatter,
+      };
+
+      const initExampleSection = printTypeOptions?.exampleSection;
+      let deprecatedExampleSection: DeprecatedPrintTypeOptions["exampleSection"];
+
+      if (typeof initExampleSection === "boolean") {
+        deprecatedExampleSection = initExampleSection;
+      } else if (initExampleSection === undefined) {
+        deprecatedExampleSection =
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.exampleSection;
+      } else {
+        deprecatedExampleSection = true;
+      }
+
+      Printer._deprecatedOptions = {
+        codeSection:
+          printTypeOptions?.codeSection ??
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.codeSection,
+        exampleSection: deprecatedExampleSection,
+        relatedTypeSection:
+          printTypeOptions?.relatedTypeSection ??
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.relatedTypeSection,
+      };
+
+      Printer.mdxDeclaration = mdxDeclaration ?? "";
     }
-
-    Printer.options = {
-      ...DEFAULT_OPTIONS,
-      basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
-      codeSection:
-        printTypeOptions?.codeSection ?? PRINT_TYPE_DEFAULT_OPTIONS.codeSection,
-      customDirectives,
-      exampleSection:
-        printTypeOptions?.exampleSection ??
-        PRINT_TYPE_DEFAULT_OPTIONS.exampleSection,
-      groups,
-      parentTypePrefix:
-        printTypeOptions?.parentTypePrefix ??
-        PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
-      deprecated:
-        printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
-      relatedTypeSection:
-        printTypeOptions?.relatedTypeSection ??
-        PRINT_TYPE_DEFAULT_OPTIONS.relatedTypeSection,
-      schema,
-      onlyDocDirectives: onlyDocDirectives ?? [],
-      skipDocDirectives: skipDocDirectives ?? [],
-      sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
-      typeBadges:
-        printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
-      metatags: metatags ?? [],
-      hierarchy:
-        printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
-      meta: meta,
-      // Merge formatter functions: default formatter with any overrides
-      ...createDefaultFormatter(),
-      ...formatter,
-    };
-
-    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
@@ -280,10 +355,6 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): string => {
-    if (options.codeSection === undefined || options.codeSection !== true) {
-      return "";
-    }
-
     let code = "";
 
     switch (true) {
@@ -350,14 +421,7 @@ export class Printer implements IPrinter {
     const eventData = { type, typeName, options: { ...options } };
 
     // Emit BEFORE event - handlers can modify inputs or prevent default
-    const beforeEvent = {
-      data: eventData,
-      output: "" as string,
-      defaultPrevented: false,
-      preventDefault(): void {
-        this.defaultPrevented = true;
-      },
-    };
+    const beforeEvent = new PrintCodeEvent(eventData, "");
     await Printer.eventEmitter.emitAsync(
       PrintTypeEvents.BEFORE_PRINT_CODE,
       beforeEvent,
@@ -372,10 +436,7 @@ export class Printer implements IPrinter {
     const output = Printer.printCode(type, eventData.options);
 
     // Emit AFTER event - handlers can modify the output
-    const afterEvent = {
-      data: eventData,
-      output,
-    };
+    const afterEvent = new PrintCodeEvent(eventData, output);
     await Printer.eventEmitter.emitAsync(
       PrintTypeEvents.AFTER_PRINT_CODE,
       afterEvent,
@@ -389,27 +450,22 @@ export class Printer implements IPrinter {
    *
    * @param type - GraphQL type to generate example for
    * @param options - Printer configuration options
-   * @returns Formatted example section string or empty string if no example
+   * @returns Example page section or undefined when no example is available
    */
   static readonly printExample = (
     type: unknown,
     options: PrintTypeOptions,
-  ): string => {
-    if (
-      options.exampleSection === undefined ||
-      options.exampleSection === null ||
-      options.exampleSection === false
-    ) {
-      return "";
-    }
-
+  ): Maybe<PageSection> => {
     const example = printExample(type, options);
 
     if (!example) {
-      return "";
+      return undefined;
     }
 
-    return `${SectionLevels.LEVEL.repeat(3)} Example${MARKDOWN_EOP}${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`;
+    return {
+      content: `${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`,
+      title: "Example",
+    };
   };
 
   /**
@@ -417,13 +473,12 @@ export class Printer implements IPrinter {
    *
    * @param type - GraphQL type to print metadata for
    * @param options - Printer configuration options
-   * @returns Formatted metadata string as MDX or plain string
-   * @throws When type is not supported
+   * @returns Metadata section (or section list) for supported types, otherwise undefined
    */
   static readonly printTypeMetadata = (
     type: unknown,
     options: PrintTypeOptions,
-  ): MDXString | string => {
+  ): Maybe<PageSection | PageSection[]> => {
     switch (true) {
       case isScalarType(type):
         return printScalarMetadata(type, options);
@@ -445,7 +500,7 @@ export class Printer implements IPrinter {
           options,
         );
       default:
-        return "";
+        return undefined;
     }
   };
 
@@ -460,9 +515,6 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): MDXString | string => {
-    if (options.relatedTypeSection !== true) {
-      return "";
-    }
     return printRelations(type, options);
   };
 
@@ -503,8 +555,7 @@ export class Printer implements IPrinter {
    * @example
    * ```typescript
    * const doc = await Printer.printType('User', UserType, {
-   *   frontMatter: true,
-   *   codeSection: true
+   *   frontMatter: true
    * });
    * ```
    *
@@ -521,6 +572,7 @@ export class Printer implements IPrinter {
    *
    * When an event emitter is configured, emits events:
    * - `print:beforePrintType` - Before generating documentation
+   * - `print:beforeComposePageType` - Before composing section order and final page output
    * - `print:afterPrintType` - After generating documentation (output can be modified)
    */
   static readonly printType = async (
@@ -534,6 +586,13 @@ export class Printer implements IPrinter {
       ...options,
     };
 
+    const deprecatedOptions: DeprecatedPrintTypeOptions = {
+      ...Printer.deprecatedOptions,
+      exampleSection: printTypeOptions.exampleSection
+        ? true
+        : Printer.deprecatedOptions?.exampleSection,
+    };
+
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
       return undefined;
     }
@@ -543,18 +602,7 @@ export class Printer implements IPrinter {
 
     // Emit BEFORE_PRINT_TYPE event if emitter is configured
     if (Printer.eventEmitter) {
-      const beforeEvent = {
-        data: eventData,
-        output: undefined as Maybe<MDXString>,
-        defaultPrevented: false,
-        propagationStopped: false,
-        preventDefault(): void {
-          this.defaultPrevented = true;
-        },
-        stopPropagation(): void {
-          this.propagationStopped = true;
-        },
-      };
+      const beforeEvent = new PrintTypeEvent(eventData, undefined);
       await Printer.eventEmitter.emitAsync(
         PrintTypeEvents.BEFORE_PRINT_TYPE,
         beforeEvent,
@@ -572,12 +620,16 @@ export class Printer implements IPrinter {
       printTypeOptions,
     );
     const metatags = Printer.printMetaTags(type, printTypeOptions);
+
     const description = Printer.printDescription(type, printTypeOptions);
 
-    // Use async code printing when event emitter is configured
-    const code = Printer.eventEmitter
-      ? await Printer.printCodeAsync(type, name, printTypeOptions)
-      : Printer.printCode(type, printTypeOptions);
+    // Generate all sections unconditionally to support event hooks that might re-add
+    // sections excluded by deprecated toggles. This is a performance trade-off:
+    // sections excluded by deprecated flags (codeSection, exampleSection, relatedTypeSection)
+    // are still generated and print events emitted, even if they won't be rendered.
+    // TODO(perf): Implement lazy section generation based on final composed order
+    // when no BEFORE_COMPOSE_PAGE_TYPE listeners are registered.
+    const code = await Printer.printCodeAsync(type, name, printTypeOptions);
 
     const customDirectives = Printer.printCustomDirectives(
       type,
@@ -588,42 +640,216 @@ export class Printer implements IPrinter {
     const relations = Printer.printRelations(type, printTypeOptions);
     const example = Printer.printExample(type, printTypeOptions);
 
-    let output = [
-      header,
-      metatags,
-      Printer.mdxDeclaration,
-      tags,
-      description,
-      code,
-      customDirectives,
-      metadata,
-      example,
-      relations,
-    ]
+    // Create sections map for composition events
+    const sections: PageSections = {
+      header: { content: header } as PageHeader,
+      metatags: { content: metatags } as PageHeader,
+      mdxDeclaration: { content: Printer.mdxDeclaration ?? "" } as PageHeader,
+      tags: Printer.normalizePageSection(tags),
+      description: Printer.normalizePageSection(description),
+      code: Printer.normalizePageSection(code),
+      customDirectives: Printer.normalizePageSection(customDirectives),
+      metadata: Printer.normalizePageSection(metadata),
+      example: Printer.normalizePageSection(example),
+      relations: Printer.normalizePageSection(relations),
+    };
+
+    let sectionOrder: (keyof PageSections)[] =
+      Printer.getDeprecatedTypePageSectionOrder(
+        [...TYPE_PAGE_SECTION_ORDER],
+        deprecatedOptions,
+      );
+
+    // Emit BEFORE_COMPOSE_PAGE_TYPE event if emitter is configured
+    if (Printer.eventEmitter) {
+      const beforeComposeEvent = new BeforeComposePageTypeEvent(
+        { type, name, options: printTypeOptions, sections },
+        sectionOrder,
+      );
+      await Printer.eventEmitter.emitAsync(
+        PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE,
+        beforeComposeEvent,
+      );
+      sectionOrder = Printer.sanitizeTypePageSectionOrder(
+        beforeComposeEvent.output,
+        sections,
+      );
+    }
+
+    // Compose output based on section order
+    const pageSections: (keyof PageSections)[] = [
+      ...TYPE_PAGE_HEADER_ORDER,
+      ...sectionOrder,
+    ];
+    let output = pageSections
+      .map((key) => {
+        return Printer.renderPageSection(sections[key]);
+      })
+      .filter((section) => {
+        return section.length > 0;
+      })
       .join(MARKDOWN_EOP)
       .trim() as MDXString;
 
     // Emit AFTER_PRINT_TYPE event if emitter is configured
     if (Printer.eventEmitter) {
-      const afterEvent = {
-        data: eventData,
-        output,
-        defaultPrevented: false,
-        propagationStopped: false,
-        preventDefault(): void {
-          this.defaultPrevented = true;
-        },
-        stopPropagation(): void {
-          this.propagationStopped = true;
-        },
-      };
+      const afterEvent = new PrintTypeEvent(eventData, output);
       await Printer.eventEmitter.emitAsync(
         PrintTypeEvents.AFTER_PRINT_TYPE,
         afterEvent,
       );
-      output = afterEvent.output;
+      output = afterEvent.output ?? output;
     }
 
     return output;
+  };
+
+  /**
+   * Renders a page section, optionally prefixing a heading when a title is present.
+   */
+  private static readonly renderPageSection = (
+    section: Maybe<PageSections[keyof PageSections]>,
+  ): string => {
+    if (
+      !section ||
+      typeof section !== "object" ||
+      Array.isArray(section) ||
+      (!("content" in section) && !("title" in section))
+    ) {
+      return "";
+    }
+
+    let content: string;
+    if (!("content" in section) || !section.content) {
+      content = "";
+    } else if (Array.isArray(section.content)) {
+      content = section.content
+        .map((entry) => {
+          return Printer.renderPageSection(entry);
+        })
+        .filter((entry) => {
+          return entry.length > 0;
+        })
+        .join(MARKDOWN_EOP);
+    } else if (typeof section.content === "string") {
+      content = section.content;
+    } else {
+      content = Printer.renderPageSection(section.content);
+    }
+
+    if (!("title" in section) || typeof section.title !== "string") {
+      if (!content || content.trim().length === 0) {
+        return "";
+      }
+
+      return content;
+    }
+
+    if (!section.title || section.title.trim().length === 0) {
+      if (!content || content.trim().length === 0) {
+        return "";
+      }
+
+      return content;
+    }
+
+    const level = Math.max(1, section.level ?? 3);
+    const title = `${SectionLevels.LEVEL.repeat(level)} ${section.title}${MARKDOWN_EOP}`;
+
+    if (!content || content.trim().length === 0) {
+      return title;
+    }
+
+    return `${title}${content}`;
+  };
+
+  /**
+   * Returns the default content section order for type pages.
+   *
+   * Applies backward-compatibility toggles from deprecated section flags.
+   */
+  private static readonly getDeprecatedTypePageSectionOrder = (
+    sections: TypePageContentSection[],
+    deprecatedOptions: DeprecatedPrintTypeOptions,
+  ): TypePageContentSection[] => {
+    return sections.filter((section) => {
+      if (section === "code") {
+        return deprecatedOptions.codeSection !== false;
+      }
+
+      if (section === "example") {
+        return deprecatedOptions.exampleSection !== false;
+      }
+
+      if (section === "relations") {
+        return deprecatedOptions.relatedTypeSection !== false;
+      }
+
+      return true;
+    });
+  };
+
+  /**
+   * Runtime guard for built-in page content section keys.
+   */
+  private static readonly isTypePageContentSection = (
+    section: unknown,
+  ): section is TypePageContentSection => {
+    return (
+      typeof section === "string" &&
+      (TYPE_PAGE_SECTION_ORDER as readonly string[]).includes(section)
+    );
+  };
+
+  /**
+   * Runtime guard for header-only page section keys.
+   */
+  private static readonly isTypePageHeaderSection = (
+    section: unknown,
+  ): section is TypePageHeaderSection => {
+    return (
+      typeof section === "string" &&
+      (TYPE_PAGE_HEADER_ORDER as readonly string[]).includes(section)
+    );
+  };
+
+  /**
+   * Normalizes event-driven section order, allowing built-in section keys and
+   * any custom keys that were added to the sections map by an event handler.
+   * Keys that are neither built-in nor present in the sections map are dropped.
+   */
+  private static readonly sanitizeTypePageSectionOrder = (
+    sectionOrder: Maybe<(keyof PageSections)[]>,
+    sections: PageSections,
+  ): string[] => {
+    if (!Array.isArray(sectionOrder)) {
+      return [];
+    }
+
+    return sectionOrder.filter((section): section is string => {
+      return (
+        typeof section === "string" &&
+        !Printer.isTypePageHeaderSection(section) &&
+        (Printer.isTypePageContentSection(section) ||
+          Object.hasOwn(sections, section))
+      );
+    });
+  };
+
+  /**
+   * Normalizes mixed section value shapes to the internal PageSection format.
+   */
+  private static readonly normalizePageSection = (
+    section: Maybe<unknown>,
+  ): PageSection | undefined => {
+    if (!section) {
+      return undefined;
+    }
+
+    if (typeof section === "string" || Array.isArray(section)) {
+      return { content: section } as PageSection;
+    }
+
+    return section;
   };
 }

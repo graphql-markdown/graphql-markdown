@@ -315,19 +315,21 @@ It only applies to types with a location compatible with the directive, i.e. if 
 
 Use these options to toggle the type of information rendered on pages:
 
-- `codeSection`: display type code section.
+- `codeSection` (deprecated): display type code section. Prefer `beforeComposePageTypeHook` and remove `"code"` from `event.output`.
 - `deprecated`: option for displaying deprecated entities (fields, values, operations).
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
-- `exampleSection`: display example section based on directive data (see [Examples](/docs/advanced/examples)).
+- `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/advanced/examples)).
+  - `printTypeOptions.exampleSection: { ... }` is the recommended configuration format.
+  - `printTypeOptions.exampleSection: boolean` is deprecated; prefer `beforeComposePageTypeHook` and remove `"example"` from `event.output`.
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
   - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)).
   - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/namespaced-operations))._
 - `parentTypePrefix`: prefix field names with the parent type name.
-- `relatedTypeSection`: display related type sections.
+- `relatedTypeSection` (deprecated): display related type sections. Prefer `beforeComposePageTypeHook` and remove `"relations"` from `event.output`.
 - `typeBadges`: add field type attributes badges.
 
 | Setting                               | CLI flag                | Default   |
@@ -342,6 +344,14 @@ Use these options to toggle the type of information rendered on pages:
 
 <br/>
 
+:::warning
+
+`printTypeOptions.codeSection`, `printTypeOptions.relatedTypeSection`, boolean `printTypeOptions.exampleSection`, and CLI flags `--noCode`, `--noRelatedType`, `--noExample` are deprecated and kept for backward compatibility.
+
+Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) to control section visibility and order instead.
+
+:::
+
 ```js title="docusaurus.config.js"
 plugins: [
     [
@@ -354,14 +364,15 @@ plugins: [
         homepage: "./docs/swapi.md",
         // highlight-start
         printTypeOptions: {
-          codeSection: false, // disable code section, same as CLI flag --noCode
           deprecated: "group", // group deprecated entities, same as CLI flag --deprecated group
-          exampleSection: false, // disable code section, same as CLI flag --noExample
+          exampleSection: {
+            field: "example", // use directive field for example rendering
+          },
           hierarchy: "entity",  // disable type API grouping, same as CLI flag --hierarchy entity
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
-          relatedTypeSection: false, // disable related type sections, same as CLI flag --noRelatedType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
         },
+        mdxParser: require.resolve("./custom-mdx.cjs"), // use hook-based section composition
         // highlight-end
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
@@ -369,6 +380,20 @@ plugins: [
       },
     ],
   ],
+```
+
+```js title="custom-mdx.cjs"
+const DocusaurusMDX = require("@graphql-markdown/docusaurus/mdx");
+
+const beforeComposePageTypeHook = async (event) => {
+  // Hide code and relations sections
+  event.output = event.output.filter((key) => key !== "code" && key !== "relations");
+};
+
+module.exports = {
+  ...DocusaurusMDX,
+  beforeComposePageTypeHook,
+};
 ```
 
 <br/>

@@ -23,7 +23,9 @@ describe("union", () => {
 
       const code = await printUnionMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toBe(`### Possible types
+      expect(code).toMatchInlineSnapshot(String.raw`
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](/types/objects/one) <mark class="gqlmd-mdx-badge">object</mark> 
 
@@ -33,6 +35,10 @@ describe("union", () => {
 
 
 
+",
+  "level": 3,
+  "title": "Possible types",
+}
 `);
     });
   });

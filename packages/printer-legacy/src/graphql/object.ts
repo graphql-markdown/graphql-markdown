@@ -3,7 +3,11 @@
  * @module
  */
 
-import type { PrintTypeOptions } from "@graphql-markdown/types";
+import type {
+  Maybe,
+  PageSection,
+  PrintTypeOptions,
+} from "@graphql-markdown/types";
 
 import { getTypeName, getFields } from "@graphql-markdown/graphql";
 
@@ -15,34 +19,34 @@ import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
  * Prints the metadata section for interfaces implemented by a GraphQL type
  * @param type - The GraphQL type object to process
  * @param options - Printing options
- * @returns Markdown formatted string of implemented interfaces
+ * @returns An "Interfaces" PageSection, or undefined when the type has no interfaces
  */
 const printImplementedInterfaceMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): string => {
+): Maybe<PageSection> => {
   if (
     typeof type !== "object" ||
     type === null ||
     !("getInterfaces" in type) ||
     typeof type.getInterfaces !== "function"
   ) {
-    return "";
+    return undefined;
   }
 
-  return printSection(type.getInterfaces(), "Interfaces", options) as string;
+  return printSection(type.getInterfaces(), "Interfaces", options);
 };
 
 /**
  * Prints the complete metadata section for a GraphQL object type
  * @param type - The GraphQL type object to process
  * @param options - Printing options
- * @returns Markdown formatted string containing fields and interfaces metadata
+ * @returns Ordered metadata sections for fields and interfaces
  */
 export const printObjectMetadata = (
   type: unknown,
   options: PrintTypeOptions,
-): string => {
+): Maybe<PageSection[]> => {
   const interfaceMeta = printImplementedInterfaceMetadata(type, options);
   const metadata = printMetadataSection(
     type,
@@ -51,7 +55,7 @@ export const printObjectMetadata = (
     options,
   );
 
-  return `${metadata}${interfaceMeta}`;
+  return [metadata, interfaceMeta].filter(Boolean) as PageSection[];
 };
 
 /**

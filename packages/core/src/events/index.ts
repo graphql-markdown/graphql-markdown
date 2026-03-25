@@ -4,14 +4,6 @@
  * @packageDocumentation
  */
 
-// Base
-export {
-  CancellableEvent,
-  DataEvent,
-  DataOutputEvent,
-  deepFreeze,
-} from "./base";
-
 // Event constants
 export { SchemaEvents } from "./schema-events";
 export { DiffEvents } from "./diff-events";
@@ -28,5 +20,10 @@ export { RenderRootTypesEvent } from "./render-root-types";
 export { RenderHomepageEvent } from "./render-homepage";
 export { RenderTypeEntitiesEvent } from "./render-type-entities";
 export { GenerateIndexMetafileEvent } from "./generate-index-metafile";
-export { PrintCodeEvent, PrintTypeEvent } from "./print-type";
-export type { PrintCodeEventData, PrintTypeEventData } from "./print-type";
+export type {
+  PrintCodeEventData,
+  PrintTypeEventData,
+  ComposePageTypeEventData,
+  PageSection,
+  PageSections,
+} from "@graphql-markdown/types";

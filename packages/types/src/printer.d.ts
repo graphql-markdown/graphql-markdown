@@ -8,6 +8,120 @@ import type {
   TypeHierarchyObjectType,
 } from "./core";
 import type { ICancellableEvent } from "./event";
+import type { MDXString, Maybe } from "./utils";
+
+/**
+ * Represents a single header section of a page with only content.
+ */
+export interface PageHeader {
+  /** The header content */
+  content?: MDXString | string;
+}
+
+/**
+ * Represents a single section of a page with optional title and content.
+ */
+export interface PageSection {
+  /** Optional title/heading for the section */
+  title?: MDXString | string;
+  /** Optional section level for hierarchical structuring */
+  level?: number;
+  /** The section content */
+  content?: MDXString | PageSection | PageSection[] | string;
+}
+
+/**
+ * Map of all available sections in a type page.
+ */
+export interface PageSections {
+  /** Additional custom sections can be added by event handlers */
+  [key: string]: Maybe<PageHeader | PageSection>;
+  /** YAML frontmatter or top-level heading */
+  header?: PageHeader;
+  /** HTML meta tags */
+  metatags?: PageHeader;
+  /** MDX import declarations */
+  mdxDeclaration?: PageHeader;
+  /** Custom tags (e.g., \@deprecated) */
+  tags?: PageSection;
+  /** Type description from GraphQL comments */
+  description?: PageSection;
+  /** GraphQL code block */
+  code?: PageSection;
+  /** Custom directives */
+  customDirectives?: PageSection;
+  /** Type metadata (fields, arguments, etc.) */
+  metadata?: PageSection;
+  /** Usage examples */
+  example?: PageSection;
+  /** Related types */
+  relations?: PageSection;
+}
+
+/**
+ * Data payload for print code events.
+ */
+export interface PrintCodeEventData {
+  /** The GraphQL type being printed */
+  readonly type: unknown;
+  /** The name of the type */
+  readonly typeName: string;
+  /** The print options in effect */
+  readonly options: PrintTypeOptions;
+}
+
+/**
+ * Data payload for print type events.
+ */
+export interface PrintTypeEventData {
+  /** The GraphQL type being printed */
+  readonly type: unknown;
+  /** The name identifier for the type */
+  readonly name: Maybe<string>;
+  /** The print options in effect */
+  readonly options: PrintTypeOptions;
+}
+
+/**
+ * Public interface contract for print code events.
+ *
+ * Matches the runtime shape of printer event class instances.
+ */
+export interface IPrintCodeEvent extends ICancellableEvent {
+  readonly data: PrintCodeEventData;
+  output: string;
+}
+
+/**
+ * Public interface contract for print type events.
+ *
+ * Matches the runtime shape of printer event class instances.
+ */
+export interface IPrintTypeEvent extends ICancellableEvent {
+  readonly data: PrintTypeEventData;
+  output: Maybe<MDXString>;
+}
+
+/** @deprecated Use IPrintCodeEvent */
+export type PrintCodeEvent = IPrintCodeEvent;
+
+/** @deprecated Use IPrintTypeEvent */
+export type PrintTypeEvent = IPrintTypeEvent;
+
+/**
+ * Data payload for compose page type events.
+ */
+export interface ComposePageTypeEventData {
+  /** The GraphQL type being composed */
+  readonly type: unknown;
+  /** The name identifier for the type */
+  readonly name: Maybe<string>;
+  /** The print options in effect */
+  readonly options: PrintTypeOptions;
+  /** The map of all page sections (mutable in BEFORE event) */
+  readonly sections: PageSections;
+}
+
 import type { Formatter } from "./formatter";
 import type {
   GraphQLDirective,
@@ -15,16 +129,6 @@ import type {
   SchemaEntitiesGroupMap,
 } from "./graphql";
 import type { CustomDirectiveMap } from "./helpers";
-import type { Maybe, MDXString } from "./utils";
-
-/**
- * Base interface for printer events.
- * All print events must have a mutable output property.
- */
-export interface PrinterEvent {
-  /** The generated output that handlers can modify */
-  output: Maybe<MDXString> | MDXString | string;
-}
 
 /**
  * Minimal event emitter interface for printer event emission.
@@ -52,12 +156,12 @@ export interface PrinterEventEmitter {
    * Handlers can modify the event's mutable properties.
    *
    * @param eventName - The event name to emit
-   * @param event - The event object (PrinterEvent or CancellableEvent instance)
+   * @param event - The event object (PrinterEvent instance)
    * @returns Promise that resolves when all handlers have executed
    */
   emitAsync: (
     eventName: string,
-    event: ICancellableEvent | PrinterEvent,
+    event: ICancellableEvent,
   ) => Promise<{ errors: Error[]; defaultPrevented: boolean }>;
 }
 
@@ -100,15 +204,39 @@ export interface AdmonitionType {
 /**
  * Configuration options for printing type documentation
  */
-export interface PrinterConfigPrintTypeOptions {
+export interface PrinterDeprecatedConfigPrintTypeOptions {
+  /** @deprecated Use compose page type events to control code section visibility */
   codeSection?: boolean;
+  /** @deprecated Use compose page type events to control code section visibility */
+  exampleSection?: boolean;
+  /** @deprecated Use compose page type events to control code section visibility */
+  relatedTypeSection?: boolean;
+}
+
+/**
+ * Configuration options for printing type documentation
+ */
+export interface PrinterConfigPrintTypeOptions {
   deprecated?: TypeDeprecatedOption;
-  exampleSection?: TypeExampleSectionOption | boolean;
+  exampleSection?: TypeExampleSectionOption;
   hierarchy?: TypeHierarchyObjectType;
   metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
-  relatedTypeSection?: boolean;
   typeBadges?: boolean;
+}
+
+/**
+ * Deprecated print type section toggles retained for backward compatibility.
+ *
+ * Prefer compose page type events to control section visibility and order.
+ */
+export interface DeprecatedPrintTypeOptions {
+  /** @deprecated Use compose page type events to control code section visibility */
+  codeSection?: Maybe<boolean>;
+  /** @deprecated Use compose page type events to control example section visibility */
+  exampleSection?: Maybe<boolean>;
+  /** @deprecated Use compose page type events to control related section visibility */
+  relatedTypeSection?: Maybe<boolean>;
 }
 
 /**
@@ -116,11 +244,10 @@ export interface PrinterConfigPrintTypeOptions {
  */
 export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
-  codeSection?: Maybe<boolean>;
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
   deprecated?: Maybe<TypeDeprecatedOption>;
-  exampleSection?: Maybe<TypeExampleSectionOption | boolean>;
+  exampleSection?: Maybe<TypeExampleSectionOption>;
   formatCategoryFolderName?: Maybe<(categoryName: string) => string>;
   frontMatter?: Maybe<FrontMatterOptions>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
@@ -132,7 +259,6 @@ export type PrintTypeOptions = Partial<Formatter> & {
   operationNamespaceParts?: Maybe<string[]>;
   parentType?: Maybe<string>;
   parentTypePrefix?: boolean;
-  relatedTypeSection?: boolean;
   schema?: Maybe<GraphQLSchema>;
   sectionHeaderId?: boolean;
   skipDocDirectives?: GraphQLDirective[];

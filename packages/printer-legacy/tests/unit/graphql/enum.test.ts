@@ -20,7 +20,8 @@ describe("enum", () => {
       const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Values
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
 
@@ -37,7 +38,10 @@ Deprecated
 </fieldset>
 
 
-"
+",
+  "level": 3,
+  "title": "Values",
+}
 `);
     });
 
@@ -50,13 +54,14 @@ Deprecated
       });
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
-"### Values
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
 
 
 
- 
+
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
@@ -71,7 +76,10 @@ Deprecated
 
 </span>
 </fieldset>
-undefined"
+undefined",
+  "level": 3,
+  "title": "Values",
+}
 `);
     });
   });

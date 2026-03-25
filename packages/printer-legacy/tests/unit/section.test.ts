@@ -12,6 +12,7 @@ import { Kind, DirectiveLocation } from "graphql/language";
 
 import {
   printSection,
+  printMetadataSection,
   printSectionItem,
   printSectionItems,
 } from "../../src/section";
@@ -31,13 +32,17 @@ describe("section", () => {
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"### section title
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 
-"
+",
+  "level": 3,
+  "title": "section title",
+}
 `);
     });
 
@@ -56,7 +61,8 @@ describe("section", () => {
       });
 
       expect(section).toMatchInlineSnapshot(String.raw`
-" 
+{
+  "content": "
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
@@ -64,7 +70,10 @@ describe("section", () => {
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
-undefined"
+undefined",
+  "level": 0,
+  "title": "",
+}
 `);
     });
 
@@ -80,17 +89,21 @@ undefined"
       });
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"# section title
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 
-"
+",
+  "level": 1,
+  "title": "section title",
+}
 `);
     });
 
-    test("returns empty string if content is empty", () => {
+    test("returns undefined if content is empty", () => {
       expect.hasAssertions();
 
       const title = "section title";
@@ -98,7 +111,42 @@ undefined"
 
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
-      expect(section).toBe("");
+      expect(section).toBeUndefined();
+    });
+  });
+
+  describe("printMetadataSection()", () => {
+    test("keeps the section heading when all items are deprecated", () => {
+      expect.hasAssertions();
+
+      const type = new GraphQLObjectType({
+        name: "TestName",
+        fields: {
+          deprecatedField: {
+            type: GraphQLString,
+            deprecationReason: "Use another field",
+          },
+        },
+      });
+
+      const section = printMetadataSection(
+        type,
+        Object.values(type.getFields()),
+        "Fields",
+        {
+          ...DEFAULT_OPTIONS,
+          deprecated: "group",
+        },
+      );
+
+      expect(section).toEqual(
+        expect.objectContaining({
+          title: "Fields",
+          level: 3,
+        }),
+      );
+      expect(section?.content).toContain("DEPRECATED");
+      expect(section?.content).toContain("deprecatedField");
     });
   });
 

@@ -85,6 +85,7 @@ The custom MDX module can also export lifecycle hooks to customize the generatio
 | `afterPrintCodeHook` | Called after generating code blocks - can modify the generated output |
 | `beforePrintTypeHook` | Called before generating type documentation - can modify options or prevent default |
 | `afterPrintTypeHook` | Called after generating type documentation - can modify the generated output |
+| `beforeComposePageTypeHook` | Called before composing type page sections - can reorder, remove, or inject sections |
 
 :::tip
 Printer hooks are useful for extending the generated documentation. For example, you can use `afterPrintCodeHook` to append response type information after operation code blocks. See **[Hooks Recipes](/docs/advanced/hook-recipes)** for examples.

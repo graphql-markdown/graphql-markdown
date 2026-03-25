@@ -24,10 +24,11 @@ describe("scalar", () => {
 
       const deprecation = printSpecification(type, DEFAULT_OPTIONS);
 
-      expect(deprecation).toMatchInlineSnapshot(`
-"### <span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://lorem.ipsum" title="Specified by https://lorem.ipsum">⎘</a></span>
-
-"
+      expect(deprecation).toMatchInlineSnapshot(String.raw`
+{
+  "level": 3,
+  "title": "<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://lorem.ipsum" title="Specified by https://lorem.ipsum">⎘</a></span>",
+}
 `);
     });
 
@@ -41,17 +42,17 @@ describe("scalar", () => {
 
       const deprecation = printSpecification(type, DEFAULT_OPTIONS);
 
-      expect(deprecation).toBe("");
+      expect(deprecation).toBeUndefined();
     });
   });
 
   describe("printScalarMetadata()", () => {
-    test("returns empty if not specifiedByUrl", () => {
+    test("returns undefined if not specifiedByUrl", () => {
       expect.hasAssertions();
 
       const metadata = printScalarMetadata(type, DEFAULT_OPTIONS);
 
-      expect(metadata).toBe("");
+      expect(metadata).toBeUndefined();
     });
 
     test("returns specifiedBy tag if specifiedByUrl", () => {
@@ -64,10 +65,11 @@ describe("scalar", () => {
 
       const metadata = printScalarMetadata(typeSpecifiedBy, DEFAULT_OPTIONS);
 
-      expect(metadata).toMatchInlineSnapshot(`
-"### <span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://graphql-markdown.dev/" title="Specified by https://graphql-markdown.dev/">⎘</a></span>
-
-"
+      expect(metadata).toMatchInlineSnapshot(String.raw`
+{
+  "level": 3,
+  "title": "<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://graphql-markdown.dev/" title="Specified by https://graphql-markdown.dev/">⎘</a></span>",
+}
 `);
     });
   });

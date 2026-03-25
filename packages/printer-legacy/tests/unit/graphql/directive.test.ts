@@ -10,7 +10,7 @@ import {
 
 describe("directive", () => {
   describe("printDirectiveMetadata()", () => {
-    test("returns directive metadata without params", () => {
+    test("returns undefined for directive metadata without params", () => {
       expect.hasAssertions();
 
       const type = new GraphQLDirective({
@@ -20,7 +20,7 @@ describe("directive", () => {
 
       const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
-      expect(code).toMatchInlineSnapshot(`""`);
+      expect(code).toBeUndefined();
     });
 
     test("returns directive metadata", () => {
@@ -39,13 +39,17 @@ describe("directive", () => {
       const code = printDirectiveMetadata(type, DEFAULT_OPTIONS);
 
       expect(code).toMatchInlineSnapshot(String.raw`
-"### Arguments
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
 
 
 
-"
+",
+  "level": 3,
+  "title": "Arguments",
+}
 `);
     });
 
@@ -72,13 +76,14 @@ describe("directive", () => {
       });
 
       expect(code).toMatchInlineSnapshot(String.raw`
-"### Arguments
+{
+  "content": "
 
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">FooBar</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
 
 
 
- 
+
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
@@ -93,7 +98,10 @@ Deprecated
 
 </span>
 </fieldset>
-undefined"
+undefined",
+  "level": 3,
+  "title": "Arguments",
+}
 `);
     });
   });

@@ -1,5 +1,5 @@
 import { EventEmitter } from "node:events";
-import type { ICancellableEvent, PrinterEvent } from "@graphql-markdown/types";
+import type { ICancellableEvent } from "@graphql-markdown/types";
 
 /**
  * Result object returned when emitting a cancellable event.
@@ -36,9 +36,7 @@ class CancellableEventEmitter extends EventEmitter {
     return error instanceof Error ? error : new Error(String(error));
   }
 
-  private static isDefaultPrevented(
-    event: ICancellableEvent | PrinterEvent,
-  ): boolean {
+  private static isDefaultPrevented(event: ICancellableEvent): boolean {
     return "defaultPrevented" in event
       ? !!(event as { defaultPrevented?: boolean }).defaultPrevented
       : false;
@@ -78,7 +76,7 @@ class CancellableEventEmitter extends EventEmitter {
    */
   async emitAsync(
     eventName: string,
-    event: ICancellableEvent | PrinterEvent,
+    event: ICancellableEvent,
   ): Promise<EmitResult> {
     const errors: Error[] = [];
 
@@ -98,15 +96,15 @@ class CancellableEventEmitter extends EventEmitter {
   }
 
   private async invokeListener(
-    listener: (event: ICancellableEvent | PrinterEvent) => unknown,
-    event: ICancellableEvent | PrinterEvent,
+    listener: (event: ICancellableEvent) => unknown,
+    event: ICancellableEvent,
   ): Promise<void> {
     await Promise.resolve(listener(event));
   }
 
   private async emitToListeners(
-    listeners: ((event: ICancellableEvent | PrinterEvent) => unknown)[],
-    event: ICancellableEvent | PrinterEvent,
+    listeners: ((event: ICancellableEvent) => unknown)[],
+    event: ICancellableEvent,
     errors: Error[],
     isCancellable: boolean,
   ): Promise<void> {
@@ -127,7 +125,7 @@ class CancellableEventEmitter extends EventEmitter {
   }
 
   private async runDefaultAction(
-    event: ICancellableEvent | PrinterEvent,
+    event: ICancellableEvent,
     errors: Error[],
   ): Promise<void> {
     if (!("runDefaultAction" in event)) {
