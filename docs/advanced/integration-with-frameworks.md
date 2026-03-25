@@ -98,7 +98,7 @@ You only need to export the formatter functions your framework requires. Any mis
 
 ### Docusaurus
 
-The official Docusaurus integration is available as a dedicated package:
+The official [Docusaurus](https://docusaurus.io/) integration is available as a dedicated package:
 
 ```js
 const path = require('node:path');
@@ -122,7 +122,7 @@ For more details, check the [@graphql-markdown/docusaurus](https://github.com/gr
 
 ### Astro Starlight
 
-For Astro Starlight integration, create a custom MDX module:
+For [Astro Starlight](https://starlight.astro.build/) integration, create a custom MDX module:
 
 ```js
 // src/modules/astro-mdx.cjs
@@ -165,7 +165,7 @@ See complete implementation: [demo-astro-starlight](https://github.com/graphql-m
 
 ### Next.js with Fumadocs
 
-For Next.js using Fumadocs, create a custom MDX module:
+For Next.js using [Fumadocs](https://www.fumadocs.dev/), create a custom MDX module:
 
 ```js
 // lib/fumadocs-mdx.cjs
@@ -202,7 +202,7 @@ See complete implementation: [demo-nextjs-fumadocs](https://github.com/graphql-m
 
 ### Vocs
 
-For Vocs integration, create a custom MDX module:
+For [Vocs](https://vocs.dev/) integration, create a custom MDX module:
 
 ```js
 // lib/vocs-mdx.cjs
@@ -245,3 +245,6 @@ module.exports = {
 
 See complete implementation: [demo-vite-vocs](https://github.com/graphql-markdown/demo-vite-vocs)
 
+### VitePress
+
+For [VitePress](https://vitepress.dev/) support, check the package **[graphql-markdown-vitepress](https://www.npmjs.com/package/graphql-markdown-vitepress)**.
