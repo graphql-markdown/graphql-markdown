@@ -7,7 +7,6 @@ import {
   CancellableEvent,
   DataEvent,
   DataOutputEvent,
-  type CancellableEventOptions,
 } from "../../src/events";
 
 describe("deepFreeze", () => {
@@ -16,6 +15,7 @@ describe("deepFreeze", () => {
     const frozen = deepFreeze(obj);
 
     expect(frozen).toBe(obj); // Same reference
+
     expect(() => {
       frozen.a = 3;
     }).toThrow();
@@ -67,13 +67,18 @@ describe("deepFreeze", () => {
 
   test("handles function values", () => {
     const obj = {
-      fn: () => "result",
+      fn: () => {
+        return "result";
+      },
     };
     const frozen = deepFreeze(obj);
 
     expect(frozen.fn()).toBe("result");
+
     expect(() => {
-      frozen.fn = () => "other";
+      frozen.fn = () => {
+        return "other";
+      };
     }).toThrow();
   });
 });
@@ -148,6 +153,7 @@ describe("CancellableEvent", () => {
     const event = new TestEvent({ defaultAction: actionMock });
 
     await event.runDefaultAction();
+
     expect(actionMock).toHaveBeenCalled();
   });
 
@@ -157,6 +163,7 @@ describe("CancellableEvent", () => {
 
     event.preventDefault();
     await event.runDefaultAction();
+
     expect(actionMock).not.toHaveBeenCalled();
   });
 
@@ -167,14 +174,20 @@ describe("CancellableEvent", () => {
   });
 
   test("runDefaultAction returns void 0 when prevented", async () => {
-    const event = new TestEvent({ defaultAction: () => Promise.resolve() });
+    const event = new TestEvent({
+      defaultAction: async () => {
+        return Promise.resolve();
+      },
+    });
     event.preventDefault();
     const result = await event.runDefaultAction();
     expect(result).toBeUndefined();
   });
 
   test("defaultAction getter returns provided action", () => {
-    const action = () => Promise.resolve();
+    const action = async () => {
+      return Promise.resolve();
+    };
     const event = new TestEvent({ defaultAction: action });
     expect(event.defaultAction).toBe(action);
   });
@@ -273,7 +286,9 @@ describe("DataOutputEvent", () => {
     });
 
     await event.runDefaultAction();
-    // The action was called (though binding context works with the event)
+    // Verify the action captured the context correctly
+    expect(capturedData).toBe(data);
+    expect(capturedOutput).toBe("initial");
   });
 
   test("works with complex output types", () => {
