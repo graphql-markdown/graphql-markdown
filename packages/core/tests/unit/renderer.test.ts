@@ -745,6 +745,31 @@ describe("renderer", () => {
         );
       });
 
+      test("passes namespace parts in flat hierarchy for namespaced operations", async () => {
+        expect.assertions(1);
+
+        jest.replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+
+        const printSpy = jest
+          .spyOn(Printer, "printType")
+          .mockResolvedValue("content" as MDXString);
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(printSpy).toHaveBeenCalledWith(
+          "analytics-aggregate-tournaments",
+          expect.anything(),
+          expect.objectContaining({ operationNamespaceParts: ["analytics"] }),
+        );
+      });
+
       test("renders nested operation namespaces into nested category folders", async () => {
         expect.assertions(3);
 

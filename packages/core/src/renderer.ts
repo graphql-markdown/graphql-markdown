@@ -564,6 +564,18 @@ export class Renderer {
         let entityName = name;
         let operationNamespaceParts: string[] | undefined;
 
+        if (isOperationRootType && name.includes(".")) {
+          const namespaceParts = name.split(".").filter(Boolean);
+
+          if (namespaceParts.length > 1) {
+            operationNamespaceParts = namespaceParts.slice(0, -1);
+
+            if (!isFlat) {
+              entityName = namespaceParts.at(-1) ?? entityName;
+            }
+          }
+        }
+
         if (!isFlat) {
           dirPath = await this.generateCategoryMetafileType(
             (type as Record<string, unknown>)[name],
@@ -571,18 +583,11 @@ export class Renderer {
             rootTypeName,
           );
 
-          if (isOperationRootType && name.includes(".")) {
-            const namespaceParts = name.split(".").filter(Boolean);
-
-            if (namespaceParts.length > 1) {
-              entityName = namespaceParts.at(-1) ?? entityName;
-              operationNamespaceParts = namespaceParts.slice(0, -1);
-
-              for (const namespace of namespaceParts.slice(0, -1)) {
-                const formattedNamespace = slugify(namespace);
-                dirPath = join(dirPath, formattedNamespace);
-                await this.generateIndexMetafile(dirPath, namespace);
-              }
+          if (operationNamespaceParts && operationNamespaceParts.length > 0) {
+            for (const namespace of operationNamespaceParts) {
+              const formattedNamespace = slugify(namespace);
+              dirPath = join(dirPath, formattedNamespace);
+              await this.generateIndexMetafile(dirPath, namespace);
             }
           }
         }
