@@ -34,7 +34,7 @@ Generated operation pages include nested paths such as:
 
 When [`groupByDirective`](/docs/advanced/group-by-directive) is enabled, these namespaced operations are still grouped by their directive category.
 
-Generated code snippet for these namespaced operations will be wrapped into the namespace:
+Generated code snippet for these namespaced operations will be wrapped in the namespace:
 
 ```graphql
 # highlight-next-line
