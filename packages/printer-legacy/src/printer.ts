@@ -123,13 +123,6 @@ export class Printer implements IPrinter {
   static options: Readonly<Maybe<PrintTypeOptions>>;
 
   /**
-   * Optional event emitter for print events.
-   * When set, the printer will emit events before/after printCode and printType,
-   * allowing external code to intercept and modify the output.
-   */
-  static eventEmitter: Maybe<PrinterEventEmitter>;
-
-  /**
    * Prints type descriptions
    */
   static readonly printDescription = printDescription;
@@ -144,10 +137,33 @@ export class Printer implements IPrinter {
    */
   static readonly printCustomTags = printCustomTags;
 
+  private static _eventEmitter: Maybe<PrinterEventEmitter>;
+
+  private static _mdxDeclaration: Readonly<Maybe<string>>;
+
+  /**
+   * Optional event emitter for print events.
+   * When set, the printer will emit events before/after printCode and printType,
+   * allowing external code to intercept and modify the output.
+   */
+  static get eventEmitter(): Maybe<PrinterEventEmitter> {
+    return Printer._eventEmitter;
+  }
+
   /**
    * Prints mdx modules import declaration
    */
-  static mdxDeclaration: Readonly<Maybe<string>>;
+  static get mdxDeclaration(): Readonly<Maybe<string>> {
+    return Printer._mdxDeclaration;
+  }
+
+  static set eventEmitter(eventEmitter: Maybe<PrinterEventEmitter>) {
+    Printer._eventEmitter = eventEmitter;
+  }
+
+  static set mdxDeclaration(mdxDeclaration: Readonly<Maybe<string>>) {
+    Printer._mdxDeclaration = mdxDeclaration;
+  }
 
   /**
    * Initializes the printer with the given schema and configuration.
@@ -189,7 +205,7 @@ export class Printer implements IPrinter {
     eventEmitter?: Maybe<PrinterEventEmitter>,
   ): Promise<void> {
     // Always update eventEmitter regardless of initialization state
-    Printer.eventEmitter = eventEmitter ?? null;
+    Printer._eventEmitter = eventEmitter ?? null;
 
     if (Printer.options !== undefined) {
       return;
@@ -228,7 +244,7 @@ export class Printer implements IPrinter {
       ...formatter,
     };
 
-    Printer.mdxDeclaration = mdxDeclaration ?? "";
+    Printer._mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
@@ -611,7 +627,7 @@ export class Printer implements IPrinter {
         PrintTypeEvents.AFTER_PRINT_TYPE,
         afterEvent,
       );
-      output = afterEvent.output as MDXString;
+      output = afterEvent.output;
     }
 
     return output;
