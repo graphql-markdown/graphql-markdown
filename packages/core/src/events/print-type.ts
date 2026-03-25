@@ -12,7 +12,7 @@ import type {
   PrintTypeOptions,
 } from "@graphql-markdown/types";
 
-import { CancellableEvent, CancellableEventOptions } from "./base";
+import { CancellableEventOptions, DataEvent, DataOutputEvent } from "./base";
 
 /**
  * Represents a single section of a page with optional title and content.
@@ -78,24 +78,16 @@ export interface PrintCodeEventData {
  *
  * @category Events
  */
-export class PrintCodeEvent extends CancellableEvent {
-  /** Read-only event data */
-  readonly data: PrintCodeEventData;
-
-  /**
-   * The generated code output.
-   * Handlers can modify this property to change the final output.
-   */
-  output: string;
-
+export class PrintCodeEvent extends DataOutputEvent<
+  PrintCodeEventData,
+  string
+> {
   constructor(
     data: PrintCodeEventData,
     initialOutput: string,
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
-    this.output = initialOutput;
+    super(data, initialOutput, options);
   }
 }
 
@@ -127,24 +119,16 @@ export interface PrintTypeEventData {
  *
  * @category Events
  */
-export class PrintTypeEvent extends CancellableEvent {
-  /** Read-only event data */
-  readonly data: PrintTypeEventData;
-
-  /**
-   * The generated documentation output.
-   * Handlers can modify this property to change the final output.
-   */
-  output: Maybe<MDXString>;
-
+export class PrintTypeEvent extends DataOutputEvent<
+  PrintTypeEventData,
+  Maybe<MDXString>
+> {
   constructor(
     data: PrintTypeEventData,
     initialOutput: Maybe<MDXString>,
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
-    this.output = initialOutput;
+    super(data, initialOutput, options);
   }
 }
 
@@ -180,16 +164,12 @@ export interface ComposePageTypeEventData {
  *
  * @category Events
  */
-export class BeforeComposePageTypeEvent extends CancellableEvent {
-  /** Read-only event data (but data.sections is mutable) */
-  readonly data: ComposePageTypeEventData;
-
+export class BeforeComposePageTypeEvent extends DataEvent<ComposePageTypeEventData> {
   constructor(
     data: ComposePageTypeEventData,
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
+    super(data, options);
   }
 }
 
@@ -215,24 +195,15 @@ export class BeforeComposePageTypeEvent extends CancellableEvent {
  *
  * @category Events
  */
-export class AfterComposePageTypeEvent extends CancellableEvent {
-  /** Read-only event data */
-  readonly data: ComposePageTypeEventData;
-
-  /**
-   * The ordered array of section keys to include in the output.
-   * Handlers can modify this array to reorder, filter, or append sections.
-   * Only keys with truthy content will be included in the final output.
-   */
-  output: (keyof PageSections)[];
-
+export class AfterComposePageTypeEvent extends DataOutputEvent<
+  ComposePageTypeEventData,
+  (keyof PageSections)[]
+> {
   constructor(
     data: ComposePageTypeEventData,
     initialOutput: (keyof PageSections)[],
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
-    this.output = initialOutput;
+    super(data, initialOutput, options);
   }
 }

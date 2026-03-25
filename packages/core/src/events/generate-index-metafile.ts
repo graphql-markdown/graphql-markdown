@@ -4,21 +4,18 @@
  * @packageDocumentation
  */
 
-import { CancellableEvent, CancellableEventOptions } from "./base";
+import { CancellableEventOptions, DataEvent } from "./base";
 
 /**
  * Event emitted before/after generating index metafile.
  *
  * @category Events
  */
-export class GenerateIndexMetafileEvent extends CancellableEvent {
-  /** Event data containing directory path, category, and options */
-  readonly data: {
-    dirPath: string;
-    category: string;
-    options?: Record<string, unknown>;
-  };
-
+export class GenerateIndexMetafileEvent extends DataEvent<{
+  dirPath: string;
+  category: string;
+  options?: Record<string, unknown>;
+}> {
   constructor(
     data: {
       dirPath: string;
@@ -27,7 +24,6 @@ export class GenerateIndexMetafileEvent extends CancellableEvent {
     },
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
+    super(data, options);
   }
 }

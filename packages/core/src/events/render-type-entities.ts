@@ -4,20 +4,17 @@
  * @packageDocumentation
  */
 
-import { CancellableEvent, CancellableEventOptions } from "./base";
+import { CancellableEventOptions, DataEvent } from "./base";
 
 /**
  * Event emitted before/after rendering type entities.
  *
  * @category Events
  */
-export class RenderTypeEntitiesEvent extends CancellableEvent {
-  /** Event data containing name and file path */
-  readonly data: {
-    name: string;
-    filePath: string;
-  };
-
+export class RenderTypeEntitiesEvent extends DataEvent<{
+  name: string;
+  filePath: string;
+}> {
   constructor(
     data: {
       name: string;
@@ -25,7 +22,6 @@ export class RenderTypeEntitiesEvent extends CancellableEvent {
     },
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
+    super(data, options);
   }
 }
