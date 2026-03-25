@@ -244,6 +244,19 @@ describe("DataOutputEvent", () => {
 
   class TestOutputEvent extends DataOutputEvent<TestData, string> {}
 
+  interface ComplexOutput {
+    nested: {
+      value: number;
+    };
+  }
+
+  class TestComplexOutputEvent extends DataOutputEvent<
+    TestData,
+    ComplexOutput
+  > {}
+
+  class TestArrayOutputEvent extends DataOutputEvent<TestData, string[]> {}
+
   test("stores data and mutable output", () => {
     const data = { name: "test" };
     const event = new TestOutputEvent(data, "initial output");
@@ -293,8 +306,8 @@ describe("DataOutputEvent", () => {
 
   test("works with complex output types", () => {
     const data = { name: "test" };
-    const outputObj = { nested: { value: 123 } };
-    const event = new TestOutputEvent(data, outputObj);
+    const outputObj: ComplexOutput = { nested: { value: 123 } };
+    const event = new TestComplexOutputEvent(data, outputObj);
 
     expect(event.output).toBe(outputObj);
     event.output = { nested: { value: 456 } };
@@ -303,7 +316,7 @@ describe("DataOutputEvent", () => {
 
   test("works with array output", () => {
     const data = { name: "test" };
-    const event = new TestOutputEvent(data, ["a", "b"]);
+    const event = new TestArrayOutputEvent(data, ["a", "b"]);
 
     expect(event.output).toEqual(["a", "b"]);
     event.output = ["x", "y", "z"];
