@@ -247,4 +247,4 @@ See complete implementation: [demo-vite-vocs](https://github.com/graphql-markdow
 
 ### VitePress
 
-For [VitePress](https://vitepress.dev/) support check the package **[graphql-markdown-vitepress](https://www.npmjs.com/package/graphql-markdown-vitepress)**.
+For [VitePress](https://vitepress.dev/) support, check the package **[graphql-markdown-vitepress](https://www.npmjs.com/package/graphql-markdown-vitepress)**.
