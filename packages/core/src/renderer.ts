@@ -562,6 +562,19 @@ export class Renderer {
       Object.keys(type).map(async (name) => {
         let dirPath = this.outputDir;
         let entityName = name;
+        let operationNamespaceParts: string[] | undefined;
+
+        if (isOperationRootType && name.includes(".")) {
+          const namespaceParts = name.split(".").filter(Boolean);
+
+          if (namespaceParts.length > 1) {
+            operationNamespaceParts = namespaceParts.slice(0, -1);
+
+            if (!isFlat) {
+              entityName = namespaceParts.at(-1) ?? entityName;
+            }
+          }
+        }
 
         if (!isFlat) {
           dirPath = await this.generateCategoryMetafileType(
@@ -570,17 +583,11 @@ export class Renderer {
             rootTypeName,
           );
 
-          if (isOperationRootType && name.includes(".")) {
-            const namespaceParts = name.split(".").filter(Boolean);
-
-            if (namespaceParts.length > 1) {
-              entityName = namespaceParts.at(-1) ?? entityName;
-
-              for (const namespace of namespaceParts.slice(0, -1)) {
-                const formattedNamespace = slugify(namespace);
-                dirPath = join(dirPath, formattedNamespace);
-                await this.generateIndexMetafile(dirPath, namespace);
-              }
+          if (operationNamespaceParts && operationNamespaceParts.length > 0) {
+            for (const namespace of operationNamespaceParts) {
+              const formattedNamespace = slugify(namespace);
+              dirPath = join(dirPath, formattedNamespace);
+              await this.generateIndexMetafile(dirPath, namespace);
             }
           }
         }
@@ -589,6 +596,7 @@ export class Renderer {
           dirPath,
           entityName,
           (type as Record<string, unknown>)[name],
+          operationNamespaceParts,
         );
       }),
     );
@@ -607,6 +615,7 @@ export class Renderer {
     dirPath: string,
     name: string,
     type: unknown,
+    operationNamespaceParts?: string[],
   ): Promise<Maybe<Category>> {
     if (!isPath(dirPath)) {
       throw new Error("Output directory is empty or not specified");
@@ -658,6 +667,9 @@ export class Renderer {
           // Unknown categories should not receive synthetic numeric prefixes.
           return slugify(categoryName);
         },
+        ...(operationNamespaceParts === undefined
+          ? {}
+          : { operationNamespaceParts }),
       };
       content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {

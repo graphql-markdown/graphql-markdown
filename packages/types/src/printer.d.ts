@@ -129,6 +129,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   meta?: Maybe<MetaInfo>;
   metatags?: Maybe<Record<string, string>[]>;
   onlyDocDirectives?: GraphQLDirective[];
+  operationNamespaceParts?: Maybe<string[]>;
   parentType?: Maybe<string>;
   parentTypePrefix?: boolean;
   relatedTypeSection?: boolean;
