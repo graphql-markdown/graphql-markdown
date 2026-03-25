@@ -662,7 +662,9 @@ export class Renderer {
           // Unknown categories should not receive synthetic numeric prefixes.
           return slugify(categoryName);
         },
-        operationNamespaceParts,
+        ...(operationNamespaceParts !== undefined
+          ? { operationNamespaceParts }
+          : {}),
       };
       content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {

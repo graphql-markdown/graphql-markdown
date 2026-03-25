@@ -127,7 +127,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
@@ -150,7 +150,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         jest.replaceProperty(rendererInstance, "options", {
@@ -178,7 +178,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         jest.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
@@ -198,7 +198,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         jest.replaceProperty(rendererInstance, "prettify", true);
@@ -216,7 +216,7 @@ describe("renderer", () => {
       test("do nothing if type is not defined", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Printer, "printType").mockReturnValue(undefined);
+        jest.spyOn(Printer, "printType").mockResolvedValue(undefined);
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -255,7 +255,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
         const logSpy = jest.mocked(log);
         logSpy.mockClear();
@@ -278,7 +278,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Printer, "printType");
 
         const optionsWithFrontMatter: RendererDocOptions = {
@@ -331,11 +331,11 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockImplementation((_, __, options) => {
+          .mockImplementation(async (_, __, options) => {
             formattedLowercaseGroup =
-              options.formatCategoryFolderName?.("grade") ?? "";
+              options?.formatCategoryFolderName?.("grade") ?? "";
             formattedOriginalGroup =
-              options.formatCategoryFolderName?.("Grade") ?? "";
+              options?.formatCategoryFolderName?.("Grade") ?? "";
             return "Lorem ipsum" as MDXString;
           });
 
@@ -381,13 +381,13 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockImplementation((_, __, options) => {
-            rootDirect = options.formatCategoryFolderName?.("Query") ?? "";
-            nestedDirect = options.formatCategoryFolderName?.("objects") ?? "";
+          .mockImplementation(async (_, __, options) => {
+            rootDirect = options!.formatCategoryFolderName?.("Query") ?? "";
+            nestedDirect = options!.formatCategoryFolderName?.("objects") ?? "";
             nestedFallback =
-              options.formatCategoryFolderName?.("mutations") ?? "";
+              options!.formatCategoryFolderName?.("mutations") ?? "";
             unknownCategory =
-              options.formatCategoryFolderName?.("AnalyticsNamespace") ?? "";
+              options!.formatCategoryFolderName?.("AnalyticsNamespace") ?? "";
             return "Lorem ipsum" as MDXString;
           });
 
@@ -406,7 +406,7 @@ describe("renderer", () => {
       test("handles cancelled rendering when printType returns an empty string", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockReturnValue("" as MDXString);
+        jest.spyOn(Printer, "printType").mockResolvedValue("" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
@@ -425,7 +425,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
@@ -451,7 +451,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         const output = "/output/special";
@@ -670,9 +670,9 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockImplementation(() => {
-          return "content" as MDXString;
-        });
+        jest
+          .spyOn(Printer, "printType")
+          .mockResolvedValue("content" as MDXString);
         jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
         const spy = jest.spyOn(Utils, "saveFile");
 
@@ -718,9 +718,9 @@ describe("renderer", () => {
       test("renders root types with flat hierarchy", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockImplementation(() => {
-          return "content" as MDXString;
-        });
+        jest
+          .spyOn(Printer, "printType")
+          .mockResolvedValue("content" as MDXString);
         jest.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
@@ -750,9 +750,7 @@ describe("renderer", () => {
 
         const printSpy = jest
           .spyOn(Printer, "printType")
-          .mockImplementation(() => {
-            return "content" as MDXString;
-          });
+          .mockResolvedValue("content" as MDXString);
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         const saveSpy = jest.spyOn(Utils, "saveFile");
         const indexSpy = jest.spyOn(rendererInstance, "generateIndexMetafile");
@@ -784,9 +782,7 @@ describe("renderer", () => {
 
         const printSpy = jest
           .spyOn(Printer, "printType")
-          .mockImplementation(() => {
-            return "content" as MDXString;
-          });
+          .mockResolvedValue("content" as MDXString);
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         const saveSpy = jest.spyOn(Utils, "saveFile");
 
@@ -810,23 +806,51 @@ describe("renderer", () => {
         );
       });
 
+      test("does not overwrite configured namespace parts for non-namespaced operations", async () => {
+        expect.assertions(1);
+
+        const optionsWithNamespace = {
+          ...DEFAULT_RENDERER_OPTIONS,
+          operationNamespaceParts: ["configured"],
+        } as RendererDocOptions;
+
+        jest.replaceProperty(rendererInstance, "options", {
+          ...optionsWithNamespace,
+        });
+
+        const printSpy = jest
+          .spyOn(Printer, "printType")
+          .mockResolvedValue("content" as MDXString);
+
+        await rendererInstance.renderRootTypes("queries", {
+          aggregateTournaments: {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(printSpy).toHaveBeenCalledWith(
+          "aggregate-tournaments",
+          expect.anything(),
+          expect.objectContaining({ operationNamespaceParts: ["configured"] }),
+        );
+      });
+
       test("does not apply category formatting to namespace folders", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Printer, "printType").mockImplementation(() => {
-          return "content" as MDXString;
-        });
+        jest
+          .spyOn(Printer, "printType")
+          .mockResolvedValue("content" as MDXString);
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         jest
-          .spyOn(rendererInstance, "formatCategoryFolderName")
-          .mockImplementation(
-            (categoryName: string, isRootTypeLevel: boolean) => {
-              if (!isRootTypeLevel && categoryName === "analytics") {
-                return "99-analytics";
-              }
-              return categoryName.toLowerCase();
-            },
-          );
+          .spyOn(rendererInstance as any, "formatCategoryFolderName")
+          .mockImplementation((...args: unknown[]) => {
+            const [categoryName, isRootTypeLevel] = args as [string, boolean];
+            if (!isRootTypeLevel && categoryName === "analytics") {
+              return "99-analytics";
+            }
+            return categoryName.toLowerCase();
+          });
 
         const saveSpy = jest.spyOn(Utils, "saveFile");
 
@@ -2202,7 +2226,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -2221,7 +2245,7 @@ describe("renderer", () => {
 
         jest
           .spyOn(Printer, "printType")
-          .mockReturnValue("Lorem ipsum" as MDXString);
+          .mockResolvedValue("Lorem ipsum" as MDXString);
         const spy = jest.spyOn(Utils, "saveFile");
 
         const output = "/output/api-types/objects";
