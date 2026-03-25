@@ -9,7 +9,6 @@
 import type {
   PrintDirectiveOptions,
   GraphQLDirective,
-  MDXString,
   Maybe,
   PageSection,
 } from "@graphql-markdown/types";

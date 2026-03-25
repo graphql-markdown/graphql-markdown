@@ -704,20 +704,23 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    const content = !section.content
-      ? ""
-      : Array.isArray(section.content)
-        ? section.content
-            .map((entry) => {
-              return Printer.renderPageSection(entry);
-            })
-            .filter((entry) => {
-              return entry.length > 0;
-            })
-            .join(MARKDOWN_EOP)
-        : typeof section.content === "string"
-          ? section.content
-          : Printer.renderPageSection(section.content);
+    let content: string;
+    if (!section.content) {
+      content = "";
+    } else if (Array.isArray(section.content)) {
+      content = section.content
+        .map((entry) => {
+          return Printer.renderPageSection(entry);
+        })
+        .filter((entry) => {
+          return entry.length > 0;
+        })
+        .join(MARKDOWN_EOP);
+    } else if (typeof section.content === "string") {
+      content = section.content;
+    } else {
+      content = Printer.renderPageSection(section.content);
+    }
 
     if (
       !("title" in section) ||

@@ -10,6 +10,13 @@ import type {
   MDXString,
   Maybe,
   ComposePageTypeEventData,
+  PageSections,
+  PrintCodeEventData,
+  PrintTypeEventData,
+} from "@graphql-markdown/types";
+
+export type {
+  ComposePageTypeEventData,
   PageSection,
   PageSections,
   PrintCodeEventData,
@@ -19,14 +26,6 @@ import type {
 import type { CancellableEventOptions } from "@graphql-markdown/utils";
 
 import { DataOutputEvent } from "@graphql-markdown/utils";
-
-export type {
-  ComposePageTypeEventData,
-  PageSection,
-  PageSections,
-  PrintCodeEventData,
-  PrintTypeEventData,
-};
 
 /**
  * Event emitted around code block generation for a GraphQL type.

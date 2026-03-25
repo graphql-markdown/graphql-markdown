@@ -5,7 +5,6 @@
 
 import type {
   Maybe,
-  MDXString,
   PageSection,
   PrintTypeOptions,
 } from "@graphql-markdown/types";
