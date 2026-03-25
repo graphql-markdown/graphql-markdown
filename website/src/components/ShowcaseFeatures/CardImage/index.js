@@ -1,4 +1,3 @@
-import React from "react";
 import clsx from "clsx";
 import useBaseUrl from "@docusaurus/useBaseUrl"; // Import the useBaseUrl function from Docusaurus
 
