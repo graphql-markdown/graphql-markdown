@@ -83,6 +83,32 @@ export interface PrintTypeEventData {
 }
 
 /**
+ * Public interface contract for print code events.
+ *
+ * Matches the runtime shape of printer event class instances.
+ */
+export interface IPrintCodeEvent extends ICancellableEvent {
+  readonly data: PrintCodeEventData;
+  output: string;
+}
+
+/**
+ * Public interface contract for print type events.
+ *
+ * Matches the runtime shape of printer event class instances.
+ */
+export interface IPrintTypeEvent extends ICancellableEvent {
+  readonly data: PrintTypeEventData;
+  output: Maybe<MDXString>;
+}
+
+/** @deprecated Use IPrintCodeEvent */
+export type PrintCodeEvent = IPrintCodeEvent;
+
+/** @deprecated Use IPrintTypeEvent */
+export type PrintTypeEvent = IPrintTypeEvent;
+
+/**
  * Data payload for compose page type events.
  */
 export interface ComposePageTypeEventData {

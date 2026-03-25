@@ -28,9 +28,15 @@ export type { RenderHomepageEvent } from "./events/render-homepage";
 export type { RenderTypeEntitiesEvent } from "./events/render-type-entities";
 export type { GenerateIndexMetafileEvent } from "./events/generate-index-metafile";
 export type {
-  PrintCodeEventData,
-  PrintTypeEventData,
   ComposePageTypeEventData,
+  IPrintCodeEvent,
+  IPrintTypeEvent,
   PageSection,
   PageSections,
+  PrintCodeEvent,
+  PrintCodeEventData,
+  PrintTypeEvent,
+  PrintTypeEventData,
 } from "@graphql-markdown/types";
+
+export { CancellableEvent } from "@graphql-markdown/utils";

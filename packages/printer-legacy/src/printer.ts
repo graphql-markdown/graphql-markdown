@@ -154,18 +154,6 @@ type InitPrintTypeOptions = DeprecatedPrintTypeOptions &
  */
 export class Printer implements IPrinter {
   /**
-   * Global printer configuration options
-   */
-  static options: Readonly<Maybe<PrintTypeOptions>>;
-
-  /**
-   * Backward-compat section toggles extracted from legacy config options.
-   *
-   * These flags are applied only during section order composition.
-   */
-  static deprecatedOptions: Readonly<Maybe<DeprecatedPrintTypeOptions>>;
-
-  /**
    * Prints type descriptions
    */
   static readonly printDescription = printDescription;
@@ -182,7 +170,29 @@ export class Printer implements IPrinter {
 
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 
+  private static _options: Readonly<Maybe<PrintTypeOptions>>;
+
+  private static _deprecatedOptions: Readonly<
+    Maybe<DeprecatedPrintTypeOptions>
+  >;
+
   private static _mdxDeclaration: Readonly<Maybe<string>>;
+
+  /**
+   * Global printer configuration options
+   */
+  static get options(): Readonly<Maybe<PrintTypeOptions>> {
+    return Printer._options;
+  }
+
+  /**
+   * Backward-compat section toggles extracted from legacy config options.
+   *
+   * These flags are applied only during section order composition.
+   */
+  static get deprecatedOptions(): Readonly<Maybe<DeprecatedPrintTypeOptions>> {
+    return Printer._deprecatedOptions;
+  }
 
   /**
    * Optional event emitter for print events.
@@ -198,6 +208,10 @@ export class Printer implements IPrinter {
    */
   static get mdxDeclaration(): Readonly<Maybe<string>> {
     return Printer._mdxDeclaration;
+  }
+
+  static set options(options: Readonly<Maybe<PrintTypeOptions>>) {
+    Printer._options = options;
   }
 
   static set eventEmitter(eventEmitter: Maybe<PrinterEventEmitter>) {
@@ -250,62 +264,60 @@ export class Printer implements IPrinter {
     // Always update eventEmitter regardless of initialization state
     Printer.eventEmitter = eventEmitter ?? null;
 
-    if (Printer.options !== undefined) {
-      return;
+    if (Printer.options === undefined) {
+      Printer.options = {
+        ...DEFAULT_OPTIONS,
+        basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
+        customDirectives,
+        exampleSection:
+          typeof printTypeOptions?.exampleSection === "object"
+            ? printTypeOptions.exampleSection
+            : undefined,
+        groups,
+        parentTypePrefix:
+          printTypeOptions?.parentTypePrefix ??
+          PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
+        deprecated:
+          printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+        schema,
+        onlyDocDirectives: onlyDocDirectives ?? [],
+        skipDocDirectives: skipDocDirectives ?? [],
+        sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
+        typeBadges:
+          printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
+        metatags: metatags ?? [],
+        hierarchy:
+          printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+        meta: meta,
+        // Merge formatter functions: default formatter with any overrides
+        ...createDefaultFormatter(),
+        ...formatter,
+      };
+
+      const initExampleSection = printTypeOptions?.exampleSection;
+      let deprecatedExampleSection: DeprecatedPrintTypeOptions["exampleSection"];
+
+      if (typeof initExampleSection === "boolean") {
+        deprecatedExampleSection = initExampleSection;
+      } else if (initExampleSection === undefined) {
+        deprecatedExampleSection =
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.exampleSection;
+      } else {
+        deprecatedExampleSection = true;
+      }
+
+      Printer._deprecatedOptions = {
+        codeSection:
+          printTypeOptions?.codeSection ??
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.codeSection,
+        exampleSection: deprecatedExampleSection,
+        relatedTypeSection:
+          printTypeOptions?.relatedTypeSection ??
+          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.relatedTypeSection,
+      };
+
+      Printer.mdxDeclaration = mdxDeclaration ?? "";
     }
-
-    Printer.options = {
-      ...DEFAULT_OPTIONS,
-      basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
-      customDirectives,
-      exampleSection:
-        typeof printTypeOptions?.exampleSection === "object"
-          ? printTypeOptions.exampleSection
-          : undefined,
-      groups,
-      parentTypePrefix:
-        printTypeOptions?.parentTypePrefix ??
-        PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
-      deprecated:
-        printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
-      schema,
-      onlyDocDirectives: onlyDocDirectives ?? [],
-      skipDocDirectives: skipDocDirectives ?? [],
-      sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
-      typeBadges:
-        printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
-      metatags: metatags ?? [],
-      hierarchy:
-        printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
-      meta: meta,
-      // Merge formatter functions: default formatter with any overrides
-      ...createDefaultFormatter(),
-      ...formatter,
-    };
-
-    const initExampleSection = printTypeOptions?.exampleSection;
-    let deprecatedExampleSection: DeprecatedPrintTypeOptions["exampleSection"];
-
-    if (typeof initExampleSection === "boolean") {
-      deprecatedExampleSection = initExampleSection;
-    } else if (initExampleSection !== undefined) {
-      deprecatedExampleSection = true;
-    } else {
-      deprecatedExampleSection =
-        PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.exampleSection;
-    }
-
-    Printer.deprecatedOptions = {
-      codeSection:
-        printTypeOptions?.codeSection ??
-        PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.codeSection,
-      exampleSection: deprecatedExampleSection,
-      relatedTypeSection:
-        printTypeOptions?.relatedTypeSection ??
-        PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.relatedTypeSection,
-    };
-
-    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**

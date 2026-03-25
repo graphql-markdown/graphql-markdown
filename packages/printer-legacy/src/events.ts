@@ -7,6 +7,8 @@
  */
 
 import type {
+  IPrintCodeEvent,
+  IPrintTypeEvent,
   MDXString,
   Maybe,
   ComposePageTypeEventData,
@@ -43,10 +45,10 @@ import { DataOutputEvent } from "@graphql-markdown/utils";
  *
  * @category Events
  */
-export class PrintCodeEvent extends DataOutputEvent<
-  PrintCodeEventData,
-  string
-> {
+export class PrintCodeEvent
+  extends DataOutputEvent<PrintCodeEventData, string>
+  implements IPrintCodeEvent
+{
   constructor(
     data: PrintCodeEventData,
     initialOutput: string,
@@ -72,10 +74,10 @@ export class PrintCodeEvent extends DataOutputEvent<
  *
  * @category Events
  */
-export class PrintTypeEvent extends DataOutputEvent<
-  PrintTypeEventData,
-  Maybe<MDXString>
-> {
+export class PrintTypeEvent
+  extends DataOutputEvent<PrintTypeEventData, Maybe<MDXString>>
+  implements IPrintTypeEvent
+{
   constructor(
     data: PrintTypeEventData,
     initialOutput: Maybe<MDXString>,

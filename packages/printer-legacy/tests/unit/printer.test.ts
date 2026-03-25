@@ -152,7 +152,7 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    Printer.deprecatedOptions = undefined;
+    (Printer as any)._deprecatedOptions = undefined;
     jest.spyOn(GraphQL, "getTypeName").mockImplementation((value: unknown) => {
       return value as string;
     });
@@ -632,7 +632,7 @@ describe("Printer", () => {
         }),
       };
 
-      (Printer as any).deprecatedOptions = { exampleSection: false };
+      (Printer as any)._deprecatedOptions = { exampleSection: false };
       (Printer as any).eventEmitter = emitter;
 
       await Printer.printType("test", { name: "Test" });
@@ -666,7 +666,7 @@ describe("Printer", () => {
         }),
       };
 
-      (Printer as any).deprecatedOptions = {
+      (Printer as any)._deprecatedOptions = {
         codeSection: false,
         exampleSection: false,
         relatedTypeSection: false,
