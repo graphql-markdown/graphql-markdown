@@ -5,7 +5,12 @@
  */
 
 // Base
-export { CancellableEvent, deepFreeze } from "./base";
+export {
+  CancellableEvent,
+  DataEvent,
+  DataOutputEvent,
+  deepFreeze,
+} from "./base";
 
 // Event constants
 export { SchemaEvents } from "./schema-events";

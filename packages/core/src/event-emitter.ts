@@ -32,6 +32,18 @@ export interface EmitResult {
  * @category Events
  */
 class CancellableEventEmitter extends EventEmitter {
+  private static toError(error: unknown): Error {
+    return error instanceof Error ? error : new Error(String(error));
+  }
+
+  private static isDefaultPrevented(
+    event: ICancellableEvent | PrinterEvent,
+  ): boolean {
+    return "defaultPrevented" in event
+      ? !!(event as { defaultPrevented?: boolean }).defaultPrevented
+      : false;
+  }
+
   /**
    * Emit an event asynchronously with cancellable event support.
    *
@@ -76,46 +88,59 @@ class CancellableEventEmitter extends EventEmitter {
     // Check if event is a full cancellable event (has propagationStopped property)
     const isCancellable = "propagationStopped" in event;
 
-    // Execute each handler sequentially
+    await this.emitToListeners(listeners, event, errors, isCancellable);
+    await this.runDefaultAction(event, errors);
+
+    return {
+      errors,
+      defaultPrevented: CancellableEventEmitter.isDefaultPrevented(event),
+    };
+  }
+
+  private async invokeListener(
+    listener: (event: ICancellableEvent | PrinterEvent) => unknown,
+    event: ICancellableEvent | PrinterEvent,
+  ): Promise<void> {
+    await Promise.resolve(listener(event));
+  }
+
+  private async emitToListeners(
+    listeners: ((event: ICancellableEvent | PrinterEvent) => unknown)[],
+    event: ICancellableEvent | PrinterEvent,
+    errors: Error[],
+    isCancellable: boolean,
+  ): Promise<void> {
     for (const listener of listeners) {
       try {
-        // Call the handler - await to support async handlers
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        await listener(event);
+        await this.invokeListener(listener, event);
 
-        // Check if handler stopped propagation to remaining handlers
         if (
           isCancellable &&
           (event as { propagationStopped?: boolean }).propagationStopped
         ) {
-          break; // Exit the loop, skipping remaining handlers
+          break;
         }
       } catch (error) {
-        // Collect error but continue executing remaining handlers
-        errors.push(error instanceof Error ? error : new Error(String(error)));
+        errors.push(CancellableEventEmitter.toError(error));
       }
     }
+  }
 
-    // Execute default action if not prevented and event has one
-    if ("runDefaultAction" in event) {
-      try {
-        // Call defaultAction - await to support async
-        await (
-          event as { runDefaultAction: () => Promise<void> }
-        ).runDefaultAction();
-      } catch (error) {
-        // Collect error from default action
-        errors.push(error instanceof Error ? error : new Error(String(error)));
-      }
+  private async runDefaultAction(
+    event: ICancellableEvent | PrinterEvent,
+    errors: Error[],
+  ): Promise<void> {
+    if (!("runDefaultAction" in event)) {
+      return;
     }
 
-    // Check defaultPrevented - simple events may have this property
-    const defaultPrevented =
-      "defaultPrevented" in event
-        ? !!(event as { defaultPrevented?: boolean }).defaultPrevented
-        : false;
-
-    return { errors, defaultPrevented };
+    try {
+      await (
+        event as { runDefaultAction: () => Promise<void> }
+      ).runDefaultAction();
+    } catch (error) {
+      errors.push(CancellableEventEmitter.toError(error));
+    }
   }
 }
 

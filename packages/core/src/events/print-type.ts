@@ -12,7 +12,7 @@ import type {
   PrintTypeOptions,
 } from "@graphql-markdown/types";
 
-import { CancellableEvent, CancellableEventOptions } from "./base";
+import { CancellableEventOptions, DataOutputEvent } from "./base";
 
 /**
  * Data payload for print code events.
@@ -42,24 +42,16 @@ export interface PrintCodeEventData {
  *
  * @category Events
  */
-export class PrintCodeEvent extends CancellableEvent {
-  /** Read-only event data */
-  readonly data: PrintCodeEventData;
-
-  /**
-   * The generated code output.
-   * Handlers can modify this property to change the final output.
-   */
-  output: string;
-
+export class PrintCodeEvent extends DataOutputEvent<
+  PrintCodeEventData,
+  string
+> {
   constructor(
     data: PrintCodeEventData,
     initialOutput: string,
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
-    this.output = initialOutput;
+    super(data, initialOutput, options);
   }
 }
 
@@ -91,23 +83,15 @@ export interface PrintTypeEventData {
  *
  * @category Events
  */
-export class PrintTypeEvent extends CancellableEvent {
-  /** Read-only event data */
-  readonly data: PrintTypeEventData;
-
-  /**
-   * The generated documentation output.
-   * Handlers can modify this property to change the final output.
-   */
-  output: Maybe<MDXString>;
-
+export class PrintTypeEvent extends DataOutputEvent<
+  PrintTypeEventData,
+  Maybe<MDXString>
+> {
   constructor(
     data: PrintTypeEventData,
     initialOutput: Maybe<MDXString>,
     options?: CancellableEventOptions,
   ) {
-    super(options);
-    this.data = data;
-    this.output = initialOutput;
+    super(data, initialOutput, options);
   }
 }
