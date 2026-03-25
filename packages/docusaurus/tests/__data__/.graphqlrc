@@ -13,7 +13,6 @@ projects:
           categorySort: "natural"
         printTypeOptions:
           parentTypePrefix: false
-          relatedTypeSection: false
           typeBadges: true
           deprecated: group
         skipDocDirective:

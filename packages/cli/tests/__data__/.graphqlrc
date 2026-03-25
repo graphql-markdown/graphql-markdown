@@ -12,7 +12,6 @@ projects:
           index: true
         printTypeOptions:
           parentTypePrefix: false
-          relatedTypeSection: false
           typeBadges: true
           deprecated: group
         skipDocDirective:

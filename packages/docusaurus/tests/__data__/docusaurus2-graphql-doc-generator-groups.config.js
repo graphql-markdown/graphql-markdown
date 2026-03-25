@@ -20,9 +20,7 @@ module.exports = {
     field: "category",
   },
   printTypeOptions: {
-    exampleSection: true,
     parentTypePrefix: false,
-    relatedTypeSection: false,
     typeBadges: true,
   },
   docOptions: {

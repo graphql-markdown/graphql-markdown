@@ -17,7 +17,6 @@ module.exports = {
         },
         printTypeOptions: {
           parentTypePrefix: false,
-          relatedTypeSection: false,
           typeBadges: true,
           deprecated: "group",
         },
