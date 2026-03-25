@@ -609,7 +609,12 @@ export class Printer implements IPrinter {
 
     const description = Printer.printDescription(type, printTypeOptions);
 
-    // Use async code printing when event emitter is configured
+    // Generate all sections unconditionally to support event hooks that might re-add
+    // sections excluded by deprecated toggles. This is a performance trade-off:
+    // sections excluded by deprecated flags (codeSection, exampleSection, relatedTypeSection)
+    // are still generated and print events emitted, even if they won't be rendered.
+    // TODO(perf): Implement lazy section generation based on final composed order
+    // when no BEFORE_COMPOSE_PAGE_TYPE listeners are registered.
     const code = await Printer.printCodeAsync(type, name, printTypeOptions);
 
     const customDirectives = Printer.printCustomDirectives(
@@ -646,15 +651,6 @@ export class Printer implements IPrinter {
       const beforeComposeEvent = new BeforeComposePageTypeEvent(
         { type, name, options: printTypeOptions, sections },
         sectionOrder,
-        {
-          defaultAction: async (): Promise<void> => {
-            beforeComposeEvent.output =
-              Printer.getDeprecatedTypePageSectionOrder(
-                [...TYPE_PAGE_SECTION_ORDER],
-                deprecatedOptions,
-              );
-          },
-        },
       );
       await Printer.eventEmitter.emitAsync(
         PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE,

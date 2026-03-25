@@ -150,6 +150,10 @@ export const printSection = <V>(
     "level" in options && typeof options.level === "number" ? options.level : 3
   ) as SectionLevelValue;
 
+  // TODO(spacing): Non-collapsible sections with openSection=MARKDOWN_EOP will
+  // result in doubled paragraph breaks with renderPageSection which adds
+  // MARKDOWN_EOP after headings. Consider using empty string for non-collapsible
+  // openSection to eliminate duplicate spacing.
   const [openSection, closeSection] = ((): MDXString[] | string[] => {
     if (
       typeof options.collapsible?.dataOpen === "string" &&

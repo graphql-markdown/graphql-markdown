@@ -12,7 +12,8 @@
  *
  * @example
  * ```typescript
- * import { getEvents, PrintTypeEvents, PrintTypeEvent } from "@graphql-markdown/core";
+ * import { getEvents, PrintTypeEvents } from "@graphql-markdown/core";
+ * import { PrintTypeEvent } from "@graphql-markdown/printer-legacy";
  *
  * const events = getEvents();
  * events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintTypeEvent) => {
