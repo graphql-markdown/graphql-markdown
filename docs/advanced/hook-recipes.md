@@ -23,6 +23,7 @@ Hooks are part of the [documentation frameworks integration](./integration-with-
 GraphQL-Markdown provides lifecycle hooks for customizing the documentation generation process:
 
 **Generation Hooks:**
+
 - `beforeSchemaLoadHook` / `afterSchemaLoadHook` - Schema loading
 - `beforeDiffCheckHook` / `afterDiffCheckHook` - Schema diff checking
 - `beforeRenderRootTypesHook` / `afterRenderRootTypesHook` - Root types rendering
@@ -31,10 +32,13 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 - `beforeGenerateIndexMetafileHook` / `afterGenerateIndexMetafileHook` - Index metafile generation
 
 **Printer Hooks:**
+
 - `beforePrintCodeHook` / `afterPrintCodeHook` - Code block generation
 - `beforePrintTypeHook` / `afterPrintTypeHook` - Type documentation generation
+- `beforeComposePageTypeHook` - Type page section composition (order and visibility)
 
 All hooks receive an `event` object with a `data` property containing context-specific information. Printer hooks also have an `output` property that can be modified.
+For `beforeComposePageTypeHook`, `event.output` is the ordered list of section keys to render, and `event.data.sections` is the section content map.
 
 ## Using Hooks with Docusaurus
 
@@ -212,10 +216,7 @@ const afterPrintCodeHook = async (event) => {
   }
 
   // Generate the SDL code block for the return type
-  const returnTypeCode = Printer.printCode(returnType, {
-    ...options,
-    codeSection: true,
-  });
+  const returnTypeCode = Printer.printCode(returnType, options);
 
   if (returnTypeCode) {
     event.output = `${event.output}\n\n### Response Type\n\n${returnTypeCode}`;
@@ -224,6 +225,34 @@ const afterPrintCodeHook = async (event) => {
 
 export { afterPrintCodeHook };
 ```
+
+## Reorder or hide sections before page composition
+
+Use `beforeComposePageTypeHook` to customize the final section order for each type page. This is the recommended approach for section visibility and ordering.
+
+```js title="custom-mdx.mjs"
+const beforeComposePageTypeHook = async (event) => {
+  // Hide the generated code section
+  event.output = event.output.filter((key) => key !== "code");
+
+  // Move "relations" before "metadata" when both are present
+  const relationsIndex = event.output.indexOf("relations");
+  const metadataIndex = event.output.indexOf("metadata");
+
+  if (relationsIndex > -1 && metadataIndex > -1 && relationsIndex > metadataIndex) {
+    event.output.splice(relationsIndex, 1);
+    event.output.splice(metadataIndex, 0, "relations");
+  }
+};
+
+export { beforeComposePageTypeHook };
+```
+
+:::info
+
+Legacy options and CLI flags (`printTypeOptions.codeSection`, `printTypeOptions.relatedTypeSection`, `printTypeOptions.exampleSection`, `--noCode`, `--noRelatedType`, `--noExample`) are deprecated and kept for backward compatibility.
+
+:::
 
 :::tip
 
