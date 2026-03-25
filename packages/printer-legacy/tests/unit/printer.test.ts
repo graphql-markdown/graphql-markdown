@@ -196,6 +196,7 @@ describe("Printer", () => {
   "meta": undefined,
   "metatags": [],
   "onlyDocDirectives": [],
+  "operationNamespaceParts": null,
   "parentType": undefined,
   "parentTypePrefix": true,
   "relatedTypeSection": true,
@@ -267,6 +268,7 @@ describe("Printer", () => {
   "meta": undefined,
   "metatags": [],
   "onlyDocDirectives": [],
+  "operationNamespaceParts": null,
   "parentType": undefined,
   "parentTypePrefix": false,
   "relatedTypeSection": false,
@@ -433,6 +435,30 @@ describe("Printer", () => {
       });
 
       expect(code).toBe("");
+    });
+
+    test("passes namespace parts to printCodeOperation", () => {
+      expect.hasAssertions();
+
+      jest.spyOn(GraphQL, "isOperation").mockReturnValue(true);
+      const printCodeOperationSpy = jest
+        .spyOn(GraphQLPrinter, "printCodeOperation")
+        .mockReturnValue(`aggregatePlayers: ID\n`);
+
+      Printer.printCode(
+        { name: "aggregatePlayers" },
+        {
+          ...DEFAULT_OPTIONS,
+          operationNamespaceParts: ["analytics", "admin"],
+        },
+      );
+
+      expect(printCodeOperationSpy).toHaveBeenCalledWith(
+        { name: "aggregatePlayers" },
+        expect.objectContaining({
+          operationNamespaceParts: ["analytics", "admin"],
+        }),
+      );
     });
   });
 

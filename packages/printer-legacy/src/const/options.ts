@@ -78,6 +78,7 @@ export const DEFAULT_OPTIONS: Required<
   level: undefined,
   metatags: [] as const,
   onlyDocDirectives: [] as const,
+  operationNamespaceParts: null,
   parentType: undefined,
   schema: undefined,
   skipDocDirectives: [] as const,

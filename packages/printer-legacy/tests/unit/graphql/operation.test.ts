@@ -190,6 +190,59 @@ undefined### Type
         "
       `);
     });
+
+    test("wraps operation code in a namespace block when namespace parts are provided", () => {
+      expect.hasAssertions();
+
+      const operation = {
+        name: "aggregatePlayers",
+        type: GraphQLID,
+        args: [
+          {
+            name: "groupBy",
+            type: GraphQLString,
+          },
+        ],
+      };
+
+      const code = printCodeOperation(operation, {
+        ...DEFAULT_OPTIONS,
+        operationNamespaceParts: ["analytics"],
+      });
+
+      expect(code).toMatchInlineSnapshot(`
+        "analytics {
+          aggregatePlayers(
+            groupBy: String
+          ): ID
+        }
+        "
+      `);
+    });
+
+    test("wraps operation code in nested namespace blocks in outer-to-inner order", () => {
+      expect.hasAssertions();
+
+      const operation = {
+        name: "aggregatePlayers",
+        type: GraphQLID,
+        args: [],
+      };
+
+      const code = printCodeOperation(operation, {
+        ...DEFAULT_OPTIONS,
+        operationNamespaceParts: ["analytics", "admin"],
+      });
+
+      expect(code).toMatchInlineSnapshot(`
+        "analytics {
+          admin {
+            aggregatePlayers: ID
+          }
+        }
+        "
+      `);
+    });
   });
 
   test("returns an operation with fields and default values", () => {

@@ -746,11 +746,13 @@ describe("renderer", () => {
       });
 
       test("renders nested operation namespaces into nested category folders", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
-        jest.spyOn(Printer, "printType").mockImplementation(() => {
-          return "content" as MDXString;
-        });
+        const printSpy = jest
+          .spyOn(Printer, "printType")
+          .mockImplementation(() => {
+            return "content" as MDXString;
+          });
         jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         const saveSpy = jest.spyOn(Utils, "saveFile");
         const indexSpy = jest.spyOn(rendererInstance, "generateIndexMetafile");
@@ -769,6 +771,42 @@ describe("renderer", () => {
         expect(indexSpy).toHaveBeenCalledWith(
           "/output/operations/queries/analytics",
           "analytics",
+        );
+        expect(printSpy).toHaveBeenCalledWith(
+          "aggregate-tournaments",
+          expect.anything(),
+          expect.objectContaining({ operationNamespaceParts: ["analytics"] }),
+        );
+      });
+
+      test("passes full namespace chain for deeply namespaced operations", async () => {
+        expect.assertions(2);
+
+        const printSpy = jest
+          .spyOn(Printer, "printType")
+          .mockImplementation(() => {
+            return "content" as MDXString;
+          });
+        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const saveSpy = jest.spyOn(Utils, "saveFile");
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.admin.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        expect(saveSpy).toHaveBeenCalledWith(
+          "/output/operations/queries/analytics/admin/aggregate-tournaments.mdx",
+          "content",
+          undefined,
+        );
+        expect(printSpy).toHaveBeenCalledWith(
+          "aggregate-tournaments",
+          expect.anything(),
+          expect.objectContaining({
+            operationNamespaceParts: ["analytics", "admin"],
+          }),
         );
       });
 

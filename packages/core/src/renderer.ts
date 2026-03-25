@@ -562,6 +562,7 @@ export class Renderer {
       Object.keys(type).map(async (name) => {
         let dirPath = this.outputDir;
         let entityName = name;
+        let operationNamespaceParts: string[] | undefined;
 
         if (!isFlat) {
           dirPath = await this.generateCategoryMetafileType(
@@ -575,6 +576,7 @@ export class Renderer {
 
             if (namespaceParts.length > 1) {
               entityName = namespaceParts.at(-1) ?? entityName;
+              operationNamespaceParts = namespaceParts.slice(0, -1);
 
               for (const namespace of namespaceParts.slice(0, -1)) {
                 const formattedNamespace = slugify(namespace);
@@ -589,6 +591,7 @@ export class Renderer {
           dirPath,
           entityName,
           (type as Record<string, unknown>)[name],
+          operationNamespaceParts,
         );
       }),
     );
@@ -607,6 +610,7 @@ export class Renderer {
     dirPath: string,
     name: string,
     type: unknown,
+    operationNamespaceParts?: string[],
   ): Promise<Maybe<Category>> {
     if (!isPath(dirPath)) {
       throw new Error("Output directory is empty or not specified");
@@ -658,6 +662,7 @@ export class Renderer {
           // Unknown categories should not receive synthetic numeric prefixes.
           return slugify(categoryName);
         },
+        operationNamespaceParts,
       };
       content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {
