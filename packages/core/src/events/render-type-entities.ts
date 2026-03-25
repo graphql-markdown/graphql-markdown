@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { CancellableEventOptions, DataEvent } from "./base";
+import { CancellableEventOptions, DataEvent } from "@graphql-markdown/utils";
 
 /**
  * Event emitted before/after rendering type entities.
