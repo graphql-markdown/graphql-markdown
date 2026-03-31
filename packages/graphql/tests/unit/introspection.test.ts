@@ -118,6 +118,30 @@ describe("introspection", () => {
       ]);
     });
 
+    test("does not treat mutations returning root Mutation type as namespaces", () => {
+      expect.hasAssertions();
+
+      const schema = buildSchema(`
+        type Mutation {
+          if(selector: String): Mutation
+          ifnot(selector: String): Mutation
+          click(selector: String!): ClickResponse
+        }
+
+        type ClickResponse {
+          status: Int
+        }
+      `);
+
+      const list = getOperation(schema.getMutationType()!);
+
+      expect(Object.keys(list)).toEqual(
+        expect.arrayContaining(["if", "ifnot", "click"]),
+      );
+      expect(Object.keys(list)).toHaveLength(3);
+    });
+
+
     test("does not recurse infinitely for self-referential query namespaces", () => {
       expect.hasAssertions();
 
@@ -359,6 +383,29 @@ describe("introspection", () => {
 
       expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
     });
+
+    test("does not misclassify mutations returning root Mutation type as namespace containers", () => {
+      expect.hasAssertions();
+
+      const schema = buildSchema(`
+        type Mutation {
+          if(selector: String): Mutation
+          ifnot(selector: String): Mutation
+          click(selector: String!): ClickResponse
+        }
+
+        type ClickResponse {
+          status: Int
+        }
+      `);
+
+      const schemaMap = getSchemaMap(schema);
+
+      expect(Object.keys(schemaMap.mutations ?? {})).toEqual(
+        expect.arrayContaining(["if", "ifnot", "click"]),
+      );
+    });
+
 
     test("resolves nested namespaces with custom root type names", () => {
       expect.hasAssertions();
