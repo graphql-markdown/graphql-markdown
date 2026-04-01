@@ -207,7 +207,7 @@
     "lodash.filter": "4.6.0",
     "memfs": "4.57.1",
     "prettier": "3.8.1",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.9",
     "tsgo-dev": "^2025.12.2",
     "turbo": "2.9.3",
     "typedoc": "0.28.18",
