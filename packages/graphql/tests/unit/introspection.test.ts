@@ -141,7 +141,6 @@ describe("introspection", () => {
       expect(Object.keys(list)).toHaveLength(3);
     });
 
-
     test("does not recurse infinitely for self-referential query namespaces", () => {
       expect.hasAssertions();
 
@@ -405,7 +404,6 @@ describe("introspection", () => {
         expect.arrayContaining(["if", "ifnot", "click"]),
       );
     });
-
 
     test("resolves nested namespaces with custom root type names", () => {
       expect.hasAssertions();
