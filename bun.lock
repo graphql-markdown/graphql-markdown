@@ -52,7 +52,7 @@
     },
     "packages/cli": {
       "name": "@graphql-markdown/cli",
-      "version": "0.7.0",
+      "version": "0.7.1",
       "bin": {
         "gqlmd": "./dist/main.js",
       },
@@ -67,7 +67,7 @@
     },
     "packages/core": {
       "name": "@graphql-markdown/core",
-      "version": "1.19.0",
+      "version": "1.20.0",
       "dependencies": {
         "@fastify/deepmerge": "^3.2.1",
         "@graphql-markdown/graphql": "workspace:^",
@@ -90,7 +90,7 @@
     },
     "packages/diff": {
       "name": "@graphql-markdown/diff",
-      "version": "1.1.13",
+      "version": "1.1.14",
       "dependencies": {
         "@graphql-inspector/core": "^7.1.1",
         "@graphql-markdown/graphql": "workspace:^",
@@ -102,7 +102,7 @@
     },
     "packages/docusaurus": {
       "name": "@graphql-markdown/docusaurus",
-      "version": "1.33.0",
+      "version": "1.34.0",
       "dependencies": {
         "@docusaurus/utils": "catalog:docusaurus",
         "@graphql-markdown/cli": "workspace:^",
@@ -119,7 +119,7 @@
     },
     "packages/graphql": {
       "name": "@graphql-markdown/graphql",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
@@ -131,7 +131,7 @@
     },
     "packages/helpers": {
       "name": "@graphql-markdown/helpers",
-      "version": "1.0.12",
+      "version": "1.0.13",
       "dependencies": {
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
@@ -143,7 +143,7 @@
     },
     "packages/logger": {
       "name": "@graphql-markdown/logger",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
       },
@@ -153,7 +153,7 @@
     },
     "packages/printer-legacy": {
       "name": "@graphql-markdown/printer-legacy",
-      "version": "1.14.0",
+      "version": "1.15.0",
       "dependencies": {
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
@@ -162,7 +162,7 @@
     },
     "packages/types": {
       "name": "@graphql-markdown/types",
-      "version": "1.11.0",
+      "version": "1.12.0",
       "devDependencies": {
         "@graphql-tools/load": "catalog:graphql-tools",
         "@graphql-tools/utils": "catalog:graphql-tools",
@@ -172,7 +172,7 @@
     },
     "packages/utils": {
       "name": "@graphql-markdown/utils",
-      "version": "1.10.0",
+      "version": "1.11.0",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
       },
