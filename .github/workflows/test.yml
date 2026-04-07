@@ -62,21 +62,26 @@ jobs:
       - name: Install modules
         run: bun ci
 
+      - name: Build packages
+        run: bun run build:all
+
       - name: Run Unit Tests
         id: unit
         run: |
-          bun test:ci -- --coverage --reporters="github-actions" --reporters="summary" --testPathPatterns="/unit/" --selectProjects @graphql-markdown/${{ matrix.package }}
+          cd packages/${{ matrix.package }}
+          bun test:unit -- --coverage --reporters="github-actions" --reporters="summary"
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
-          mkdir -p packages/${{ matrix.package }}/.nyc_output/unit
-          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/unit.json
+          mkdir -p .nyc_output
+          mv ./coverage/coverage-final.json .nyc_output/unit.json
 
       - name: Run Integration Tests
         id: integration
         run: |
-          bun test:ci -- --coverage --reporters="github-actions" --reporters="summary" --testPathPatterns="/integration/" --selectProjects @graphql-markdown/${{ matrix.package }}
+          cd packages/${{ matrix.package }}
+          bun test:integration -- --coverage --reporters="github-actions" --reporters="summary"
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
-          mkdir -p packages/${{ matrix.package }}/.nyc_output/integration
-          mv ./coverage/coverage-final.json packages/${{ matrix.package }}/.nyc_output/integration.json
+          mkdir -p .nyc_output
+          mv ./coverage/coverage-final.json .nyc_output/integration.json
 
       - name: Check Code Coverage
         id: coverage
@@ -101,25 +106,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  build:
-    name: Mock Build
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout Code Base
-        uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "lts/*"
-      
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "latest"
-
-      - name: Install modules
-        run: bun ci
-
-      - name: TS Build
-        run: bun run build:all
