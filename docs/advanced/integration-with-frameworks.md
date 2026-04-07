@@ -51,16 +51,22 @@ A custom MDX module can export individual formatter functions:
 
 :::warning `formatMDXDetails` contract
 
-The string returned by `formatMDXDetails` **must** contain a `\r` (carriage return) character as a delimiter between the opening part (everything up to and including `</summary>`) and the closing part (everything from `</details>` onward). The printer splits on `\r` to wrap generated content inside the collapsible element.
+The string returned by `formatMDXDetails` **must** contain a single `\r` (carriage return) character as a delimiter between the opening part and the closing part. The printer splits on `"\r"` to wrap generated content inside the collapsible element, so reserve `\r` only for that separator and use `\n` for all regular line breaks inside the returned string.
+
+Do **not** use CRLF (`\r\n`) for normal line endings in `formatMDXDetails`, because any extra `\r` characters will also be treated as delimiters.
 
 ```js
-// ✅ correct — \r separates the open and close halves
+// ✅ correct — use \n for normal line breaks and a single standalone \r as the delimiter
 export const formatMDXDetails = ({ dataOpen }) =>
-  `\n\n<MyDetails label="${dataOpen}">\n\r\n</MyDetails>\n\n`;
+  `\n\n<MyDetails label="${dataOpen}">\n\r</MyDetails>\n\n`;
 
 // ❌ incorrect — no \r means the closing tag is lost and items render outside
 export const formatMDXDetails = ({ dataOpen }) =>
   `\n\n<MyDetails label="${dataOpen}">\n</MyDetails>\n\n`;
+
+// ❌ incorrect — CRLF introduces extra \r characters that break result.split("\r")
+export const formatMDXDetails = ({ dataOpen }) =>
+  `\r\n\r\n<MyDetails label="${dataOpen}">\r\n\r</MyDetails>\r\n\r\n`;
 ```
 
 :::
