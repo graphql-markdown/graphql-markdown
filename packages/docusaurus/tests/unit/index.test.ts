@@ -21,7 +21,6 @@ import Logger from "@graphql-markdown/logger";
 describe("pluginGraphQLDocGenerator", () => {
   const mockCli = {
     addCommand: jest.fn(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
 
   const mockOptions = {

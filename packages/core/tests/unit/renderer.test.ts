@@ -11,7 +11,6 @@ import type {
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:fs/promises");
 
 jest.mock("node:path", (): unknown => {
@@ -22,11 +21,9 @@ jest.mock("node:path", (): unknown => {
 });
 import * as path from "node:path";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
@@ -41,7 +38,6 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
 });
 import * as Utils from "@graphql-markdown/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     __esModule: true,
@@ -52,7 +48,6 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/logger", (): unknown => {
   return {
     __esModule: true,
@@ -89,11 +84,11 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
  * Helper function to create a renderer with a mock generateIndexMetafile hook.
  * Registers the mock as an event handler instead of passing it as legacy mdxModule.
  */
-function mockGenerateIndexMetafileHook(mockFn: jest.Mock): void {
+const mockGenerateIndexMetafileHook = (mockFn: jest.Mock): void => {
   getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
     mockFn(event.data.dirPath, event.data.category, event.data.options);
   });
-}
+};
 
 describe("renderer", () => {
   describe("class Renderer", () => {
@@ -2528,9 +2523,10 @@ describe("renderer", () => {
 
         // Test that the regex correctly extracts category and pageId
         // The regex captures everything up to '.mdx' as pageId
-        const validMatch = "Foobar/foo-bar.mdx".match(
-          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/, //NOSONAR
-        );
+        const validMatch =
+          /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/.exec(
+            "Foobar/foo-bar.mdx",
+          );
         expect(validMatch?.groups?.category).toBe("Foobar");
         // The second capture group captures 'foo-bar' because [A-Za-z0-9-]+ matches the full string
         expect(validMatch?.groups?.pageId).toBe("foo-bar");

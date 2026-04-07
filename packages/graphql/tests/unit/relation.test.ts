@@ -221,9 +221,11 @@ describe("relation", () => {
 
       const relations = getRelationOfReturn(compositeType, schemaMap);
 
-      expect(relations.queries.map((q) => q.name)).toEqual([
-        "analytics.getStudyItem",
-      ]);
+      expect(
+        relations.queries.map((q) => {
+          return q.name;
+        }),
+      ).toEqual(["analytics.getStudyItem"]);
     });
 
     test("ignores operation entries with unresolved return types", () => {
@@ -316,7 +318,7 @@ describe("relation", () => {
       expect(
         relations.queries
           .filter((q) => {
-            return typeof q === "object" && q !== null && "name" in q;
+            return typeof q === "object" && "name" in q;
           })
           .map((q) => {
             return (q as { name: string }).name;

@@ -57,7 +57,7 @@ export const beforeGenerateIndexMetafileHook = async (event: {
     typeof options?.sidebarPosition === "number"
       ? options.sidebarPosition
       : SidebarPosition.FIRST;
-  const content = `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${options?.collapsible ?? true}\ncollapsed: ${options?.collapsed ?? true}\n`;
+  const content = `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${Boolean(options?.collapsible ?? true)}\ncollapsed: ${Boolean(options?.collapsed ?? true)}\n`;
 
   await ensureDir(dirPath);
   await saveFile(filePath, content);

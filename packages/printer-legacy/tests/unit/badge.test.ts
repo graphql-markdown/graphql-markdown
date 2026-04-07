@@ -63,10 +63,12 @@ const createOptionsWithFormatter = (
       const classAttr = badge.classname
         ? ` class="gqlmd-mdx-badge ${[badge.classname]
             .flat()
-            .map((c) => `gqlmd-mdx-badge--${c.toLowerCase()}`)
+            .map((c) => {
+              return `gqlmd-mdx-badge--${c.toLowerCase()}`;
+            })
             .join(" ")}"`
         : ' class="gqlmd-mdx-badge"';
-      return `<mark${classAttr}>${badge.text}</mark>` as any;
+      return `<mark${classAttr}>${badge.text as string}</mark>` as any;
     },
     ...options,
   } as PrintTypeOptions;

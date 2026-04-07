@@ -1,5 +1,3 @@
-import type { MetaInfo, PrintTypeOptions } from "@graphql-markdown/types";
-
 import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
 import { DirectiveLocation } from "graphql/language";
 

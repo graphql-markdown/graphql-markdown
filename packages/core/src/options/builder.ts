@@ -21,7 +21,7 @@ import type { Maybe } from "@graphql-markdown/types";
 /**
  * Type representing the source of an option value.
  */
-type OptionSource = "default" | "config" | "cli";
+type OptionSource = "cli" | "config" | "default";
 
 /**
  * Builder for constructing options from multiple sources with priority precedence.
@@ -54,7 +54,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
   };
 
   private merged: Partial<T> = {};
-  private readonly sources: Map<keyof T, OptionSource> = new Map();
+  private readonly sources = new Map<keyof T, OptionSource>();
 
   /**
    * Adds a default value (lowest priority).
@@ -108,38 +108,6 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    */
   addFromCli<K extends keyof T>(value: Maybe<T[K]>, key: K): this {
     return this.setIfProvided(value, key, "cli");
-  }
-
-  /**
-   * Sets a value if it's not null or undefined, respecting precedence.
-   * Internal helper method used by addDefault, addFromConfig, and addFromCli.
-   *
-   * Only updates the merged value if the source has equal or higher precedence
-   * than the currently stored source. Precedence order: default < config < cli.
-   *
-   * @param value - The value to set
-   * @param key - The key to set
-   * @param source - The source of this value ('default', 'config', or 'cli')
-   * @returns This builder for method chaining
-   */
-  private setIfProvided<K extends keyof T>(
-    value: Maybe<T[K]>,
-    key: K,
-    source: OptionSource,
-  ): this {
-    if (value !== null && value !== undefined) {
-      const currentSource = this.sources.get(key);
-      const shouldUpdate =
-        !currentSource ||
-        OptionBuilder.PRECEDENCE_ORDER[source] >=
-          OptionBuilder.PRECEDENCE_ORDER[currentSource];
-
-      if (shouldUpdate) {
-        this.merged[key] = value;
-        this.sources.set(key, source);
-      }
-    }
-    return this;
   }
 
   /**
@@ -232,5 +200,37 @@ export class OptionBuilder<T extends Record<string, unknown>> {
       }
     }
     return result;
+  }
+
+  /**
+   * Sets a value if it's not null or undefined, respecting precedence.
+   * Internal helper method used by addDefault, addFromConfig, and addFromCli.
+   *
+   * Only updates the merged value if the source has equal or higher precedence
+   * than the currently stored source. Precedence order: default < config < cli.
+   *
+   * @param value - The value to set
+   * @param key - The key to set
+   * @param source - The source of this value ('default', 'config', or 'cli')
+   * @returns This builder for method chaining
+   */
+  private setIfProvided<K extends keyof T>(
+    value: Maybe<T[K]>,
+    key: K,
+    source: OptionSource,
+  ): this {
+    if (value !== null && value !== undefined) {
+      const currentSource = this.sources.get(key);
+      const shouldUpdate =
+        !currentSource ||
+        OptionBuilder.PRECEDENCE_ORDER[source] >=
+          OptionBuilder.PRECEDENCE_ORDER[currentSource];
+
+      if (shouldUpdate) {
+        this.merged[key] = value;
+        this.sources.set(key, source);
+      }
+    }
+    return this;
   }
 }

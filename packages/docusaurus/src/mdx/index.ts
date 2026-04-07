@@ -154,14 +154,20 @@ export const formatMDXFrontmatter = (
  * // '<Badge class="badge badge--secondary " text="Required"/>'
  * ```
  */
-export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => ({
-  formatMDXBadge,
-  formatMDXAdmonition: (admonition: AdmonitionType, _meta: Maybe<MetaInfo>) =>
-    formatMDXAdmonition(admonition, meta ?? _meta),
-  formatMDXBullet,
-  formatMDXDetails,
-  formatMDXFrontmatter,
-  formatMDXLink,
-  formatMDXNameEntity,
-  formatMDXSpecifiedByLink,
-});
+export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
+  return {
+    formatMDXBadge,
+    formatMDXAdmonition: (
+      admonition: AdmonitionType,
+      _meta: Maybe<MetaInfo>,
+    ): MDXString => {
+      return formatMDXAdmonition(admonition, meta ?? _meta);
+    },
+    formatMDXBullet,
+    formatMDXDetails,
+    formatMDXFrontmatter,
+    formatMDXLink,
+    formatMDXNameEntity,
+    formatMDXSpecifiedByLink,
+  };
+};

@@ -5,7 +5,7 @@ import { buildSchema } from "graphql/utilities";
 import { getDirectiveExampleOption, printExample } from "../../src/example";
 
 import * as Link from "../../src/link";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("../../src/link");
 
 describe("example", () => {
@@ -207,7 +207,7 @@ describe("example", () => {
 
       jest
         .spyOn(Link, "hasPrintableDirective")
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "ScalarExample";
         });
@@ -224,7 +224,7 @@ describe("example", () => {
 
       jest
         .spyOn(Link, "hasPrintableDirective")
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "TypeExample";
         });
