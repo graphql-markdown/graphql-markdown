@@ -21,9 +21,7 @@ describe("enum", () => {
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
 {
-  "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
 
 
 
@@ -55,9 +53,7 @@ Deprecated
 
       expect(metadata).toMatchInlineSnapshot(String.raw`
 {
-  "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
 
 
 

@@ -33,9 +33,7 @@ describe("section", () => {
 
       expect(section).toMatchInlineSnapshot(String.raw`
 {
-  "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 
@@ -90,9 +88,7 @@ undefined",
 
       expect(section).toMatchInlineSnapshot(String.raw`
 {
-  "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
 
 

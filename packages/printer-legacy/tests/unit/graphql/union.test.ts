@@ -25,9 +25,7 @@ describe("union", () => {
 
       expect(code).toMatchInlineSnapshot(String.raw`
 {
-  "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](/types/objects/one) <mark class="gqlmd-mdx-badge">object</mark> 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">UnionTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](/types/objects/one) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 

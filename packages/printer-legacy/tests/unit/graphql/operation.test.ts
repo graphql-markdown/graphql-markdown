@@ -50,9 +50,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(String.raw`
 [
   {
-    "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
+    "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
@@ -93,9 +91,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(String.raw`
 [
   {
-    "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
+    "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#arg-foo-bar\} 
 
 
 
@@ -104,9 +100,7 @@ describe("operation", () => {
     "title": "Arguments",
   },
   {
-    "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
+    "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
@@ -153,9 +147,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(String.raw`
 [
   {
-    "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
+    "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#foo\} 
 
 
 
@@ -179,9 +171,7 @@ undefined",
     "title": "Arguments",
   },
   {
-    "content": "
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
+    "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
 
 
 
