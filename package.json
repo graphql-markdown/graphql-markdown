@@ -15,7 +15,7 @@
     ],
     "catalog": {
       "graphql": "16.13.2",
-      "graphql-config": "5.1.5",
+      "graphql-config": "5.1.6",
       "prettier": "3.8.1"
     },
     "catalogs": {
@@ -197,8 +197,8 @@
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-tsdoc": "0.5.2",
     "globals": "17.4.0",
-    "graphql": "16.13.2",
-    "graphql-config": "5.1.6",
+    "graphql": "catalog:",
+    "graphql-config": "catalog:",
     "husky": "9.1.7",
     "jest": "30.3.0",
     "jest-environment-node": "30.3.0",
@@ -206,7 +206,7 @@
     "knip": "6.3.0",
     "lodash.filter": "4.6.0",
     "memfs": "4.57.1",
-    "prettier": "3.8.1",
+    "prettier": "catalog:",
     "ts-jest": "29.4.9",
     "tsgo-dev": "^2025.12.2",
     "turbo": "2.9.4",
