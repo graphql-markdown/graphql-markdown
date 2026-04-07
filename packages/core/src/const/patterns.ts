@@ -3,7 +3,7 @@
  *
  * This module centralizes all regex patterns and constants to ensure consistency
  * and simplify maintenance when patterns need to be updated.
-   *
+ *
  * @packageDocumentation
  */
 
@@ -22,7 +22,7 @@ export const PATTERNS = {
    * Matches directive names with named capture groups.
    * Captures the directive name after the \@ symbol.
    *
-   * @pattern `^\x40(?<directive>\w+)$`
+   * @pattern `^\@(?<directive>\w+)$`
    * @example
    * - "\@tag" matches → directive: "tag"
    * - "\@myDirective" matches → directive: "myDirective"
