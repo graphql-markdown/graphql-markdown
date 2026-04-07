@@ -55,7 +55,7 @@ export const formatMDXBullet = (text = ""): MDXString => {
 export const formatMDXDetails = ({
   dataOpen,
 }: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}\r${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 /**

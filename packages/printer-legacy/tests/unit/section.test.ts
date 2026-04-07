@@ -64,11 +64,12 @@ describe("section", () => {
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
-</details>
-
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
 
-undefined",
+
+</details>
+
+",
   "level": 0,
   "title": "",
 }

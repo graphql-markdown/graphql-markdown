@@ -106,8 +106,6 @@ Deprecated
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
-</details>
-
 #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#two\} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
@@ -117,7 +115,10 @@ Deprecated
 
 </span>
 </fieldset>
-undefined",
+
+</details>
+
+",
     "level": 3,
     "title": "Fields",
   },
