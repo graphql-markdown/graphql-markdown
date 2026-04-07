@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vol } from "memfs";
 
 import { join } from "node:path";
@@ -11,7 +9,6 @@ import {
   DEFAULT_OPTIONS,
 } from "../../src/config";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("graphql-config");
 import * as GraphQLConfig from "graphql-config";
 

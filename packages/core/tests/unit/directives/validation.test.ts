@@ -14,14 +14,22 @@ describe("directives/validation", () => {
     test("returns true for object with descriptor function", () => {
       expect.hasAssertions();
 
-      const config = { descriptor: () => "result" };
+      const config = {
+        descriptor: () => {
+          return "result";
+        },
+      };
       expect(hasDescriptor(config)).toBe(true);
     });
 
     test("returns false for object without descriptor", () => {
       expect.hasAssertions();
 
-      const config = { tag: () => "result" };
+      const config = {
+        tag: () => {
+          return "result";
+        },
+      };
       expect(hasDescriptor(config)).toBe(false);
     });
 
@@ -55,7 +63,13 @@ describe("directives/validation", () => {
     test("returns false for arrays", () => {
       expect.hasAssertions();
 
-      expect(hasDescriptor([() => "result"])).toBe(false);
+      expect(
+        hasDescriptor([
+          () => {
+            return "result";
+          },
+        ]),
+      ).toBe(false);
     });
   });
 
@@ -63,14 +77,22 @@ describe("directives/validation", () => {
     test("returns true for object with tag function", () => {
       expect.hasAssertions();
 
-      const config = { tag: () => "result" };
+      const config = {
+        tag: () => {
+          return "result";
+        },
+      };
       expect(hasTag(config)).toBe(true);
     });
 
     test("returns false for object without tag", () => {
       expect.hasAssertions();
 
-      const config = { descriptor: () => "result" };
+      const config = {
+        descriptor: () => {
+          return "result";
+        },
+      };
       expect(hasTag(config)).toBe(false);
     });
 
@@ -104,7 +126,13 @@ describe("directives/validation", () => {
     test("returns false for arrays", () => {
       expect.hasAssertions();
 
-      expect(hasTag([() => "result"])).toBe(false);
+      expect(
+        hasTag([
+          () => {
+            return "result";
+          },
+        ]),
+      ).toBe(false);
     });
   });
 
@@ -299,14 +327,22 @@ describe("directives/validation", () => {
     test("returns false for descriptor property that is a function", () => {
       expect.hasAssertions();
 
-      const config = { descriptor: () => "result" };
+      const config = {
+        descriptor: () => {
+          return "result";
+        },
+      };
       expect(isInvalidFunctionProperty(config, "descriptor")).toBe(false);
     });
 
     test("returns false for tag property that is a function", () => {
       expect.hasAssertions();
 
-      const config = { tag: () => "result" };
+      const config = {
+        tag: () => {
+          return "result";
+        },
+      };
       expect(isInvalidFunctionProperty(config, "tag")).toBe(false);
     });
 
@@ -367,7 +403,9 @@ describe("directives/validation", () => {
       expect.hasAssertions();
 
       const config: Record<string, unknown> = { descriptor: undefined };
-      config.descriptor = () => "result";
+      config.descriptor = () => {
+        return "result";
+      };
       expect(isInvalidFunctionProperty(config, "descriptor")).toBe(false);
     });
   });

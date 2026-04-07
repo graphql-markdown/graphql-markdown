@@ -219,8 +219,15 @@ describe("Type Guard Utilities", () => {
   });
 
   describe("hasFunctionProperty", () => {
-    const myFunc = () => "result";
-    const obj = { callback: myFunc, arrow: () => 42 };
+    const myFunc = () => {
+      return "result";
+    };
+    const obj = {
+      callback: myFunc,
+      arrow: () => {
+        return 42;
+      },
+    };
 
     it("should return true for function properties", () => {
       expect(hasFunctionProperty(obj, "callback")).toBe(true);
@@ -244,7 +251,11 @@ describe("Type Guard Utilities", () => {
     });
 
     it("should narrow type to function", () => {
-      const obj: unknown = { callback: () => "result" };
+      const obj: unknown = {
+        callback: () => {
+          return "result";
+        },
+      };
       if (hasFunctionProperty(obj, "callback")) {
         expect(typeof obj.callback).toBe("function");
       }

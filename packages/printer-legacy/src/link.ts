@@ -91,7 +91,7 @@ export const hasPrintableDirective = (
       ? hasDirective(type, options.onlyDocDirectives, true)
       : true;
 
-  return !(skipDirective || skipDeprecated) && onlyDirective;
+  return !skipDirective && !skipDeprecated && onlyDirective;
 };
 
 /**

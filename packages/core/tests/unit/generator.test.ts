@@ -25,13 +25,13 @@ jest.mock("@graphql-markdown/graphql", () => {
 
 import { DiffMethod, TypeHierarchy } from "../../src/config";
 import * as CoreDiff from "../../src/diff";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("../../src/printer");
 
 import { resetEvents } from "../../src/event-emitter";
@@ -921,7 +921,11 @@ describe("generator", () => {
 
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(2);
-      expect(result.every((item) => Array.isArray(item))).toBe(true);
+      expect(
+        result.every((item) => {
+          return Array.isArray(item);
+        }),
+      ).toBe(true);
     });
 
     test("correctly separates only vs skip directives", () => {

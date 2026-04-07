@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { vol } from "memfs";
 
 jest.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { vol: fsVol } = require("memfs");
   return fsVol.promises;
 });
@@ -11,18 +11,15 @@ import type { DiffMethodName } from "@graphql-markdown/types";
 
 import { GraphQLSchema } from "graphql/type";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("graphql/utilities");
 import * as graphql from "graphql/utilities";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-tools/load");
 import * as graphqlLoad from "@graphql-tools/load";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-inspector/core");
 import * as inspector from "@graphql-inspector/core";
-import type { Change } from "@graphql-inspector/core/typings/diff/changes/change";
+import type { Change } from "@graphql-inspector/core/diff/changes/change";
 
 import {
   checkSchemaChanges,

@@ -4,7 +4,8 @@
  * @packageDocumentation
  */
 
-import { CancellableEventOptions, DataEvent } from "@graphql-markdown/utils";
+import type { CancellableEventOptions } from "@graphql-markdown/utils";
+import { DataEvent } from "@graphql-markdown/utils";
 
 /**
  * Event emitted before/after rendering homepage.

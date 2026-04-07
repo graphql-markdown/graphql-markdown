@@ -43,7 +43,9 @@ export const normalizeDirectiveNames = (
   ...sources: (DirectiveName[] | Maybe<DirectiveName[]>)[]
 ): DirectiveName[] => {
   return sources
-    .filter((s): s is DirectiveName[] => Array.isArray(s) && s.length > 0)
+    .filter((s): s is DirectiveName[] => {
+      return Array.isArray(s) && s.length > 0;
+    })
     .flat();
 };
 

@@ -39,9 +39,8 @@ import {
 
 import * as graphqlConfigModule from "../../src/graphql-config";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/utils");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("../../src/graphql-config");
 
 describe("config", () => {
@@ -1314,7 +1313,9 @@ describe("mutation test: getCustomDirectives edge cases", () => {
   test("returns custom directive with valid tag function", () => {
     expect.assertions(1);
 
-    const tag = (): string => "test";
+    const tag = (): string => {
+      return "test";
+    };
     const options = {
       test: { tag },
     };
@@ -1327,7 +1328,9 @@ describe("mutation test: getCustomDirectives edge cases", () => {
   test("returns custom directive with valid descriptor function", () => {
     expect.assertions(1);
 
-    const descriptor = (): string => "test";
+    const descriptor = (): string => {
+      return "test";
+    };
     const options = {
       test: { descriptor },
     };
@@ -1340,8 +1343,12 @@ describe("mutation test: getCustomDirectives edge cases", () => {
   test("returns custom directive with both tag and descriptor functions", () => {
     expect.assertions(1);
 
-    const tag = (): string => "tag";
-    const descriptor = (): string => "descriptor";
+    const tag = (): string => {
+      return "tag";
+    };
+    const descriptor = (): string => {
+      return "descriptor";
+    };
     const options = {
       test: { tag, descriptor },
     };

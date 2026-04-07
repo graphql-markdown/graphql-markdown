@@ -79,7 +79,11 @@ describe("Regex Patterns", () => {
 
     it("should handle multiple consecutive delimiters", () => {
       const parts = "hello--world".split(PATTERNS.WORD_BOUNDARY);
-      expect(parts.filter((p) => p.length > 0)).toEqual(["hello", "world"]);
+      expect(
+        parts.filter((p) => {
+          return p.length > 0;
+        }),
+      ).toEqual(["hello", "world"]);
     });
 
     it("should preserve alphanumeric content", () => {

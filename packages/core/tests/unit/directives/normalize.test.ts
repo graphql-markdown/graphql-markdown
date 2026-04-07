@@ -64,7 +64,9 @@ describe("Directive Name Normalization", () => {
       const result = normalizeDirectiveNames(cli, config);
       expect(result).toEqual(["@example", "@internal", "@example", "@auth"]);
       expect(
-        result.filter((d: DirectiveName) => d === "@example"),
+        result.filter((d: DirectiveName) => {
+          return d === "@example";
+        }),
       ).toHaveLength(2);
     });
 

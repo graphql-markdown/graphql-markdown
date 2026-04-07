@@ -4,10 +4,8 @@ import type {
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:fs/promises");
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("node:path", (): unknown => {
   return {
     __esModule: true,
@@ -15,11 +13,9 @@ jest.mock("node:path", (): unknown => {
   };
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/utils", (): unknown => {
   return {
     __esModule: true,
@@ -33,7 +29,6 @@ jest.mock("@graphql-markdown/utils", (): unknown => {
   };
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     __esModule: true,
@@ -64,11 +59,11 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
  * Helper function to create a renderer with a mock generateIndexMetafile hook.
  * Registers the mock as an event handler instead of passing it as legacy mdxModule.
  */
-function mockGenerateIndexMetafileHook(mockFn: jest.Mock): void {
+const mockGenerateIndexMetafileHook = (mockFn: jest.Mock): void => {
   getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
     mockFn(event.data.dirPath, event.data.category, event.data.options);
   });
-}
+};
 
 describe("generateCategoryMetafileType - focused tests", () => {
   const baseURL = "graphql";

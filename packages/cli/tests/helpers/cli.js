@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { exec } = require("node:child_process");
 
 module.exports = function cli({

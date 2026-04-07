@@ -32,7 +32,7 @@ import jestPlugin from "eslint-plugin-jest";
 import importPlugin from "eslint-plugin-import";
 import tsdocPlugin from "eslint-plugin-tsdoc";
 import jsoncPlugin from "eslint-plugin-jsonc";
-import jsoncParser from "jsonc-eslint-parser";
+import * as jsoncParser from "jsonc-eslint-parser";
 import * as mdxPlugin from "eslint-plugin-mdx";
 import graphqlPlugin from "@graphql-eslint/eslint-plugin";
 import type { Linter } from "eslint";
@@ -233,6 +233,15 @@ export default [
     },
   },
 
+  {
+    files: ["**/tests/**/*.js", "**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+
   // JSON files
   {
     files: ["**/*.json"],
@@ -273,7 +282,7 @@ export default [
       prettier: prettierPlugin,
     },
     languageOptions: {
-      parser: graphqlPlugin,
+      parser: graphqlPlugin.parser,
     },
     rules: {
       ...prettierConfig.rules,

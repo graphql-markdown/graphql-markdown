@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // packages/utils/tests/unit/prettier.test.ts
 import * as Prettier from "../../src/prettier";
 
