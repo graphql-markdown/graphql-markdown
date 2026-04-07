@@ -3,4 +3,6 @@
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
 
-module.exports = require("../../config/stryker.conf");
+import config from "@graphql-markdown/tooling-config/stryker";
+
+export default config;
