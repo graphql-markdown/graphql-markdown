@@ -100,13 +100,13 @@ const formatMDXBullet = (text: string = ""): MDXString => {
  * ```typescript
  * const options = { dataOpen: "More Info" };
  * formatMDXDetails(options);
- * // '\n\n<details class="gqlmd-mdx-details">\n<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">MORE INFO</span></summary>\n</details>\n\n'
+ * // '\n\n<details class="gqlmd-mdx-details">\n<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">MORE INFO</span></summary>\n\r\n</details>\n\n'
  * ```
  * @see {@link mdxModule.formatMDXDetails} for the equivalent function in the MDX module.
  * @see {@link printer.formatDetails} for usage in the printer module.
  */
 const formatMDXDetails = ({ dataOpen }: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}\r${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 /**

@@ -46,6 +46,7 @@ describe("mdx", () => {
 
 <details class="gqlmd-mdx-details">
 <summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">THIS IS A SUMMARY</span></summary>
+
 </details>
 
 "
