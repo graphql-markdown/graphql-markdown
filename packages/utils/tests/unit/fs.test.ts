@@ -4,6 +4,7 @@ import { vol } from "memfs";
 // In Jest 30+, we need to ensure the mock is properly set up before the fs module is loaded
 jest.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { vol: fsVol } = require("memfs");
   return fsVol.promises;
 });

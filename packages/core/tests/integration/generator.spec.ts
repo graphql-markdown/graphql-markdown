@@ -2,11 +2,12 @@
 import path, { join } from "node:path";
 
 import { vol } from "memfs";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("fs");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 jest.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { vol: fsVol } = require("memfs");
   return fsVol.promises;
 });
@@ -21,11 +22,9 @@ import type {
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
@@ -380,7 +379,9 @@ describe("renderer", () => {
       // Verify that folder names are prefixed with numbers
       // Look for patterns like "01-", "02-", etc. in folder paths
       const allPaths = Object.keys(outputJson);
-      const prefixedFolders = allPaths.filter((p) => /\/\d{2}-[a-z]/.test(p));
+      const prefixedFolders = allPaths.filter((p) => {
+        return /\/\d{2}-[a-z]/.test(p);
+      });
 
       // Should have at least some folders with numeric prefixes when categorySort is enabled
       expect(prefixedFolders.length).toBeGreaterThan(0);
@@ -434,14 +435,14 @@ describe("renderer", () => {
       // - Entity categories nested further: "02-directives", "04-queries", etc.
 
       // Check for custom group folders at root
-      const customGroupFolders = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)\//.test(p),
-      );
+      const customGroupFolders = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)\//.test(p);
+      });
 
       // Check for API group folders (should be nested, not at root)
-      const apiGroupFoldersAtRoot = allPaths.filter((p) =>
-        /^\d{2}-(operations|types)\//.test(p),
-      );
+      const apiGroupFoldersAtRoot = allPaths.filter((p) => {
+        return /^\d{2}-(operations|types)\//.test(p);
+      });
 
       // API groups should be NESTED under custom groups, not at root
       expect(apiGroupFoldersAtRoot.length).toBe(0);
@@ -450,9 +451,9 @@ describe("renderer", () => {
       expect(customGroupFolders.length).toBeGreaterThan(0);
 
       // Check for nested API groups under custom groups
-      const nestedApiGroups = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)\/\d{2}-(operations|types)\//.test(p),
-      );
+      const nestedApiGroups = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)\/\d{2}-(operations|types)\//.test(p);
+      });
       expect(nestedApiGroups.length).toBeGreaterThan(0);
     });
 
@@ -502,36 +503,36 @@ describe("renderer", () => {
 
       // Custom groups (course, grade, misc) should be at ROOT level with prefixes
       // Pattern: 01-course/, 02-grade/, 03-misc/ (note: no leading /)
-      const customGroupsWithPrefix = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)(\/|$)/.test(p),
-      );
+      const customGroupsWithPrefix = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)(\/|$)/.test(p);
+      });
       expect(customGroupsWithPrefix.length).toBeGreaterThan(0);
 
       // Entity type folders (objects, scalars, enums, etc.) should be WITHIN custom groups
       // and should have prefixes when they exist
       // Pattern: 01-course/01-objects/, 01-course/02-scalars/, etc.
-      const entityFoldersWithinCustomGroups = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+\//.test(p),
-      );
+      const entityFoldersWithinCustomGroups = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+\//.test(p);
+      });
       expect(entityFoldersWithinCustomGroups.length).toBeGreaterThan(0);
 
       // Verify that deprecated folder exists and is prefixed at root
-      const deprecatedFolders = allPaths.filter((p) =>
-        /^\d{2}-deprecated(\/|$)/.test(p),
-      );
+      const deprecatedFolders = allPaths.filter((p) => {
+        return /^\d{2}-deprecated(\/|$)/.test(p);
+      });
       expect(deprecatedFolders.length).toBeGreaterThan(0);
 
       // Ensure NO unprefixed custom group folders exist at root
       // (they should all be prefixed)
-      const unprefixedCustomGroups = allPaths.filter((p) =>
-        /^(course|grade|misc)(\/|$)/.test(p),
-      );
+      const unprefixedCustomGroups = allPaths.filter((p) => {
+        return /^(course|grade|misc)(\/|$)/.test(p);
+      });
       expect(unprefixedCustomGroups.length).toBe(0);
 
       // Ensure NO unprefixed entity type folders exist within custom groups
-      const unprefixedEntityFolders = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)\/[a-z]+\//.test(p),
-      );
+      const unprefixedEntityFolders = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)\/[a-z]+\//.test(p);
+      });
       expect(unprefixedEntityFolders.length).toBe(0);
     });
 
@@ -581,20 +582,22 @@ describe("renderer", () => {
 
       // Verify that custom groups are NOT prefixed (backward compatible behavior)
       // Should have folders like "course/", "grade/", "misc/" WITHOUT numeric prefixes
-      const unprefixedCustomGroups = allPaths.filter((p) =>
-        /^(course|grade|misc)(\/|$)/.test(p),
-      );
+      const unprefixedCustomGroups = allPaths.filter((p) => {
+        return /^(course|grade|misc)(\/|$)/.test(p);
+      });
       expect(unprefixedCustomGroups.length).toBeGreaterThan(0);
 
       // Verify that entity type folders are NOT prefixed
       // Should have folders like "course/objects/", "course/queries/" WITHOUT numeric prefixes
-      const unprefixedEntityFolders = allPaths.filter((p) =>
-        /^(course|grade|misc)\/[a-z]+\//.test(p),
-      );
+      const unprefixedEntityFolders = allPaths.filter((p) => {
+        return /^(course|grade|misc)\/[a-z]+\//.test(p);
+      });
       expect(unprefixedEntityFolders.length).toBeGreaterThan(0);
 
       // Ensure NO prefixed folders exist
-      const prefixedFolders = allPaths.filter((p) => /^\d{2}-/.test(p));
+      const prefixedFolders = allPaths.filter((p) => {
+        return /^\d{2}-/.test(p);
+      });
       expect(prefixedFolders.length).toBe(0);
     });
 
@@ -643,15 +646,15 @@ describe("renderer", () => {
       const allPaths = Object.keys(outputJson);
 
       // Verify root-level prefixed directories exist (custom groups with prefixes)
-      const rootPrefixedDirs = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)/.test(p),
-      );
+      const rootPrefixedDirs = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)/.test(p);
+      });
       expect(rootPrefixedDirs.length).toBeGreaterThan(0);
 
       // Verify entity-level prefixed directories exist within custom groups
-      const entityPrefixedDirs = allPaths.filter((p) =>
-        /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+/.test(p),
-      );
+      const entityPrefixedDirs = allPaths.filter((p) => {
+        return /^\d{2}-(course|grade|misc)\/\d{2}-[a-z]+/.test(p);
+      });
       expect(entityPrefixedDirs.length).toBeGreaterThan(0);
     });
 
@@ -700,13 +703,15 @@ describe("renderer", () => {
       const allPaths = Object.keys(outputJson);
 
       // With FLAT hierarchy, directories should be at root (no nesting)
-      const nestedDirs = allPaths.filter((p) => /^\/[^/]+\/[^/]+\//.test(p));
+      const nestedDirs = allPaths.filter((p) => {
+        return /^\/[^/]+\/[^/]+\//.test(p);
+      });
       expect(nestedDirs.length).toBe(0);
 
       // All files should be at root or one level deep
-      const rootLevelFiles = allPaths.filter((p) =>
-        /^[^/]*$|^\/[^/]+$/.test(p),
-      );
+      const rootLevelFiles = allPaths.filter((p) => {
+        return /^[^/]*$|^\/[^/]+$/.test(p);
+      });
       expect(rootLevelFiles.length).toBeGreaterThan(0);
     });
 
@@ -757,7 +762,7 @@ describe("renderer", () => {
       // Collect all prefixes at root level
       const rootPrefixes = new Set<string>();
       for (const path of allPaths) {
-        const match = path.match(/^(\d{2})-/);
+        const match = /^(\d{2})-/.exec(path);
         if (match) {
           rootPrefixes.add(match[1]);
         }
@@ -765,7 +770,9 @@ describe("renderer", () => {
 
       // Verify prefixes are consistently formatted (2 digits)
       const prefixArray = Array.from(rootPrefixes);
-      const validPrefixes = prefixArray.filter((p) => /^\d{2}$/.test(p));
+      const validPrefixes = prefixArray.filter((p) => {
+        return /^\d{2}$/.test(p);
+      });
       expect(validPrefixes.length).toBe(prefixArray.length);
 
       // Verify we have multiple prefixes showing hierarchical organization
@@ -821,12 +828,18 @@ describe("renderer", () => {
       for (const path of allPaths) {
         const matches = path.match(/\/(\d{2})-/g);
         if (matches) {
-          allPrefixes.push(...matches.map((m) => m.replace(/[\/\-]/g, "")));
+          allPrefixes.push(
+            ...matches.map((m) => {
+              return m.replace(/[/-]/g, "");
+            }),
+          );
         }
       }
 
       // Verify prefix format is consistent (2 digits)
-      const invalidPrefixes = allPrefixes.filter((p) => !/^\d{2}$/.test(p));
+      const invalidPrefixes = allPrefixes.filter((p) => {
+        return !/^\d{2}$/.test(p);
+      });
       expect(invalidPrefixes.length).toBe(0);
     });
 
@@ -875,11 +888,15 @@ describe("renderer", () => {
       const allPaths = Object.keys(outputJson);
 
       // Generated markdown files should exist
-      const markdownFiles = allPaths.filter((p) => /\.mdx?$/.test(p));
+      const markdownFiles = allPaths.filter((p) => {
+        return /\.mdx?$/.test(p);
+      });
       expect(markdownFiles.length).toBeGreaterThan(0);
 
       // Prefixed directories should be created
-      const prefixedDirs = allPaths.filter((p) => /\/\d{2}-/.test(p));
+      const prefixedDirs = allPaths.filter((p) => {
+        return /\/\d{2}-/.test(p);
+      });
       expect(prefixedDirs.length).toBeGreaterThan(0);
     });
   });

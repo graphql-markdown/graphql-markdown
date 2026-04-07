@@ -6,11 +6,8 @@ import {
   RenderTypeEntitiesEvent,
   PrintTypeEvents,
 } from "../../src/events";
-import {
-  CancellableEvent,
-  CancellableEventOptions,
-  deepFreeze,
-} from "@graphql-markdown/utils";
+import type { CancellableEventOptions } from "@graphql-markdown/utils";
+import { CancellableEvent, deepFreeze } from "@graphql-markdown/utils";
 import {
   PrintCodeEvent,
   PrintTypeEvent,
@@ -145,7 +142,9 @@ describe("events", () => {
     });
 
     it("should accept defaultAction", () => {
-      const defaultAction = jest.fn(() => Promise.resolve());
+      const defaultAction = jest.fn(async () => {
+        return Promise.resolve();
+      });
       const event = new SchemaEvent(
         {
           schemaLocation: "/path/to/schema.graphql",
@@ -345,7 +344,9 @@ describe("events", () => {
 
     it("should execute defaultAction if not prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn(() => Promise.resolve());
+      const defaultAction = jest.fn(async () => {
+        return Promise.resolve();
+      });
 
       const event = new SchemaEvent(
         { schemaLocation: "/path/to/schema" },
@@ -358,7 +359,9 @@ describe("events", () => {
 
     it("should not execute defaultAction if prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn(() => Promise.resolve());
+      const defaultAction = jest.fn(async () => {
+        return Promise.resolve();
+      });
 
       events.on(SchemaEvents.BEFORE_LOAD, (event) => {
         event.preventDefault();
@@ -432,6 +435,7 @@ describe("events", () => {
 
       const spy = jest.spyOn(console, "log").mockImplementation();
 
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       events.on(SchemaEvents.BEFORE_LOAD, async () => {
         console.log(SchemaEvents.BEFORE_LOAD);
       });
@@ -451,7 +455,9 @@ describe("events", () => {
         { schemaLocation: "/path/to/schema" },
         {
           defaultAction: async () => {
-            await new Promise((resolve) => setTimeout(resolve, 10));
+            await new Promise((resolve) => {
+              return setTimeout(resolve, 10);
+            });
             executed = true;
           },
         },
