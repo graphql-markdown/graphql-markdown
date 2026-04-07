@@ -49,6 +49,22 @@ A custom MDX module can export individual formatter functions:
 | `formatMDXNameEntity` | `(name: string, parentType?: string) => string` | Format named entity references |
 | `formatMDXSpecifiedByLink` | `(url: string) => string` | Format scalar specification links |
 
+:::warning `formatMDXDetails` contract
+
+The string returned by `formatMDXDetails` **must** contain a `\r` (carriage return) character as a delimiter between the opening part (everything up to and including `</summary>`) and the closing part (everything from `</details>` onward). The printer splits on `\r` to wrap generated content inside the collapsible element.
+
+```js
+// ✅ correct — \r separates the open and close halves
+export const formatMDXDetails = ({ dataOpen }) =>
+  `\n\n<MyDetails label="${dataOpen}">\n\r\n</MyDetails>\n\n`;
+
+// ❌ incorrect — no \r means the closing tag is lost and items render outside
+export const formatMDXDetails = ({ dataOpen }) =>
+  `\n\n<MyDetails label="${dataOpen}">\n</MyDetails>\n\n`;
+```
+
+:::
+
 Additionally, the module can export:
 
 | Export | Type | Description |
