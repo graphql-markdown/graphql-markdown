@@ -395,18 +395,24 @@ export const getTypeName = (
  *
  * @param type - GraphQL named type candidate.
  * @param operationKind - Root operation kind currently being traversed.
+ * @param rootTypeName - Root operation type name that must not be treated as a namespace.
  * @returns `true` when the type is an object namespace compatible with the root kind.
  */
 const isNestedOperationNamespaceType = (
   type: unknown,
   operationKind: Maybe<OperationKind>,
+  rootTypeName: string,
 ): type is GraphQLObjectType => {
   if (!isObjectType(type)) {
     return false;
   }
 
   const typeName = getTypeName(type);
-  if (typeName.startsWith("__") || !operationKind) {
+  if (
+    typeName.startsWith("__") ||
+    !operationKind ||
+    typeName === rootTypeName
+  ) {
     return false;
   }
 
@@ -421,13 +427,16 @@ const isNestedOperationNamespaceType = (
  * @param list - Accumulator receiving flattened operation fields.
  * @param prefix - Current namespace prefix.
  * @param operationKind - Root operation kind currently being traversed.
+ * @param rootTypeName - Root operation type name to exclude from namespace traversal.
  * @param visitedTypeNames - Set used to prevent cyclic recursion.
+ * @param namespaceTypeNames - Optional set collecting discovered namespace container type names.
  */
 const collectOperationFields = (
   fieldMap: Record<string, unknown>,
   list: Record<string, GraphQLOperationType>,
   prefix: string,
   operationKind: Maybe<OperationKind>,
+  rootTypeName: string,
   visitedTypeNames: Set<string>,
   namespaceTypeNames: Set<string> = new Set<string>(),
 ): void => {
@@ -450,6 +459,7 @@ const collectOperationFields = (
     const isNamespaceType = isNestedOperationNamespaceType(
       nestedType,
       operationKind,
+      rootTypeName,
     );
 
     if (!isNamespaceType) {
@@ -471,6 +481,7 @@ const collectOperationFields = (
       list,
       key,
       operationKind,
+      rootTypeName,
       new Set([...visitedTypeNames, nestedTypeName]),
       namespaceTypeNames,
     );
@@ -481,6 +492,7 @@ const collectOperationFields = (
  * Returns names of namespace container object types for a root operation type.
  *
  * @param operationType - root operation type to inspect.
+ * @param operationKind - Optional explicit operation kind.
  * @returns set of namespace container type names.
  */
 const getOperationNamespaceTypeNames = (
@@ -500,6 +512,7 @@ const getOperationNamespaceTypeNames = (
         {},
         "",
         resolvedOperationKind,
+        rootTypeName,
         rootTypeName ? new Set([rootTypeName]) : new Set(),
         namespaceTypeNames,
       );
@@ -518,6 +531,7 @@ const getOperationNamespaceTypeNames = (
  * see {@link getSchemaMap}
  *
  * @param operationType - the operation type to parse.
+ * @param operationKind - optional explicit operation kind.
  *
  * @returns a map of fields as k/v records.
  *
@@ -539,6 +553,7 @@ export const getOperation = (
         list,
         "",
         resolvedOperationKind,
+        rootTypeName,
         rootTypeName ? new Set([rootTypeName]) : new Set(),
       );
 
