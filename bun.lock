@@ -47,6 +47,7 @@
         "typedoc-docusaurus-theme": "1.4.2",
         "typedoc-plugin-frontmatter": "1.3.1",
         "typedoc-plugin-markdown": "4.11.0",
+        "typescript-eslint": "8.58.0",
         "unionfs": "4.6.0",
       },
     },
@@ -159,6 +160,10 @@
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
       },
+    },
+    "packages/tooling-config": {
+      "name": "@graphql-markdown/tooling-config",
+      "version": "1.0.0",
     },
     "packages/types": {
       "name": "@graphql-markdown/types",
@@ -375,6 +380,8 @@
     "@graphql-markdown/logger": ["@graphql-markdown/logger@workspace:packages/logger"],
 
     "@graphql-markdown/printer-legacy": ["@graphql-markdown/printer-legacy@workspace:packages/printer-legacy"],
+
+    "@graphql-markdown/tooling-config": ["@graphql-markdown/tooling-config@workspace:packages/tooling-config"],
 
     "@graphql-markdown/types": ["@graphql-markdown/types@workspace:packages/types"],
 
@@ -2223,6 +2230,8 @@
     "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.11.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-2iunh2ALyfyh204OF7h2u0kuQ84xB3jFZtFyUr01nThJkLvR8oGGSSDlyt2gyO4kXhvUxDcVbO0y43+qX+wFbw=="],
 
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+
+    "typescript-eslint": ["typescript-eslint@8.58.0", "", { "dependencies": { "@typescript-eslint/eslint-plugin": "8.58.0", "@typescript-eslint/parser": "8.58.0", "@typescript-eslint/typescript-estree": "8.58.0", "@typescript-eslint/utils": "8.58.0" }, "peerDependencies": { "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0", "typescript": ">=4.8.4 <6.1.0" } }, "sha512-e2TQzKfaI85fO+F3QywtX+tCTsu/D3WW5LVU6nz8hTFKFZ8yBJ6mSYRpXqdR3mFjPWmO0eWsTa5f+UpAOe/FMA=="],
 
     "uc.micro": ["uc.micro@2.1.0", "", {}, "sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A=="],
 
