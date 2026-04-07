@@ -51,11 +51,20 @@ export const formatMDXBullet = (text = ""): MDXString => {
 
 /**
  * Default details formatter.
+ *
+ * The returned string **must** contain a `\r` (carriage return) character as a
+ * delimiter between the opening part (ending after `</summary>`) and the
+ * closing part (starting before `</details>`). `printSection` calls
+ * `result.split('\r')` to obtain `[openSection, closeSection]`; without this
+ * delimiter the closing tag is lost and items are rendered outside the
+ * collapsible element.
+ *
+ * Custom implementations of `formatMDXDetails` must follow the same contract.
  */
 export const formatMDXDetails = ({
   dataOpen,
 }: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<details class="gqlmd-mdx-details">${MARKDOWN_EOL}<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">${dataOpen.toUpperCase()}</span></summary>${MARKDOWN_EOL}\r${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 /**
