@@ -77,6 +77,16 @@ describe("formatter", () => {
         expect(result).toContain("gqlmd-mdx-details-summary");
         expect(result).toContain("SHOW");
       });
+
+      it("includes a \\r delimiter between open and close parts", () => {
+        const result = formatter.formatMDXDetails({
+          dataOpen: "show",
+        } as CollapsibleOption);
+        const parts = result.split("\r");
+        expect(parts).toHaveLength(2);
+        expect(parts[0]).toContain("</summary>");
+        expect(parts[1]).toContain("</details>");
+      });
     });
 
     describe("formatMDXFrontmatter", () => {
