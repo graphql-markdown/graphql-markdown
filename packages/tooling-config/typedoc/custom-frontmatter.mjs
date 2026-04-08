@@ -1,8 +1,8 @@
 // @ts-check
 
 import path from "node:path/posix";
-import { ReflectionKind } from 'typedoc';
-import { MarkdownPageEvent } from 'typedoc-plugin-markdown';
+import { ReflectionKind } from "typedoc";
+import { MarkdownPageEvent } from "typedoc-plugin-markdown";
 
 /**
  * Compatibility hook for the root TypeDoc pipeline.
@@ -16,8 +16,7 @@ export function load(app) {
   // Listen to PREPARE_FRONTMATTER event
   app.renderer.on(MarkdownPageEvent.BEGIN, (event) => {
     const isProjectPage =
-      event.isReflectionEvent() &&
-      event.model.kind === ReflectionKind.Project;
+      event.isReflectionEvent() && event.model.kind === ReflectionKind.Project;
 
     // Update event.frontmatter object using information from the page model as JSON
     event.frontmatter = {
@@ -31,4 +30,4 @@ export function load(app) {
       ...event.frontmatter,
     };
   });
-};
+}

@@ -34,15 +34,17 @@ export const typedocBaseOptions = {
   excludeTags: ["@alias"],
 };
 
-export const createPackageTypedocConfig = (overrides = {}) => ({
-  ...typedocBaseOptions,
-  plugin: [
-    "typedoc-plugin-markdown",
-    "../../tooling-config/typedoc/no-media-plugin.mjs",
-  ],
-  prettierConfigFile: "../../tooling-config/prettier/index.mjs",
-  entryPoints: ["./src"],
-  entryPointStrategy: "expand",
-  out: "./docs",
-  ...overrides,
-});
+export const createPackageTypedocConfig = (overrides = {}) => {
+  return {
+    ...typedocBaseOptions,
+    plugin: [
+      "typedoc-plugin-markdown",
+      "../../tooling-config/typedoc/no-media-plugin.mjs",
+    ],
+    prettierConfigFile: "../../tooling-config/prettier/index.mjs",
+    entryPoints: ["./src"],
+    entryPointStrategy: "expand",
+    out: "./docs",
+    ...overrides,
+  };
+};

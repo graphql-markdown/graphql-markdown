@@ -5,16 +5,17 @@
 
 import { createProjectConfig } from "../jest/base.mjs";
 
-const { roots, testEnvironment, transform, collectCoverageFrom } = createProjectConfig("_", {
-  testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
-});
+const { roots, testEnvironment, transform, collectCoverageFrom } =
+  createProjectConfig("_", {
+    testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
+  });
 
 const config = {
   buildCommand: "tsgo --build",
   checkers: ["typescript"],
   plugins: [
     "@stryker-mutator/jest-runner",
-    "@stryker-mutator/typescript-checker"
+    "@stryker-mutator/typescript-checker",
   ],
   commandRunner: { command: "npm run test:ci" },
   coverageAnalysis: "perTest",

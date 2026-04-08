@@ -38,7 +38,9 @@ export const createProjectConfig = (name, options = {}) => ({
     ],
   },
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
-  testMatch: options.testMatch || ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+  testMatch: options.testMatch || [
+    "<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts",
+  ],
   moduleNameMapper: {
     "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",
   },
@@ -50,7 +52,8 @@ export const createProjectConfig = (name, options = {}) => ({
  * @returns {import('ts-jest').JestConfigWithTsJest}
  */
 export const createPackageConfig = (name, options = {}) => {
-  const { rootDir, ...projectConfig } = createProjectConfig(name, options);
+  const projectConfig = createProjectConfig(name, options);
+  delete projectConfig.rootDir;
 
   return {
     preset: "ts-jest",
@@ -68,7 +71,11 @@ export const createPackageConfig = (name, options = {}) => {
  * @param {Partial<import('jest').Config>} [extraOptions]
  * @returns {import('jest').Config}
  */
-export const createMultiProjectConfig = (rootDir, projectOptions, extraOptions = {}) => ({
+export const createMultiProjectConfig = (
+  rootDir,
+  projectOptions,
+  extraOptions = {},
+) => ({
   rootDir,
   preset: "ts-jest",
   moduleFileExtensions: ["ts", "js"],

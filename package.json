@@ -85,6 +85,7 @@
     "prepare": "node ./packages/tooling-config/husky/prepare-husky.js",
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
+    "test": "turbo run test",
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",

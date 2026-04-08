@@ -1,26 +1,3 @@
-/**
- * ESLint 9 Flat Configuration
- * 
- * This configuration migrates from ESLint 8 .eslintrc.js to ESLint 9 flat config format.
- * 
- * Key changes from ESLint 8:
- * - Uses flat config format (eslint.config.ts) instead of .eslintrc.js
- * - Requires @eslint/js package for base configurations
- * - Plugins are specified in the `plugins` object, not as strings
- * - Config extends are now spread into the array
- * - Parser is specified in `languageOptions.parser`
- * 
- * Dependencies required:
- * - @eslint/js (peer dependency of ESLint 9)
- * 
- * Note: This file uses TypeScript for better type safety and IDE support.
- * - Bun (used by this project) natively supports TypeScript config files
- * - Node.js >= 22.10.0 supports TypeScript with --experimental-strip-types flag
- * - Node.js < 22.10.0 requires 'jiti' package (v2.0.0+) for TypeScript support
- * 
- * Run `bun install` to install missing dependencies.
- */
-
 import { join } from "node:path";
 import globals from "globals";
 import js from "@eslint/js";
@@ -90,7 +67,11 @@ export default [
       },
       "import/resolver": {
         typescript: {
-          project: ["./tsconfig.json", "./packages/*/tsconfig.json", "./packages/*/tsconfig.test.json"],
+          project: [
+            "./tsconfig.json",
+            "./packages/*/tsconfig.json",
+            "./packages/*/tsconfig.test.json",
+          ],
         },
       },
     },
@@ -293,4 +274,3 @@ export default [
   // Apply prettier config last to override any conflicting rules
   prettierConfig,
 ] satisfies Linter.FlatConfig[];
-

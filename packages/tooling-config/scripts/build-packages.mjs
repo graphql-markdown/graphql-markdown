@@ -15,7 +15,9 @@ const getBuildDependency = () => {
     const buildNeed = Object.keys({
       ...packageMeta?.dependencies,
       ...packageMeta?.peerDependencies,
-    }).filter((dependencyName) => dependencyName.startsWith(orgName));
+    }).filter((dependencyName) => {
+      return dependencyName.startsWith(orgName);
+    });
 
     const idx = buildSequence.indexOf(packageName);
 

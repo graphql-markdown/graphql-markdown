@@ -5,7 +5,7 @@
  * @type {import("prettier").Config}
  */
 
-export default{
+export default {
   singleQuote: false,
   bracketSpacing: true,
   proseWrap: "preserve",

@@ -9,6 +9,8 @@ import { createMultiProjectConfig } from "./base.mjs";
 export const createRootConfig = (rootDir) =>
   createMultiProjectConfig(
     rootDir,
-    { testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"] },
+    {
+      testMatch: ["<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts"],
+    },
     { collectCoverage: true, coverageReporters: ["json", "lcov"] },
   );

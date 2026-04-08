@@ -22,14 +22,23 @@ const getWorkspacePackagesMap = () => {
   const packagesPath = `${rootDir}/${packages.slice(0, -2)}`;
   const map = {};
   const folders = readdirSync(packagesPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+    .filter((dirent) => {
+      return dirent.isDirectory();
+    })
+    .map((dirent) => {
+      return dirent.name;
+    });
   folders.forEach((packageFolder) => {
     const packageJson = JSON.parse(
       readFileSync(`${packagesPath}/${packageFolder}/package.json`, "utf-8"),
     );
-    const { name, version, private: isPrivate, dependencies, peerDependencies } =
-      packageJson;
+    const {
+      name,
+      version,
+      private: isPrivate,
+      dependencies,
+      peerDependencies,
+    } = packageJson;
 
     Object.assign(map, {
       [name]: {

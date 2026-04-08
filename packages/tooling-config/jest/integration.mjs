@@ -9,6 +9,9 @@ import { createMultiProjectConfig } from "./base.mjs";
 export const createIntegrationConfig = (rootDir) =>
   createMultiProjectConfig(
     rootDir,
-    { testTimeout: 30000, testMatch: ["<rootDir>/tests/integration/**/(*.)+(spec|test).ts"] },
+    {
+      testTimeout: 30000,
+      testMatch: ["<rootDir>/tests/integration/**/(*.)+(spec|test).ts"],
+    },
     { collectCoverage: false },
   );
