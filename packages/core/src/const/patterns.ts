@@ -20,13 +20,13 @@
 export const PATTERNS = {
   /**
    * Matches directive names with named capture groups.
-   * Captures the directive name after the @ symbol.
+   * Captures the directive name after the \@ symbol.
    *
-   * @pattern `^@(?<directive>\w+)$`
+   * @pattern `^\@(?<directive>\w+)$`
    * @example
-   * - "@tag" matches → directive: "tag"
-   * - "@myDirective" matches → directive: "myDirective"
-   * - "@" does not match
+   * - "\@tag" matches → directive: "tag"
+   * - "\@myDirective" matches → directive: "myDirective"
+   * - "\@" does not match
    * - "tag" does not match
    */
   DIRECTIVE_NAME: /^@(?<directive>\w+)$/, // NOSONAR: S5843
@@ -35,11 +35,11 @@ export const PATTERNS = {
    * Matches group-by directive format with directive name, field, and optional fallback.
    * Groups: (1) directive name, (2) field name, (3) optional fallback
    *
-   * @pattern `^@(\w+)\((\w+)(?:\|=(\w+))?\)$`
+   * @pattern `^\@(\w+)\((\w+)(?:\|=(\w+))?\)$`
    * @example
-   * - "@tag(name)" matches → ["@tag(name)", "tag", "name", undefined]
-   * - "@category(type|=Other)" matches → ["@category(type|=Other)", "category", "type", "Other"]
-   * - "@tag()" does not match
+   * - "\@tag(name)" matches → ["\@tag(name)", "tag", "name", undefined]
+   * - "\@category(type|=Other)" matches → ["\@category(type|=Other)", "category", "type", "Other"]
+   * - "\@tag()" does not match
    * - "tag(name)" does not match
    */
   GROUP_BY_DIRECTIVE: /^@(\w+)\((\w+)(?:\|=(\w+))?\)$/, // NOSONAR: S5843

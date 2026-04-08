@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 jest.mock("graphql/execution", () => {
   const graphql = jest.requireActual("graphql/execution");
   return {

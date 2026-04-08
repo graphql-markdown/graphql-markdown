@@ -1,9 +1,56 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "./node_modules/turbo/schema.json",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "stryker": {
+      "dependsOn": ["^build"],
+      "outputs": ["reports/**"],
+      "cache": false
+    },
+    "docs": {
+      "dependsOn": ["^build"],
+      "outputs": ["api/**"]
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "prettier": {},
+    "prettier:fix": {
+      "cache": false
+    },
+    "ts:check": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["lint"],
+      "outputs": ["coverage/**"],
+      "cache": false
+    },
+    "test:unit": {
+      "dependsOn": ["lint"],
+      "outputs": ["coverage/**"]
+    },
+    "test:integration": {
+      "dependsOn": ["lint"],
+      "outputs": ["coverage/**"]
+    },
+    "test:ci": {
+      "dependsOn": ["lint"],
+      "outputs": ["coverage/**"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true
     },
     "dev": {
       "persistent": true,

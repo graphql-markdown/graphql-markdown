@@ -4,7 +4,6 @@ import type { DiffMethodName } from "@graphql-markdown/types";
 
 import { hasChanges } from "../../src/diff";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 jest.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 

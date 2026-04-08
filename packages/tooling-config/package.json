@@ -1,0 +1,53 @@
+{
+  "name": "@graphql-markdown/tooling-config",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graphql-markdown/graphql-markdown.git",
+    "directory": "packages/tooling-config"
+  },
+  "exports": {
+    "./eslint": "./eslint/config.ts",
+    "./jest/base": {
+      "types": "./jest/base.d.mts",
+      "default": "./jest/base.mjs"
+    },
+    "./jest/integration": {
+      "types": "./jest/integration.d.mts",
+      "default": "./jest/integration.mjs"
+    },
+    "./jest/root": {
+      "types": "./jest/root.d.mts",
+      "default": "./jest/root.mjs"
+    },
+    "./jest/unit": {
+      "types": "./jest/unit.d.mts",
+      "default": "./jest/unit.mjs"
+    },
+    "./package.json": "./package.json",
+    "./prettier": "./prettier/index.mjs",
+    "./stryker": "./stryker/stryker.conf.mjs",
+    "./tsconfig/base": "./tsconfig/base.json",
+    "./tsdoc": "./tsdoc/tsdoc.json",
+    "./typedoc/base": "./typedoc/base.mjs",
+    "./typedoc/package-base": "./typedoc/base.mjs",
+    "./typedoc/root": "./typedoc/root.mjs"
+  },
+  "scripts": {
+    "lint": "eslint --config ./eslint/config.ts \"**/*.{ts,mjs,js,json}\"",
+    "lint:fix": "eslint --config ./eslint/config.ts \"**/*.{ts,mjs,js,json}\" --fix",
+    "prettier": "prettier \"**/*.{ts,mjs,js,json}\" --check",
+    "prettier:fix": "prettier \"**/*.{ts,mjs,js,json}\" --write"
+  },
+  "files": [
+    "eslint",
+    "jest",
+    "prettier",
+    "scripts",
+    "tsconfig",
+    "typedoc",
+    "stryker"
+  ]
+}

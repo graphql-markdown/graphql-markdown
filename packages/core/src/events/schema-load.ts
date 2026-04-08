@@ -5,7 +5,8 @@
  */
 
 import type { GraphQLSchema, Maybe, SchemaMap } from "@graphql-markdown/types";
-import { CancellableEventOptions, DataEvent } from "@graphql-markdown/utils";
+import type { CancellableEventOptions } from "@graphql-markdown/utils";
+import { DataEvent } from "@graphql-markdown/utils";
 
 /**
  * Event emitted before/after loading a GraphQL schema.

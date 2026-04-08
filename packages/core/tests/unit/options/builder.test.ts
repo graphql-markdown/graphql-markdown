@@ -177,7 +177,9 @@ describe("OptionBuilder", () => {
       expect.hasAssertions();
 
       const builder = new OptionBuilder<TestOptions>();
-      builder.addFromCli(5, "count").transform("count", (v) => v * 2);
+      builder.addFromCli(5, "count").transform("count", (v) => {
+        return v * 2;
+      });
 
       expect(builder.get("count")).toBe(10);
     });
@@ -186,7 +188,9 @@ describe("OptionBuilder", () => {
       expect.hasAssertions();
 
       const builder = new OptionBuilder<TestOptions>();
-      builder.transform("count", (v) => v * 2);
+      builder.transform("count", (v) => {
+        return v * 2;
+      });
 
       expect(builder.get("count")).toBeUndefined();
     });
@@ -197,9 +201,15 @@ describe("OptionBuilder", () => {
       const builder = new OptionBuilder<TestOptions>();
       builder
         .addFromCli(5, "count")
-        .transform("count", (v) => v * 2)
-        .transform("count", (v) => v + 1)
-        .transform("count", (v) => v * 3);
+        .transform("count", (v) => {
+          return v * 2;
+        })
+        .transform("count", (v) => {
+          return v + 1;
+        })
+        .transform("count", (v) => {
+          return v * 3;
+        });
 
       expect(builder.get("count")).toBe(33); // ((5 * 2) + 1) * 3
     });
@@ -210,8 +220,12 @@ describe("OptionBuilder", () => {
       const builder = new OptionBuilder<TestOptions>();
       builder
         .addFromCli("  hello  ", "name")
-        .transform("name", (v) => v.trim())
-        .transform("name", (v) => v.toUpperCase());
+        .transform("name", (v) => {
+          return v.trim();
+        })
+        .transform("name", (v) => {
+          return v.toUpperCase();
+        });
 
       expect(builder.get("name")).toBe("HELLO");
     });
@@ -227,8 +241,12 @@ describe("OptionBuilder", () => {
         .addFromCli(true, "enabled")
         .transformIf(
           "count",
-          (merged) => merged.enabled === true,
-          (v) => v * 2,
+          (merged) => {
+            return merged.enabled === true;
+          },
+          (v) => {
+            return v * 2;
+          },
         );
 
       expect(builder.get("count")).toBe(10);
@@ -243,8 +261,12 @@ describe("OptionBuilder", () => {
         .addFromCli(false, "enabled")
         .transformIf(
           "count",
-          (merged) => merged.enabled === true,
-          (v) => v * 2,
+          (merged) => {
+            return merged.enabled === true;
+          },
+          (v) => {
+            return v * 2;
+          },
         );
 
       expect(builder.get("count")).toBe(5);
@@ -256,8 +278,12 @@ describe("OptionBuilder", () => {
       const builder = new OptionBuilder<TestOptions>();
       builder.addFromCli(true, "enabled").transformIf(
         "count",
-        (merged) => merged.enabled === true,
-        (v) => v * 2,
+        (merged) => {
+          return merged.enabled === true;
+        },
+        (v) => {
+          return v * 2;
+        },
       );
 
       expect(builder.get("count")).toBeUndefined();
@@ -320,7 +346,9 @@ describe("OptionBuilder", () => {
         .addDefault(0, "count")
         .addFromConfig(5, "count")
         .addDefault(true, "enabled")
-        .transform("count", (v) => v * 2)
+        .transform("count", (v) => {
+          return v * 2;
+        })
         .build();
 
       expect(options).toEqual({

@@ -112,12 +112,12 @@ When making your changes, remember to check your code by running:
 
 - `bun run ts:check` checks that the code is TS compliant
 - `bun run lint` checks that the code respects coding standards (ESLint + Prettier)
-- `bun run test` runs the test suites
+- `bun run test:[unit|integration]` runs the test suites for unit tests or integration tests
 - `earthly +smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
-> Note that `bun run ts:check`, `bun run lint` and `bun run test` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `bun run ts:check`, `bun run lint` and `bun run test:unit` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
 
 ### Committing changes
 
@@ -132,12 +132,14 @@ This project uses the [conventional commits](https://www.conventionalcommits.org
 The project follows a monorepo architecture with the following key packages:
 
 Core packages:
+
 - `core` - Main documentation generation engine
 - `docusaurus` - Official Docusaurus plugin
 - `cli` - Command line interface
 - `types` - Shared TypeScript types
 
 Support packages:
+
 - `utils` - Common utilities
 - `graphql` - Schema loading and parsing
 - `logger` - Logging functionality
@@ -146,7 +148,8 @@ Support packages:
 - `helpers` - Directive helpers (optional)
 
 Each package contains:
-```
+
+```text
 package/
 ├── src/         # Source code
 ├── tests/       # Test files
@@ -198,6 +201,12 @@ Mutation testing can be run locally with the command:
 earthly +mutation-test
 ```
 
+or
+
+```shell
+bun run stryker
+```
+
 You can read more about [mutation testing here](https://stryker-mutator.io/docs/).
 
 ### Build documentation
@@ -223,7 +232,7 @@ Generate API documentation for packages:
 
 ```shell
 # Generate docs for all packages
-bun run docs:api:all
+bun run docs:api
 ```
 
 The generated documentation will be available in each package's `docs/` directory.
@@ -239,20 +248,22 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
 #### Correct Publishing Process
 
 1. **Build all packages first**:
+
    ```shell
-   bun run build:all
-   ```
+   bun run build
 
 2. **Use the publish scripts** (recommended):
+
    ```shell
    # Single package
-   ./scripts/publish-package.sh <package-name>
-   
+   ./packages/tooling-config/scripts/publish-package.sh <package-name>
+
    # All packages for a release
-   ./scripts/publish-release.sh
+   ./packages/tooling-config/scripts/publish-release.sh
    ```
 
 3. **Or manually with bun pack + npm publish tarball**:
+
    ```shell
    cd packages/<package-name>
    bun pm pack                    # Creates tarball with resolved deps
@@ -260,6 +271,7 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
    ```
 
 The publish scripts will:
+
 - Pack with `bun pm pack` (resolves `workspace:^` to versions)
 - Verify no `workspace:` references remain in the tarball
 - Publish using the tarball (not from directory)
@@ -268,6 +280,7 @@ The publish scripts will:
 #### Dependency Order for Publishing
 
 Packages must be published in dependency order:
+
 1. `types` (no internal deps)
 2. `utils`, `logger`, `graphql`
 3. `helpers`, `diff`, `printer-legacy`

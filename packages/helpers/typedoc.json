@@ -1,7 +1,0 @@
-{
-  "extends": ["../../typedoc.base.json"],
-  "entryPoints": ["./src"],
-  "entryPointStrategy": "expand",
-  "out": "./docs",
-  "exclude": ["./src/index.ts"]
-}

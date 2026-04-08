@@ -10,7 +10,7 @@ jest.mock("@graphql-markdown/graphql", (): unknown => {
   return {
     ...jest.requireActual("@graphql-markdown/graphql"),
     isDirectiveType: jest.fn(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     isDeprecated: jest.fn((T: any): boolean => {
       return "deprecationReason" in T;
     }),

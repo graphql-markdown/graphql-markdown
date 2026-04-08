@@ -22,7 +22,7 @@ describe("array", () => {
 
       expect(toArray(undefined)).toBeUndefined();
       expect(toArray(null)).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       expect(toArray("not an object" as any)).toBeUndefined();
     });
 
@@ -72,7 +72,7 @@ describe("array", () => {
 
       expect(convertArrayToMapObject(undefined)).toBeUndefined();
       expect(convertArrayToMapObject(null)).toBeUndefined();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       expect(convertArrayToMapObject({} as any)).toBeUndefined();
     });
 

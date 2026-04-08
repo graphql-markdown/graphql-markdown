@@ -13,6 +13,11 @@ on:
     paths:
       - "packages/**/src/**/*"
       - "packages/**/tests/**/*"
+      - "packages/**/package.json"
+      - "packages/**/stryker.conf.mjs"
+      - "packages/tooling-config/**/*"
+      - "bun.lock"
+      - "package.json"
       - ".github/workflows/mutation.yml"
 
 concurrency:
@@ -64,7 +69,7 @@ jobs:
         run: bun ci
 
       - name: Build packages
-        run: bun run build:all
+        run: bun run build
 
       - name: Run Mutations Tests
-        run: bun run --filter '@graphql-markdown/${{matrix.package}}' stryker --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}
+        run: bun run --filter '@graphql-markdown/${{ matrix.package }}' stryker --allowEmpty --reporters dashboard --dashboard.module ${{matrix.package}}

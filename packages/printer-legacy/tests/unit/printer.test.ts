@@ -754,7 +754,7 @@ describe("Printer", () => {
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
               if (_eventName === "print:afterPrintCode") {
-                event.output = "MODIFIED: " + event.output;
+                event.output = "MODIFIED: " + (event.output as string);
               }
               return { errors: [], defaultPrevented: false };
             },

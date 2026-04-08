@@ -37,14 +37,25 @@
   "scripts": {
     "stryker": "stryker run",
     "clean": "tsgo --build --clean && rm -rf ./dist",
-    "docs": "typedoc",
-    "build": "tsgo --build"
+    "docs": "typedoc --options typedoc.config.mjs",
+    "build": "tsgo --build",
+    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"{src,tests}/**/*.{ts,js,json,gql}\"",
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"{src,tests}/**/*.{ts,js,json,gql}\" --fix",
+    "prettier": "prettier \"{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --check",
+    "prettier:fix": "prettier \"{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --write",
+    "ts:check": "tsgo --noEmit",
+    "test": "jest",
+    "test:unit": "jest --passWithNoTests --testPathPatterns=tests\/unit",
+    "test:integration": "jest --passWithNoTests --testPathPatterns=tests\/integration",
+    "test:ci": "jest --passWithNoTests --ci --silent --randomize --runInBand",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@graphql-markdown/types": "workspace:^"
   },
   "devDependencies": {
-    "@docusaurus/logger": "catalog:docusaurus"
+    "@docusaurus/logger": "catalog:docusaurus",
+    "@graphql-markdown/tooling-config": "workspace:^"
   },
   "directories": {
     "test": "tests"
