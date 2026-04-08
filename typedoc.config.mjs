@@ -11,7 +11,7 @@ export default {
     "./packages/tooling-config/typedoc/custom-frontmatter.mjs",
     "./packages/tooling-config/typedoc/no-media-plugin.mjs",
   ],
-  prettierConfigFile: "./packages/tooling-config/prettier/index.js",
+  prettierConfigFile: "./packages/tooling-config/prettier/index.mjs",
   entryPoints: ["packages/*"],
   entryPointStrategy: "packages",
   exclude: [
