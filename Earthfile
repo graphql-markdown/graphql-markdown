@@ -102,7 +102,13 @@ smoke-docusaurus-test:
   DO +SMOKE_TEST --package=docusaurus
 
 smoke-docusaurus-run:
-  FROM +smoke-docusaurus-test
+  ARG options=
+  FROM +setup-docusaurus-project
+  WORKDIR /$docusaurusProject
+  DO +GQLMD --options=$options
+  RUN bun run build
+  RUN bun run clear
+
 smoke-cli-test:
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
