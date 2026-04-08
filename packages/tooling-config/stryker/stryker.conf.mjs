@@ -1,15 +1,20 @@
 // @ts-check
-/**
- * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
- */
 
 import { createProjectConfig } from "../jest/base.mjs";
 
-const { roots, testEnvironment, transform, collectCoverageFrom } =
-  createProjectConfig("_", {
-    testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
-  });
+const {
+  roots,
+  testEnvironment,
+  transform,
+  collectCoverageFrom,
+  moduleNameMapper,
+} = createProjectConfig("_", {
+  testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
+});
 
+/**
+ * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
+ */
 const config = {
   buildCommand: "tsgo --build",
   checkers: ["typescript"],
@@ -29,6 +34,11 @@ const config = {
       collectCoverage: false,
       collectCoverageFrom,
       moduleFileExtensions: ["js", "ts"],
+      moduleNameMapper: Object.fromEntries(
+        Object.entries(moduleNameMapper).map(([pattern]) => {
+          return [pattern, "<rootDir>/../../../$1/src"];
+        }),
+      ),
       notify: false,
       preset: "ts-jest",
       reporters: [],
