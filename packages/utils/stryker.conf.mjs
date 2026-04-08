@@ -3,6 +3,6 @@
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
 
-import config from "../tooling-config/stryker/stryker.conf.mjs";
+import config from "@graphql-markdown/tooling-config/stryker";
 
 export default config;
