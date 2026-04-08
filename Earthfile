@@ -14,7 +14,7 @@ ENV NODE_ENV=ci
 ENV HUSKY=0
 ENV NODE_OPTIONS=--dns-result-order=ipv4first
 ENV TURBO_CONCURRENCY=50%
-RUN --mount=type=cache,target=/root/.bun npm install --global npm@$npmVersion bun
+RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
 RUN node --version
 RUN npm --version
 RUN bun --version
@@ -67,9 +67,9 @@ build-docusaurus-project:
   FROM +build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
-    RUN bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
   ELSE
-    RUN bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
+    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript 
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
@@ -167,8 +167,7 @@ all:
 
 INSTALL_JEST:
   FUNCTION
-  ARG package_manager=bun
-  RUN --mount=type=cache,target=/root/.$package_manager \ $package_manager install --silent --global jest
+  RUN --mount=type=cache,target=/root/.bun bun install --silent --global jest
 
 GQLMD:
   FUNCTION
@@ -195,11 +194,10 @@ INSTALL_GQLMD:
 SMOKE_TEST:
   FUNCTION
   ARG package
-  DO +INSTALL_JEST --package_manager=npm
   COPY --dir ./packages/$package/tests/e2e ./__tests__/e2e
   COPY --dir ./packages/$package/tests/helpers ./__tests__/helpers
-  RUN if [ -f ./__tests__/e2e/jest.config.mjs ]; then mv ./__tests__/e2e/jest.config.mjs ./jest.config.mjs; else mv ./__tests__/e2e/jest.config.js ./jest.config.js; fi
-  RUN if [ -f ./jest.config.mjs ]; then npx jest --runInBand --config ./jest.config.mjs; else npx jest --runInBand; fi
+  RUN mv ./__tests__/e2e/jest.config.mjs ./jest.config.mjs
+  RUN NODE_OPTIONS=--experimental-vm-modules npx --yes jest --runInBand --config ./jest.config.mjs
 
 BUILD_EXAMPLES:
   FUNCTION
