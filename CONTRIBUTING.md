@@ -256,10 +256,10 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
 
    ```shell
    # Single package
-   ./packages/tooling-config/publish-package.sh <package-name>
+   ./packages/tooling-config/scripts/publish-package.sh <package-name>
 
    # All packages for a release
-   ./packages/tooling-config/publish-release.sh
+   ./packages/tooling-config/scripts/publish-release.sh
    ```
 
 3. **Or manually with bun pack + npm publish tarball**:
