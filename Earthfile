@@ -29,6 +29,7 @@ deps:
 
 build:
   FROM +deps
+  RUN bun run clean
   RUN bun run build
 
 lint:
