@@ -20,7 +20,7 @@ RUN bun --version
 
 deps:
   COPY package.json bun.lock ./
-  COPY tsconfig.json tsconfig.base.json turbo.json tsdoc.json typedoc.config.mjs ./
+  COPY tsconfig.json tsconfig.base.json turbo.json typedoc.config.mjs ./
   COPY --dir config ./config
   COPY --dir packages ./packages
   RUN --mount=type=cache,target=/root/.bun bun ci --silent
