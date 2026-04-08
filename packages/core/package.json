@@ -78,6 +78,9 @@
     "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
   },
+  "devDependencies": {
+    "@graphql-markdown/tooling-config": "workspace:^"
+  },
   "peerDependencies": {
     "@graphql-markdown/diff": "workspace:^",
     "@graphql-markdown/helpers": "workspace:^",

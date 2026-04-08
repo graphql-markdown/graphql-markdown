@@ -54,7 +54,8 @@
     "@graphql-markdown/types": "workspace:^"
   },
   "devDependencies": {
-    "@docusaurus/logger": "catalog:docusaurus"
+    "@docusaurus/logger": "catalog:docusaurus",
+    "@graphql-markdown/tooling-config": "workspace:^"
   },
   "directories": {
     "test": "tests"

@@ -81,7 +81,8 @@
     "@docusaurus/utils": "catalog:docusaurus"
   },
   "devDependencies": {
-    "@docusaurus/types": "catalog:docusaurus"
+    "@docusaurus/types": "catalog:docusaurus",
+    "@graphql-markdown/tooling-config": "workspace:^"
   },
   "peerDependencies": {
     "@docusaurus/logger": "catalog:docusaurus"

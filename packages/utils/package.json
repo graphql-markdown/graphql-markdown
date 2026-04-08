@@ -67,6 +67,9 @@
   "dependencies": {
     "@graphql-markdown/types": "workspace:^"
   },
+  "devDependencies": {
+    "@graphql-markdown/tooling-config": "workspace:^"
+  },
   "peerDependencies": {
     "prettier": "catalog:"
   },

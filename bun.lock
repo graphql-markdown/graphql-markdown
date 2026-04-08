@@ -65,6 +65,9 @@
         "commander": "^5.1.0",
         "graphql-config": "catalog:",
       },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
+      },
     },
     "packages/core": {
       "name": "@graphql-markdown/core",
@@ -75,6 +78,9 @@
         "@graphql-markdown/logger": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
       "peerDependencies": {
         "@graphql-markdown/diff": "workspace:^",
@@ -100,6 +106,9 @@
         "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
         "@graphql-tools/load": "catalog:graphql-tools",
       },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
+      },
     },
     "packages/docusaurus": {
       "name": "@graphql-markdown/docusaurus",
@@ -113,6 +122,7 @@
       },
       "devDependencies": {
         "@docusaurus/types": "catalog:docusaurus",
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
       "peerDependencies": {
         "@docusaurus/logger": "catalog:docusaurus",
@@ -126,6 +136,9 @@
         "@graphql-markdown/utils": "workspace:^",
         "@graphql-tools/load": "catalog:graphql-tools",
       },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
+      },
       "peerDependencies": {
         "graphql": "catalog:",
       },
@@ -137,6 +150,9 @@
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
       "peerDependencies": {
         "graphql": "catalog:",
@@ -150,6 +166,7 @@
       },
       "devDependencies": {
         "@docusaurus/logger": "catalog:docusaurus",
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
     },
     "packages/printer-legacy": {
@@ -159,6 +176,9 @@
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
     },
     "packages/tooling-config": {
@@ -180,6 +200,9 @@
       "version": "1.10.0",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
       "peerDependencies": {
         "prettier": "catalog:",

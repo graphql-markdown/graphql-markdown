@@ -72,6 +72,9 @@
     "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
     "@graphql-tools/load": "catalog:graphql-tools"
   },
+  "devDependencies": {
+    "@graphql-markdown/tooling-config": "workspace:^"
+  },
   "resolutions": {
     "braces": "3.0.3"
   },
