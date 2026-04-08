@@ -13,7 +13,11 @@ declare global {
 }
 
 /**
- * Log levels.
+ * Log levels supported by the logger.
+ *
+ * @remarks
+ * The logger supports standard console methods plus custom 'success' level
+ * for framework-specific integrations like Docusaurus.
  *
  */
 export enum LogLevel {
@@ -24,6 +28,68 @@ export enum LogLevel {
   success = "success",
   warn = "warn",
 }
+
+/**
+ * Type guard to check if an object has a log method for a given level.
+ *
+ * @param instance - The object to check
+ * @param level - The log level to verify
+ * @returns `true` if the instance has a function at the given level, `false` otherwise
+ */
+const hasLogMethod = (
+  instance: unknown,
+  level: LogLevel | keyof typeof LogLevel,
+): instance is Record<string, (...args: unknown[]) => unknown> => {
+  return (
+    typeof instance === "object" &&
+    instance !== null &&
+    typeof (instance as Record<string, unknown>)[level] === "function"
+  );
+};
+
+/**
+ * Resolve a logger instance from a module export.
+ *
+ * @remarks
+ * Handles various module export patterns:
+ * - Direct logger instance: `{ info: () => {}, ... }`
+ * - Default export: `{ default: { info: () => {}, ... } }`
+ * - Named export: `{ logger: { info: () => {}, ... } }`
+ *
+ * @param instance - The module export or object to resolve
+ * @returns The logger instance if found, or `undefined` if no valid logger is detected (the caller is responsible for falling back to `globalThis.console`)
+ */
+const resolveLoggerInstance = (
+  instance: unknown,
+): LoggerType["instance"] | undefined => {
+  if (hasLogMethod(instance, LogLevel.info)) {
+    return instance as LoggerType["instance"];
+  }
+
+  if (
+    typeof instance === "object" &&
+    instance !== null &&
+    "default" in instance
+  ) {
+    const nestedDefault = (instance as { default?: unknown }).default;
+    if (hasLogMethod(nestedDefault, LogLevel.info)) {
+      return nestedDefault as LoggerType["instance"];
+    }
+  }
+
+  if (
+    typeof instance === "object" &&
+    instance !== null &&
+    "logger" in instance
+  ) {
+    const nestedLogger = (instance as { logger?: unknown }).logger;
+    if (hasLogMethod(nestedLogger, LogLevel.info)) {
+      return nestedLogger as LoggerType["instance"];
+    }
+  }
+
+  return undefined;
+};
 
 /**
  * Instantiate a logger module.
@@ -47,19 +113,35 @@ export const Logger = async (moduleName?: string): Promise<void> => {
     return;
   }
 
-  const instance: LoggerType["instance"] =
+  const moduleExports =
     typeof moduleName === "string" && moduleName !== ""
-      ? (await import(moduleName)).default
-      : globalThis.console;
+      ? await import(moduleName)
+      : undefined;
+
+  const instance =
+    resolveLoggerInstance(moduleExports) ??
+    resolveLoggerInstance(moduleExports?.default) ??
+    globalThis.console;
+
+  const getCallbackForLevel = (
+    instanceObj: LoggerType["instance"],
+    requestedLevel: LogLevel | keyof typeof LogLevel,
+  ): ((...args: unknown[]) => unknown) | undefined => {
+    if (hasLogMethod(instanceObj, requestedLevel)) {
+      return instanceObj[requestedLevel] as (...args: unknown[]) => unknown;
+    }
+    if (hasLogMethod(instanceObj, LogLevel.info)) {
+      return instanceObj[LogLevel.info] as (...args: unknown[]) => unknown;
+    }
+    return undefined;
+  };
 
   const _log = (
     message: string,
 
     level: LogLevel | keyof typeof LogLevel = LogLevel.info,
   ): void => {
-    const fallback = instance[LogLevel.info];
-    const callback =
-      typeof instance[level] === "function" ? instance[level] : fallback;
+    const callback = getCallbackForLevel(instance, level);
     callback?.apply(this, [message]);
   };
 
@@ -91,6 +173,14 @@ export const log = (
   Promise.resolve(Logger()).catch(() => {});
   globalThis.logger?._log(message, level);
 };
+
+/**
+ * Internal helpers exported for testing purposes only.
+ * Not part of the public API — do not use in application code.
+ *
+ * @internal
+ */
+export const __internal = { hasLogMethod, resolveLoggerInstance };
 
 /**
  * @see log
