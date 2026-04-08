@@ -157,7 +157,9 @@ describe("logger", () => {
         },
       };
 
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.info)).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.info),
+      ).toBe(true);
     });
 
     test("returns false for object without log method", () => {
@@ -169,16 +171,26 @@ describe("logger", () => {
         },
       };
 
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.info)).toBe(false);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.info),
+      ).toBe(false);
     });
 
     test("returns false for null or non-object", () => {
       expect.hasAssertions();
 
-      expect(Logger.hasLogMethod(null, Logger.LogLevel.info)).toBe(false);
-      expect(Logger.hasLogMethod(undefined, Logger.LogLevel.info)).toBe(false);
-      expect(Logger.hasLogMethod("string", Logger.LogLevel.info)).toBe(false);
-      expect(Logger.hasLogMethod(123, Logger.LogLevel.info)).toBe(false);
+      expect(Logger.__internal.hasLogMethod(null, Logger.LogLevel.info)).toBe(
+        false,
+      );
+      expect(
+        Logger.__internal.hasLogMethod(undefined, Logger.LogLevel.info),
+      ).toBe(false);
+      expect(
+        Logger.__internal.hasLogMethod("string", Logger.LogLevel.info),
+      ).toBe(false);
+      expect(Logger.__internal.hasLogMethod(123, Logger.LogLevel.info)).toBe(
+        false,
+      );
     });
 
     test("works with each log level", () => {
@@ -205,14 +217,24 @@ describe("logger", () => {
         },
       };
 
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.debug)).toBe(true);
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.error)).toBe(true);
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.info)).toBe(true);
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.log)).toBe(true);
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.success)).toBe(
-        true,
-      );
-      expect(Logger.hasLogMethod(loggerObj, Logger.LogLevel.warn)).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.debug),
+      ).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.error),
+      ).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.info),
+      ).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.log),
+      ).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.success),
+      ).toBe(true);
+      expect(
+        Logger.__internal.hasLogMethod(loggerObj, Logger.LogLevel.warn),
+      ).toBe(true);
     });
 
     test("works with string log level names", () => {
@@ -224,8 +246,8 @@ describe("logger", () => {
         },
       };
 
-      expect(Logger.hasLogMethod(loggerObj, "info")).toBe(true);
-      expect(Logger.hasLogMethod(loggerObj, "error")).toBe(false);
+      expect(Logger.__internal.hasLogMethod(loggerObj, "info")).toBe(true);
+      expect(Logger.__internal.hasLogMethod(loggerObj, "error")).toBe(false);
     });
   });
 
@@ -239,7 +261,7 @@ describe("logger", () => {
         },
       };
 
-      const resolved = Logger.resolveLoggerInstance(loggerObj);
+      const resolved = Logger.__internal.resolveLoggerInstance(loggerObj);
 
       expect(resolved).toEqual(loggerObj);
     });
@@ -249,67 +271,34 @@ describe("logger", () => {
 
       const obj = { foo: "bar" };
 
-      const resolved = Logger.resolveLoggerInstance(obj);
+      const resolved = Logger.__internal.resolveLoggerInstance(obj);
 
       expect(resolved).toBeUndefined();
     });
 
-    test("resolves default export pattern", () => {
+    test("resolves default export pattern", async () => {
       expect.hasAssertions();
 
-      // Simulate default export pattern: { default: { info: fn, ... } }
-      const simulatedDefaultExport = {
-        default: {
-          debug: () => {
-            return "Debug via default";
-          },
-          error: () => {
-            return "Error via default";
-          },
-          info: () => {
-            return "Info via default";
-          },
-          log: () => {
-            return "Log via default";
-          },
-          warn: () => {
-            return "Warn via default";
-          },
-        },
-      };
-
-      const resolved = Logger.resolveLoggerInstance(simulatedDefaultExport);
+      // CJS modules imported via dynamic import() wrap module.exports as .default
+      const { default: simulatedDefaultExport } =
+        await import("../__data__/logger_default_export.js");
+      const resolved = Logger.__internal.resolveLoggerInstance(
+        simulatedDefaultExport,
+      );
 
       expect(resolved).toEqual(simulatedDefaultExport.default);
       expect(resolved).toHaveProperty("info");
       expect(typeof resolved?.info).toBe("function");
     });
 
-    test("resolves named logger export pattern", () => {
+    test("resolves named logger export pattern", async () => {
       expect.hasAssertions();
 
-      // Simulate named logger export pattern: { logger: { info: fn, ... } }
-      const simulatedNamedExport = {
-        logger: {
-          debug: () => {
-            return "Debug via logger";
-          },
-          error: () => {
-            return "Error via logger";
-          },
-          info: () => {
-            return "Info via logger";
-          },
-          log: () => {
-            return "Log via logger";
-          },
-          warn: () => {
-            return "Warn via logger";
-          },
-        },
-      };
-
-      const resolved = Logger.resolveLoggerInstance(simulatedNamedExport);
+      // CJS modules imported via dynamic import() wrap module.exports as .default
+      const { default: simulatedNamedExport } =
+        await import("../__data__/logger_named_export.js");
+      const resolved =
+        Logger.__internal.resolveLoggerInstance(simulatedNamedExport);
 
       expect(resolved).toEqual(simulatedNamedExport.logger);
       expect(resolved).toHaveProperty("info");
@@ -319,26 +308,22 @@ describe("logger", () => {
     test("returns undefined for null or non-object", () => {
       expect.hasAssertions();
 
-      expect(Logger.resolveLoggerInstance(null)).toBeUndefined();
-      expect(Logger.resolveLoggerInstance(undefined)).toBeUndefined();
-      expect(Logger.resolveLoggerInstance("string")).toBeUndefined();
-      expect(Logger.resolveLoggerInstance(123)).toBeUndefined();
+      expect(Logger.__internal.resolveLoggerInstance(null)).toBeUndefined();
+      expect(
+        Logger.__internal.resolveLoggerInstance(undefined),
+      ).toBeUndefined();
+      expect(Logger.__internal.resolveLoggerInstance("string")).toBeUndefined();
+      expect(Logger.__internal.resolveLoggerInstance(123)).toBeUndefined();
     });
 
-    test("resolves incomplete logger (with some methods)", () => {
+    test("resolves incomplete logger (with some methods)", async () => {
       expect.hasAssertions();
 
-      // Incomplete logger with only some methods
-      const incompleteLogger = {
-        info: () => {
-          return "Incomplete info";
-        },
-        warn: () => {
-          return "Incomplete warn";
-        },
-      };
-
-      const resolved = Logger.resolveLoggerInstance(incompleteLogger);
+      // CJS modules imported via dynamic import() wrap module.exports as .default
+      const { default: incompleteLogger } =
+        await import("../__data__/logger_incomplete.js");
+      const resolved =
+        Logger.__internal.resolveLoggerInstance(incompleteLogger);
 
       expect(resolved).toEqual(incompleteLogger);
       expect(resolved).toHaveProperty("info");
@@ -360,7 +345,7 @@ describe("logger", () => {
         },
       };
 
-      const resolved = Logger.resolveLoggerInstance(nestedModule);
+      const resolved = Logger.__internal.resolveLoggerInstance(nestedModule);
 
       // Should resolve to the module itself (which has the direct methods)
       expect(resolved?.info()).toBe("direct");
