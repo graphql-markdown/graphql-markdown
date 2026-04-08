@@ -1,13 +1,16 @@
-const { getTypeDirectiveValues } = require("@graphql-markdown/graphql");
-const {
+// @ts-check
+
+import { getTypeDirectiveValues } from "@graphql-markdown/graphql";
+import {
   directiveDescriptor,
   directiveTag,
-} = require("@graphql-markdown/helpers");
+} from "@graphql-markdown/helpers";
+
+/** @type {string} */
+export const schema = "data/schema_with_grouping.graphql";
 
 /** @type {import('@graphql-markdown/types').ConfigOptions} */
-module.exports = {
-  id: "schema_with_grouping",
-  schema: "data/schema_with_grouping.graphql",
+export const options = {
   rootPath: "./docs",
   linkRoot: "/examples/group-by",
   baseURL: ".",

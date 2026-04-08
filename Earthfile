@@ -81,44 +81,31 @@ setup-cli-project:
   WORKDIR /$gqlmdCliProject
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
-  RUN --mount=type=cache,target=/root/.npm npm install --save ./graphql-markdown-cli.tgz
-  COPY --dir ./packages/cli/tests/__data__ ./data
+  RUN npm install --save ./graphql-markdown-cli.tgz
 
 setup-docusaurus-project:
   FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
-  DO +INSTALL_GRAPHQL
-  DO +INSTALL_GQLMD
-  RUN --mount=type=cache,target=/root/.npm npm install --save ./graphql-markdown-cli.tgz
-  RUN --mount=type=cache,target=/root/.npm npm install --save ./graphql-markdown-docusaurus.tgz
-  COPY --dir ./packages/docusaurus/tests/__data__ ./data
   COPY --dir ./website/static/img ./static/img
   COPY --dir ./website/src/css ./src/css
-  RUN mv ./data/.graphqlrc ./.graphqlrc && \
-    mv ./data/docusaurus2-graphql-doc-build.js ./docusaurus2-graphql-doc-build.js && \
-    mv ./data/docusaurus2-graphql-doc-nobuild.js ./docusaurus2-graphql-doc-nobuild.js && \
-    mv ./data/scripts/config-plugin.mjs ./config-plugin.mjs
-  RUN --mount=type=cache,target=/root/.npm npm install --save ./data/e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
+  DO +INSTALL_GRAPHQL
+  DO +INSTALL_GQLMD
+  RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
+  COPY ./tests/e2e/docusaurus/__data__/scripts/config-plugin.mjs ./config-plugin.mjs
   RUN node config-plugin.mjs
 
 smoke-docusaurus-test:
   FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
+  COPY ./tests/e2e/helpers/e2e-test-webpack-plugin ./e2e-test-webpack-plugin
+  RUN npm install --save ./e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
   DO +SMOKE_TEST --package=docusaurus
 
 smoke-cli-test:
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
-  RUN mv ./data/cli-graphql-doc-generator-multi-instance.config.js ./graphql.config.js
+  COPY ./tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs ./graphql.config.mjs
   DO +SMOKE_TEST --package=cli
-
-smoke-docusaurus-run:
-  ARG options=
-  FROM +setup-docusaurus-project
-  WORKDIR /$docusaurusProject
-  DO +GQLMD --options=$options
-  RUN bun run build
-  RUN bun run clear
 
 build-docusaurus-examples:
   FROM +setup-docusaurus-project
@@ -130,7 +117,7 @@ build-cli-examples:
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
-  RUN mv ./data/graphql.config.js ./graphql.config.js
+  COPY ./tests/e2e/__data__/graphql.config.mjs ./graphql.config.mjs
   DO +BUILD_EXAMPLES --command=gqlmd
 
 build-api-docs:
@@ -194,9 +181,12 @@ INSTALL_GQLMD:
 SMOKE_TEST:
   FUNCTION
   ARG package
-  COPY --dir ./packages/$package/tests/e2e ./__tests__/e2e
-  COPY --dir ./packages/$package/tests/helpers ./__tests__/helpers
-  RUN mv ./__tests__/e2e/jest.config.mjs ./jest.config.mjs
+  COPY ./tests/e2e/__data__ ./data
+  COPY ./tests/e2e/__data__/.graphqlrc ./.graphqlrc
+  COPY ./tests/e2e/helpers/cli.mjs ./__tests__/helpers/cli.mjs
+  COPY ./tests/e2e/$package/__data__ ./data
+  COPY ./tests/e2e/$package/specs ./__tests__/e2e/specs
+  COPY ./tests/e2e/$package/jest.config.mjs ./jest.config.mjs
   RUN NODE_OPTIONS=--experimental-vm-modules npx --yes jest --runInBand --config ./jest.config.mjs
 
 BUILD_EXAMPLES:

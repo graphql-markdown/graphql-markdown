@@ -6,6 +6,7 @@ const config = {
   displayName: "End-to-End Tests",
   globals: {
     __ROOT_DIR__: "/docusaurus-gqlmd",
+    __CLI_COMMAND__: "npx docusaurus",
   },
   rootDir: import.meta.dirname,
   testEnvironment: "node",

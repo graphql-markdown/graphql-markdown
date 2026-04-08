@@ -1,6 +1,10 @@
+// @ts-check
+
+/** @type {string} */
+export const schema = "data/tweet.graphql";
+
 /** @type {import('@graphql-markdown/types').ConfigOptions} */
-module.exports = {
-  schema: "data/tweet.graphql",
+export const options = {
   rootPath: "./docs",
   linkRoot: "/examples/default",
   baseURL: ".",
@@ -18,5 +22,8 @@ module.exports = {
       pagination_prev: null,
     },
   },
-  metatags: [{ name: "googlebot", content: "noindex" }, { charset: "utf-8" }],
+  metatags: [
+    { name: "robots", content: "noindex" },
+    { charset: "utf-8" },
+  ],
 };

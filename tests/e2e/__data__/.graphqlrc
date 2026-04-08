@@ -3,6 +3,7 @@ projects:
     schema: data/tweet.graphql
     extensions:
       graphql-markdown:
+        rootPath: "./docs"
         baseURL: "."
         linkRoot: "/examples/tweet"
         homepage: data/groups.md
@@ -10,6 +11,7 @@ projects:
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
         docOptions:
           index: true
+          categorySort: "natural"
         printTypeOptions:
           parentTypePrefix: false
           typeBadges: true
@@ -17,6 +19,6 @@ projects:
         skipDocDirective:
         - "@noDoc"
         metatags:
-        - name: googlebot
+        - name: robots
           content: noindex
         - charset: utf-8

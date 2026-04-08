@@ -1,12 +1,14 @@
+// @ts-check
+
 import { writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 
 const PLUGIN_FILENAMES = {
-  config1: "docusaurus2-graphql-doc-generator.config.js",
-  config2: "docusaurus2-graphql-doc-generator-groups.config.js",
-  config3: "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js",
+  config1: "graphql-doc-generator.config.mjs",
+  config2: "graphql-doc-generator-groups.config.mjs",
+  config3: "graphql-doc-generator-tweets.graphqlrc.mjs",
 };
 
 const PLUGIN_PLACEHOLDER_ENTRIES = Object.entries(PLUGIN_FILENAMES);
@@ -78,19 +80,29 @@ const config = {
   ],
 };
 
-const createPluginRequireString = (filename) =>
-  `require(path.resolve(__dirname, "data/${filename}"))`;
+const createPluginImportString = (filename) =>
+  `await importConfig("${filename}")`;
 
 const configExportTemplate = `
-const path = require("path");
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-module.exports = ${JSON.stringify(config)};\n`
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const importConfig = async (filename) => {
+  const moduleUrl = pathToFileURL(path.resolve(__dirname, "data", filename)).href;
+  const moduleExports = await import(moduleUrl);
+  return moduleExports.default;
+};
+
+export default async function createConfigAsync() {
+  return ${JSON.stringify(config)};
+}\n`
 
 const configExportString = PLUGIN_PLACEHOLDER_ENTRIES.reduce(
   (output, [placeholder, filename]) =>
     output.replace(
       `"@${placeholder}@"`,
-      createPluginRequireString(filename),
+      createPluginImportString(filename),
     ),
   configExportTemplate,
 );

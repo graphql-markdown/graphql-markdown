@@ -1,5 +1,5 @@
 /** @type {import('graphql-config').IGraphQLConfig} */
-module.exports = {
+const config = {
   projects: {
     default: {
       extensions: {
@@ -23,3 +23,5 @@ module.exports = {
     },
   },
 };
+
+export default config;

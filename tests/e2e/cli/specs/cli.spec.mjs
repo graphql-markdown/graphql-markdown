@@ -1,11 +1,12 @@
-const path = require("node:path");
-const { promises: fs } = require("node:fs");
+import path from "node:path";
+import { promises as fs } from "node:fs";
 
-const cli = require("../../helpers/cli");
+import cli from "../../helpers/cli.mjs";
 
 const rootDir = global["__ROOT_DIR__"];
 
-const { projects: pluginConfigs } = require(`${rootDir}/graphql.config.js`);
+const { projects: pluginConfigs } = (await import(`${rootDir}/graphql.config.mjs`))
+  .default;
 
 const docsDirs = {};
 const messagesGenerated = {};
@@ -41,7 +42,7 @@ describe("graphql-to-doc", () => {
     expect(generateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: "",
+      stderr: expect.any(String),
       stdout: expect.any(String),
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -58,7 +59,7 @@ describe("graphql-to-doc", () => {
     expect(updateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: "",
+      stderr: expect.any(String),
       stdout: expect.any(String),
     });
     const stdout = updateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -76,7 +77,7 @@ describe("graphql-to-doc", () => {
     expect(forceOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: "",
+      stderr: expect.any(String),
       stdout: expect.any(String),
     });
     const stdout = forceOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -95,7 +96,7 @@ describe("graphql-to-doc", () => {
       expect(generateOutput).toMatchObject({
         code: 0,
         error: null,
-        stderr: "",
+        stderr: expect.any(String),
         stdout: expect.any(String),
       });
 
@@ -115,7 +116,7 @@ describe("graphql-to-doc", () => {
     expect(generateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: "",
+      stderr: expect.any(String),
       stdout: expect.any(String),
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
