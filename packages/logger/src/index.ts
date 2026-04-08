@@ -32,6 +32,9 @@ export enum LogLevel {
 /**
  * Type guard to check if an object has a log method for a given level.
  *
+ * @remarks
+ * This is an internal helper function exported for testing purposes.
+ *
  * @param instance - The object to check
  * @param level - The log level to verify
  * @returns `true` if the instance has a function at the given level, `false` otherwise
@@ -43,8 +46,9 @@ export enum LogLevel {
  * hasLogMethod(logger, LogLevel.error); // false
  * ```
  *
+ * @internal
  */
-const hasLogMethod = (
+export const hasLogMethod = (
   instance: unknown,
   level: LogLevel | keyof typeof LogLevel,
 ): instance is Record<string, (...args: unknown[]) => unknown> => {
@@ -66,6 +70,8 @@ const hasLogMethod = (
  *
  * Falls back to `globalThis.console` if no valid logger is found.
  *
+ * This is an internal helper function exported for testing purposes.
+ *
  * @param instance - The module export or object to resolve
  * @returns The logger instance if found, or undefined (will fall back to console)
  *
@@ -76,8 +82,9 @@ const hasLogMethod = (
  * const logger = resolveLoggerInstance(exported);
  * ```
  *
+ * @internal
  */
-const resolveLoggerInstance = (
+export const resolveLoggerInstance = (
   instance: unknown,
 ): LoggerType["instance"] | undefined => {
   if (hasLogMethod(instance, LogLevel.info)) {
