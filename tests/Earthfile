@@ -1,0 +1,44 @@
+VERSION 0.8
+
+IMPORT .. AS root
+
+ARG --global docusaurusVersion="latest"
+ARG --global docusaurusProject="docusaurus-gqlmd"
+ARG --global gqlmdCliProject="cli-gqlmd"
+ARG --global testTimeout="5000"
+
+smoke-docusaurus-test:
+  FROM root+setup-docusaurus-project
+  WORKDIR /$docusaurusProject
+  COPY ./e2e/helpers/e2e-test-webpack-plugin ./e2e-test-webpack-plugin
+  RUN npm install --save ./e2e-test-webpack-plugin
+  DO +SMOKE_TEST --package=docusaurus
+
+smoke-docusaurus-run:
+  ARG options=
+  FROM root+setup-docusaurus-project
+  WORKDIR /$docusaurusProject
+  COPY ./e2e/__data__ ./data
+  COPY ./e2e/docusaurus/__data__ ./data
+  DO root+GQLMD --options=$options
+  RUN bun run build
+  RUN bun run clear
+
+smoke-cli-test:
+  FROM root+setup-cli-project
+  WORKDIR /$gqlmdCliProject
+  COPY ./e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs ./graphql.config.mjs
+  DO +SMOKE_TEST --package=cli
+
+# --- UDCs (localized to e2e) ---
+
+SMOKE_TEST:
+  FUNCTION
+  ARG package
+  COPY ./e2e/__data__ ./data
+  COPY ./e2e/__data__/.graphqlrc ./.graphqlrc
+  COPY ./e2e/helpers/cli.mjs ./__tests__/helpers/cli.mjs
+  COPY ./e2e/$package/__data__ ./data
+  COPY ./e2e/$package/specs ./__tests__/e2e/specs
+  COPY ./e2e/$package/jest.config.mjs ./jest.config.mjs
+  RUN NODE_OPTIONS=--experimental-vm-modules npx --yes jest --runInBand --config ./jest.config.mjs
