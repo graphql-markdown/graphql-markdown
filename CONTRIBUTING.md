@@ -251,7 +251,6 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
 
    ```shell
    bun run build
-   ```å
 
 2. **Use the publish scripts** (recommended):
 
