@@ -148,16 +148,25 @@ export const Logger = async (moduleName?: string): Promise<void> => {
     resolveLoggerInstance(moduleExports?.default) ??
     globalThis.console;
 
+  const getCallbackForLevel = (
+    instanceObj: LoggerType["instance"],
+    requestedLevel: LogLevel | keyof typeof LogLevel,
+  ): ((...args: unknown[]) => unknown) | undefined => {
+    if (hasLogMethod(instanceObj, requestedLevel)) {
+      return instanceObj[requestedLevel] as (...args: unknown[]) => unknown;
+    }
+    if (hasLogMethod(instanceObj, LogLevel.info)) {
+      return instanceObj[LogLevel.info] as (...args: unknown[]) => unknown;
+    }
+    return undefined;
+  };
+
   const _log = (
     message: string,
 
     level: LogLevel | keyof typeof LogLevel = LogLevel.info,
   ): void => {
-    const callback = hasLogMethod(instance, level)
-      ? instance[level]
-      : hasLogMethod(instance, LogLevel.info)
-        ? instance[LogLevel.info]
-        : undefined;
+    const callback = getCallbackForLevel(instance, level);
     callback?.apply(this, [message]);
   };
 
