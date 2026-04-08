@@ -96,7 +96,7 @@ const importConfig = async (filename) => {
 
 export default async function createConfigAsync() {
   return ${JSON.stringify(config)};
-}\n`
+}\n`;
 
 const configExportString = PLUGIN_PLACEHOLDER_ENTRIES.reduce(
   (output, [placeholder, filename]) =>
