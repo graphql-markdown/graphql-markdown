@@ -41,4 +41,4 @@ SMOKE_TEST:
   COPY ./e2e/$package/__data__ ./data
   COPY ./e2e/$package/specs ./__tests__/e2e/specs
   COPY ./e2e/$package/jest.config.mjs ./jest.config.mjs
-  RUN NODE_OPTIONS=--experimental-vm-modules npx --yes jest --runInBand --config ./jest.config.mjs
+  RUN NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx --yes jest --runInBand --config ./jest.config.mjs
