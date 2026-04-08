@@ -22,6 +22,7 @@ jobs:
       SOURCE_DIR: project
       TARGET_DIR: website
       DOCUSAURUS_VERSION: 3
+      EARTHLY_TARGET: ./website+build-docs
     steps:
       - name: Install Earthly
         uses: earthly/actions-setup@v1
@@ -53,7 +54,7 @@ jobs:
       - name: Build docs
         run: |
           cd ${{ env.SOURCE_DIR }}
-          earthly --build-arg VERSION=${{ env.DOCUSAURUS_VERSION }} ./${{ env.TARGET_DIR }}/+build-docs
+          earthly --build-arg "docusaurusVersion=${{ env.DOCUSAURUS_VERSION }}" "${{ env.EARTHLY_TARGET }}"
 
       - name: Push changes to website repo
         run: |
