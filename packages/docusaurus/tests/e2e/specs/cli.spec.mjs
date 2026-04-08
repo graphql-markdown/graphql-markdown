@@ -1,13 +1,15 @@
-const path = require("node:path");
-const { promises: fs } = require("node:fs");
+// @ts-check
 
-const cli = require("../../helpers/cli");
+import path from "node:path";
+import { promises as fs } from "node:fs";
+
+import cli from "../../helpers/cli.mjs";
 
 const rootDir = global["__ROOT_DIR__"];
 
-const pluginConfigs = require(
-  `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`,
-);
+const pluginConfigs = (await import(
+  `${rootDir}/data/docusaurus2-graphql-doc-generator-multi-instance.config.js`
+)).default;
 
 const docsDirs = [];
 const messagesGenerated = [];

@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @type {import('jest').Config} */
 const config = {
   collectCoverage: false,
@@ -5,11 +7,11 @@ const config = {
   globals: {
     __ROOT_DIR__: "/docusaurus-gqlmd",
   },
-  rootDir: __dirname,
+  rootDir: import.meta.dirname,
   testEnvironment: "node",
-  testMatch: ["<rootDir>/**/?(*.)+(spec|test).js"],
+  testMatch: ["<rootDir>/**/?(*.)+(spec|test).mjs"],
   transform: {},
   verbose: true,
 };
 
-module.exports = config;
+export default config;

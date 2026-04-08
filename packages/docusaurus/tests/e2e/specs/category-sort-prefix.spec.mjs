@@ -1,7 +1,9 @@
-const path = require("node:path");
-const { promises: fs } = require("node:fs");
+// @ts-check
 
-const cli = require("../../helpers/cli");
+import path from "node:path";
+import { promises as fs } from "node:fs";
+
+import cli from "../../helpers/cli.mjs";
 
 const rootDir = global["__ROOT_DIR__"] || "/tmp";
 

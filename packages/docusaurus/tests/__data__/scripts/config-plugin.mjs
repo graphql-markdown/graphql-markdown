@@ -1,10 +1,15 @@
-const fs = require("node:fs");
+import { writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 
-const pluginConfigFilename = "docusaurus2-graphql-doc-generator.config.js";
-const pluginGroupConfigFilename =
-  "docusaurus2-graphql-doc-generator-groups.config.js";
-const pluginGraphqlrcConfigFilename =
-  "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js";
+const require = createRequire(import.meta.url);
+
+const PLUGIN_FILENAMES = {
+  config1: "docusaurus2-graphql-doc-generator.config.js",
+  config2: "docusaurus2-graphql-doc-generator-groups.config.js",
+  config3: "docusaurus2-graphql-doc-generator-tweets.graphqlrc.js",
+};
+
+const PLUGIN_PLACEHOLDER_ENTRIES = Object.entries(PLUGIN_FILENAMES);
 
 const docusaurusConfigFilepath = require.resolve("./docusaurus.config.js");
 
@@ -73,27 +78,26 @@ const config = {
   ],
 };
 
-const configExportString = `
+const createPluginRequireString = (filename) =>
+  `require(path.resolve(__dirname, "data/${filename}"))`;
+
+const configExportTemplate = `
 const path = require("path");
 
 module.exports = ${JSON.stringify(config)};\n`
-  .replace(
-    `"@config1@"`,
-    `require(path.resolve(__dirname, "data/${pluginConfigFilename}"))`,
-  )
-  .replace(
-    `"@config2@"`,
-    `require(path.resolve(__dirname, "data/${pluginGroupConfigFilename}"))`,
-  )
-  .replace(
-    `"@config3@"`,
-    `require(path.resolve(__dirname, "data/${pluginGraphqlrcConfigFilename}"))`,
-  );
 
-fs.writeFile(docusaurusConfigFilepath, configExportString, (err) => {
-  if (err) {
-    console.log(`Error updating '${docusaurusConfigFilepath}'`, err);
-  } else {
-    console.log(`Successfully updated '${docusaurusConfigFilepath}'`);
-  }
-});
+const configExportString = PLUGIN_PLACEHOLDER_ENTRIES.reduce(
+  (output, [placeholder, filename]) =>
+    output.replace(
+      `"@${placeholder}@"`,
+      createPluginRequireString(filename),
+    ),
+  configExportTemplate,
+);
+
+try {
+  await writeFile(docusaurusConfigFilepath, configExportString);
+  console.log(`Successfully updated '${docusaurusConfigFilepath}'`);
+} catch (error) {
+  console.log(`Error updating '${docusaurusConfigFilepath}'`, error);
+}

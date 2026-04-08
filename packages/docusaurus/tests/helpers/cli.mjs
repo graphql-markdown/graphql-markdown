@@ -1,6 +1,8 @@
-const { exec } = require("node:child_process");
+// @ts-check
 
-module.exports = function cli({
+import { exec } from "node:child_process";
+
+export default function cli({
   cmd = "graphql-to-doc",
   args = [],
   cwd = global["__ROOT_DIR__"],
@@ -22,4 +24,4 @@ module.exports = function cli({
       },
     );
   });
-};
+}
