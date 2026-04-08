@@ -185,11 +185,11 @@ GQLMD:
 
 INSTALL_GQLMD:
   FUNCTION
-  FOR package IN $(node /graphql-markdown/packages/tooling-config/scripts/build-packages.js)
+  FOR package IN $(node /graphql-markdown/packages/tooling-config/scripts/build-packages.mjs)
     COPY (+build-package/graphql-markdown-${package}.tgz --package=${package}) ./
   END
   RUN --mount=type=cache,target=/root/.bun \
-    packages=$(node /graphql-markdown/packages/tooling-config/scripts/build-packages.js | grep -vE "^(cli|docusaurus)$" | sed 's|^|./graphql-markdown-|; s|$|.tgz|' | tr '\n' ' ') && \
+    packages=$(node /graphql-markdown/packages/tooling-config/scripts/build-packages.mjs | grep -vE "^(cli|docusaurus)$" | sed 's|^|./graphql-markdown-|; s|$|.tgz|' | tr '\n' ' ') && \
     bun add $packages
 
 SMOKE_TEST:

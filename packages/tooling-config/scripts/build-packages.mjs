@@ -1,4 +1,6 @@
-const { getWorkspacePackagesMap } = require("./shared/dependencies-utils");
+//ts-check
+
+import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mjs";
 
 const orgName = "@graphql-markdown";
 const packagesMap = getWorkspacePackagesMap();
@@ -13,7 +15,7 @@ const getBuildDependency = () => {
     const buildNeed = Object.keys({
       ...packageMeta?.dependencies,
       ...packageMeta?.peerDependencies,
-    }).filter((packageName) => packageName.startsWith(orgName));
+    }).filter((dependencyName) => dependencyName.startsWith(orgName));
 
     const idx = buildSequence.indexOf(packageName);
 
