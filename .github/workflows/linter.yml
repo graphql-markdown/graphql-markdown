@@ -5,14 +5,16 @@ env:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - main
     paths:
       - "packages/**/*"
-      - "config/*"
+      - "packages/tooling-config/**/*"
+      - "config/**/*"
       - "*.json"
+      - "*.mjs"
       - ".github/workflows/linter.yml"
 
 jobs:
@@ -35,17 +37,14 @@ jobs:
       - name: Install modules
         run: bun ci
 
-      - name: Build packages
-        run: bun run build:all
-
       - name: Run TS Check
-        run: bun ts:check
+        run: bun run ts:check
 
       - name: Run Prettier
-        run: bun prettier
+        run: bun run prettier
 
       - name: Run ESLint
-        run: bun lint
+        run: bun run lint
 
       - name: Run knip
-        run: bun knip --no-config-hints --reporter github-actions
+        run: bun run knip --no-config-hints --reporter github-actions

@@ -5,14 +5,16 @@ env:
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
       - main
     paths:
       - "packages/**/*"
-      - "config/*"
+      - "packages/tooling-config/**/*"
+      - "config/**/*"
       - "*.json"
+      - "*.mjs"
       - ".github/workflows/test.yml"
 
 jobs:
@@ -63,7 +65,7 @@ jobs:
         run: bun ci
 
       - name: Build packages
-        run: bun run build:all
+        run: bun run build
 
       - name: Run Unit Tests
         id: unit
@@ -94,6 +96,7 @@ jobs:
 
       - name: SonarCloud Scan
         id: sonarcloud
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         uses: SonarSource/sonarqube-scan-action@v7.1.0
         with:
           projectBaseDir: ${{ github.workspace }}
