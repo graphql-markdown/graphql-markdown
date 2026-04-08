@@ -18,7 +18,10 @@ jobs:
   publish:
     name: Publish docs
     runs-on: ubuntu-latest
-
+    env:
+      SOURCE_DIR: project
+      TARGET_DIR: website
+      DOCUSAURUS_VERSION: 3
     steps:
       - name: Install Earthly
         uses: earthly/actions-setup@v1
@@ -37,25 +40,25 @@ jobs:
       - name: Checkout project repo
         uses: actions/checkout@v6
         with:
-          path: project
+          path: ${{ env.SOURCE_DIR }}
           token: ${{ secrets.BOT_PAT }}
 
       - name: Checkout website repo
         uses: actions/checkout@v6
         with:
           repository: graphql-markdown/graphql-markdown.github.io
-          path: website
+          path: ${{ env.TARGET_DIR }}
           token: ${{ secrets.BOT_PAT }}
 
       - name: Build docs
         run: |
-          cd project
-          earthly --build-arg VERSION=3 +build-docs
+          cd ${{ env.SOURCE_DIR }}
+          earthly --build-arg VERSION=${{ env.DOCUSAURUS_VERSION }} ./${{ env.TARGET_DIR }}/+build-docs
 
       - name: Push changes to website repo
         run: |
-          cp -Rf project/build/** website/
-          cd website
+          cp -Rf ${{ env.SOURCE_DIR }}/build/** ${{ env.TARGET_DIR }}/
+          cd ${{ env.TARGET_DIR }}
           git add --all
           git commit -am ":memo: update documentation ($GITHUB_SHA)"
           git push
