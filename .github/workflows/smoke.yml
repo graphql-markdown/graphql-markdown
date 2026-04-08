@@ -33,7 +33,7 @@ jobs:
       matrix:
         docusaurus: [2, 3]
     env:
-      SMOKE_TASK: /tests/+smoke-docusaurus-test
+      SMOKE_TASK: /tests/+smoke-docusaurus-run
     steps:
       - name: Install earthly
         uses: earthly/actions-setup@v1
@@ -45,6 +45,7 @@ jobs:
         run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/${GITHUB_REPOSITORY}:${GITHUB_REF#refs/heads/}${{ env.SMOKE_TASK}}
         env:
           EARTHLY_NO_CACHE: true
+          SMOKE_TASK: /tests/+smoke-docusaurus-test
 
       - name: Docusaurus Production Smoke Build without parameters and local schema
         run: earthly --ci --build-arg docusaurusVersion=${{ matrix.docusaurus }} github.com/${GITHUB_REPOSITORY}:${GITHUB_REF#refs/heads/}${{ env.SMOKE_TASK}}
