@@ -56,10 +56,8 @@ const hasLogMethod = (
  * - Default export: `{ default: { info: () => {}, ... } }`
  * - Named export: `{ logger: { info: () => {}, ... } }`
  *
- * Falls back to `globalThis.console` if no valid logger is found.
- *
  * @param instance - The module export or object to resolve
- * @returns The logger instance if found, or undefined (will fall back to console)
+ * @returns The logger instance if found, or `undefined` if no valid logger is detected (the caller is responsible for falling back to `globalThis.console`)
  */
 const resolveLoggerInstance = (
   instance: unknown,
