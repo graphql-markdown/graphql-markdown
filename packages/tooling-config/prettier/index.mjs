@@ -1,4 +1,4 @@
-//ts-check
+// @ts-check
 
 /**
  * @see https://prettier.io/docs/configuration

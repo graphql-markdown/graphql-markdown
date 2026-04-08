@@ -1,4 +1,4 @@
-//ts-check
+// @ts-check
 
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
