@@ -6,6 +6,9 @@ const orgName = "@graphql-markdown";
 const packagesMap = getWorkspacePackagesMap();
 
 const getBuildDependency = () => {
+  /**
+   * @type {string[]}
+   */
   const buildSequence = [];
   for (const [packageName, packageMeta] of Object.entries(packagesMap)) {
     if (packageMeta?.private) {
