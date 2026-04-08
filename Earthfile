@@ -101,6 +101,8 @@ smoke-docusaurus-test:
   RUN npm install --save ./e2e-test-webpack-plugin # Custom plugin for silencing webpack warnings [webpack.cache.PackFileCacheStrategy] 
   DO +SMOKE_TEST --package=docusaurus
 
+smoke-docusaurus-run:
+  FROM +smoke-docusaurus-test
 smoke-cli-test:
   FROM +setup-cli-project
   WORKDIR /$gqlmdCliProject
