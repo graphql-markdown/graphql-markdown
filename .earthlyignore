@@ -9,5 +9,6 @@ coverage
 packages/*/.stryker-tmp
 packages/*/coverage
 packages/*/dist
+packages/*/*.tsbuildinfo
 packages/*/reports
 node_modules

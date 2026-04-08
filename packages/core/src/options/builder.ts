@@ -207,7 +207,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * Internal helper method used by addDefault, addFromConfig, and addFromCli.
    *
    * Only updates the merged value if the source has equal or higher precedence
-   * than the currently stored source. Precedence order: default < config < cli.
+   * than the currently stored source. Precedence order: `default < config < cli`.
    *
    * @param value - The value to set
    * @param key - The key to set

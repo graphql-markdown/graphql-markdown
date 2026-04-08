@@ -20,7 +20,7 @@
  * 
  * Run `bun install` to install missing dependencies.
  */
-
+import type { ESLint } from "eslint";
 import { join } from "node:path";
 import globals from "globals";
 import js from "@eslint/js";
@@ -66,7 +66,7 @@ export default [
   {
     files: ["**/*.ts", "**/*.mts", "**/*.cts"],
     plugins: {
-      "@typescript-eslint": tsPlugin,
+      "@typescript-eslint": tsPlugin as unknown as ESLint.Plugin,
       prettier: prettierPlugin,
       jest: jestPlugin,
       import: importPlugin,
@@ -210,7 +210,7 @@ export default [
   {
     files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
     plugins: {
-      "@typescript-eslint": tsPlugin,
+      "@typescript-eslint": tsPlugin as unknown as ESLint.Plugin,
       prettier: prettierPlugin,
       jest: jestPlugin,
     },

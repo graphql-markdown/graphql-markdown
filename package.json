@@ -15,7 +15,7 @@
     ],
     "catalog": {
       "graphql": "16.13.2",
-      "graphql-config": "5.1.5",
+      "graphql-config": "5.1.6",
       "prettier": "3.8.1"
     },
     "catalogs": {
@@ -76,27 +76,24 @@
     }
   ],
   "scripts": {
-    "build:all": "turbo build",
-    "clean:all": "bun run --if-present --workspaces clean",
-    "docs:api:all": "bun run --if-present --workspaces docs",
-    "docs:api": "sh ./scripts/docs-api.sh",
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "docs:api": "sh ./packages/tooling-config/scripts/docs-api.sh",
     "knip": "knip --strict",
-    "lint": "eslint --config config/eslint.config.ts \"packages/*/{src,tests}/**.{ts,js,json,gql}\"",
-    "lint:fix": "eslint --config config/eslint.config.ts \"packages/*/{src,tests}/**.{ts,js,json,gql}\" --fix",
-    "prepare": "node ./scripts/prepare-husky.js",
-    "prettier": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --check",
-    "prettier:fix": "prettier \"packages/*/{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --write",
-    "test": "jest --config=./config/jest.config.js --maxWorkers=50% --randomize --detectOpenHandles",
-    "test:dev": "jest --config=./config/jest.unit.config.js --maxWorkers=50% --bail --onlyChanged",
-    "test:unit": "jest --config=./config/jest.unit.config.js --maxWorkers=50% --randomize",
-    "test:integration": "jest --config=./config/jest.integration.config.js --maxWorkers=25% --randomize",
-    "test:ci": "jest --config=./config/jest.config.js --runInBand --passWithNoTests --ci --silent --randomize",
-    "test:watch": "jest --config=./config/jest.unit.config.js --watch --maxWorkers=25% --bail --onlyChanged",
-    "ts:check": "tsgo --noEmit",
-    "typedoc": "typedoc",
-    "stryker": "bun run --if-present --workspaces stryker --allowEmpty --reporters progress,html"
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "prepare": "node ./packages/tooling-config/husky/prepare-husky.js",
+    "prettier": "turbo run prettier",
+    "prettier:fix": "turbo run prettier:fix",
+    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
+    "test:integration": "turbo run test:integration",
+    "test:ci": "turbo run test:ci",
+    "ts:check": "turbo run ts:check",
+    "typedoc": "typedoc --options typedoc.config.mjs",
+    "stryker": "turbo stryker"
   },
-  "prettier": "./config/.prettierrc.js",
+  "prettier": "./packages/tooling-config/prettier/index.mjs",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-emoji"
@@ -197,8 +194,8 @@
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-tsdoc": "0.5.2",
     "globals": "17.4.0",
-    "graphql": "16.13.2",
-    "graphql-config": "5.1.6",
+    "graphql": "catalog:",
+    "graphql-config": "catalog:",
     "husky": "9.1.7",
     "jest": "30.3.0",
     "jest-environment-node": "30.3.0",
@@ -206,7 +203,7 @@
     "knip": "6.3.0",
     "lodash.filter": "4.6.0",
     "memfs": "4.57.1",
-    "prettier": "3.8.1",
+    "prettier": "catalog:",
     "ts-jest": "29.4.9",
     "tsgo-dev": "^2025.12.2",
     "turbo": "2.9.5",
@@ -214,6 +211,8 @@
     "typedoc-docusaurus-theme": "1.4.2",
     "typedoc-plugin-frontmatter": "1.3.1",
     "typedoc-plugin-markdown": "4.11.0",
+    "typescript": "6.0.2",
+    "typescript-eslint": "8.58.0",
     "unionfs": "4.6.0"
   }
 }

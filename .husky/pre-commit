@@ -1,6 +1,6 @@
 
 npm run ts:check
 npm run lint
-npm run prettier -- --check
-npm test
+npm run prettier
+npm run test:unit
 npm run knip
