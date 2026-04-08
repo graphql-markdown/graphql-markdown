@@ -1,0 +1,78 @@
+VERSION 0.8
+
+IMPORT .. AS root
+
+ARG --global docusaurusVersion="latest"
+ARG --global docusaurusProject="docusaurus-gqlmd"
+
+assets:
+  FROM scratch
+  COPY --dir ./static/img ./static/img
+  COPY --dir ./src/css ./src/css
+  SAVE ARTIFACT ./static/img
+  SAVE ARTIFACT ./src/css
+
+build-docusaurus-project:
+  FROM root+build
+  WORKDIR /
+  IF [ "$docusaurusVersion" = "2" ]
+    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+  ELSE
+    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript
+  END
+  WORKDIR /$docusaurusProject
+  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
+  DO root+INSTALL_DOCUSAURUS
+
+build-docusaurus-examples:
+  FROM root+build-docusaurus-project
+  WORKDIR /$docusaurusProject
+  RUN --mount=type=cache,target=/root/.npm npm install --save prettier
+  DO +BUILD_EXAMPLES
+
+build-cli-examples:
+  FROM root+setup-cli-project
+  WORKDIR /$gqlmdCliProject
+  RUN --mount=type=cache,target=/root/.npm npm install --save prettier
+  COPY ./e2e/__data__/graphql.config.mjs ./graphql.config.mjs
+  DO +BUILD_EXAMPLES --command=gqlmd
+
+build-api-docs:
+  FROM root+build
+  COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
+  RUN bun run docs:api
+  SAVE ARTIFACT ./api
+
+build-docs:
+  FROM docker.io/library/node:lts-alpine
+  COPY ./website ./
+  COPY (+build-docusaurus-examples/examples) ./examples
+  COPY (+build-api-docs/api) ./api
+  COPY --dir docs .
+  RUN --mount=type=cache,target=/root/.npm npm ci
+  RUN --mount=type=cache,target=/root/.npm npx update-browserslist-db@latest
+  RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
+  SAVE ARTIFACT --force ./build AS LOCAL build
+
+build-image:
+  FROM +build-docs
+  EXPOSE 8080
+  ENTRYPOINT ["npm", "run", "serve", "--",  "--host=0.0.0.0", "--port=8080"]
+  SAVE IMAGE graphql-markdown:docs
+
+# --- UDCs (localized to website) ---
+
+BUILD_EXAMPLES:
+  FUNCTION
+  ARG command=docusaurus
+  LET folderDocs="examples"
+  LET folderExample="default"
+  LET idExample="default"
+  RUN mkdir $folderDocs
+  DO root+GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
+  RUN mv docs ./$folderDocs/$folderExample
+  SET folderExample="group-by"
+  SET idExample="schema_with_grouping"
+  DO root+GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
+  RUN mv docs ./$folderDocs/$folderExample
+  SAVE ARTIFACT ./$folderDocs

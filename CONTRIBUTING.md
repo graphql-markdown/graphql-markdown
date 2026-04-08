@@ -152,12 +152,26 @@ Each package contains:
 ```text
 package/
 ├── src/         # Source code
-├── tests/       # Test files
+├── tests/       # Unit and integration test files
 ├── docs/        # API documentation
 └── package.json # Package manifest
 ```
 
-> The project uses classes; it is for historical reasons, and that was not necessarily a good choice. So, you should not feel obliged to do the same.
+End-to-end (smoke) tests live outside packages in a top-level directory:
+
+```text
+tests/e2e/
+├── __data__/           # Shared fixtures (schemas, markdown, shared config options)
+├── helpers/            # Shared test helpers (CLI runner)
+├── cli/                # CLI-specific specs, jest config, and fixture data
+│   ├── __data__/
+│   ├── specs/
+│   └── jest.config.mjs
+└── docusaurus/         # Docusaurus-specific specs, jest config, and fixture data
+    ├── __data__/
+    ├── specs/
+    └── jest.config.mjs
+```
 
 ### Dependencies
 
@@ -185,9 +199,9 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
 
   > If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
 
-- `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests.
+- `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/`.
 
-  > The tests run within a Docker container using Earthly.
+  > The tests run within a Docker container using Earthly and cannot be run locally.
 
 #### Mutation testing
 
