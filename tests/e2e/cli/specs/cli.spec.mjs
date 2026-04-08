@@ -42,7 +42,7 @@ describe("graphql-to-doc", () => {
     expect(generateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: expect.any(String),
+      stderr: "",
       stdout: expect.any(String),
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -59,7 +59,7 @@ describe("graphql-to-doc", () => {
     expect(updateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: expect.any(String),
+      stderr: "",
       stdout: expect.any(String),
     });
     const stdout = updateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -77,7 +77,7 @@ describe("graphql-to-doc", () => {
     expect(forceOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: expect.any(String),
+      stderr: "",
       stdout: expect.any(String),
     });
     const stdout = forceOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");
@@ -96,7 +96,7 @@ describe("graphql-to-doc", () => {
       expect(generateOutput).toMatchObject({
         code: 0,
         error: null,
-        stderr: expect.any(String),
+        stderr: "",
         stdout: expect.any(String),
       });
 
@@ -116,7 +116,7 @@ describe("graphql-to-doc", () => {
     expect(generateOutput).toMatchObject({
       code: 0,
       error: null,
-      stderr: expect.any(String),
+      stderr: "",
       stdout: expect.any(String),
     });
     const stdout = generateOutput.stdout.replace(/\d+\.?\d*/g, "{Any<Number>}");

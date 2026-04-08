@@ -16,19 +16,11 @@ export default function cli({
       execCommand,
       { cwd, env: { ...process.env, NODE_NO_WARNINGS: 1 } },
       (error, stdout, stderr) => {
-        const safeStdout = stdout ?? "";
-        const safeStderr = stderr ?? "";
-        const isDocusaurusCli = String(global["__CLI_COMMAND__"] || "").includes(
-          "docusaurus",
-        );
-        const output =
-          isDocusaurusCli && !safeStdout.trim() ? safeStderr : safeStdout;
-
         resolve({
           code: error && error.code ? error.code : 0,
           error,
-          stdout: output,
-          stderr: safeStderr,
+          stdout: stdout ?? "",
+          stderr: stderr ?? "",
         });
       },
     );

@@ -30,6 +30,13 @@ describe_conditional("categorySort E2E feature (Earthly only)", () => {
       ],
     });
 
+    expect(generateOutput).toMatchObject({
+      code: 0,
+      error: null,
+      stdout: expect.any(String),
+      stderr: "",
+    });
+
     // Verify generation succeeded without errors
     expect(generateOutput.code).toBe(0);
     expect(generateOutput.stdout).toContain(
