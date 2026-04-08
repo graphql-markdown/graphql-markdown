@@ -104,7 +104,7 @@ setup-docusaurus-project:
 smoke-docusaurus-test:
   FROM +setup-docusaurus-project
   WORKDIR /$docusaurusProject
-  RUN --mount=type=cache,target=/root/.bun bun add graphql-config@5.1.5
+  RUN --mount=type=cache,target=/root/.bun bun add graphql-config@^5.1.6
   DO +SMOKE_TEST --package=docusaurus
 
 smoke-cli-test:
