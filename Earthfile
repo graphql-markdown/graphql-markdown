@@ -88,8 +88,8 @@ setup-cli-project:
 setup-docusaurus-project:
   FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
-  COPY (website+assets/img) ./static/img
-  COPY (website+assets/css) ./src/css
+  COPY (website+assets/static/img) ./static/img
+  COPY (website+assets/src/css) ./src/css
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
   RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
