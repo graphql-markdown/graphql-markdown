@@ -5,20 +5,13 @@ IMPORT .. AS root
 ARG --global docusaurusVersion="latest"
 ARG --global docusaurusProject="docusaurus-gqlmd"
 
-assets:
-  FROM scratch
-  COPY --dir ./static/img ./static/img
-  COPY --dir ./src/css ./src/css
-  SAVE ARTIFACT ./static/img
-  SAVE ARTIFACT ./src/css
-
 build-docusaurus-project:
   FROM root+build
   WORKDIR /
   IF [ "$docusaurusVersion" = "2" ]
-    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
+    RUN --mount=type=cache,target=/root/.bun bunx --silent create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
   ELSE
-    RUN --mount=type=cache,target=/root/.bun bunx --quiet create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript
+    RUN --mount=type=cache,target=/root/.bun bunx --silent create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript
   END
   WORKDIR /$docusaurusProject
   RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
@@ -29,26 +22,28 @@ build-docusaurus-examples:
   WORKDIR /$docusaurusProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
   DO +BUILD_EXAMPLES
+  SAVE ARTIFACT ./examples
 
 build-cli-examples:
   FROM root+setup-cli-project
   WORKDIR /$gqlmdCliProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
-  COPY ./e2e/__data__/graphql.config.mjs ./graphql.config.mjs
+  COPY root+assets/data/graphql.config.mjs ./graphql.config.mjs
   DO +BUILD_EXAMPLES --command=gqlmd
+  SAVE ARTIFACT ./examples
 
 build-api-docs:
   FROM root+build
-  COPY ./docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
+  COPY root+assets/docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
   RUN bun run docs:api
   SAVE ARTIFACT ./api
 
 build-docs:
   FROM docker.io/library/node:lts-alpine
-  COPY ./website ./
-  COPY (+build-docusaurus-examples/examples) ./examples
-  COPY (+build-api-docs/api) ./api
-  COPY --dir docs .
+  COPY ./ ./
+  COPY +build-docusaurus-examples/examples ./examples
+  COPY +build-api-docs/api ./api
+  COPY root+assets/docs .
   RUN --mount=type=cache,target=/root/.npm npm ci
   RUN --mount=type=cache,target=/root/.npm npx update-browserslist-db@latest
   RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build

@@ -8,8 +8,6 @@ ARG --global gqlmdCliProject="cli-gqlmd"
 ARG --global testTimeout="5000"
 ARG --global coverage="true"
 
-IMPORT ./website AS website
-
 FROM docker.io/library/node:$nodeVersion-alpine
 WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
@@ -20,6 +18,19 @@ RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bu
 RUN node --version
 RUN npm --version
 RUN bun --version
+
+ARG --global turboOutputLogs = errors-only
+
+assets:
+  FROM scratch
+  COPY --dir ./website/static/img ./static/img
+  COPY --dir ./website/src/css ./src/css
+  COPY --dir ./docs ./docs
+  COPY --dir ./tests/e2e/__data__ ./data
+  SAVE ARTIFACT ./static/img
+  SAVE ARTIFACT ./src/css
+  SAVE ARTIFACT ./docs
+  SAVE ARTIFACT ./data
 
 deps:
   COPY package.json bun.lock ./
@@ -88,8 +99,8 @@ setup-cli-project:
 setup-docusaurus-project:
   FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
-  COPY (website+assets/img) ./static/img
-  COPY (website+assets/css) ./src/css
+  COPY (+assets/img) ./static/img
+  COPY (+assets/css) ./src/css
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
   RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
