@@ -55,9 +55,9 @@ Optional logger module to use.
 
 ##### customMdxParser?
 
-Optional MDX parser configuration.
+`string` \| `boolean`
 
-`string` | `boolean`
+Optional MDX parser configuration.
 
 #### Returns
 

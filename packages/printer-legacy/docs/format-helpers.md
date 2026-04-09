@@ -83,9 +83,18 @@ Default bullet formatter.
 function formatMDXDetails(__namedParameters): MDXString;
 ```
 
-Defined in: [printer-legacy/src/format-helpers.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L55)
+Defined in: [printer-legacy/src/format-helpers.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L64)
 
 Default details formatter.
+
+The returned string **must** contain a `\r` (carriage return) character as a
+delimiter between the opening part (ending after `</summary>`) and the
+closing part (starting before `</details>`). `printSection` calls
+`result.split('\r')` to obtain `[openSection, closeSection]`; without this
+delimiter the closing tag is lost and items are rendered outside the
+collapsible element.
+
+Custom implementations of `formatMDXDetails` must follow the same contract.
 
 #### Parameters
 
@@ -105,7 +114,7 @@ Default details formatter.
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [printer-legacy/src/format-helpers.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L64)
+Defined in: [printer-legacy/src/format-helpers.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L73)
 
 Default frontmatter formatter.
 
@@ -131,7 +140,7 @@ Default frontmatter formatter.
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [printer-legacy/src/format-helpers.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L78)
+Defined in: [printer-legacy/src/format-helpers.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L87)
 
 Default link formatter.
 
@@ -153,7 +162,7 @@ Default link formatter.
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [printer-legacy/src/format-helpers.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L85)
+Defined in: [printer-legacy/src/format-helpers.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L94)
 
 Default name entity formatter.
 
@@ -179,7 +188,7 @@ Default name entity formatter.
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [printer-legacy/src/format-helpers.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L98)
+Defined in: [printer-legacy/src/format-helpers.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/format-helpers.ts#L107)
 
 Default specified-by link formatter.
 

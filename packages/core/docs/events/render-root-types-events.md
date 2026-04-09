@@ -10,7 +10,7 @@ Render root types event constants.
 const RenderRootTypesEvents: object;
 ```
 
-Defined in: [events/render-root-types-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-root-types-events.ts#L10)
+Defined in: [core/src/events/render-root-types-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-root-types-events.ts#L10)
 
 Event names for rendering root types.
 

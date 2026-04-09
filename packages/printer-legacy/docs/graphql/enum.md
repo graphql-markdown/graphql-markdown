@@ -10,7 +10,7 @@ Provides utilities for printing GraphQL enum types to Markdown/MDX format
 function printCodeEnum(type, options?): string;
 ```
 
-Defined in: [printer-legacy/src/graphql/enum.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L43)
+Defined in: [printer-legacy/src/graphql/enum.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L47)
 
 Generates a GraphQL SDL code block for an enum type.
 
@@ -39,10 +39,10 @@ A string containing the enum type definition in GraphQL SDL, or empty string if 
 ### printEnumMetadata()
 
 ```ts
-function printEnumMetadata(type, options): string | MDXString;
+function printEnumMetadata(type, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/graphql/enum.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L25)
+Defined in: [printer-legacy/src/graphql/enum.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/enum.ts#L29)
 
 Prints the metadata section for a GraphQL enum type.
 
@@ -62,6 +62,6 @@ Options for printing the type
 
 #### Returns
 
-`string` \| `MDXString`
+`Maybe`&lt;[`PageSection`](../events.md#pagesection)&gt;
 
-A string containing the metadata section in MDX format, or empty string if type is not an enum
+A "Values" PageSection, or undefined when `type` is not an enum

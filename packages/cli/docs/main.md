@@ -11,7 +11,7 @@ Loads configuration from graphql-config and sets up command-line interface.
 const EXTENSION_NAME: "graphql-markdown";
 ```
 
-Defined in: [main.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L22)
+Defined in: [main.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L24)
 
 Name of the GraphQL Markdown extension for graphql-config
 
@@ -23,7 +23,7 @@ Name of the GraphQL Markdown extension for graphql-config
 const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-Defined in: [main.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L28)
+Defined in: [main.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/main.ts#L30)
 
 GraphQL config extension declaration for GraphQL Markdown
 

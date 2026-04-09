@@ -11,7 +11,6 @@
 - [event-handlers](event-handlers.md)
 - [event-map](event-map.md)
 - [events](events.md)
-- [events/base](events/base.md)
 - [events/diff-check](events/diff-check.md)
 - [events/diff-events](events/diff-events.md)
 - [events/generate-index-metafile](events/generate-index-metafile.md)

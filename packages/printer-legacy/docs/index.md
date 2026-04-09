@@ -8,6 +8,7 @@
 - [const/options](const/options.md)
 - [const/strings](const/strings.md)
 - [directive](directive.md)
+- [events](events.md)
 - [example](example.md)
 - [format-helpers](format-helpers.md)
 - [formatter](formatter.md)

@@ -36,7 +36,7 @@ The directive example configuration if valid, otherwise `undefined`
 function printExample(type, options): Maybe<string>;
 ```
 
-Defined in: [printer-legacy/src/example.ts:247](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L247)
+Defined in: [printer-legacy/src/example.ts:252](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L252)
 
 Prints an example value for a given GraphQL type or operation.
 

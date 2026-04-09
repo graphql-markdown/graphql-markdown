@@ -19,7 +19,7 @@ Eliminates repetitive if/coalesce patterns throughout the codebase.
 
 ### OptionBuilder
 
-Defined in: [options/builder.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L49)
+Defined in: [core/src/options/builder.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L49)
 
 Builder for constructing options from multiple sources with priority precedence.
 
@@ -70,7 +70,7 @@ new OptionBuilder<T>(): OptionBuilder<T>;
 addDefault<K>(value, key): this;
 ```
 
-Defined in: [options/builder.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L73)
+Defined in: [core/src/options/builder.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L73)
 
 Adds a default value (lowest priority).
 Sets a value that can be overwritten by config or CLI options.
@@ -114,7 +114,7 @@ builder.addDefault(3000, "port");
 addFromCli<K>(value, key): this;
 ```
 
-Defined in: [options/builder.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L109)
+Defined in: [core/src/options/builder.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L109)
 
 Adds a value from CLI options if provided (highest priority).
 Can override both default and config values for this key.
@@ -158,7 +158,7 @@ builder.addFromCli(cliOpts.port, "port");
 addFromConfig<K>(value, key): this;
 ```
 
-Defined in: [options/builder.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L91)
+Defined in: [core/src/options/builder.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L91)
 
 Adds a value from config file if provided (medium priority).
 Can override default values if the config value exists.
@@ -202,7 +202,7 @@ builder.addFromConfig(config.port, "port");
 build(): Partial<T>;
 ```
 
-Defined in: [options/builder.ts:222](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L222)
+Defined in: [core/src/options/builder.ts:190](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L190)
 
 Returns the built options object with all accumulated values.
 The object contains all keys that were set during the building process.
@@ -225,7 +225,7 @@ The constructed options object with type `Partial<T>` (may not have all properti
 get<K>(key): T[K] | undefined;
 ```
 
-Defined in: [options/builder.ts:199](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L199)
+Defined in: [core/src/options/builder.ts:167](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L167)
 
 Gets the current value for a key without building.
 Useful for conditional logic during building.
@@ -258,7 +258,7 @@ The current value for the key, or `undefined` if not set
 transform<K>(key, fn): this;
 ```
 
-Defined in: [options/builder.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L158)
+Defined in: [core/src/options/builder.ts:126](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L126)
 
 Transforms a value using a function if the key exists.
 Useful for processing values after they've been set.
@@ -304,7 +304,7 @@ transformIf<K>(
    fn): this;
 ```
 
-Defined in: [options/builder.ts:179](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L179)
+Defined in: [core/src/options/builder.ts:147](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/options/builder.ts#L147)
 
 Conditionally applies a transformation if a predicate is true.
 Useful for applying different transformations based on other values.

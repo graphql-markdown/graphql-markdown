@@ -8,7 +8,7 @@
 function createMDXFormatter(meta?): Formatter;
 ```
 
-Defined in: [mdx/index.ts:157](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L157)
+Defined in: [mdx/index.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L159)
 
 Creates an MDX formatter for Docusaurus documentation.
 
@@ -158,7 +158,7 @@ Formatted MDX string for the collapsible section
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [mdx/index.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L127)
+Defined in: [mdx/index.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L129)
 
 Default frontmatter formatter for MDX.
 
@@ -190,7 +190,7 @@ Formatted MDX string for the front matter
 function formatMDXLink(param): TypeLink;
 ```
 
-Defined in: [mdx/index.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L113)
+Defined in: [mdx/index.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L115)
 
 Formats a link in MDX format
 
@@ -216,7 +216,7 @@ Formatted MDX link object
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [mdx/index.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L100)
+Defined in: [mdx/index.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L102)
 
 Formats a name entity with optional parent type
 
@@ -248,7 +248,7 @@ Formatted MDX string for the name entity
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [mdx/index.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L90)
+Defined in: [mdx/index.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L92)
 
 Creates a link to the specification documentation
 

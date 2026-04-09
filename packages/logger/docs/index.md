@@ -6,9 +6,14 @@ Logger singleton module.
 
 ### LogLevel
 
-Defined in: [index.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L19)
+Defined in: [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L23)
 
-Log levels.
+Log levels supported by the logger.
+
+#### Remarks
+
+The logger supports standard console methods plus custom 'success' level
+for framework-specific integrations like Docusaurus.
 
 #### Enumeration Members
 
@@ -18,7 +23,7 @@ Log levels.
 debug: "debug";
 ```
 
-Defined in: [index.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L20)
+Defined in: [index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L24)
 
 ##### error
 
@@ -26,7 +31,7 @@ Defined in: [index.ts:20](https://github.com/graphql-markdown/graphql-markdown/b
 error: "error";
 ```
 
-Defined in: [index.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L21)
+Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L25)
 
 ##### info
 
@@ -34,7 +39,7 @@ Defined in: [index.ts:21](https://github.com/graphql-markdown/graphql-markdown/b
 info: "info";
 ```
 
-Defined in: [index.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L22)
+Defined in: [index.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L26)
 
 ##### log
 
@@ -42,7 +47,7 @@ Defined in: [index.ts:22](https://github.com/graphql-markdown/graphql-markdown/b
 log: "log";
 ```
 
-Defined in: [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L23)
+Defined in: [index.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L27)
 
 ##### success
 
@@ -50,7 +55,7 @@ Defined in: [index.ts:23](https://github.com/graphql-markdown/graphql-markdown/b
 success: "success";
 ```
 
-Defined in: [index.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L24)
+Defined in: [index.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L28)
 
 ##### warn
 
@@ -58,7 +63,91 @@ Defined in: [index.ts:24](https://github.com/graphql-markdown/graphql-markdown/b
 warn: "warn";
 ```
 
-Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L25)
+Defined in: [index.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L29)
+
+## Variables
+
+### \_\_internal
+
+```ts
+const __internal: object;
+```
+
+Defined in: [index.ts:183](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L183)
+
+**`Internal`**
+
+Internal helpers exported for testing purposes only.
+Not part of the public API — do not use in application code.
+
+#### Type Declaration
+
+##### hasLogMethod
+
+```ts
+hasLogMethod: (instance, level) => instance is Record<string, (args: unknown[]) => unknown>;
+```
+
+Type guard to check if an object has a log method for a given level.
+
+###### Parameters
+
+###### instance
+
+`unknown`
+
+The object to check
+
+###### level
+
+\| `"debug"`
+\| `"error"`
+\| `"info"`
+\| `"log"`
+\| `"success"`
+\| `"warn"`
+\| [`LogLevel`](#loglevel)
+
+The log level to verify
+
+###### Returns
+
+`instance is Record<string, (args: unknown[]) => unknown>`
+
+`true` if the instance has a function at the given level, `false` otherwise
+
+##### resolveLoggerInstance
+
+```ts
+resolveLoggerInstance: (instance) =>
+  | Partial<Record<LogLevel, (...unknown) => void>>
+  | undefined;
+```
+
+Resolve a logger instance from a module export.
+
+###### Parameters
+
+###### instance
+
+`unknown`
+
+The module export or object to resolve
+
+###### Returns
+
+\| `Partial`&lt;`Record`&lt;`LogLevel`, (...`unknown`) => `void`&gt;&gt;
+\| `undefined`
+
+The logger instance if found, or `undefined` if no valid logger is detected (the caller is responsible for falling back to `globalThis.console`)
+
+###### Remarks
+
+Handles various module export patterns:
+
+- Direct logger instance: `{ info: () => {}, ... }`
+- Default export: `{ default: { info: () => {}, ... } }`
+- Named export: `{ logger: { info: () => {}, ... } }`
 
 ## Functions
 
@@ -68,7 +157,7 @@ Defined in: [index.ts:25](https://github.com/graphql-markdown/graphql-markdown/b
 function log(message, level?): void;
 ```
 
-Defined in: [index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L86)
+Defined in: [index.ts:168](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L168)
 
 Logs a message by calling the active logger instance.
 
@@ -82,9 +171,15 @@ a string to be logged.
 
 ##### level?
 
-optional log level, `"info"` by default.
+\| `"debug"`
+\| `"error"`
+\| `"info"`
+\| `"log"`
+\| `"success"`
+\| `"warn"`
+\| [`LogLevel`](#loglevel)
 
-`"debug"` | `"error"` | `"info"` | `"log"` | `"success"` | `"warn"` | [`LogLevel`](#loglevel)
+optional log level, `"info"` by default.
 
 #### Returns
 
@@ -110,7 +205,7 @@ log("Info message"); // Expected console output "Info message"
 function Logger(moduleName?): Promise<void>;
 ```
 
-Defined in: [index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L45)
+Defined in: [index.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/logger/src/index.ts#L111)
 
 Instantiate a logger module.
 By default, the logger module uses `globalThis.console`
