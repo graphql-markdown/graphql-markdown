@@ -5,6 +5,8 @@ const { themes } = require("prism-react-renderer");
 const createLLMSPluginConfig = require("./llms.config");
 const lightCodeTheme = themes.github,
   darkCodeTheme = themes.dracula;
+const sitemapLastmod =
+  process.env.DOCUSAURUS_DISABLE_GIT_METADATA === "true" ? undefined : "date";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -97,7 +99,7 @@ const config = {
           customCss: ["./src/css/custom.css"],
         },
         sitemap: {
-          lastmod: "date",
+          lastmod: sitemapLastmod,
           changefreq: "weekly",
           priority: 0.5,
           ignorePatterns: ["/examples/**", "/search/**"],
