@@ -140,9 +140,9 @@ export const formatMDXFrontmatter = (
 /**
  * Creates an MDX formatter for Docusaurus documentation.
  *
- * The MDX formatter produces React component-based markup compatible
- * with Docusaurus MDX rendering. It uses components like `<Badge>`,
- * `<Bullet>`, `<Details>`, and `<SpecifiedBy>`.
+ * The MDX formatter produces MDX/HTML markup compatible with Docusaurus.
+ * It uses helper components like `<Badge>`, `<Bullet>`, and `<SpecifiedBy>`,
+ * and emits native `<details>/<summary>` blocks for collapsible sections.
  *
  * @param meta - Optional metadata for framework-specific formatting
  * @returns A complete Formatter implementation for MDX output
