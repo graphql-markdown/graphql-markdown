@@ -78,6 +78,7 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
+    "docs": "turbo run docs",
     "docs:api": "turbo run docs:api:root",
     "docs:api:root": "node ./packages/tooling-config/scripts/docs-api.mjs",
     "knip": "knip --strict",
