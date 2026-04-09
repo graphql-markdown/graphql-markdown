@@ -172,8 +172,8 @@
   "devDependencies": {
     "@eslint/js": "9.39.4",
     "@graphql-eslint/eslint-plugin": "4.4.0",
-    "@graphql-tools/graphql-file-loader": "8.1.12",
-    "@graphql-tools/json-file-loader": "8.0.26",
+    "@graphql-tools/graphql-file-loader": "8.1.13",
+    "@graphql-tools/json-file-loader": "8.0.27",
     "@stryker-mutator/api": "9.6.0",
     "@stryker-mutator/core": "9.6.0",
     "@stryker-mutator/jest-runner": "9.6.0",
