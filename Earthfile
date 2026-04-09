@@ -46,24 +46,24 @@ deps:
 
 build:
   FROM +deps
-  RUN bun run clean
-  RUN bun run build
+  RUN bun run clean --output-logs "$turboOutputLogs"
+  RUN bun run build --output-logs "$turboOutputLogs"
 
 lint:
   FROM +build
-  RUN bun run ts:check
-  RUN bun run prettier
-  RUN bun run lint
+  RUN bun run ts:check --output-logs "$turboOutputLogs"
+  RUN bun run prettier --output-logs "$turboOutputLogs"
+  RUN bun run lint --output-logs "$turboOutputLogs"
 
 unit-test:
   FROM +lint
   DO +INSTALL_JEST
-  RUN bun run test:unit
+  RUN bun run test:unit --output-logs "$turboOutputLogs"
 
 integration-test:
   FROM +lint
   DO +INSTALL_JEST
-  RUN bun run test:integration
+  RUN bun run test:integration --output-logs "$turboOutputLogs"
 
 mutation-test:
   FROM +build
