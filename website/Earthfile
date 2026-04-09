@@ -5,22 +5,11 @@ IMPORT .. AS root
 ARG --global docusaurusVersion="latest"
 ARG --global docusaurusProject="docusaurus-gqlmd"
 
-build-docusaurus-project:
-  FROM root+build
-  WORKDIR /
-  IF [ "$docusaurusVersion" = "2" ]
-    RUN --mount=type=cache,target=/root/.bun bunx --silent create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install
-  ELSE
-    RUN --mount=type=cache,target=/root/.bun bunx --silent create-docusaurus@$docusaurusVersion "$docusaurusProject" classic --skip-install --javascript
-  END
-  WORKDIR /$docusaurusProject
-  RUN rm -rf docs; rm -rf blog; rm -rf src; rm -rf static/img
-  DO root+INSTALL_DOCUSAURUS
-
 build-docusaurus-examples:
   FROM root+build-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
+  RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
   DO +BUILD_EXAMPLES
   SAVE ARTIFACT ./examples
 
@@ -28,6 +17,7 @@ build-cli-examples:
   FROM root+setup-cli-project
   WORKDIR /$gqlmdCliProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
+  RUN npm install --save ./graphql-markdown-cli.tgz
   COPY root+assets/data/graphql.config.mjs ./graphql.config.mjs
   DO +BUILD_EXAMPLES --command=gqlmd
   SAVE ARTIFACT ./examples
@@ -39,11 +29,13 @@ build-api-docs:
   SAVE ARTIFACT ./api
 
 build-docs:
-  FROM docker.io/library/node:lts-alpine
-  COPY ./ ./
+  FROM root+alpine
+  COPY --dir ./src ./src
+  COPY --dir ./static ./static
+  COPY package.json package-lock.json docusaurus.config.js llms.config.js ./
   COPY +build-docusaurus-examples/examples ./examples
   COPY +build-api-docs/api ./api
-  COPY root+assets/docs .
+  COPY root+assets/docs ./docs
   RUN --mount=type=cache,target=/root/.npm npm ci
   RUN --mount=type=cache,target=/root/.npm npx update-browserslist-db@latest
   RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
@@ -63,6 +55,8 @@ BUILD_EXAMPLES:
   LET folderDocs="examples"
   LET folderExample="default"
   LET idExample="default"
+  DO root+INSTALL_GRAPHQL
+  DO root+INSTALL_GQLMD
   RUN mkdir $folderDocs
   DO root+GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
   RUN mv docs ./$folderDocs/$folderExample

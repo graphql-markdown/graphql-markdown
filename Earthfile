@@ -7,19 +7,20 @@ ARG --global docusaurusProject="docusaurus-gqlmd"
 ARG --global gqlmdCliProject="cli-gqlmd"
 ARG --global testTimeout="5000"
 ARG --global coverage="true"
+ARG --global turboOutputLogs="errors-only"
 
 FROM docker.io/library/node:$nodeVersion-alpine
-WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
 ENV HUSKY=0
 ENV NODE_OPTIONS=--dns-result-order=ipv4first
 ENV TURBO_CONCURRENCY=50%
-RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
-RUN node --version
-RUN npm --version
-RUN bun --version
 
-ARG --global turboOutputLogs = errors-only
+alpine: 
+  WORKDIR /graphql-markdown
+  RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
+  RUN node --version
+  RUN npm --version
+  RUN bun --version
 
 assets:
   FROM scratch
@@ -33,6 +34,7 @@ assets:
   SAVE ARTIFACT ./data
 
 deps:
+  FROM +alpine
   COPY package.json bun.lock ./
   COPY tsconfig.json tsconfig.base.json turbo.json ./
   COPY --dir packages ./packages
