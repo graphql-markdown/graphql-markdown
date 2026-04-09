@@ -463,14 +463,20 @@ The `prettier` package has to be installed separately. If the package is not pre
 
 ## `runOnBuild`
 
-:::warning[EXPERIMENTAL]
+:::warning[DEPRECATED]
 
-`runOnBuild` is an experimental feature, and it should not be used in production.
+`runOnBuild` is deprecated and will be removed in a future release.
 
 :::
 
-When set to `true` enables running doc generation on `docusaurus build`.
-If `false`, then the documentation can only be generated with the Docusaurus command `graphql-to-doc`.
+When set to `true`, this option runs documentation generation during `docusaurus build`.
+
+Prefer generating docs explicitly with the Docusaurus command `graphql-to-doc` before running the build.
+
+```bash
+npx docusaurus graphql-to-doc
+npx docusaurus build
+```
 
 | Setting      | CLI flag | Default |
 | ------------ | -------- | ------- |

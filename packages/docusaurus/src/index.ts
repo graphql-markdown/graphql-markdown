@@ -13,7 +13,7 @@ import {
   getGraphQLMarkdownCli,
   runGraphQLMarkdown,
 } from "@graphql-markdown/cli";
-import Logger from "@graphql-markdown/logger";
+import Logger, { log, LogLevel } from "@graphql-markdown/logger";
 
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const LOGGER_MODULE = "@docusaurus/logger" as const;
@@ -44,6 +44,10 @@ export default async function pluginGraphQLDocGenerator(
       if (options.runOnBuild !== true) {
         return;
       }
+      log(
+        "`runOnBuild` option is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.",
+        LogLevel.warn,
+      );
       await runGraphQLMarkdown(options, {}, LOGGER_MODULE);
     },
 
