@@ -391,7 +391,7 @@ const isLinkType = (arg: unknown): arg is TypeLink => {
 /**
  * Prints a link for a GraphQL type based on the provided options.
  *
- * @param type - The GraphQL type to print a link for
+ * @param arg - The GraphQL type or link object to print a link for
  * @param options - Configuration options for link generation
  * @returns The formatted link as a string
  */

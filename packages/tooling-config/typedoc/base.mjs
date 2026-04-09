@@ -39,9 +39,9 @@ export const createPackageTypedocConfig = (overrides = {}) => {
     ...typedocBaseOptions,
     plugin: [
       "typedoc-plugin-markdown",
-      "../../tooling-config/typedoc/no-media-plugin.mjs",
+      "../tooling-config/typedoc/no-media-plugin.mjs",
     ],
-    prettierConfigFile: "../../tooling-config/prettier/index.mjs",
+    prettierConfigFile: "../tooling-config/prettier/index.mjs",
     entryPoints: ["./src"],
     entryPointStrategy: "expand",
     out: "./docs",
