@@ -12,9 +12,9 @@ Defined in: [mdx/index.ts:157](https://github.com/graphql-markdown/graphql-markd
 
 Creates an MDX formatter for Docusaurus documentation.
 
-The MDX formatter produces React component-based markup compatible
-with Docusaurus MDX rendering. It uses components like `<Badge>`,
-`<Bullet>`, `<Details>`, and `<SpecifiedBy>`.
+The MDX formatter produces MDX/HTML markup compatible with Docusaurus.
+It uses helper components like `<Badge>`, `<Bullet>`, and `<SpecifiedBy>`,
+and emits native `<details>/<summary>` blocks for collapsible sections.
 
 #### Parameters
 

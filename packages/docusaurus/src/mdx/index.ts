@@ -79,7 +79,9 @@ export const formatMDXDetails = ({
   dataOpen,
   dataClose,
 }: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<Details dataOpen="Hide ${dataOpen}" dataClose="Show ${dataClose}">${MARKDOWN_EOP}\r${MARKDOWN_EOP}</Details>${MARKDOWN_EOP}` as MDXString;
+  const openLabel = escapeMDX(`Hide ${dataOpen}`);
+  const closeLabel = escapeMDX(`Show ${dataClose}`);
+  return `${MARKDOWN_EOP}<details class="graphql-markdown-details">${MARKDOWN_EOL}<summary>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-closed">${closeLabel}</span>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-open">${openLabel}</span>${MARKDOWN_EOL}</summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 /**
@@ -138,9 +140,9 @@ export const formatMDXFrontmatter = (
 /**
  * Creates an MDX formatter for Docusaurus documentation.
  *
- * The MDX formatter produces React component-based markup compatible
- * with Docusaurus MDX rendering. It uses components like `<Badge>`,
- * `<Bullet>`, `<Details>`, and `<SpecifiedBy>`.
+ * The MDX formatter produces MDX/HTML markup compatible with Docusaurus.
+ * It uses helper components like `<Badge>`, `<Bullet>`, and `<SpecifiedBy>`,
+ * and emits native `<details>/<summary>` blocks for collapsible sections.
  *
  * @param meta - Optional metadata for framework-specific formatting
  * @returns A complete Formatter implementation for MDX output

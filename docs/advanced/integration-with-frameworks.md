@@ -123,6 +123,13 @@ You only need to export the formatter functions your framework requires. Any mis
 
 The official [Docusaurus](https://docusaurus.io/) integration is available as a dedicated package:
 
+:::info Docusaurus default details output
+
+With the default `@graphql-markdown/docusaurus/mdx` parser, collapsible sections are emitted as native `<details>/<summary>` markup.
+Custom summary labels are rendered with open/closed spans and toggled with CSS (`data-collapsed` and `[open]` selectors), so no custom `<Details>` React component is required.
+
+:::
+
 ```js
 const path = require('node:path');
 
