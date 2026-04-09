@@ -78,7 +78,8 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
-    "docs:api": "sh ./packages/tooling-config/scripts/docs-api.sh",
+    "docs:api": "turbo run docs:api:root",
+    "docs:api:root": "node ./packages/tooling-config/scripts/docs-api.mjs",
     "knip": "knip --strict",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
@@ -90,7 +91,6 @@
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",
     "ts:check": "turbo run ts:check",
-    "typedoc": "typedoc --options typedoc.config.mjs",
     "stryker": "turbo stryker"
   },
   "prettier": "./packages/tooling-config/prettier/index.mjs",
@@ -171,8 +171,8 @@
   "devDependencies": {
     "@eslint/js": "9.39.4",
     "@graphql-eslint/eslint-plugin": "4.4.0",
-    "@graphql-tools/graphql-file-loader": "8.1.12",
-    "@graphql-tools/json-file-loader": "8.0.26",
+    "@graphql-tools/graphql-file-loader": "8.1.13",
+    "@graphql-tools/json-file-loader": "8.0.27",
     "@stryker-mutator/api": "9.6.0",
     "@stryker-mutator/core": "9.6.0",
     "@stryker-mutator/jest-runner": "9.6.0",

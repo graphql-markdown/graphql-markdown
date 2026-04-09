@@ -18,7 +18,7 @@ smoke-docusaurus-run:
   ARG options=
   FROM root+setup-docusaurus-project
   WORKDIR /$docusaurusProject
-  COPY ./e2e/__data__ ./data
+  COPY root+assets/data ./data
   COPY ./e2e/docusaurus/__data__ ./data
   DO root+GQLMD --options=$options
   RUN bun run build
@@ -35,7 +35,7 @@ smoke-cli-test:
 SMOKE_TEST:
   FUNCTION
   ARG package
-  COPY ./e2e/__data__ ./data
+  COPY root+assets/data ./data
   COPY ./e2e/__data__/.graphqlrc ./.graphqlrc
   COPY ./e2e/helpers/cli.mjs ./__tests__/helpers/cli.mjs
   COPY ./e2e/$package/__data__ ./data

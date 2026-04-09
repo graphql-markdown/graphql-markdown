@@ -7,23 +7,38 @@ ARG --global docusaurusProject="docusaurus-gqlmd"
 ARG --global gqlmdCliProject="cli-gqlmd"
 ARG --global testTimeout="5000"
 ARG --global coverage="true"
-
-IMPORT ./website AS website
+ARG --global turboOutputLogs="errors-only"
 
 FROM docker.io/library/node:$nodeVersion-alpine
-WORKDIR /graphql-markdown
 ENV NODE_ENV=ci
 ENV HUSKY=0
 ENV NODE_OPTIONS=--dns-result-order=ipv4first
 ENV TURBO_CONCURRENCY=50%
-RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
-RUN node --version
-RUN npm --version
-RUN bun --version
+
+alpine: 
+  WORKDIR /graphql-markdown
+  RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
+  RUN node --version
+  RUN npm --version
+  RUN bun --version
+
+assets:
+  FROM scratch
+  COPY --dir ./website/static/img ./static/img
+  COPY --dir ./website/src/css ./src/css
+  COPY --dir ./docs ./docs
+  COPY --dir ./tests/e2e/__data__ ./data
+  COPY --dir ./tests/e2e/docusaurus/__data__ ./docusaurus
+  SAVE ARTIFACT ./static/img
+  SAVE ARTIFACT ./src/css
+  SAVE ARTIFACT ./docs
+  SAVE ARTIFACT ./data
+  SAVE ARTIFACT ./docusaurus
 
 deps:
+  FROM +alpine
   COPY package.json bun.lock ./
-  COPY tsconfig.json tsconfig.base.json turbo.json typedoc.config.mjs ./
+  COPY tsconfig.json tsconfig.base.json turbo.json ./
   COPY --dir packages ./packages
   RUN --mount=type=cache,target=/root/.bun bun ci --silent
   # Cache node_modules
@@ -88,8 +103,8 @@ setup-cli-project:
 setup-docusaurus-project:
   FROM +build-docusaurus-project
   WORKDIR /$docusaurusProject
-  COPY (website+assets/img) ./static/img
-  COPY (website+assets/css) ./src/css
+  COPY (+assets/img) ./static/img
+  COPY (+assets/css) ./src/css
   DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
   RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
@@ -112,13 +127,15 @@ GQLMD:
   FUNCTION
   ARG id
   ARG options
-  ARG command=docusaurus
+  ARG command="docusaurus"
+  ARG runner="bunx"
   RUN mkdir -p docs
-  IF [ ! $id ]
-    RUN bunx $command graphql-to-doc $options 2>&1 | tee ./run.log
-  ELSE
-    RUN bunx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+  LET gqlmd=graphql-to-doc
+  IF [ $id ]
+    SET gqlmd=${gqlmd}:${id}
   END
+  RUN echo "Running command: $runner $command $gqlmd $options"
+  RUN $runner $command $gqlmd $options 2>&1 | tee ./run.log
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1)
 
 INSTALL_DOCUSAURUS:
