@@ -14,9 +14,14 @@ import {
 } from "@graphql-markdown/cli";
 
 jest.mock("@graphql-markdown/logger", () => {
-  return jest.fn();
+  return {
+    __esModule: true,
+    default: jest.fn(),
+    log: jest.fn(),
+    LogLevel: { warn: "warn" },
+  };
 });
-import Logger from "@graphql-markdown/logger";
+import Logger, { log } from "@graphql-markdown/logger";
 
 describe("pluginGraphQLDocGenerator", () => {
   const mockCli = {
@@ -61,6 +66,10 @@ describe("pluginGraphQLDocGenerator", () => {
         mockOptions,
       );
       await plugin.loadContent!();
+      expect(log).toHaveBeenCalledWith(
+        "`runOnBuild` option is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.",
+        "warn",
+      );
       expect(runGraphQLMarkdown).toHaveBeenCalledWith(
         mockOptions,
         {},
