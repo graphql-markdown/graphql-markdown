@@ -4,12 +4,14 @@ IMPORT .. AS root
 
 ARG --global docusaurusVersion="latest"
 ARG --global docusaurusProject="docusaurus-gqlmd"
+ARG --global turboOutputLogs="errors-only"
 
 build-docusaurus-examples:
-  FROM root+build-docusaurus-project
+  FROM root+setup-docusaurus-project
   WORKDIR /$docusaurusProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
-  RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
+  COPY root+assets/data ./data
+  COPY root+assets/docusaurus ./data
   DO +BUILD_EXAMPLES
   SAVE ARTIFACT ./examples
 
@@ -17,7 +19,7 @@ build-cli-examples:
   FROM root+setup-cli-project
   WORKDIR /$gqlmdCliProject
   RUN --mount=type=cache,target=/root/.npm npm install --save prettier
-  RUN npm install --save ./graphql-markdown-cli.tgz
+  COPY root+assets/data ./data
   COPY root+assets/data/graphql.config.mjs ./graphql.config.mjs
   DO +BUILD_EXAMPLES --command=gqlmd
   SAVE ARTIFACT ./examples
@@ -25,7 +27,7 @@ build-cli-examples:
 build-api-docs:
   FROM root+build
   COPY root+assets/docs/__api/__index.md /graphql-markdown/docs/__api/__index.md
-  RUN bun run docs:api
+  RUN bun run docs:api --output-logs "$turboOutputLogs"
   SAVE ARTIFACT ./api
 
 build-docs:
@@ -38,7 +40,7 @@ build-docs:
   COPY root+assets/docs ./docs
   RUN --mount=type=cache,target=/root/.npm npm ci
   RUN --mount=type=cache,target=/root/.npm npx update-browserslist-db@latest
-  RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true npm run build
+  RUN NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true DOCUSAURUS_DISABLE_GIT_METADATA=true npm run build
   SAVE ARTIFACT --force ./build AS LOCAL build
 
 build-image:
@@ -51,17 +53,17 @@ build-image:
 
 BUILD_EXAMPLES:
   FUNCTION
-  ARG command=docusaurus
-  LET folderDocs="examples"
+  ARG command="docusaurus"
   LET folderExample="default"
   LET idExample="default"
-  DO root+INSTALL_GRAPHQL
-  DO root+INSTALL_GQLMD
-  RUN mkdir $folderDocs
-  DO root+GQLMD --command=$command --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /${folderDocs}/${folderExample} --force --pretty --deprecated group"
-  RUN mv docs ./$folderDocs/$folderExample
+  LET runner="npx"
+  RUN mkdir examples
+  DO root+GQLMD --command=$command --runner=$runner --options="--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /examples/${folderExample} --force --pretty --deprecated group"
+  RUN mv docs ./examples/$folderExample
+  RUN test -n "$(find ./examples/$folderExample -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO root+GQLMD --command=$command --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /${folderDocs}/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
-  RUN mv docs ./$folderDocs/$folderExample
-  SAVE ARTIFACT ./$folderDocs
+  DO root+GQLMD --command=$command --runner=$runner --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /examples/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
+  RUN mv docs ./examples/$folderExample
+  RUN test -n "$(find ./examples/$folderExample -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
+  SAVE ARTIFACT ./examples

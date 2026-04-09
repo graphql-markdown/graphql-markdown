@@ -28,10 +28,12 @@ assets:
   COPY --dir ./website/src/css ./src/css
   COPY --dir ./docs ./docs
   COPY --dir ./tests/e2e/__data__ ./data
+  COPY --dir ./tests/e2e/docusaurus/__data__ ./docusaurus
   SAVE ARTIFACT ./static/img
   SAVE ARTIFACT ./src/css
   SAVE ARTIFACT ./docs
   SAVE ARTIFACT ./data
+  SAVE ARTIFACT ./docusaurus
 
 deps:
   FROM +alpine
@@ -125,13 +127,15 @@ GQLMD:
   FUNCTION
   ARG id
   ARG options
-  ARG command=docusaurus
+  ARG command="docusaurus"
+  ARG runner="bunx"
   RUN mkdir -p docs
-  IF [ ! $id ]
-    RUN bunx $command graphql-to-doc $options 2>&1 | tee ./run.log
-  ELSE
-    RUN bunx $command graphql-to-doc:${id} $options 2>&1 | tee ./run.log
+  LET gqlmd=graphql-to-doc
+  IF [ $id ]
+    SET gqlmd=${gqlmd}:${id}
   END
+  RUN echo "Running command: $runner $command $gqlmd $options"
+  RUN $runner $command $gqlmd $options 2>&1 | tee ./run.log
   RUN test `grep -c -i "An error occurred" run.log` -eq 0 && echo "Success" || (echo "Failed with errors"; exit 1)
 
 INSTALL_DOCUSAURUS:
