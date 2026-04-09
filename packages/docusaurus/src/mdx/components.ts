@@ -24,23 +24,5 @@ export const SpecifiedBy = (props) => <>Specification<a className="link" style={
 
 export const Badge = (props) => <><span className={props.class}>{props.text}</span></>
 
-import { useState } from 'react';
-import ThemedDetails from '@theme/Details';
-
-export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
-  const [open, setOpen] = useState(Boolean(startOpen));
-  return (
-    <ThemedDetails
-      open={open}
-      onToggle={(event) => {
-        setOpen(event.currentTarget.open);
-      }}
-      summary={open ? dataOpen : dataClose}
-    >
-      {open && children}
-    </ThemedDetails>
-  );
-};
-
 
 ` as MDXString;
