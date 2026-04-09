@@ -78,7 +78,8 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
-    "docs:api": "sh ./packages/tooling-config/scripts/docs-api.sh",
+    "docs:api": "turbo run docs:api:root",
+    "docs:api:root": "node ./packages/tooling-config/scripts/docs-api.mjs",
     "knip": "knip --strict",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
@@ -90,7 +91,7 @@
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",
     "ts:check": "turbo run ts:check",
-    "typedoc": "typedoc --options typedoc.config.mjs",
+    "typedoc": "turbo run build typedoc:root",
     "stryker": "turbo stryker"
   },
   "prettier": "./packages/tooling-config/prettier/index.mjs",

@@ -52,9 +52,9 @@
       "cache": false,
       "persistent": true
     },
-    "dev": {
-      "persistent": true,
-      "cache": false
-    }
+    "//#docs:api:root": {
+      "dependsOn": ["^build"],
+      "outputs": ["api/**", "!api/@@graphql-markdown/**"]
+    },
   }
 }

@@ -1,7 +1,7 @@
 {
   "workspaces": {
     ".": {
-      "entry": ["dangerfile.js", "config/*.js", "typedoc.config.mjs"],
+      "entry": ["dangerfile.js", "config/*.js"],
       "project": ["config/**/*.js"],
       "eslint": {
         "config": ["packages/tooling-config/eslint/config.ts"]
@@ -32,9 +32,10 @@
         "scripts/shared/dependencies-utils.mjs",
         "scripts/publish-package.sh",
         "scripts/publish-release.sh",
-        "scripts/docs-api.sh",
+        "scripts/docs-api.mjs",
         "husky/prepare-husky.js",
         "stryker/stryker.conf.mjs",
+        "typedoc/api.mjs",
         "typedoc/base.mjs",
         "typedoc/root.mjs",
         "typedoc/custom-frontmatter.mjs",

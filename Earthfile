@@ -34,7 +34,7 @@ assets:
 
 deps:
   COPY package.json bun.lock ./
-  COPY tsconfig.json tsconfig.base.json turbo.json typedoc.config.mjs ./
+  COPY tsconfig.json tsconfig.base.json turbo.json ./
   COPY --dir packages ./packages
   RUN --mount=type=cache,target=/root/.bun bun ci --silent
   # Cache node_modules
