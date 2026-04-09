@@ -1,9 +1,10 @@
 #!/bin/sh
+set -e
 
 API_DIR=./api
 WORKSPACE=@graphql-markdown
 
-bun run build
+bun run build --output-logs=errors-only
 
 # export NODE_OPTIONS=--max_old_space_size=8192
 bunx typedoc --options typedoc.config.mjs --skipErrorChecking --logLevel Error --out ${API_DIR}
