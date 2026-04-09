@@ -15,7 +15,7 @@
     },
     "docs": {
       "dependsOn": ["^build"],
-      "outputs": ["api/**"]
+      "outputs": ["docs/**"]
     },
     "lint": {
       "dependsOn": ["^build"]
@@ -55,6 +55,6 @@
     "//#docs:api:root": {
       "dependsOn": ["^build"],
       "outputs": ["api/**", "!api/@@graphql-markdown/**"]
-    },
+    }
   }
 }
