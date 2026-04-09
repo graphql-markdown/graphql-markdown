@@ -22,7 +22,7 @@ const prettierRules = {
   "prettier/prettier": "error" as const,
 };
 
-export default [
+const config: Linter.FlatConfig[] = [
   // Global ignores
   {
     languageOptions: {
@@ -274,3 +274,5 @@ export default [
   // Apply prettier config last to override any conflicting rules
   prettierConfig,
 ] satisfies Linter.FlatConfig[];
+
+export default config;
