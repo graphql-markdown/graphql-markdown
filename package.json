@@ -91,7 +91,6 @@
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",
     "ts:check": "turbo run ts:check",
-    "typedoc": "turbo run build typedoc:root",
     "stryker": "turbo stryker"
   },
   "prettier": "./packages/tooling-config/prettier/index.mjs",
