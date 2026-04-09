@@ -128,3 +128,28 @@ div[class^="announcementBar_"] {
   width: 15rem;
   margin: 1rem;
 }
+
+.graphql-markdown-details .graphql-markdown-details-label-closed {
+  display: inline;
+}
+
+.graphql-markdown-details .graphql-markdown-details-label-open {
+  display: none;
+}
+
+.graphql-markdown-details .graphql-markdown-details-label-open[hidden] {
+  display: none;
+}
+
+/* Expanded state from themed details (data-collapsed) or native details (open). */
+details[data-collapsed="false"] .graphql-markdown-details-label-closed,
+details[open] .graphql-markdown-details-label-closed {
+  display: none;
+}
+
+details[data-collapsed="false"] .graphql-markdown-details-label-open,
+details[open] .graphql-markdown-details-label-open,
+details[data-collapsed="false"] .graphql-markdown-details-label-open[hidden],
+details[open] .graphql-markdown-details-label-open[hidden] {
+  display: inline !important;
+}

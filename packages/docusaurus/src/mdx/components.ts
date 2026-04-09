@@ -24,25 +24,5 @@ export const SpecifiedBy = (props) => <>Specification<a className="link" style={
 
 export const Badge = (props) => <><span className={props.class}>{props.text}</span></>
 
-import { useState } from 'react';
-
-export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
-  const [open, setOpen] = useState(startOpen);
-  return (
-    <details {...(open ? { open: true } : {})} className="details" style={{ border:'none', boxShadow:'none', background:'var(--ifm-background-color)' }}>
-      <summary
-        onClick={(e) => {
-          e.preventDefault();
-          setOpen((open) => !open);
-        }}
-        style={{ listStyle:'none' }}
-      >
-      {open ? dataOpen : dataClose}
-      </summary>
-      {open && children}
-    </details>
-  );
-};
-
 
 ` as MDXString;

@@ -20,6 +20,7 @@ export default {
   entryPointStrategy: "packages",
   exclude: [
     `${projectRoot}/packages/types`,
+    `${projectRoot}/packages/tooling-config`,
     `${projectRoot}/packages/core/src/index.ts`,
     `${projectRoot}/packages/graphql/src/index.ts`,
     `${projectRoot}/packages/helpers/src/index.ts`,

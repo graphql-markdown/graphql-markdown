@@ -58,7 +58,7 @@ describe("formatMDXDetails", () => {
     };
     const result = formatMDXDetails(details);
     expect(result).toBe(
-      '\n\n<Details dataOpen="Hide Open" dataClose="Show Close">\n\n\r\n\n</Details>\n\n',
+      '\n\n<details class="graphql-markdown-details">\n<summary>\n<span class="graphql-markdown-details-label-closed">Show Close</span>\n<span class="graphql-markdown-details-label-open">Hide Open</span>\n</summary>\n\n\r\n\n</details>\n\n',
     );
   });
 });
@@ -169,7 +169,7 @@ describe("createMDXFormatter", () => {
       dataOpen: "details",
       dataClose: "details",
     });
-    expect(result).toContain("Details");
+    expect(result).toContain('<details class="graphql-markdown-details">');
   });
 
   test("formatMDXFrontmatter returns expected output", () => {
