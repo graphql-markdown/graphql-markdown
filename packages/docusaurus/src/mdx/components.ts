@@ -25,20 +25,22 @@ export const SpecifiedBy = (props) => <>Specification<a className="link" style={
 export const Badge = (props) => <><span className={props.class}>{props.text}</span></>
 
 import { useState } from 'react';
-import ThemedDetails from '@theme/Details';
 
 export const Details = ({ dataOpen, dataClose, children, startOpen = false }) => {
-  const [open, setOpen] = useState(Boolean(startOpen));
+  const [open, setOpen] = useState(startOpen);
   return (
-    <ThemedDetails
-      open={open}
-      onToggle={(event) => {
-        setOpen(event.currentTarget.open);
-      }}
-      summary={open ? dataOpen : dataClose}
-    >
-      {children}
-    </ThemedDetails>
+    <details {...(open ? { open: true } : {})} className="details" style={{ border:'none', boxShadow:'none', background:'var(--ifm-background-color)' }}>
+      <summary
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen((open) => !open);
+        }}
+        style={{ listStyle:'none' }}
+      >
+      {open ? dataOpen : dataClose}
+      </summary>
+      {open && children}
+    </details>
   );
 };
 
