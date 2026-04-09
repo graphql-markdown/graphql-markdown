@@ -37,7 +37,7 @@ export const Details = ({ dataOpen, dataClose, children, startOpen = false }) =>
       }}
       summary={open ? dataOpen : dataClose}
     >
-      {children}
+      {open && children}
     </ThemedDetails>
   );
 };
