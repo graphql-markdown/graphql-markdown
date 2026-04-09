@@ -12,10 +12,10 @@ export default {
     "typedoc-plugin-markdown",
     "typedoc-plugin-frontmatter",
     "typedoc-docusaurus-theme",
-    "./custom-frontmatter.mjs",
-    "./no-media-plugin.mjs",
+    `${projectRoot}/packages/tooling-config/typedoc/custom-frontmatter.mjs`,
+    `${projectRoot}/packages/tooling-config/typedoc/no-media-plugin.mjs`,
   ],
-  prettierConfigFile: "../prettier/index.mjs",
+  prettierConfigFile: `${projectRoot}/packages/tooling-config/prettier/index.mjs`,
   entryPoints: [`${projectRoot}/packages/*`],
   entryPointStrategy: "packages",
   exclude: [
