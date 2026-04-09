@@ -24,7 +24,7 @@ const TYPEDOC_OPTIONS_PATH = fileURLToPath(
   import.meta.resolve("../typedoc/api.mjs"),
 );
 
-const GENERATED_FILES_DEPTH = 2;
+const GENERATED_FILES_DEPTH = 1;
 const GENERATED_FILES_TO_REMOVE = ["generated.md", "modules.md"];
 
 /** @typedef {{ type: "exit"; exitCode: number | null; signal: NodeJS.Signals | null }} SpawnExit */
@@ -111,7 +111,7 @@ async function ensureRootIndexFile() {
 
 /**
  * Delete generated helper pages from nested folders only.
- * Equivalent of: find api -mindepth 2 -type f \( -name generated.md -o -name modules.md \) -delete
+ * Equivalent of deleting generated.md/modules.md under api/<package>/ and deeper directories.
  */
 async function removeGeneratedFiles(
   /** @type {string} */ dir = API_DIR,
