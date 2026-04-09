@@ -113,7 +113,8 @@ When making your changes, remember to check your code by running:
 - `bun run ts:check` checks that the code is TS compliant
 - `bun run lint` checks that the code respects coding standards (ESLint + Prettier)
 - `bun run test:[unit|integration]` runs the test suites for unit tests or integration tests
-- `earthly +smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
+- `bun run knip` checks dependencies
+- `earthly ./tests/+smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
 
 When you are ready, you should then run the full checks with `earthly +all`.
 
@@ -230,13 +231,13 @@ You can read more about [mutation testing here](https://stryker-mutator.io/docs/
 You can build the documentation locally with the command:
 
 ```shell
-earthly +build-docs
+earthly ./website+build-docs
 ```
 
 You can also create a local container image `graphql-markdown:docs` for tests:
 
 ```shell
-earthly +build-image
+earthly ./website+build-image
 docker run --rm -it -p 8080:8080 graphql-markdown:docs
 ```
 
