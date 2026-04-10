@@ -166,6 +166,7 @@ export const DEFAULT_OPTIONS: Readonly<
     frontMatter: {} as FrontMatterOptions,
     index: false as const,
     sectionHeaderId: true as const,
+    suppressGenerator: false as const,
   } as Pick<ConfigDocOptions, "categorySort"> &
     Required<
       Pick<
@@ -501,6 +502,8 @@ export const getDocOptions = (
       : DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
   const sectionHeaderId =
     cliOpts?.noSectionId === true ? false : configSectionHeaderId;
+  const suppressGenerator =
+    configOptions?.suppressGenerator === true ? true : false;
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
@@ -509,6 +512,7 @@ export const getDocOptions = (
     },
     index,
     sectionHeaderId,
+    suppressGenerator,
   } as Required<ConfigDocOptions>;
 };
 

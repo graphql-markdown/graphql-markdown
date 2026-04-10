@@ -456,6 +456,7 @@ export const generateDocFromSchema = async ({
       printTypeOptions,
       skipDocDirectives,
       sectionHeaderId: docOptions?.sectionHeaderId,
+      suppressGenerator: docOptions?.suppressGenerator,
     },
     formatter,
     mdxDeclaration,

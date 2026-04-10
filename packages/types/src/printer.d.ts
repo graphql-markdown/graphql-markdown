@@ -262,6 +262,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   schema?: Maybe<GraphQLSchema>;
   sectionHeaderId?: boolean;
   skipDocDirectives?: GraphQLDirective[];
+  suppressGenerator?: boolean;
   typeBadges?: boolean;
   withAttributes?: boolean;
 };
@@ -477,4 +478,6 @@ export interface PrinterOptions {
   skipDocDirectives?: GraphQLDirective[];
   /** Flag to disable custom header section ID for permalink */
   sectionHeaderId?: boolean;
+  /** When true, suppresses the auto-injected generator meta tag */
+  suppressGenerator?: boolean;
 }

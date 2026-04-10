@@ -202,6 +202,7 @@ describe("Printer", () => {
   "schema": undefined,
   "sectionHeaderId": true,
   "skipDocDirectives": [],
+  "suppressGenerator": false,
   "typeBadges": true,
   "withAttributes": false,
 }
@@ -304,6 +305,7 @@ describe("Printer", () => {
   "skipDocDirectives": [
     "@test",
   ],
+  "suppressGenerator": false,
   "typeBadges": false,
   "withAttributes": false,
 }
@@ -533,15 +535,17 @@ describe("Printer", () => {
       { options: { metatags: undefined } },
       { options: { metatags: [] } },
     ])(
-      "return empty string if no metatags set",
+      "always returns generator meta tag even when no user metatags are set",
       ({ options }: Record<string, unknown>) => {
         expect.assertions(1);
 
-        expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe("");
+        expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe(
+          `<head>\n<meta name="generator" content="@graphql-markdown" />\n</head>`,
+        );
       },
     );
 
-    test("returns a formatted head tag with meta tags", () => {
+    test("returns generator tag followed by user-configured meta tags", () => {
       expect.assertions(1);
 
       const metatags = [
@@ -552,9 +556,33 @@ describe("Printer", () => {
       expect(
         Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
       ).toBe(`<head>
+<meta name="generator" content="@graphql-markdown" />
 <meta charSet="utf-8" />
 <meta name="robot" contents="none" />
 </head>`);
+    });
+
+    test("returns empty string when suppressGenerator is true and no user metatags", () => {
+      expect.assertions(1);
+
+      expect(
+        Printer.printMetaTags({}, {
+          suppressGenerator: true,
+        } as PrintTypeOptions),
+      ).toBe("");
+    });
+
+    test("returns only user metatags when suppressGenerator is true", () => {
+      expect.assertions(1);
+
+      const metatags = [{ name: "robot", contents: "none" }];
+
+      expect(
+        Printer.printMetaTags({}, {
+          metatags,
+          suppressGenerator: true,
+        } as unknown as PrintTypeOptions),
+      ).toBe(`<head>\n<meta name="robot" contents="none" />\n</head>`);
     });
   });
 

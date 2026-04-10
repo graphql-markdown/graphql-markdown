@@ -105,6 +105,7 @@ export const DEFAULT_OPTIONS: Required<
   typeBadges: PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
   withAttributes: false as const,
   sectionHeaderId: true as const,
+  suppressGenerator: false as const,
   hierarchy: PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
   ...MDXModule,
 };

@@ -132,6 +132,11 @@ export interface ConfigDocOptions {
    * This is useful for enabling direct linking to specific sections of the documentation.
    */
   sectionHeaderId?: boolean;
+  /**
+   * When true, suppresses the automatic `<meta name="generator" content="@graphql-markdown" />`
+   * tag that is otherwise injected into every generated page.
+   */
+  suppressGenerator?: boolean;
 }
 
 /**

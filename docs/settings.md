@@ -81,13 +81,15 @@ Use these options to tweak some of the static documentation generator features:
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) &mdash; **ONLY FOR DOCUSAURUS**
 - `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. Conceptually this uses the syntax `### Section {#ID}`, but the generated MDX will escape the braces as in `### Section \{#id\}` so that MDX does not treat `{...}` as an expression.
+- `suppressGenerator`: when set to `true`, suppresses the `<meta name="generator" content="@graphql-markdown" />` tag that is otherwise injected into every generated page. By default the tag is included to allow tooling and web crawlers to identify documentation built with GraphQL-Markdown (analogous to the generator meta tag used by WordPress, Gatsby, and Docusaurus).
 
-| Setting                      | CLI flag        | Default |
-| ---------------------------- | --------------- | ------- |
-| `docOptions.categorySort`    | _not supported_ | -       |
-| `docOptions.frontMatter`     | _not supported_ | `{}`    |
-| `docOptions.index`           | `--index`       | `false` |
-| `docOptions.sectionHeaderId` | `--noSectionId` | `true`  |
+| Setting                           | CLI flag        | Default |
+| --------------------------------- | --------------- | ------- |
+| `docOptions.categorySort`         | _not supported_ | -       |
+| `docOptions.frontMatter`          | _not supported_ | `{}`    |
+| `docOptions.index`                | `--index`       | `false` |
+| `docOptions.sectionHeaderId`      | `--noSectionId` | `true`  |
+| `docOptions.suppressGenerator`    | _not supported_ | `false` |
 
 <br/>
 
@@ -111,6 +113,7 @@ plugins: [
           index: true, // enable generated index pages, same as CLI flag --index
           categorySort: "natural", // sort categories alphabetically and prefix with order numbers (01-objects, 02-queries, etc.)
           sectionHeaderId: false, // disable custom section header IDs (restores previous behavior)
+          suppressGenerator: true, // opt out of <meta name="generator" content="@graphql-markdown" />
         },
         // highlight-end
         loaders: {

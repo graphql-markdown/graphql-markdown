@@ -292,6 +292,7 @@ describe("config", () => {
           index: false,
           frontMatter: { draft: true },
           sectionHeaderId: false,
+          suppressGenerator: false,
         },
         printTypeOptions: {
           codeSection: false,
@@ -422,6 +423,7 @@ describe("config", () => {
           frontMatter: {},
           index: true,
           sectionHeaderId: false,
+          suppressGenerator: false,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
@@ -502,6 +504,7 @@ describe("config", () => {
           frontMatter: { draft: true, page_next: null },
           index: true,
           sectionHeaderId: true,
+          suppressGenerator: false,
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
