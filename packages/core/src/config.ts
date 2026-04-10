@@ -502,9 +502,12 @@ export const getDocOptions = (
       : DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
   const sectionHeaderId =
     cliOpts?.noSectionId === true ? false : configSectionHeaderId;
+  const configSuppressGenerator =
+    typeof configOptions?.suppressGenerator === "boolean"
+      ? configOptions.suppressGenerator
+      : undefined;
   const suppressGenerator =
-    configOptions?.suppressGenerator ??
-    DEFAULT_OPTIONS.docOptions!.suppressGenerator;
+    configSuppressGenerator ?? DEFAULT_OPTIONS.docOptions!.suppressGenerator;
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
