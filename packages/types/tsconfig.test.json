@@ -6,6 +6,7 @@
     "rootDir": "./",
 
     "noEmit": true,
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
 
     "types": ["node"]
   },

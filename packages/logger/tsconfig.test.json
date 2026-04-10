@@ -8,6 +8,7 @@
     "moduleResolution": "bundler",
     "ignoreDeprecations": "6.0",
     "noEmit": true,
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
 
     "isolatedModules": true,
 
