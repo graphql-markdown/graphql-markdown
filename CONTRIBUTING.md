@@ -247,7 +247,7 @@ Generate API documentation for packages:
 
 ```shell
 # Generate docs for all packages
-bun run docs:api
+bun run docs
 ```
 
 The generated documentation will be available in each package's `docs/` directory.
