@@ -503,7 +503,8 @@ export const getDocOptions = (
   const sectionHeaderId =
     cliOpts?.noSectionId === true ? false : configSectionHeaderId;
   const suppressGenerator =
-    configOptions?.suppressGenerator === true ? true : false;
+    configOptions?.suppressGenerator ??
+    DEFAULT_OPTIONS.docOptions!.suppressGenerator;
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
