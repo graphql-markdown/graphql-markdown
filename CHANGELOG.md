@@ -1,3 +1,70 @@
+<a id="1.34.0"></a>
+# [1.34.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.34.0) - 2026-04-10
+
+This release is a spring-cleaning pass across GraphQL-Markdown: clearing cobwebs from the tooling attic, tightening the generation pipeline, and shipping a few practical improvements along the way.
+
+### What's New
+
+#### `beforeComposePageTypeHook` - Control page section layout
+
+A new lifecycle hook lets you reorder, filter, or hide sections on any generated page before it is rendered. This supersedes the deprecated boolean options `codeSection`, `relatedTypeSection`, and `exampleSection`.
+
+See the [Hook Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes) documentation for usage examples.
+
+#### Namespace wrapping in code snippets
+
+Operations that belong to a namespace (introduced in 1.33.0) now render their code snippets wrapped in the correct namespace block, giving a more accurate representation of the schema structure.
+
+#### Runtime deprecation warnings
+
+Using deprecated CLI flags or config options (`--noCode`, `--noRelatedType`, `--noExample`, `codeSection`, `relatedTypeSection`) now emits a visible warning at runtime to help with migration.
+
+#### Docusaurus `<details>` MDX implementation update
+
+The Docusaurus package updates its MDX handling for `<details>` blocks to align with the current implementation.
+
+### Bug Fixes
+
+- **Namespace detection regression** ([#2809](https://github.com/graphql-markdown/graphql-markdown/issues/2809)): fields whose return type is the root operation type (for example, a `Mutation` field returning `Mutation`) were incorrectly classified as namespace containers. This caused those fields to be omitted from operation lists and the root type to be stripped from the objects map. Fixed in `@graphql-markdown/graphql`.
+
+### Breaking / Deprecations
+
+- `relatedTypeSection` is deprecated - use `beforeComposePageTypeHook` to hide the related-types section.
+- `codeSection` and boolean `exampleSection` are deprecated - use `beforeComposePageTypeHook` instead.
+- `options.runOnBuild` is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.
+- `PrinterEvent` enum is deprecated in favour of `ICancellableEvent`.
+- Potential breaking change: all section printer functions now return structured `PageSection` objects instead of raw strings.
+### Internal / Architecture
+
+- Event base classes (`CancellableEvent`, `DataEvent`, `DataOutputEvent`) moved from `@graphql-markdown/core` -> `@graphql-markdown/utils`, making them available to downstream consumers.
+- Print event implementations (`PrintCodeEvent`, `PrintTypeEvent`, `BeforeComposePageTypeEvent`) moved to `@graphql-markdown/printer-legacy`.
+- `@graphql-markdown/types` promoted from `devDependencies` -> `dependencies` across all packages.
+
+### Package Versions
+
+| Package | Version |
+|---|---|
+| `@graphql-markdown/docusaurus` | `1.34.0` |
+| `@graphql-markdown/core` | `1.20.0` |
+| `@graphql-markdown/printer-legacy` | `1.15.0` |
+| `@graphql-markdown/types` | `1.12.0` |
+| `@graphql-markdown/utils` | `1.11.0` |
+| `@graphql-markdown/graphql` | `1.2.1` |
+| `@graphql-markdown/cli` | `0.7.1` |
+| `@graphql-markdown/diff` | `1.1.14` |
+| `@graphql-markdown/helpers` | `1.0.13` |
+| `@graphql-markdown/logger` | `1.0.6` |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.33.0...1.34.0
+
+
+
+
+
+
+[Changes][1.34.0]
+
+
 <a id="1.33.0"></a>
 # [1.33.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.33.0) - 2026-03-06
 
@@ -2230,6 +2297,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.34.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.33.0...1.34.0
 [1.33.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.1...1.33.0
 [1.32.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.0...1.32.1
 [1.32.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.31.2...1.32.0
