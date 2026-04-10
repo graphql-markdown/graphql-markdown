@@ -584,6 +584,16 @@ describe("Printer", () => {
         } as unknown as PrintTypeOptions),
       ).toBe(`<head>\n<meta name="robot" contents="none" />\n</head>`);
     });
+
+    test("does not duplicate generator tag when user metatags already include name=generator", () => {
+      expect.assertions(1);
+
+      const metatags = [{ name: "generator", content: "Docusaurus" }];
+
+      expect(
+        Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
+      ).toBe(`<head>\n<meta name="generator" content="Docusaurus" />\n</head>`);
+    });
   });
 
   describe("printExample()", () => {
