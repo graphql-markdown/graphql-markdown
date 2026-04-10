@@ -226,6 +226,18 @@ const afterPrintCodeHook = async (event) => {
 export { afterPrintCodeHook };
 ```
 
+:::tip
+
+You can customize the heading level or text by changing `### Response Type` to match your documentation style.
+
+:::
+
+:::note
+
+The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL type wrappers like `NonNull` and `List`. For example, `[User!]!` becomes `User`.
+
+:::
+
 ## Reorder or hide sections before page composition
 
 Use `beforeComposePageTypeHook` to customize the final section order for each type page. This is the recommended approach for section visibility and ordering.
@@ -254,14 +266,3 @@ Legacy options and CLI flags (`printTypeOptions.codeSection`, `printTypeOptions.
 
 :::
 
-:::tip
-
-You can customize the heading level or text by changing `### Response Type` to match your documentation style.
-
-:::
-
-:::note
-
-The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL type wrappers like `NonNull` and `List`. For example, `[User!]!` becomes `User`.
-
-:::
