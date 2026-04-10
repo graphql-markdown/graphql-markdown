@@ -58,7 +58,7 @@ jobs:
 
       - name: Push changes to website repo
         run: |
-          cp -Rf ${{ env.SOURCE_DIR }}/build/** ${{ env.TARGET_DIR }}/
+          cp -Rf ${{ env.SOURCE_DIR }}/website/build/** ${{ env.TARGET_DIR }}/
           cd ${{ env.TARGET_DIR }}
           git add --all
           git commit -am ":memo: update documentation ($GITHUB_SHA)"
