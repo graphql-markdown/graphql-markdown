@@ -544,7 +544,7 @@ export class Printer implements IPrinter {
     { metatags, suppressGenerator }: PrintTypeOptions,
   ): MDXString | string => {
     const userDefinedGenerator = (metatags ?? []).some((tag) => {
-      return tag["name"] === "generator";
+      return String(tag["name"]).trim().toLowerCase() === "generator";
     });
     const generatorTag =
       suppressGenerator || userDefinedGenerator
