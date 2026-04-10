@@ -264,26 +264,29 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
 
 1. **Build all packages first**:
 
-   ```shell
-   bun run build
+  ```shell
+  bun run build
+  ```
 
 2. **Use the publish scripts** (recommended):
 
-   ```shell
-   # Single package
-   ./packages/tooling-config/scripts/publish-package.sh <package-name>
+  ```shell
+  # Single package
+  ./packages/tooling-config/scripts/publish-package.sh <package-name>
+  ./packages/tooling-config/scripts/publish-package.sh --dry-run <package-name>
 
-   # All packages for a release
-   ./packages/tooling-config/scripts/publish-release.sh
-   ```
+  # All packages for a release
+  ./packages/tooling-config/scripts/publish-release.sh
+  ./packages/tooling-config/scripts/publish-release.sh --dry-run
+  ```
 
 3. **Or manually with bun pack + npm publish tarball**:
 
-   ```shell
-   cd packages/<package-name>
-   bun pm pack                    # Creates tarball with resolved deps
-   npm publish <tarball.tgz> --access public
-   ```
+  ```shell
+  cd packages/<package-name>
+  bun pm pack                    # Creates tarball with resolved deps
+  npm publish <tarball.tgz> --access public
+  ```
 
 The publish scripts will:
 
@@ -291,6 +294,8 @@ The publish scripts will:
 - Verify no `workspace:` references remain in the tarball
 - Publish using the tarball (not from directory)
 - Publish in correct dependency order
+
+Use `--dry-run` to review the publish plan and validate the tarball flow without publishing anything.
 
 #### Dependency Order for Publishing
 

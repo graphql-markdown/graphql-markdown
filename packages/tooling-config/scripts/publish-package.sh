@@ -2,17 +2,53 @@
 # Publish a package using bun pack + npm publish with tarball
 # This ensures workspace:^ dependencies are resolved correctly
 #
-# Usage: ./scripts/publish-package.sh <package-name>
+# Usage: ./scripts/publish-package.sh [--dry-run|-n] <package-name>
 # Example: ./scripts/publish-package.sh docusaurus
+# Example: ./scripts/publish-package.sh --dry-run docusaurus
 
 set -euo pipefail
 
-PACKAGE_NAME="${1:-}"
-
-if [[ -z "$PACKAGE_NAME" ]]; then
-  echo "Usage: $0 <package-name>"
+usage() {
+  echo "Usage: $0 [--dry-run|-n] <package-name>"
+  echo ""
+  echo "Options:"
+  echo "  --dry-run, -n  Prepare and validate publish artifacts without publishing"
+  echo ""
   echo "Available packages:"
   ls -1 packages/ | grep -v node_modules
+}
+
+PACKAGE_NAME=""
+DRY_RUN=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run|-n)
+      DRY_RUN=true
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "Error: Unknown option '$arg'"
+      usage
+      exit 1
+      ;;
+    *)
+      if [[ -z "$PACKAGE_NAME" ]]; then
+        PACKAGE_NAME="$arg"
+      else
+        echo "Error: Too many arguments"
+        usage
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [[ -z "$PACKAGE_NAME" ]]; then
+  usage
   exit 1
 fi
 
@@ -66,6 +102,17 @@ fi
 echo ""
 echo "✅ Dependencies resolved correctly"
 echo ""
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "🧪 Dry run enabled"
+  echo "Would run: npm publish $TARBALL_NAME --access public --workspaces=false"
+  echo ""
+  echo "🔍 Running npm publish --dry-run validation..."
+  npm publish "$TARBALL_NAME" --access public --workspaces=false --dry-run
+  echo ""
+  echo "✅ Dry run completed for $FULL_NAME@$VERSION"
+  exit 0
+fi
 
 # Publish using the tarball
 echo "🚀 Publishing to npm..."
