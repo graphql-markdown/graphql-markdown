@@ -13,7 +13,7 @@ These events allow interception and modification of the generated code output.
 const PrintTypeEvents: object;
 ```
 
-Defined in: [events/print-type-events.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/print-type-events.ts#L24)
+Defined in: [core/src/events/print-type-events.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/print-type-events.ts#L25)
 
 Event names for printing type documentation.
 
@@ -35,6 +35,14 @@ readonly AFTER_PRINT_TYPE: "print:afterPrintType" = "print:afterPrintType";
 
 Emitted after generating the full type documentation (output can be modified)
 
+##### BEFORE_COMPOSE_PAGE_TYPE
+
+```ts
+readonly BEFORE_COMPOSE_PAGE_TYPE: "print:beforeComposePageType" = "print:beforeComposePageType";
+```
+
+Emitted before composing page sections (can modify section content)
+
 ##### BEFORE_PRINT_CODE
 
 ```ts
@@ -54,14 +62,11 @@ Emitted before generating the full type documentation
 #### Example
 
 ```typescript
-import {
-  getEvents,
-  PrintTypeEvents,
-  PrintTypeEvent,
-} from "@graphql-markdown/core";
+import { getEvents, PrintTypeEvents } from "@graphql-markdown/core";
+import { PrintCodeEvent } from "@graphql-markdown/printer-legacy";
 
 const events = getEvents();
-events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintTypeEvent) => {
+events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
   // Modify the generated code
   event.output = event.output.toUpperCase();
 });

@@ -3,6 +3,7 @@
 ## Modules
 
 - [array](array.md)
+- [events](events.md)
 - [frontmatter](frontmatter.md)
 - [fs](fs.md)
 - [guards](guards.md)

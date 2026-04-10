@@ -10,7 +10,7 @@ Render homepage event constants.
 const RenderHomepageEvents: object;
 ```
 
-Defined in: [events/render-homepage-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-homepage-events.ts#L10)
+Defined in: [core/src/events/render-homepage-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-homepage-events.ts#L10)
 
 Event names for rendering homepage.
 

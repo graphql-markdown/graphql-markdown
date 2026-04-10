@@ -17,7 +17,7 @@ function getPrinter(
 ): Promise<typeof IPrinter>;
 ```
 
-Defined in: [printer.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L67)
+Defined in: [core/src/printer.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L67)
 
 Loads and initializes a printer module for GraphQL schema documentation.
 

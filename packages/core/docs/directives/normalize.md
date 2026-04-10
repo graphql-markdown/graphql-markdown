@@ -14,7 +14,7 @@ the application.
 function combineDirectiveNames(...sources): DirectiveName[];
 ```
 
-Defined in: [directives/normalize.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L92)
+Defined in: [core/src/directives/normalize.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L94)
 
 Combines and deduplicates directive names from multiple sources in one step.
 
@@ -56,7 +56,7 @@ const all = combineDirectiveNames(cliDirectives, configDirectives);
 function normalizeDirectiveNames(...sources): DirectiveName[];
 ```
 
-Defined in: [directives/normalize.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L42)
+Defined in: [core/src/directives/normalize.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L42)
 
 Normalizes directive names from multiple sources into a single flattened array.
 
@@ -111,7 +111,7 @@ const safe = normalizeDirectiveNames(
 function uniqueDirectiveNames(directives): DirectiveName[];
 ```
 
-Defined in: [directives/normalize.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L65)
+Defined in: [core/src/directives/normalize.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/normalize.ts#L67)
 
 Removes duplicate directive names from an array while preserving order.
 

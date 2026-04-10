@@ -1,6 +1,6 @@
 
-npm run ts:check
-npm run lint
-npm run prettier
-npm run test:unit
-npm run knip
+bun run ts:check
+bun run lint
+bun run prettier
+bun run test:unit
+bun run knip

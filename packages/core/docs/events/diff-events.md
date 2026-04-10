@@ -10,7 +10,7 @@ Diff checking event constants.
 const DiffEvents: object;
 ```
 
-Defined in: [events/diff-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-events.ts#L10)
+Defined in: [core/src/events/diff-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/diff-events.ts#L10)
 
 Event names for diff checking lifecycle.
 

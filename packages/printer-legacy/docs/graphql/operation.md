@@ -5,13 +5,39 @@ Provides utilities to print operation types, metadata, and code representations.
 
 ## Functions
 
+### printCodeOperation()
+
+```ts
+function printCodeOperation(type, options?): string | MDXString;
+```
+
+Defined in: [printer-legacy/src/graphql/operation.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L94)
+
+Prints the code representation of an operation.
+
+#### Parameters
+
+##### type
+
+`unknown`
+
+##### options?
+
+`PrintTypeOptions`
+
+#### Returns
+
+`string` \| `MDXString`
+
+---
+
 ### printOperationMetadata()
 
 ```ts
-function printOperationMetadata(type, options): string | MDXString;
+function printOperationMetadata(type, options): Maybe<PageSection[]>;
 ```
 
-Defined in: [printer-legacy/src/graphql/operation.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L38)
+Defined in: [printer-legacy/src/graphql/operation.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L45)
 
 Prints the operation metadata including arguments and type information.
 
@@ -31,19 +57,19 @@ Print type options for customizing output
 
 #### Returns
 
-`string` \| `MDXString`
+`Maybe`&lt;[`PageSection`](../events.md#pagesection)[]&gt;
 
-Formatted string containing operation metadata or empty string if invalid
+Ordered operation metadata sections, or undefined when `type` is not an operation
 
 ---
 
 ### printOperationType()
 
 ```ts
-function printOperationType(type, options): string | MDXString;
+function printOperationType(type, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/graphql/operation.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L17)
+Defined in: [printer-legacy/src/graphql/operation.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L24)
 
 Prints the operation type information.
 
@@ -63,6 +89,6 @@ Print type options for customizing output
 
 #### Returns
 
-`string` \| `MDXString`
+`Maybe`&lt;[`PageSection`](../events.md#pagesection)&gt;
 
-Formatted string representation of the operation type or empty string if invalid
+A "Type" PageSection, or undefined when `type` is not an operation

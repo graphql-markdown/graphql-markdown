@@ -10,7 +10,7 @@ Generate index metafile event constants.
 const GenerateIndexMetafileEvents: object;
 ```
 
-Defined in: [events/generate-index-metafile-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile-events.ts#L10)
+Defined in: [core/src/events/generate-index-metafile-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile-events.ts#L10)
 
 Event names for generating index metafile.
 

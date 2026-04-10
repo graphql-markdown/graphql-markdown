@@ -4,7 +4,7 @@
 
 ### EmitResult
 
-Defined in: [event-emitter.ts:9](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L9)
+Defined in: [core/src/event-emitter.ts:9](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L9)
 
 Result object returned when emitting a cancellable event.
 
@@ -16,7 +16,7 @@ Result object returned when emitting a cancellable event.
 defaultPrevented: boolean;
 ```
 
-Defined in: [event-emitter.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L20)
+Defined in: [core/src/event-emitter.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L20)
 
 Whether any handler called preventDefault() on the event.
 Only applicable if the event is cancellable.
@@ -27,7 +27,7 @@ Only applicable if the event is cancellable.
 errors: Error[];
 ```
 
-Defined in: [event-emitter.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L14)
+Defined in: [core/src/event-emitter.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L14)
 
 Array of errors that occurred during handler execution.
 Handlers continue executing even if previous handlers throw errors.
@@ -40,7 +40,7 @@ Handlers continue executing even if previous handlers throw errors.
 function getEvents(): CancellableEventEmitter;
 ```
 
-Defined in: [event-emitter.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L149)
+Defined in: [core/src/event-emitter.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L172)
 
 Get the singleton event emitter instance.
 
@@ -73,7 +73,7 @@ await events.emitAsync("beforeLoadSchema", event);
 function resetEvents(): void;
 ```
 
-Defined in: [event-emitter.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L173)
+Defined in: [core/src/event-emitter.ts:196](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L196)
 
 Reset the event emitter singleton.
 

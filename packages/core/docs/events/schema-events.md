@@ -10,7 +10,7 @@ Schema loading event constants.
 const SchemaEvents: object;
 ```
 
-Defined in: [events/schema-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/schema-events.ts#L10)
+Defined in: [core/src/events/schema-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/schema-events.ts#L10)
 
 Event names for schema loading lifecycle.
 

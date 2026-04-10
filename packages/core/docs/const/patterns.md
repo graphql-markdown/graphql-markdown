@@ -13,7 +13,7 @@ and simplify maintenance when patterns need to be updated.
 const CONFIG_CONSTANTS: object;
 ```
 
-Defined in: [const/patterns.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L115)
+Defined in: [core/src/const/patterns.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L115)
 
 String constants used for configuration parsing and defaults.
 
@@ -36,7 +36,7 @@ Items without the grouping directive are assigned to this group.
 const PATTERNS: object;
 ```
 
-Defined in: [const/patterns.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L20)
+Defined in: [core/src/const/patterns.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L20)
 
 Central repository of regex patterns used for configuration parsing and string transformation.
 
@@ -95,7 +95,7 @@ Captures the directive name after the @ symbol.
 
 ###### Pattern
 
-`^@(?<directive>\w+)$`
+`^\@(?<directive>\w+)$`
 
 ###### Example
 
@@ -117,7 +117,7 @@ Groups: (1) directive name, (2) field name, (3) optional fallback
 
 ###### Pattern
 
-`^@(\w+)\((\w+)(?:\|=(\w+))?\)$`
+`^\@(\w+)\((\w+)(?:\|=(\w+))?\)$`
 
 ###### Example
 

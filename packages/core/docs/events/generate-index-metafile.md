@@ -6,13 +6,17 @@ Generate index metafile event class.
 
 ### GenerateIndexMetafileEvent
 
-Defined in: [events/generate-index-metafile.ts:14](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L14)
+Defined in: [core/src/events/generate-index-metafile.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L15)
 
 Event emitted before/after generating index metafile.
 
 #### Extends
 
-- [`CancellableEvent`](base.md#abstract-cancellableevent)
+- `DataEvent`&lt;\{
+  `category`: `string`;
+  `dirPath`: `string`;
+  `options?`: `Record`&lt;`string`, `unknown`&gt;;
+  \}&gt;
 
 #### Constructors
 
@@ -22,7 +26,7 @@ Event emitted before/after generating index metafile.
 new GenerateIndexMetafileEvent(data, options?): GenerateIndexMetafileEvent;
 ```
 
-Defined in: [events/generate-index-metafile.ts:22](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L22)
+Defined in: [core/src/events/generate-index-metafile.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L20)
 
 ###### Parameters
 
@@ -42,7 +46,7 @@ Defined in: [events/generate-index-metafile.ts:22](https://github.com/graphql-ma
 
 ###### options?
 
-[`CancellableEventOptions`](base.md#cancellableeventoptions)
+`CancellableEventOptions`
 
 ###### Returns
 
@@ -50,7 +54,13 @@ Defined in: [events/generate-index-metafile.ts:22](https://github.com/graphql-ma
 
 ###### Overrides
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`constructor`](base.md#constructor)
+```ts
+DataEvent<{
+  dirPath: string;
+  category: string;
+  options?: Record<string, unknown>;
+}>.constructor
+```
 
 #### Properties
 
@@ -60,9 +70,9 @@ Defined in: [events/generate-index-metafile.ts:22](https://github.com/graphql-ma
 readonly data: object;
 ```
 
-Defined in: [events/generate-index-metafile.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L16)
+Defined in: utils/dist/events.d.ts:111
 
-Event data containing directory path, category, and options
+Read-only event data payload.
 
 ###### category
 
@@ -79,7 +89,13 @@ dirPath: string;
 ###### options?
 
 ```ts
-optional options: Record<string, unknown>;
+optional options?: Record<string, unknown>;
+```
+
+###### Inherited from
+
+```ts
+DataEvent.data;
 ```
 
 #### Accessors
@@ -92,7 +108,7 @@ optional options: Record<string, unknown>;
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: [events/base.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L109)
+Defined in: utils/dist/events.d.ts:78
 
 Gets the default action function if one was provided.
 
@@ -102,7 +118,9 @@ Gets the default action function if one was provided.
 
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`defaultAction`](base.md#defaultaction)
+```ts
+DataEvent.defaultAction;
+```
 
 ##### defaultPrevented
 
@@ -112,7 +130,7 @@ Gets the default action function if one was provided.
 get defaultPrevented(): boolean;
 ```
 
-Defined in: [events/base.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L95)
+Defined in: utils/dist/events.d.ts:70
 
 Gets whether the default action has been prevented.
 
@@ -120,9 +138,31 @@ Gets whether the default action has been prevented.
 
 `boolean`
 
+###### Set Signature
+
+```ts
+set defaultPrevented(value): void;
+```
+
+Defined in: utils/dist/events.d.ts:82
+
+Allows setting defaultPrevented to true directly.
+
+###### Parameters
+
+###### value
+
+`boolean`
+
+###### Returns
+
+`void`
+
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`defaultPrevented`](base.md#defaultprevented)
+```ts
+DataEvent.defaultPrevented;
+```
 
 ##### propagationStopped
 
@@ -132,7 +172,7 @@ Gets whether the default action has been prevented.
 get propagationStopped(): boolean;
 ```
 
-Defined in: [events/base.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L102)
+Defined in: utils/dist/events.d.ts:74
 
 Gets whether propagation has been stopped.
 
@@ -140,9 +180,31 @@ Gets whether propagation has been stopped.
 
 `boolean`
 
+###### Set Signature
+
+```ts
+set propagationStopped(value): void;
+```
+
+Defined in: utils/dist/events.d.ts:86
+
+Allows setting propagationStopped to true directly.
+
+###### Parameters
+
+###### value
+
+`boolean`
+
+###### Returns
+
+`void`
+
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`propagationStopped`](base.md#propagationstopped)
+```ts
+DataEvent.propagationStopped;
+```
 
 #### Methods
 
@@ -152,7 +214,7 @@ Gets whether propagation has been stopped.
 preventDefault(): void;
 ```
 
-Defined in: [events/base.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L127)
+Defined in: utils/dist/events.d.ts:91
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -161,20 +223,11 @@ Only works if the event is cancellable.
 
 `void`
 
-###### Example
-
-```typescript
-events.on("beforeLoadSchema", (event) => {
-  if (shouldUseCustomLoader) {
-    event.preventDefault(); // Stops default schema loading
-    // Custom logic here
-  }
-});
-```
-
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`preventDefault`](base.md#preventdefault)
+```ts
+DataEvent.preventDefault;
+```
 
 ##### runDefaultAction()
 
@@ -182,7 +235,7 @@ events.on("beforeLoadSchema", (event) => {
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: [events/base.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L160)
+Defined in: utils/dist/events.d.ts:100
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -190,18 +243,11 @@ Executes the default action for an event if it hasn't been prevented.
 
 `Promise`&lt;`void`&gt;
 
-A promise that resolves when the default action completes, or void if the action was prevented or no default action is defined
-
-###### Remarks
-
-This method will only execute the `_defaultAction` if:
-
-- The event's default has not been prevented (`_defaultPrevented` is false)
-- A default action function has been defined (`_defaultAction` is a function)
-
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`runDefaultAction`](base.md#rundefaultaction)
+```ts
+DataEvent.runDefaultAction;
+```
 
 ##### stopPropagation()
 
@@ -209,7 +255,7 @@ This method will only execute the `_defaultAction` if:
 stopPropagation(): void;
 ```
 
-Defined in: [events/base.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/base.ts#L146)
+Defined in: utils/dist/events.d.ts:96
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.
@@ -218,16 +264,8 @@ Handlers registered after the current one will not execute.
 
 `void`
 
-###### Example
-
-```typescript
-events.on("beforeLoadSchema", (event) => {
-  if (criticalError) {
-    event.stopPropagation(); // No more handlers run
-  }
-});
-```
-
 ###### Inherited from
 
-[`CancellableEvent`](base.md#abstract-cancellableevent).[`stopPropagation`](base.md#stoppropagation)
+```ts
+DataEvent.stopPropagation;
+```

@@ -4,7 +4,7 @@ Library of helpers for formatting strings.
 
 ## Variables
 
-### slugify()
+### slugify
 
 ```ts
 const slugify: (str) => string = kebabCase;
@@ -363,9 +363,9 @@ optional character separator for word-based transformation.
 
 ##### splitter?
 
-optional regex or string rule for splitting string into word.
+`string` \| `RegExp`
 
-`string` | `RegExp`
+optional regex or string rule for splitting string into word.
 
 #### Returns
 
