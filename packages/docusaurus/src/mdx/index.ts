@@ -81,7 +81,7 @@ export const formatMDXDetails = ({
 }: CollapsibleOption): MDXString => {
   const openLabel = escapeMDX(`Hide ${dataOpen}`);
   const closeLabel = escapeMDX(`Show ${dataClose}`);
-  return `${MARKDOWN_EOP}<details class="graphql-markdown-details">${MARKDOWN_EOL}<summary>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-closed">${closeLabel}</span>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-open">${openLabel}</span>${MARKDOWN_EOL}</summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
+  return `${MARKDOWN_EOP}<details class="graphql-markdown-details">${MARKDOWN_EOL}<summary>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-closed">${closeLabel}</span>${MARKDOWN_EOL}<span class="graphql-markdown-details-label-open" hidden>${openLabel}</span>${MARKDOWN_EOL}</summary>${MARKDOWN_EOP}\r${MARKDOWN_EOP}</details>${MARKDOWN_EOP}` as MDXString;
 };
 
 /**
