@@ -540,7 +540,7 @@ describe("Printer", () => {
         expect.assertions(1);
 
         expect(Printer.printMetaTags({}, options as PrintTypeOptions)).toBe(
-          `<head>\n<meta name="generator" content="@graphql-markdown" />\n</head>`,
+          `<Head>\n<meta name="generator" content="@graphql-markdown" />\n</Head>`,
         );
       },
     );
@@ -555,11 +555,11 @@ describe("Printer", () => {
 
       expect(
         Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
-      ).toBe(`<head>
+      ).toBe(`<Head>
 <meta name="generator" content="@graphql-markdown" />
 <meta charSet="utf-8" />
 <meta name="robot" contents="none" />
-</head>`);
+</Head>`);
     });
 
     test("returns empty string when suppressGenerator is true and no user metatags", () => {
@@ -582,7 +582,7 @@ describe("Printer", () => {
           metatags,
           suppressGenerator: true,
         } as unknown as PrintTypeOptions),
-      ).toBe(`<head>\n<meta name="robot" contents="none" />\n</head>`);
+      ).toBe(`<Head>\n<meta name="robot" contents="none" />\n</Head>`);
     });
 
     test("does not duplicate generator tag when user metatags already include name=generator", () => {
@@ -592,7 +592,7 @@ describe("Printer", () => {
 
       expect(
         Printer.printMetaTags({}, { metatags } as unknown as PrintTypeOptions),
-      ).toBe(`<head>\n<meta name="generator" content="Docusaurus" />\n</head>`);
+      ).toBe(`<Head>\n<meta name="generator" content="Docusaurus" />\n</Head>`);
     });
   });
 
