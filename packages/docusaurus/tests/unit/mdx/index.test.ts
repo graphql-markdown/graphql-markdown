@@ -58,7 +58,7 @@ describe("formatMDXDetails", () => {
     };
     const result = formatMDXDetails(details);
     expect(result).toBe(
-      '\n\n<details class="graphql-markdown-details">\n<summary>\n<span class="graphql-markdown-details-label-closed">Show Close</span>\n<span class="graphql-markdown-details-label-open">Hide Open</span>\n</summary>\n\n\r\n\n</details>\n\n',
+      '\n\n<details class="graphql-markdown-details">\n<summary>\n<span class="graphql-markdown-details-label-closed">Show Close</span>\n<span class="graphql-markdown-details-label-open" hidden>Hide Open</span>\n</summary>\n\n\r\n\n</details>\n\n',
     );
   });
 });
