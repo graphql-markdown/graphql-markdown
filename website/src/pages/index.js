@@ -13,10 +13,14 @@ function HomepageHeader() {
         <img
           className={clsx("hero", styles.heroImage)}
           src="/img/preview.svg"
-          alt="GraphQL-Markdown documentation generator"
+          alt="GraphQL-Markdown: generate Markdown and MDX documentation from any GraphQL schema"
+          width="1280"
+          height="640"
+          fetchpriority="high"
+          decoding="async"
         />
 
-        <p className={clsx("hero__subtitle", styles.heroSubtitle)}>
+        <h1 className={clsx("hero__title", styles.heroSubtitle)}>
           Customizable{" "}
           <span style={{ color: "#36c46f", whiteSpace: "nowrap" }}>
             Markdown + MDX
@@ -30,7 +34,7 @@ function HomepageHeader() {
             <span style={{ color: "#e535ab" }}>GraphQL</span>
           </a>{" "}
           schemas.
-        </p>
+        </h1>
 
         <p className={clsx("hero__subtitle", styles.heroSubtitleSecondary)}>
           One{" "}
@@ -74,7 +78,7 @@ function Thanks() {
   return (
     <div className="col col--6 col--offset-3 padding-bottom--xl">
       <div className="text--center">
-        <h3 className="padding-bottom--md">Thanks to our contributors</h3>
+        <h2 className="padding-bottom--md">Thanks to our contributors</h2>
         <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
           <img
             src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8"
@@ -95,7 +99,7 @@ export default function Home() {
   return (
     <Layout
       title="GraphQL-Markdown — GraphQL schema documentation generator"
-      description="Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Use the CLI to produce docs that integrate with any MDX framework."
+      description="Auto-generate beautiful Markdown and MDX docs from any GraphQL schema. Open-source CLI with type cross-linking, custom directives, and Docusaurus integration. MIT licensed."
     >
       <HomepageHeader />
       <main>

@@ -65,6 +65,7 @@ const config = {
         id: "api",
         path: "./api",
         routeBasePath: "api",
+        versions: { current: { noIndex: true } },
       },
     ],
     ["docusaurus-plugin-llms", createLLMSPluginConfig()],
@@ -98,12 +99,42 @@ const config = {
         theme: {
           customCss: ["./src/css/custom.css"],
         },
+        blog: false,
         sitemap: {
           lastmod: sitemapLastmod,
           changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ["/examples/**", "/search/**"],
+          ignorePatterns: [
+            "/examples/**",
+            "/search/**",
+            "/api/category/**",
+            "/api/printer-legacy/**",
+            "/blog/**",
+          ],
           filename: "sitemap.xml",
+          createSitemapItems: async (params) => {
+            const { defaultCreateSitemapItems, ...rest } = params;
+            const items = await defaultCreateSitemapItems(rest);
+            return items.map((item) => {
+              if (item.url === "https://graphql-markdown.dev/") {
+                return { ...item, priority: 1.0, changefreq: "monthly" };
+              }
+              if (
+                /\/docs\/(get-started|intro|configuration|try-it)$/.test(
+                  item.url,
+                )
+              ) {
+                return { ...item, priority: 0.9, changefreq: "monthly" };
+              }
+              if (item.url.includes("/docs/")) {
+                return { ...item, priority: 0.7 };
+              }
+              if (item.url.includes("/api/")) {
+                return { ...item, priority: 0.4, changefreq: "monthly" };
+              }
+              return item;
+            });
+          },
         },
       }),
     ],
@@ -120,31 +151,27 @@ const config = {
         "@type": "SoftwareApplication",
         name: "GraphQL-Markdown",
         applicationCategory: "DeveloperApplication",
-        operatingSystem: "Any",
+        applicationSubCategory: "DocumentationTool",
+        operatingSystem: "Linux, macOS, Windows",
         description:
           "Generate customizable Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular MDX frameworks.",
         url: "https://graphql-markdown.dev",
+        downloadUrl: "https://www.npmjs.com/package/@graphql-markdown/cli",
+        softwareVersion: "latest",
         author: {
           "@type": "Person",
           name: "Grégory Heitz",
         },
         license: "https://opensource.org/licenses/MIT",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+        codeRepository:
+          "https://github.com/graphql-markdown/graphql-markdown",
+        programmingLanguage: ["TypeScript", "JavaScript"],
       }),
-    },
-    {
-      tagName: "link",
-      attributes: {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-    },
-    {
-      tagName: "link",
-      attributes: {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
     },
     {
       tagName: "link",
@@ -177,12 +204,7 @@ const config = {
         {
           name: "description",
           content:
-            "Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Works with Docusaurus and popular frameworks.",
-        },
-        {
-          name: "keywords",
-          content:
-            "GraphQL, Markdown, MDX, documentation, Docusaurus, API documentation, schema, generator, GraphQL schema",
+            "Auto-generate beautiful Markdown and MDX docs from any GraphQL schema. Open-source CLI with type cross-linking, custom directives, and Docusaurus integration. MIT licensed.",
         },
         { name: "author", content: "Grégory Heitz" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -190,7 +212,7 @@ const config = {
         {
           name: "twitter:description",
           content:
-            "Generate human-friendly Markdown/MDX documentation from GraphQL schemas.",
+            "Auto-generate beautiful Markdown and MDX docs from any GraphQL schema. Open-source CLI, Docusaurus integration, MIT licensed.",
         },
         { property: "og:type", content: "website" },
         { property: "og:site_name", content: "GraphQL-Markdown" },
