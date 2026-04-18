@@ -174,6 +174,58 @@ const config = {
       }),
     },
     {
+      tagName: "script",
+      attributes: {
+        type: "application/ld+json",
+      },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "What is GraphQL-Markdown?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "GraphQL-Markdown is an open-source command-line tool and JavaScript/TypeScript library that auto-generates human-friendly Markdown and MDX documentation from any GraphQL schema. It supports Docusaurus out of the box and works with any MDX framework.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Does GraphQL-Markdown work with Apollo, Hasura, or custom GraphQL servers?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. GraphQL-Markdown reads schemas from SDL files, introspection endpoints, or GraphQL config, so it works with Apollo Server, Hasura, GraphQL Yoga, and any server that exposes a standard GraphQL schema.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Can GraphQL-Markdown generate docs for custom directives?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. You can document custom directives, group types by directive, and use directive metadata to drive deprecation notices, tags, access-control badges, and other custom sections in the generated output.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "How is GraphQL-Markdown different from SpectaQL or GraphDoc?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "SpectaQL and GraphDoc produce standalone HTML sites. GraphQL-Markdown produces Markdown/MDX files that you commit alongside your existing docs site, so you keep your theme, search, versioning, and navigation. It is ideal for teams already using Docusaurus, Astro, Next.js, or any MDX-based framework.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Is GraphQL-Markdown free to use?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. GraphQL-Markdown is free and open-source under the MIT license. If you use it in production, consider planting a tree via the Treeware initiative to support the project.",
+            },
+          },
+        ],
+      }),
+    },
+    {
       tagName: "link",
       attributes: {
         rel: "manifest",
@@ -219,10 +271,10 @@ const config = {
         { property: "og:locale", content: "en_US" },
       ],
       announcementBar: {
-        // content:
-        //   '🚀 Now compatible with AstroJS, NextJS and more... <a href="/docs/advanced/integration-with-frameworks">check our documentation</a> 🚀',
         content:
-          'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
+          '🚀 Now compatible with Astro, Next.js and more — see <a href="/docs/advanced/integration-with-frameworks">MDX framework integration</a> 🚀',
+        // content:
+        //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",
         textColor: "#dbf5e6",
         isCloseable: true,
