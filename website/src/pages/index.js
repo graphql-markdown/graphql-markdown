@@ -22,7 +22,7 @@ const SHOWCASE_NAMES = [
 
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
-  const cmd = "npm install @graphql-markdown/docusaurus graphql";
+  const cmd = "npm install @graphql-markdown/cli graphql";
 
   function handleCopy() {
     navigator.clipboard.writeText(cmd).then(() => {
