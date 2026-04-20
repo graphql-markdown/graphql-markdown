@@ -16,7 +16,7 @@ const {
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
 const config = {
-  buildCommand: "tsgo --build",
+  buildCommand: "tsgo-wasm --build",
   checkers: ["typescript"],
   plugins: [
     "@stryker-mutator/jest-runner",
