@@ -25,7 +25,7 @@ Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
 
 ### Requirements
 
-Node.js version [16.14](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
+Node.js version [20.0](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
 :::info[Package managers]
 
@@ -90,7 +90,7 @@ These requirements are specific to Docusaurus integration. See our [Framework In
 
 Your project needs to meet the following requirements:
 
-- Node.js version [16.14](https://nodejs.org/en/download/) or above
+- Node.js version [20.0](https://nodejs.org/en/download/) or above
 - [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
 - [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above
 
