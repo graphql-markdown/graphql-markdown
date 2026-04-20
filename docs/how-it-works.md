@@ -15,43 +15,9 @@ GraphQL-Markdown reads your schema, parses every type and operation, and writes 
 
 ## Pipeline
 
-```mermaid
-flowchart LR
-    subgraph Input
-        A1[".graphql file"]
-        A2["Remote endpoint"]
-        A3["Introspection JSON"]
-    end
+![pipeline](/img/docs/pipeline.png)
 
-    subgraph Core
-        B["Schema Loader\n@graphql-tools"]
-        C["Schema Parser"]
-        D["Doc Generator"]
-    end
-
-    subgraph Output
-        E1["objects.mdx"]
-        E2["queries.mdx"]
-        E3["inputs.mdx"]
-        E4["..."]
-    end
-
-    A1 --> B
-    A2 --> B
-    A3 --> B
-    B --> C
-    C --> D
-    D --> E1
-    D --> E2
-    D --> E3
-    D --> E4
-
-    style Input fill:#1a2520,stroke:#36c46f,color:#dbf5e6
-    style Core fill:#1a2520,stroke:#374844,color:#dbf5e6
-    style Output fill:#1a2520,stroke:#e535ab,color:#dbf5e6
-```
-
-## Input → Output
+### Input
 
 Given this schema:
 
@@ -76,6 +42,8 @@ type Query {
   getPosts: [Post!]!
 }
 ```
+
+### Output
 
 GraphQL-Markdown generates a file per type category. For example, `objects/user.mdx`:
 
