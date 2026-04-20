@@ -149,8 +149,6 @@ function Thanks() {
 }
 
 export default function Home() {
-  useDocusaurusContext();
-
   return (
     <Layout
       title="GraphQL-Markdown — GraphQL schema documentation generator"
