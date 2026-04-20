@@ -27,7 +27,7 @@ Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
 
 Node.js version [16.14](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
-:::info Package managers
+:::info[Package managers]
 
 You can use either `npm`, `yarn`, or `pnpm` as your package manager. The examples in this documentation use `npm`, but you can substitute the commands with your preferred package manager.
 

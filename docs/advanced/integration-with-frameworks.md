@@ -49,7 +49,7 @@ A custom MDX module can export individual formatter functions:
 | `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                    | Format named entity references                   |
 | `formatMDXSpecifiedByLink` | `(url: string) => string`                                          | Format scalar specification links                |
 
-:::warning `formatMDXDetails` contract
+:::warning[`formatMDXDetails` contract]
 
 The string returned by `formatMDXDetails` **must** contain a single `\r` (carriage return) character as a delimiter between the opening part and the closing part. The printer splits on `"\r"` to wrap generated content inside the collapsible element, so reserve `\r` only for that separator and use `\n` for all regular line breaks inside the returned string.
 
@@ -123,7 +123,7 @@ You only need to export the formatter functions your framework requires. Any mis
 
 The official [Docusaurus](https://docusaurus.io/) integration is available as a dedicated package:
 
-:::info Docusaurus default details output
+:::info[Docusaurus default details output]
 
 With the default `@graphql-markdown/docusaurus/mdx` parser, collapsible sections are emitted as native `<details>/<summary>` markup.
 Custom summary labels are rendered with open/closed spans and toggled with CSS (`data-collapsed` and `[open]` selectors), so no custom `<Details>` React component is required.
