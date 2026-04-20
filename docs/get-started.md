@@ -37,7 +37,7 @@ When installing Node.js, you are recommended to check all checkboxes related to 
 
 :::tip
 
-You can use [nvm](https://github.com/nvm-sh/nvm) for managing multiple Node.js versions on a single machine installed.
+You can use [nvm](https://github.com/nvm-sh/nvm), installed on a single machine, to manage multiple Node.js versions.
 
 :::
 
@@ -72,7 +72,7 @@ npm start
 
 :::tip
 
-The `npm run doc` is a template shortcut for command line document generation `npm run docusaurus graphql-to-doc`.
+The `npm run doc` command is a shortcut in the template for command-line document generation: `npm run docusaurus graphql-to-doc`.
 
 :::
 
