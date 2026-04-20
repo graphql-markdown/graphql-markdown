@@ -82,7 +82,7 @@ Additionally, the module can export:
 
 The custom MDX module can also export lifecycle hooks to customize the generation process. These hooks are executed at specific points during documentation generation:
 
-**Generation Hooks:**
+#### Generation Hooks
 
 | Export                              | Description                                                                             |
 | ----------------------------------- | --------------------------------------------------------------------------------------- |
@@ -99,7 +99,7 @@ The custom MDX module can also export lifecycle hooks to customize the generatio
 | `beforeGenerateIndexMetafileHook`   | Called before generating index metafiles                                                |
 | `afterGenerateIndexMetafileHook`    | Called after generating index metafiles                                                 |
 
-**Printer Hooks:**
+#### Printer Hooks
 
 | Export                        | Description                                                                             |
 | ----------------------------- | --------------------------------------------------------------------------------------- |
