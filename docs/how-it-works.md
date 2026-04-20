@@ -1,5 +1,5 @@
 ---
-sidebar_position: 80
+sidebar_position: 35
 description: Understand how GraphQL-Markdown transforms your GraphQL schema into comprehensive Markdown documentation through parsing, rendering, and output.
 keywords:
   - GraphQL-Markdown architecture
@@ -11,121 +11,63 @@ keywords:
 
 # How It Works
 
-This page explains how GraphQL-Markdown transforms your GraphQL schema into comprehensive documentation.
+GraphQL-Markdown reads your schema, parses every type and operation, and writes one MDX file per type category — ready to publish with Docusaurus or any MDX framework.
 
-## Documentation Generation Process
+## Pipeline
 
 ```mermaid
-flowchart TD
-    A[GraphQL Schema] --> B[Schema Loader]
-    B --> C[Schema Parser]
-    C --> D[Documentation Generator]
-    D --> E[Markdown Output]
+flowchart LR
+    subgraph Input
+        A1[".graphql file"]
+        A2["Remote endpoint"]
+        A3["Introspection JSON"]
+    end
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#bbf,stroke:#333,stroke-width:2px
+    subgraph Core
+        B["Schema Loader\n@graphql-tools"]
+        C["Schema Parser"]
+        D["Doc Generator"]
+    end
+
+    subgraph Output
+        E1["objects.mdx"]
+        E2["queries.mdx"]
+        E3["inputs.mdx"]
+        E4["..."]
+    end
+
+    A1 --> B
+    A2 --> B
+    A3 --> B
+    B --> C
+    C --> D
+    D --> E1
+    D --> E2
+    D --> E3
+    D --> E4
+
+    style Input fill:#1a2520,stroke:#36c46f,color:#dbf5e6
+    style Core fill:#1a2520,stroke:#374844,color:#dbf5e6
+    style Output fill:#1a2520,stroke:#e535ab,color:#dbf5e6
 ```
 
-## The Process Step-by-Step
+## Input → Output
 
-### 1. GraphQL Schema Input
-
-The process begins with your GraphQL schema - this can be:
-
-- A local `.graphql` or `.gql` file
-- A remote GraphQL endpoint URL
-- An introspection result JSON file
-- A programmatically provided GraphQL schema object
-
-### 2. Schema Loading
-
-GraphQL-Markdown loads the schema using:
-
-- For local files: Direct file reading
-- For remote endpoints: Introspection query
-- For provided schemas: Direct schema parsing
-
-### 3. Schema Parsing
-
-Once loaded, GraphQL-Markdown analyzes the schema to extract:
-
-- Types (Object, Input, Interface, Union, etc.)
-- Queries, mutations, and subscriptions
-- Fields, arguments, and return types
-- Descriptions and deprecation notices
-- Custom directives and their usage
-
-### 4. Documentation Generation
-
-The parsed schema is transformed into documentation with:
-
-- Hierarchical organization by type categories
-- Cross-linking between related types
-- Formatting of descriptions (Markdown support)
-- Special handling for deprecated items
-- Custom rendering hooks (if configured)
-
-### 5. Markdown Output
-
-Finally, GraphQL-Markdown outputs:
-
-- Individual Markdown files for each type category
-- Index files for easy navigation
-- Table of contents and sidebar configuration
-- Links and references between types
-
-## Configuration Options
-
-GraphQL-Markdown supports extensive configuration through the `graphql-markdown.config.js` file:
-
-```javascript
-module.exports = {
-  schema: "./schema.graphql", // Schema source
-  rootPath: "./docs", // Output directory
-  baseURL: "graphql", // Base URL for docs
-  homepage: "graphql-schema.md", // Home page
-  loaders: {
-    // Custom loaders
-    // Loader configuration
-  },
-  docOptions: {
-    // Documentation options
-    pagination: true, // Enable pagination
-    toc: true, // Table of contents
-    index: true, // Generate index
-    // ...more options
-  },
-};
-```
-
-## Example: Input to Output
-
-**Input:** A GraphQL schema definition
+Given this schema:
 
 ```graphql
 type User {
-  """
-  User's unique identifier
-  """
+  """User's unique identifier"""
   id: ID!
-  """
-  User's full name
-  """
+  """User's full name"""
   name: String!
-  """
-  User's email address
-  """
-  email: String!
-  """
-  List of posts authored by this user
-  """
+  """List of posts authored by this user"""
   posts: [Post!]
 }
 
 type Post {
   id: ID!
   title: String!
-  content: String!
   author: User!
 }
 
@@ -135,21 +77,50 @@ type Query {
 }
 ```
 
-**Output:** Generated documentation files including:
+GraphQL-Markdown generates a file per type category. For example, `objects/user.mdx`:
 
-- Schema overview (`index.md`)
-- Object types (`objects.md`)
-- Queries (`queries.md`)
-- Cross-linked type documentation
+```mdx
+---
+id: user
+title: User
+---
+
+# User
+
+Object Type
+
+## Fields
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `id` | `ID!` | User's unique identifier |
+| `name` | `String!` | User's full name |
+| `posts` | [`[Post!]`](/docs/graphql/objects/post) | List of posts authored by this user |
+
+## Returned by
+
+[`getUser`](/docs/graphql/queries/get-user)
+```
+
+Notice the cross-link on `Post` and the back-reference under "Returned by" — these are generated automatically from the schema graph.
+
+## What gets generated
+
+| Output | Description |
+| ------ | ----------- |
+| `objects/` | One file per Object type |
+| `inputs/` | One file per Input type |
+| `queries/` | One file per Query field |
+| `mutations/` | One file per Mutation field |
+| `subscriptions/` | One file per Subscription field |
+| `enums/` | One file per Enum type |
+| `interfaces/` | One file per Interface type |
+| `unions/` | One file per Union type |
+| `scalars/` | One file per Scalar type |
+| `_category_.yml` | Sidebar metadata for each folder |
 
 ## Customization
 
-GraphQL-Markdown allows for customization through:
+The generation pipeline exposes lifecycle hooks at every stage — before/after schema load, before/after rendering each type, before/after composing each page. See [hook recipes](/docs/advanced/hook-recipes) and [custom directives](/docs/advanced/custom-directive).
 
-- Custom templates
-- Rendering hooks
-- Plugin architecture
-- Integration with documentation frameworks (Docusaurus, VuePress, etc.)
-- Custom loaders for specialized schema sources
-
-By understanding this process, you can optimize your documentation setup and make the most of GraphQL-Markdown's capabilities.
+To see the full output in action, browse the [live examples](/examples/default).

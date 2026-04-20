@@ -38,16 +38,16 @@ When integrating with frameworks other than Docusaurus, you'll need to create a 
 
 A custom MDX module can export individual formatter functions:
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `formatMDXBadge` | `(badge: { text, classname? }) => string` | Format type badges (deprecated, required, etc.) |
-| `formatMDXAdmonition` | `(admonition: { text, title, type, icon? }, meta?) => string` | Format callout/warning blocks |
-| `formatMDXBullet` | `(text?: string) => string` | Format bullet point separators |
-| `formatMDXDetails` | `(option: { dataOpen, dataClose? }) => string` | Format collapsible sections |
-| `formatMDXFrontmatter` | `(props?, formatted?: string[]) => string` | Format page frontmatter |
-| `formatMDXLink` | `(link: { text, url }) => { text, url }` | Transform type links |
-| `formatMDXNameEntity` | `(name: string, parentType?: string) => string` | Format named entity references |
-| `formatMDXSpecifiedByLink` | `(url: string) => string` | Format scalar specification links |
+| Export                     | Type                                                               | Description                                      |
+| -------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`                          | Format type badges (deprecated, required, etc.)  |
+| `formatMDXAdmonition`      | `(admonition: { text, title, type, icon? }, meta?) => string`      | Format callout/warning blocks                    |
+| `formatMDXBullet`          | `(text?: string) => string`                                        | Format bullet point separators                   |
+| `formatMDXDetails`         | `(option: { dataOpen, dataClose? }) => string`                     | Format collapsible sections                      |
+| `formatMDXFrontmatter`     | `(props?, formatted?: string[]) => string`                         | Format page frontmatter                          |
+| `formatMDXLink`            | `(link: { text, url }) => { text, url }`                           | Transform type links                             |
+| `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                    | Format named entity references                   |
+| `formatMDXSpecifiedByLink` | `(url: string) => string`                                          | Format scalar specification links                |
 
 :::warning `formatMDXDetails` contract
 
@@ -73,10 +73,10 @@ export const formatMDXDetails = ({ dataOpen }) =>
 
 Additionally, the module can export:
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `mdxDeclaration` | `string` | Import statements prepended to generated files |
-| `mdxExtension` | `string` | Custom file extension (defaults to `.mdx`) |
+| Export            | Type     | Description                                          |
+| ----------------- | -------- | ---------------------------------------------------- |
+| `mdxDeclaration`  | `string` | Import statements prepended to generated files       |
+| `mdxExtension`    | `string` | Custom file extension (defaults to `.mdx`)           |
 
 ### Lifecycle Hooks
 
@@ -84,30 +84,30 @@ The custom MDX module can also export lifecycle hooks to customize the generatio
 
 **Generation Hooks:**
 
-| Export | Description |
-|--------|-------------|
-| `beforeSchemaLoadHook` | Called before loading the GraphQL schema |
-| `afterSchemaLoadHook` | Called after loading the GraphQL schema |
-| `beforeDiffCheckHook` | Called before checking schema differences |
-| `afterDiffCheckHook` | Called after checking schema differences |
-| `beforeRenderRootTypesHook` | Called before rendering root types |
-| `afterRenderRootTypesHook` | Called after rendering root types |
-| `beforeRenderHomepageHook` | Called before rendering the homepage |
-| `afterRenderHomepageHook` | Called after rendering the homepage |
-| `beforeRenderTypeEntitiesHook` | Called before rendering type entities |
-| `afterRenderTypeEntitiesHook` | Called after rendering type entities |
-| `beforeGenerateIndexMetafileHook` | Called before generating index metafiles |
-| `afterGenerateIndexMetafileHook` | Called after generating index metafiles |
+| Export                              | Description                                                                             |
+| ----------------------------------- | --------------------------------------------------------------------------------------- |
+| `beforeSchemaLoadHook`              | Called before loading the GraphQL schema                                                |
+| `afterSchemaLoadHook`               | Called after loading the GraphQL schema                                                 |
+| `beforeDiffCheckHook`               | Called before checking schema differences                                               |
+| `afterDiffCheckHook`                | Called after checking schema differences                                                |
+| `beforeRenderRootTypesHook`         | Called before rendering root types                                                      |
+| `afterRenderRootTypesHook`          | Called after rendering root types                                                       |
+| `beforeRenderHomepageHook`          | Called before rendering the homepage                                                    |
+| `afterRenderHomepageHook`           | Called after rendering the homepage                                                     |
+| `beforeRenderTypeEntitiesHook`      | Called before rendering type entities                                                   |
+| `afterRenderTypeEntitiesHook`       | Called after rendering type entities                                                    |
+| `beforeGenerateIndexMetafileHook`   | Called before generating index metafiles                                                |
+| `afterGenerateIndexMetafileHook`    | Called after generating index metafiles                                                 |
 
 **Printer Hooks:**
 
-| Export | Description |
-|--------|-------------|
-| `beforePrintCodeHook` | Called before generating code blocks - can modify options or prevent default generation |
-| `afterPrintCodeHook` | Called after generating code blocks - can modify the generated output |
-| `beforePrintTypeHook` | Called before generating type documentation - can modify options or prevent default |
-| `afterPrintTypeHook` | Called after generating type documentation - can modify the generated output |
-| `beforeComposePageTypeHook` | Called before composing type page sections - can reorder, remove, or inject sections |
+| Export                        | Description                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| `beforePrintCodeHook`         | Called before generating code blocks — can modify options or prevent default generation |
+| `afterPrintCodeHook`          | Called after generating code blocks — can modify the generated output                   |
+| `beforePrintTypeHook`         | Called before generating type documentation — can modify options or prevent default     |
+| `afterPrintTypeHook`          | Called after generating type documentation — can modify the generated output            |
+| `beforeComposePageTypeHook`   | Called before composing type page sections — can reorder, remove, or inject sections    |
 
 :::tip
 Printer hooks are useful for extending the generated documentation. For example, you can use `afterPrintCodeHook` to append response type information after operation code blocks. See **[Hooks Recipes](/docs/advanced/hook-recipes)** for examples.
@@ -200,7 +200,6 @@ For Next.js using [Fumadocs](https://www.fumadocs.dev/), create a custom MDX mod
 ```js
 // lib/fumadocs-mdx.cjs
 const mdxDeclaration = `
-import { Heading } from 'fumadocs-ui/components/heading';
 import { Callout } from 'fumadocs-ui/components/callout';
 import Chip from '@mui/material/Chip';
 `;

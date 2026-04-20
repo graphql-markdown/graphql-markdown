@@ -11,7 +11,7 @@ keywords:
 
 # Configuration
 
-GraphQL-Markdown is compatible with most MDX frameworks, with built-in support for Docusaurus and other static site generators. This guide explains the different configuration methods and their priorities.
+GraphQL-Markdown supports three configuration methods. Later entries in this list take precedence over earlier ones.
 
 ## Framework-agnostic Configuration
 

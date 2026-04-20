@@ -19,9 +19,6 @@ For example, we have two mutations called `addCourse` and `dropCourse`, and we w
 ```graphql
 type Mutation {
   AddCourse(input: String): String
-}
-
-type Mutation {
   DropCourse(input: String): String
 }
 ```
@@ -33,9 +30,6 @@ We can accomplish this by adding a directive called `doc` with a field `category
 ```graphql
 type Mutation {
   AddCourse(input: String): String @doc(category: "Course")
-}
-
-type Mutation {
   DropCourse(input: String): String @doc(category: "Course")
 }
 ```

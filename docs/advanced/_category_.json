@@ -1,6 +1,7 @@
 {
   "label": "Advanced settings",
   "position": 70,
+  "className": "sidebar-advanced",
   "link": {
     "type": "generated-index"
   }

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 10
-pagination_next: get-started
+pagination_next: try-it
 hide_table_of_contents: true
 description: Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Easy setup, customizable output, and seamless Docusaurus integration.
 keywords:
@@ -27,32 +27,25 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 
 ## Features
 
-- Easy set up and customizable
-- Full relations information between types
-  - Visual representation of type relationships
-  - Complete type hierarchy documentation
-- Custom category sorting and organization
-  - Alphabetical or custom ordering logic
-  - Automatic folder numbering for consistent navigation
-- MDX generated are fully customizable using MDX components
-- Extensible hooks and events system
-  - Native Node.js EventEmitter integration
-  - Lifecycle hooks for custom workflows
-- Use any schema loader compatible with `@graphql-tools/load`
-  - Support for local schema files
-  - Support for remote GraphQL endpoints
+- Easy set up and customizable output
+- Full cross-linking between types with visual relationship hierarchy
+- MDX output fully customizable using your own components
+- Extensible lifecycle hooks and events system
+- Any schema loader compatible with `@graphql-tools/load` (local files, remote endpoints)
 - Group types into categories using directives
-  - Organize types logically
-  - Create a custom navigation structure
-- Support namespaced operations (nested query/mutation/subscription objects)
-  - Generate nested operation pages automatically
-  - Keep grouped navigation working with namespaced operations
-- Support of GraphQL config
-  - Integration with existing GraphQL setups
-  - Consistent configuration across tools
+- Namespaced operations (nested query/mutation/subscription objects)
+- GraphQL config support
 
 ## Quick Install
 
+For **Docusaurus** projects:
+
 ```bash
-npm install @graphql-markdown/cli
+npm install @graphql-markdown/docusaurus graphql
+```
+
+For **other MDX frameworks** (Astro, Next.js, etc.):
+
+```bash
+npm install @graphql-markdown/cli graphql
 ```

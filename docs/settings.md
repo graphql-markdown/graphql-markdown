@@ -11,9 +11,7 @@ keywords:
 
 # Settings
 
-GraphQL-Markdown can be configured through plugin options in your configuration file and through CLI flags. This page lists all available settings, their CLI equivalents, and default values.
-
-By default, the plugin will use the options as defined in the [configuration](/docs/configuration), and they can be overridden using CLI flags.
+All settings can be set via plugin options in your config file and overridden with CLI flags. See [configuration](/docs/configuration) for the different config methods.
 
 ## `--config`
 
@@ -121,7 +119,7 @@ plugins: [
   ],
 ```
 
-### Compatibility with Other Options
+:::info[Compatibility between options]
 
 The `categorySort` option works seamlessly with:
 
@@ -143,6 +141,8 @@ groupByDirective: {
 ```
 
 This generates folder names like: `01-common`, `02-internal`, `03-public`
+
+:::
 
 ## `force`
 

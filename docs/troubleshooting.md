@@ -94,11 +94,6 @@ For large schemas, try:
 NODE_OPTIONS=--max-old-space-size=4096 npx docusaurus graphql-to-doc
 ```
 
-2. Use the `--chunk-size` option to process in batches:
-```shell
-npx docusaurus graphql-to-doc --chunk-size 50
-```
-
 ## Getting Help
 
 If you're still having issues:

@@ -9,8 +9,6 @@ keywords:
 
 # Configuration Cheat Sheet
 
-Quickly look up in the most frequently used CLI flag and renderer options for GraphQL-Markdown in one place without digging through the longer Settings guide.
-
 :::note
 This is a quick reference guide. All settings are thoroughly documented in the [**Settings** page](/docs/settings).
 :::
@@ -27,7 +25,7 @@ This is a quick reference guide. All settings are thoroughly documented in the [
 
 | Option         | Type                     | Default | Description                                                           |
 | -------------- | ------------------------ | ------- | --------------------------------------------------------------------- |
-| `linkRoot`     | `boolean`                | `false` | Link types to root documentation                                      |
+| `linkRoot`     | `string`                 | `/`     | Root path used for type cross-links in generated documentation        |
 | `homepage`     | `string`                 | —       | Custom homepage content file                                          |
 | `hierarchy`    | `string`                 | `api`   | Documentation structure: `api`, `entity`, or `flat`                   |
 | `index`        | `boolean`                | `false` | Generate category indices                                             |
@@ -53,10 +51,38 @@ This is a quick reference guide. All settings are thoroughly documented in the [
 | `skip`             | `string[]` | —         | Exclude types with specified directives                            |
 | `deprecated`       | `string`   | `default` | Handling of deprecated items: `default`, `group`, `skip`           |
 
-## Advanced Options
+## Build Control Options
 
-| Option   | Type      | Default | Description                            |
-| -------- | --------- | ------- | -------------------------------------- |
-| `force`  | `boolean` | `false` | Force regeneration of all files        |
-| `diff`   | `string`  | —       | Diff method for schema changes         |
-| `tmpDir` | `string`  | —       | Temporary directory for schema diffing |
+| Option        | Type      | Default | Description                                                       |
+| ------------- | --------- | ------- | ----------------------------------------------------------------- |
+| `force`       | `boolean` | `false` | Force regeneration of all files                                   |
+| `diffMethod`  | `string`  | `NONE`  | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH`   |
+| `tmpDir`      | `string`  | —       | Temporary directory for storing schema signature (used by diff)   |
+| `pretty`      | `boolean` | `false` | Format output files with Prettier (requires `prettier` installed) |
+| `mdxParser`   | `string`  | —       | Path to a custom MDX formatter module                             |
+
+## CLI Flags
+
+All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc` or `npx graphql-markdown`.
+
+| Flag                              | Config option                         | Description                                    |
+| --------------------------------- | ------------------------------------- | ---------------------------------------------- |
+| `-s, --schema <path>`             | `schema`                              | Schema file, URL, or introspection JSON        |
+| `-b, --base <baseURL>`            | `baseURL`                             | Base URL and output folder name                |
+| `-r, --root <rootPath>`           | `rootPath`                            | Root output folder                             |
+| `-l, --link <linkRoot>`           | `linkRoot`                            | Root path for cross-links                      |
+| `-h, --homepage <file>`           | `homepage`                            | Custom homepage file                           |
+| `-f, --force`                     | `force`                               | Skip diff, always regenerate                   |
+| `-d, --diff <method>`             | `diffMethod`                          | Diff method (`NONE`, `SCHEMA-DIFF`, etc.)      |
+| `-t, --tmp <dir>`                 | `tmpDir`                              | Temp dir for schema diffing                    |
+| `--index`                         | `docOptions.index`                    | Generate category index pages                  |
+| `--hierarchy <type>`              | `printTypeOptions.hierarchy`          | Folder structure: `api`, `entity`, `flat`      |
+| `--deprecated <option>`           | `printTypeOptions.deprecated`         | `default`, `group`, or `skip`                  |
+| `--noParentType`                  | `printTypeOptions.parentTypePrefix`   | Hide parent type prefix on fields              |
+| `--noTypeBadges`                  | `printTypeOptions.typeBadges`         | Hide type attribute badges                     |
+| `--only <@directive...>`          | `onlyDocDirective`                    | Include only types with these directives       |
+| `--skip <@directive...>`          | `skipDocDirective`                    | Exclude types with these directives            |
+| `-gdb, --groupByDirective <expr>` | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
+| `--pretty`                        | `pretty`                              | Format output with Prettier                    |
+| `--mdxParser <path>`              | `mdxParser`                           | Custom MDX formatter module                    |
+| `--config`                        | —                                     | Print resolved config (debug)                  |

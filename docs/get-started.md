@@ -11,8 +11,6 @@ keywords:
 
 # Getting started
 
-Quick start guide for installing and configuring GraphQL-Markdown with Docusaurus. Generate documentation from your GraphQL schema in minutes.
-
 :::info
 
 While GraphQL-Markdown was initially developed as a Docusaurus plugin, it now supports various MDX documentation generators. This guide focuses on the Docusaurus integration - for other frameworks, please see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
@@ -63,12 +61,6 @@ A schema loader is required to load your GraphQL schema. The template comes with
 
 See [schema loading](/docs/advanced/schema-loading) for other loaders and configuration options.
 
-:::tip
-
-The template comes by default with `@graphql-tools/url-loader` for remote schemas.
-
-:::
-
 ### Start your site
 
 Run the development server:
@@ -77,8 +69,6 @@ Run the development server:
 cd my-website
 npm start
 ```
-
-The `cd` command changes the directory you're working in. To work with your newly created Docusaurus site, you'll need to navigate the terminal there.
 
 :::tip
 
@@ -90,7 +80,7 @@ The `npm run start` command builds your website locally and serves it through a 
 
 ## Existing Docusaurus site
 
-### Requirements
+### Prerequisites
 
 :::note
 
@@ -112,7 +102,7 @@ Add the `@graphql-markdown/docusaurus` plugin to your site installation:
 npm install @graphql-markdown/docusaurus graphql
 ```
 
-### Add a GraphQL schema loader
+### Add a schema loader
 
 See [schema loading](/docs/advanced/schema-loading).
 
@@ -128,9 +118,7 @@ Build your website:
 npm run docusaurus build
 ```
 
-**OR**
-
-Run the documentation generator using CLI:
+Or run the documentation generator directly:
 
 ```shell title="shell"
 npm run docusaurus graphql-to-doc
