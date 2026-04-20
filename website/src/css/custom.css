@@ -153,3 +153,67 @@ details[data-collapsed="false"] .graphql-markdown-details-label-open[hidden],
 details[open] .graphql-markdown-details-label-open[hidden] {
   display: inline !important;
 }
+
+/* ── Docs sidebar icons ── */
+a.menu__link[href$="/docs/intro"]::before,
+a.menu__link[href$="/docs/try-it"]::before,
+a.menu__link[href$="/docs/get-started"]::before,
+a.menu__link[href$="/docs/how-it-works"]::before,
+a.menu__link[href$="/docs/configuration"]::before,
+a.menu__link[href$="/docs/configuration-cheatsheet"]::before,
+a.menu__link[href$="/docs/settings"]::before,
+a.menu__link[href$="/docs/troubleshooting"]::before,
+.sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.4rem;
+  margin-bottom: -0.15rem;
+  flex-shrink: 0;
+  background-color: currentColor;
+  opacity: 0.7;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+a.menu__link[href$="/docs/intro"]::before {
+  mask-image: url("/img/docs/icons/intro.svg");
+  -webkit-mask-image: url("/img/docs/icons/intro.svg");
+}
+a.menu__link[href$="/docs/try-it"]::before {
+  mask-image: url("/img/docs/icons/try-it.svg");
+  -webkit-mask-image: url("/img/docs/icons/try-it.svg");
+}
+a.menu__link[href$="/docs/get-started"]::before {
+  mask-image: url("/img/docs/icons/get-started.svg");
+  -webkit-mask-image: url("/img/docs/icons/get-started.svg");
+}
+a.menu__link[href$="/docs/how-it-works"]::before {
+  mask-image: url("/img/docs/icons/how-it-works.svg");
+  -webkit-mask-image: url("/img/docs/icons/how-it-works.svg");
+}
+a.menu__link[href$="/docs/configuration"]::before {
+  mask-image: url("/img/docs/icons/configuration.svg");
+  -webkit-mask-image: url("/img/docs/icons/configuration.svg");
+}
+a.menu__link[href$="/docs/configuration-cheatsheet"]::before {
+  mask-image: url("/img/docs/icons/cheatsheet.svg");
+  -webkit-mask-image: url("/img/docs/icons/cheatsheet.svg");
+}
+a.menu__link[href$="/docs/settings"]::before {
+  mask-image: url("/img/docs/icons/settings.svg");
+  -webkit-mask-image: url("/img/docs/icons/settings.svg");
+}
+a.menu__link[href$="/docs/troubleshooting"]::before {
+  mask-image: url("/img/docs/icons/troubleshooting.svg");
+  -webkit-mask-image: url("/img/docs/icons/troubleshooting.svg");
+}
+.sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
+  mask-image: url("/img/docs/icons/advanced.svg");
+  -webkit-mask-image: url("/img/docs/icons/advanced.svg");
+}

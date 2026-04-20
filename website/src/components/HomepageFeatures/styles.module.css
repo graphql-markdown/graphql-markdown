@@ -1,64 +1,140 @@
-.features {
-  width: 100%;
-  padding: 2.25rem 0;
+/* ── Shared ── */
+.sectionHeading {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 auto 2rem;
+  letter-spacing: -0.01em;
 }
 
-.featureRow {
+/* ── How it works ── */
+.howItWorks {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .howItWorks {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.stepCard {
+  text-align: center;
+  padding: 0 1.5rem 1rem;
+  position: relative;
+}
+
+/* arrow connector between steps */
+.stepCard:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -0.6rem;
+  top: 1.6rem;
+  font-size: 1.4rem;
+  color: rgba(54, 196, 111, 0.5);
+  pointer-events: none;
+}
+
+.stepNumber {
+  display: inline-flex;
   align-items: center;
-  padding: 1.5rem 0;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: rgba(54, 196, 111, 0.12);
+  border: 2px solid rgba(54, 196, 111, 0.4);
+  color: #36c46f;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-/* subtle separation without “giant gaps” */
-.featureRow + .featureRow {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+.stepTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
 }
 
-.iconCol {
+.stepDescription {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ── Features ── */
+.features {
+  padding: 3rem 0 3.5rem;
+}
+
+.featureCard {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 10px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.featureCard:hover {
+  box-shadow: 0 6px 24px rgba(54, 196, 111, 0.1);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .featureCard:hover {
+  box-shadow: 0 6px 24px rgba(54, 196, 111, 0.15);
+}
+
+.iconWrap {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-bottom: 1.25rem;
 }
 
 .featureSvg {
-  width: 140px;
-  height: 140px;
+  width: 80px;
+  height: 80px;
 }
 
 .featureTitle {
-  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.65rem;
 }
 
 .featureText {
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.65;
+  font-size: 0.95rem;
 }
 
 .inlineCta {
   white-space: nowrap;
 }
 
+/* ── Responsive ── */
 @media screen and (max-width: 996px) {
+  .howItWorks {
+    padding: 2rem 1rem 1.5rem;
+  }
+
   .features {
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2.5rem;
   }
 
-  .featureRow {
-    text-align: center;
-    padding: 1.25rem 0;
+  .stepCard {
+    padding: 0 1rem 1.5rem;
   }
 
-  .featureTitle,
-  .featureText {
-    text-align: left;
+  .stepCard:not(:last-child)::after {
+    display: none;
+  }
+
+  .featureCard {
+    padding: 1.25rem 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .featureSvg {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 0.75rem;
-  }
-
-  .iconCol {
-    justify-content: flex-start;
+    width: 64px;
+    height: 64px;
   }
 }

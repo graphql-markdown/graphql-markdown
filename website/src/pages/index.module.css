@@ -4,50 +4,138 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 3.5rem 0 2.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      rgba(54, 196, 111, 0.07) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 90% 90%,
+      rgba(229, 53, 171, 0.05) 0%,
+      transparent 60%
+    );
 }
 
-.heroImage {
-  /* ✅ responsive image: no fixed 800x300 */
-  display: block;
-  width: min(800px, 100%);
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0;
+[data-theme="dark"] .heroBanner {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  background: radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      rgba(54, 196, 111, 0.1) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 90% 90%,
+      rgba(229, 53, 171, 0.07) 0%,
+      transparent 60%
+    );
+}
+
+.heroTitle {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 auto 0.6rem;
+  max-width: 52rem;
+}
+
+.accentPinkLink {
+  color: #e535ab !important;
+  text-decoration: none !important;
+}
+
+.accentPinkLink:hover {
+  text-decoration: underline !important;
+}
+
+.accentGreen {
+  color: #36c46f;
+  font-weight: 600;
 }
 
 .heroSubtitle {
-  max-width: 52rem;
-  margin: 0.75rem auto 0;
-  line-height: 1.4;
-  font-size: 1.5rem;
-  font-weight: normal;
+  max-width: 42rem;
+  margin: 0 auto 0.25rem;
+  line-height: 1.5;
+  font-size: 1.15rem;
+  opacity: 0.92;
 }
 
-.heroSubtitleSecondary {
-  max-width: 52rem;
-  margin: 0.25rem auto 0;
-  line-height: 1.4;
-  opacity: 0.92; /* makes it feel secondary without changing font size */
+/* ── Install command block ── */
+.installBlock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #111c18;
+  border: 1px solid rgba(54, 196, 111, 0.25);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  margin: 1.25rem auto 0;
+  max-width: min(660px, calc(100% - 2rem));
+  overflow-x: auto;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
 }
 
+[data-theme="light"] .installBlock {
+  background: #1a2520;
+}
+
+.installPrompt {
+  color: #36c46f;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  font-size: 1rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.installCmd {
+  color: #e7ebf5 !important;
+  font-size: 0.9rem;
+  font-family: var(--ifm-font-family-monospace);
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.copyBtn {
+  background: transparent;
+  border: 1px solid rgba(54, 196, 111, 0.4);
+  border-radius: 4px;
+  color: #36c46f;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: var(--ifm-font-family-base);
+  padding: 0.2rem 0.65rem;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+.copyBtn:hover {
+  background: rgba(54, 196, 111, 0.15);
+  border-color: #36c46f;
+}
+
+/* ── CTA buttons ── */
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
 .heroButton {
-  border-radius: 0px;
-  padding-left: 4px;
-  padding-right: 4px;
+  border-radius: 4px;
   width: 200px;
-  --ifm-button-border-width: 0.4rem;
+  font-weight: 600;
 }
 
 .heroButton:hover {
@@ -66,32 +154,75 @@
 
 .heroButtonSecondary:hover {
   --ifm-button-background-color: #e535ab;
+  --ifm-button-border-color: #e535ab;
+  color: #fff;
 }
 
-.frameworkLinks {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
+/* ── Preview image ── */
+.heroImage {
+  display: block;
+  width: min(860px, 100%);
+  height: auto;
 }
 
-.frameworkLink {
+/* ── Trusted by strip ── */
+.trustedBy {
+  padding: 1rem 1.5rem;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: background-color 0.2s;
+  justify-content: center;
+  gap: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.02);
 }
 
-.frameworkLink:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  text-decoration: none;
+[data-theme="dark"] .trustedBy {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
 }
 
+.trustedByLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+.trustedByNames {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+}
+
+.trustedByChip {
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(55, 72, 68, 0.07);
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .trustedByChip {
+  background: rgba(135, 222, 170, 0.08);
+}
+
+.trustedByMore {
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 1.5rem;
   }
 
   .heroImage {
@@ -104,6 +235,9 @@
 
   .heroButton {
     width: 80%;
-    margin-top: 1rem;
+  }
+
+  .installBlock {
+    max-width: 100%;
   }
 }

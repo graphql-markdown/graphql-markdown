@@ -1,3 +1,4 @@
+import { useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -6,71 +7,125 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 
 import styles from "./index.module.css";
 
+const SHOWCASE_NAMES = [
+  "Mozilla",
+  "IOTA",
+  "Bitquery",
+  "Browserless.io",
+  "Aragon",
+  "Sablier",
+  "MONEI",
+  "CivicEngine",
+  "epilot",
+  "Coral",
+];
+
+function InstallCommand() {
+  const [copied, setCopied] = useState(false);
+  const cmd = "npm install @graphql-markdown/docusaurus graphql";
+
+  function handleCopy() {
+    navigator.clipboard.writeText(cmd).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div className={styles.installBlock}>
+      <span className={styles.installPrompt}>$</span>
+      <code className={styles.installCmd}>{cmd}</code>
+      <button
+        className={styles.copyBtn}
+        onClick={handleCopy}
+        aria-label="Copy install command"
+      >
+        {copied ? "✓ Copied" : "Copy"}
+      </button>
+    </div>
+  );
+}
+
 function HomepageHeader() {
   return (
     <header className={clsx("hero hero--secondary", styles.heroBanner)}>
       <div className="container">
-        <img
-          className={clsx("hero", styles.heroImage)}
-          src="/img/preview.svg"
-          alt="GraphQL-Markdown: generate Markdown and MDX documentation from any GraphQL schema"
-          width="1280"
-          height="640"
-          fetchpriority="high"
-          decoding="async"
-        />
-
-        <h1 className={clsx("hero__title", styles.heroSubtitle)}>
-          Customizable{" "}
-          <span style={{ color: "#36c46f", whiteSpace: "nowrap" }}>
-            Markdown + MDX
-          </span>{" "}
-          documentation for{" "}
+        <h1 className={styles.heroTitle}>
+          Turn any{" "}
           <a
             target="_blank"
             rel="noopener noreferrer"
             href="https://graphql.org/"
+            className={styles.accentPinkLink}
           >
-            <span style={{ color: "#e535ab" }}>GraphQL</span>
+            GraphQL
           </a>{" "}
-          schemas.
+          schema into beautiful docs
         </h1>
 
-        <p className={clsx("hero__subtitle", styles.heroSubtitleSecondary)}>
-          One{" "}
-          <Link to="/docs/get-started" style={{ color: "#e535ab" }}>
-            CLI
-          </Link>{" "}
-          to generate docs for{" "}
-          <a href="/docs/advanced/integration-with-frameworks">
-            <span style={{ color: "#36c46f" }}>any MDX framework</span>
-          </a>
-          .
+        <p className={styles.heroSubtitle}>
+          One CLI to generate{" "}
+          <span className={styles.accentGreen}>Markdown + MDX</span>{" "}
+          documentation for{" "}
+          <Link to="/docs/advanced/integration-with-frameworks">
+            any MDX framework
+          </Link>
+          . Zero boilerplate.
         </p>
 
-        <div className={clsx("margin-vert--lg", styles.buttons)}>
+        <InstallCommand />
+
+        <div className={clsx("margin-vert--md", styles.buttons)}>
           <Link
             className={clsx(
-              "button button--primary button--lg margin-horiz--lg",
+              "button button--primary button--lg",
               styles.heroButton,
             )}
             to="/docs/get-started"
           >
-            Get started
+            Get started →
           </Link>
           <Link
             className={clsx(
-              "button button--outline button--lg margin-horiz--lg",
+              "button button--outline button--lg",
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
             to="/docs/try-it"
           >
-            Try it
+            Try it live
           </Link>
         </div>
+
+        <img
+          className={styles.heroImage}
+          src="/img/preview.svg"
+          alt="GraphQL-Markdown output: Markdown documentation generated from a GraphQL schema"
+          width="1280"
+          height="640"
+          fetchpriority="high"
+          decoding="async"
+        />
       </div>
     </header>
+  );
+}
+
+function TrustedBy() {
+  return (
+    <div className={styles.trustedBy}>
+      <span className={styles.trustedByLabel}>Trusted by teams at</span>
+      <div className={styles.trustedByNames}>
+        {SHOWCASE_NAMES.map((name) => (
+          <span key={name} className={styles.trustedByChip}>
+            {name}
+          </span>
+        ))}
+        <Link to="/showcase" className={styles.trustedByMore}>
+          +20 more →
+        </Link>
+      </div>
+    </div>
   );
 }
 
@@ -94,7 +149,7 @@ function Thanks() {
 }
 
 export default function Home() {
-  useDocusaurusContext(); // keep hook in case you rely on it later
+  useDocusaurusContext();
 
   return (
     <Layout
@@ -102,6 +157,7 @@ export default function Home() {
       description="Auto-generate beautiful Markdown and MDX docs from any GraphQL schema. Open-source CLI with type cross-linking, custom directives, and Docusaurus integration. MIT licensed."
     >
       <HomepageHeader />
+      <TrustedBy />
       <main>
         <HomepageFeatures />
       </main>
