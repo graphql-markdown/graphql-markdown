@@ -23,7 +23,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Automatically generating documentation from your schema
 - Keeping documentation in sync with your API
 - Providing a consistent documentation structure
-- Integrating seamlessly with Docusaurus
+- Integrating seamlessly with most of the MDX documentation frameworks
 
 ## Features
 
