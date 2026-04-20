@@ -99,8 +99,5 @@
   ],
   "jest.rootPath": ".",
   "jest.jestCommandLine": "node node_modules/.bin/jest",
-  "chat.tools.terminal.autoApprove": {
-    "printf": true,
-    "set": true
-  }
+  "js/ts.experimental.useTsgo": true
 }
