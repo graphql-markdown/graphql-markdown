@@ -20,25 +20,44 @@ Hooks are part of the [documentation frameworks integration](./integration-with-
 
 ## Available Hooks
 
-GraphQL-Markdown provides lifecycle hooks for customizing the documentation generation process:
+GraphQL-Markdown provides lifecycle hooks for customizing the documentation generation process.
 
-**Generation Hooks:**
+### Generation Hooks
 
-- `beforeSchemaLoadHook` / `afterSchemaLoadHook` - Schema loading
-- `beforeDiffCheckHook` / `afterDiffCheckHook` - Schema diff checking
-- `beforeRenderRootTypesHook` / `afterRenderRootTypesHook` - Root types rendering
-- `beforeRenderHomepageHook` / `afterRenderHomepageHook` - Homepage rendering
-- `beforeRenderTypeEntitiesHook` / `afterRenderTypeEntitiesHook` - Type entities rendering
-- `beforeGenerateIndexMetafileHook` / `afterGenerateIndexMetafileHook` - Index metafile generation
+| Hook                                | Description                                  |
+| ----------------------------------- | -------------------------------------------- |
+| `beforeSchemaLoadHook`              | Called before loading the GraphQL schema     |
+| `afterSchemaLoadHook`               | Called after loading the GraphQL schema      |
+| `beforeDiffCheckHook`               | Called before checking schema differences    |
+| `afterDiffCheckHook`                | Called after checking schema differences     |
+| `beforeRenderRootTypesHook`         | Called before rendering root types           |
+| `afterRenderRootTypesHook`          | Called after rendering root types            |
+| `beforeRenderHomepageHook`          | Called before rendering the homepage         |
+| `afterRenderHomepageHook`           | Called after rendering the homepage          |
+| `beforeRenderTypeEntitiesHook`      | Called before rendering type entities        |
+| `afterRenderTypeEntitiesHook`       | Called after rendering type entities         |
+| `beforeGenerateIndexMetafileHook`   | Called before generating index metafiles     |
+| `afterGenerateIndexMetafileHook`    | Called after generating index metafiles      |
 
-**Printer Hooks:**
+### Printer Hooks
 
-- `beforePrintCodeHook` / `afterPrintCodeHook` - Code block generation
-- `beforePrintTypeHook` / `afterPrintTypeHook` - Type documentation generation
-- `beforeComposePageTypeHook` - Type page section composition (order and visibility)
+| Hook                          | Description                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| `beforePrintCodeHook`         | Called before generating code blocks — can modify options or prevent default generation |
+| `afterPrintCodeHook`          | Called after generating code blocks — can modify the generated output                   |
+| `beforePrintTypeHook`         | Called before generating type documentation — can modify options or prevent default     |
+| `afterPrintTypeHook`          | Called after generating type documentation — can modify the generated output            |
+| `beforeComposePageTypeHook`   | Called before composing type page sections — can reorder, remove, or inject sections    |
+
+<br/>
+
+:::info
 
 All hooks receive an `event` object with a `data` property containing context-specific information. Printer hooks also have an `output` property that can be modified.
+
 For `beforeComposePageTypeHook`, `event.output` is the ordered list of section keys to render, and `event.data.sections` is the section content map.
+
+:::
 
 ## Using Hooks with Docusaurus
 
@@ -168,7 +187,7 @@ The hook appends a "Response Type" section after the operation's code block:
 query user(id: ID!): User
 ```
 
-### Response Type
+**Response Type**
 
 ```graphql
 type User {
@@ -259,10 +278,3 @@ const beforeComposePageTypeHook = async (event) => {
 
 export { beforeComposePageTypeHook };
 ```
-
-:::info
-
-Legacy options and CLI flags (`printTypeOptions.codeSection`, `printTypeOptions.relatedTypeSection`, `printTypeOptions.exampleSection`, `--noCode`, `--noRelatedType`, `--noExample`) are deprecated and kept for backward compatibility.
-
-:::
-
