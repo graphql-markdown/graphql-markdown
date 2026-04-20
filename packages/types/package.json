@@ -20,7 +20,7 @@
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
   "types": "src/index.d.ts",
   "scripts": {
-    "build": "tsgo --build"
+    "build": "tsgo-wasm --build"
   },
   "devDependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",

@@ -40,7 +40,7 @@
     "lint:fix": "eslint --config ./eslint/config.ts \"**/*.{ts,mjs,js,json}\" --fix",
     "prettier": "prettier \"**/*.{ts,mjs,js,json}\" --check",
     "prettier:fix": "prettier \"**/*.{ts,mjs,js,json}\" --write",
-    "ts:check": "tsgo --noEmit"
+    "ts:check": "tsgo-wasm --noEmit"
   },
   "files": [
     "eslint",

@@ -206,7 +206,7 @@
     "memfs": "4.57.2",
     "prettier": "catalog:",
     "ts-jest": "29.4.9",
-    "tsgo-dev": "^2025.12.2",
+    "tsgo-wasm": "^2026.4.20",
     "turbo": "2.9.6",
     "typedoc": "0.28.19",
     "typedoc-docusaurus-theme": "1.4.2",
