@@ -25,10 +25,15 @@ function InstallCommand() {
   const cmd = "npm install @graphql-markdown/cli graphql";
 
   function handleCopy() {
-    navigator.clipboard.writeText(cmd).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard
+      .writeText(cmd)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((error) => {
+        console.error("Failed to copy install command to clipboard:", error);
+      });
   }
 
   return (
