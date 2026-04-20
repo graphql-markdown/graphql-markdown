@@ -163,6 +163,7 @@
   display: block;
   width: min(860px, 100%);
   height: auto;
+  margin: 1.5rem auto 0;
 }
 
 /* ── Trusted by strip ── */
