@@ -75,7 +75,7 @@ See [documentation troubleshooting](https://graphql-markdown.dev/docs/troublesho
 
 ## Showcase
 
-Used in production by [40+ teams](https://graphql-markdown.dev/showcase) including Saleor, Sui, Mozilla, IOTA, Swan, Sablier, and Browserless.
+Used in production by [30+ teams](https://graphql-markdown.dev/showcase) including Saleor, Sui, Mozilla, IOTA, Swan, Sablier, and Browserless.
 
 [View the full showcase](https://graphql-markdown.dev/showcase) · [Add your site](https://github.com/graphql-markdown/graphql-markdown/issues/1601)
 
