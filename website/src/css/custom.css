@@ -231,6 +231,27 @@ div[class^="announcementBar_"] {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
+@media (max-width: 1400px) {
+  .showcase-featured {
+    grid-template-columns: repeat(2, 22rem);
+  }
+}
+
+@media (max-width: 996px) {
+  .showcase {
+    padding: 0 1rem;
+  }
+
+  .showcase-featured {
+    grid-template-columns: minmax(0, 22rem);
+  }
+
+  .showcase-all {
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    justify-content: stretch;
+  }
+}
+
 .graphql-markdown-details .graphql-markdown-details-label-closed {
   display: inline;
 }
