@@ -245,11 +245,6 @@ div[class^="announcementBar_"] {
   .showcase-featured {
     grid-template-columns: minmax(0, 22rem);
   }
-
-  .showcase-all {
-    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-    justify-content: stretch;
-  }
 }
 
 .graphql-markdown-details .graphql-markdown-details-label-closed {
