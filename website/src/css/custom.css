@@ -111,7 +111,7 @@ div[class^="announcementBar_"] {
 
 .theme-doc-sidebar-item-category-level-1.graphql-markdown-api-section
   > div:first-child {
-  text-transform: uppercase full-width;
+  text-transform: uppercase;
   margin: 5px 5px auto auto;
   background-color: rgb(246, 248, 250);
 }
