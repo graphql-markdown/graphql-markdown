@@ -117,6 +117,38 @@ div[class^="announcementBar_"] {
 }
 
 .showcase {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.showcase-featured {
+  display: grid;
+  grid-template-columns: repeat(3, 22rem);
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.showcase-all {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 15rem);
+  justify-content: center;
+  gap: 1rem;
+}
+
+.showcase__card,
+.showcase__card--featured {
+  width: auto;
+  margin: 0;
+}
+
+.showcase .card-demo,
+.showcase .card {
+  height: 100%;
+}
+
 .npm-downloads__caption {
   font-size: 0.9rem;
   opacity: 0.8;
@@ -131,6 +163,72 @@ div[class^="announcementBar_"] {
 .npm-downloads__link:hover {
   text-decoration: underline !important;
 }
+
+.showcase__add-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px dashed rgba(54, 196, 111, 0.35);
+  border-radius: var(--ifm-card-border-radius, 8px);
+  text-decoration: none !important;
+  color: inherit !important;
+  min-height: 200px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.showcase__add-card:hover {
+  border-color: #36c46f;
+  background: rgba(54, 196, 111, 0.04);
+}
+
+.showcase__add-icon {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #36c46f;
+  line-height: 1;
+}
+
+.showcase__add-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.55;
+}
+
+.showcase .card__image {
+  filter: grayscale(1);
+  transition: filter 0.25s ease;
+}
+
+.showcase .card-demo:hover .card__image {
+  filter: grayscale(0);
+}
+
+.showcase-section-label {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.45;
+  padding: 0.75rem 0 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  margin-bottom: 0;
+}
+
+[data-theme="dark"] .showcase-section-label {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.showcase-divider {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin: 1.5rem 0 0;
+}
+
+[data-theme="dark"] .showcase-divider {
+  border-top-color: rgba(255, 255, 255, 0.08);
 }
 
 .graphql-markdown-details .graphql-markdown-details-label-closed {
