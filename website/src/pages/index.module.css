@@ -220,6 +220,25 @@
   opacity: 0.7;
 }
 
+.trustedBySep {
+  font-size: 2rem;
+  opacity: 0.35;
+  user-select: none;
+  line-height: 1;
+}
+
+.downloadsChip {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #36c46f !important;
+  white-space: nowrap;
+  text-decoration: none !important;
+}
+
+.downloadsChip:hover {
+  text-decoration: underline !important;
+}
+
 /* ── Responsive ── */
 @media screen and (max-width: 996px) {
   .heroBanner {

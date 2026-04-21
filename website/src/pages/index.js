@@ -6,6 +6,8 @@ import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 
 import styles from "./index.module.css";
+import useNpmDownloads from "@site/src/hooks/useNpmDownloads";
+import showcaseData from "@site/src/data/showcase.json";
 
 const SHOWCASE_NAMES = [
   "Mozilla",
@@ -19,6 +21,9 @@ const SHOWCASE_NAMES = [
   "epilot",
   "Coral",
 ];
+
+const MORE_COUNT =
+  Math.floor((showcaseData.length - SHOWCASE_NAMES.length) / 10) * 10;
 
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
@@ -117,6 +122,7 @@ function HomepageHeader() {
 }
 
 function TrustedBy() {
+  const downloads = useNpmDownloads("@graphql-markdown/core");
   return (
     <div className={styles.trustedBy}>
       <span className={styles.trustedByLabel}>Trusted by teams at</span>
@@ -127,8 +133,17 @@ function TrustedBy() {
           </span>
         ))}
         <Link to="/showcase" className={styles.trustedByMore}>
-          +20 more →
+          +{MORE_COUNT} more
         </Link>
+        <span className={styles.trustedBySep}>·</span>
+        <a
+          href="https://www.npmjs.com/package/@graphql-markdown/core"
+          className={styles.downloadsChip}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {downloads} weekly downloads
+        </a>
       </div>
     </div>
   );

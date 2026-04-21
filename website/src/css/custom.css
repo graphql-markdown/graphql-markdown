@@ -117,16 +117,20 @@ div[class^="announcementBar_"] {
 }
 
 .showcase {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex-basis: 10em;
+.npm-downloads__caption {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
-.showcase__card {
-  width: 15rem;
-  margin: 1rem;
+.npm-downloads__link {
+  color: #36c46f !important;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.npm-downloads__link:hover {
+  text-decoration: underline !important;
+}
 }
 
 .graphql-markdown-details .graphql-markdown-details-label-closed {
