@@ -2,6 +2,7 @@
 
 <h1 align="center">Flexible documentation for GraphQL schemas</h1>
 
+[![npm downloads](https://img.shields.io/npm/dw/@graphql-markdown/core?label=weekly%20downloads&color=36c46f&style=flat)](https://www.npmjs.com/package/@graphql-markdown/core)
 [![NPM Last Update](https://img.shields.io/npm/last-update/%40graphql-markdown%2Fcli)](https://www.npmjs.com/package/@graphql-markdown/cli)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/graphql-markdown/graphql-markdown)
@@ -71,6 +72,12 @@ See [documentation configuration](https://graphql-markdown.dev/docs/configuratio
 ## Troubleshooting
 
 See [documentation troubleshooting](https://graphql-markdown.dev/docs/troubleshooting) page.
+
+## Showcase
+
+Used in production by [40+ teams](https://graphql-markdown.dev/showcase) including Saleor, Sui, Mozilla, IOTA, Swan, Sablier, and Browserless.
+
+[View the full showcase](https://graphql-markdown.dev/showcase) · [Add your site](https://github.com/graphql-markdown/graphql-markdown/issues/1601)
 
 ## License
 
