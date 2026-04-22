@@ -16,8 +16,8 @@
     "types": ["node", "@types/jest"],
 
     "paths": {
-      "@graphql-markdown/types": ["./packages/types/src/index.d.ts"],
-      "@graphql-markdown/*": ["./packages/*/src/index.ts"]
+      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/*": ["../*/src/index.ts"]
     }
   },
 

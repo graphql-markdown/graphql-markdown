@@ -1,6 +1,6 @@
 import { GraphQLSchema } from "graphql/type";
 
-import type { Formatter, PackageName } from "@graphql-markdown/types";
+import type { Formatter } from "@graphql-markdown/types";
 
 import { getPrinter } from "../../src/printer";
 
@@ -25,7 +25,6 @@ describe("generator", () => {
         printTypeOptions: {},
       };
       const printer = await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         printerConfig,
         printerOptions,
         undefined,
@@ -45,63 +44,161 @@ describe("generator", () => {
       );
     });
 
-    test.each([[undefined], [null]])(
-      "throws exception if printer module is %s",
-      async (value) => {
-        expect.assertions(1);
+    test("passes nullable printer options through to initialization", async () => {
+      expect.assertions(1);
 
-        await expect(
-          getPrinter(
-            value,
-            {
-              schema: new GraphQLSchema({}),
-              baseURL: "/",
-              linkRoot: "root",
-            },
-            {
-              groups: {},
-              printTypeOptions: {},
-            },
-          ),
-        ).rejects.toThrow("Invalid printer module name.");
-      },
-    );
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          customDirectives: null,
+          deprecated: null,
+          groups: null,
+          meta: null,
+          metatags: null,
+          onlyDocDirectives: [],
+          printTypeOptions: {
+            deprecated: "group",
+          },
+          skipDocDirectives: [],
+          sectionHeaderId: false,
+        },
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          customDirectives: null,
+          deprecated: null,
+          groups: null,
+          meta: null,
+          metatags: null,
+          onlyDocDirectives: [],
+          printTypeOptions: {
+            deprecated: "group",
+          },
+          skipDocDirectives: [],
+          sectionHeaderId: false,
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    test("passes null printTypeOptions through to initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: null,
+        },
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          groups: {},
+          printTypeOptions: null,
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    test("passes undefined to initialization when printer options are null", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        null,
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    test("passes string hierarchy through to initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: {
+            hierarchy: "flat",
+          },
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          groups: {},
+          printTypeOptions: {
+            hierarchy: "flat",
+          },
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
 
     test("throws exception if no printer config set", async () => {
       expect.assertions(1);
 
       await expect(
-        getPrinter(
-          "@graphql-markdown/printer-legacy" as PackageName,
-          undefined,
-          {
-            groups: {},
-            printTypeOptions: {},
-          },
-        ),
+        getPrinter(undefined, {
+          groups: {},
+          printTypeOptions: {},
+        }),
       ).rejects.toThrow("Invalid printer config.");
     });
 
-    test("throws exception if no printer module not found", async () => {
-      expect.assertions(1);
-
-      await expect(
-        getPrinter(
-          "foobar" as PackageName,
-          {
-            schema: new GraphQLSchema({}),
-            baseURL: "/",
-            linkRoot: "root",
-          },
-          {
-            groups: {},
-            printTypeOptions: {},
-          },
-        ),
-      ).rejects.toThrow("Cannot find module 'foobar'.");
-    });
-
-    test("throws error if printer module initialization fails", async () => {
+    test("throws error if printer initialization fails", async () => {
       expect.assertions(1);
 
       jest
@@ -110,7 +207,6 @@ describe("generator", () => {
 
       await expect(
         getPrinter(
-          "@graphql-markdown/printer-legacy" as PackageName,
           {
             schema: new GraphQLSchema({}),
             baseURL: "/",
@@ -121,9 +217,7 @@ describe("generator", () => {
             printTypeOptions: {},
           },
         ),
-      ).rejects.toThrow(
-        "Cannot find module '@graphql-markdown/printer-legacy'",
-      );
+      ).rejects.toThrow("Init error");
     });
 
     test("passes mdxModule to printer initialization", async () => {
@@ -133,7 +227,6 @@ describe("generator", () => {
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         {
           schema: new GraphQLSchema({}),
           baseURL: "/",
@@ -164,7 +257,6 @@ describe("generator", () => {
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         {
           schema: new GraphQLSchema({}),
           baseURL: "/",

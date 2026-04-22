@@ -9,24 +9,22 @@
  */
 
 import type {
-  CustomDirectiveMap,
+  ConfigPrintTypeOptions,
   DeprecatedPrintTypeOptions,
   Formatter,
-  GraphQLDirective,
   GraphQLField,
   GraphQLSchema,
   IPrinter,
   Maybe,
   MDXString,
-  MetaInfo,
   PageHeader,
   PageSection,
   PageSections,
-  PrinterConfigPrintTypeOptions,
   PrinterEventEmitter,
+  PrinterInitOptions,
   PrintTypeOptions,
-  SchemaEntitiesGroupMap,
-  TypeDeprecatedOption,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 /**
@@ -129,12 +127,28 @@ const DEFAULT_INIT_OPTIONS = {
   sectionHeaderId: true,
 };
 
-type InitPrintTypeOptions = DeprecatedPrintTypeOptions &
-  Omit<PrinterConfigPrintTypeOptions, "exampleSection"> & {
-    exampleSection?:
-      | DeprecatedPrintTypeOptions["exampleSection"]
-      | PrinterConfigPrintTypeOptions["exampleSection"];
-  };
+const normalizeHierarchy = (
+  hierarchy?: Maybe<ConfigPrintTypeOptions["hierarchy"]>,
+): TypeHierarchyObjectType | undefined => {
+  if (!hierarchy) {
+    return undefined;
+  }
+
+  if (typeof hierarchy !== "string") {
+    return hierarchy;
+  }
+
+  switch (hierarchy.toLowerCase() as TypeHierarchyValueType) {
+    case "entity":
+      return { entity: {} };
+    case "flat":
+      return { flat: {} };
+    case "api":
+      return { api: {} };
+    default:
+      return undefined;
+  }
+};
 
 /**
  * The Printer class implements the core functionality for generating Markdown documentation
@@ -241,6 +255,7 @@ export class Printer implements IPrinter {
     linkRoot: Maybe<string> = "/",
     {
       customDirectives,
+      deprecated,
       groups,
       meta,
       metatags,
@@ -248,17 +263,7 @@ export class Printer implements IPrinter {
       printTypeOptions,
       skipDocDirectives,
       sectionHeaderId,
-    }: {
-      customDirectives?: CustomDirectiveMap;
-      deprecated?: TypeDeprecatedOption;
-      groups?: SchemaEntitiesGroupMap;
-      meta?: Maybe<MetaInfo>;
-      metatags?: Record<string, string>[];
-      onlyDocDirectives?: GraphQLDirective[];
-      printTypeOptions?: InitPrintTypeOptions;
-      skipDocDirectives?: GraphQLDirective[];
-      sectionHeaderId?: boolean;
-    } = DEFAULT_INIT_OPTIONS,
+    }: PrinterInitOptions = DEFAULT_INIT_OPTIONS,
     formatter?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
     eventEmitter?: Maybe<PrinterEventEmitter>,
@@ -280,7 +285,9 @@ export class Printer implements IPrinter {
           printTypeOptions?.parentTypePrefix ??
           PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
         deprecated:
-          printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+          printTypeOptions?.deprecated ??
+          deprecated ??
+          PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
         schema,
         onlyDocDirectives: onlyDocDirectives ?? [],
         skipDocDirectives: skipDocDirectives ?? [],
@@ -289,7 +296,8 @@ export class Printer implements IPrinter {
           printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
         metatags: metatags ?? [],
         hierarchy:
-          printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+          normalizeHierarchy(printTypeOptions?.hierarchy) ??
+          PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
         meta: meta,
         // Merge formatter functions: default formatter with any overrides
         ...createDefaultFormatter(),

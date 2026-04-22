@@ -255,7 +255,6 @@ describe("config", () => {
           outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
           onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
           prettify: DEFAULT_OPTIONS.pretty,
-          printer: DEFAULT_OPTIONS.printer,
           printTypeOptions: {
             ...DEFAULT_OPTIONS.printTypeOptions,
             hierarchy: DEFAULT_HIERARCHY,
@@ -337,7 +336,6 @@ describe("config", () => {
         outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         prettify: configFileOpts.pretty,
-        printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: {
           ...configFileOpts.printTypeOptions,
           hierarchy: { entity: {} },
@@ -430,7 +428,6 @@ describe("config", () => {
           hierarchy: { entity: {} },
           exampleSection: false,
         },
-        printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
         customDirective: DEFAULT_OPTIONS.customDirective,
@@ -508,7 +505,6 @@ describe("config", () => {
           hierarchy: { entity: {} },
           exampleSection: true,
         },
-        printer: DEFAULT_OPTIONS.printer,
         skipDocDirective: [],
         onlyDocDirective: [],
         customDirective: DEFAULT_OPTIONS.customDirective,
@@ -546,7 +542,6 @@ describe("config", () => {
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
         prettify: cliOpts.pretty,
-        printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: DEFAULT_HIERARCHY,
@@ -580,7 +575,6 @@ describe("config", () => {
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
-        printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: DEFAULT_HIERARCHY,
@@ -618,7 +612,6 @@ describe("config", () => {
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
-        printer: DEFAULT_OPTIONS.printer,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: DEFAULT_HIERARCHY,
