@@ -319,20 +319,15 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
  * Options accepted by printer initialization.
  */
 export type PrinterInitOptions = {
-  customDirectives?: CustomDirectiveMap;
-  deprecated?: TypeDeprecatedOption;
-  groups?: SchemaEntitiesGroupMap;
+  customDirectives?: Maybe<CustomDirectiveMap>;
+  deprecated?: Maybe<TypeDeprecatedOption>;
+  groups?: Maybe<SchemaEntitiesGroupMap>;
   meta?: Maybe<MetaInfo>;
-  metatags?: Record<string, string>[];
-  onlyDocDirectives?: GraphQLDirective[];
-  printTypeOptions?: DeprecatedPrintTypeOptions &
-    Omit<PrinterConfigPrintTypeOptions, "exampleSection"> & {
-      exampleSection?:
-        | DeprecatedPrintTypeOptions["exampleSection"]
-        | PrinterConfigPrintTypeOptions["exampleSection"];
-    };
-  skipDocDirectives?: GraphQLDirective[];
-  sectionHeaderId?: boolean;
+  metatags?: Maybe<Record<string, string>[]>;
+  onlyDocDirectives?: Maybe<GraphQLDirective[]>;
+  printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
+  skipDocDirectives?: Maybe<GraphQLDirective[]>;
+  sectionHeaderId?: Maybe<boolean>;
 };
 
 /**

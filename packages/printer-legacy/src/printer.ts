@@ -9,6 +9,7 @@
  */
 
 import type {
+  ConfigPrintTypeOptions,
   DeprecatedPrintTypeOptions,
   Formatter,
   GraphQLField,
@@ -22,6 +23,8 @@ import type {
   PrinterEventEmitter,
   PrinterInitOptions,
   PrintTypeOptions,
+  TypeHierarchyObjectType,
+  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 /**
@@ -122,6 +125,29 @@ const DEFAULT_INIT_OPTIONS = {
   customDirectives: undefined,
   groups: undefined,
   sectionHeaderId: true,
+};
+
+const normalizeHierarchy = (
+  hierarchy?: Maybe<ConfigPrintTypeOptions["hierarchy"]>,
+): TypeHierarchyObjectType | undefined => {
+  if (!hierarchy) {
+    return undefined;
+  }
+
+  if (typeof hierarchy !== "string") {
+    return hierarchy;
+  }
+
+  switch (hierarchy.toLowerCase() as TypeHierarchyValueType) {
+    case "entity":
+      return { entity: {} };
+    case "flat":
+      return { flat: {} };
+    case "api":
+      return { api: {} };
+    default:
+      return undefined;
+  }
 };
 
 /**
@@ -229,6 +255,7 @@ export class Printer implements IPrinter {
     linkRoot: Maybe<string> = "/",
     {
       customDirectives,
+      deprecated,
       groups,
       meta,
       metatags,
@@ -258,7 +285,9 @@ export class Printer implements IPrinter {
           printTypeOptions?.parentTypePrefix ??
           PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
         deprecated:
-          printTypeOptions?.deprecated ?? PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+          printTypeOptions?.deprecated ??
+          deprecated ??
+          PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
         schema,
         onlyDocDirectives: onlyDocDirectives ?? [],
         skipDocDirectives: skipDocDirectives ?? [],
@@ -267,7 +296,8 @@ export class Printer implements IPrinter {
           printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
         metatags: metatags ?? [],
         hierarchy:
-          printTypeOptions?.hierarchy ?? PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+          normalizeHierarchy(printTypeOptions?.hierarchy) ??
+          PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
         meta: meta,
         // Merge formatter functions: default formatter with any overrides
         ...createDefaultFormatter(),

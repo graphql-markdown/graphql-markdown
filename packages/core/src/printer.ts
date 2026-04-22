@@ -15,31 +15,9 @@ import type {
   Maybe,
   PrinterConfig,
   PrinterEventEmitter,
-  PrinterInitOptions,
   PrinterOptions,
 } from "@graphql-markdown/types";
 import { Printer } from "@graphql-markdown/printer-legacy";
-
-const normalizePrinterOptions = (
-  options?: Maybe<PrinterOptions>,
-): PrinterInitOptions | undefined => {
-  if (!options) {
-    return undefined;
-  }
-
-  return {
-    customDirectives: options.customDirectives ?? undefined,
-    deprecated: options.deprecated ?? undefined,
-    groups: options.groups ?? undefined,
-    meta: options.meta ?? undefined,
-    metatags: options.metatags ?? undefined,
-    onlyDocDirectives: options.onlyDocDirectives ?? undefined,
-    printTypeOptions:
-      options.printTypeOptions as NonNullable<PrinterInitOptions>["printTypeOptions"],
-    skipDocDirectives: options.skipDocDirectives ?? undefined,
-    sectionHeaderId: options.sectionHeaderId,
-  };
-};
 
 /**
  * Loads and initializes a printer module for GraphQL schema documentation.
@@ -74,11 +52,14 @@ const normalizePrinterOptions = (
  *     linkRoot: 'graphql'
  *   },
  *   {
- *     printTypeOptions: { includeDeprecationReasons: true }
+ *     printTypeOptions: { deprecated: 'group' }
  *   }
  * );
  *
- * const output = printer.printSchema();
+ * const queryType = schema.getQueryType();
+ * if (queryType) {
+ *   const output = await printer.printType('Query', queryType);
+ * }
  * ```
  */
 export const getPrinter = async (
@@ -92,14 +73,12 @@ export const getPrinter = async (
     throw new Error("Invalid printer config.");
   }
 
-  const normalizedOptions = normalizePrinterOptions(options);
-
   const { schema, baseURL, linkRoot } = config;
   await Printer.init(
     schema,
     baseURL,
     linkRoot,
-    normalizedOptions,
+    options ?? undefined,
     formatter,
     mdxDeclaration,
     eventEmitter,

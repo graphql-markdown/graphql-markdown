@@ -321,6 +321,33 @@ describe("Printer", () => {
 
       expect(Printer.options!.sectionHeaderId).toBe(false);
     });
+
+    test("uses top-level deprecated option when printTypeOptions.deprecated is unset", async () => {
+      expect.hasAssertions();
+
+      Printer.options = undefined;
+
+      await Printer.init(undefined, undefined, undefined, {
+        deprecated: "group",
+      });
+
+      expect(Printer.options!.deprecated).toBe("group");
+    });
+
+    test("prefers printTypeOptions.deprecated over top-level deprecated option", async () => {
+      expect.hasAssertions();
+
+      Printer.options = undefined;
+
+      await Printer.init(undefined, undefined, undefined, {
+        deprecated: "group",
+        printTypeOptions: {
+          deprecated: "skip",
+        },
+      });
+
+      expect(Printer.options!.deprecated).toBe("skip");
+    });
   });
 
   describe("printHeader()", () => {

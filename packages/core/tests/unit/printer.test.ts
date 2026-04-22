@@ -44,7 +44,7 @@ describe("generator", () => {
       );
     });
 
-    test("normalizes nullable printer options before initialization", async () => {
+    test("passes nullable printer options through to initialization", async () => {
       expect.assertions(1);
 
       const spy = jest.spyOn(Printer, "init");
@@ -75,17 +75,86 @@ describe("generator", () => {
         "/",
         "root",
         {
-          customDirectives: undefined,
-          deprecated: undefined,
-          groups: undefined,
-          meta: undefined,
-          metatags: undefined,
+          customDirectives: null,
+          deprecated: null,
+          groups: null,
+          meta: null,
+          metatags: null,
           onlyDocDirectives: [],
           printTypeOptions: {
             deprecated: "group",
           },
           skipDocDirectives: [],
           sectionHeaderId: false,
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    test("passes null printTypeOptions through to initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: null,
+        },
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          groups: {},
+          printTypeOptions: null,
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    test("passes string hierarchy through to initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          groups: {},
+          printTypeOptions: {
+            hierarchy: "flat",
+          },
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          groups: {},
+          printTypeOptions: {
+            hierarchy: "flat",
+          },
         },
         undefined,
         undefined,
