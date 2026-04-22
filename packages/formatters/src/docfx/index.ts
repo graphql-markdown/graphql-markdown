@@ -8,6 +8,8 @@
  * @packageDocumentation
  */
 
+import { dirname, resolve, basename, relative } from "node:path";
+
 import type {
   AdmonitionType,
   Badge,
@@ -17,12 +19,17 @@ import type {
   Maybe,
   MDXString,
   MetaInfo,
+  RenderTypeEntitiesHook,
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  capitalize,
+  fileExists,
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
+  readFile,
+  saveFile,
 } from "@graphql-markdown/utils";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
@@ -46,13 +53,22 @@ const quoteLines = (text: string): string => {
     .join(MARKDOWN_EOL);
 };
 
+/** Maps graphql-markdown badge classnames to Bootstrap 5 contextual badge classes. */
+export const BADGE_CLASS_MAP: Record<string, string> = {
+  DEPRECATED: "text-bg-danger",
+  NON_NULL: "text-bg-primary",
+  RELATION: "text-bg-info",
+};
+
 /**
- * Formats a badge as an inline HTML mark element.
+ * Formats a badge using Bootstrap 5 badge classes available in DocFX's modern template.
  * @param badge - Badge data containing text and optional classname
  * @returns Formatted badge string
  */
-export const formatMDXBadge = ({ text }: Badge): MDXString => {
-  return `<mark class="gqlmd-docfx-badge">${text as string}</mark>` as MDXString;
+export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
+  const key = Array.isArray(classname) ? classname[0] : classname;
+  const variant = (key && BADGE_CLASS_MAP[key]) ?? "text-bg-secondary";
+  return `<span class="badge ${variant}">${text as string}</span>` as MDXString;
 };
 
 /**
@@ -167,4 +183,110 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXNameEntity,
     formatMDXSpecifiedByLink,
   };
+};
+
+export const mdxExtension = ".md" as const;
+
+// ─── toc.yml builder ────────────────────────────────────────────────────────
+
+const writeQueue = new Map<string, Promise<void>>();
+
+const queueFileUpdate = async (
+  filePath: string,
+  update: () => Promise<void>,
+): Promise<void> => {
+  const previous = writeQueue.get(filePath) ?? Promise.resolve();
+  const next = previous.catch(() => {}).then(update);
+  writeQueue.set(filePath, next);
+  return next;
+};
+
+const updateToc = async (
+  tocFilePath: string,
+  name: string,
+  href: string,
+): Promise<void> => {
+  await queueFileUpdate(tocFilePath, async () => {
+    const entry = `- name: ${name}${MARKDOWN_EOL}  href: ${href}`;
+
+    if (!(await fileExists(tocFilePath))) {
+      await saveFile(tocFilePath, entry + MARKDOWN_EOL);
+      return;
+    }
+
+    const existing = await readFile(tocFilePath, "utf-8");
+    if (existing.includes(`href: ${href}`)) {
+      return;
+    }
+
+    await saveFile(
+      tocFilePath,
+      existing.trimEnd() + MARKDOWN_EOL + entry + MARKDOWN_EOL,
+    );
+  });
+};
+
+// Tracks directories whose index.md has already been prepended to their toc.yml.
+// Module-level so it persists across all hook invocations within one generation run.
+const seenDirectories = new Set<string>();
+
+/**
+ * Builds DocFX `toc.yml` navigation files as each entity page is written.
+ *
+ * Walks up from the generated file to the graphql output root (`outputDir`),
+ * writing or updating a `toc.yml` at every directory level. Section index pages
+ * are prepended as an "Overview" entry on first encounter.
+ */
+export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
+  event,
+): Promise<void> => {
+  const { filePath, name, outputDir } = (
+    event as { data: { filePath: string; name: string; outputDir: string } }
+  ).data;
+
+  const graphqlRoot = resolve(outputDir);
+
+  // Rewrite uid as a path-derived value to guarantee uniqueness across the site.
+  // e.g. operations/queries/continent.md → uid: operations-queries-continent
+  const uid = relative(graphqlRoot, filePath)
+    .replace(/\.mdx?$/, "")
+    .replace(/[/\\]/g, "-");
+  const content = await readFile(filePath, "utf-8");
+  const rewritten = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  if (rewritten !== content) {
+    await saveFile(filePath, rewritten);
+  }
+
+  let currentDir = resolve(dirname(filePath));
+  let currentHref = basename(filePath);
+  let currentName = name;
+
+  while (currentDir.startsWith(graphqlRoot)) {
+    const tocPath = resolve(currentDir, "toc.yml");
+
+    if (!seenDirectories.has(currentDir)) {
+      seenDirectories.add(currentDir);
+      if (currentDir === graphqlRoot) {
+        // Homepage is written after hooks run, so add Overview unconditionally.
+        await updateToc(tocPath, "Overview", "index.md");
+      } else {
+        const indexPath = resolve(currentDir, "index.md");
+        if (await fileExists(indexPath)) {
+          await updateToc(
+            tocPath,
+            `${capitalize(basename(currentDir))} Overview`,
+            "index.md",
+          );
+        }
+      }
+    }
+
+    await updateToc(tocPath, currentName, currentHref);
+
+    if (currentDir === graphqlRoot) break;
+
+    currentHref = `${basename(currentDir)}/toc.yml`;
+    currentName = capitalize(basename(currentDir));
+    currentDir = dirname(currentDir);
+  }
 };

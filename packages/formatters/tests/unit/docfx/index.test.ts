@@ -11,9 +11,21 @@ import {
 } from "../../../src/docfx";
 
 describe("formatMDXBadge", () => {
-  test("renders inline mark tag", () => {
+  test("renders bootstrap badge with secondary variant when no classname", () => {
     expect(formatMDXBadge({ text: "Required" })).toBe(
-      '<mark class="gqlmd-docfx-badge">Required</mark>',
+      '<span class="badge text-bg-secondary">Required</span>',
+    );
+  });
+
+  test("maps DEPRECATED classname to danger variant", () => {
+    expect(
+      formatMDXBadge({ text: "Deprecated", classname: "DEPRECATED" }),
+    ).toBe('<span class="badge text-bg-danger">Deprecated</span>');
+  });
+
+  test("maps NON_NULL classname to primary variant", () => {
+    expect(formatMDXBadge({ text: "Non-null", classname: "NON_NULL" })).toBe(
+      '<span class="badge text-bg-primary">Non-null</span>',
     );
   });
 });
