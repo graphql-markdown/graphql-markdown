@@ -7,11 +7,10 @@
  * @module printer
  *
  * This module provides the functionality to load and initialize a printer for GraphQL schema documentation.
- * It dynamically imports a printer module and configures it with the provided schema and options.
+ * It resolves a supported printer module and configures it with the provided schema and options.
  */
 import type {
   Formatter,
-  IPrinter,
   Maybe,
   PackageName,
   Printer,
@@ -19,11 +18,14 @@ import type {
   PrinterEventEmitter,
   PrinterOptions,
 } from "@graphql-markdown/types";
+import { Printer as LegacyPrinter } from "@graphql-markdown/printer-legacy";
+
+const PRINTER_LEGACY_PACKAGE = "@graphql-markdown/printer-legacy";
 
 /**
  * Loads and initializes a printer module for GraphQL schema documentation.
  *
- * This function dynamically imports the specified printer module and initializes it
+ * This function resolves the specified printer module and initializes it
  * with the provided configuration and options. The printer is responsible for rendering
  * GraphQL schema documentation in the desired format.
  *
@@ -36,7 +38,7 @@ import type {
  *
  * @throws Will throw an error if printerModule is not a string
  * @throws Will throw an error if config is not provided
- * @throws Will throw an error if the module specified by printerModule cannot be found
+ * @throws Will throw an error if printerModule is not supported
  *
  * @example
  * ```typescript
@@ -80,24 +82,23 @@ export const getPrinter = async (
     throw new Error("Invalid printer config.");
   }
 
-  try {
-    const { Printer }: { Printer: typeof IPrinter } = await import(
-      printerModule
-    );
-
-    const { schema, baseURL, linkRoot } = config;
-    await Printer.init(
-      schema,
-      baseURL,
-      linkRoot,
-      { ...options },
-      formatter,
-      mdxDeclaration,
-      eventEmitter,
-    );
-
-    return Printer;
-  } catch {
-    throw new Error(`Cannot find module '${printerModule}'.`);
+  if (printerModule !== PRINTER_LEGACY_PACKAGE) {
+    throw new Error(`Unsupported printer module '${printerModule}'.`);
   }
+
+  const printer = LegacyPrinter as unknown as Printer;
+  const normalizedOptions = options ?? undefined;
+
+  const { schema, baseURL, linkRoot } = config;
+  await printer.init(
+    schema,
+    baseURL,
+    linkRoot,
+    normalizedOptions,
+    formatter,
+    mdxDeclaration,
+    eventEmitter,
+  );
+
+  return printer;
 };

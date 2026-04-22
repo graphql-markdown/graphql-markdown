@@ -98,10 +98,10 @@ describe("generator", () => {
             printTypeOptions: {},
           },
         ),
-      ).rejects.toThrow("Cannot find module 'foobar'.");
+      ).rejects.toThrow("Unsupported printer module 'foobar'.");
     });
 
-    test("throws error if printer module initialization fails", async () => {
+    test("throws error if printer initialization fails", async () => {
       expect.assertions(1);
 
       jest
@@ -121,9 +121,7 @@ describe("generator", () => {
             printTypeOptions: {},
           },
         ),
-      ).rejects.toThrow(
-        "Cannot find module '@graphql-markdown/printer-legacy'",
-      );
+      ).rejects.toThrow("Init error");
     });
 
     test("passes mdxModule to printer initialization", async () => {
