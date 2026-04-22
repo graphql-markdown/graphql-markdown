@@ -35,7 +35,6 @@ import type {
   GroupByDirectiveOptions,
   Maybe,
   Options,
-  PackageName,
   Pointer,
   TypeDeprecatedOption,
   TypeDiffMethod,
@@ -180,7 +179,6 @@ export const DEFAULT_OPTIONS: Readonly<
   loaders: undefined,
   metatags: [] as Record<string, string>[],
   pretty: false as const,
-  printer: "@graphql-markdown/printer-legacy" as PackageName,
   printTypeOptions: {
     codeSection: true as const,
     deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
@@ -900,7 +898,6 @@ export const buildConfig = async (
     onlyDocDirective,
     outputDir: join(rootPath, baseURL),
     prettify,
-    printer: (config.printer ?? DEFAULT_OPTIONS.printer)!,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
     schemaLocation,
     skipDocDirective,

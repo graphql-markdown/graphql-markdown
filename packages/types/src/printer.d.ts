@@ -316,6 +316,21 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
   Pick<PrintTypeOptions, "basePath" | "deprecated" | "parentTypePrefix">;
 
 /**
+ * Options accepted by printer initialization.
+ */
+export type PrinterInitOptions = {
+  customDirectives?: Maybe<CustomDirectiveMap>;
+  deprecated?: Maybe<TypeDeprecatedOption>;
+  groups?: Maybe<SchemaEntitiesGroupMap>;
+  meta?: Maybe<MetaInfo>;
+  metatags?: Maybe<Record<string, string>[]>;
+  onlyDocDirectives?: Maybe<GraphQLDirective[]>;
+  printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
+  skipDocDirectives?: Maybe<GraphQLDirective[]>;
+  sectionHeaderId?: Maybe<boolean>;
+};
+
+/**
  * Abstract printer class that handles the generation of markdown documentation
  * from GraphQL schema components.
  * @public
@@ -334,9 +349,9 @@ export abstract class IPrinter {
    */
   static init(
     schema: Maybe<GraphQLSchema>,
-    baseURL: string,
-    linkRoot: string,
-    options: Maybe<PrinterOptions>,
+    baseURL?: Maybe<string>,
+    linkRoot?: Maybe<string>,
+    options?: PrinterInitOptions,
     mdxModule?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
     eventEmitter?: Maybe<PrinterEventEmitter>,
@@ -352,7 +367,7 @@ export abstract class IPrinter {
   static printHeader(
     id: string,
     title: string,
-    options: PrinterConfig & PrinterOptions,
+    options: PrintTypeOptions,
   ): string;
 
   /**
@@ -364,9 +379,9 @@ export abstract class IPrinter {
    */
   static printDescription(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
-    noText: string,
-  ): string;
+    options: PrintTypeOptions,
+    noText?: string,
+  ): MDXString | string;
 
   /**
    * Prints the code representation of a GraphQL type
@@ -376,7 +391,7 @@ export abstract class IPrinter {
    */
   static printCode(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
+    options: PrintTypeOptions,
   ): string;
 
   /**
@@ -387,8 +402,8 @@ export abstract class IPrinter {
    */
   static printCustomDirectives(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
-  ): MDXString;
+    options: PrintTypeOptions,
+  ): Maybe<PageSection>;
 
   /**
    * Prints custom tags associated with a type
@@ -398,8 +413,8 @@ export abstract class IPrinter {
    */
   static printCustomTags(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
-  ): MDXString;
+    options: PrintTypeOptions,
+  ): MDXString | string;
 
   /**
    * Prints metadata information for a type
@@ -409,8 +424,8 @@ export abstract class IPrinter {
    */
   static printTypeMetadata(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
-  ): MDXString;
+    options: PrintTypeOptions,
+  ): Maybe<PageSection | PageSection[]>;
 
   /**
    * Prints related types and their relationships
@@ -420,8 +435,8 @@ export abstract class IPrinter {
    */
   static printRelations(
     type: unknown,
-    options: PrinterConfig & PrinterOptions,
-  ): MDXString;
+    options: PrintTypeOptions,
+  ): MDXString | string;
 
   /**
    * Prints complete documentation for a GraphQL type
@@ -431,17 +446,11 @@ export abstract class IPrinter {
    * @returns Promise resolving to MDX string containing complete type documentation
    */
   static printType(
-    name: string,
+    name: Maybe<string>,
     type: unknown,
     options?: Maybe<Partial<PrintTypeOptions>>,
   ): Promise<Maybe<MDXString>>;
 }
-
-/**
- * Type representing the static side of IPrinter class
- * Used for type-safe access to static printer methods
- */
-export type Printer = typeof IPrinter;
 
 /**
  * Basic printer configuration

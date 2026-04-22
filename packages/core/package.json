@@ -75,6 +75,7 @@
     "@fastify/deepmerge": "^3.2.1",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
+    "@graphql-markdown/printer-legacy": "workspace:^",
     "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
   },
@@ -84,13 +85,9 @@
   "peerDependencies": {
     "@graphql-markdown/diff": "workspace:^",
     "@graphql-markdown/helpers": "workspace:^",
-    "@graphql-markdown/printer-legacy": "workspace:^",
     "graphql-config": "catalog:"
   },
   "peerDependenciesMeta": {
-    "@graphql-markdown/printer-legacy": {
-      "optional": true
-    },
     "@graphql-markdown/diff": {
       "optional": true
     },

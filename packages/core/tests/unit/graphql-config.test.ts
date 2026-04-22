@@ -377,7 +377,6 @@ describe("config", () => {
             graphqlConfig.extensions["graphql-markdown"].baseURL,
           ),
           prettify: DEFAULT_OPTIONS.pretty,
-          printer: DEFAULT_OPTIONS.printer,
           printTypeOptions: {
             ...DEFAULT_OPTIONS.printTypeOptions,
             hierarchy: DEFAULT_HIERARCHY,
