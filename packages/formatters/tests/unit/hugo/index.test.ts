@@ -1,4 +1,5 @@
 import {
+  beforeGenerateIndexMetafileHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -8,12 +9,13 @@ import {
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
+  mdxExtension,
 } from "../../../src/hugo";
 
 describe("formatMDXBadge", () => {
-  test("renders inline mark tag", () => {
+  test("renders inline span tag", () => {
     expect(formatMDXBadge({ text: "Required" })).toBe(
-      '<mark class="gqlmd-hugo-badge">Required</mark>',
+      '<span class="gqlmd-badge">Required</span>',
     );
   });
 });
@@ -64,7 +66,19 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bull entity with text", () => {
-    expect(formatMDXBullet("item")).toBe("&bull;&nbsp;item");
+    expect(formatMDXBullet("item")).toBe("&nbsp;&bull;&nbsp;item");
+  });
+});
+
+describe("mdxExtension", () => {
+  test("uses markdown extension", () => {
+    expect(mdxExtension).toBe(".md");
+  });
+});
+
+describe("beforeGenerateIndexMetafileHook", () => {
+  test("is exported", () => {
+    expect(beforeGenerateIndexMetafileHook).toBeDefined();
   });
 });
 
