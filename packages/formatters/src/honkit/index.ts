@@ -108,9 +108,17 @@ export const formatMDXFrontmatter = (
   );
 
   for (const line of formatted ?? []) {
-    const match = /^\s*([^:#\n]+)\s*:\s*(.*)\s*$/.exec(line);
-    if (!match) continue;
-    entries.set(match[1].trim(), match[2].trim());
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const separatorIndex = trimmed.indexOf(":");
+    if (separatorIndex <= 0) continue;
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    if (!key || key.includes("#")) continue;
+
+    const value = trimmed.slice(separatorIndex + 1).trim();
+    entries.set(key, value);
   }
 
   const lines = Array.from(entries.entries()).map(([k, v]) => {
@@ -251,14 +259,25 @@ interface TocEntry {
   anchor: string;
 }
 
+const escapeHtml = (value: string): string => {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+};
+
 const collectTocEntries = (section: unknown, entries: TocEntry[]): void => {
   if (!section) return;
 
   if (typeof section === "string") {
-    const re = /^###\s+(.+)$/gm;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(section)) !== null) {
-      const raw = m[1].replace(/<[^>]+>/g, "").trim();
+    for (const line of section.split(/\r?\n/)) {
+      if (!line.startsWith("###")) continue;
+      const title = line.slice(3).trim();
+      if (!title) continue;
+
+      const raw = title;
       if (!raw) continue;
       entries.push({
         text: raw,
@@ -279,7 +298,7 @@ const collectTocEntries = (section: unknown, entries: TocEntry[]): void => {
   if (typeof section === "object") {
     const s = section as Record<string, unknown>;
     if (typeof s.title === "string" && s.title.trim()) {
-      const raw = s.title.replace(/<[^>]+>/g, "").trim();
+      const raw = s.title.trim();
       if (raw) {
         entries.push({
           text: raw,
@@ -304,7 +323,7 @@ const buildPageToc = (
 
   const links = items
     .map(({ text, anchor }) => {
-      return `<li><a href="#${anchor}">${text}</a></li>`;
+      return `<li><a href="#${escapeHtml(anchor)}">${escapeHtml(text)}</a></li>`;
     })
     .join("");
 
@@ -341,9 +360,14 @@ export const beforeComposePageTypeHook = async (event: {
   const badge = makeKindBadge(kind);
   const header = sections.header as Record<string, unknown> | undefined;
   if (header && typeof header.content === "string") {
-    header.content = header.content.replace(/^(#\s+.+)$/m, (_, h1) => {
-      return `${h1} ${badge}`;
+    const lines = header.content.split(/\r?\n/);
+    const h1Index = lines.findIndex((line) => {
+      return line.startsWith("# ");
     });
+    if (h1Index >= 0) {
+      lines[h1Index] = `${lines[h1Index]} ${badge}`;
+      header.content = lines.join("\n");
+    }
   }
 
   const toc = buildPageToc(sections, event.output);
