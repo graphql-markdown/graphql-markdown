@@ -1,4 +1,5 @@
 import {
+  afterRenderTypeEntitiesHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -8,7 +9,19 @@ import {
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
+  mdxExtension,
 } from "../../../src/mkdocs";
+
+import * as Utils from "@graphql-markdown/utils";
+
+jest.mock("@graphql-markdown/utils", () => {
+  const actual = jest.requireActual("@graphql-markdown/utils");
+  return {
+    ...actual,
+    readFile: jest.fn(),
+    saveFile: jest.fn(),
+  };
+});
 
 describe("formatMDXBadge", () => {
   test("renders inline mark tag", () => {
@@ -55,19 +68,20 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bull entity with text", () => {
-    expect(formatMDXBullet("item")).toBe("&bull;&nbsp;item");
+    expect(formatMDXBullet("item")).toBe("&nbsp;&bull;&nbsp;item");
   });
 
   test("renders bull entity with empty default", () => {
-    expect(formatMDXBullet()).toBe("&bull;&nbsp;");
+    expect(formatMDXBullet()).toBe("&nbsp;&bull;&nbsp;");
   });
 });
 
 describe("formatMDXDetails", () => {
-  test("renders MkDocs Material collapsible admonition", () => {
+  test("renders HTML details block", () => {
     const result = formatMDXDetails({ dataOpen: "Show", dataClose: "Hide" });
-    expect(result).toContain('??? note "Show"');
-    expect(result).toContain("*Hide*");
+    expect(result).toContain("<details>");
+    expect(result).toContain("<summary>Show</summary>");
+    expect(result).toContain("<em>Hide</em>");
   });
 });
 
@@ -76,9 +90,20 @@ describe("formatMDXFrontmatter", () => {
     expect(formatMDXFrontmatter(undefined, null)).toBe("");
   });
 
-  test("wraps lines with --- delimiters", () => {
+  test("renders heading from formatted title", () => {
     const result = formatMDXFrontmatter(undefined, ["title: Test", "id: foo"]);
-    expect(result).toBe("---\ntitle: Test\nid: foo\n---");
+    expect(result).toBe("# Test");
+  });
+
+  test("falls back to props title", () => {
+    const result = formatMDXFrontmatter({ title: "Fallback" }, []);
+    expect(result).toBe("# Fallback");
+  });
+});
+
+describe("mdxExtension", () => {
+  test("uses markdown extension", () => {
+    expect(mdxExtension).toBe(".md");
   });
 });
 
@@ -118,5 +143,54 @@ describe("createMDXFormatter", () => {
     expect(formatter).toHaveProperty("formatMDXLink");
     expect(formatter).toHaveProperty("formatMDXNameEntity");
     expect(formatter).toHaveProperty("formatMDXSpecifiedByLink");
+  });
+});
+
+describe("afterRenderTypeEntitiesHook", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("rewrites baseURL absolute links to relative markdown links", async () => {
+    const readFileMock = jest.mocked(Utils.readFile);
+    const saveFileMock = jest.mocked(Utils.saveFile);
+
+    readFileMock.mockResolvedValue(
+      "See [Book](/graphql/types/objects/book) and [ID](/graphql/types/scalars/id#value)",
+    );
+    saveFileMock.mockResolvedValue(undefined);
+
+    await afterRenderTypeEntitiesHook({
+      data: {
+        baseURL: "graphql",
+        filePath: "/workspace/docs/graphql/operations/queries/book-by-id.md",
+        outputDir: "/workspace/docs/graphql",
+      },
+    });
+
+    expect(saveFileMock).toHaveBeenCalledWith(
+      "/workspace/docs/graphql/operations/queries/book-by-id.md",
+      "See [Book](../../types/objects/book.md) and [ID](../../types/scalars/id.md#value)",
+    );
+  });
+
+  test("leaves non-baseURL absolute links unchanged", async () => {
+    const readFileMock = jest.mocked(Utils.readFile);
+    const saveFileMock = jest.mocked(Utils.saveFile);
+
+    readFileMock.mockResolvedValue(
+      "See [Site](/other/path) and [Spec](https://example.com)",
+    );
+    saveFileMock.mockResolvedValue(undefined);
+
+    await afterRenderTypeEntitiesHook({
+      data: {
+        baseURL: "graphql",
+        filePath: "/workspace/docs/graphql/types/objects/book.md",
+        outputDir: "/workspace/docs",
+      },
+    });
+
+    expect(saveFileMock).not.toHaveBeenCalled();
   });
 });
