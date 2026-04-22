@@ -17,7 +17,7 @@ const HowItWorksSteps = [
     title: "Configure",
     description: (
       <>
-        Point it at your schema — SDL file, introspection endpoint, or GraphQL config.
+        Point it at your schema — SDL file, introspection endpoint, GraphQL config, or code-first TS/JS schema.
       </>
     ),
   },
@@ -39,7 +39,7 @@ const FeatureList = [
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
-        Supports SDL files, introspection endpoints, and GraphQL config. Type
+        Supports SDL files, introspection endpoints, GraphQL config, and code-first TS/JS schemas. Type
         cross-linking, deprecation notices, and custom directive badges —
         included out of the box.{" "}
         <Link to="/docs/get-started" className={styles.inlineCta}>

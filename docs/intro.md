@@ -31,7 +31,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Full cross-linking between types with visual relationship hierarchy
 - MDX output fully customizable using your own components
 - Extensible lifecycle hooks and events system
-- Any schema loader compatible with `@graphql-tools/load` (local files, remote endpoints)
+- Any schema loader compatible with `@graphql-tools/load` — SDL files, remote endpoints, or code-first TS/JS schemas
 - Group types into categories using directives
 - Namespaced operations (nested query/mutation/subscription objects)
 - GraphQL config support

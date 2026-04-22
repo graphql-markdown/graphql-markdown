@@ -99,3 +99,31 @@ plugins: [
 See our [Troubleshooting section](/docs/troubleshooting) in case of error ['UrlLoader' does not exist in type 'LoaderOption'.ts](/docs/troubleshooting#urlloader-does-not-exist-in-type-loaderoptionts).
 
 :::
+
+## Code-first schema (TypeScript/JavaScript)
+
+For teams using a code-first approach, use `@graphql-tools/code-file-loader` to load a schema exported directly from a TypeScript or JavaScript file:
+
+```shell title="shell"
+npm install @graphql-tools/code-file-loader
+```
+
+Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
+
+```js title="docusaurus.config.js"
+plugins: [
+  [
+    "@graphql-markdown/docusaurus",
+    /** @type {import('@graphql-markdown/types').ConfigOptions} */
+    {
+      // ... other options
+      schema: "./src/**/graphql/*.ts",
+      loaders: {
+        CodeFileLoader: "@graphql-tools/code-file-loader"
+      }
+    },
+  ],
+],
+```
+
+The schema file must export a `GraphQLSchema` instance as its default or named export. This works with any code-first library that produces a `GraphQLSchema` — including `makeExecutableSchema` (graphql-tools), [Pothos](https://pothos-graphql.dev/), [TypeGraphQL](https://typegraphql.com/), and [NestJS](https://docs.nestjs.com/graphql/quick-start).
