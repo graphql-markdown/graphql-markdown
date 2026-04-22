@@ -44,6 +44,55 @@ describe("generator", () => {
       );
     });
 
+    test("normalizes nullable printer options before initialization", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        {
+          customDirectives: null,
+          deprecated: null,
+          groups: null,
+          meta: null,
+          metatags: null,
+          onlyDocDirectives: [],
+          printTypeOptions: {
+            deprecated: "group",
+          },
+          skipDocDirectives: [],
+          sectionHeaderId: false,
+        },
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        {
+          customDirectives: undefined,
+          deprecated: undefined,
+          groups: undefined,
+          meta: undefined,
+          metatags: undefined,
+          onlyDocDirectives: [],
+          printTypeOptions: {
+            deprecated: "group",
+          },
+          skipDocDirectives: [],
+          sectionHeaderId: false,
+        },
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
     test("throws exception if no printer config set", async () => {
       expect.assertions(1);
 
