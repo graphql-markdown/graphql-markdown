@@ -322,6 +322,28 @@ describe("Printer", () => {
       expect(Printer.options!.sectionHeaderId).toBe(false);
     });
 
+    test.each([
+      ["entity", { entity: {} }],
+      ["flat", { flat: {} }],
+      ["api", { api: {} }],
+      ["unknown", DEFAULT_OPTIONS.hierarchy],
+    ])(
+      "normalizes hierarchy value %s during initialization",
+      async (hierarchy, expectedHierarchy) => {
+        expect.hasAssertions();
+
+        Printer.options = undefined;
+
+        await Printer.init(undefined, undefined, undefined, {
+          printTypeOptions: {
+            hierarchy: hierarchy as "api",
+          },
+        });
+
+        expect(Printer.options!.hierarchy).toEqual(expectedHierarchy);
+      },
+    );
+
     test("uses top-level deprecated option when printTypeOptions.deprecated is unset", async () => {
       expect.hasAssertions();
 

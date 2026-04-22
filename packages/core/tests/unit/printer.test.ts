@@ -124,6 +124,31 @@ describe("generator", () => {
       );
     });
 
+    test("passes undefined to initialization when printer options are null", async () => {
+      expect.assertions(1);
+
+      const spy = jest.spyOn(Printer, "init");
+
+      await getPrinter(
+        {
+          schema: new GraphQLSchema({}),
+          baseURL: "/",
+          linkRoot: "root",
+        },
+        null,
+      );
+
+      expect(spy).toHaveBeenCalledWith(
+        expect.any(GraphQLSchema),
+        "/",
+        "root",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
     test("passes string hierarchy through to initialization", async () => {
       expect.assertions(1);
 
