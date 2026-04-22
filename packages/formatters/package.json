@@ -95,6 +95,7 @@
     "ts:check": "tsgo --noEmit",
     "test": "jest",
     "test:unit": "jest --passWithNoTests --testPathPatterns=tests\\/unit",
+    "test:integration": "jest --passWithNoTests --testPathPatterns=tests\/integration",
     "test:ci": "jest --passWithNoTests --ci --silent --randomize --runInBand"
   },
   "dependencies": {
