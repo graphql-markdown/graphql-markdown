@@ -38,11 +38,12 @@ jobs:
             "core",
             "diff",
             "docusaurus",
-            "printer-legacy",
-            "utils",
+            "formatters",
+            "graphql",
             "helpers",
             "logger",
-            "graphql",
+            "printer-legacy",
+            "utils",
           ]
 
     steps:
