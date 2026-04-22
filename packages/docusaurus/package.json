@@ -75,6 +75,7 @@
   },
   "dependencies": {
     "@graphql-markdown/cli": "workspace:^",
+    "@graphql-markdown/formatters": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^",
