@@ -117,6 +117,7 @@
       "dependencies": {
         "@docusaurus/utils": "catalog:docusaurus",
         "@graphql-markdown/cli": "workspace:^",
+        "@graphql-markdown/formatters": "workspace:^",
         "@graphql-markdown/logger": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
@@ -127,6 +128,17 @@
       },
       "peerDependencies": {
         "@docusaurus/logger": "catalog:docusaurus",
+      },
+    },
+    "packages/formatters": {
+      "name": "@graphql-markdown/formatters",
+      "version": "1.0.0",
+      "dependencies": {
+        "@graphql-markdown/types": "workspace:^",
+        "@graphql-markdown/utils": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
       },
     },
     "packages/graphql": {
@@ -396,6 +408,8 @@
     "@graphql-markdown/diff": ["@graphql-markdown/diff@workspace:packages/diff"],
 
     "@graphql-markdown/docusaurus": ["@graphql-markdown/docusaurus@workspace:packages/docusaurus"],
+
+    "@graphql-markdown/formatters": ["@graphql-markdown/formatters@workspace:packages/formatters"],
 
     "@graphql-markdown/graphql": ["@graphql-markdown/graphql@workspace:packages/graphql"],
 

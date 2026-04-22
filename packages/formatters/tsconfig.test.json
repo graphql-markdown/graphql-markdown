@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+    "rootDir": "./",
+
+    "module": "commonjs",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
+    "noEmit": true,
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
+
+    "isolatedModules": true,
+
+    "types": ["node", "@types/jest"],
+
+    "paths": {
+      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/*": ["../*/src/index.ts"]
+    }
+  },
+
+  "include": ["tests", "src"],
+  "exclude": ["**/data", "*.js", "**/dist"]
+}

@@ -8,7 +8,7 @@ import {
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../../../src/mdx";
+} from "../../../src/docusaurus";
 
 describe("formatMDXBadge", () => {
   test("returns a formatted MDX badge string", () => {
@@ -144,7 +144,6 @@ describe("createMDXFormatter", () => {
       { text: "content", title: "Title", type: "warning" },
       undefined,
     );
-    // Docusaurus v2 uses 'caution' instead of 'warning'
     expect(result).toContain("caution");
   });
 
