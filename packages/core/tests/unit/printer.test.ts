@@ -1,6 +1,6 @@
 import { GraphQLSchema } from "graphql/type";
 
-import type { Formatter, PackageName } from "@graphql-markdown/types";
+import type { Formatter } from "@graphql-markdown/types";
 
 import { getPrinter } from "../../src/printer";
 
@@ -25,7 +25,6 @@ describe("generator", () => {
         printTypeOptions: {},
       };
       const printer = await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         printerConfig,
         printerOptions,
         undefined,
@@ -45,60 +44,15 @@ describe("generator", () => {
       );
     });
 
-    test.each([[undefined], [null]])(
-      "throws exception if printer module is %s",
-      async (value) => {
-        expect.assertions(1);
-
-        await expect(
-          getPrinter(
-            value,
-            {
-              schema: new GraphQLSchema({}),
-              baseURL: "/",
-              linkRoot: "root",
-            },
-            {
-              groups: {},
-              printTypeOptions: {},
-            },
-          ),
-        ).rejects.toThrow("Invalid printer module name.");
-      },
-    );
-
     test("throws exception if no printer config set", async () => {
       expect.assertions(1);
 
       await expect(
-        getPrinter(
-          "@graphql-markdown/printer-legacy" as PackageName,
-          undefined,
-          {
-            groups: {},
-            printTypeOptions: {},
-          },
-        ),
+        getPrinter(undefined, {
+          groups: {},
+          printTypeOptions: {},
+        }),
       ).rejects.toThrow("Invalid printer config.");
-    });
-
-    test("throws exception if no printer module not found", async () => {
-      expect.assertions(1);
-
-      await expect(
-        getPrinter(
-          "foobar" as PackageName,
-          {
-            schema: new GraphQLSchema({}),
-            baseURL: "/",
-            linkRoot: "root",
-          },
-          {
-            groups: {},
-            printTypeOptions: {},
-          },
-        ),
-      ).rejects.toThrow("Unsupported printer module 'foobar'.");
     });
 
     test("throws error if printer initialization fails", async () => {
@@ -110,7 +64,6 @@ describe("generator", () => {
 
       await expect(
         getPrinter(
-          "@graphql-markdown/printer-legacy" as PackageName,
           {
             schema: new GraphQLSchema({}),
             baseURL: "/",
@@ -131,7 +84,6 @@ describe("generator", () => {
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         {
           schema: new GraphQLSchema({}),
           baseURL: "/",
@@ -162,7 +114,6 @@ describe("generator", () => {
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
-        "@graphql-markdown/printer-legacy" as PackageName,
         {
           schema: new GraphQLSchema({}),
           baseURL: "/",

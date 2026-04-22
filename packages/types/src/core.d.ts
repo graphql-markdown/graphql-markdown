@@ -253,8 +253,6 @@ export interface ConfigOptions {
   onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
   /** Use prettier to make the output pretty */
   pretty?: Maybe<boolean>;
-  /** Printer module to use for generating output */
-  printer?: Maybe<PackageName>;
   /** Options for printing GraphQL types */
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   /** Root path for the project */
@@ -376,7 +374,6 @@ export type Options = Omit<
       | "docOptions"
       | "metatags"
       | "onlyDocDirective"
-      | "printer"
       | "printTypeOptions"
       | "skipDocDirective"
     > & {

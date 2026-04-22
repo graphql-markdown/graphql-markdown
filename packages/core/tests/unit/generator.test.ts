@@ -73,7 +73,6 @@ describe("generator", () => {
       metatags: [],
       onlyDocDirective: [],
       prettify: true,
-      printer: "printer module" as PackageName,
       printTypeOptions: {
         codeSection: true,
         deprecated: "skip",
@@ -157,7 +156,6 @@ describe("generator", () => {
         await generateDocFromSchema({ ...options, mdxParser });
 
         expect(getPrinterSpy).toHaveBeenCalledWith(
-          options.printer,
           {
             baseURL: options.baseURL,
             linkRoot: options.linkRoot,
@@ -404,7 +402,6 @@ describe("generator", () => {
 
       // Verify object literals are passed correctly with all expected properties
       expect(getPrinterSpy).toHaveBeenCalledWith(
-        expect.any(String),
         expect.objectContaining({
           baseURL: options.baseURL,
           linkRoot: options.linkRoot,
@@ -425,13 +422,13 @@ describe("generator", () => {
       );
 
       // Verify that the meta object contains expected properties
-      expect(getPrinterSpy.mock.calls[0][2]?.meta).toEqual({
+      expect(getPrinterSpy.mock.calls[0][1]?.meta).toEqual({
         generatorFrameworkName: undefined,
         generatorFrameworkVersion: undefined,
       });
 
       // Verify printTypeOptions are passed intact
-      expect(getPrinterSpy.mock.calls[0][2]?.printTypeOptions).toEqual(
+      expect(getPrinterSpy.mock.calls[0][1]?.printTypeOptions).toEqual(
         options.printTypeOptions,
       );
     });
@@ -472,7 +469,6 @@ describe("generator", () => {
       });
 
       expect(getPrinterSpy).toHaveBeenCalledWith(
-        expect.any(String),
         expect.any(Object),
         expect.objectContaining({
           sectionHeaderId: false,

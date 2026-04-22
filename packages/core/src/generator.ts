@@ -349,7 +349,6 @@ export const generateDocFromSchema = async ({
   onlyDocDirective,
   outputDir,
   prettify,
-  printer: printerModule,
   printTypeOptions,
   schemaLocation,
   skipDocDirective,
@@ -433,9 +432,6 @@ export const generateDocFromSchema = async ({
   );
 
   const printer = await getPrinter(
-    // module mandatory
-    printerModule,
-
     // config mandatory
     {
       baseURL,

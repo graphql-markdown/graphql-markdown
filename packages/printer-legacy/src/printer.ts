@@ -9,24 +9,19 @@
  */
 
 import type {
-  CustomDirectiveMap,
   DeprecatedPrintTypeOptions,
   Formatter,
-  GraphQLDirective,
   GraphQLField,
   GraphQLSchema,
   IPrinter,
   Maybe,
   MDXString,
-  MetaInfo,
   PageHeader,
   PageSection,
   PageSections,
-  PrinterConfigPrintTypeOptions,
   PrinterEventEmitter,
+  PrinterInitOptions,
   PrintTypeOptions,
-  SchemaEntitiesGroupMap,
-  TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
 /**
@@ -128,13 +123,6 @@ const DEFAULT_INIT_OPTIONS = {
   groups: undefined,
   sectionHeaderId: true,
 };
-
-type InitPrintTypeOptions = DeprecatedPrintTypeOptions &
-  Omit<PrinterConfigPrintTypeOptions, "exampleSection"> & {
-    exampleSection?:
-      | DeprecatedPrintTypeOptions["exampleSection"]
-      | PrinterConfigPrintTypeOptions["exampleSection"];
-  };
 
 /**
  * The Printer class implements the core functionality for generating Markdown documentation
@@ -248,17 +236,7 @@ export class Printer implements IPrinter {
       printTypeOptions,
       skipDocDirectives,
       sectionHeaderId,
-    }: {
-      customDirectives?: CustomDirectiveMap;
-      deprecated?: TypeDeprecatedOption;
-      groups?: SchemaEntitiesGroupMap;
-      meta?: Maybe<MetaInfo>;
-      metatags?: Record<string, string>[];
-      onlyDocDirectives?: GraphQLDirective[];
-      printTypeOptions?: InitPrintTypeOptions;
-      skipDocDirectives?: GraphQLDirective[];
-      sectionHeaderId?: boolean;
-    } = DEFAULT_INIT_OPTIONS,
+    }: PrinterInitOptions = DEFAULT_INIT_OPTIONS,
     formatter?: Partial<Formatter>,
     mdxDeclaration?: Maybe<string>,
     eventEmitter?: Maybe<PrinterEventEmitter>,

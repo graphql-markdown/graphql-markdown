@@ -4,7 +4,7 @@ import type {
   CategorySortFn,
   Maybe,
   MDXString,
-  Printer,
+  IPrinter,
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
@@ -340,8 +340,7 @@ export class Renderer {
   readonly options: Maybe<RendererDocOptions>;
   readonly mdxExtension: string;
   // mdxModuleIndexFileSupport: boolean;
-
-  private readonly printer: Printer;
+  private readonly printer: typeof IPrinter;
   private readonly rootLevelPositionManager: CategoryPositionManager;
   private readonly categoryPositionManager: CategoryPositionManager;
 
@@ -358,7 +357,7 @@ export class Renderer {
    * @example
    */
   constructor(
-    printer: Printer,
+    printer: typeof IPrinter,
     outputDir: string,
     baseURL: string,
     group: Maybe<SchemaEntitiesGroupMap>,
@@ -1033,7 +1032,7 @@ export class Renderer {
  * ```
  */
 export const getRenderer = async (
-  printer: Printer,
+  printer: typeof IPrinter,
   outputDir: string,
   baseURL: string,
   group: Maybe<SchemaEntitiesGroupMap>,

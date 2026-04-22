@@ -11,16 +11,35 @@
  */
 import type {
   Formatter,
+  IPrinter,
   Maybe,
-  PackageName,
-  Printer,
   PrinterConfig,
   PrinterEventEmitter,
+  PrinterInitOptions,
   PrinterOptions,
 } from "@graphql-markdown/types";
-import { Printer as LegacyPrinter } from "@graphql-markdown/printer-legacy";
+import { Printer } from "@graphql-markdown/printer-legacy";
 
-const PRINTER_LEGACY_PACKAGE = "@graphql-markdown/printer-legacy";
+const normalizePrinterOptions = (
+  options?: Maybe<PrinterOptions>,
+): PrinterInitOptions | undefined => {
+  if (!options) {
+    return undefined;
+  }
+
+  return {
+    customDirectives: options.customDirectives ?? undefined,
+    deprecated: options.deprecated ?? undefined,
+    groups: options.groups ?? undefined,
+    meta: options.meta ?? undefined,
+    metatags: options.metatags ?? undefined,
+    onlyDocDirectives: options.onlyDocDirectives ?? undefined,
+    printTypeOptions:
+      options.printTypeOptions as NonNullable<PrinterInitOptions>["printTypeOptions"],
+    skipDocDirectives: options.skipDocDirectives ?? undefined,
+    sectionHeaderId: options.sectionHeaderId,
+  };
+};
 
 /**
  * Loads and initializes a printer module for GraphQL schema documentation.
@@ -29,16 +48,13 @@ const PRINTER_LEGACY_PACKAGE = "@graphql-markdown/printer-legacy";
  * with the provided configuration and options. The printer is responsible for rendering
  * GraphQL schema documentation in the desired format.
  *
- * @param printerModule - The name/path of the printer module to load
  * @param config - Configuration for the printer including schema, baseURL, and linkRoot
  * @param options - Additional options for customizing the printer's behavior
  * @param formatter - Optional formatter functions for customizing output format (e.g., MDX)
  *
  * @returns A promise that resolves to the initialized Printer instance
  *
- * @throws Will throw an error if printerModule is not a string
  * @throws Will throw an error if config is not provided
- * @throws Will throw an error if printerModule is not supported
  *
  * @example
  * ```typescript
@@ -52,7 +68,6 @@ const PRINTER_LEGACY_PACKAGE = "@graphql-markdown/printer-legacy";
  * `);
  *
  * const printer = await getPrinter(
- *   '@graphql-markdown/printer-legacy',
  *   {
  *     schema,
  *     baseURL: '/docs',
@@ -67,30 +82,20 @@ const PRINTER_LEGACY_PACKAGE = "@graphql-markdown/printer-legacy";
  * ```
  */
 export const getPrinter = async (
-  printerModule?: Maybe<PackageName>,
   config?: Maybe<PrinterConfig>,
   options?: Maybe<PrinterOptions>,
   formatter?: Partial<Formatter>,
   mdxDeclaration?: Maybe<string>,
   eventEmitter?: Maybe<PrinterEventEmitter>,
-): Promise<Printer> => {
-  if (typeof printerModule !== "string") {
-    throw new TypeError("Invalid printer module name.");
-  }
-
+): Promise<typeof IPrinter> => {
   if (!config) {
     throw new Error("Invalid printer config.");
   }
 
-  if (printerModule !== PRINTER_LEGACY_PACKAGE) {
-    throw new Error(`Unsupported printer module '${printerModule}'.`);
-  }
-
-  const printer = LegacyPrinter as unknown as Printer;
-  const normalizedOptions = options ?? undefined;
+  const normalizedOptions = normalizePrinterOptions(options);
 
   const { schema, baseURL, linkRoot } = config;
-  await printer.init(
+  await Printer.init(
     schema,
     baseURL,
     linkRoot,
@@ -100,5 +105,5 @@ export const getPrinter = async (
     eventEmitter,
   );
 
-  return printer;
+  return Printer;
 };
