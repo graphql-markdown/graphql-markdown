@@ -62,6 +62,35 @@ const quoteLines = (text: string): string => {
 };
 
 /**
+ * Extracts the title value from a YAML frontmatter line in linear time.
+ * Accepts values with or without surrounding single/double quotes.
+ */
+const extractFrontmatterTitle = (line: string): string => {
+  const trimmed = line.trim();
+  const titlePrefix = "title:";
+
+  if (!trimmed.startsWith(titlePrefix)) {
+    return "";
+  }
+
+  const rawValue = trimmed.slice(titlePrefix.length).trim();
+  if (rawValue.length === 0) {
+    return "";
+  }
+
+  const firstChar = rawValue[0];
+  const lastChar = rawValue[rawValue.length - 1];
+  const isWrappedInMatchingQuotes =
+    rawValue.length >= 2 &&
+    ((firstChar === '"' && lastChar === '"') ||
+      (firstChar === "'" && lastChar === "'"));
+
+  return isWrappedInMatchingQuotes
+    ? rawValue.slice(1, -1).trim()
+    : rawValue.trim();
+};
+
+/**
  * Formats a badge as a styled span element.
  * @param badge - Badge data containing the display text
  * @returns HTML `<span>` string with the `gqlmd-badge` class
@@ -132,12 +161,7 @@ export const formatMDXFrontmatter = (
   const titleLine = lines.find((line) => {
     return line.trimStart().startsWith("title:");
   });
-  const title = titleLine
-    ? titleLine
-        .replace(/^\s*title:\s*["']?(.+?)["']?\s*$/, "$1")
-        .replace(/\r?\n/g, " ")
-        .trim()
-    : "";
+  const title = titleLine ? extractFrontmatterTitle(titleLine) : "";
 
   const frontmatter = [
     FRONT_MATTER_DELIMITER,

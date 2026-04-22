@@ -99,6 +99,16 @@ describe("formatMDXFrontmatter", () => {
     const result = formatMDXFrontmatter({ title: "Fallback" }, []);
     expect(result).toBe("# Fallback");
   });
+
+  test("renders heading from single-quoted title", () => {
+    const result = formatMDXFrontmatter(undefined, ["title: 'My Title'"]);
+    expect(result).toBe("# My Title");
+  });
+
+  test("renders heading from title with extra spacing", () => {
+    const result = formatMDXFrontmatter(undefined, ["  title:   Test Value  "]);
+    expect(result).toBe("# Test Value");
+  });
 });
 
 describe("mdxExtension", () => {

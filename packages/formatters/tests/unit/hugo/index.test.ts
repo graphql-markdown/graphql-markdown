@@ -101,6 +101,16 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toContain("---");
     expect(result).toContain("title: Test");
   });
+
+  test("renders heading from single-quoted title", () => {
+    const result = formatMDXFrontmatter(undefined, ["title: 'My Title'"]);
+    expect(result).toContain("# My Title");
+  });
+
+  test("renders heading from title with extra spacing", () => {
+    const result = formatMDXFrontmatter(undefined, ["  title:   Test Value  "]);
+    expect(result).toContain("# Test Value");
+  });
 });
 
 describe("formatMDXLink", () => {

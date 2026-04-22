@@ -38,6 +38,31 @@ const ADMONITION_TYPE_MAP: Record<string, string> = {
   success: "success",
 };
 
+const parseFrontmatterTitleLine = (line: string): string => {
+  const trimmed = line.trim();
+  const titlePrefix = "title:";
+
+  if (!trimmed.startsWith(titlePrefix)) {
+    return "";
+  }
+
+  const rawValue = trimmed.slice(titlePrefix.length).trim();
+  if (rawValue.length === 0) {
+    return "";
+  }
+
+  const firstChar = rawValue[0];
+  const lastChar = rawValue[rawValue.length - 1];
+  const isWrappedInMatchingQuotes =
+    rawValue.length >= 2 &&
+    ((firstChar === '"' && lastChar === '"') ||
+      (firstChar === "'" && lastChar === "'"));
+
+  return isWrappedInMatchingQuotes
+    ? rawValue.slice(1, -1).trim()
+    : rawValue.trim();
+};
+
 const extractTitle = (
   props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
@@ -57,9 +82,7 @@ const extractTitle = (
     }
   }
 
-  return titleLine
-    ? titleLine.replace(/^\s*title:\s*["']?(.+?)["']?\s*$/, "$1").trim()
-    : titleFromProps;
+  return titleLine ? parseFrontmatterTitleLine(titleLine) : titleFromProps;
 };
 
 const rewriteInternalLinks = (
