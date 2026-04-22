@@ -17,6 +17,28 @@ This guide provides examples for integrating GraphQL-Markdown with popular docum
 
 Most documentation frameworks allow you to generate documentation during the build process. You can integrate GraphQL-Markdown by creating a script that runs before your documentation build.
 
+## Use the Formatter Presets Package
+
+GraphQL-Markdown now provides framework formatter presets in a dedicated package:
+
+```bash
+npm install @graphql-markdown/formatters
+```
+
+You can use these presets directly as your `mdxParser` value:
+
+| Framework | `mdxParser` value |
+| --------- | ----------------- |
+| Docusaurus | `@graphql-markdown/formatters/docusaurus` |
+| Astro Starlight | `@graphql-markdown/formatters/starlight` |
+| Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs` |
+| Vocs | `@graphql-markdown/formatters/vocs` |
+| HonKit | `@graphql-markdown/formatters/honkit` |
+| Hugo | `@graphql-markdown/formatters/hugo` |
+| MkDocs | `@graphql-markdown/formatters/mkdocs` |
+| DocFX | `@graphql-markdown/formatters/docfx` |
+| mdBook | `@graphql-markdown/formatters/mdbook` |
+
 ### Basic Integration Example
 
 ```js
@@ -96,7 +118,7 @@ The official [Docusaurus](https://docusaurus.io/) integration is available as a 
 
 :::info[Docusaurus default details output]
 
-With the default `@graphql-markdown/docusaurus/mdx` parser, collapsible sections are emitted as native `<details>/<summary>` markup.
+With the `@graphql-markdown/formatters/docusaurus` parser, collapsible sections are emitted as native `<details>/<summary>` markup.
 Custom summary labels are rendered with open/closed spans and toggled with CSS (`data-collapsed` and `[open]` selectors), so no custom `<Details>` React component is required.
 
 :::
@@ -121,44 +143,37 @@ module.exports = {
 
 For more details, check the [@graphql-markdown/docusaurus](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/docusaurus) package.
 
+If you need to override formatting behavior, set `mdxParser` to your own module path and export only the formatter functions you want to customize.
+
 ### Astro Starlight
 
-For [Astro Starlight](https://starlight.astro.build/) integration, create a custom MDX module:
+For [Astro Starlight](https://starlight.astro.build/) integration, use the built-in Starlight formatter preset:
+
+```js
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
+
+await runGraphQLMarkdown({
+  schema: "./schema.graphql",
+  rootPath: "./src/content/docs",
+  baseURL: "api",
+  mdxParser: "@graphql-markdown/formatters/starlight",
+});
+```
+
+If you need custom rendering on top of the preset, create a custom module and spread the preset exports:
 
 ```js
 // src/modules/astro-mdx.cjs
+const StarlightMDX = require("@graphql-markdown/formatters/starlight");
 
-/**
- * Import statement prepended to every generated MDX file.
- */
-const mdxDeclaration = `import { Aside, Badge } from '@astrojs/starlight/components';`;
-
-/**
- * Optional: Custom file extension for generated files.
- */
-const mdxExtension = ".mdx";
-
-/**
- * Format badge elements (e.g., "deprecated", "required")
- */
 const formatMDXBadge = ({ text, classname }) => {
-  const variant = classname === "DEPRECATED" ? 'caution' : 'default';
-  return `<Badge variant="${variant}" text="${text}"/>`;
-};
-
-/**
- * Format admonition/callout blocks (warnings, notes, tips)
- */
-const formatMDXAdmonition = ({ text, title, type }, meta) => {
-  const asideType = type === "warning" ? "caution" : "note";
-  return `<Aside type="${asideType}" title="${title}">${text}</Aside>`;
+  const variant = classname === "DEPRECATED" ? "caution" : "default";
+  return `<mark data-variant="${variant}">${text}</mark>`;
 };
 
 module.exports = {
-  mdxDeclaration,
-  mdxExtension,
+  ...StarlightMDX,
   formatMDXBadge,
-  formatMDXAdmonition,
 };
 ```
 
@@ -166,81 +181,34 @@ See complete implementation: [demo-astro-starlight](https://github.com/graphql-m
 
 ### Next.js with Fumadocs
 
-For Next.js using [Fumadocs](https://www.fumadocs.dev/), create a custom MDX module:
+For Next.js using [Fumadocs](https://www.fumadocs.dev/), use the built-in Fumadocs formatter preset:
 
 ```js
-// lib/fumadocs-mdx.cjs
-const mdxDeclaration = `
-import { Callout } from 'fumadocs-ui/components/callout';
-import Chip from '@mui/material/Chip';
-`;
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
 
-/**
- * Format badge elements
- */
-const formatMDXBadge = ({ text, classname }) => {
-  const color = classname === "DEPRECATED" ? 'warning' : 'info';
-  return `<Chip color="${color}" label="${text}" size="small" variant="outlined"/>`;
-};
-
-/**
- * Format admonition/callout blocks
- */
-const formatMDXAdmonition = ({ text, title, type }, meta) => {
-  const calloutType = type === "warning" ? "warn" : "info";
-  return `<Callout type="${calloutType}" title="${title}">${text}</Callout>`;
-};
-
-module.exports = {
-  mdxDeclaration,
-  formatMDXBadge,
-  formatMDXAdmonition,
-};
+await runGraphQLMarkdown({
+  schema: "./schema.graphql",
+  rootPath: "./content/docs",
+  baseURL: "api",
+  mdxParser: "@graphql-markdown/formatters/fumadocs",
+});
 ```
 
 See complete implementation: [demo-nextjs-fumadocs](https://github.com/graphql-markdown/demo-nextjs-fumadocs)
 
 ### Vocs
 
-For [Vocs](https://vocs.dev/) integration, create a custom MDX module:
+For [Vocs](https://vocs.dev/) integration, use the built-in Vocs formatter preset:
 
 ```js
-// lib/vocs-mdx.cjs
-const mdxDeclaration = `
-import Chip from '@mui/material/Chip';
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
 
-export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em' }}>&nbsp;●&nbsp;</span></>
-`;
-
-/**
- * Format badge elements
- */
-const formatMDXBadge = ({ text, classname }) => {
-  const color = classname === "DEPRECATED" ? 'warning' : 'info';
-  return `<Chip color="${color}" label="${text}" size="small" variant="outlined"/>`;
-};
-
-/**
- * Format admonition/callout blocks
- */
-const formatMDXAdmonition = ({ text, title, type }, meta) => {
-  const calloutType = type === "warning" ? "warning" : "info";
-  return `:::${calloutType}[${title}]${text}:::`;
-};
-
-/**
- * Format bullet point separators using custom Bullet component
- */
-const formatMDXBullet = (text = "") => {
-  return `<Bullet/>${text}`;
-};
-
-module.exports = {
-  mdxDeclaration,
-  formatMDXBadge,
-  formatMDXAdmonition,
-  formatMDXBullet,
-};
+await runGraphQLMarkdown({
+  schema: "./schema.graphql",
+  rootPath: "./docs",
+  baseURL: "api",
+  mdxParser: "@graphql-markdown/formatters/vocs",
+});
 ```
 
 See complete implementation: [demo-vite-vocs](https://github.com/graphql-markdown/demo-vite-vocs)

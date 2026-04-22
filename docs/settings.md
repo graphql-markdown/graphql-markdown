@@ -202,11 +202,26 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 ## `mdxParser`
 
-Provide a custom module for formatting MDX content. This allows integration with frameworks other than Docusaurus by defining custom formatter functions.
+Provide a custom module for formatting MDX content. You can also use built-in formatter presets from `@graphql-markdown/formatters`, for example:
+
+- `@graphql-markdown/formatters/docusaurus`
+- `@graphql-markdown/formatters/starlight`
+- `@graphql-markdown/formatters/fumadocs`
+- `@graphql-markdown/formatters/vocs`
+- `@graphql-markdown/formatters/docfx`
+- `@graphql-markdown/formatters/mdbook`
 
 | Setting     | CLI flag      | Default                            |
 | ----------- | ------------- | ---------------------------------- |
-| `mdxParser` | `--mdxParser` | `@graphql-markdown/docusaurus/mdx` |
+| `mdxParser` | `--mdxParser` | `undefined`                        |
+
+<br/>
+
+:::info
+
+`@graphql-markdown/docusaurus` comes with `@graphql-markdown/formatters/docusaurus` by default.
+
+:::
 
 The custom module can export individual formatter functions:
 
