@@ -720,8 +720,10 @@ export class Renderer {
 
     const events = getEvents();
     const event = new RenderTypeEntitiesEvent({
+      baseURL: this.baseURL,
       name,
       filePath,
+      outputDir: this.outputDir,
     });
     await events.emitAsync(RenderTypeEntitiesEvents.AFTER_RENDER, event);
 
