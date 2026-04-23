@@ -8,7 +8,6 @@ Printer loader helpers for bootstrapping GraphQL-Markdown renderers.
 
 ```ts
 function getPrinter(
-  printerModule?,
   config?,
   options?,
   formatter?,
@@ -17,21 +16,15 @@ function getPrinter(
 ): Promise<typeof IPrinter>;
 ```
 
-Defined in: [core/src/printer.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L67)
+Defined in: [core/src/printer.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/printer.ts#L65)
 
 Loads and initializes a printer module for GraphQL schema documentation.
 
-This function dynamically imports the specified printer module and initializes it
+This function resolves the specified printer module and initializes it
 with the provided configuration and options. The printer is responsible for rendering
 GraphQL schema documentation in the desired format.
 
 #### Parameters
-
-##### printerModule?
-
-`Maybe`&lt;`PackageName`&gt;
-
-The name/path of the printer module to load
 
 ##### config?
 
@@ -67,15 +60,7 @@ A promise that resolves to the initialized Printer instance
 
 #### Throws
 
-Will throw an error if printerModule is not a string
-
-#### Throws
-
 Will throw an error if config is not provided
-
-#### Throws
-
-Will throw an error if the module specified by printerModule cannot be found
 
 #### Example
 
@@ -90,16 +75,18 @@ const schema = buildSchema(`
 `);
 
 const printer = await getPrinter(
-  "@graphql-markdown/printer-legacy",
   {
     schema,
     baseURL: "/docs",
     linkRoot: "graphql",
   },
   {
-    printTypeOptions: { includeDeprecationReasons: true },
+    printTypeOptions: { deprecated: "group" },
   },
 );
 
-const output = printer.printSchema();
+const queryType = schema.getQueryType();
+if (queryType) {
+  const output = await printer.printType("Query", queryType);
+}
 ```

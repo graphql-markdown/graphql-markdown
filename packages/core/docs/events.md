@@ -107,7 +107,7 @@ Map of all available sections in a type page.
 #### Indexable
 
 ```ts
-[key: string]: Maybe<PageHeader | PageSection>
+[key: string]: Maybe<PageSection | PageHeader>
 ```
 
 Additional custom sections can be added by event handlers

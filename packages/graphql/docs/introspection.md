@@ -27,7 +27,7 @@ Defined in: [packages/graphql/src/introspection.ts:51](https://github.com/graphq
 new IntrospectionError(message?): IntrospectionError;
 ```
 
-Defined in: node_modules/.bun/typescript@6.0.2/node_modules/typescript/lib/lib.es5.d.ts:1080
+Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.es5.d.ts:1080
 
 ###### Parameters
 
@@ -51,7 +51,7 @@ Error.constructor;
 new IntrospectionError(message?, options?): IntrospectionError;
 ```
 
-Defined in: node_modules/.bun/typescript@6.0.2/node_modules/typescript/lib/lib.es5.d.ts:1080
+Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.es5.d.ts:1080
 
 ###### Parameters
 

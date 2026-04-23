@@ -1,20 +1,17 @@
 # mdx
 
-## Functions
+## Variables
 
-### createMDXFormatter()
+### createMDXFormatter
 
 ```ts
-function createMDXFormatter(meta?): Formatter;
+const createMDXFormatter: (meta?) => Formatter;
 ```
 
-Defined in: [mdx/index.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L159)
+Defined in: formatters/dist/docusaurus/index.d.ts:75
 
-Creates an MDX formatter for Docusaurus documentation.
-
-The MDX formatter produces MDX/HTML markup compatible with Docusaurus.
-It uses helper components like `<Badge>`, `<Bullet>`, and `<SpecifiedBy>`,
-and emits native `<details>/<summary>` blocks for collapsible sections.
+Creates a Docusaurus formatter.
+Captures `meta` in closure so `formatMDXAdmonition` can detect the Docusaurus version.
 
 #### Parameters
 
@@ -22,145 +19,133 @@ and emits native `<details>/<summary>` blocks for collapsible sections.
 
 `Maybe`&lt;`MetaInfo`&gt;
 
-Optional metadata for framework-specific formatting
+Optional metadata used to detect Docusaurus version
 
 #### Returns
 
 `Formatter`
 
-A complete Formatter implementation for MDX output
-
-#### Example
-
-```typescript
-import { createMDXFormatter } from "@graphql-markdown/docusaurus";
-
-const formatter = createMDXFormatter({ generatorFrameworkName: "docusaurus" });
-const badge = formatter.formatMDXBadge({ text: "Required" });
-// '<Badge class="badge badge--secondary " text="Required"/>'
-```
+A complete Formatter implementation for Docusaurus MDX output
 
 ---
 
-### formatMDXAdmonition()
+### formatMDXAdmonition
 
 ```ts
-function formatMDXAdmonition(param, meta): MDXString;
+const formatMDXAdmonition: ({ text, title, type }, meta) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L52)
+Defined in: formatters/dist/docusaurus/index.d.ts:26
 
-Formats an admonition block in MDX format
+Formats an admonition using Docusaurus native `:::type` callout syntax.
+Detects Docusaurus v2 (via `meta`) and uses `:::caution` instead of `:::warning`.
 
 #### Parameters
 
-##### param
+##### \{ text, title, type \}
 
 `AdmonitionType`
-
-The admonition configuration object
 
 ##### meta
 
 `Maybe`&lt;`MetaInfo`&gt;
 
-Optional metadata for generator configuration
+Optional metadata used to detect Docusaurus version
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the admonition
+Formatted admonition string
 
 ---
 
-### formatMDXBadge()
+### formatMDXBadge
 
 ```ts
-function formatMDXBadge(param): MDXString;
+const formatMDXBadge: ({ text, classname }) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L40)
+Defined in: formatters/dist/docusaurus/index.d.ts:18
 
-Formats a Badge inline-block in MDX format
+Formats a badge using the inline `<Badge>` component defined in `mdxDeclaration`.
+Appends a CSS class derived from `classname` (e.g. `badge--deprecated`).
 
 #### Parameters
 
-##### param
+##### \{ text, classname \}
 
 `Badge`
-
-The badge configuration object
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the badge
+Formatted Badge component string
 
 ---
 
-### formatMDXBullet()
+### formatMDXBullet
 
 ```ts
-function formatMDXBullet(text?): MDXString;
+const formatMDXBullet: (text?) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L69)
+Defined in: formatters/dist/docusaurus/index.d.ts:32
 
-Creates a bullet point element in MDX format
+Formats a bullet point using the inline `<Bullet/>` component defined in `mdxDeclaration`.
 
 #### Parameters
 
 ##### text?
 
-`string` = `""`
+`string`
 
-Optional text to append after the bullet point
+Optional text to append after the bullet
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the bullet point
+Formatted Bullet component string
 
 ---
 
-### formatMDXDetails()
+### formatMDXDetails
 
 ```ts
-function formatMDXDetails(param): MDXString;
+const formatMDXDetails: ({ dataOpen, dataClose }) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L78)
+Defined in: formatters/dist/docusaurus/index.d.ts:40
 
-Creates a collapsible details section in MDX format
+Formats a collapsible block as an HTML `<details>` element with
+toggle labels that swap via the `hidden` attribute.
+Text is escaped so curly braces and angle brackets don't break MDX.
 
 #### Parameters
 
-##### param
+##### \{ dataOpen, dataClose, \}
 
 `CollapsibleOption`
-
-The collapsible section configuration
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the collapsible section
+Formatted details element string
 
 ---
 
-### formatMDXFrontmatter()
+### formatMDXFrontmatter
 
 ```ts
-function formatMDXFrontmatter(_props, formatted): MDXString;
+const formatMDXFrontmatter: (_props, formatted) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L129)
+Defined in: formatters/dist/docusaurus/index.d.ts:68
 
-Default frontmatter formatter for MDX.
+Formats YAML front matter wrapped in `---` delimiters.
 
 #### Parameters
 
@@ -168,57 +153,57 @@ Default frontmatter formatter for MDX.
 
 `Maybe`&lt;`FrontMatterOptions`&gt;
 
-The front matter options (unused)
+Front matter options (unused)
 
 ##### formatted
 
 `Maybe`&lt;`string`[]&gt;
 
-The formatted front matter as an array of strings
+Pre-formatted front matter lines
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the front matter
+Formatted front matter block, or empty string if no lines provided
 
 ---
 
-### formatMDXLink()
+### formatMDXLink
 
 ```ts
-function formatMDXLink(param): TypeLink;
+const formatMDXLink: ({ text, url }) => TypeLink;
 ```
 
-Defined in: [mdx/index.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L115)
+Defined in: formatters/dist/docusaurus/index.d.ts:61
 
-Formats a link in MDX format
+Appends `.mdx` to internal link URLs.
 
 #### Parameters
 
-##### param
+##### \{ text, url \}
 
 `TypeLink`
-
-The link configuration object
 
 #### Returns
 
 `TypeLink`
 
-Formatted MDX link object
+Link with `.mdx` extension appended to the URL
 
 ---
 
-### formatMDXNameEntity()
+### formatMDXNameEntity
 
 ```ts
-function formatMDXNameEntity(name, parentType?): MDXString;
+const formatMDXNameEntity: (name, parentType?) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L102)
+Defined in: formatters/dist/docusaurus/index.d.ts:55
 
-Formats a name entity with optional parent type
+Formats a named entity as an inline `<code>` element with the parent type
+in normal weight and the entity name in bold.
+Text is escaped so curly braces don't break MDX.
 
 #### Parameters
 
@@ -226,31 +211,31 @@ Formats a name entity with optional parent type
 
 `string`
 
-The name to format
+Entity name
 
 ##### parentType?
 
 `Maybe`&lt;`string`&gt;
 
-Optional parent type to prefix the name
+Optional parent type name for qualified references
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the name entity
+Formatted JSX code element string
 
 ---
 
-### formatMDXSpecifiedByLink()
+### formatMDXSpecifiedByLink
 
 ```ts
-function formatMDXSpecifiedByLink(url): MDXString;
+const formatMDXSpecifiedByLink: (url) => MDXString;
 ```
 
-Defined in: [mdx/index.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/index.ts#L92)
+Defined in: formatters/dist/docusaurus/index.d.ts:46
 
-Creates a link to the specification documentation
+Formats a "specified by" link using the inline `<SpecifiedBy>` component.
 
 #### Parameters
 
@@ -258,10 +243,22 @@ Creates a link to the specification documentation
 
 `string`
 
-The URL to the specification
+URL to the specification
 
 #### Returns
 
 `MDXString`
 
-Formatted MDX string for the specification link
+Formatted SpecifiedBy component string
+
+---
+
+### mdxDeclaration
+
+```ts
+const mdxDeclaration: MDXString;
+```
+
+Defined in: formatters/dist/docusaurus/index.d.ts:11
+
+MDX component definitions prepended to every generated file.

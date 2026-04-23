@@ -1,22 +1,22 @@
-# events/render-type-entities
+# events/render-files
 
-Render type entities event class.
+Render files event class.
 
 ## Events
 
-### RenderTypeEntitiesEvent
+### RenderFilesEvent
 
-Defined in: [core/src/events/render-type-entities.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L15)
+Defined in: [core/src/events/render-files.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-files.ts#L15)
 
-Event emitted before/after rendering type entities.
+Event emitted after all output files (entities + homepage) have been written.
 
 #### Extends
 
 - `DataEvent`&lt;\{
   `baseURL`: `string`;
-  `filePath`: `string`;
-  `name`: `string`;
   `outputDir`: `string`;
+  `pages`: `unknown`;
+  `rootDir`: `string`;
   \}&gt;
 
 #### Constructors
@@ -24,10 +24,10 @@ Event emitted before/after rendering type entities.
 ##### Constructor
 
 ```ts
-new RenderTypeEntitiesEvent(data, options?): RenderTypeEntitiesEvent;
+new RenderFilesEvent(data, options?): RenderFilesEvent;
 ```
 
-Defined in: [core/src/events/render-type-entities.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L21)
+Defined in: [core/src/events/render-files.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-files.ts#L21)
 
 ###### Parameters
 
@@ -37,15 +37,15 @@ Defined in: [core/src/events/render-type-entities.ts:21](https://github.com/grap
 
 `string`
 
-###### filePath
-
-`string`
-
-###### name
-
-`string`
-
 ###### outputDir
+
+`string`
+
+###### pages
+
+`unknown`
+
+###### rootDir
 
 `string`
 
@@ -55,16 +55,16 @@ Defined in: [core/src/events/render-type-entities.ts:21](https://github.com/grap
 
 ###### Returns
 
-[`RenderTypeEntitiesEvent`](#rendertypeentitiesevent)
+[`RenderFilesEvent`](#renderfilesevent)
 
 ###### Overrides
 
 ```ts
 DataEvent<{
   baseURL: string;
-  name: string;
-  filePath: string;
   outputDir: string;
+  rootDir: string;
+  pages: unknown;
 }>.constructor
 ```
 
@@ -86,22 +86,22 @@ Read-only event data payload.
 baseURL: string;
 ```
 
-###### filePath
-
-```ts
-filePath: string;
-```
-
-###### name
-
-```ts
-name: string;
-```
-
 ###### outputDir
 
 ```ts
 outputDir: string;
+```
+
+###### pages
+
+```ts
+pages: unknown;
+```
+
+###### rootDir
+
+```ts
+rootDir: string;
 ```
 
 ###### Inherited from
