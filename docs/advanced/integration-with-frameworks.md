@@ -44,12 +44,12 @@ You can use these presets directly as your `mdxParser` value:
 ```js
 import { runGraphQLMarkdown } from '@graphql-markdown/cli';
 
-const config = {
+await runGraphQLMarkdown({
   schema: './schema.graphql',
   rootPath: './docs',
-};
-
-await runGraphQLMarkdown(config);
+  baseURL: 'api',
+  mdxParser: '@graphql-markdown/formatters/starlight', // replace with your framework
+});
 ```
 
 ## Custom MDX Formatter
@@ -142,6 +142,17 @@ module.exports = {
 ```
 
 For more details, check the [@graphql-markdown/docusaurus](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/docusaurus) package.
+
+If you are using the CLI without the Docusaurus plugin, use the formatter preset directly:
+
+```js
+await runGraphQLMarkdown({
+  schema: './schema.graphql',
+  rootPath: './docs',
+  baseURL: 'api',
+  mdxParser: '@graphql-markdown/formatters/docusaurus',
+});
+```
 
 If you need to override formatting behavior, set `mdxParser` to your own module path and export only the formatter functions you want to customize.
 
