@@ -43,6 +43,8 @@ export const createProjectConfig = (name, options = {}) => ({
     "<rootDir>/tests/(unit|integration)/**/(*.)+(spec|test).ts",
   ],
   moduleNameMapper: {
+    "@graphql-markdown/formatters/defaults$":
+      "<rootDir>/../formatters/src/defaults",
     "@graphql-markdown/formatters/(.*)$":
       "<rootDir>/../formatters/src/$1/index",
     "@graphql-markdown/(.*)$": "<rootDir>/../$1/src",

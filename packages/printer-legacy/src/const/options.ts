@@ -20,7 +20,7 @@ import {
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../../../formatters/src/defaults";
+} from "@graphql-markdown/formatters/defaults";
 
 export enum TypeHierarchy {
   API = "api",

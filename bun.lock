@@ -185,6 +185,7 @@
       "name": "@graphql-markdown/printer-legacy",
       "version": "1.15.0",
       "dependencies": {
+        "@graphql-markdown/formatters": "workspace:^",
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
