@@ -36,6 +36,9 @@ const config = {
       moduleFileExtensions: ["js", "ts"],
       moduleNameMapper: Object.fromEntries(
         Object.entries(moduleNameMapper).map(([pattern]) => {
+          if (pattern.startsWith("@graphql-markdown/formatters/defaults$")) {
+            return [pattern, "<rootDir>/../../../formatters/src/defaults"];
+          }
           return [pattern, "<rootDir>/../../../$1/src"];
         }),
       ),
