@@ -309,16 +309,40 @@ describe("formatMDXLink", () => {
   });
 
   test("distinguishes between fragment-only links and internal paths with fragments", () => {
-    // Fragment only
+    // Fragment only - must return unchanged
     const frag = formatMDXLink({ text: "Section", url: "#section" });
     expect(frag).toEqual({ text: "Section", url: "#section" });
 
-    // Path with fragment
+    // Path with fragment - must add .html before fragment
     const pathWithFrag = formatMDXLink({
       text: "Section",
       url: "/docs#section",
     });
     expect(pathWithFrag.url).toBe("/docs.html#section");
+  });
+
+  test("fragment-only links start with hash character", () => {
+    const link = { text: "Link", url: "#anchor" };
+    const result = formatMDXLink(link);
+    // Fragment-only links should not get .html extension
+    expect(result.url).toBe("#anchor");
+    expect(result.url).not.toContain(".html");
+  });
+
+  test("http protocol detection validates both cases: with and without slash", () => {
+    // http:// with slashes
+    const httpWithSlash = formatMDXLink({
+      text: "Link",
+      url: "http://example.com",
+    });
+    expect(httpWithSlash.url).toBe("http://example.com");
+
+    // https:// with slashes
+    const httpsWithSlash = formatMDXLink({
+      text: "Link",
+      url: "https://example.com",
+    });
+    expect(httpsWithSlash.url).toBe("https://example.com");
   });
 
   test("treats ftp:// as external protocol and leaves unchanged", () => {
