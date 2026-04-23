@@ -34,6 +34,10 @@ import {
   MARKDOWN_EOP,
   saveFile,
 } from "@graphql-markdown/utils";
+import {
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -121,27 +125,9 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   };
 };
 
-/**
- * Formats a named entity as a backtick code span.
- * @param name - Entity name
- * @param parentType - Optional parent type name for qualified references
- * @returns Formatted entity reference string
- */
-export const formatMDXNameEntity = (
-  name: string,
-  parentType?: Maybe<string>,
-): MDXString => {
-  const parentName = parentType ? `${parentType}.` : "";
-  return `\`${parentName}${name}\`` as MDXString;
-};
-
-/**
- * Formats a "specified by" link as a standard Markdown link.
- * @param url - URL to the specification
- * @returns Formatted specification link string
- */
-export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `[Specification ⎘](${url})` as MDXString;
+export {
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
 };
 
 /**

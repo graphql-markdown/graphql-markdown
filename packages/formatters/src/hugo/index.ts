@@ -35,6 +35,7 @@ import {
   saveFile,
   startCase,
 } from "@graphql-markdown/utils";
+import { formatMDXNameEntity, formatMDXSpecifiedByLink } from "../defaults";
 
 /**
  * Maps graphql-markdown admonition types to Hugo GitHub-style alert types (Hugo 0.132+).
@@ -145,28 +146,7 @@ export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   };
 };
 
-/**
- * Formats a named entity as a backtick code span.
- * @param name - Entity name
- * @param parentType - Optional parent type name for qualified references
- * @returns Formatted entity reference string
- */
-export const formatMDXNameEntity = (
-  name: string,
-  parentType?: Maybe<string>,
-): MDXString => {
-  const parentName = parentType ? `${parentType}.` : "";
-  return `\`${parentName}${name}\`` as MDXString;
-};
-
-/**
- * Formats a "specified by" link as a standard Markdown link.
- * @param url - URL to the specification
- * @returns Formatted specification link string
- */
-export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `[Specification ⎘](${url})` as MDXString;
-};
+export { formatMDXNameEntity, formatMDXSpecifiedByLink };
 
 /**
  * Creates a Hugo formatter.

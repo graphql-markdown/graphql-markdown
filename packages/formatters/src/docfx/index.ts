@@ -13,7 +13,6 @@ import { dirname, resolve, basename, relative } from "node:path";
 import type {
   AdmonitionType,
   Badge,
-  CollapsibleOption,
   Formatter,
   FrontMatterOptions,
   Maybe,
@@ -32,6 +31,12 @@ import {
   readFile,
   saveFile,
 } from "@graphql-markdown/utils";
+import {
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
 const ALERT_TYPE_MAP: Record<string, string> = {
@@ -79,27 +84,6 @@ export const formatMDXAdmonition = (
 };
 
 /**
- * Formats a bullet point separator.
- * @param text - Optional text to append after the bullet
- * @returns Formatted bullet string
- */
-export const formatMDXBullet = (text = ""): MDXString => {
-  return `&bull;&nbsp;${text}` as MDXString;
-};
-
-/**
- * Formats a collapsible block as an HTML `<details>` element.
- * @param option - Configuration for open/close label text
- * @returns Formatted details element string
- */
-export const formatMDXDetails = ({
-  dataOpen,
-  dataClose,
-}: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<details>${MARKDOWN_EOL}<summary>${dataOpen}</summary>${MARKDOWN_EOL}${MARKDOWN_EOL}\r${MARKDOWN_EOL}${MARKDOWN_EOL}<em>${dataClose}</em>${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
-};
-
-/**
  * Formats YAML front matter, injecting a `uid` field required by DocFX
  * for cross-reference resolution between pages.
  * @param props - Front matter options; `id` is used as the DocFX `uid` value
@@ -136,27 +120,11 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   return link;
 };
 
-/**
- * Formats a named entity as a backtick code span.
- * @param name - Entity name
- * @param parentType - Optional parent type name for qualified references
- * @returns Formatted entity reference string
- */
-export const formatMDXNameEntity = (
-  name: string,
-  parentType?: Maybe<string>,
-): MDXString => {
-  const parentName = parentType ? `${parentType}.` : "";
-  return `\`${parentName}${name}\`` as MDXString;
-};
-
-/**
- * Formats a "specified by" link as a standard Markdown link.
- * @param url - URL to the specification
- * @returns Formatted specification link string
- */
-export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `[Specification ⎘](${url})` as MDXString;
+export {
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
 };
 
 /**

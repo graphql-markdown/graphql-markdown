@@ -10,23 +10,19 @@
 import type {
   AdmonitionType,
   Badge,
-  CollapsibleOption,
   Formatter,
-  FrontMatterOptions,
   Maybe,
   MDXString,
   MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
+import { appendLinkExtension } from "@graphql-markdown/helpers";
+import { MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
-  appendLinkExtension,
-  formatMarkdownFrontmatter,
-} from "@graphql-markdown/helpers";
-import {
-  FRONT_MATTER_DELIMITER,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-} from "@graphql-markdown/utils";
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /** MDX import statement and inline component definitions prepended to every generated file. */
 export const mdxDeclaration: MDXString = `
@@ -74,35 +70,6 @@ export const formatMDXBullet = (text = ""): MDXString => {
 };
 
 /**
- * Formats a collapsible block as an HTML `<details>` element.
- * @param option - Configuration for open/close label text
- * @returns Formatted details element string
- */
-export const formatMDXDetails = ({
-  dataOpen,
-  dataClose,
-}: CollapsibleOption): MDXString => {
-  return `${MARKDOWN_EOP}<details>${MARKDOWN_EOL}<summary>${dataOpen}</summary>${MARKDOWN_EOL}${MARKDOWN_EOL}\r${MARKDOWN_EOL}${MARKDOWN_EOL}<em>${dataClose}</em>${MARKDOWN_EOL}</details>${MARKDOWN_EOP}` as MDXString;
-};
-
-/**
- * Formats YAML front matter wrapped in `---` delimiters.
- * @param _props - Front matter options (unused)
- * @param formatted - Pre-formatted front matter lines
- * @returns Formatted front matter block, or empty string if no lines provided
- */
-export const formatMDXFrontmatter = (
-  _props: Maybe<FrontMatterOptions>,
-  formatted: Maybe<string[]>,
-): MDXString => {
-  return formatMarkdownFrontmatter(
-    formatted,
-    FRONT_MATTER_DELIMITER,
-    MARKDOWN_EOL,
-  ) as MDXString;
-};
-
-/**
  * Appends `.mdx` to internal link URLs.
  * @param link - Link data with URL and text
  * @returns Link with `.mdx` extension appended to the URL
@@ -130,13 +97,10 @@ export const formatMDXNameEntity = (
   return `<span className="gqlmd-mdx-entity"><code className="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };
 
-/**
- * Formats a "specified by" link as a standard Markdown link.
- * @param url - URL to the specification
- * @returns Formatted specification link string
- */
-export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `[Specification ⎘](${url})` as MDXString;
+export {
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXSpecifiedByLink,
 };
 
 /**
