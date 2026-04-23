@@ -38,14 +38,18 @@ export const toRelativeGeneratedDocLink = ({
   outputDir,
   targetUrlPath,
 }: RelativeGeneratedDocLinkOptions): string | undefined => {
-  const basePrefix = `/${baseURL}/`;
+  const normalizedBaseURL = baseURL.replace(/^\/+|\/+$/g, "");
+  const basePrefix = `/${normalizedBaseURL}/`;
 
   if (!targetUrlPath.startsWith(basePrefix)) {
     return undefined;
   }
 
   const relativeDocPath = targetUrlPath.slice(basePrefix.length);
-  const targetFilePath = resolveFs(outputDir, `${relativeDocPath}${extension}`);
+  const docPathWithExt = relativeDocPath.endsWith(extension)
+    ? relativeDocPath
+    : `${relativeDocPath}${extension}`;
+  const targetFilePath = resolveFs(outputDir, docPathWithExt);
 
   return normalizeRelativePath(
     relativeFs(dirname(currentFilePath), targetFilePath),
