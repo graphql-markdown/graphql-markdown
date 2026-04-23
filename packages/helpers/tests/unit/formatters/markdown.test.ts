@@ -24,8 +24,42 @@ describe("formatters markdown helpers", () => {
       expect(parseFrontmatterTitleLine("title: Test Value")).toBe("Test Value");
     });
 
+    test("parses double-quoted title", () => {
+      expect(parseFrontmatterTitleLine('title: "Double Quoted"')).toBe(
+        "Double Quoted",
+      );
+    });
+
     test("returns empty string for non-title line", () => {
       expect(parseFrontmatterTitleLine("id: test")).toBe("");
+    });
+
+    test("handles title with leading/trailing whitespace", () => {
+      expect(parseFrontmatterTitleLine("  title:   My Title   ")).toBe(
+        "My Title",
+      );
+    });
+
+    test("returns empty string when value is only quotes", () => {
+      expect(parseFrontmatterTitleLine("title: ''")).toBe("");
+    });
+
+    test("returns empty string when no value after colon", () => {
+      expect(parseFrontmatterTitleLine("title:")).toBe("");
+    });
+
+    test("returns unquoted value when quotes are mismatched", () => {
+      expect(parseFrontmatterTitleLine("title: 'mismatched\"")).toBe(
+        "'mismatched\"",
+      );
+    });
+
+    test("handles quoted empty string", () => {
+      expect(parseFrontmatterTitleLine('title: ""')).toBe("");
+    });
+
+    test("handles single-quoted empty string", () => {
+      expect(parseFrontmatterTitleLine("title: ''")).toBe("");
     });
   });
 
@@ -77,6 +111,66 @@ describe("formatters markdown helpers", () => {
         ]),
       ).toEqual(["title: New Title"]);
     });
+
+    test("ignores empty and whitespace-only lines", () => {
+      expect(
+        mergeFrontmatterLines({ title: "Test" }, ["", "   ", "title: Updated"]),
+      ).toEqual(["title: Updated"]);
+    });
+
+    test("ignores lines without colon separator", () => {
+      expect(
+        mergeFrontmatterLines({ title: "Test" }, ["invalid-no-colon"]),
+      ).toEqual(["title: Test"]);
+    });
+
+    test("ignores lines with empty key", () => {
+      expect(mergeFrontmatterLines({ title: "Test" }, [": value"])).toEqual([
+        "title: Test",
+      ]);
+    });
+
+    test("ignores keys that contain # comment marker", () => {
+      expect(
+        mergeFrontmatterLines({ title: "Test" }, ["key#comment: value"]),
+      ).toEqual(["title: Test"]);
+    });
+
+    test("handles multiple entries with same key (last wins)", () => {
+      expect(
+        mergeFrontmatterLines({ title: "Props Title" }, [
+          "title: First",
+          "title: Second",
+        ]),
+      ).toEqual(["title: Second"]);
+    });
+
+    test("returns empty array when both props and formatted are empty", () => {
+      expect(mergeFrontmatterLines({}, [])).toEqual([]);
+    });
+
+    test("handles null props", () => {
+      expect(mergeFrontmatterLines(null, ["title: Test", "id: 1"])).toEqual([
+        "title: Test",
+        "id: 1",
+      ]);
+    });
+
+    test("trims whitespace from keys and values", () => {
+      expect(mergeFrontmatterLines(null, ["  key  :  value  "])).toEqual([
+        "key: value",
+      ]);
+    });
+
+    test("preserves order of first appearance", () => {
+      const result = mergeFrontmatterLines(
+        { author: "Anonymous", title: "Book" },
+        ["description: A test"],
+      );
+      expect(result).toContain("author: Anonymous");
+      expect(result).toContain("title: Book");
+      expect(result).toContain("description: A test");
+    });
   });
 
   describe("appendLinkExtension", () => {
@@ -96,6 +190,45 @@ describe("formatters markdown helpers", () => {
       expect(
         appendExtensionToAbsolutePathWithoutExtension("/path/doc.md", ".md"),
       ).toBe("/path/doc.md");
+    });
+
+    test("keeps relative paths unchanged", () => {
+      expect(appendExtensionToAbsolutePathWithoutExtension("doc", ".md")).toBe(
+        "doc",
+      );
+    });
+
+    test("keeps paths with multi-char extensions unchanged", () => {
+      expect(
+        appendExtensionToAbsolutePathWithoutExtension("/path/file.html", ".md"),
+      ).toBe("/path/file.html");
+    });
+
+    test("keeps paths with fragments unchanged", () => {
+      expect(
+        appendExtensionToAbsolutePathWithoutExtension(
+          "/path/file.md#section",
+          ".html",
+        ),
+      ).toBe("/path/file.md#section");
+    });
+
+    test("handles various extension lengths", () => {
+      expect(
+        appendExtensionToAbsolutePathWithoutExtension(
+          "/path/file.abcde",
+          ".md",
+        ),
+      ).toBe("/path/file.abcde");
+    });
+
+    test("handles paths with multiple dots", () => {
+      expect(
+        appendExtensionToAbsolutePathWithoutExtension(
+          "/path/file.backup.old",
+          ".md",
+        ),
+      ).toBe("/path/file.backup.old");
     });
   });
 
