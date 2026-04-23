@@ -26,10 +26,10 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 
 | Hook                                | Description                                  |
 | ----------------------------------- | -------------------------------------------- |
-| `beforeSchemaLoadHook`              | Called before loading the GraphQL schema     |
-| `afterSchemaLoadHook`               | Called after loading the GraphQL schema      |
-| `beforeDiffCheckHook`               | Called before checking schema differences    |
-| `afterDiffCheckHook`                | Called after checking schema differences     |
+| `beforeLoadSchemaHook`              | Called before loading the GraphQL schema     |
+| `afterLoadSchemaHook`               | Called after loading the GraphQL schema      |
+| `beforeCheckDiffHook`               | Called before checking schema differences    |
+| `afterCheckDiffHook`                | Called after checking schema differences     |
 | `beforeRenderRootTypesHook`         | Called before rendering root types           |
 | `afterRenderRootTypesHook`          | Called after rendering root types            |
 | `beforeRenderHomepageHook`          | Called before rendering the homepage         |
@@ -38,6 +38,7 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 | `afterRenderTypeEntitiesHook`       | Called after rendering type entities         |
 | `beforeGenerateIndexMetafileHook`   | Called before generating index metafiles     |
 | `afterGenerateIndexMetafileHook`    | Called after generating index metafiles      |
+| `afterRenderFilesHook`              | Called once after all pages have been written — receives the full pages collection |
 
 ### Printer Hooks
 
