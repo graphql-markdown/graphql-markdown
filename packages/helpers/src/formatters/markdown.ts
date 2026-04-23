@@ -44,7 +44,7 @@ export const parseFrontmatterTitleLine = (line: string): string => {
   }
 
   const firstChar = rawValue[0];
-  const lastChar = rawValue[rawValue.length - 1];
+  const lastChar = rawValue.at(-1);
   const isWrappedInMatchingQuotes =
     rawValue.length >= 2 &&
     ((firstChar === '"' && lastChar === '"') ||
@@ -69,6 +69,51 @@ export const extractFrontmatterTitle = (
   });
 
   return titleLine ? parseFrontmatterTitleLine(titleLine) : "";
+};
+
+/**
+ * Merges frontmatter object entries with preformatted frontmatter lines.
+ *
+ * Preformatted lines take precedence over object values when keys overlap.
+ * Lines without a `key: value` shape and comment lines are ignored.
+ *
+ * @param props - Frontmatter key-value object.
+ * @param formatted - Serialized frontmatter lines without delimiters.
+ * @returns Merged frontmatter lines in insertion order.
+ */
+export const mergeFrontmatterLines = (
+  props: Record<string, unknown> | null | undefined,
+  formatted: string[] | null | undefined,
+): string[] => {
+  const entries = new Map<string, string>();
+
+  for (const [key, value] of Object.entries(props ?? {})) {
+    entries.set(key, String(value));
+  }
+
+  for (const line of formatted ?? []) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf(":");
+    if (separatorIndex <= 0) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    if (!key || key.includes("#")) {
+      continue;
+    }
+
+    const value = trimmed.slice(separatorIndex + 1).trim();
+    entries.set(key, value);
+  }
+
+  return Array.from(entries.entries()).map(([key, value]) => {
+    return `${key}: ${value}`;
+  });
 };
 
 /**

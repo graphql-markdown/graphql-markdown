@@ -4,6 +4,7 @@ import {
   extractFrontmatterTitle,
   formatMarkdownFrontmatter,
   indentMarkdownLines,
+  mergeFrontmatterLines,
   parseFrontmatterTitleLine,
   quoteMarkdownLines,
 } from "../../../src/formatters/markdown";
@@ -49,6 +50,33 @@ describe("formatters markdown helpers", () => {
 
     test("returns empty string when title line is missing", () => {
       expect(extractFrontmatterTitle(["id: book"])).toBe("");
+    });
+  });
+
+  describe("mergeFrontmatterLines", () => {
+    test("merges props into frontmatter lines", () => {
+      expect(mergeFrontmatterLines({ title: "My Type", id: "book" }, null)).toEqual([
+        "title: My Type",
+        "id: book",
+      ]);
+    });
+
+    test("formatted lines override props when keys overlap", () => {
+      expect(
+        mergeFrontmatterLines(
+          { title: "Old Title", id: "book" },
+          ["title: New Title"],
+        ),
+      ).toEqual(["title: New Title", "id: book"]);
+    });
+
+    test("ignores comments and invalid lines", () => {
+      expect(
+        mergeFrontmatterLines(
+          { title: "Old Title" },
+          ["# comment", "invalid", "title: New Title"],
+        ),
+      ).toEqual(["title: New Title"]);
     });
   });
 
