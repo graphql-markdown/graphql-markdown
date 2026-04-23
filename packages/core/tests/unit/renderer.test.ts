@@ -132,7 +132,11 @@ describe("renderer", () => {
           "FooBar",
         );
 
-        expect(meta).toEqual({ category: "Foobar", slug: "foobar/foo-bar" });
+        expect(meta).toEqual({
+          category: "Foobar",
+          filePath: `${output}/foo-bar.mdx`,
+          name: "FooBar",
+        });
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
@@ -160,7 +164,11 @@ describe("renderer", () => {
           "FooBar",
         );
 
-        expect(meta).toEqual({ category: "schema", slug: "foo-bar" });
+        expect(meta).toEqual({
+          category: "schema",
+          filePath: `${output}/foo-bar.mdx`,
+          name: "FooBar",
+        });
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
@@ -432,7 +440,8 @@ describe("renderer", () => {
 
         expect(meta).toEqual({
           category: "Foobar",
-          slug: "foobar/custom-type-name",
+          filePath: `${output}/custom-type-name.mdx`,
+          name: "CustomTypeName",
         });
         expect(spy).toHaveBeenCalledWith(
           `${output}/custom-type-name.mdx`,
@@ -458,7 +467,8 @@ describe("renderer", () => {
 
         expect(meta).toEqual({
           category: "Special",
-          slug: "special/type-with-special-chars",
+          filePath: `${output}/type-with-special-chars.mdx`,
+          name: "Type_With-Special@Chars!",
         });
         expect(spy).toHaveBeenCalledWith(
           `${output}/type-with-special-chars.mdx`,
@@ -2242,7 +2252,7 @@ describe("renderer", () => {
       });
 
       test("renderTypeEntities correctly parses category from nested file paths", async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         jest
           .spyOn(Printer, "printType")
@@ -2255,9 +2265,8 @@ describe("renderer", () => {
           "FooBar",
         );
 
-        // Regex pattern /(?<category>[A-Za-z0-9-]+)[\\/]+(?<pageId>[A-Za-z0-9-]+).mdx?$/
-        // should capture category='foobar' and pageId='foo-bar'
-        expect(meta?.slug).toBe("foobar/foo-bar");
+        expect(meta?.category).toBe("Foobar");
+        expect(meta?.name).toBe("FooBar");
       });
 
       test("renderTypeEntities uses correct regex for hierarchical paths", async () => {

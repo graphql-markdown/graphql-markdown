@@ -713,9 +713,6 @@ export class Renderer {
       ? page.groups.pageId
       : stripNumericPrefix(page.groups.category);
 
-    const slug = isFlat
-      ? page.groups.pageId
-      : pathUrl.join(extractedCategory, page.groups.pageId);
     const category = isFlat ? "schema" : startCase(extractedCategory);
 
     const events = getEvents();
@@ -729,7 +726,8 @@ export class Renderer {
 
     return {
       category,
-      slug,
+      filePath,
+      name,
     } as Category;
   }
 

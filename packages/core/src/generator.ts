@@ -35,6 +35,8 @@ import {
 
 import { toString } from "@graphql-markdown/utils";
 
+import { dirname } from "node:path";
+
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
@@ -49,6 +51,8 @@ import {
   RenderRootTypesEvents,
   RenderHomepageEvent,
   RenderHomepageEvents,
+  RenderFilesEvent,
+  RenderFilesEvents,
 } from "./events";
 import { registerMDXEventHandlers } from "./event-handlers";
 
@@ -530,6 +534,16 @@ export const generateDocFromSchema = async ({
   await events.emitAsync(
     RenderHomepageEvents.AFTER_RENDER,
     afterRenderHomepageEvent,
+  );
+
+  await events.emitAsync(
+    RenderFilesEvents.AFTER_RENDER,
+    new RenderFilesEvent({
+      baseURL,
+      outputDir,
+      rootDir: dirname(outputDir),
+      pages,
+    }),
   );
 
   const duration = (
