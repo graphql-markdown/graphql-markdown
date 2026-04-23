@@ -26,7 +26,7 @@ import {
  * @returns Formatted bullet string
  */
 export const formatMDXBullet = (text = ""): MDXString => {
-  return `&bull;&nbsp;${text}` as MDXString;
+  return `&nbsp;&bull;&nbsp;${text}` as MDXString;
 };
 
 /**

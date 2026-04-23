@@ -35,7 +35,11 @@ import {
   saveFile,
   startCase,
 } from "@graphql-markdown/utils";
-import { formatMDXNameEntity, formatMDXSpecifiedByLink } from "../defaults";
+import {
+  formatMDXBullet,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Maps graphql-markdown admonition types to Hugo GitHub-style alert types (Hugo 0.132+).
@@ -77,15 +81,6 @@ export const formatMDXAdmonition = (
   const alertType = ALERT_TYPE_MAP[type.toLowerCase()] ?? "NOTE";
   const titleLine = title ? `${MARKDOWN_EOL}> **${title}**` : "";
   return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
-};
-
-/**
- * Formats a bullet point separator.
- * @param text - Optional text to append after the bullet
- * @returns Formatted bullet string
- */
-export const formatMDXBullet = (text = ""): MDXString => {
-  return `&nbsp;&bull;&nbsp;${text}` as MDXString;
 };
 
 /**
@@ -146,7 +141,7 @@ export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   };
 };
 
-export { formatMDXNameEntity, formatMDXSpecifiedByLink };
+export { formatMDXBullet, formatMDXNameEntity, formatMDXSpecifiedByLink };
 
 /**
  * Creates a Hugo formatter.

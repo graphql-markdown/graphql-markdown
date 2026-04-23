@@ -30,6 +30,7 @@ import {
   saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
+import { formatMDXBullet } from "../defaults";
 
 const ADMONITION_TYPE_MAP: Record<string, string> = {
   note: "note",
@@ -87,15 +88,6 @@ export const formatMDXAdmonition = (
   const mkdocsType = ADMONITION_TYPE_MAP[type.toLowerCase()] ?? "note";
   const titleAttr = title ? ` "${title}"` : "";
   return `${MARKDOWN_EOP}!!! ${mkdocsType}${titleAttr}${MARKDOWN_EOL}${indentMarkdownLines(text, 4, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
-};
-
-/**
- * Formats a bullet point separator.
- * @param text - Optional text to append after the bullet
- * @returns Formatted bullet string
- */
-export const formatMDXBullet = (text = ""): MDXString => {
-  return `&nbsp;&bull;&nbsp;${text}` as MDXString;
 };
 
 /**
@@ -185,6 +177,8 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     await saveFile(filePath, rewrittenContent);
   }
 };
+
+export { formatMDXBullet };
 
 /**
  * Creates an MkDocs Material formatter.

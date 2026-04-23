@@ -80,7 +80,7 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bull entity with text", () => {
-    expect(formatMDXBullet("item")).toBe("&bull;&nbsp;item");
+    expect(formatMDXBullet("item")).toBe("&nbsp;&bull;&nbsp;item");
   });
 });
 

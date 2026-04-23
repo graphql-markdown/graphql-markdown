@@ -34,7 +34,11 @@ import {
   MARKDOWN_EOP,
   saveFile,
 } from "@graphql-markdown/utils";
-import { formatMDXNameEntity, formatMDXSpecifiedByLink } from "../defaults";
+import {
+  formatMDXBullet,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -59,15 +63,6 @@ export const formatMDXAdmonition = (
   const tag = type.toUpperCase();
   const titleLine = title?.trim() ? `> ${title.trim()}${MARKDOWN_EOL}` : "";
   return `${MARKDOWN_EOP}> [!${tag}]${MARKDOWN_EOL}${titleLine}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
-};
-
-/**
- * Formats a bullet point separator.
- * @param text - Optional text to append after the bullet
- * @returns Formatted bullet string
- */
-export const formatMDXBullet = (text = ""): MDXString => {
-  return `&nbsp;&bull;&nbsp;${text}` as MDXString;
 };
 
 /**
@@ -122,7 +117,7 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   };
 };
 
-export { formatMDXNameEntity, formatMDXSpecifiedByLink };
+export { formatMDXBullet, formatMDXNameEntity, formatMDXSpecifiedByLink };
 
 /**
  * Creates an mdBook formatter.
