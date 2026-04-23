@@ -202,7 +202,7 @@
     "jest": "30.3.0",
     "jest-environment-node": "30.3.0",
     "jsonc-eslint-parser": "3.1.0",
-    "knip": "6.6.1",
+    "knip": "6.6.2",
     "lodash.filter": "4.6.0",
     "memfs": "4.57.2",
     "prettier": "catalog:",
