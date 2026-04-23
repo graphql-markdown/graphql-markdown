@@ -141,7 +141,11 @@ export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   };
 };
 
-export { formatMDXBullet, formatMDXNameEntity, formatMDXSpecifiedByLink };
+export {
+  formatMDXBullet,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Creates a Hugo formatter.

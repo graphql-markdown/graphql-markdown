@@ -97,7 +97,11 @@ export const formatMDXNameEntity = (
   return `<span className="gqlmd-mdx-entity"><code className="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };
 
-export { formatMDXDetails, formatMDXFrontmatter, formatMDXSpecifiedByLink };
+export {
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Creates a Vocs formatter.

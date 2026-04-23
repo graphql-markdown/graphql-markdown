@@ -117,7 +117,11 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   };
 };
 
-export { formatMDXBullet, formatMDXNameEntity, formatMDXSpecifiedByLink };
+export {
+  formatMDXBullet,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../defaults";
 
 /**
  * Creates an mdBook formatter.
@@ -230,7 +234,7 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     lines.push(`- [${category}]()`);
 
     for (const { filePath, name: pageName } of entries) {
-      const relPath = relative(rootDir, filePath).replaceAll(/\\/g, "/");
+      const relPath = relative(rootDir, filePath).replaceAll("\\", "/");
       lines.push(`  - [${pageName}](${relPath})`);
     }
 

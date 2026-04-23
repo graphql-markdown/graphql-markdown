@@ -125,7 +125,7 @@ export {
   formatMDXDetails,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-};
+} from "../defaults";
 
 /**
  * Creates a DocFX formatter.

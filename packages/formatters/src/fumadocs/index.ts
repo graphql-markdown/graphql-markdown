@@ -79,7 +79,7 @@ export {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-};
+} from "../defaults";
 
 /**
  * Creates a Fumadocs formatter.

@@ -88,7 +88,7 @@ export {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-};
+} from "../defaults";
 
 const INDEX_MD = "index.md" as const;
 

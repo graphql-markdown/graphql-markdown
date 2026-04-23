@@ -96,10 +96,7 @@ export const formatMDXFrontmatter = (
     return "" as MDXString;
   }
 
-  const lines = mergeFrontmatterLines(
-    props as Record<string, unknown>,
-    formatted ?? null,
-  );
+  const lines = mergeFrontmatterLines(props, formatted ?? null);
 
   const frontmatter = formatMarkdownFrontmatter(
     lines,
