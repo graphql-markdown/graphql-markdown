@@ -58,22 +58,25 @@ describe("section", () => {
         },
       });
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-{
-  "content": "
+      expect(section).toMatchInlineSnapshot(`
+        {
+          "content": "
 
-<details class="gqlmd-mdx-details">
-<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
+        <details class="gqlmd-mdx-details">
+        <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
+
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \\{#section-content\\} 
 
 
-</details>
 
-",
-  "level": 0,
-  "title": "",
-}
-`);
+        <em>deprecated</em>
+        </details>
+
+        ",
+          "level": 0,
+          "title": "",
+        }
+      `);
     });
 
     test("returns Markdown custom section level", () => {

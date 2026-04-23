@@ -11,7 +11,16 @@ import type {
   SectionLevelValue,
 } from "@graphql-markdown/types";
 
-import MDXModule from "../mdx";
+import {
+  formatMDXAdmonition,
+  formatMDXBadge,
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXLink,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
+} from "../../../formatters/src/defaults";
 
 export enum TypeHierarchy {
   API = "api",
@@ -106,5 +115,12 @@ export const DEFAULT_OPTIONS: Required<
   withAttributes: false as const,
   sectionHeaderId: true as const,
   hierarchy: PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
-  ...MDXModule,
+  formatMDXAdmonition,
+  formatMDXBadge,
+  formatMDXBullet,
+  formatMDXDetails,
+  formatMDXFrontmatter,
+  formatMDXLink,
+  formatMDXNameEntity,
+  formatMDXSpecifiedByLink,
 };
