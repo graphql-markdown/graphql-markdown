@@ -1,8 +1,8 @@
 import {
+  __default,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
-  formatMDXBullet,
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXLink,
@@ -10,6 +10,8 @@ import {
   formatMDXSpecifiedByLink,
   mdxExtension,
 } from "../../../src/honkit";
+
+const { formatMDXBullet } = __default;
 
 describe("mdxExtension", () => {
   test("uses .md extension — HonKit outputs plain markdown", () => {
@@ -56,11 +58,15 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bullet character with text", () => {
-    expect(formatMDXBullet("item")).toBe(" • item");
+    expect(formatMDXBullet("item")).toBe(
+      '<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>item',
+    );
   });
 
   test("renders bullet character with empty default", () => {
-    expect(formatMDXBullet()).toBe(" • ");
+    expect(formatMDXBullet()).toBe(
+      '<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>',
+    );
   });
 });
 

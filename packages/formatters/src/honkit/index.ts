@@ -25,6 +25,9 @@ import {
   mergeFrontmatterLines,
 } from "@graphql-markdown/helpers";
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
+import { formatMDXBullet } from "../defaults";
+
+export const __default = { formatMDXBullet };
 
 /** File extension used for generated pages — HonKit renders plain Markdown to HTML. */
 export const mdxExtension = ".md" as const;
@@ -62,15 +65,6 @@ export const formatMDXAdmonition = (
 ): MDXString => {
   const prefix = type === "warning" ? "WARNING" : "INFO";
   return `> **${prefix} - ${title}**\n>\n> ${text}` as MDXString;
-};
-
-/**
- * Formats a bullet point separator using a Unicode bullet character.
- * @param text - Optional text to append after the bullet
- * @returns Formatted bullet string
- */
-export const formatMDXBullet = (text = ""): MDXString => {
-  return ` • ${text}` as MDXString;
 };
 
 /**

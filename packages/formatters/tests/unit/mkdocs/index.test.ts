@@ -1,16 +1,17 @@
 import {
+  __default,
   afterRenderTypeEntitiesHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
-  formatMDXBullet,
   formatMDXDetails,
   formatMDXFrontmatter,
-  formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
   mdxExtension,
 } from "../../../src/mkdocs";
+
+const { formatMDXBullet, formatMDXLink } = __default;
 
 import * as Utils from "@graphql-markdown/utils";
 

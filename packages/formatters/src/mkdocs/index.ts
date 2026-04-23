@@ -17,7 +17,6 @@ import type {
   MDXString,
   MetaInfo,
   RenderTypeEntitiesHook,
-  TypeLink,
 } from "@graphql-markdown/types";
 import {
   extractFrontmatterTitle,
@@ -30,7 +29,12 @@ import {
   saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
-import { formatMDXBullet } from "../defaults";
+import { formatMDXBullet, formatMDXLink } from "../defaults";
+
+export const __default = {
+  formatMDXBullet,
+  formatMDXLink,
+};
 
 const ADMONITION_TYPE_MAP: Record<string, string> = {
   note: "note",
@@ -114,15 +118,6 @@ export const formatMDXFrontmatter = (
 ): MDXString => {
   const title = extractFrontmatterTitle(formatted);
   return title ? (`# ${title}` as MDXString) : ("" as MDXString);
-};
-
-/**
- * Returns the link unchanged — MkDocs resolves `.md` links natively.
- * @param link - Link data with URL and text
- * @returns The link unchanged
- */
-export const formatMDXLink = (link: TypeLink): TypeLink => {
-  return link;
 };
 
 /**
