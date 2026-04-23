@@ -68,6 +68,12 @@ export type RenderTypeEntitiesHook = (event: unknown) => Promise<void>;
 export type GenerateIndexMetafileHook = (event: unknown) => Promise<void>;
 
 /**
+ * Hook callback fired once after all files (entities + homepage) have been written.
+ * Use this for post-generation tasks that require the complete output directory.
+ */
+export type RenderFilesHook = (event: unknown) => Promise<void>;
+
+/**
  * Hook callback for print code events.
  * Receives an event with mutable `output` property for modifying generated code.
  */

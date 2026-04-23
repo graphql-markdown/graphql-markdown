@@ -2,7 +2,8 @@ export type Maybe<T> = T | null | undefined;
 
 export interface Category {
   category: string;
-  slug: string;
+  filePath: string;
+  name: string;
 }
 
 export type MDXString = string & { _opaque: typeof MDX_STRING };
