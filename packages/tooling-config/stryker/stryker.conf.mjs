@@ -35,9 +35,12 @@ const config = {
       collectCoverageFrom,
       moduleFileExtensions: ["js", "ts"],
       moduleNameMapper: Object.fromEntries(
-        Object.entries(moduleNameMapper).map(([pattern]) => {
+        Object.entries(moduleNameMapper ?? {}).map(([pattern]) => {
           if (pattern.startsWith("@graphql-markdown/formatters/defaults$")) {
             return [pattern, "<rootDir>/../../../formatters/src/defaults"];
+          }
+          if (pattern === "@graphql-markdown/formatters/(.*)$") {
+            return [pattern, "<rootDir>/../../../formatters/src/$1/index"];
           }
           return [pattern, "<rootDir>/../../../$1/src"];
         }),
