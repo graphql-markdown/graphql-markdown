@@ -202,14 +202,8 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 ## `mdxParser`
 
-Provide a custom module for formatting MDX content. You can also use built-in formatter presets from `@graphql-markdown/formatters`, for example:
+Provide a custom module for formatting MDX content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
 
-- `@graphql-markdown/formatters/docusaurus`
-- `@graphql-markdown/formatters/starlight`
-- `@graphql-markdown/formatters/fumadocs`
-- `@graphql-markdown/formatters/vocs`
-- `@graphql-markdown/formatters/docfx`
-- `@graphql-markdown/formatters/mdbook`
 
 | Setting     | CLI flag      | Default                            |
 | ----------- | ------------- | ---------------------------------- |
