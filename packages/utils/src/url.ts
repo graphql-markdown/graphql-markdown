@@ -38,7 +38,9 @@ export const toRelativeGeneratedDocLink = ({
   outputDir,
   targetUrlPath,
 }: RelativeGeneratedDocLinkOptions): string | undefined => {
-  const normalizedBaseURL = baseURL.replace(/^\/+/, "").replace(/\/+$/, "");
+  const normalizedBaseURL = baseURL
+    .replaceAll(/^\/+/g, "")
+    .replaceAll(/\/+$/g, "");
   const basePrefix = `/${normalizedBaseURL}/`;
 
   if (!targetUrlPath.startsWith(basePrefix)) {
