@@ -68,11 +68,15 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bull entity with text", () => {
-    expect(formatMDXBullet("item")).toBe("&nbsp;&bull;&nbsp;item");
+    expect(formatMDXBullet("item")).toBe(
+      '<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>item',
+    );
   });
 
   test("renders bull entity with empty default", () => {
-    expect(formatMDXBullet()).toBe("&nbsp;&bull;&nbsp;");
+    expect(formatMDXBullet()).toBe(
+      '<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>',
+    );
   });
 });
 

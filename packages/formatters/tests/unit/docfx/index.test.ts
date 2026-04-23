@@ -60,15 +60,18 @@ describe("formatMDXAdmonition", () => {
 
 describe("formatMDXBullet", () => {
   test("renders bull entity with text", () => {
-    expect(formatMDXBullet("item")).toBe("&nbsp;&bull;&nbsp;item");
+    expect(formatMDXBullet("item")).toBe(
+      '<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>item',
+    );
   });
 });
 
 describe("formatMDXDetails", () => {
   test("renders HTML details element", () => {
     const result = formatMDXDetails({ dataOpen: "Show", dataClose: "Hide" });
-    expect(result).toContain("<details>");
-    expect(result).toContain("<summary>Show</summary>");
+    expect(result).toContain('<details class="gqlmd-mdx-details">');
+    expect(result).toContain("SHOW");
+    expect(result).toContain("<em>Hide</em>");
   });
 });
 
@@ -106,19 +109,23 @@ describe("formatMDXLink", () => {
 });
 
 describe("formatMDXNameEntity", () => {
-  test("renders backtick code with parent", () => {
-    expect(formatMDXNameEntity("field", "Query")).toBe("`Query.field`");
+  test("renders entity span with parent", () => {
+    expect(formatMDXNameEntity("field", "Query")).toBe(
+      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">Query</code>.<code class="gqlmd-mdx-entity-name">field</code></span>',
+    );
   });
 
-  test("renders backtick code without parent", () => {
-    expect(formatMDXNameEntity("field")).toBe("`field`");
+  test("renders entity span without parent", () => {
+    expect(formatMDXNameEntity("field")).toBe(
+      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">field</code></span>',
+    );
   });
 });
 
 describe("formatMDXSpecifiedByLink", () => {
-  test("renders markdown link", () => {
+  test("renders specifiedby span with link", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
-      "[Specification ⎘](https://spec.example)",
+      '<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://spec.example" title="Specified by https://spec.example">⎘</a></span>',
     );
   });
 });

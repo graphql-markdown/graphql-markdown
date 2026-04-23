@@ -65,8 +65,9 @@ describe("formatMDXBullet", () => {
 describe("formatMDXDetails", () => {
   test("renders HTML details element", () => {
     const result = formatMDXDetails({ dataOpen: "Show", dataClose: "Hide" });
-    expect(result).toContain("<details>");
-    expect(result).toContain("<summary>Show</summary>");
+    expect(result).toContain('<details class="gqlmd-mdx-details">');
+    expect(result).toContain("SHOW");
+    expect(result).toContain("<em>Hide</em>");
   });
 });
 
@@ -106,9 +107,9 @@ describe("formatMDXNameEntity", () => {
 });
 
 describe("formatMDXSpecifiedByLink", () => {
-  test("renders markdown link", () => {
+  test("renders specifiedby span with link", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
-      "[Specification ⎘](https://spec.example)",
+      '<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://spec.example" title="Specified by https://spec.example">⎘</a></span>',
     );
   });
 });

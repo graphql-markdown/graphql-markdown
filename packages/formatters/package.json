@@ -83,6 +83,11 @@
       "import": { "types": "./dist/vocs/index.d.ts", "default": "./dist/vocs/index.js" },
       "default": { "types": "./dist/vocs/index.d.ts", "default": "./dist/vocs/index.js" }
     },
+    "./defaults": {
+      "require": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" },
+      "import": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" },
+      "default": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" }
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
