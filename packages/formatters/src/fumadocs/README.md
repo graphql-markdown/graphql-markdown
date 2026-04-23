@@ -8,6 +8,12 @@ Formatter preset for Next.js with [Fumadocs](https://www.fumadocs.dev/).
 npm install @graphql-markdown/formatters
 ```
 
+The Fumadocs formatter uses MUI `<Chip>` for badges. Install MUI if it is not already a dependency of your project:
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
 ## Quick Start
 
 ```js

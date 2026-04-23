@@ -8,6 +8,12 @@ Formatter preset for [Vocs](https://vocs.dev/).
 npm install @graphql-markdown/formatters
 ```
 
+The Vocs formatter uses MUI `<Chip>` for badges. Install MUI if it is not already a dependency of your project:
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
 ## Quick Start
 
 ```js

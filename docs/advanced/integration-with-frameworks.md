@@ -22,16 +22,16 @@ npm install @graphql-markdown/formatters
 Then select your framework:
 
 | Framework | Package | Setup |
-|-----------|---------|-------|
-| **Docusaurus** | `@graphql-markdown/formatters/docusaurus` | [Guide](../../packages/formatters/src/docusaurus/README.md) |
-| **Astro Starlight** | `@graphql-markdown/formatters/starlight` | [Guide](../../packages/formatters/src/starlight/README.md) |
-| **Next.js + Fumadocs** | `@graphql-markdown/formatters/fumadocs` | [Guide](../../packages/formatters/src/fumadocs/README.md) |
-| **Vocs** | `@graphql-markdown/formatters/vocs` | [Guide](../../packages/formatters/src/vocs/README.md) |
-| **HonKit** | `@graphql-markdown/formatters/honkit` | [Guide](../../packages/formatters/src/honkit/README.md) |
-| **Hugo** | `@graphql-markdown/formatters/hugo` | [Guide](../../packages/formatters/src/hugo/README.md) |
-| **MkDocs** | `@graphql-markdown/formatters/mkdocs` | [Guide](../../packages/formatters/src/mkdocs/README.md) |
-| **DocFX** | `@graphql-markdown/formatters/docfx` | [Guide](../../packages/formatters/src/docfx/README.md) |
-| **mdBook** | `@graphql-markdown/formatters/mdbook` | [Guide](../../packages/formatters/src/mdbook/README.md) |
+| --------- | ------- | ----- |
+| **Docusaurus** | `@graphql-markdown/formatters/docusaurus` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/README.md) |
+| **Astro Starlight** | `@graphql-markdown/formatters/starlight` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/README.md) |
+| **Next.js + Fumadocs** | `@graphql-markdown/formatters/fumadocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/README.md) |
+| **Vocs** | `@graphql-markdown/formatters/vocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/README.md) |
+| **HonKit** | `@graphql-markdown/formatters/honkit` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/README.md) |
+| **Hugo** | `@graphql-markdown/formatters/hugo` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/README.md) |
+| **MkDocs** | `@graphql-markdown/formatters/mkdocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/README.md) |
+| **DocFX** | `@graphql-markdown/formatters/docfx` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md) |
+| **mdBook** | `@graphql-markdown/formatters/mdbook` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/README.md) |
 
 ### Quick Example
 
@@ -51,7 +51,7 @@ await runGraphQLMarkdown({
 Some frameworks have dedicated integration packages beyond the basic formatters:
 
 | Framework | Framework Link | Package | NPM |
-|-----------|---|---|---|
+| --------- | -------------- | ------- | --- |
 | **VitePress** | [vitepress.dev](https://vitepress.dev/) | graphql-markdown-vitepress | [NPM](https://www.npmjs.com/package/graphql-markdown-vitepress) |
 
 ## Custom MDX Formatter

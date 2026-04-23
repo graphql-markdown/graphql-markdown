@@ -34,13 +34,23 @@ extensions:
     mdxParser: "@graphql-markdown/formatters/mkdocs"
 ```
 
+## Requirements
+
+Admonitions use the `!!!` block syntax from the Python-Markdown [`admonition`](https://python-markdown.github.io/extensions/admonition/) extension. Enable it in your `mkdocs.yml`:
+
+```yaml
+markdown_extensions:
+  - admonition
+```
+
+This works with any MkDocs theme that supports the extension, including Material for MkDocs and the ReadTheDocs theme.
+
 ## Features
 
-- **Material Admonitions**: Uses Material for MkDocs `!!!` syntax for admonitions
-- **Collapsible Sections**: Uses `???` syntax for details/collapsible content
+- **Admonitions**: Uses Python-Markdown `!!!` block syntax (requires the `admonition` extension)
+- **Collapsible Sections**: Uses HTML `<details>/<summary>` elements — no theme-specific plugin required
 - **Markdown Extension**: Generates `.md` files
-- **Frontmatter Support**: Includes YAML frontmatter for page metadata
-- **Responsive**: Optimized for MkDocs' static site generation
+- **Frontmatter**: Renders the page title as a visible `# Heading` (MkDocs ignores YAML frontmatter by default)
 
 ## Custom Overrides
 

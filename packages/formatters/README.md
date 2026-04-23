@@ -42,19 +42,19 @@ Each formatter has its own setup guide:
 
 | Framework | Package Path | Documentation |
 |-----------|--------------|---|
-| Docusaurus | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |
 | Astro Starlight | `@graphql-markdown/formatters/starlight` | [Guide](src/starlight/README.md) |
-| Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs` | [Guide](src/fumadocs/README.md) |
-| Vocs | `@graphql-markdown/formatters/vocs` | [Guide](src/vocs/README.md) |
+| DocFX | `@graphql-markdown/formatters/docfx` | [Guide](src/docfx/README.md) |
+| Docusaurus | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |
 | HonKit | `@graphql-markdown/formatters/honkit` | [Guide](src/honkit/README.md) |
 | Hugo | `@graphql-markdown/formatters/hugo` | [Guide](src/hugo/README.md) |
-| MkDocs | `@graphql-markdown/formatters/mkdocs` | [Guide](src/mkdocs/README.md) |
-| DocFX | `@graphql-markdown/formatters/docfx` | [Guide](src/docfx/README.md) |
 | mdBook | `@graphql-markdown/formatters/mdbook` | [Guide](src/mdbook/README.md) |
+| MkDocs | `@graphql-markdown/formatters/mkdocs` | [Guide](src/mkdocs/README.md) |
+| Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs` | [Guide](src/fumadocs/README.md) |
+| Vocs | `@graphql-markdown/formatters/vocs` | [Guide](src/vocs/README.md) |
 
 ## Custom Formatter
 
-For frameworks not listed above, create a custom MDX module. See the main [Integration Guide](/docs/advanced/integration-with-frameworks.md#custom-mdx-formatter) for details on the formatter contract and examples.
+For frameworks not listed above, create a custom MDX module. See the [Integration Guide](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#custom-mdx-formatter) for the full formatter contract, the `formatMDXDetails` `\r` delimiter invariant, and examples of extending a preset.
 
 ## Contributing
 
@@ -68,24 +68,9 @@ For frameworks not listed above, create a custom MDX module. See the main [Integ
 
 ### Formatter Contract
 
-A formatter module should export `createMDXFormatter` and may also export individual formatter helpers:
+A formatter module exports `createMDXFormatter` and any subset of the standard formatter functions (`formatMDXBadge`, `formatMDXAdmonition`, `formatMDXBullet`, `formatMDXDetails`, `formatMDXFrontmatter`, `formatMDXLink`, `formatMDXNameEntity`, `formatMDXSpecifiedByLink`). Optional exports include `mdxDeclaration`, `mdxExtension`, and lifecycle hooks.
 
-- `formatMDXBadge`
-- `formatMDXAdmonition`
-- `formatMDXBullet`
-- `formatMDXDetails`
-- `formatMDXFrontmatter`
-- `formatMDXLink`
-- `formatMDXNameEntity`
-- `formatMDXSpecifiedByLink`
-
-Optional exports:
-
-- `mdxDeclaration`
-- `mdxExtension`
-- lifecycle hooks (for advanced customization)
-
-For `formatMDXDetails`, keep a single standalone `\r` delimiter in the returned string to split open and close content correctly.
+See the [Integration Guide](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#custom-mdx-formatter) for the full contract, type signatures, and the `formatMDXDetails` `\r` delimiter invariant.
 
 ### Testing Checklist
 

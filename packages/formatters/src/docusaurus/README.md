@@ -70,7 +70,6 @@ extensions:
 - **MDX Components**: Uses Docusaurus-native components (Badge, Admonition, Details)
 - **MDX Extension**: Generates `.mdx` files with JSX support
 - **Details/Summary**: Collapsible sections use native `<details>/<summary>` HTML with custom CSS for label control
-- **Sidebar Integration**: Automatically generates `_category_.yml` files for Docusaurus sidebar metadata
 
 ## Custom Overrides
 

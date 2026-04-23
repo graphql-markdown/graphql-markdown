@@ -34,13 +34,16 @@ extensions:
     mdxParser: "@graphql-markdown/formatters/hugo"
 ```
 
+## Requirements
+
+Alert rendering requires Hugo 0.132 or later with the GitHub-style blockquote alert render hook enabled (included in Hugo's default configuration since 0.132).
+
 ## Features
 
-- **GitHub-style Alerts**: Uses `> [!NOTE]`, `> [!WARNING]`, etc. for admonitions
+- **GitHub-style Alerts**: Uses `> [!NOTE]`, `> [!WARNING]`, etc. syntax rendered as styled callouts by Hugo's built-in alert hook (Hugo 0.132+)
 - **Markdown Extension**: Generates `.md` files
-- **Extensionless Links**: Internal links omit file extensions for Hugo's URL handling
-- **Frontmatter Support**: Includes YAML frontmatter for Hugo metadata
-- **Responsive**: Optimized for Hugo's static site generation
+- **Extensionless Links**: Internal links omit file extensions to match Hugo's URL routing
+- **Frontmatter Support**: Includes YAML frontmatter for Hugo page metadata
 
 ## Custom Overrides
 

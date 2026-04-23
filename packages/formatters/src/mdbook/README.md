@@ -36,10 +36,9 @@ extensions:
 
 ## Features
 
-- **No Frontmatter**: mdBook doesn't support frontmatter; content is rendered as documentation
-- **Blockquote Admonitions**: Uses blockquote syntax for admonitions
+- **No Frontmatter**: mdBook doesn't support YAML frontmatter; it renders the delimiters and content as raw text. Metadata is handled via `SUMMARY.md` and `book.toml` instead.
+- **Blockquote Admonitions**: Uses `> **Note**` / `> **Warning**` blockquote style (compatible with all mdBook versions without plugins)
 - **Markdown Extension**: Generates `.md` files
-- **Responsive**: Optimized for mdBook's Rust documentation framework
 - **Simplicity**: Minimal configuration for straightforward documentation
 
 ## Custom Overrides
