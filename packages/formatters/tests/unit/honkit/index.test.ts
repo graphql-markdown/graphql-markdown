@@ -427,6 +427,22 @@ describe("formatMDXSpecifiedByLink", () => {
     const result = formatMDXFrontmatter({ title: "Title\n  " }, []);
     expect(result).toContain("# Title");
   });
+
+  test("preserves text content when replacing newlines", () => {
+    const result = formatMDXFrontmatter({ title: "GraphQL\nSchema" }, []);
+    const heading = /# .*/.exec(result);
+    expect(heading).toBeTruthy();
+    expect(heading![0]).toBe("# GraphQL Schema");
+  });
+
+  test("does not contain literal newlines in heading after replacement", () => {
+    const result = formatMDXFrontmatter({ title: "Multi\nLine\nTitle" }, []);
+    const lines = result.split("\n");
+    const headingLine = lines.find((l) => {
+      return l.startsWith("# ");
+    });
+    expect(headingLine).toBe("# Multi Line Title");
+  });
 });
 
 describe("createMDXFormatter", () => {
