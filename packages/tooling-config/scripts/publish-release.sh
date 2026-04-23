@@ -7,10 +7,12 @@
 # Publishes packages in dependency order:
 # 1. types (no deps)
 # 2. utils, logger, graphql (depend on types)
-# 3. helpers, diff, printer-legacy (depend on utils, graphql)
-# 4. core (depends on graphql, logger, utils)
-# 5. cli (depends on core, logger, printer-legacy)
-# 6. docusaurus (depends on cli, logger, utils)
+# 3. helpers, diff, 
+# 4. formatters (depend on utils, logger, graphql, helpers)
+# 5. printer-legacy (depend on utils, graphql, formatters)
+# 6. core (depends on graphql, logger, utils)
+# 7. cli (depends on core, logger, printer-legacy)
+# 8. docusaurus (depends on cli, logger, utils)
 
 set -euo pipefail
 
@@ -47,6 +49,7 @@ PACKAGES=(
   "graphql"
   "helpers"
   "diff"
+  "formatters"
   "printer-legacy"
   "core"
   "cli"
