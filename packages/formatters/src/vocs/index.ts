@@ -19,6 +19,10 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  appendLinkExtension,
+  formatMarkdownFrontmatter,
+} from "@graphql-markdown/helpers";
+import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -30,6 +34,9 @@ import Chip from '@mui/material/Chip';
 
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em' }}>&nbsp;●&nbsp;</span></>
 ` as MDXString;
+
+/** File extension used for generated pages. */
+export const mdxExtension = ".mdx" as const;
 
 /**
  * Formats a badge using the Material UI `<Chip>` component.
@@ -88,11 +95,11 @@ export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  return formatted
-    ? ([FRONT_MATTER_DELIMITER, ...formatted, FRONT_MATTER_DELIMITER].join(
-        MARKDOWN_EOL,
-      ) as MDXString)
-    : ("" as MDXString);
+  return formatMarkdownFrontmatter(
+    formatted,
+    FRONT_MATTER_DELIMITER,
+    MARKDOWN_EOL,
+  ) as MDXString;
 };
 
 /**
@@ -103,7 +110,7 @@ export const formatMDXFrontmatter = (
 export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   return {
     text,
-    url: `${url}.mdx`,
+    url: appendLinkExtension(url, mdxExtension),
   };
 };
 

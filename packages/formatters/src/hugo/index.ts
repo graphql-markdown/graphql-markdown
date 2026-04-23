@@ -23,6 +23,10 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  extractFrontmatterTitle,
+  quoteMarkdownLines,
+} from "@graphql-markdown/helpers";
+import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -45,49 +49,6 @@ const ALERT_TYPE_MAP: Record<string, string> = {
   deprecated: "WARNING",
   caution: "CAUTION",
   success: "NOTE",
-};
-
-/**
- * Prefixes every line of a multiline string with `> ` to produce a Markdown blockquote.
- * @param text - The text to quote
- * @returns Blockquote-formatted string
- */
-const quoteLines = (text: string): string => {
-  return text
-    .split(MARKDOWN_EOL)
-    .map((line) => {
-      return `> ${line}`;
-    })
-    .join(MARKDOWN_EOL);
-};
-
-/**
- * Extracts the title value from a YAML frontmatter line in linear time.
- * Accepts values with or without surrounding single/double quotes.
- */
-const extractFrontmatterTitle = (line: string): string => {
-  const trimmed = line.trim();
-  const titlePrefix = "title:";
-
-  if (!trimmed.startsWith(titlePrefix)) {
-    return "";
-  }
-
-  const rawValue = trimmed.slice(titlePrefix.length).trim();
-  if (rawValue.length === 0) {
-    return "";
-  }
-
-  const firstChar = rawValue[0];
-  const lastChar = rawValue[rawValue.length - 1];
-  const isWrappedInMatchingQuotes =
-    rawValue.length >= 2 &&
-    ((firstChar === '"' && lastChar === '"') ||
-      (firstChar === "'" && lastChar === "'"));
-
-  return isWrappedInMatchingQuotes
-    ? rawValue.slice(1, -1).trim()
-    : rawValue.trim();
 };
 
 /**
@@ -114,7 +75,7 @@ export const formatMDXAdmonition = (
 ): MDXString => {
   const alertType = ALERT_TYPE_MAP[type.toLowerCase()] ?? "NOTE";
   const titleLine = title ? `${MARKDOWN_EOL}> **${title}**` : "";
-  return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteLines(text)}${MARKDOWN_EOL}` as MDXString;
+  return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
 };
 
 /**
@@ -158,10 +119,7 @@ export const formatMDXFrontmatter = (
     return "" as MDXString;
   }
 
-  const titleLine = lines.find((line) => {
-    return line.trimStart().startsWith("title:");
-  });
-  const title = titleLine ? extractFrontmatterTitle(titleLine) : "";
+  const title = extractFrontmatterTitle(lines);
 
   const frontmatter = [
     FRONT_MATTER_DELIMITER,

@@ -95,9 +95,9 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toBe("# Test");
   });
 
-  test("falls back to props title", () => {
+  test("ignores props — title is sourced from formatted lines", () => {
     const result = formatMDXFrontmatter({ title: "Fallback" }, []);
-    expect(result).toBe("# Fallback");
+    expect(result).toBe("");
   });
 
   test("renders heading from single-quoted title", () => {

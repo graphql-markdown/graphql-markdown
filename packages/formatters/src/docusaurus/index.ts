@@ -19,6 +19,10 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  appendLinkExtension,
+  formatMarkdownFrontmatter,
+} from "@graphql-markdown/helpers";
+import {
   escapeMDX,
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
@@ -128,7 +132,7 @@ export const formatMDXNameEntity = (
 export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
   return {
     text,
-    url: `${url}${LINK_MDX_EXTENSION}`,
+    url: appendLinkExtension(url, LINK_MDX_EXTENSION),
   };
 };
 
@@ -142,11 +146,11 @@ export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  return formatted
-    ? ([FRONT_MATTER_DELIMITER, ...formatted, FRONT_MATTER_DELIMITER].join(
-        MARKDOWN_EOL,
-      ) as MDXString)
-    : ("" as MDXString);
+  return formatMarkdownFrontmatter(
+    formatted,
+    FRONT_MATTER_DELIMITER,
+    MARKDOWN_EOL,
+  ) as MDXString;
 };
 
 /**

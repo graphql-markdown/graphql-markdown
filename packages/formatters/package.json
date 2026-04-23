@@ -99,6 +99,7 @@
     "test:ci": "jest --passWithNoTests --ci --silent --randomize --runInBand"
   },
   "dependencies": {
+    "@graphql-markdown/helpers": "workspace:^",
     "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"
   },

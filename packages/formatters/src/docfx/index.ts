@@ -22,6 +22,7 @@ import type {
   RenderTypeEntitiesHook,
   TypeLink,
 } from "@graphql-markdown/types";
+import { quoteMarkdownLines } from "@graphql-markdown/helpers";
 import {
   capitalize,
   fileExists,
@@ -42,15 +43,6 @@ const ALERT_TYPE_MAP: Record<string, string> = {
   deprecated: "WARNING",
   caution: "CAUTION",
   success: "NOTE",
-};
-
-const quoteLines = (text: string): string => {
-  return text
-    .split(MARKDOWN_EOL)
-    .map((line) => {
-      return `> ${line}`;
-    })
-    .join(MARKDOWN_EOL);
 };
 
 /** Maps graphql-markdown badge classnames to Bootstrap 5 contextual badge classes. */
@@ -83,7 +75,7 @@ export const formatMDXAdmonition = (
 ): MDXString => {
   const alertType = ALERT_TYPE_MAP[type.toLowerCase()] ?? "NOTE";
   const titleLine = title ? `${MARKDOWN_EOL}> **${title}**` : "";
-  return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteLines(text)}${MARKDOWN_EOL}` as MDXString;
+  return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
 };
 
 /**

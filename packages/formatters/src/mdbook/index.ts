@@ -24,20 +24,16 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  appendExtensionToAbsolutePathWithoutExtension,
+  extractFrontmatterTitle,
+  quoteMarkdownLines,
+} from "@graphql-markdown/helpers";
+import {
   firstUppercase,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   saveFile,
 } from "@graphql-markdown/utils";
-
-const quoteLines = (text: string): string => {
-  return text
-    .split(MARKDOWN_EOL)
-    .map((line) => {
-      return `> ${line}`;
-    })
-    .join(MARKDOWN_EOL);
-};
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -61,7 +57,7 @@ export const formatMDXAdmonition = (
 ): MDXString => {
   const tag = type.toUpperCase();
   const titleLine = title?.trim() ? `> ${title.trim()}${MARKDOWN_EOL}` : "";
-  return `${MARKDOWN_EOP}> [!${tag}]${MARKDOWN_EOL}${titleLine}${quoteLines(text)}${MARKDOWN_EOL}` as MDXString;
+  return `${MARKDOWN_EOP}> [!${tag}]${MARKDOWN_EOL}${titleLine}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
 };
 
 /**
@@ -101,12 +97,12 @@ export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  const titleLine = formatted?.find((l) => {
-    return l.startsWith("title:");
-  });
-  const title = titleLine?.slice("title:".length).trim() ?? "";
+  const title = extractFrontmatterTitle(formatted);
   return (title ? `# ${title}${MARKDOWN_EOL}` : "") as MDXString;
 };
+
+/** mdBook expects `.md` files; override the default `.mdx` extension. */
+export const mdxExtension = ".md";
 
 /**
  * Returns the link unchanged — mdBook resolves `.md` links natively.
@@ -115,10 +111,14 @@ export const formatMDXFrontmatter = (
  */
 export const formatMDXLink = (link: TypeLink): TypeLink => {
   const { url } = link;
-  if (url && url.startsWith("/") && !/\.[a-z]{2,5}(#.*)?$/i.test(url)) {
-    return { ...link, url: `${url}.md` };
+  if (!url) {
+    return link;
   }
-  return link;
+
+  return {
+    ...link,
+    url: appendExtensionToAbsolutePathWithoutExtension(url, mdxExtension),
+  };
 };
 
 /**
@@ -161,9 +161,6 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXSpecifiedByLink,
   };
 };
-
-/** mdBook expects `.md` files; override the default `.mdx` extension. */
-export const mdxExtension = ".md";
 
 const SECTION_ORDER = [
   "Queries",
@@ -243,7 +240,7 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     "",
     "---",
     "",
-    `[GraphQL API Reference](${baseURL}/index.md)`,
+    `[GraphQL API Reference](${baseURL}/index${mdxExtension}})`,
     "",
   ];
 

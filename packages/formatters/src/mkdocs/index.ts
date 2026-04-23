@@ -20,6 +20,10 @@ import type {
   TypeLink,
 } from "@graphql-markdown/types";
 import {
+  extractFrontmatterTitle,
+  indentMarkdownLines,
+} from "@graphql-markdown/helpers";
+import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   readFile,
@@ -38,53 +42,6 @@ const ADMONITION_TYPE_MAP: Record<string, string> = {
   success: "success",
 };
 
-const parseFrontmatterTitleLine = (line: string): string => {
-  const trimmed = line.trim();
-  const titlePrefix = "title:";
-
-  if (!trimmed.startsWith(titlePrefix)) {
-    return "";
-  }
-
-  const rawValue = trimmed.slice(titlePrefix.length).trim();
-  if (rawValue.length === 0) {
-    return "";
-  }
-
-  const firstChar = rawValue[0];
-  const lastChar = rawValue[rawValue.length - 1];
-  const isWrappedInMatchingQuotes =
-    rawValue.length >= 2 &&
-    ((firstChar === '"' && lastChar === '"') ||
-      (firstChar === "'" && lastChar === "'"));
-
-  return isWrappedInMatchingQuotes
-    ? rawValue.slice(1, -1).trim()
-    : rawValue.trim();
-};
-
-const extractTitle = (
-  props: Maybe<FrontMatterOptions>,
-  formatted: Maybe<string[]>,
-): string => {
-  const lines = formatted ?? [];
-  const titleLine = lines.find((line) => {
-    return line.trimStart().startsWith("title:");
-  });
-
-  let titleFromProps = "";
-  if (props && typeof props === "object" && "title" in props) {
-    const titleValue = (props as { title?: unknown }).title;
-    if (typeof titleValue === "string") {
-      titleFromProps = titleValue;
-    } else if (typeof titleValue === "number") {
-      titleFromProps = `${titleValue}`;
-    }
-  }
-
-  return titleLine ? parseFrontmatterTitleLine(titleLine) : titleFromProps;
-};
-
 const rewriteInternalLinks = (
   content: string,
   filePath: string,
@@ -93,7 +50,7 @@ const rewriteInternalLinks = (
 ): string => {
   return content.replace(
     /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
-    (match, urlPath, hash = "") => {
+    (_match, urlPath, hash = "") => {
       const relativePath = toRelativeGeneratedDocLink({
         baseURL,
         currentFilePath: filePath,
@@ -101,23 +58,10 @@ const rewriteInternalLinks = (
         targetUrlPath: urlPath,
       });
 
-      if (!relativePath) {
-        return match;
-      }
-
-      return `](${relativePath}${hash})`;
+      const target = relativePath ?? urlPath;
+      return `](${target}${hash})`;
     },
   );
-};
-
-const indentLines = (text: string, spaces: number): string => {
-  const indent = " ".repeat(spaces);
-  return text
-    .split(MARKDOWN_EOL)
-    .map((line) => {
-      return line.trim() ? `${indent}${line}` : "";
-    })
-    .join(MARKDOWN_EOL);
 };
 
 /**
@@ -142,7 +86,7 @@ export const formatMDXAdmonition = (
 ): MDXString => {
   const mkdocsType = ADMONITION_TYPE_MAP[type.toLowerCase()] ?? "note";
   const titleAttr = title ? ` "${title}"` : "";
-  return `${MARKDOWN_EOP}!!! ${mkdocsType}${titleAttr}${MARKDOWN_EOL}${indentLines(text, 4)}${MARKDOWN_EOL}` as MDXString;
+  return `${MARKDOWN_EOP}!!! ${mkdocsType}${titleAttr}${MARKDOWN_EOL}${indentMarkdownLines(text, 4, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
 };
 
 /**
@@ -168,15 +112,15 @@ export const formatMDXDetails = ({
 
 /**
  * Formats page title as a visible H1 heading.
- * @param props - Front matter options used as a fallback title source
+ * @param _props - Front matter options (unused)
  * @param formatted - Pre-formatted front matter lines
  * @returns Visible heading string, or empty string if no title is available
  */
 export const formatMDXFrontmatter = (
-  props: Maybe<FrontMatterOptions>,
+  _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  const title = extractTitle(props, formatted);
+  const title = extractFrontmatterTitle(formatted);
   return title ? (`# ${title}` as MDXString) : ("" as MDXString);
 };
 
