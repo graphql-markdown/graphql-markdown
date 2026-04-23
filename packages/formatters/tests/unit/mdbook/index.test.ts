@@ -38,6 +38,44 @@ describe("formatMDXAdmonition", () => {
     expect(result).not.toContain("> \n");
     expect(result).toContain("> body");
   });
+
+  test("omits title line when title is only whitespace", () => {
+    const result = formatMDXAdmonition(
+      { text: "body", title: "   ", type: "info" },
+      null,
+    );
+    expect(result).toContain("> [!INFO]");
+    expect(result).not.toContain("> \n");
+    expect(result).toContain("> body");
+  });
+
+  test("trims whitespace from title", () => {
+    const result = formatMDXAdmonition(
+      { text: "body", title: "  Trimmed Title  ", type: "note" },
+      null,
+    );
+    expect(result).toContain("> Trimmed Title");
+    expect(result).not.toContain(">   ");
+  });
+
+  test("uppercases the admonition type tag", () => {
+    const result = formatMDXAdmonition(
+      { text: "body", title: "", type: "warning" },
+      null,
+    );
+    expect(result).toContain("> [!WARNING]");
+  });
+
+  test("renders different admonition types", () => {
+    const types = ["note", "warning", "important", "tip", "caution"];
+    for (const type of types) {
+      const result = formatMDXAdmonition(
+        { text: "body", title: "", type: type as any },
+        null,
+      );
+      expect(result).toContain(`> [!${type.toUpperCase()}]`);
+    }
+  });
 });
 
 describe("formatMDXBullet", () => {
@@ -104,6 +142,20 @@ describe("formatMDXLink", () => {
   test("leaves relative links unchanged", () => {
     const link = { text: "Type", url: "type" };
     expect(formatMDXLink(link)).toEqual(link);
+  });
+
+  test("returns link unchanged when URL is null", () => {
+    expect(formatMDXLink({ text: "Type", url: null })).toEqual({
+      text: "Type",
+      url: null,
+    });
+  });
+
+  test("returns link unchanged when URL is undefined", () => {
+    expect(formatMDXLink({ text: "Type", url: undefined })).toEqual({
+      text: "Type",
+      url: undefined,
+    });
   });
 });
 
@@ -192,5 +244,246 @@ describe("afterRenderFilesHook", () => {
     expect(summary.indexOf("# Operations")).toBeLessThan(
       summary.indexOf("# Types"),
     );
+  });
+
+  test("handles empty pages array", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-empty-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("# Summary");
+    expect(summary).toContain("[Introduction](introduction.md)");
+  });
+
+  test("filters out null pages", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-null-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            null,
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "test.md"),
+              name: "test",
+            },
+            undefined,
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("- [Queries]()");
+    expect(summary).toContain("  - [test](graphql/operations/queries/test.md)");
+  });
+
+  test("sorts sections with Operations before Types", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-sort-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Scalars",
+              filePath: pathJoin(outputDir, "types", "scalars", "string.md"),
+              name: "String",
+            },
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "foo.md"),
+              name: "foo",
+            },
+            {
+              category: "Mutations",
+              filePath: pathJoin(
+                outputDir,
+                "operations",
+                "mutations",
+                "bar.md",
+              ),
+              name: "bar",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    const opsIdx = summary.indexOf("# Operations");
+    const typesIdx = summary.indexOf("# Types");
+    expect(opsIdx).toBeLessThan(typesIdx);
+  });
+
+  test("sorts categories within a section by SECTION_ORDER", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-category-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Subscriptions",
+              filePath: pathJoin(
+                outputDir,
+                "operations",
+                "subscriptions",
+                "sub.md",
+              ),
+              name: "sub",
+            },
+            {
+              category: "Mutations",
+              filePath: pathJoin(
+                outputDir,
+                "operations",
+                "mutations",
+                "mut.md",
+              ),
+              name: "mut",
+            },
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "q.md"),
+              name: "q",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    const queryIdx = summary.indexOf("- [Queries]");
+    const mutIdx = summary.indexOf("- [Mutations]");
+    const subIdx = summary.indexOf("- [Subscriptions]");
+
+    // Queries < Mutations < Subscriptions (per SECTION_ORDER)
+    expect(queryIdx).toBeLessThan(mutIdx);
+    expect(mutIdx).toBeLessThan(subIdx);
+  });
+
+  test("includes GraphQL API Reference link with correct baseURL", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-ref-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "schema",
+        outputDir,
+        rootDir,
+        pages: [[]],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("[GraphQL API Reference](schema/index.md");
+  });
+
+  test("includes introduction link in summary header", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-intro-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [[]],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("[Introduction](introduction.md)");
+    expect(summary.indexOf("[Introduction]")).toBeLessThan(
+      summary.indexOf("[GraphQL API Reference]"),
+    );
+  });
+
+  test("includes separator between header and content", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-sep-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [[]],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("---");
+    // Separator should come after intro, before API reference
+    const introIdx = summary.indexOf("[Introduction]");
+    const sepIdx = summary.indexOf("---");
+    const apiRefIdx = summary.indexOf("[GraphQL API Reference]");
+    expect(introIdx).toBeLessThan(sepIdx);
+    expect(sepIdx).toBeLessThan(apiRefIdx);
   });
 });
