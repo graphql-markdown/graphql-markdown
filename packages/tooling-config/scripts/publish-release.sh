@@ -7,7 +7,7 @@
 # Publishes packages in dependency order:
 # 1. types (no deps)
 # 2. utils, logger, graphql (depend on types)
-# 3. helpers, diff, 
+# 3. helpers, diff (depend on utils, logger, graphql)
 # 4. formatters (depend on utils, logger, graphql, helpers)
 # 5. printer-legacy (depend on utils, graphql, formatters)
 # 6. core (depends on graphql, logger, utils)
