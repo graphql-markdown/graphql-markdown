@@ -33,9 +33,7 @@ export type {
   IPrintTypeEvent,
   PageSection,
   PageSections,
-  PrintCodeEvent,
   PrintCodeEventData,
-  PrintTypeEvent,
   PrintTypeEventData,
 } from "@graphql-markdown/types";
 

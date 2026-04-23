@@ -102,11 +102,6 @@ export interface IPrintTypeEvent extends ICancellableEvent {
   output: Maybe<MDXString>;
 }
 
-/** @deprecated Use IPrintCodeEvent */
-export type PrintCodeEvent = IPrintCodeEvent;
-
-/** @deprecated Use IPrintTypeEvent */
-export type PrintTypeEvent = IPrintTypeEvent;
 
 /**
  * Data payload for compose page type events.
