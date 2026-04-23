@@ -1,4 +1,5 @@
 import {
+  afterRenderFilesHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -8,6 +9,7 @@ import {
   formatMDXLink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
+  mdxExtension,
 } from "../../../src/mdbook";
 
 describe("formatMDXBadge", () => {
@@ -17,21 +19,24 @@ describe("formatMDXBadge", () => {
 });
 
 describe("formatMDXAdmonition", () => {
-  test("renders blockquote with uppercased type as label", () => {
+  test("renders admonition with [!TYPE] tag and title line", () => {
     const result = formatMDXAdmonition(
       { text: "body", title: "My Title", type: "note" },
       null,
     );
-    expect(result).toContain("> **MY TITLE**");
+    expect(result).toContain("> [!NOTE]");
+    expect(result).toContain("> My Title");
     expect(result).toContain("> body");
   });
 
-  test("uses type when title is empty", () => {
+  test("omits title line when title is empty", () => {
     const result = formatMDXAdmonition(
       { text: "body", title: "", type: "warning" },
       null,
     );
-    expect(result).toContain("> **WARNING**");
+    expect(result).toContain("> [!WARNING]");
+    expect(result).not.toContain("> \n");
+    expect(result).toContain("> body");
   });
 });
 
@@ -42,26 +47,60 @@ describe("formatMDXBullet", () => {
 });
 
 describe("formatMDXDetails", () => {
-  test("renders HTML details element", () => {
-    const result = formatMDXDetails({ dataOpen: "Show", dataClose: "Hide" });
-    expect(result).toContain("<details>");
-    expect(result).toContain("<summary>Show</summary>");
+  test("renders bold label — no heading, safe at any nesting level without breaking heading hierarchy", () => {
+    const result = formatMDXDetails({
+      dataOpen: "DEPRECATED",
+      dataClose: "DEPRECATED",
+    });
+    expect(result).not.toContain("<details>");
+    expect(result).not.toContain("###");
+    expect(result).toContain("**Deprecated**");
+  });
+
+  test("output contains \\r so the printer can split into [openSection, closeSection]", () => {
+    const result = formatMDXDetails({
+      dataOpen: "DEPRECATED",
+      dataClose: "DEPRECATED",
+    });
+    const parts = result.split("\r");
+    expect(parts).toHaveLength(2);
+    expect(parts[0]).toContain("**Deprecated**");
   });
 });
 
 describe("formatMDXFrontmatter", () => {
-  test("returns empty string — mdBook renders frontmatter as literal content", () => {
-    expect(formatMDXFrontmatter(undefined, ["title: Test"])).toBe("");
+  test("emits H1 title — mdBook renders YAML front matter as literal content", () => {
+    expect(formatMDXFrontmatter(undefined, ["id: test", "title: Test"])).toBe(
+      "# Test\n",
+    );
   });
 
-  test("returns empty string even when props are provided", () => {
-    expect(formatMDXFrontmatter({ title: "Test" }, ["title: Test"])).toBe("");
+  test("returns empty string when no title line is present", () => {
+    expect(formatMDXFrontmatter(undefined, ["id: test"])).toBe("");
+  });
+
+  test("ignores props — title is always sourced from the formatted array", () => {
+    expect(
+      formatMDXFrontmatter({ title: "ignored" }, ["title: FromFormatted"]),
+    ).toBe("# FromFormatted\n");
   });
 });
 
 describe("formatMDXLink", () => {
-  test("returns link unchanged", () => {
-    const link = { text: "Type", url: "/schema/type" };
+  test("appends .md to extensionless absolute paths", () => {
+    expect(formatMDXLink({ text: "Type", url: "/schema/type" })).toEqual({
+      text: "Type",
+      url: "/schema/type.md",
+    });
+  });
+
+  test("leaves links with an extension unchanged", () => {
+    const link = { text: "Type", url: "/schema/type.md" };
+    expect(formatMDXLink(link)).toEqual(link);
+  });
+
+  test("leaves relative links unchanged", () => {
+    const link = { text: "Type", url: "type" };
     expect(formatMDXLink(link)).toEqual(link);
   });
 });
@@ -91,5 +130,61 @@ describe("createMDXFormatter", () => {
     expect(formatter).toHaveProperty("formatMDXAdmonition");
     expect(formatter).toHaveProperty("formatMDXFrontmatter");
     expect(formatter).toHaveProperty("formatMDXLink");
+  });
+});
+
+describe("mdxExtension", () => {
+  test("is .md — mdBook does not use .mdx files", () => {
+    expect(mdxExtension).toBe(".md");
+  });
+});
+
+describe("afterRenderFilesHook", () => {
+  test("is a function (lifecycle hook contract)", () => {
+    expect(typeof afterRenderFilesHook).toBe("function");
+  });
+
+  test("writes SUMMARY.md with grouped and sorted pages", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-test-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "foo.md"),
+              name: "foo",
+            },
+            {
+              category: "Scalars",
+              filePath: pathJoin(outputDir, "types", "scalars", "string.md"),
+              name: "String",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("# Operations");
+    expect(summary).toContain("- [Queries]()");
+    expect(summary).toContain("  - [foo](graphql/operations/queries/foo.md)");
+    expect(summary).toContain("# Types");
+    expect(summary).toContain("- [Scalars]()");
+    // Operations must come before Types
+    expect(summary.indexOf("# Operations")).toBeLessThan(
+      summary.indexOf("# Types"),
+    );
   });
 });
