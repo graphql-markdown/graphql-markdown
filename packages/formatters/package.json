@@ -88,6 +88,7 @@
   "scripts": {
     "clean": "tsgo --build --clean && rm -rf ./dist",
     "build": "tsgo --build",
+    "docs": "typedoc --options typedoc.config.mjs",
     "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"{src,tests}/**/*.{ts,js,json,gql}\"",
     "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"{src,tests}/**/*.{ts,js,json,gql}\" --fix",
     "prettier": "prettier \"{src,tests}/**/*.{ts,js,json,md,gql}\" --check",
