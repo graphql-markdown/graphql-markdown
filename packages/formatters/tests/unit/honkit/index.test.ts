@@ -1,5 +1,4 @@
 import {
-  beforeComposePageTypeHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -19,19 +18,19 @@ describe("mdxExtension", () => {
 });
 
 describe("formatMDXBadge", () => {
-  test("renders inline span with themed styles", () => {
+  test("renders inline span with shared styles", () => {
     const result = formatMDXBadge({ text: "Required", classname: "required" });
     expect(result).toContain("<span");
     expect(result).toContain("Required");
     expect(result).toContain("border-radius:999px");
   });
 
-  test("applies deprecated theme for deprecated classname", () => {
+  test("uses same shared color for deprecated classname", () => {
     const result = formatMDXBadge({ text: "Old", classname: "deprecated" });
-    expect(result).toContain("#9f1239");
+    expect(result).toContain("#374151");
   });
 
-  test("applies default theme for unknown classname", () => {
+  test("uses same shared color for unknown classname", () => {
     const result = formatMDXBadge({ text: "Thing", classname: "other" });
     expect(result).toContain("#374151");
   });
@@ -142,92 +141,6 @@ describe("formatMDXSpecifiedByLink", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
       "\n\nSpecified by: https://spec.example",
     );
-  });
-});
-
-describe("beforeComposePageTypeHook", () => {
-  test("injects kind badge into H1 heading", async () => {
-    const header = { content: "# MyQuery" };
-    const event = {
-      data: {
-        type: {
-          constructor: { name: "GraphQLObjectType" },
-          name: "Query",
-          astNode: { kind: "ObjectTypeDefinition" },
-        },
-        options: {
-          schema: {
-            getQueryType: () => {
-              return { name: "Query" };
-            },
-            getMutationType: () => {
-              return null;
-            },
-            getSubscriptionType: () => {
-              return null;
-            },
-          },
-        },
-        sections: { header },
-      },
-      output: ["header"],
-    };
-
-    await beforeComposePageTypeHook(event as never);
-
-    expect(header.content).toContain("# MyQuery");
-    expect(header.content).toContain("query");
-    expect(header.content).toContain("border-radius:999px");
-  });
-
-  test("does nothing when entity kind cannot be determined", async () => {
-    const header = { content: "# Unknown" };
-    const event = {
-      data: {
-        type: null,
-        options: {},
-        sections: { header },
-      },
-      output: ["header"],
-    };
-
-    await beforeComposePageTypeHook(event as never);
-
-    expect(header.content).toBe("# Unknown");
-  });
-
-  test("prepends toc section when enough headings exist", async () => {
-    const header = { content: "# MyType" };
-    const fields = { content: "### Field One\n\n### Field Two" };
-    const event = {
-      data: {
-        type: {
-          constructor: { name: "GraphQLObjectType" },
-          name: "Other",
-          astNode: { kind: "ObjectTypeDefinition" },
-        },
-        options: {
-          schema: {
-            getQueryType: () => {
-              return null;
-            },
-            getMutationType: () => {
-              return null;
-            },
-            getSubscriptionType: () => {
-              return null;
-            },
-          },
-        },
-        sections: { header, fields },
-      },
-      output: ["header", "fields"],
-    };
-
-    await beforeComposePageTypeHook(event as never);
-
-    expect((event.data.sections as Record<string, unknown>).toc).toBeDefined();
-    expect(event.output[0]).toBe("toc");
   });
 });
 

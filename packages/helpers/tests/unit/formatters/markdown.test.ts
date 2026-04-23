@@ -55,27 +55,26 @@ describe("formatters markdown helpers", () => {
 
   describe("mergeFrontmatterLines", () => {
     test("merges props into frontmatter lines", () => {
-      expect(mergeFrontmatterLines({ title: "My Type", id: "book" }, null)).toEqual([
-        "title: My Type",
-        "id: book",
-      ]);
+      expect(
+        mergeFrontmatterLines({ title: "My Type", id: "book" }, null),
+      ).toEqual(["title: My Type", "id: book"]);
     });
 
     test("formatted lines override props when keys overlap", () => {
       expect(
-        mergeFrontmatterLines(
-          { title: "Old Title", id: "book" },
-          ["title: New Title"],
-        ),
+        mergeFrontmatterLines({ title: "Old Title", id: "book" }, [
+          "title: New Title",
+        ]),
       ).toEqual(["title: New Title", "id: book"]);
     });
 
     test("ignores comments and invalid lines", () => {
       expect(
-        mergeFrontmatterLines(
-          { title: "Old Title" },
-          ["# comment", "invalid", "title: New Title"],
-        ),
+        mergeFrontmatterLines({ title: "Old Title" }, [
+          "# comment",
+          "invalid",
+          "title: New Title",
+        ]),
       ).toEqual(["title: New Title"]);
     });
   });
