@@ -486,4 +486,173 @@ describe("afterRenderFilesHook", () => {
     expect(introIdx).toBeLessThan(sepIdx);
     expect(sepIdx).toBeLessThan(apiRefIdx);
   });
+
+  test("starts with # Summary heading", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-heading-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [[]],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toMatch(/^# Summary/);
+  });
+
+  test("ensures Operations section comes before any other section", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-ops-first-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Interfaces",
+              filePath: pathJoin(outputDir, "types", "interfaces", "node.md"),
+              name: "Node",
+            },
+            {
+              category: "Objects",
+              filePath: pathJoin(outputDir, "types", "objects", "user.md"),
+              name: "User",
+            },
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "user.md"),
+              name: "user",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    const opsIdx = summary.indexOf("# Operations");
+    const interfacesIdx = summary.indexOf("# Types");
+    // Operations must be first
+    expect(opsIdx).toBeGreaterThan(0);
+    expect(opsIdx).toBeLessThan(interfacesIdx);
+  });
+
+  test("formats category link with empty href", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-cat-link-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "foo.md"),
+              name: "foo",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toContain("- [Queries]()");
+  });
+
+  test("formats page links with proper nesting", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-nesting-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "foo.md"),
+              name: "foo",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    expect(summary).toMatch(/^ {2}- \[foo\]\(/m);
+  });
+
+  test("does not prioritize other sections like Types", async () => {
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-not-types-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+
+    const event = {
+      data: {
+        baseURL: "graphql",
+        outputDir,
+        rootDir,
+        pages: [
+          [
+            {
+              category: "Scalars",
+              filePath: pathJoin(outputDir, "types", "scalars", "string.md"),
+              name: "String",
+            },
+            {
+              category: "Queries",
+              filePath: pathJoin(outputDir, "operations", "queries", "foo.md"),
+              name: "foo",
+            },
+          ],
+        ],
+      },
+    };
+
+    await afterRenderFilesHook(event);
+
+    const summary = readFileSync(pathJoin(rootDir, "SUMMARY.md"), "utf-8");
+    const typesIdx = summary.indexOf("# Types");
+    const opsIdx = summary.indexOf("# Operations");
+    // Operations must come before Types, not tied
+    expect(opsIdx).toBeLessThan(typesIdx);
+  });
 });

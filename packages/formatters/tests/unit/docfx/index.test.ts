@@ -99,6 +99,56 @@ describe("formatMDXFrontmatter", () => {
     const result = formatMDXFrontmatter({ id: "foo" }, ["  title: Foo"]);
     expect(result.indexOf("uid:")).toBeLessThan(result.indexOf("title:"));
   });
+
+  test("does not include uid line when props is null", () => {
+    const result = formatMDXFrontmatter(null, ["  title: Test"]);
+    expect(result).not.toContain("uid:");
+  });
+
+  test("does not include uid line when props is not an object", () => {
+    const result = formatMDXFrontmatter("not-an-object" as any, [
+      "  title: Test",
+    ]);
+    expect(result).not.toContain("uid:");
+  });
+
+  test("does not include uid line when id property does not exist", () => {
+    const result = formatMDXFrontmatter({ name: "test", type: "Query" }, [
+      "  title: Test",
+    ]);
+    expect(result).not.toContain("uid:");
+    // Verify the structure is correct (no extra fields)
+    expect(result).toContain("---");
+    expect(result).toContain("title: Test");
+    const lines = result.split("\n");
+    const nonDelimiterLines = lines.filter((line) => {
+      return line !== "---" && line.trim() !== "";
+    });
+    // Should only have the title line, no uid
+    expect(nonDelimiterLines).toContain("  title: Test");
+    expect(
+      nonDelimiterLines.some((line) => {
+        return line.includes("Stryker");
+      }),
+    ).toBe(false);
+  });
+
+  test("includes uid line with proper formatting", () => {
+    const result = formatMDXFrontmatter({ id: "test-id" }, []);
+    expect(result).toMatch(/uid: test-id/);
+    expect(result).toContain("---");
+  });
+
+  test("handles empty formatted lines with id", () => {
+    const result = formatMDXFrontmatter({ id: "test" }, []);
+    expect(result).toContain("uid: test");
+    expect(result).toContain("---");
+  });
+
+  test("uid line has two space indentation", () => {
+    const result = formatMDXFrontmatter({ id: "test-id" }, ["title: Test"]);
+    expect(result).toContain("  uid:");
+  });
 });
 
 describe("formatMDXLink", () => {

@@ -127,6 +127,69 @@ describe("formatMDXLink", () => {
     const link = { text: "Type", url: "/schema/type" };
     expect(formatMDXLink(link)).toEqual(link);
   });
+
+  test("strips .md only at end of URL", () => {
+    expect(formatMDXLink({ text: "Link", url: "/md/file.md" })).toEqual({
+      text: "Link",
+      url: "/md/file",
+    });
+  });
+
+  test("leaves .md in middle of path unchanged", () => {
+    expect(formatMDXLink({ text: "Link", url: "/md/file.txt" })).toEqual({
+      text: "Link",
+      url: "/md/file.txt",
+    });
+  });
+
+  test("strips .md from simple filename", () => {
+    expect(formatMDXLink({ text: "Readme", url: "README.md" })).toEqual({
+      text: "Readme",
+      url: "README",
+    });
+  });
+
+  test("does not strip .md when followed by fragment", () => {
+    expect(formatMDXLink({ text: "Link", url: "/docs.md#section" })).toEqual({
+      text: "Link",
+      url: "/docs.md#section",
+    });
+  });
+
+  test("does not strip .md when followed by query string", () => {
+    expect(formatMDXLink({ text: "Link", url: "/docs.md?id=1" })).toEqual({
+      text: "Link",
+      url: "/docs.md?id=1",
+    });
+  });
+
+  test("handles multiple occurrences of md", () => {
+    expect(formatMDXLink({ text: "Link", url: "/md/command.md" })).toEqual({
+      text: "Link",
+      url: "/md/command",
+    });
+  });
+
+  test("preserves other extensions", () => {
+    expect(formatMDXLink({ text: "Link", url: "/path/file.html" })).toEqual({
+      text: "Link",
+      url: "/path/file.html",
+    });
+  });
+
+  test("handles root path with .md", () => {
+    expect(formatMDXLink({ text: "Home", url: "/index.md" })).toEqual({
+      text: "Home",
+      url: "/index",
+    });
+  });
+
+  test("leaves empty url unchanged", () => {
+    expect(formatMDXLink({ text: "Link", url: "" })).toEqual({
+      text: "Link",
+      url: "",
+    });
+  });
 });
 
 describe("formatMDXNameEntity", () => {

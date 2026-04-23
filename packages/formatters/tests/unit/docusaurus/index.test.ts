@@ -18,6 +18,25 @@ describe("formatMDXBadge", () => {
       '<Badge class="badge badge--secondary badge--test-class" text="Test Badge"/>',
     );
   });
+
+  test("includes badge-- prefix for classname", () => {
+    const badge = { text: "Badge", classname: "required" };
+    const result = formatMDXBadge(badge);
+    expect(result).toContain("badge--required");
+  });
+
+  test("lowercases classname in badge prefix", () => {
+    const badge = { text: "Badge", classname: "Required" };
+    const result = formatMDXBadge(badge);
+    expect(result).toContain("badge--required");
+    expect(result).not.toContain("badge--Required");
+  });
+
+  test("returns empty string for non-string classname", () => {
+    const badge = { text: "Badge", classname: null };
+    const result = formatMDXBadge(badge);
+    expect(result).toContain('<Badge class="badge badge--secondary "');
+  });
 });
 
 describe("formatMDXAdmonition", () => {
@@ -35,11 +54,109 @@ describe("formatMDXAdmonition", () => {
     expect(result).toBe("\n\n:::caution Test TitleTest Text:::");
   });
 
+  test("converts warning to caution only for Docusaurus v2", () => {
+    const admonition = {
+      text: "Test Text",
+      title: "Test Title",
+      type: "warning",
+    };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "2.0.0",
+    };
+    const result = formatMDXAdmonition(admonition, meta);
+    expect(result).toContain(":::caution");
+    expect(result).not.toContain(":::warning");
+  });
+
+  test("preserves warning type for Docusaurus v1", () => {
+    const admonition = {
+      text: "Test Text",
+      title: "Test Title",
+      type: "warning",
+    };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "1.0.0",
+    };
+    const result = formatMDXAdmonition(admonition, meta);
+    expect(result).toContain(":::warning[Test Title]");
+  });
+
+  test("uses bracket notation for non-v2 Docusaurus", () => {
+    const admonition = {
+      text: "Test Text",
+      title: "Test Title",
+      type: "info",
+    };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "1.0.0",
+    };
+    const result = formatMDXAdmonition(admonition, meta);
+    expect(result).toContain(":::info[Test Title]");
+  });
+
   test("returns a formatted MDX admonition string for non-Docusaurus", () => {
     const admonition = { text: "Test Text", title: "Test Title", type: "info" };
     const meta = null;
     const result = formatMDXAdmonition(admonition, meta);
     expect(result).toBe("\n\n:::info[Test Title]Test Text:::");
+  });
+
+  test("requires both framework name and version check for v2 behavior", () => {
+    const admonition = {
+      text: "Test Text",
+      title: "Test Title",
+      type: "warning",
+    };
+
+    // With framework name but no version
+    const metaNoVersion = {
+      generatorFrameworkName: "docusaurus",
+    };
+    const resultNoVersion = formatMDXAdmonition(admonition, metaNoVersion);
+    expect(resultNoVersion).toContain(":::warning[Test Title]");
+
+    // With version but wrong framework name
+    const metaWrongFramework = {
+      generatorFrameworkName: "other",
+      generatorFrameworkVersion: "2.0.0",
+    };
+    const resultWrongFramework = formatMDXAdmonition(
+      admonition,
+      metaWrongFramework,
+    );
+    expect(resultWrongFramework).toContain(":::warning[Test Title]");
+  });
+
+  test("v2 uses space after type instead of brackets", () => {
+    const admonition = {
+      text: "Content",
+      title: "MyTitle",
+      type: "note",
+    };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "2.0.0",
+    };
+    const result = formatMDXAdmonition(admonition, meta);
+    expect(result).toContain(":::note MyTitle");
+    expect(result).not.toContain(":::note[");
+  });
+
+  test("v1 uses brackets instead of space", () => {
+    const admonition = {
+      text: "Content",
+      title: "MyTitle",
+      type: "note",
+    };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "1.0.0",
+    };
+    const result = formatMDXAdmonition(admonition, meta);
+    expect(result).toContain(":::note[MyTitle]");
   });
 });
 

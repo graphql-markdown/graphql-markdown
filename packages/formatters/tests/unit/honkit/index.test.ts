@@ -331,6 +331,59 @@ describe("formatMDXLink", () => {
     const result = formatMDXLink({ text: "Page", url: "/https-docs/page" });
     expect(result.url).toBe("/https-docs/page.html");
   });
+
+  test("recognizes http: (single colon) as protocol", () => {
+    const result = formatMDXLink({ text: "Link", url: "http://example.com" });
+    expect(result).toEqual({ text: "Link", url: "http://example.com" });
+  });
+
+  test("recognizes https: (single colon) as protocol", () => {
+    const result = formatMDXLink({
+      text: "Link",
+      url: "https://example.com",
+    });
+    expect(result).toEqual({ text: "Link", url: "https://example.com" });
+  });
+
+  test("leaves urls starting with mailto: unchanged", () => {
+    const result = formatMDXLink({
+      text: "Contact",
+      url: "mailto:contact@example.com",
+    });
+    expect(result).toEqual({
+      text: "Contact",
+      url: "mailto:contact@example.com",
+    });
+  });
+
+  test("leaves urls starting with tel: unchanged", () => {
+    const result = formatMDXLink({ text: "Call", url: "tel:555-1234" });
+    expect(result).toEqual({ text: "Call", url: "tel:555-1234" });
+  });
+
+  test("adds .html before query string", () => {
+    const result = formatMDXLink({
+      text: "Link",
+      url: "/page?foo=bar&baz=qux",
+    });
+    expect(result.url).toBe("/page.html?foo=bar&baz=qux");
+  });
+
+  test("adds .html before fragment", () => {
+    const result = formatMDXLink({
+      text: "Link",
+      url: "/section#heading",
+    });
+    expect(result.url).toBe("/section.html#heading");
+  });
+
+  test("preserves query string and fragment together", () => {
+    const result = formatMDXLink({
+      text: "Link",
+      url: "/page?id=123#result",
+    });
+    expect(result.url).toBe("/page.html?id=123#result");
+  });
 });
 
 describe("formatMDXNameEntity", () => {
@@ -348,6 +401,31 @@ describe("formatMDXSpecifiedByLink", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
       "\n\nSpecified by: https://spec.example",
     );
+  });
+
+  test("replaces single newlines with spaces in title", () => {
+    const result = formatMDXFrontmatter({ title: "Line One\nLine Two" }, []);
+    expect(result).toContain("# Line One Line Two");
+  });
+
+  test("replaces carriage return + newline with space in title", () => {
+    const result = formatMDXFrontmatter({ title: "Line One\r\nLine Two" }, []);
+    expect(result).toContain("# Line One Line Two");
+  });
+
+  test("replaces multiple consecutive newlines in title", () => {
+    const result = formatMDXFrontmatter({ title: "Line One\n\nLine Two" }, []);
+    expect(result).toContain("# Line One  Line Two");
+  });
+
+  test("handles Windows-style line endings in title", () => {
+    const result = formatMDXFrontmatter({ title: "A\r\nB\r\nC" }, []);
+    expect(result).toContain("# A B C");
+  });
+
+  test("trims spaces after newline replacement in title", () => {
+    const result = formatMDXFrontmatter({ title: "Title\n  " }, []);
+    expect(result).toContain("# Title");
   });
 });
 
