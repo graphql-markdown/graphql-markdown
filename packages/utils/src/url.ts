@@ -21,7 +21,7 @@ export interface RelativeGeneratedDocLinkOptions {
 }
 
 const normalizeRelativePath = (path: string): string => {
-  const normalizedPath = path.replace(/\\/g, "/");
+  const normalizedPath = path.replaceAll(/\\/g, "/");
   return normalizedPath.startsWith(".")
     ? normalizedPath
     : `./${normalizedPath}`;
