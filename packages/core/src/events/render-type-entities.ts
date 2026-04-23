@@ -13,13 +13,17 @@ import { DataEvent } from "@graphql-markdown/utils";
  * @category Events
  */
 export class RenderTypeEntitiesEvent extends DataEvent<{
+  baseURL: string;
   name: string;
   filePath: string;
+  outputDir: string;
 }> {
   constructor(
     data: {
+      baseURL: string;
       name: string;
       filePath: string;
+      outputDir: string;
     },
     options?: CancellableEventOptions,
   ) {

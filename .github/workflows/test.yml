@@ -30,6 +30,7 @@ jobs:
             "core",
             "diff",
             "docusaurus",
+            "formatters",
             "graphql",
             "helpers",
             "logger",

@@ -12,6 +12,7 @@ import { RenderRootTypesEvents } from "./events/render-root-types-events";
 import { RenderHomepageEvents } from "./events/render-homepage-events";
 import { RenderTypeEntitiesEvents } from "./events/render-type-entities-events";
 import { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events";
+import { RenderFilesEvents } from "./events/render-files-events";
 import { PrintTypeEvents } from "./events/print-type-events";
 
 /**
@@ -36,6 +37,7 @@ export const EVENT_CALLBACK_MAP = {
     "beforeGenerateIndexMetafileHook",
   [GenerateIndexMetafileEvents.AFTER_GENERATE]:
     "afterGenerateIndexMetafileHook",
+  [RenderFilesEvents.AFTER_RENDER]: "afterRenderFilesHook",
   [PrintTypeEvents.BEFORE_PRINT_CODE]: "beforePrintCodeHook",
   [PrintTypeEvents.AFTER_PRINT_CODE]: "afterPrintCodeHook",
   [PrintTypeEvents.BEFORE_PRINT_TYPE]: "beforePrintTypeHook",

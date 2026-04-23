@@ -13,7 +13,7 @@ callback names in MDX modules. Kept separate to avoid circular dependencies.
 const EVENT_CALLBACK_MAP: object;
 ```
 
-Defined in: [core/src/event-map.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L24)
+Defined in: [core/src/event-map.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L25)
 
 Event callback mapping configuration.
 Maps event names to their corresponding callback names in mdxModule.
@@ -69,6 +69,12 @@ readonly print:beforePrintType: "beforePrintTypeHook" = "beforePrintTypeHook";
 
 ```ts
 readonly render:afterGenerateIndexMetafile: "afterGenerateIndexMetafileHook" = "afterGenerateIndexMetafileHook";
+```
+
+##### render:afterRenderFiles
+
+```ts
+readonly render:afterRenderFiles: "afterRenderFilesHook" = "afterRenderFilesHook";
 ```
 
 ##### render:afterRenderHomepage

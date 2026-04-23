@@ -7,4 +7,5 @@ export * from "./markdown";
 export * from "./object";
 export * from "./prettier";
 export * from "./string";
+export * from "./url";
 export * as pathUrl from "./url";

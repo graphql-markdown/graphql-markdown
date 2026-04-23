@@ -65,6 +65,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@graphql-markdown/formatters": "workspace:^",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/types": "workspace:^",
     "@graphql-markdown/utils": "workspace:^"

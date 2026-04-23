@@ -19,28 +19,28 @@ describe("enum", () => {
 
       const metadata = printEnumMetadata(type, DEFAULT_OPTIONS);
 
-      expect(metadata).toMatchInlineSnapshot(String.raw`
-{
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
+      expect(metadata).toMatchInlineSnapshot(`
+        {
+          "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \\{#one\\} 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two) <mark class="gqlmd-mdx-badge">deprecated</mark> \{#two\} 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two) <mark class="gqlmd-mdx-badge">deprecated</mark> \\{#two\\} 
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
+        <span>
 
-Deprecated
+        Deprecated
 
-</span>
-</fieldset>
+        </span>
+        </fieldset>
 
 
-",
-  "level": 3,
-  "title": "Values",
-}
-`);
+        ",
+          "level": 3,
+          "title": "Values",
+        }
+      `);
     });
 
     test("returns enum metadata with grouped deprecated", async () => {
@@ -51,33 +51,36 @@ Deprecated
         deprecated: "group",
       });
 
-      expect(metadata).toMatchInlineSnapshot(String.raw`
-{
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
+      expect(metadata).toMatchInlineSnapshot(`
+        {
+          "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one) \\{#one\\} 
 
 
 
 
 
-<details class="gqlmd-mdx-details">
-<summary class="gqlmd-mdx-details-summary"><span className="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two) <mark class="gqlmd-mdx-badge">deprecated</mark> \{#two\} 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        <details class="gqlmd-mdx-details">
+        <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-Deprecated
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EnumTypeName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two) <mark class="gqlmd-mdx-badge">deprecated</mark> \\{#two\\} 
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
+        <span>
 
-</span>
-</fieldset>
+        Deprecated
 
-</details>
+        </span>
+        </fieldset>
 
-",
-  "level": 3,
-  "title": "Values",
-}
-`);
+
+        <em>deprecated</em>
+        </details>
+
+        ",
+          "level": 3,
+          "title": "Values",
+        }
+      `);
     });
   });
 

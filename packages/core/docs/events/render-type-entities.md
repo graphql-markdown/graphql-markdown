@@ -13,8 +13,10 @@ Event emitted before/after rendering type entities.
 #### Extends
 
 - `DataEvent`&lt;\{
+  `baseURL`: `string`;
   `filePath`: `string`;
   `name`: `string`;
+  `outputDir`: `string`;
   \}&gt;
 
 #### Constructors
@@ -25,17 +27,25 @@ Event emitted before/after rendering type entities.
 new RenderTypeEntitiesEvent(data, options?): RenderTypeEntitiesEvent;
 ```
 
-Defined in: [core/src/events/render-type-entities.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L19)
+Defined in: [core/src/events/render-type-entities.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-type-entities.ts#L21)
 
 ###### Parameters
 
 ###### data
+
+###### baseURL
+
+`string`
 
 ###### filePath
 
 `string`
 
 ###### name
+
+`string`
+
+###### outputDir
 
 `string`
 
@@ -51,8 +61,10 @@ Defined in: [core/src/events/render-type-entities.ts:19](https://github.com/grap
 
 ```ts
 DataEvent<{
+  baseURL: string;
   name: string;
   filePath: string;
+  outputDir: string;
 }>.constructor
 ```
 
@@ -68,6 +80,12 @@ Defined in: utils/dist/events.d.ts:111
 
 Read-only event data payload.
 
+###### baseURL
+
+```ts
+baseURL: string;
+```
+
 ###### filePath
 
 ```ts
@@ -78,6 +96,12 @@ filePath: string;
 
 ```ts
 name: string;
+```
+
+###### outputDir
+
+```ts
+outputDir: string;
 ```
 
 ###### Inherited from

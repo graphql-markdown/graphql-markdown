@@ -15,6 +15,7 @@
   },
 
   "references": [
+    { "path": "../formatters" },
     { "path": "../graphql" },
     { "path": "../utils" }
   ]

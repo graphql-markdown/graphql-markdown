@@ -713,21 +713,21 @@ export class Renderer {
       ? page.groups.pageId
       : stripNumericPrefix(page.groups.category);
 
-    const slug = isFlat
-      ? page.groups.pageId
-      : pathUrl.join(extractedCategory, page.groups.pageId);
     const category = isFlat ? "schema" : startCase(extractedCategory);
 
     const events = getEvents();
     const event = new RenderTypeEntitiesEvent({
+      baseURL: this.baseURL,
       name,
       filePath,
+      outputDir: this.outputDir,
     });
     await events.emitAsync(RenderTypeEntitiesEvents.AFTER_RENDER, event);
 
     return {
       category,
-      slug,
+      filePath,
+      name,
     } as Category;
   }
 

@@ -10,6 +10,7 @@ import type { AdmonitionType, Badge, TypeLink } from "./printer";
 import type {
   DiffCheckHook,
   GenerateIndexMetafileHook,
+  RenderFilesHook,
   RenderHomepageHook,
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
@@ -88,6 +89,7 @@ export interface MDXSupportType {
   afterRenderTypeEntitiesHook?: RenderTypeEntitiesHook;
   beforeGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
   afterGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
+  afterRenderFilesHook?: RenderFilesHook;
 }
 
 /**
@@ -486,6 +488,7 @@ export type {
   ICancellableEvent,
   PrintCodeHook,
   PrintTypeHook,
+  RenderFilesHook,
   RenderHomepageHook,
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
