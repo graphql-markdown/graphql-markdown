@@ -34,10 +34,7 @@ import {
   MARKDOWN_EOP,
   saveFile,
 } from "@graphql-markdown/utils";
-import {
-  formatMDXNameEntity,
-  formatMDXSpecifiedByLink,
-} from "../defaults";
+import { formatMDXNameEntity, formatMDXSpecifiedByLink } from "../defaults";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -125,10 +122,7 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   };
 };
 
-export {
-  formatMDXNameEntity,
-  formatMDXSpecifiedByLink,
-};
+export { formatMDXNameEntity, formatMDXSpecifiedByLink };
 
 /**
  * Creates an mdBook formatter.
