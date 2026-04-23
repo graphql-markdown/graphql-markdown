@@ -242,7 +242,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   // e.g. operations/queries/continent.md → uid: operations-queries-continent
   const uid = relative(graphqlRoot, filePath)
     .replace(/\.mdx?$/, "")
-    .replace(/[/\\]/g, "-");
+    .replaceAll(/[/\\]/g, "-");
   const content = await readFile(filePath, "utf-8");
   const rewritten = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
   if (rewritten !== content) {

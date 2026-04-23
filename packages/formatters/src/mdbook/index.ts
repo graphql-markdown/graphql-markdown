@@ -248,15 +248,14 @@ export const afterRenderFilesHook: RenderFilesHook = async (
 
   for (const { topSection, category, entries } of sorted) {
     if (topSection !== lastTopSection) {
-      lines.push(`# ${topSection}`);
-      lines.push("");
+      lines.push(`# ${topSection}`, "");
       lastTopSection = topSection;
     }
 
     lines.push(`- [${category}]()`);
 
     for (const { filePath, name: pageName } of entries) {
-      const relPath = relative(rootDir, filePath).replace(/\\/g, "/");
+      const relPath = relative(rootDir, filePath).replaceAll(/\\/g, "/");
       lines.push(`  - [${pageName}](${relPath})`);
     }
 

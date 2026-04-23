@@ -124,7 +124,7 @@ export const formatMDXFrontmatter = (
   const lines = Array.from(entries.entries()).map(([k, v]) => {
     return `${k}: ${v}`;
   });
-  const title = (entries.get("title") ?? "").replace(/\r?\n/g, " ").trim();
+  const title = (entries.get("title") ?? "").replaceAll(/\r?\n/g, " ").trim();
   const heading = title ? `\n\n# ${title}` : "";
 
   return `---\n${lines.join("\n")}\n---${heading}` as MDXString;
@@ -261,53 +261,50 @@ interface TocEntry {
 
 const escapeHtml = (value: string): string => {
   return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replaceAll(/&/g, "&amp;")
+    .replaceAll(/</g, "&lt;")
+    .replaceAll(/>/g, "&gt;")
+    .replaceAll(/"/g, "&quot;")
+    .replaceAll(/'/g, "&#39;");
+};
+
+const toAnchor = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replaceAll(/[^\w\s-]/g, "")
+    .replaceAll(/\s+/g, "-");
+};
+
+const addTocEntry = (raw: string, entries: TocEntry[]): void => {
+  entries.push({ text: raw, anchor: toAnchor(raw) });
+};
+
+const collectTocEntriesFromString = (
+  section: string,
+  entries: TocEntry[],
+): void => {
+  for (const line of section.split(/\r?\n/)) {
+    if (!line.startsWith("###")) continue;
+    const title = line.slice(3).trim();
+    if (title) addTocEntry(title, entries);
+  }
 };
 
 const collectTocEntries = (section: unknown, entries: TocEntry[]): void => {
   if (!section) return;
-
   if (typeof section === "string") {
-    for (const line of section.split(/\r?\n/)) {
-      if (!line.startsWith("###")) continue;
-      const title = line.slice(3).trim();
-      if (!title) continue;
-
-      const raw = title;
-      if (!raw) continue;
-      entries.push({
-        text: raw,
-        anchor: raw
-          .toLowerCase()
-          .replace(/[^\w\s-]/g, "")
-          .replace(/\s+/g, "-"),
-      });
-    }
+    collectTocEntriesFromString(section, entries);
     return;
   }
-
   if (Array.isArray(section)) {
     for (const item of section) collectTocEntries(item, entries);
     return;
   }
-
   if (typeof section === "object") {
     const s = section as Record<string, unknown>;
-    if (typeof s.title === "string" && s.title.trim()) {
+    if (typeof s.title === "string") {
       const raw = s.title.trim();
-      if (raw) {
-        entries.push({
-          text: raw,
-          anchor: raw
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, "")
-            .replace(/\s+/g, "-"),
-        });
-      }
+      if (raw) addTocEntry(raw, entries);
     }
     if (s.content !== undefined) collectTocEntries(s.content, entries);
   }

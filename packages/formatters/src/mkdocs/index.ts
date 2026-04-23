@@ -48,7 +48,7 @@ const rewriteInternalLinks = (
   outputDir: string,
   baseURL: string,
 ): string => {
-  return content.replace(
+  return content.replaceAll(
     /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
     (_match, urlPath, hash = "") => {
       const relativePath = toRelativeGeneratedDocLink({
