@@ -62,6 +62,9 @@ jobs:
         with:
           bun-version: "latest"
 
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+
       - name: Install modules
         run: bun ci
 
