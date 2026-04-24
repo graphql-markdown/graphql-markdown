@@ -49,6 +49,9 @@ jobs:
         with:
           node-version: "lts/*"
 
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:

@@ -17,6 +17,8 @@ ENV TURBO_CONCURRENCY=50%
 
 alpine: 
   WORKDIR /graphql-markdown
+  RUN apk --no-cache add curl
+  RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
   RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
   RUN node --version
   RUN npm --version

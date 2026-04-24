@@ -50,17 +50,12 @@ jobs:
       - name: Checkout Code Base
         uses: actions/checkout@v6
 
-      - name: Cache turbo build setup
-        uses: actions/cache@v5
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
+
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -68,6 +63,14 @@ jobs:
 
       - name: Install modules
         run: bun ci
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v5
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Build packages
         run: bun run build
