@@ -288,17 +288,6 @@ export interface ConfigPrintTypeOptions {
   typeBadges?: boolean;
 }
 
-/**
- * Experimental configuration options.
- * Features that are not yet stable or fully implemented.
- */
-export interface ExperimentalConfigOptions {
-  /**
-   * Whether to run generation during build.
-   * @deprecated Use the `graphql-to-doc` CLI command instead of running generation during Docusaurus build.
-   */
-  runOnBuild: boolean | undefined;
-}
 
 /**
  * Command line interface options.
