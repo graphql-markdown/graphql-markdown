@@ -34,13 +34,10 @@ This is a quick reference guide. All settings are thoroughly documented in the [
 
 ## Content Options
 
-| Option          | Type      | Default | Description                |
-| --------------- | --------- | ------- | -------------------------- |
-| `noCode`        | `boolean` | `false` | Hide code sections         |
-| `noExample`     | `boolean` | `false` | Hide example sections      |
-| `noParentType`  | `boolean` | `false` | Hide parent type prefix    |
-| `noRelatedType` | `boolean` | `false` | Hide related types section |
-| `noTypeBadges`  | `boolean` | `false` | Hide type badges           |
+| Option         | Type      | Default | Description             |
+| -------------- | --------- | ------- | ----------------------- |
+| `noParentType` | `boolean` | `false` | Hide parent type prefix |
+| `noTypeBadges` | `boolean` | `false` | Hide type badges        |
 
 ## Filtering Options
 
