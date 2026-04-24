@@ -98,7 +98,7 @@ jobs:
       - name: SonarCloud Scan
         id: sonarcloud
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        uses: SonarSource/sonarqube-scan-action@v7.1.0
+        uses: SonarSource/sonarqube-scan-action@299e4b793aaa83bf2aba7c9c14bedbb485688ec4 # v7.1.0
         with:
           projectBaseDir: ${{ github.workspace }}
           args: >
