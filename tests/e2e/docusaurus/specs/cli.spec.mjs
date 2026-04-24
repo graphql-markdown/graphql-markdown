@@ -132,9 +132,3 @@ describe("graphql-to-doc", () => {
     );
   }, 60000);
 });
-
-// TODO: Remove tests for runOnBuild lifecycle once fully deprecated and replaced.
-describe.skip("loadContent", () => {
-  test.todo("should generate plugin files on build when runOnBuild is true");
-  test.todo("should not generate plugin files on build when runOnBuild is false");
-});
