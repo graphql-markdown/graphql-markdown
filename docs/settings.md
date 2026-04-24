@@ -399,14 +399,6 @@ module.exports = {
 
 <br/>
 
-:::warning[hierarchy]
-
-**If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
-
-To resolve this, you can regenerate the documentation using the [`force`](#force) setting, or use `hierarchy: "entity"` to keep the previous behavior.
-
-:::
-
 :::danger
 
 Declaring a different option type in the CLI flag `hierarchy` and the config file `hierarchy` will generate an error.
