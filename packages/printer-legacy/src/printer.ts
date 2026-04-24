@@ -587,12 +587,10 @@ export class Printer implements IPrinter {
 
     const description = Printer.printDescription(type, printTypeOptions);
 
-    // Generate all sections unconditionally to support event hooks that might re-add
-    // sections excluded by deprecated toggles. This is a performance trade-off:
-    // sections excluded by deprecated flags (codeSection, exampleSection, relatedTypeSection)
-    // are still generated and print events emitted, even if they won't be rendered.
-    // TODO(perf): Implement lazy section generation based on final composed order
-    // when no BEFORE_COMPOSE_PAGE_TYPE listeners are registered.
+    // Generate all sections unconditionally so that BEFORE_COMPOSE_PAGE_TYPE hooks
+    // can add, remove, or reorder them at will.
+    // TODO(perf): Implement lazy section generation when no BEFORE_COMPOSE_PAGE_TYPE
+    // listeners are registered.
     const code = await Printer.printCodeAsync(type, name, printTypeOptions);
 
     const customDirectives = Printer.printCustomDirectives(

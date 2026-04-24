@@ -47,8 +47,6 @@ export const PRINT_TYPE_DEFAULT_OPTIONS: Required<
 
 /**
  * Clean runtime options passed through the printer.
- *
- * Deprecated section toggles are excluded and handled via backward-compat paths.
  */
 export const DEFAULT_OPTIONS: Required<
   Omit<
