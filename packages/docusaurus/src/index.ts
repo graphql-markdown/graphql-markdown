@@ -9,11 +9,8 @@ import type { GraphQLMarkdownCliOptions } from "@graphql-markdown/types";
 
 import { DOCUSAURUS_VERSION } from "@docusaurus/utils";
 
-import {
-  getGraphQLMarkdownCli,
-  runGraphQLMarkdown,
-} from "@graphql-markdown/cli";
-import Logger, { log, LogLevel } from "@graphql-markdown/logger";
+import { getGraphQLMarkdownCli } from "@graphql-markdown/cli";
+import Logger from "@graphql-markdown/logger";
 
 const NAME = "docusaurus-graphql-doc-generator" as const;
 const LOGGER_MODULE = "@docusaurus/logger" as const;
@@ -36,20 +33,6 @@ export default async function pluginGraphQLDocGenerator(
 
   return {
     name: NAME,
-
-    /**
-     * @experimental
-     */
-    async loadContent(): Promise<void> {
-      if (options.runOnBuild !== true) {
-        return;
-      }
-      log(
-        "`runOnBuild` option is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.",
-        LogLevel.warn,
-      );
-      await runGraphQLMarkdown(options, {}, LOGGER_MODULE);
-    },
 
     /**
      * Extends Docusaurus CLI with GraphQL Documentation generator command.
