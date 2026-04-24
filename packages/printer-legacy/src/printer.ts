@@ -10,7 +10,6 @@
 
 import type {
   ConfigPrintTypeOptions,
-  DeprecatedPrintTypeOptions,
   Formatter,
   GraphQLField,
   GraphQLSchema,
@@ -106,7 +105,6 @@ import {
 import { createDefaultFormatter } from "./formatter";
 import {
   DEFAULT_OPTIONS,
-  PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
   SectionLevels,
 } from "./const/options";
@@ -188,10 +186,6 @@ export class Printer implements IPrinter {
 
   private static _options: Readonly<Maybe<PrintTypeOptions>>;
 
-  private static _deprecatedOptions: Readonly<
-    Maybe<DeprecatedPrintTypeOptions>
-  >;
-
   private static _mdxDeclaration: Readonly<Maybe<string>>;
 
   /**
@@ -199,15 +193,6 @@ export class Printer implements IPrinter {
    */
   static get options(): Readonly<Maybe<PrintTypeOptions>> {
     return Printer._options;
-  }
-
-  /**
-   * Backward-compat section toggles extracted from legacy config options.
-   *
-   * These flags are applied only during section order composition.
-   */
-  static get deprecatedOptions(): Readonly<Maybe<DeprecatedPrintTypeOptions>> {
-    return Printer._deprecatedOptions;
   }
 
   /**
@@ -302,28 +287,6 @@ export class Printer implements IPrinter {
         // Merge formatter functions: default formatter with any overrides
         ...createDefaultFormatter(),
         ...formatter,
-      };
-
-      const initExampleSection = printTypeOptions?.exampleSection;
-      let deprecatedExampleSection: DeprecatedPrintTypeOptions["exampleSection"];
-
-      if (typeof initExampleSection === "boolean") {
-        deprecatedExampleSection = initExampleSection;
-      } else if (initExampleSection === undefined) {
-        deprecatedExampleSection =
-          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.exampleSection;
-      } else {
-        deprecatedExampleSection = true;
-      }
-
-      Printer._deprecatedOptions = {
-        codeSection:
-          printTypeOptions?.codeSection ??
-          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.codeSection,
-        exampleSection: deprecatedExampleSection,
-        relatedTypeSection:
-          printTypeOptions?.relatedTypeSection ??
-          PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS.relatedTypeSection,
       };
 
       Printer.mdxDeclaration = mdxDeclaration ?? "";
@@ -594,13 +557,6 @@ export class Printer implements IPrinter {
       ...options,
     };
 
-    const deprecatedOptions: DeprecatedPrintTypeOptions = {
-      ...Printer.deprecatedOptions,
-      exampleSection: printTypeOptions.exampleSection
-        ? true
-        : Printer.deprecatedOptions?.exampleSection,
-    };
-
     if (!name || !hasPrintableDirective(type, printTypeOptions)) {
       return undefined;
     }
@@ -662,11 +618,7 @@ export class Printer implements IPrinter {
       relations: Printer.normalizePageSection(relations),
     };
 
-    let sectionOrder: (keyof PageSections)[] =
-      Printer.getDeprecatedTypePageSectionOrder(
-        [...TYPE_PAGE_SECTION_ORDER],
-        deprecatedOptions,
-      );
+    let sectionOrder: (keyof PageSections)[] = [...TYPE_PAGE_SECTION_ORDER];
 
     // Emit BEFORE_COMPOSE_PAGE_TYPE event if emitter is configured
     if (Printer.eventEmitter) {
@@ -769,32 +721,6 @@ export class Printer implements IPrinter {
     }
 
     return `${title}${content}`;
-  };
-
-  /**
-   * Returns the default content section order for type pages.
-   *
-   * Applies backward-compatibility toggles from deprecated section flags.
-   */
-  private static readonly getDeprecatedTypePageSectionOrder = (
-    sections: TypePageContentSection[],
-    deprecatedOptions: DeprecatedPrintTypeOptions,
-  ): TypePageContentSection[] => {
-    return sections.filter((section) => {
-      if (section === "code") {
-        return deprecatedOptions.codeSection !== false;
-      }
-
-      if (section === "example") {
-        return deprecatedOptions.exampleSection !== false;
-      }
-
-      if (section === "relations") {
-        return deprecatedOptions.relatedTypeSection !== false;
-      }
-
-      return true;
-    });
   };
 
   /**
