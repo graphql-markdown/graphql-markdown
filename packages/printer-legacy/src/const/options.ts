@@ -1,6 +1,5 @@
 import type {
   CollapsibleOption,
-  DeprecatedPrintTypeOptions,
   FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
@@ -32,15 +31,6 @@ export enum SectionLevels {
   NONE = "",
   LEVEL = "#",
 }
-
-export const PRINT_TYPE_DEFAULT_DEPRECATED_OPTIONS = {
-  codeSection: true as const,
-  exampleSection: false as const,
-  relatedTypeSection: true as const,
-} satisfies Pick<
-  Required<DeprecatedPrintTypeOptions>,
-  "codeSection" | "exampleSection" | "relatedTypeSection"
->;
 
 export const PRINT_TYPE_DEFAULT_OPTIONS: Required<
   Omit<PrinterConfigPrintTypeOptions, "exampleSection">
