@@ -199,18 +199,6 @@ export interface AdmonitionType {
 /**
  * Configuration options for printing type documentation
  */
-export interface PrinterDeprecatedConfigPrintTypeOptions {
-  /** @deprecated Use compose page type events to control code section visibility */
-  codeSection?: boolean;
-  /** @deprecated Use compose page type events to control code section visibility */
-  exampleSection?: boolean;
-  /** @deprecated Use compose page type events to control code section visibility */
-  relatedTypeSection?: boolean;
-}
-
-/**
- * Configuration options for printing type documentation
- */
 export interface PrinterConfigPrintTypeOptions {
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption;
@@ -218,20 +206,6 @@ export interface PrinterConfigPrintTypeOptions {
   metatags?: Record<string, string>[];
   parentTypePrefix?: boolean;
   typeBadges?: boolean;
-}
-
-/**
- * Deprecated print type section toggles retained for backward compatibility.
- *
- * Prefer compose page type events to control section visibility and order.
- */
-export interface DeprecatedPrintTypeOptions {
-  /** @deprecated Use compose page type events to control code section visibility */
-  codeSection?: Maybe<boolean>;
-  /** @deprecated Use compose page type events to control example section visibility */
-  exampleSection?: Maybe<boolean>;
-  /** @deprecated Use compose page type events to control related section visibility */
-  relatedTypeSection?: Maybe<boolean>;
 }
 
 /**
