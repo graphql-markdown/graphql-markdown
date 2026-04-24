@@ -115,10 +115,7 @@ export const getGraphQLMarkdownCli = (
       "--hierarchy <hierarchy>",
       "Schema entity hierarchy: `api`, `entity`, `flat`",
     )
-    .option("--noCode", "Disable code section for types")
-    .option("--noExample", "Disable example section for types")
     .option("--noParentType", "Disable parent type name as field prefix")
-    .option("--noRelatedType", "Disable related types sections")
     .option("--noTypeBadges", "Disable badges for types")
     .option("--noSectionId", "Disable custom section header IDs for permalinks")
     .option("--index", "Enable generated index for categories")

@@ -170,16 +170,8 @@ export type RendererDocOptions = ConfigDocOptions & {
   hierarchy?: Maybe<TypeHierarchyObjectType>;
 };
 
-export interface DeprecatedConfigDocOptions {
-  never: never;
-}
-
 /** Flag for API group setting */
 export type UseApiGroupOptionType = ApiGroupOverrideType | boolean;
-
-export interface DeprecatedConfigPrintTypeOptions {
-  never: never;
-}
 
 /**
  * Options for handling deprecated schema items.
@@ -232,9 +224,7 @@ export interface ConfigOptions {
   /** Method to use for diffing schema changes */
   diffMethod?: Maybe<TypeDiffMethod>;
   /** Documentation framework specific options */
-  docOptions?: Maybe<
-    ConfigDocOptions & Omit<DeprecatedConfigDocOptions, "never">
-  >;
+  docOptions?: Maybe<ConfigDocOptions>;
   /** Forces regeneration of all files regardless of changes */
   force?: boolean;
   /** Directives used to group schema types */
@@ -272,33 +262,18 @@ export interface ConfigOptions {
  * Controls how types are rendered in the documentation.
  */
 export interface ConfigPrintTypeOptions {
-  /** Whether to include code sections */
-  codeSection?: boolean;
   /** How to handle deprecated items */
   deprecated?: TypeDeprecatedOption;
   /** Configuration for example sections */
-  exampleSection?: TypeExampleSectionOption | boolean;
+  exampleSection?: TypeExampleSectionOption;
   /** Documentation hierarchy structure */
   hierarchy?: TypeHierarchyType;
   /** Whether to prefix fields with parent type names */
   parentTypePrefix?: boolean;
-  /** Whether to show related type sections */
-  relatedTypeSection?: boolean;
   /** Whether to show type badges */
   typeBadges?: boolean;
 }
 
-/**
- * Experimental configuration options.
- * Features that are not yet stable or fully implemented.
- */
-export interface ExperimentalConfigOptions {
-  /**
-   * Whether to run generation during build.
-   * @deprecated Use the `graphql-to-doc` CLI command instead of running generation during Docusaurus build.
-   */
-  runOnBuild: boolean | undefined;
-}
 
 /**
  * Command line interface options.
@@ -327,14 +302,8 @@ export interface CliOptions {
   hierarchy?: TypeHierarchyValueType;
   /** MDX parser package */
   mdxParser?: string;
-  /** Disable code sections flag */
-  noCode?: boolean;
-  /** Disable examples flag */
-  noExample?: boolean;
   /** Disable parent type prefix flag */
   noParentType?: boolean;
-  /** Disable related types flag */
-  noRelatedType?: boolean;
   /** Disable type badges flag */
   noTypeBadges?: boolean;
   /** Disable custom section header IDs for permalinks */
@@ -353,13 +322,6 @@ export interface CliOptions {
   tmp?: string;
 }
 
-/**
- * Legacy CLI options interface
- * Use CliOptions instead
- */
-export interface DeprecatedCliOptions {
-  never: never;
-}
 
 /**
  * Core options type that combines config options with required fields.

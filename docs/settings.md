@@ -324,40 +324,32 @@ It only applies to types with a location compatible with the directive, i.e. if 
 
 Use these options to toggle the type of information rendered on pages:
 
-- `codeSection` (deprecated): display type code section. Prefer `beforeComposePageTypeHook` and remove `"code"` from `event.output`.
 - `deprecated`: option for displaying deprecated entities (fields, values, operations).
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
 - `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/advanced/examples)).
-  - `printTypeOptions.exampleSection: { ... }` is the recommended configuration format.
-  - `printTypeOptions.exampleSection: boolean` is deprecated; prefer `beforeComposePageTypeHook` and remove `"example"` from `event.output`.
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
   - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)).
   - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/namespaced-operations))._
 - `parentTypePrefix`: prefix field names with the parent type name.
-- `relatedTypeSection` (deprecated): display related type sections. Prefer `beforeComposePageTypeHook` and remove `"relations"` from `event.output`.
 - `typeBadges`: add field type attributes badges.
 
-| Setting                               | CLI flag                | Default   |
-| ------------------------------------- | ----------------------- | --------- |
-| `printTypeOptions.codeSection`        | `--noCode`              | `true`    |
-| `printTypeOptions.deprecated`         | `--deprecated <option>` | `default` |
-| `printTypeOptions.exampleSection`     | `--noExample`           | `false`   |
-| `printTypeOptions.hierarchy`          | `--hierarchy`           | `api`     |
-| `printTypeOptions.parentTypePrefix`   | `--noParentType`        | `true`    |
-| `printTypeOptions.relatedTypeSection` | `--noRelatedType`       | `true`    |
-| `printTypeOptions.typeBadges`         | `--noTypeBadges`        | `true`    |
+| Setting                             | CLI flag                | Default   |
+| ----------------------------------- | ----------------------- | --------- |
+| `printTypeOptions.deprecated`       | `--deprecated <option>` | `default` |
+| `printTypeOptions.exampleSection`   | n/a                     | —         |
+| `printTypeOptions.hierarchy`        | `--hierarchy`           | `api`     |
+| `printTypeOptions.parentTypePrefix` | `--noParentType`        | `true`    |
+| `printTypeOptions.typeBadges`       | `--noTypeBadges`        | `true`    |
 
 <br/>
 
-:::warning
+:::tip
 
-`printTypeOptions.codeSection`, `printTypeOptions.relatedTypeSection`, boolean `printTypeOptions.exampleSection`, and CLI flags `--noCode`, `--noRelatedType`, `--noExample` are deprecated and kept for backward compatibility.
-
-Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) to control section visibility and order instead.
+Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) to control section visibility and order.
 
 :::
 
@@ -406,14 +398,6 @@ module.exports = {
 ```
 
 <br/>
-
-:::warning[hierarchy]
-
-**If you upgraded to version [1.23.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.23.0) or higher**, then in some cases the old GraphQL documentation structure is not being removed.
-
-To resolve this, you can regenerate the documentation using the [`force`](#force) setting, or use `hierarchy: "entity"` to keep the previous behavior.
-
-:::
 
 :::danger
 
@@ -469,27 +453,6 @@ Use [`prettier`](https://prettier.io) to format generated files.
 The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
 
 :::
-
-## `runOnBuild`
-
-:::warning[DEPRECATED]
-
-`runOnBuild` is deprecated and will be removed in a future release.
-
-:::
-
-When set to `true`, this option runs documentation generation during `docusaurus build`.
-
-Prefer generating docs explicitly with the Docusaurus command `graphql-to-doc` before running the build.
-
-```bash
-npx docusaurus graphql-to-doc
-npx docusaurus build
-```
-
-| Setting      | CLI flag | Default |
-| ------------ | -------- | ------- |
-| `runOnBuild` | n/a      | `false` |
 
 ## `rootPath`
 

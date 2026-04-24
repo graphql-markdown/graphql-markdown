@@ -293,12 +293,10 @@ describe("config", () => {
           sectionHeaderId: false,
         },
         printTypeOptions: {
-          codeSection: false,
           deprecated: "group",
-          exampleSection: true,
+          exampleSection: { directive: "example" },
           hierarchy: TypeHierarchy.ENTITY,
           parentTypePrefix: false,
-          relatedTypeSection: false,
           typeBadges: false,
         },
         skipDocDirective: ["@noDoc" as DirectiveName],
@@ -370,7 +368,6 @@ describe("config", () => {
           index: true,
         },
         printTypeOptions: {
-          exampleSection: true,
           hierarchy: TypeHierarchy.ENTITY,
         },
       };
@@ -383,8 +380,6 @@ describe("config", () => {
         homepage: "cli/my-homepage.md",
         index: true,
         link: "/cli",
-        noCode: true,
-        noExample: true,
         noSectionId: true,
         only: "@public",
         pretty: true,
@@ -423,10 +418,8 @@ describe("config", () => {
         },
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
-          codeSection: false,
           deprecated: "group",
           hierarchy: { entity: {} },
-          exampleSection: false,
         },
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
@@ -459,7 +452,7 @@ describe("config", () => {
           index: true,
         },
         printTypeOptions: {
-          exampleSection: true,
+          exampleSection: { directive: "example" },
           hierarchy: TypeHierarchy.ENTITY,
         },
       };
@@ -503,7 +496,7 @@ describe("config", () => {
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: { entity: {} },
-          exampleSection: true,
+          exampleSection: { directive: "example" },
         },
         skipDocDirective: [],
         onlyDocDirective: [],
@@ -884,34 +877,16 @@ describe("config", () => {
   });
 
   describe("parseDeprecatedPrintTypeOptions", () => {
-    test("returns empty object if no deprecated option", () => {
+    test("returns empty object", () => {
       expect.hasAssertions();
-
-      const cliOpt = {},
-        configOptions = undefined;
-
-      const spyConsole = jest.spyOn(globalThis.console, "warn");
-
-      expect(
-        parseDeprecatedPrintTypeOptions(cliOpt, configOptions),
-      ).toStrictEqual({});
-      expect(spyConsole).not.toHaveBeenCalled();
+      expect(parseDeprecatedPrintTypeOptions({}, undefined)).toStrictEqual({});
     });
   });
 
   describe("parseDeprecatedDocOptions", () => {
-    test("returns empty object if no deprecated option", () => {
+    test("returns empty object", () => {
       expect.hasAssertions();
-
-      const cliOpt = {},
-        configOptions = undefined;
-
-      const spyConsole = jest.spyOn(globalThis.console, "warn");
-
-      expect(parseDeprecatedDocOptions(cliOpt, configOptions)).toStrictEqual(
-        {},
-      );
-      expect(spyConsole).not.toHaveBeenCalled();
+      expect(parseDeprecatedDocOptions({}, undefined)).toStrictEqual({});
     });
   });
 

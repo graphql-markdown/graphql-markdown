@@ -5,23 +5,17 @@ import pluginGraphQLDocGenerator from "../../src/index";
 jest.mock("@graphql-markdown/cli", () => {
   return {
     getGraphQLMarkdownCli: jest.fn(),
-    runGraphQLMarkdown: jest.fn(),
   };
 });
-import {
-  getGraphQLMarkdownCli,
-  runGraphQLMarkdown,
-} from "@graphql-markdown/cli";
+import { getGraphQLMarkdownCli } from "@graphql-markdown/cli";
 
 jest.mock("@graphql-markdown/logger", () => {
   return {
     __esModule: true,
     default: jest.fn(),
-    log: jest.fn(),
-    LogLevel: { warn: "warn" },
   };
 });
-import Logger, { log } from "@graphql-markdown/logger";
+import Logger from "@graphql-markdown/logger";
 
 describe("pluginGraphQLDocGenerator", () => {
   const mockCli = {
@@ -29,7 +23,6 @@ describe("pluginGraphQLDocGenerator", () => {
   } as any;
 
   const mockOptions = {
-    runOnBuild: true,
     someOtherOption: "value",
     docOptions: { frontMatter: { draft: true } },
   };
@@ -49,33 +42,6 @@ describe("pluginGraphQLDocGenerator", () => {
       mockOptions,
     );
     expect(plugin.name).toBe("docusaurus-graphql-doc-generator");
-  });
-
-  describe("loadContent", () => {
-    test("does not call runGraphQLMarkdown if runOnBuild is false", async () => {
-      const plugin = await pluginGraphQLDocGenerator({} as LoadContext, {
-        runOnBuild: false,
-      });
-      await plugin.loadContent!();
-      expect(runGraphQLMarkdown).not.toHaveBeenCalled();
-    });
-
-    test("calls runGraphQLMarkdown if runOnBuild is true", async () => {
-      const plugin = await pluginGraphQLDocGenerator(
-        {} as LoadContext,
-        mockOptions,
-      );
-      await plugin.loadContent!();
-      expect(log).toHaveBeenCalledWith(
-        "`runOnBuild` option is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.",
-        "warn",
-      );
-      expect(runGraphQLMarkdown).toHaveBeenCalledWith(
-        mockOptions,
-        {},
-        "@docusaurus/logger",
-      );
-    });
   });
 
   describe("extendCli", () => {
@@ -101,7 +67,6 @@ describe("pluginGraphQLDocGenerator", () => {
 
     test("passes categorySort through docOptions", async () => {
       const optionsWithCategorySort = {
-        runOnBuild: false,
         docOptions: {
           frontMatter: { draft: true },
           categorySort: "natural" as const,
@@ -128,7 +93,6 @@ describe("pluginGraphQLDocGenerator", () => {
 
     test("passes sectionHeaderId through docOptions", async () => {
       const optionsWithSectionHeaderId = {
-        runOnBuild: false,
         docOptions: {
           frontMatter: { draft: true },
           sectionHeaderId: false,

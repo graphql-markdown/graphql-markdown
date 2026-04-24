@@ -1,4 +1,3 @@
-import type { ConfigOptions, ExperimentalConfigOptions } from "./core";
+import type { ConfigOptions } from "./core";
 
-export type GraphQLMarkdownCliOptions = ConfigOptions &
-  Partial<ExperimentalConfigOptions>;
+export type GraphQLMarkdownCliOptions = ConfigOptions;

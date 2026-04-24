@@ -152,7 +152,6 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    (Printer as any)._deprecatedOptions = undefined;
     jest.spyOn(GraphQL, "getTypeName").mockImplementation((value: unknown) => {
       return value as string;
     });
@@ -230,11 +229,9 @@ describe("Printer", () => {
       await Printer.init(new GraphQLSchema({}), "test", "/", {
         groups: {},
         printTypeOptions: {
-          codeSection: false,
-          exampleSection: true,
+          exampleSection: { directive: "example" },
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
           parentTypePrefix: false,
-          relatedTypeSection: false,
           typeBadges: false,
         },
         skipDocDirectives: [testDirective],
@@ -246,7 +243,9 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "deprecated": "default",
-          "exampleSection": undefined,
+          "exampleSection": {
+            "directive": "example",
+          },
           "formatMDXAdmonition": [Function],
           "formatMDXBadge": [Function],
           "formatMDXBullet": [Function],
@@ -656,78 +655,6 @@ describe("Printer", () => {
 
       expect(spy).toHaveBeenCalled();
       expect(code).toBeUndefined();
-    });
-
-    test("removes example from section order when deprecated exampleSection is false", async () => {
-      expect.hasAssertions();
-
-      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
-      jest.spyOn(Printer, "printHeader").mockReturnValue("");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("");
-      jest.spyOn(Printer, "printDescription").mockReturnValue("");
-      jest.spyOn(Printer, "printCustomDirectives").mockReturnValue("");
-      jest.spyOn(Printer, "printCustomTags").mockReturnValue("");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("");
-      jest.spyOn(Printer, "printExample").mockReturnValue("EXAMPLE");
-
-      const emitter = {
-        emitAsync: jest.fn().mockResolvedValue({
-          errors: [],
-          defaultPrevented: false,
-        }),
-      };
-
-      (Printer as any)._deprecatedOptions = { exampleSection: false };
-      (Printer as any).eventEmitter = emitter;
-
-      await Printer.printType("test", { name: "Test" });
-
-      expect(emitter.emitAsync).toHaveBeenCalledWith(
-        "print:beforeComposePageType",
-        expect.objectContaining({
-          output: expect.not.arrayContaining(["example"]),
-        }),
-      );
-    });
-
-    test("removes code and relations from section order when deprecated options are false", async () => {
-      expect.hasAssertions();
-
-      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
-      jest.spyOn(Printer, "printHeader").mockReturnValue("");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
-      jest.spyOn(Printer, "printDescription").mockReturnValue("");
-      jest.spyOn(Printer, "printCustomDirectives").mockReturnValue("");
-      jest.spyOn(Printer, "printCustomTags").mockReturnValue("");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
-      jest.spyOn(Printer, "printExample").mockReturnValue("");
-
-      const emitter = {
-        emitAsync: jest.fn().mockResolvedValue({
-          errors: [],
-          defaultPrevented: false,
-        }),
-      };
-
-      (Printer as any)._deprecatedOptions = {
-        codeSection: false,
-        exampleSection: false,
-        relatedTypeSection: false,
-      };
-      (Printer as any).eventEmitter = emitter;
-
-      await Printer.printType("test", { name: "Test" });
-
-      expect(emitter.emitAsync).toHaveBeenCalledWith(
-        "print:beforeComposePageType",
-        expect.objectContaining({
-          output: expect.not.arrayContaining(["code", "relations"]),
-        }),
-      );
     });
   });
 

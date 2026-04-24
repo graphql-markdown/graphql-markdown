@@ -1,7 +1,7 @@
 /**
- * Library supporting `relatedTypeSection` for displaying relations between GraphQL schema entities.
+ * Library for displaying relations between GraphQL schema entities.
  *
- * @see [Option `relatedTypeSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+ * @see [Settings `printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
  *
  * @packageDocumentation
  */
