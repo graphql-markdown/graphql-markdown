@@ -27,9 +27,6 @@ import type {
   ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
-  DeprecatedCliOptions,
-  DeprecatedConfigDocOptions,
-  DeprecatedConfigPrintTypeOptions,
   DirectiveName,
   FrontMatterOptions,
   GroupByDirectiveOptions,
@@ -47,7 +44,6 @@ import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
 import { OptionBuilder } from "./options/builder";
-import { log, LogLevel } from "@graphql-markdown/logger";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -152,7 +148,10 @@ export const DEFAULT_OPTIONS: Readonly<
       >
     >
 > & {
-  printTypeOptions: Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
+  printTypeOptions: Required<
+    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
+  > & {
+    exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   };
 } = {
@@ -166,12 +165,7 @@ export const DEFAULT_OPTIONS: Readonly<
     index: false as const,
     sectionHeaderId: true as const,
   } as Pick<ConfigDocOptions, "categorySort"> &
-    Required<
-      Pick<
-        ConfigDocOptions & DeprecatedConfigDocOptions,
-        "frontMatter" | "index"
-      >
-    >,
+    Required<Pick<ConfigDocOptions, "frontMatter" | "index">>,
   force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -180,13 +174,14 @@ export const DEFAULT_OPTIONS: Readonly<
   metatags: [] as Record<string, string>[],
   pretty: false as const,
   printTypeOptions: {
-    codeSection: true as const,
     deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
-    exampleSection: false as const,
+    exampleSection: undefined,
     parentTypePrefix: true as const,
-    relatedTypeSection: true as const,
     typeBadges: true as const,
-  } as Required<Omit<ConfigPrintTypeOptions, "hierarchy">> & {
+  } as Required<
+    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
+  > & {
+    exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   },
   rootPath: "./docs" as const,
@@ -446,17 +441,9 @@ export const getDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
   return getNormalizedDiffMethod(diff);
 };
 
-/**
- * Placeholder function for handling deprecated document options.
- * Currently returns an empty object as these options are deprecated.
- *
- * @param _cliOpts - Deprecated CLI options (unused)
- * @param _configOptions - Deprecated config options (unused)
- * @returns An empty object
- */
 export const parseDeprecatedDocOptions = (
-  _cliOpts: Maybe<Omit<DeprecatedCliOptions, "never">>,
-  _configOptions: Maybe<Omit<DeprecatedConfigDocOptions, "never">>,
+  _cliOpts?: Maybe<CliOptions>,
+  _configOptions?: Maybe<ConfigDocOptions>,
 ): Record<string, never> => {
   return {};
 };
@@ -482,10 +469,8 @@ export const parseDeprecatedDocOptions = (
  * ```
  */
 export const getDocOptions = (
-  cliOpts?: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
-  configOptions?: Maybe<
-    ConfigDocOptions & Omit<DeprecatedConfigDocOptions, "never">
-  >,
+  cliOpts?: Maybe<CliOptions>,
+  configOptions?: Maybe<ConfigDocOptions>,
 ): Required<ConfigDocOptions> => {
   const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   const cliIndex =
@@ -578,61 +563,10 @@ export const getTypeHierarchyOption = (
   return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
 };
 
-/**
- * Handles deprecated print type options.
- *
- * Emits deprecation warnings when legacy section toggle options are detected
- * from CLI flags or config file values.
- *
- * @param cliOpts - CLI options containing deprecated print type flags
- * @param configOptions - Config options containing deprecated print type settings
- * @returns An empty object reserved for backward compatibility
- */
 export const parseDeprecatedPrintTypeOptions = (
-  cliOpts: Maybe<Pick<CliOptions, "noCode" | "noExample" | "noRelatedType">>,
-  configOptions: Maybe<
-    Pick<
-      ConfigPrintTypeOptions,
-      "codeSection" | "exampleSection" | "relatedTypeSection"
-    >
-  >,
+  _cliOpts?: Maybe<CliOptions>,
+  _configOptions?: Maybe<ConfigPrintTypeOptions>,
 ): Record<string, never> => {
-  if (cliOpts?.noCode) {
-    log(
-      `[DEPRECATED] CLI option '--noCode' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
-      LogLevel.warn,
-    );
-  } else if (typeof configOptions?.codeSection === "boolean") {
-    log(
-      `[DEPRECATED] config option 'printTypeOptions.codeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'code' from event.output to hide the code section.`,
-      LogLevel.warn,
-    );
-  }
-
-  if (cliOpts?.noExample) {
-    log(
-      `[DEPRECATED] CLI option '--noExample' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
-      LogLevel.warn,
-    );
-  } else if (typeof configOptions?.exampleSection === "boolean") {
-    log(
-      `[DEPRECATED] config option 'printTypeOptions.exampleSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'example' from event.output to hide the example section.`,
-      LogLevel.warn,
-    );
-  }
-
-  if (cliOpts?.noRelatedType) {
-    log(
-      `[DEPRECATED] CLI option '--noRelatedType' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
-      LogLevel.warn,
-    );
-  } else if (typeof configOptions?.relatedTypeSection === "boolean") {
-    log(
-      `[DEPRECATED] config option 'printTypeOptions.relatedTypeSection' is deprecated. Use the 'beforeComposePageTypeHook' event instead: remove 'relations' from event.output to hide the relations section.`,
-      LogLevel.warn,
-    );
-  }
-
   return {};
 };
 
@@ -645,20 +579,18 @@ export const parseDeprecatedPrintTypeOptions = (
  * @returns The resolved print type options with all required fields
  * @example
  * ```typescript
- * const cliOptions = { noCode: true, deprecated: "group" };
+ * const cliOptions = { deprecated: "group" };
  * const configOptions = {
- *   exampleSection: true,
+ *   exampleSection: { directive: "example" },
  *   hierarchy: "entity"
  * };
  *
  * const printOptions = getPrintTypeOptions(cliOptions, configOptions);
  * console.log(printOptions);
  * // {
- * //   codeSection: false,  // Disabled via noCode CLI flag
  * //   deprecated: "group", // From CLI
- * //   exampleSection: true, // From config
+ * //   exampleSection: { directive: "example" }, // From config
  * //   parentTypePrefix: true, // Default value
- * //   relatedTypeSection: true, // Default value
  * //   typeBadges: true, // Default value
  * //   hierarchy: { entity: {} } // Parsed from config
  * // }
@@ -667,29 +599,21 @@ export const parseDeprecatedPrintTypeOptions = (
  * @see {@link getTypeHierarchyOption} for hierarchy resolution
  */
 export const getPrintTypeOptions = (
-  cliOpts: Maybe<CliOptions & Omit<DeprecatedCliOptions, "never">>,
-  configOptions: Maybe<
-    ConfigPrintTypeOptions & Omit<DeprecatedConfigPrintTypeOptions, "never">
-  >,
+  cliOpts: Maybe<CliOptions>,
+  configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
   return {
-    codeSection:
-      (!cliOpts?.noCode && configOptions?.codeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions.codeSection,
     deprecated: (
       (cliOpts?.deprecated ??
         configOptions?.deprecated ??
         DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
     ).toLocaleLowerCase() as TypeDeprecatedOption,
     exampleSection:
-      (!cliOpts?.noExample && configOptions?.exampleSection) ??
+      configOptions?.exampleSection ??
       DEFAULT_OPTIONS.printTypeOptions.exampleSection,
     parentTypePrefix:
       (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix,
-    relatedTypeSection:
-      (!cliOpts?.noRelatedType && configOptions?.relatedTypeSection) ??
-      DEFAULT_OPTIONS.printTypeOptions.relatedTypeSection,
     typeBadges:
       (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
       DEFAULT_OPTIONS.printTypeOptions.typeBadges,
@@ -824,8 +748,6 @@ export const buildConfig = async (
 
   const graphqlConfig = await loadConfiguration(id);
 
-  // Emit deprecation warnings using raw user-provided options only (no defaults merged in),
-  // so we don't spuriously warn for projects that never set these options.
   parseDeprecatedPrintTypeOptions(cliOpts, {
     ...(graphqlConfig as Maybe<ConfigOptions>)?.printTypeOptions,
     ...configFileOpts?.printTypeOptions,
