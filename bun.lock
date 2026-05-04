@@ -98,7 +98,7 @@
       "name": "@graphql-markdown/diff",
       "version": "1.1.14",
       "dependencies": {
-        "@graphql-inspector/core": "^7.1.1",
+        "@graphql-inspector/core": "^7.1.3",
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
@@ -402,7 +402,7 @@
 
     "@graphql-hive/signal": ["@graphql-hive/signal@2.0.0", "", {}, "sha512-Pz8wB3K0iU6ae9S1fWfsmJX24CcGeTo6hE7T44ucmV/ALKRj+bxClmqrYcDT7v3f0d12Rh4FAXBb6gon+WkDpQ=="],
 
-    "@graphql-inspector/core": ["@graphql-inspector/core@7.1.2", "", { "dependencies": { "dependency-graph": "1.0.0", "object-inspect": "1.13.2", "tslib": "2.6.2" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0" } }, "sha512-yYuWN3/2lQsICwy0PL24hPYeNvDP62Z/t7CfQHcB9V4DJhDtNpoyUYBOwBB1YSwNs4nE9ZQhuv2VeBUZigKVQQ=="],
+    "@graphql-inspector/core": ["@graphql-inspector/core@7.1.3", "", { "dependencies": { "dependency-graph": "1.0.0", "object-inspect": "1.13.2", "tslib": "2.6.2" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0" } }, "sha512-KY5UlRVn3Q12mBeGCu0Z2dmKYUl+eiHpLPo5cyQBWmAibjatPe0IO3I9THW/9rPusafbh3cRnGpYHIH/SxyASQ=="],
 
     "@graphql-markdown/cli": ["@graphql-markdown/cli@workspace:packages/cli"],
 
