@@ -25,8 +25,8 @@
         "@graphql-tools/utils": "^11.1.0"
       },
       "docusaurus": {
-        "@docusaurus/utils": "^3.10.0",
-        "@docusaurus/types": "^3.10.0",
+        "@docusaurus/utils": "^3.10.1",
+        "@docusaurus/types": "^3.10.1",
         "@docusaurus/logger": "*"
       }
     }
