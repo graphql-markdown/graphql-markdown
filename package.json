@@ -14,19 +14,19 @@
       "packages/*"
     ],
     "catalog": {
-      "graphql": "16.13.2",
+      "graphql": "16.14.0",
       "graphql-config": "5.1.6",
-      "prettier": "3.8.1"
+      "prettier": "3.8.3"
     },
     "catalogs": {
       "graphql-tools": {
-        "@graphql-tools/load": "8.1.8",
-        "@graphql-tools/graphql-file-loader": "8.0.22",
-        "@graphql-tools/utils": "11.0.0"
+        "@graphql-tools/load": "8.1.10",
+        "@graphql-tools/graphql-file-loader": "8.1.14",
+        "@graphql-tools/utils": "11.1.0"
       },
       "docusaurus": {
-        "@docusaurus/utils": ">=3.9.2",
-        "@docusaurus/types": "^3.7.0",
+        "@docusaurus/utils": "3.10.1",
+        "@docusaurus/types": "3.10.1",
         "@docusaurus/logger": "*"
       }
     }
