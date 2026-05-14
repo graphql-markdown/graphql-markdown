@@ -562,6 +562,26 @@ describe("CLI Module", () => {
       ).toHaveBeenCalled();
     });
 
+    test("initializes logger before buildConfig", async () => {
+      expect.assertions(2);
+
+      const callOrder: string[] = [];
+      require("@graphql-markdown/logger").mockImplementationOnce(async () => {
+        callOrder.push("Logger");
+      });
+      require("@graphql-markdown/core").buildConfig.mockImplementationOnce(
+        async (config: Options) => {
+          callOrder.push("buildConfig");
+          return config;
+        },
+      );
+
+      await runGraphQLMarkdown({ schema: "./schema.graphql" }, {});
+
+      expect(callOrder[0]).toBe("Logger");
+      expect(callOrder[1]).toBe("buildConfig");
+    });
+
     test("handles errors during documentation generation", async () => {
       expect.assertions(1);
 
