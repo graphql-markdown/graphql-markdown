@@ -348,7 +348,7 @@ export const generateDocFromSchema = async ({
   linkRoot,
   loaders: loadersList,
   loggerModule,
-  mdxParser,
+  formatter,
   metatags,
   onlyDocDirective,
   outputDir,
@@ -362,7 +362,7 @@ export const generateDocFromSchema = async ({
 
   await Logger(loggerModule);
 
-  const mdxModule = await loadMDXModule(mdxParser);
+  const mdxModule = await loadMDXModule(formatter);
   // Register MDX lifecycle event handlers if mdxModule loaded successfully
   // This must be called BEFORE getEvents() because it resets the singleton
   registerMDXEventHandlers(mdxModule);
@@ -427,7 +427,7 @@ export const generateDocFromSchema = async ({
   const groups = getGroups(rootTypes, groupByDirective);
 
   // Extract formatter from the MDX module (for direct function calls)
-  const formatter = getFormatterFromMDXModule(mdxModule, docOptions);
+  const mdxFormatter = getFormatterFromMDXModule(mdxModule, docOptions);
 
   // Extract mdxDeclaration from the MDX module (if available)
   const mdxDeclaration = getMDXModuleProperty<string>(
@@ -457,7 +457,7 @@ export const generateDocFromSchema = async ({
       skipDocDirectives,
       sectionHeaderId: docOptions?.sectionHeaderId,
     },
-    formatter,
+    mdxFormatter,
     mdxDeclaration,
     // Pass event emitter to enable print events
     events,

@@ -200,14 +200,20 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
 
-## `mdxParser`
+## `formatter`
 
-Provide a custom module for formatting MDX content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
+Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
 
 
 | Setting     | CLI flag      | Default                            |
 | ----------- | ------------- | ---------------------------------- |
-| `mdxParser` | `--mdxParser` | `undefined`                        |
+| `formatter` | `--formatter` | `undefined`                        |
+
+:::note
+
+The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning. Migrate to `formatter`.
+
+:::
 
 <br/>
 
@@ -254,7 +260,7 @@ plugins: [
         baseURL: "swapi",
         homepage: "./docs/swapi.md",
         // highlight-start
-        mdxParser: "./lib/custom-mdx.cjs",
+        formatter: "./lib/custom-mdx.cjs",
         // highlight-end
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
@@ -373,7 +379,7 @@ plugins: [
           parentTypePrefix: false, // disable parent prefix, same as CLI flag --noParentType
           typeBadges: false, // disable type attribute badges, same as CLI flag --noTypeBadges
         },
-        mdxParser: require.resolve("./custom-mdx.cjs"), // use hook-based section composition
+        formatter: require.resolve("./custom-mdx.cjs"), // use hook-based section composition
         // highlight-end
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema

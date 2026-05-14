@@ -237,7 +237,12 @@ export interface ConfigOptions {
   linkRoot?: Maybe<string>;
   /** List of loaders to use for loading the schema */
   loaders?: Maybe<LoaderOption>;
-  /** Package to be used for generating MDX output */
+  /** Package to be used for formatting MDX output */
+  formatter?: Maybe<PackageName | string>;
+  /**
+   * @deprecated Use `formatter` instead.
+   * @see formatter
+   */
   mdxParser?: Maybe<PackageName | string>;
   /** Metadata tags to include in documentation */
   metatags?: Record<string, string>[];
@@ -300,7 +305,12 @@ export interface CliOptions {
   link?: string;
   /** Documentation hierarchy type */
   hierarchy?: TypeHierarchyValueType;
-  /** MDX parser package */
+  /** Formatter package */
+  formatter?: string;
+  /**
+   * @deprecated Use `formatter` instead.
+   * @see formatter
+   */
   mdxParser?: string;
   /** Disable parent type prefix flag */
   noParentType?: boolean;

@@ -56,7 +56,7 @@ This is a quick reference guide. All settings are thoroughly documented in the [
 | `diffMethod`  | `string`  | `NONE`  | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH`   |
 | `tmpDir`      | `string`  | —       | Temporary directory for storing schema signature (used by diff)   |
 | `pretty`      | `boolean` | `false` | Format output files with Prettier (requires `prettier` installed) |
-| `mdxParser`   | `string`  | —       | Path to a custom MDX formatter module                             |
+| `formatter`   | `string`  | —       | Package name or path to a custom formatter module                 |
 
 ## CLI Flags
 
@@ -81,5 +81,6 @@ All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc`
 | `--skip <@directive...>`          | `skipDocDirective`                    | Exclude types with these directives            |
 | `-gdb, --groupByDirective <expr>` | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
 | `--pretty`                        | `pretty`                              | Format output with Prettier                    |
-| `--mdxParser <path>`              | `mdxParser`                           | Custom MDX formatter module                    |
+| `--formatter <pkg>`               | `formatter`                           | Formatter package name or path                 |
+| `--mdxParser <pkg>`               | ~~`mdxParser`~~ (deprecated)          | Use `--formatter` instead                      |
 | `--config`                        | —                                     | Print resolved config (debug)                  |

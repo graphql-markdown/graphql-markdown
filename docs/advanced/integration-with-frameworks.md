@@ -42,7 +42,7 @@ await runGraphQLMarkdown({
   schema: './schema.graphql',
   rootPath: './docs',
   baseURL: 'api',
-  mdxParser: '@graphql-markdown/formatters/docusaurus', // or your framework
+  formatter: '@graphql-markdown/formatters/docusaurus', // or your framework
 });
 ```
 

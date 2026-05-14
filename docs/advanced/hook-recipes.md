@@ -87,7 +87,7 @@ plugins: [
     {
       schema: "./schema.graphql",
       // highlight-next-line
-      mdxParser: require.resolve("./custom-mdx.cjs"),
+      formatter: require.resolve("./custom-mdx.cjs"),
       // ... other options
     },
   ],
@@ -108,7 +108,7 @@ title: "Unions"
 - [NotificationUnion](./notification-union.mdx)
 ```
 
-Declare the custom module in GraphQL-Markdown configuration `mdxParser: "./custom-mdx.mjs"`.
+Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
 
 ```js title="custom-mdx.mjs"
 
@@ -199,7 +199,7 @@ type User {
 }
 ```
 
-Declare the custom module in GraphQL-Markdown configuration `mdxParser: "./custom-mdx.mjs"`.
+Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
 
 ```js title="custom-mdx.mjs"
 import { 

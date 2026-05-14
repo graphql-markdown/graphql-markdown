@@ -8,10 +8,7 @@
  * @module
  */
 
-import type {
-  ConfigOptions,
-  GraphQLExtensionDeclaration,
-} from "@graphql-markdown/types";
+import type { GraphQLExtensionDeclaration } from "@graphql-markdown/types";
 
 import { Command } from "commander";
 import { loadConfig } from "graphql-config";
@@ -45,13 +42,7 @@ void (async (): Promise<void> => /* NOSONAR */ {
     : ["default"];
   // build commands for each project declared in graphql-config file
   for (const project of projects) {
-    const cmd = getGraphQLMarkdownCli(
-      {
-        id: project,
-      } as unknown as ConfigOptions,
-      undefined,
-      true,
-    );
+    const cmd = getGraphQLMarkdownCli({ id: project });
     program.addCommand(cmd);
   }
 
