@@ -570,8 +570,8 @@ export const parseDeprecatedFormatterOption = (
   cliOpts?: Maybe<CliOptions>,
   configOptions?: Maybe<ConfigOptions>,
 ): Maybe<string> => {
-  const legacyCli = cliOpts?.mdxParser ?? null;
-  const legacyConfig = configOptions?.mdxParser;
+  const legacyCli = cliOpts?.mdxParser ?? null; // NOSONAR typescript:S1874
+  const legacyConfig = configOptions?.mdxParser; // NOSONAR typescript:S1874
   if (
     legacyCli !== null ||
     (legacyConfig !== undefined && legacyConfig !== null)
