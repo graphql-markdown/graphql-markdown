@@ -79,3 +79,6 @@ jobs:
         run: earthly --ci "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
         env:
           EARTHLY_NO_CACHE: true
+
+      - name: Run CLI Deprecated Formatter Smoke Tests
+        run: earthly --ci "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+smoke-cli-deprecated-formatter-test"
