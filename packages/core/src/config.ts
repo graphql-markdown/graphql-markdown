@@ -40,6 +40,8 @@ import type {
   TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
+import { log, LogLevel } from "@graphql-markdown/logger";
+
 import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
@@ -564,6 +566,20 @@ export const getTypeHierarchyOption = (
   return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
 };
 
+export const parseDeprecatedFormatterOption = (
+  cliOpts?: Maybe<CliOptions>,
+  configOptions?: Maybe<ConfigOptions>,
+): Maybe<string> => {
+  const legacyValue = cliOpts?.mdxParser ?? configOptions?.mdxParser;
+  if (legacyValue !== undefined && legacyValue !== null) {
+    log(
+      `Setting "mdxParser" is deprecated and will be removed in a future version. Use "formatter" instead.`,
+      LogLevel.warn,
+    );
+  }
+  return cliOpts?.formatter ?? legacyValue ?? configOptions?.formatter;
+};
+
 export const parseDeprecatedPrintTypeOptions = (
   _cliOpts?: Maybe<CliOptions>,
   _configOptions?: Maybe<ConfigPrintTypeOptions>,
@@ -816,7 +832,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot,
     loaders: config.loaders,
-    mdxParser: cliOpts.mdxParser ?? config.mdxParser,
+    formatter: parseDeprecatedFormatterOption(cliOpts, config),
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
     outputDir: join(rootPath, baseURL),

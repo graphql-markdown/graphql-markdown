@@ -31,6 +31,7 @@ import {
   getTypeHierarchyOption,
   getVisibilityDirectives,
   parseDeprecatedDocOptions,
+  parseDeprecatedFormatterOption,
   parseDeprecatedPrintTypeOptions,
   parseGroupByOption,
   parseHomepageOption,
@@ -38,6 +39,17 @@ import {
 } from "../../src/config";
 
 import * as graphqlConfigModule from "../../src/graphql-config";
+
+jest.mock("@graphql-markdown/logger", (): unknown => {
+  return {
+    __esModule: true,
+    ...jest.requireActual("@graphql-markdown/logger"),
+    log: jest.fn(),
+    LogLevel: { debug: "debug", warn: "warn", info: "info", error: "error" },
+  };
+});
+
+import { log } from "@graphql-markdown/logger";
 
 jest.mock("@graphql-markdown/utils");
 
@@ -329,7 +341,7 @@ describe("config", () => {
         id: DEFAULT_OPTIONS.id,
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
@@ -404,7 +416,7 @@ describe("config", () => {
         homepageLocation: cliOpts.homepage,
         linkRoot: cliOpts.link,
         loaders: configFileOpts.loaders,
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         outputDir: join(cliOpts.root!, cliOpts.base!),
         prettify: cliOpts.pretty,
@@ -481,7 +493,7 @@ describe("config", () => {
         homepageLocation: configFileOpts.homepage,
         linkRoot: configFileOpts.linkRoot,
         loaders: configFileOpts.loaders,
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
@@ -530,7 +542,7 @@ describe("config", () => {
         id: DEFAULT_OPTIONS.id,
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         loaders: configFileOpts.loaders,
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, configFileOpts.baseURL!),
@@ -563,7 +575,7 @@ describe("config", () => {
         id: DEFAULT_OPTIONS.id,
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         loaders: {},
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
@@ -600,7 +612,7 @@ describe("config", () => {
         id: DEFAULT_OPTIONS.id,
         linkRoot: DEFAULT_OPTIONS.linkRoot,
         loaders: {},
-        mdxParser: undefined,
+        formatter: undefined,
         metatags: DEFAULT_OPTIONS.metatags,
         onlyDocDirective: DEFAULT_OPTIONS.onlyDocDirective,
         outputDir: join(DEFAULT_OPTIONS.rootPath!, DEFAULT_OPTIONS.baseURL!),
@@ -873,6 +885,58 @@ describe("config", () => {
 
       expect(index).toBeFalsy();
       expect(frontMatter).toStrictEqual({ draft: true });
+    });
+  });
+
+  describe("parseDeprecatedFormatterOption", () => {
+    test("returns undefined when neither formatter nor mdxParser is set", () => {
+      expect.hasAssertions();
+      expect(parseDeprecatedFormatterOption({}, {})).toBeUndefined();
+      expect(log).not.toHaveBeenCalled();
+    });
+
+    test("returns formatter value without warning when only formatter is set", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption({ formatter: "my-formatter" }, {}),
+      ).toBe("my-formatter");
+      expect(log).not.toHaveBeenCalled();
+    });
+
+    test("returns mdxParser value and emits deprecation warning when mdxParser is set in config", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption({}, { mdxParser: "my-parser" }),
+      ).toBe("my-parser");
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"mdxParser" is deprecated'),
+        "warn",
+      );
+    });
+
+    test("returns mdxParser value and emits deprecation warning when mdxParser is set in CLI opts", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption({ mdxParser: "my-parser" }, {}),
+      ).toBe("my-parser");
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"mdxParser" is deprecated'),
+        "warn",
+      );
+    });
+
+    test("formatter takes precedence over mdxParser and still emits deprecation warning", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption(
+          { formatter: "new-formatter", mdxParser: "old-parser" },
+          {},
+        ),
+      ).toBe("new-formatter");
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"mdxParser" is deprecated'),
+        "warn",
+      );
     });
   });
 
