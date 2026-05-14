@@ -45,13 +45,9 @@ void (async (): Promise<void> => /* NOSONAR */ {
     : ["default"];
   // build commands for each project declared in graphql-config file
   for (const project of projects) {
-    const cmd = getGraphQLMarkdownCli(
-      {
-        id: project,
-      } as unknown as ConfigOptions,
-      undefined,
-      true,
-    );
+    const cmd = getGraphQLMarkdownCli({
+      id: project,
+    } as unknown as ConfigOptions);
     program.addCommand(cmd);
   }
 

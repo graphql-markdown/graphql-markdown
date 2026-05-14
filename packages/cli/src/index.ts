@@ -68,7 +68,8 @@ export const runGraphQLMarkdown = async (
  *
  * @param options - Options for configuring the GraphQL Markdown CLI.
  * @param loggerModule - Optional logger module to use.
- * @param customFormatter - Optional formatter package name or `true` to enable the flag.
+ * @param customFormatter - Optional default formatter package name. When provided, registers
+ *   `--formatter` and `--mdxParser` (deprecated) flags with this value as the default.
  *
  * @returns The configured CLI instance.
  *
@@ -77,7 +78,7 @@ export const runGraphQLMarkdown = async (
  * const cli = getGraphQLMarkdownCli(
  *   { id: "custom" },
  *   "custom-logger",
- *   true
+ *   "@graphql-markdown/docusaurus/mdx"
  * );
  * await cli.parseAsync(process.argv);
  * ```
@@ -85,7 +86,7 @@ export const runGraphQLMarkdown = async (
 export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
-  customFormatter?: boolean | string,
+  customFormatter?: string,
 ): GraphQLMarkdownCliType => {
   // Initialize logger asynchronously without blocking - non-critical operation
   Logger(loggerModule).catch((error: Error) => {
@@ -139,12 +140,12 @@ export const getGraphQLMarkdownCli = (
     .option("--pretty", "Prettify generated files")
     .option("--config", "Print configuration (for debugging)");
 
-  if (customFormatter === true || typeof customFormatter === "string") {
+  if (typeof customFormatter === "string") {
     command
       .option(
         "--formatter <formatter>",
         "Set formatter package",
-        typeof customFormatter === "string" ? customFormatter : undefined,
+        customFormatter,
       )
       .option(
         "--mdxParser <mdxParser>",
