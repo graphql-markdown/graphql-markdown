@@ -961,6 +961,20 @@ describe("config", () => {
       );
     });
 
+    test("configOptions.formatter takes precedence over configOptions.mdxParser and emits warning", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption(
+          {},
+          { formatter: "config-formatter", mdxParser: "config-parser" },
+        ),
+      ).toBe("config-formatter");
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"mdxParser" is deprecated'),
+        "warn",
+      );
+    });
+
     test("does not emit warning when mdxParser is null", () => {
       expect.hasAssertions();
       expect(

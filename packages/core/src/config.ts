@@ -570,14 +570,20 @@ export const parseDeprecatedFormatterOption = (
   cliOpts?: Maybe<CliOptions>,
   configOptions?: Maybe<ConfigOptions>,
 ): Maybe<string> => {
-  const legacyValue = cliOpts?.mdxParser ?? configOptions?.mdxParser;
-  if (legacyValue !== undefined && legacyValue !== null) {
+  const legacyCli = cliOpts?.mdxParser ?? null;
+  const legacyConfig = configOptions?.mdxParser;
+  if (
+    legacyCli !== null ||
+    (legacyConfig !== undefined && legacyConfig !== null)
+  ) {
     log(
       `Setting "mdxParser" is deprecated and will be removed in a future version. Use "formatter" instead.`,
       LogLevel.warn,
     );
   }
-  return cliOpts?.formatter ?? legacyValue ?? configOptions?.formatter;
+  return (
+    cliOpts?.formatter ?? legacyCli ?? configOptions?.formatter ?? legacyConfig
+  );
 };
 
 export const parseDeprecatedPrintTypeOptions = (
