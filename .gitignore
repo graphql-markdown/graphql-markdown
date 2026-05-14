@@ -34,3 +34,7 @@ bin
 
 .turbo
 .sonarlint
+
+# local dev tooling
+.claude/
+.mcp.json
