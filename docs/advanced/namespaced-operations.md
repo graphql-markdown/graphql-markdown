@@ -68,7 +68,7 @@ const beforePrintCodeHook = async (event) => {
 export { beforePrintCodeHook };
 ```
 
-Then register the module with `mdxParser` as described in [Hooks Recipes](/docs/advanced/hook-recipes) and [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
+Then register the module with `formatter` as described in [Hooks Recipes](/docs/advanced/hook-recipes) and [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
 With this hook enabled, a namespaced operation page can still be generated at `operations/queries/analytics/courses-by-department`, but its code block will render without the namespace wrapper:
 
