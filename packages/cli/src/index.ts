@@ -78,7 +78,7 @@ export const runGraphQLMarkdown = async (
  * const cli = getGraphQLMarkdownCli(
  *   { id: "custom" },
  *   "custom-logger",
- *   "@graphql-markdown/docusaurus/mdx"
+ *   "@graphql-markdown/formatters/docusaurus"
  * );
  * await cli.parseAsync(process.argv);
  * ```
