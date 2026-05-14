@@ -113,8 +113,8 @@ describe("generator", () => {
     };
 
     test.each([[undefined], ["custom-mdx"]])(
-      "passes options to Printer and Renderer with mdxParser set to %s",
-      async (mdxParser) => {
+      "passes options to Printer and Renderer with formatter set to %s",
+      async (formatter) => {
         expect.assertions(2);
 
         const mockSchema = { getDirective } as unknown as GraphQLSchema;
@@ -153,7 +153,7 @@ describe("generator", () => {
           .spyOn(CoreRenderer, "getRenderer")
           .mockResolvedValueOnce(mockRenderer);
 
-        await generateDocFromSchema({ ...options, mdxParser });
+        await generateDocFromSchema({ ...options, formatter });
 
         expect(getPrinterSpy).toHaveBeenCalledWith(
           {
@@ -577,7 +577,7 @@ describe("generator", () => {
       );
     });
 
-    test("calls loadMDXModule with mdxParser option", async () => {
+    test("calls loadMDXModule with formatter option", async () => {
       expect.assertions(1);
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
@@ -604,7 +604,7 @@ describe("generator", () => {
 
       await generateDocFromSchema({
         ...options,
-        mdxParser: "custom-mdx-parser",
+        formatter: "custom-mdx-parser",
       });
 
       expect(loadMDXSpy).toHaveBeenCalledWith("custom-mdx-parser");
@@ -637,7 +637,7 @@ describe("generator", () => {
 
       await generateDocFromSchema({
         ...options,
-        mdxParser: "custom-mdx-parser",
+        formatter: "custom-mdx-parser",
       });
 
       // Verify the last argument (mdxExtension) is .mdx
@@ -672,7 +672,7 @@ describe("generator", () => {
 
       await generateDocFromSchema({
         ...options,
-        mdxParser: "custom-mdx-parser",
+        formatter: "custom-mdx-parser",
       });
 
       // Verify the last argument (mdxExtension) is the custom extension
@@ -711,7 +711,7 @@ describe("generator", () => {
 
       await generateDocFromSchema({
         ...options,
-        mdxParser: "custom-mdx-parser",
+        formatter: "custom-mdx-parser",
       });
 
       // Should use mdxExtension (.mdx), not mdxDeclaration (the import statement)

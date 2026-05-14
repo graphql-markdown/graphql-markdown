@@ -938,6 +938,36 @@ describe("config", () => {
         "warn",
       );
     });
+
+    test("returns configOptions.formatter when no CLI opts and no mdxParser", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption({}, { formatter: "config-formatter" }),
+      ).toBe("config-formatter");
+      expect(log).not.toHaveBeenCalled();
+    });
+
+    test("mdxParser in CLI takes precedence over configOptions.formatter and emits warning", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption(
+          { mdxParser: "cli-parser" },
+          { formatter: "config-formatter" },
+        ),
+      ).toBe("cli-parser");
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"mdxParser" is deprecated'),
+        "warn",
+      );
+    });
+
+    test("does not emit warning when mdxParser is null", () => {
+      expect.hasAssertions();
+      expect(
+        parseDeprecatedFormatterOption({ mdxParser: null }, {}),
+      ).toBeUndefined();
+      expect(log).not.toHaveBeenCalled();
+    });
   });
 
   describe("parseDeprecatedPrintTypeOptions", () => {

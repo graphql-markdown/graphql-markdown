@@ -88,7 +88,7 @@ describe("renderer", () => {
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
         metatags: [],
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         onlyDocDirective: [],
         outputDir: "/output",
         prettify: false,
@@ -124,7 +124,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",
@@ -170,7 +170,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",
@@ -215,7 +215,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output",
@@ -252,7 +252,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-nested-namespace",
@@ -357,7 +357,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-prefix",
@@ -409,7 +409,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-api-prefix",
@@ -481,7 +481,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-strict-test",
@@ -560,7 +560,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-backward-compat",
@@ -625,7 +625,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-category-files",
@@ -682,7 +682,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-flat-prefix",
@@ -739,7 +739,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-no-duplicate",
@@ -803,7 +803,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-many-cats",
@@ -867,7 +867,7 @@ describe("renderer", () => {
           ["GraphQLFileLoader" as ClassName]:
             "@graphql-tools/graphql-file-loader" as PackageName,
         },
-        mdxParser: "mdx-parser-mock" as PackageName,
+        formatter: "mdx-parser-mock" as PackageName,
         metatags: [],
         onlyDocDirective: [],
         outputDir: "/output-homepage-check",
