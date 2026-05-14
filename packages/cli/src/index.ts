@@ -49,6 +49,7 @@ export const runGraphQLMarkdown = async (
   cliOptions: CliOptions,
   loggerModule?: string,
 ): Promise<void> => {
+  await Logger(loggerModule);
   const config = await buildConfig(options, cliOptions, options.id);
 
   if (cliOptions.config) {
