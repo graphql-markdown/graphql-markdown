@@ -141,6 +141,7 @@ export const DEFAULT_OPTIONS: Readonly<
       Omit<
         ConfigOptions,
         | "customDirective"
+        | "formatter"
         | "groupByDirective"
         | "loaders"
         | "mdxParser"
