@@ -37,7 +37,7 @@ smoke-cli-deprecated-formatter-test:
   COPY ./e2e/__data__/.graphqlrc ./.graphqlrc
   COPY ./e2e/helpers/cli.mjs ./__tests__/helpers/cli.mjs
   COPY ./e2e/cli/__data__/graphql-doc-generator-deprecated-formatter.config.mjs ./graphql.config.mjs
-  COPY ./e2e/cli/specs/deprecated-formatter.spec.mjs ./__tests__/e2e/specs/deprecated-formatter.spec.mjs
+  COPY ./e2e/cli/__deprecated__/specs/deprecated-formatter.spec.mjs ./__tests__/e2e/specs/deprecated-formatter.spec.mjs
   COPY ./e2e/cli/jest.config.mjs ./jest.config.mjs
   RUN NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx --yes jest --runInBand --config ./jest.config.mjs --testPathPattern "deprecated-formatter"
 
