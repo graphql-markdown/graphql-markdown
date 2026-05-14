@@ -30,6 +30,7 @@ smoke-cli-test:
   COPY ./e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs ./graphql.config.mjs
   DO +SMOKE_TEST --package=cli
 
+# TODO: remove this step when mdxParser is removed from the codebase
 smoke-cli-deprecated-formatter-test:
   FROM root+setup-cli-project
   WORKDIR /$gqlmdCliProject
