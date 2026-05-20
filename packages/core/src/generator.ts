@@ -63,7 +63,7 @@ import { registerMDXEventHandlers } from "./event-handlers";
  * - MDX: MDX file extension (.mdx) for React component-enabled markdown
  * - MD: Standard markdown file extension (.md)
  */
-export const FILE_EXTENSION = {
+const FILE_EXTENSION = {
   MDX: ".mdx",
   MD: ".md",
 } as const;

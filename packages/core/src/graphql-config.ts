@@ -28,7 +28,7 @@ import {
  * The name of the GraphQL Markdown extension.
  * Used to identify the extension in graphql-config.
  */
-export const EXTENSION_NAME = "graphql-markdown" as const;
+const EXTENSION_NAME = "graphql-markdown" as const;
 
 /**
  * GraphQL extension declaration for graphql-config.
