@@ -1,4 +1,4 @@
-import cli from "../../../helpers/cli.mjs";
+import cli from "../../helpers/cli.mjs";
 
 describe("deprecated mdxParser config option", () => {
   test(
