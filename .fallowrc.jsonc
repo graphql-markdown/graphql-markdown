@@ -1,0 +1,93 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/refs/heads/main/schema.json",
+
+  // Files loaded implicitly by Jest, Stryker, CI tooling, or TypeDoc —
+  // not imported statically but still needed. Declaring them as entry
+  // points silences unused-file false positives.
+  "entry": [
+    "**/tests/**",
+    "tests/**",
+    "dangerfile.js",
+    "**/stryker.conf.mjs",
+    "packages/tooling-config/scripts/**",
+    "packages/tooling-config/typedoc/**"
+  ],
+
+  // website/ is a Docusaurus app outside the packages/* workspace —
+  // its CSS-module exports and @docusaurus/* imports produce noise.
+  // dist/ is build output. __data__/ holds test fixtures.
+  "ignorePatterns": ["website/**", "**/dist/**", "**/__data__/**"],
+
+  // All @graphql-markdown/* workspace packages are resolved through their
+  // dist/ entries (e.g. "main": "dist/index.js"), which is excluded via
+  // ignorePatterns. This causes every cross-workspace import to appear
+  // unresolvable, making the packages look unused. Marking them as always-
+  // available suppresses the false positives without hiding real issues in
+  // external dependencies.
+  "ignoreDependencies": [
+    "@graphql-markdown/cli",
+    "@graphql-markdown/core",
+    "@graphql-markdown/diff",
+    "@graphql-markdown/docusaurus",
+    "@graphql-markdown/formatters",
+    "@graphql-markdown/graphql",
+    "@graphql-markdown/helpers",
+    "@graphql-markdown/logger",
+    "@graphql-markdown/printer-legacy",
+    "@graphql-markdown/tooling-config",
+    "@graphql-markdown/types",
+    "@graphql-markdown/utils"
+  ],
+
+  // IPrinter in packages/types/src/printer.d.ts is a public interface —
+  // its methods define a contract, not call sites.
+  // CancellableEvent accessors (defaultPrevented, propagationStopped,
+  // defaultAction, runDefaultAction) are public event-system API used by
+  // formatter lifecycle hooks at runtime.
+  // Renderer.preCollectCategories is called in generator.ts:496 but fallow
+  // can't trace the indirect method call on the renderer instance.
+  // OptionBuilder.transformIf is part of the public builder fluent API.
+  // False-positive class/interface member suppressions.
+  // IPrinter methods define an interface contract — no caller invokes them
+  // on the interface type directly.
+  // CancellableEvent accessors are public event-system API used by lifecycle
+  // hooks at runtime (fallow can't trace accessor usage through dispatch).
+  // Renderer.preCollectCategories is called in generator.ts:496 via an
+  // instance variable; fallow misses the indirect call.
+  // OptionBuilder.transformIf is a fluent builder method invoked via chain.
+  "usedClassMembers": [
+    "init",
+    "printHeader",
+    "printDescription",
+    "printCode",
+    "printCustomDirectives",
+    "printCustomTags",
+    "printTypeMetadata",
+    "printRelations",
+    "printType",
+    "defaultPrevented",
+    "propagationStopped",
+    "defaultAction",
+    "runDefaultAction",
+    "preCollectCategories",
+    "transformIf"
+  ],
+
+  "duplicates": {
+    // mild is the default; raising minLines reduces formatter-preset noise
+    // (8 formatters share intentionally similar structure in packages/formatters).
+    "mode": "mild",
+    "minLines": 8,
+    "ignore": ["packages/formatters/src/**"]
+  },
+
+  "rules": {
+    // Keep everything that matters at error so CI can gate on it.
+    // unused-dev-dependencies: stryker/jest devDeps are referenced via
+    //   config-object strings, not imports — static analysis can't trace them.
+    // unlisted-dependencies: tooling-config's ESLint/TypeDoc plugins are used
+    //   transitively across all packages but listed only in tooling-config.
+    "unused-dev-dependencies": "warn",
+    "unlisted-dependencies": "warn"
+  }
+}
