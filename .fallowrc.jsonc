@@ -1,12 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/refs/heads/main/schema.json",
 
-  // Files loaded implicitly by Jest, Stryker, CI tooling, or TypeDoc —
-  // not imported statically but still needed. Declaring them as entry
-  // points silences unused-file false positives.
+  // Files loaded implicitly by CI tooling or TypeDoc — not imported statically
+  // but still needed. Declaring them as entry points silences unused-file
+  // false positives. (Test files are excluded by production: true; stryker and
+  // danger configs are dev tooling so they must be declared explicitly.)
   "entry": [
-    "**/tests/**",
-    "tests/**",
     "dangerfile.js",
     "**/stryker.conf.mjs",
     "packages/tooling-config/scripts/**",
@@ -39,22 +38,16 @@
     "@graphql-markdown/utils"
   ],
 
-  // IPrinter in packages/types/src/printer.d.ts is a public interface —
-  // its methods define a contract, not call sites.
-  // CancellableEvent accessors (defaultPrevented, propagationStopped,
-  // defaultAction, runDefaultAction) are public event-system API used by
-  // formatter lifecycle hooks at runtime.
-  // Renderer.preCollectCategories is called in generator.ts:496 but fallow
-  // can't trace the indirect method call on the renderer instance.
-  // OptionBuilder.transformIf is part of the public builder fluent API.
-  // False-positive class/interface member suppressions.
+  // Class member false-positive suppressions.
   // IPrinter methods define an interface contract — no caller invokes them
-  // on the interface type directly.
+  //   on the interface type directly.
   // CancellableEvent accessors are public event-system API used by lifecycle
-  // hooks at runtime (fallow can't trace accessor usage through dispatch).
-  // Renderer.preCollectCategories is called in generator.ts:496 via an
-  // instance variable; fallow misses the indirect call.
-  // OptionBuilder.transformIf is a fluent builder method invoked via chain.
+  //   hooks at runtime (fallow can't trace accessor usage through dispatch).
+  // Renderer.preCollectCategories is called in generator.ts via an instance
+  //   variable; fallow misses the indirect call.
+  // OptionBuilder methods (addDefault, addFromConfig, addFromCli, get, build,
+  //   transformIf) are all called via fluent method chaining in config.ts;
+  //   fallow can't trace instance-level chain calls.
   "usedClassMembers": [
     "init",
     "printHeader",
@@ -70,12 +63,16 @@
     "defaultAction",
     "runDefaultAction",
     "preCollectCategories",
-    "transformIf"
+    "transformIf",
+    "addDefault",
+    "addFromConfig",
+    "addFromCli",
+    "get",
+    "build"
   ],
 
-  // Restrict duplication analysis to production source files only — test files,
-  // spec files, and story files are excluded. Test suites intentionally repeat
-  // mock scaffolding patterns; flagging them as duplicates produces noise.
+  // Restrict dead-code and duplication analysis to production source files only.
+  // Test files are excluded — their repeated mock-setup patterns are intentional.
   "production": true,
 
   "duplicates": {
@@ -91,30 +88,36 @@
 
   "rules": {
     // Keep everything that matters at error so CI can gate on it.
-    // unused-dev-dependencies: stryker/jest devDeps are referenced via
-    //   config-object strings, not imports — static analysis can't trace them.
     // unlisted-dependencies: tooling-config's ESLint/TypeDoc plugins are used
     //   transitively across all packages but listed only in tooling-config.
-    "unused-dev-dependencies": "warn",
+    // unused-dev-dependencies is superseded by production: true (dev deps are
+    //   not reported in production mode).
     "unlisted-dependencies": "warn"
   },
 
-  // setLoaderOptions is exported so tests can jest.spyOn it via namespace import;
-  // fallow can't trace dynamic spy interception.
-  "ignoreExports": [
-    {
-      "file": "packages/core/src/graphql-config.ts",
-      "exports": ["setLoaderOptions"]
-    }
-  ],
 
-  // jest.config.mjs imports @graphql-markdown/tooling-config/jest/root via a
-  // workspace sub-path that resolves through dist/ (excluded from analysis).
-  // This is a workspace resolution limitation, not a real missing import.
+  // These source files export internal implementation details so unit tests can
+  // import and exercise them directly (or spy on them via jest.spyOn). With
+  // production: true the test callers are excluded, making these exports appear
+  // unused. Downgrade to warn so the findings remain visible without blocking CI.
   "overrides": [
     {
-      "files": ["jest.config.mjs"],
-      "rules": { "unresolved-import": "off" }
+      "files": [
+        "packages/core/src/config.ts",
+        "packages/core/src/directives/validation.ts",
+        "packages/core/src/generator.ts",
+        "packages/core/src/graphql-config.ts",
+        "packages/core/src/renderer.ts",
+        "packages/printer-legacy/src/badge.ts",
+        "packages/printer-legacy/src/common.ts",
+        "packages/printer-legacy/src/directive.ts",
+        "packages/printer-legacy/src/example.ts",
+        "packages/printer-legacy/src/graphql/scalar.ts",
+        "packages/printer-legacy/src/link.ts",
+        "packages/printer-legacy/src/relation.ts",
+        "packages/printer-legacy/src/section.ts"
+      ],
+      "rules": { "unused-exports": "warn" }
     }
   ]
 }
