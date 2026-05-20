@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.fallow.tools/schema.json",
+
+  // Files loaded implicitly by Jest, Stryker, or CI tooling — not imported
+  // by anything but still needed. Declaring them as entry points silences
+  // the unused-file false positives for tests, fixtures, mocks, and configs.
+  "entry": [
+    "**/tests/**",
+    "tests/**",
+    "dangerfile.js",
+    "**/stryker.conf.mjs"
+  ],
+
+  // The website is a Docusaurus app that is not part of the packages
+  // workspace. Its CSS-module exports, Docusaurus-internal imports, and
+  // unlisted @docusaurus/* deps all produce noise that isn't actionable here.
+  // dist/ is build output and should never be analysed.
+  "ignorePatterns": ["website/**", "**/dist/**", "**/__data__/**"],
+
+  "duplicates": {
+    // mild is the default; raising minLines reduces formatter-preset noise
+    // (8 formatters share intentionally similar structure in packages/formatters).
+    "mode": "mild",
+    "minLines": 8,
+    "ignore": ["packages/formatters/src/**"]
+  },
+
+  "rules": {
+    // Keep everything that matters at error so CI can gate on it.
+    // unused-dev-dependencies is warn (default) — stryker / jest devDeps are
+    // legitimately hard for static analysis to trace.
+    "unused-dev-dependencies": "warn",
+    // unlisted-dependencies from the website produce noise; suppress until
+    // website is declared as a workspace or fully excluded.
+    "unlisted-dependencies": "warn"
+  }
+}
