@@ -35,7 +35,7 @@ export enum SectionLevels {
    * @deprecated Use `SectionLevels.LEVEL` instead.
    */
   // fallow-ignore-next-line unused-enum-member
-  NONE = "#",
+  NONE = "",
   LEVEL = "#",
 }
 
