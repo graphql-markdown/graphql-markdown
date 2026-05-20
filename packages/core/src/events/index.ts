@@ -22,10 +22,3 @@ export { RenderHomepageEvent } from "./render-homepage";
 export { RenderFilesEvent } from "./render-files";
 export { RenderTypeEntitiesEvent } from "./render-type-entities";
 export { GenerateIndexMetafileEvent } from "./generate-index-metafile";
-export type {
-  PrintCodeEventData,
-  PrintTypeEventData,
-  ComposePageTypeEventData,
-  PageSection,
-  PageSections,
-} from "@graphql-markdown/types";
