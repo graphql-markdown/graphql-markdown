@@ -30,7 +30,7 @@ import { getCustomDirectiveResolver } from "./directive";
  * @param options - Printer configuration options
  * @returns Formatted directive documentation string
  */
-export const printCustomDirectives = (
+export const getCustomDirectivesText = (
   type: unknown,
   options?: PrintTypeOptions,
 ): string => {
@@ -70,7 +70,7 @@ export const printCustomDirectives = (
  * @param replacement - Optional fallback text if no description exists
  * @returns Formatted description string or MDX content
  */
-export const formatDescription = (
+const formatDescription = (
   type: unknown,
   replacement: Maybe<string> = NO_DESCRIPTION_TEXT,
 ): MDXString | string => {
@@ -143,7 +143,7 @@ export const printDescription = (
   noText?: string,
 ): MDXString | string => {
   const description = formatDescription(type, noText);
-  const customDirectives = printCustomDirectives(type, options);
+  const customDirectives = getCustomDirectivesText(type, options);
   const deprecation = printDeprecation(type, options);
   return `${deprecation}${description}${customDirectives}`;
 };

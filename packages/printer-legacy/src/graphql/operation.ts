@@ -21,7 +21,7 @@ import { printSection, printMetadataSection } from "../section";
  * @param options - Print type options for customizing output
  * @returns A "Type" PageSection, or undefined when `type` is not an operation
  */
-export const printOperationType = (
+const printOperationType = (
   type: unknown,
   options: PrintTypeOptions,
 ): Maybe<PageSection> => {

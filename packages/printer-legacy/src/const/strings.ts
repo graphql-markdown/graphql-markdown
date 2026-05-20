@@ -8,9 +8,7 @@ import type { RootTypeLocale } from "@graphql-markdown/types";
 import { MARKDOWN_CODE_SNIPPET, MARKDOWN_EOL } from "@graphql-markdown/utils";
 
 export {
-  FRONT_MATTER_DELIMITER,
   MARKDOWN_CODE_INDENTATION,
-  MARKDOWN_CODE_SNIPPET,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
@@ -39,7 +37,7 @@ export const DEPRECATED = "deprecated" as const;
 export const NON_NULL = "non-null" as const;
 
 /** Short identifier for the GraphQL language tag used in fenced blocks. */
-export const GRAPHQL = "graphql" as const;
+const GRAPHQL = "graphql" as const;
 
 /** Default placeholder when no schema description is provided. */
 export const NO_DESCRIPTION_TEXT = "No description" as const;

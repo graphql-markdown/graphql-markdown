@@ -204,7 +204,7 @@ export const getLinkApiGroupFolder = (
  * @param option - The deprecation option
  * @returns The folder name for deprecated types
  */
-export const getLinkDeprecatedFolder = (
+const getLinkDeprecatedFolder = (
   type: unknown,
   option: Maybe<TypeDeprecatedOption>,
 ): string => {

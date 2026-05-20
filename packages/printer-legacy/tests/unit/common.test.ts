@@ -2,7 +2,7 @@ import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
 import { DirectiveLocation } from "graphql/language";
 
 import {
-  printCustomDirectives,
+  getCustomDirectivesText,
   printDeprecation,
   printDescription,
   printWarning,
@@ -253,7 +253,7 @@ Lorem ipsum"
     });
   });
 
-  describe("printCustomDirectives()", () => {
+  describe("getCustomDirectivesText()", () => {
     const directiveType = new GraphQLDirective({
       name: "testDirective",
       locations: [DirectiveLocation.OBJECT],
@@ -274,7 +274,7 @@ Lorem ipsum"
     test("does not print directive description if type has no directive", () => {
       expect.hasAssertions();
 
-      const description = printCustomDirectives(type, DEFAULT_OPTIONS);
+      const description = getCustomDirectivesText(type, DEFAULT_OPTIONS);
 
       expect(description).toBe("");
     });
@@ -294,7 +294,7 @@ Lorem ipsum"
         },
       };
 
-      const description = printCustomDirectives(type, options);
+      const description = getCustomDirectivesText(type, options);
 
       expect(description).toMatchInlineSnapshot(`
 "

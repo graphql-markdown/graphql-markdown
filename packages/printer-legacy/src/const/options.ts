@@ -28,7 +28,6 @@ export enum TypeHierarchy {
 }
 
 export enum SectionLevels {
-  NONE = "",
   LEVEL = "#",
 }
 
