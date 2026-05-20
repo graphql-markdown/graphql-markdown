@@ -95,23 +95,6 @@
     "unlisted-dependencies": "warn"
   },
 
-  // setLoaderOptions is exported so tests can jest.spyOn it via namespace import;
-  // with production: true the test callers are excluded, making the export appear
-  // unused. Suppress the false positive here.
-  "ignoreExports": [
-    {
-      "file": "packages/core/src/graphql-config.ts",
-      "exports": ["setLoaderOptions"]
-    },
-    {
-      // PrintTypeEvents is re-exported here so tests/unit/events.test.ts can
-      // import from the events barrel. core/src/index.ts re-exports it directly
-      // from the source file, which fallow traces — making this barrel entry
-      // appear redundant in production mode.
-      "file": "packages/core/src/events/index.ts",
-      "exports": ["PrintTypeEvents"]
-    }
-  ],
 
   // These source files export internal implementation details so unit tests can
   // import and exercise them directly (or spy on them via jest.spyOn). With
