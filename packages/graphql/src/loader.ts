@@ -17,8 +17,6 @@ import type {
   PackageOptionsConfig,
 } from "@graphql-markdown/types";
 
-export { GraphQLSchema } from "graphql";
-
 interface LoadSchemaConfig extends LoadSchemaOptions {
   rootTypes?: Partial<Record<OperationTypeNode, string>>;
 }

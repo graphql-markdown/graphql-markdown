@@ -28,6 +28,9 @@ export enum TypeHierarchy {
 }
 
 export enum SectionLevels {
+  /**
+   * @deprecated Use `undefined` for no heading. Kept for backward compatibility until the next major release.
+   */
   NONE = "",
   LEVEL = "#",
 }

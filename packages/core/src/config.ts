@@ -434,9 +434,7 @@ export const getForcedDiffMethod = (): TypeDiffMethod => {
   return DiffMethod.FORCE;
 };
 
-export const getNormalizedDiffMethod = (
-  diff: TypeDiffMethod,
-): TypeDiffMethod => {
+const getNormalizedDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
   return diff.toLocaleUpperCase() as TypeDiffMethod;
 };
 
@@ -621,7 +619,7 @@ export const parseDeprecatedPrintTypeOptions = (
  * @see {@link DeprecatedOption} for deprecated handling options
  * @see {@link getTypeHierarchyOption} for hierarchy resolution
  */
-export const getPrintTypeOptions = (
+const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
