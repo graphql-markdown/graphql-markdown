@@ -74,6 +74,32 @@ describe("renderer", () => {
   });
 
   describe("generateDocFromSchema()", () => {
+    const GROUPING_BASE = {
+      baseURL: "graphql",
+      schemaLocation: join(
+        __dirname,
+        "../__data__/schema_with_grouping.graphql",
+      ),
+      diffMethod: DiffMethod.NONE,
+      groupByDirective: {
+        directive: "doc" as DirectiveName,
+        field: "category",
+        fallback: "misc",
+      },
+      homepageLocation: "/assets/generated.md",
+      linkRoot: "docs",
+      loaders: {
+        ["GraphQLFileLoader" as ClassName]:
+          "@graphql-tools/graphql-file-loader" as PackageName,
+      },
+      formatter: "mdx-parser-mock" as PackageName,
+      metatags: [],
+      onlyDocDirective: [],
+      prettify: false,
+      printer: "@graphql-markdown/printer-legacy" as PackageName,
+      skipDocDirective: [],
+    } satisfies Partial<GeneratorOptions>;
+
     test("generates Markdown document structure from GraphQL schema", async () => {
       expect.assertions(1);
 
@@ -152,36 +178,14 @@ describe("renderer", () => {
       expect.assertions(3);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {},
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp",
       };
 
@@ -202,30 +206,14 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {},
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
+        groupByDirective: undefined,
         outputDir: "/output",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: { [TypeHierarchy.API]: {} },
         },
-        skipDocDirective: [],
         tmpDir: "/temp",
       };
 
@@ -301,29 +289,15 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {},
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        metatags: [],
-        onlyDocDirective: [],
+        formatter: undefined,
+        groupByDirective: undefined,
         outputDir: "/output",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         },
-        skipDocDirective: [],
         tmpDir: "/temp",
       };
 
@@ -337,38 +311,16 @@ describe("renderer", () => {
       expect.assertions(1);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-prefix",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-prefix",
       };
 
@@ -389,38 +341,16 @@ describe("renderer", () => {
 
     test("categorySort automatically prefixes folders when enabled (with API hierarchy)", async () => {
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-api-prefix",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
           hierarchy: { [TypeHierarchy.API]: {} },
         },
-        skipDocDirective: [],
         tmpDir: "/temp-api-prefix",
       };
 
@@ -461,38 +391,16 @@ describe("renderer", () => {
       expect.assertions(5);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-strict-test",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-strict-test",
       };
 
@@ -540,38 +448,16 @@ describe("renderer", () => {
       expect.assertions(3);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           // categorySort is NOT set - no prefixes should be added
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-backward-compat",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-backward-compat",
       };
 
@@ -605,38 +491,16 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-category-files",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-category-files",
       };
 
@@ -662,38 +526,16 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-flat-prefix",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
           hierarchy: TypeHierarchy.FLAT,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-flat-prefix",
       };
 
@@ -719,38 +561,16 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-no-duplicate",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-no-duplicate",
       };
 
@@ -783,38 +603,16 @@ describe("renderer", () => {
       expect.assertions(1);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-many-cats",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-many-cats",
       };
 
@@ -847,38 +645,16 @@ describe("renderer", () => {
       expect.assertions(2);
 
       const config: GeneratorOptions = {
-        baseURL: "graphql",
-        schemaLocation: join(
-          __dirname,
-          "../__data__/schema_with_grouping.graphql",
-        ),
-        diffMethod: DiffMethod.NONE,
+        ...GROUPING_BASE,
         docOptions: {
           categorySort: "natural",
         },
-        groupByDirective: {
-          directive: "doc" as DirectiveName,
-          field: "category",
-          fallback: "misc",
-        },
-        homepageLocation: "/assets/generated.md",
-        linkRoot: "docs",
-        loaders: {
-          ["GraphQLFileLoader" as ClassName]:
-            "@graphql-tools/graphql-file-loader" as PackageName,
-        },
-        formatter: "mdx-parser-mock" as PackageName,
-        metatags: [],
-        onlyDocDirective: [],
         outputDir: "/output-homepage-check",
-        prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.GROUP,
           hierarchy: TypeHierarchy.ENTITY,
         },
-        skipDocDirective: [],
         tmpDir: "/temp-homepage-check",
       };
 

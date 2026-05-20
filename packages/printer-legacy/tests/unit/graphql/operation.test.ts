@@ -26,6 +26,15 @@ import {
 
 describe("operation", () => {
   describe("printOperationMetadata()", () => {
+    const defaultSchemaOptions = {
+      ...DEFAULT_OPTIONS,
+      schema: {
+        getType: () => {
+          return new GraphQLObjectType({ name: "Test", fields: {} });
+        },
+      } as unknown as GraphQLSchema,
+    };
+
     test("returns operation metadata", () => {
       expect.hasAssertions();
 
@@ -35,17 +44,7 @@ describe("operation", () => {
         args: [],
       };
 
-      const metadata = printOperationMetadata(operation, {
-        ...DEFAULT_OPTIONS,
-        schema: {
-          getType: () => {
-            return new GraphQLObjectType({
-              name: "Test",
-              fields: {},
-            });
-          },
-        } as unknown as GraphQLSchema,
-      });
+      const metadata = printOperationMetadata(operation, defaultSchemaOptions);
 
       expect(metadata).toMatchInlineSnapshot(`
         [
@@ -76,17 +75,7 @@ describe("operation", () => {
         ],
       };
 
-      const metadata = printOperationMetadata(operation, {
-        ...DEFAULT_OPTIONS,
-        schema: {
-          getType: () => {
-            return new GraphQLObjectType({
-              name: "Test",
-              fields: {},
-            });
-          },
-        } as unknown as GraphQLSchema,
-      });
+      const metadata = printOperationMetadata(operation, defaultSchemaOptions);
 
       expect(metadata).toMatchInlineSnapshot(`
         [
@@ -132,16 +121,8 @@ describe("operation", () => {
       };
 
       const metadata = printOperationMetadata(operation, {
-        ...DEFAULT_OPTIONS,
+        ...defaultSchemaOptions,
         deprecated: "group",
-        schema: {
-          getType: () => {
-            return new GraphQLObjectType({
-              name: "Test",
-              fields: {},
-            });
-          },
-        } as unknown as GraphQLSchema,
       });
 
       expect(metadata).toMatchInlineSnapshot(`

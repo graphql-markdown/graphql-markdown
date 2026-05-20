@@ -111,6 +111,26 @@ export const printBadge = (
 };
 
 /**
+ * Formats an array of badges into a space-joined MDX string.
+ * @param badges - Array of badge objects to format
+ * @param options - Options containing the formatter for badges
+ * @returns Space-joined MDX string of all badges, or empty string if none
+ */
+export const formatBadges = (
+  badges: Badge[],
+  options: PrintTypeOptions,
+): MDXString | string => {
+  if (badges.length === 0) {
+    return "";
+  }
+  return badges
+    .map((badge) => {
+      return printBadge(badge, options);
+    })
+    .join(" ") as MDXString;
+};
+
+/**
  * Generates and formats all applicable badges for a GraphQL type.
  * @param type - The GraphQL type to generate badges for
  * @param options - Options for printing/formatting the badges
@@ -128,14 +148,5 @@ export const printBadges = (
     return "";
   }
 
-  const badges = getTypeBadges(type, options.groups);
-
-  if (badges.length === 0) {
-    return "";
-  }
-
-  const formattedBadges = badges.map((badge) => {
-    return printBadge(badge, options);
-  });
-  return formattedBadges.join(" ") as MDXString;
+  return formatBadges(getTypeBadges(type, options.groups), options);
 };

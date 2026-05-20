@@ -12,6 +12,27 @@ import {
 jest.mock("graphql-config");
 import * as GraphQLConfig from "graphql-config";
 
+const mockLoadConfig = (
+  schema: string,
+  extensions: { "graphql-markdown"?: Record<string, unknown> },
+) => {
+  return jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
+    getProject: () => {
+      return {
+        extension: (): any => {
+          return {
+            documents: undefined,
+            exclude: undefined,
+            include: undefined,
+            schema,
+            ...extensions["graphql-markdown"],
+          } as unknown as any;
+        },
+      } as unknown as any;
+    },
+  } as unknown as any);
+};
+
 describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
     afterEach(() => {
@@ -69,23 +90,10 @@ describe("graphql-config", () => {
         },
       };
 
-      const spy = jest
-        .spyOn(GraphQLConfig, "loadConfig")
-        .mockResolvedValueOnce({
-          getProject: () => {
-            return {
-              extension: (): any => {
-                return {
-                  documents: undefined,
-                  exclude: undefined,
-                  include: undefined,
-                  schema: graphqlConfig.schema,
-                  ...graphqlConfig.extensions["graphql-markdown"],
-                } as unknown as any;
-              },
-            } as unknown as any;
-          },
-        } as unknown as any);
+      const spy = mockLoadConfig(
+        graphqlConfig.schema,
+        graphqlConfig.extensions,
+      );
 
       await expect(
         CoreGraphQLConfig.loadConfiguration("default", undefined, {
@@ -132,21 +140,7 @@ describe("graphql-config", () => {
         },
       };
 
-      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
-        getProject: () => {
-          return {
-            extension: (): any => {
-              return {
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.schema,
-                ...graphqlConfig.extensions["graphql-markdown"],
-              } as unknown as any;
-            },
-          } as unknown as any;
-        },
-      } as unknown as any);
+      mockLoadConfig(graphqlConfig.schema, graphqlConfig.extensions);
 
       await expect(
         CoreGraphQLConfig.loadConfiguration("default", undefined, {
@@ -197,21 +191,10 @@ describe("graphql-config", () => {
         },
       };
 
-      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
-        getProject: () => {
-          return {
-            extension: (): any => {
-              return {
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.projects.foo.schema,
-                ...graphqlConfig.projects.foo.extensions["graphql-markdown"],
-              } as unknown as any;
-            },
-          } as unknown as any;
-        },
-      } as unknown as any);
+      mockLoadConfig(
+        graphqlConfig.projects.foo.schema,
+        graphqlConfig.projects.foo.extensions,
+      );
 
       await expect(
         CoreGraphQLConfig.loadConfiguration("foo", undefined, {
@@ -266,10 +249,10 @@ describe("graphql-config", () => {
       expect.hasAssertions();
 
       // Mock loadConfig to simulate different project scenarios
-      const mockLoadConfig = jest.spyOn(GraphQLConfig, "loadConfig");
+      const loadConfigSpy = jest.spyOn(GraphQLConfig, "loadConfig");
 
       // Scenario 1: Project exists and has graphql-markdown extension
-      mockLoadConfig.mockResolvedValueOnce({
+      loadConfigSpy.mockResolvedValueOnce({
         getProject: jest.fn(() => {
           return {
             extension: (): any => {
@@ -290,7 +273,7 @@ describe("graphql-config", () => {
       });
 
       // Scenario 2: Project exists but doesn't have graphql-markdown extension
-      mockLoadConfig.mockResolvedValueOnce({
+      loadConfigSpy.mockResolvedValueOnce({
         getProject: jest.fn(() => {
           return {
             extension: (): any => {
@@ -306,7 +289,7 @@ describe("graphql-config", () => {
       expect(result2).toBeUndefined();
 
       // Scenario 3: Project doesn't exist
-      mockLoadConfig.mockResolvedValueOnce({
+      loadConfigSpy.mockResolvedValueOnce({
         getProject: jest.fn(() => {
           return undefined;
         }),
@@ -318,7 +301,7 @@ describe("graphql-config", () => {
       expect(result3).toBeUndefined();
 
       // This ensures the conditional logic is properly tested
-      expect(mockLoadConfig).toHaveBeenCalledTimes(3);
+      expect(loadConfigSpy).toHaveBeenCalledTimes(3);
     });
   });
 });
@@ -343,21 +326,7 @@ describe("config", () => {
         },
       };
 
-      jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
-        getProject: () => {
-          return {
-            extension: (): any => {
-              return {
-                documents: undefined,
-                exclude: undefined,
-                include: undefined,
-                schema: graphqlConfig.schema,
-                ...graphqlConfig.extensions["graphql-markdown"],
-              } as unknown as any;
-            },
-          } as unknown as any;
-        },
-      } as unknown as any);
+      mockLoadConfig(graphqlConfig.schema, graphqlConfig.extensions);
 
       const config = await buildConfig(undefined, undefined);
 
