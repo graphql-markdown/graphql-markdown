@@ -23,15 +23,14 @@ import {
 
 export enum TypeHierarchy {
   API = "api",
+  // Used cross-package in packages/core/src/renderer.ts and config.ts;
+  // fallow can't trace cross-workspace callers when dist/ is excluded.
+  // fallow-ignore-next-line unused-enum-members
   ENTITY = "entity",
   FLAT = "flat",
 }
 
 export enum SectionLevels {
-  /**
-   * @deprecated Use `undefined` for no heading. Kept for backward compatibility until the next major release.
-   */
-  NONE = "",
   LEVEL = "#",
 }
 

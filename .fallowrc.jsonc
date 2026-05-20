@@ -38,22 +38,16 @@
     "@graphql-markdown/utils"
   ],
 
-  // IPrinter in packages/types/src/printer.d.ts is a public interface —
-  // its methods define a contract, not call sites.
-  // CancellableEvent accessors (defaultPrevented, propagationStopped,
-  // defaultAction, runDefaultAction) are public event-system API used by
-  // formatter lifecycle hooks at runtime.
-  // Renderer.preCollectCategories is called in generator.ts:496 but fallow
-  // can't trace the indirect method call on the renderer instance.
-  // OptionBuilder.transformIf is part of the public builder fluent API.
-  // False-positive class/interface member suppressions.
+  // Class member false-positive suppressions.
   // IPrinter methods define an interface contract — no caller invokes them
-  // on the interface type directly.
+  //   on the interface type directly.
   // CancellableEvent accessors are public event-system API used by lifecycle
-  // hooks at runtime (fallow can't trace accessor usage through dispatch).
-  // Renderer.preCollectCategories is called in generator.ts:496 via an
-  // instance variable; fallow misses the indirect call.
-  // OptionBuilder.transformIf is a fluent builder method invoked via chain.
+  //   hooks at runtime (fallow can't trace accessor usage through dispatch).
+  // Renderer.preCollectCategories is called in generator.ts via an instance
+  //   variable; fallow misses the indirect call.
+  // OptionBuilder methods (addDefault, addFromConfig, addFromCli, get, build,
+  //   transformIf) are all called via fluent method chaining in config.ts;
+  //   fallow can't trace instance-level chain calls.
   "usedClassMembers": [
     "init",
     "printHeader",
@@ -69,7 +63,12 @@
     "defaultAction",
     "runDefaultAction",
     "preCollectCategories",
-    "transformIf"
+    "transformIf",
+    "addDefault",
+    "addFromConfig",
+    "addFromCli",
+    "get",
+    "build"
   ],
 
   // Restrict dead-code and duplication analysis to production source files only.
@@ -103,6 +102,39 @@
     {
       "file": "packages/core/src/graphql-config.ts",
       "exports": ["setLoaderOptions"]
+    },
+    {
+      // PrintTypeEvents is re-exported here so tests/unit/events.test.ts can
+      // import from the events barrel. core/src/index.ts re-exports it directly
+      // from the source file, which fallow traces — making this barrel entry
+      // appear redundant in production mode.
+      "file": "packages/core/src/events/index.ts",
+      "exports": ["PrintTypeEvents"]
+    }
+  ],
+
+  // These source files export internal implementation details so unit tests can
+  // import and exercise them directly (or spy on them via jest.spyOn). With
+  // production: true the test callers are excluded, making these exports appear
+  // unused. Downgrade to warn so the findings remain visible without blocking CI.
+  "overrides": [
+    {
+      "files": [
+        "packages/core/src/config.ts",
+        "packages/core/src/directives/validation.ts",
+        "packages/core/src/generator.ts",
+        "packages/core/src/graphql-config.ts",
+        "packages/core/src/renderer.ts",
+        "packages/printer-legacy/src/badge.ts",
+        "packages/printer-legacy/src/common.ts",
+        "packages/printer-legacy/src/directive.ts",
+        "packages/printer-legacy/src/example.ts",
+        "packages/printer-legacy/src/graphql/scalar.ts",
+        "packages/printer-legacy/src/link.ts",
+        "packages/printer-legacy/src/relation.ts",
+        "packages/printer-legacy/src/section.ts"
+      ],
+      "rules": { "unused-exports": "warn" }
     }
   ]
 }
