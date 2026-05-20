@@ -14,7 +14,7 @@ import * as GraphQLConfig from "graphql-config";
 
 const mockLoadConfig = (
   schema: string,
-  extensions: Record<string, unknown>,
+  extensions: { "graphql-markdown"?: Record<string, unknown> },
 ) => {
   return jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
     getProject: () => {
