@@ -208,6 +208,7 @@ describe("renderer", () => {
       const config: GeneratorOptions = {
         ...GROUPING_BASE,
         docOptions: {},
+        groupByDirective: undefined,
         outputDir: "/output",
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
