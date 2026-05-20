@@ -31,6 +31,10 @@ export enum TypeHierarchy {
 }
 
 export enum SectionLevels {
+  /**
+   * @deprecated Use `SectionLevels.LEVEL` instead.
+   */
+  NONE = "#",
   LEVEL = "#",
 }
 
