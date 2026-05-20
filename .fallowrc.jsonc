@@ -73,6 +73,11 @@
     "transformIf"
   ],
 
+  // Restrict duplication analysis to production source files only — test files,
+  // spec files, and story files are excluded. Test suites intentionally repeat
+  // mock scaffolding patterns; flagging them as duplicates produces noise.
+  "production": true,
+
   "duplicates": {
     // mild is the default; raising minLines reduces formatter-preset noise
     // (8 formatters share intentionally similar structure in packages/formatters).
