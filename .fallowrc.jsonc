@@ -1,12 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/refs/heads/main/schema.json",
 
-  // Files loaded implicitly by Jest, Stryker, CI tooling, or TypeDoc —
-  // not imported statically but still needed. Declaring them as entry
-  // points silences unused-file false positives.
+  // Files loaded implicitly by CI tooling or TypeDoc — not imported statically
+  // but still needed. Declaring them as entry points silences unused-file
+  // false positives. (Test files are excluded by production: true; stryker and
+  // danger configs are dev tooling so they must be declared explicitly.)
   "entry": [
-    "**/tests/**",
-    "tests/**",
     "dangerfile.js",
     "**/stryker.conf.mjs",
     "packages/tooling-config/scripts/**",
@@ -73,9 +72,8 @@
     "transformIf"
   ],
 
-  // Restrict duplication analysis to production source files only — test files,
-  // spec files, and story files are excluded. Test suites intentionally repeat
-  // mock scaffolding patterns; flagging them as duplicates produces noise.
+  // Restrict dead-code and duplication analysis to production source files only.
+  // Test files are excluded — their repeated mock-setup patterns are intentional.
   "production": true,
 
   "duplicates": {
@@ -91,30 +89,20 @@
 
   "rules": {
     // Keep everything that matters at error so CI can gate on it.
-    // unused-dev-dependencies: stryker/jest devDeps are referenced via
-    //   config-object strings, not imports — static analysis can't trace them.
     // unlisted-dependencies: tooling-config's ESLint/TypeDoc plugins are used
     //   transitively across all packages but listed only in tooling-config.
-    "unused-dev-dependencies": "warn",
+    // unused-dev-dependencies is superseded by production: true (dev deps are
+    //   not reported in production mode).
     "unlisted-dependencies": "warn"
   },
 
   // setLoaderOptions is exported so tests can jest.spyOn it via namespace import;
-  // fallow can't trace dynamic spy interception.
+  // with production: true the test callers are excluded, making the export appear
+  // unused. Suppress the false positive here.
   "ignoreExports": [
     {
       "file": "packages/core/src/graphql-config.ts",
       "exports": ["setLoaderOptions"]
-    }
-  ],
-
-  // jest.config.mjs imports @graphql-markdown/tooling-config/jest/root via a
-  // workspace sub-path that resolves through dist/ (excluded from analysis).
-  // This is a workspace resolution limitation, not a real missing import.
-  "overrides": [
-    {
-      "files": ["jest.config.mjs"],
-      "rules": { "unresolved-import": "off" }
     }
   ]
 }
