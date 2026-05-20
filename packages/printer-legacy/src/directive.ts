@@ -18,7 +18,7 @@ import { getConstDirectiveMap } from "@graphql-markdown/graphql";
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { SectionLevels } from "./const/options";
 import { printLink } from "./link";
-import { printBadge } from "./badge";
+import { formatBadges } from "./badge";
 
 /**
  * Resolves a custom directive using the provided resolver function
@@ -158,14 +158,5 @@ export const printCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
 ): MDXString | string => {
-  const badges = getCustomTags(type, options);
-
-  if (badges.length === 0) {
-    return "";
-  }
-
-  const formattedBadges = badges.map((badge) => {
-    return printBadge(badge, options);
-  });
-  return formattedBadges.join(" ") as MDXString;
+  return formatBadges(getCustomTags(type, options), options);
 };

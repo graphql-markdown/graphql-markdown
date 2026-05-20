@@ -78,7 +78,10 @@
     // (8 formatters share intentionally similar structure in packages/formatters).
     "mode": "mild",
     "minLines": 8,
-    "ignore": ["packages/formatters/src/**"]
+    // packages/formatters/src/**  — 8 preset implementations intentionally share structure
+    // packages/formatters/tests/** — each formatter test file tests the same Formatter
+    //   interface contract; structural similarity is by design, not copy-paste debt
+    "ignore": ["packages/formatters/**"]
   },
 
   "rules": {
