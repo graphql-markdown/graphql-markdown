@@ -206,7 +206,7 @@
     "lodash.filter": "4.6.0",
     "memfs": "4.57.2",
     "prettier": "catalog:",
-    "ts-jest": "29.4.10",
+    "ts-jest": "29.4.11",
     "turbo": "2.9.14",
     "typedoc": "0.28.19",
     "typedoc-docusaurus-theme": "1.4.2",
