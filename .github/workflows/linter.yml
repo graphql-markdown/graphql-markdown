@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -40,3 +42,6 @@ jobs:
 
       - name: Run knip
         run: bun run knip --no-config-hints --reporter github-actions
+
+      - name: Run fallow
+        run: bun run fallow -- audit
