@@ -44,13 +44,9 @@ jobs:
         run: bun run knip --no-config-hints --reporter github-actions
 
       - name: Fetch base branch for fallow
-        if: github.event_name == 'pull_request'
-        run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
+        run: |
+          BASE_REF="${GITHUB_BASE_REF:-main}"
+          git fetch --no-tags origin "${BASE_REF}:${BASE_REF}"
 
       - name: Run fallow
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            bun run fallow -- audit --base "origin/${GITHUB_BASE_REF}"
-          else
-            bun run fallow
-          fi
+        run: bun run fallow -- audit --base "${GITHUB_BASE_REF:-main}"
