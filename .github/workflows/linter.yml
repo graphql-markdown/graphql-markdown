@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v6
+
       - name: Setup environment
         uses: ./.github/actions/setup
 

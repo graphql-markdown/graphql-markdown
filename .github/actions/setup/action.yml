@@ -1,14 +1,9 @@
 name: Setup environment
-description: Checkout repository, install Node.js, Bun 1.3.2, and project dependencies
+description: Install Node.js, Bun 1.3.2, and project dependencies
 
 runs:
   using: composite
   steps:
-    - name: Checkout Code Base
-      uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-
     - name: Setup NodeJS LTS
       uses: actions/setup-node@v6
       with:
