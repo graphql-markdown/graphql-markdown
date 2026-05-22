@@ -165,7 +165,7 @@ export class OptionBuilder<T extends Record<string, unknown>> {
    * @returns The current value for the key, or `undefined` if not set
    */
   get<K extends keyof T>(key: K): T[K] | undefined {
-    const value = this.merged[key] as T[K] | undefined;
+    const value = this.merged[key];
     if (Array.isArray(value)) {
       return [...value] as T[K];
     }

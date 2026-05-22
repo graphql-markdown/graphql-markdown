@@ -128,7 +128,7 @@ export const Logger = async (moduleName?: string): Promise<void> => {
     requestedLevel: LogLevel | keyof typeof LogLevel,
   ): ((...args: unknown[]) => unknown) | undefined => {
     if (hasLogMethod(instanceObj, requestedLevel)) {
-      return instanceObj[requestedLevel] as (...args: unknown[]) => unknown;
+      return instanceObj[requestedLevel];
     }
     if (hasLogMethod(instanceObj, LogLevel.info)) {
       return instanceObj[LogLevel.info] as (...args: unknown[]) => unknown;

@@ -56,23 +56,23 @@ export const getTypeBadges = (
     badges.push({
       text: DEPRECATED,
       classname: CSS_BADGE_CLASSNAME.DEPRECATED,
-    } as Badge);
+    });
   }
 
   if (isNonNullType(rootType)) {
     badges.push({
       text: NON_NULL,
       classname: CSS_BADGE_CLASSNAME.NON_NULL,
-    } as Badge);
+    });
   }
 
   if (isListType(rootType)) {
-    badges.push({ text: "list" } as Badge);
+    badges.push({ text: "list" });
   }
 
   const category = getCategoryLocale(getNamedType(rootType));
   if (category) {
-    badges.push({ text: category } as Badge);
+    badges.push({ text: category });
   }
 
   if (groups) {
@@ -81,7 +81,7 @@ export const getTypeBadges = (
     ) as SchemaEntity;
     const group = getGroup(rootType, groups, typeCategory);
     if (group && group !== "") {
-      badges.push({ text: group } as Badge);
+      badges.push({ text: group });
     }
   }
 
@@ -127,7 +127,7 @@ export const formatBadges = (
     .map((badge) => {
       return printBadge(badge, options);
     })
-    .join(" ") as MDXString;
+    .join(" ");
 };
 
 /**

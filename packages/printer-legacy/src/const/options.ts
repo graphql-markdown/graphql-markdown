@@ -1,6 +1,5 @@
 import type {
   CollapsibleOption,
-  FrontMatterOptions,
   GraphQLDirective,
   GraphQLSchema,
   Maybe,
@@ -97,7 +96,7 @@ export const DEFAULT_OPTIONS: Required<
   customDirectives: {} as const,
   exampleSection: undefined,
   groups: undefined,
-  frontMatter: {} as FrontMatterOptions,
+  frontMatter: {},
   level: undefined,
   metatags: PRINT_TYPE_DEFAULT_OPTIONS.metatags,
   onlyDocDirectives: [] as const,

@@ -96,11 +96,11 @@ export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
   return mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser as string).catch((error: unknown) => {
+    ? import(mdxParser).catch((error: unknown) => {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         log(
-          `An error occurred while loading MDX formatter "${mdxParser as string}": ${errorMessage}`,
+          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
           LogLevel.warn,
         );
         return undefined;
