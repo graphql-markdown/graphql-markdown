@@ -6,16 +6,6 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-  push:
-    branches:
-      - main
-    paths:
-      - "packages/**/*"
-      - "packages/tooling-config/**/*"
-      - "config/**/*"
-      - "*.json"
-      - "*.mjs"
-      - ".github/workflows/linter.yml"
 
 jobs:
   lint:
@@ -44,9 +34,7 @@ jobs:
         run: bun run knip --no-config-hints --reporter github-actions
 
       - name: Fetch base branch for fallow
-        run: |
-          BASE_REF="${GITHUB_BASE_REF:-main}"
-          git fetch --no-tags origin "${BASE_REF}:${BASE_REF}"
+        run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
 
       - name: Run fallow
-        run: bun run fallow -- audit --base "${GITHUB_BASE_REF:-main}"
+        run: bun run fallow -- audit --base "origin/${GITHUB_BASE_REF}"
