@@ -81,6 +81,7 @@
     "docs": "turbo run docs",
     "docs:api": "turbo run docs:api:root",
     "docs:api:root": "node ./packages/tooling-config/scripts/docs-api.mjs",
+    "fallow": "bunx fallow",
     "knip": "knip --strict",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",

@@ -44,21 +44,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup NodeJS LTS
-        uses: actions/setup-node@v6
-        with:
-          node-version: "lts/*"
-
-      - name: Install safe-chain
-        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "latest"
-
-      - name: Install modules
-        run: bun ci
+      - name: Setup environment
+        uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
         uses: actions/cache@v5
