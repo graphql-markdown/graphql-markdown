@@ -93,7 +93,7 @@ export const printSectionItem = <T>(
     });
   }
 
-  return section as MDXString;
+  return section;
 };
 
 /**
@@ -124,7 +124,7 @@ export const printSectionItems = <V>(
     });
   });
 
-  return items.join(MARKDOWN_EOP) as MDXString;
+  return items.join(MARKDOWN_EOP);
 };
 
 /**
@@ -155,9 +155,7 @@ export const printSection = <V>(
       typeof options.collapsible?.dataOpen === "string" &&
       typeof options.collapsible.dataClose === "string"
     ) {
-      return options.formatMDXDetails!(options.collapsible).split(
-        `\r`,
-      ) as MDXString[];
+      return options.formatMDXDetails!(options.collapsible).split(`\r`);
     }
     return ["", MARKDOWN_EOP];
   })();
