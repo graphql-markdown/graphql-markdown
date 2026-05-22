@@ -1,9 +1,15 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "bun.lock",
+    "tsconfig.base.json",
+    "package.json"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "inputs": ["src/**/*.ts", "tsconfig*.json", "package.json"]
     },
     "clean": {
       "cache": false
@@ -18,7 +24,8 @@
       "outputs": ["docs/**"]
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.ts", "tests/**/*.ts", "package.json"]
     },
     "lint:fix": {
       "dependsOn": ["^build"],
@@ -29,24 +36,49 @@
       "cache": false
     },
     "ts:check": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.ts", "tests/**/*.ts", "tsconfig*.json"]
     },
     "test": {
-      "dependsOn": ["lint"],
+      "dependsOn": ["^build"],
       "outputs": ["coverage/**"],
       "cache": false
     },
     "test:unit": {
-      "dependsOn": ["lint"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "inputs": [
+        "src/**/*.ts",
+        "tests/unit/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:integration": {
-      "dependsOn": ["lint"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "inputs": [
+        "src/**/*.ts",
+        "tests/integration/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:ci": {
-      "dependsOn": ["lint"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "inputs": [
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:watch": {
       "cache": false,
