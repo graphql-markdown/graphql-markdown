@@ -11,12 +11,10 @@
 import type {
   ConfigPrintTypeOptions,
   Formatter,
-  GraphQLField,
   GraphQLSchema,
   IPrinter,
   Maybe,
   MDXString,
-  PageHeader,
   PageSection,
   PageSections,
   PrinterEventEmitter,
@@ -466,10 +464,7 @@ export class Printer implements IPrinter {
       case isDirectiveType(type):
         return printDirectiveMetadata(type, options);
       case isOperation(type):
-        return printOperationMetadata(
-          type as unknown as GraphQLField<unknown, unknown, unknown>,
-          options,
-        );
+        return printOperationMetadata(type, options);
       default:
         return undefined;
     }
@@ -589,8 +584,7 @@ export class Printer implements IPrinter {
 
     // Generate all sections unconditionally so that BEFORE_COMPOSE_PAGE_TYPE hooks
     // can add, remove, or reorder them at will.
-    // TODO(perf): Implement lazy section generation when no BEFORE_COMPOSE_PAGE_TYPE
-    // listeners are registered.
+    // See: https://github.com/graphql-markdown/graphql-markdown/issues/2954
     const code = await Printer.printCodeAsync(type, name, printTypeOptions);
 
     const customDirectives = Printer.printCustomDirectives(
@@ -604,9 +598,9 @@ export class Printer implements IPrinter {
 
     // Create sections map for composition events
     const sections: PageSections = {
-      header: { content: header } as PageHeader,
-      metatags: { content: metatags } as PageHeader,
-      mdxDeclaration: { content: Printer.mdxDeclaration ?? "" } as PageHeader,
+      header: { content: header },
+      metatags: { content: metatags },
+      mdxDeclaration: { content: Printer.mdxDeclaration ?? "" },
       tags: Printer.normalizePageSection(tags),
       description: Printer.normalizePageSection(description),
       code: Printer.normalizePageSection(code),
@@ -779,7 +773,7 @@ export class Printer implements IPrinter {
     }
 
     if (typeof section === "string" || Array.isArray(section)) {
-      return { content: section } as PageSection;
+      return { content: section };
     }
 
     return section;

@@ -102,7 +102,7 @@ export const printWarning = (
   return options.formatMDXAdmonition!(
     { text: formattedText, type: "warning", icon: "⚠️", title },
     options.meta,
-  ) as string;
+  );
 };
 
 /**

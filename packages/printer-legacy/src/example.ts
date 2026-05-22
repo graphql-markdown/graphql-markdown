@@ -72,7 +72,7 @@ export const getDirectiveExampleOption = ({
     directive,
     field: argName,
     parser: parserFunc,
-  } as TypeDirectiveExample;
+  };
 };
 
 /**

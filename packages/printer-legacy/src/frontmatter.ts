@@ -29,5 +29,5 @@ export const printFrontMatter = (
     return "";
   }
 
-  return options.formatMDXFrontmatter(props, frontMatter) as string;
+  return options.formatMDXFrontmatter(props, frontMatter);
 };

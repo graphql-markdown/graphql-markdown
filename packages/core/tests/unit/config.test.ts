@@ -1517,17 +1517,12 @@ describe("getVisibilityDirectives additional validation", () => {
   });
 
   test("error message exact format must be validated", () => {
-    expect.assertions(2);
-
-    const thrown = expect(() => {
+    expect(() => {
       getVisibilityDirectives(
         { only: ["@deprecated" as DirectiveName] },
         { skipDocDirective: ["@deprecated" as DirectiveName] },
       );
-    });
-
-    thrown.toThrow();
-    thrown.toThrow(
+    }).toThrow(
       "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
     );
   });

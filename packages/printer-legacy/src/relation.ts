@@ -117,7 +117,7 @@ export const printRelationOf = <T>(
     })
     .join(options.formatMDXBullet!()) as MDXString;
 
-  return `${SectionLevels.LEVEL.repeat(3)} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}` as MDXString;
+  return `${SectionLevels.LEVEL.repeat(3)} ${section}${MARKDOWN_EOP}${content}${MARKDOWN_EOP}`;
 };
 
 /**
@@ -149,5 +149,5 @@ export const printRelations = (
       return printRelationOf(type, section, getRelation, options);
     },
   );
-  return relationResults.join("") as MDXString;
+  return relationResults.join("");
 };

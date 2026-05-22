@@ -192,7 +192,7 @@ export const loadConfiguration = async (
       }
     }
 
-    return projectConfig as Readonly<ExtensionProjectConfig>;
+    return projectConfig;
   } catch {
     return undefined;
   }
