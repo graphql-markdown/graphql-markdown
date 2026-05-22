@@ -1,5 +1,10 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "bun.lock",
+    "tsconfig.base.json",
+    "package.json"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -42,17 +47,38 @@
     "test:unit": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"],
-      "inputs": ["src/**/*.ts", "tests/unit/**/*.ts", "tests/__mocks__/**/*.ts", "tsconfig*.json"]
+      "inputs": [
+        "src/**/*.ts",
+        "tests/unit/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:integration": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"],
-      "inputs": ["src/**/*.ts", "tests/integration/**/*.ts", "tests/__mocks__/**/*.ts", "tsconfig*.json"]
+      "inputs": [
+        "src/**/*.ts",
+        "tests/integration/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:ci": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"],
-      "inputs": ["src/**/*.ts", "tests/**/*.ts", "tests/__mocks__/**/*.ts", "tsconfig*.json"]
+      "inputs": [
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "tests/__mocks__/**/*.ts",
+        "tsconfig*.json",
+        "jest.config.mjs",
+        "package.json"
+      ]
     },
     "test:watch": {
       "cache": false,
