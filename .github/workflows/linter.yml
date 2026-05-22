@@ -44,4 +44,6 @@ jobs:
         run: bun run knip --no-config-hints --reporter github-actions
 
       - name: Run fallow
-        run: bun run fallow -- audit
+        uses: fallow-rs/fallow@v2
+        with:
+          command: audit
