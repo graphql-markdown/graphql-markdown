@@ -6,7 +6,6 @@
 
 import type {
   ApiGroupOverrideType,
-  GraphQLNamedType,
   MDXString,
   Maybe,
   PrintLinkOptions,
@@ -356,7 +355,7 @@ export const printLinkAttributes = (
   }
 
   if (!isLeafType(type) && "ofType" in type && type.ofType !== undefined) {
-    text = printLinkAttributes(type.ofType as GraphQLNamedType, text);
+    text = printLinkAttributes(type.ofType, text);
   }
 
   if (isListType(type)) {

@@ -28,7 +28,6 @@ import type {
   ConfigPrintTypeOptions,
   CustomDirective,
   DirectiveName,
-  FrontMatterOptions,
   GroupByDirectiveOptions,
   Maybe,
   Options,
@@ -161,14 +160,13 @@ export const DEFAULT_OPTIONS: Readonly<
   id: "default" as const,
   baseURL: "schema" as const,
   customDirective: undefined,
-  diffMethod: DiffMethod.NONE as TypeDiffMethod,
+  diffMethod: DiffMethod.NONE,
   docOptions: {
     categorySort: undefined,
-    frontMatter: {} as FrontMatterOptions,
+    frontMatter: {},
     index: false as const,
     sectionHeaderId: true as const,
-  } as Pick<ConfigDocOptions, "categorySort"> &
-    Required<Pick<ConfigDocOptions, "frontMatter" | "index">>,
+  },
   force: false as const,
   groupByDirective: undefined,
   homepage: ASSET_HOMEPAGE_LOCATION,
@@ -177,7 +175,7 @@ export const DEFAULT_OPTIONS: Readonly<
   metatags: [] as Record<string, string>[],
   pretty: false as const,
   printTypeOptions: {
-    deprecated: DeprecatedOption.DEFAULT as TypeDeprecatedOption,
+    deprecated: DeprecatedOption.DEFAULT,
     exampleSection: undefined,
     parentTypePrefix: true as const,
     typeBadges: true as const,
@@ -188,7 +186,7 @@ export const DEFAULT_OPTIONS: Readonly<
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   },
   rootPath: "./docs" as const,
-  schema: "./schema.graphql" as Pointer,
+  schema: "./schema.graphql",
   tmpDir: join(tmpdir(), PACKAGE_NAME),
   skipDocDirective: [] as DirectiveName[],
   onlyDocDirective: [] as DirectiveName[],
@@ -845,5 +843,5 @@ export const buildConfig = async (
     schemaLocation,
     skipDocDirective,
     tmpDir,
-  } as Options;
+  };
 };

@@ -74,9 +74,7 @@ export const getTypeFromSchema = <T>(
 
   const operationKinds: string[] = [];
   Object.values(OperationTypeNode).forEach((operationTypeNode) => {
-    const operationType = schema.getRootType(
-      operationTypeNode as OperationTypeNode,
-    );
+    const operationType = schema.getRootType(operationTypeNode);
     if (operationType) {
       operationKinds.push(operationType.name);
     }
@@ -256,14 +254,14 @@ export const getTypeDirectiveValues = (
 ): Maybe<Record<string, unknown>> => {
   if (hasAstNode(type)) {
     return getDirectiveValues(
-      directive as never,
+      directive,
       (type as GraphQLNamedType).astNode as {
         readonly directives?: readonly DirectiveNode[];
       },
     );
   }
   return getDirectiveValues(
-    directive as never,
+    directive,
     type as ASTNode as {
       readonly directives?: readonly DirectiveNode[];
     },

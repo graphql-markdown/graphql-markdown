@@ -728,7 +728,7 @@ export class Renderer {
       category,
       filePath,
       name,
-    } as Category;
+    };
   }
 
   /**
