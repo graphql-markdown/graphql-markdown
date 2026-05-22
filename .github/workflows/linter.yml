@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -40,3 +42,11 @@ jobs:
 
       - name: Run knip
         run: bun run knip --no-config-hints --reporter github-actions
+
+      - name: Fetch base branch for fallow
+        run: |
+          BASE_REF="${GITHUB_BASE_REF:-main}"
+          git fetch --no-tags origin "${BASE_REF}:${BASE_REF}"
+
+      - name: Run fallow
+        run: bun run fallow -- audit --base "${GITHUB_BASE_REF:-main}"
