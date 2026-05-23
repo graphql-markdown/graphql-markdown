@@ -4,6 +4,9 @@
   "workspaces": {
     "": {
       "name": "graphql-markdown",
+      "dependencies": {
+        "ws": "8.20.1",
+      },
       "devDependencies": {
         "@eslint/js": "9.39.4",
         "@graphql-eslint/eslint-plugin": "4.4.0",
@@ -2409,7 +2412,7 @@
 
     "write-file-atomic": ["write-file-atomic@5.0.1", "", { "dependencies": { "imurmurhash": "^0.1.4", "signal-exit": "^4.0.1" } }, "sha512-+QU2zd6OTD8XWIJCbffaiQeH9U73qIqafo1x6V1snCWYGJf6cVE0cDR4D8xRzcEnfI21IFrUPzPGtcPf8AC+Rw=="],
 
-    "ws": ["ws@8.20.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA=="],
+    "ws": ["ws@8.20.1", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-It4dO0K5v//JtTXuPkfEOaI3uUN87iYPnqo/ZzqCoG3g8uhA66QUMs/SrM0YK7/NAu+r4LMh/9dq2A7k+rHs+w=="],
 
     "y18n": ["y18n@5.0.8", "", {}, "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA=="],
 
@@ -2450,6 +2453,12 @@
     "@graphql-eslint/eslint-plugin/@graphql-tools/utils": ["@graphql-tools/utils@10.11.0", "", { "dependencies": { "@graphql-typed-document-node/core": "^3.1.1", "@whatwg-node/promise-helpers": "^1.0.0", "cross-inspect": "1.0.1", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-iBFR9GXIs0gCD+yc3hoNswViL1O5josI33dUqiNStFI/MHLCEPduasceAcazRH77YONKNiviHBV8f7OgcT4o2Q=="],
 
     "@graphql-inspector/core/tslib": ["tslib@2.6.2", "", {}, "sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q=="],
+
+    "@graphql-tools/executor-graphql-ws/ws": ["ws@8.20.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA=="],
+
+    "@graphql-tools/executor-legacy-ws/ws": ["ws@8.20.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA=="],
+
+    "@graphql-tools/url-loader/ws": ["ws@8.20.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA=="],
 
     "@inquirer/core/cli-width": ["cli-width@4.1.0", "", {}, "sha512-ouuZd4/dm2Sw5Gmqy6bGyNNNe1qt9RpmxveLSO7KcgsTnU7RXfsw+/bukWGo1abgBiMAic068rclZsO4IWmmxQ=="],
 
