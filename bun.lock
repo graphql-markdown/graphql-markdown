@@ -27,7 +27,7 @@
         "eslint-plugin-import": "2.32.0",
         "eslint-plugin-jest": "29.15.2",
         "eslint-plugin-jsonc": "3.1.2",
-        "eslint-plugin-mdx": "3.7.0",
+        "eslint-plugin-mdx": "3.7.1",
         "eslint-plugin-prettier": "5.5.5",
         "eslint-plugin-tsdoc": "0.5.2",
         "fallow": "2.83.0",
@@ -1253,7 +1253,7 @@
 
     "eslint-json-compat-utils": ["eslint-json-compat-utils@0.2.3", "", { "dependencies": { "esquery": "^1.6.0" }, "peerDependencies": { "eslint": "*", "jsonc-eslint-parser": "^2.4.0 || ^3.0.0" } }, "sha512-RbBmDFyu7FqnjE8F0ZxPNzx5UaptdeS9Uu50r7A+D7s/+FCX+ybiyViYEgFUaFIFqSWJgZRTpL5d8Kanxxl2lQ=="],
 
-    "eslint-mdx": ["eslint-mdx@3.7.0", "", { "dependencies": { "acorn": "^8.15.0", "acorn-jsx": "^5.3.2", "espree": "^9.6.1 || ^10.4.0", "estree-util-visit": "^2.0.0", "remark-mdx": "^3.1.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.11.8", "unified": "^11.0.5", "unified-engine": "^11.2.2", "unist-util-visit": "^5.0.0", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0", "remark-lint-file-extension": "*" }, "optionalPeers": ["remark-lint-file-extension"] }, "sha512-QpPdJ6EeFthHuIrfgnWneZgwwFNOLFj/nf2jg/tOTBoiUnqNTxUUpTGAn0ZFHYEh5htVVoe5kjvD02oKtxZGeA=="],
+    "eslint-mdx": ["eslint-mdx@3.7.1", "", { "dependencies": { "acorn": "^8.15.0", "acorn-jsx": "^5.3.2", "espree": "^9.6.1 || ^10.4.0", "estree-util-visit": "^2.0.0", "remark-mdx": "^3.1.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.11.8", "unified": "^11.0.5", "unified-engine": "^11.2.2", "unist-util-visit": "^5.0.0", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0", "remark-lint-file-extension": "*" }, "optionalPeers": ["remark-lint-file-extension"] }, "sha512-EBPfh1p4hHPX2o3Rd4UfpkfKrb+Bb/DkH0fZaR5XPug2G7gig43+d7Z2IWb+nqxjMlkD8qhjYLstb3NwNdhyyg=="],
 
     "eslint-module-utils": ["eslint-module-utils@2.12.1", "", { "dependencies": { "debug": "^3.2.7" } }, "sha512-L8jSWTze7K2mTg0vos/RuLRS5soomksDPoJLXIslC7c8Wmut3bx7CPpJijDcBZtxQ5lrbUdM+s0OlNbz0DCDNw=="],
 
@@ -1263,7 +1263,7 @@
 
     "eslint-plugin-jsonc": ["eslint-plugin-jsonc@3.1.2", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.5.1", "@eslint/core": "^1.0.1", "@eslint/plugin-kit": "^0.6.0", "@ota-meshi/ast-token-store": "^0.3.0", "diff-sequences": "^29.6.3", "eslint-json-compat-utils": "^0.2.3", "jsonc-eslint-parser": "^3.1.0", "natural-compare": "^1.4.0", "synckit": "^0.11.12" }, "peerDependencies": { "eslint": ">=9.38.0" } }, "sha512-dopTxdB22iuOkgKyJCupEC5IYBItUT4J/teq1H5ddUObcaYhOURxtJElZczdcYnnKCghNU/vccuyPkliy2Wxsg=="],
 
-    "eslint-plugin-mdx": ["eslint-plugin-mdx@3.7.0", "", { "dependencies": { "eslint-mdx": "^3.7.0", "mdast-util-from-markdown": "^2.0.2", "mdast-util-mdx": "^3.0.0", "micromark-extension-mdxjs": "^3.0.0", "remark-mdx": "^3.1.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.11.8", "unified": "^11.0.5", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0" } }, "sha512-JXaaQPnKqyti/QSOSQDThLV1EemHm/Fe2l/nMKH0vmhvmABtN/yV/9+GtKgh8UTZwrwuTfQq1HW5eR8HXneNLA=="],
+    "eslint-plugin-mdx": ["eslint-plugin-mdx@3.7.1", "", { "dependencies": { "eslint-mdx": "^3.7.1", "mdast-util-from-markdown": "^2.0.2", "mdast-util-mdx": "^3.0.0", "micromark-extension-mdxjs": "^3.0.0", "remark-mdx": "^3.1.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.11.8", "unified": "^11.0.5", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0" } }, "sha512-G7Wqce+roWW35pQ/160UJiZdEWEyeR9LLaujDRnSV0O8SLHU6yHrK8C8kJLNtcBuU/AFd54zheefqZOyUr1aiA=="],
 
     "eslint-plugin-prettier": ["eslint-plugin-prettier@5.5.5", "", { "dependencies": { "prettier-linter-helpers": "^1.0.1", "synckit": "^0.11.12" }, "peerDependencies": { "@types/eslint": ">=8.0.0", "eslint": ">=8.0.0", "eslint-config-prettier": ">= 7.0.0 <10.0.0 || >=10.1.0", "prettier": ">=3.0.0" }, "optionalPeers": ["@types/eslint", "eslint-config-prettier"] }, "sha512-hscXkbqUZ2sPithAuLm5MXL+Wph+U7wHngPBv9OMWwlP8iaflyxpjTYZkmdgB4/vPIhemRlBEoLrH7UC1n7aUw=="],
 
