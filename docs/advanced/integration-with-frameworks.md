@@ -11,6 +11,38 @@ keywords:
 
 GraphQL-Markdown supports multiple documentation frameworks through formatter presets. Each framework has its own setup guide, or you can create a custom formatter for any framework.
 
+## Choose a Path
+
+Use the path that matches your documentation stack:
+
+| If you are using... | Recommended path |
+| ------------------- | ---------------- |
+| **Docusaurus** | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior. |
+| **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems. |
+| **Starlight, Fumadocs, or Vocs** | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place. |
+| **Any unsupported framework** | Start from the closest preset or create a custom formatter module. |
+
+For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
+
+## Common Setup
+
+Install the CLI and formatter presets:
+
+```bash
+npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
+```
+
+Then configure the formatter that matches your framework:
+
+```yaml
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    rootPath: ./docs
+    baseURL: api
+    formatter: "@graphql-markdown/formatters/hugo"
+```
+
 ## Supported Formatters
 
 Install the formatters package:
