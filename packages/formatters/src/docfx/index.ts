@@ -30,6 +30,7 @@ import {
   MARKDOWN_EOP,
   readFile,
   saveFile,
+  toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
@@ -147,6 +148,40 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
 
 export const mdxExtension = ".md" as const;
 
+const rewriteInternalLinks = (
+  content: string,
+  filePath: string,
+  outputDir: string,
+  baseURL: string,
+): string => {
+  const normalizedBaseURL = baseURL.replace(/^\/+|\/+$/g, "");
+  const baseSegment = `/${normalizedBaseURL}/`;
+
+  return content.replaceAll(
+    /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
+    (_match, urlPath, hash = "") => {
+      // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
+      // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
+      const baseIndex = urlPath.indexOf(baseSegment);
+      if (baseIndex === -1) {
+        return `](${urlPath}${hash})`;
+      }
+      const normalizedPath = urlPath.slice(baseIndex);
+
+      const relativePath = toRelativeGeneratedDocLink({
+        baseURL: normalizedBaseURL,
+        currentFilePath: filePath,
+        extension: mdxExtension,
+        outputDir,
+        targetUrlPath: normalizedPath,
+      });
+
+      const target = relativePath ?? urlPath;
+      return `](${target}${hash})`;
+    },
+  );
+};
+
 // ─── toc.yml builder ────────────────────────────────────────────────────────
 
 const writeQueue = new Map<string, Promise<void>>();
@@ -200,8 +235,15 @@ const seenDirectories = new Set<string>();
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { filePath, name, outputDir } = (
-    event as { data: { filePath: string; name: string; outputDir: string } }
+  const { baseURL, filePath, name, outputDir } = (
+    event as {
+      data: {
+        baseURL: string;
+        filePath: string;
+        name: string;
+        outputDir: string;
+      };
+    }
   ).data;
 
   const graphqlRoot = resolve(outputDir);
@@ -212,7 +254,8 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     .replace(/\.mdx?$/, "")
     .replaceAll(/[/\\]/g, "-");
   const content = await readFile(filePath, "utf-8");
-  const rewritten = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
   if (rewritten !== content) {
     await saveFile(filePath, rewritten);
   }
