@@ -42,17 +42,23 @@ function InstallCommand() {
   }
 
   return (
-    <div className={styles.installBlock}>
-      <span className={styles.installPrompt}>$</span>
-      <code className={styles.installCmd}>{cmd}</code>
-      <button
-        className={styles.copyBtn}
-        onClick={handleCopy}
-        aria-label="Copy install command"
-      >
-        {copied ? "✓ Copied" : "Copy"}
-      </button>
-    </div>
+    <>
+      <div className={styles.installBlock}>
+        <span className={styles.installPrompt}>$</span>
+        <code className={styles.installCmd}>{cmd}</code>
+        <button
+          className={styles.copyBtn}
+          onClick={handleCopy}
+          aria-label="Copy install command"
+        >
+          {copied ? "✓ Copied" : "Copy"}
+        </button>
+      </div>
+      <p className="margin-top--sm margin-bottom--lg">
+        Start with the CLI, then choose the Docusaurus plugin or a formatter
+        preset for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems.
+      </p>
+    </>
   );
 }
 
@@ -70,17 +76,14 @@ function HomepageHeader() {
           >
             GraphQL
           </a>{" "}
-          schema into beautiful docs
+          schema into Markdown or MDX docs
         </h1>
 
         <p className={styles.heroSubtitle}>
-          One CLI to generate{" "}
-          <span className={styles.accentGreen}>Markdown + MDX</span>{" "}
-          documentation for{" "}
-          <Link to="/docs/advanced/integration-with-frameworks">
-            any MDX framework
-          </Link>
-          . Zero boilerplate.
+          Use the Docusaurus plugin for Docusaurus sites, or formatter presets
+          for{" "}
+          <span className={styles.accentGreen}>Hugo, MkDocs, DocFX, mdBook</span>{" "}
+          and other supported documentation ecosystems.
         </p>
 
         <InstallCommand />
@@ -93,7 +96,7 @@ function HomepageHeader() {
             )}
             to="/docs/get-started"
           >
-            Get started →
+            Docusaurus quickstart →
           </Link>
           <Link
             className={clsx(
@@ -101,9 +104,9 @@ function HomepageHeader() {
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
-            to="/docs/try-it"
+            to="/docs/advanced/integration-with-frameworks"
           >
-            Try it live
+            Other ecosystems →
           </Link>
         </div>
 
@@ -172,7 +175,7 @@ export default function Home() {
   return (
     <Layout
       title="GraphQL-Markdown — GraphQL schema documentation generator"
-      description="Auto-generate beautiful Markdown and MDX docs from any GraphQL schema. Open-source CLI with type cross-linking, custom directives, and Docusaurus integration. MIT licensed."
+      description="Generate Markdown and MDX documentation from any GraphQL schema. Use the official Docusaurus plugin or formatter presets for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems."
     >
       <HomepageHeader />
       <TrustedBy />
