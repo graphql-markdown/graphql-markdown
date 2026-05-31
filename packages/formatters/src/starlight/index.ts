@@ -20,7 +20,6 @@ import type {
   MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
-import { appendLinkExtension } from "@graphql-markdown/helpers";
 import {
   ensureDir,
   fileExists,
@@ -71,15 +70,13 @@ export const formatMDXAdmonition = (
 };
 
 /**
- * Appends `.mdx` to internal link URLs.
+ * Returns the link unchanged — Starlight routes `page.mdx` to `page/` so
+ * links must not include the `.mdx` extension.
  * @param link - Link data with URL and text
- * @returns Link with `.mdx` extension appended to the URL
+ * @returns Unmodified link
  */
-export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
-  return {
-    text,
-    url: appendLinkExtension(url, mdxExtension),
-  };
+export const formatMDXLink = (link: TypeLink): TypeLink => {
+  return link;
 };
 
 export {
