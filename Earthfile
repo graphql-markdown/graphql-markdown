@@ -138,7 +138,7 @@ GQLMD:
   END
   RUN echo "Running command: $runner $command $gqlmd $options"
   RUN set -o pipefail; $runner $command $gqlmd $options 2>&1 | tee ./run.log
-  RUN if grep -q -i "An error occurred" ./run.log; then echo "Failed with errors"; exit 1; fi
+  RUN if grep -qE '^error:' ./run.log; then echo "Failed with errors"; exit 1; fi
   RUN echo "Success"
 
 INSTALL_DOCUSAURUS:

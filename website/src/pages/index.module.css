@@ -130,11 +130,14 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .heroButton {
   border-radius: 4px;
-  width: 200px;
+  width: auto;
+  min-width: 220px;
+  max-width: 100%;
   font-weight: 600;
 }
 
@@ -254,7 +257,8 @@
   }
 
   .heroButton {
-    width: 80%;
+    width: min(100%, 24rem);
+    min-width: 0;
   }
 
   .installBlock {
