@@ -157,8 +157,42 @@ const rewriteInternalLinks = (
   const normalizedBaseURL = baseURL.split("/").filter(Boolean).join("/");
   const baseSegment = `/${normalizedBaseURL}/`;
 
-  return content.replaceAll(/\]\((\/[^)\s]+)\)/g, (_match, urlWithHash) => {
-    // Split URL and optional fragment without regex to avoid ReDoS.
+  // Use indexOf scanning instead of regex to avoid ReDoS on file content.
+  const out: string[] = [];
+  let pos = 0;
+
+  while (pos < content.length) {
+    const markerPos = content.indexOf("](", pos);
+    if (markerPos === -1) {
+      out.push(content.slice(pos));
+      break;
+    }
+
+    const urlStart = markerPos + 2;
+
+    // Only process absolute links (start with /).
+    if (content[urlStart] !== "/") {
+      out.push(content.slice(pos, urlStart));
+      pos = urlStart;
+      continue;
+    }
+
+    const closePos = content.indexOf(")", urlStart);
+    if (closePos === -1) {
+      out.push(content.slice(pos));
+      break;
+    }
+
+    const urlWithHash = content.slice(urlStart, closePos);
+
+    // Skip if the captured URL contains whitespace — not a valid Markdown link.
+    if (/\s/u.test(urlWithHash)) {
+      out.push(content.slice(pos, urlStart));
+      pos = urlStart;
+      continue;
+    }
+
+    // Split off optional fragment without regex.
     const hashIdx = urlWithHash.indexOf("#");
     const urlPath =
       hashIdx === -1 ? urlWithHash : urlWithHash.slice(0, hashIdx);
@@ -167,22 +201,26 @@ const rewriteInternalLinks = (
     // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
     // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
     const baseIndex = urlPath.indexOf(baseSegment);
+
+    out.push(content.slice(pos, markerPos));
+
     if (baseIndex === -1) {
-      return `](${urlPath}${hash})`;
+      out.push(`](${urlWithHash})`);
+    } else {
+      const relativePath = toRelativeGeneratedDocLink({
+        baseURL: normalizedBaseURL,
+        currentFilePath: filePath,
+        extension: mdxExtension,
+        outputDir,
+        targetUrlPath: urlPath.slice(baseIndex),
+      });
+      out.push(`](${relativePath ?? urlPath}${hash})`);
     }
-    const normalizedPath = urlPath.slice(baseIndex);
 
-    const relativePath = toRelativeGeneratedDocLink({
-      baseURL: normalizedBaseURL,
-      currentFilePath: filePath,
-      extension: mdxExtension,
-      outputDir,
-      targetUrlPath: normalizedPath,
-    });
+    pos = closePos + 1;
+  }
 
-    const target = relativePath ?? urlPath;
-    return `](${target}${hash})`;
-  });
+  return out.join("");
 };
 
 // ─── toc.yml builder ────────────────────────────────────────────────────────
