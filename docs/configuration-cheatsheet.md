@@ -13,6 +13,10 @@ keywords:
 This is a quick reference guide. All settings are thoroughly documented in the [**Settings** page](/docs/settings).
 :::
 
+:::tip
+For formatter-based setups, prefer `formatter`. The older `mdxParser` setting and CLI flag are deprecated aliases.
+:::
+
 ## Essential Options
 
 | Option     | Type     | Default    | Description                                               |
@@ -82,5 +86,5 @@ All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc`
 | `-gdb, --groupByDirective <expr>` | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
 | `--pretty`                        | `pretty`                              | Format output with Prettier                    |
 | `--formatter <pkg>`               | `formatter`                           | Formatter package name or path                 |
-| `--mdxParser <pkg>`               | ~~`mdxParser`~~ (deprecated)          | Use `--formatter` instead                      |
+| `--mdxParser <pkg>`               | ~~`mdxParser`~~ (deprecated)          | Deprecated alias for `formatter`               |
 | `--config`                        | —                                     | Print resolved config (debug)                  |
