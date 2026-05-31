@@ -21,6 +21,7 @@ import type {
   MDXString,
   MetaInfo,
   RenderFilesHook,
+  RenderTypeEntitiesHook,
   TypeLink,
 } from "@graphql-markdown/types";
 import {
@@ -32,7 +33,9 @@ import {
   firstUppercase,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
+  readFile,
   saveFile,
+  toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
@@ -122,6 +125,61 @@ export {
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+
+const rewriteInternalLinks = (
+  content: string,
+  filePath: string,
+  outputDir: string,
+  baseURL: string,
+): string => {
+  return content.replaceAll(
+    /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
+    (_match, urlPath, hash = "") => {
+      const relativePath = toRelativeGeneratedDocLink({
+        baseURL,
+        currentFilePath: filePath,
+        extension: mdxExtension,
+        outputDir,
+        targetUrlPath: urlPath,
+      });
+
+      const target = relativePath ?? urlPath;
+      return `](${target}${hash})`;
+    },
+  );
+};
+
+/**
+ * Rewrites absolute generated doc links to page-relative `.md` paths after each page is rendered.
+ *
+ * mdBook resolves links relative to the book source root, so absolute paths
+ * like `/graphql/types/scalars/id.md` are rendered as `/graphql/types/scalars/id.html`
+ * in the output HTML — which breaks when the book is served under a subdirectory
+ * (e.g. `https://example.com/demo-mdbook/`).
+ * Converting them to relative paths (e.g. `../../scalars/id.md`) makes links
+ * work correctly regardless of where the book is hosted.
+ */
+export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
+  event,
+): Promise<void> => {
+  const { baseURL, filePath, outputDir } = (
+    event as {
+      data: { baseURL: string; filePath: string; outputDir: string };
+    }
+  ).data;
+
+  const content = await readFile(filePath, "utf-8");
+  const rewrittenContent = rewriteInternalLinks(
+    content,
+    filePath,
+    outputDir,
+    baseURL,
+  );
+
+  if (rewrittenContent !== content) {
+    await saveFile(filePath, rewrittenContent);
+  }
+};
 
 /**
  * Creates an mdBook formatter.
@@ -219,7 +277,7 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     "",
     "---",
     "",
-    `[GraphQL API Reference](${baseURL}/index${mdxExtension}})`,
+    `[GraphQL API Reference](${baseURL}/index${mdxExtension})`,
     "",
   ];
 
