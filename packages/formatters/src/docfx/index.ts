@@ -154,32 +154,35 @@ const rewriteInternalLinks = (
   outputDir: string,
   baseURL: string,
 ): string => {
-  const normalizedBaseURL = baseURL.replace(/^\/+|\/+$/g, "");
+  const normalizedBaseURL = baseURL.split("/").filter(Boolean).join("/");
   const baseSegment = `/${normalizedBaseURL}/`;
 
-  return content.replaceAll(
-    /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
-    (_match, urlPath, hash = "") => {
-      // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
-      // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
-      const baseIndex = urlPath.indexOf(baseSegment);
-      if (baseIndex === -1) {
-        return `](${urlPath}${hash})`;
-      }
-      const normalizedPath = urlPath.slice(baseIndex);
+  return content.replaceAll(/\]\((\/[^)\s]+)\)/g, (_match, urlWithHash) => {
+    // Split URL and optional fragment without regex to avoid ReDoS.
+    const hashIdx = urlWithHash.indexOf("#");
+    const urlPath =
+      hashIdx === -1 ? urlWithHash : urlWithHash.slice(0, hashIdx);
+    const hash = hashIdx === -1 ? "" : urlWithHash.slice(hashIdx);
 
-      const relativePath = toRelativeGeneratedDocLink({
-        baseURL: normalizedBaseURL,
-        currentFilePath: filePath,
-        extension: mdxExtension,
-        outputDir,
-        targetUrlPath: normalizedPath,
-      });
+    // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
+    // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
+    const baseIndex = urlPath.indexOf(baseSegment);
+    if (baseIndex === -1) {
+      return `](${urlPath}${hash})`;
+    }
+    const normalizedPath = urlPath.slice(baseIndex);
 
-      const target = relativePath ?? urlPath;
-      return `](${target}${hash})`;
-    },
-  );
+    const relativePath = toRelativeGeneratedDocLink({
+      baseURL: normalizedBaseURL,
+      currentFilePath: filePath,
+      extension: mdxExtension,
+      outputDir,
+      targetUrlPath: normalizedPath,
+    });
+
+    const target = relativePath ?? urlPath;
+    return `](${target}${hash})`;
+  });
 };
 
 // ─── toc.yml builder ────────────────────────────────────────────────────────
