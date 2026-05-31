@@ -63,6 +63,10 @@ module.exports = {
 
 Since mdBook doesn't support frontmatter, metadata (title, description, etc.) is typically handled through mdBook's `SUMMARY.md` file for navigation and book.toml for configuration.
 
+## Examples
+
+See the complete implementation: [demo-mdbook](https://github.com/graphql-markdown/demo-mdbook)
+
 ## Links
 
 - [mdBook Documentation](https://rust-lang.github.io/mdBook/)
