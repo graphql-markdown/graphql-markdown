@@ -48,7 +48,7 @@ await runGraphQLMarkdown({
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "api",
-  mdxParser: "@graphql-markdown/formatters/docusaurus",
+  formatter: "@graphql-markdown/formatters/docusaurus",
 });
 ```
 
@@ -62,7 +62,7 @@ extensions:
   graphql-markdown:
     rootPath: ./docs
     baseURL: api
-    mdxParser: "@graphql-markdown/formatters/docusaurus"
+    formatter: "@graphql-markdown/formatters/docusaurus"
 ```
 
 ## Features
@@ -95,7 +95,7 @@ Then use it in your config:
 ```yaml
 extensions:
   graphql-markdown:
-    mdxParser: ./src/modules/custom-mdx.cjs
+    formatter: ./src/modules/custom-mdx.cjs
 ```
 
 ## Links

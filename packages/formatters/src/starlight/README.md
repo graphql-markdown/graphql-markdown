@@ -17,7 +17,7 @@ await runGraphQLMarkdown({
   schema: "./schema.graphql",
   rootPath: "./src/content/docs",
   baseURL: "api",
-  mdxParser: "@graphql-markdown/formatters/starlight",
+  formatter: "@graphql-markdown/formatters/starlight",
 });
 ```
 
@@ -31,7 +31,7 @@ extensions:
   graphql-markdown:
     rootPath: ./src/content/docs
     baseURL: api
-    mdxParser: "@graphql-markdown/formatters/starlight"
+    formatter: "@graphql-markdown/formatters/starlight"
 ```
 
 ## Features
@@ -64,7 +64,7 @@ Then reference your custom module in the config:
 ```yaml
 extensions:
   graphql-markdown:
-    mdxParser: ./src/modules/astro-mdx.cjs
+    formatter: ./src/modules/astro-mdx.cjs
 ```
 
 ## Examples
