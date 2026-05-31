@@ -145,7 +145,6 @@ npx docusaurus graphql-to-doc \
     --skip @noDoc \
     --index \
     --noParentType \
-    --noRelatedType \
     --deprecated group \
     --hierarchy entity
 ```
