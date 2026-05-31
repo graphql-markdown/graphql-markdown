@@ -8,7 +8,8 @@ const HowItWorksSteps = [
     title: "Install",
     description: (
       <>
-        Add GraphQL-Markdown to your project with a single npm command.
+        Install GraphQL-Markdown, then choose the Docusaurus plugin or a
+        formatter preset that matches your docs stack.
       </>
     ),
   },
@@ -17,7 +18,8 @@ const HowItWorksSteps = [
     title: "Configure",
     description: (
       <>
-        Point it at your schema — SDL file, introspection endpoint, GraphQL config, or code-first TS/JS schema.
+        Point it at your schema with SDL, introspection, GraphQL Config, or a
+        code-first TS/JS schema source.
       </>
     ),
   },
@@ -26,8 +28,11 @@ const HowItWorksSteps = [
     title: "Generate",
     description: (
       <>
-        Run the CLI and get human-readable MDX docs, ready to publish.{" "}
-        <Link to="/docs/get-started">See the guide →</Link>
+        Run the CLI and generate Markdown or MDX documentation ready for your
+        target ecosystem.{" "}
+        <Link to="/docs/advanced/integration-with-frameworks">
+          Choose a path →
+        </Link>
       </>
     ),
   },
@@ -39,9 +44,9 @@ const FeatureList = [
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
-        Supports SDL files, introspection endpoints, GraphQL config, and code-first TS/JS schemas. Type
-        cross-linking, deprecation notices, and custom directive badges —
-        included out of the box.{" "}
+        Supports SDL files, introspection endpoints, GraphQL config, and
+        code-first TS/JS schemas. Type cross-linking, deprecation notices, and
+        custom directive badges are included out of the box.{" "}
         <Link to="/docs/get-started" className={styles.inlineCta}>
           Get started →
         </Link>
@@ -49,16 +54,18 @@ const FeatureList = [
     ),
   },
   {
-    title: "MDX output, any framework",
+    title: "Output adapted for your docs ecosystem",
     Svg: require("@site/static/img/mdx.svg").default,
     description: (
       <>
-        Output is plain MDX — keep your existing theme, navigation, and search.
-        Works with Docusaurus, Astro, Next.js, and{" "}
+        GraphQL-Markdown generates Markdown or MDX, and formatter presets adapt
+        the output for Docusaurus, Hugo, MkDocs, DocFX, mdBook, Astro, Next.js,
+        and other supported targets while preserving each ecosystem's
+        conventions.{" "}
         <Link to="/docs/advanced/integration-with-frameworks">
-          any MDX framework
+          Explore formatter presets
         </Link>
-        . Zero framework lock-in.
+        .
       </>
     ),
   },
