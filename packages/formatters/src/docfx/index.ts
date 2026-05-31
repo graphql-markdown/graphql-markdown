@@ -148,6 +148,35 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
 
 export const mdxExtension = ".md" as const;
 
+const resolveLink = (
+  urlWithHash: string,
+  filePath: string,
+  outputDir: string,
+  normalizedBaseURL: string,
+  baseSegment: string,
+): string => {
+  const hashIdx = urlWithHash.indexOf("#");
+  const urlPath = hashIdx === -1 ? urlWithHash : urlWithHash.slice(0, hashIdx);
+  const hash = hashIdx === -1 ? "" : urlWithHash.slice(hashIdx);
+
+  // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
+  // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
+  const baseIndex = urlPath.indexOf(baseSegment);
+  if (baseIndex === -1) {
+    return `](${urlWithHash})`;
+  }
+
+  const relativePath = toRelativeGeneratedDocLink({
+    baseURL: normalizedBaseURL,
+    currentFilePath: filePath,
+    extension: mdxExtension,
+    outputDir,
+    targetUrlPath: urlPath.slice(baseIndex),
+  });
+
+  return `](${relativePath ?? urlPath}${hash})`;
+};
+
 const rewriteInternalLinks = (
   content: string,
   filePath: string,
@@ -170,53 +199,32 @@ const rewriteInternalLinks = (
 
     const urlStart = markerPos + 2;
 
-    // Only process absolute links (start with /).
-    if (content[urlStart] !== "/") {
-      out.push(content.slice(pos, urlStart));
-      pos = urlStart;
-      continue;
-    }
-
+    // Only process absolute links (start with /) with no whitespace.
     const closePos = content.indexOf(")", urlStart);
-    if (closePos === -1) {
-      out.push(content.slice(pos));
-      break;
-    }
+    const urlWithHash =
+      closePos !== -1 ? content.slice(urlStart, closePos) : null;
+    const isValid =
+      content[urlStart] === "/" &&
+      closePos !== -1 &&
+      urlWithHash !== null &&
+      !/\s/u.test(urlWithHash);
 
-    const urlWithHash = content.slice(urlStart, closePos);
-
-    // Skip if the captured URL contains whitespace — not a valid Markdown link.
-    if (/\s/u.test(urlWithHash)) {
+    if (!isValid) {
       out.push(content.slice(pos, urlStart));
       pos = urlStart;
       continue;
     }
-
-    // Split off optional fragment without regex.
-    const hashIdx = urlWithHash.indexOf("#");
-    const urlPath =
-      hashIdx === -1 ? urlWithHash : urlWithHash.slice(0, hashIdx);
-    const hash = hashIdx === -1 ? "" : urlWithHash.slice(hashIdx);
-
-    // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
-    // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
-    const baseIndex = urlPath.indexOf(baseSegment);
 
     out.push(content.slice(pos, markerPos));
-
-    if (baseIndex === -1) {
-      out.push(`](${urlWithHash})`);
-    } else {
-      const relativePath = toRelativeGeneratedDocLink({
-        baseURL: normalizedBaseURL,
-        currentFilePath: filePath,
-        extension: mdxExtension,
+    out.push(
+      resolveLink(
+        urlWithHash!,
+        filePath,
         outputDir,
-        targetUrlPath: urlPath.slice(baseIndex),
-      });
-      out.push(`](${relativePath ?? urlPath}${hash})`);
-    }
-
+        normalizedBaseURL,
+        baseSegment,
+      ),
+    );
     pos = closePos + 1;
   }
 
