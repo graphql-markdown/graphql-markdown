@@ -98,6 +98,10 @@ extensions:
     formatter: ./src/modules/custom-mdx.cjs
 ```
 
+## Examples
+
+See the complete implementation: [demo-docusaurus](https://github.com/graphql-markdown/demo-docusaurus)
+
 ## Links
 
 - [GraphQL-Markdown Docusaurus Plugin](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/docusaurus)

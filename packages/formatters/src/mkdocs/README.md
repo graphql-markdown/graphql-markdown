@@ -71,6 +71,10 @@ module.exports = {
 };
 ```
 
+## Examples
+
+See the complete implementation: [demo-mkdocs](https://github.com/graphql-markdown/demo-mkdocs)
+
 ## Links
 
 - [MkDocs Documentation](https://www.mkdocs.org/)

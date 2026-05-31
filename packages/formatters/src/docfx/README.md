@@ -63,6 +63,10 @@ module.exports = {
 
 The `uid` field in frontmatter is computed from `props.id` by the default formatter and rewritten to a path-derived value by the `afterRenderTypeEntitiesHook`. Override `formatMDXFrontmatter` only if you need to change the frontmatter structure beyond the `uid` field.
 
+## Examples
+
+See the complete implementation: [demo-docfx](https://github.com/graphql-markdown/demo-docfx)
+
 ## Links
 
 - [DocFX Documentation](https://dotnet.github.io/docfx/)

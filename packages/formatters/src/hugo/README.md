@@ -64,6 +64,10 @@ module.exports = {
 };
 ```
 
+## Examples
+
+See the complete implementation: [demo-hugo](https://github.com/graphql-markdown/demo-hugo)
+
 ## Links
 
 - [Hugo Documentation](https://gohugo.io/)
