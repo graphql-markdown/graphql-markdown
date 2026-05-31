@@ -1,5 +1,6 @@
 import {
   afterRenderFilesHook,
+  afterRenderTypeEntitiesHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -654,5 +655,112 @@ describe("afterRenderFilesHook", () => {
     const opsIdx = summary.indexOf("# Operations");
     // Operations must come before Types, not tied
     expect(opsIdx).toBeLessThan(typesIdx);
+  });
+});
+
+describe("afterRenderTypeEntitiesHook", () => {
+  test("is a function (lifecycle hook contract)", () => {
+    expect(typeof afterRenderTypeEntitiesHook).toBe("function");
+  });
+
+  test("rewrites absolute internal links to relative paths", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-hook-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+    const filePath = pathJoin(outputDir, "types", "objects", "country.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "objects"), { recursive: true });
+
+    const content = "# Country\n\n[ID!](/graphql/types/scalars/id.md) scalar\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).not.toContain("](/graphql/");
+    expect(result).toContain("](../scalars/id.md)");
+  });
+
+  test("preserves fragment anchors when rewriting links", async () => {
+    const { mkdtempSync, writeFileSync, readFileSync, mkdirSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-frag-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+    const filePath = pathJoin(outputDir, "types", "objects", "country.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "objects"), { recursive: true });
+
+    const content =
+      "# Country\n\n[field](/graphql/types/scalars/id.md#field)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("](../scalars/id.md#field)");
+  });
+
+  test("does not modify the file when no internal links are present", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, statSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-noop-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "string.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    const content = "# String\n\nBuilt-in scalar.\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    const mtimeBefore = statSync(filePath).mtimeMs;
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 10);
+    });
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, outputDir },
+    });
+
+    const mtimeAfter = statSync(filePath).mtimeMs;
+    expect(mtimeBefore).toBe(mtimeAfter);
+  });
+
+  test("leaves external URLs unchanged", async () => {
+    const { mkdtempSync, writeFileSync, readFileSync, mkdirSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "mdbook-ext-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "id.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    const content =
+      "# ID\n\n[Spec](https://spec.example.com/id)\n[Repo](https://github.com/example)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("(https://spec.example.com/id)");
+    expect(result).toContain("(https://github.com/example)");
   });
 });
