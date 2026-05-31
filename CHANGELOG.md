@@ -1,46 +1,95 @@
+<a id="1.35.0"></a>
+# [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0) - 2026-05-31
+
+1.35.0 focuses on formatter-first integration: Docusaurus, Astro Starlight, Next.js + Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, and mdBook.
+`formatter` is now the canonical setting; `mdxParser` remains a deprecated alias for migration compatibility.
+Examples: `@graphql-markdown/formatters/hugo`, `@graphql-markdown/formatters/docusaurus`, `@graphql-markdown/formatters/starlight`.
+
+```yaml
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    rootPath: ./content
+    baseURL: api
+    formatter: "@graphql-markdown/formatters/hugo"
+```
+
+> [!WARNING]
+> **Removed deprecated options/features (explicit list)**
+> - Removed CLI flags: `--noCode`, `--noExample`, `--noRelatedType`.
+> - Removed `printTypeOptions` toggles: `codeSection` and `relatedTypeSection`.
+> - Removed boolean form of `printTypeOptions.exampleSection` (object config only).
+> - Removed deprecated Docusaurus plugin option: `runOnBuild`.
+> - Removed deprecated printer event type aliases: `PrintCodeEvent` and `PrintTypeEvent`.
+>
+> **Use instead (migration mapping)**
+> - `--noCode` / `codeSection` -> use `beforeComposePageTypeHook` and remove `code` from `event.output`.
+> - `--noExample` / boolean `exampleSection` -> use object `printTypeOptions.exampleSection` config, or remove `example` from `event.output` in `beforeComposePageTypeHook`.
+> - `--noRelatedType` / `relatedTypeSection` -> use `beforeComposePageTypeHook` and remove `relations` from `event.output`.
+> - `runOnBuild` -> run `graphql-to-doc` explicitly in your docs/build pipeline.
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.35.0 |
+| @graphql-markdown/core | 1.21.0 |
+| @graphql-markdown/printer-legacy | 1.16.0 |
+| @graphql-markdown/types | 1.13.0 |
+| @graphql-markdown/utils | 1.12.0 |
+| @graphql-markdown/graphql | 1.2.2 |
+| @graphql-markdown/cli | 1.0.0 |
+| @graphql-markdown/diff | 1.1.15 |
+| @graphql-markdown/helpers | 1.1.0 |
+| @graphql-markdown/logger | 1.0.7 |
+| @graphql-markdown/formatters | 1.0.0 |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.34.0...1.35.0
+
+[Changes][1.35.0]
+
+
 <a id="1.34.0"></a>
 # [1.34.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.34.0) - 2026-04-10
 
-This release is a spring-cleaning pass across GraphQL-Markdown: clearing cobwebs from the tooling attic, tightening the generation pipeline, and shipping a few practical improvements along the way.
+This release is a spring-cleaning pass across GraphQL-Markdown: 🧹 clearing cobwebs from the tooling attic, 🔧 tightening the generation pipeline, and 🚀 shipping a few practical improvements along the way.
 
-### What's New
+### What's New ✨ 
 
 #### `beforeComposePageTypeHook` - Control page section layout
 
 A new lifecycle hook lets you reorder, filter, or hide sections on any generated page before it is rendered. This supersedes the deprecated boolean options `codeSection`, `relatedTypeSection`, and `exampleSection`.
 
-See the [Hook Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes) documentation for usage examples.
+See the [Hook Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes#reorder-or-hide-sections-before-page-composition) documentation for usage examples.
+
+Using deprecated CLI flags or config options (`--noCode`, `--noRelatedType`, `--noExample`, `codeSection`, `relatedTypeSection`) will now emits a visible warning at runtime to help with migration.
 
 #### Namespace wrapping in code snippets
 
-Operations that belong to a namespace (introduced in 1.33.0) now render their code snippets wrapped in the correct namespace block, giving a more accurate representation of the schema structure.
-
-#### Runtime deprecation warnings
-
-Using deprecated CLI flags or config options (`--noCode`, `--noRelatedType`, `--noExample`, `codeSection`, `relatedTypeSection`) now emits a visible warning at runtime to help with migration.
+Operations that belong to a namespace (introduced in [1.33.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.33.0)) now render their code snippets wrapped in the correct namespace block, giving a more accurate representation of the schema structure (reported in [#2717 (comment)](https://github.com/graphql-markdown/graphql-markdown/issues/2717#issuecomment-4022069486) by [@marshmn](https://github.com/marshmn)).
 
 #### Docusaurus `<details>` MDX implementation update
 
-The Docusaurus package updates its MDX handling for `<details>` blocks to align with the current implementation.
+The Docusaurus package updates its MDX handling for `<details>` blocks to align with the official Docusarus implementation.
 
-### Bug Fixes
+### Bug Fixes 🐛 
 
-- **Namespace detection regression** ([#2809](https://github.com/graphql-markdown/graphql-markdown/issues/2809)): fields whose return type is the root operation type (for example, a `Mutation` field returning `Mutation`) were incorrectly classified as namespace containers. This caused those fields to be omitted from operation lists and the root type to be stripped from the objects map. Fixed in `@graphql-markdown/graphql`.
+- **Namespace detection regression** ([#2809](https://github.com/graphql-markdown/graphql-markdown/issues/2809)): fields whose return type is the root operation type (for example, a `Mutation` field returning `Mutation`) were incorrectly classified as namespace containers. This caused those fields to be omitted from operation lists and the root type to be stripped from the objects map. Fixed in `@graphql-markdown/graphql` (reported in [#2803](https://github.com/graphql-markdown/graphql-markdown/pull/2803) by [@artiom](https://github.com/artiom)).
 
-### Breaking / Deprecations
+### Breaking / Deprecations ⚠️ 
 
-- `relatedTypeSection` is deprecated - use `beforeComposePageTypeHook` to hide the related-types section.
-- `codeSection` and boolean `exampleSection` are deprecated - use `beforeComposePageTypeHook` instead.
-- `options.runOnBuild` is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.
+- `relatedTypeSection`, `codeSection` and `exampleSection` (boolean) are deprecated - use `beforeComposePageTypeHook` to hide the related-types section.
+- `runOnBuild` is deprecated and will be removed in a future release. Use the `graphql-to-doc` CLI command instead.
 - `PrinterEvent` enum is deprecated in favour of `ICancellableEvent`.
 - Potential breaking change: all section printer functions now return structured `PageSection` objects instead of raw strings.
-### Internal / Architecture
+
+### Internal / Architecture 🧰 
 
 - Event base classes (`CancellableEvent`, `DataEvent`, `DataOutputEvent`) moved from `@graphql-markdown/core` -> `@graphql-markdown/utils`, making them available to downstream consumers.
 - Print event implementations (`PrintCodeEvent`, `PrintTypeEvent`, `BeforeComposePageTypeEvent`) moved to `@graphql-markdown/printer-legacy`.
 - `@graphql-markdown/types` promoted from `devDependencies` -> `dependencies` across all packages.
 
-### Package Versions
+### Package Versions 📦 
 
 | Package | Version |
 |---|---|
@@ -2297,6 +2346,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.35.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.34.0...1.35.0
 [1.34.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.33.0...1.34.0
 [1.33.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.1...1.33.0
 [1.32.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.0...1.32.1
