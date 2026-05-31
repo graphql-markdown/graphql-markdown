@@ -11,18 +11,23 @@
 
 # GraphQL-Markdown
 
-Generate **Markdown documentation** from **GraphQL schemas** for static site generators.
+Generate **Markdown and MDX documentation** from **GraphQL schemas** for Docusaurus and other supported documentation ecosystems.
 
 ## Installation
 
-Choose your preferred package based on your static site generator:
+GraphQL-Markdown supports two main setup paths:
+
+- use the official Docusaurus integration for Docusaurus sites
+- use the CLI with formatter presets for other supported ecosystems such as Hugo, MkDocs, DocFX, and mdBook
+
+Choose your preferred package based on your documentation stack:
 
 ```shell
-# For Docusaurus
+# For Docusaurus sites
 npm install @graphql-markdown/docusaurus graphql
 
-# For other static site generators
-npm install @graphql-markdown/cli graphql
+# For formatter-based setups
+npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
 
 ## Usage
@@ -45,13 +50,27 @@ npx docusaurus graphql-to-doc
 
 ### CLI Usage
 
+Use the CLI directly for custom workflows, or pair it with `@graphql-markdown/formatters` to adapt the generated output for supported frameworks.
+
 ```shell
 npx gqlmd graphql-to-doc --schema ./schema.graphql --output ./docs
+```
+
+For formatter-based setups:
+
+```yaml
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    rootPath: ./docs
+    baseURL: api
+    formatter: "@graphql-markdown/formatters/hugo"
 ```
 
 ### API Usage
 
 For programmatic usage, you can use the CLI package:
+
 ```typescript
 import { runGraphQLMarkdown } from '@graphql-markdown/cli';
 
@@ -63,7 +82,7 @@ const config = {
 await runGraphQLMarkdown(config);
 ```
 
-See [API documentation](https://graphql-markdown.dev/api/) and our [Framework Integration page](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks) for more details.
+See [API documentation](https://graphql-markdown.dev/api/) and our [Framework Integration page](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks) for the full list of supported formatter presets.
 
 ## Configuration
 

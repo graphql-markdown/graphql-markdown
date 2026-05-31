@@ -2,7 +2,7 @@
 
 Framework formatter presets for GraphQL-Markdown.
 
-This package provides ready-to-use `mdxParser` modules for popular documentation frameworks, with each formatter in its own package subpath.
+This package provides ready-to-use formatter presets for popular documentation frameworks, with each formatter in its own package subpath.
 
 ## Installation
 
@@ -20,7 +20,7 @@ extensions:
   graphql-markdown:
     rootPath: ./docs
     baseURL: api
-    mdxParser: "@graphql-markdown/formatters/docusaurus"
+    formatter: "@graphql-markdown/formatters/docusaurus"
 ```
 
 Or programmatically:
@@ -32,16 +32,18 @@ await runGraphQLMarkdown({
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "api",
-  mdxParser: "@graphql-markdown/formatters/docusaurus",
+  formatter: "@graphql-markdown/formatters/docusaurus",
 });
 ```
+
+The legacy `mdxParser` setting still works as a deprecated alias, but new configurations should use `formatter`.
 
 ## Supported Formatters
 
 Each formatter has its own setup guide:
 
 | Framework | Package Path | Documentation |
-|-----------|--------------|---|
+| --------- | ------------ | ------------- |
 | Astro Starlight | `@graphql-markdown/formatters/starlight` | [Guide](src/starlight/README.md) |
 | DocFX | `@graphql-markdown/formatters/docfx` | [Guide](src/docfx/README.md) |
 | Docusaurus | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |

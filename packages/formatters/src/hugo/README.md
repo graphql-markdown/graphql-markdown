@@ -17,7 +17,7 @@ await runGraphQLMarkdown({
   schema: "./schema.graphql",
   rootPath: "./content",
   baseURL: "api",
-  mdxParser: "@graphql-markdown/formatters/hugo",
+  formatter: "@graphql-markdown/formatters/hugo",
 });
 ```
 
@@ -31,7 +31,7 @@ extensions:
   graphql-markdown:
     rootPath: ./content
     baseURL: api
-    mdxParser: "@graphql-markdown/formatters/hugo"
+    formatter: "@graphql-markdown/formatters/hugo"
 ```
 
 ## Requirements

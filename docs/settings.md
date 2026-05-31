@@ -11,7 +11,7 @@ keywords:
 
 # Settings
 
-All settings can be set via plugin options in your config file and overridden with CLI flags. See [configuration](/docs/configuration) for the different config methods.
+All settings can be set via plugin options in your config file and overridden with CLI flags. Use `formatter` when you want GraphQL-Markdown to target a supported formatter-based documentation ecosystem, and see [configuration](/docs/configuration) for the different config methods.
 
 ## `--config`
 
@@ -203,7 +203,6 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 ## `formatter`
 
 Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
-
 
 | Setting     | CLI flag      | Default                            |
 | ----------- | ------------- | ---------------------------------- |

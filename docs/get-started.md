@@ -1,6 +1,6 @@
 ---
 sidebar_position: 30
-description: Quick start guide for installing and configuring GraphQL-Markdown with Docusaurus. Generate documentation from your GraphQL schema in minutes.
+description: Quick start guide for installing and configuring GraphQL-Markdown with Docusaurus, plus the right entry point for formatter-based setups.
 keywords:
   - GraphQL-Markdown installation
   - Docusaurus setup
@@ -13,13 +13,26 @@ keywords:
 
 :::info
 
-While GraphQL-Markdown was initially developed as a Docusaurus plugin, it now supports various MDX documentation generators. This guide focuses on the Docusaurus integration - for other frameworks, please see our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
+GraphQL-Markdown supports two main setup paths:
+
+- the official Docusaurus integration for Docusaurus sites
+- the CLI with formatter presets for other supported documentation ecosystems
+
+This guide focuses on the Docusaurus path. If you are using Hugo, MkDocs, DocFX, mdBook, or another supported formatter-based setup, start with our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
 
 :::
 
-Get started by [creating a new site](#new-docusaurus-site).
+If you are setting up Docusaurus, get started by [creating a new site](#new-docusaurus-site).
 
 Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
+
+If you are not using Docusaurus, install the CLI and formatter presets:
+
+```shell title="shell"
+npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
+```
+
+Then continue with [Integration with Frameworks](/docs/advanced/integration-with-frameworks) to choose the preset for your documentation stack.
 
 ## New Docusaurus site
 
@@ -84,7 +97,7 @@ The `npm run start` command builds your website locally and serves it through a 
 
 :::note
 
-These requirements are specific to Docusaurus integration. See our [Framework Integration Guide](/docs/advanced/integration-with-frameworks) for other frameworks' requirements.
+These requirements are specific to Docusaurus integration. See our [Framework Integration Guide](/docs/advanced/integration-with-frameworks) for formatter-based setups and their requirements.
 
 :::
 

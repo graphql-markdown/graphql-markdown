@@ -2,7 +2,7 @@
 sidebar_position: 10
 pagination_next: try-it
 hide_table_of_contents: true
-description: Generate human-friendly Markdown/MDX documentation from GraphQL schemas. Easy setup, customizable output, and seamless Docusaurus integration.
+description: Generate human-friendly Markdown and MDX documentation from GraphQL schemas for Docusaurus and supported formatter-based documentation ecosystems.
 keywords:
   - GraphQL
   - documentation generator
@@ -14,7 +14,7 @@ keywords:
 
 # Introduction
 
-The `@graphql-markdown/cli` package adds a CLI with commands for generating MDX using a GraphQL schema as the source. It simplifies creating and maintaining GraphQL API documentation by automatically generating well-structured documentation from your schema.
+GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can use the official Docusaurus integration for Docusaurus sites, or use the CLI with formatter presets for other supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.
 
 ## Why GraphQL Markdown?
 
@@ -23,7 +23,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Automatically generating documentation from your schema
 - Keeping documentation in sync with your API
 - Providing a consistent documentation structure
-- Integrating seamlessly with most of the MDX documentation frameworks
+- Integrating with Docusaurus and supported formatter-based documentation ecosystems
 
 ## Features
 
@@ -44,8 +44,10 @@ For **Docusaurus** projects:
 npm install @graphql-markdown/docusaurus graphql
 ```
 
-For **other MDX frameworks** (Astro, Next.js, etc.):
+For **formatter-based setups** (Hugo, MkDocs, DocFX, mdBook, Astro, Next.js, etc.):
 
 ```bash
-npm install @graphql-markdown/cli graphql
+npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
+
+For the full list of supported formatter presets, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).

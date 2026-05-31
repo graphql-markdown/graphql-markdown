@@ -11,7 +11,7 @@ keywords:
 
 # Configuration
 
-GraphQL-Markdown supports three configuration methods. Later entries in this list take precedence over earlier ones.
+GraphQL-Markdown supports three configuration methods. Use GraphQL Config for framework-agnostic setups, use Docusaurus plugin options for Docusaurus sites, and use CLI flags when you need temporary overrides. Later entries in this list take precedence over earlier ones.
 
 ## Framework-agnostic Configuration
 
@@ -30,6 +30,7 @@ extensions:
     linkRoot: "/examples/default"
     baseURL: "."
     homepage: "data/anilist.md"
+    formatter: "@graphql-markdown/formatters/hugo"
     loaders:
       UrlLoader:
         module: "@graphql-tools/url-loader"
@@ -38,6 +39,8 @@ extensions:
     printTypeOptions:
       deprecated: "group"
 ```
+
+For supported formatter presets, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
 ## Docusaurus Integration
 
@@ -111,5 +114,6 @@ For any framework, you can use CLI flags to temporarily override settings withou
 :::
 
 **Current limitations:**
+
 - Single schema only, no schema stitching
 - `include`, `exclude`, `documents` and glob pattern are not supported
