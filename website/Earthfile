@@ -63,7 +63,7 @@ BUILD_EXAMPLES:
   RUN test -n "$(find ./examples/$folderExample -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
   SET folderExample="group-by"
   SET idExample="schema_with_grouping"
-  DO root+GQLMD --command=$command --runner=$runner --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /examples/${folderExample} --skip @noDoc --index --noParentType --noRelatedType --deprecated group --hierarchy entity"
+  DO root+GQLMD --command=$command --runner=$runner --id="${idExample}" --options="--homepage data/groups.md --schema data/${idExample}.graphql --groupByDirective @doc(category|=Common) --base . --link /examples/${folderExample} --skip @noDoc --index --noParentType --deprecated group --hierarchy entity"
   RUN mv docs ./examples/$folderExample
   RUN test -n "$(find ./examples/$folderExample -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
   SAVE ARTIFACT ./examples
