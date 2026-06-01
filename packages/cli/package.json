@@ -65,7 +65,7 @@
     "@graphql-markdown/core": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/types": "workspace:^",
-    "commander": "^5.1.0",
+    "commander": "^15.0.0",
     "graphql-config": "catalog:"
   },
   "devDependencies": {
