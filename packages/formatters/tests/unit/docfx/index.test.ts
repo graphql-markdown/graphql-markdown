@@ -1,4 +1,5 @@
 import {
+  afterRenderTypeEntitiesHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -187,5 +188,141 @@ describe("createMDXFormatter", () => {
     expect(formatter).toHaveProperty("formatMDXAdmonition");
     expect(formatter).toHaveProperty("formatMDXLink");
     expect(formatter).toHaveProperty("formatMDXNameEntity");
+  });
+});
+
+describe("afterRenderTypeEntitiesHook", () => {
+  test("is a function (lifecycle hook contract)", () => {
+    expect(typeof afterRenderTypeEntitiesHook).toBe("function");
+  });
+
+  test("rewrites absolute links with linkRoot prefix to relative paths", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "docfx-hook-"));
+    const outputDir = pathJoin(rootDir, "docs", "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "string.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    // Link uses /docs/graphql/... (linkRoot="/docs", baseURL="graphql")
+    const content =
+      "---\n  uid: types-scalars-string\n---\n\n[Continent](/docs/graphql/types/objects/continent)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, name: "String", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).not.toContain("](/docs/graphql/");
+    expect(result).toContain("](../objects/continent.md)");
+  });
+
+  test("preserves fragment anchors when rewriting links", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "docfx-frag-"));
+    const outputDir = pathJoin(rootDir, "docs", "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "string.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    const content =
+      "---\n  uid: types-scalars-string\n---\n\n[field](/docs/graphql/types/objects/continent#field)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, name: "String", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("](../objects/continent.md#field)");
+  });
+
+  test("leaves external URLs unchanged", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "docfx-ext-"));
+    const outputDir = pathJoin(rootDir, "docs", "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "string.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    const content =
+      "---\n  uid: types-scalars-string\n---\n\n[Spec](https://spec.example.com/string)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, name: "String", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("(https://spec.example.com/string)");
+  });
+
+  test("rewrites links when there is no linkRoot (baseURL-only absolute paths)", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "docfx-noroot-"));
+    const outputDir = pathJoin(rootDir, "graphql");
+    const filePath = pathJoin(outputDir, "types", "scalars", "string.md");
+
+    mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
+
+    const content =
+      "---\n  uid: types-scalars-string\n---\n\n[Continent](/graphql/types/objects/continent)\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, name: "String", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).not.toContain("](/graphql/");
+    expect(result).toContain("](../objects/continent.md)");
+  });
+
+  test("rewrites uid to path-derived value", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+      await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join: pathJoin } = await import("node:path");
+
+    const rootDir = mkdtempSync(pathJoin(tmpdir(), "docfx-uid-"));
+    const outputDir = pathJoin(rootDir, "docs", "graphql");
+    const filePath = pathJoin(
+      outputDir,
+      "operations",
+      "queries",
+      "continent.md",
+    );
+
+    mkdirSync(pathJoin(outputDir, "operations", "queries"), {
+      recursive: true,
+    });
+
+    const content = "---\n  uid: old-uid\n---\n\n# Continent\n";
+    writeFileSync(filePath, content, "utf-8");
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: "graphql", filePath, name: "continent", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("uid: operations-queries-continent");
+    expect(result).not.toContain("uid: old-uid");
   });
 });

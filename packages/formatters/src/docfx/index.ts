@@ -30,6 +30,7 @@ import {
   MARKDOWN_EOP,
   readFile,
   saveFile,
+  toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
@@ -147,6 +148,89 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
 
 export const mdxExtension = ".md" as const;
 
+const isAbsoluteInternalLink = (
+  content: string,
+  urlStart: number,
+): { closePos: number; urlWithHash: string } | null => {
+  if (content[urlStart] !== "/") return null;
+  const closePos = content.indexOf(")", urlStart);
+  if (closePos === -1) return null;
+  const urlWithHash = content.slice(urlStart, closePos);
+  if (/\s/u.test(urlWithHash)) return null;
+  return { closePos, urlWithHash };
+};
+
+const resolveLink = (
+  urlWithHash: string,
+  filePath: string,
+  outputDir: string,
+  normalizedBaseURL: string,
+  baseSegment: string,
+): string => {
+  const sepIdx = urlWithHash.indexOf("#");
+  const [urlPath, hash] =
+    sepIdx < 0
+      ? [urlWithHash, ""]
+      : [urlWithHash.slice(0, sepIdx), urlWithHash.slice(sepIdx)];
+
+  // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
+  // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
+  const baseIndex = urlPath.indexOf(baseSegment);
+  if (baseIndex === -1) return `](${urlWithHash})`;
+
+  const relative = toRelativeGeneratedDocLink({
+    baseURL: normalizedBaseURL,
+    currentFilePath: filePath,
+    extension: mdxExtension,
+    outputDir,
+    targetUrlPath: urlPath.slice(baseIndex),
+  });
+
+  return `](${relative ?? urlPath}${hash})`;
+};
+
+const rewriteInternalLinks = (
+  content: string,
+  filePath: string,
+  outputDir: string,
+  baseURL: string,
+): string => {
+  const normalizedBaseURL = baseURL.split("/").filter(Boolean).join("/");
+  const baseSegment = `/${normalizedBaseURL}/`;
+
+  // Use indexOf scanning instead of regex to avoid ReDoS on file content.
+  const out: string[] = [];
+  let pos = 0;
+
+  while (pos < content.length) {
+    const markerPos = content.indexOf("](", pos);
+    if (markerPos === -1) {
+      out.push(content.slice(pos));
+      break;
+    }
+    const urlStart = markerPos + 2;
+    const match = isAbsoluteInternalLink(content, urlStart);
+    if (!match) {
+      out.push(content.slice(pos, urlStart));
+      pos = urlStart;
+      continue;
+    }
+    out.push(content.slice(pos, markerPos));
+    out.push(
+      resolveLink(
+        match.urlWithHash,
+        filePath,
+        outputDir,
+        normalizedBaseURL,
+        baseSegment,
+      ),
+    );
+    pos = match.closePos + 1;
+  }
+
+  return out.join("");
+};
+
 // ─── toc.yml builder ────────────────────────────────────────────────────────
 
 const writeQueue = new Map<string, Promise<void>>();
@@ -200,8 +284,15 @@ const seenDirectories = new Set<string>();
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { filePath, name, outputDir } = (
-    event as { data: { filePath: string; name: string; outputDir: string } }
+  const { baseURL, filePath, name, outputDir } = (
+    event as {
+      data: {
+        baseURL: string;
+        filePath: string;
+        name: string;
+        outputDir: string;
+      };
+    }
   ).data;
 
   const graphqlRoot = resolve(outputDir);
@@ -212,7 +303,8 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     .replace(/\.mdx?$/, "")
     .replaceAll(/[/\\]/g, "-");
   const content = await readFile(filePath, "utf-8");
-  const rewritten = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
   if (rewritten !== content) {
     await saveFile(filePath, rewritten);
   }
