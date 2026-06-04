@@ -14,7 +14,7 @@
       "packages/*"
     ],
     "catalog": {
-      "graphql": "16.14.0",
+      "graphql": "16.14.1",
       "graphql-config": "5.1.6",
       "prettier": "3.8.3"
     },
