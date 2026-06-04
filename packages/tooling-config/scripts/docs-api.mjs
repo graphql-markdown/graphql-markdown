@@ -45,7 +45,9 @@ async function runStep(
   try {
     await action();
   } catch (err) {
-    throw new Error(`${name} failed: ${asError(err).message}`);
+    throw new Error(`${name} failed: ${asError(err).message}`, {
+      cause: err,
+    });
   }
 }
 
