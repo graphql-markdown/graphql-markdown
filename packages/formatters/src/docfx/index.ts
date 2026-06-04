@@ -148,6 +148,18 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
 
 export const mdxExtension = ".md" as const;
 
+const isAbsoluteInternalLink = (
+  content: string,
+  urlStart: number,
+): { closePos: number; urlWithHash: string } | null => {
+  if (content[urlStart] !== "/") return null;
+  const closePos = content.indexOf(")", urlStart);
+  if (closePos === -1) return null;
+  const urlWithHash = content.slice(urlStart, closePos);
+  if (/\s/u.test(urlWithHash)) return null;
+  return { closePos, urlWithHash };
+};
+
 const resolveLink = (
   urlWithHash: string,
   filePath: string,
@@ -155,18 +167,18 @@ const resolveLink = (
   normalizedBaseURL: string,
   baseSegment: string,
 ): string => {
-  const hashIdx = urlWithHash.indexOf("#");
-  const urlPath = hashIdx === -1 ? urlWithHash : urlWithHash.slice(0, hashIdx);
-  const hash = hashIdx === -1 ? "" : urlWithHash.slice(hashIdx);
+  const sepIdx = urlWithHash.indexOf("#");
+  const [urlPath, hash] =
+    sepIdx < 0
+      ? [urlWithHash, ""]
+      : [urlWithHash.slice(0, sepIdx), urlWithHash.slice(sepIdx)];
 
   // Strip any linkRoot prefix so toRelativeGeneratedDocLink can resolve the path.
   // e.g. /docs/graphql/types/scalars/id → /graphql/types/scalars/id
   const baseIndex = urlPath.indexOf(baseSegment);
-  if (baseIndex === -1) {
-    return `](${urlWithHash})`;
-  }
+  if (baseIndex === -1) return `](${urlWithHash})`;
 
-  const relativePath = toRelativeGeneratedDocLink({
+  const relative = toRelativeGeneratedDocLink({
     baseURL: normalizedBaseURL,
     currentFilePath: filePath,
     extension: mdxExtension,
@@ -174,7 +186,7 @@ const resolveLink = (
     targetUrlPath: urlPath.slice(baseIndex),
   });
 
-  return `](${relativePath ?? urlPath}${hash})`;
+  return `](${relative ?? urlPath}${hash})`;
 };
 
 const rewriteInternalLinks = (
@@ -196,36 +208,24 @@ const rewriteInternalLinks = (
       out.push(content.slice(pos));
       break;
     }
-
     const urlStart = markerPos + 2;
-
-    // Only process absolute links (start with /) with no whitespace.
-    const closePos = content.indexOf(")", urlStart);
-    const urlWithHash =
-      closePos !== -1 ? content.slice(urlStart, closePos) : null;
-    const isValid =
-      content[urlStart] === "/" &&
-      closePos !== -1 &&
-      urlWithHash !== null &&
-      !/\s/u.test(urlWithHash);
-
-    if (!isValid) {
+    const match = isAbsoluteInternalLink(content, urlStart);
+    if (!match) {
       out.push(content.slice(pos, urlStart));
       pos = urlStart;
       continue;
     }
-
     out.push(content.slice(pos, markerPos));
     out.push(
       resolveLink(
-        urlWithHash!,
+        match.urlWithHash,
         filePath,
         outputDir,
         normalizedBaseURL,
         baseSegment,
       ),
     );
-    pos = closePos + 1;
+    pos = match.closePos + 1;
   }
 
   return out.join("");
