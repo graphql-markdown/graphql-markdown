@@ -172,7 +172,7 @@
     }
   },
   "devDependencies": {
-    "@eslint/js": "9.39.4",
+    "@eslint/js": "10.0.1",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
     "@graphql-tools/json-file-loader": "catalog:graphql-tools",
