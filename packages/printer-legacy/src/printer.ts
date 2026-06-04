@@ -324,7 +324,7 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): string => {
-    let code = "";
+    let code: string;
 
     switch (true) {
       case isOperation(type):
