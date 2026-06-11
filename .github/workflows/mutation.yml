@@ -36,13 +36,13 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
       - name: Setup environment
         uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}

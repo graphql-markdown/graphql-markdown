@@ -15,12 +15,12 @@ jobs:
     name: Update changelog
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           ref: main
           token: ${{ secrets.BOT_PAT }}
 
-      - uses: rhysd/changelog-from-release/action@v3
+      - uses: rhysd/changelog-from-release/action@78b335bb7d059f35ad04c5428d50711726feee50 # v3
         with:
           file: CHANGELOG.md
           github_token: ${{ secrets.BOT_PAT }}
