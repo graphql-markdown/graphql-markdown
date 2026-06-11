@@ -1,13 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
   "semanticCommits": "enabled",
-  "baseBranchPatterns": ["main"],
+  "baseBranchPatterns": [
+    "main"
+  ],
   "customManagers": [
     {
       "customType": "regex",
       "description": "Update Bun workspaces catalog and catalogs dependency versions",
-      "managerFilePatterns": ["/^package\\.json$/"],
+      "managerFilePatterns": [
+        "/^package\\.json$/"
+      ],
       "matchStrings": [
         "^\\s{6,}\"(?<depName>@?[\\w./-]+)\"\\s*:\\s*\"(?<currentValue>(?:\\^|~|>=)?\\d[^\"]*)\""
       ],
@@ -17,12 +24,21 @@
   "packageRules": [
     {
       "enabled": false,
-      "matchPackageNames": ["/^@graphql-markdown/"]
+      "matchPackageNames": [
+        "/^@graphql-markdown/"
+      ]
     },
     {
-      "matchFileNames": ["website/**"],
-      "matchUpdateTypes": ["major", "minor"],
-      "matchBaseBranches": ["main"],
+      "matchFileNames": [
+        "website/**"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ],
+      "matchBaseBranches": [
+        "main"
+      ],
       "enabled": false
     }
   ]

@@ -66,11 +66,11 @@
   },
   "dependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",
-    "@graphql-markdown/types": "workspace:^",
-    "@graphql-markdown/utils": "workspace:^"
+    "@graphql-markdown/types": "workspace:",
+    "@graphql-markdown/utils": "workspace:"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "peerDependencies": {
     "graphql": "catalog:"

@@ -60,14 +60,14 @@
         "gqlmd": "./dist/main.js",
       },
       "dependencies": {
-        "@graphql-markdown/core": "workspace:^",
-        "@graphql-markdown/logger": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
+        "@graphql-markdown/core": "workspace:",
+        "@graphql-markdown/logger": "workspace:",
+        "@graphql-markdown/types": "workspace:",
         "commander": "^5.1.0",
         "graphql-config": "catalog:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
     },
     "packages/core": {
@@ -75,18 +75,18 @@
       "version": "1.21.0",
       "dependencies": {
         "@fastify/deepmerge": "^3.2.1",
-        "@graphql-markdown/graphql": "workspace:^",
-        "@graphql-markdown/logger": "workspace:^",
-        "@graphql-markdown/printer-legacy": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/graphql": "workspace:",
+        "@graphql-markdown/logger": "workspace:",
+        "@graphql-markdown/printer-legacy": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
       "peerDependencies": {
-        "@graphql-markdown/diff": "workspace:^",
-        "@graphql-markdown/helpers": "workspace:^",
+        "@graphql-markdown/diff": "workspace:",
+        "@graphql-markdown/helpers": "workspace:",
         "graphql-config": "catalog:",
       },
       "optionalPeers": [
@@ -100,14 +100,14 @@
       "version": "1.1.15",
       "dependencies": {
         "@graphql-inspector/core": "^7.1.3",
-        "@graphql-markdown/graphql": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/graphql": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
         "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
         "@graphql-tools/load": "catalog:graphql-tools",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
     },
     "packages/docusaurus": {
@@ -115,15 +115,15 @@
       "version": "1.35.0",
       "dependencies": {
         "@docusaurus/utils": "catalog:docusaurus",
-        "@graphql-markdown/cli": "workspace:^",
-        "@graphql-markdown/formatters": "workspace:^",
-        "@graphql-markdown/logger": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/cli": "workspace:",
+        "@graphql-markdown/formatters": "workspace:",
+        "@graphql-markdown/logger": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
       },
       "devDependencies": {
         "@docusaurus/types": "catalog:docusaurus",
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
       "peerDependencies": {
         "@docusaurus/logger": "catalog:docusaurus",
@@ -133,24 +133,24 @@
       "name": "@graphql-markdown/formatters",
       "version": "1.0.0",
       "dependencies": {
-        "@graphql-markdown/helpers": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/helpers": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
     },
     "packages/graphql": {
       "name": "@graphql-markdown/graphql",
       "version": "1.2.2",
       "dependencies": {
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
         "@graphql-tools/load": "catalog:graphql-tools",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
       "peerDependencies": {
         "graphql": "catalog:",
@@ -160,12 +160,12 @@
       "name": "@graphql-markdown/helpers",
       "version": "1.1.0",
       "dependencies": {
-        "@graphql-markdown/graphql": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/graphql": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
       "peerDependencies": {
         "graphql": "catalog:",
@@ -175,24 +175,24 @@
       "name": "@graphql-markdown/logger",
       "version": "1.0.7",
       "dependencies": {
-        "@graphql-markdown/types": "workspace:^",
+        "@graphql-markdown/types": "workspace:",
       },
       "devDependencies": {
         "@docusaurus/logger": "catalog:docusaurus",
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
     },
     "packages/printer-legacy": {
       "name": "@graphql-markdown/printer-legacy",
       "version": "1.16.0",
       "dependencies": {
-        "@graphql-markdown/formatters": "workspace:^",
-        "@graphql-markdown/graphql": "workspace:^",
-        "@graphql-markdown/types": "workspace:^",
-        "@graphql-markdown/utils": "workspace:^",
+        "@graphql-markdown/formatters": "workspace:",
+        "@graphql-markdown/graphql": "workspace:",
+        "@graphql-markdown/types": "workspace:",
+        "@graphql-markdown/utils": "workspace:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
     },
     "packages/tooling-config": {
@@ -213,10 +213,10 @@
       "name": "@graphql-markdown/utils",
       "version": "1.12.0",
       "dependencies": {
-        "@graphql-markdown/types": "workspace:^",
+        "@graphql-markdown/types": "workspace:",
       },
       "devDependencies": {
-        "@graphql-markdown/tooling-config": "workspace:^",
+        "@graphql-markdown/tooling-config": "workspace:",
       },
       "peerDependencies": {
         "prettier": "catalog:",
@@ -230,7 +230,7 @@
     "lodash": "4.18.1",
   },
   "catalog": {
-    "graphql": "16.14.1",
+    "graphql": "16.14.2",
     "graphql-config": "5.1.6",
     "prettier": "3.8.3",
   },
@@ -1198,7 +1198,7 @@
 
     "eastasianwidth": ["eastasianwidth@0.2.0", "", {}, "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA=="],
 
-    "electron-to-chromium": ["electron-to-chromium@1.5.368", "", {}, "sha512-7RckJJK4uESJF9PxvfMWd3TGqIiieUTG4HxnKaKuIpGbcr+r2ZEB3g2gAhCP3Fqm42vJSzLfgab9eva/C4/XVw=="],
+    "electron-to-chromium": ["electron-to-chromium@1.5.370", "", {}, "sha512-D5tSHJReAb/Kf3Hu9F/GO4lJuSWzEWHwvQ/kKSUP7pimNgvxkSKj+gUQhHpKKACwrin7rS3byU7IxreF56rl5g=="],
 
     "emittery": ["emittery@0.13.1", "", {}, "sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ=="],
 
@@ -1438,7 +1438,7 @@
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
-    "graphql": ["graphql@16.14.1", "", {}, "sha512-cQOsSMS/IrDz82PVyRDvf/Q1F/bRbBVjJlh+xYOkI1qw2bWRvWGiWc+m2O0d6l4Bt1fyY+8kzJ8JFWGJqNeDBg=="],
+    "graphql": ["graphql@16.14.2", "", {}, "sha512-Chq1s4CY7jmh8gO2qvLIJyfCDIN+EHLFW/9iShnp1z8FjBQMoodWP1kDC36VAMXXIvAjj4ARa7ntfAV2BrjsbA=="],
 
     "graphql-config": ["graphql-config@5.1.6", "", { "dependencies": { "@graphql-tools/graphql-file-loader": "^8.0.0", "@graphql-tools/json-file-loader": "^8.0.0", "@graphql-tools/load": "^8.1.0", "@graphql-tools/merge": "^9.0.0", "@graphql-tools/url-loader": "^9.0.0", "@graphql-tools/utils": "^11.0.0", "cosmiconfig": "^8.1.0", "jiti": "^2.0.0", "minimatch": "^10.0.0", "string-env-interpolation": "^1.0.1", "tslib": "^2.4.0" }, "peerDependencies": { "cosmiconfig-toml-loader": "^1.0.0", "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0" }, "optionalPeers": ["cosmiconfig-toml-loader"] }, "sha512-fCkYnm4Kdq3un0YIM4BCZHVR5xl0UeLP6syxxO7KAstdY7QVyVvTHP0kRPDYEP1v08uwtJVgis5sj3IOTLOniQ=="],
 
@@ -2140,7 +2140,7 @@
 
     "shebang-regex": ["shebang-regex@3.0.0", "", {}, "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="],
 
-    "side-channel": ["side-channel@1.1.0", "", { "dependencies": { "es-errors": "^1.3.0", "object-inspect": "^1.13.3", "side-channel-list": "^1.0.0", "side-channel-map": "^1.0.1", "side-channel-weakmap": "^1.0.2" } }, "sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw=="],
+    "side-channel": ["side-channel@1.1.1", "", { "dependencies": { "es-errors": "^1.3.0", "object-inspect": "^1.13.4", "side-channel-list": "^1.0.1", "side-channel-map": "^1.0.1", "side-channel-weakmap": "^1.0.2" } }, "sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ=="],
 
     "side-channel-list": ["side-channel-list@1.0.1", "", { "dependencies": { "es-errors": "^1.3.0", "object-inspect": "^1.13.4" } }, "sha512-mjn/0bi/oUURjc5Xl7IaWi/OJJJumuoJFQJfDDyO46+hBWsfaVM65TBHq2eoZBhzl9EchxOijpkbRC8SVBQU0w=="],
 
