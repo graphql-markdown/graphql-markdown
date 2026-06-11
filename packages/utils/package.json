@@ -65,10 +65,10 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@graphql-markdown/types": "workspace:^"
+    "@graphql-markdown/types": "workspace:"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "peerDependencies": {
     "prettier": "catalog:"

@@ -73,18 +73,18 @@
   },
   "dependencies": {
     "@fastify/deepmerge": "^3.2.1",
-    "@graphql-markdown/graphql": "workspace:^",
-    "@graphql-markdown/logger": "workspace:^",
-    "@graphql-markdown/printer-legacy": "workspace:^",
-    "@graphql-markdown/types": "workspace:^",
-    "@graphql-markdown/utils": "workspace:^"
+    "@graphql-markdown/graphql": "workspace:",
+    "@graphql-markdown/logger": "workspace:",
+    "@graphql-markdown/printer-legacy": "workspace:",
+    "@graphql-markdown/types": "workspace:",
+    "@graphql-markdown/utils": "workspace:"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "peerDependencies": {
-    "@graphql-markdown/diff": "workspace:^",
-    "@graphql-markdown/helpers": "workspace:^",
+    "@graphql-markdown/diff": "workspace:",
+    "@graphql-markdown/helpers": "workspace:",
     "graphql-config": "catalog:"
   },
   "peerDependenciesMeta": {
