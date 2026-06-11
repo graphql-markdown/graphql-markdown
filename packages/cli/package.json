@@ -62,14 +62,14 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@graphql-markdown/core": "workspace:^",
-    "@graphql-markdown/logger": "workspace:^",
-    "@graphql-markdown/types": "workspace:^",
+    "@graphql-markdown/core": "workspace:",
+    "@graphql-markdown/logger": "workspace:",
+    "@graphql-markdown/types": "workspace:",
     "commander": "^5.1.0",
     "graphql-config": "catalog:"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "directories": {
     "test": "tests"

@@ -65,13 +65,13 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@graphql-markdown/formatters": "workspace:^",
-    "@graphql-markdown/graphql": "workspace:^",
-    "@graphql-markdown/types": "workspace:^",
-    "@graphql-markdown/utils": "workspace:^"
+    "@graphql-markdown/formatters": "workspace:",
+    "@graphql-markdown/graphql": "workspace:",
+    "@graphql-markdown/types": "workspace:",
+    "@graphql-markdown/utils": "workspace:"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "resolutions": {
     "micromatch": "4.0.8"

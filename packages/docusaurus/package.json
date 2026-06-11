@@ -74,16 +74,16 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@graphql-markdown/cli": "workspace:^",
-    "@graphql-markdown/formatters": "workspace:^",
-    "@graphql-markdown/logger": "workspace:^",
-    "@graphql-markdown/types": "workspace:^",
-    "@graphql-markdown/utils": "workspace:^",
+    "@graphql-markdown/cli": "workspace:",
+    "@graphql-markdown/formatters": "workspace:",
+    "@graphql-markdown/logger": "workspace:",
+    "@graphql-markdown/types": "workspace:",
+    "@graphql-markdown/utils": "workspace:",
     "@docusaurus/utils": "catalog:docusaurus"
   },
   "devDependencies": {
     "@docusaurus/types": "catalog:docusaurus",
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:"
   },
   "peerDependencies": {
     "@docusaurus/logger": "catalog:docusaurus"
