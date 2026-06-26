@@ -11,8 +11,11 @@ import type {
   GraphQLMarkdownCliOptions,
 } from "@graphql-markdown/types";
 
-import type { CommanderStatic } from "commander";
-import Commander from "commander";
+// Commander v15 is ESM-only; this package requires Node.js >=22.12.0 which
+// supports synchronous require(esm) natively. TypeScript's node16 module mode
+// does not model this capability, so the error is suppressed intentionally.
+// @ts-expect-error TS1378
+import { Command } from "commander";
 
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
@@ -26,7 +29,7 @@ const DEFAULT_ID = "default" as const;
  *
  * @see {@link https://graphql-markdown.dev | GraphQL Markdown Documentation}
  */
-export type GraphQLMarkdownCliType = CommanderStatic;
+export type GraphQLMarkdownCliType = Command;
 
 /**
  * Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
@@ -103,10 +106,7 @@ export const getGraphQLMarkdownCli = (
     ? DESCRIPTION
     : `${DESCRIPTION} for configuration with id ${options.id}`;
 
-  const cli: GraphQLMarkdownCliType = Commander;
-
-  const command = cli
-    .command(cmd)
+  const command = new Command(cmd)
     .description(description)
     .option("-s, --schema <schema>", "Schema location")
     .option("-r, --root <rootPath>", "Root folder for doc generation")
@@ -155,7 +155,27 @@ export const getGraphQLMarkdownCli = (
 
   command.action(async (cliOptions: CliOptions) => {
     await runGraphQLMarkdown(options, cliOptions, loggerModule);
-  }) as GraphQLMarkdownCliType;
+  });
 
-  return command as CommanderStatic;
+  // When used as a subcommand of an older commander version (e.g. Docusaurus
+  // v2/v3 ship commander v5), many v15 methods call _getCommandAndAncestors()
+  // and then access v15-only properties (_lifeCycleHooks, _checkForConflicting-
+  // LocalOptions, etc.) on each ancestor, crashing on v5 nodes. Override
+  // _getCommandAndAncestors to stop the walk at ancestors lacking _lifeCycleHooks
+  // (the marker that distinguishes a v15-initialised Command from earlier ones).
+
+  (command as unknown as Record<string, unknown>)._getCommandAndAncestors =
+    function (this: Command): Command[] {
+      const result: Command[] = [this];
+      for (
+        let parent: Command | null = this.parent;
+        parent !== null && "_lifeCycleHooks" in parent;
+        parent = parent.parent
+      ) {
+        result.push(parent);
+      }
+      return result;
+    };
+
+  return command;
 };

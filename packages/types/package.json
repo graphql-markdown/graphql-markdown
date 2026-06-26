@@ -28,6 +28,9 @@
     "graphql": "catalog:",
     "graphql-config": "catalog:"
   },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "publishConfig": {
     "access": "public"
   },

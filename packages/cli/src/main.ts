@@ -10,6 +10,8 @@
 
 import type { GraphQLExtensionDeclaration } from "@graphql-markdown/types";
 
+// Commander v15 is ESM-only; requires Node.js >=22.12.0 for synchronous require(esm).
+// @ts-expect-error TS1479
 import { Command } from "commander";
 import { loadConfig } from "graphql-config";
 
