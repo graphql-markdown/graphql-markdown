@@ -157,5 +157,20 @@ export const getGraphQLMarkdownCli = (
     await runGraphQLMarkdown(options, cliOptions, loggerModule);
   });
 
+  // When used as a subcommand of an older commander version (e.g. Docusaurus
+  // v2/v3 ship commander v5), _checkForConflictingOptions walks the ancestor
+  // chain via _getCommandAndAncestors and calls _checkForConflictingLocalOptions
+  // on each node. Ancestors from commander v5 do not have that method, causing
+  // a TypeError at parse time. Override to guard the walk.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (command as any)._checkForConflictingOptions = function () {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    for (let cmd: any = this; cmd; cmd = cmd.parent) {
+      if (typeof cmd._checkForConflictingLocalOptions === "function") {
+        cmd._checkForConflictingLocalOptions();
+      }
+    }
+  };
+
   return command;
 };
