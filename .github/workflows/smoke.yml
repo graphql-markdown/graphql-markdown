@@ -38,7 +38,7 @@ jobs:
       SMOKE_TARGET: smoke-docusaurus-run
     steps:
       - name: Install earthly
-        uses: earthly/actions-setup@v1
+        uses: earthly/actions-setup@43211c7a0eae5344d6d79fb4aaf209c8f8866203 # v1.0.13
         with:
           version: latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
       SMOKE_TARGET: smoke-cli-test
     steps:
       - name: Install earthly
-        uses: earthly/actions-setup@v1
+        uses: earthly/actions-setup@43211c7a0eae5344d6d79fb4aaf209c8f8866203 # v1.0.13
         with:
           version: latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
