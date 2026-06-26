@@ -158,18 +158,19 @@ export const getGraphQLMarkdownCli = (
   });
 
   // When used as a subcommand of an older commander version (e.g. Docusaurus
-  // v2/v3 ship commander v5), _checkForConflictingOptions walks the ancestor
-  // chain via _getCommandAndAncestors and calls _checkForConflictingLocalOptions
-  // on each node. Ancestors from commander v5 do not have that method, causing
-  // a TypeError at parse time. Override to guard the walk.
+  // v2/v3 ship commander v5), many v15 methods call _getCommandAndAncestors()
+  // and then access v15-only properties (_lifeCycleHooks, _checkForConflicting-
+  // LocalOptions, etc.) on each ancestor, crashing on v5 nodes. Override
+  // _getCommandAndAncestors to stop the walk at ancestors lacking _lifeCycleHooks
+  // (the marker that distinguishes a v15-initialised Command from earlier ones).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (command as any)._checkForConflictingOptions = function () {
+  (command as any)._getCommandAndAncestors = function () {
+    const result = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    for (let cmd: any = this; cmd; cmd = cmd.parent) {
-      if (typeof cmd._checkForConflictingLocalOptions === "function") {
-        cmd._checkForConflictingLocalOptions();
-      }
+    for (let cmd: any = this; cmd && cmd._lifeCycleHooks !== undefined; cmd = cmd.parent) {
+      result.push(cmd);
     }
+    return result;
   };
 
   return command;
