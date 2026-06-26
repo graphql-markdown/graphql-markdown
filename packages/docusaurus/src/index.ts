@@ -43,6 +43,9 @@ export default async function pluginGraphQLDocGenerator(
      * @returns void
      */
     extendCli(cli): void {
+      // @graphql-markdown/cli uses commander v15; @docusaurus/types types extendCli
+      // with commander v5's Command. The two are structurally compatible at runtime
+      // but TypeScript sees them as different types due to dual-version resolution.
       cli.addCommand(
         getGraphQLMarkdownCli(
           {
@@ -55,7 +58,7 @@ export default async function pluginGraphQLDocGenerator(
           },
           LOGGER_MODULE,
           options.formatter ?? options.mdxParser ?? MDX_PACKAGE, // NOSONAR typescript:S1874
-        ),
+        ) as unknown as Parameters<typeof cli.addCommand>[0],
       );
     },
   };
