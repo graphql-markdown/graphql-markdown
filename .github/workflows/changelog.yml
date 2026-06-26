@@ -19,6 +19,7 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.BOT_PAT }}
+          persist-credentials: false
 
       - uses: rhysd/changelog-from-release/action@78b335bb7d059f35ad04c5428d50711726feee50 # v3
         with:
