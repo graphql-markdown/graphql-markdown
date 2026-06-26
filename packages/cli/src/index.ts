@@ -166,13 +166,13 @@ export const getGraphQLMarkdownCli = (
 
   (command as unknown as Record<string, unknown>)._getCommandAndAncestors =
     function (this: Command): Command[] {
-      const result: Command[] = [];
+      const result: Command[] = [this];
       for (
-        let cmd: Command | null = this;
-        cmd !== null && "_lifeCycleHooks" in cmd;
-        cmd = cmd.parent
+        let parent: Command | null = this.parent;
+        parent !== null && "_lifeCycleHooks" in parent;
+        parent = parent.parent
       ) {
-        result.push(cmd);
+        result.push(parent);
       }
       return result;
     };
