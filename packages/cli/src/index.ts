@@ -163,15 +163,19 @@ export const getGraphQLMarkdownCli = (
   // LocalOptions, etc.) on each ancestor, crashing on v5 nodes. Override
   // _getCommandAndAncestors to stop the walk at ancestors lacking _lifeCycleHooks
   // (the marker that distinguishes a v15-initialised Command from earlier ones).
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (command as any)._getCommandAndAncestors = function () {
-    const result = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    for (let cmd: any = this; cmd && cmd._lifeCycleHooks !== undefined; cmd = cmd.parent) {
-      result.push(cmd);
-    }
-    return result;
-  };
+
+  (command as unknown as Record<string, unknown>)._getCommandAndAncestors =
+    function (this: Command): Command[] {
+      const result: Command[] = [];
+      for (
+        let cmd: Command | null = this;
+        cmd !== null && "_lifeCycleHooks" in cmd;
+        cmd = cmd.parent
+      ) {
+        result.push(cmd);
+      }
+      return result;
+    };
 
   return command;
 };
