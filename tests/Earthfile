@@ -30,18 +30,6 @@ smoke-cli-test:
   COPY ./e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs ./graphql.config.mjs
   DO +SMOKE_TEST --package=cli
 
-# TODO: remove this step when mdxParser is removed from the codebase
-smoke-cli-deprecated-formatter-test:
-  FROM root+setup-cli-project
-  WORKDIR /$gqlmdCliProject
-  COPY root+assets/data ./data
-  COPY ./e2e/__data__/config-default.mjs ./config-default.mjs
-  COPY ./e2e/helpers/cli.mjs ./__tests__/helpers/cli.mjs
-  COPY ./e2e/cli/__data__/graphql-doc-generator-deprecated-formatter.config.mjs ./graphql.config.mjs
-  COPY ./e2e/cli/__deprecated__/specs/deprecated-formatter.spec.mjs ./__tests__/e2e/specs/deprecated-formatter.spec.mjs
-  COPY ./e2e/cli/jest.config.mjs ./jest.config.mjs
-  RUN NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx --yes jest --runInBand --config ./jest.config.mjs --testPathPatterns "deprecated-formatter"
-
 # --- UDCs (localized to e2e) ---
 
 SMOKE_TEST:

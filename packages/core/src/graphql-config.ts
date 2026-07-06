@@ -91,9 +91,6 @@ const DEFAULT_THROW_OPTIONS: ThrowOptions = {
  * // Result: loaders with { baseDir: "./src", outputDir: "./docs" }
  * ```
  */
-// Exported so tests can jest.spyOn via namespace import; fallow can't trace
-// dynamic spy interception and production: true excludes the test callers.
-// fallow-ignore-next-line unused-export
 export const setLoaderOptions = (
   loaders: LoaderOption,
   options: PackageOptionsConfig,

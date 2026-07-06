@@ -80,6 +80,3 @@ jobs:
         env:
           EARTHLY_NO_CACHE: true
 
-      # TODO: remove this step when mdxParser is removed from the codebase
-      - name: Run CLI Deprecated Formatter Smoke Tests
-        run: earthly --ci "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+smoke-cli-deprecated-formatter-test"
