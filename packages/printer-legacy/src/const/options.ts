@@ -22,6 +22,8 @@ import {
 
 export enum TypeHierarchy {
   API = "api",
+  // Used only by unit tests for direct whitebox coverage.
+  // fallow-ignore-next-line unused-enum-member
   ENTITY = "entity",
   FLAT = "flat",
 }
@@ -30,6 +32,8 @@ export enum SectionLevels {
   /**
    * @deprecated Use `SectionLevels.LEVEL` instead.
    */
+  // Reserved for future usage.
+  // fallow-ignore-next-line unused-enum-member
   NONE = "",
   LEVEL = "#",
 }

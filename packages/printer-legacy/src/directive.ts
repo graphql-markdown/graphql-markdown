@@ -54,6 +54,8 @@ export const getCustomDirectiveResolver = (
  * @param options - General printing options
  * @returns Formatted Markdown string for the directive or `undefined`
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
@@ -122,6 +124,8 @@ export const printCustomDirectives = (
  * @param options - General printing options
  * @returns Array of badge configurations from directive tags
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
