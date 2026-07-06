@@ -34,6 +34,12 @@
   //   eslint-import-resolver-typescript — ESLint import/resolver setting
   //   jest-environment-node           — jest testEnvironment: "node"
   //   typedoc-docusaurus-theme        — TypeDoc plugin string in typedoc config
+  //
+  // diff, lodash.filter are used only by dangerfile.js (Danger CI tooling). dangerfile.js is
+  // declared above as an `entry` point so fallow doesn't flag it as an unused file, but that
+  // makes it "reachable production code" and flags these dev-only deps as
+  // dev-dependencies-in-production. The root package.json is private with no `dependencies`
+  // field and is never installed with `--prod`, so this is a false positive.
   "ignoreDependencies": [
     "@graphql-markdown/cli",
     "@graphql-markdown/core",
@@ -51,7 +57,9 @@
     "cz-emoji",
     "eslint-import-resolver-typescript",
     "jest-environment-node",
-    "typedoc-docusaurus-theme"
+    "typedoc-docusaurus-theme",
+    "diff",
+    "lodash.filter"
   ],
 
   // Class member false-positive suppressions.
