@@ -3,13 +3,16 @@
 
   // Files loaded implicitly by CI tooling or TypeDoc — not imported statically
   // but still needed. Declaring them as entry points silences unused-file
-  // false positives. (Test files are excluded by production: true; stryker and
-  // danger configs are dev tooling so they must be declared explicitly.)
+  // false positives. Stryker and danger configs are dev tooling so they must
+  // be declared explicitly. E2e specs are run via Earthfile (outside jest plugin
+  // detection range) so they are declared here too.
   "entry": [
     "dangerfile.js",
     "**/stryker.conf.mjs",
     "packages/tooling-config/scripts/**",
-    "packages/tooling-config/typedoc/**"
+    "packages/tooling-config/typedoc/**",
+    "tests/e2e/*/specs/*.spec.mjs",
+    "tests/e2e/helpers/**"
   ],
 
   // website/ is a Docusaurus app outside the packages/* workspace —
@@ -23,6 +26,13 @@
   // unresolvable, making the packages look unused. Marking them as always-
   // available suppresses the false positives without hiding real issues in
   // external dependencies.
+  //
+  // The four non-workspace entries below are used via config strings, not
+  // import statements, so fallow cannot trace them:
+  //   cz-emoji                        — commitizen adapter (config.commitizen.path)
+  //   eslint-import-resolver-typescript — ESLint import/resolver setting
+  //   jest-environment-node           — jest testEnvironment: "node"
+  //   typedoc-docusaurus-theme        — TypeDoc plugin string in typedoc config
   "ignoreDependencies": [
     "@graphql-markdown/cli",
     "@graphql-markdown/core",
@@ -35,7 +45,11 @@
     "@graphql-markdown/printer-legacy",
     "@graphql-markdown/tooling-config",
     "@graphql-markdown/types",
-    "@graphql-markdown/utils"
+    "@graphql-markdown/utils",
+    "cz-emoji",
+    "eslint-import-resolver-typescript",
+    "jest-environment-node",
+    "typedoc-docusaurus-theme"
   ],
 
   // Class member false-positive suppressions.
@@ -71,9 +85,7 @@
     "build"
   ],
 
-  // Restrict dead-code and duplication analysis to production source files only.
-  // Test files are excluded — their repeated mock-setup patterns are intentional.
-  "production": true,
+  "production": false,
 
   "duplicates": {
     // mild is the default; raising minLines reduces formatter-preset noise
@@ -87,37 +99,8 @@
   },
 
   "rules": {
-    // Keep everything that matters at error so CI can gate on it.
     // unlisted-dependencies: tooling-config's ESLint/TypeDoc plugins are used
     //   transitively across all packages but listed only in tooling-config.
-    // unused-dev-dependencies is superseded by production: true (dev deps are
-    //   not reported in production mode).
     "unlisted-dependencies": "warn"
-  },
-
-
-  // These source files export internal implementation details so unit tests can
-  // import and exercise them directly (or spy on them via jest.spyOn). With
-  // production: true the test callers are excluded, making these exports appear
-  // unused. Downgrade to warn so the findings remain visible without blocking CI.
-  "overrides": [
-    {
-      "files": [
-        "packages/core/src/config.ts",
-        "packages/core/src/directives/validation.ts",
-        "packages/core/src/generator.ts",
-        "packages/core/src/graphql-config.ts",
-        "packages/core/src/renderer.ts",
-        "packages/printer-legacy/src/badge.ts",
-        "packages/printer-legacy/src/common.ts",
-        "packages/printer-legacy/src/directive.ts",
-        "packages/printer-legacy/src/example.ts",
-        "packages/printer-legacy/src/graphql/scalar.ts",
-        "packages/printer-legacy/src/link.ts",
-        "packages/printer-legacy/src/relation.ts",
-        "packages/printer-legacy/src/section.ts"
-      ],
-      "rules": { "unused-exports": "warn" }
-    }
-  ]
+  }
 }
