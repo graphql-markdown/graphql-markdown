@@ -27,8 +27,9 @@
   // available suppresses the false positives without hiding real issues in
   // external dependencies.
   //
-  // The four non-workspace entries below are used via config strings, not
-  // import statements, so fallow cannot trace them:
+  // The entries below are used via dynamic import strings or config strings,
+  // not static import statements, so fallow cannot trace them:
+  //   @docusaurus/logger              — dynamically imported in logger tests via import(moduleName)
   //   cz-emoji                        — commitizen adapter (config.commitizen.path)
   //   eslint-import-resolver-typescript — ESLint import/resolver setting
   //   jest-environment-node           — jest testEnvironment: "node"
@@ -46,6 +47,7 @@
     "@graphql-markdown/tooling-config",
     "@graphql-markdown/types",
     "@graphql-markdown/utils",
+    "@docusaurus/logger",
     "cz-emoji",
     "eslint-import-resolver-typescript",
     "jest-environment-node",
