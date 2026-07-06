@@ -43,6 +43,8 @@ const EXTENSION_NAME = "graphql-markdown" as const;
  * });
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as const;
 };
@@ -91,6 +93,8 @@ const DEFAULT_THROW_OPTIONS: ThrowOptions = {
  * // Result: loaders with { baseDir: "./src", outputDir: "./docs" }
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const setLoaderOptions = (
   loaders: LoaderOption,
   options: PackageOptionsConfig,

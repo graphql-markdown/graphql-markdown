@@ -208,6 +208,8 @@ export const DEFAULT_OPTIONS: Readonly<
  * getDocDirective("example"); // Error: Invalid "example"
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getDocDirective = (name: Maybe<DirectiveName>): DirectiveName => {
   if (typeof name !== "string" || !PATTERNS.DIRECTIVE_NAME.test(name)) {
     throw new Error(`Invalid "${name}"`);
@@ -383,6 +385,8 @@ export const getVisibilityDirectives = (
  * ```
  * @see {@link DOCS_URL}/advanced/custom-directive for custom directive format documentation
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getCustomDirectives = (
   customDirectiveOptions: Maybe<CustomDirective>,
   skipDocDirective?: Maybe<DirectiveName[]>,
@@ -428,6 +432,8 @@ export const getCustomDirectives = (
  * ```
  * @see {@link DiffMethod} for available diff methods
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getForcedDiffMethod = (): TypeDiffMethod => {
   return DiffMethod.FORCE;
 };
@@ -436,10 +442,14 @@ const getNormalizedDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
   return diff.toLocaleUpperCase() as TypeDiffMethod;
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
   return getNormalizedDiffMethod(diff);
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const parseDeprecatedDocOptions = (
   _cliOpts?: Maybe<CliOptions>,
   _configOptions?: Maybe<ConfigDocOptions>,
@@ -467,6 +477,8 @@ export const parseDeprecatedDocOptions = (
  * // }
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getDocOptions = (
   cliOpts?: Maybe<CliOptions>,
   configOptions?: Maybe<ConfigDocOptions>,
@@ -518,6 +530,8 @@ export const getDocOptions = (
  * ```
  * @see {@link TypeHierarchy} for available hierarchy types
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getTypeHierarchyOption = (
   cliOption?: Maybe<TypeHierarchyValueType>,
   configOption?: Maybe<TypeHierarchyType>,
@@ -562,6 +576,8 @@ export const getTypeHierarchyOption = (
   return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const parseDeprecatedFormatterOption = (
   cliOpts?: Maybe<CliOptions>,
   configOptions?: Maybe<ConfigOptions>,
@@ -582,6 +598,8 @@ export const parseDeprecatedFormatterOption = (
   );
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const parseDeprecatedPrintTypeOptions = (
   _cliOpts?: Maybe<CliOptions>,
   _configOptions?: Maybe<ConfigPrintTypeOptions>,
@@ -670,6 +688,8 @@ const getPrintTypeOptions = (
  * // Error: Invalid "invalid-format"
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const parseGroupByOption = (
   groupOptions: unknown,
 ): Maybe<GroupByDirectiveOptions> => {
@@ -690,6 +710,8 @@ export const parseGroupByOption = (
   } as GroupByDirectiveOptions;
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const parseHomepageOption = (
   cliHomepage: Maybe<string | false>,
   configHomepage: Maybe<string | false>,

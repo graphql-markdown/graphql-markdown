@@ -30,6 +30,8 @@ import { getCustomDirectiveResolver } from "./directive";
  * @param options - Printer configuration options
  * @returns Formatted directive documentation string
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getCustomDirectivesText = (
   type: unknown,
   options?: PrintTypeOptions,
@@ -90,6 +92,8 @@ const formatDescription = (
  * @param options - Configuration options for printing
  * @returns Formatted warning message as MDX string
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const printWarning = (
   { text, title }: { text?: string; title?: string },
   options: PrintTypeOptions,
@@ -111,6 +115,8 @@ export const printWarning = (
  * @param options - Configuration options for printing
  * @returns Formatted deprecation warning as MDX string, or empty string if not deprecated
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const printDeprecation = (
   type: unknown,
   options: PrintTypeOptions,

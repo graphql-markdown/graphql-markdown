@@ -41,6 +41,8 @@ export const CSS_BADGE_CLASSNAME = {
  * @param groups - Optional map of schema entities to their groups
  * @returns Array of Badge objects containing text and optional classnames
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getTypeBadges = (
   type: unknown,
   groups?: Maybe<SchemaEntitiesGroupMap>,

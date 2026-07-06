@@ -36,6 +36,8 @@ const isTypeObject = (
  * }
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const hasDescriptor = (
   config: unknown,
 ): config is Record<"descriptor", (...args: unknown[]) => unknown> => {
@@ -62,6 +64,8 @@ export const hasDescriptor = (
  * }
  * ```
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const hasTag = (
   config: unknown,
 ): config is Record<"tag", (...args: unknown[]) => unknown> => {

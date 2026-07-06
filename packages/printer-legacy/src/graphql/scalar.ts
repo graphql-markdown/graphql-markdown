@@ -16,6 +16,8 @@ import { getTypeName } from "@graphql-markdown/graphql";
  * @param options - Options for printing type information
  * @returns A specification PageSection, or undefined when no URL exists
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const printSpecification = (
   type: unknown,
   options: PrintTypeOptions,

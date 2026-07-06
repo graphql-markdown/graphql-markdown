@@ -48,6 +48,8 @@ import { getGroup } from "./group";
 import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
 import { TypeHierarchy } from "./const/options";
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
   types: "types",
@@ -128,6 +130,8 @@ export const getCategoryLocale = (type: unknown): Maybe<TypeLocale> => {
  * @param operationLocale - The locale of the operation
  * @returns The folder name for the link category, or `undefined` if not found
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getLinkCategoryFolder = (
   type: unknown,
   operationLocale?: Maybe<TypeLocale>,
@@ -159,6 +163,8 @@ export const getLinkCategoryFolder = (
  * @param options - The options to check
  * @returns `true` if the options include `withAttributes`, `false` otherwise
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
   return "withAttributes" in options && options.withAttributes === true;
 };
@@ -169,6 +175,8 @@ export const hasOptionWithAttributes = (options: PrintLinkOptions): boolean => {
  * @param options - The options to check
  * @returns `true` if the options include `parentTypePrefix`, `false` otherwise
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
   return (
     "parentTypePrefix" in options &&
@@ -185,6 +193,8 @@ export const hasOptionParentType = (options: PrintLinkOptions): boolean => {
  * @param groups - The group options
  * @returns The folder name for the API group
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const getLinkApiGroupFolder = (
   type: unknown,
   groups?: Maybe<ApiGroupOverrideType | boolean>,
@@ -346,6 +356,8 @@ export const getRelationLink = (
  * @param text - The text to append attributes to
  * @returns The text with appended attributes
  */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// fallow-ignore-next-line unused-export
 export const printLinkAttributes = (
   type: unknown,
   text: Maybe<string> = "",
