@@ -57,7 +57,9 @@ jobs:
 
       - name: Push changes to website repo
         run: |
-          cp -Rf ${{ env.SOURCE_DIR }}/website/build/** ${{ env.TARGET_DIR }}/
+          # Copy the build output including dotfiles (e.g. .nojekyll, which keeps
+          # GitHub Pages from running Jekyll and stripping Docusaurus _-prefixed assets).
+          cp -Rf "${{ env.SOURCE_DIR }}/website/build/." "${{ env.TARGET_DIR }}/"
           cd ${{ env.TARGET_DIR }}
           git add --all
           git commit -am ":memo: update documentation ($GITHUB_SHA)"
