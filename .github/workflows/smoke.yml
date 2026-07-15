@@ -16,6 +16,7 @@ on:
       - "config/**/*"
       - "*.json"
       - "*.mjs"
+      - ".github/actions/**/*"
       - ".github/scripts/**/*"
       - ".github/workflows/smoke.yml"
 
@@ -24,39 +25,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  smoke-docusaurus:
-    name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }}
+  smoke-docusaurus-test:
+    name: Docusaurus ${{ matrix.docusaurus }} smoke tests
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     strategy:
       fail-fast: false
       matrix:
         docusaurus: [2, 3]
-    env:
-      REPO_ROOT: ${{ github.workspace }}
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - name: Setup environment
-        uses: ./.github/actions/setup
-
-      - name: Compute scratch paths
-        run: |
-          # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
-          PROJECT_DIR="$RUNNER_TEMP/docusaurus-gqlmd"
-          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          echo "E2E_ROOT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
-
-      - name: Build workspace packages
-        run: bun run build
-
-      - name: Pack workspace packages
-        run: .github/scripts/pack-packages.sh "$PKG_DIR"
-
-      - name: Scaffold Docusaurus project and install graphql-markdown
-        run: .github/scripts/setup-docusaurus-project.sh "${{ matrix.docusaurus }}" "$PROJECT_DIR" "$PKG_DIR"
+      - name: Scaffold Docusaurus project
+        uses: ./.github/actions/scaffold-docusaurus
+        with:
+          docusaurus-version: ${{ matrix.docusaurus }}
 
       - name: Install e2e webpack test plugin
         working-directory: ${{ env.PROJECT_DIR }}
@@ -65,39 +49,40 @@ jobs:
       - name: Run Docusaurus Smoke Tests
         run: .github/scripts/e2e/smoke-test.sh docusaurus "$PROJECT_DIR"
 
-      - name: Docusaurus Production Smoke Build without parameters and local schema
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          rm -rf docs
-          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
-          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/gqlmd.sh"
-          bun run build
-          bun run clear
+  smoke-docusaurus-build:
+    name: Docusaurus ${{ matrix.docusaurus }} build (${{ matrix.case.name }})
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    strategy:
+      fail-fast: false
+      matrix:
+        docusaurus: [2, 3]
+        case:
+          - name: local schema, no options
+            options: ""
+          - name: remote schema with parameters
+            options: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
+          - name: groupByDirective option
+            options: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - name: Docusaurus Production Smoke Build with parameters and remote schema
+      - name: Scaffold Docusaurus project
+        uses: ./.github/actions/scaffold-docusaurus
+        with:
+          docusaurus-version: ${{ matrix.docusaurus }}
+
+      - name: Docusaurus Production Smoke Build
         working-directory: ${{ env.PROJECT_DIR }}
+        env:
+          OPTIONS: ${{ matrix.case.options }}
         run: |
-          rm -rf docs
           cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
           cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
           "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
           bun run build
           bun run clear
-        env:
-          OPTIONS: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
-
-      - name: Docusaurus Production Smoke Build with groupByDirective option
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          rm -rf docs
-          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
-          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
-          bun run build
-          bun run clear
-        env:
-          OPTIONS: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
 
   smoke-cli:
     name: Smoke Tests on CLI
@@ -115,10 +100,11 @@ jobs:
       - name: Compute scratch paths
         run: |
           # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
-          PROJECT_DIR="$RUNNER_TEMP/cli-gqlmd"
-          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          echo "E2E_ROOT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
+          {
+            echo "PROJECT_DIR=$RUNNER_TEMP/cli-gqlmd"
+            echo "E2E_ROOT_DIR=$RUNNER_TEMP/cli-gqlmd"
+            echo "PKG_DIR=$RUNNER_TEMP/pkgs"
+          } >> "$GITHUB_ENV"
 
       - name: Build workspace packages
         run: bun run build

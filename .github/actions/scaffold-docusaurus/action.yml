@@ -1,0 +1,39 @@
+name: Scaffold Docusaurus smoke project
+description: >-
+  Build and pack the workspace packages, then scaffold a throwaway Docusaurus
+  project with the locally-built graphql-markdown packages installed. Exports
+  REPO_ROOT, PROJECT_DIR, E2E_ROOT_DIR and PKG_DIR for later steps.
+
+inputs:
+  docusaurus-version:
+    description: Docusaurus major version to scaffold (e.g. 2 or 3)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup environment
+      uses: ./.github/actions/setup
+
+    - name: Compute scratch paths
+      shell: bash
+      run: |
+        # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
+        {
+          echo "REPO_ROOT=$GITHUB_WORKSPACE"
+          echo "PROJECT_DIR=$RUNNER_TEMP/docusaurus-gqlmd"
+          echo "E2E_ROOT_DIR=$RUNNER_TEMP/docusaurus-gqlmd"
+          echo "PKG_DIR=$RUNNER_TEMP/pkgs"
+        } >> "$GITHUB_ENV"
+
+    - name: Build workspace packages
+      shell: bash
+      run: bun run build
+
+    - name: Pack workspace packages
+      shell: bash
+      run: .github/scripts/pack-packages.sh "$PKG_DIR"
+
+    - name: Scaffold Docusaurus project and install graphql-markdown
+      shell: bash
+      run: .github/scripts/setup-docusaurus-project.sh "${{ inputs.docusaurus-version }}" "$PROJECT_DIR" "$PKG_DIR"
