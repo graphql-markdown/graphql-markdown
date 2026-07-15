@@ -1,5 +1,5 @@
 name: Setup environment
-description: Install Node.js, Bun 1.3.2, and project dependencies
+description: Install Node.js, Bun 1.3.14, and project dependencies
 
 inputs:
   working-directory:
