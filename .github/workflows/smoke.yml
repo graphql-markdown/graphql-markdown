@@ -41,7 +41,7 @@ jobs:
         run: bun run build
 
       - name: Pack workspace packages
-        run: .github/scripts/pack-packages.sh "$RUNNER_TEMP/pkgs"
+        run: node .github/scripts/pack-packages.mjs "$RUNNER_TEMP/pkgs"
 
       - name: Upload package tarballs
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

@@ -17,7 +17,7 @@ mkdir -p "$WORK_DIR"
 
 echo "::group::Build workspace packages"
 (cd "$REPO_ROOT" && bun run build)
-"$SHARED_DIR/pack-packages.sh" "$PKG_DIR"
+node "$SHARED_DIR/pack-packages.mjs" "$PKG_DIR"
 echo "::endgroup::"
 
 echo "::group::Build API docs"

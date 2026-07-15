@@ -37,7 +37,7 @@ mkdir -p static src
 cp -R "$REPO_ROOT/website/static/img" ./static/img
 cp -R "$REPO_ROOT/website/src/css" ./src/css
 
-"$SCRIPT_DIR/install-gqlmd.sh" "$PKG_DIR"
+node "$SCRIPT_DIR/install-gqlmd.mjs" "$PKG_DIR"
 "$SCRIPT_DIR/install-graphql.sh"
 npm install --save "$PKG_DIR/graphql-markdown-cli.tgz" "$PKG_DIR/graphql-markdown-docusaurus.tgz"
 

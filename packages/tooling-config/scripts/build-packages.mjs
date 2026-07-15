@@ -1,11 +1,13 @@
 // @ts-check
 
+import { pathToFileURL } from "node:url";
+
 import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mjs";
 
 const orgName = "@graphql-markdown";
-const packagesMap = getWorkspacePackagesMap();
 
 const getBuildDependency = () => {
+  const packagesMap = getWorkspacePackagesMap();
   /**
    * @type {string[]}
    */
@@ -49,6 +51,23 @@ const getBuildDependency = () => {
   return buildSequence;
 };
 
-for (const packageName of getBuildDependency()) {
-  console.log(packageName.slice(orgName.length + 1));
+/**
+ * Publishable workspace package short names (org prefix stripped), ordered so
+ * each package's `@graphql-markdown/*` dependencies are built before it.
+ * @returns {string[]}
+ */
+const getBuildSequence = () => {
+  return getBuildDependency().map((packageName) => {
+    return packageName.slice(orgName.length + 1);
+  });
+};
+
+export { getBuildSequence };
+
+// When run directly (`node build-packages.mjs`), print one package name per line
+// so shell tooling can consume the build order.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  for (const packageName of getBuildSequence()) {
+    console.log(packageName);
+  }
 }

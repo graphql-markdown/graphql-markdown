@@ -14,6 +14,6 @@ SHARED_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mkdir -p "$PROJECT_DIR"
 cd "$PROJECT_DIR"
 
-"$SHARED_DIR/install-gqlmd.sh" "$PKG_DIR"
+node "$SHARED_DIR/install-gqlmd.mjs" "$PKG_DIR"
 "$SHARED_DIR/install-graphql.sh"
 npm install --save "$PKG_DIR/graphql-markdown-cli.tgz"
