@@ -77,13 +77,7 @@ jobs:
       - name: Docusaurus Production Smoke Build
         env:
           OPTIONS: ${{ matrix.case.options }}
-        run: |
-          cd "$PROJECT_DIR"
-          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
-          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
-          bun run build
-          bun run clear
+        run: .github/scripts/e2e/smoke-build.sh docusaurus "$PROJECT_DIR"
 
   smoke-cli:
     name: Smoke Tests on CLI
