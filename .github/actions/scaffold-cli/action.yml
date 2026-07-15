@@ -1,0 +1,34 @@
+name: Scaffold CLI smoke project
+description: >-
+  Build and pack the workspace packages, then scaffold a throwaway CLI project
+  with the locally-built graphql-markdown packages installed. Exports
+  PROJECT_DIR and PKG_DIR for later steps (REPO_ROOT comes from the caller
+  workflow's top-level env).
+
+runs:
+  using: composite
+  steps:
+    - name: Setup environment
+      uses: ./.github/actions/setup
+
+    - name: Compute scratch paths
+      shell: bash
+      run: |
+        # PROJECT_DIR is read by the jest e2e config as __ROOT_DIR__.
+        # REPO_ROOT is provided by the caller workflow's top-level env.
+        {
+          echo "PROJECT_DIR=$RUNNER_TEMP/cli-gqlmd"
+          echo "PKG_DIR=$RUNNER_TEMP/pkgs"
+        } >> "$GITHUB_ENV"
+
+    - name: Build workspace packages
+      shell: bash
+      run: bun run build
+
+    - name: Pack workspace packages
+      shell: bash
+      run: .github/scripts/pack-packages.sh "$PKG_DIR"
+
+    - name: Scaffold CLI project and install graphql-markdown
+      shell: bash
+      run: .github/scripts/e2e/setup-cli-project.sh "$PROJECT_DIR" "$PKG_DIR"
