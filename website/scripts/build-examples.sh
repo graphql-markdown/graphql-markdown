@@ -12,8 +12,7 @@ GQLMD="$REPO_ROOT/.github/scripts/gqlmd.sh"
 
 cd "$PROJECT_DIR"
 npm install --save prettier
-cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
-cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
+"$REPO_ROOT/.github/scripts/e2e/copy-e2e-data.sh" docusaurus
 
 mkdir -p examples
 

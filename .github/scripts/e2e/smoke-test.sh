@@ -9,11 +9,10 @@ PROJECT_DIR="${2:?usage: smoke-test.sh <docusaurus|cli> <project-dir>}"
 
 cd "$PROJECT_DIR"
 
-mkdir -p data __tests__/helpers __tests__/e2e
-cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
+mkdir -p __tests__/helpers __tests__/e2e
+"$REPO_ROOT/.github/scripts/e2e/copy-e2e-data.sh" "$PACKAGE"
 cp "$REPO_ROOT/tests/e2e/__data__/.graphqlrc" ./.graphqlrc
 cp "$REPO_ROOT/tests/e2e/helpers/cli.mjs" ./__tests__/helpers/cli.mjs
-cp -R "$REPO_ROOT/tests/e2e/$PACKAGE/__data__/." ./data/
 rm -rf ./__tests__/e2e/specs
 cp -R "$REPO_ROOT/tests/e2e/$PACKAGE/specs" ./__tests__/e2e/specs
 cp "$REPO_ROOT/tests/e2e/$PACKAGE/jest.config.mjs" ./jest.config.mjs
