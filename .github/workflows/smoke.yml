@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   smoke-docusaurus-test:
-    name: Docusaurus ${{ matrix.docusaurus }} smoke tests
+    name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }}
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     strategy:
@@ -50,7 +50,7 @@ jobs:
         run: .github/scripts/e2e/smoke-test.sh docusaurus "$PROJECT_DIR"
 
   smoke-docusaurus-build:
-    name: Docusaurus ${{ matrix.docusaurus }} build (${{ matrix.case.name }})
+    name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }} build (${{ matrix.case.name }})
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     strategy:
