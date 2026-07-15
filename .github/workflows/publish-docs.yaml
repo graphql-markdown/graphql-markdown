@@ -5,6 +5,9 @@ run-name: >-
     || format('Publish docs release {0}', github.event.release.name)
   }}
 
+env:
+  HUSKY: 0
+
 on:
   workflow_dispatch:
   release:
@@ -22,17 +25,7 @@ jobs:
       SOURCE_DIR: project
       TARGET_DIR: website
       DOCUSAURUS_VERSION: 3
-      EARTHLY_TARGET: ./website+build-docs
     steps:
-      - name: Install Earthly
-        uses: earthly/actions-setup@v1
-        with:
-          version: latest
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Docker login # to avoid dockerhub rate-limiting
-        run: docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
-
       - name: Setup git
         run: |
           git config --global user.name "GraphQL-Markdown bot"
@@ -51,10 +44,16 @@ jobs:
           path: ${{ env.TARGET_DIR }}
           token: ${{ secrets.BOT_PAT }}
 
+      - name: Setup environment
+        uses: ./project/.github/actions/setup
+        with:
+          working-directory: ${{ env.SOURCE_DIR }}
+
       - name: Build docs
-        run: |
-          cd ${{ env.SOURCE_DIR }}
-          earthly --build-arg "docusaurusVersion=${{ env.DOCUSAURUS_VERSION }}" "${{ env.EARTHLY_TARGET }}"
+        run: ./.github/scripts/e2e/build-docs.sh "$DOCUSAURUS_VERSION" "$RUNNER_TEMP/docs-build"
+        working-directory: ${{ env.SOURCE_DIR }}
+        env:
+          REPO_ROOT: ${{ github.workspace }}/${{ env.SOURCE_DIR }}
 
       - name: Push changes to website repo
         run: |

@@ -1,6 +1,12 @@
 name: Setup environment
 description: Install Node.js, Bun 1.3.2, and project dependencies
 
+inputs:
+  working-directory:
+    description: Directory containing the package.json to install
+    required: false
+    default: "."
+
 runs:
   using: composite
   steps:
@@ -20,4 +26,5 @@ runs:
 
     - name: Install modules
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: bun ci

@@ -2,7 +2,6 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
-    "earthly.earthfile-syntax-highlighting",
     "knisterpeter.vscode-commitizen",
     "snyk-security.snyk-vulnerability-scanner",
     "graphql.vscode-graphql",

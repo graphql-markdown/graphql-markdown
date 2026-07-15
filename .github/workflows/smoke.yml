@@ -2,8 +2,6 @@ name: Smoke Tests
 
 env:
   HUSKY: 0
-  EARTHLY_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
-  EARTHLY_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
 
 on:
   pull_request:
@@ -12,13 +10,13 @@ on:
     branches:
       - main
     paths:
-      - "Earthfile"
       - "tests/**/*"
       - "packages/**/*"
       - "packages/tooling-config/**/*"
       - "config/**/*"
       - "*.json"
       - "*.mjs"
+      - ".github/scripts/e2e/**/*"
       - ".github/workflows/smoke.yml"
 
 concurrency:
@@ -35,30 +33,67 @@ jobs:
       matrix:
         docusaurus: [2, 3]
     env:
-      SMOKE_TARGET: smoke-docusaurus-run
+      REPO_ROOT: ${{ github.workspace }}
     steps:
-      - name: Install earthly
-        uses: earthly/actions-setup@43211c7a0eae5344d6d79fb4aaf209c8f8866203 # v1.0.13
-        with:
-          version: latest
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Code Base
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Compute scratch paths
+        run: |
+          # PROJECT_DIR must match __ROOT_DIR__ hardcoded in tests/e2e/docusaurus/jest.config.mjs
+          echo "PROJECT_DIR=/docusaurus-gqlmd" >> "$GITHUB_ENV"
+          echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
+
+      - name: Build workspace packages
+        run: bun run build
+
+      - name: Pack workspace packages
+        run: .github/scripts/e2e/pack-packages.sh "$PKG_DIR"
+
+      - name: Scaffold Docusaurus project and install graphql-markdown
+        run: .github/scripts/e2e/setup-docusaurus-project.sh "${{ matrix.docusaurus }}" "$PROJECT_DIR" "$PKG_DIR"
+
+      - name: Install e2e webpack test plugin
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm install --save "$REPO_ROOT/tests/e2e/helpers/e2e-test-webpack-plugin"
 
       - name: Run Docusaurus Smoke Tests
-        run: earthly --ci --build-arg "docusaurusVersion=${{ matrix.docusaurus }}" "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
-        env:
-          EARTHLY_NO_CACHE: true
-          SMOKE_TARGET: smoke-docusaurus-test
+        run: .github/scripts/e2e/smoke-test.sh docusaurus "$PROJECT_DIR"
 
       - name: Docusaurus Production Smoke Build without parameters and local schema
-        run: earthly --ci --build-arg "docusaurusVersion=${{ matrix.docusaurus }}" "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          rm -rf docs
+          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
+          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
+          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh"
+          bun run build
+          bun run clear
 
       - name: Docusaurus Production Smoke Build with parameters and remote schema
-        run: earthly --ci --build-arg "OPTIONS=$OPTIONS" --build-arg "docusaurusVersion=${{ matrix.docusaurus }}" "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          rm -rf docs
+          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
+          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
+          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh" --options "$OPTIONS"
+          bun run build
+          bun run clear
         env:
           OPTIONS: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
 
       - name: Docusaurus Production Smoke Build with groupByDirective option
-        run: earthly --ci --build-arg "OPTIONS=$OPTIONS" --build-arg "docusaurusVersion=${{ matrix.docusaurus }}" "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          rm -rf docs
+          cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
+          cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
+          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh" --options "$OPTIONS"
+          bun run build
+          bun run clear
         env:
           OPTIONS: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
 
@@ -67,16 +102,31 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     env:
-      SMOKE_TARGET: smoke-cli-test
+      REPO_ROOT: ${{ github.workspace }}
     steps:
-      - name: Install earthly
-        uses: earthly/actions-setup@43211c7a0eae5344d6d79fb4aaf209c8f8866203 # v1.0.13
-        with:
-          version: latest
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Code Base
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Compute scratch paths
+        run: |
+          # PROJECT_DIR must match __ROOT_DIR__ hardcoded in tests/e2e/cli/jest.config.mjs
+          echo "PROJECT_DIR=/cli-gqlmd" >> "$GITHUB_ENV"
+          echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
+
+      - name: Build workspace packages
+        run: bun run build
+
+      - name: Pack workspace packages
+        run: .github/scripts/e2e/pack-packages.sh "$PKG_DIR"
+
+      - name: Scaffold CLI project and install graphql-markdown
+        run: .github/scripts/e2e/setup-cli-project.sh "$PROJECT_DIR" "$PKG_DIR"
+
+      - name: Configure multi-instance graphql config
+        run: cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs "$PROJECT_DIR/graphql.config.mjs"
 
       - name: Run CLI Smoke Tests
-        run: earthly --ci "github.com/${EARTHLY_REPOSITORY}/tests:${EARTHLY_REF}+${{ env.SMOKE_TARGET }}"
-        env:
-          EARTHLY_NO_CACHE: true
-
+        run: .github/scripts/e2e/smoke-test.sh cli "$PROJECT_DIR"
