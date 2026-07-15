@@ -43,8 +43,9 @@ jobs:
           docusaurus-version: ${{ matrix.docusaurus }}
 
       - name: Install e2e webpack test plugin
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: npm install --save "$REPO_ROOT/tests/e2e/helpers/e2e-test-webpack-plugin"
+        run: |
+          cd "$PROJECT_DIR"
+          npm install --save "$REPO_ROOT/tests/e2e/helpers/e2e-test-webpack-plugin"
 
       - name: Run Docusaurus Smoke Tests
         run: .github/scripts/e2e/smoke-test.sh docusaurus "$PROJECT_DIR"
@@ -74,10 +75,10 @@ jobs:
           docusaurus-version: ${{ matrix.docusaurus }}
 
       - name: Docusaurus Production Smoke Build
-        working-directory: ${{ env.PROJECT_DIR }}
         env:
           OPTIONS: ${{ matrix.case.options }}
         run: |
+          cd "$PROJECT_DIR"
           cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
           cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
           "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
