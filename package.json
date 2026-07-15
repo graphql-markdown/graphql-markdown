@@ -210,7 +210,7 @@
     "memfs": "4.64.0",
     "prettier": "catalog:",
     "ts-jest": "29.4.11",
-    "turbo": "2.10.4",
+    "turbo": "2.10.5",
     "typedoc": "0.28.20",
     "typedoc-docusaurus-theme": "1.4.2",
     "typedoc-plugin-frontmatter": "1.3.1",
