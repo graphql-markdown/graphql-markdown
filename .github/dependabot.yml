@@ -4,6 +4,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 2
     rebase-strategy: "auto"
     labels:
       - "automerge"
@@ -17,6 +19,8 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 2
     open-pull-requests-limit: 10
     commit-message:
       prefix: "🔧 gha"
