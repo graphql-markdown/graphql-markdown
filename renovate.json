@@ -8,6 +8,8 @@
   "baseBranchPatterns": [
     "main"
   ],
+  "minimumReleaseAge": "2 days",
+  "internalChecksFilter": "strict",
   "customManagers": [
     {
       "customType": "regex",
