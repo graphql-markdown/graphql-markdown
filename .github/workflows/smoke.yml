@@ -43,8 +43,10 @@ jobs:
 
       - name: Compute scratch paths
         run: |
-          # PROJECT_DIR must match __ROOT_DIR__ hardcoded in tests/e2e/docusaurus/jest.config.mjs
-          echo "PROJECT_DIR=/docusaurus-gqlmd" >> "$GITHUB_ENV"
+          # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
+          PROJECT_DIR="$RUNNER_TEMP/docusaurus-gqlmd"
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "E2E_ROOT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
           echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
 
       - name: Build workspace packages
@@ -112,8 +114,10 @@ jobs:
 
       - name: Compute scratch paths
         run: |
-          # PROJECT_DIR must match __ROOT_DIR__ hardcoded in tests/e2e/cli/jest.config.mjs
-          echo "PROJECT_DIR=/cli-gqlmd" >> "$GITHUB_ENV"
+          # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
+          PROJECT_DIR="$RUNNER_TEMP/cli-gqlmd"
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "E2E_ROOT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
           echo "PKG_DIR=$RUNNER_TEMP/pkgs" >> "$GITHUB_ENV"
 
       - name: Build workspace packages

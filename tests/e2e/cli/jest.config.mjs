@@ -5,7 +5,7 @@ const config = {
   collectCoverage: false,
   displayName: "End-to-End Tests",
   globals: {
-    __ROOT_DIR__: "/cli-gqlmd",
+    __ROOT_DIR__: process.env.E2E_ROOT_DIR ?? "/cli-gqlmd",
     __CLI_COMMAND__: "npx --silent gqlmd",
   },
   rootDir: import.meta.dirname,

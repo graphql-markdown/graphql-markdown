@@ -14,23 +14,14 @@ PARENT_DIR="$(dirname "$PROJECT_DIR")"
 PROJECT_NAME="$(basename "$PROJECT_DIR")"
 
 # create-docusaurus refuses to scaffold into a directory that already exists
-# (even empty), so PARENT_DIR must not exist as a writable dir beforehand.
-# When PARENT_DIR needs root (e.g. PROJECT_DIR is /docusaurus-gqlmd, matching
-# the __ROOT_DIR__ the e2e jest configs hardcode), scaffold via sudo and hand
-# ownership back to the current user afterwards.
-SUDO=""
-if [[ ! -w "$PARENT_DIR" ]]; then
-  SUDO="sudo -E env PATH=$PATH"
-fi
-
+# (even empty), so PROJECT_DIR must not exist yet; PARENT_DIR is a writable
+# scratch dir (see E2E_ROOT_DIR in the caller).
+mkdir -p "$PARENT_DIR"
 cd "$PARENT_DIR"
 if [[ "$DOCUSAURUS_VERSION" == "2" ]]; then
-  $SUDO bunx --quiet create-docusaurus@"$DOCUSAURUS_VERSION" "$PROJECT_NAME" classic --skip-install
+  bunx --quiet create-docusaurus@"$DOCUSAURUS_VERSION" "$PROJECT_NAME" classic --skip-install
 else
-  $SUDO bunx --quiet create-docusaurus@"$DOCUSAURUS_VERSION" "$PROJECT_NAME" classic --skip-install --javascript
-fi
-if [[ -n "$SUDO" ]]; then
-  sudo chown -R "$(id -u):$(id -g)" "$PROJECT_DIR"
+  bunx --quiet create-docusaurus@"$DOCUSAURUS_VERSION" "$PROJECT_NAME" classic --skip-install --javascript
 fi
 
 cd "$PROJECT_DIR"
