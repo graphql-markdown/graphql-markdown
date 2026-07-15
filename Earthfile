@@ -17,8 +17,6 @@ ENV TURBO_CONCURRENCY=50%
 
 alpine: 
   WORKDIR /graphql-markdown
-  RUN apk --no-cache add curl
-  RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
   RUN --mount=type=cache,target=/root/.npm npm install --global npm@$npmVersion bun
   RUN node --version
   RUN npm --version
@@ -98,8 +96,8 @@ setup-cli-project:
   FROM +build
   RUN mkdir /$gqlmdCliProject
   WORKDIR /$gqlmdCliProject
-  DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  DO +INSTALL_GRAPHQL
   RUN npm install --save ./graphql-markdown-cli.tgz
 
 setup-docusaurus-project:
@@ -107,8 +105,8 @@ setup-docusaurus-project:
   WORKDIR /$docusaurusProject
   COPY (+assets/img) ./static/img
   COPY (+assets/css) ./src/css
-  DO +INSTALL_GRAPHQL
   DO +INSTALL_GQLMD
+  DO +INSTALL_GRAPHQL
   RUN npm install --save ./graphql-markdown-cli.tgz ./graphql-markdown-docusaurus.tgz
   COPY ./tests/e2e/docusaurus/__data__/scripts/config-plugin.mjs ./config-plugin.mjs
   RUN node config-plugin.mjs

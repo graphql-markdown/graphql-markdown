@@ -6,7 +6,7 @@ const config = {
   displayName: "End-to-End Tests",
   globals: {
     __ROOT_DIR__: "/cli-gqlmd",
-    __CLI_COMMAND__: "npx gqlmd",
+    __CLI_COMMAND__: "npx --silent gqlmd",
   },
   rootDir: import.meta.dirname,
   testEnvironment: "node",
