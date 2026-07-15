@@ -2,6 +2,7 @@ name: Smoke Tests
 
 env:
   HUSKY: 0
+  REPO_ROOT: ${{ github.workspace }}
 
 on:
   pull_request:
@@ -83,8 +84,6 @@ jobs:
     name: Smoke Tests on CLI
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    env:
-      REPO_ROOT: ${{ github.workspace }}
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
