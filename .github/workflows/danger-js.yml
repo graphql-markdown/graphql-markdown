@@ -4,6 +4,10 @@ on: pull_request
 env:
   HUSKY: 0
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   danger-js:
     name: Danger.js Checks
