@@ -4,7 +4,7 @@
 set -euo pipefail
 
 OUT_DIR="${1:?usage: pack-packages.sh <out-dir>}"
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+: "${REPO_ROOT:?REPO_ROOT env var must be set}"
 
 mkdir -p "$OUT_DIR"
 

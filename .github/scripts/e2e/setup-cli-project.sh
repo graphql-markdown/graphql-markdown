@@ -8,11 +8,12 @@ PROJECT_DIR="${1:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
 PKG_DIR="${2:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
 : "${REPO_ROOT:?REPO_ROOT env var must be set}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Shared install helpers live one level up, in .github/scripts/.
+SHARED_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 mkdir -p "$PROJECT_DIR"
 cd "$PROJECT_DIR"
 
-"$SCRIPT_DIR/install-gqlmd.sh" "$PKG_DIR"
-"$SCRIPT_DIR/install-graphql.sh"
+"$SHARED_DIR/install-gqlmd.sh" "$PKG_DIR"
+"$SHARED_DIR/install-graphql.sh"
 npm install --save "$PKG_DIR/graphql-markdown-cli.tgz"

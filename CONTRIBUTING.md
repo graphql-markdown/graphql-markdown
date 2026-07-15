@@ -223,7 +223,7 @@ You can read more about [mutation testing here](https://stryker-mutator.io/docs/
 You can build the documentation locally with the command:
 
 ```shell
-REPO_ROOT="$PWD" .github/scripts/e2e/build-docs.sh 3 /tmp/graphql-markdown-docs-build
+REPO_ROOT="$PWD" ./website/scripts/build-docs.sh 3 /tmp/graphql-markdown-docs-build
 ```
 
 You can then serve the built site locally:

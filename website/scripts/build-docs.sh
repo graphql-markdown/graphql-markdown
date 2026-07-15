@@ -8,6 +8,8 @@ WORK_DIR="${2:?usage: build-docs.sh <docusaurus-version> <work-dir>}"
 : "${REPO_ROOT:?REPO_ROOT env var must be set}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Shared CI primitives (pack/scaffold) live under .github/scripts/.
+SHARED_DIR="$REPO_ROOT/.github/scripts"
 PKG_DIR="$WORK_DIR/pkgs"
 DOCUSAURUS_PROJECT_DIR="$WORK_DIR/docusaurus-gqlmd"
 
@@ -15,7 +17,7 @@ mkdir -p "$WORK_DIR"
 
 echo "::group::Build workspace packages"
 (cd "$REPO_ROOT" && bun run build)
-"$SCRIPT_DIR/pack-packages.sh" "$PKG_DIR"
+"$SHARED_DIR/pack-packages.sh" "$PKG_DIR"
 echo "::endgroup::"
 
 echo "::group::Build API docs"
@@ -23,8 +25,8 @@ echo "::group::Build API docs"
 echo "::endgroup::"
 
 echo "::group::Build Docusaurus example docs"
-"$SCRIPT_DIR/setup-docusaurus-project.sh" "$DOCUSAURUS_VERSION" "$DOCUSAURUS_PROJECT_DIR" "$PKG_DIR"
-"$SCRIPT_DIR/build-docs-examples.sh" "$DOCUSAURUS_PROJECT_DIR" "$REPO_ROOT/website/examples"
+"$SHARED_DIR/setup-docusaurus-project.sh" "$DOCUSAURUS_VERSION" "$DOCUSAURUS_PROJECT_DIR" "$PKG_DIR"
+"$SCRIPT_DIR/build-examples.sh" "$DOCUSAURUS_PROJECT_DIR" "$REPO_ROOT/website/examples"
 echo "::endgroup::"
 
 echo "::group::Build website"

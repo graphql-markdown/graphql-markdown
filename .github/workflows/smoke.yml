@@ -16,7 +16,7 @@ on:
       - "config/**/*"
       - "*.json"
       - "*.mjs"
-      - ".github/scripts/e2e/**/*"
+      - ".github/scripts/**/*"
       - ".github/workflows/smoke.yml"
 
 concurrency:
@@ -53,10 +53,10 @@ jobs:
         run: bun run build
 
       - name: Pack workspace packages
-        run: .github/scripts/e2e/pack-packages.sh "$PKG_DIR"
+        run: .github/scripts/pack-packages.sh "$PKG_DIR"
 
       - name: Scaffold Docusaurus project and install graphql-markdown
-        run: .github/scripts/e2e/setup-docusaurus-project.sh "${{ matrix.docusaurus }}" "$PROJECT_DIR" "$PKG_DIR"
+        run: .github/scripts/setup-docusaurus-project.sh "${{ matrix.docusaurus }}" "$PROJECT_DIR" "$PKG_DIR"
 
       - name: Install e2e webpack test plugin
         working-directory: ${{ env.PROJECT_DIR }}
@@ -71,7 +71,7 @@ jobs:
           rm -rf docs
           cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
           cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh"
+          "$REPO_ROOT/.github/scripts/gqlmd.sh"
           bun run build
           bun run clear
 
@@ -81,7 +81,7 @@ jobs:
           rm -rf docs
           cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
           cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh" --options "$OPTIONS"
+          "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
           bun run build
           bun run clear
         env:
@@ -93,7 +93,7 @@ jobs:
           rm -rf docs
           cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/
           cp -R "$REPO_ROOT/tests/e2e/docusaurus/__data__/." ./data/
-          "$REPO_ROOT/.github/scripts/e2e/gqlmd.sh" --options "$OPTIONS"
+          "$REPO_ROOT/.github/scripts/gqlmd.sh" --options "$OPTIONS"
           bun run build
           bun run clear
         env:
@@ -124,7 +124,7 @@ jobs:
         run: bun run build
 
       - name: Pack workspace packages
-        run: .github/scripts/e2e/pack-packages.sh "$PKG_DIR"
+        run: .github/scripts/pack-packages.sh "$PKG_DIR"
 
       - name: Scaffold CLI project and install graphql-markdown
         run: .github/scripts/e2e/setup-cli-project.sh "$PROJECT_DIR" "$PKG_DIR"
