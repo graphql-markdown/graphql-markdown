@@ -93,10 +93,9 @@ jobs:
 
       - name: Compute scratch paths
         run: |
-          # PROJECT_DIR is exported to the jest e2e config as E2E_ROOT_DIR (__ROOT_DIR__)
+          # PROJECT_DIR is read by the jest e2e config as __ROOT_DIR__.
           {
             echo "PROJECT_DIR=$RUNNER_TEMP/cli-gqlmd"
-            echo "E2E_ROOT_DIR=$RUNNER_TEMP/cli-gqlmd"
             echo "PKG_DIR=$RUNNER_TEMP/pkgs"
           } >> "$GITHUB_ENV"
 

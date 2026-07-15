@@ -15,7 +15,7 @@ PROJECT_NAME="$(basename "$PROJECT_DIR")"
 
 # create-docusaurus refuses to scaffold into a directory that already exists
 # (even empty), so PROJECT_DIR must not exist yet; PARENT_DIR is a writable
-# scratch dir (see E2E_ROOT_DIR in the caller).
+# scratch dir (PROJECT_DIR lives under RUNNER_TEMP in the caller).
 mkdir -p "$PARENT_DIR"
 cd "$PARENT_DIR"
 if [[ "$DOCUSAURUS_VERSION" == "2" ]]; then
