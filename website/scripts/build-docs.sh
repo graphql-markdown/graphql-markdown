@@ -33,11 +33,13 @@ echo "::group::Build website"
 cd "$REPO_ROOT/website"
 # docusaurus.config.js configures docs: { path: "docs" } and api: { path: "./api" },
 # neither of which is committed under website/ — both are assembled here from the
-# repo-root docs/ source and the generated api/ output.
+# repo-root docs/ source and the generated api/ output. Clear any prior copy first
+# so a local re-run stays idempotent (cp -R into an existing dir would nest it).
+rm -rf ./docs ./api
 cp -R "$REPO_ROOT/docs" ./docs
 cp -R "$REPO_ROOT/api" ./api
 test -n "$(ls -A ./docs)" || { echo "website/docs is empty after copy" >&2; exit 1; }
 npm ci
-npx update-browserslist-db@latest
+npx --yes update-browserslist-db@latest
 NODE_OPTIONS="--max-old-space-size=4096" DOCUSAURUS_IGNORE_SSG_WARNINGS=true DOCUSAURUS_DISABLE_GIT_METADATA=true npm run build
 echo "::endgroup::"
