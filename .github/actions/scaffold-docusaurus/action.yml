@@ -1,0 +1,37 @@
+name: Scaffold Docusaurus smoke project
+description: >-
+  Download the prebuilt workspace package tarballs (from the build-packages
+  job) and scaffold a throwaway Docusaurus project with them installed. Exports
+  PROJECT_DIR and PKG_DIR for later steps (REPO_ROOT comes from the caller
+  workflow's top-level env).
+
+inputs:
+  docusaurus-version:
+    description: Docusaurus major version to scaffold (e.g. 2 or 3)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup environment
+      uses: ./.github/actions/setup
+
+    - name: Compute scratch paths
+      shell: bash
+      run: |
+        # PROJECT_DIR is read by the jest e2e config as __ROOT_DIR__.
+        # REPO_ROOT is provided by the caller workflow's top-level env.
+        {
+          echo "PROJECT_DIR=$RUNNER_TEMP/docusaurus-gqlmd"
+          echo "PKG_DIR=$RUNNER_TEMP/pkgs"
+        } >> "$GITHUB_ENV"
+
+    - name: Download package tarballs
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: workspace-packages
+        path: ${{ runner.temp }}/pkgs
+
+    - name: Scaffold Docusaurus project and install graphql-markdown
+      shell: bash
+      run: .github/scripts/setup-docusaurus-project.sh "${{ inputs.docusaurus-version }}" "$PROJECT_DIR" "$PKG_DIR"

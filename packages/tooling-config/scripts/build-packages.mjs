@@ -1,11 +1,52 @@
 // @ts-check
 
+import { pathToFileURL } from "node:url";
+
 import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mjs";
 
 const orgName = "@graphql-markdown";
-const packagesMap = getWorkspacePackagesMap();
+
+const getWorkspaceBuildNeeds = (packageMeta = {}) => {
+  return Object.keys({
+    ...packageMeta.dependencies,
+    ...packageMeta.peerDependencies,
+  }).filter((dependencyName) => {
+    return dependencyName.startsWith(orgName);
+  });
+};
+
+const ensureDependencyOrder = (buildSequence, dependencyNames) => {
+  return dependencyNames.reduce((index, dependencyName) => {
+    const pos = buildSequence.indexOf(dependencyName);
+    if (pos === -1) {
+      buildSequence.push(dependencyName);
+      return buildSequence.length - 1;
+    }
+    return Math.max(pos, index);
+  }, 0);
+};
+
+const insertPackageAfterDependencies = (
+  buildSequence,
+  packageName,
+  dependencyNames,
+) => {
+  const idx = buildSequence.indexOf(packageName);
+  if (idx > -1) {
+    buildSequence.splice(idx, 1);
+  }
+
+  if (dependencyNames.length === 0) {
+    buildSequence.unshift(packageName);
+    return;
+  }
+
+  const position = ensureDependencyOrder(buildSequence, dependencyNames);
+  buildSequence.splice(position + 1, 0, packageName);
+};
 
 const getBuildDependency = () => {
+  const packagesMap = getWorkspacePackagesMap();
   /**
    * @type {string[]}
    */
@@ -15,40 +56,30 @@ const getBuildDependency = () => {
       continue;
     }
 
-    const buildNeed = Object.keys({
-      ...packageMeta?.dependencies,
-      ...packageMeta?.peerDependencies,
-    }).filter((dependencyName) => {
-      return dependencyName.startsWith(orgName);
-    });
-
-    const idx = buildSequence.indexOf(packageName);
-
-    if (buildNeed.length === 0) {
-      if (idx === -1) {
-        buildSequence.unshift(packageName);
-      }
-      continue;
-    }
-
-    if (idx > -1) {
-      buildSequence.splice(idx, 1);
-    }
-
-    const position = buildNeed.reduce((index, dependency) => {
-      const pos = buildSequence.indexOf(dependency);
-      if (pos === -1) {
-        buildSequence.push(dependency);
-        return buildSequence.length - 1;
-      }
-      return Math.max(pos, index);
-    }, 0);
-    buildSequence.splice(position + 1, 0, packageName);
+    const buildNeeds = getWorkspaceBuildNeeds(packageMeta);
+    insertPackageAfterDependencies(buildSequence, packageName, buildNeeds);
   }
 
   return buildSequence;
 };
 
-for (const packageName of getBuildDependency()) {
-  console.log(packageName.slice(orgName.length + 1));
+/**
+ * Publishable workspace package short names (org prefix stripped), ordered so
+ * each package's `@graphql-markdown/*` dependencies are built before it.
+ * @returns {string[]}
+ */
+const getBuildSequence = () => {
+  return getBuildDependency().map((packageName) => {
+    return packageName.slice(orgName.length + 1);
+  });
+};
+
+export { getBuildSequence };
+
+// When run directly (`node build-packages.mjs`), print one package name per line
+// so shell tooling can consume the build order.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  for (const packageName of getBuildSequence()) {
+    console.log(packageName);
+  }
 }

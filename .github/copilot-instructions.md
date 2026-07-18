@@ -22,5 +22,4 @@ The documentation generation follows an event-driven architecture with three mai
 - Run with: `bun run test` (runs all test types)
 
 ### Smoke Tests (E2E)
-- Validate CLI options and complete workflows with `earthly +smoke-cli-test`
-- Run with: `earthly +smoke-docusaurus-test` for Docusaurus plugin
+- Validate CLI options and complete workflows; these scaffold throwaway CLI/Docusaurus projects and run in CI via `.github/workflows/smoke.yml`, not locally

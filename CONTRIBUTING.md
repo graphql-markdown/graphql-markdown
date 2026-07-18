@@ -51,14 +51,10 @@ If you aim at a code contribution, you will need the following tools:
 
 - [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (macOS and Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows)
-- [docker](https://www.docker.com/products/docker-desktop) or [podman](https://podman.io/getting-started/installation)\*
-- [earthly](https://earthly.dev/get-earthly)
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 - [bun](https://bun.com/docs)
 
 This project is fully compatible with [GitHub Codespaces](https://github.com/features/codespaces). However, if you prefer a local environment, then we recommend [VS Code](https://code.visualstudio.com/download) for this project.
-
-_\* For using `podman` with `earthly`, you need to run `earthly config global.container_frontend podman-shell` (see [earthly ticket](https://github.com/earthly/earthly/issues/760#issuecomment-932323241))._
 
 ### Create a repository branch
 
@@ -89,7 +85,10 @@ If you aim at a code contribution, you will need to perform a few additional ste
 - from the local folder, check that everything is working
 
   ```shell
-  earthly +all
+  bun run lint
+  bun run build
+  bun run test:unit
+  bun run test:integration
   ```
 
 ## Make your changes
@@ -114,11 +113,10 @@ When making your changes, remember to check your code by running:
 - `bun run lint` checks that the code respects coding standards (ESLint + Prettier)
 - `bun run test:[unit|integration]` runs the test suites for unit tests or integration tests
 - `bun run knip` checks dependencies
-- `earthly ./tests/+smoke-[cli|docusaurus]-test` runs smoke tests for CLI or Docusaurus (includes packages build)
 
-When you are ready, you should then run the full checks with `earthly +all`.
+Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)); they scaffold throwaway CLI/Docusaurus projects, so they aren't meant to be run locally.
 
-> Note that `bun run ts:check`, `bun run lint` and `bun run test:unit` will be automatically triggered when committing code, and `earthly +all` will be automatically triggered when pushing local code to the remote repository.
+> Note that `bun run ts:check`, `bun run lint` and `bun run test:unit` will be automatically triggered when committing code.
 
 ### Committing changes
 
@@ -202,7 +200,7 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
 
 - `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/`.
 
-  > The tests run within a Docker container using Earthly and cannot be run locally.
+  > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request; they are not meant to be run locally.
 
 #### Mutation testing
 
@@ -211,12 +209,6 @@ The project uses [Stryker Mutator](https://stryker-mutator.io/docs/stryker-js/in
 As a contributor, you do not need to do anything. However, if the mutation testing score falls below a certain threshold when running mutation tests against your PR, this likely means that you need to improve your tests (even if the test coverage is good).
 
 Mutation testing can be run locally with the command:
-
-```shell
-earthly +mutation-test
-```
-
-or
 
 ```shell
 bun run stryker
@@ -231,14 +223,13 @@ You can read more about [mutation testing here](https://stryker-mutator.io/docs/
 You can build the documentation locally with the command:
 
 ```shell
-earthly ./website+build-docs
+REPO_ROOT="$PWD" ./website/scripts/build-docs.sh 3 /tmp/graphql-markdown-docs-build
 ```
 
-You can also create a local container image `graphql-markdown:docs` for tests:
+You can then serve the built site locally:
 
 ```shell
-earthly ./website+build-image
-docker run --rm -it -p 8080:8080 graphql-markdown:docs
+cd website && npm run serve
 ```
 
 ### API Documentation
@@ -312,7 +303,6 @@ Packages must be published in dependency order:
 
 Common issues:
 
-- **Build failures**: Run `earthly --interactive [target]` then retry
 - **Type errors**: Check `tsconfig.json` in the affected package
 - **Test failures**: Use `--verbose` flag with Jest for details
 - **Dependency issues**: Clean install with `bun ci`
