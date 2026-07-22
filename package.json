@@ -192,7 +192,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jest": "29.15.4",
+    "eslint-plugin-jest": "29.15.5",
     "eslint-plugin-jsonc": "3.3.0",
     "eslint-plugin-mdx": "3.8.1",
     "eslint-plugin-prettier": "5.5.6",
