@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsgo --build"
   },
-  "devDependencies": {
+  "dependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",
     "@graphql-tools/utils": "catalog:graphql-tools",
     "graphql": "catalog:",
