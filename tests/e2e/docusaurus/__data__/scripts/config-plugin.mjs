@@ -83,20 +83,23 @@ const config = {
 const createPluginImportString = (filename) =>
   `await importConfig("${filename}")`;
 
+// Written as CommonJS (module.exports) rather than ESM: Docusaurus 2's config
+// loader (import-fresh) doesn't unwrap the "default" export when Node's
+// require() resolves a native ES module, so an ESM docusaurus.config.js would
+// hand it the raw module namespace object instead of the resolved config.
 const configExportTemplate = `
-import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+const path = require("node:path");
+const { pathToFileURL } = require("node:url");
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const importConfig = async (filename) => {
   const moduleUrl = pathToFileURL(path.resolve(__dirname, "data", filename)).href;
   const moduleExports = await import(moduleUrl);
   return moduleExports.default;
 };
 
-export default async function createConfigAsync() {
+module.exports = async function createConfigAsync() {
   return ${JSON.stringify(config)};
-}\n`;
+};\n`;
 
 const configExportString = PLUGIN_PLACEHOLDER_ENTRIES.reduce(
   (output, [placeholder, filename]) =>
