@@ -3,8 +3,8 @@
 # `build-api-docs` + `build-docs` targets.
 set -euo pipefail
 
-DOCUSAURUS_VERSION="${1:?usage: build-docs.sh <docusaurus-version>}"
-WORK_DIR="${2:?usage: build-docs.sh <docusaurus-version> <work-dir>}"
+WORK_DIR="${1:?usage: build-docs.sh <work-dir> [docusaurus-version]}"
+DOCUSAURUS_VERSION="${2:-3}"
 export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

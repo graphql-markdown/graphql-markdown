@@ -50,7 +50,7 @@ jobs:
           working-directory: ${{ env.SOURCE_DIR }}
 
       - name: Build docs
-        run: ./website/scripts/build-docs.sh "$DOCUSAURUS_VERSION" "$RUNNER_TEMP/docs-build"
+        run: ./website/scripts/build-docs.sh "$RUNNER_TEMP/docs-build" "$DOCUSAURUS_VERSION"
         working-directory: ${{ env.SOURCE_DIR }}
         env:
           REPO_ROOT: ${{ github.workspace }}/${{ env.SOURCE_DIR }}

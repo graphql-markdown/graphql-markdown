@@ -240,7 +240,7 @@ You can read more about [mutation testing here](https://stryker-mutator.io/docs/
 You can build the documentation locally with the command (run from the repository root):
 
 ```shell
-./website/scripts/build-docs.sh 3 /tmp/graphql-markdown-docs-build
+./website/scripts/build-docs.sh /tmp/graphql-markdown-docs-build
 ```
 
 You can then serve the built site locally:
