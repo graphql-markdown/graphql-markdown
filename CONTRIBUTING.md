@@ -208,14 +208,16 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
   > node .github/scripts/pack-packages.mjs /tmp/gqlmd-pkgs
   >
   > # 2a. CLI: scaffold a throwaway project and run its smoke suite
-  > REPO_ROOT="$PWD" .github/scripts/e2e/setup-cli-project.sh /tmp/cli-gqlmd /tmp/gqlmd-pkgs
+  > .github/scripts/e2e/setup-cli-project.sh /tmp/cli-gqlmd /tmp/gqlmd-pkgs
   > cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs /tmp/cli-gqlmd/graphql.config.mjs
-  > REPO_ROOT="$PWD" PROJECT_DIR=/tmp/cli-gqlmd .github/scripts/e2e/smoke-test.sh cli /tmp/cli-gqlmd
+  > PROJECT_DIR=/tmp/cli-gqlmd .github/scripts/e2e/smoke-test.sh cli /tmp/cli-gqlmd
   >
   > # 2b. Docusaurus: scaffold a throwaway project (version 2 or 3) and run its smoke suite
-  > REPO_ROOT="$PWD" .github/scripts/setup-docusaurus-project.sh 3 /tmp/docusaurus-gqlmd /tmp/gqlmd-pkgs
-  > REPO_ROOT="$PWD" PROJECT_DIR=/tmp/docusaurus-gqlmd .github/scripts/e2e/smoke-test.sh docusaurus /tmp/docusaurus-gqlmd
+  > .github/scripts/setup-docusaurus-project.sh 3 /tmp/docusaurus-gqlmd /tmp/gqlmd-pkgs
+  > PROJECT_DIR=/tmp/docusaurus-gqlmd .github/scripts/e2e/smoke-test.sh docusaurus /tmp/docusaurus-gqlmd
   > ```
+  >
+  > All commands above must be run from the repository root — `REPO_ROOT` defaults to the current directory, and can be overridden if you need to invoke a script from elsewhere.
 
 #### Mutation testing
 
@@ -235,10 +237,10 @@ You can read more about [mutation testing here](https://stryker-mutator.io/docs/
 
 > The documentation is automatically generated and published when a new release is created.
 
-You can build the documentation locally with the command:
+You can build the documentation locally with the command (run from the repository root):
 
 ```shell
-REPO_ROOT="$PWD" ./website/scripts/build-docs.sh 3 /tmp/graphql-markdown-docs-build
+./website/scripts/build-docs.sh 3 /tmp/graphql-markdown-docs-build
 ```
 
 You can then serve the built site locally:

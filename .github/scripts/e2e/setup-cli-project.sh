@@ -6,7 +6,7 @@ set -euo pipefail
 
 PROJECT_DIR="${1:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
 PKG_DIR="${2:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 # Shared install helpers live one level up, in .github/scripts/.
 SHARED_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

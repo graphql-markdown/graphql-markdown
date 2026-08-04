@@ -5,7 +5,7 @@ set -euo pipefail
 
 PACKAGE="${1:?usage: smoke-test.sh <docusaurus|cli> <project-dir>}"
 PROJECT_DIR="${2:?usage: smoke-test.sh <docusaurus|cli> <project-dir>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 cd "$PROJECT_DIR"
 

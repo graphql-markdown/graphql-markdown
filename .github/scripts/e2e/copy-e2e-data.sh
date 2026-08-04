@@ -5,7 +5,7 @@
 set -euo pipefail
 
 PACKAGE="${1:?usage: copy-e2e-data.sh <docusaurus|cli>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 mkdir -p data
 cp -R "$REPO_ROOT/tests/e2e/__data__/." ./data/

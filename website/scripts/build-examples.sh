@@ -5,7 +5,7 @@ set -euo pipefail
 
 PROJECT_DIR="${1:?usage: build-examples.sh <docusaurus-project-dir> <out-examples-dir>}"
 OUT_DIR="${2:?usage: build-examples.sh <docusaurus-project-dir> <out-examples-dir>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 # graphql-to-doc runner lives with the shared CI primitives.
 GQLMD="$REPO_ROOT/.github/scripts/gqlmd.sh"

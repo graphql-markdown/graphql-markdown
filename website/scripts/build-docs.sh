@@ -5,7 +5,7 @@ set -euo pipefail
 
 DOCUSAURUS_VERSION="${1:?usage: build-docs.sh <docusaurus-version>}"
 WORK_DIR="${2:?usage: build-docs.sh <docusaurus-version> <work-dir>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Shared CI primitives (pack/scaffold) live under .github/scripts/.

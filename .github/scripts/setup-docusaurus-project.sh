@@ -7,7 +7,7 @@ set -euo pipefail
 DOCUSAURUS_VERSION="${1:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
 PROJECT_DIR="${2:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
 PKG_DIR="${3:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
-: "${REPO_ROOT:?REPO_ROOT env var must be set}"
+export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARENT_DIR="$(dirname "$PROJECT_DIR")"
