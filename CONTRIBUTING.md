@@ -200,7 +200,22 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
 
 - `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/`.
 
-  > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request; they are not meant to be run locally.
+  > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). There's no single wrapper command, but you can reproduce a run locally:
+  >
+  > ```shell
+  > # 1. Build and pack the workspace packages
+  > bun run build
+  > node .github/scripts/pack-packages.mjs /tmp/gqlmd-pkgs
+  >
+  > # 2a. CLI: scaffold a throwaway project and run its smoke suite
+  > REPO_ROOT="$PWD" .github/scripts/e2e/setup-cli-project.sh /tmp/cli-gqlmd /tmp/gqlmd-pkgs
+  > cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs /tmp/cli-gqlmd/graphql.config.mjs
+  > REPO_ROOT="$PWD" PROJECT_DIR=/tmp/cli-gqlmd .github/scripts/e2e/smoke-test.sh cli /tmp/cli-gqlmd
+  >
+  > # 2b. Docusaurus: scaffold a throwaway project (version 2 or 3) and run its smoke suite
+  > REPO_ROOT="$PWD" .github/scripts/setup-docusaurus-project.sh 3 /tmp/docusaurus-gqlmd /tmp/gqlmd-pkgs
+  > REPO_ROOT="$PWD" PROJECT_DIR=/tmp/docusaurus-gqlmd .github/scripts/e2e/smoke-test.sh docusaurus /tmp/docusaurus-gqlmd
+  > ```
 
 #### Mutation testing
 
