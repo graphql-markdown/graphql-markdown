@@ -24,8 +24,16 @@ const getBuildDependency = () => {
   const visited = new Set();
   const visiting = new Set();
 
-  const visit = (packageName) => {
+  const shouldSkipVisit = (packageName) => {
     if (visited.has(packageName)) {
+      return true;
+    }
+    const packageMeta = packagesMap[packageName];
+    return !packageMeta || packageMeta.private;
+  };
+
+  const visit = (packageName) => {
+    if (shouldSkipVisit(packageName)) {
       return;
     }
     if (visiting.has(packageName)) {
@@ -35,10 +43,6 @@ const getBuildDependency = () => {
     }
 
     const packageMeta = packagesMap[packageName];
-    if (!packageMeta || packageMeta.private) {
-      return;
-    }
-
     visiting.add(packageName);
     for (const dependencyName of getWorkspaceBuildNeeds(packageMeta)) {
       visit(dependencyName);
