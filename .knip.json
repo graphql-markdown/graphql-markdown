@@ -11,6 +11,14 @@
       "entry": ["jest.config.mjs"],
       "project": ["**/*.ts!"]
     },
+    "packages/types": {
+      "ignoreDependencies": [
+        "@graphql-tools/load",
+        "@graphql-tools/utils",
+        "graphql",
+        "graphql-config"
+      ]
+    },
     "packages/core": {
       "entry": ["jest.config.mjs"],
       "ignoreDependencies": ["graphql-config"]
