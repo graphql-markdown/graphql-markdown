@@ -114,7 +114,7 @@ When making your changes, remember to check your code by running:
 - `bun run test:[unit|integration]` runs the test suites for unit tests or integration tests
 - `bun run knip` checks dependencies
 
-Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)); they scaffold throwaway CLI/Docusaurus projects, so they aren't meant to be run locally.
+Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). Run them locally with `bun run smoke` (see [Tests](#tests) below).
 
 > Note that `bun run ts:check`, `bun run lint` and `bun run test:unit` will be automatically triggered when committing code.
 
@@ -200,24 +200,22 @@ There are 3 types of tests used in this project, all based on [Jest](https://jes
 
 - `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/`.
 
-  > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). There's no single wrapper command, but you can reproduce a run locally:
+  > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). To reproduce a run locally, use the bundled script:
   >
   > ```shell
-  > # 1. Build and pack the workspace packages
-  > bun run build
-  > node .github/scripts/pack-packages.mjs /tmp/gqlmd-pkgs
-  >
-  > # 2a. CLI: scaffold a throwaway project and run its smoke suite
-  > .github/scripts/e2e/setup-cli-project.sh /tmp/cli-gqlmd /tmp/gqlmd-pkgs
-  > cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs /tmp/cli-gqlmd/graphql.config.mjs
-  > PROJECT_DIR=/tmp/cli-gqlmd .github/scripts/e2e/smoke-test.sh cli /tmp/cli-gqlmd
-  >
-  > # 2b. Docusaurus: scaffold a throwaway project (version 2 or 3) and run its smoke suite
-  > .github/scripts/setup-docusaurus-project.sh 3 /tmp/docusaurus-gqlmd /tmp/gqlmd-pkgs
-  > PROJECT_DIR=/tmp/docusaurus-gqlmd .github/scripts/e2e/smoke-test.sh docusaurus /tmp/docusaurus-gqlmd
+  > bun run smoke
   > ```
   >
-  > All commands above must be run from the repository root — `REPO_ROOT` defaults to the current directory, and can be overridden if you need to invoke a script from elsewhere.
+  > Run it with no arguments for an interactive menu (CLI, Docusaurus 2, Docusaurus 3, or all), or pass a target non-interactively:
+  >
+  > ```shell
+  > bun run smoke -- cli
+  > bun run smoke -- docusaurus2
+  > bun run smoke -- docusaurus3
+  > bun run smoke -- all
+  > ```
+  >
+  > The script builds and packs the workspace once, then scaffolds each selected suite into its own throwaway project under a fresh scratch directory (printed at the end of the run — left in place for debugging, not auto-removed). Must be run from the repository root; `REPO_ROOT` can be overridden if needed.
 
 #### Mutation testing
 
