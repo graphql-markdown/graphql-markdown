@@ -15,49 +15,42 @@ const getWorkspaceBuildNeeds = (packageMeta = {}) => {
   });
 };
 
-const ensureDependencyOrder = (buildSequence, dependencyNames) => {
-  return dependencyNames.reduce((index, dependencyName) => {
-    const pos = buildSequence.indexOf(dependencyName);
-    if (pos === -1) {
-      buildSequence.push(dependencyName);
-      return buildSequence.length - 1;
-    }
-    return Math.max(pos, index);
-  }, 0);
-};
-
-const insertPackageAfterDependencies = (
-  buildSequence,
-  packageName,
-  dependencyNames,
-) => {
-  const idx = buildSequence.indexOf(packageName);
-  if (idx > -1) {
-    buildSequence.splice(idx, 1);
-  }
-
-  if (dependencyNames.length === 0) {
-    buildSequence.unshift(packageName);
-    return;
-  }
-
-  const position = ensureDependencyOrder(buildSequence, dependencyNames);
-  buildSequence.splice(position + 1, 0, packageName);
-};
-
 const getBuildDependency = () => {
   const packagesMap = getWorkspacePackagesMap();
   /**
    * @type {string[]}
    */
   const buildSequence = [];
-  for (const [packageName, packageMeta] of Object.entries(packagesMap)) {
-    if (packageMeta?.private) {
-      continue;
+  const visited = new Set();
+  const visiting = new Set();
+
+  const visit = (packageName) => {
+    if (visited.has(packageName)) {
+      return;
+    }
+    if (visiting.has(packageName)) {
+      throw new Error(
+        `Circular @graphql-markdown workspace dependency detected involving "${packageName}"`,
+      );
     }
 
-    const buildNeeds = getWorkspaceBuildNeeds(packageMeta);
-    insertPackageAfterDependencies(buildSequence, packageName, buildNeeds);
+    const packageMeta = packagesMap[packageName];
+    if (!packageMeta || packageMeta.private) {
+      return;
+    }
+
+    visiting.add(packageName);
+    for (const dependencyName of getWorkspaceBuildNeeds(packageMeta)) {
+      visit(dependencyName);
+    }
+    visiting.delete(packageName);
+
+    visited.add(packageName);
+    buildSequence.push(packageName);
+  };
+
+  for (const packageName of Object.keys(packagesMap)) {
+    visit(packageName);
   }
 
   return buildSequence;
