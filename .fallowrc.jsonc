@@ -8,6 +8,7 @@
   // detection range) so they are declared here too.
   "entry": [
     "dangerfile.js",
+    ".github/scripts/**",
     "**/stryker.conf.mjs",
     "packages/tooling-config/scripts/**",
     "packages/tooling-config/typedoc/**",

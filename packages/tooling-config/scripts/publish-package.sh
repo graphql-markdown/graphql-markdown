@@ -15,7 +15,12 @@ usage() {
   echo "  --dry-run, -n  Prepare and validate publish artifacts without publishing"
   echo ""
   echo "Available packages:"
-  ls -1 packages/ | grep -v node_modules
+  for dir in packages/*/; do
+    name="$(basename "$dir")"
+    if [[ "$name" != "node_modules" ]]; then
+      echo "$name"
+    fi
+  done
 }
 
 PACKAGE_NAME=""
@@ -72,7 +77,7 @@ echo "📦 Publishing $FULL_NAME@$VERSION"
 echo ""
 
 # Remove old tarballs
-rm -f *.tgz
+rm -f -- *.tgz
 
 # Pack with bun (resolves workspace:^ to actual versions)
 echo "🔧 Packing with bun..."
@@ -82,7 +87,7 @@ bun pm pack
 if [[ ! -f "$TARBALL_NAME" ]]; then
   echo "Error: Expected tarball '$TARBALL_NAME' not found"
   echo "Found tarballs:"
-  ls -la *.tgz 2>/dev/null || echo "  (none)"
+  ls -la -- *.tgz 2>/dev/null || echo "  (none)"
   exit 1
 fi
 

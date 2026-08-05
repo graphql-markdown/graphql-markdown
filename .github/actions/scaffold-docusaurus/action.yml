@@ -1,0 +1,22 @@
+name: Scaffold Docusaurus smoke project
+description: >-
+  Download the prebuilt workspace package tarballs (from the build-packages
+  job) and scaffold a throwaway Docusaurus project with them installed. Exports
+  PROJECT_DIR and PKG_DIR for later steps (REPO_ROOT comes from the caller
+  workflow's top-level env).
+
+inputs:
+  docusaurus-version:
+    description: Docusaurus major version to scaffold (e.g. 2 or 3)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/prepare-scaffold
+      with:
+        project-name: docusaurus-gqlmd
+
+    - name: Scaffold Docusaurus project and install graphql-markdown
+      shell: bash
+      run: .github/scripts/setup-docusaurus-project.sh "${{ inputs.docusaurus-version }}" "$PROJECT_DIR" "$PKG_DIR"

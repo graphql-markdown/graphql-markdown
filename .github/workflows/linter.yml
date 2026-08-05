@@ -23,6 +23,19 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Install actionlint
+        run: |
+          curl -fsSL -o actionlint.tar.gz "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz"
+          tar xzf actionlint.tar.gz actionlint
+          sudo mv actionlint /usr/local/bin/
+          rm actionlint.tar.gz
+
+      - name: Run actionlint
+        run: actionlint -color
+
+      - name: Run shellcheck
+        run: find .github/scripts website/scripts packages/tooling-config/scripts -name '*.sh' -exec shellcheck {} +
+
       - name: Setup environment
         uses: ./.github/actions/setup
 
