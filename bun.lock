@@ -26,7 +26,7 @@
         "eslint-import-resolver-typescript": "4.4.5",
         "eslint-plugin-import": "2.32.0",
         "eslint-plugin-jest": "29.16.0",
-        "eslint-plugin-jsonc": "3.4.0",
+        "eslint-plugin-jsonc": "3.4.1",
         "eslint-plugin-mdx": "3.8.1",
         "eslint-plugin-prettier": "5.5.6",
         "eslint-plugin-tsdoc": "0.5.2",
@@ -1301,7 +1301,7 @@
 
     "eslint-plugin-jest": ["eslint-plugin-jest@29.16.0", "", { "dependencies": { "@typescript-eslint/utils": "^8.0.0" }, "peerDependencies": { "@typescript-eslint/eslint-plugin": "^8.0.0", "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0", "jest": "*", "typescript": ">=4.8.4 <8.0.0" }, "optionalPeers": ["@typescript-eslint/eslint-plugin", "jest", "typescript"] }, "sha512-0WFBxDHlT2ratGQfnFQEVIsgQJ5cfd+0IV8Kc6U3X2onB8ATLG23voD2Ch5G9fCkEpCPmCMuzW0tbS0kYb8biw=="],
 
-    "eslint-plugin-jsonc": ["eslint-plugin-jsonc@3.4.0", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.5.1", "@eslint/core": "^1.0.1", "@eslint/plugin-kit": "^0.7.0", "@ota-meshi/ast-token-store": "^0.3.0", "diff-sequences": "^29.6.3", "eslint-json-compat-utils": "^0.2.3", "jsonc-eslint-parser": "^3.1.0", "natural-compare": "^1.4.0", "synckit": "^0.11.12" }, "peerDependencies": { "eslint": ">=9.38.0" } }, "sha512-0f6RztjDatnBKCkRFIYEX1fjlijts1YsmMbnprE5jsTbLeP2iQsaZB4sXIE3ZSAg+HABZpaZaEhnSEUCTvraTQ=="],
+    "eslint-plugin-jsonc": ["eslint-plugin-jsonc@3.4.1", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.5.1", "@eslint/core": "^1.0.1", "@eslint/plugin-kit": "^0.7.0", "@ota-meshi/ast-token-store": "^0.3.0", "diff-sequences": "^29.6.3", "eslint-json-compat-utils": "^0.2.3", "jsonc-eslint-parser": "^3.1.0", "natural-compare": "^1.4.0", "synckit": "^0.11.12" }, "peerDependencies": { "eslint": ">=9.38.0" } }, "sha512-HHWkjAmVJ3QAffCkfo0XKl3CstLtgbIu5EGfFfVDLQT6vqPrxl4pFbUwFwY03nOlvyuDiiBixhHFrlbzn9u09Q=="],
 
     "eslint-plugin-mdx": ["eslint-plugin-mdx@3.8.1", "", { "dependencies": { "eslint-mdx": "^3.8.1", "mdast-util-from-markdown": "^2.0.2", "mdast-util-mdx": "^3.0.0", "micromark-extension-mdxjs": "^3.0.0", "remark-mdx": "^3.1.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.11.8", "unified": "^11.0.5", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0" } }, "sha512-4OLgotfBxUDc1f6ihXSagT/1+JCCUABA/2r6Kzl6gqFftg4dCV0wBfdwFo6X6UO/FzTHr3g6mVt+6prRXffc/Q=="],
 
