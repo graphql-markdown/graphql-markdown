@@ -141,7 +141,23 @@ const config = {
     ],
   ],
 
+  // No third-party/CDN scripts or stylesheets are loaded today (everything is
+  // bundled and served from 'self'). If one is ever added here, pair its tag
+  // with an `integrity` hash and `crossorigin: "anonymous"` (SRI).
   headTags: [
+    // GitHub Pages doesn't support custom HTTP response headers, so a real
+    // Content-Security-Policy header isn't possible here — this meta tag is
+    // the closest equivalent. 'unsafe-inline' on script-src is required for
+    // Docusaurus's inline hydration scripts and the JSON-LD blocks below;
+    // note frame-ancestors is ignored by browsers when set via meta tag.
+    {
+      tagName: "meta",
+      attributes: {
+        "http-equiv": "Content-Security-Policy",
+        content:
+          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none';",
+      },
+    },
     {
       tagName: "script",
       attributes: {
