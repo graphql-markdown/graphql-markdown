@@ -199,7 +199,7 @@
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-tsdoc": "0.5.2",
     "fallow": "3.15.0",
-    "globals": "17.10.0",
+    "globals": "17.11.0",
     "graphql": "catalog:",
     "graphql-config": "catalog:",
     "husky": "9.1.7",
