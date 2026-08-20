@@ -84,10 +84,10 @@ describe("formatMDXFrontmatter", () => {
 });
 
 describe("formatMDXLink", () => {
-  test("appends .mdx extension", () => {
+  test("returns the link unchanged, without file extension", () => {
     expect(formatMDXLink({ text: "Type", url: "/schema/type" })).toEqual({
       text: "Type",
-      url: "/schema/type.mdx",
+      url: "/schema/type",
     });
   });
 });
