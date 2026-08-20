@@ -870,6 +870,17 @@ describe("introspection", () => {
         isValidDirectiveLocation({}, schema.getDirective("testA")!),
       ).toBeFalsy();
     });
+
+    test("returns false if entity AST node has no directive location", () => {
+      expect.assertions(1);
+
+      expect(
+        isValidDirectiveLocation(
+          schema.getDirective("testB"),
+          schema.getDirective("testA")!,
+        ),
+      ).toBeFalsy();
+    });
   });
 
   describe("getDirectiveLocationForASTPath", () => {
@@ -937,6 +948,11 @@ describe("introspection", () => {
       [
         {
           appliedTo: Kind.DIRECTIVE,
+        },
+      ],
+      [
+        {
+          kind: Kind.DIRECTIVE_DEFINITION,
         },
       ],
     ])("throws on unsupported entity", (node: unknown) => {

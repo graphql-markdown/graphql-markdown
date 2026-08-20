@@ -115,40 +115,66 @@ export const hasAstNode = <T>(node: T): node is AstNodeType<T> => {
 };
 
 /**
+ * Directive locations supported by AST node kinds.
+ *
+ * @internal
+ */
+const DIRECTIVE_LOCATION_BY_AST_KIND: Partial<
+  Record<ASTNode["kind"], DirectiveLocation>
+> = {
+  Field: DirectiveLocation.FIELD,
+  SchemaDefinition: DirectiveLocation.SCHEMA,
+  SchemaExtension: DirectiveLocation.SCHEMA,
+  ScalarTypeDefinition: DirectiveLocation.SCALAR,
+  ScalarTypeExtension: DirectiveLocation.SCALAR,
+  ObjectTypeDefinition: DirectiveLocation.OBJECT,
+  ObjectTypeExtension: DirectiveLocation.OBJECT,
+  FieldDefinition: DirectiveLocation.FIELD_DEFINITION,
+  InterfaceTypeDefinition: DirectiveLocation.INTERFACE,
+  InterfaceTypeExtension: DirectiveLocation.INTERFACE,
+  UnionTypeDefinition: DirectiveLocation.UNION,
+  UnionTypeExtension: DirectiveLocation.UNION,
+  EnumTypeDefinition: DirectiveLocation.ENUM,
+  EnumTypeExtension: DirectiveLocation.ENUM,
+  EnumValueDefinition: DirectiveLocation.ENUM_VALUE,
+  InputObjectTypeDefinition: DirectiveLocation.INPUT_OBJECT,
+  InputObjectTypeExtension: DirectiveLocation.INPUT_OBJECT,
+  InputValueDefinition: DirectiveLocation.ARGUMENT_DEFINITION,
+  Argument: DirectiveLocation.ARGUMENT_DEFINITION,
+};
+
+/**
+ * Returns the directive location matching an AST node, if any.
+ *
+ * @internal
+ *
+ * @param appliedTo - a GraphQL AST node.
+ *
+ * @returns the matching directive location, else `undefined`.
+ *
+ */
+const findDirectiveLocationForASTPath = (
+  appliedTo: Maybe<ASTNode>,
+): Maybe<DirectiveLocation> => {
+  if (!appliedTo || !("kind" in appliedTo)) {
+    return undefined;
+  }
+
+  return DIRECTIVE_LOCATION_BY_AST_KIND[appliedTo.kind];
+};
+
+/**
  *
  */
 export const getDirectiveLocationForASTPath = (
   appliedTo: Maybe<ASTNode>,
 ): DirectiveLocation => {
-  if (!appliedTo || !("kind" in appliedTo)) {
-    throw new IntrospectionError("Unexpected kind: " + String(appliedTo));
-  }
+  const location = findDirectiveLocationForASTPath(appliedTo);
 
-  const kindToLocation: Partial<Record<ASTNode["kind"], DirectiveLocation>> = {
-    Field: DirectiveLocation.FIELD,
-    SchemaDefinition: DirectiveLocation.SCHEMA,
-    SchemaExtension: DirectiveLocation.SCHEMA,
-    ScalarTypeDefinition: DirectiveLocation.SCALAR,
-    ScalarTypeExtension: DirectiveLocation.SCALAR,
-    ObjectTypeDefinition: DirectiveLocation.OBJECT,
-    ObjectTypeExtension: DirectiveLocation.OBJECT,
-    FieldDefinition: DirectiveLocation.FIELD_DEFINITION,
-    InterfaceTypeDefinition: DirectiveLocation.INTERFACE,
-    InterfaceTypeExtension: DirectiveLocation.INTERFACE,
-    UnionTypeDefinition: DirectiveLocation.UNION,
-    UnionTypeExtension: DirectiveLocation.UNION,
-    EnumTypeDefinition: DirectiveLocation.ENUM,
-    EnumTypeExtension: DirectiveLocation.ENUM,
-    EnumValueDefinition: DirectiveLocation.ENUM_VALUE,
-    InputObjectTypeDefinition: DirectiveLocation.INPUT_OBJECT,
-    InputObjectTypeExtension: DirectiveLocation.INPUT_OBJECT,
-    InputValueDefinition: DirectiveLocation.ARGUMENT_DEFINITION,
-    Argument: DirectiveLocation.ARGUMENT_DEFINITION,
-  };
-
-  const location = kindToLocation[appliedTo.kind];
   if (!location) {
-    throw new IntrospectionError("Unexpected kind: " + String(appliedTo.kind));
+    throw new IntrospectionError(
+      "Unexpected kind: " + String(appliedTo?.kind ?? appliedTo),
+    );
   }
 
   return location;
@@ -169,8 +195,12 @@ export const isValidDirectiveLocation = (
   if (!hasAstNode(entity)) {
     return false;
   }
-  const location = getDirectiveLocationForASTPath(entity.astNode);
-  return directive.locations.includes(location);
+
+  // AST nodes without a directive location (eg. directive definitions) are not
+  // valid targets.
+  const location = findDirectiveLocationForASTPath(entity.astNode);
+
+  return !!location && directive.locations.includes(location);
 };
 
 /**
