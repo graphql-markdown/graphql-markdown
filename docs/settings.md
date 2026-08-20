@@ -158,7 +158,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 | Setting            | CLI flag                                                                        | Default     |
 | ------------------ | ------------------------------------------------------------------------------- | ----------- |
-| `groupByDirective` | <code>-gdb, --groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
+| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code>       | `undefined` |
 
 ## `homepage`
 
@@ -211,6 +211,12 @@ Provide a custom module for formatting output content. You can also use built-in
 :::note
 
 The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning. Migrate to `formatter`.
+
+:::
+
+:::caution
+
+The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
 
 :::
 

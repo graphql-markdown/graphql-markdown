@@ -67,15 +67,37 @@ Then select your framework:
 
 ### Quick Example
 
-```js
-import { runGraphQLMarkdown } from '@graphql-markdown/cli';
+Declare the settings in your GraphQL Config file, then run the CLI:
 
-await runGraphQLMarkdown({
-  schema: './schema.graphql',
-  rootPath: './docs',
-  baseURL: 'api',
-  formatter: '@graphql-markdown/formatters/docusaurus', // or your framework
-});
+```yaml title=".graphqlrc"
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    rootPath: ./docs
+    baseURL: api
+    formatter: "@graphql-markdown/formatters/docusaurus" # or your framework
+```
+
+```bash
+npx gqlmd graphql-to-doc
+```
+
+The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/advanced/additional-schema#graphql-config).
+
+You can also call the generator programmatically. `runGraphQLMarkdown` takes the configuration as first argument, and CLI-style overrides as second argument:
+
+```js
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
+
+await runGraphQLMarkdown(
+  {
+    schema: "./schema.graphql",
+    rootPath: "./docs",
+    baseURL: "api",
+    formatter: "@graphql-markdown/formatters/docusaurus", // or your framework
+  },
+  {}, // CLI flags overrides, eg `{ force: true }`
+);
 ```
 
 ## 3rd Party Packages
