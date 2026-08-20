@@ -149,15 +149,17 @@ const config = {
     // Content-Security-Policy header isn't possible here — this meta tag is
     // the closest equivalent. 'unsafe-inline' on script-src is required for
     // Docusaurus's inline hydration scripts and the JSON-LD blocks below;
-    // note frame-ancestors is ignored by browsers when set via meta tag.
+    // frame-ancestors is omitted because browsers ignore it in a meta tag and
+    // log a console warning.
     // img-src allows contrib.rocks for the homepage's contributors image
-    // (src/pages/index.js).
+    // (src/pages/index.js), and connect-src allows the npm downloads API used
+    // by src/hooks/useNpmDownloads.js.
     {
       tagName: "meta",
       attributes: {
         "http-equiv": "Content-Security-Policy",
         content:
-          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contrib.rocks; object-src 'none'; base-uri 'self'; frame-ancestors 'none';",
+          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contrib.rocks; connect-src 'self' https://api.npmjs.org; object-src 'none'; base-uri 'self';",
       },
     },
     {
