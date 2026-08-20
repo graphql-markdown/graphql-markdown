@@ -68,18 +68,6 @@ Defined in: [printer-legacy/src/const/options.ts:28](https://github.com/graphql-
 const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
-    | "afterDiffCheckHook"
-    | "afterGenerateIndexMetafileHook"
-    | "afterRenderHomepageHook"
-    | "afterRenderRootTypesHook"
-    | "afterRenderTypeEntitiesHook"
-    | "afterSchemaLoadHook"
-    | "beforeDiffCheckHook"
-    | "beforeGenerateIndexMetafileHook"
-    | "beforeRenderHomepageHook"
-    | "beforeRenderRootTypesHook"
-    | "beforeRenderTypeEntitiesHook"
-    | "beforeSchemaLoadHook"
     | "collapsible"
     | "exampleSection"
     | "formatCategoryFolderName"
