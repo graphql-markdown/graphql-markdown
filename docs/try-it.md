@@ -1,6 +1,6 @@
 ---
 sidebar_position: 20
-description: Try GraphQL-Markdown instantly with interactive CodeSandbox demos for Docusaurus, Astro, Next.js, Vocs, GitBook, and other frameworks.
+description: Try GraphQL-Markdown instantly with our demo repositories for Docusaurus, Astro, Next.js, Vocs, HonKit, Hugo, MkDocs, mdBook and DocFX.
 keywords:
   - GraphQL-Markdown demo
   - CodeSandbox
@@ -40,3 +40,27 @@ Edit the configuration in `graphql.config.mjs`.
 Fork our [demo repo](https://github.com/graphql-markdown/demo-honkit) to try with your own GraphQL schema.
 
 Edit the configuration in `graphql.config.mjs`.
+
+## Hugo
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-hugo) to try with your own GraphQL schema.
+
+Edit the configuration in `.graphqlrc.yml`.
+
+## MkDocs
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-mkdocs) to try with your own GraphQL schema.
+
+Edit the configuration in `scripts/generate-docs.mjs`.
+
+## mdBook
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-mdbook) to try with your own GraphQL schema.
+
+Edit the configuration in `scripts/generate-docs.mjs`.
+
+## DocFX
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-docfx) to try with your own GraphQL schema.
+
+Edit the configuration in `scripts/generate-docs.mjs`.

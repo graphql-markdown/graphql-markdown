@@ -114,7 +114,7 @@ plugins: [
 You can use **`"*"` as a wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
 ```js title="docusaurus.config.js"
-const { directiveDescriptor, tagDescriptor } = require("@graphql-markdown/helpers");
+const { directiveDescriptor, directiveTag } = require("@graphql-markdown/helpers");
 
 //...//
 
@@ -128,7 +128,7 @@ plugins: [
         // highlight-start
         "*": {
           descriptor: directiveDescriptor,
-          tag: tagDescriptor,
+          tag: directiveTag,
         },
         // highlight-end
         // ... optionally specific custom directive options
@@ -155,7 +155,7 @@ npm i @graphql-markdown/helpers
 ### `@graphql-markdown/helpers`
 
 - [`directiveDescriptor`](/api/helpers/directives/descriptor)
-- [`tagDescriptor`](/api/helpers/directives/tag)
+- [`directiveTag`](/api/helpers/directives/tag)
 
 ### `@graphql-markdown/graphql`
 

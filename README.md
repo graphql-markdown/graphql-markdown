@@ -53,7 +53,7 @@ npx docusaurus graphql-to-doc
 Use the CLI directly for custom workflows, or pair it with `@graphql-markdown/formatters` to adapt the generated output for supported frameworks.
 
 ```shell
-npx gqlmd graphql-to-doc --schema ./schema.graphql --output ./docs
+npx gqlmd graphql-to-doc --schema ./schema.graphql --root ./docs
 ```
 
 For formatter-based setups:

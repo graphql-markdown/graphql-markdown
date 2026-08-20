@@ -12,7 +12,7 @@ keywords:
 
 # Examples
 
-By enabling the option [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions), you can add examples to types documentation.
+Examples are added to types documentation as soon as the schema declares an `@example` directive. The option [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) is only needed when the directive name, its field, or the value parsing has to be customized (see [advanced options](#advanced-options)).
 
 ## Usage
 
@@ -57,7 +57,7 @@ Examples can be inherited, this is why in the above example there is no example 
 
 ## Advanced options
 
-Example directive definition and parser behavior can be customized through the configuration using a `TypeDirectiveExample` object instead of a boolean value for `printTypeOptions.exampleSection`:
+Example directive definition and parser behavior can be customized through the configuration by setting `printTypeOptions.exampleSection` to a `TypeExampleSectionOption` object (any other value is ignored, and the defaults `@example(value: ...)` apply):
 
 ```ts
 interface TypeExampleSectionOption {

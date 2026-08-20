@@ -158,7 +158,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 | Setting            | CLI flag                                                                        | Default     |
 | ------------------ | ------------------------------------------------------------------------------- | ----------- |
-| `groupByDirective` | <code>-gdb, --groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
+| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code>       | `undefined` |
 
 ## `homepage`
 
@@ -183,6 +183,14 @@ Set `homepage: false` to disable the homepage generation.
 The GraphQL-Markdown template for Docusaurus provides a customized homepage located at `static/index.md`.
 
 :::
+
+## `id`
+
+The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/advanced/additional-schema): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/configuration#graphql-config) project of the same name.
+
+| Setting | CLI flag        | Default     |
+| ------- | --------------- | ----------- |
+| `id`    | _not supported_ | `default`   |
 
 ## `linkRoot`
 
@@ -211,6 +219,12 @@ Provide a custom module for formatting output content. You can also use built-in
 :::note
 
 The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning. Migrate to `formatter`.
+
+:::
+
+:::caution
+
+The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
 
 :::
 

@@ -23,18 +23,19 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 | ---------- | -------- | ---------- | --------------------------------------------------------- |
 | `schema`   | `string` | —          | **Required**. Path to schema file or introspection result |
 | `rootPath` | `string` | `./docs`   | Root folder for documentation generation                  |
-| `baseURL`  | `string` | `/graphql` | Base URL path for generated documentation                 |
+| `baseURL`  | `string` | `schema`   | Base URL path and output folder name under `rootPath`     |
 
 ## Document Structure
 
-| Option         | Type                     | Default | Description                                                           |
-| -------------- | ------------------------ | ------- | --------------------------------------------------------------------- |
-| `linkRoot`     | `string`                 | `/`     | Root path used for type cross-links in generated documentation        |
-| `homepage`     | `string`                 | —       | Custom homepage content file                                          |
-| `hierarchy`    | `string`                 | `api`   | Documentation structure: `api`, `entity`, or `flat`                   |
-| `index`        | `boolean`                | `false` | Generate category indices                                             |
-| `categorySort` | `string` \| `function`   | —       | Sort categories: `"natural"` for alphabetical or custom function      |
-| `pretty`       | `boolean`                | `false` | Format generated Markdown files                                       |
+| Option             | Type                   | Default        | Description                                                      |
+| ------------------ | ---------------------- | -------------- | ---------------------------------------------------------------- |
+| `linkRoot`         | `string`               | `/`            | Root path used for type cross-links in generated documentation   |
+| `homepage`         | `string` \| `false`    | `generated.md` | Custom homepage content file, `false` to disable                 |
+| `hierarchy`        | `string`               | `api`          | Documentation structure: `api`, `entity`, or `flat`              |
+| `index`            | `boolean`              | `false`        | Generate category indices                                        |
+| `categorySort`     | `string` \| `function` | —              | Sort categories: `"natural"` for alphabetical or custom function |
+| `sectionHeaderId`  | `boolean`              | `true`         | Generate custom section header IDs for permalinks                |
+| `pretty`           | `boolean`              | `false`        | Format generated Markdown files                                  |
 
 ## Content Options
 
@@ -64,7 +65,7 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 
 ## CLI Flags
 
-All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc` or `npx graphql-markdown`.
+All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone CLI).
 
 | Flag                              | Config option                         | Description                                    |
 | --------------------------------- | ------------------------------------- | ---------------------------------------------- |
@@ -81,10 +82,13 @@ All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc`
 | `--deprecated <option>`           | `printTypeOptions.deprecated`         | `default`, `group`, or `skip`                  |
 | `--noParentType`                  | `printTypeOptions.parentTypePrefix`   | Hide parent type prefix on fields              |
 | `--noTypeBadges`                  | `printTypeOptions.typeBadges`         | Hide type attribute badges                     |
+| `--noSectionId`                   | `docOptions.sectionHeaderId`          | Disable section header IDs for permalinks      |
 | `--only <@directive...>`          | `onlyDocDirective`                    | Include only types with these directives       |
 | `--skip <@directive...>`          | `skipDocDirective`                    | Exclude types with these directives            |
-| `-gdb, --groupByDirective <expr>` | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
+| `--groupByDirective <expr>`       | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
 | `--pretty`                        | `pretty`                              | Format output with Prettier                    |
-| `--formatter <pkg>`               | `formatter`                           | Formatter package name or path                 |
-| `--mdxParser <pkg>`               | ~~`mdxParser`~~ (deprecated)          | Deprecated alias for `formatter`               |
+| `--formatter <pkg>`[^1]           | `formatter`                           | Formatter package name or path                 |
+| `--mdxParser <pkg>`[^1]           | ~~`mdxParser`~~ (deprecated)          | Deprecated alias for `formatter`               |
 | `--config`                        | —                                     | Print resolved config (debug)                  |
+
+[^1]: The `--formatter` and `--mdxParser` flags are only registered when the CLI is set up with a default formatter package, as done by `@graphql-markdown/docusaurus`. The standalone `gqlmd` command does not expose them &mdash; set `formatter` in your configuration file instead.
