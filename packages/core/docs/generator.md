@@ -6,37 +6,6 @@ This module contains the main functionality for generating markdown documentatio
 from GraphQL schemas. It handles schema loading, processing, and markdown generation
 through appropriate printers and renderers.
 
-## Variables
-
-### FILE_EXTENSION
-
-```ts
-const FILE_EXTENSION: object;
-```
-
-Defined in: [core/src/generator.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L66)
-
-Supported file extensions for generated documentation files.
-
-#### Type Declaration
-
-##### MD
-
-```ts
-readonly MD: ".md" = ".md";
-```
-
-##### MDX
-
-```ts
-readonly MDX: ".mdx" = ".mdx";
-```
-
-#### Remarks
-
-- MDX: MDX file extension (.mdx) for React component-enabled markdown
-- MD: Standard markdown file extension (.md)
-
 ## Functions
 
 ### checkSchemaDifferences()
@@ -50,7 +19,7 @@ function checkSchemaDifferences(
 ): Promise<boolean>;
 ```
 
-Defined in: [core/src/generator.ts:268](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L268)
+Defined in: [core/src/generator.ts:270](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L270)
 
 Checks if there are differences in the GraphQL schema compared to a previous version.
 
@@ -99,7 +68,7 @@ When no changes are detected, a log message is generated indicating that the sch
 function generateDocFromSchema(options): Promise<void>;
 ```
 
-Defined in: [core/src/generator.ts:340](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L340)
+Defined in: [core/src/generator.ts:344](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L344)
 
 Main entry point for generating Markdown documentation from a GraphQL schema.
 
@@ -292,7 +261,7 @@ function resolveSkipAndOnlyDirectives(
 ): GraphQLDirective[][];
 ```
 
-Defined in: [core/src/generator.ts:299](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L299)
+Defined in: [core/src/generator.ts:303](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/generator.ts#L303)
 
 Resolves and retrieves GraphQL directive objects from the schema based on their names.
 

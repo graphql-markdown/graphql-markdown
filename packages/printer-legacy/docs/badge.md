@@ -36,13 +36,45 @@ RELATION: string = "RELATION";
 
 ## Functions
 
+### formatBadges()
+
+```ts
+function formatBadges(badges, options): string | MDXString;
+```
+
+Defined in: [printer-legacy/src/badge.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L121)
+
+Formats an array of badges into a space-joined MDX string.
+
+#### Parameters
+
+##### badges
+
+`Badge`[]
+
+Array of badge objects to format
+
+##### options
+
+`PrintTypeOptions`
+
+Options containing the formatter for badges
+
+#### Returns
+
+`string` \| `MDXString`
+
+Space-joined MDX string of all badges, or empty string if none
+
+---
+
 ### getTypeBadges()
 
 ```ts
 function getTypeBadges(type, groups?): Badge[];
 ```
 
-Defined in: [printer-legacy/src/badge.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L44)
+Defined in: [printer-legacy/src/badge.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L46)
 
 Gets an array of badges for a given GraphQL type.
 
@@ -74,7 +106,7 @@ Array of Badge objects containing text and optional classnames
 function printBadge(badge, options): MDXString;
 ```
 
-Defined in: [printer-legacy/src/badge.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L97)
+Defined in: [printer-legacy/src/badge.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L99)
 
 Formats a single badge into MDX string format.
 
@@ -106,7 +138,7 @@ Formatted MDX string representation of the badge
 function printBadges(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/badge.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L119)
+Defined in: [printer-legacy/src/badge.ts:141](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L141)
 
 Generates and formats all applicable badges for a GraphQL type.
 

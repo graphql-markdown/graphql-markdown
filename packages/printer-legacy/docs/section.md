@@ -16,7 +16,7 @@ function printMetadataSection<T, V>(
 ): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/section.ts:195](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L195)
+Defined in: [printer-legacy/src/section.ts:197](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L197)
 
 Prints a metadata section with special handling for deprecated items.
 
@@ -74,7 +74,7 @@ Formatted MDX string containing the metadata section
 function printSection<V>(values, section, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/section.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L140)
+Defined in: [printer-legacy/src/section.ts:144](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L144)
 
 Prints a complete section with title and content.
 
@@ -120,7 +120,7 @@ Formatted MDX string containing the complete section
 function printSectionItem<T>(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/section.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L46)
+Defined in: [printer-legacy/src/section.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L48)
 
 Prints a single section item with its associated metadata.
 
@@ -160,7 +160,7 @@ Formatted MDX string containing the section item
 function printSectionItems<V>(values, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/section.ts:108](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L108)
+Defined in: [printer-legacy/src/section.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/section.ts#L112)
 
 Prints an array of section items with consistent formatting.
 

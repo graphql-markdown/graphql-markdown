@@ -68,13 +68,19 @@ Uses either diff or hash-based comparison methods based on the method parameter.
 
 #### Param
 
+**schema**
+
 The current GraphQL schema
 
 #### Param
 
+**outputDir**
+
 Directory where schema or hash files will be saved
 
 #### Param
+
+**method**
 
 Comparison method to use (defaults to DIFF)
 

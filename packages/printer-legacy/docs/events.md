@@ -928,7 +928,7 @@ DataOutputEvent.stopPropagation;
 
 ### ComposePageTypeEventData
 
-Defined in: [types/src/printer.d.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L114)
+Defined in: [types/src/printer.d.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L109)
 
 Data payload for compose page type events.
 
@@ -940,7 +940,7 @@ Data payload for compose page type events.
 readonly name: Maybe<string>;
 ```
 
-Defined in: [types/src/printer.d.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L118)
+Defined in: [types/src/printer.d.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L113)
 
 The name identifier for the type
 
@@ -950,7 +950,7 @@ The name identifier for the type
 readonly options: PrintTypeOptions;
 ```
 
-Defined in: [types/src/printer.d.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L120)
+Defined in: [types/src/printer.d.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L115)
 
 The print options in effect
 
@@ -960,7 +960,7 @@ The print options in effect
 readonly sections: PageSections;
 ```
 
-Defined in: [types/src/printer.d.ts:122](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L122)
+Defined in: [types/src/printer.d.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L117)
 
 The map of all page sections (mutable in BEFORE event)
 
@@ -970,7 +970,7 @@ The map of all page sections (mutable in BEFORE event)
 readonly type: unknown;
 ```
 
-Defined in: [types/src/printer.d.ts:116](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L116)
+Defined in: [types/src/printer.d.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L111)
 
 The GraphQL type being composed
 

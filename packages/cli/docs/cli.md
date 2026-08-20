@@ -12,10 +12,10 @@ It exports utilities to run the documentation generator both programmatically an
 ### GraphQLMarkdownCliType
 
 ```ts
-type GraphQLMarkdownCliType = CommanderStatic;
+type GraphQLMarkdownCliType = Command;
 ```
 
-Defined in: [index.ts:29](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L29)
+Defined in: [index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L32)
 
 Type representing the GraphQL Markdown CLI.
 
@@ -31,11 +31,11 @@ Type representing the GraphQL Markdown CLI.
 function getGraphQLMarkdownCli(
   options,
   loggerModule?,
-  customMdxParser?,
-): CommanderStatic;
+  customFormatter?,
+): Command;
 ```
 
-Defined in: [index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L84)
+Defined in: [index.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L89)
 
 Configures and returns the GraphQL Markdown CLI.
 
@@ -43,7 +43,7 @@ Configures and returns the GraphQL Markdown CLI.
 
 ##### options
 
-`GraphQLMarkdownCliOptions`
+`ConfigOptions`
 
 Options for configuring the GraphQL Markdown CLI.
 
@@ -53,22 +53,27 @@ Options for configuring the GraphQL Markdown CLI.
 
 Optional logger module to use.
 
-##### customMdxParser?
+##### customFormatter?
 
-`string` \| `boolean`
+`string`
 
-Optional MDX parser configuration.
+Optional default formatter package name. When provided, registers
+`--formatter` and `--mdxParser` (deprecated) flags with this value as the default.
 
 #### Returns
 
-`CommanderStatic`
+`Command`
 
 The configured CLI instance.
 
 #### Example
 
 ```typescript
-const cli = getGraphQLMarkdownCli({ id: "custom" }, "custom-logger", true);
+const cli = getGraphQLMarkdownCli(
+  { id: "custom" },
+  "custom-logger",
+  "@graphql-markdown/formatters/docusaurus",
+);
 await cli.parseAsync(process.argv);
 ```
 
@@ -80,7 +85,7 @@ await cli.parseAsync(process.argv);
 function runGraphQLMarkdown(options, cliOptions, loggerModule?): Promise<void>;
 ```
 
-Defined in: [index.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L47)
+Defined in: [index.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L50)
 
 Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
 
@@ -88,7 +93,7 @@ Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
 
 ##### options
 
-`GraphQLMarkdownCliOptions`
+`ConfigOptions`
 
 Options for configuring the GraphQL Markdown CLI.
 
