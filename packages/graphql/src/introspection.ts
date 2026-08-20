@@ -169,7 +169,19 @@ export const isValidDirectiveLocation = (
   if (!hasAstNode(entity)) {
     return false;
   }
-  const location = getDirectiveLocationForASTPath(entity.astNode);
+
+  // AST nodes without a directive location (eg. directive definitions) are not
+  // valid targets, and should not surface as errors.
+  let location: DirectiveLocation;
+  try {
+    location = getDirectiveLocationForASTPath(entity.astNode);
+  } catch (error) {
+    if (error instanceof IntrospectionError) {
+      return false;
+    }
+    throw error;
+  }
+
   return directive.locations.includes(location);
 };
 
