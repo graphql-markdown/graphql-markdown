@@ -8,8 +8,11 @@ import type { CustomDirective } from "./helpers";
 import type { Maybe, MDXString } from "./utils";
 import type { AdmonitionType, Badge, TypeLink } from "./printer";
 import type {
+  BeforeComposePageTypeHook,
   DiffCheckHook,
   GenerateIndexMetafileHook,
+  PrintCodeHook,
+  PrintTypeHook,
   RenderFilesHook,
   RenderHomepageHook,
   RenderRootTypesHook,
@@ -76,11 +79,11 @@ export interface MDXSupportType {
     formatted: Maybe<string[]>,
   ) => MDXString;
   mdxDeclaration: string;
-  // Event hooks
-  beforeSchemaLoadHook?: SchemaLoadHook;
-  afterSchemaLoadHook?: SchemaLoadHook;
-  beforeDiffCheckHook?: DiffCheckHook;
-  afterDiffCheckHook?: DiffCheckHook;
+  // Event hooks, see EVENT_CALLBACK_MAP in @graphql-markdown/core
+  beforeLoadSchemaHook?: SchemaLoadHook;
+  afterLoadSchemaHook?: SchemaLoadHook;
+  beforeCheckDiffHook?: DiffCheckHook;
+  afterCheckDiffHook?: DiffCheckHook;
   beforeRenderRootTypesHook?: RenderRootTypesHook;
   afterRenderRootTypesHook?: RenderRootTypesHook;
   beforeRenderHomepageHook?: RenderHomepageHook;
@@ -90,6 +93,11 @@ export interface MDXSupportType {
   beforeGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
   afterGenerateIndexMetafileHook?: GenerateIndexMetafileHook;
   afterRenderFilesHook?: RenderFilesHook;
+  beforePrintCodeHook?: PrintCodeHook;
+  afterPrintCodeHook?: PrintCodeHook;
+  beforePrintTypeHook?: PrintTypeHook;
+  afterPrintTypeHook?: PrintTypeHook;
+  beforeComposePageTypeHook?: BeforeComposePageTypeHook;
 }
 
 /**
@@ -454,6 +462,7 @@ declare const LOCATION_PATH: unique symbol;
 
 // Re-export event system types from event.d.ts
 export type {
+  BeforeComposePageTypeHook,
   DefaultAction,
   DiffCheckHook,
   GenerateIndexMetafileHook,
