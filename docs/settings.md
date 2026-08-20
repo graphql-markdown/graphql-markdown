@@ -184,6 +184,14 @@ The GraphQL-Markdown template for Docusaurus provides a customized homepage loca
 
 :::
 
+## `id`
+
+The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/advanced/additional-schema): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/configuration#graphql-config) project of the same name.
+
+| Setting | CLI flag        | Default     |
+| ------- | --------------- | ----------- |
+| `id`    | _not supported_ | `default`   |
+
 ## `linkRoot`
 
 The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.

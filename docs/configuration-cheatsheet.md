@@ -27,14 +27,15 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 
 ## Document Structure
 
-| Option         | Type                     | Default | Description                                                           |
-| -------------- | ------------------------ | ------- | --------------------------------------------------------------------- |
-| `linkRoot`     | `string`                 | `/`     | Root path used for type cross-links in generated documentation        |
-| `homepage`     | `string`                 | —       | Custom homepage content file                                          |
-| `hierarchy`    | `string`                 | `api`   | Documentation structure: `api`, `entity`, or `flat`                   |
-| `index`        | `boolean`                | `false` | Generate category indices                                             |
-| `categorySort` | `string` \| `function`   | —       | Sort categories: `"natural"` for alphabetical or custom function      |
-| `pretty`       | `boolean`                | `false` | Format generated Markdown files                                       |
+| Option             | Type                   | Default        | Description                                                      |
+| ------------------ | ---------------------- | -------------- | ---------------------------------------------------------------- |
+| `linkRoot`         | `string`               | `/`            | Root path used for type cross-links in generated documentation   |
+| `homepage`         | `string` \| `false`    | `generated.md` | Custom homepage content file, `false` to disable                 |
+| `hierarchy`        | `string`               | `api`          | Documentation structure: `api`, `entity`, or `flat`              |
+| `index`            | `boolean`              | `false`        | Generate category indices                                        |
+| `categorySort`     | `string` \| `function` | —              | Sort categories: `"natural"` for alphabetical or custom function |
+| `sectionHeaderId`  | `boolean`              | `true`         | Generate custom section header IDs for permalinks                |
+| `pretty`           | `boolean`              | `false`        | Format generated Markdown files                                  |
 
 ## Content Options
 
@@ -81,6 +82,7 @@ All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc`
 | `--deprecated <option>`           | `printTypeOptions.deprecated`         | `default`, `group`, or `skip`                  |
 | `--noParentType`                  | `printTypeOptions.parentTypePrefix`   | Hide parent type prefix on fields              |
 | `--noTypeBadges`                  | `printTypeOptions.typeBadges`         | Hide type attribute badges                     |
+| `--noSectionId`                   | `docOptions.sectionHeaderId`          | Disable section header IDs for permalinks      |
 | `--only <@directive...>`          | `onlyDocDirective`                    | Include only types with these directives       |
 | `--skip <@directive...>`          | `skipDocDirective`                    | Exclude types with these directives            |
 | `--groupByDirective <expr>`       | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
