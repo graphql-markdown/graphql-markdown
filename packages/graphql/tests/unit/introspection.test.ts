@@ -950,6 +950,11 @@ describe("introspection", () => {
           appliedTo: Kind.DIRECTIVE,
         },
       ],
+      [
+        {
+          kind: Kind.DIRECTIVE_DEFINITION,
+        },
+      ],
     ])("throws on unsupported entity", (node: unknown) => {
       expect.assertions(1);
 
