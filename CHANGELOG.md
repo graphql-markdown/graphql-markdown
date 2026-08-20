@@ -1,7 +1,45 @@
+<a id="1.35.1"></a>
+# [1.35.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.1) - 2026-08-20
+
+1.35.1 is a maintenance release: it fixes internal link generation in the DocFX, mdBook and Starlight formatters, refines directive location resolution in the GraphQL introspection layer, and refreshes dependencies (Commander v15, `graphql` 16.14.2).
+
+### Bug Fixes 🐛
+
+- **DocFX formatter**: rewrite absolute internal links to relative paths ([#2995](https://github.com/graphql-markdown/graphql-markdown/issues/2995)).
+- **mdBook formatter**: rewrite internal links to relative paths ([#2994](https://github.com/graphql-markdown/graphql-markdown/issues/2994)).
+- **Starlight formatter**: drop the `.mdx` extension from generated links ([#2996](https://github.com/graphql-markdown/graphql-markdown/issues/2996)).
+- **GraphQL**: skip directive locations for AST nodes without one, resolving the location without throwing ([#3214](https://github.com/graphql-markdown/graphql-markdown/issues/3214)).
+
+### Maintenance 🧹
+
+- Upgrade `commander` to v15 and pin the workspace protocol with `graphql` 16.14.2 ([#3073](https://github.com/graphql-markdown/graphql-markdown/issues/3073), [#3028](https://github.com/graphql-markdown/graphql-markdown/issues/3028)).
+- Remove dead code and tighten unused-export configuration in `core` and `printer-legacy` ([#3103](https://github.com/graphql-markdown/graphql-markdown/issues/3103), [#3106](https://github.com/graphql-markdown/graphql-markdown/issues/3106)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.35.1 |
+| @graphql-markdown/core | 1.21.1 |
+| @graphql-markdown/printer-legacy | 1.16.1 |
+| @graphql-markdown/types | 1.13.1 |
+| @graphql-markdown/utils | 1.12.1 |
+| @graphql-markdown/graphql | 1.2.3 |
+| @graphql-markdown/cli | 1.0.1 |
+| @graphql-markdown/diff | 1.1.16 |
+| @graphql-markdown/helpers | 1.1.1 |
+| @graphql-markdown/logger | 1.0.8 |
+| @graphql-markdown/formatters | 1.0.1 |
+
+**Full Changelog (draft)**: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.0...1.35.1
+
+[Changes][1.35.1]
+
+
 <a id="1.35.0"></a>
 # [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0) - 2026-05-31
 
-1.35.0 focuses on formatter-first integration: Docusaurus, Astro Starlight, Next.js + Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, and mdBook.
+1.35.0 focuses on [formatter-first integration](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#supported-formatters): Docusaurus, Astro Starlight, Next.js + Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, and mdBook.
 `formatter` is now the canonical setting; `mdxParser` remains a deprecated alias for migration compatibility.
 Examples: `@graphql-markdown/formatters/hugo`, `@graphql-markdown/formatters/docusaurus`, `@graphql-markdown/formatters/starlight`.
 
@@ -2346,6 +2384,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.35.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.0...1.35.1
 [1.35.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.34.0...1.35.0
 [1.34.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.33.0...1.34.0
 [1.33.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.32.1...1.33.0
