@@ -150,12 +150,14 @@ const config = {
     // the closest equivalent. 'unsafe-inline' on script-src is required for
     // Docusaurus's inline hydration scripts and the JSON-LD blocks below;
     // note frame-ancestors is ignored by browsers when set via meta tag.
+    // img-src allows contrib.rocks for the homepage's contributors image
+    // (src/pages/index.js).
     {
       tagName: "meta",
       attributes: {
         "http-equiv": "Content-Security-Policy",
         content:
-          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none';",
+          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contrib.rocks; object-src 'none'; base-uri 'self'; frame-ancestors 'none';",
       },
     },
     {
