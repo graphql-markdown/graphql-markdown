@@ -10,7 +10,7 @@ Module providing utilities for handling GraphQL example directives and printing 
 function getDirectiveExampleOption(options): Maybe<TypeDirectiveExample>;
 ```
 
-Defined in: [printer-legacy/src/example.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L44)
+Defined in: [printer-legacy/src/example.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L46)
 
 Retrieves directive example options from the provided print type options.
 
@@ -36,7 +36,7 @@ The directive example configuration if valid, otherwise `undefined`
 function printExample(type, options): Maybe<string>;
 ```
 
-Defined in: [printer-legacy/src/example.ts:252](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L252)
+Defined in: [printer-legacy/src/example.ts:254](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/example.ts#L254)
 
 Prints an example value for a given GraphQL type or operation.
 

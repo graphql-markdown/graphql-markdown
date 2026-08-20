@@ -59,7 +59,7 @@ The resolved directive value or `fallback`/`undefined`
 function getCustomTags(type, options): Badge[];
 ```
 
-Defined in: [printer-legacy/src/directive.ts:125](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L125)
+Defined in: [printer-legacy/src/directive.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L129)
 
 Extracts custom tags from directives for a given type
 
@@ -95,7 +95,7 @@ function printCustomDirective(
 ): Maybe<string>;
 ```
 
-Defined in: [printer-legacy/src/directive.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L57)
+Defined in: [printer-legacy/src/directive.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L59)
 
 Prints a custom directive as a Markdown string
 
@@ -133,7 +133,7 @@ Formatted Markdown string for the directive or `undefined`
 function printCustomDirectives(type, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/directive.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L85)
+Defined in: [printer-legacy/src/directive.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L87)
 
 Prints all custom directives for a type as a Markdown section
 
@@ -165,7 +165,7 @@ A "Directives" PageSection, or undefined when no directives are printable
 function printCustomTags(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/directive.ts:157](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L157)
+Defined in: [printer-legacy/src/directive.ts:161](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/directive.ts#L161)
 
 Prints custom directive tags as Markdown badges
 

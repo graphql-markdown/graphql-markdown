@@ -51,6 +51,8 @@ Returns a stringified version of the variable.
 
 #### Param
 
+**variable**
+
 the variable to be transformed.
 
 #### Returns

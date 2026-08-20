@@ -10,7 +10,7 @@ Shared markdown-oriented helpers used by formatter presets.
 function appendExtensionToAbsolutePathWithoutExtension(url, extension): string;
 ```
 
-Defined in: [formatters/markdown.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L114)
+Defined in: [formatters/markdown.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L159)
 
 Appends an extension only when URL is an absolute path without a file extension.
 
@@ -44,7 +44,7 @@ Updated or original URL depending on path shape.
 function appendLinkExtension(url, extension): string;
 ```
 
-Defined in: [formatters/markdown.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L101)
+Defined in: [formatters/markdown.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L146)
 
 Appends an extension to a link URL.
 
@@ -102,7 +102,7 @@ Parsed title value, or an empty string when no `title:` line exists.
 function formatMarkdownFrontmatter(formatted, delimiter?, eol?): string;
 ```
 
-Defined in: [formatters/markdown.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L82)
+Defined in: [formatters/markdown.ts:127](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L127)
 
 Formats a markdown frontmatter block from preformatted lines.
 
@@ -140,7 +140,7 @@ Complete frontmatter block or an empty string when input is absent.
 function indentMarkdownLines(text, spaces, eol?): string;
 ```
 
-Defined in: [formatters/markdown.ts:133](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L133)
+Defined in: [formatters/markdown.ts:178](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L178)
 
 Indents non-empty markdown lines by a fixed amount of spaces.
 
@@ -169,6 +169,41 @@ Line separator used to split and join lines.
 `string`
 
 Indented multiline string.
+
+---
+
+### mergeFrontmatterLines()
+
+```ts
+function mergeFrontmatterLines(props, formatted): string[];
+```
+
+Defined in: [formatters/markdown.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/formatters/markdown.ts#L84)
+
+Merges frontmatter object entries with preformatted frontmatter lines.
+
+Preformatted lines take precedence over object values when keys overlap.
+Lines without a `key: value` shape and comment lines are ignored.
+
+#### Parameters
+
+##### props
+
+`Record`&lt;`string`, `unknown`&gt; \| `null` \| `undefined`
+
+Frontmatter key-value object.
+
+##### formatted
+
+`string`[] \| `null` \| `undefined`
+
+Serialized frontmatter lines without delimiters.
+
+#### Returns
+
+`string`[]
+
+Merged frontmatter lines in insertion order.
 
 ---
 

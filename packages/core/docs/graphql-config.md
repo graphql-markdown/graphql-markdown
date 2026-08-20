@@ -7,26 +7,13 @@ using the graphql-config package.
 
 ## Variables
 
-### EXTENSION_NAME
-
-```ts
-const EXTENSION_NAME: "graphql-markdown";
-```
-
-Defined in: [core/src/graphql-config.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L31)
-
-The name of the GraphQL Markdown extension.
-Used to identify the extension in graphql-config.
-
----
-
 ### graphQLConfigExtension
 
 ```ts
 const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-Defined in: [core/src/graphql-config.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L46)
+Defined in: [core/src/graphql-config.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L48)
 
 GraphQL extension declaration for graphql-config.
 
@@ -55,7 +42,7 @@ function loadConfiguration(
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>>;
 ```
 
-Defined in: [core/src/graphql-config.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L142)
+Defined in: [core/src/graphql-config.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L146)
 
 Loads the GraphQL Markdown configuration from graphql-config.
 
@@ -116,7 +103,7 @@ const config = await loadConfiguration(
 function setLoaderOptions(loaders, options): LoaderOption;
 ```
 
-Defined in: [core/src/graphql-config.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L94)
+Defined in: [core/src/graphql-config.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L98)
 
 Sets loader options for GraphQL Markdown loaders.
 

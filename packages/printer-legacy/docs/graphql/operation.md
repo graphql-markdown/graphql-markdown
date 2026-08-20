@@ -60,35 +60,3 @@ Print type options for customizing output
 `Maybe`&lt;[`PageSection`](../events.md#pagesection)[]&gt;
 
 Ordered operation metadata sections, or undefined when `type` is not an operation
-
----
-
-### printOperationType()
-
-```ts
-function printOperationType(type, options): Maybe<PageSection>;
-```
-
-Defined in: [printer-legacy/src/graphql/operation.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/operation.ts#L24)
-
-Prints the operation type information.
-
-#### Parameters
-
-##### type
-
-`unknown`
-
-The operation type to print
-
-##### options
-
-`PrintTypeOptions`
-
-Print type options for customizing output
-
-#### Returns
-
-`Maybe`&lt;[`PageSection`](../events.md#pagesection)&gt;
-
-A "Type" PageSection, or undefined when `type` is not an operation

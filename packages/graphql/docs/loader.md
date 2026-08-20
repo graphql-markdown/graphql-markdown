@@ -10,7 +10,7 @@ Library for GraphQL schema loading and `loaders` config processing.
 function getDocumentLoaders(loadersList): Promise<Maybe<LoadSchemaOptions>>;
 ```
 
-Defined in: [packages/graphql/src/loader.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L113)
+Defined in: [packages/graphql/src/loader.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L111)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [packages/graphql/src/loader.ts:113](https://github.com/graphql-mark
 function loadSchema(schemaLocation, options): Promise<GraphQLSchema>;
 ```
 
-Defined in: [packages/graphql/src/loader.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L50)
+Defined in: [packages/graphql/src/loader.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L48)
 
 #### Parameters
 

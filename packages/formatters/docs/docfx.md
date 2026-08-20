@@ -14,7 +14,7 @@ Uses DocFX alert syntax for admonitions and injects the required
 const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook;
 ```
 
-Defined in: [docfx/index.ts:232](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L232)
+Defined in: [docfx/index.ts:284](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L284)
 
 Builds DocFX `toc.yml` navigation files as each entity page is written.
 
@@ -30,7 +30,7 @@ are prepended as an "Overview" entry on first encounter.
 const BADGE_CLASS_MAP: Record<string, string>;
 ```
 
-Defined in: [docfx/index.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L49)
+Defined in: [docfx/index.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L55)
 
 Maps graphql-markdown badge classnames to Bootstrap 5 contextual badge classes.
 
@@ -42,7 +42,7 @@ Maps graphql-markdown badge classnames to Bootstrap 5 contextual badge classes.
 const mdxExtension: ".md";
 ```
 
-Defined in: [docfx/index.ts:180](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L180)
+Defined in: [docfx/index.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L149)
 
 ## Functions
 
@@ -52,7 +52,7 @@ Defined in: [docfx/index.ts:180](https://github.com/graphql-markdown/graphql-mar
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [docfx/index.ts:167](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L167)
+Defined in: [docfx/index.ts:136](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L136)
 
 Creates a DocFX formatter.
 
@@ -78,7 +78,7 @@ A complete Formatter implementation for DocFX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [docfx/index.ts:72](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L72)
+Defined in: [docfx/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L78)
 
 Formats an admonition using DocFX alert syntax (`> [!TYPE]`).
 
@@ -110,7 +110,7 @@ Formatted admonition string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [docfx/index.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L60)
+Defined in: [docfx/index.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L66)
 
 Formats a badge using Bootstrap 5 badge classes available in DocFX's modern template.
 
@@ -130,65 +130,13 @@ Formatted badge string
 
 ---
 
-### formatMDXBullet()
-
-```ts
-function formatMDXBullet(text?): MDXString;
-```
-
-Defined in: [docfx/index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L86)
-
-Formats a bullet point separator.
-
-#### Parameters
-
-##### text?
-
-`string` = `""`
-
-Optional text to append after the bullet
-
-#### Returns
-
-`MDXString`
-
-Formatted bullet string
-
----
-
-### formatMDXDetails()
-
-```ts
-function formatMDXDetails(option): MDXString;
-```
-
-Defined in: [docfx/index.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L95)
-
-Formats a collapsible block as an HTML `<details>` element.
-
-#### Parameters
-
-##### option
-
-`CollapsibleOption`
-
-Configuration for open/close label text
-
-#### Returns
-
-`MDXString`
-
-Formatted details element string
-
----
-
 ### formatMDXFrontmatter()
 
 ```ts
 function formatMDXFrontmatter(props, formatted): MDXString;
 ```
 
-Defined in: [docfx/index.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L109)
+Defined in: [docfx/index.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L94)
 
 Formats YAML front matter, injecting a `uid` field required by DocFX
 for cross-reference resolution between pages.
@@ -221,7 +169,7 @@ Formatted front matter block, or empty string if no lines provided
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [docfx/index.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L135)
+Defined in: [docfx/index.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L120)
 
 Returns the link unchanged — DocFX resolves `.md` links natively.
 
@@ -238,61 +186,3 @@ Link data with URL and text
 `TypeLink`
 
 The link unchanged
-
----
-
-### formatMDXNameEntity()
-
-```ts
-function formatMDXNameEntity(name, parentType?): MDXString;
-```
-
-Defined in: [docfx/index.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L145)
-
-Formats a named entity as a backtick code span.
-
-#### Parameters
-
-##### name
-
-`string`
-
-Entity name
-
-##### parentType?
-
-`Maybe`&lt;`string`&gt;
-
-Optional parent type name for qualified references
-
-#### Returns
-
-`MDXString`
-
-Formatted entity reference string
-
----
-
-### formatMDXSpecifiedByLink()
-
-```ts
-function formatMDXSpecifiedByLink(url): MDXString;
-```
-
-Defined in: [docfx/index.ts:158](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L158)
-
-Formats a "specified by" link as a standard Markdown link.
-
-#### Parameters
-
-##### url
-
-`string`
-
-URL to the specification
-
-#### Returns
-
-`MDXString`
-
-Formatted specification link string

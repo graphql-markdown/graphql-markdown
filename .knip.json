@@ -19,6 +19,10 @@
         "graphql-config"
       ]
     },
+    "packages/docusaurus": {
+      "entry": ["jest.config.mjs"],
+      "ignoreDependencies": ["@docusaurus/types"]
+    },
     "packages/core": {
       "entry": ["jest.config.mjs"],
       "ignoreDependencies": ["graphql-config"]

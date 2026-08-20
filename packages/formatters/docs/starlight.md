@@ -14,7 +14,7 @@ index files for each category directory.
 const mdxDeclaration: MDXString;
 ```
 
-Defined in: [starlight/index.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L43)
+Defined in: [starlight/index.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L42)
 
 MDX import statement prepended to every generated file to register Starlight components.
 
@@ -26,7 +26,7 @@ MDX import statement prepended to every generated file to register Starlight com
 const mdxExtension: ".mdx";
 ```
 
-Defined in: [starlight/index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L40)
+Defined in: [starlight/index.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L39)
 
 File extension used for generated pages.
 
@@ -38,7 +38,7 @@ File extension used for generated pages.
 function afterRenderTypeEntitiesHook(event): Promise<void>;
 ```
 
-Defined in: [starlight/index.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L173)
+Defined in: [starlight/index.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L117)
 
 Lifecycle hook that appends a link entry to the category `index.md`
 after each type entity page is rendered.
@@ -76,7 +76,7 @@ Hook payload containing the entity name and its output file path
 function beforeGenerateIndexMetafileHook(event): Promise<void>;
 ```
 
-Defined in: [starlight/index.ts:153](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L153)
+Defined in: [starlight/index.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L97)
 
 Lifecycle hook that creates an `index.md` file for a category directory
 before Starlight indexes it. Skips creation if the file already exists.
@@ -114,7 +114,7 @@ Hook payload containing the target directory and category name
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [starlight/index.ts:190](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L190)
+Defined in: [starlight/index.ts:134](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L134)
 
 Creates an Astro Starlight formatter.
 
@@ -140,7 +140,7 @@ A complete Formatter implementation for Starlight MDX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [starlight/index.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L65)
+Defined in: [starlight/index.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L64)
 
 Formats an admonition using the Starlight `<Aside>` component.
 Maps `warning` type to `caution`; all other types use `note`.
@@ -173,7 +173,7 @@ Formatted Starlight Aside component string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [starlight/index.ts:53](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L53)
+Defined in: [starlight/index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L52)
 
 Formats a badge using the Starlight `<Badge>` component.
 Maps `DEPRECATED` classname to the `caution` variant; all others use `default`.
@@ -194,99 +194,16 @@ Formatted Starlight Badge component string
 
 ---
 
-### formatMDXBullet()
-
-```ts
-function formatMDXBullet(text?): MDXString;
-```
-
-Defined in: [starlight/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L78)
-
-Formats a bullet point separator.
-
-#### Parameters
-
-##### text?
-
-`string` = `""`
-
-Optional text to append after the bullet
-
-#### Returns
-
-`MDXString`
-
-Formatted bullet string
-
----
-
-### formatMDXDetails()
-
-```ts
-function formatMDXDetails(option): MDXString;
-```
-
-Defined in: [starlight/index.ts:87](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L87)
-
-Formats a collapsible block as an HTML `<details>` element.
-
-#### Parameters
-
-##### option
-
-`CollapsibleOption`
-
-Configuration for open/close label text
-
-#### Returns
-
-`MDXString`
-
-Formatted details element string
-
----
-
-### formatMDXFrontmatter()
-
-```ts
-function formatMDXFrontmatter(_props, formatted): MDXString;
-```
-
-Defined in: [starlight/index.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L100)
-
-Formats YAML front matter wrapped in `---` delimiters.
-
-#### Parameters
-
-##### \_props
-
-`Maybe`&lt;`FrontMatterOptions`&gt;
-
-Front matter options (unused)
-
-##### formatted
-
-`Maybe`&lt;`string`[]&gt;
-
-Pre-formatted front matter lines
-
-#### Returns
-
-`MDXString`
-
-Formatted front matter block, or empty string if no lines provided
-
----
-
 ### formatMDXLink()
 
 ```ts
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [starlight/index.ts:116](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L116)
+Defined in: [starlight/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L78)
 
-Appends `.mdx` to internal link URLs.
+Returns the link unchanged — Starlight routes `page.mdx` to `page/` so
+links must not include the `.mdx` extension.
 
 #### Parameters
 
@@ -300,62 +217,4 @@ Link data with URL and text
 
 `TypeLink`
 
-Link with `.mdx` extension appended to the URL
-
----
-
-### formatMDXNameEntity()
-
-```ts
-function formatMDXNameEntity(name, parentType?): MDXString;
-```
-
-Defined in: [starlight/index.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L129)
-
-Formats a named entity as a backtick code span.
-
-#### Parameters
-
-##### name
-
-`string`
-
-Entity name
-
-##### parentType?
-
-`Maybe`&lt;`string`&gt;
-
-Optional parent type name for qualified references
-
-#### Returns
-
-`MDXString`
-
-Formatted entity reference string
-
----
-
-### formatMDXSpecifiedByLink()
-
-```ts
-function formatMDXSpecifiedByLink(url): MDXString;
-```
-
-Defined in: [starlight/index.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L142)
-
-Formats a "specified by" link as a standard Markdown link.
-
-#### Parameters
-
-##### url
-
-`string`
-
-URL to the specification
-
-#### Returns
-
-`MDXString`
-
-Formatted specification link string
+Unmodified link

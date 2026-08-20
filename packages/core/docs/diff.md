@@ -62,6 +62,8 @@ const changesDetected = await hasChanges(schema, "/tmp", "methodName");
 console.log(changesDetected); // true or false
 ```
 
+**Using with a custom diff module**
+
 ```typescript
 import { hasChanges } from "./diff";
 

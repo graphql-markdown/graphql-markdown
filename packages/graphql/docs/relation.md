@@ -1,10 +1,10 @@
 # relation
 
-Library supporting `relatedTypeSection` for displaying relations between GraphQL schema entities.
+Library for displaying relations between GraphQL schema entities.
 
 ## See
 
-[Option `relatedTypeSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+[Settings `printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
 
 ## Variables
 
@@ -24,17 +24,25 @@ mapRelationOf
 
 #### Type Param
 
+**T**
+
 the type of the GraphQL schema type.
 
 #### Type Param
+
+**R**
 
 the return type of map of relations (see IGetRelation).
 
 #### Param
 
+**type**
+
 the GraphQL schema type being processed.
 
 #### Param
+
+**schemaMap**
 
 a GraphQL schema map (see getSchemaMap).
 
@@ -60,17 +68,25 @@ mapRelationOf
 
 #### Type Param
 
+**T**
+
 the type of the GraphQL schema type.
 
 #### Type Param
+
+**R**
 
 the return type of map of relations (see IGetRelation).
 
 #### Param
 
+**type**
+
 the GraphQL schema type being processed.
 
 #### Param
+
+**schemaMap**
 
 a GraphQL schema map (see getSchemaMap).
 
@@ -96,17 +112,25 @@ mapRelationOf
 
 #### Type Param
 
+**T**
+
 the type of the GraphQL schema type.
 
 #### Type Param
+
+**R**
 
 the return type of map of relations (see IGetRelation).
 
 #### Param
 
+**type**
+
 the GraphQL schema type being processed.
 
 #### Param
+
+**schemaMap**
 
 a GraphQL schema map (see getSchemaMap).
 
@@ -132,17 +156,25 @@ mapRelationOf
 
 #### Type Param
 
+**T**
+
 the type of the GraphQL schema type.
 
 #### Type Param
+
+**R**
 
 the return type of map of relations (see IGetRelation).
 
 #### Param
 
+**type**
+
 the GraphQL schema type being processed.
 
 #### Param
+
+**schemaMap**
 
 a GraphQL schema map (see getSchemaMap).
 
@@ -168,17 +200,25 @@ mapRelationOf
 
 #### Type Param
 
+**T**
+
 the type of the GraphQL schema type.
 
 #### Type Param
+
+**R**
 
 the return type of map of relations (see IGetRelation).
 
 #### Param
 
+**type**
+
 the GraphQL schema type being processed.
 
 #### Param
+
+**schemaMap**
 
 a GraphQL schema map (see getSchemaMap).
 
