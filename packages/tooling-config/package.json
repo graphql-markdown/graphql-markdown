@@ -27,6 +27,10 @@
       "default": "./jest/unit.mjs"
     },
     "./package.json": "./package.json",
+    "./vitest/base": {
+      "types": "./vitest/base.d.mts",
+      "default": "./vitest/base.mjs"
+    },
     "./prettier": "./prettier/index.mjs",
     "./stryker": "./stryker/stryker.conf.mjs",
     "./tsconfig/base": "./tsconfig/base.json",
@@ -49,6 +53,7 @@
     "scripts",
     "tsconfig",
     "typedoc",
-    "stryker"
+    "stryker",
+    "vitest"
   ]
 }

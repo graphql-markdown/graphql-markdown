@@ -35,6 +35,7 @@
     "packages/tooling-config": {
       "entry": [
         "eslint/config.ts",
+        "vitest/base.mjs",
         "jest/base.mjs",
         "jest/root.mjs",
         "jest/unit.mjs",
@@ -60,6 +61,8 @@
         "@typescript-eslint/parser",
         "eslint-config-prettier",
         "eslint-plugin-import",
+        "@vitest/eslint-plugin",
+        "vitest",
         "eslint-plugin-jest",
         "eslint-plugin-jsonc",
         "eslint-plugin-mdx",
@@ -79,6 +82,10 @@
   ],
   "jest": {
     "config": ["packages/*/jest.config.mjs"],
+    "entry": ["**/tests/**/*.ts"]
+  },
+  "vitest": {
+    "config": ["packages/*/vitest.config.mjs"],
     "entry": ["**/tests/**/*.ts"]
   }
 }

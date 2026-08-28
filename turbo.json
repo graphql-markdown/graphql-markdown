@@ -53,6 +53,7 @@
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
         "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },
@@ -65,6 +66,7 @@
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
         "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },
@@ -77,6 +79,7 @@
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
         "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },
