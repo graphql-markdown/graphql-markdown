@@ -5,20 +5,6 @@ import { fileURLToPath } from "node:url";
 
 import { defineConfig } from "vitest/config";
 
-// Shared base configuration for Vitest.
-export const PACKAGES = [
-  "cli",
-  "core",
-  "diff",
-  "docusaurus",
-  "formatters",
-  "graphql",
-  "helpers",
-  "logger",
-  "printer-legacy",
-  "utils",
-];
-
 /**
  * Resolves a workspace package `src` folder as an absolute path.
  *
@@ -38,7 +24,7 @@ const packagePath = (packagesDir, subPath) => `${packagesDir}/${subPath}`;
  * @param {string} packagesDir absolute path to the `packages` folder
  * @returns {{ find: RegExp, replacement: string }[]}
  */
-export const createAlias = (packagesDir) => [
+const createAlias = (packagesDir) => [
   {
     find: /^@graphql-markdown\/formatters\/defaults$/,
     replacement: packagePath(packagesDir, "formatters/src/defaults"),
