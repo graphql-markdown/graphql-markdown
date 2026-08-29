@@ -135,7 +135,7 @@ jobs:
       - name: Scaffold CLI project
         uses: ./.github/actions/scaffold-cli
         with:
-            graphql-version: ${{ matrix.graphql }}
+          graphql-version: ${{ matrix.graphql }}
 
       - name: Configure multi-instance graphql config
         run: cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs "$PROJECT_DIR/graphql.config.mjs"

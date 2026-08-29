@@ -12,11 +12,13 @@ export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 usage() {
   cat >&2 <<'EOF'
-usage: run-smoke.sh [cli|docusaurus2|docusaurus3|all]
+usage: run-smoke.sh [cli|docusaurus2|docusaurus3|all] [graphql-version]
 
 Builds and packs the workspace once, then scaffolds a throwaway project and
-runs the smoke-test suite for the selected target(s). With no argument,
-prompts interactively. Must be run from the repository root.
+runs the smoke-test suite for the selected target(s). The optional second
+argument selects the GraphQL major to install (16 or 17, default 16) and
+applies to every suite, including `all`. With no argument, prompts
+interactively. Must be run from the repository root.
 EOF
 }
 
@@ -39,6 +41,8 @@ if [[ -z "$SUITE" ]]; then
     esac
   done
 fi
+
+GRAPHQL_VERSION="${2:-16}"
 
 case "$SUITE" in
   cli|docusaurus2|docusaurus3|all) ;;
@@ -85,13 +89,12 @@ run_docusaurus() {
 build_and_pack
 
 case "$SUITE" in
-  cli) run_cli 16 ;;
-  docusaurus2) run_docusaurus 2 16;;
-  docusaurus3) run_docusaurus 3 16;;
+  cli) run_cli "$GRAPHQL_VERSION" ;;
+  docusaurus2) run_docusaurus 2 "$GRAPHQL_VERSION" ;;
+  docusaurus3) run_docusaurus 3 "$GRAPHQL_VERSION" ;;
   all)
-    run_cli
-    run_docusaurus 2 16
-    run_docusaurus 3 16
-    run_docusaurus 3 17
+    run_cli "$GRAPHQL_VERSION"
+    run_docusaurus 2 "$GRAPHQL_VERSION"
+    run_docusaurus 3 "$GRAPHQL_VERSION"
     ;;
 esac
