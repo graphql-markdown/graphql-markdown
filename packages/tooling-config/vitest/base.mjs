@@ -1,5 +1,6 @@
 // @ts-check
 
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { defineConfig } from "vitest/config";
@@ -53,6 +54,34 @@ export const createAlias = (packagesDir) => [
 ];
 
 /**
+ * Locates the workspace `packages` folder by walking up from a package root.
+ *
+ * A plain `../` would do for `packages/<name>/vitest.config.mjs`, but Stryker
+ * copies the package into `packages/<name>/.stryker-tmp/sandbox-XXXX/` and runs
+ * the config from there. Walking up keeps the `@graphql-markdown/*` aliases
+ * pointing at the real sibling sources in both cases; without it they resolve
+ * to a path that does not exist and every test file fails to load.
+ *
+ * @param {string} from absolute path of the package root
+ * @returns {string} absolute path of the `packages` folder
+ */
+const findPackagesDir = (from) => {
+  let current = resolve(from);
+
+  while (basename(dirname(current)) !== "packages") {
+    const parent = dirname(current);
+    if (parent === current) {
+      throw new Error(
+        `Unable to locate the workspace "packages" folder from "${from}".`,
+      );
+    }
+    current = parent;
+  }
+
+  return dirname(current);
+};
+
+/**
  * @typedef {object} PackageConfigOptions
  * @property {number} [testTimeout]
  * @property {string[]} [include]
@@ -67,11 +96,11 @@ export const createAlias = (packagesDir) => [
  */
 export const createPackageConfig = (name, configUrl, options = {}) => {
   const root = fileURLToPath(new URL(".", configUrl));
-  const packagesDir = fileURLToPath(new URL("../", configUrl));
+  const packagesDir = findPackagesDir(root);
 
   return defineConfig({
     resolve: {
-      alias: createAlias(packagesDir.replace(/\/$/, "")),
+      alias: createAlias(packagesDir),
       // Each workspace package resolves its own copy of `graphql`, and the
       // library rejects values built by a different instance ("Cannot use
       // GraphQLObjectType from another module or realm"). Jest collapsed the
