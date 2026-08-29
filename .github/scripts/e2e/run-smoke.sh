@@ -61,9 +61,10 @@ build_and_pack() {
 }
 
 run_cli() {
+  local graphql_version="$1"
   echo "::group::CLI smoke suite"
   local project_dir="$SCRATCH_ROOT/cli-gqlmd"
-  "$SCRIPT_DIR/setup-cli-project.sh" "$project_dir" "$PKG_DIR"
+  "$SCRIPT_DIR/setup-cli-project.sh" "$graphql_version" "$project_dir" "$PKG_DIR"
   cp "$REPO_ROOT/tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs" \
     "$project_dir/graphql.config.mjs"
   PROJECT_DIR="$project_dir" "$SCRIPT_DIR/smoke-test.sh" cli "$project_dir"
@@ -72,9 +73,10 @@ run_cli() {
 
 run_docusaurus() {
   local version="$1"
+  local graphql_version="$2"
   echo "::group::Docusaurus $version smoke suite"
   local project_dir="$SCRATCH_ROOT/docusaurus${version}-gqlmd"
-  "$SHARED_DIR/setup-docusaurus-project.sh" "$version" "$project_dir" "$PKG_DIR"
+  "$SHARED_DIR/setup-docusaurus-project.sh" "$version" "$graphql_version" "$project_dir" "$PKG_DIR"
   (cd "$project_dir" && npm install --save "$REPO_ROOT/tests/e2e/helpers/e2e-test-webpack-plugin")
   PROJECT_DIR="$project_dir" "$SCRIPT_DIR/smoke-test.sh" docusaurus "$project_dir"
   echo "::endgroup::"
@@ -83,12 +85,13 @@ run_docusaurus() {
 build_and_pack
 
 case "$SUITE" in
-  cli) run_cli ;;
-  docusaurus2) run_docusaurus 2 ;;
-  docusaurus3) run_docusaurus 3 ;;
+  cli) run_cli 16 ;;
+  docusaurus2) run_docusaurus 2 16;;
+  docusaurus3) run_docusaurus 3 16;;
   all)
     run_cli
-    run_docusaurus 2
-    run_docusaurus 3
+    run_docusaurus 2 16
+    run_docusaurus 3 16
+    run_docusaurus 3 17
     ;;
 esac
