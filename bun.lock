@@ -229,7 +229,7 @@
     "lodash": "4.18.1",
   },
   "catalog": {
-    "graphql": "16 | 17",
+    "graphql": "^16.0.0 || ^17.0.0",
     "graphql-config": "5.1.6",
     "prettier": "3.8.3",
   },
