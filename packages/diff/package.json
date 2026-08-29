@@ -76,8 +76,7 @@
     "@graphql-markdown/tooling-config": "workspace:"
   },
   "resolutions": {
-    "braces": "3.0.3",
-    "graphql": "16"
+    "braces": "3.0.3"
   },
   "directories": {
     "test": "tests"
