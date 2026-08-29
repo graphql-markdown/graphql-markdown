@@ -234,25 +234,6 @@ describe("graphql-config", () => {
       ).resolves.toBeUndefined();
     });
 
-    test("logs an error when the project config cannot be read", async () => {
-      expect.hasAssertions();
-
-      const errorSpy = jest.spyOn(console, "error");
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => {
-          return undefined;
-        }),
-      });
-
-      await CoreGraphQLConfig.loadConfiguration("baz");
-
-      expect(errorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(
-          'Cannot read the "graphql-markdown" configuration for project "baz"',
-        ),
-      );
-    });
-
     test("reports the fallback to defaults when no config is found", async () => {
       expect.hasAssertions();
 

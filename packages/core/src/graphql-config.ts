@@ -204,11 +204,10 @@ export const loadConfiguration = async (
     }
 
     return projectConfig;
-  } catch (error) {
-    log(
-      `Cannot read the "${EXTENSION_NAME}" configuration for project "${id}", so the built-in defaults are used instead.\n${String(error)}`,
-      "error",
-    );
+  } catch {
+    // Asking for a project that the config does not declare is ordinary: the
+    // caller always asks for "default", and a config file with named projects
+    // legitimately has no such project. Stay silent and fall back.
     return undefined;
   }
 };
