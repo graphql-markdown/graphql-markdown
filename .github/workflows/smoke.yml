@@ -116,10 +116,14 @@ jobs:
         run: .github/scripts/e2e/smoke-build.sh docusaurus "$PROJECT_DIR"
 
   smoke-cli:
-    name: Smoke Tests on CLI
+    name: Smoke Tests on CLI with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
     needs: build-packages
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    strategy:
+      fail-fast: false
+      matrix:
+        graphql: [16, 17]
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -129,6 +133,9 @@ jobs:
 
       - name: Configure multi-instance graphql config
         run: cp tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs "$PROJECT_DIR/graphql.config.mjs"
+    
+      - name: Install graphql
+        run: npm install "graphql@${{ matrix.graphql }}"
 
       - name: Run CLI Smoke Tests
         run: .github/scripts/e2e/smoke-test.sh cli "$PROJECT_DIR"
