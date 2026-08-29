@@ -359,14 +359,40 @@ interface OutputAdapter {
 }
 ```
 
+The following example publishes the generated pages to a [Cloudflare R2](https://developers.cloudflare.com/r2/) bucket instead of writing them to disk, using R2's S3-compatible API:
+
 ```js
-const pages = new Map();
+const path = require("node:path");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+
+const rootPath = "./docs";
+const baseURL = "schema";
+const outputDir = path.join(rootPath, baseURL);
+
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  },
+});
 
 module.exports = {
   // ...
+  rootPath,
+  baseURL,
   outputAdapter: {
+    // R2 is a flat object store with no directories, so `ensureDir` is omitted.
     writeFile: async (filePath, content) => {
-      pages.set(filePath, content);
+      await r2.send(
+        new PutObjectCommand({
+          Bucket: "docs",
+          Key: path.relative(outputDir, filePath),
+          Body: content,
+          ContentType: "text/markdown",
+        }),
+      );
     },
   },
 };
@@ -379,6 +405,18 @@ module.exports = {
 `ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same absolute paths the filesystem writer would use, rooted at the output directory — an adapter backed by something other than a filesystem can treat them as opaque keys.
 
 Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
+
+:::
+
+:::caution
+
+An adapter that omits `ensureDir` has no way to clear the destination, so [`force`](#force) cannot remove entries left behind by a previous run. If types are removed from the schema, their pages persist until something deletes them. Implement `ensureDir` and honour `forceEmpty`, or prune the destination yourself before generating.
+
+:::
+
+:::note
+
+`outputAdapter` redirects where documentation is written; it does not make generation runnable on a non-Node runtime. `@graphql-markdown/core` and its dependencies still require Node built-ins, so generation runs under Node — in a build step or CI job — and the adapter publishes the result to its destination.
 
 :::
 
