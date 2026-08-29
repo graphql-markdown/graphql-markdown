@@ -9,6 +9,9 @@ inputs:
   docusaurus-version:
     description: Docusaurus major version to scaffold (e.g. 2 or 3)
     required: true
+  graphql-version:
+    description: GraphQL major version to install (e.g. 16 or 17)
+    required: true
 
 runs:
   using: composite
@@ -19,4 +22,4 @@ runs:
 
     - name: Scaffold Docusaurus project and install graphql-markdown
       shell: bash
-      run: .github/scripts/setup-docusaurus-project.sh "${{ inputs.docusaurus-version }}" "$PROJECT_DIR" "$PKG_DIR"
+      run: .github/scripts/setup-docusaurus-project.sh "${{ inputs.docusaurus-version }}" "${{ inputs.graphql-version }}" "$PROJECT_DIR" "$PKG_DIR"

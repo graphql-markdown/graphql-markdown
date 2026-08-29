@@ -4,9 +4,10 @@
 # `build-docusaurus-project` + `setup-docusaurus-project` targets.
 set -euo pipefail
 
-DOCUSAURUS_VERSION="${1:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
-PROJECT_DIR="${2:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
-PKG_DIR="${3:?usage: setup-docusaurus-project.sh <docusaurus-version> <project-dir> <package-tgz-dir>}"
+DOCUSAURUS_VERSION="${1:?usage: setup-docusaurus-project.sh <docusaurus-version> <graphql-version> <project-dir> <package-tgz-dir>}"
+GRAPHQL_VERSION="${2:?usage: setup-docusaurus-project.sh <docusaurus-version> <graphql-version> <project-dir> <package-tgz-dir>}"
+PROJECT_DIR="${3:?usage: setup-docusaurus-project.sh <docusaurus-version> <graphql-version> <project-dir> <package-tgz-dir>}"
+PKG_DIR="${4:?usage: setup-docusaurus-project.sh <docusaurus-version> <graphql-version> <project-dir> <package-tgz-dir>}"
 export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -38,7 +39,7 @@ cp -R "$REPO_ROOT/website/static/img" ./static/img
 cp -R "$REPO_ROOT/website/src/css" ./src/css
 
 node "$SCRIPT_DIR/install-gqlmd.mjs" "$PKG_DIR"
-"$SCRIPT_DIR/install-graphql.sh"
+"$SCRIPT_DIR/install-graphql.sh" "$GRAPHQL_VERSION"
 npm install --save "$PKG_DIR/graphql-markdown-cli.tgz" "$PKG_DIR/graphql-markdown-docusaurus.tgz"
 
 cp "$REPO_ROOT/tests/e2e/docusaurus/__data__/scripts/config-plugin.mjs" ./config-plugin.mjs

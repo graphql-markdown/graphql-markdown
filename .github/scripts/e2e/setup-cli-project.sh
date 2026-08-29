@@ -4,8 +4,9 @@
 # `setup-cli-project` target.
 set -euo pipefail
 
-PROJECT_DIR="${1:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
-PKG_DIR="${2:?usage: setup-cli-project.sh <project-dir> <package-tgz-dir>}"
+GRAPHQL_VERSION="${1:?usage: setup-cli-project.sh <graphql-version> <project-dir> <package-tgz-dir>}"
+PROJECT_DIR="${2:?usage: setup-cli-project.sh <graphql-version> <project-dir> <package-tgz-dir>}"
+PKG_DIR="${3:?usage: setup-cli-project.sh <graphql-version> <project-dir> <package-tgz-dir>}"
 export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 # Shared install helpers live one level up, in .github/scripts/.
@@ -15,5 +16,5 @@ mkdir -p "$PROJECT_DIR"
 cd "$PROJECT_DIR"
 
 node "$SHARED_DIR/install-gqlmd.mjs" "$PKG_DIR"
-"$SHARED_DIR/install-graphql.sh"
+"$SHARED_DIR/install-graphql.sh" "$GRAPHQL_VERSION"
 npm install --save "$PKG_DIR/graphql-markdown-cli.tgz"
