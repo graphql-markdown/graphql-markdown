@@ -1294,7 +1294,7 @@ describe("generator", () => {
       expect(result).toBeUndefined();
     });
 
-    test("logs error message when loaders fail", async () => {
+    test("logs error message naming the schema when no loader is configured", async () => {
       expect.assertions(1);
 
       const errorSpy = jest.spyOn(console, "error");
@@ -1305,7 +1305,7 @@ describe("generator", () => {
       await loadGraphqlSchema("schema.graphql", undefined);
 
       expect(errorSpy).toHaveBeenCalledWith(
-        `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+        `No GraphQL document loader is configured, so the schema at "schema.graphql" cannot be loaded.\nDeclare a "loaders" option in your configuration, and check the log above for a configuration that failed to load.`,
       );
     });
 

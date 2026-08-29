@@ -157,7 +157,10 @@ export const loadConfiguration = async (
   try {
     graphQLConfig = await import("graphql-config");
   } catch {
-    log("Cannot find module 'graphql-config'!");
+    log(
+      `Cannot find module 'graphql-config', so the configuration for project "${id}" was ignored and the built-in defaults are used instead.\nInstall 'graphql-config' as a dependency of your project, and check that it resolves from @graphql-markdown/core: a peer dependency conflict can leave it installed but unreachable.`,
+      "error",
+    );
     return undefined;
   }
 
@@ -169,6 +172,10 @@ export const loadConfiguration = async (
   });
 
   if (!config) {
+    log(
+      `No GraphQL config found for project "${id}", so the built-in defaults are used instead.`,
+      "warn",
+    );
     return undefined;
   }
 
@@ -194,7 +201,11 @@ export const loadConfiguration = async (
     }
 
     return projectConfig;
-  } catch {
+  } catch (error) {
+    log(
+      `Cannot read the "${EXTENSION_NAME}" configuration for project "${id}", so the built-in defaults are used instead.\n${String(error)}`,
+      "error",
+    );
     return undefined;
   }
 };

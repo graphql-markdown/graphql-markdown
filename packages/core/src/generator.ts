@@ -242,7 +242,9 @@ export const loadGraphqlSchema = async (
 
   if (!loaders) {
     log(
-      `An error occurred while loading GraphQL loader.\nCheck your dependencies and configuration.`,
+      `No GraphQL document loader is configured, so the schema at "${toString(
+        schemaLocation,
+      )}" cannot be loaded.\nDeclare a "loaders" option in your configuration, and check the log above for a configuration that failed to load.`,
       "error",
     );
     return undefined;
