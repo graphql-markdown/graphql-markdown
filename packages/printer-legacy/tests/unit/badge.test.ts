@@ -118,7 +118,15 @@ describe("badge", () => {
     test("returns an empty string if getTypeBadges returns empty list", () => {
       expect.assertions(1);
 
-      vi.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
+      // `getTypeBadges()` is called from within `badge.ts` through its local
+      // binding, so a spy on the module namespace cannot intercept it (and a
+      // stale spy would leak into the following tests). Drive it to return an
+      // empty list through its inputs instead: no type guard matches, so no
+      // badge is collected.
+      vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
+      vi.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(false);
+      vi.spyOn(GraphQL, "isListType").mockReturnValueOnce(false);
+      vi.spyOn(Link, "getCategoryLocale").mockReturnValueOnce(undefined);
 
       const badges = Badge.printBadges({}, createOptionsWithFormatter());
 

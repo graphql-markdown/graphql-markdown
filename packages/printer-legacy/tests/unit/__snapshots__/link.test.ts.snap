@@ -18,134 +18,54 @@ exports[`link > getLinkCategoryFolder() > returns a category object matching the
 
 exports[`link > toLink() > returns markdown link for GraphQL 'Directive' 1`] = `
 {
-  "id": "test-directive",
-  "text": "TestDirective",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Enum' 1`] = `
-{
-  "id": "test-enum",
-  "text": "TestEnum",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Input' 1`] = `
-{
-  "id": "test-input",
-  "text": "TestInput",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Interface' 1`] = `
-{
-  "id": "test-interface",
-  "text": "TestInterface",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Object' 1`] = `
-{
-  "id": "test-object",
-  "text": "TestObject",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Operation' 1`] = `
-{
-  "id": "test-operation",
-  "text": "TestOperation",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Scalar' 1`] = `
-{
-  "id": "test-scalar",
-  "text": "TestScalar",
-  "url": "#",
-}
-`;
-
-exports[`link > toLink() > returns markdown link for GraphQL 'Union' 1`] = `
-{
-  "id": "test-union",
-  "text": "TestUnion",
-  "url": "#",
-}
-`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Directive 1`] = `"directives"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Enum 1`] = `"enums"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Input 1`] = `"inputs"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Interface 1`] = `"interfaces"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Object 1`] = `"objects"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Operation 1`] = `undefined`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Scalar 1`] = `"scalars"`;
-
-exports[`link getLinkCategoryFolder() returns a category object matching the graphLQLNamedType Union 1`] = `"unions"`;
-
-exports[`link toLink() returns markdown link for GraphQL Directive 1`] = `
-{
   "text": "TestDirective",
   "url": "docs/graphql/operations/directives/test-directive",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Enum 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Enum' 1`] = `
 {
   "text": "TestEnum",
   "url": "docs/graphql/operations/enums/test-enum",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Input 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Input' 1`] = `
 {
   "text": "TestInput",
   "url": "docs/graphql/operations/inputs/test-input",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Interface 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Interface' 1`] = `
 {
   "text": "TestInterface",
   "url": "docs/graphql/operations/interfaces/test-interface",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Object 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Object' 1`] = `
 {
   "text": "TestObject",
   "url": "docs/graphql/operations/objects/test-object",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Operation 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Operation' 1`] = `
 {
   "text": "TestOperation",
   "url": "docs/graphql/operations/queries/test-operation",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Scalar 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Scalar' 1`] = `
 {
   "text": "TestScalar",
   "url": "docs/graphql/operations/scalars/test-scalar",
 }
 `;
 
-exports[`link toLink() returns markdown link for GraphQL Union 1`] = `
+exports[`link > toLink() > returns markdown link for GraphQL 'Union' 1`] = `
 {
   "text": "TestUnion",
   "url": "docs/graphql/operations/unions/test-union",

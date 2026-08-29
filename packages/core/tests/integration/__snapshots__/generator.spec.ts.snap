@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 1`] = `
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using api hierarchy 1`] = `
 {
   "generated.md": "Dummy homepage for tweet.graphql",
   "operations/directives/include.mdx": "include",
@@ -41,9 +41,9 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 }
 `;
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using api hierarchy 2`] = `{}`;
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using api hierarchy 2`] = `{}`;
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using flat hierarchy 1`] = `
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using flat hierarchy 1`] = `
 {
   "add-course.md": "add-course",
   "all-courses.md": "all-courses",
@@ -83,9 +83,9 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 }
 `;
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using flat hierarchy 2`] = `{}`;
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using flat hierarchy 2`] = `{}`;
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using grouping 1`] = `
 {
   "course/operations/mutations/add-course.mdx": "add-course",
   "course/operations/mutations/drop-course.mdx": "drop-course",
@@ -126,9 +126,9 @@ exports[`renderer generateDocFromSchema() Markdown document structure from Graph
 }
 `;
 
-exports[`renderer generateDocFromSchema() Markdown document structure from GraphQL schema is correct when using grouping 2`] = `{}`;
+exports[`renderer > generateDocFromSchema() > Markdown document structure from GraphQL schema is correct when using grouping 2`] = `{}`;
 
-exports[`renderer generateDocFromSchema() generates Markdown document structure from GraphQL schema 1`] = `
+exports[`renderer > generateDocFromSchema() > generates Markdown document structure from GraphQL schema 1`] = `
 {
   "generated.md": "Dummy homepage for tweet.graphql",
   "operations/directives/include.mdx": "include",
@@ -164,3 +164,4 @@ exports[`renderer generateDocFromSchema() generates Markdown document structure 
   "types/scalars/url.mdx": "url",
 }
 `;
+

@@ -4,10 +4,9 @@ import type { DiffMethodName } from "@graphql-markdown/types";
 
 import { hasChanges } from "../../src/diff";
 
-vi.mock(
-  "@graphql-markdown/diff",
-  async () => await import("../__mocks__/@graphql-markdown/diff"),
-);
+vi.mock("@graphql-markdown/diff", async () => {
+  return import("../__mocks__/@graphql-markdown/diff");
+});
 import * as diff from "@graphql-markdown/diff";
 
 describe("diff", () => {
@@ -98,9 +97,9 @@ describe("diff", () => {
       expect.assertions(2);
 
       const logSpy = vi.spyOn(console, "warn");
-      vi
-        .spyOn(diff, "checkSchemaChanges")
-        .mockRejectedValueOnce(new Error("Test error"));
+      vi.spyOn(diff, "checkSchemaChanges").mockRejectedValueOnce(
+        new Error("Test error"),
+      );
 
       const result = await hasChanges(
         new GraphQLSchema({}),

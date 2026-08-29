@@ -1,3 +1,5 @@
+import type { Mock } from "vitest";
+
 import type {
   IPrinter,
   RendererDocOptions,
@@ -29,19 +31,23 @@ vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
   };
 });
 
-vi.mock("@graphql-markdown/graphql", async (importOriginal): Promise<unknown> => {
-  return {
-    __esModule: true,
-    ...(await importOriginal<Record<string, unknown>>()),
-    isDeprecated: vi.fn(),
-    isApiType: vi.fn(),
-  };
-});
+vi.mock(
+  "@graphql-markdown/graphql",
+  async (importOriginal): Promise<unknown> => {
+    return {
+      __esModule: true,
+      ...(await importOriginal<Record<string, unknown>>()),
+      isDeprecated: vi.fn(),
+      isApiType: vi.fn(),
+    };
+  },
+);
 import * as GraphQL from "@graphql-markdown/graphql";
 
 import { getRenderer } from "../../src/renderer";
 import { resetEvents, getEvents } from "../../src/event-emitter";
 import { GenerateIndexMetafileEvents } from "../../src/events";
+import { replaceProperty } from "../__utils__/replace-property";
 import {
   DEFAULT_OPTIONS,
   DEFAULT_HIERARCHY,
@@ -85,7 +91,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
       false,
       DEFAULT_RENDERER_OPTIONS,
     );
-    vi.replaceProperty(renderer, "outputDir", "");
+    replaceProperty(renderer, "outputDir", "");
 
     await expect(
       renderer.generateCategoryMetafileType({}, "TestType", "objects"),

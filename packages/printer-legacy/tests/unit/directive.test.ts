@@ -112,9 +112,7 @@ describe("directive", () => {
       const constDirectiveOption =
         options.customDirectives["testA" as DirectiveName];
 
-      vi
-        .spyOn(Link, "printLink")
-        .mockReturnValue("[`foo`](/bar)" as MDXString);
+      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirective(type, constDirectiveOption, options))
         .toMatchInlineSnapshot(`
@@ -130,9 +128,7 @@ describe("directive", () => {
       const constDirectiveOption =
         options.customDirectives["noDescriptor" as DirectiveName];
 
-      vi
-        .spyOn(Link, "printLink")
-        .mockReturnValue("[`foo`](/bar)" as MDXString);
+      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(
         printCustomDirective(type, constDirectiveOption, options),
@@ -157,12 +153,10 @@ describe("directive", () => {
       const mockConstDirectiveMap = {
         testA: options.customDirectives["testA" as DirectiveName],
       };
-      vi
-        .spyOn(GraphQL, "getConstDirectiveMap")
-        .mockReturnValue(mockConstDirectiveMap);
-      vi
-        .spyOn(Link, "printLink")
-        .mockReturnValue("[`foo`](/bar)" as MDXString);
+      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
+        mockConstDirectiveMap,
+      );
+      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
 {
@@ -183,12 +177,10 @@ describe("directive", () => {
       const mockConstDirectiveMap = {
         testA: options.customDirectives["noDescriptor" as DirectiveName],
       };
-      vi
-        .spyOn(GraphQL, "getConstDirectiveMap")
-        .mockReturnValue(mockConstDirectiveMap);
-      vi
-        .spyOn(Link, "printLink")
-        .mockReturnValue("[`foo`](/bar)" as MDXString);
+      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
+        mockConstDirectiveMap,
+      );
+      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(printCustomDirectives(type, options)).toBeUndefined();
     });
@@ -212,9 +204,9 @@ describe("directive", () => {
         testA: options.customDirectives["testA" as DirectiveName],
       };
 
-      vi
-        .spyOn(GraphQL, "getConstDirectiveMap")
-        .mockReturnValue(mockConstDirectiveMap);
+      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
+        mockConstDirectiveMap,
+      );
       vi.spyOn(Utils, "isEmpty").mockReturnValue(false);
 
       const tags = getCustomTags(type, options);
@@ -239,9 +231,9 @@ describe("directive", () => {
       const mockConstDirectiveMap = {
         testA: options.customDirectives["testA" as DirectiveName],
       };
-      vi
-        .spyOn(GraphQL, "getConstDirectiveMap")
-        .mockReturnValue(mockConstDirectiveMap);
+      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
+        mockConstDirectiveMap,
+      );
       vi.spyOn(Utils, "isEmpty").mockReturnValue(false);
       vi.spyOn(Utils, "escapeMDX").mockImplementation((text: unknown) => {
         return text as string;

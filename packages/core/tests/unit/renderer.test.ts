@@ -1,3 +1,5 @@
+import type { Mock } from "vitest";
+
 import { GraphQLScalarType } from "graphql/type";
 import { Kind } from "graphql/language";
 
@@ -38,29 +40,35 @@ vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
 });
 import * as Utils from "@graphql-markdown/utils";
 
-vi.mock("@graphql-markdown/graphql", async (importOriginal): Promise<unknown> => {
-  return {
-    __esModule: true,
-    ...(await importOriginal<Record<string, unknown>>()),
-    isDeprecated: vi.fn(),
-    isApiType: vi.fn(),
-  };
-});
+vi.mock(
+  "@graphql-markdown/graphql",
+  async (importOriginal): Promise<unknown> => {
+    return {
+      __esModule: true,
+      ...(await importOriginal<Record<string, unknown>>()),
+      isDeprecated: vi.fn(),
+      isApiType: vi.fn(),
+    };
+  },
+);
 import * as GraphQL from "@graphql-markdown/graphql";
 
-vi.mock("@graphql-markdown/logger", async (importOriginal): Promise<unknown> => {
-  return {
-    __esModule: true,
-    ...(await importOriginal<Record<string, unknown>>()),
-    log: vi.fn(),
-    LogLevel: {
-      debug: "debug",
-      warn: "warn",
-      info: "info",
-      error: "error",
-    },
-  };
-});
+vi.mock(
+  "@graphql-markdown/logger",
+  async (importOriginal): Promise<unknown> => {
+    return {
+      __esModule: true,
+      ...(await importOriginal<Record<string, unknown>>()),
+      log: vi.fn(),
+      LogLevel: {
+        debug: "debug",
+        warn: "warn",
+        info: "info",
+        error: "error",
+      },
+    };
+  },
+);
 import { log } from "@graphql-markdown/logger";
 
 import type { Renderer } from "../../src/renderer";
@@ -72,6 +80,7 @@ import {
 } from "../../src/config";
 import { resetEvents, getEvents } from "../../src/event-emitter";
 import { GenerateIndexMetafileEvents } from "../../src/events";
+import { replaceProperty } from "../__utils__/replace-property";
 
 const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
   ...DEFAULT_OPTIONS.docOptions,
@@ -120,9 +129,9 @@ describe("renderer", () => {
       test("creates entity page structure into output folder", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
@@ -147,12 +156,12 @@ describe("renderer", () => {
       test("creates entity page flat structure into output if hierarchy is flat", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
@@ -179,12 +188,12 @@ describe("renderer", () => {
       test("creates entity page with MDX extension when mdxExtension is .mdx", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
-        vi.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
+        replaceProperty(rendererInstance, "mdxExtension", ".mdx");
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -199,12 +208,12 @@ describe("renderer", () => {
       test("applies prettify function when prettify is true", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
-        vi.replaceProperty(rendererInstance, "prettify", true);
+        replaceProperty(rendererInstance, "prettify", true);
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -256,9 +265,9 @@ describe("renderer", () => {
       test("return undefined and logs warning if file path is invalid", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         vi.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
         const logSpy = vi.mocked(log);
         logSpy.mockClear();
@@ -279,20 +288,16 @@ describe("renderer", () => {
       test("uses frontmatter configuration when available", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Printer, "printType");
 
         const optionsWithFrontMatter: RendererDocOptions = {
           frontMatter: { custom: "value" },
         };
 
-        vi.replaceProperty(
-          rendererInstance,
-          "options",
-          optionsWithFrontMatter,
-        );
+        replaceProperty(rendererInstance, "options", optionsWithFrontMatter);
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -332,15 +337,15 @@ describe("renderer", () => {
         let formattedLowercaseGroup = "";
         let formattedOriginalGroup = "";
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockImplementation(async (_, __, options) => {
+        vi.spyOn(Printer, "printType").mockImplementation(
+          async (_, __, options) => {
             formattedLowercaseGroup =
               options?.formatCategoryFolderName?.("grade") ?? "";
             formattedOriginalGroup =
               options?.formatCategoryFolderName?.("Grade") ?? "";
             return "Lorem ipsum" as MDXString;
-          });
+          },
+        );
 
         await renderer.renderTypeEntities(
           "/output/04-grade/07-queries",
@@ -382,9 +387,8 @@ describe("renderer", () => {
         let nestedFallback = "";
         let unknownCategory = "";
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockImplementation(async (_, __, options) => {
+        vi.spyOn(Printer, "printType").mockImplementation(
+          async (_, __, options) => {
             rootDirect = options!.formatCategoryFolderName?.("Query") ?? "";
             nestedDirect = options!.formatCategoryFolderName?.("objects") ?? "";
             nestedFallback =
@@ -392,7 +396,8 @@ describe("renderer", () => {
             unknownCategory =
               options!.formatCategoryFolderName?.("AnalyticsNamespace") ?? "";
             return "Lorem ipsum" as MDXString;
-          });
+          },
+        );
 
         await renderer.renderTypeEntities(
           "/output/queries",
@@ -426,9 +431,9 @@ describe("renderer", () => {
       test("handles both pathname and type name when they are different", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
@@ -453,9 +458,9 @@ describe("renderer", () => {
       test("handles non-alphanumeric characters in type names", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/special";
@@ -509,20 +514,21 @@ describe("renderer", () => {
       test("replaces template variables in homepage content", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Utils, "readFile")
-          .mockResolvedValueOnce(
-            "baseURL: ##baseURL## - Generated: ##generated-date-time##",
-          );
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce(
+          "baseURL: ##baseURL## - Generated: ##generated-date-time##",
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
-        // Mock Date to have consistent test results
+        // Mock Date to have consistent test results.
+        // `vi.spyOn(globalThis, "Date")` replaces the whole Date binding and
+        // breaks `new Date()` inside the renderer, so the clock is faked
+        // instead, which pins `new Date()` to the same instant.
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        vi.spyOn(globalThis, "Date").mockImplementation(() => {
-          return mockDate as unknown as Date;
-        });
+        vi.useFakeTimers();
+        vi.setSystemTime(mockDate);
 
         await rendererInstance.renderHomepage("/assets/generated.md");
+        vi.useRealTimers();
 
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
@@ -589,13 +595,16 @@ describe("renderer", () => {
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
         const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
-        // Mock Date to have consistent test results
+        // Mock Date to have consistent test results.
+        // `vi.spyOn(globalThis, "Date")` replaces the whole Date binding and
+        // breaks `new Date()` inside the renderer, so the clock is faked
+        // instead, which pins `new Date()` to the same instant.
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        vi.spyOn(globalThis, "Date").mockImplementation(() => {
-          return mockDate as unknown as Date;
-        });
+        vi.useFakeTimers();
+        vi.setSystemTime(mockDate);
 
         await rendererInstance.renderHomepage("/assets/multiple-vars.md");
+        vi.useRealTimers();
 
         const expected = `baseURL: /graphql\ngenerated: ${mockDate.toLocaleString()}\nbaseURL again: /graphql`;
         expect(saveFileSpy).toHaveBeenCalledWith(
@@ -631,13 +640,13 @@ describe("renderer", () => {
       test("applies prettify function when prettify is enabled", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Utils, "readFile")
-          .mockResolvedValueOnce("## Unformatted content");
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce(
+          "## Unformatted content",
+        );
         const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
         // Enable prettify
-        vi.replaceProperty(rendererInstance, "prettify", true);
+        replaceProperty(rendererInstance, "prettify", true);
 
         await rendererInstance.renderHomepage("/assets/to-prettify.md");
 
@@ -652,7 +661,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         // Set renderer's outputDir to empty string
-        vi.replaceProperty(rendererInstance, "outputDir", "");
+        replaceProperty(rendererInstance, "outputDir", "");
 
         await expect(
           rendererInstance.renderHomepage("/assets/homepage.md"),
@@ -675,9 +684,9 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("content" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "content" as MDXString,
+        );
         vi.spyOn(Utils, "fileExists").mockResolvedValue(true);
         const spy = vi.spyOn(Utils, "saveFile");
 
@@ -723,10 +732,10 @@ describe("renderer", () => {
       test("renders root types with flat hierarchy", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("content" as MDXString);
-        vi.replaceProperty(rendererInstance, "options", {
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "content" as MDXString,
+        );
+        replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
@@ -753,7 +762,7 @@ describe("renderer", () => {
       test("passes namespace parts in flat hierarchy for namespaced operations", async () => {
         expect.assertions(1);
 
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
@@ -844,7 +853,7 @@ describe("renderer", () => {
           operationNamespaceParts: ["configured"],
         } as RendererDocOptions;
 
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           ...optionsWithNamespace,
         });
 
@@ -868,19 +877,20 @@ describe("renderer", () => {
       test("does not apply category formatting to namespace folders", async () => {
         expect.assertions(1);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("content" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "content" as MDXString,
+        );
         vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        vi
-          .spyOn(rendererInstance as any, "formatCategoryFolderName")
-          .mockImplementation((...args: unknown[]) => {
-            const [categoryName, isRootTypeLevel] = args as [string, boolean];
-            if (!isRootTypeLevel && categoryName === "analytics") {
-              return "99-analytics";
-            }
-            return categoryName.toLowerCase();
-          });
+        vi.spyOn(
+          rendererInstance as any,
+          "formatCategoryFolderName",
+        ).mockImplementation((...args: unknown[]) => {
+          const [categoryName, isRootTypeLevel] = args as [string, boolean];
+          if (!isRootTypeLevel && categoryName === "analytics") {
+            return "99-analytics";
+          }
+          return categoryName.toLowerCase();
+        });
 
         const saveSpy = vi.spyOn(Utils, "saveFile");
 
@@ -903,7 +913,7 @@ describe("renderer", () => {
         expect.assertions(3);
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
@@ -925,10 +935,10 @@ describe("renderer", () => {
         const [type, name, root, group] = [{}, "Foo", "objects", "lorem"];
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "group", {
+        replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
 
@@ -949,7 +959,7 @@ describe("renderer", () => {
         const [type, name, root] = [{}, "Foo", "Baz"];
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
@@ -976,7 +986,7 @@ describe("renderer", () => {
         const [type, name, root] = [{}, "Foo", "Baz"];
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
@@ -999,7 +1009,7 @@ describe("renderer", () => {
         const [type, name, root] = [{}, "Foo", "Baz"];
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
@@ -1022,12 +1032,12 @@ describe("renderer", () => {
         const [type, name, root, group] = [{}, "Foo", "Baz", "lorem"];
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
-        vi.replaceProperty(rendererInstance, "group", {
+        replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
         vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
@@ -1048,7 +1058,7 @@ describe("renderer", () => {
         expect.assertions(3);
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
@@ -1074,7 +1084,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
@@ -1099,7 +1109,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
@@ -1121,7 +1131,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: {
@@ -1147,7 +1157,7 @@ describe("renderer", () => {
       test("handles undefined group configuration", async () => {
         expect.assertions(2);
 
-        vi.replaceProperty(rendererInstance, "group", undefined);
+        replaceProperty(rendererInstance, "group", undefined);
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
@@ -1163,7 +1173,7 @@ describe("renderer", () => {
       test("handles undefined type hierarchy", async () => {
         expect.assertions(2);
 
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           hierarchy: undefined,
         });
         const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
@@ -1182,7 +1192,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         vi.spyOn(rendererInstance, "generateIndexMetafile");
-        vi.replaceProperty(rendererInstance, "options", {
+        replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
@@ -1212,7 +1222,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         // Set renderer's outputDir to empty string
-        vi.replaceProperty(rendererInstance, "outputDir", "");
+        replaceProperty(rendererInstance, "outputDir", "");
 
         await expect(
           rendererInstance.generateCategoryMetafileType(
@@ -2254,9 +2264,9 @@ describe("renderer", () => {
       test("renderTypeEntities correctly parses category from nested file paths", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -2272,9 +2282,9 @@ describe("renderer", () => {
       test("renderTypeEntities uses correct regex for hierarchical paths", async () => {
         expect.assertions(2);
 
-        vi
-          .spyOn(Printer, "printType")
-          .mockResolvedValue("Lorem ipsum" as MDXString);
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "Lorem ipsum" as MDXString,
+        );
         const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/api-types/objects";

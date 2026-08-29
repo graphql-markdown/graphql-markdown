@@ -1,3 +1,5 @@
+import type { Mock } from "vitest";
+
 import { vol } from "memfs";
 
 import { join } from "node:path";
@@ -52,11 +54,11 @@ describe("graphql-config", () => {
     test("returns undefined if an error is thrown", async () => {
       expect.hasAssertions();
 
-      vi
-        .spyOn(CoreGraphQLConfig, "setLoaderOptions")
-        .mockImplementationOnce(() => {
+      vi.spyOn(CoreGraphQLConfig, "setLoaderOptions").mockImplementationOnce(
+        () => {
           throw new Error();
-        });
+        },
+      );
 
       await expect(
         CoreGraphQLConfig.loadConfiguration("default", undefined, {

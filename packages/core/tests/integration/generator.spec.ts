@@ -3,7 +3,15 @@ import path, { join } from "node:path";
 
 import { vol } from "memfs";
 
-vi.mock("fs");
+// Vitest does not auto-load `__mocks__`, so the union file system mock (real
+// fixtures for reads + memfs for writes) is wired up explicitly.
+vi.mock("fs", async () => {
+  const unionFs = (await import("../__mocks__/fs")).default;
+  return {
+    ...(unionFs as unknown as Record<string, unknown>),
+    default: unionFs,
+  };
+});
 
 vi.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
@@ -28,17 +36,18 @@ import { Printer } from "@graphql-markdown/printer-legacy";
 vi.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
-vi.mock(
-  "mdx-parser-mock",
-  () => {
-    return {
-      generateIndexMetafile: (dirPath: string, category: string): string => {
-        return path.join(dirPath, category).toLocaleLowerCase();
-      },
-    };
-  },
-  { virtual: true },
-);
+// Virtual module: `mdx-parser-mock` does not exist on disk, the factory is the
+// whole module. `default` is declared explicitly (as undefined) because Vitest
+// throws on reading an export a mock factory did not declare, and the generator
+// probes `module.default` to detect ESM default exports.
+vi.mock("mdx-parser-mock", () => {
+  return {
+    default: undefined,
+    generateIndexMetafile: (dirPath: string, category: string): string => {
+      return path.join(dirPath, category).toLocaleLowerCase();
+    },
+  };
+});
 
 import { generateDocFromSchema } from "../../src/generator";
 import {

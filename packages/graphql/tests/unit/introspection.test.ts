@@ -1,8 +1,10 @@
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
+import type * as GraphQLExecution from "graphql/execution";
+
 vi.mock("graphql/execution", async (importOriginal) => {
-  const graphql = await importOriginal<typeof import("graphql/execution")>();
+  const graphql = await importOriginal<typeof GraphQLExecution>();
   return {
     ...graphql,
     getDirectiveValues: vi.fn(graphql.getDirectiveValues),

@@ -389,12 +389,10 @@ describe("Printer", () => {
     test("returns a MDX frontmatter document header", () => {
       expect.hasAssertions();
 
-      vi
-        .spyOn(Utils, "formatFrontMatterObject")
-        .mockReturnValue([
-          "id: an-object-type-name",
-          "title: An Object Type Name",
-        ]);
+      vi.spyOn(Utils, "formatFrontMatterObject").mockReturnValue([
+        "id: an-object-type-name",
+        "title: An Object Type Name",
+      ]);
 
       const header = Printer.printHeader(
         "an-object-type-name",
@@ -413,14 +411,12 @@ describe("Printer", () => {
     test("returns a MDX frontmatter document header with custom info", () => {
       expect.hasAssertions();
 
-      vi
-        .spyOn(Utils, "formatFrontMatterObject")
-        .mockReturnValue([
-          "draft: true",
-          "hide_table_of_contents: null",
-          "id: an-object-type-name",
-          "title: An Object Type Name",
-        ]);
+      vi.spyOn(Utils, "formatFrontMatterObject").mockReturnValue([
+        "draft: true",
+        "hide_table_of_contents: null",
+        "id: an-object-type-name",
+        "title: An Object Type Name",
+      ]);
 
       const header = Printer.printHeader(
         "an-object-type-name",
@@ -678,9 +674,9 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      vi
-        .spyOn(GraphQLPrinter, "printCodeEnum")
-        .mockReturnValue("enum Test { }");
+      vi.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue(
+        "enum Test { }",
+      );
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
@@ -694,9 +690,9 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = mockEventEmitter;
       vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      vi
-        .spyOn(GraphQLPrinter, "printCodeEnum")
-        .mockReturnValue("enum Test { }");
+      vi.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue(
+        "enum Test { }",
+      );
 
       await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
@@ -737,9 +733,9 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = modifiedEmitter;
       vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      vi
-        .spyOn(GraphQLPrinter, "printCodeEnum")
-        .mockReturnValue("enum Test { }");
+      vi.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue(
+        "enum Test { }",
+      );
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,
@@ -767,9 +763,9 @@ describe("Printer", () => {
 
       (Printer as any).eventEmitter = preventingEmitter;
       vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      vi
-        .spyOn(GraphQLPrinter, "printCodeEnum")
-        .mockReturnValue("enum Test { }");
+      vi.spyOn(GraphQLPrinter, "printCodeEnum").mockReturnValue(
+        "enum Test { }",
+      );
 
       const result = await Printer.printCodeAsync({ name: "Test" }, "test", {
         ...DEFAULT_OPTIONS,

@@ -57,9 +57,9 @@ describe("group", () => {
         },
       ],
     ])("returns group name string if type has group", (type) => {
-      vi
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue({ name: "FooBaz" } as unknown as GraphQLNamedType);
+      vi.spyOn(GraphQL, "getNamedType").mockReturnValue({
+        name: "FooBaz",
+      } as unknown as GraphQLNamedType);
 
       const group = getGroup(
         type,
@@ -71,9 +71,9 @@ describe("group", () => {
     });
 
     test("returns empty string if type not in group", () => {
-      vi
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue({ name: "FooBar" } as unknown as GraphQLNamedType);
+      vi.spyOn(GraphQL, "getNamedType").mockReturnValue({
+        name: "FooBar",
+      } as unknown as GraphQLNamedType);
 
       const group = getGroup(
         { name: "FooBar" },

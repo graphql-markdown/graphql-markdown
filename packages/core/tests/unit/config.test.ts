@@ -40,14 +40,17 @@ import {
 
 import * as graphqlConfigModule from "../../src/graphql-config";
 
-vi.mock("@graphql-markdown/logger", async (importOriginal): Promise<unknown> => {
-  return {
-    __esModule: true,
-    ...(await importOriginal<Record<string, unknown>>()),
-    log: vi.fn(),
-    LogLevel: { debug: "debug", warn: "warn", info: "info", error: "error" },
-  };
-});
+vi.mock(
+  "@graphql-markdown/logger",
+  async (importOriginal): Promise<unknown> => {
+    return {
+      __esModule: true,
+      ...(await importOriginal<Record<string, unknown>>()),
+      log: vi.fn(),
+      LogLevel: { debug: "debug", warn: "warn", info: "info", error: "error" },
+    };
+  },
+);
 
 import { log } from "@graphql-markdown/logger";
 
@@ -469,11 +472,9 @@ describe("config", () => {
         },
       };
 
-      vi
-        .spyOn(graphqlConfigModule, "loadConfiguration")
-        .mockResolvedValue(
-          configFileOpts as unknown as Readonly<ExtensionProjectConfig>,
-        );
+      vi.spyOn(graphqlConfigModule, "loadConfiguration").mockResolvedValue(
+        configFileOpts as unknown as Readonly<ExtensionProjectConfig>,
+      );
 
       const config = await buildConfig(
         { docOptions: { frontMatter: { page_next: null } } },

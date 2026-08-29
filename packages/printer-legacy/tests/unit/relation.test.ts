@@ -242,41 +242,61 @@ describe("relation", () => {
     test("calls printRelationOf() for each type of relation", () => {
       expect.hasAssertions();
 
-      const spy = vi.spyOn(Relation, "printRelationOf");
-
       const type = new GraphQLScalarType({
         name: "String",
         description: "Lorem Ipsum",
       });
       const options = { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema };
+      const schemaMap = { objects: {} };
 
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
+      mockGraphQL.getSchemaMap.mockReturnValue(
+        schemaMap as unknown as ReturnType<typeof GraphQL.getSchemaMap>,
+      );
+      mockGraphQL.getRelationOfReturn.mockReturnValue({
+        queries: [{ name: "Foo" }],
+      } as never);
+      mockGraphQL.getRelationOfField.mockReturnValue({
+        queries: [{ name: "Bar" }],
+      } as never);
+      mockGraphQL.getRelationOfImplementation.mockReturnValue({
+        queries: [{ name: "Baz" }],
+      } as never);
 
-      printRelations(type, options);
+      const relations = printRelations(type, options);
 
-      expect(spy).toHaveBeenCalledTimes(3);
-      expect(spy).toHaveBeenNthCalledWith(
-        1,
+      // `printRelationOf()` is called from within `relation.ts` through its
+      // local binding, so a spy on the module namespace cannot intercept it.
+      // Assert the three invocations through their observable effects instead:
+      // each relation getter is invoked once with the type and the schema map,
+      // and each section is rendered, in order, into the returned MDX.
+      expect(mockGraphQL.getRelationOfReturn).toHaveBeenCalledExactlyOnceWith(
         type,
-        "Returned By",
-        GraphQL.getRelationOfReturn,
-        options,
+        schemaMap,
       );
-      expect(spy).toHaveBeenNthCalledWith(
-        2,
+      expect(mockGraphQL.getRelationOfField).toHaveBeenCalledExactlyOnceWith(
         type,
-        "Member Of",
-        GraphQL.getRelationOfField,
-        options,
+        schemaMap,
       );
-      expect(spy).toHaveBeenNthCalledWith(
-        3,
-        type,
-        "Implemented By",
-        GraphQL.getRelationOfImplementation,
-        options,
-      );
+      expect(
+        mockGraphQL.getRelationOfImplementation,
+      ).toHaveBeenCalledExactlyOnceWith(type, schemaMap);
+      expect(relations).toMatchInlineSnapshot(`
+"### Returned By
+
+[\`Foo\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+### Member Of
+
+[\`Bar\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+### Implemented By
+
+[\`Baz\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+"
+`);
     });
   });
 });

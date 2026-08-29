@@ -201,9 +201,7 @@ describe("generator", () => {
     test("throws error if printer initialization fails", async () => {
       expect.assertions(1);
 
-      vi
-        .spyOn(Printer, "init")
-        .mockRejectedValueOnce(new Error("Init error"));
+      vi.spyOn(Printer, "init").mockRejectedValueOnce(new Error("Init error"));
 
       await expect(
         getPrinter(

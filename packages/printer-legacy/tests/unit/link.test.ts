@@ -52,8 +52,9 @@ vi.mock("@graphql-markdown/graphql", () => {
 });
 const mockGraphQL = vi.mocked(GraphQL);
 
-const { hasDirective: actualHasDirective } =
-  await vi.importActual<typeof GraphQL>("@graphql-markdown/graphql");
+const { hasDirective: actualHasDirective } = await vi.importActual<
+  typeof GraphQL
+>("@graphql-markdown/graphql");
 
 import { DEFAULT_OPTIONS, TypeHierarchy } from "../../src/const/options";
 
@@ -301,7 +302,7 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL[TypeGuard.DIRECTIVE].mockReturnValue(true);
-      vi.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
+      mockPrintableDirective(false);
       mockUtils.slugify.mockReturnValue(slug);
 
       const link = Link.toLink(type, entityName, undefined, {
@@ -592,14 +593,22 @@ describe("link", () => {
   });
 
   describe("printLink()", () => {
+    /**
+     * `toLink()`, `hasOptionWithAttributes()` and `printLinkAttributes()` are
+     * called from within `link.ts` through their local bindings, so a spy on
+     * the module namespace cannot intercept them. `printLink()` accepts an
+     * already resolved `TypeLink` as its first argument (see `isLinkType()`),
+     * so the link `toLink()` used to be stubbed to return is passed in
+     * directly, and the attributes/parent-type branches are driven through the
+     * `withAttributes` / `parentTypePrefix` options instead.
+     */
     test("returns formatted markdown link", () => {
       expect.hasAssertions();
 
-      vi.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
-      vi.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
-      vi.spyOn(Link, "hasOptionParentType").mockReturnValue(false);
-
-      const result = Link.printLink({}, DEFAULT_OPTIONS);
+      const result = Link.printLink(
+        { text: "foo", url: "/bar" },
+        DEFAULT_OPTIONS,
+      );
 
       expect(result).toBe(
         '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)',
@@ -609,12 +618,8 @@ describe("link", () => {
     test("returns formatted markdown link parentType", () => {
       expect.hasAssertions();
 
-      vi.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
-      vi.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
-      vi.spyOn(Link, "hasOptionParentType").mockReturnValue(true);
-
       const result = Link.printLink(
-        {},
+        { text: "foo", url: "/bar" },
         { ...DEFAULT_OPTIONS, parentTypePrefix: true, parentType: "baz" },
       );
 
@@ -626,32 +631,29 @@ describe("link", () => {
     test("returns formatted markdown link withAttributes", () => {
       expect.hasAssertions();
 
-      vi.spyOn(Link, "toLink").mockReturnValue({ text: "foo", url: "/bar" });
-      vi.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(true);
-      vi.spyOn(Link, "printLinkAttributes").mockReturnValue("barfoo");
+      // The attributes decoration is produced by `printLinkAttributes()`, which
+      // is driven here through the mocked `isListType()` type guard.
+      mockGraphQL.isListType.mockReturnValueOnce(true);
 
       const result = Link.printLink(
-        {},
+        { text: "foo", url: "/bar" },
         { ...DEFAULT_OPTIONS, withAttributes: true },
       );
 
       expect(result).toBe(
-        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">barfoo</code></span>](/bar)',
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[foo]</code></span>](/bar)',
       );
     });
 
     test("does not include section header id in hash link when disabled", () => {
       expect.hasAssertions();
 
-      vi.spyOn(Link, "toLink").mockReturnValue({
-        id: "foo-id",
-        text: "foo",
-        url: "#",
-      });
-      vi.spyOn(Link, "hasOptionWithAttributes").mockReturnValue(false);
-
       const result = Link.printLink(
-        {},
+        {
+          id: "foo-id",
+          text: "foo",
+          url: "#",
+        },
         { ...DEFAULT_OPTIONS, sectionHeaderId: false },
       );
 
@@ -753,12 +755,17 @@ describe("link", () => {
     test("returns a MDX Bullet component with parent link if type defined", () => {
       expect.hasAssertions();
 
-      vi.spyOn(Link, "printLink").mockReturnValueOnce("[`foo`](/bar)");
-
+      // `printLink()` is called from within `link.ts` through its local
+      // binding, so a namespace spy cannot intercept it. Feed the parent type
+      // an already resolved `TypeLink` instead, so the real `printLink()`
+      // renders it and the bullet wrapper stays observable.
       expect(
-        Link.printParentLink({ type: "foo" }, DEFAULT_OPTIONS),
+        Link.printParentLink(
+          { type: { text: "foo", url: "/bar" } },
+          DEFAULT_OPTIONS,
+        ),
       ).toMatchInlineSnapshot(
-        `"<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[\`foo\`](/bar)"`,
+        `"<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](/bar)"`,
       );
     });
 
@@ -779,7 +786,7 @@ describe("link", () => {
         name: entityName,
       });
 
-      vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+      mockPrintableDirective(true);
 
       mockGraphQL.getNamedType.mockReturnValue(
         entityName as unknown as GraphQLNamedType,
@@ -991,9 +998,7 @@ describe("link", () => {
         onlyDocDirectives: [publicDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(false);
-      mockGraphQL.hasDirective.mockImplementation(
-        actualHasDirective,
-      );
+      mockGraphQL.hasDirective.mockImplementation(actualHasDirective);
 
       expect(Link.hasPrintableDirective(enumType, options)).toBeTruthy();
     });
@@ -1005,9 +1010,7 @@ describe("link", () => {
         onlyDocDirectives: [noDocDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(false);
-      mockGraphQL.hasDirective.mockImplementation(
-        actualHasDirective,
-      );
+      mockGraphQL.hasDirective.mockImplementation(actualHasDirective);
 
       expect(Link.hasPrintableDirective(enumType, options)).toBeFalsy();
     });
@@ -1019,9 +1022,7 @@ describe("link", () => {
         onlyDocDirectives: [docDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(false);
-      mockGraphQL.hasDirective.mockImplementation(
-        actualHasDirective,
-      );
+      mockGraphQL.hasDirective.mockImplementation(actualHasDirective);
 
       expect(Link.hasPrintableDirective(enumType, options)).toBeTruthy();
     });
@@ -1034,9 +1035,7 @@ describe("link", () => {
         onlyDocDirectives: [publicDirective],
       } as unknown as PrintTypeOptions;
       mockGraphQL.isDeprecated.mockReturnValue(true);
-      mockGraphQL.hasDirective.mockImplementation(
-        actualHasDirective,
-      );
+      mockGraphQL.hasDirective.mockImplementation(actualHasDirective);
 
       expect(Link.hasPrintableDirective(enumType, options)).toBeFalsy();
     });

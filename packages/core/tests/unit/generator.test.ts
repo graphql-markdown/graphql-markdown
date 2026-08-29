@@ -1,3 +1,5 @@
+import type { Mock } from "vitest";
+
 vi.useFakeTimers();
 
 import type {
@@ -5,7 +7,9 @@ import type {
   GeneratorOptions,
   GraphQLSchema,
   IPrinter,
+  LoaderOption,
   LoadSchemaOptions,
+  Maybe,
   PackageName,
   SchemaMap,
 } from "@graphql-markdown/types";
@@ -35,6 +39,46 @@ import * as CorePrinter from "../../src/printer";
 vi.mock("../../src/printer");
 
 import { resetEvents } from "../../src/event-emitter";
+
+/*
+ * `generateDocFromSchema()` calls the helpers exported by `src/generator.ts`
+ * (`loadMDXModule`, `loadGraphqlSchema`, `checkSchemaDifferences`,
+ * `resolveSkipAndOnlyDirectives`) through their local bindings. Under the ESM
+ * transform a namespace spy (`vi.spyOn(GeneratorModule, ...)`) is therefore
+ * never in the call path, so the tests below drive and observe those helpers
+ * through their own cross-module dependencies instead.
+ */
+
+/**
+ * Virtual module resolved by `loadMDXModule("custom-mdx-parser")`. Every export
+ * the generator probes must exist as a key, because Vitest throws when a mocked
+ * module is asked for an export its factory did not declare. Values are reset
+ * before each test.
+ */
+const { mdxParserStub } = vi.hoisted(() => {
+  return {
+    mdxParserStub: {
+      createMDXFormatter: undefined,
+      default: undefined,
+      mdxDeclaration: undefined,
+      mdxExtension: undefined,
+    } as Record<string, unknown>,
+  };
+});
+vi.mock("custom-mdx-parser", () => {
+  return mdxParserStub;
+});
+
+/**
+ * Drives the internal `loadGraphqlSchema()` call through the
+ * `@graphql-markdown/graphql` functions it depends on.
+ */
+const mockSchemaLoad = (schema: Maybe<GraphQLSchema>): void => {
+  vi.mocked(GraphQL.getDocumentLoaders).mockResolvedValueOnce(
+    {} as unknown as LoaderOption,
+  );
+  vi.mocked(GraphQL.loadSchema).mockResolvedValueOnce(schema!);
+};
 
 // Import helper functions for direct testing
 import * as GeneratorModule from "../../src/generator";
@@ -93,6 +137,10 @@ describe("generator", () => {
     });
 
     beforeEach(() => {
+      for (const key of Object.keys(mdxParserStub)) {
+        mdxParserStub[key] = undefined;
+      }
+
       // silent console
       vi.spyOn(globalThis.console, "info").mockImplementation(() => {});
       vi.spyOn(globalThis.console, "warn").mockImplementation(() => {});
@@ -123,28 +171,19 @@ describe("generator", () => {
           locations: [],
         });
 
-        // Mock helper functions
-        vi
-          .spyOn(GeneratorModule, "loadMDXModule")
-          .mockResolvedValueOnce(undefined);
-        vi
-          .spyOn(GeneratorModule, "loadGraphqlSchema")
-          .mockResolvedValueOnce(mockSchema);
-        vi
-          .spyOn(GeneratorModule, "checkSchemaDifferences")
-          .mockResolvedValueOnce(true);
-        vi
-          .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-          .mockReturnValueOnce([[], [mockDirective]]);
+        // No MDX module is registered for the `custom-mdx` package name, so
+        // `loadMDXModule()` resolves to undefined. `checkSchemaDifferences()`
+        // returns true because `diffMethod` is NONE, and
+        // `resolveSkipAndOnlyDirectives()` runs for real against `mockSchema`,
+        // resolving `skipDocDirective` to `mockDirective`.
+        mockSchemaLoad(mockSchema);
 
         // Mock GraphQL package functions still needed
-        vi
-          .spyOn(GraphQL, "getSchemaMap")
-          .mockReturnValueOnce({ objects: {} } as SchemaMap);
+        vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+          objects: {},
+        } as SchemaMap);
         vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-        vi
-          .spyOn(GraphQL, "getCustomDirectives")
-          .mockReturnValueOnce(undefined);
+        vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
 
         const getPrinterSpy = vi
           .spyOn(CorePrinter, "getPrinter")
@@ -199,31 +238,17 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      // Mock helper functions
-      vi
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce(undefined);
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
       vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
-      vi
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       const loggerSpy = vi.spyOn(globalThis.console, "info");
 
@@ -244,14 +269,17 @@ describe("generator", () => {
     test("returns early when loadGraphqlSchema returns undefined", async () => {
       expect.assertions(2);
 
-      const loadGraphqlSchemaSpy = vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
+      // `loadGraphqlSchema()` returns undefined when it cannot build loaders,
+      // which is the only observable way to reach the early return now that the
+      // internal call cannot be intercepted.
+      const getDocumentLoadersSpy = vi
+        .mocked(GraphQL.getDocumentLoaders)
         .mockResolvedValueOnce(undefined);
       const loggerSpy = vi.spyOn(console, "error");
 
       await generateDocFromSchema({} as unknown as GeneratorOptions);
 
-      expect(loadGraphqlSchemaSpy).toHaveBeenCalled();
+      expect(getDocumentLoadersSpy).toHaveBeenCalled();
       expect(loggerSpy).toHaveBeenCalledWith(
         expect.stringContaining("Failed to load GraphQL schema"),
       );
@@ -262,31 +290,26 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      const checkDiffSpy = vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
+      mockSchemaLoad(mockSchema);
+      // `checkSchemaDifferences()` is observed through `hasChanges()`, the
+      // cross-module dependency it delegates the comparison to. A non-NONE diff
+      // method is required for the delegation to happen at all.
+      const hasChangesSpy = vi
+        .mocked(CoreDiff.hasChanges)
         .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
       const loggerSpy = vi.spyOn(console, "info");
 
-      await generateDocFromSchema(options);
+      await generateDocFromSchema({ ...options, diffMethod: DiffMethod.FORCE });
 
-      expect(checkDiffSpy).toHaveBeenCalledWith(
+      expect(hasChangesSpy).toHaveBeenCalledWith(
         mockSchema,
-        "schema location",
-        "NONE",
         "temp dir",
+        DiffMethod.FORCE,
       );
       expect(loggerSpy).not.toHaveBeenCalledWith(
         `No changes detected in schema "schema location".`,
@@ -298,30 +321,22 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      const checkDiffSpy = vi.spyOn(
-        GeneratorModule,
-        "checkSchemaDifferences",
-      );
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
+      const hasChangesSpy = vi.mocked(CoreDiff.hasChanges);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
         diffMethod: DiffMethod.NONE,
       });
 
-      expect(checkDiffSpy).toHaveBeenCalled();
+      // `checkSchemaDifferences()` short-circuits on DiffMethod.NONE, which is
+      // observable as its `hasChanges()` dependency never being called.
+      expect(hasChangesSpy).not.toHaveBeenCalled();
     });
 
     test("correctly calculates execution time", async () => {
@@ -338,26 +353,15 @@ describe("generator", () => {
 
       process.hrtime.bigint = mockHrtime;
 
-      // Mock helper functions
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       const loggerSpy = vi.spyOn(globalThis.console, "info");
 
@@ -377,22 +381,12 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
@@ -438,27 +432,17 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
       vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
       const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
@@ -484,15 +468,7 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
       // Create a comprehensive schema map with all possible root types
       vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
@@ -504,18 +480,16 @@ describe("generator", () => {
         unions: { TestUnion: {} },
       } as unknown as SchemaMap);
 
-      vi
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
 
       const rendererMock = {
         ...mockRenderer,
         renderRootTypes: vi.fn().mockResolvedValue({}),
       } as unknown as CoreRenderer.Renderer;
 
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(rendererMock);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(rendererMock);
 
       await generateDocFromSchema(options);
 
@@ -547,25 +521,15 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
       // Test with completely empty schema map
       vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({} as SchemaMap);
 
-      vi
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       const loggerSpy = vi.spyOn(globalThis.console, "info");
 
@@ -582,32 +546,25 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      const loadMDXSpy = vi
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce(undefined);
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      // `loadMDXModule()` is called internally, so instead of spying on it the
+      // `formatter` package name is resolved to a virtual module whose
+      // `createMDXFormatter()` factory must be invoked for the option to have
+      // been honoured.
+      const createMDXFormatter = vi.fn().mockReturnValue({});
+      mdxParserStub.createMDXFormatter = createMDXFormatter;
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
         formatter: "custom-mdx-parser",
       });
 
-      expect(loadMDXSpy).toHaveBeenCalledWith("custom-mdx-parser");
+      expect(createMDXFormatter).toHaveBeenCalled();
     });
 
     test("uses .mdx extension when mdxModule is loaded", async () => {
@@ -615,22 +572,14 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce({ createMDXFormatter: vi.fn() });
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      // The `custom-mdx-parser` virtual module stands in for a loaded MDX
+      // module, which is what the internal `loadMDXModule()` call resolves.
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
       const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
@@ -649,23 +598,13 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
-        createMDXFormatter: vi.fn(),
-        mdxExtension: ".custom",
-      });
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mdxParserStub.mdxExtension = ".custom";
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
       const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
@@ -686,25 +625,15 @@ describe("generator", () => {
 
       // This simulates a module that has both mdxDeclaration and mdxExtension
       // The code should use mdxExtension, not mdxDeclaration
-      vi.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
-        createMDXFormatter: vi.fn(),
-        mdxExtension: ".mdx",
-        mdxDeclaration:
-          "import { Badge } from '@astrojs/starlight/components';",
-      });
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mdxParserStub.mdxExtension = ".mdx";
+      mdxParserStub.mdxDeclaration =
+        "import { Badge } from '@astrojs/starlight/components';";
+      mockSchemaLoad(mockSchema);
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
       const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
@@ -723,30 +652,27 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      vi
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      vi
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      const resolveSpy = vi
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
+      // `resolveSkipAndOnlyDirectives()` runs for real: its only dependency is
+      // `schema.getDirective()`, so observing that lookup proves the option
+      // lists and the loaded schema were handed to it.
+      const getDirectiveSpy = vi.spyOn(mockSchema, "getDirective");
 
-      vi
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      vi
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema(options);
 
-      expect(resolveSpy).toHaveBeenCalledWith(
-        options.onlyDocDirective,
-        options.skipDocDirective,
-        mockSchema,
-      );
+      expect(getDirectiveSpy.mock.calls).toStrictEqual([
+        ...(options.onlyDocDirective as DirectiveName[]).map((name) => {
+          return [name];
+        }),
+        ...(options.skipDocDirective as DirectiveName[]).map((name) => {
+          return [name];
+        }),
+      ]);
     });
   });
 
@@ -1272,9 +1198,9 @@ describe("generator", () => {
       expect.assertions(1);
 
       const mockSchema = {} as GraphQLSchema;
-      vi
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce({} as LoadSchemaOptions);
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(
+        {} as LoadSchemaOptions,
+      );
       vi.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(mockSchema);
 
       const result = await loadGraphqlSchema("schema.graphql", undefined);
@@ -1285,9 +1211,7 @@ describe("generator", () => {
     test("returns undefined when loaders cannot be initialized", async () => {
       expect.assertions(1);
 
-      vi
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce(undefined);
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(undefined);
 
       const result = await loadGraphqlSchema("schema.graphql", undefined);
 
@@ -1298,9 +1222,7 @@ describe("generator", () => {
       expect.assertions(1);
 
       const errorSpy = vi.spyOn(console, "error");
-      vi
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce(undefined);
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(undefined);
 
       await loadGraphqlSchema("schema.graphql", undefined);
 
@@ -1316,9 +1238,9 @@ describe("generator", () => {
       const getLoadersSpy = vi
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      vi
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      vi.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(
+        {} as GraphQLSchema,
+      );
 
       await loadGraphqlSchema("schema.graphql", loadersList);
 

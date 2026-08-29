@@ -205,8 +205,7 @@ describe("example", () => {
     test("returns JSON formatted string example using subtype examples skipping non printable type", () => {
       expect.assertions(1);
 
-      vi
-        .spyOn(Link, "hasPrintableDirective")
+      vi.spyOn(Link, "hasPrintableDirective")
 
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "ScalarExample";
@@ -222,8 +221,7 @@ describe("example", () => {
     test("skips attributes of non-printable type", () => {
       expect.assertions(1);
 
-      vi
-        .spyOn(Link, "hasPrintableDirective")
+      vi.spyOn(Link, "hasPrintableDirective")
 
         .mockImplementation((type, _options) => {
           return (type as { name: string }).name !== "TypeExample";
