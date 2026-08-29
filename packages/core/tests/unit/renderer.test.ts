@@ -78,10 +78,12 @@ import { log } from "@graphql-markdown/logger";
 import type { Renderer } from "../../src/renderer";
 import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
 import {
+  ASSET_HOMEPAGE_LOCATION,
   DEFAULT_OPTIONS,
   DEFAULT_HIERARCHY,
   TypeHierarchy,
 } from "../../src/config";
+import { DEFAULT_HOMEPAGE_TEMPLATE } from "../../src/const/homepage";
 import { resetEvents, getEvents } from "../../src/event-emitter";
 import { GenerateIndexMetafileEvents } from "../../src/events";
 import { replaceProperty } from "../__utils__/replace-property";
@@ -535,6 +537,44 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           `baseURL: /graphql - Generated: ${mockDate.toLocaleString()}`,
+        );
+      });
+
+      test("uses the inlined template for the default homepage, without reading from disk", async () => {
+        expect.assertions(3);
+
+        const readFileSpy = vi.mocked(Utils.readFile);
+        readFileSpy.mockClear();
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage(ASSET_HOMEPAGE_LOCATION);
+
+        // The whole point: the default path performs no filesystem read, so a
+        // write-only output adapter can render the homepage.
+        expect(readFileSpy).not.toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith(
+          "/output/generated.md",
+          DEFAULT_HOMEPAGE_TEMPLATE.replaceAll("##baseURL##", "/graphql"),
+        );
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      test("still reads a caller-supplied homepage from disk", async () => {
+        expect.assertions(2);
+
+        const readFileSpy = vi.mocked(Utils.readFile);
+        readFileSpy.mockClear();
+        readFileSpy.mockResolvedValueOnce("custom: ##baseURL##");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage("/assets/custom.md");
+
+        expect(readFileSpy).toHaveBeenCalledWith("/assets/custom.md");
+        expect(spy).toHaveBeenCalledWith(
+          "/output/custom.md",
+          "custom: /graphql",
         );
       });
 

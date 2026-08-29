@@ -27,7 +27,8 @@ import {
 } from "@graphql-markdown/utils";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
-import { TypeHierarchy } from "./config";
+import { ASSET_HOMEPAGE_LOCATION, TypeHierarchy } from "./config";
+import { DEFAULT_HOMEPAGE_TEMPLATE } from "./const/homepage";
 import { isGroupsObject, isPath } from "./directives/validation";
 import { getEvents } from "./event-emitter";
 import {
@@ -823,7 +824,13 @@ export class Renderer {
       // the output directory and reading it back: the round-trip wrote a file
       // only to overwrite it a moment later, and it forced the destination to
       // be readable, which a write-only output adapter is not.
-      const template = await readFile(homepageLocation);
+      //
+      // The built-in template is inlined, so the default path performs no
+      // filesystem read at all. Only a caller-supplied `homepage` path does.
+      const template =
+        homepageLocation === ASSET_HOMEPAGE_LOCATION
+          ? DEFAULT_HOMEPAGE_TEMPLATE
+          : await readFile(homepageLocation);
 
       const data = template
         .toString()
