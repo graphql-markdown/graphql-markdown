@@ -5,7 +5,7 @@
   "compilerOptions": {
     "rootDir": "./",
 
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "ignoreDeprecations": "6.0",
     "noEmit": true,
@@ -13,7 +13,7 @@
 
     "isolatedModules": true,
 
-    "types": ["node", "@types/jest"],
+    "types": ["node", "vitest/globals"],
 
     "paths": {
       "@graphql-markdown/types": ["../types/src/index.d.ts"],

@@ -1,8 +1,7 @@
 import { vol } from "memfs";
 import { ufs } from "unionfs";
+import fs from "node:fs";
 
 import type { IFS } from "unionfs";
 
-const fs = jest.requireActual("node:fs");
-
-module.exports = ufs.use(fs).use(vol as unknown as IFS).promises;
+export default ufs.use(fs).use(vol as unknown as IFS).promises;

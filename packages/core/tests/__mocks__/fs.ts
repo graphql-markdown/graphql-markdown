@@ -1,8 +1,20 @@
-import { vol } from "memfs";
+import { createFsFromVolume, vol } from "memfs";
 import { ufs } from "unionfs";
 
+import type * as NodeFs from "node:fs";
 import type { IFS } from "unionfs";
 
-const fs = jest.requireActual("fs");
+/**
+ * Union file system: reads fall through to the real file system (test fixtures
+ * under `tests/__data__`, the package `assets` folder), while everything the
+ * generator writes lands in the in-memory `vol` volume the tests inspect.
+ */
+const actualFs = await vi.importActual<typeof NodeFs>("node:fs");
 
-module.exports = ufs.use(fs).use(vol as unknown as IFS);
+const memoryFs = createFsFromVolume(vol);
+
+const unionFs = ufs
+  .use(actualFs as unknown as IFS)
+  .use(memoryFs as unknown as IFS);
+
+export default unionFs;

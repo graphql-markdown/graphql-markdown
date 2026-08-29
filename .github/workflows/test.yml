@@ -67,7 +67,7 @@ jobs:
         id: unit
         run: |
           cd packages/${{ matrix.package }}
-          bun test:unit -- --coverage --reporters="github-actions" --reporters="summary"
+          bun test:unit -- --coverage --reporter=github-actions --reporter=default
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p .nyc_output
           mv ./coverage/coverage-final.json .nyc_output/unit.json
@@ -76,7 +76,7 @@ jobs:
         id: integration
         run: |
           cd packages/${{ matrix.package }}
-          bun test:integration -- --coverage --reporters="github-actions" --reporters="summary"
+          bun test:integration -- --coverage --reporter=github-actions --reporter=default
           [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
           mkdir -p .nyc_output
           mv ./coverage/coverage-final.json .nyc_output/integration.json

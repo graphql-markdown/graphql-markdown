@@ -149,7 +149,7 @@ describe("CancellableEvent", () => {
   });
 
   test("runDefaultAction executes when not prevented", async () => {
-    const actionMock = jest.fn();
+    const actionMock = vi.fn();
     const event = new TestEvent({ defaultAction: actionMock });
 
     await event.runDefaultAction();
@@ -158,7 +158,7 @@ describe("CancellableEvent", () => {
   });
 
   test("runDefaultAction does not execute when prevented", async () => {
-    const actionMock = jest.fn();
+    const actionMock = vi.fn();
     const event = new TestEvent({ defaultAction: actionMock });
 
     event.preventDefault();
@@ -226,7 +226,7 @@ describe("DataEvent", () => {
 
   test("works with options parameter", () => {
     const data = { id: "test", value: 42 };
-    const action = jest.fn();
+    const action = vi.fn();
     const event = new TestDataEvent(data, {
       defaultAction: action,
       cancellable: false,

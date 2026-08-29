@@ -1,10 +1,12 @@
+import { vi } from "vitest";
+
 export default {
-  formatMDXAdmonition: jest.fn(),
-  formatMDXBadge: jest.fn(),
-  formatMDXBullet: jest.fn(),
-  formatMDXDetails: jest.fn(),
-  formatMDXFrontmatter: jest.fn(),
-  formatMDXNameEntity: jest.fn(),
-  formatMDXSpecifiedByLink: jest.fn(),
-  mdxDeclaration: jest.fn(),
+  formatMDXAdmonition: vi.fn(),
+  formatMDXBadge: vi.fn(),
+  formatMDXBullet: vi.fn(),
+  formatMDXDetails: vi.fn(),
+  formatMDXFrontmatter: vi.fn(),
+  formatMDXNameEntity: vi.fn(),
+  formatMDXSpecifiedByLink: vi.fn(),
+  mdxDeclaration: vi.fn(),
 };

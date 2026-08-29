@@ -52,7 +52,7 @@
         "tests/unit/**/*.ts",
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
-        "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },
@@ -64,7 +64,7 @@
         "tests/integration/**/*.ts",
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
-        "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },
@@ -76,7 +76,7 @@
         "tests/**/*.ts",
         "tests/__mocks__/**/*.ts",
         "tsconfig*.json",
-        "jest.config.mjs",
+        "vitest.config.mjs",
         "package.json"
       ]
     },

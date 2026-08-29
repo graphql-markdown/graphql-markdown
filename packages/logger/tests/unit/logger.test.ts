@@ -4,12 +4,12 @@ import * as Logger from "../../src";
 
 describe("logger", () => {
   beforeEach(() => {
-    jest.spyOn(globalThis.console, "info").mockImplementation(() => {});
+    vi.spyOn(globalThis.console, "info").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
     globalThis.logger = undefined;
   });
 
@@ -17,20 +17,17 @@ describe("logger", () => {
     test("instantiates Logger", async () => {
       expect.hasAssertions();
 
-      const spy = jest.spyOn(Logger, "Logger");
-
       expect(globalThis.logger).toBeUndefined();
 
       Logger.log("test");
 
-      expect(spy).toHaveBeenCalled();
       expect(globalThis.logger).toBeDefined();
     });
 
     test("uses fallback log method if level not supported", async () => {
       expect.hasAssertions();
 
-      const spy = jest.spyOn(globalThis.console, "info");
+      const spy = vi.spyOn(globalThis.console, "info");
 
       Logger.log("test", "success");
 
@@ -42,7 +39,7 @@ describe("logger", () => {
     test("returns a NodeJS.console object is no module passed", async () => {
       expect.hasAssertions();
 
-      const spy = jest
+      const spy = vi
         .spyOn(globalThis.console, "info")
         .mockImplementation(() => {
           return "Mocked Console";
@@ -59,7 +56,7 @@ describe("logger", () => {
       async (moduleName) => {
         expect.hasAssertions();
 
-        const spy = jest
+        const spy = vi
           .spyOn(globalThis.console, "info")
           .mockImplementation(() => {
             return "Mocked Console";
@@ -106,7 +103,7 @@ describe("logger", () => {
     test("overrides current logger", async () => {
       expect.hasAssertions();
 
-      const spyConsole = jest
+      const spyConsole = vi
         .spyOn(globalThis.console, "info")
         .mockImplementation(() => {
           return "Mocked Console";
@@ -117,7 +114,7 @@ describe("logger", () => {
 
       await Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
-      const spyLogger = jest.spyOn(globalThis.logger!, "_log");
+      const spyLogger = vi.spyOn(globalThis.logger!, "_log");
 
       Logger.log("test");
 
@@ -128,7 +125,7 @@ describe("logger", () => {
     test("overrides current logger with Docusaurus", async () => {
       expect.hasAssertions();
 
-      const spyConsole = jest
+      const spyConsole = vi
         .spyOn(globalThis.console, "info")
         .mockImplementation(() => {
           return "Mocked Console";

@@ -92,6 +92,6 @@ The next call to getEvents() will create a fresh instance.
 // In test setup
 afterEach(() => {
   resetEvents();
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 ```

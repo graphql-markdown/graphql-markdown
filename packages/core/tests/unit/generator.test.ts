@@ -1,11 +1,15 @@
-jest.useFakeTimers();
+import type { Mock } from "vitest";
+
+vi.useFakeTimers();
 
 import type {
   DirectiveName,
   GeneratorOptions,
   GraphQLSchema,
   IPrinter,
+  LoaderOption,
   LoadSchemaOptions,
+  Maybe,
   PackageName,
   SchemaMap,
 } from "@graphql-markdown/types";
@@ -13,28 +17,68 @@ import type {
 import { GraphQLDirective } from "graphql/type";
 
 import * as GraphQL from "@graphql-markdown/graphql";
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", () => {
   return {
-    getCustomDirectives: jest.fn(),
-    getDocumentLoaders: jest.fn(),
-    getGroups: jest.fn(),
-    getSchemaMap: jest.fn(),
-    loadSchema: jest.fn(),
+    getCustomDirectives: vi.fn(),
+    getDocumentLoaders: vi.fn(),
+    getGroups: vi.fn(),
+    getSchemaMap: vi.fn(),
+    loadSchema: vi.fn(),
   };
 });
 
 import { DiffMethod, TypeHierarchy } from "../../src/config";
 import * as CoreDiff from "../../src/diff";
 
-jest.mock("../../src/diff");
+vi.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
 
-jest.mock("../../src/renderer");
+vi.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
 
-jest.mock("../../src/printer");
+vi.mock("../../src/printer");
 
 import { resetEvents } from "../../src/event-emitter";
+
+/*
+ * `generateDocFromSchema()` calls the helpers exported by `src/generator.ts`
+ * (`loadMDXModule`, `loadGraphqlSchema`, `checkSchemaDifferences`,
+ * `resolveSkipAndOnlyDirectives`) through their local bindings. Under the ESM
+ * transform a namespace spy (`vi.spyOn(GeneratorModule, ...)`) is therefore
+ * never in the call path, so the tests below drive and observe those helpers
+ * through their own cross-module dependencies instead.
+ */
+
+/**
+ * Virtual module resolved by `loadMDXModule("custom-mdx-parser")`. Every export
+ * the generator probes must exist as a key, because Vitest throws when a mocked
+ * module is asked for an export its factory did not declare. Values are reset
+ * before each test.
+ */
+const { mdxParserStub } = vi.hoisted(() => {
+  return {
+    mdxParserStub: {
+      createMDXFormatter: undefined,
+      default: undefined,
+      mdxDeclaration: undefined,
+      mdxExtension: undefined,
+    } as Record<string, unknown>,
+  };
+});
+vi.mock("custom-mdx-parser", () => {
+  return mdxParserStub;
+});
+
+/**
+ * Drives the internal `loadGraphqlSchema()` call through the
+ * `@graphql-markdown/graphql` functions it depends on.
+ */
+const mockSchemaLoad = (schema: Maybe<GraphQLSchema>): void => {
+  vi.mocked(GraphQL.getDocumentLoaders).mockResolvedValueOnce(
+    {} as unknown as LoaderOption,
+  );
+  vi.mocked(GraphQL.loadSchema).mockResolvedValueOnce(schema!);
+};
 
 // Import helper functions for direct testing
 import * as GeneratorModule from "../../src/generator";
@@ -48,12 +92,12 @@ const {
 } = GeneratorModule;
 
 const mockRenderer = {
-  generateCategoryMetafile: jest.fn(),
-  generateCategoryMetafileType: jest.fn(),
-  renderRootTypes: jest.fn(),
-  renderTypeEntities: jest.fn(),
-  renderHomepage: jest.fn(),
-  preCollectCategories: jest.fn(),
+  generateCategoryMetafile: vi.fn(),
+  generateCategoryMetafileType: vi.fn(),
+  renderRootTypes: vi.fn(),
+  renderTypeEntities: vi.fn(),
+  renderHomepage: vi.fn(),
+  preCollectCategories: vi.fn(),
 } as unknown as CoreRenderer.Renderer;
 
 import { generateDocFromSchema } from "../../src";
@@ -93,14 +137,18 @@ describe("generator", () => {
     });
 
     beforeEach(() => {
+      for (const key of Object.keys(mdxParserStub)) {
+        mdxParserStub[key] = undefined;
+      }
+
       // silent console
-      jest.spyOn(globalThis.console, "info").mockImplementation(() => {});
-      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
-      jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
+      vi.spyOn(globalThis.console, "info").mockImplementation(() => {});
+      vi.spyOn(globalThis.console, "warn").mockImplementation(() => {});
+      vi.spyOn(globalThis.console, "error").mockImplementation(() => {});
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
       resetEvents();
     });
 
@@ -123,33 +171,24 @@ describe("generator", () => {
           locations: [],
         });
 
-        // Mock helper functions
-        jest
-          .spyOn(GeneratorModule, "loadMDXModule")
-          .mockResolvedValueOnce(undefined);
-        jest
-          .spyOn(GeneratorModule, "loadGraphqlSchema")
-          .mockResolvedValueOnce(mockSchema);
-        jest
-          .spyOn(GeneratorModule, "checkSchemaDifferences")
-          .mockResolvedValueOnce(true);
-        jest
-          .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-          .mockReturnValueOnce([[], [mockDirective]]);
+        // No MDX module is registered for the `custom-mdx` package name, so
+        // `loadMDXModule()` resolves to undefined. `checkSchemaDifferences()`
+        // returns true because `diffMethod` is NONE, and
+        // `resolveSkipAndOnlyDirectives()` runs for real against `mockSchema`,
+        // resolving `skipDocDirective` to `mockDirective`.
+        mockSchemaLoad(mockSchema);
 
         // Mock GraphQL package functions still needed
-        jest
-          .spyOn(GraphQL, "getSchemaMap")
-          .mockReturnValueOnce({ objects: {} } as SchemaMap);
-        jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-        jest
-          .spyOn(GraphQL, "getCustomDirectives")
-          .mockReturnValueOnce(undefined);
+        vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+          objects: {},
+        } as SchemaMap);
+        vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+        vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
 
-        const getPrinterSpy = jest
+        const getPrinterSpy = vi
           .spyOn(CorePrinter, "getPrinter")
           .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-        const rendererSpy = jest
+        const rendererSpy = vi
           .spyOn(CoreRenderer, "getRenderer")
           .mockResolvedValueOnce(mockRenderer);
 
@@ -199,33 +238,19 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      // Mock helper functions
-      jest
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce(undefined);
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
-      jest
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(globalThis.console, "info");
+      const loggerSpy = vi.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema(options);
 
@@ -244,14 +269,17 @@ describe("generator", () => {
     test("returns early when loadGraphqlSchema returns undefined", async () => {
       expect.assertions(2);
 
-      const loadGraphqlSchemaSpy = jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
+      // `loadGraphqlSchema()` returns undefined when it cannot build loaders,
+      // which is the only observable way to reach the early return now that the
+      // internal call cannot be intercepted.
+      const getDocumentLoadersSpy = vi
+        .mocked(GraphQL.getDocumentLoaders)
         .mockResolvedValueOnce(undefined);
-      const loggerSpy = jest.spyOn(console, "error");
+      const loggerSpy = vi.spyOn(console, "error");
 
       await generateDocFromSchema({} as unknown as GeneratorOptions);
 
-      expect(loadGraphqlSchemaSpy).toHaveBeenCalled();
+      expect(getDocumentLoadersSpy).toHaveBeenCalled();
       expect(loggerSpy).toHaveBeenCalledWith(
         expect.stringContaining("Failed to load GraphQL schema"),
       );
@@ -262,31 +290,26 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      const checkDiffSpy = jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
+      mockSchemaLoad(mockSchema);
+      // `checkSchemaDifferences()` is observed through `hasChanges()`, the
+      // cross-module dependency it delegates the comparison to. A non-NONE diff
+      // method is required for the delegation to happen at all.
+      const hasChangesSpy = vi
+        .mocked(CoreDiff.hasChanges)
         .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
-      const loggerSpy = jest.spyOn(console, "info");
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+      const loggerSpy = vi.spyOn(console, "info");
 
-      await generateDocFromSchema(options);
+      await generateDocFromSchema({ ...options, diffMethod: DiffMethod.FORCE });
 
-      expect(checkDiffSpy).toHaveBeenCalledWith(
+      expect(hasChangesSpy).toHaveBeenCalledWith(
         mockSchema,
-        "schema location",
-        "NONE",
         "temp dir",
+        DiffMethod.FORCE,
       );
       expect(loggerSpy).not.toHaveBeenCalledWith(
         `No changes detected in schema "schema location".`,
@@ -298,30 +321,22 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      const checkDiffSpy = jest.spyOn(
-        GeneratorModule,
-        "checkSchemaDifferences",
-      );
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
+      const hasChangesSpy = vi.mocked(CoreDiff.hasChanges);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
         diffMethod: DiffMethod.NONE,
       });
 
-      expect(checkDiffSpy).toHaveBeenCalled();
+      // `checkSchemaDifferences()` short-circuits on DiffMethod.NONE, which is
+      // observable as its `hasChanges()` dependency never being called.
+      expect(hasChangesSpy).not.toHaveBeenCalled();
     });
 
     test("correctly calculates execution time", async () => {
@@ -331,35 +346,24 @@ describe("generator", () => {
 
       // Mock process.hrtime.bigint to return predictable values
       const originalHrtime = process.hrtime.bigint;
-      const mockHrtime = jest
+      const mockHrtime = vi
         .fn()
         .mockReturnValueOnce(1000000000n) // start time
         .mockReturnValueOnce(2000000000n); // end time
 
       process.hrtime.bigint = mockHrtime;
 
-      // Mock helper functions
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(globalThis.console, "info");
+      const loggerSpy = vi.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema(options);
 
@@ -377,24 +381,14 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
-      const getPrinterSpy = jest
+      const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
 
@@ -438,27 +432,17 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      jest.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
-      const getPrinterSpy = jest
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+      const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
@@ -484,18 +468,10 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
       // Create a comprehensive schema map with all possible root types
-      jest.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
         objects: { TestObject: {} },
         inputs: { TestInput: {} },
         interfaces: { TestInterface: {} },
@@ -504,18 +480,16 @@ describe("generator", () => {
         unions: { TestUnion: {} },
       } as unknown as SchemaMap);
 
-      jest
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
 
       const rendererMock = {
         ...mockRenderer,
-        renderRootTypes: jest.fn().mockResolvedValue({}),
+        renderRootTypes: vi.fn().mockResolvedValue({}),
       } as unknown as CoreRenderer.Renderer;
 
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(rendererMock);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(rendererMock);
 
       await generateDocFromSchema(options);
 
@@ -547,27 +521,17 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
 
       // Test with completely empty schema map
-      jest.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({} as SchemaMap);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({} as SchemaMap);
 
-      jest
-        .spyOn(CorePrinter, "getPrinter")
-        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
-      const loggerSpy = jest.spyOn(globalThis.console, "info");
+      const loggerSpy = vi.spyOn(globalThis.console, "info");
 
       await generateDocFromSchema(options);
 
@@ -582,32 +546,25 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      const loadMDXSpy = jest
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce(undefined);
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      // `loadMDXModule()` is called internally, so instead of spying on it the
+      // `formatter` package name is resolved to a virtual module whose
+      // `createMDXFormatter()` factory must be invoked for the option to have
+      // been honoured.
+      const createMDXFormatter = vi.fn().mockReturnValue({});
+      mdxParserStub.createMDXFormatter = createMDXFormatter;
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema({
         ...options,
         formatter: "custom-mdx-parser",
       });
 
-      expect(loadMDXSpy).toHaveBeenCalledWith("custom-mdx-parser");
+      expect(createMDXFormatter).toHaveBeenCalled();
     });
 
     test("uses .mdx extension when mdxModule is loaded", async () => {
@@ -615,23 +572,15 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadMDXModule")
-        .mockResolvedValueOnce({ createMDXFormatter: jest.fn() });
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      // The `custom-mdx-parser` virtual module stands in for a loaded MDX
+      // module, which is what the internal `loadMDXModule()` call resolves.
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      const rendererSpy = jest
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
@@ -649,24 +598,14 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
-        createMDXFormatter: jest.fn(),
-        mdxExtension: ".custom",
-      });
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mdxParserStub.mdxExtension = ".custom";
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      const rendererSpy = jest
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
@@ -686,26 +625,16 @@ describe("generator", () => {
 
       // This simulates a module that has both mdxDeclaration and mdxExtension
       // The code should use mdxExtension, not mdxDeclaration
-      jest.spyOn(GeneratorModule, "loadMDXModule").mockResolvedValueOnce({
-        createMDXFormatter: jest.fn(),
-        mdxExtension: ".mdx",
-        mdxDeclaration:
-          "import { Badge } from '@astrojs/starlight/components';",
-      });
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mdxParserStub.createMDXFormatter = vi.fn();
+      mdxParserStub.mdxExtension = ".mdx";
+      mdxParserStub.mdxDeclaration =
+        "import { Badge } from '@astrojs/starlight/components';";
+      mockSchemaLoad(mockSchema);
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      const rendererSpy = jest
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      const rendererSpy = vi
         .spyOn(CoreRenderer, "getRenderer")
         .mockResolvedValueOnce(mockRenderer);
 
@@ -723,40 +652,37 @@ describe("generator", () => {
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
 
-      jest
-        .spyOn(GeneratorModule, "loadGraphqlSchema")
-        .mockResolvedValueOnce(mockSchema);
-      jest
-        .spyOn(GeneratorModule, "checkSchemaDifferences")
-        .mockResolvedValueOnce(true);
-      const resolveSpy = jest
-        .spyOn(GeneratorModule, "resolveSkipAndOnlyDirectives")
-        .mockReturnValueOnce([[], []]);
+      mockSchemaLoad(mockSchema);
+      // `resolveSkipAndOnlyDirectives()` runs for real: its only dependency is
+      // `schema.getDirective()`, so observing that lookup proves the option
+      // lists and the loaded schema were handed to it.
+      const getDirectiveSpy = vi.spyOn(mockSchema, "getDirective");
 
-      jest
-        .spyOn(GraphQL, "getSchemaMap")
-        .mockReturnValueOnce({ objects: {} } as SchemaMap);
-      jest
-        .spyOn(CoreRenderer, "getRenderer")
-        .mockResolvedValueOnce(mockRenderer);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
 
       await generateDocFromSchema(options);
 
-      expect(resolveSpy).toHaveBeenCalledWith(
-        options.onlyDocDirective,
-        options.skipDocDirective,
-        mockSchema,
-      );
+      expect(getDirectiveSpy.mock.calls).toStrictEqual([
+        ...(options.onlyDocDirective as DirectiveName[]).map((name) => {
+          return [name];
+        }),
+        ...(options.skipDocDirective as DirectiveName[]).map((name) => {
+          return [name];
+        }),
+      ]);
     });
   });
 
   describe("resolveSkipAndOnlyDirectives()", () => {
     const mockSchema = {
-      getDirective: jest.fn(),
+      getDirective: vi.fn(),
     } as unknown as GraphQLSchema;
 
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test("converts single directive name to array for onlyDocDirective", () => {
@@ -766,7 +692,7 @@ describe("generator", () => {
         name: "testDirective",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock).mockReturnValue(directive);
+      (mockSchema.getDirective as Mock).mockReturnValue(directive);
 
       const result = resolveSkipAndOnlyDirectives(
         "testDirective" as DirectiveName,
@@ -785,7 +711,7 @@ describe("generator", () => {
         name: "skipDirective",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock).mockReturnValue(directive);
+      (mockSchema.getDirective as Mock).mockReturnValue(directive);
 
       const result = resolveSkipAndOnlyDirectives(
         undefined,
@@ -808,7 +734,7 @@ describe("generator", () => {
         name: "directive2",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock)
+      (mockSchema.getDirective as Mock)
         .mockReturnValueOnce(directive1)
         .mockReturnValueOnce(directive2);
 
@@ -866,7 +792,7 @@ describe("generator", () => {
         name: "customDirective",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock).mockReturnValue(directive);
+      (mockSchema.getDirective as Mock).mockReturnValue(directive);
 
       resolveSkipAndOnlyDirectives(
         "customDirective" as DirectiveName,
@@ -881,7 +807,7 @@ describe("generator", () => {
     test("filters out directives not found in schema", () => {
       expect.assertions(1);
 
-      (mockSchema.getDirective as jest.Mock).mockReturnValue(undefined);
+      (mockSchema.getDirective as Mock).mockReturnValue(undefined);
 
       const result = resolveSkipAndOnlyDirectives(
         "nonExistentDirective" as DirectiveName,
@@ -895,7 +821,7 @@ describe("generator", () => {
     test("returns empty array when directive not in schema", () => {
       expect.assertions(1);
 
-      (mockSchema.getDirective as jest.Mock).mockReturnValue(undefined);
+      (mockSchema.getDirective as Mock).mockReturnValue(undefined);
 
       const result = resolveSkipAndOnlyDirectives(
         ["missing1", "missing2"] as DirectiveName[],
@@ -935,7 +861,7 @@ describe("generator", () => {
         name: "skipDirective",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock)
+      (mockSchema.getDirective as Mock)
         .mockReturnValueOnce(onlyDirective)
         .mockReturnValueOnce(skipDirective);
 
@@ -969,7 +895,7 @@ describe("generator", () => {
         name: "valid",
         locations: [],
       });
-      (mockSchema.getDirective as jest.Mock)
+      (mockSchema.getDirective as Mock)
         .mockReturnValueOnce(validDirective)
         .mockReturnValueOnce(undefined)
         .mockReturnValueOnce(validDirective);
@@ -986,8 +912,8 @@ describe("generator", () => {
 
   describe("loadMDXModule()", () => {
     beforeEach(() => {
-      jest.clearAllMocks();
-      jest.spyOn(console, "warn").mockImplementation(() => {});
+      vi.clearAllMocks();
+      vi.spyOn(console, "warn").mockImplementation(() => {});
     });
 
     test("returns undefined when mdxParser is null", async () => {
@@ -1009,7 +935,7 @@ describe("generator", () => {
     test("logs warning and returns undefined on import error", async () => {
       expect.assertions(2);
 
-      const warnSpy = jest.spyOn(console, "warn");
+      const warnSpy = vi.spyOn(console, "warn");
       const invalidModule = "non-existent-module-xyz" as PackageName;
 
       const result = await loadMDXModule(invalidModule);
@@ -1052,10 +978,10 @@ describe("generator", () => {
       expect.assertions(2);
 
       const mockFormatter = {
-        formatMDXBadge: jest.fn(),
-        formatMDXAdmonition: jest.fn(),
+        formatMDXBadge: vi.fn(),
+        formatMDXAdmonition: vi.fn(),
       };
-      const createMDXFormatter = jest.fn().mockReturnValue(mockFormatter);
+      const createMDXFormatter = vi.fn().mockReturnValue(mockFormatter);
       const mdxModule = { createMDXFormatter };
 
       const result = getFormatterFromMDXModule(mdxModule, {
@@ -1072,9 +998,9 @@ describe("generator", () => {
       expect.assertions(2);
 
       const mockFormatter = {
-        formatMDXBadge: jest.fn(),
+        formatMDXBadge: vi.fn(),
       };
-      const createMDXFormatter = jest.fn().mockReturnValue(mockFormatter);
+      const createMDXFormatter = vi.fn().mockReturnValue(mockFormatter);
       const mdxModule = { default: { createMDXFormatter } };
 
       const result = getFormatterFromMDXModule(mdxModule);
@@ -1086,8 +1012,8 @@ describe("generator", () => {
     test("detects individual formatter functions from module", () => {
       expect.assertions(3);
 
-      const formatMDXBadge = jest.fn();
-      const formatMDXAdmonition = jest.fn();
+      const formatMDXBadge = vi.fn();
+      const formatMDXAdmonition = vi.fn();
       const mdxModule = { formatMDXBadge, formatMDXAdmonition };
 
       const result = getFormatterFromMDXModule(mdxModule);
@@ -1100,7 +1026,7 @@ describe("generator", () => {
     test("detects individual formatter functions from default export", () => {
       expect.assertions(2);
 
-      const formatMDXBullet = jest.fn();
+      const formatMDXBullet = vi.fn();
       const mdxModule = { default: { formatMDXBullet } };
 
       const result = getFormatterFromMDXModule(mdxModule);
@@ -1122,9 +1048,9 @@ describe("generator", () => {
     test("prefers createMDXFormatter over individual functions", () => {
       expect.assertions(2);
 
-      const factoryFormatter = { formatMDXBadge: jest.fn() };
-      const createMDXFormatter = jest.fn().mockReturnValue(factoryFormatter);
-      const individualBadge = jest.fn();
+      const factoryFormatter = { formatMDXBadge: vi.fn() };
+      const createMDXFormatter = vi.fn().mockReturnValue(factoryFormatter);
+      const individualBadge = vi.fn();
       const mdxModule = {
         createMDXFormatter,
         formatMDXBadge: individualBadge,
@@ -1140,14 +1066,14 @@ describe("generator", () => {
       expect.assertions(9);
 
       const mdxModule = {
-        formatMDXBadge: jest.fn(),
-        formatMDXAdmonition: jest.fn(),
-        formatMDXBullet: jest.fn(),
-        formatMDXDetails: jest.fn(),
-        formatMDXFrontmatter: jest.fn(),
-        formatMDXLink: jest.fn(),
-        formatMDXNameEntity: jest.fn(),
-        formatMDXSpecifiedByLink: jest.fn(),
+        formatMDXBadge: vi.fn(),
+        formatMDXAdmonition: vi.fn(),
+        formatMDXBullet: vi.fn(),
+        formatMDXDetails: vi.fn(),
+        formatMDXFrontmatter: vi.fn(),
+        formatMDXLink: vi.fn(),
+        formatMDXNameEntity: vi.fn(),
+        formatMDXSpecifiedByLink: vi.fn(),
       };
 
       const result = getFormatterFromMDXModule(mdxModule);
@@ -1264,18 +1190,18 @@ describe("generator", () => {
 
   describe("loadGraphqlSchema()", () => {
     beforeEach(() => {
-      jest.clearAllMocks();
-      jest.spyOn(console, "error").mockImplementation(() => {});
+      vi.clearAllMocks();
+      vi.spyOn(console, "error").mockImplementation(() => {});
     });
 
     test("returns schema when loaders succeed", async () => {
       expect.assertions(1);
 
       const mockSchema = {} as GraphQLSchema;
-      jest
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(mockSchema);
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(
+        {} as LoadSchemaOptions,
+      );
+      vi.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(mockSchema);
 
       const result = await loadGraphqlSchema("schema.graphql", undefined);
 
@@ -1285,9 +1211,7 @@ describe("generator", () => {
     test("returns undefined when loaders cannot be initialized", async () => {
       expect.assertions(1);
 
-      jest
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce(undefined);
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(undefined);
 
       const result = await loadGraphqlSchema("schema.graphql", undefined);
 
@@ -1297,10 +1221,8 @@ describe("generator", () => {
     test("logs error message when loaders fail", async () => {
       expect.assertions(1);
 
-      const errorSpy = jest.spyOn(console, "error");
-      jest
-        .spyOn(GraphQL, "getDocumentLoaders")
-        .mockResolvedValueOnce(undefined);
+      const errorSpy = vi.spyOn(console, "error");
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(undefined);
 
       await loadGraphqlSchema("schema.graphql", undefined);
 
@@ -1313,12 +1235,12 @@ describe("generator", () => {
       expect.assertions(1);
 
       const loadersList = { documents: "**/*.graphql" };
-      const getLoadersSpy = jest
+      const getLoadersSpy = vi
         .spyOn(GraphQL, "getDocumentLoaders")
         .mockResolvedValueOnce({} as LoadSchemaOptions);
-      jest
-        .spyOn(GraphQL, "loadSchema")
-        .mockResolvedValueOnce({} as GraphQLSchema);
+      vi.spyOn(GraphQL, "loadSchema").mockResolvedValueOnce(
+        {} as GraphQLSchema,
+      );
 
       await loadGraphqlSchema("schema.graphql", loadersList);
 
@@ -1330,8 +1252,8 @@ describe("generator", () => {
 
       const schemaLocation = "http://example.com/schema.graphql";
       const loaders = {} as LoadSchemaOptions;
-      jest.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(loaders);
-      const loadSchemaSpy = jest
+      vi.spyOn(GraphQL, "getDocumentLoaders").mockResolvedValueOnce(loaders);
+      const loadSchemaSpy = vi
         .spyOn(GraphQL, "loadSchema")
         .mockResolvedValueOnce({} as GraphQLSchema);
 
@@ -1347,14 +1269,14 @@ describe("generator", () => {
     const tmpDir = "/tmp";
 
     beforeEach(() => {
-      jest.clearAllMocks();
-      jest.spyOn(console, "info").mockImplementation(() => {});
+      vi.clearAllMocks();
+      vi.spyOn(console, "info").mockImplementation(() => {});
     });
 
     test("returns true when diffMethod is NONE", async () => {
       expect.assertions(2);
 
-      const hasChangesSpy = jest.spyOn(CoreDiff, "hasChanges");
+      const hasChangesSpy = vi.spyOn(CoreDiff, "hasChanges");
 
       const result = await checkSchemaDifferences(
         mockSchema,
@@ -1370,7 +1292,7 @@ describe("generator", () => {
     test("calls hasChanges when diffMethod is not NONE", async () => {
       expect.assertions(2);
 
-      const hasChangesSpy = jest
+      const hasChangesSpy = vi
         .spyOn(CoreDiff, "hasChanges")
         .mockResolvedValueOnce(true);
 
@@ -1388,8 +1310,8 @@ describe("generator", () => {
     test("logs message when no changes detected", async () => {
       expect.assertions(1);
 
-      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(false);
-      const infoSpy = jest.spyOn(console, "info");
+      vi.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(false);
+      const infoSpy = vi.spyOn(console, "info");
 
       await checkSchemaDifferences(
         mockSchema,
@@ -1406,8 +1328,8 @@ describe("generator", () => {
     test("does not log when changes detected", async () => {
       expect.assertions(1);
 
-      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
-      const infoSpy = jest.spyOn(console, "info");
+      vi.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(true);
+      const infoSpy = vi.spyOn(console, "info");
 
       await checkSchemaDifferences(
         mockSchema,
@@ -1422,7 +1344,7 @@ describe("generator", () => {
     test("passes correct parameters to hasChanges", async () => {
       expect.assertions(1);
 
-      const hasChangesSpy = jest
+      const hasChangesSpy = vi
         .spyOn(CoreDiff, "hasChanges")
         .mockResolvedValueOnce(true);
 
@@ -1439,7 +1361,7 @@ describe("generator", () => {
     test("returns false when hasChanges returns false", async () => {
       expect.assertions(1);
 
-      jest.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(false);
+      vi.spyOn(CoreDiff, "hasChanges").mockResolvedValueOnce(false);
 
       const result = await checkSchemaDifferences(
         mockSchema,

@@ -6,14 +6,14 @@ import { getPrinter } from "../../src/printer";
 
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-jest.mock("@graphql-markdown/printer-legacy");
+vi.mock("@graphql-markdown/printer-legacy");
 
 describe("generator", () => {
   describe("getPrinter()", () => {
     test("returns Printer object for @graphql-markdown/printer-legacy", async () => {
       expect.assertions(4);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
 
       const printerConfig = {
         schema: new GraphQLSchema({}),
@@ -47,7 +47,7 @@ describe("generator", () => {
     test("passes nullable printer options through to initialization", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
 
       await getPrinter(
         {
@@ -96,7 +96,7 @@ describe("generator", () => {
     test("passes null printTypeOptions through to initialization", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
 
       await getPrinter(
         {
@@ -127,7 +127,7 @@ describe("generator", () => {
     test("passes undefined to initialization when printer options are null", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
 
       await getPrinter(
         {
@@ -152,7 +152,7 @@ describe("generator", () => {
     test("passes string hierarchy through to initialization", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
 
       await getPrinter(
         {
@@ -201,9 +201,7 @@ describe("generator", () => {
     test("throws error if printer initialization fails", async () => {
       expect.assertions(1);
 
-      jest
-        .spyOn(Printer, "init")
-        .mockRejectedValueOnce(new Error("Init error"));
+      vi.spyOn(Printer, "init").mockRejectedValueOnce(new Error("Init error"));
 
       await expect(
         getPrinter(
@@ -223,7 +221,7 @@ describe("generator", () => {
     test("passes mdxModule to printer initialization", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(
@@ -253,7 +251,7 @@ describe("generator", () => {
     test("passes mdxDeclaration to printer initialization", async () => {
       expect.assertions(1);
 
-      const spy = jest.spyOn(Printer, "init");
+      const spy = vi.spyOn(Printer, "init");
       const mdxModule = { test: true } as Partial<Formatter>;
 
       await getPrinter(

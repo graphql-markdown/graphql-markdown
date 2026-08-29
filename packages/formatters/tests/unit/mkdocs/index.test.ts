@@ -15,12 +15,12 @@ const { formatMDXBullet, formatMDXLink } = __default;
 
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/utils", () => {
-  const actual = jest.requireActual("@graphql-markdown/utils");
+vi.mock("@graphql-markdown/utils", async (importOriginal) => {
+  const actual = await importOriginal();
   return {
     ...actual,
-    readFile: jest.fn(),
-    saveFile: jest.fn(),
+    readFile: vi.fn(),
+    saveFile: vi.fn(),
   };
 });
 
@@ -163,12 +163,12 @@ describe("createMDXFormatter", () => {
 
 describe("afterRenderTypeEntitiesHook", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("rewrites baseURL absolute links to relative markdown links", async () => {
-    const readFileMock = jest.mocked(Utils.readFile);
-    const saveFileMock = jest.mocked(Utils.saveFile);
+    const readFileMock = vi.mocked(Utils.readFile);
+    const saveFileMock = vi.mocked(Utils.saveFile);
 
     readFileMock.mockResolvedValue(
       "See [Book](/graphql/types/objects/book) and [ID](/graphql/types/scalars/id#value)",
@@ -190,8 +190,8 @@ describe("afterRenderTypeEntitiesHook", () => {
   });
 
   test("leaves non-baseURL absolute links unchanged", async () => {
-    const readFileMock = jest.mocked(Utils.readFile);
-    const saveFileMock = jest.mocked(Utils.saveFile);
+    const readFileMock = vi.mocked(Utils.readFile);
+    const saveFileMock = vi.mocked(Utils.saveFile);
 
     readFileMock.mockResolvedValue(
       "See [Site](/other/path) and [Spec](https://example.com)",

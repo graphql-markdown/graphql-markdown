@@ -1,9 +1,9 @@
 import type { GraphQLNamedType } from "graphql/type/definition";
 
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/graphql"),
-    getNamedType: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    getNamedType: vi.fn(),
   };
 });
 
@@ -13,8 +13,8 @@ import { getGroup } from "../../src/group";
 
 describe("group", () => {
   afterEach(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("getGroup()", () => {
@@ -57,9 +57,9 @@ describe("group", () => {
         },
       ],
     ])("returns group name string if type has group", (type) => {
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue({ name: "FooBaz" } as unknown as GraphQLNamedType);
+      vi.spyOn(GraphQL, "getNamedType").mockReturnValue({
+        name: "FooBaz",
+      } as unknown as GraphQLNamedType);
 
       const group = getGroup(
         type,
@@ -71,9 +71,9 @@ describe("group", () => {
     });
 
     test("returns empty string if type not in group", () => {
-      jest
-        .spyOn(GraphQL, "getNamedType")
-        .mockReturnValue({ name: "FooBar" } as unknown as GraphQLNamedType);
+      vi.spyOn(GraphQL, "getNamedType").mockReturnValue({
+        name: "FooBar",
+      } as unknown as GraphQLNamedType);
 
       const group = getGroup(
         { name: "FooBar" },
@@ -86,7 +86,7 @@ describe("group", () => {
   });
 
   test("returns empty string if resolved named type is undefined", () => {
-    jest.spyOn(GraphQL, "getNamedType").mockReturnValue(undefined);
+    vi.spyOn(GraphQL, "getNamedType").mockReturnValue(undefined);
 
     const group = getGroup(
       { name: "FooBar" },

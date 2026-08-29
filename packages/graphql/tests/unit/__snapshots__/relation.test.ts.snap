@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`relation getRelationOfField returns queries, subscriptions and mutations using a type 1`] = `
+exports[`relation > getRelationOfField > returns queries, subscriptions and mutations using a type 1`] = `
 {
   "directives": [
     "@deprecated",
@@ -508,7 +508,7 @@ exports[`relation getRelationOfField returns queries, subscriptions and mutation
 }
 `;
 
-exports[`relation getRelationOfReturn returns queries, subscriptions and mutations using a type 1`] = `
+exports[`relation > getRelationOfReturn > returns queries, subscriptions and mutations using a type 1`] = `
 {
   "mutations": [
     {

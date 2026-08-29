@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from "graphql/type";
 
-jest.mock("graphql");
+vi.mock("graphql");
 
 import type {
   GraphQLOperationType,
@@ -8,35 +8,35 @@ import type {
   GraphQLSchema,
 } from "@graphql-markdown/types";
 
-jest.mock("@graphql-markdown/utils", () => {
+vi.mock("@graphql-markdown/utils", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
-    escapeMDX: jest.fn((s): string => {
+    ...(await importOriginal<Record<string, unknown>>()),
+    escapeMDX: vi.fn((s): string => {
       return s as string;
     }),
-    pathUrl: jest.fn(),
-    slugify: jest.fn(),
+    pathUrl: vi.fn(),
+    slugify: vi.fn(),
   };
 });
 
 import * as GraphQL from "@graphql-markdown/graphql";
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", () => {
   return {
-    getNamedType: jest.fn(),
-    getRelationOfReturn: jest.fn(),
-    getRelationOfField: jest.fn(),
-    getRelationOfImplementation: jest.fn(),
-    getSchemaMap: jest.fn(),
-    hasDirective: jest.fn(),
-    isDirectiveType: jest.fn(),
-    isEnumType: jest.fn(),
-    isInputType: jest.fn(),
-    isInterfaceType: jest.fn(),
-    isNamedType: jest.fn(),
-    isObjectType: jest.fn(),
-    isOperation: jest.fn(),
-    isScalarType: jest.fn(),
-    isUnionType: jest.fn(),
+    getNamedType: vi.fn(),
+    getRelationOfReturn: vi.fn(),
+    getRelationOfField: vi.fn(),
+    getRelationOfImplementation: vi.fn(),
+    getSchemaMap: vi.fn(),
+    hasDirective: vi.fn(),
+    isDirectiveType: vi.fn(),
+    isEnumType: vi.fn(),
+    isInputType: vi.fn(),
+    isInterfaceType: vi.fn(),
+    isNamedType: vi.fn(),
+    isObjectType: vi.fn(),
+    isOperation: vi.fn(),
+    isScalarType: vi.fn(),
+    isUnionType: vi.fn(),
   };
 });
 
@@ -46,12 +46,12 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
   Relation;
 
-const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
+const mockGraphQL = vi.mocked(GraphQL);
 
 describe("relation", () => {
   afterAll(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("printRelationOf()", () => {
@@ -128,7 +128,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = await printRelationOf(type, "RelationOf", jest.fn(), {
+      const relation = await printRelationOf(type, "RelationOf", vi.fn(), {
         ...DEFAULT_OPTIONS,
         schema: undefined,
       });
@@ -242,41 +242,61 @@ describe("relation", () => {
     test("calls printRelationOf() for each type of relation", () => {
       expect.hasAssertions();
 
-      const spy = jest.spyOn(Relation, "printRelationOf");
-
       const type = new GraphQLScalarType({
         name: "String",
         description: "Lorem Ipsum",
       });
       const options = { ...DEFAULT_OPTIONS, schema: {} as GraphQLSchema };
+      const schemaMap = { objects: {} };
 
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
+      mockGraphQL.getSchemaMap.mockReturnValue(
+        schemaMap as unknown as ReturnType<typeof GraphQL.getSchemaMap>,
+      );
+      mockGraphQL.getRelationOfReturn.mockReturnValue({
+        queries: [{ name: "Foo" }],
+      } as never);
+      mockGraphQL.getRelationOfField.mockReturnValue({
+        queries: [{ name: "Bar" }],
+      } as never);
+      mockGraphQL.getRelationOfImplementation.mockReturnValue({
+        queries: [{ name: "Baz" }],
+      } as never);
 
-      printRelations(type, options);
+      const relations = printRelations(type, options);
 
-      expect(spy).toHaveBeenCalledTimes(3);
-      expect(spy).toHaveBeenNthCalledWith(
-        1,
+      // `printRelationOf()` is called from within `relation.ts` through its
+      // local binding, so a spy on the module namespace cannot intercept it.
+      // Assert the three invocations through their observable effects instead:
+      // each relation getter is invoked once with the type and the schema map,
+      // and each section is rendered, in order, into the returned MDX.
+      expect(mockGraphQL.getRelationOfReturn).toHaveBeenCalledExactlyOnceWith(
         type,
-        "Returned By",
-        GraphQL.getRelationOfReturn,
-        options,
+        schemaMap,
       );
-      expect(spy).toHaveBeenNthCalledWith(
-        2,
+      expect(mockGraphQL.getRelationOfField).toHaveBeenCalledExactlyOnceWith(
         type,
-        "Member Of",
-        GraphQL.getRelationOfField,
-        options,
+        schemaMap,
       );
-      expect(spy).toHaveBeenNthCalledWith(
-        3,
-        type,
-        "Implemented By",
-        GraphQL.getRelationOfImplementation,
-        options,
-      );
+      expect(
+        mockGraphQL.getRelationOfImplementation,
+      ).toHaveBeenCalledExactlyOnceWith(type, schemaMap);
+      expect(relations).toMatchInlineSnapshot(`
+"### Returned By
+
+[\`Foo\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+### Member Of
+
+[\`Bar\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+### Implemented By
+
+[\`Baz\`](#)  <mark class="gqlmd-mdx-badge">query</mark>
+
+"
+`);
     });
   });
 });

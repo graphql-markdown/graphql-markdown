@@ -5,7 +5,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import prettierConfig from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
-import jestPlugin from "eslint-plugin-jest";
+import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import tsdocPlugin from "eslint-plugin-tsdoc";
 import jsoncPlugin from "eslint-plugin-jsonc";
@@ -50,7 +50,6 @@ const config: Linter.FlatConfig[] = [
     plugins: {
       "@typescript-eslint": tsPlugin as unknown as ESLint.Plugin,
       prettier: prettierPlugin,
-      jest: jestPlugin,
       import: importPlugin,
       tsdoc: tsdocPlugin,
     },
@@ -171,6 +170,9 @@ const config: Linter.FlatConfig[] = [
   // TypeScript test files - use tsconfig.test.json
   {
     files: ["**/tests/**/*.ts", "**/*.test.ts", "**/*.spec.ts"],
+    plugins: {
+      vitest: vitestPlugin,
+    },
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -180,7 +182,7 @@ const config: Linter.FlatConfig[] = [
         sourceType: "module",
       },
       globals: {
-        ...globals.jest,
+        ...vitestPlugin.environments.env.globals,
       },
     },
     rules: {
@@ -196,7 +198,6 @@ const config: Linter.FlatConfig[] = [
     files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
     plugins: {
       prettier: prettierPlugin,
-      jest: jestPlugin,
     },
     languageOptions: {
       parserOptions: {
@@ -218,9 +219,12 @@ const config: Linter.FlatConfig[] = [
 
   {
     files: ["**/tests/**/*.js", "**/*.test.js", "**/*.spec.js"],
+    plugins: {
+      vitest: vitestPlugin,
+    },
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ...vitestPlugin.environments.env.globals,
       },
     },
   },

@@ -1,12 +1,13 @@
 import { JsonFileLoader } from "@graphql-tools/json-file-loader";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-jest.mock("graphql/execution", (): unknown => {
-  const graphql = jest.requireActual("graphql/execution");
+import type * as GraphQLExecution from "graphql/execution";
+
+vi.mock("graphql/execution", async (importOriginal) => {
+  const graphql = await importOriginal<typeof GraphQLExecution>();
   return {
-    __esModule: true,
     ...graphql,
-    getDirectiveValues: jest.fn(graphql.getDirectiveValues),
+    getDirectiveValues: vi.fn(graphql.getDirectiveValues),
   };
 });
 

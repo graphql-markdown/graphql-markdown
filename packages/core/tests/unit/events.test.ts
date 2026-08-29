@@ -16,7 +16,7 @@ import {
 describe("events", () => {
   afterEach(() => {
     resetEvents();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe("deepFreeze", () => {
@@ -142,7 +142,7 @@ describe("events", () => {
     });
 
     it("should accept defaultAction", () => {
-      const defaultAction = jest.fn(async () => {
+      const defaultAction = vi.fn(async () => {
         return Promise.resolve();
       });
       const event = new SchemaEvent(
@@ -235,7 +235,7 @@ describe("events", () => {
   describe("resetEvents", () => {
     it("should clear all listeners", () => {
       const events = getEvents();
-      const handler = jest.fn();
+      const handler = vi.fn();
 
       events.on("testEvent", handler);
       resetEvents();
@@ -307,7 +307,7 @@ describe("events", () => {
 
     it("should continue executing handlers after error", async () => {
       const events = getEvents();
-      const handler2 = jest.fn();
+      const handler2 = vi.fn();
 
       events.on(SchemaEvents.BEFORE_LOAD, () => {
         throw new Error("Handler 1 failed");
@@ -324,8 +324,8 @@ describe("events", () => {
 
     it("should stop executing handlers when stopPropagation is called", async () => {
       const events = getEvents();
-      const handler2 = jest.fn();
-      const handler3 = jest.fn();
+      const handler2 = vi.fn();
+      const handler3 = vi.fn();
 
       events.on(SchemaEvents.BEFORE_LOAD, (event) => {
         event.stopPropagation();
@@ -344,7 +344,7 @@ describe("events", () => {
 
     it("should execute defaultAction if not prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn(async () => {
+      const defaultAction = vi.fn(async () => {
         return Promise.resolve();
       });
 
@@ -359,7 +359,7 @@ describe("events", () => {
 
     it("should not execute defaultAction if prevented", async () => {
       const events = getEvents();
-      const defaultAction = jest.fn(async () => {
+      const defaultAction = vi.fn(async () => {
         return Promise.resolve();
       });
 
@@ -433,7 +433,7 @@ describe("events", () => {
     it("should handle async handlers", async () => {
       const events = getEvents();
 
-      const spy = jest.spyOn(console, "log").mockImplementation();
+      const spy = vi.spyOn(console, "log").mockImplementation();
 
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       events.on(SchemaEvents.BEFORE_LOAD, async () => {

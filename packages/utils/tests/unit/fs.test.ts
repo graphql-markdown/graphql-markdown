@@ -1,12 +1,16 @@
 import { vol } from "memfs";
 
-// Jest.mock must be called before importing the module that uses the mocked dependency
-// In Jest 30+, we need to ensure the mock is properly set up before the fs module is loaded
-jest.mock("node:fs/promises", () => {
-  // Return the memfs vol promises directly
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { vol: fsVol } = require("memfs");
-  return fsVol.promises;
+// `vi.mock` is hoisted above the imports below, so `node:fs/promises` is
+// already replaced by the memfs-backed manual mock by the time
+// `../../src/fs` is evaluated.
+// The factory runs in an ESM context: it cannot close over outer bindings
+// (hence no reference to `vol` above) and cannot use CJS `require`, so the
+// manual mock is pulled in with a dynamic `import()`. `memfs` exports a single
+// shared `vol`, so the instance seeded in `beforeEach` is the one the mock
+// serves.
+vi.mock("node:fs/promises", async () => {
+  const memfsPromises = (await import("../__mocks__/node:fs/promises")).default;
+  return { ...memfsPromises, default: memfsPromises };
 });
 
 import { ensureDir, fileExists, saveFile } from "../../src/fs";

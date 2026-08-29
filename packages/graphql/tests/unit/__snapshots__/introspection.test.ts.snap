@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`introspection getFields() returns list of type fields 1`] = `
+exports[`introspection > getFields() > returns list of type fields 1`] = `
 "[
   {
     "name": "createTweet",
@@ -523,7 +523,7 @@ exports[`introspection getFields() returns list of type fields 1`] = `
 ]"
 `;
 
-exports[`introspection getOperation() returns list of mutations 1`] = `
+exports[`introspection > getOperation() > returns list of mutations 1`] = `
 "{
   "createTweet": {
     "name": "createTweet",
@@ -1046,7 +1046,7 @@ exports[`introspection getOperation() returns list of mutations 1`] = `
 }"
 `;
 
-exports[`introspection getOperation() returns list of queries 1`] = `
+exports[`introspection > getOperation() > returns list of queries 1`] = `
 "{
   "Tweet": {
     "name": "Tweet",
@@ -1986,7 +1986,7 @@ exports[`introspection getOperation() returns list of queries 1`] = `
 }"
 `;
 
-exports[`introspection getOperation() returns list of subscriptions 1`] = `
+exports[`introspection > getOperation() > returns list of subscriptions 1`] = `
 "{
   "Notifications": {
     "name": "Notifications",
@@ -2112,7 +2112,7 @@ exports[`introspection getOperation() returns list of subscriptions 1`] = `
 }"
 `;
 
-exports[`introspection getSchemaMap() returns {} if root type no declared (issue #802) 1`] = `
+exports[`introspection > getSchemaMap() > returns {} if root type no declared (issue #802) 1`] = `
 "{
   "queries": {
     "posts": {
@@ -2329,7 +2329,7 @@ exports[`introspection getSchemaMap() returns {} if root type no declared (issue
 }"
 `;
 
-exports[`introspection getSchemaMap() returns schema types map 1`] = `
+exports[`introspection > getSchemaMap() > returns schema types map 1`] = `
 "{
   "queries": {
     "Tweet": {
@@ -3949,7 +3949,7 @@ exports[`introspection getSchemaMap() returns schema types map 1`] = `
 }"
 `;
 
-exports[`introspection getSchemaMap() returns schema types map with custom root types 1`] = `
+exports[`introspection > getSchemaMap() > returns schema types map with custom root types 1`] = `
 "{
   "queries": {
     "allSubscription": {
@@ -4400,7 +4400,7 @@ exports[`introspection getSchemaMap() returns schema types map with custom root 
 }"
 `;
 
-exports[`introspection getSchemaMap() returns schema types map with defined root types 1`] = `
+exports[`introspection > getSchemaMap() > returns schema types map with defined root types 1`] = `
 "{
   "queries": {
     "someField": {
@@ -4571,7 +4571,7 @@ exports[`introspection getSchemaMap() returns schema types map with defined root
 }"
 `;
 
-exports[`introspection getTypeFromSchema() handles null types from introspection JSON 1`] = `
+exports[`introspection > getTypeFromSchema() > handles null types from introspection JSON 1`] = `
 "{
   "ID": "ID",
   "String": "String",
@@ -4580,25 +4580,25 @@ exports[`introspection getTypeFromSchema() handles null types from introspection
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLEnumType 1`] = `
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLEnumType 1`] = `
 "{
   "MediaType": "MediaType"
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLInputObjectType 1`] = `
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLInputObjectType 1`] = `
 "{
   "TweetContent": "TweetContent"
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLInterfaceType 1`] = `
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLInterfaceType 1`] = `
 "{
   "Node": "Node"
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLObjectType 1`] = `
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLObjectType 1`] = `
 "{
   "Media": "Media",
   "Tweet": "Tweet",
@@ -4609,7 +4609,7 @@ exports[`introspection getTypeFromSchema() returns a filter map filtered by Grap
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLScalarType 1`] = `
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLScalarType 1`] = `
 "{
   "SRI": "SRI",
   "ID": "ID",
@@ -4621,4 +4621,4 @@ exports[`introspection getTypeFromSchema() returns a filter map filtered by Grap
 }"
 `;
 
-exports[`introspection getTypeFromSchema() returns a filter map filtered by GraphQLUnionType 1`] = `"{}"`;
+exports[`introspection > getTypeFromSchema() > returns a filter map filtered by GraphQLUnionType 1`] = `"{}"`;

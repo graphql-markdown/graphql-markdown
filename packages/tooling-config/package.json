@@ -10,23 +10,11 @@
   },
   "exports": {
     "./eslint": "./eslint/config.ts",
-    "./jest/base": {
-      "types": "./jest/base.d.mts",
-      "default": "./jest/base.mjs"
-    },
-    "./jest/integration": {
-      "types": "./jest/integration.d.mts",
-      "default": "./jest/integration.mjs"
-    },
-    "./jest/root": {
-      "types": "./jest/root.d.mts",
-      "default": "./jest/root.mjs"
-    },
-    "./jest/unit": {
-      "types": "./jest/unit.d.mts",
-      "default": "./jest/unit.mjs"
-    },
     "./package.json": "./package.json",
+    "./vitest/base": {
+      "types": "./vitest/base.d.mts",
+      "default": "./vitest/base.mjs"
+    },
     "./prettier": "./prettier/index.mjs",
     "./stryker": "./stryker/stryker.conf.mjs",
     "./tsconfig/base": "./tsconfig/base.json",
@@ -44,11 +32,11 @@
   },
   "files": [
     "eslint",
-    "jest",
     "prettier",
     "scripts",
     "tsconfig",
     "typedoc",
-    "stryker"
+    "stryker",
+    "vitest"
   ]
 }
