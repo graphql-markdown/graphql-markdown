@@ -137,7 +137,10 @@ export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
  * @see {@link Options} for the complete configuration interface
  */
 export const DEFAULT_OPTIONS: Readonly<
-  Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
+  Pick<
+    ConfigOptions,
+    "customDirective" | "groupByDirective" | "loaders" | "outputAdapter"
+  > &
     Required<
       Omit<
         ConfigOptions,
@@ -146,6 +149,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "groupByDirective"
         | "loaders"
         | "mdxParser"
+        | "outputAdapter"
         | "printTypeOptions"
       >
     >
@@ -859,6 +863,7 @@ export const buildConfig = async (
     formatter: parseDeprecatedFormatterOption(cliOpts, config),
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
+    outputAdapter: config.outputAdapter,
     outputDir: join(rootPath, baseURL),
     prettify,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
