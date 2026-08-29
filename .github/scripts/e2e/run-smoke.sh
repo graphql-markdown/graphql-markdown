@@ -12,11 +12,13 @@ export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 usage() {
   cat >&2 <<'EOF'
-usage: run-smoke.sh [cli|docusaurus2|docusaurus3|all]
+usage: run-smoke.sh [cli|docusaurus2|docusaurus3|all] [graphql-version]
 
 Builds and packs the workspace once, then scaffolds a throwaway project and
-runs the smoke-test suite for the selected target(s). With no argument,
-prompts interactively. Must be run from the repository root.
+runs the smoke-test suite for the selected target(s). The optional second
+argument selects the GraphQL major to install (16 or 17, default 16) and
+applies to every suite, including `all`. With no argument, prompts
+interactively. Must be run from the repository root.
 EOF
 }
 
@@ -40,6 +42,8 @@ if [[ -z "$SUITE" ]]; then
   done
 fi
 
+GRAPHQL_VERSION="${2:-16}"
+
 case "$SUITE" in
   cli|docusaurus2|docusaurus3|all) ;;
   *)
@@ -61,9 +65,10 @@ build_and_pack() {
 }
 
 run_cli() {
+  local graphql_version="$1"
   echo "::group::CLI smoke suite"
   local project_dir="$SCRATCH_ROOT/cli-gqlmd"
-  "$SCRIPT_DIR/setup-cli-project.sh" "$project_dir" "$PKG_DIR"
+  "$SCRIPT_DIR/setup-cli-project.sh" "$graphql_version" "$project_dir" "$PKG_DIR"
   cp "$REPO_ROOT/tests/e2e/cli/__data__/graphql-doc-generator-multi-instance.config.mjs" \
     "$project_dir/graphql.config.mjs"
   PROJECT_DIR="$project_dir" "$SCRIPT_DIR/smoke-test.sh" cli "$project_dir"
@@ -72,9 +77,10 @@ run_cli() {
 
 run_docusaurus() {
   local version="$1"
+  local graphql_version="$2"
   echo "::group::Docusaurus $version smoke suite"
   local project_dir="$SCRATCH_ROOT/docusaurus${version}-gqlmd"
-  "$SHARED_DIR/setup-docusaurus-project.sh" "$version" "$project_dir" "$PKG_DIR"
+  "$SHARED_DIR/setup-docusaurus-project.sh" "$version" "$graphql_version" "$project_dir" "$PKG_DIR"
   (cd "$project_dir" && npm install --save "$REPO_ROOT/tests/e2e/helpers/e2e-test-webpack-plugin")
   PROJECT_DIR="$project_dir" "$SCRIPT_DIR/smoke-test.sh" docusaurus "$project_dir"
   echo "::endgroup::"
@@ -83,12 +89,12 @@ run_docusaurus() {
 build_and_pack
 
 case "$SUITE" in
-  cli) run_cli ;;
-  docusaurus2) run_docusaurus 2 ;;
-  docusaurus3) run_docusaurus 3 ;;
+  cli) run_cli "$GRAPHQL_VERSION" ;;
+  docusaurus2) run_docusaurus 2 "$GRAPHQL_VERSION" ;;
+  docusaurus3) run_docusaurus 3 "$GRAPHQL_VERSION" ;;
   all)
-    run_cli
-    run_docusaurus 2
-    run_docusaurus 3
+    run_cli "$GRAPHQL_VERSION"
+    run_docusaurus 2 "$GRAPHQL_VERSION"
+    run_docusaurus 3 "$GRAPHQL_VERSION"
     ;;
 esac
