@@ -1,17 +1,5 @@
 // @ts-check
 
-import { createProjectConfig } from "../jest/base.mjs";
-
-const {
-  roots,
-  testEnvironment,
-  transform,
-  collectCoverageFrom,
-  moduleNameMapper,
-} = createProjectConfig("_", {
-  testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
-});
-
 /**
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
@@ -19,54 +7,33 @@ const config = {
   buildCommand: "tsgo --build",
   checkers: ["typescript"],
   plugins: [
-    "@stryker-mutator/jest-runner",
+    "@stryker-mutator/vitest-runner",
     "@stryker-mutator/typescript-checker",
   ],
   commandRunner: { command: "npm run test:ci" },
+  // The Vitest runner forces "perTest" and does not allow overriding it.
   coverageAnalysis: "perTest",
   dashboard: {},
   ignorePatterns: ["assets", "build", "config", "coverage", "dist", "docs"],
   ignoreStatic: true,
   inPlace: false,
-  jest: {
-    config: {
-      bail: false,
-      collectCoverage: false,
-      collectCoverageFrom,
-      moduleFileExtensions: ["js", "ts"],
-      moduleNameMapper: Object.fromEntries(
-        Object.entries(moduleNameMapper ?? {}).map(([pattern]) => {
-          if (pattern.startsWith("@graphql-markdown/formatters/defaults$")) {
-            return [pattern, "<rootDir>/../../../formatters/src/defaults"];
-          }
-          if (pattern === "@graphql-markdown/formatters/(.*)$") {
-            return [pattern, "<rootDir>/../../../formatters/src/$1/index"];
-          }
-          return [pattern, "<rootDir>/../../../$1/src"];
-        }),
-      ),
-      notify: false,
-      preset: "ts-jest",
-      reporters: [],
-      roots,
-      testEnvironment,
-      testMatch: ["<rootDir>/tests/unit/**/(*.)+(spec|test).ts"],
-      transform,
-      verbose: false,
-    },
-    enableFindRelatedTests: true,
-    projectType: "custom",
-  },
   mutate: ["src/**/*.ts"],
   packageManager: "npm",
   reporters: ["html", "json"],
   symlinkNodeModules: true,
-  testRunner: "jest",
+  testRunner: "vitest",
   testRunnerNodeArgs: [],
   thresholds: { high: 85, low: 75, break: 70 },
   tsconfigFile: "tsconfig.json",
   typescriptChecker: {
     prioritizePerformanceOverAccuracy: true,
+  },
+  vitest: {
+    configFile: "vitest.config.mjs",
+    // Integration specs exercise the generator end to end rather than
+    // importing the mutated module directly, so Vitest's related-test
+    // filtering would skip the tests that actually cover those mutants.
+    related: false,
   },
   warnings: true,
 };

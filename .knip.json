@@ -8,7 +8,7 @@
       }
     },
     "packages/*": {
-      "entry": ["jest.config.mjs"],
+      "entry": ["vitest.config.mjs"],
       "project": ["**/*.ts!"]
     },
     "packages/types": {
@@ -20,15 +20,15 @@
       ]
     },
     "packages/docusaurus": {
-      "entry": ["jest.config.mjs"],
+      "entry": ["vitest.config.mjs"],
       "ignoreDependencies": ["@docusaurus/types"]
     },
     "packages/core": {
-      "entry": ["jest.config.mjs"],
+      "entry": ["vitest.config.mjs"],
       "ignoreDependencies": ["graphql-config"]
     },
     "packages/utils": {
-      "entry": ["jest.config.mjs"],
+      "entry": ["vitest.config.mjs"],
       "project": ["**/*.ts!"],
       "ignoreDependencies": ["prettier"]
     },
@@ -36,10 +36,6 @@
       "entry": [
         "eslint/config.ts",
         "vitest/base.mjs",
-        "jest/base.mjs",
-        "jest/root.mjs",
-        "jest/unit.mjs",
-        "jest/integration.mjs",
         "prettier/index.mjs",
         "scripts/build-packages.mjs",
         "scripts/shared/dependencies-utils.mjs",
@@ -63,7 +59,6 @@
         "eslint-plugin-import",
         "@vitest/eslint-plugin",
         "vitest",
-        "eslint-plugin-jest",
         "eslint-plugin-jsonc",
         "eslint-plugin-mdx",
         "eslint-plugin-prettier",
@@ -77,13 +72,8 @@
     "@docusaurus/logger",
     "commitizen",
     "danger",
-    "husky",
-    "jest-environment-node"
+    "husky"
   ],
-  "jest": {
-    "config": ["packages/*/jest.config.mjs"],
-    "entry": ["**/tests/**/*.ts"]
-  },
   "vitest": {
     "config": ["packages/*/vitest.config.mjs"],
     "entry": ["**/tests/**/*.ts"]
