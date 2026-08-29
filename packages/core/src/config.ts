@@ -191,7 +191,12 @@ export const DEFAULT_OPTIONS: Readonly<
   },
   rootPath: "./docs" as const,
   schema: "./schema.graphql",
-  tmpDir: join(tmpdir(), PACKAGE_NAME),
+  // Lazy: as a plain property this ran `tmpdir()` at module load, so merely
+  // importing the config module touched the OS temp path even for runs that
+  // never diff. The getter defers it to the point a default is actually needed.
+  get tmpDir(): string {
+    return join(tmpdir(), PACKAGE_NAME);
+  },
   skipDocDirective: [] as DirectiveName[],
   onlyDocDirective: [] as DirectiveName[],
 } as const;
