@@ -1,20 +1,4 @@
-import path from "node:path";
-
-jest.mock("node:fs/promises");
-jest.mock("@graphql-markdown/utils", (): unknown => {
-  return {
-    __esModule: true,
-    ...jest.requireActual("@graphql-markdown/utils"),
-    ensureDir: jest.fn(),
-    fileExists: jest.fn(),
-    saveFile: jest.fn(),
-  };
-});
-
-import * as Utils from "@graphql-markdown/utils";
 import {
-  afterRenderTypeEntitiesHook,
-  beforeGenerateIndexMetafileHook,
   createMDXFormatter,
   formatMDXAdmonition,
   formatMDXBadge,
@@ -135,82 +119,6 @@ describe("formatMDXSpecifiedByLink", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
       '<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://spec.example" title="Specified by https://spec.example">⎘</a></span>',
     );
-  });
-});
-
-describe("beforeGenerateIndexMetafileHook", () => {
-  const dirPath = path.join("/output/docs", "queries");
-
-  beforeEach(() => {
-    return jest.clearAllMocks();
-  });
-
-  test("creates index.md with title frontmatter when file does not exist", async () => {
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const saveSpy = jest.spyOn(Utils, "saveFile");
-
-    await beforeGenerateIndexMetafileHook({
-      data: { dirPath, category: "queries" },
-    });
-
-    expect(saveSpy).toHaveBeenCalledWith(
-      path.join(dirPath, "index.md"),
-      "---\ntitle: Queries\n---\n",
-    );
-  });
-
-  test("skips creation when index.md already exists", async () => {
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
-    const saveSpy = jest.spyOn(Utils, "saveFile");
-
-    await beforeGenerateIndexMetafileHook({
-      data: { dirPath, category: "queries" },
-    });
-
-    expect(saveSpy).not.toHaveBeenCalled();
-  });
-
-  test("ensures directory exists before saving", async () => {
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const ensureSpy = jest.spyOn(Utils, "ensureDir");
-
-    await beforeGenerateIndexMetafileHook({
-      data: { dirPath, category: "queries" },
-    });
-
-    expect(ensureSpy).toHaveBeenCalledWith(dirPath);
-  });
-});
-
-describe("afterRenderTypeEntitiesHook", () => {
-  const { appendFile } = jest.requireMock("node:fs/promises");
-
-  beforeEach(() => {
-    return jest.clearAllMocks();
-  });
-
-  test("appends entry link to index.md when it exists", async () => {
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
-    (appendFile as jest.Mock).mockResolvedValue(undefined);
-
-    await afterRenderTypeEntitiesHook({
-      data: { name: "Query", filePath: "/docs/queries/query.mdx" },
-    });
-
-    expect(appendFile).toHaveBeenCalledWith(
-      "/docs/queries/index.md",
-      "- [Query](./query.mdx)\n",
-    );
-  });
-
-  test("skips append when index.md does not exist", async () => {
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-
-    await afterRenderTypeEntitiesHook({
-      data: { name: "Query", filePath: "/docs/queries/query.mdx" },
-    });
-
-    expect(appendFile).not.toHaveBeenCalled();
   });
 });
 

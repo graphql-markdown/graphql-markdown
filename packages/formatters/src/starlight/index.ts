@@ -8,9 +8,6 @@
  * @packageDocumentation
  */
 
-import { join, dirname, resolve, basename } from "node:path";
-import { appendFile } from "node:fs/promises";
-
 import type {
   AdmonitionType,
   Badge,
@@ -20,13 +17,7 @@ import type {
   MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
-import {
-  ensureDir,
-  fileExists,
-  MARKDOWN_EOP,
-  saveFile,
-  startCase,
-} from "@graphql-markdown/utils";
+import { MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
   formatMDXDetails,
@@ -86,45 +77,6 @@ export {
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
 } from "../defaults";
-
-const INDEX_MD = "index.md" as const;
-
-/**
- * Lifecycle hook that creates an `index.md` file for a category directory
- * before Starlight indexes it. Skips creation if the file already exists.
- * @param event - Hook payload containing the target directory and category name
- */
-export const beforeGenerateIndexMetafileHook = async (event: {
-  data: { dirPath: string; category: string };
-}): Promise<void> => {
-  const { dirPath, category } = event.data;
-  const filePath = join(dirPath, INDEX_MD);
-
-  if (await fileExists(filePath)) {
-    return;
-  }
-
-  const label = startCase(category);
-  await ensureDir(dirPath);
-  await saveFile(filePath, `---\ntitle: ${label}\n---\n`);
-};
-
-/**
- * Lifecycle hook that appends a link entry to the category `index.md`
- * after each type entity page is rendered.
- * @param event - Hook payload containing the entity name and its output file path
- */
-export const afterRenderTypeEntitiesHook = async (event: {
-  data: { name: string; filePath: string };
-}): Promise<void> => {
-  const { name, filePath } = event.data;
-  const indexFilePath = resolve(dirname(filePath), INDEX_MD);
-  const pageFileName = basename(filePath);
-
-  if (await fileExists(indexFilePath)) {
-    await appendFile(indexFilePath, `- [${name}](./${pageFileName})\n`);
-  }
-};
 
 /**
  * Creates an Astro Starlight formatter.
