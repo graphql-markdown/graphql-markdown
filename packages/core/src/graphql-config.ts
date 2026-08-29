@@ -157,14 +157,7 @@ export const loadConfiguration = async (
   try {
     graphQLConfig = await import("graphql-config");
   } catch {
-    // graphql-config is an optional peer dependency, and buildConfig() calls
-    // this on every run, so its absence is a supported setup and must stay
-    // quiet. Name the consequence anyway: a peer conflict can leave it
-    // installed but unreachable from here, and the fallback is otherwise
-    // indistinguishable from having no configuration at all.
-    log(
-      `Cannot find module 'graphql-config'. Any "${EXTENSION_NAME}" configuration it provides is ignored, and the built-in defaults are used instead.`,
-    );
+    log("Cannot find module 'graphql-config'!");
     return undefined;
   }
 
@@ -176,9 +169,6 @@ export const loadConfiguration = async (
   });
 
   if (!config) {
-    log(
-      `No GraphQL config found for project "${id}", so the built-in defaults are used instead.`,
-    );
     return undefined;
   }
 
@@ -205,9 +195,6 @@ export const loadConfiguration = async (
 
     return projectConfig;
   } catch {
-    // Asking for a project that the config does not declare is ordinary: the
-    // caller always asks for "default", and a config file with named projects
-    // legitimately has no such project. Stay silent and fall back.
     return undefined;
   }
 };

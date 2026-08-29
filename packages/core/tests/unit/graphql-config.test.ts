@@ -234,22 +234,6 @@ describe("graphql-config", () => {
       ).resolves.toBeUndefined();
     });
 
-    test("reports the fallback to defaults when no config is found", async () => {
-      expect.hasAssertions();
-
-      const infoSpy = jest
-        .spyOn(globalThis.console, "info")
-        .mockImplementation(() => {});
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce(undefined);
-
-      await expect(
-        CoreGraphQLConfig.loadConfiguration("baz"),
-      ).resolves.toBeUndefined();
-      expect(infoSpy).toHaveBeenCalledWith(
-        'No GraphQL config found for project "baz", so the built-in defaults are used instead.',
-      );
-    });
-
     test.each([[undefined], [null]])(
       "returns undefined if project id is %s",
       async (value) => {
