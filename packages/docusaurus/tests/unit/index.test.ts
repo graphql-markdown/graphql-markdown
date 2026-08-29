@@ -2,24 +2,24 @@ import type { LoadContext } from "@docusaurus/types";
 
 import pluginGraphQLDocGenerator from "../../src/index";
 
-jest.mock("@graphql-markdown/cli", () => {
+vi.mock("@graphql-markdown/cli", () => {
   return {
-    getGraphQLMarkdownCli: jest.fn(),
+    getGraphQLMarkdownCli: vi.fn(),
   };
 });
 import { getGraphQLMarkdownCli } from "@graphql-markdown/cli";
 
-jest.mock("@graphql-markdown/logger", () => {
+vi.mock("@graphql-markdown/logger", () => {
   return {
     __esModule: true,
-    default: jest.fn(),
+    default: vi.fn(),
   };
 });
 import Logger from "@graphql-markdown/logger";
 
 describe("pluginGraphQLDocGenerator", () => {
   const mockCli = {
-    addCommand: jest.fn(),
+    addCommand: vi.fn(),
   } as any;
 
   const mockOptions = {
@@ -28,7 +28,7 @@ describe("pluginGraphQLDocGenerator", () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("calls Logger with LOGGER_MODULE", async () => {

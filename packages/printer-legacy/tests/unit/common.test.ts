@@ -11,14 +11,14 @@ import {
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 import * as GraphQL from "@graphql-markdown/graphql";
-jest.mock("@graphql-markdown/graphql", (): unknown => {
+vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/graphql"),
-    isDeprecated: jest.fn(),
-    hasDirective: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDeprecated: vi.fn(),
+    hasDirective: vi.fn(),
   };
 });
-const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
+const mockGraphQL = vi.mocked(GraphQL);
 
 describe("common", () => {
   beforeEach(() => {
@@ -26,8 +26,8 @@ describe("common", () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
-    jest.restoreAllMocks();
+    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe("printDescription()", () => {

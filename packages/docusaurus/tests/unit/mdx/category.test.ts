@@ -1,18 +1,15 @@
 import path from "node:path";
 
-jest.mock("fs");
-jest.mock("node:fs/promises");
-
-jest.mock("@graphql-markdown/utils", (): unknown => {
+vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/utils"),
-    isDeprecated: jest.fn(),
-    ensureDir: jest.fn(),
-    fileExists: jest.fn(),
-    saveFile: jest.fn(),
-    copyFile: jest.fn(),
-    readFile: jest.fn(),
+    ...(await importOriginal()),
+    isDeprecated: vi.fn(),
+    ensureDir: vi.fn(),
+    fileExists: vi.fn(),
+    saveFile: vi.fn(),
+    copyFile: vi.fn(),
+    readFile: vi.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -28,8 +25,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -51,8 +48,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -78,8 +75,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -102,8 +99,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = "/output/docs";
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(true);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -125,8 +122,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -150,8 +147,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const filePath = path.join(outputPath, CATEGORY_YAML);
     const styleClass = "foo-baz";
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -177,8 +174,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", "01-common");
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const spy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -199,9 +196,9 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const category = "foobar";
     const outputPath = "/output/docs";
 
-    jest.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
-    const saveFileSpy = jest.spyOn(Utils, "saveFile");
+    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
+    const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
+    const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
     await beforeGenerateIndexMetafileHook({
       data: {

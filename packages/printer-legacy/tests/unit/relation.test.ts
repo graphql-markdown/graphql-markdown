@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from "graphql/type";
 
-jest.mock("graphql");
+vi.mock("graphql");
 
 import type {
   GraphQLOperationType,
@@ -8,35 +8,35 @@ import type {
   GraphQLSchema,
 } from "@graphql-markdown/types";
 
-jest.mock("@graphql-markdown/utils", () => {
+vi.mock("@graphql-markdown/utils", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
-    escapeMDX: jest.fn((s): string => {
+    ...(await importOriginal<Record<string, unknown>>()),
+    escapeMDX: vi.fn((s): string => {
       return s as string;
     }),
-    pathUrl: jest.fn(),
-    slugify: jest.fn(),
+    pathUrl: vi.fn(),
+    slugify: vi.fn(),
   };
 });
 
 import * as GraphQL from "@graphql-markdown/graphql";
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", () => {
   return {
-    getNamedType: jest.fn(),
-    getRelationOfReturn: jest.fn(),
-    getRelationOfField: jest.fn(),
-    getRelationOfImplementation: jest.fn(),
-    getSchemaMap: jest.fn(),
-    hasDirective: jest.fn(),
-    isDirectiveType: jest.fn(),
-    isEnumType: jest.fn(),
-    isInputType: jest.fn(),
-    isInterfaceType: jest.fn(),
-    isNamedType: jest.fn(),
-    isObjectType: jest.fn(),
-    isOperation: jest.fn(),
-    isScalarType: jest.fn(),
-    isUnionType: jest.fn(),
+    getNamedType: vi.fn(),
+    getRelationOfReturn: vi.fn(),
+    getRelationOfField: vi.fn(),
+    getRelationOfImplementation: vi.fn(),
+    getSchemaMap: vi.fn(),
+    hasDirective: vi.fn(),
+    isDirectiveType: vi.fn(),
+    isEnumType: vi.fn(),
+    isInputType: vi.fn(),
+    isInterfaceType: vi.fn(),
+    isNamedType: vi.fn(),
+    isObjectType: vi.fn(),
+    isOperation: vi.fn(),
+    isScalarType: vi.fn(),
+    isUnionType: vi.fn(),
   };
 });
 
@@ -46,12 +46,12 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 const { getRootTypeLocaleFromString, printRelationOf, printRelations } =
   Relation;
 
-const mockGraphQL = jest.mocked(GraphQL, { shallow: true });
+const mockGraphQL = vi.mocked(GraphQL);
 
 describe("relation", () => {
   afterAll(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("printRelationOf()", () => {
@@ -128,7 +128,7 @@ describe("relation", () => {
       mockGraphQL.isNamedType.mockReturnValue(true);
       mockGraphQL.isOperation.mockReturnValue(false);
 
-      const relation = await printRelationOf(type, "RelationOf", jest.fn(), {
+      const relation = await printRelationOf(type, "RelationOf", vi.fn(), {
         ...DEFAULT_OPTIONS,
         schema: undefined,
       });
@@ -242,7 +242,7 @@ describe("relation", () => {
     test("calls printRelationOf() for each type of relation", () => {
       expect.hasAssertions();
 
-      const spy = jest.spyOn(Relation, "printRelationOf");
+      const spy = vi.spyOn(Relation, "printRelationOf");
 
       const type = new GraphQLScalarType({
         name: "String",

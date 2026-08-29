@@ -40,20 +40,20 @@ import {
 
 import * as graphqlConfigModule from "../../src/graphql-config";
 
-jest.mock("@graphql-markdown/logger", (): unknown => {
+vi.mock("@graphql-markdown/logger", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/logger"),
-    log: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    log: vi.fn(),
     LogLevel: { debug: "debug", warn: "warn", info: "info", error: "error" },
   };
 });
 
 import { log } from "@graphql-markdown/logger";
 
-jest.mock("@graphql-markdown/utils");
+vi.mock("@graphql-markdown/utils");
 
-jest.mock("../../src/graphql-config");
+vi.mock("../../src/graphql-config");
 
 describe("config", () => {
   beforeAll(() => {
@@ -61,8 +61,8 @@ describe("config", () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   afterAll(() => {
@@ -469,7 +469,7 @@ describe("config", () => {
         },
       };
 
-      jest
+      vi
         .spyOn(graphqlConfigModule, "loadConfiguration")
         .mockResolvedValue(
           configFileOpts as unknown as Readonly<ExtensionProjectConfig>,

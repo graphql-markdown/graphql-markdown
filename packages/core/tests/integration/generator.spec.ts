@@ -3,9 +3,9 @@ import path, { join } from "node:path";
 
 import { vol } from "memfs";
 
-jest.mock("fs");
+vi.mock("fs");
 
-jest.mock("node:fs/promises", () => {
+vi.mock("node:fs/promises", () => {
   // Return the memfs vol promises directly
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { vol: fsVol } = require("memfs");
@@ -22,13 +22,13 @@ import type {
   TypeDiffMethod,
 } from "@graphql-markdown/types";
 
-jest.mock("@graphql-markdown/printer-legacy");
+vi.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-jest.mock("@graphql-markdown/diff");
+vi.mock("@graphql-markdown/diff");
 import * as diff from "@graphql-markdown/diff";
 
-jest.mock(
+vi.mock(
   "mdx-parser-mock",
   () => {
     return {
@@ -52,10 +52,10 @@ import { resetEvents } from "../../src/event-emitter";
 describe("renderer", () => {
   beforeEach(() => {
     // silent console
-    jest.spyOn(globalThis.console, "info").mockImplementation(() => {});
-    jest.spyOn(globalThis.console, "error").mockImplementation(() => {});
+    vi.spyOn(globalThis.console, "info").mockImplementation(() => {});
+    vi.spyOn(globalThis.console, "error").mockImplementation(() => {});
 
-    jest.spyOn(Printer, "printType").mockImplementation((value) => {
+    vi.spyOn(Printer, "printType").mockImplementation((value) => {
       return value as MDXString;
     });
 
@@ -68,8 +68,8 @@ describe("renderer", () => {
 
   afterEach(() => {
     vol.reset();
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
     resetEvents();
   });
 
@@ -137,7 +137,7 @@ describe("renderer", () => {
     test('outputs "no schema changed" message when called twice', async () => {
       expect.assertions(1);
 
-      const logSpy = jest.spyOn(console, "info");
+      const logSpy = vi.spyOn(console, "info");
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
@@ -166,7 +166,7 @@ describe("renderer", () => {
         tmpDir: "/temp",
       };
 
-      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValue(false);
+      vi.spyOn(diff, "checkSchemaChanges").mockResolvedValue(false);
       await generateDocFromSchema(config);
 
       expect(logSpy).toHaveBeenCalledWith(

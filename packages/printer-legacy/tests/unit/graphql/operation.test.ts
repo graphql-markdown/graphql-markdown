@@ -6,12 +6,12 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-jest.mock("@graphql-markdown/graphql", (): unknown => {
+vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/graphql"),
-    isDirectiveType: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDirectiveType: vi.fn(),
 
-    isDeprecated: jest.fn((T: any): boolean => {
+    isDeprecated: vi.fn((T: any): boolean => {
       return "deprecationReason" in T;
     }),
   };

@@ -72,6 +72,11 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
   return defineConfig({
     resolve: {
       alias: createAlias(packagesDir.replace(/\/$/, "")),
+      // Each workspace package resolves its own copy of `graphql`, and the
+      // library rejects values built by a different instance ("Cannot use
+      // GraphQLObjectType from another module or realm"). Jest collapsed the
+      // copies through `moduleNameMapper`; Vite needs to be told explicitly.
+      dedupe: ["graphql"],
     },
     test: {
       name: `@graphql-markdown/${name}`,
@@ -83,11 +88,21 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       ],
       exclude: ["**/node_modules/**", "**/dist/**", "**/__data__/**"],
       testTimeout: options.testTimeout ?? 5000,
+      // `graphql` ships a CJS and an ESM build with no `exports` map, so Vite
+      // resolves it to `index.mjs` while an externalised dependency gets the
+      // CJS `index.js` through Node. That yields two instances, and the library
+      // rejects values built by the other one ("Cannot use GraphQLObjectType
+      // from another module or realm"). Inlining the whole GraphQL ecosystem
+      // keeps every consumer on one copy. Jest collapsed these via its CJS
+      // registry, so it never hit this.
+      server: {
+        deps: {
+          inline: [/^graphql$/, /^graphql\//, /@graphql-tools\//],
+        },
+      },
       // Replaces Jest's `testEnvironmentOptions.globalsCleanup`: each test file
       // runs in a fresh module registry so globals cannot leak between files.
       isolate: true,
-      restoreMocks: true,
-      unstubGlobals: true,
       coverage: {
         enabled: options.coverage ?? false,
         provider: "v8",

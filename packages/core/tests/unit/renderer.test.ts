@@ -11,48 +11,48 @@ import type {
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
-jest.mock("node:fs/promises");
+vi.mock("node:fs/promises");
 
-jest.mock("node:path", (): unknown => {
+vi.mock("node:path", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("node:path"),
+    ...(await importOriginal<Record<string, unknown>>()),
   };
 });
 import * as path from "node:path";
 
-jest.mock("@graphql-markdown/printer-legacy");
+vi.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-jest.mock("@graphql-markdown/utils", (): unknown => {
+vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/utils"),
-    isDeprecated: jest.fn(),
-    ensureDir: jest.fn(),
-    fileExists: jest.fn(),
-    saveFile: jest.fn(),
-    copyFile: jest.fn(),
-    readFile: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDeprecated: vi.fn(),
+    ensureDir: vi.fn(),
+    fileExists: vi.fn(),
+    saveFile: vi.fn(),
+    copyFile: vi.fn(),
+    readFile: vi.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/graphql", (): unknown => {
+vi.mock("@graphql-markdown/graphql", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/graphql"),
-    isDeprecated: jest.fn(),
-    isApiType: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDeprecated: vi.fn(),
+    isApiType: vi.fn(),
   };
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-jest.mock("@graphql-markdown/logger", (): unknown => {
+vi.mock("@graphql-markdown/logger", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/logger"),
-    log: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    log: vi.fn(),
     LogLevel: {
       debug: "debug",
       warn: "warn",
@@ -84,7 +84,7 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
  * Helper function to create a renderer with a mock generateIndexMetafile hook.
  * Registers the mock as an event handler instead of passing it as legacy mdxModule.
  */
-const mockGenerateIndexMetafileHook = (mockFn: jest.Mock): void => {
+const mockGenerateIndexMetafileHook = (mockFn: Mock): void => {
   getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
     mockFn(event.data.dirPath, event.data.category, event.data.options);
   });
@@ -107,12 +107,12 @@ describe("renderer", () => {
       );
 
       // silent console
-      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
+      vi.spyOn(globalThis.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
+      vi.restoreAllMocks();
+      vi.resetAllMocks();
       resetEvents();
     });
 
@@ -120,10 +120,10 @@ describe("renderer", () => {
       test("creates entity page structure into output folder", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -147,12 +147,12 @@ describe("renderer", () => {
       test("creates entity page flat structure into output if hierarchy is flat", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
@@ -179,12 +179,12 @@ describe("renderer", () => {
       test("creates entity page with MDX extension when mdxExtension is .mdx", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
-        jest.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
+        vi.replaceProperty(rendererInstance, "mdxExtension", ".mdx");
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -199,12 +199,12 @@ describe("renderer", () => {
       test("applies prettify function when prettify is true", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
-        jest.replaceProperty(rendererInstance, "prettify", true);
+        vi.replaceProperty(rendererInstance, "prettify", true);
 
         const output = "/output/foobar";
         await rendererInstance.renderTypeEntities(output, "FooBar", "FooBar");
@@ -219,7 +219,7 @@ describe("renderer", () => {
       test("do nothing if type is not defined", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Printer, "printType").mockResolvedValue(undefined);
+        vi.spyOn(Printer, "printType").mockResolvedValue(undefined);
 
         const meta = await rendererInstance.renderTypeEntities(
           "test",
@@ -233,11 +233,11 @@ describe("renderer", () => {
       test("return undefined and logs warning if an error is thrown", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockImplementationOnce(() => {
+        vi.spyOn(Printer, "printType").mockImplementationOnce(() => {
           throw new Error("Test error");
         });
 
-        const logSpy = jest.mocked(log);
+        const logSpy = vi.mocked(log);
         logSpy.mockClear();
 
         const meta = await rendererInstance.renderTypeEntities(
@@ -256,11 +256,11 @@ describe("renderer", () => {
       test("return undefined and logs warning if file path is invalid", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        jest.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
-        const logSpy = jest.mocked(log);
+        vi.spyOn(path, "relative").mockReturnValueOnce("not-valid.md");
+        const logSpy = vi.mocked(log);
         logSpy.mockClear();
 
         const meta = await rendererInstance.renderTypeEntities(
@@ -279,16 +279,16 @@ describe("renderer", () => {
       test("uses frontmatter configuration when available", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Printer, "printType");
+        const spy = vi.spyOn(Printer, "printType");
 
         const optionsWithFrontMatter: RendererDocOptions = {
           frontMatter: { custom: "value" },
         };
 
-        jest.replaceProperty(
+        vi.replaceProperty(
           rendererInstance,
           "options",
           optionsWithFrontMatter,
@@ -332,7 +332,7 @@ describe("renderer", () => {
         let formattedLowercaseGroup = "";
         let formattedOriginalGroup = "";
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockImplementation(async (_, __, options) => {
             formattedLowercaseGroup =
@@ -382,7 +382,7 @@ describe("renderer", () => {
         let nestedFallback = "";
         let unknownCategory = "";
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockImplementation(async (_, __, options) => {
             rootDirect = options!.formatCategoryFolderName?.("Query") ?? "";
@@ -409,8 +409,8 @@ describe("renderer", () => {
       test("handles cancelled rendering when printType returns an empty string", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Printer, "printType").mockResolvedValue("" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Printer, "printType").mockResolvedValue("" as MDXString);
+        const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -426,10 +426,10 @@ describe("renderer", () => {
       test("handles both pathname and type name when they are different", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -453,10 +453,10 @@ describe("renderer", () => {
       test("handles non-alphanumeric characters in type names", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/special";
         const meta = await rendererInstance.renderTypeEntities(
@@ -494,8 +494,8 @@ describe("renderer", () => {
       test("copies default homepage into output folder", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("Test Homepage");
-        const spy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce("Test Homepage");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderHomepage("/assets/generated.md");
 
@@ -509,16 +509,16 @@ describe("renderer", () => {
       test("replaces template variables in homepage content", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Utils, "readFile")
           .mockResolvedValueOnce(
             "baseURL: ##baseURL## - Generated: ##generated-date-time##",
           );
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(globalThis, "Date").mockImplementation(() => {
+        vi.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 
@@ -534,10 +534,10 @@ describe("renderer", () => {
       test("handles errors when reading homepage template", async () => {
         expect.assertions(2);
 
-        const readFileSpy = jest
+        const readFileSpy = vi
           .spyOn(Utils, "readFile")
           .mockRejectedValueOnce(new Error("File not found"));
-        const logSpy = jest.mocked(log);
+        const logSpy = vi.mocked(log);
         logSpy.mockClear();
 
         await rendererInstance.renderHomepage("/assets/nonexistent.md");
@@ -552,8 +552,8 @@ describe("renderer", () => {
       test("handles empty homepage content", async () => {
         expect.assertions(1);
 
-        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("");
-        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce("");
+        const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderHomepage("/assets/empty.md");
 
@@ -569,8 +569,8 @@ describe("renderer", () => {
 
         const content =
           "# GraphQL API Documentation\n\nThis is static content with no variables.";
-        jest.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
-        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
+        const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderHomepage("/assets/no-variables.md");
 
@@ -586,12 +586,12 @@ describe("renderer", () => {
 
         const content =
           "baseURL: ##baseURL##\ngenerated: ##generated-date-time##\nbaseURL again: ##baseURL##";
-        jest.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
-        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
+        const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
         // Mock Date to have consistent test results
         const mockDate = new Date(2023, 0, 1, 12, 0, 0);
-        jest.spyOn(globalThis, "Date").mockImplementation(() => {
+        vi.spyOn(globalThis, "Date").mockImplementation(() => {
           return mockDate as unknown as Date;
         });
 
@@ -608,11 +608,11 @@ describe("renderer", () => {
       test("handles errors when saving homepage", async () => {
         expect.assertions(2);
 
-        jest.spyOn(Utils, "readFile").mockResolvedValueOnce("Test content");
-        const saveFileSpy = jest
+        vi.spyOn(Utils, "readFile").mockResolvedValueOnce("Test content");
+        const saveFileSpy = vi
           .spyOn(Utils, "saveFile")
           .mockRejectedValueOnce(new Error("Write error"));
-        const logSpy = jest.mocked(log);
+        const logSpy = vi.mocked(log);
         logSpy.mockClear();
 
         await rendererInstance.renderHomepage("/assets/error-saving.md");
@@ -631,13 +631,13 @@ describe("renderer", () => {
       test("applies prettify function when prettify is enabled", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Utils, "readFile")
           .mockResolvedValueOnce("## Unformatted content");
-        const saveFileSpy = jest.spyOn(Utils, "saveFile");
+        const saveFileSpy = vi.spyOn(Utils, "saveFile");
 
         // Enable prettify
-        jest.replaceProperty(rendererInstance, "prettify", true);
+        vi.replaceProperty(rendererInstance, "prettify", true);
 
         await rendererInstance.renderHomepage("/assets/to-prettify.md");
 
@@ -652,7 +652,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         // Set renderer's outputDir to empty string
-        jest.replaceProperty(rendererInstance, "outputDir", "");
+        vi.replaceProperty(rendererInstance, "outputDir", "");
 
         await expect(
           rendererInstance.renderHomepage("/assets/homepage.md"),
@@ -662,7 +662,7 @@ describe("renderer", () => {
       test("do not generated homepage if undefined", async () => {
         expect.assertions(1);
 
-        const spy = jest.spyOn(Utils, "copyFile");
+        const spy = vi.spyOn(Utils, "copyFile");
 
         // Pass undefined as the homepage location
         await rendererInstance.renderHomepage(undefined);
@@ -675,11 +675,11 @@ describe("renderer", () => {
       test("render root type", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
-        jest.spyOn(Utils, "fileExists").mockResolvedValue(true);
-        const spy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(Utils, "fileExists").mockResolvedValue(true);
+        const spy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
@@ -723,14 +723,14 @@ describe("renderer", () => {
       test("renders root types with flat hierarchy", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
@@ -753,12 +753,12 @@ describe("renderer", () => {
       test("passes namespace parts in flat hierarchy for namespaced operations", async () => {
         expect.assertions(1);
 
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
 
-        const printSpy = jest
+        const printSpy = vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
 
@@ -778,12 +778,12 @@ describe("renderer", () => {
       test("renders nested operation namespaces into nested category folders", async () => {
         expect.assertions(3);
 
-        const printSpy = jest
+        const printSpy = vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        const saveSpy = jest.spyOn(Utils, "saveFile");
-        const indexSpy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const saveSpy = vi.spyOn(Utils, "saveFile");
+        const indexSpy = vi.spyOn(rendererInstance, "generateIndexMetafile");
 
         await rendererInstance.renderRootTypes("queries", {
           "analytics.aggregateTournaments": {
@@ -810,11 +810,11 @@ describe("renderer", () => {
       test("passes full namespace chain for deeply namespaced operations", async () => {
         expect.assertions(2);
 
-        const printSpy = jest
+        const printSpy = vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        const saveSpy = jest.spyOn(Utils, "saveFile");
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const saveSpy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderRootTypes("queries", {
           "analytics.admin.aggregateTournaments": {
@@ -844,11 +844,11 @@ describe("renderer", () => {
           operationNamespaceParts: ["configured"],
         } as RendererDocOptions;
 
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           ...optionsWithNamespace,
         });
 
-        const printSpy = jest
+        const printSpy = vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
 
@@ -868,11 +868,11 @@ describe("renderer", () => {
       test("does not apply category formatting to namespace folders", async () => {
         expect.assertions(1);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        jest
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        vi
           .spyOn(rendererInstance as any, "formatCategoryFolderName")
           .mockImplementation((...args: unknown[]) => {
             const [categoryName, isRootTypeLevel] = args as [string, boolean];
@@ -882,7 +882,7 @@ describe("renderer", () => {
             return categoryName.toLowerCase();
           });
 
-        const saveSpy = jest.spyOn(Utils, "saveFile");
+        const saveSpy = vi.spyOn(Utils, "saveFile");
 
         await rendererInstance.renderRootTypes("queries", {
           "analytics.aggregateTournaments": {
@@ -902,8 +902,8 @@ describe("renderer", () => {
       test("generate type _category_.yml file", async () => {
         expect.assertions(3);
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
@@ -924,11 +924,11 @@ describe("renderer", () => {
 
         const [type, name, root, group] = [{}, "Foo", "objects", "lorem"];
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "group", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
 
@@ -948,13 +948,13 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -975,13 +975,13 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -998,13 +998,13 @@ describe("renderer", () => {
 
         const [type, name, root] = [{}, "Foo", "Baz"];
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -1021,16 +1021,16 @@ describe("renderer", () => {
 
         const [type, name, root, group] = [{}, "Foo", "Baz", "lorem"];
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "group",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.ENTITY]: {} },
         });
-        jest.replaceProperty(rendererInstance, "group", {
+        vi.replaceProperty(rendererInstance, "group", {
           [root]: { [name]: group },
         });
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           type,
@@ -1047,14 +1047,14 @@ describe("renderer", () => {
       test("generate api _category_.yml file", async () => {
         expect.assertions(3);
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
         });
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1073,14 +1073,14 @@ describe("renderer", () => {
       test("generate system _category_.yml file", async () => {
         expect.assertions(2);
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
         });
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1098,14 +1098,14 @@ describe("renderer", () => {
       test("does not generate _category_.yml file if hierarchy is flat", async () => {
         expect.assertions(2);
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1120,8 +1120,8 @@ describe("renderer", () => {
       test("handles custom API group names", async () => {
         expect.assertions(2);
 
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: {
@@ -1132,7 +1132,7 @@ describe("renderer", () => {
           },
         });
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1147,8 +1147,8 @@ describe("renderer", () => {
       test("handles undefined group configuration", async () => {
         expect.assertions(2);
 
-        jest.replaceProperty(rendererInstance, "group", undefined);
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "group", undefined);
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1163,10 +1163,10 @@ describe("renderer", () => {
       test("handles undefined type hierarchy", async () => {
         expect.assertions(2);
 
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.replaceProperty(rendererInstance, "options", {
           hierarchy: undefined,
         });
-        const spy = jest.spyOn(rendererInstance, "generateIndexMetafile");
+        const spy = vi.spyOn(rendererInstance, "generateIndexMetafile");
 
         const dirPath = await rendererInstance.generateCategoryMetafileType(
           {},
@@ -1181,15 +1181,15 @@ describe("renderer", () => {
       test("tests regex patterns for API type hierarchy", async () => {
         expect.assertions(2);
 
-        jest.spyOn(rendererInstance, "generateIndexMetafile");
-        jest.replaceProperty(rendererInstance, "options", {
+        vi.spyOn(rendererInstance, "generateIndexMetafile");
+        vi.replaceProperty(rendererInstance, "options", {
           deprecated: "default",
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.API]: {} },
         });
 
         // Test with valid API type
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         const apiPath = await rendererInstance.generateCategoryMetafileType(
           {},
           "Query",
@@ -1197,7 +1197,7 @@ describe("renderer", () => {
         );
 
         // Test with non-API type for comparison
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
         const nonApiPath = await rendererInstance.generateCategoryMetafileType(
           {},
           "User",
@@ -1212,7 +1212,7 @@ describe("renderer", () => {
         expect.assertions(1);
 
         // Set renderer's outputDir to empty string
-        jest.replaceProperty(rendererInstance, "outputDir", "");
+        vi.replaceProperty(rendererInstance, "outputDir", "");
 
         await expect(
           rendererInstance.generateCategoryMetafileType(
@@ -1230,12 +1230,12 @@ describe("renderer", () => {
         (apiGroupOption) => {
           expect.hasAssertions();
 
-          jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+          vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
           expect(getApiGroupFolder({}, apiGroupOption)).toBe(
             API_GROUPS.operations,
           );
 
-          jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+          vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
           expect(getApiGroupFolder({}, apiGroupOption)).toBe(API_GROUPS.types);
         },
       );
@@ -1248,12 +1248,12 @@ describe("renderer", () => {
           types: "entities",
         };
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
         expect(getApiGroupFolder({}, apiGroupOption)).toBe(
           apiGroupOption.operations,
         );
 
-        jest.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(false);
         expect(getApiGroupFolder({}, apiGroupOption)).toBe(
           apiGroupOption.types,
         );
@@ -1264,7 +1264,7 @@ describe("renderer", () => {
       test("creates output directory before initializing renderer", async () => {
         expect.assertions(1);
 
-        const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
+        const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
 
         await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1284,7 +1284,7 @@ describe("renderer", () => {
       test("passes force option to ensureDir when provided", async () => {
         expect.assertions(1);
 
-        const ensureDirSpy = jest.spyOn(Utils, "ensureDir");
+        const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
 
         await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1329,7 +1329,7 @@ describe("renderer", () => {
       test("generates categories with natural alphabetical sorting by default", async () => {
         expect.assertions(3);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1385,7 +1385,7 @@ describe("renderer", () => {
       test("generates categories with explicit 'natural' sorting", async () => {
         expect.assertions(2);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1431,7 +1431,7 @@ describe("renderer", () => {
       test("generates categories with custom sort function", async () => {
         expect.assertions(3);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         // Custom sort: reverse alphabetical order
         const customSort = (a: string, b: string): number => {
@@ -1493,7 +1493,7 @@ describe("renderer", () => {
       test("respects explicit sidebarPosition when provided", async () => {
         expect.assertions(1);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1522,7 +1522,7 @@ describe("renderer", () => {
       test("maintains consistent positions across multiple calls", async () => {
         expect.assertions(4);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2016,7 +2016,7 @@ describe("renderer", () => {
         );
 
         // Mock a deprecated type
-        jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+        vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
         // Pre-register categories including deprecated
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2254,7 +2254,7 @@ describe("renderer", () => {
       test("renderTypeEntities correctly parses category from nested file paths", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
 
@@ -2272,10 +2272,10 @@ describe("renderer", () => {
       test("renderTypeEntities uses correct regex for hierarchical paths", async () => {
         expect.assertions(2);
 
-        jest
+        vi
           .spyOn(Printer, "printType")
           .mockResolvedValue("Lorem ipsum" as MDXString);
-        const spy = jest.spyOn(Utils, "saveFile");
+        const spy = vi.spyOn(Utils, "saveFile");
 
         const output = "/output/api-types/objects";
         const meta = await rendererInstance.renderTypeEntities(
@@ -2378,7 +2378,7 @@ describe("renderer", () => {
       test("mutation test: position comparison operators", async () => {
         expect.assertions(4);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2454,7 +2454,7 @@ describe("renderer", () => {
       test("mutation test: category naming with collapsible true", async () => {
         expect.assertions(2);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2473,7 +2473,7 @@ describe("renderer", () => {
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
         renderer["rootLevelPositionManager"].computePositions();
 
-        const mockFunc = mockGenerateIndexMetafile as jest.Mock;
+        const mockFunc = mockGenerateIndexMetafile as Mock;
         mockFunc.mockClear();
 
         await renderer.generateCategoryMetafileType(
@@ -2493,7 +2493,7 @@ describe("renderer", () => {
       test("mutation test: custom sort function reverses alphabetical order", async () => {
         expect.assertions(2);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2544,7 +2544,7 @@ describe("renderer", () => {
       test("mutation test: boolean literal false in category options", async () => {
         expect.assertions(2);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2563,7 +2563,7 @@ describe("renderer", () => {
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
         renderer["rootLevelPositionManager"].computePositions();
 
-        const mockFunc = mockGenerateIndexMetafile as jest.Mock;
+        const mockFunc = mockGenerateIndexMetafile as Mock;
         mockFunc.mockClear();
 
         await renderer.generateCategoryMetafileType(
@@ -2581,7 +2581,7 @@ describe("renderer", () => {
       test("mutation test: flat hierarchy skips category generation", async () => {
         expect.assertions(2);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2628,7 +2628,7 @@ describe("renderer", () => {
       test("mutation test: category sort with numeric prefix application", async () => {
         expect.assertions(3);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
         const renderer = await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -2947,7 +2947,7 @@ describe("renderer", () => {
       test("mutation test: comprehensive category metafile generation with hierarchy", async () => {
         expect.assertions(4);
 
-        const mockGenerateIndexMetafile = jest.fn();
+        const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
 
         const renderer = await getRenderer(

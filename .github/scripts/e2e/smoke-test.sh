@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Wires e2e fixtures/specs into a scaffolded project and runs its jest smoke
+# Wires e2e fixtures/specs into a scaffolded project and runs its Vitest smoke
 # suite, mirroring the old Earthfile `SMOKE_TEST` UDC.
 set -euo pipefail
 
@@ -15,6 +15,7 @@ cp "$REPO_ROOT/tests/e2e/__data__/.graphqlrc" ./.graphqlrc
 cp "$REPO_ROOT/tests/e2e/helpers/cli.mjs" ./__tests__/helpers/cli.mjs
 rm -rf ./__tests__/e2e/specs
 cp -R "$REPO_ROOT/tests/e2e/$PACKAGE/specs" ./__tests__/e2e/specs
-cp "$REPO_ROOT/tests/e2e/$PACKAGE/jest.config.mjs" ./jest.config.mjs
+cp "$REPO_ROOT/tests/e2e/$PACKAGE/vitest.config.mjs" ./vitest.config.mjs
+cp "$REPO_ROOT/tests/e2e/$PACKAGE/vitest.setup.mjs" ./vitest.setup.mjs
 
-NODE_OPTIONS="${NODE_OPTIONS:-} --experimental-vm-modules" npx --yes jest --runInBand --config ./jest.config.mjs
+npx --yes vitest run --config ./vitest.config.mjs

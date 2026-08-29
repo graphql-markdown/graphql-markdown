@@ -1,11 +1,16 @@
-jest.mock("graphql/execution", () => {
-  const graphql = jest.requireActual("graphql/execution");
-  return {
+import type * as GraphQLExecution from "graphql/execution";
+
+vi.mock("graphql/execution", async (importOriginal) => {
+  const graphql = await importOriginal<typeof GraphQLExecution>();
+  const mocked = {
     ...graphql,
-    getDirectiveValues: jest.fn((...args) => {
-      return graphql.getDirectiveValues(...args);
+    getDirectiveValues: vi.fn((...args) => {
+      return graphql.getDirectiveValues(
+        ...(args as Parameters<typeof graphql.getDirectiveValues>),
+      );
     }),
   };
+  return { ...mocked, default: mocked };
 });
 import graphql from "graphql/execution";
 import type { GraphQLDirective, GraphQLNamedType } from "graphql/type";
@@ -17,7 +22,7 @@ describe("directives", () => {
     test("returns a templated description of a directive", () => {
       expect.hasAssertions();
 
-      jest.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
+      vi.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
 
       expect(
         directiveDescriptor(
@@ -33,7 +38,7 @@ describe("directives", () => {
     test("returns default directive description is no template set", () => {
       expect.hasAssertions();
 
-      jest.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
+      vi.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
 
       expect(
         directiveDescriptor(
@@ -48,7 +53,7 @@ describe("directives", () => {
     test("returns empty string if default directive description", () => {
       expect.hasAssertions();
 
-      jest.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
+      vi.spyOn(graphql, "getDirectiveValues").mockReturnValue({ value: 42 });
 
       expect(
         directiveDescriptor(

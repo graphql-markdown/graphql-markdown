@@ -4,37 +4,37 @@ import type {
   TypeDeprecatedOption,
 } from "@graphql-markdown/types";
 
-jest.mock("node:fs/promises");
+vi.mock("node:fs/promises");
 
-jest.mock("node:path", (): unknown => {
+vi.mock("node:path", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("node:path"),
+    ...(await importOriginal<Record<string, unknown>>()),
   };
 });
 
-jest.mock("@graphql-markdown/printer-legacy");
+vi.mock("@graphql-markdown/printer-legacy");
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-jest.mock("@graphql-markdown/utils", (): unknown => {
+vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/utils"),
-    isDeprecated: jest.fn(),
-    ensureDir: jest.fn(),
-    fileExists: jest.fn(),
-    saveFile: jest.fn(),
-    copyFile: jest.fn(),
-    readFile: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDeprecated: vi.fn(),
+    ensureDir: vi.fn(),
+    fileExists: vi.fn(),
+    saveFile: vi.fn(),
+    copyFile: vi.fn(),
+    readFile: vi.fn(),
   };
 });
 
-jest.mock("@graphql-markdown/graphql", (): unknown => {
+vi.mock("@graphql-markdown/graphql", async (importOriginal): Promise<unknown> => {
   return {
     __esModule: true,
-    ...jest.requireActual("@graphql-markdown/graphql"),
-    isDeprecated: jest.fn(),
-    isApiType: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    isDeprecated: vi.fn(),
+    isApiType: vi.fn(),
   };
 });
 import * as GraphQL from "@graphql-markdown/graphql";
@@ -59,7 +59,7 @@ const DEFAULT_RENDERER_OPTIONS: RendererDocOptions = {
  * Helper function to create a renderer with a mock generateIndexMetafile hook.
  * Registers the mock as an event handler instead of passing it as legacy mdxModule.
  */
-const mockGenerateIndexMetafileHook = (mockFn: jest.Mock): void => {
+const mockGenerateIndexMetafileHook = (mockFn: Mock): void => {
   getEvents().on(GenerateIndexMetafileEvents.BEFORE_GENERATE, (event: any) => {
     mockFn(event.data.dirPath, event.data.category, event.data.options);
   });
@@ -69,8 +69,8 @@ describe("generateCategoryMetafileType - focused tests", () => {
   const baseURL = "graphql";
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
     resetEvents();
   });
 
@@ -85,7 +85,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
       false,
       DEFAULT_RENDERER_OPTIONS,
     );
-    jest.replaceProperty(renderer, "outputDir", "");
+    vi.replaceProperty(renderer, "outputDir", "");
 
     await expect(
       renderer.generateCategoryMetafileType({}, "TestType", "objects"),
@@ -95,7 +95,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
   test("flat hierarchy returns outputDir and does not call generateIndexMetafile", async () => {
     expect.assertions(2);
 
-    const mockGenerateIndexMetafile = jest.fn();
+    const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
@@ -123,7 +123,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
   test("forwards categoryPositionManager.getPosition as sidebarPosition", async () => {
     expect.assertions(3);
 
-    const mockGenerateIndexMetafile = jest.fn();
+    const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
@@ -138,7 +138,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     // enable MDX forwarding
     renderer.mdxModuleIndexFileSupport = true;
     renderer.categoryPositionManager = {
-      getPosition: jest.fn().mockReturnValue(42),
+      getPosition: vi.fn().mockReturnValue(42),
     };
 
     await renderer.generateCategoryMetafileType({}, "Foo", "objects");
@@ -154,7 +154,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
   test("deprecated group creates deprecated group index with special styleClass", async () => {
     expect.assertions(4);
 
-    const mockGenerateIndexMetafile = jest.fn();
+    const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,
@@ -171,7 +171,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
     );
 
     renderer.mdxModuleIndexFileSupport = true;
-    jest.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
+    vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
 
     await renderer.generateCategoryMetafileType({}, "Foo", "objects");
 
@@ -185,7 +185,7 @@ describe("generateCategoryMetafileType - focused tests", () => {
   test("forwards explicit index option from renderer.options", async () => {
     expect.assertions(1);
 
-    const mockGenerateIndexMetafile = jest.fn();
+    const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
     const renderer: any = await getRenderer(
       Printer as unknown as typeof IPrinter,

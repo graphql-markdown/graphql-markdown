@@ -6,7 +6,7 @@ import { getDirectiveExampleOption, printExample } from "../../src/example";
 
 import * as Link from "../../src/link";
 
-jest.mock("../../src/link");
+vi.mock("../../src/link");
 
 describe("example", () => {
   const schema = buildSchema(`
@@ -70,11 +70,11 @@ describe("example", () => {
 `);
 
   beforeEach(() => {
-    jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+    vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("getDirectiveExampleOption()", () => {
@@ -171,7 +171,7 @@ describe("example", () => {
     test("returns undefined if directive not printable", () => {
       expect.assertions(1);
 
-      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(false);
+      vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(false);
 
       expect(
         printExample(schema.getType("ScalarExample"), {
@@ -205,7 +205,7 @@ describe("example", () => {
     test("returns JSON formatted string example using subtype examples skipping non printable type", () => {
       expect.assertions(1);
 
-      jest
+      vi
         .spyOn(Link, "hasPrintableDirective")
 
         .mockImplementation((type, _options) => {
@@ -222,7 +222,7 @@ describe("example", () => {
     test("skips attributes of non-printable type", () => {
       expect.assertions(1);
 
-      jest
+      vi
         .spyOn(Link, "hasPrintableDirective")
 
         .mockImplementation((type, _options) => {

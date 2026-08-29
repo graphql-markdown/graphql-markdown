@@ -4,19 +4,22 @@ import type { DiffMethodName } from "@graphql-markdown/types";
 
 import { hasChanges } from "../../src/diff";
 
-jest.mock("@graphql-markdown/diff");
+vi.mock(
+  "@graphql-markdown/diff",
+  async () => await import("../__mocks__/@graphql-markdown/diff"),
+);
 import * as diff from "@graphql-markdown/diff";
 
 describe("diff", () => {
   describe("hasChanges()", () => {
     beforeEach(() => {
       // silent console
-      jest.spyOn(globalThis.console, "warn").mockImplementation(() => {});
+      vi.spyOn(globalThis.console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
+      vi.restoreAllMocks();
+      vi.resetAllMocks();
     });
 
     test.each([[undefined], [null]])(
@@ -24,7 +27,7 @@ describe("diff", () => {
       async (value: unknown) => {
         expect.assertions(2);
 
-        const logSpy = jest.spyOn(console, "warn");
+        const logSpy = vi.spyOn(console, "warn");
 
         await expect(
           hasChanges(new GraphQLSchema({}), "", value as DiffMethodName),
@@ -38,9 +41,9 @@ describe("diff", () => {
       async (value) => {
         expect.assertions(2);
 
-        const logSpy = jest.spyOn(console, "warn");
+        const logSpy = vi.spyOn(console, "warn");
 
-        jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
+        vi.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
         await expect(
           hasChanges(
@@ -57,9 +60,9 @@ describe("diff", () => {
     test("returns true if diff module package not resolved", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
+      const logSpy = vi.spyOn(console, "warn");
 
-      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
+      vi.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
       await expect(
         hasChanges(
@@ -77,9 +80,9 @@ describe("diff", () => {
     test("returns boolean if diff module package resolved", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
+      const logSpy = vi.spyOn(console, "warn");
 
-      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
+      vi.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(true);
 
       const result = await hasChanges(
         new GraphQLSchema({}),
@@ -94,8 +97,8 @@ describe("diff", () => {
     test("returns true if checkSchemaChanges throws error", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
-      jest
+      const logSpy = vi.spyOn(console, "warn");
+      vi
         .spyOn(diff, "checkSchemaChanges")
         .mockRejectedValueOnce(new Error("Test error"));
 
@@ -114,8 +117,8 @@ describe("diff", () => {
     test("returns value from checkSchemaChanges if successful", async () => {
       expect.assertions(2);
 
-      const logSpy = jest.spyOn(console, "warn");
-      jest.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(false);
+      const logSpy = vi.spyOn(console, "warn");
+      vi.spyOn(diff, "checkSchemaChanges").mockResolvedValueOnce(false);
 
       const result = await hasChanges(
         new GraphQLSchema({}),

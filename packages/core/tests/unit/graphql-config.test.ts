@@ -9,14 +9,14 @@ import {
   DEFAULT_OPTIONS,
 } from "../../src/config";
 
-jest.mock("graphql-config");
+vi.mock("graphql-config");
 import * as GraphQLConfig from "graphql-config";
 
 const mockLoadConfig = (
   schema: string,
   extensions: { "graphql-markdown"?: Record<string, unknown> },
 ) => {
-  return jest.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
+  return vi.spyOn(GraphQLConfig, "loadConfig").mockResolvedValueOnce({
     getProject: () => {
       return {
         extension: (): any => {
@@ -37,8 +37,8 @@ describe("graphql-config", () => {
   describe("loadConfiguration()", () => {
     afterEach(() => {
       vol.reset();
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
+      vi.restoreAllMocks();
+      vi.resetAllMocks();
     });
 
     test("returns undefined if graphql-config empty", async () => {
@@ -52,7 +52,7 @@ describe("graphql-config", () => {
     test("returns undefined if an error is thrown", async () => {
       expect.hasAssertions();
 
-      jest
+      vi
         .spyOn(CoreGraphQLConfig, "setLoaderOptions")
         .mockImplementationOnce(() => {
           throw new Error();
@@ -223,8 +223,8 @@ describe("graphql-config", () => {
     test("returns undefined if project id does not exist", async () => {
       expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
-        getProject: jest.fn(() => {
+      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
+        getProject: vi.fn(() => {
           return undefined;
         }),
       });
@@ -249,11 +249,11 @@ describe("graphql-config", () => {
       expect.hasAssertions();
 
       // Mock loadConfig to simulate different project scenarios
-      const loadConfigSpy = jest.spyOn(GraphQLConfig, "loadConfig");
+      const loadConfigSpy = vi.spyOn(GraphQLConfig, "loadConfig");
 
       // Scenario 1: Project exists and has graphql-markdown extension
       loadConfigSpy.mockResolvedValueOnce({
-        getProject: jest.fn(() => {
+        getProject: vi.fn(() => {
           return {
             extension: (): any => {
               return {
@@ -274,7 +274,7 @@ describe("graphql-config", () => {
 
       // Scenario 2: Project exists but doesn't have graphql-markdown extension
       loadConfigSpy.mockResolvedValueOnce({
-        getProject: jest.fn(() => {
+        getProject: vi.fn(() => {
           return {
             extension: (): any => {
               return undefined;
@@ -290,7 +290,7 @@ describe("graphql-config", () => {
 
       // Scenario 3: Project doesn't exist
       loadConfigSpy.mockResolvedValueOnce({
-        getProject: jest.fn(() => {
+        getProject: vi.fn(() => {
           return undefined;
         }),
       } as unknown as any);
@@ -310,8 +310,8 @@ describe("config", () => {
   describe("buildConfig()", () => {
     afterEach(() => {
       vol.reset();
-      jest.restoreAllMocks();
-      jest.resetAllMocks();
+      vi.restoreAllMocks();
+      vi.resetAllMocks();
     });
 
     test("returns config with .graphqlrc options set", async () => {
@@ -360,7 +360,7 @@ describe("config", () => {
     test("loads configuration with throwOnMissing and throwOnEmpty both true", async () => {
       expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
         config: { id: "test-project" },
       });
 
@@ -379,7 +379,7 @@ describe("config", () => {
     test("loads configuration with throwOnMissing and throwOnEmpty both false", async () => {
       expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
         config: { id: "test-project" },
       });
 
@@ -398,7 +398,7 @@ describe("config", () => {
     test("handles throwOnMissing true and throwOnEmpty false", async () => {
       expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
         config: { id: "test-project" },
       });
 
@@ -417,7 +417,7 @@ describe("config", () => {
     test("handles throwOnMissing false and throwOnEmpty true", async () => {
       expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as jest.Mock).mockResolvedValueOnce({
+      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
         config: { id: "test-project" },
       });
 

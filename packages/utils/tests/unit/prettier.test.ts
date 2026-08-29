@@ -1,59 +1,48 @@
 // packages/utils/tests/unit/prettier.test.ts
-import * as Prettier from "../../src/prettier";
 
 describe("prettier", () => {
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
+    vi.doUnmock("prettier");
   });
 
   describe("prettify()", () => {
     test("formats content using the specified parser", async () => {
       expect.assertions(1);
 
-      jest.mock(
-        "prettier",
-        () => {
-          return {
-            resolveConfigFile: async () => {
-              return null;
-            },
-            resolveConfig: async () => {
-              return {};
-            },
-            format: async (content: string) => {
-              return `prettified:${content}`;
-            },
-          };
-        },
-        { virtual: true },
-      );
+      // `vi.doMock` is not hoisted, so it can be scoped to this test; combined
+      // with `vi.resetModules()` the module under test is imported fresh below
+      // and its dynamic `import("prettier")` resolves to the manual mock.
+      vi.doMock("prettier", async () => {
+        return import("../__mocks__/prettier");
+      });
 
-      const result = await Prettier.prettify("test content", "mdx");
+      const { prettify } = await import("../../src/prettier");
+
+      const result = await prettify("test content", "mdx");
       expect(result).toBe("prettified:test content");
     });
 
     test("logs error and returns undefined when prettier is not available", async () => {
       expect.assertions(2);
 
-      jest.mock(
-        "prettier",
-        () => {
-          throw new Error(
-            'Prettier is not found or not configured. Please install it or disable the "pretty" option.',
-          );
-        },
-        { virtual: true },
-      );
+      vi.doMock("prettier", () => {
+        throw new Error(
+          'Prettier is not found or not configured. Please install it or disable the "pretty" option.',
+        );
+      });
 
-      const consoleSpy = jest
+      const consoleSpy = vi
         .spyOn(globalThis.console, "log")
         .mockImplementation(() => {});
 
-      const result = await Prettier.prettify("test content", "mdx");
+      const { prettify } = await import("../../src/prettier");
+
+      const result = await prettify("test content", "mdx");
 
       expect(result).toBeUndefined();
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -63,14 +52,28 @@ describe("prettier", () => {
   });
 
   describe("prettifyMarkdown()", () => {
+    // `prettifyMarkdown` calls `prettify` through the module-local binding, so
+    // spying on the module namespace export cannot intercept it under Vitest's
+    // ESM transform (it only worked with Jest because ts-jest's CommonJS emit
+    // rewrote the internal call to `exports.prettify`). The delegation is
+    // asserted through its observable effect instead: `prettier.format` is
+    // called with the `mdx` parser and its output is returned.
     test("calls prettify with markdown parser", async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
-      const prettifySpy = jest.spyOn(Prettier, "prettify");
+      vi.doMock("prettier", async () => {
+        return import("../__mocks__/prettier");
+      });
 
-      await Prettier.prettifyMarkdown("# Markdown content");
+      const { format } = await import("../__mocks__/prettier");
+      const { prettifyMarkdown } = await import("../../src/prettier");
 
-      expect(prettifySpy).toHaveBeenCalledWith("# Markdown content", "mdx");
+      const result = await prettifyMarkdown("# Markdown content");
+
+      expect(format).toHaveBeenCalledWith("# Markdown content", {
+        parser: "mdx",
+      });
+      expect(result).toBe("prettified:# Markdown content");
     });
   });
 });

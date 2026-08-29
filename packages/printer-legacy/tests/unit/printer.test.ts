@@ -15,39 +15,39 @@ import {
 
 import type { PageSections, PrintTypeOptions } from "@graphql-markdown/types";
 
-jest.mock("@graphql-markdown/utils", () => {
+vi.mock("@graphql-markdown/utils", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
-    escapeMDX: jest.fn(),
-    formatFrontMatterObject: jest.fn(),
-    isEmpty: jest.fn(),
+    ...(await importOriginal<Record<string, unknown>>()),
+    escapeMDX: vi.fn(),
+    formatFrontMatterObject: vi.fn(),
+    isEmpty: vi.fn(),
     pathUrl: { join: posix.join },
-    slugify: jest.fn(),
+    slugify: vi.fn(),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", () => {
   return {
-    getConstDirectiveMap: jest.fn(),
-    getTypeName: jest.fn(),
-    hasDirective: jest.fn(),
-    isDirectiveType: jest.fn(),
-    isEnumType: jest.fn(),
-    isInputType: jest.fn(),
-    isInterfaceType: jest.fn(),
-    isObjectType: jest.fn(),
-    isOperation: jest.fn(),
-    isScalarType: jest.fn(),
-    isUnionType: jest.fn(),
+    getConstDirectiveMap: vi.fn(),
+    getTypeName: vi.fn(),
+    hasDirective: vi.fn(),
+    isDirectiveType: vi.fn(),
+    isEnumType: vi.fn(),
+    isInputType: vi.fn(),
+    isInterfaceType: vi.fn(),
+    isObjectType: vi.fn(),
+    isOperation: vi.fn(),
+    isScalarType: vi.fn(),
+    isUnionType: vi.fn(),
   };
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-jest.mock("../../src/graphql");
+vi.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
-jest.mock("../../src/example");
+vi.mock("../../src/example");
 import * as ExamplePrinter from "../../src/example";
 
 import * as Link from "../../src/link";
@@ -152,14 +152,14 @@ describe("Printer", () => {
 
   beforeEach(() => {
     Printer.options = undefined;
-    jest.spyOn(GraphQL, "getTypeName").mockImplementation((value: unknown) => {
+    vi.spyOn(GraphQL, "getTypeName").mockImplementation((value: unknown) => {
       return value as string;
     });
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("init()", () => {
@@ -389,7 +389,7 @@ describe("Printer", () => {
     test("returns a MDX frontmatter document header", () => {
       expect.hasAssertions();
 
-      jest
+      vi
         .spyOn(Utils, "formatFrontMatterObject")
         .mockReturnValue([
           "id: an-object-type-name",
@@ -413,7 +413,7 @@ describe("Printer", () => {
     test("returns a MDX frontmatter document header with custom info", () => {
       expect.hasAssertions();
 
-      jest
+      vi
         .spyOn(Utils, "formatFrontMatterObject")
         .mockReturnValue([
           "draft: true",
@@ -448,8 +448,8 @@ describe("Printer", () => {
       ({ type, printCode, name, guard }: Record<string, unknown>) => {
         expect.hasAssertions();
 
-        jest.spyOn(GraphQL, guard).mockReturnValue(true);
-        jest.spyOn(GraphQLPrinter, printCode).mockReturnValue(name);
+        vi.spyOn(GraphQL, guard).mockReturnValue(true);
+        vi.spyOn(GraphQLPrinter, printCode).mockReturnValue(name);
 
         const code = Printer.printCode(type, DEFAULT_OPTIONS);
 
@@ -470,8 +470,8 @@ describe("Printer", () => {
     test("passes namespace parts to printCodeOperation", () => {
       expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isOperation").mockReturnValue(true);
-      const printCodeOperationSpy = jest
+      vi.spyOn(GraphQL, "isOperation").mockReturnValue(true);
+      const printCodeOperationSpy = vi
         .spyOn(GraphQLPrinter, "printCodeOperation")
         .mockReturnValue(`aggregatePlayers: ID\n`);
 
@@ -498,8 +498,8 @@ describe("Printer", () => {
       ({ type, printMeta, name, guard }: Record<string, unknown>) => {
         expect.hasAssertions();
 
-        jest.spyOn(GraphQL, guard).mockReturnValue(true);
-        const spy = jest.spyOn(GraphQLPrinter, printMeta).mockReturnValue(name);
+        vi.spyOn(GraphQL, guard).mockReturnValue(true);
+        const spy = vi.spyOn(GraphQLPrinter, printMeta).mockReturnValue(name);
 
         Printer.printTypeMetadata(type, DEFAULT_OPTIONS);
 
@@ -534,10 +534,10 @@ describe("Printer", () => {
       async ({ name, type }: { name: string; type: unknown }) => {
         expect.hasAssertions();
 
-        jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+        vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
 
         const spies = methods.map((method) => {
-          return jest.spyOn(Printer, method).mockReturnValue("");
+          return vi.spyOn(Printer, method).mockReturnValue("");
         });
 
         await Printer.printType(name, type);
@@ -566,7 +566,7 @@ describe("Printer", () => {
 
     test("returns undefined if type has no printable directive", async () => {
       expect.hasAssertions();
-      jest.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
+      vi.spyOn(Link, "hasPrintableDirective").mockReturnValueOnce(false);
       const printedType = await Printer.printType("any", null);
 
       expect(printedType).toBeUndefined();
@@ -617,7 +617,7 @@ describe("Printer", () => {
         } as GraphQLSchema,
       } as PrintTypeOptions;
 
-      const spy = jest
+      const spy = vi
         .spyOn(ExamplePrinter, "printExample")
         .mockReturnValue("This is an example");
 
@@ -630,7 +630,7 @@ describe("Printer", () => {
     test("returns undefined if printExample returns undefined", () => {
       expect.hasAssertions();
 
-      jest.spyOn(ExamplePrinter, "printExample").mockReturnValue(undefined);
+      vi.spyOn(ExamplePrinter, "printExample").mockReturnValue(undefined);
 
       const code = Printer.printExample(GraphQLString, DEFAULT_OPTIONS);
 
@@ -640,7 +640,7 @@ describe("Printer", () => {
     test("returns undefined if printTypeOptions.exampleSection directive is invalid", () => {
       expect.hasAssertions();
 
-      const spy = jest
+      const spy = vi
         .spyOn(ExamplePrinter, "printExample")
         .mockReturnValue(undefined);
 
@@ -660,7 +660,7 @@ describe("Printer", () => {
 
   describe("printCodeAsync()", () => {
     const mockEventEmitter = {
-      emitAsync: jest
+      emitAsync: vi
         .fn()
         .mockResolvedValue({ errors: [], defaultPrevented: false }),
     };
@@ -677,8 +677,8 @@ describe("Printer", () => {
     test("returns printCode output when no event emitter is configured", async () => {
       expect.hasAssertions();
 
-      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest
+      vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      vi
         .spyOn(GraphQLPrinter, "printCodeEnum")
         .mockReturnValue("enum Test { }");
 
@@ -693,8 +693,8 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       (Printer as any).eventEmitter = mockEventEmitter;
-      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest
+      vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      vi
         .spyOn(GraphQLPrinter, "printCodeEnum")
         .mockReturnValue("enum Test { }");
 
@@ -723,7 +723,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const modifiedEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -736,8 +736,8 @@ describe("Printer", () => {
       };
 
       (Printer as any).eventEmitter = modifiedEmitter;
-      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest
+      vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      vi
         .spyOn(GraphQLPrinter, "printCodeEnum")
         .mockReturnValue("enum Test { }");
 
@@ -752,7 +752,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const preventingEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -766,8 +766,8 @@ describe("Printer", () => {
       };
 
       (Printer as any).eventEmitter = preventingEmitter;
-      jest.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
-      jest
+      vi.spyOn(GraphQL, "isEnumType").mockReturnValue(true);
+      vi
         .spyOn(GraphQLPrinter, "printCodeEnum")
         .mockReturnValue("enum Test { }");
 
@@ -781,18 +781,18 @@ describe("Printer", () => {
 
   describe("printType() with events", () => {
     const mockEventEmitter = {
-      emitAsync: jest
+      emitAsync: vi
         .fn()
         .mockResolvedValue({ errors: [], defaultPrevented: false }),
     };
 
     beforeEach(() => {
       (Printer as any).eventEmitter = null;
-      jest.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
+      vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
       // Mock printDescription since it's a static property pointing to external function
-      (Printer as any).printDescription = jest.fn().mockReturnValue("");
-      (Printer as any).printCustomDirectives = jest.fn().mockReturnValue("");
-      (Printer as any).printCustomTags = jest.fn().mockReturnValue("");
+      (Printer as any).printDescription = vi.fn().mockReturnValue("");
+      (Printer as any).printCustomDirectives = vi.fn().mockReturnValue("");
+      (Printer as any).printCustomTags = vi.fn().mockReturnValue("");
     });
 
     afterEach(() => {
@@ -805,12 +805,12 @@ describe("Printer", () => {
       (Printer as any).eventEmitter = mockEventEmitter;
 
       // Mock all the print methods to return empty strings
-      jest.spyOn(Printer, "printHeader").mockReturnValue("");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("");
-      jest.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printHeader").mockReturnValue("");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
 
       await Printer.printType("test", { name: "Test" });
 
@@ -834,7 +834,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const modifiedEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -847,12 +847,12 @@ describe("Printer", () => {
       };
 
       (Printer as any).eventEmitter = modifiedEmitter;
-      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("");
-      jest.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
 
       const result = await Printer.printType("test", { name: "Test" });
 
@@ -863,7 +863,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const preventingEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -891,12 +891,12 @@ describe("Printer", () => {
       // Ensure no emitter
       Printer.eventEmitter = null;
 
-      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("META");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
-      jest.spyOn(Printer, "printExample").mockReturnValue({
+      vi.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("META");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
+      vi.spyOn(Printer, "printExample").mockReturnValue({
         title: "Example",
         content: "EXAMPLE",
       });
@@ -916,7 +916,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const filteringEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -946,13 +946,13 @@ describe("Printer", () => {
 
       Printer.eventEmitter = filteringEmitter;
 
-      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("HEAD META TAGS");
-      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      vi.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("HEAD META TAGS");
+      vi.spyOn(Printer, "printCode").mockReturnValue("CODE");
       (Printer as any).mdxDeclaration = "MDX DECLARATION";
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("TYPE METADATA");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
-      jest.spyOn(Printer, "printExample").mockReturnValue({
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("TYPE METADATA");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("RELATIONS");
+      vi.spyOn(Printer, "printExample").mockReturnValue({
         title: "Example",
         content: "EXAMPLE",
       });
@@ -977,7 +977,7 @@ describe("Printer", () => {
       let capturedSections: PageSections | undefined;
 
       const customSectionEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -1004,12 +1004,12 @@ describe("Printer", () => {
 
       Printer.eventEmitter = customSectionEmitter;
 
-      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("");
-      jest.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
 
       const result = await Printer.printType("test", { name: "Test" });
 
@@ -1034,7 +1034,7 @@ describe("Printer", () => {
       expect.hasAssertions();
 
       const invalidSectionEmitter = {
-        emitAsync: jest
+        emitAsync: vi
           .fn()
           .mockImplementation(
             async (_eventName: string, event: Record<string, unknown>) => {
@@ -1065,12 +1065,12 @@ describe("Printer", () => {
 
       Printer.eventEmitter = invalidSectionEmitter;
 
-      jest.spyOn(Printer, "printHeader").mockReturnValue("# Test");
-      jest.spyOn(Printer, "printMetaTags").mockReturnValue("");
-      jest.spyOn(Printer, "printCode").mockReturnValue("CODE");
-      jest.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
-      jest.spyOn(Printer, "printRelations").mockReturnValue("");
-      jest.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printHeader").mockReturnValue("# Test");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
 
       const result = await Printer.printType("test", { name: "Test" });
 

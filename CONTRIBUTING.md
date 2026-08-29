@@ -105,7 +105,7 @@ You should edit the documentation or add new documentation files directly in you
 
 > We are using a monorepo, so you might want to [read about monorepo](https://monorepo.tools/) before jumping into the code.
 
-The code base is full TypeScript using NodeJS, and Jest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
+The code base is full TypeScript using NodeJS, and Vitest for tests. The codebase can seem a bit messy, so start by reading the section [coding style](#coding-style).
 
 When making your changes, remember to check your code by running:
 
@@ -162,14 +162,16 @@ End-to-end (smoke) tests live outside packages in a top-level directory:
 tests/e2e/
 ├── __data__/           # Shared fixtures (schemas, markdown, shared config options)
 ├── helpers/            # Shared test helpers (CLI runner)
-├── cli/                # CLI-specific specs, jest config, and fixture data
+├── cli/                # CLI-specific specs, Vitest config, and fixture data
 │   ├── __data__/
 │   ├── specs/
-│   └── jest.config.mjs
-└── docusaurus/         # Docusaurus-specific specs, jest config, and fixture data
+│   ├── vitest.config.mjs
+│   └── vitest.setup.mjs
+└── docusaurus/         # Docusaurus-specific specs, Vitest config, and fixture data
     ├── __data__/
     ├── specs/
-    └── jest.config.mjs
+    ├── vitest.config.mjs
+    └── vitest.setup.mjs
 ```
 
 ### Dependencies
@@ -188,11 +190,11 @@ When choosing an external package, always look at the following:
 
 There are a lot of ways to test your code, and you should always add tests when making changes to the code.
 
-There are 3 types of tests used in this project, all based on [Jest](https://jestjs.io/):
+There are 3 types of tests used in this project, all based on [Vitest](https://vitest.dev/):
 
 - `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils`, then this is likely where you should add your tests.
 
-  > You should always mock external calls (see [Jest mock](https://jestjs.io/docs/mock-functions)).
+  > You should always mock external calls (see [Vitest mocking](https://vitest.dev/guide/mocking)).
 
 - `integration` for testing the logic of the main classes. If your changes are located in `src/lib`, then you will need to add your tests here.
 
@@ -319,7 +321,7 @@ Packages must be published in dependency order:
 Common issues:
 
 - **Type errors**: Check `tsconfig.json` in the affected package
-- **Test failures**: Use `--verbose` flag with Jest for details
+- **Test failures**: Use the `--reporter=verbose` flag with Vitest for details
 - **Dependency issues**: Clean install with `bun ci`
 
 For other issues, please check existing GitHub issues or create a new one.

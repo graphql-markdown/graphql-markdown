@@ -1,49 +1,49 @@
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
-jest.mock("@graphql-markdown/utils", () => {
+vi.mock("@graphql-markdown/utils", async (importOriginal) => {
   return {
-    ...jest.requireActual("@graphql-markdown/utils"),
-    slugify: jest.fn(),
-    escapeMDX: jest.fn(<T>(t: T): T => {
+    ...(await importOriginal<Record<string, unknown>>()),
+    slugify: vi.fn(),
+    escapeMDX: vi.fn(<T>(t: T): T => {
       return t;
     }),
-    pathUrl: jest.fn(),
-    isEmpty: jest.fn(() => {
+    pathUrl: vi.fn(),
+    isEmpty: vi.fn(() => {
       return false;
     }),
   };
 });
 import * as Utils from "@graphql-markdown/utils";
 
-jest.mock("@graphql-markdown/graphql", () => {
+vi.mock("@graphql-markdown/graphql", () => {
   return {
-    isNonNullType: jest.fn(),
-    isListType: jest.fn(),
-    isOperation: jest.fn(),
-    isEnumType: jest.fn(),
-    isUnionType: jest.fn(),
-    isInterfaceType: jest.fn(),
-    isObjectType: jest.fn(),
-    isInputType: jest.fn(),
-    isScalarType: jest.fn(),
-    isDirectiveType: jest.fn(),
-    isDeprecated: jest.fn(),
-    getNamedType: jest.fn(),
-    getConstDirectiveMap: jest.fn(),
+    isNonNullType: vi.fn(),
+    isListType: vi.fn(),
+    isOperation: vi.fn(),
+    isEnumType: vi.fn(),
+    isUnionType: vi.fn(),
+    isInterfaceType: vi.fn(),
+    isObjectType: vi.fn(),
+    isInputType: vi.fn(),
+    isScalarType: vi.fn(),
+    isDirectiveType: vi.fn(),
+    isDeprecated: vi.fn(),
+    getNamedType: vi.fn(),
+    getConstDirectiveMap: vi.fn(),
   };
 });
 import * as GraphQL from "@graphql-markdown/graphql";
 
-jest.mock("../../src/link", () => {
+vi.mock("../../src/link", () => {
   return {
-    getCategoryLocale: jest.fn(),
+    getCategoryLocale: vi.fn(),
   };
 });
 import * as Link from "../../src/link";
 
-jest.mock("../../src/group", () => {
+vi.mock("../../src/group", () => {
   return {
-    getGroup: jest.fn(),
+    getGroup: vi.fn(),
   };
 });
 import * as Group from "../../src/group";
@@ -76,16 +76,16 @@ const createOptionsWithFormatter = (
 
 describe("badge", () => {
   afterAll(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("printBadges", () => {
     test("returns a MDX string of Badge components", () => {
       expect.assertions(1);
 
-      jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
-      jest.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
+      vi.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
+      vi.spyOn(Utils, "isEmpty").mockReturnValueOnce(true);
 
       const badges = Badge.printBadges({}, createOptionsWithFormatter());
 
@@ -118,7 +118,7 @@ describe("badge", () => {
     test("returns an empty string if getTypeBadges returns empty list", () => {
       expect.assertions(1);
 
-      jest.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
+      vi.spyOn(Badge, "getTypeBadges").mockReturnValueOnce([]);
 
       const badges = Badge.printBadges({}, createOptionsWithFormatter());
 
@@ -130,7 +130,7 @@ describe("badge", () => {
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
 
-      jest.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
+      vi.spyOn(GraphQL, "isNonNullType").mockReturnValueOnce(true);
 
       const type = {};
 
@@ -144,7 +144,7 @@ describe("badge", () => {
     test("return list badge is type is list", () => {
       expect.assertions(1);
 
-      jest.spyOn(GraphQL, "isListType").mockReturnValueOnce(true);
+      vi.spyOn(GraphQL, "isListType").mockReturnValueOnce(true);
 
       const type = {};
 
@@ -156,7 +156,7 @@ describe("badge", () => {
     test("return category name as badge is type is subtype", () => {
       expect.assertions(1);
 
-      jest.spyOn(Link, "getCategoryLocale").mockReturnValueOnce("foobar");
+      vi.spyOn(Link, "getCategoryLocale").mockReturnValueOnce("foobar");
 
       const type = {};
 
@@ -168,7 +168,7 @@ describe("badge", () => {
     test("return group name as badge is type has group", () => {
       expect.assertions(1);
 
-      jest.spyOn(Group, "getGroup").mockReturnValueOnce("foobaz");
+      vi.spyOn(Group, "getGroup").mockReturnValueOnce("foobaz");
 
       const type = {};
 

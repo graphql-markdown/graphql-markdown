@@ -34,59 +34,158 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "default": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
     "./docusaurus": {
-      "require": { "types": "./dist/docusaurus/index.d.ts", "default": "./dist/docusaurus/index.js" },
-      "import": { "types": "./dist/docusaurus/index.d.ts", "default": "./dist/docusaurus/index.js" },
-      "default": { "types": "./dist/docusaurus/index.d.ts", "default": "./dist/docusaurus/index.js" }
+      "require": {
+        "types": "./dist/docusaurus/index.d.ts",
+        "default": "./dist/docusaurus/index.js"
+      },
+      "import": {
+        "types": "./dist/docusaurus/index.d.ts",
+        "default": "./dist/docusaurus/index.js"
+      },
+      "default": {
+        "types": "./dist/docusaurus/index.d.ts",
+        "default": "./dist/docusaurus/index.js"
+      }
     },
     "./docfx": {
-      "require": { "types": "./dist/docfx/index.d.ts", "default": "./dist/docfx/index.js" },
-      "import": { "types": "./dist/docfx/index.d.ts", "default": "./dist/docfx/index.js" },
-      "default": { "types": "./dist/docfx/index.d.ts", "default": "./dist/docfx/index.js" }
+      "require": {
+        "types": "./dist/docfx/index.d.ts",
+        "default": "./dist/docfx/index.js"
+      },
+      "import": {
+        "types": "./dist/docfx/index.d.ts",
+        "default": "./dist/docfx/index.js"
+      },
+      "default": {
+        "types": "./dist/docfx/index.d.ts",
+        "default": "./dist/docfx/index.js"
+      }
     },
     "./fumadocs": {
-      "require": { "types": "./dist/fumadocs/index.d.ts", "default": "./dist/fumadocs/index.js" },
-      "import": { "types": "./dist/fumadocs/index.d.ts", "default": "./dist/fumadocs/index.js" },
-      "default": { "types": "./dist/fumadocs/index.d.ts", "default": "./dist/fumadocs/index.js" }
+      "require": {
+        "types": "./dist/fumadocs/index.d.ts",
+        "default": "./dist/fumadocs/index.js"
+      },
+      "import": {
+        "types": "./dist/fumadocs/index.d.ts",
+        "default": "./dist/fumadocs/index.js"
+      },
+      "default": {
+        "types": "./dist/fumadocs/index.d.ts",
+        "default": "./dist/fumadocs/index.js"
+      }
     },
     "./honkit": {
-      "require": { "types": "./dist/honkit/index.d.ts", "default": "./dist/honkit/index.js" },
-      "import": { "types": "./dist/honkit/index.d.ts", "default": "./dist/honkit/index.js" },
-      "default": { "types": "./dist/honkit/index.d.ts", "default": "./dist/honkit/index.js" }
+      "require": {
+        "types": "./dist/honkit/index.d.ts",
+        "default": "./dist/honkit/index.js"
+      },
+      "import": {
+        "types": "./dist/honkit/index.d.ts",
+        "default": "./dist/honkit/index.js"
+      },
+      "default": {
+        "types": "./dist/honkit/index.d.ts",
+        "default": "./dist/honkit/index.js"
+      }
     },
     "./hugo": {
-      "require": { "types": "./dist/hugo/index.d.ts", "default": "./dist/hugo/index.js" },
-      "import": { "types": "./dist/hugo/index.d.ts", "default": "./dist/hugo/index.js" },
-      "default": { "types": "./dist/hugo/index.d.ts", "default": "./dist/hugo/index.js" }
+      "require": {
+        "types": "./dist/hugo/index.d.ts",
+        "default": "./dist/hugo/index.js"
+      },
+      "import": {
+        "types": "./dist/hugo/index.d.ts",
+        "default": "./dist/hugo/index.js"
+      },
+      "default": {
+        "types": "./dist/hugo/index.d.ts",
+        "default": "./dist/hugo/index.js"
+      }
     },
     "./mdbook": {
-      "require": { "types": "./dist/mdbook/index.d.ts", "default": "./dist/mdbook/index.js" },
-      "import": { "types": "./dist/mdbook/index.d.ts", "default": "./dist/mdbook/index.js" },
-      "default": { "types": "./dist/mdbook/index.d.ts", "default": "./dist/mdbook/index.js" }
+      "require": {
+        "types": "./dist/mdbook/index.d.ts",
+        "default": "./dist/mdbook/index.js"
+      },
+      "import": {
+        "types": "./dist/mdbook/index.d.ts",
+        "default": "./dist/mdbook/index.js"
+      },
+      "default": {
+        "types": "./dist/mdbook/index.d.ts",
+        "default": "./dist/mdbook/index.js"
+      }
     },
     "./mkdocs": {
-      "require": { "types": "./dist/mkdocs/index.d.ts", "default": "./dist/mkdocs/index.js" },
-      "import": { "types": "./dist/mkdocs/index.d.ts", "default": "./dist/mkdocs/index.js" },
-      "default": { "types": "./dist/mkdocs/index.d.ts", "default": "./dist/mkdocs/index.js" }
+      "require": {
+        "types": "./dist/mkdocs/index.d.ts",
+        "default": "./dist/mkdocs/index.js"
+      },
+      "import": {
+        "types": "./dist/mkdocs/index.d.ts",
+        "default": "./dist/mkdocs/index.js"
+      },
+      "default": {
+        "types": "./dist/mkdocs/index.d.ts",
+        "default": "./dist/mkdocs/index.js"
+      }
     },
     "./starlight": {
-      "require": { "types": "./dist/starlight/index.d.ts", "default": "./dist/starlight/index.js" },
-      "import": { "types": "./dist/starlight/index.d.ts", "default": "./dist/starlight/index.js" },
-      "default": { "types": "./dist/starlight/index.d.ts", "default": "./dist/starlight/index.js" }
+      "require": {
+        "types": "./dist/starlight/index.d.ts",
+        "default": "./dist/starlight/index.js"
+      },
+      "import": {
+        "types": "./dist/starlight/index.d.ts",
+        "default": "./dist/starlight/index.js"
+      },
+      "default": {
+        "types": "./dist/starlight/index.d.ts",
+        "default": "./dist/starlight/index.js"
+      }
     },
     "./vocs": {
-      "require": { "types": "./dist/vocs/index.d.ts", "default": "./dist/vocs/index.js" },
-      "import": { "types": "./dist/vocs/index.d.ts", "default": "./dist/vocs/index.js" },
-      "default": { "types": "./dist/vocs/index.d.ts", "default": "./dist/vocs/index.js" }
+      "require": {
+        "types": "./dist/vocs/index.d.ts",
+        "default": "./dist/vocs/index.js"
+      },
+      "import": {
+        "types": "./dist/vocs/index.d.ts",
+        "default": "./dist/vocs/index.js"
+      },
+      "default": {
+        "types": "./dist/vocs/index.d.ts",
+        "default": "./dist/vocs/index.js"
+      }
     },
     "./defaults": {
-      "require": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" },
-      "import": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" },
-      "default": { "types": "./dist/defaults.d.ts", "default": "./dist/defaults.js" }
+      "require": {
+        "types": "./dist/defaults.d.ts",
+        "default": "./dist/defaults.js"
+      },
+      "import": {
+        "types": "./dist/defaults.d.ts",
+        "default": "./dist/defaults.js"
+      },
+      "default": {
+        "types": "./dist/defaults.d.ts",
+        "default": "./dist/defaults.js"
+      }
     },
     "./package.json": "./package.json"
   },
@@ -100,11 +199,11 @@
     "prettier": "prettier \"{src,tests}/**/*.{ts,js,json,md,gql}\" --check",
     "prettier:fix": "prettier \"{src,tests}/**/*.{ts,js,json,md,gql}\" --write",
     "ts:check": "tsgo --noEmit",
-    "test": "jest",
-    "test:unit": "jest --passWithNoTests --testPathPatterns=tests\/unit",
-    "test:integration": "jest --passWithNoTests --testPathPatterns=tests\/integration",
-    "test:ci": "jest --passWithNoTests --ci --silent --randomize --runInBand",
-    "test:watch": "jest --watch"
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run --passWithNoTests tests/unit",
+    "test:integration": "vitest run --passWithNoTests tests/integration",
+    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle --no-file-parallelism",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@graphql-markdown/helpers": "workspace:",

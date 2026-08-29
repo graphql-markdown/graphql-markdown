@@ -1,37 +1,28 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 // packages/cli/test/index.test.ts
 import type { Options } from "@graphql-markdown/types";
+import * as core from "@graphql-markdown/core";
+import Logger from "@graphql-markdown/logger";
+
 import { getGraphQLMarkdownCli, runGraphQLMarkdown } from "../../src/index";
 
 // Mock dependencies
-jest.mock(
-  "@graphql-markdown/core",
-  () => {
-    return {
-      buildConfig: jest
-        .fn()
-        .mockImplementation(async (config: Options): Promise<Options> => {
-          return config;
-        }),
-      generateDocFromSchema: jest.fn().mockResolvedValue(undefined),
-    };
-  },
-  { virtual: true },
-);
-
-jest.mock("@graphql-markdown/logger", () => {
-  return jest.fn().mockResolvedValue({
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-    debug: jest.fn(),
-  });
+vi.mock("@graphql-markdown/core", () => {
+  return {
+    buildConfig: vi.fn(),
+    generateDocFromSchema: vi.fn(),
+  };
 });
 
-jest.mock("graphql-config", () => {
+vi.mock("@graphql-markdown/logger", () => {
   return {
-    loadConfig: jest.fn().mockResolvedValue({
-      getDefault: jest.fn().mockReturnValue({
+    default: vi.fn(),
+  };
+});
+
+vi.mock("graphql-config", () => {
+  return {
+    loadConfig: vi.fn().mockResolvedValue({
+      getDefault: vi.fn().mockReturnValue({
         schema: "./schema.graphql",
         documents: "./src/**/*.graphql",
         extensions: {
@@ -47,7 +38,19 @@ jest.mock("graphql-config", () => {
 
 describe("CLI Module", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
+    vi.mocked(core.buildConfig).mockImplementation(
+      async (config: Options): Promise<Options> => {
+        return config;
+      },
+    );
+    vi.mocked(core.generateDocFromSchema).mockResolvedValue(undefined);
+    vi.mocked(Logger).mockResolvedValue({
+      info: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn(),
+    });
   });
 
   describe("getGraphQLMarkdownCli", () => {
@@ -961,7 +964,7 @@ describe("CLI Module", () => {
 
     await command.parseAsync(["node", "graphql-to-doc", "--config"]);
 
-    expect(require("@graphql-markdown/core").buildConfig).toHaveBeenCalledWith(
+    expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
       options,
       expect.objectContaining({ config: true }),
       undefined,
@@ -981,19 +984,18 @@ describe("CLI Module", () => {
 
       await runGraphQLMarkdown(options, cliOptions, loggerModule);
 
-      expect(
-        require("@graphql-markdown/core").generateDocFromSchema,
-      ).toHaveBeenCalled();
+      expect(vi.mocked(core.generateDocFromSchema)).toHaveBeenCalled();
     });
 
     test("initializes logger before buildConfig", async () => {
       expect.assertions(2);
 
       const callOrder: string[] = [];
-      require("@graphql-markdown/logger").mockImplementationOnce(async () => {
+      vi.mocked(Logger).mockImplementationOnce(async () => {
         callOrder.push("Logger");
+        return undefined;
       });
-      require("@graphql-markdown/core").buildConfig.mockImplementationOnce(
+      vi.mocked(core.buildConfig).mockImplementationOnce(
         async (config: Options) => {
           callOrder.push("buildConfig");
           return config;
@@ -1010,9 +1012,7 @@ describe("CLI Module", () => {
       expect.assertions(1);
 
       const error = new Error("Generation failed");
-      require("@graphql-markdown/core").generateDocFromSchema.mockRejectedValueOnce(
-        error,
-      );
+      vi.mocked(core.generateDocFromSchema).mockRejectedValueOnce(error);
 
       const options = {
         schema: "./schema.graphql",
@@ -1032,16 +1032,14 @@ describe("CLI Module", () => {
       };
       const cliOptions = { config: true };
 
-      const spy = jest
+      const spy = vi
         .spyOn(globalThis.console, "dir")
         .mockImplementation(() => {});
 
       await runGraphQLMarkdown(options, cliOptions);
 
       expect(spy).toHaveBeenCalledWith(options, { depth: null });
-      expect(
-        require("@graphql-markdown/core").generateDocFromSchema,
-      ).not.toHaveBeenCalled();
+      expect(vi.mocked(core.generateDocFromSchema)).not.toHaveBeenCalled();
     });
 
     test("forwards noSectionId CLI option to buildConfig", async () => {
@@ -1057,9 +1055,11 @@ describe("CLI Module", () => {
 
       await runGraphQLMarkdown(options, cliOptions);
 
-      expect(
-        require("@graphql-markdown/core").buildConfig,
-      ).toHaveBeenCalledWith(options, cliOptions, undefined);
+      expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
+        options,
+        cliOptions,
+        undefined,
+      );
     });
   });
 });

@@ -55,11 +55,11 @@
     "prettier": "prettier \"{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --check",
     "prettier:fix": "prettier \"{src,tests,assets}/**/*.{ts,js,json,md,gql}\" --write",
     "ts:check": "tsgo --noEmit",
-    "test": "jest",
-    "test:unit": "jest --passWithNoTests --testPathPatterns=tests\/unit",
-    "test:integration": "jest --passWithNoTests --testPathPatterns=tests\/integration",
-    "test:ci": "jest --passWithNoTests --ci --silent --randomize --runInBand",
-    "test:watch": "jest --watch"
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run --passWithNoTests tests/unit",
+    "test:integration": "vitest run --passWithNoTests tests/integration",
+    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle --no-file-parallelism",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@graphql-markdown/core": "workspace:",

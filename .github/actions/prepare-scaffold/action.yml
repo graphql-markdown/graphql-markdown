@@ -19,7 +19,7 @@ runs:
     - name: Compute scratch paths
       shell: bash
       run: |
-        # PROJECT_DIR is read by the jest e2e config as __ROOT_DIR__.
+        # PROJECT_DIR is read by the Vitest e2e setup file as __ROOT_DIR__.
         # REPO_ROOT is provided by the caller workflow's top-level env.
         {
           echo "PROJECT_DIR=$RUNNER_TEMP/${{ inputs.project-name }}"

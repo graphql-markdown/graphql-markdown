@@ -5,16 +5,16 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-jest.mock("@graphql-markdown/graphql", (): unknown => {
+vi.mock("@graphql-markdown/graphql", (): unknown => {
   return {
-    getFormattedDefaultValue: jest.fn((type): unknown => {
+    getFormattedDefaultValue: vi.fn((type): unknown => {
       return type?.defaultValue;
     }),
-    getTypeName: jest.fn((t): string => {
+    getTypeName: vi.fn((t): string => {
       return (t.name ?? t.toString()) as string;
     }),
-    hasDirective: jest.fn(),
-    isDeprecated: jest.fn((t): boolean => {
+    hasDirective: vi.fn(),
+    isDeprecated: vi.fn((t): boolean => {
       return (t.isDeprecated as boolean) || false;
     }),
   };
@@ -25,8 +25,8 @@ import { DEFAULT_OPTIONS } from "../../src/const/options";
 
 describe("code", () => {
   afterAll(() => {
-    jest.restoreAllMocks();
-    jest.resetAllMocks();
+    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   describe("printCodeArguments()", () => {

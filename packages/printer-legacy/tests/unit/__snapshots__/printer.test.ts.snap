@@ -1,4 +1,89 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Printer > printCode() > returns a Markdown codeblock with non supported message for unsupported type 1`] = `
+"
+\`\`\`graphql
+"TestFooBarType" not supported
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Directive' 1`] = `
+"
+\`\`\`graphql
+Directive
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Enum' 1`] = `
+"
+\`\`\`graphql
+Enum
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Input' 1`] = `
+"
+\`\`\`graphql
+Input
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Interface' 1`] = `
+"
+\`\`\`graphql
+Interface
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Object' 1`] = `
+"
+\`\`\`graphql
+Object
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Operation' 1`] = `
+"
+\`\`\`graphql
+Operation
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Scalar' 1`] = `
+"
+\`\`\`graphql
+Scalar
+\`\`\`
+"
+`;
+
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Union' 1`] = `
+"
+\`\`\`graphql
+Union
+\`\`\`
+"
+`;
+
+exports[`Printer > printExample() > returns a Markdown graphql codeblock with example 1`] = `
+{
+  "content": "
+\`\`\`graphql
+This is an example
+\`\`\`
+
+
+",
+  "title": "Example",
+}
+`;
 
 exports[`Printer printCode() returns a Markdown codeblock with non supported message for unsupported type 1`] = `
 "
