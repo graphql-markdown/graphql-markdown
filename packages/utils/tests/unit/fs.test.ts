@@ -13,7 +13,7 @@ vi.mock("node:fs/promises", async () => {
   return { ...memfsPromises, default: memfsPromises };
 });
 
-import { ensureDir, fileExists, saveFile } from "../../src/fs";
+import { ensureDir, fileExists, fsOutputAdapter, saveFile } from "../../src/fs";
 
 describe("fs", () => {
   beforeEach(() => {
@@ -137,6 +137,49 @@ describe("fs", () => {
           "/foo/bar/test/prettify.test": "prettify hello",
         }
       `);
+    });
+  });
+
+  describe("fsOutputAdapter", () => {
+    test("writeFile() persists content, creating parent folders", async () => {
+      expect.assertions(1);
+
+      await fsOutputAdapter.writeFile("/foo/bar/adapter.md", "adapter content");
+
+      expect(vol.toJSON("/foo/bar/adapter.md")).toMatchInlineSnapshot(`
+        {
+          "/foo/bar/adapter.md": "adapter content",
+        }
+      `);
+    });
+
+    test("writeFile() overwrites an existing entry", async () => {
+      expect.assertions(1);
+
+      await fsOutputAdapter.writeFile("/testFolder/testFile", "replaced");
+
+      expect(vol.toJSON("/testFolder/testFile")).toMatchInlineSnapshot(`
+        {
+          "/testFolder/testFile": "replaced",
+        }
+      `);
+    });
+
+    test("ensureDir() creates a missing folder", async () => {
+      expect.assertions(2);
+
+      expect(await fileExists("/adapterFolder")).toBe(false);
+      await fsOutputAdapter.ensureDir!("/adapterFolder");
+
+      expect(await fileExists("/adapterFolder")).toBe(true);
+    });
+
+    test("ensureDir() empties an existing folder when forceEmpty is set", async () => {
+      expect.assertions(1);
+
+      await fsOutputAdapter.ensureDir!("/testFolder", { forceEmpty: true });
+
+      expect(await fileExists("/testFolder/testFile")).toBe(false);
     });
   });
 });
