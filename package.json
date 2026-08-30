@@ -208,7 +208,7 @@
     "knip": "6.32.3",
     "lodash.filter": "4.6.0",
     "memfs": "4.68.1",
-    "mutation-testing-metrics": "3.8.4",
+    "mutation-testing-metrics": "3.9.0",
     "prettier": "catalog:",
     "turbo": "2.10.12",
     "typedoc": "0.28.20",
