@@ -28,6 +28,7 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
+import { formatMDXEscapedPermalink } from "../defaults";
 import { isFrameworkVersion, isFrameworkVersionAtLeast } from "../version";
 
 const LINK_MDX_EXTENSION = ".mdx" as const;
@@ -194,8 +195,7 @@ export const formatMDXPermalink = (
   ) {
     return `{/* #${id} */}` as MDXString;
   }
-  // use raw string to prevent MDX from interpreting the curly braces as JSX
-  return String.raw`\{#${id}\}` as MDXString;
+  return formatMDXEscapedPermalink(id);
 };
 
 export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {

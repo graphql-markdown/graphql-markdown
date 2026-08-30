@@ -107,7 +107,7 @@ describe("formatMDXNameEntity", () => {
 
 describe("formatMDXPermalink", () => {
   test("renders permalink with proper formatting", () => {
-    expect(formatMDXPermalink("foo")).toBe("");
+    expect(formatMDXPermalink("foo")).toBe(String.raw`\{#foo\}`);
   });
 });
 

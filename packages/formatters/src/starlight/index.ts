@@ -22,21 +22,23 @@ import {
   formatMDXBullet,
   formatMDXDetails,
   formatMDXFrontmatter,
+  formatMDXEscapedPermalink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
 /**
- * Starlight has no built-in custom heading id syntax, and generated pages are
- * MDX, where an unescaped `{#id}` is a parsing error. No permalink is emitted;
- * Starlight derives heading ids from the heading text.
+ * Formats a permalink for a section header, using the classic `{#id}` syntax
+ * escaped to remain valid MDX.
  *
- * @param _id - The ID of the section header (unused)
- * @returns An empty string
+ * Starlight has no built-in custom header id syntax, so the permalink is inert
+ * unless a remark plugin such as `remark-custom-heading-id` is configured. Turn
+ * it off with `docOptions.sectionHeaderId: false`.
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
  */
-export const formatMDXPermalink = (_id: string): MDXString => {
-  return "" as MDXString;
-};
+export const formatMDXPermalink = formatMDXEscapedPermalink;
 
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;

@@ -121,6 +121,25 @@ export const formatMDXSpecifiedByLink = (url: string): MDXString => {
 };
 
 /**
+ * Formats a permalink for a section header using the classic `{#id}` syntax,
+ * escaped so that it stays valid MDX.
+ *
+ * MDX parses an unescaped `{` as the start of an expression, and `{#id}` is not
+ * a valid one, so presets generating `.mdx` pages must use this variant.
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ *
+ * @example
+ * ```js
+ * formatMDXEscapedPermalink("my-id"); // \{#my-id\}
+ * ```
+ */
+export const formatMDXEscapedPermalink = (id: string): MDXString => {
+  return String.raw`\{#${id}\}` as MDXString;
+};
+
+/**
  * Formats a permalink for a section header using the classic `{#id}` syntax.
  *
  * This is the syntax supported by most Markdown-based generators (Hugo,
