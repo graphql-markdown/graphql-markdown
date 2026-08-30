@@ -1,3 +1,39 @@
+<a id="1.35.2"></a>
+# [1.35.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.2) - 2026-08-30
+
+1.35.2 introduces support for **GraphQL.js v17**. It also adds some minor improvements to Fumadocs, Astro Starlight, and Vocs formatters.
+
+### Bug Fixes 🐛
+
+- **Fumadocs formatter**: drop `.mdx` extension from links ([#3218](https://github.com/graphql-markdown/graphql-markdown/issues/3218)).
+- **Astro Starlight formatter**: remove `index.md` file generation ([#3239](https://github.com/graphql-markdown/graphql-markdown/issues/3239)).
+
+### Maintenance 🧹
+
+- Add support for GraphQL.js v17 ([#3240](https://github.com/graphql-markdown/graphql-markdown/issues/3240)).
+- **Vocs formatter**: use Vocs native text directive for badge instead of MUI chip component ([#3248](https://github.com/graphql-markdown/graphql-markdown/issues/3248)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.35.2 |
+| @graphql-markdown/core | 1.21.2 |
+| @graphql-markdown/printer-legacy | 1.16.2 |
+| @graphql-markdown/types | 1.13.2 |
+| @graphql-markdown/utils | 1.12.2 |
+| @graphql-markdown/graphql | 1.2.4 |
+| @graphql-markdown/cli | 1.0.2 |
+| @graphql-markdown/diff | 1.1.17 |
+| @graphql-markdown/helpers | 1.1.2 |
+| @graphql-markdown/logger | 1.0.9 |
+| @graphql-markdown/formatters | 1.0.2 |
+
+**Full Changelog (draft)**: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.1...1.35.2
+
+[Changes][1.35.2]
+
+
 <a id="1.35.1"></a>
 # [1.35.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.1) - 2026-08-20
 
@@ -12,7 +48,7 @@
 
 ### Maintenance 🧹
 
-- Upgrade `commander` to v15 and pin the workspace protocol with `graphql` 16.14.2 ([#3073](https://github.com/graphql-markdown/graphql-markdown/issues/3073), [#3028](https://github.com/graphql-markdown/graphql-markdown/issues/3028)).
+- Upgrade `commander` to v15 ([#3073](https://github.com/graphql-markdown/graphql-markdown/issues/3073)).
 - Remove dead code and tighten unused-export configuration in `core` and `printer-legacy` ([#3103](https://github.com/graphql-markdown/graphql-markdown/issues/3103), [#3106](https://github.com/graphql-markdown/graphql-markdown/issues/3106)).
 
 ### Package Versions 📦
@@ -2384,6 +2420,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.35.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.1...1.35.2
 [1.35.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.0...1.35.1
 [1.35.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.34.0...1.35.0
 [1.34.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.33.0...1.34.0
