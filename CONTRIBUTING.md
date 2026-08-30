@@ -242,7 +242,7 @@ Every package's `vitest.config.mjs` is a thin wrapper around `createPackageConfi
 Two settings in it are load-bearing for how fast the suite runs:
 
 - tests run on Vitest's `threads` pool, which is safe because every package tests plain Node code with no native addon and no `process.chdir`. If you add a test that needs a real child process, override `pool` in that package's config rather than in the shared base;
-- `isolate` stays `true`. Turning it off is worth roughly another 25%, but some suites currently leak state between files and fail without a fresh module registry, so it needs those suites fixed first.
+- `isolate` stays `true`, deliberately. Turning it off saves ~160ms across the workspace (1.82s → 1.66s), and in exchange `printer-legacy` fails nondeterministically — four identical runs produced 35, 46, 41 and 5 failures, since which test files share a worker changes between runs. The other nine packages are already clean. The coupling is the `Printer` class's mutable static state, which only `printer.test.ts` resets, plus a few `vi.mock` factories that replace a module's whole surface instead of spreading `importOriginal()`. Both are worth fixing so tests do not depend on each other, but not in pursuit of 160ms.
 
 `test:ci` shuffles file order (`--sequence.shuffle`) to catch tests that depend on running after another file. If a test only passes in a particular order, fix the test rather than the flag.
 

@@ -108,11 +108,6 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       // per test file. Roughly 30% off the wall time of the larger packages,
       // where module transform and import dominate over the assertions.
       pool: "threads",
-      poolOptions: {
-        threads: {
-          useAtomics: true,
-        },
-      },
       // `graphql` ships a CJS and an ESM build with no `exports` map, so Vite
       // resolves it to `index.mjs` while an externalised dependency gets the
       // CJS `index.js` through Node. That yields two instances, and the library
@@ -128,9 +123,15 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       // Replaces Jest's `testEnvironmentOptions.globalsCleanup`: each test file
       // runs in a fresh module registry so globals cannot leak between files.
       //
-      // Do not flip this to `false` for speed without fixing the suites first:
-      // it is worth another ~25% but 17 tests in `printer-legacy` (7 of them
-      // snapshots) fail when the registry is shared, so state does leak today.
+      // Turning this off is not worth it, and the question is settled: measured
+      // across the workspace it saves ~160ms (1.82s -> 1.66s, 9%), and in return
+      // `printer-legacy` fails nondeterministically — four identical runs gave
+      // 35, 46, 41 and 5 failures, because which files share a worker varies.
+      // The other nine packages are already clean; the coupling is `Printer`'s
+      // mutable static state (`src/printer.ts`, only reset by `printer.test.ts`)
+      // plus a few whole-surface `vi.mock` factories that clobber each other in
+      // a shared registry. Both are worth fixing for order-independence, but on
+      // their own merits — not for 160ms.
       isolate: true,
       coverage: {
         enabled: options.coverage ?? false,
