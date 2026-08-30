@@ -3,8 +3,9 @@
 # `build-api-docs` + `build-docs` targets.
 set -euo pipefail
 
-WORK_DIR="${1:?usage: build-docs.sh <work-dir> [docusaurus-version]}"
+WORK_DIR="${1:?usage: build-docs.sh <work-dir> [docusaurus-version] [graphql-version]}"
 DOCUSAURUS_VERSION="${2:-3}"
+GRAPHQL_VERSION="${3:-16}"
 export REPO_ROOT="${REPO_ROOT:-$PWD}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -25,7 +26,7 @@ echo "::group::Build API docs"
 echo "::endgroup::"
 
 echo "::group::Build Docusaurus example docs"
-"$SHARED_DIR/setup-docusaurus-project.sh" "$DOCUSAURUS_VERSION" "$DOCUSAURUS_PROJECT_DIR" "$PKG_DIR"
+"$SHARED_DIR/setup-docusaurus-project.sh" "$DOCUSAURUS_VERSION" "$GRAPHQL_VERSION" "$DOCUSAURUS_PROJECT_DIR" "$PKG_DIR"
 "$SCRIPT_DIR/build-examples.sh" "$DOCUSAURUS_PROJECT_DIR" "$REPO_ROOT/website/examples"
 echo "::endgroup::"
 
