@@ -38,10 +38,11 @@ const parseFrameworkVersion = (
     return undefined;
   }
 
-  // named groups are typed as always present, but an optional group is not
-  const { major, minor } = parsed.groups as { major: string; minor?: string };
-
-  return { major: Number(major), minor: minor ? Number(minor) : 0 };
+  // an optional group is typed as always present, but is undefined when absent
+  return {
+    major: Number(parsed.groups.major),
+    minor: Number(parsed.groups.minor || 0),
+  };
 };
 
 /**
