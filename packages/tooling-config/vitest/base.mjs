@@ -103,6 +103,16 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       ],
       exclude: ["**/node_modules/**", "**/dist/**", "**/__data__/**"],
       testTimeout: options.testTimeout ?? 5000,
+      // Every package tests plain Node code with no native addon and no
+      // `process.chdir`, so worker threads are safe and avoid a child process
+      // per test file. Roughly 30% off the wall time of the larger packages,
+      // where module transform and import dominate over the assertions.
+      pool: "threads",
+      poolOptions: {
+        threads: {
+          useAtomics: true,
+        },
+      },
       // `graphql` ships a CJS and an ESM build with no `exports` map, so Vite
       // resolves it to `index.mjs` while an externalised dependency gets the
       // CJS `index.js` through Node. That yields two instances, and the library
@@ -117,6 +127,10 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       },
       // Replaces Jest's `testEnvironmentOptions.globalsCleanup`: each test file
       // runs in a fresh module registry so globals cannot leak between files.
+      //
+      // Do not flip this to `false` for speed without fixing the suites first:
+      // it is worth another ~25% but 17 tests in `printer-legacy` (7 of them
+      // snapshots) fail when the registry is shared, so state does leak today.
       isolate: true,
       coverage: {
         enabled: options.coverage ?? false,
