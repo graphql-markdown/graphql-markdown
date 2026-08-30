@@ -108,6 +108,15 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       // per test file. Roughly 30% off the wall time of the larger packages,
       // where module transform and import dominate over the assertions.
       pool: "threads",
+      // Vitest auto-appends the `github-actions` reporter when GITHUB_ACTIONS is
+      // set and no reporter is configured, and that reporter writes a "Vitest
+      // Test Report" into $GITHUB_STEP_SUMMARY — a file, so it shows up in
+      // neither stdout nor the job log. Stryker runs Vitest once per mutant,
+      // which stacked ~1200 of those reports into a single mutation job's
+      // summary. Naming a reporter here stops the auto-append; the Test workflow
+      // still asks for the GitHub reporter on the command line, where it is
+      // wanted, and CLI reporters replace this value rather than merge with it.
+      reporters: ["default"],
       // `graphql` ships a CJS and an ESM build with no `exports` map, so Vite
       // resolves it to `index.mjs` while an externalised dependency gets the
       // CJS `index.js` through Node. That yields two instances, and the library
