@@ -56,39 +56,17 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'packages/*/src/**', 'packages/*/tsconfig*.json', 'tsconfig.base.json') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
       - name: Build packages
-        run: bun run build
+        run: bun run build -- --filter=@graphql-markdown/${{ matrix.package }}...
 
-      - name: Run Unit Tests
-        id: unit
+      - name: Run Tests
         run: |
           cd packages/${{ matrix.package }}
-          bun test:unit -- --coverage --reporter=github-actions --reporter=default
-          [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
-          mkdir -p .nyc_output
-          mv ./coverage/coverage-final.json .nyc_output/unit.json
-
-      - name: Run Integration Tests
-        id: integration
-        run: |
-          cd packages/${{ matrix.package }}
-          bun test:integration -- --coverage --reporter=github-actions --reporter=default
-          [ ! -d "./coverage/" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
-          mkdir -p .nyc_output
-          mv ./coverage/coverage-final.json .nyc_output/integration.json
-
-      - name: Check Code Coverage
-        id: coverage
-        if: ${{ !steps.unit.outputs.skipped && !steps.integration.outputs.skipped }}
-        run: |
-          [ ! -d "packages/${{ matrix.package }}/.nyc_output" ] && echo "skipped=1" >> "$GITHUB_OUTPUT" && exit 0
-          cd packages/${{ matrix.package }}
-          bunx -y --quiet nyc merge .nyc_output .nyc_output/coverage.json
-          bunx -y --quiet nyc report --reporter=lcov --reporter=text --temp-dir .nyc_output
+          bun test:ci -- --coverage --reporter=github-actions --reporter=default
 
       - name: SonarCloud Scan
         id: sonarcloud

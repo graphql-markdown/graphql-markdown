@@ -112,6 +112,7 @@ When making your changes, remember to check your code by running:
 - `bun run ts:check` checks that the code is TS compliant
 - `bun run lint` checks that the code respects coding standards (ESLint + Prettier)
 - `bun run test:[unit|integration]` runs the test suites for unit tests or integration tests
+- `bun run test:all` runs every package's tests in a single Vitest instance, which is the quickest way to check the whole workspace (add `--watch` to keep it running)
 - `bun run knip` checks dependencies
 
 Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). Run them locally with `bun run smoke` (see [Tests](#tests) below).
@@ -233,6 +234,17 @@ There are 3 types of tests used in this project, all based on [Vitest](https://v
   > ```
   >
   > The script builds and packs the workspace once, then scaffolds each selected suite into its own throwaway project under a fresh scratch directory (printed at the end of the run — left in place for debugging, not auto-removed). Must be run from the repository root; `REPO_ROOT` can be overridden if needed.
+
+#### Test configuration
+
+Every package's `vitest.config.mjs` is a thin wrapper around `createPackageConfig` in [`packages/tooling-config/vitest/base.mjs`](packages/tooling-config/vitest/base.mjs) — change shared test behaviour there rather than in a package.
+
+Two settings in it are load-bearing for how fast the suite runs:
+
+- tests run on Vitest's `threads` pool, which is safe because every package tests plain Node code with no native addon and no `process.chdir`. If you add a test that needs a real child process, override `pool` in that package's config rather than in the shared base;
+- `isolate` stays `true`, deliberately. Turning it off saves ~160ms across the workspace (1.82s → 1.66s), and in exchange `printer-legacy` fails nondeterministically — four identical runs produced 35, 46, 41 and 5 failures, since which test files share a worker changes between runs. The other nine packages are already clean. The coupling is the `Printer` class's mutable static state, which only `printer.test.ts` resets, plus a few `vi.mock` factories that replace a module's whole surface instead of spreading `importOriginal()`. Both are worth fixing so tests do not depend on each other, but not in pursuit of 160ms.
+
+`test:ci` shuffles file order (`--sequence.shuffle`) to catch tests that depend on running after another file. If a test only passes in a particular order, fix the test rather than the flag.
 
 #### Mutation testing
 
