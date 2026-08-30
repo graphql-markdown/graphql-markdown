@@ -70,7 +70,7 @@
     "test": "vitest run --passWithNoTests",
     "test:unit": "vitest run --passWithNoTests tests/unit",
     "test:integration": "vitest run --passWithNoTests tests/integration",
-    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle --no-file-parallelism",
+    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle",
     "test:watch": "vitest --watch"
   },
   "dependencies": {

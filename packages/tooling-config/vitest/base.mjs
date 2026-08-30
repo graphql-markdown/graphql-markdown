@@ -103,6 +103,20 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       ],
       exclude: ["**/node_modules/**", "**/dist/**", "**/__data__/**"],
       testTimeout: options.testTimeout ?? 5000,
+      // Every package tests plain Node code with no native addon and no
+      // `process.chdir`, so worker threads are safe and avoid a child process
+      // per test file. Roughly 30% off the wall time of the larger packages,
+      // where module transform and import dominate over the assertions.
+      pool: "threads",
+      // Vitest auto-appends the `github-actions` reporter when GITHUB_ACTIONS is
+      // set and no reporter is configured, and that reporter writes a "Vitest
+      // Test Report" into $GITHUB_STEP_SUMMARY — a file, so it shows up in
+      // neither stdout nor the job log. Stryker runs Vitest once per mutant,
+      // which stacked ~1200 of those reports into a single mutation job's
+      // summary. Naming a reporter here stops the auto-append; the Test workflow
+      // still asks for the GitHub reporter on the command line, where it is
+      // wanted, and CLI reporters replace this value rather than merge with it.
+      reporters: ["default"],
       // `graphql` ships a CJS and an ESM build with no `exports` map, so Vite
       // resolves it to `index.mjs` while an externalised dependency gets the
       // CJS `index.js` through Node. That yields two instances, and the library
@@ -117,6 +131,16 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       },
       // Replaces Jest's `testEnvironmentOptions.globalsCleanup`: each test file
       // runs in a fresh module registry so globals cannot leak between files.
+      //
+      // Turning this off is not worth it, and the question is settled: measured
+      // across the workspace it saves ~160ms (1.82s -> 1.66s, 9%), and in return
+      // `printer-legacy` fails nondeterministically — four identical runs gave
+      // 35, 46, 41 and 5 failures, because which files share a worker varies.
+      // The other nine packages are already clean; the coupling is `Printer`'s
+      // mutable static state (`src/printer.ts`, only reset by `printer.test.ts`)
+      // plus a few whole-surface `vi.mock` factories that clobber each other in
+      // a shared registry. Both are worth fixing for order-independence, but on
+      // their own merits — not for 160ms.
       isolate: true,
       coverage: {
         enabled: options.coverage ?? false,

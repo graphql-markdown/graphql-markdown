@@ -34,6 +34,12 @@ const config = {
     // importing the mutated module directly, so Vitest's related-test
     // filtering would skip the tests that actually cover those mutants.
     related: false,
+    // Only `dir`, `related` and `configFile` are accepted here — the runner's
+    // schema sets `additionalProperties: false`, so anything else is a hard
+    // config error rather than an ignored key. In particular there is no
+    // `reporters` option: the runner never forwards one to Vitest, and it
+    // already silences test output with `onConsoleLog: () => false`. To make a
+    // Stryker run quieter, use the top-level `logLevel` instead.
   },
   warnings: true,
 };
