@@ -67,7 +67,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        docusaurus: [2, 3]
+        docusaurus: [3]
         graphql: [16, 17]
     steps:
       - name: Checkout Code Base
@@ -95,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        docusaurus: [2, 3]
+        docusaurus: [3]
         graphql: [16, 17]
         case:
           - name: local schema, no options
