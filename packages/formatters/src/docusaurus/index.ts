@@ -162,12 +162,6 @@ export const formatMDXFrontmatter = (
 };
 
 /**
- * Creates a Docusaurus formatter.
- * Captures `meta` in closure so `formatMDXAdmonition` can detect the Docusaurus version.
- * @param meta - Optional metadata used to detect Docusaurus version
- * @returns A complete {@link Formatter} implementation for Docusaurus MDX output
- */
-/**
  * Formats a permalink for a section header.
  *
  * Docusaurus 3.10 introduced a heading id syntax based on a native MDX comment,
@@ -198,6 +192,12 @@ export const formatMDXPermalink = (
   return formatMDXEscapedPermalink(id);
 };
 
+/**
+ * Creates a Docusaurus formatter.
+ * Captures `meta` in closure so `formatMDXAdmonition` can detect the Docusaurus version.
+ * @param meta - Optional metadata used to detect Docusaurus version
+ * @returns A complete {@link Formatter} implementation for Docusaurus MDX output
+ */
 export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
   return {
     formatMDXBadge,
