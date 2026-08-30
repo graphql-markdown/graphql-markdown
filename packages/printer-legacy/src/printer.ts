@@ -657,7 +657,18 @@ export class Printer implements IPrinter {
   };
 
   /**
-   * Renders a page section, optionally prefixing a heading when a title is present.
+   * Renders a page section into markdown text.
+   *
+   * Accepts a nullable section-like value and safely normalizes it into a string.
+   * If the section has a valid `title`, a markdown heading is prefixed using the
+   * provided `level` (defaulting to 3). If no valid title exists, only content is returned.
+   *
+   * Content can be a string, a nested section object, or an array of nested entries.
+   * Nested content is rendered recursively by calling `renderPageSection` for each child.
+   * Invalid, unsupported, or effectively empty inputs return an empty string.
+   *
+   * @param section - A nullable page section value to render. Supports nested structures.
+   * @returns The rendered markdown for the section, or an empty string when nothing renderable exists.
    */
   private static readonly renderPageSection = (
     section: Maybe<PageSections[keyof PageSections]>,
