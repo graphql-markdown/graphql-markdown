@@ -2,7 +2,6 @@
  * Vocs formatter for GraphQL documentation output.
  *
  * Produces MDX compatible with Vite/Vocs using its native callout syntax
- * and Material UI Chip components for badges.
  *
  * @packageDocumentation
  */
@@ -26,8 +25,6 @@ import {
 
 /** MDX import statement and inline component definitions prepended to every generated file. */
 export const mdxDeclaration: MDXString = `
-import Chip from '@mui/material/Chip';
-
 export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5em' }}>&nbsp;●&nbsp;</span></>
 ` as MDXString;
 
@@ -35,14 +32,14 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 export const mdxExtension = ".mdx" as const;
 
 /**
- * Formats a badge using the Material UI `<Chip>` component.
- * Maps `DEPRECATED` classname to `warning` color; all others use `info`.
+ * Formats a badge using Vocs native text directive (`:badge[...]`).
+ * Maps `DEPRECATED` classname to `warning` color; all others use default.
  * @param badge - Badge data containing text and optional classname
- * @returns Formatted MUI Chip component string
+ * @returns Formatted Vocs badge string
  */
 export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
-  const color = classname === "DEPRECATED" ? "warning" : "info";
-  return `<Chip color="${color}" label="${text as string}" size="small" variant="outlined"/>` as MDXString;
+  const badgeType = classname === "DEPRECATED" ? "{warning}" : "";
+  return `:badge[${text as string}]${badgeType}` as MDXString;
 };
 
 /**

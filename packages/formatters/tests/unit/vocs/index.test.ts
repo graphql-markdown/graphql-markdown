@@ -12,8 +12,7 @@ import {
 } from "../../../src/vocs/index";
 
 describe("mdxDeclaration", () => {
-  test("imports MUI Chip and defines Bullet component", () => {
-    expect(mdxDeclaration).toContain("@mui/material/Chip");
+  test("defines Bullet component", () => {
     expect(mdxDeclaration).toContain("Bullet");
   });
 });
@@ -21,8 +20,7 @@ describe("mdxDeclaration", () => {
 describe("formatMDXBadge", () => {
   test("renders MUI Chip for default classname", () => {
     const result = formatMDXBadge({ text: "Required", classname: "required" });
-    expect(result).toContain('<Chip color="info"');
-    expect(result).toContain('label="Required"');
+    expect(result).toMatch(":badge[Required]");
   });
 
   test("renders caution color for DEPRECATED classname", () => {
@@ -30,7 +28,7 @@ describe("formatMDXBadge", () => {
       text: "Deprecated",
       classname: "DEPRECATED",
     });
-    expect(result).toContain('color="warning"');
+    expect(result).toMatch(":badge[Deprecated]{warning}");
   });
 });
 
