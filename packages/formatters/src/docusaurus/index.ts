@@ -28,10 +28,6 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
-import { formatMDXPermalink } from "../defaults";
-
-export { formatMDXPermalink } from "../defaults";
-
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
@@ -162,6 +158,22 @@ export const formatMDXFrontmatter = (
  * @param meta - Optional metadata used to detect Docusaurus version
  * @returns A complete {@link Formatter} implementation for Docusaurus MDX output
  */
+/**
+ * Formats a permalink for a section header using the MDX comment syntax
+ * introduced in Docusaurus 3.10.
+ *
+ * The braces must NOT be escaped: Docusaurus extracts the heading id from a
+ * real MDX expression node, so an escaped token would be rendered as text.
+ *
+ * @see https://docusaurus.io/blog/releases/3.10#strict-heading-ids
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = (id: string): MDXString => {
+  return `{/* #${id} */}` as MDXString;
+};
+
 export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
   return {
     formatMDXBadge,

@@ -23,9 +23,20 @@ import {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXNameEntity,
-  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+
+/**
+ * Starlight has no built-in custom heading id syntax, and generated pages are
+ * MDX, where an unescaped `{#id}` is a parsing error. No permalink is emitted;
+ * Starlight derives heading ids from the heading text.
+ *
+ * @param _id - The ID of the section header (unused)
+ * @returns An empty string
+ */
+export const formatMDXPermalink = (_id: string): MDXString => {
+  return "" as MDXString;
+};
 
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;
@@ -76,7 +87,6 @@ export {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXNameEntity,
-  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 

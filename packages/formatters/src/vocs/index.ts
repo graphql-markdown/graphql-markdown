@@ -21,8 +21,22 @@ import {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
-  formatMDXPermalink,
 } from "../defaults";
+
+/**
+ * Vocs has no custom heading id syntax, and reserves `[...]` after a heading
+ * for the heading subtext. Generated pages are MDX, where an unescaped
+ * `{#id}` is a parsing error, so no permalink is emitted; Vocs derives heading
+ * ids from the heading text.
+ *
+ * @see https://vocs.dev/docs/markdown
+ *
+ * @param _id - The ID of the section header (unused)
+ * @returns An empty string
+ */
+export const formatMDXPermalink = (_id: string): MDXString => {
+  return "" as MDXString;
+};
 
 /** MDX import statement and inline component definitions prepended to every generated file. */
 export const mdxDeclaration: MDXString = `
@@ -99,7 +113,6 @@ export {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
-  formatMDXPermalink,
 } from "../defaults";
 
 /**

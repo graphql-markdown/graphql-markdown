@@ -32,11 +32,12 @@ import {
 import { printCustomTags } from "./directive";
 
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
-import { SectionLevels } from "./const/options";
-import { createDefaultFormatter } from "./formatter";
+import { DEFAULT_OPTIONS, SectionLevels } from "./const/options";
 
 /**
  * Prints a permalink for the section header if enabled in the options.
+ *
+ * The permalink syntax is formatter specific, see `formatMDXPermalink`.
  *
  * @param id - The ID of the section header
  * @param options - Configuration options for printing
@@ -50,13 +51,10 @@ const printPermalink = (
     return undefined;
   }
 
-  // Use the formatter from options (either custom or default)
-  if (options.formatMDXPermalink) {
-    return options.formatMDXPermalink(id);
-  }
+  const format =
+    options.formatMDXPermalink ?? DEFAULT_OPTIONS.formatMDXPermalink;
 
-  // Fallback to default formatter (should not happen if Printer.init was called)
-  return createDefaultFormatter().formatMDXPermalink(id);
+  return format(id);
 };
 
 /**

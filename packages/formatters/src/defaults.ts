@@ -121,10 +121,15 @@ export const formatMDXSpecifiedByLink = (url: string): MDXString => {
 };
 
 /**
- * Formats a permalink for a section header using a raw string.
+ * Formats a permalink for a section header using the classic `{#id}` syntax.
+ *
+ * This is the syntax supported by most Markdown-based generators (Hugo,
+ * mdBook, DocFX, MkDocs with `attr_list`). Presets targeting a framework that
+ * expects another syntax override this function.
+ *
  * @param id - The ID of the section header
  * @returns Formatted permalink string
  */
 export const formatMDXPermalink = (id: string): MDXString => {
-  return String.raw`\{/* #${id} */\}` as MDXString;
+  return `{#${id}}` as MDXString;
 };

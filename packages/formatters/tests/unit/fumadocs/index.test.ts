@@ -109,7 +109,7 @@ describe("formatMDXNameEntity", () => {
 
 describe("formatMDXPermalink", () => {
   test("renders permalink with proper formatting", () => {
-    expect(formatMDXPermalink("foo")).toBe("\\{/* #foo */\\}");
+    expect(formatMDXPermalink("foo")).toBe("[#foo]");
   });
 });
 
