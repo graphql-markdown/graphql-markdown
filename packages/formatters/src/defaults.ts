@@ -119,3 +119,36 @@ export const formatMDXNameEntity = (
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
   return `<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="${url}" title="Specified by ${url}">⎘</a></span>` as MDXString;
 };
+
+/**
+ * Formats a permalink for a section header using the classic `{#id}` syntax,
+ * escaped so that it stays valid MDX.
+ *
+ * MDX parses an unescaped `{` as the start of an expression, and `{#id}` is not
+ * a valid one, so presets generating `.mdx` pages must use this variant.
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ *
+ * @example
+ * ```js
+ * formatMDXEscapedPermalink("my-id"); // \{#my-id\}
+ * ```
+ */
+export const formatMDXEscapedPermalink = (id: string): MDXString => {
+  return String.raw`\{#${id}\}` as MDXString;
+};
+
+/**
+ * Formats a permalink for a section header using the classic `{#id}` syntax.
+ *
+ * This is the syntax supported by most Markdown-based generators (Hugo,
+ * mdBook, DocFX, MkDocs with `attr_list`). Presets targeting a framework that
+ * expects another syntax override this function.
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = (id: string): MDXString => {
+  return `{#${id}}` as MDXString;
+};

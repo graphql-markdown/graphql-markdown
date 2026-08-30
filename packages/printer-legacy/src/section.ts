@@ -32,7 +32,30 @@ import {
 import { printCustomTags } from "./directive";
 
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
-import { SectionLevels } from "./const/options";
+import { DEFAULT_OPTIONS, SectionLevels } from "./const/options";
+
+/**
+ * Prints a permalink for the section header if enabled in the options.
+ *
+ * The permalink syntax is formatter specific, see `formatMDXPermalink`.
+ *
+ * @param id - The ID of the section header
+ * @param options - Configuration options for printing
+ * @returns Formatted permalink string or undefined if not applicable
+ */
+const printPermalink = (
+  id: Maybe<string>,
+  options: PrintTypeOptions,
+): string | undefined => {
+  if (!options.sectionHeaderId || !id) {
+    return undefined;
+  }
+
+  const format =
+    options.formatMDXPermalink ?? DEFAULT_OPTIONS.formatMDXPermalink;
+
+  return format(id);
+};
 
 /**
  * Prints a single section item with its associated metadata.
@@ -70,10 +93,7 @@ export const printSectionItem = <T>(
   const badges = printBadges(type, options);
   const tags = printCustomTags(type, options);
   const parentTypeLink = printParentLink(type, options);
-  const permalink =
-    options.sectionHeaderId && link.id
-      ? String.raw`\{#${link.id}\}`
-      : undefined; // use raw string to prevent MDX from interpreting the curly braces as JSX
+  const permalink = printPermalink(link.id, options);
   const metadata = [badges, tags, permalink].filter(Boolean).join(" ");
   const title =
     `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${metadata} ${MARKDOWN_EOL}` as MDXString;

@@ -7,6 +7,7 @@ import {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
   mdxExtension,
 } from "../../../src/mkdocs";
@@ -136,6 +137,12 @@ describe("formatMDXNameEntity", () => {
 
   test("renders backtick code without parent", () => {
     expect(formatMDXNameEntity("field")).toBe("`field`");
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe("{#foo}");
   });
 });
 

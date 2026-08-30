@@ -25,6 +25,18 @@ import {
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
+/**
+ * Formats a permalink for a section header using the Fumadocs `[#id]` syntax.
+ *
+ * @see https://www.fumadocs.dev/docs/headless/mdx/headings
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = (id: string): MDXString => {
+  return `[#${id}]` as MDXString;
+};
+
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;
 
@@ -92,6 +104,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

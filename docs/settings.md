@@ -78,7 +78,7 @@ Use these options to tweak some of the static documentation generator features:
 - `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When enabled, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). When not set, the order depends on document generator folders sorting and no prefixes are added.
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) &mdash; **ONLY FOR DOCUSAURUS**
-- `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. Conceptually this uses the syntax `### Section {#ID}`, but the generated MDX will escape the braces as in `### Section \{#id\}` so that MDX does not treat `{...}` as an expression.
+- `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. The syntax depends on the formatter: `### Section {/* #ID */}` for Docusaurus 3.10 and later (see [Strict Heading IDs](https://docusaurus.io/blog/releases/3.10#strict-heading-ids) and [heading IDs](https://docusaurus.io/docs/markdown-features/toc#heading-ids)), `### Section [#ID]` for Fumadocs, and the classic `### Section {#ID}` for the other formatters. Starlight and Vocs have no custom header ID syntax, so the classic one is escaped as `### Section \{#ID\}` to keep the page valid MDX, and is only resolved if a remark plugin such as `remark-custom-heading-id` is configured. Override `formatMDXPermalink` in a [custom formatter](#formatter) to change it.
 
 | Setting                      | CLI flag        | Default |
 | ---------------------------- | --------------- | ------- |
@@ -247,6 +247,7 @@ The custom module can export individual formatter functions:
 | `formatMDXFrontmatter`     | `(props?, formatted?) => string`          | Format page frontmatter           |
 | `formatMDXLink`            | `(link) => { text, url }`                 | Transform type links              |
 | `formatMDXNameEntity`      | `(name, parentType?) => string`           | Format named entity references    |
+| `formatMDXPermalink`       | `(id) => string`                          | Format section header permalinks  |
 | `formatMDXSpecifiedByLink` | `(url) => string`                         | Format scalar specification links |
 
 For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.

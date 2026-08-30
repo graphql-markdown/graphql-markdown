@@ -25,9 +25,11 @@ import {
   mergeFrontmatterLines,
 } from "@graphql-markdown/helpers";
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
-import { formatMDXBullet } from "../defaults";
+import { formatMDXBullet, formatMDXPermalink } from "../defaults";
 
-export const __default = { formatMDXBullet };
+export { formatMDXPermalink } from "../defaults";
+
+export const __default = { formatMDXBullet, formatMDXPermalink };
 
 /** File extension used for generated pages — HonKit renders plain Markdown to HTML. */
 export const mdxExtension = ".md" as const;
@@ -177,6 +179,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };
