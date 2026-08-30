@@ -12,24 +12,17 @@
   },
   "dependencies": {
     "@cmfcmf/docusaurus-search-local": "2.0.1",
-    "@docusaurus/core": "^3.9.2",
-    "@docusaurus/faster": "^3.9.2",
-    "@docusaurus/preset-classic": "^3.9.2",
-    "@docusaurus/theme-mermaid": "^3.9.2",
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/faster": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "@docusaurus/theme-mermaid": "^3.10.2",
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
-    "docusaurus-plugin-llms": "^0.3.0",
+    "docusaurus-plugin-llms": "^0.5.1",
     "prism-react-renderer": "^2.4.1",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "overrides": {
-    "js-yaml": "^4.3.1",
-    "gray-matter": {
-      "js-yaml": "^4.3.1"
-    },
-    "nanoid": "^3.3.17"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "browserslist": {
     "production": [
@@ -44,6 +37,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.14"
   }
 }
