@@ -29,11 +29,16 @@ import {
   saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
-import { formatMDXBullet, formatMDXLink } from "../defaults";
+import {
+  formatMDXBullet,
+  formatMDXLink,
+  formatMDXPermalink,
+} from "../defaults";
 
 export const __default = {
   formatMDXBullet,
   formatMDXLink,
+  formatMDXPermalink,
 };
 
 const ADMONITION_TYPE_MAP: Record<string, string> = {
@@ -173,7 +178,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   }
 };
 
-export { formatMDXBullet } from "../defaults";
+export { formatMDXBullet, formatMDXPermalink } from "../defaults";
 
 /**
  * Creates an MkDocs Material formatter.
@@ -189,6 +194,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

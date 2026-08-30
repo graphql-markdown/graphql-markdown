@@ -259,7 +259,11 @@ describe("config", () => {
           baseURL: DEFAULT_OPTIONS.baseURL,
           customDirective: DEFAULT_OPTIONS.customDirective,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
-          docOptions: DEFAULT_OPTIONS.docOptions,
+          docOptions: {
+            ...DEFAULT_OPTIONS.docOptions,
+            generatorFrameworkName: undefined,
+            generatorFrameworkVersion: undefined,
+          },
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           force: DEFAULT_OPTIONS.force,
           homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/), //NOSONAR
@@ -306,6 +310,8 @@ describe("config", () => {
         docOptions: {
           index: false,
           frontMatter: { draft: true },
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
           sectionHeaderId: false,
         },
         printTypeOptions: {
@@ -337,6 +343,8 @@ describe("config", () => {
         docOptions: {
           ...configFileOpts.docOptions,
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
           frontMatter: { draft: true },
         },
         groupByDirective: configFileOpts.groupByDirective,
@@ -430,6 +438,8 @@ describe("config", () => {
         tmpDir: cliOpts.tmp,
         docOptions: {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
           frontMatter: {},
           index: true,
           sectionHeaderId: false,
@@ -506,6 +516,8 @@ describe("config", () => {
         tmpDir: configFileOpts.tmpDir,
         docOptions: {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
           frontMatter: { draft: true, page_next: null },
           index: true,
           sectionHeaderId: true,
@@ -540,7 +552,11 @@ describe("config", () => {
         baseURL: configFileOpts.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
-        docOptions: DEFAULT_OPTIONS.docOptions,
+        docOptions: {
+          ...DEFAULT_OPTIONS.docOptions,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
+        },
         force: DEFAULT_OPTIONS.force,
         groupByDirective: undefined,
         homepageLocation: DEFAULT_OPTIONS.homepage,
@@ -574,7 +590,11 @@ describe("config", () => {
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
-        docOptions: DEFAULT_OPTIONS.docOptions,
+        docOptions: {
+          ...DEFAULT_OPTIONS.docOptions,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
+        },
         force: cliOpts.force,
         groupByDirective: DEFAULT_OPTIONS.groupByDirective,
         homepageLocation: DEFAULT_OPTIONS.homepage,
@@ -612,7 +632,11 @@ describe("config", () => {
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
-        docOptions: DEFAULT_OPTIONS.docOptions,
+        docOptions: {
+          ...DEFAULT_OPTIONS.docOptions,
+          generatorFrameworkName: undefined,
+          generatorFrameworkVersion: undefined,
+        },
         force: configFileOpts.force,
         groupByDirective: DEFAULT_OPTIONS.groupByDirective,
         homepageLocation: DEFAULT_OPTIONS.homepage,
@@ -893,6 +917,19 @@ describe("config", () => {
 
       expect(index).toBeFalsy();
       expect(frontMatter).toStrictEqual({ draft: true });
+    });
+
+    test("returns object with the generator framework from config", () => {
+      expect.assertions(2);
+
+      const { generatorFrameworkName, generatorFrameworkVersion } =
+        getDocOptions(undefined, {
+          generatorFrameworkName: "docusaurus",
+          generatorFrameworkVersion: "3.10.2",
+        });
+
+      expect(generatorFrameworkName).toBe("docusaurus");
+      expect(generatorFrameworkVersion).toBe("3.10.2");
     });
   });
 

@@ -510,6 +510,10 @@ export const getDocOptions = (
       ...deprecated,
       ...configOptions?.frontMatter,
     },
+    // the framework name and version are set by the framework plugin, and are
+    // needed by the formatters to adjust their output to the target version
+    generatorFrameworkName: configOptions?.generatorFrameworkName,
+    generatorFrameworkVersion: configOptions?.generatorFrameworkVersion,
     index,
     sectionHeaderId,
   } as Required<ConfigDocOptions>;

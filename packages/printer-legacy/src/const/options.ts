@@ -17,6 +17,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "@graphql-markdown/formatters/defaults";
 
@@ -104,5 +105,6 @@ export const DEFAULT_OPTIONS: Required<
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 };

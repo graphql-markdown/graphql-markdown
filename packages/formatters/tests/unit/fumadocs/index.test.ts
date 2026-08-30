@@ -7,6 +7,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
   mdxDeclaration,
 } from "../../../src/fumadocs";
@@ -103,6 +104,12 @@ describe("formatMDXNameEntity", () => {
     expect(formatMDXNameEntity("field")).toBe(
       '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">field</code></span>',
     );
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe("[#foo]");
   });
 });
 

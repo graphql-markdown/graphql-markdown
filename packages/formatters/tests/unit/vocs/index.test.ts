@@ -7,6 +7,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
   mdxDeclaration,
 } from "../../../src/vocs/index";
@@ -101,6 +102,12 @@ describe("formatMDXNameEntity", () => {
     const result = formatMDXNameEntity("field");
     expect(result).toContain("field");
     expect(result).not.toContain(".");
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe(String.raw`\{#foo\}`);
   });
 });
 

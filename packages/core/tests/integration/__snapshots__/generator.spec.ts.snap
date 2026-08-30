@@ -164,4 +164,3 @@ exports[`renderer > generateDocFromSchema() > generates Markdown document struct
   "types/scalars/url.mdx": "url",
 }
 `;
-

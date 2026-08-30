@@ -8,6 +8,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../../../src/docfx";
 
@@ -170,6 +171,12 @@ describe("formatMDXNameEntity", () => {
     expect(formatMDXNameEntity("field")).toBe(
       '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">field</code></span>',
     );
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe("{#foo}");
   });
 });
 

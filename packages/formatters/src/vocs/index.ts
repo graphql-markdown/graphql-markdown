@@ -19,9 +19,25 @@ import { appendLinkExtension } from "@graphql-markdown/helpers";
 import { MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
   formatMDXDetails,
+  formatMDXEscapedPermalink,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+
+/**
+ * Formats a permalink for a section header, using the classic `{#id}` syntax
+ * escaped to remain valid MDX.
+ *
+ * Vocs has no custom header id syntax, so the permalink is inert unless a
+ * remark plugin is configured. Turn it off with
+ * `docOptions.sectionHeaderId: false`.
+ *
+ * @see https://vocs.dev/docs/markdown
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = formatMDXEscapedPermalink;
 
 /** MDX import statement and inline component definitions prepended to every generated file. */
 export const mdxDeclaration: MDXString = `
@@ -114,6 +130,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

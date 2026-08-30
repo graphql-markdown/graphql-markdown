@@ -33,7 +33,7 @@ describe("section", () => {
 
       expect(section).toMatchInlineSnapshot(String.raw`
 {
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
 
 
 
@@ -65,7 +65,7 @@ describe("section", () => {
         <details class="gqlmd-mdx-details">
         <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \\{#section-content\\} 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
 
 
 
@@ -92,7 +92,7 @@ describe("section", () => {
 
       expect(section).toMatchInlineSnapshot(String.raw`
 {
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) \{#section-content\} 
+  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
 
 
 
@@ -159,15 +159,15 @@ describe("section", () => {
       const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">one</code></span>](#one) \{#one\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">one</code></span>](#one) {#one} 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">two</code></span>](#two) \{#two\} 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">two</code></span>](#two) {#two} 
 
 
 
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">three</code></span>](#three) \{#three\} 
+#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">three</code></span>](#three) {#three} 
 
 "
 `);
@@ -260,7 +260,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> \{#entity-type-name\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name} 
 
 "
 `);
@@ -284,7 +284,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> \{#entity-type-name\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name} 
 
 "
 `);
@@ -303,7 +303,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       });
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) \{#entity-type-name\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name} 
 
 "
 `);
@@ -324,9 +324,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) \{#entity-type-name\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name} 
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#parameter-type-name\} 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name} 
 
 "
 `);
@@ -360,9 +360,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       );
 
       expect(first).toContain("(#entity-type-name-field-one-id)");
-      expect(first).toContain(String.raw`\{#entity-type-name-field-one-id\}`);
+      expect(first).toContain("{#entity-type-name-field-one-id}");
       expect(second).toContain("(#entity-type-name-field-two-id)");
-      expect(second).toContain(String.raw`\{#entity-type-name-field-two-id\}`);
+      expect(second).toContain("{#entity-type-name-field-two-id}");
     });
 
     test("returns Markdown #### link section with non empty nullable list [!]", () => {
@@ -376,7 +376,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#entity-type-name-list\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list} 
 
 "
 `);
@@ -395,7 +395,7 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> \{#entity-type-name-list\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list} 
 
 "
 `);
@@ -475,14 +475,14 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       });
 
       expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> \{#entity-type-name\} 
+"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> {#entity-type-name} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 <span>
 
 </span>
 </fieldset>
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> \{#parameter-type-name\} 
+##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name} 
 
 
 

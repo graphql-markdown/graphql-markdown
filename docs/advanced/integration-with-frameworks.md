@@ -125,6 +125,7 @@ A custom MDX module can export individual formatter functions:
 | `formatMDXFrontmatter`     | `(props?, formatted?: string[]) => string`                         | Format page frontmatter                          |
 | `formatMDXLink`            | `(link: { text, url }) => { text, url }`                           | Transform type links                             |
 | `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                    | Format named entity references                   |
+| `formatMDXPermalink`       | `(id: string) => string`                                           | Format section header permalinks                 |
 | `formatMDXSpecifiedByLink` | `(url: string) => string`                                          | Format scalar specification links                |
 
 Optional exports:
