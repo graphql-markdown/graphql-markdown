@@ -716,7 +716,11 @@ export class Printer implements IPrinter {
   };
 
   /**
-   * Runtime guard for built-in page content section keys.
+   * Runtime type guard for built-in type page content section keys.
+   *
+   * A value qualifies as a valid content section when it is a string key
+   * included in `TYPE_PAGE_SECTION_ORDER` (that is, one of the built-in
+   * content sections used when rendering type pages).
    */
   private static readonly isTypePageContentSection = (
     section: unknown,
