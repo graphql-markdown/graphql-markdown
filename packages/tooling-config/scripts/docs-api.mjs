@@ -84,8 +84,14 @@ async function generateTypeDoc() {
   }
 
   if (result.exitCode !== 0 || result.signal !== null) {
+    if (result.signal !== null) {
+      throw new Error(
+        `bun x typedoc terminated by signal ${String(result.signal)}`,
+      );
+    }
+
     throw new Error(
-      `bun x typedoc exited with code ${String(result.exitCode)}${result.signal ? ` and signal ${String(result.signal)}` : ""}`,
+      `bun x typedoc exited with non-zero code ${String(result.exitCode)}`,
     );
   }
 }
