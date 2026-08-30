@@ -25,6 +25,7 @@ jobs:
       SOURCE_DIR: project
       TARGET_DIR: website
       DOCUSAURUS_VERSION: 3
+      GRAPHQL_VERSION: 17
     steps:
       - name: Setup git
         run: |
@@ -50,7 +51,7 @@ jobs:
           working-directory: ${{ env.SOURCE_DIR }}
 
       - name: Build docs
-        run: ./website/scripts/build-docs.sh "$RUNNER_TEMP/docs-build" "$DOCUSAURUS_VERSION"
+        run: ./website/scripts/build-docs.sh "$RUNNER_TEMP/docs-build" "$DOCUSAURUS_VERSION" "$GRAPHQL_VERSION"
         working-directory: ${{ env.SOURCE_DIR }}
         env:
           REPO_ROOT: ${{ github.workspace }}/${{ env.SOURCE_DIR }}

@@ -84,8 +84,14 @@ async function generateTypeDoc() {
   }
 
   if (result.exitCode !== 0 || result.signal !== null) {
+    if (result.signal !== null) {
+      throw new Error(
+        `bun x typedoc terminated by signal ${String(result.signal)}`,
+      );
+    }
+
     throw new Error(
-      `bun x typedoc exited with code ${String(result.exitCode)}${result.signal ? ` and signal ${String(result.signal)}` : ""}`,
+      `bun x typedoc exited with non-zero code ${String(result.exitCode)}`,
     );
   }
 }
@@ -156,6 +162,7 @@ async function createCategoryFiles(
   }
 }
 
+/** Create generated-index category metadata files for all top-level API sections. */
 async function writeAllCategoryFiles() {
   for (const entry of await readdir(API_DIR, { withFileTypes: true })) {
     if (entry.isDirectory()) {
@@ -164,6 +171,10 @@ async function writeAllCategoryFiles() {
   }
 }
 
+/**
+ * Flatten the workspace output directory into api/ by moving all children up one level.
+ * Removes the now-unneeded workspace directory after all moves complete.
+ */
 async function flattenWorkspaceDirectory() {
   const workspaceDir = join(API_DIR, WORKSPACE);
   // Move generated package docs from api/@graphql-markdown/* to api/*.
