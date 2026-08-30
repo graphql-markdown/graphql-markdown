@@ -116,11 +116,13 @@ When making your changes, remember to check your code by running:
 
 Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). Run them locally with `bun run smoke` (see [Tests](#tests) below).
 
-> Note that `bun run ts:check`, `bun run lint` and `bun run test:unit` will be automatically triggered when committing code.
+> Note that `bun run ts:check`, `bun run lint`, `bun run prettier`, `bun run test:unit` and `bun run knip` will be automatically triggered when committing code (see [`.husky/pre-commit`](.husky/pre-commit)).
 
 ### Committing changes
 
-This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
+This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages, with an emoji prefix provided by [cz-emoji](https://github.com/ngryman/cz-emoji). When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
+
+The available types are configured in the root `package.json` (`config.cz-emoji`), and result in messages such as `✨ feat: add support for X` or `🐛 fix: resolve Y`. The same convention applies to pull request titles.
 
 ## Coding style
 
@@ -143,8 +145,13 @@ Support packages:
 - `graphql` - Schema loading and parsing
 - `logger` - Logging functionality
 - `printer-legacy` - Legacy markdown generation
+- `formatters` - Framework presets (Docusaurus, Starlight, MkDocs, Hugo, mdBook, Fumadocs, Vocs, DocFX)
 - `diff` - Schema diffing (optional)
 - `helpers` - Directive helpers (optional)
+
+Tooling:
+
+- `tooling-config` - Shared ESLint, Prettier, TypeScript, Vitest, Stryker, TypeDoc and Husky configuration, plus the build and publish scripts
 
 Each package contains:
 
@@ -156,12 +163,14 @@ package/
 └── package.json # Package manifest
 ```
 
+> Not every package has all of them: `types` ships types only (no `tests/` nor `docs/`), and `tooling-config` holds shared configuration instead of a `src/`.
+
 End-to-end (smoke) tests live outside packages in a top-level directory:
 
 ```text
 tests/e2e/
 ├── __data__/           # Shared fixtures (schemas, markdown, shared config options)
-├── helpers/            # Shared test helpers (CLI runner)
+├── helpers/            # Shared test helpers (CLI runner, Docusaurus test webpack plugin)
 ├── cli/                # CLI-specific specs, Vitest config, and fixture data
 │   ├── __data__/
 │   ├── specs/
@@ -192,15 +201,15 @@ There are a lot of ways to test your code, and you should always add tests when 
 
 There are 3 types of tests used in this project, all based on [Vitest](https://vitest.dev/):
 
-- `unit` for testing individual units of code (class methods and functions). If your changes are located in `src/utils`, then this is likely where you should add your tests.
+- `unit` for testing individual units of code (class methods and functions). This is where most tests belong, in the `tests/unit` folder of the package you changed.
 
   > You should always mock external calls (see [Vitest mocking](https://vitest.dev/guide/mocking)).
 
-- `integration` for testing the logic of the main classes. If your changes are located in `src/lib`, then you will need to add your tests here.
+- `integration` for testing how the modules of a package work together. Unit and integration tests live side by side in each package, under `tests/unit` and `tests/integration`.
 
   > If your tests interact with the filesystem, then you should make use of file system mocking with `memfs`.
 
-- `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/`.
+- `smoke` (aka `e2e`) for testing the whole plugin behaviour. If your changes affect the CLI or options, then you will need to update those tests. Smoke tests live in `tests/e2e/` and are split by package (`cli/` and `docusaurus/`). Shared fixtures and helpers are in `tests/e2e/__data__/` and `tests/e2e/helpers/` (CLI runner and the Docusaurus test webpack plugin).
 
   > The tests scaffold throwaway CLI/Docusaurus projects and run automatically in CI on every pull request (see [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml)). To reproduce a run locally, use the bundled script:
   >
@@ -215,6 +224,12 @@ There are 3 types of tests used in this project, all based on [Vitest](https://v
   > bun run smoke -- docusaurus2
   > bun run smoke -- docusaurus3
   > bun run smoke -- all
+  > ```
+  >
+  > A second argument selects the GraphQL major version to install (`16` or `17`, default `16`), and applies to every suite, including `all`:
+  >
+  > ```shell
+  > bun run smoke -- all 17
   > ```
   >
   > The script builds and packs the workspace once, then scaffolds each selected suite into its own throwaway project under a fresh scratch directory (printed at the end of the run — left in place for debugging, not auto-removed). Must be run from the repository root; `REPO_ROOT` can be overridden if needed.
@@ -311,10 +326,14 @@ Packages must be published in dependency order:
 
 1. `types` (no internal deps)
 2. `utils`, `logger`, `graphql`
-3. `helpers`, `diff`, `printer-legacy`
-4. `core`
-5. `cli`
-6. `docusaurus`
+3. `helpers`, `diff`
+4. `formatters`
+5. `printer-legacy`
+6. `core`
+7. `cli`
+8. `docusaurus`
+
+This is the order used by [`publish-release.sh`](packages/tooling-config/scripts/publish-release.sh); keep both in sync when adding a package.
 
 ### Troubleshooting
 
