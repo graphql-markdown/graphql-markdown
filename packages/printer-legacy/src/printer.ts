@@ -728,7 +728,11 @@ export class Printer implements IPrinter {
   };
 
   /**
-   * Runtime guard for header-only page section keys.
+   * Runtime type guard for header-only type page section keys.
+   *
+   * A value is considered a valid header section when it is a string and
+   * matches one of the built-in header keys defined in `TYPE_PAGE_HEADER_ORDER`.
+   * Returning `true` narrows `section` to `TypePageHeaderSection`.
    */
   private static readonly isTypePageHeaderSection = (
     section: unknown,
