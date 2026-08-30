@@ -182,8 +182,39 @@ describe("formatMDXDetails", () => {
 });
 
 describe("formatMDXPermalink", () => {
-  test("renders permalink with proper formatting", () => {
-    expect(formatMDXPermalink("foo")).toBe("{/* #foo */}");
+  const meta = (generatorFrameworkVersion: string) => {
+    return { generatorFrameworkName: "docusaurus", generatorFrameworkVersion };
+  };
+
+  test("returns the MDX comment syntax for Docusaurus 3.10", () => {
+    expect(formatMDXPermalink("foo", meta("3.10.2"))).toBe("{/* #foo */}");
+  });
+
+  test("returns the MDX comment syntax for Docusaurus above 3.10", () => {
+    expect(formatMDXPermalink("foo", meta("4.0.0"))).toBe("{/* #foo */}");
+    expect(formatMDXPermalink("foo", meta("3.11.0"))).toBe("{/* #foo */}");
+  });
+
+  test("returns the classic escaped syntax below Docusaurus 3.10", () => {
+    expect(formatMDXPermalink("foo", meta("3.9.1"))).toBe(String.raw`\{#foo\}`);
+    expect(formatMDXPermalink("foo", meta("2.4.3"))).toBe(String.raw`\{#foo\}`);
+  });
+
+  test("returns the classic escaped syntax when the version is unknown", () => {
+    expect(formatMDXPermalink("foo")).toBe(String.raw`\{#foo\}`);
+    expect(formatMDXPermalink("foo", meta("next"))).toBe(String.raw`\{#foo\}`);
+    expect(
+      formatMDXPermalink("foo", { generatorFrameworkName: "docusaurus" }),
+    ).toBe(String.raw`\{#foo\}`);
+  });
+
+  test("returns the classic escaped syntax for another framework", () => {
+    expect(
+      formatMDXPermalink("foo", {
+        generatorFrameworkName: "vocs",
+        generatorFrameworkVersion: "3.10.2",
+      }),
+    ).toBe(String.raw`\{#foo\}`);
   });
 });
 
@@ -249,7 +280,28 @@ describe("createMDXFormatter", () => {
     expect(formatter).toHaveProperty("formatMDXFrontmatter");
     expect(formatter).toHaveProperty("formatMDXLink");
     expect(formatter).toHaveProperty("formatMDXNameEntity");
+    expect(formatter).toHaveProperty("formatMDXPermalink");
     expect(formatter).toHaveProperty("formatMDXSpecifiedByLink");
+  });
+
+  test("formatMDXPermalink uses the version from the formatter metadata", () => {
+    expect(
+      createMDXFormatter({
+        generatorFrameworkName: "docusaurus",
+        generatorFrameworkVersion: "3.10.2",
+      }).formatMDXPermalink("foo"),
+    ).toBe("{/* #foo */}");
+
+    expect(
+      createMDXFormatter({
+        generatorFrameworkName: "docusaurus",
+        generatorFrameworkVersion: "3.9.1",
+      }).formatMDXPermalink("foo"),
+    ).toBe(String.raw`\{#foo\}`);
+
+    expect(createMDXFormatter().formatMDXPermalink("foo")).toBe(
+      String.raw`\{#foo\}`,
+    );
   });
 
   test("formatMDXBadge returns expected output", () => {

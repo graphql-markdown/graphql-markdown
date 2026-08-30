@@ -28,7 +28,14 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
+import { isFrameworkVersion, isFrameworkVersionAtLeast } from "../version";
+
 const LINK_MDX_EXTENSION = ".mdx" as const;
+const DOCUSAURUS_FRAMEWORK = "docusaurus" as const;
+/** Docusaurus version using the legacy `:::caution` admonition syntax. */
+const LEGACY_ADMONITION_VERSION = { major: 2 } as const;
+/** Docusaurus version introducing the MDX comment heading id syntax. */
+const MDX_COMMENT_HEADING_ID_VERSION = { major: 3, minor: 10 } as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
 /** MDX component definitions prepended to every generated file. */
@@ -65,8 +72,9 @@ export const formatMDXAdmonition = (
   { text, title, type }: AdmonitionType,
   meta: Maybe<MetaInfo>,
 ): MDXString => {
-  const isDocusaurus = meta?.generatorFrameworkName === "docusaurus";
-  if (isDocusaurus && meta.generatorFrameworkVersion?.startsWith("2")) {
+  if (
+    isFrameworkVersion(meta, DOCUSAURUS_FRAMEWORK, LEGACY_ADMONITION_VERSION)
+  ) {
     const oldType = type === "warning" ? "caution" : type;
     return `${MARKDOWN_EOP}:::${oldType} ${title}${text}:::` as MDXString;
   }
@@ -159,19 +167,35 @@ export const formatMDXFrontmatter = (
  * @returns A complete {@link Formatter} implementation for Docusaurus MDX output
  */
 /**
- * Formats a permalink for a section header using the MDX comment syntax
- * introduced in Docusaurus 3.10.
+ * Formats a permalink for a section header.
  *
- * The braces must NOT be escaped: Docusaurus extracts the heading id from a
- * real MDX expression node, so an escaped token would be rendered as text.
+ * Docusaurus 3.10 introduced a heading id syntax based on a native MDX comment,
+ * and deprecated the classic one. The braces of the comment must NOT be escaped:
+ * the heading id is extracted from a real MDX expression node, so an escaped
+ * token would be rendered as text. Older versions only support the classic
+ * syntax, whose braces must be escaped to remain valid MDX.
  *
  * @see https://docusaurus.io/blog/releases/3.10#strict-heading-ids
  *
  * @param id - The ID of the section header
+ * @param meta - Optional metadata used to detect the Docusaurus version
  * @returns Formatted permalink string
  */
-export const formatMDXPermalink = (id: string): MDXString => {
-  return `{/* #${id} */}` as MDXString;
+export const formatMDXPermalink = (
+  id: string,
+  meta?: Maybe<MetaInfo>,
+): MDXString => {
+  if (
+    isFrameworkVersionAtLeast(
+      meta,
+      DOCUSAURUS_FRAMEWORK,
+      MDX_COMMENT_HEADING_ID_VERSION,
+    )
+  ) {
+    return `{/* #${id} */}` as MDXString;
+  }
+  // use raw string to prevent MDX from interpreting the curly braces as JSX
+  return String.raw`\{#${id}\}` as MDXString;
 };
 
 export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
@@ -188,7 +212,9 @@ export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
-    formatMDXPermalink,
+    formatMDXPermalink: (id: string): MDXString => {
+      return formatMDXPermalink(id, meta);
+    },
     formatMDXSpecifiedByLink,
   };
 };
