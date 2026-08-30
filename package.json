@@ -91,6 +91,7 @@
     "prettier:fix": "turbo run prettier:fix",
     "smoke": ".github/scripts/e2e/run-smoke.sh",
     "test": "turbo run test",
+    "test:all": "vitest run --passWithNoTests",
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",
