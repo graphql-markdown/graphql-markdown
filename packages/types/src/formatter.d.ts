@@ -103,4 +103,12 @@ export interface Formatter {
    * @returns Formatted specification link string
    */
   formatMDXSpecifiedByLink: (url: string) => MDXString;
+
+  /**
+   * Formats a permalink for a section header.
+   *
+   * @param id - The ID of the section header
+   * @returns Formatted permalink string
+   */
+  formatMDXPermalink: (id: string) => MDXString;
 }

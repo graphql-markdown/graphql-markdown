@@ -28,6 +28,7 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
+import { formatMDXPermalink } from "../defaults";
 
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
@@ -173,6 +174,7 @@ export const createMDXFormatter = (meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

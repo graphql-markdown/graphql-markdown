@@ -36,6 +36,7 @@ import {
   formatMDXBullet,
   formatMDXDetails,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
@@ -125,6 +126,7 @@ export {
   formatMDXBullet,
   formatMDXDetails,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
@@ -142,12 +144,19 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };
 
+/**
+ * The file extension used for MDX files in DocFX output.
+ */
 export const mdxExtension = ".md" as const;
 
+/**
+ * Determines if a link is an absolute internal link within the documentation.
+ */
 const isAbsoluteInternalLink = (
   content: string,
   urlStart: number,
@@ -160,6 +169,9 @@ const isAbsoluteInternalLink = (
   return { closePos, urlWithHash };
 };
 
+/**
+ * Resolves an internal link to its relative path within the generated documentation.
+ */
 const resolveLink = (
   urlWithHash: string,
   filePath: string,
@@ -189,6 +201,10 @@ const resolveLink = (
   return `](${relative ?? urlPath}${hash})`;
 };
 
+/**
+ * Rewrites all absolute internal links in the content to relative links
+ * based on the file's location and the documentation structure.
+ */
 const rewriteInternalLinks = (
   content: string,
   filePath: string,
@@ -233,8 +249,16 @@ const rewriteInternalLinks = (
 
 // ─── toc.yml builder ────────────────────────────────────────────────────────
 
+/**
+ * Map to track pending write operations for each file.
+ * Ensures that concurrent writes to the same file are executed sequentially.
+ */
 const writeQueue = new Map<string, Promise<void>>();
 
+/**
+ * Queues a file update to ensure that multiple concurrent writes to the same file
+ * are executed sequentially.
+ */
 const queueFileUpdate = async (
   filePath: string,
   update: () => Promise<void>,
@@ -245,6 +269,10 @@ const queueFileUpdate = async (
   return next;
 };
 
+/**
+ * Updates the `toc.yml` file for a given directory with a new entry.
+ * Ensures that multiple concurrent updates to the same file are queued.
+ */
 const updateToc = async (
   tocFilePath: string,
   name: string,

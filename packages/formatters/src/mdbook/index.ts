@@ -40,6 +40,7 @@ import {
 import {
   formatMDXBullet,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
@@ -123,6 +124,7 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
 export {
   formatMDXBullet,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
@@ -195,6 +197,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

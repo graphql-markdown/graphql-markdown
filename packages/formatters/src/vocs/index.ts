@@ -21,6 +21,7 @@ import {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
+  formatMDXPermalink,
 } from "../defaults";
 
 /** MDX import statement and inline component definitions prepended to every generated file. */
@@ -98,6 +99,7 @@ export {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
+  formatMDXPermalink,
 } from "../defaults";
 
 /**
@@ -114,6 +116,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXFrontmatter,
     formatMDXLink,
     formatMDXNameEntity,
+    formatMDXPermalink,
     formatMDXSpecifiedByLink,
   };
 };

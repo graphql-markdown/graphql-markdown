@@ -119,3 +119,12 @@ export const formatMDXNameEntity = (
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
   return `<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="${url}" title="Specified by ${url}">⎘</a></span>` as MDXString;
 };
+
+/**
+ * Formats a permalink for a section header using a raw string.
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = (id: string): MDXString => {
+  return String.raw`\{/* #${id} */\}` as MDXString;
+};
