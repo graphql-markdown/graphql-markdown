@@ -123,6 +123,20 @@ const DEFAULT_INIT_OPTIONS = {
   sectionHeaderId: true,
 };
 
+/**
+ * Normalizes the configured hierarchy option into the canonical object form.
+ *
+ * Supported string presets are:
+ * - `"entity"`: entity-centric hierarchy grouping.
+ * - `"flat"`: no hierarchy grouping (flat output structure).
+ * - `"api"`: API-oriented hierarchy grouping.
+ *
+ * If `hierarchy` is already an object, it is returned as-is. If it is missing
+ * or not one of the supported string presets, `undefined` is returned.
+ *
+ * @param hierarchy - Hierarchy configuration from print type options.
+ * @returns The normalized hierarchy object, or `undefined` when not applicable.
+ */
 const normalizeHierarchy = (
   hierarchy?: Maybe<ConfigPrintTypeOptions["hierarchy"]>,
 ): TypeHierarchyObjectType | undefined => {
