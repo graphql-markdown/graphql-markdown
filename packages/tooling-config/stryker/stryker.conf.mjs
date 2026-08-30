@@ -34,6 +34,7 @@ const config = {
     // importing the mutated module directly, so Vitest's related-test
     // filtering would skip the tests that actually cover those mutants.
     related: false,
+    reporters: ["minimal"],
   },
   warnings: true,
 };
