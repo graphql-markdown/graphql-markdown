@@ -27,6 +27,8 @@ import {
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
 import { formatMDXBullet, formatMDXPermalink } from "../defaults";
 
+export { formatMDXPermalink } from "../defaults";
+
 export const __default = { formatMDXBullet, formatMDXPermalink };
 
 /** File extension used for generated pages — HonKit renders plain Markdown to HTML. */

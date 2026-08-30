@@ -7,6 +7,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../../../src/docusaurus";
 
@@ -177,6 +178,12 @@ describe("formatMDXDetails", () => {
     expect(result).toBe(
       '\n\n<details class="graphql-markdown-details">\n<summary>\n<span class="graphql-markdown-details-label-closed">Show Close</span>\n<span class="graphql-markdown-details-label-open" hidden>Hide Open</span>\n</summary>\n\n\r\n\n</details>\n\n',
     );
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe("\\{/* #foo */\\}");
   });
 });
 

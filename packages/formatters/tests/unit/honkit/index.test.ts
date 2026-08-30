@@ -7,6 +7,7 @@ import {
   formatMDXFrontmatter,
   formatMDXLink,
   formatMDXNameEntity,
+  formatMDXPermalink,
   formatMDXSpecifiedByLink,
   mdxExtension,
 } from "../../../src/honkit";
@@ -417,6 +418,12 @@ describe("formatMDXNameEntity", () => {
 
   test("renders plain name without parent", () => {
     expect(formatMDXNameEntity("field")).toBe("field");
+  });
+});
+
+describe("formatMDXPermalink", () => {
+  test("renders permalink with proper formatting", () => {
+    expect(formatMDXPermalink("foo")).toBe("\\{/* #foo */\\}");
   });
 });
 

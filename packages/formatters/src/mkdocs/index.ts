@@ -178,7 +178,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   }
 };
 
-export { formatMDXBullet } from "../defaults";
+export { formatMDXBullet, formatMDXPermalink } from "../defaults";
 
 /**
  * Creates an MkDocs Material formatter.

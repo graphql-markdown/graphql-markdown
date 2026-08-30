@@ -30,6 +30,8 @@ import {
 } from "@graphql-markdown/utils";
 import { formatMDXPermalink } from "../defaults";
 
+export { formatMDXPermalink } from "../defaults";
+
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DEFAULT_CSS_CLASSNAME = "badge--secondary" as const;
 
