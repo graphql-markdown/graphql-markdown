@@ -356,6 +356,7 @@ export const generateDocFromSchema = async ({
   formatter,
   metatags,
   onlyDocDirective,
+  outputAdapter,
   outputDir,
   prettify,
   printTypeOptions,
@@ -495,6 +496,7 @@ export const generateDocFromSchema = async ({
       hierarchy: printTypeOptions?.hierarchy as TypeHierarchyObjectType,
     },
     mdxExtension,
+    outputAdapter,
   );
 
   // Pre-collect all categories before rendering to ensure consistent positions

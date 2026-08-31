@@ -5,7 +5,7 @@ import type { DirectiveName, GraphQLDirective, GraphQLSchema } from "./graphql";
 
 import type { CustomDirective } from "./helpers";
 
-import type { Maybe, MDXString } from "./utils";
+import type { Maybe, MDXString, OutputAdapter } from "./utils";
 import type { AdmonitionType, Badge, TypeLink } from "./printer";
 import type {
   BeforeComposePageTypeHook,
@@ -256,6 +256,12 @@ export interface ConfigOptions {
   metatags?: Record<string, string>[];
   /** Only document types with these directives */
   onlyDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  /**
+   * Destination for generated pages. Defaults to the local filesystem.
+   * Set this to write somewhere that is not a filesystem - a CMS storage API,
+   * an object store, an in-memory map.
+   */
+  outputAdapter?: Maybe<OutputAdapter>;
   /** Use prettier to make the output pretty */
   pretty?: Maybe<boolean>;
   /** Options for printing GraphQL types */

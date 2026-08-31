@@ -7,6 +7,7 @@ import type {
   ApiGroupOverrideType,
   IPrinter,
   MDXString,
+  OutputAdapter,
   PackageName,
   RendererDocOptions,
   SchemaEntity,
@@ -36,6 +37,9 @@ vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
     saveFile: vi.fn(),
     copyFile: vi.fn(),
     readFile: vi.fn(),
+    // The renderer writes through an output adapter rather than calling
+    // saveFile directly, so assertions target the adapter's writeFile.
+    fsOutputAdapter: { writeFile: vi.fn(), ensureDir: vi.fn() },
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -74,10 +78,12 @@ import { log } from "@graphql-markdown/logger";
 import type { Renderer } from "../../src/renderer";
 import { API_GROUPS, getRenderer, getApiGroupFolder } from "../../src/renderer";
 import {
+  ASSET_HOMEPAGE_LOCATION,
   DEFAULT_OPTIONS,
   DEFAULT_HIERARCHY,
   TypeHierarchy,
 } from "../../src/config";
+import { DEFAULT_HOMEPAGE_TEMPLATE } from "../../src/const/homepage";
 import { resetEvents, getEvents } from "../../src/event-emitter";
 import { GenerateIndexMetafileEvents } from "../../src/events";
 import { replaceProperty } from "../__utils__/replace-property";
@@ -132,7 +138,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -149,7 +155,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
-          undefined,
         );
       });
 
@@ -159,7 +164,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         replaceProperty(rendererInstance, "options", {
           frontMatter: undefined,
@@ -181,7 +186,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
-          undefined,
         );
       });
 
@@ -191,7 +195,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         replaceProperty(rendererInstance, "mdxExtension", ".mdx");
 
@@ -201,7 +205,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
-          undefined,
         );
       });
 
@@ -209,9 +212,14 @@ describe("renderer", () => {
         expect.assertions(1);
 
         vi.spyOn(Printer, "printType").mockResolvedValue(
-          "Lorem ipsum" as MDXString,
+          "Lorem   ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        // Stub the formatter so the assertion is about prettify being applied
+        // to the content, not about prettier's own formatting rules.
+        vi.spyOn(Utils, "prettifyMarkdown").mockResolvedValueOnce(
+          "Lorem ipsum",
+        );
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         replaceProperty(rendererInstance, "prettify", true);
 
@@ -221,7 +229,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/foo-bar.mdx`,
           "Lorem ipsum",
-          Utils.prettifyMarkdown,
         );
       });
 
@@ -415,7 +422,7 @@ describe("renderer", () => {
         expect.assertions(2);
 
         vi.spyOn(Printer, "printType").mockResolvedValue("" as MDXString);
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -434,7 +441,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         const output = "/output/foobar";
         const meta = await rendererInstance.renderTypeEntities(
@@ -451,7 +458,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/custom-type-name.mdx`,
           "Lorem ipsum",
-          undefined,
         );
       });
 
@@ -461,7 +467,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         const output = "/output/special";
         const meta = await rendererInstance.renderTypeEntities(
@@ -478,7 +484,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           `${output}/type-with-special-chars.mdx`,
           "Lorem ipsum",
-          undefined,
         );
       });
 
@@ -500,14 +505,13 @@ describe("renderer", () => {
         expect.assertions(1);
 
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce("Test Homepage");
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderHomepage("/assets/generated.md");
 
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           "Test Homepage",
-          undefined,
         );
       });
 
@@ -517,7 +521,7 @@ describe("renderer", () => {
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce(
           "baseURL: ##baseURL## - Generated: ##generated-date-time##",
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         // Mock Date to have consistent test results.
         // `vi.spyOn(globalThis, "Date")` replaces the whole Date binding and
@@ -533,7 +537,44 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           "/output/generated.md",
           `baseURL: /graphql - Generated: ${mockDate.toLocaleString()}`,
-          undefined,
+        );
+      });
+
+      test("uses the inlined template for the default homepage, without reading from disk", async () => {
+        expect.assertions(3);
+
+        const readFileSpy = vi.mocked(Utils.readFile);
+        readFileSpy.mockClear();
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage(ASSET_HOMEPAGE_LOCATION);
+
+        // The whole point: the default path performs no filesystem read, so a
+        // write-only output adapter can render the homepage.
+        expect(readFileSpy).not.toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith(
+          "/output/generated.md",
+          DEFAULT_HOMEPAGE_TEMPLATE.replaceAll("##baseURL##", "/graphql"),
+        );
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      test("still reads a caller-supplied homepage from disk", async () => {
+        expect.assertions(2);
+
+        const readFileSpy = vi.mocked(Utils.readFile);
+        readFileSpy.mockClear();
+        readFileSpy.mockResolvedValueOnce("custom: ##baseURL##");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage("/assets/custom.md");
+
+        expect(readFileSpy).toHaveBeenCalledWith("/assets/custom.md");
+        expect(spy).toHaveBeenCalledWith(
+          "/output/custom.md",
+          "custom: /graphql",
         );
       });
 
@@ -548,7 +589,9 @@ describe("renderer", () => {
 
         await rendererInstance.renderHomepage("/assets/nonexistent.md");
 
-        expect(readFileSpy).toHaveBeenCalledWith("/output/nonexistent.md");
+        // The template is read from its source location, not from a copy in
+        // the output directory.
+        expect(readFileSpy).toHaveBeenCalledWith("/assets/nonexistent.md");
         expect(logSpy).toHaveBeenCalledWith(
           "An error occurred while processing the homepage /assets/nonexistent.md: Error: File not found",
           "warn",
@@ -559,15 +602,11 @@ describe("renderer", () => {
         expect.assertions(1);
 
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce("");
-        const saveFileSpy = vi.spyOn(Utils, "saveFile");
+        const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderHomepage("/assets/empty.md");
 
-        expect(saveFileSpy).toHaveBeenCalledWith(
-          "/output/empty.md",
-          "",
-          undefined,
-        );
+        expect(saveFileSpy).toHaveBeenCalledWith("/output/empty.md", "");
       });
 
       test("preserves content without template variables", async () => {
@@ -576,14 +615,13 @@ describe("renderer", () => {
         const content =
           "# GraphQL API Documentation\n\nThis is static content with no variables.";
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
-        const saveFileSpy = vi.spyOn(Utils, "saveFile");
+        const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderHomepage("/assets/no-variables.md");
 
         expect(saveFileSpy).toHaveBeenCalledWith(
           "/output/no-variables.md",
           content,
-          undefined,
         );
       });
 
@@ -593,7 +631,7 @@ describe("renderer", () => {
         const content =
           "baseURL: ##baseURL##\ngenerated: ##generated-date-time##\nbaseURL again: ##baseURL##";
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce(content);
-        const saveFileSpy = vi.spyOn(Utils, "saveFile");
+        const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         // Mock Date to have consistent test results.
         // `vi.spyOn(globalThis, "Date")` replaces the whole Date binding and
@@ -610,7 +648,6 @@ describe("renderer", () => {
         expect(saveFileSpy).toHaveBeenCalledWith(
           "/output/multiple-vars.md",
           expected,
-          undefined,
         );
       });
 
@@ -618,9 +655,8 @@ describe("renderer", () => {
         expect.assertions(2);
 
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce("Test content");
-        const saveFileSpy = vi
-          .spyOn(Utils, "saveFile")
-          .mockRejectedValueOnce(new Error("Write error"));
+        const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        saveFileSpy.mockRejectedValueOnce(new Error("Write error"));
         const logSpy = vi.mocked(log);
         logSpy.mockClear();
 
@@ -629,7 +665,6 @@ describe("renderer", () => {
         expect(saveFileSpy).toHaveBeenCalledWith(
           "/output/error-saving.md",
           "Test content",
-          undefined,
         );
         expect(logSpy).toHaveBeenCalledWith(
           "An error occurred while processing the homepage /assets/error-saving.md: Error: Write error",
@@ -643,7 +678,12 @@ describe("renderer", () => {
         vi.spyOn(Utils, "readFile").mockResolvedValueOnce(
           "## Unformatted content",
         );
-        const saveFileSpy = vi.spyOn(Utils, "saveFile");
+        // Stub the formatter so the assertion is about prettify being applied
+        // to the content, not about prettier's own formatting rules.
+        vi.spyOn(Utils, "prettifyMarkdown").mockResolvedValueOnce(
+          "## Prettified content",
+        );
+        const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         // Enable prettify
         replaceProperty(rendererInstance, "prettify", true);
@@ -652,8 +692,7 @@ describe("renderer", () => {
 
         expect(saveFileSpy).toHaveBeenCalledWith(
           "/output/to-prettify.md",
-          "## Unformatted content",
-          Utils.prettifyMarkdown,
+          "## Prettified content",
         );
       });
 
@@ -688,7 +727,7 @@ describe("renderer", () => {
           "content" as MDXString,
         );
         vi.spyOn(Utils, "fileExists").mockResolvedValue(true);
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
@@ -711,13 +750,11 @@ describe("renderer", () => {
           1,
           "/output/types/objects/foo.mdx",
           "content",
-          undefined,
         );
         expect(spy).toHaveBeenNthCalledWith(
           2,
           "/output/types/objects/bar.mdx",
           "content",
-          undefined,
         );
       });
 
@@ -739,7 +776,7 @@ describe("renderer", () => {
           frontMatter: undefined,
           hierarchy: { [TypeHierarchy.FLAT]: {} },
         });
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderRootTypes("objects", {
           foo: new GraphQLScalarType({
@@ -752,11 +789,7 @@ describe("renderer", () => {
         });
 
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith(
-          "/output/foo.mdx",
-          "content",
-          undefined,
-        );
+        expect(spy).toHaveBeenCalledWith("/output/foo.mdx", "content");
       });
 
       test("passes namespace parts in flat hierarchy for namespaced operations", async () => {
@@ -791,7 +824,7 @@ describe("renderer", () => {
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
         vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        const saveSpy = vi.spyOn(Utils, "saveFile");
+        const saveSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
         const indexSpy = vi.spyOn(rendererInstance, "generateIndexMetafile");
 
         await rendererInstance.renderRootTypes("queries", {
@@ -803,7 +836,6 @@ describe("renderer", () => {
         expect(saveSpy).toHaveBeenCalledWith(
           "/output/operations/queries/analytics/aggregate-tournaments.mdx",
           "content",
-          undefined,
         );
         expect(indexSpy).toHaveBeenCalledWith(
           "/output/operations/queries/analytics",
@@ -823,7 +855,7 @@ describe("renderer", () => {
           .spyOn(Printer, "printType")
           .mockResolvedValue("content" as MDXString);
         vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
-        const saveSpy = vi.spyOn(Utils, "saveFile");
+        const saveSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderRootTypes("queries", {
           "analytics.admin.aggregateTournaments": {
@@ -834,7 +866,6 @@ describe("renderer", () => {
         expect(saveSpy).toHaveBeenCalledWith(
           "/output/operations/queries/analytics/admin/aggregate-tournaments.mdx",
           "content",
-          undefined,
         );
         expect(printSpy).toHaveBeenCalledWith(
           "aggregate-tournaments",
@@ -892,7 +923,7 @@ describe("renderer", () => {
           return categoryName.toLowerCase();
         });
 
-        const saveSpy = vi.spyOn(Utils, "saveFile");
+        const saveSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         await rendererInstance.renderRootTypes("queries", {
           "analytics.aggregateTournaments": {
@@ -903,7 +934,6 @@ describe("renderer", () => {
         expect(saveSpy).toHaveBeenCalledWith(
           "/output/operations/queries/analytics/aggregate-tournaments.mdx",
           "content",
-          undefined,
         );
       });
     });
@@ -1274,7 +1304,7 @@ describe("renderer", () => {
       test("creates output directory before initializing renderer", async () => {
         expect.assertions(1);
 
-        const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
+        const ensureDirSpy = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
 
         await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1294,7 +1324,7 @@ describe("renderer", () => {
       test("passes force option to ensureDir when provided", async () => {
         expect.assertions(1);
 
-        const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
+        const ensureDirSpy = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
 
         await getRenderer(
           Printer as unknown as typeof IPrinter,
@@ -1308,6 +1338,172 @@ describe("renderer", () => {
 
         expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
           forceEmpty: true,
+        });
+      });
+
+      describe("with a custom output adapter", () => {
+        const makeAdapter = (): OutputAdapter & {
+          writeFile: Mock;
+          ensureDir: Mock;
+        } => {
+          return {
+            writeFile: vi.fn(),
+            ensureDir: vi.fn(),
+          } as unknown as OutputAdapter & {
+            writeFile: Mock;
+            ensureDir: Mock;
+          };
+        };
+
+        test("prepares the output through the adapter, not the filesystem", async () => {
+          expect.assertions(2);
+
+          const adapter = makeAdapter();
+          const fsEnsureDir = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
+          fsEnsureDir.mockClear();
+
+          await getRenderer(
+            Printer as unknown as typeof IPrinter,
+            "/output",
+            "graphql",
+            undefined,
+            false,
+            { ...DEFAULT_RENDERER_OPTIONS, force: true },
+            ".mdx",
+            adapter,
+          );
+
+          expect(adapter.ensureDir).toHaveBeenCalledWith("/output", {
+            forceEmpty: true,
+          });
+          expect(fsEnsureDir).not.toHaveBeenCalled();
+        });
+
+        test("routes generated pages to the adapter", async () => {
+          expect.assertions(2);
+
+          vi.spyOn(Printer, "printType").mockResolvedValue(
+            "Lorem ipsum" as MDXString,
+          );
+          const adapter = makeAdapter();
+          const fsWriteFile = vi.mocked(Utils.fsOutputAdapter.writeFile);
+          fsWriteFile.mockClear();
+
+          const renderer = await getRenderer(
+            Printer as unknown as typeof IPrinter,
+            "/output",
+            "graphql",
+            undefined,
+            false,
+            DEFAULT_RENDERER_OPTIONS,
+            ".mdx",
+            adapter,
+          );
+          await renderer.renderTypeEntities(
+            "/output/foobar",
+            "FooBar",
+            "FooBar",
+          );
+
+          expect(adapter.writeFile).toHaveBeenCalledWith(
+            "/output/foobar/foo-bar.mdx",
+            "Lorem ipsum",
+          );
+          expect(fsWriteFile).not.toHaveBeenCalled();
+        });
+
+        test("prettifies before handing content to the adapter", async () => {
+          expect.assertions(1);
+
+          vi.spyOn(Printer, "printType").mockResolvedValue(
+            "Lorem   ipsum" as MDXString,
+          );
+          vi.spyOn(Utils, "prettifyMarkdown").mockResolvedValueOnce(
+            "Lorem ipsum",
+          );
+
+          const adapter = makeAdapter();
+          const renderer = await getRenderer(
+            Printer as unknown as typeof IPrinter,
+            "/output",
+            "graphql",
+            undefined,
+            true,
+            DEFAULT_RENDERER_OPTIONS,
+            ".mdx",
+            adapter,
+          );
+          await renderer.renderTypeEntities(
+            "/output/foobar",
+            "FooBar",
+            "FooBar",
+          );
+
+          // An adapter must never have to know about the `pretty` option.
+          expect(adapter.writeFile).toHaveBeenCalledWith(
+            "/output/foobar/foo-bar.mdx",
+            "Lorem ipsum",
+          );
+        });
+
+        test("tolerates an adapter with no ensureDir", async () => {
+          expect.assertions(1);
+
+          vi.spyOn(Printer, "printType").mockResolvedValue(
+            "Lorem ipsum" as MDXString,
+          );
+          // A destination with no directory concept - an object store, a CMS
+          // collection - omits ensureDir entirely.
+          const adapter = { writeFile: vi.fn() } as unknown as OutputAdapter;
+
+          const renderer = await getRenderer(
+            Printer as unknown as typeof IPrinter,
+            "/output",
+            "graphql",
+            undefined,
+            false,
+            { ...DEFAULT_RENDERER_OPTIONS, force: true },
+            ".mdx",
+            adapter,
+          );
+          await renderer.renderTypeEntities(
+            "/output/foobar",
+            "FooBar",
+            "FooBar",
+          );
+
+          expect(adapter.writeFile).toHaveBeenCalledWith(
+            "/output/foobar/foo-bar.mdx",
+            "Lorem ipsum",
+          );
+        });
+
+        test("routes the homepage to the adapter", async () => {
+          expect.assertions(2);
+
+          vi.spyOn(Utils, "readFile").mockResolvedValueOnce(
+            "baseURL: ##baseURL##",
+          );
+          const adapter = makeAdapter();
+
+          const renderer = await getRenderer(
+            Printer as unknown as typeof IPrinter,
+            "/output",
+            "graphql",
+            undefined,
+            false,
+            DEFAULT_RENDERER_OPTIONS,
+            ".mdx",
+            adapter,
+          );
+          await renderer.renderHomepage("/assets/homepage.md");
+
+          expect(adapter.writeFile).toHaveBeenCalledWith(
+            "/output/homepage.md",
+            "baseURL: /graphql",
+          );
+          // The template is read from source; the adapter is write-only.
+          expect(Utils.readFile).toHaveBeenCalledWith("/assets/homepage.md");
         });
       });
 
@@ -2285,7 +2481,7 @@ describe("renderer", () => {
         vi.spyOn(Printer, "printType").mockResolvedValue(
           "Lorem ipsum" as MDXString,
         );
-        const spy = vi.spyOn(Utils, "saveFile");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
         const output = "/output/api-types/objects";
         const meta = await rendererInstance.renderTypeEntities(
@@ -2299,7 +2495,6 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledWith(
           expect.stringMatching(/my-object\.mdx$/),
           "Lorem ipsum",
-          undefined,
         );
       });
 

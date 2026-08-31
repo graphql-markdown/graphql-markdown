@@ -62,6 +62,7 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 | `tmpDir`      | `string`  | —       | Temporary directory for storing schema signature (used by diff)   |
 | `pretty`      | `boolean` | `false` | Format output files with Prettier (requires `prettier` installed) |
 | `formatter`   | `string`  | —       | Package name or path to a custom formatter module                 |
+| `outputAdapter` | `object` | fs     | Write pages somewhere other than the local filesystem             |
 
 ## CLI Flags
 

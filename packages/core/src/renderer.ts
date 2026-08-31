@@ -5,6 +5,7 @@ import type {
   Maybe,
   MDXString,
   IPrinter,
+  OutputAdapter,
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
@@ -17,18 +18,17 @@ import { basename, join, relative, normalize } from "node:path";
 import { isApiType, isDeprecated } from "@graphql-markdown/graphql";
 
 import {
-  copyFile,
-  ensureDir,
+  fsOutputAdapter,
   pathUrl,
   prettifyMarkdown,
   readFile,
-  saveFile,
   startCase,
   slugify,
 } from "@graphql-markdown/utils";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
-import { TypeHierarchy } from "./config";
+import { ASSET_HOMEPAGE_LOCATION, TypeHierarchy } from "./config";
+import { DEFAULT_HOMEPAGE_TEMPLATE } from "./const/homepage";
 import { isGroupsObject, isPath } from "./directives/validation";
 import { getEvents } from "./event-emitter";
 import {
@@ -346,6 +346,7 @@ export class Renderer {
   readonly prettify: boolean;
   readonly options: Maybe<RendererDocOptions>;
   readonly mdxExtension: string;
+  readonly outputAdapter: OutputAdapter;
   // mdxModuleIndexFileSupport: boolean;
   private readonly printer: typeof IPrinter;
   private readonly rootLevelPositionManager: CategoryPositionManager;
@@ -361,6 +362,7 @@ export class Renderer {
    * @param prettify - Whether to format the generated markdown
    * @param docOptions - Additional documentation options
    * @param mdxExtension - Optional MDX file extension to use
+   * @param outputAdapter - Destination for generated pages; defaults to the local filesystem
    * @example
    */
   constructor(
@@ -371,6 +373,7 @@ export class Renderer {
     prettify: boolean,
     docOptions: Maybe<RendererDocOptions>,
     mdxExtension: string,
+    outputAdapter: Maybe<OutputAdapter> = undefined,
   ) {
     this.printer = printer;
 
@@ -380,6 +383,7 @@ export class Renderer {
     this.prettify = prettify;
     this.options = docOptions;
     this.mdxExtension = mdxExtension;
+    this.outputAdapter = outputAdapter ?? fsOutputAdapter;
 
     // Initialize position managers for different hierarchy levels
     // rootLevelPositionManager: for root-level categories (Query, Mutation, Deprecated, etc.)
@@ -693,11 +697,7 @@ export class Renderer {
       return undefined;
     }
 
-    await saveFile(
-      filePath,
-      content,
-      this.prettify ? prettifyMarkdown : undefined,
-    );
+    await this.writeOutput(filePath, content);
 
     const pagePath = relative(this.outputDir, filePath);
 
@@ -820,20 +820,24 @@ export class Renderer {
     const slug = pathUrl.resolve("/", this.baseURL);
 
     try {
-      await copyFile(homepageLocation, destLocation);
-
-      const template = await readFile(destLocation);
+      // Read the template from its source location rather than copying it into
+      // the output directory and reading it back: the round-trip wrote a file
+      // only to overwrite it a moment later, and it forced the destination to
+      // be readable, which a write-only output adapter is not.
+      //
+      // The built-in template is inlined, so the default path performs no
+      // filesystem read at all. Only a caller-supplied `homepage` path does.
+      const template =
+        homepageLocation === ASSET_HOMEPAGE_LOCATION
+          ? DEFAULT_HOMEPAGE_TEMPLATE
+          : await readFile(homepageLocation);
 
       const data = template
         .toString()
         .replaceAll("##baseURL##", slug)
         .replaceAll("##generated-date-time##", new Date().toLocaleString());
 
-      await saveFile(
-        destLocation,
-        data,
-        this.prettify ? prettifyMarkdown : undefined,
-      );
+      await this.writeOutput(destLocation, data);
     } catch (error) {
       log(
         `An error occurred while processing the homepage ${homepageLocation}: ${error}`,
@@ -1011,6 +1015,23 @@ export class Renderer {
       return slugify(categoryName);
     }
   }
+
+  /**
+   * Sends a generated page to the configured output destination.
+   *
+   * Prettifying happens here rather than in the destination so every adapter
+   * receives identical content, and a custom adapter cannot accidentally skip
+   * the `pretty` option.
+   *
+   * @param filePath - Absolute path of the page, rooted at `outputDir`
+   * @param content - Rendered page content
+   */
+  private async writeOutput(filePath: string, content: string): Promise<void> {
+    const output = this.prettify
+      ? ((await prettifyMarkdown(content)) ?? content)
+      : content;
+    await this.outputAdapter.writeFile(filePath, output);
+  }
 }
 
 /**
@@ -1046,8 +1067,12 @@ export const getRenderer = async (
   prettify: boolean,
   docOptions: Maybe<RendererDocOptions>,
   mdxExtension: string,
+  outputAdapter: Maybe<OutputAdapter> = undefined,
 ): Promise<InstanceType<typeof Renderer>> => {
-  await ensureDir(outputDir, { forceEmpty: docOptions?.force });
+  const adapter = outputAdapter ?? fsOutputAdapter;
+  // Optional on the interface: a destination with no directory concept (an
+  // object store, a CMS collection) has nothing to prepare.
+  await adapter.ensureDir?.(outputDir, { forceEmpty: docOptions?.force });
   return new Renderer(
     printer,
     outputDir,
@@ -1056,5 +1081,6 @@ export const getRenderer = async (
     prettify,
     docOptions,
     mdxExtension,
+    adapter,
   );
 };

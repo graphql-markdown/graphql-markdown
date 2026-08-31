@@ -340,6 +340,131 @@ It only applies to types with a location compatible with the directive, i.e. if 
 
 :::
 
+## `outputAdapter`
+
+The destination for generated documentation. By default pages are written to the local filesystem under [`rootPath`](#rootpath)/[`baseURL`](#baseurl). Set an adapter to send them somewhere else instead — a CMS storage API, an object store, an in-memory map — without forking the renderer.
+
+| Setting         | CLI flag | Default              |
+| --------------- | -------- | -------------------- |
+| `outputAdapter` | none     | local filesystem     |
+
+An adapter must provide `writeFile`, and may provide `ensureDir`:
+
+```ts
+interface OutputAdapter {
+  writeFile: (filePath: string, content: string) => Promise<void>;
+  ensureDir?: (
+    dirPath: string,
+    options?: { forceEmpty?: boolean },
+  ) => Promise<void>;
+}
+```
+
+The following example publishes the generated pages to a [Cloudflare R2](https://developers.cloudflare.com/r2/) bucket instead of writing them to disk, using R2's S3-compatible API:
+
+```js
+const path = require("node:path");
+const {
+  S3Client,
+  PutObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+} = require("@aws-sdk/client-s3");
+
+const rootPath = "./docs";
+const baseURL = "schema";
+const outputDir = path.join(rootPath, baseURL);
+
+const BUCKET = "docs";
+const KEY_PREFIX = "schema/";
+
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  },
+});
+
+// Object keys are the page paths relative to the output directory, always
+// forward-slashed so keys are identical whichever OS generated them.
+const toKey = (location) =>
+  KEY_PREFIX + path.relative(outputDir, location).split(path.sep).join("/");
+
+module.exports = {
+  // ...
+  rootPath,
+  baseURL,
+  outputAdapter: {
+    writeFile: async (filePath, content) => {
+      await r2.send(
+        new PutObjectCommand({
+          Bucket: BUCKET,
+          Key: toKey(filePath),
+          Body: content,
+          ContentType: "text/markdown",
+        }),
+      );
+    },
+    // R2 has no directories, so there is nothing to create. The work worth
+    // doing is honouring `forceEmpty`: without it, pages for types deleted
+    // from the schema would stay in the bucket forever.
+    ensureDir: async (dirPath, options) => {
+      if (options?.forceEmpty !== true) {
+        return;
+      }
+
+      const Prefix = toKey(dirPath);
+      let ContinuationToken;
+
+      do {
+        const listed = await r2.send(
+          new ListObjectsV2Command({ Bucket: BUCKET, Prefix, ContinuationToken }),
+        );
+
+        if (listed.KeyCount) {
+          await r2.send(
+            new DeleteObjectsCommand({
+              Bucket: BUCKET,
+              Delete: {
+                Objects: listed.Contents.map(({ Key }) => ({ Key })),
+              },
+            }),
+          );
+        }
+
+        ContinuationToken = listed.IsTruncated
+          ? listed.NextContinuationToken
+          : undefined;
+      } while (ContinuationToken);
+    },
+  },
+};
+```
+
+<br/>
+
+:::info
+
+`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same absolute paths the filesystem writer would use, rooted at the output directory — an adapter backed by something other than a filesystem can treat them as opaque keys.
+
+Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
+
+:::
+
+:::caution
+
+Omitting `ensureDir` means [`force`](#force) has nothing to act on, so entries left by a previous run are never removed — pages for types deleted from the schema persist indefinitely. A destination with no directories still usually wants `ensureDir` for exactly this reason, as in the R2 example above. Omit it only when the destination is disposable or pruned elsewhere.
+
+:::
+
+:::note
+
+`outputAdapter` redirects where documentation is written; it does not make generation runnable on a non-Node runtime. `@graphql-markdown/core` and its dependencies still require Node built-ins, so generation runs under Node — in a build step or CI job — and the adapter publishes the result to its destination.
+
+:::
+
 ## `printTypeOptions`
 
 Use these options to toggle the type of information rendered on pages:

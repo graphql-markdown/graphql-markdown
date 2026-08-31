@@ -137,7 +137,10 @@ export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
  * @see {@link Options} for the complete configuration interface
  */
 export const DEFAULT_OPTIONS: Readonly<
-  Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
+  Pick<
+    ConfigOptions,
+    "customDirective" | "groupByDirective" | "loaders" | "outputAdapter"
+  > &
     Required<
       Omit<
         ConfigOptions,
@@ -146,6 +149,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "groupByDirective"
         | "loaders"
         | "mdxParser"
+        | "outputAdapter"
         | "printTypeOptions"
       >
     >
@@ -187,7 +191,12 @@ export const DEFAULT_OPTIONS: Readonly<
   },
   rootPath: "./docs" as const,
   schema: "./schema.graphql",
-  tmpDir: join(tmpdir(), PACKAGE_NAME),
+  // Lazy: as a plain property this ran `tmpdir()` at module load, so merely
+  // importing the config module touched the OS temp path even for runs that
+  // never diff. The getter defers it to the point a default is actually needed.
+  get tmpDir(): string {
+    return join(tmpdir(), PACKAGE_NAME);
+  },
   skipDocDirective: [] as DirectiveName[],
   onlyDocDirective: [] as DirectiveName[],
 } as const;
@@ -863,6 +872,7 @@ export const buildConfig = async (
     formatter: parseDeprecatedFormatterOption(cliOpts, config),
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
+    outputAdapter: config.outputAdapter,
     outputDir: join(rootPath, baseURL),
     prettify,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),

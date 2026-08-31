@@ -9,6 +9,7 @@ import { dirname } from "node:path";
 
 import type {
   EnsureDirOptions,
+  OutputAdapter,
   PrettifyCallbackFunction,
 } from "@graphql-markdown/types";
 
@@ -104,4 +105,30 @@ export const saveFile = async (
   }
   await ensureDir(dirname(location));
   await writeFile(location, content, "utf8");
+};
+
+/**
+ * The default output destination: the local filesystem.
+ *
+ * Used whenever no custom `outputAdapter` is configured, so the out-of-the-box
+ * behaviour is unchanged. Content arrives already prettified - prettifying is
+ * the renderer's job, not the destination's.
+ *
+ * @example
+ * ```js
+ * import { fsOutputAdapter } from '@graphql-markdown/utils/fs';
+ *
+ * await fsOutputAdapter.writeFile("./docs/api/query.md", "# Query")
+ * ```
+ */
+export const fsOutputAdapter: OutputAdapter = {
+  writeFile: async (filePath: string, content: string): Promise<void> => {
+    await saveFile(filePath, content);
+  },
+  ensureDir: async (
+    dirPath: string,
+    options?: EnsureDirOptions,
+  ): Promise<void> => {
+    await ensureDir(dirPath, options);
+  },
 };

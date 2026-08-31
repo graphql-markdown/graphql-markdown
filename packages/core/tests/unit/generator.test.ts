@@ -229,6 +229,7 @@ describe("generator", () => {
             hierarchy: options.printTypeOptions!.hierarchy,
           },
           ".md",
+          undefined, // outputAdapter: unset, so the renderer falls back to the filesystem
         );
       },
     );
