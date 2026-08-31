@@ -38,7 +38,7 @@
         "jsonc-eslint-parser": "3.3.0",
         "knip": "6.33.0",
         "lodash.filter": "4.6.0",
-        "memfs": "4.68.1",
+        "memfs": "4.68.2",
         "mutation-testing-metrics": "3.9.0",
         "prettier": "catalog:",
         "turbo": "2.10.12",
@@ -528,21 +528,21 @@
 
     "@jsonjoy.com/codegen": ["@jsonjoy.com/codegen@1.0.0", "", { "peerDependencies": { "tslib": "2" } }, "sha512-E8Oy+08cmCf0EK/NMxpaJZmOxPqM+6iSe2S4nlSBrPZOORoDJILxtbSUEDKQyTamm/BVAhIGllOBNU79/dwf0g=="],
 
-    "@jsonjoy.com/fs-core": ["@jsonjoy.com/fs-core@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-node-builtins": "4.68.1", "@jsonjoy.com/fs-node-utils": "4.68.1", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-V5oZ4Gt9WJKyQef0n9cAd0N9qjSkIBm3E4MYsgNIWBk5aINCDPKxMPo1i29rBxqiT4Ixf1epklqV9VJMKIxwlw=="],
+    "@jsonjoy.com/fs-core": ["@jsonjoy.com/fs-core@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-node-builtins": "4.68.2", "@jsonjoy.com/fs-node-utils": "4.68.2", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-PoBeUNEbjyLKKwCap2z8LkkqdhdfttS4rTHCALVuP65BdF+sAoyBqHo1m+uGTRBiQWv3H7MGfr8f7lY4pDwanw=="],
 
-    "@jsonjoy.com/fs-fsa": ["@jsonjoy.com/fs-fsa@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.1", "@jsonjoy.com/fs-node-builtins": "4.68.1", "@jsonjoy.com/fs-node-utils": "4.68.1", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-HCG72UioncuO7Gw09XNVG+S85e3cq2hrUC/mexBrsWsa3mI7eePkkqWie3uVYbtsb64OR9YGQs5SqaufDRYBcg=="],
+    "@jsonjoy.com/fs-fsa": ["@jsonjoy.com/fs-fsa@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.2", "@jsonjoy.com/fs-node-builtins": "4.68.2", "@jsonjoy.com/fs-node-utils": "4.68.2", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-h6eGXlLGGMyPfNliDQrbuHKTB9Z29ksCLjreAmdBqrDOBdfrTrHssi+b9WLfrF+J2KzAbIt9OMjJu6AEpTnYkg=="],
 
-    "@jsonjoy.com/fs-node": ["@jsonjoy.com/fs-node@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.1", "@jsonjoy.com/fs-node-builtins": "4.68.1", "@jsonjoy.com/fs-node-utils": "4.68.1", "@jsonjoy.com/fs-print": "4.68.1", "@jsonjoy.com/fs-snapshot": "4.68.1", "glob-to-regex.js": "^1.0.0", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-R5D9mWtqdURzcOWj1vdXr3APCwX0xchtFT+kmW7fXLNDifWdDrnh26jSID8pdnUfFBxTyfHtFtTL/NWKzIH7kQ=="],
+    "@jsonjoy.com/fs-node": ["@jsonjoy.com/fs-node@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.2", "@jsonjoy.com/fs-node-builtins": "4.68.2", "@jsonjoy.com/fs-node-utils": "4.68.2", "@jsonjoy.com/fs-print": "4.68.2", "@jsonjoy.com/fs-snapshot": "4.68.2", "glob-to-regex.js": "^1.0.0", "thingies": "^2.5.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-Kpj519Qk4OXG4+mZ8vTf9BEflliJrPueIDEVcbx8tAOufMJJ8IxR0WwdbcEvJol2KQog3PJjtALXVclorE+xbQ=="],
 
-    "@jsonjoy.com/fs-node-builtins": ["@jsonjoy.com/fs-node-builtins@4.68.1", "", { "peerDependencies": { "tslib": "2" } }, "sha512-HK1BTksysokNZxNspqDH0yPaqN9YgR/AYIlYiIaU2Ys4BOk5CdybI7r6BgiZuiiPiV8n4sK/kZdice7Znpy2Kw=="],
+    "@jsonjoy.com/fs-node-builtins": ["@jsonjoy.com/fs-node-builtins@4.68.2", "", { "peerDependencies": { "tslib": "2" } }, "sha512-V8WzQsW2YIrH3RxBGY6HZisxn+dDUltHgksVRuCdPEOXEkAfXuhL/01eHFrabNu84Dn13XuLqvcQUKOYVKAUOA=="],
 
-    "@jsonjoy.com/fs-node-to-fsa": ["@jsonjoy.com/fs-node-to-fsa@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-fsa": "4.68.1", "@jsonjoy.com/fs-node-builtins": "4.68.1", "@jsonjoy.com/fs-node-utils": "4.68.1" }, "peerDependencies": { "tslib": "2" } }, "sha512-lpKmU4X9e/oh8GIuAI7EXaS5QiLNM3KD15CkdhfS6PYmrGvoJqKQcyEfnLgnnaGslh/PFUMYSIZBCf2ejJGw8g=="],
+    "@jsonjoy.com/fs-node-to-fsa": ["@jsonjoy.com/fs-node-to-fsa@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-fsa": "4.68.2", "@jsonjoy.com/fs-node-builtins": "4.68.2", "@jsonjoy.com/fs-node-utils": "4.68.2" }, "peerDependencies": { "tslib": "2" } }, "sha512-4O1K4w5G4oJIpKpoa3WSLG83AsQYVnGv+aUSBGOvIUph9Axm6bB1mPlvldkNg2tBx/4dkiTlZnqNrK5SQ21Wtg=="],
 
-    "@jsonjoy.com/fs-node-utils": ["@jsonjoy.com/fs-node-utils@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-node-builtins": "4.68.1", "glob-to-regex.js": "^1.0.1" }, "peerDependencies": { "tslib": "2" } }, "sha512-/GxfW1DWm9SCdkfbvqevLO/P5duobQfmKkHXxdMIDbcZMQeAgooAstIfZhkXpATzq9QbCQsnoWFM/dGHdZfndw=="],
+    "@jsonjoy.com/fs-node-utils": ["@jsonjoy.com/fs-node-utils@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-node-builtins": "4.68.2", "glob-to-regex.js": "^1.0.1" }, "peerDependencies": { "tslib": "2" } }, "sha512-CxFwyG9fJr7dAKAd1uanNRNrRMtDDqbYJA8do53+M4LY7SxcBEEmMjC1zi9MOsBlVLHTXvA7OP9+n639UqtIcw=="],
 
-    "@jsonjoy.com/fs-print": ["@jsonjoy.com/fs-print@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-node-utils": "4.68.1", "tree-dump": "^1.1.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-oGeZOGPYKK9v1CgeVeEDsLomH1lCnslSpqUN5GmPzrmAVGQlsmsdcXNA2O4lV8Y4xkuSuynx2ITBkUHJVaTbow=="],
+    "@jsonjoy.com/fs-print": ["@jsonjoy.com/fs-print@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-node-utils": "4.68.2", "tree-dump": "^1.1.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-cBABQmZJXig6bahwNka3+yPNGUF1GeMWbR76ZM1N2ajgCd+S+twZigCoe9+0ueZmkhM9xd2a7688Gy/ch7T+2w=="],
 
-    "@jsonjoy.com/fs-snapshot": ["@jsonjoy.com/fs-snapshot@4.68.1", "", { "dependencies": { "@jsonjoy.com/buffers": "^17.65.0", "@jsonjoy.com/fs-node-utils": "4.68.1", "@jsonjoy.com/json-pack": "^17.65.0", "@jsonjoy.com/util": "^17.65.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-XZfP0FDZN32bbc4t2bZN2qRrYHg5AktJnzk22HRoKGK4BprrbNRH2k5ceSNS/kupKYcofCs+O841+xaAbjnxwQ=="],
+    "@jsonjoy.com/fs-snapshot": ["@jsonjoy.com/fs-snapshot@4.68.2", "", { "dependencies": { "@jsonjoy.com/buffers": "^17.65.0", "@jsonjoy.com/fs-node-utils": "4.68.2", "@jsonjoy.com/json-pack": "^17.65.0", "@jsonjoy.com/util": "^17.65.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-Aix7+NM38LzvewM0T3PICSgFdF5BVCtVgsjNsrlDPGc9hiMgJzReTDDl2/elgl0A9USMl3QP27x5WwxZSOtrfw=="],
 
     "@jsonjoy.com/json-pack": ["@jsonjoy.com/json-pack@1.21.0", "", { "dependencies": { "@jsonjoy.com/base64": "^1.1.2", "@jsonjoy.com/buffers": "^1.2.0", "@jsonjoy.com/codegen": "^1.0.0", "@jsonjoy.com/json-pointer": "^1.0.2", "@jsonjoy.com/util": "^1.9.0", "hyperdyperid": "^1.2.0", "thingies": "^2.5.0", "tree-dump": "^1.1.0" }, "peerDependencies": { "tslib": "2" } }, "sha512-+AKG+R2cfZMShzrF2uQw34v3zbeDYUqnQ+jg7ORic3BGtfw9p/+N6RJbq/kkV8JmYZaINknaEQ2m0/f693ZPpg=="],
 
@@ -1724,7 +1724,7 @@
 
     "mdurl": ["mdurl@2.0.0", "", {}, "sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w=="],
 
-    "memfs": ["memfs@4.68.1", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.1", "@jsonjoy.com/fs-fsa": "4.68.1", "@jsonjoy.com/fs-node": "4.68.1", "@jsonjoy.com/fs-node-builtins": "4.68.1", "@jsonjoy.com/fs-node-to-fsa": "4.68.1", "@jsonjoy.com/fs-node-utils": "4.68.1", "@jsonjoy.com/fs-print": "4.68.1", "@jsonjoy.com/fs-snapshot": "4.68.1", "@jsonjoy.com/json-pack": "^1.11.0", "@jsonjoy.com/util": "^1.9.0", "glob-to-regex.js": "^1.0.1", "thingies": "^2.5.0", "tree-dump": "^1.0.3", "tslib": "^2.0.0" } }, "sha512-OD+IDRUvIxu3QHL+nFm9gdyugInD27FDJ+sl4B5QgomPHXMlbw+GP918P8VNKu2FkNlVeqBkpzkwROpamVifRw=="],
+    "memfs": ["memfs@4.68.2", "", { "dependencies": { "@jsonjoy.com/fs-core": "4.68.2", "@jsonjoy.com/fs-fsa": "4.68.2", "@jsonjoy.com/fs-node": "4.68.2", "@jsonjoy.com/fs-node-builtins": "4.68.2", "@jsonjoy.com/fs-node-to-fsa": "4.68.2", "@jsonjoy.com/fs-node-utils": "4.68.2", "@jsonjoy.com/fs-print": "4.68.2", "@jsonjoy.com/fs-snapshot": "4.68.2", "@jsonjoy.com/json-pack": "^1.11.0", "@jsonjoy.com/util": "^1.9.0", "glob-to-regex.js": "^1.0.1", "thingies": "^2.5.0", "tree-dump": "^1.0.3", "tslib": "^2.0.0" } }, "sha512-Un1ElEBoIdPI9kg0sm3LebVEuEViodfIvlaG8Z1MFXa7ZnR9vWuPKUo3dt/vuWY2ivc05l76B5QOjdgCzAzmGw=="],
 
     "meow": ["meow@13.2.0", "", {}, "sha512-pxQJQzB6djGPXh08dacEloMFopsOqGVRKFPYvPOt9XDZ1HasbgDZA74CJGreSU4G3Ak7EFJGoiH2auq+yXISgA=="],
 
