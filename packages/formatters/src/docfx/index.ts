@@ -38,7 +38,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
-import { readOutput, writeOutput } from "../output";
+import { readOptionalOutput, readOutput, writeOutput } from "../output";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
 const ALERT_TYPE_MAP: Record<string, string> = {
@@ -282,7 +282,7 @@ const updateToc = async (
   await queueFileUpdate(tocFilePath, async () => {
     const entry = `- name: ${name}${MARKDOWN_EOL}  href: ${href}`;
 
-    const existing = await readOutput(tocFilePath, outputAdapter);
+    const existing = await readOptionalOutput(tocFilePath, outputAdapter);
 
     if (typeof existing !== "string") {
       await writeOutput(tocFilePath, entry + MARKDOWN_EOL, outputAdapter);

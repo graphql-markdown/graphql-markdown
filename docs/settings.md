@@ -348,16 +348,16 @@ The destination for generated documentation. By default pages are written to the
 | --------------- | -------- | -------------------- |
 | `outputAdapter` | none     | local filesystem     |
 
-An adapter must provide `writeFile`, and may provide `ensureDir` and `readFile`:
+An adapter must provide `writeFile` and `readFile`, and may provide `ensureDir`:
 
 ```ts
 interface OutputAdapter {
   writeFile: (filePath: string, content: string) => Promise<void>;
+  readFile: (filePath: string) => Promise<string | undefined>;
   ensureDir?: (
     dirPath: string,
     options?: { forceEmpty?: boolean },
   ) => Promise<void>;
-  readFile?: (filePath: string) => Promise<string | undefined>;
 }
 ```
 
@@ -456,7 +456,7 @@ Content arrives already formatted, so an adapter never has to handle [`pretty`](
 
 :::caution
 
-The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written, and so need `readFile`. Without it those runs report an error per page and skip the post-processing, which means internal links are left as absolute paths, and DocFX gets no `toc.yml`. Presets that never read back their output (Docusaurus, Starlight, Fumadocs, Vocs, Hugo, HonKit) work with `writeFile` alone.
+The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written. A destination that cannot serve back what it wrote may return `undefined` from `readFile`, but then those presets cannot rewrite internal links, and DocFX gets no `toc.yml`: the first page that cannot be read back is reported, once per run, and the post-processing is skipped. Presets that never read back their output (Docusaurus, Starlight, Fumadocs, Vocs, Hugo, HonKit) are unaffected.
 
 :::
 

@@ -204,31 +204,27 @@ describe("afterRenderTypeEntitiesHook", () => {
     expect(outputAdapter.writeFile).not.toHaveBeenCalled();
   });
 
-  test("skips the rewrite when the page cannot be read back", async () => {
-    outputAdapter.readFile.mockResolvedValue(undefined);
+  test("reports the first page that cannot be read back, then stays quiet", async () => {
+    // a write-only destination fails on every page, so it must be reported once
+    // rather than once per page
+    const writeOnly = {
+      writeFile: vi.fn(),
+      readFile: vi.fn().mockResolvedValue(undefined),
+    };
+    const data = {
+      baseURL: "graphql",
+      filePath: "/workspace/docs/graphql/types/objects/book.md",
+      outputDir: "/workspace/docs",
+      outputAdapter: writeOnly,
+    };
 
-    await afterRenderTypeEntitiesHook({
-      data: {
-        baseURL: "graphql",
-        filePath: "/workspace/docs/graphql/types/objects/book.md",
-        outputDir: "/workspace/docs",
-        outputAdapter,
-      },
-    });
+    await expect(afterRenderTypeEntitiesHook({ data })).rejects.toThrow(
+      "Cannot read back",
+    );
 
-    expect(outputAdapter.writeFile).not.toHaveBeenCalled();
-  });
-
-  test("reports an adapter that cannot read back its own output", async () => {
     await expect(
-      afterRenderTypeEntitiesHook({
-        data: {
-          baseURL: "graphql",
-          filePath: "/workspace/docs/graphql/types/objects/book.md",
-          outputDir: "/workspace/docs",
-          outputAdapter: { writeFile: vi.fn() },
-        },
-      }),
-    ).rejects.toThrow("does not implement readFile()");
+      afterRenderTypeEntitiesHook({ data }),
+    ).resolves.toBeUndefined();
+    expect(writeOnly.writeFile).not.toHaveBeenCalled();
   });
 });

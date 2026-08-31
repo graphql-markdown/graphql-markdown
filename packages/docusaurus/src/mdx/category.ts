@@ -38,11 +38,8 @@ export const beforeGenerateIndexMetafileHook = async (event: {
   // adapter keeps the sidebar metadata alongside what it wrote
   const adapter = outputAdapter ?? fsOutputAdapter;
 
-  // preserve a metafile that is already there, when the destination can be read
-  if (
-    typeof adapter.readFile === "function" &&
-    typeof (await adapter.readFile(filePath)) === "string"
-  ) {
+  // preserve a metafile that is already there
+  if (typeof (await adapter.readFile(filePath)) === "string") {
     return;
   }
 

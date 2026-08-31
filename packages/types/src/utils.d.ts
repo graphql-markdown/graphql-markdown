@@ -44,9 +44,13 @@ export interface OutputAdapter {
     options?: EnsureDirOptions,
   ) => Promise<void>;
   /**
-   * Reads back a page this adapter wrote. Optional, but required by the
-   * formatters that post-process their own output (DocFX, mdBook, MkDocs);
-   * when it is missing, those post-processing steps are skipped with a warning.
+   * Reads back a page this adapter wrote, or resolves `undefined` when there is
+   * nothing at that path.
+   *
+   * The formatters that post-process their own output (DocFX, mdBook, MkDocs)
+   * read each page back after it is written. A write-only destination can
+   * return `undefined`, but the first page that cannot be read back is
+   * reported, since post-processing is skipped for the whole run.
    */
-  readFile?: (filePath: string) => Promise<string | undefined>;
+  readFile: (filePath: string) => Promise<string | undefined>;
 }
