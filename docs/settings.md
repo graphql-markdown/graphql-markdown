@@ -348,7 +348,7 @@ The destination for generated documentation. By default pages are written to the
 | --------------- | -------- | -------------------- |
 | `outputAdapter` | none     | local filesystem     |
 
-An adapter must provide `writeFile`, and may provide `ensureDir`:
+An adapter must provide `writeFile`, and may provide `ensureDir` and `readFile`:
 
 ```ts
 interface OutputAdapter {
@@ -357,6 +357,7 @@ interface OutputAdapter {
     dirPath: string,
     options?: { forceEmpty?: boolean },
   ) => Promise<void>;
+  readFile?: (filePath: string) => Promise<string | undefined>;
 }
 ```
 
@@ -447,9 +448,15 @@ module.exports = {
 
 :::info
 
-`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same absolute paths the filesystem writer would use, rooted at the output directory — an adapter backed by something other than a filesystem can treat them as opaque keys.
+`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute — an adapter backed by something other than a filesystem can treat them as opaque keys.
 
 Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
+
+:::
+
+:::caution
+
+The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written, and so need `readFile`. Without it those runs report an error per page and skip the post-processing, which means internal links are left as absolute paths, and DocFX gets no `toc.yml`. Presets that never read back their output (Docusaurus, Starlight, Fumadocs, Vocs, Hugo, HonKit) work with `writeFile` alone.
 
 :::
 
