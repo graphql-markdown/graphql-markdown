@@ -334,6 +334,21 @@ class CategoryPositionManager {
  * Each level has its own CategoryPositionManager that restarts numbering at 1.
  * @example
  */
+/**
+ * Reports errors thrown by event handlers.
+ *
+ * Handler errors are collected rather than thrown, so without this they are
+ * dropped and the formatter's post-processing silently does nothing.
+ *
+ * @param eventName - Name of the emitted event
+ * @param errors - Errors collected from the handlers
+ */
+const logHandlerErrors = (eventName: string, errors: Error[]): void => {
+  errors.forEach((error) => {
+    log(`Error handler for ${eventName}: ${error.message}`, LogLevel.error);
+  });
+};
+
 // Value export used only by unit tests for direct whitebox coverage; the type is used
 // elsewhere via getRenderer()'s return type.
 export class Renderer {
@@ -431,30 +446,30 @@ export class Renderer {
     const event = new GenerateIndexMetafileEvent({
       dirPath,
       category,
+      outputAdapter: this.outputAdapter,
       options: {
         ...finalOptions,
         sidebarPosition,
         index: this.options?.index,
       },
     });
-    const handlerErrors = await events.emitAsync(
+    // emitAsync resolves to an EmitResult, never an array: the previous
+    // Array.isArray() guard was always false, so handler errors went unreported
+    const { errors } = await events.emitAsync(
       GenerateIndexMetafileEvents.BEFORE_GENERATE,
       event,
     );
+    logHandlerErrors(GenerateIndexMetafileEvents.BEFORE_GENERATE, errors);
 
-    if (Array.isArray(handlerErrors) && handlerErrors.length > 0) {
-      handlerErrors.forEach((error) => {
-        log(
-          `Error handler for ${GenerateIndexMetafileEvents.BEFORE_GENERATE}: ${error.message}`,
-          LogLevel.error,
-        );
-      });
-    }
-
-    await events.emitAsync(
+    const { errors: afterErrors } = await events.emitAsync(
       GenerateIndexMetafileEvents.AFTER_GENERATE,
-      new GenerateIndexMetafileEvent({ dirPath, category }),
+      new GenerateIndexMetafileEvent({
+        dirPath,
+        category,
+        outputAdapter: this.outputAdapter,
+      }),
     );
+    logHandlerErrors(GenerateIndexMetafileEvents.AFTER_GENERATE, afterErrors);
   }
 
   /**
@@ -725,8 +740,13 @@ export class Renderer {
       name,
       filePath,
       outputDir: this.outputDir,
+      outputAdapter: this.outputAdapter,
     });
-    await events.emitAsync(RenderTypeEntitiesEvents.AFTER_RENDER, event);
+    const { errors } = await events.emitAsync(
+      RenderTypeEntitiesEvents.AFTER_RENDER,
+      event,
+    );
+    logHandlerErrors(RenderTypeEntitiesEvents.AFTER_RENDER, errors);
 
     return {
       category,

@@ -24,8 +24,9 @@ export type EnsureDirOptions = Maybe<{ forceEmpty?: boolean }>;
  * an in-memory map, an object store - without forking the renderer.
  *
  * Paths passed to an adapter are the same ones the filesystem writer would use:
- * absolute, rooted at `outputDir`. An adapter backed by something other than a
- * filesystem can treat them as opaque keys.
+ * rooted at `outputDir`, and relative to the working directory unless the
+ * configured `rootPath` is itself absolute. An adapter backed by something
+ * other than a filesystem can treat them as opaque keys.
  */
 export interface OutputAdapter {
   /**
@@ -42,4 +43,10 @@ export interface OutputAdapter {
     dirPath: string,
     options?: EnsureDirOptions,
   ) => Promise<void>;
+  /**
+   * Reads back a page this adapter wrote. Optional, but required by the
+   * formatters that post-process their own output (DocFX, mdBook, MkDocs);
+   * when it is missing, those post-processing steps are skipped with a warning.
+   */
+  readFile?: (filePath: string) => Promise<string | undefined>;
 }

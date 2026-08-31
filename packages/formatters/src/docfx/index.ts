@@ -16,6 +16,7 @@ import type {
   Formatter,
   FrontMatterOptions,
   Maybe,
+  OutputAdapter,
   MDXString,
   MetaInfo,
   RenderTypeEntitiesHook,
@@ -28,8 +29,6 @@ import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  readFile,
-  saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
@@ -39,6 +38,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+import { readOutput, writeOutput } from "../output";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
 const ALERT_TYPE_MAP: Record<string, string> = {
@@ -277,23 +277,26 @@ const updateToc = async (
   tocFilePath: string,
   name: string,
   href: string,
+  outputAdapter: Maybe<OutputAdapter>,
 ): Promise<void> => {
   await queueFileUpdate(tocFilePath, async () => {
     const entry = `- name: ${name}${MARKDOWN_EOL}  href: ${href}`;
 
-    if (!(await fileExists(tocFilePath))) {
-      await saveFile(tocFilePath, entry + MARKDOWN_EOL);
+    const existing = await readOutput(tocFilePath, outputAdapter);
+
+    if (typeof existing !== "string") {
+      await writeOutput(tocFilePath, entry + MARKDOWN_EOL, outputAdapter);
       return;
     }
 
-    const existing = await readFile(tocFilePath, "utf-8");
     if (existing.includes(`href: ${href}`)) {
       return;
     }
 
-    await saveFile(
+    await writeOutput(
       tocFilePath,
       existing.trimEnd() + MARKDOWN_EOL + entry + MARKDOWN_EOL,
+      outputAdapter,
     );
   });
 };
@@ -312,12 +315,13 @@ const seenDirectories = new Set<string>();
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, name, outputDir } = (
+  const { baseURL, filePath, name, outputAdapter, outputDir } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
         name: string;
+        outputAdapter?: OutputAdapter;
         outputDir: string;
       };
     }
@@ -330,11 +334,16 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   const uid = relative(graphqlRoot, filePath)
     .replace(/\.mdx?$/, "")
     .replaceAll(/[/\\]/g, "-");
-  const content = await readFile(filePath, "utf-8");
+  const content = await readOutput(filePath, outputAdapter);
+
+  if (typeof content !== "string") {
+    return;
+  }
+
   const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
   const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
   if (rewritten !== content) {
-    await saveFile(filePath, rewritten);
+    await writeOutput(filePath, rewritten, outputAdapter);
   }
 
   let currentDir = resolve(dirname(filePath));
@@ -348,7 +357,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
       seenDirectories.add(currentDir);
       if (currentDir === graphqlRoot) {
         // Homepage is written after hooks run, so add Overview unconditionally.
-        await updateToc(tocPath, "Overview", "index.md");
+        await updateToc(tocPath, "Overview", "index.md", outputAdapter);
       } else {
         const indexPath = resolve(currentDir, "index.md");
         if (await fileExists(indexPath)) {
@@ -356,12 +365,13 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
             tocPath,
             `${capitalize(basename(currentDir))} Overview`,
             "index.md",
+            outputAdapter,
           );
         }
       }
     }
 
-    await updateToc(tocPath, currentName, currentHref);
+    await updateToc(tocPath, currentName, currentHref, outputAdapter);
 
     if (currentDir === graphqlRoot) break;
 

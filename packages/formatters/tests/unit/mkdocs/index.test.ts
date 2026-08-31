@@ -14,17 +14,6 @@ import {
 
 const { formatMDXBullet, formatMDXLink } = __default;
 
-import * as Utils from "@graphql-markdown/utils";
-
-vi.mock("@graphql-markdown/utils", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    readFile: vi.fn(),
-    saveFile: vi.fn(),
-  };
-});
-
 describe("formatMDXBadge", () => {
   test("renders inline mark tag", () => {
     expect(formatMDXBadge({ text: "Required" })).toBe(
@@ -169,50 +158,77 @@ describe("createMDXFormatter", () => {
 });
 
 describe("afterRenderTypeEntitiesHook", () => {
+  const outputAdapter = {
+    writeFile: vi.fn(),
+    readFile: vi.fn(),
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test("rewrites baseURL absolute links to relative markdown links", async () => {
-    const readFileMock = vi.mocked(Utils.readFile);
-    const saveFileMock = vi.mocked(Utils.saveFile);
-
-    readFileMock.mockResolvedValue(
+    outputAdapter.readFile.mockResolvedValue(
       "See [Book](/graphql/types/objects/book) and [ID](/graphql/types/scalars/id#value)",
     );
-    saveFileMock.mockResolvedValue(undefined);
 
     await afterRenderTypeEntitiesHook({
       data: {
         baseURL: "graphql",
         filePath: "/workspace/docs/graphql/operations/queries/book-by-id.md",
         outputDir: "/workspace/docs/graphql",
+        outputAdapter,
       },
     });
 
-    expect(saveFileMock).toHaveBeenCalledWith(
+    expect(outputAdapter.writeFile).toHaveBeenCalledWith(
       "/workspace/docs/graphql/operations/queries/book-by-id.md",
       "See [Book](../../types/objects/book.md) and [ID](../../types/scalars/id.md#value)",
     );
   });
 
   test("leaves non-baseURL absolute links unchanged", async () => {
-    const readFileMock = vi.mocked(Utils.readFile);
-    const saveFileMock = vi.mocked(Utils.saveFile);
-
-    readFileMock.mockResolvedValue(
+    outputAdapter.readFile.mockResolvedValue(
       "See [Site](/other/path) and [Spec](https://example.com)",
     );
-    saveFileMock.mockResolvedValue(undefined);
 
     await afterRenderTypeEntitiesHook({
       data: {
         baseURL: "graphql",
         filePath: "/workspace/docs/graphql/types/objects/book.md",
         outputDir: "/workspace/docs",
+        outputAdapter,
       },
     });
 
-    expect(saveFileMock).not.toHaveBeenCalled();
+    expect(outputAdapter.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("skips the rewrite when the page cannot be read back", async () => {
+    outputAdapter.readFile.mockResolvedValue(undefined);
+
+    await afterRenderTypeEntitiesHook({
+      data: {
+        baseURL: "graphql",
+        filePath: "/workspace/docs/graphql/types/objects/book.md",
+        outputDir: "/workspace/docs",
+        outputAdapter,
+      },
+    });
+
+    expect(outputAdapter.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("reports an adapter that cannot read back its own output", async () => {
+    await expect(
+      afterRenderTypeEntitiesHook({
+        data: {
+          baseURL: "graphql",
+          filePath: "/workspace/docs/graphql/types/objects/book.md",
+          outputDir: "/workspace/docs",
+          outputAdapter: { writeFile: vi.fn() },
+        },
+      }),
+    ).rejects.toThrow("does not implement readFile()");
   });
 });

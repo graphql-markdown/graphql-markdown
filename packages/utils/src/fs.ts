@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { mkdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import type {
@@ -130,5 +130,11 @@ export const fsOutputAdapter: OutputAdapter = {
     options?: EnsureDirOptions,
   ): Promise<void> => {
     await ensureDir(dirPath, options);
+  },
+  readFile: async (filePath: string): Promise<string | undefined> => {
+    if (!(await fileExists(filePath))) {
+      return undefined;
+    }
+    return readFile(filePath, "utf-8");
   },
 };

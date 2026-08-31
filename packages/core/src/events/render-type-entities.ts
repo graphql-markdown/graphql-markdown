@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import type { OutputAdapter } from "@graphql-markdown/types";
 import type { CancellableEventOptions } from "@graphql-markdown/utils";
 import { DataEvent } from "@graphql-markdown/utils";
 
@@ -17,6 +18,8 @@ export class RenderTypeEntitiesEvent extends DataEvent<{
   name: string;
   filePath: string;
   outputDir: string;
+  /** Destination the page was written to; use it to read the page back. */
+  outputAdapter?: OutputAdapter;
 }> {
   constructor(
     data: {
@@ -24,6 +27,7 @@ export class RenderTypeEntitiesEvent extends DataEvent<{
       name: string;
       filePath: string;
       outputDir: string;
+      outputAdapter?: OutputAdapter;
     },
     options?: CancellableEventOptions,
   ) {

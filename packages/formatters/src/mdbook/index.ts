@@ -18,6 +18,7 @@ import type {
   Formatter,
   FrontMatterOptions,
   Maybe,
+  OutputAdapter,
   MDXString,
   MetaInfo,
   RenderFilesHook,
@@ -33,7 +34,6 @@ import {
   firstUppercase,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  readFile,
   saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
@@ -43,6 +43,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+import { readOutput, writeOutput } from "../output";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -164,13 +165,23 @@ const rewriteInternalLinks = (
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, outputDir } = (
+  const { baseURL, filePath, outputAdapter, outputDir } = (
     event as {
-      data: { baseURL: string; filePath: string; outputDir: string };
+      data: {
+        baseURL: string;
+        filePath: string;
+        outputAdapter?: OutputAdapter;
+        outputDir: string;
+      };
     }
   ).data;
 
-  const content = await readFile(filePath, "utf-8");
+  const content = await readOutput(filePath, outputAdapter);
+
+  if (typeof content !== "string") {
+    return;
+  }
+
   const rewrittenContent = rewriteInternalLinks(
     content,
     filePath,
@@ -179,7 +190,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   );
 
   if (rewrittenContent !== content) {
-    await saveFile(filePath, rewrittenContent);
+    await writeOutput(filePath, rewrittenContent, outputAdapter);
   }
 };
 

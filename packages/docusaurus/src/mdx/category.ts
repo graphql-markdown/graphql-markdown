@@ -7,12 +7,8 @@
 
 import { join } from "node:path";
 
-import {
-  ensureDir,
-  fileExists,
-  saveFile,
-  startCase,
-} from "@graphql-markdown/utils";
+import type { OutputAdapter } from "@graphql-markdown/types";
+import { fsOutputAdapter, startCase } from "@graphql-markdown/utils";
 
 const CATEGORY_YAML = "_category_.yml" as const;
 
@@ -32,13 +28,21 @@ export const beforeGenerateIndexMetafileHook = async (event: {
   data: {
     dirPath: string;
     category: string;
+    outputAdapter?: OutputAdapter;
     options?: Record<string, unknown>;
   };
 }): Promise<void> => {
-  const { dirPath, category, options } = event.data;
+  const { dirPath, category, options, outputAdapter } = event.data;
   const filePath = join(dirPath, CATEGORY_YAML);
+  // the metafile goes to the same destination as the pages, so a custom output
+  // adapter keeps the sidebar metadata alongside what it wrote
+  const adapter = outputAdapter ?? fsOutputAdapter;
 
-  if (await fileExists(filePath)) {
+  // preserve a metafile that is already there, when the destination can be read
+  if (
+    typeof adapter.readFile === "function" &&
+    typeof (await adapter.readFile(filePath)) === "string"
+  ) {
     return;
   }
 
@@ -59,6 +63,6 @@ export const beforeGenerateIndexMetafileHook = async (event: {
       : SidebarPosition.FIRST;
   const content = `label: ${label}\nposition: ${position}\n${className}link: ${link}\ncollapsible: ${Boolean(options?.collapsible ?? true)}\ncollapsed: ${Boolean(options?.collapsed ?? true)}\n`;
 
-  await ensureDir(dirPath);
-  await saveFile(filePath, content);
+  await adapter.ensureDir?.(dirPath);
+  await adapter.writeFile(filePath, content);
 };
