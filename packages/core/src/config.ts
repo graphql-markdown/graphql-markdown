@@ -136,6 +136,9 @@ export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
  * @public
  * @see {@link Options} for the complete configuration interface
  */
+/** Memoised OS temp path, resolved on the first read of `DEFAULT_OPTIONS.tmpDir`. */
+let defaultTmpDir: string | undefined;
+
 export const DEFAULT_OPTIONS: Readonly<
   Pick<
     ConfigOptions,
@@ -193,9 +196,11 @@ export const DEFAULT_OPTIONS: Readonly<
   schema: "./schema.graphql",
   // Lazy: as a plain property this ran `tmpdir()` at module load, so merely
   // importing the config module touched the OS temp path even for runs that
-  // never diff. The getter defers it to the point a default is actually needed.
+  // never diff. The getter defers it to the point a default is actually needed,
+  // and memoises it since a single build reads it more than once.
   get tmpDir(): string {
-    return join(tmpdir(), PACKAGE_NAME);
+    defaultTmpDir ??= join(tmpdir(), PACKAGE_NAME);
+    return defaultTmpDir;
   },
   skipDocDirective: [] as DirectiveName[],
   onlyDocDirective: [] as DirectiveName[],
@@ -801,6 +806,13 @@ export const buildConfig = async (
     configFileOpts ?? {},
   );
 
+  // deepmerge rebuilds objects as prototype-less plain copies, which strips the
+  // methods off a class-based adapter. Take it from the raw sources instead, so
+  // `new MyAdapter()` keeps working as well as an object literal.
+  const outputAdapter =
+    configFileOpts?.outputAdapter ??
+    (graphqlConfig as Maybe<ConfigOptions>)?.outputAdapter;
+
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
     cliOpts,
     config,
@@ -861,7 +873,7 @@ export const buildConfig = async (
     formatter: parseDeprecatedFormatterOption(cliOpts, config),
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
-    outputAdapter: config.outputAdapter,
+    outputAdapter,
     outputDir: join(rootPath, baseURL),
     prettify,
     printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
