@@ -113,6 +113,27 @@ export const memoryOutputAdapter = {
 
 This supports read-back, so every preset works against it.
 
+## Limitations
+
+Two things are worth knowing before you rely on an adapter in an automated pipeline.
+
+### A failed hook does not fail the process
+
+If a formatter's post-processing throws — an adapter rejecting the write of mdBook's `SUMMARY.md`, say — the error is logged and the run reports that the output is incomplete, but the process still exits `0`. Handler errors are collected rather than raised, so one failing hook does not abort a generation that otherwise succeeded.
+
+A pipeline that must not publish incomplete documentation should not treat a zero exit status as sufficient. Check the log for the incomplete-output line, or assert on what actually landed in the destination — for an object store, that the page count matches the number of types, and that any navigation file the preset needs is present.
+
+### State is kept per adapter instance, not per run
+
+Two pieces of bookkeeping live for as long as the adapter object does, rather than for the length of a run:
+
+- DocFX records which directories it has already given an "Overview" entry, so the check runs once per directory rather than once per page.
+- The first page that cannot be read back is reported once, so a write-only destination does not repeat the same error for every page.
+
+Generating once per process — which is what the CLI and every framework plugin do — is unaffected. Calling `generateDocFromSchema` repeatedly inside one process while passing the *same* adapter object carries that state into the later runs: a second run over a directory cleared by [`force`](/docs/settings#force) can leave its `toc.yml` without the "Overview" entry, and a destination that still cannot serve reads stays quiet after the first report.
+
+Construct a new adapter object per run to avoid it. An adapter that holds an expensive client can keep the client in a shared scope and return a fresh wrapper object around it.
+
 ## Generation still runs under Node
 
 `outputAdapter` changes where documentation is written, not what runs it. `@graphql-markdown/core` and its dependencies use Node built-ins, so generation happens under Node — in a build step or a CI job — and the adapter publishes the result to its destination.
