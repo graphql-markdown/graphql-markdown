@@ -45,16 +45,20 @@ The paths handed to an adapter are the ones the filesystem writer would use. Two
 
 **They are relative to the working directory**, not absolute, unless [`rootPath`](/docs/settings#rootpath) is itself absolute. With the default `rootPath: "./docs"` and `baseURL: "schema"`, a page arrives as `docs/schema/types/objects/book.md`. Key off them directly, or make them relative to `outputDir` — do not assume a leading `/`.
 
-**One path sits outside the output directory.** mdBook requires `SUMMARY.md` one level above the generated pages, so an adapter that computes keys with `path.relative(outputDir, filePath)` gets a leading `..` for that one file. Fold it away, or handle it explicitly, if your destination rejects such keys:
+**One path sits outside the output directory.** mdBook requires `SUMMARY.md` one level above the generated pages, so an adapter computing keys with `path.relative(outputDir, filePath)` gets a leading `..` for that one file, which many object stores reject.
+
+Do not strip the `..`: that moves `SUMMARY.md` in among the pages, and the links it holds — `schema/index.md` and the like — then resolve one level too deep. Key off [`rootPath`](/docs/settings#rootpath) instead, which keeps every path inside the tree and preserves the layout:
 
 ```js
 const toKey = (location) =>
-  path
-    .relative(outputDir, location)
-    .split(path.sep)
-    .filter((segment) => segment !== "..")
-    .join("/");
+  path.relative(rootPath, location).split(path.sep).join("/");
 ```
+
+| Written | Key |
+| --- | --- |
+| `docs/schema/types/objects/book.md` | `schema/types/objects/book.md` |
+| `docs/schema/index.md` | `schema/index.md` |
+| `docs/SUMMARY.md` | `SUMMARY.md` |
 
 Use forward slashes in keys regardless of the OS that generated them, so the same schema produces the same keys everywhere.
 
