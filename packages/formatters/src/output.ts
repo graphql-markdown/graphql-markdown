@@ -134,7 +134,7 @@ export const rewriteRenderedPage = async (
       data: {
         baseURL: string;
         filePath: string;
-        outputAdapter?: OutputAdapter | null;
+        outputAdapter?: OutputAdapter;
         outputDir: string;
       };
     }

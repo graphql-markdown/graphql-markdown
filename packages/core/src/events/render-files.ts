@@ -19,7 +19,7 @@ export class RenderFilesEvent extends DataEvent<{
   rootDir: string;
   pages: unknown;
   /** Destination the pages were written to; use it for any summary file. */
-  outputAdapter?: OutputAdapter | null;
+  outputAdapter?: OutputAdapter;
 }> {
   constructor(
     data: {
@@ -27,7 +27,7 @@ export class RenderFilesEvent extends DataEvent<{
       outputDir: string;
       rootDir: string;
       pages: unknown;
-      outputAdapter?: OutputAdapter | null;
+      outputAdapter?: OutputAdapter;
     },
     options?: CancellableEventOptions,
   ) {

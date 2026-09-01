@@ -548,7 +548,8 @@ export const generateDocFromSchema = async ({
       outputDir,
       rootDir: dirname(outputDir),
       pages,
-      outputAdapter,
+      // the resolved adapter, so a hook never has to fall back for itself
+      outputAdapter: renderer.outputAdapter,
     }),
   );
 

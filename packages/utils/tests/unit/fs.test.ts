@@ -198,6 +198,14 @@ describe("fs", () => {
       ).toBeUndefined();
     });
 
+    test("readFile() propagates an error that is not a missing entry", async () => {
+      expect.assertions(1);
+
+      // a directory is readable as a path but not as a file: the adapter must
+      // not swallow that the way it swallows a missing entry
+      await expect(fsOutputAdapter.readFile("/testFolder")).rejects.toThrow();
+    });
+
     test("readFile() reads back what writeFile() persisted", async () => {
       expect.assertions(1);
 

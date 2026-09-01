@@ -132,9 +132,16 @@ export const fsOutputAdapter: OutputAdapter = {
     await ensureDir(dirPath, options);
   },
   readFile: async (filePath: string): Promise<string | undefined> => {
-    if (!(await fileExists(filePath))) {
-      return undefined;
+    try {
+      return await readFile(filePath, "utf-8");
+    } catch (error) {
+      // a missing entry is the answer "there is nothing here", not a failure;
+      // reading once rather than stat-then-read also closes the window in
+      // which the file can vanish between the two calls
+      if ((error as { code?: string }).code === "ENOENT") {
+        return undefined;
+      }
+      throw error;
     }
-    return readFile(filePath, "utf-8");
   },
 };
