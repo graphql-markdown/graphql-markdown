@@ -253,9 +253,12 @@ describe("config", () => {
       expect.assertions(2);
 
       class TestOutputAdapter {
-        public readonly writes: string[] = [];
-        async writeFile(filePath: string): Promise<void> {
-          this.writes.push(filePath);
+        public readonly writes = new Map<string, string>();
+        async writeFile(filePath: string, content: string): Promise<void> {
+          this.writes.set(filePath, content);
+        }
+        async readFile(filePath: string): Promise<string | undefined> {
+          return this.writes.get(filePath);
         }
       }
       const outputAdapter = new TestOutputAdapter();

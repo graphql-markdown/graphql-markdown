@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import type { Maybe, OutputAdapter } from "@graphql-markdown/types";
 import type { CancellableEventOptions } from "@graphql-markdown/utils";
 import { DataEvent } from "@graphql-markdown/utils";
 
@@ -17,6 +18,8 @@ export class RenderFilesEvent extends DataEvent<{
   outputDir: string;
   rootDir: string;
   pages: unknown;
+  /** Destination the pages were written to; use it for any summary file. */
+  outputAdapter?: Maybe<OutputAdapter>;
 }> {
   constructor(
     data: {
@@ -24,6 +27,7 @@ export class RenderFilesEvent extends DataEvent<{
       outputDir: string;
       rootDir: string;
       pages: unknown;
+      outputAdapter?: Maybe<OutputAdapter>;
     },
     options?: CancellableEventOptions,
   ) {

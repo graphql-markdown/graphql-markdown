@@ -548,6 +548,7 @@ export const generateDocFromSchema = async ({
       outputDir,
       rootDir: dirname(outputDir),
       pages,
+      outputAdapter,
     }),
   );
 

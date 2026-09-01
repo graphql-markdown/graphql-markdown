@@ -181,5 +181,31 @@ describe("fs", () => {
 
       expect(await fileExists("/testFolder/testFile")).toBe(false);
     });
+
+    test("readFile() returns the content of an existing entry", async () => {
+      expect.assertions(1);
+
+      expect(await fsOutputAdapter.readFile("/testFolder/testFile")).toBe(
+        "just a test",
+      );
+    });
+
+    test("readFile() returns undefined when there is no entry", async () => {
+      expect.assertions(1);
+
+      expect(
+        await fsOutputAdapter.readFile("/testFolder/missing"),
+      ).toBeUndefined();
+    });
+
+    test("readFile() reads back what writeFile() persisted", async () => {
+      expect.assertions(1);
+
+      await fsOutputAdapter.writeFile("/roundtrip/page.md", "# Page");
+
+      expect(await fsOutputAdapter.readFile("/roundtrip/page.md")).toBe(
+        "# Page",
+      );
+    });
   });
 });

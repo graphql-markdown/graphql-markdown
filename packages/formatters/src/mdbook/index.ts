@@ -34,7 +34,6 @@ import {
   firstUppercase,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
@@ -236,13 +235,14 @@ const SECTION_ORDER = [
 export const afterRenderFilesHook: RenderFilesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, outputDir, rootDir, pages } = (
+  const { baseURL, outputDir, rootDir, pages, outputAdapter } = (
     event as {
       data: {
         baseURL: string;
         outputDir: string;
         rootDir: string;
         pages: unknown[];
+        outputAdapter?: OutputAdapter;
       };
     }
   ).data;
@@ -313,5 +313,5 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     lines.push("");
   }
 
-  await saveFile(summaryPath, lines.join("\n"));
+  await writeOutput(summaryPath, lines.join("\n"), outputAdapter);
 };
