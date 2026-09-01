@@ -29,8 +29,9 @@ const getOutputAdapter = (
  *
  * A destination that cannot read back its own writes fails on every page, so
  * reporting each one would bury the run in identical errors. Keyed by adapter
- * rather than a flag, so the report is per destination and does not leak into
- * another run in the same process.
+ * rather than a flag, so one destination going quiet says nothing about
+ * another. An adapter instance reused across several runs in one process is
+ * therefore reported on its first failing run only.
  */
 const readBackReported = new WeakSet<OutputAdapter>();
 
@@ -45,8 +46,8 @@ const readBackReported = new WeakSet<OutputAdapter>();
  * @param filePath - Path of the generated page
  * @param outputAdapter - Adapter carried by the hook event, if any
  * @returns The page content, or `undefined` if it cannot be read back
- * @throws An error the first time a page cannot be read back, so the skipped
- * post-processing surfaces once instead of once per page.
+ * @throws An error the first time this adapter cannot read a page back, so the
+ * skipped post-processing surfaces once instead of once per page.
  */
 export const readOutput = async (
   filePath: string,

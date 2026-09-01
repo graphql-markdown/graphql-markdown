@@ -456,7 +456,9 @@ Content arrives already formatted, so an adapter never has to handle [`pretty`](
 
 :::caution
 
-The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written. A destination that cannot serve back what it wrote may return `undefined` from `readFile`, but then those presets cannot rewrite internal links, and DocFX gets no `toc.yml`: the first page that cannot be read back is reported, once per run, and the post-processing is skipped. Presets that never read back their output (Docusaurus, Starlight, Fumadocs, Vocs, Hugo, HonKit) are unaffected.
+The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written. A destination that cannot serve back what it wrote may return `undefined` from `readFile`, but then those presets cannot rewrite internal links, and DocFX gets no `toc.yml`: the first page an adapter cannot read back is reported, once for that adapter, and the post-processing is skipped.
+
+Docusaurus also reads back, once per category, to leave an existing `_category_.yml` alone: an adapter that cannot serve it back regenerates the file on every run, overwriting hand-made edits to it. Starlight, Fumadocs, Vocs, Hugo and HonKit never read back their output.
 
 :::
 

@@ -25,7 +25,6 @@ import type {
 import { quoteMarkdownLines } from "@graphql-markdown/helpers";
 import {
   capitalize,
-  fileExists,
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -360,7 +359,12 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
         await updateToc(tocPath, "Overview", "index.md", outputAdapter);
       } else {
         const indexPath = resolve(currentDir, "index.md");
-        if (await fileExists(indexPath)) {
+        // the section index lives wherever the pages were written, which is not
+        // the local filesystem when a custom adapter is configured
+        if (
+          typeof (await readOptionalOutput(indexPath, outputAdapter)) ===
+          "string"
+        ) {
           await updateToc(
             tocPath,
             `${capitalize(basename(currentDir))} Overview`,
