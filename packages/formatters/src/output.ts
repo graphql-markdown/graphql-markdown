@@ -63,7 +63,7 @@ export const readOutput = async (
   if (!readBackReported.has(adapter)) {
     readBackReported.add(adapter);
     throw new Error(
-      `Cannot read back "${filePath}" from the output destination: the formatter cannot post-process what it wrote, so internal links are left unresolved for this run.`,
+      `Cannot read back "${filePath}" from the output destination: the formatter cannot post-process what it wrote (e.g. internal link rewriting, navigation/metadata updates) for this run.`,
     );
   }
 
