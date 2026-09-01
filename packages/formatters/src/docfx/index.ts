@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import { dirname, resolve, basename, relative } from "node:path";
+import { dirname, join, basename, relative } from "node:path";
 
 import type {
   AdmonitionType,
@@ -16,6 +16,7 @@ import type {
   Formatter,
   FrontMatterOptions,
   Maybe,
+  OutputAdapter,
   MDXString,
   MetaInfo,
   RenderTypeEntitiesHook,
@@ -24,12 +25,10 @@ import type {
 import { quoteMarkdownLines } from "@graphql-markdown/helpers";
 import {
   capitalize,
-  fileExists,
+  fsOutputAdapter,
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  readFile,
-  saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
@@ -39,6 +38,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+import { readOptionalOutput, readOutput, writeOutput } from "../output";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
 const ALERT_TYPE_MAP: Record<string, string> = {
@@ -277,30 +277,36 @@ const updateToc = async (
   tocFilePath: string,
   name: string,
   href: string,
+  outputAdapter: Maybe<OutputAdapter>,
 ): Promise<void> => {
   await queueFileUpdate(tocFilePath, async () => {
     const entry = `- name: ${name}${MARKDOWN_EOL}  href: ${href}`;
 
-    if (!(await fileExists(tocFilePath))) {
-      await saveFile(tocFilePath, entry + MARKDOWN_EOL);
+    const existing = await readOptionalOutput(tocFilePath, outputAdapter);
+
+    if (typeof existing !== "string") {
+      await writeOutput(tocFilePath, entry + MARKDOWN_EOL, outputAdapter);
       return;
     }
 
-    const existing = await readFile(tocFilePath, "utf-8");
     if (existing.includes(`href: ${href}`)) {
       return;
     }
 
-    await saveFile(
+    await writeOutput(
       tocFilePath,
       existing.trimEnd() + MARKDOWN_EOL + entry + MARKDOWN_EOL,
+      outputAdapter,
     );
   });
 };
 
-// Tracks directories whose index.md has already been prepended to their toc.yml.
-// Module-level so it persists across all hook invocations within one generation run.
-const seenDirectories = new Set<string>();
+// Tracks directories whose index.md has already been prepended to their toc.yml,
+// so the check runs once per directory rather than once per page. Keyed by
+// destination: two adapters writing the same paths keep their own state, and a
+// run with a fresh adapter starts over. `updateToc` skips an href it already
+// holds, so a repeated attempt adds nothing.
+const seenDirectories = new WeakMap<OutputAdapter, Set<string>>();
 
 /**
  * Builds DocFX `toc.yml` navigation files as each entity page is written.
@@ -309,64 +315,126 @@ const seenDirectories = new Set<string>();
  * writing or updating a `toc.yml` at every directory level. Section index pages
  * are prepended as an "Overview" entry on first encounter.
  */
+/**
+ * Adds the "Overview" entry for a directory, the first time it is reached.
+ *
+ * @param currentDir - Directory whose toc.yml is being built
+ * @param tocPath - Path of that toc.yml
+ * @param isRoot - Whether the directory is the generated documentation root
+ * @param outputAdapter - Destination the pages were written to
+ */
+const addOverviewEntry = async (
+  currentDir: string,
+  tocPath: string,
+  isRoot: boolean,
+  outputAdapter: Maybe<OutputAdapter>,
+): Promise<void> => {
+  if (isRoot) {
+    // Homepage is written after hooks run, so add Overview unconditionally.
+    await updateToc(tocPath, "Overview", "index.md", outputAdapter);
+    return;
+  }
+
+  // the section index lives wherever the pages were written, which is not the
+  // local filesystem when a custom adapter is configured
+  const indexPath = join(currentDir, "index.md");
+
+  if (
+    typeof (await readOptionalOutput(indexPath, outputAdapter)) !== "string"
+  ) {
+    return;
+  }
+
+  await updateToc(
+    tocPath,
+    `${capitalize(basename(currentDir))} Overview`,
+    "index.md",
+    outputAdapter,
+  );
+};
+
+/**
+ * Adds a page, and every directory above it, to the toc.yml chain.
+ *
+ * The walk goes up in the same path shape the page was written with: resolving
+ * here would hand an adapter an absolute `toc.yml` key next to a relative page
+ * key, and a key based destination would file them apart.
+ *
+ * @param page - The rendered page, its display name and the output root
+ * @param outputAdapter - Destination the pages were written to
+ */
+const updateTocChain = async (
+  page: { filePath: string; name: string; outputDir: string; pagePath: string },
+  outputAdapter: Maybe<OutputAdapter>,
+): Promise<void> => {
+  const { filePath, name, outputDir, pagePath } = page;
+  const destination = outputAdapter ?? fsOutputAdapter;
+  const seen = seenDirectories.get(destination) ?? new Set<string>();
+  seenDirectories.set(destination, seen);
+
+  let currentRelativeDir = dirname(pagePath);
+  let currentHref = basename(filePath);
+  let currentName = name;
+
+  for (;;) {
+    const isRoot = currentRelativeDir === "." || currentRelativeDir === "";
+    const currentDir = isRoot ? outputDir : join(outputDir, currentRelativeDir);
+    const tocPath = join(currentDir, "toc.yml");
+
+    if (!seen.has(currentDir)) {
+      seen.add(currentDir);
+      await addOverviewEntry(currentDir, tocPath, isRoot, outputAdapter);
+    }
+
+    await updateToc(tocPath, currentName, currentHref, outputAdapter);
+
+    if (isRoot) {
+      return;
+    }
+
+    currentHref = `${basename(currentDir)}/toc.yml`;
+    currentName = capitalize(basename(currentDir));
+    currentRelativeDir = dirname(currentRelativeDir);
+  }
+};
+
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, name, outputDir } = (
+  const { baseURL, filePath, name, outputAdapter, outputDir } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
         name: string;
+        outputAdapter?: OutputAdapter;
         outputDir: string;
       };
     }
   ).data;
 
-  const graphqlRoot = resolve(outputDir);
+  const pagePath = relative(outputDir, filePath);
 
   // Rewrite uid as a path-derived value to guarantee uniqueness across the site.
   // e.g. operations/queries/continent.md → uid: operations-queries-continent
-  const uid = relative(graphqlRoot, filePath)
-    .replace(/\.mdx?$/, "")
-    .replaceAll(/[/\\]/g, "-");
-  const content = await readFile(filePath, "utf-8");
+  const uid = pagePath.replace(/\.mdx?$/, "").replaceAll(/[/\\]/g, "-");
+  const content = await readOutput(filePath, outputAdapter);
+
+  if (typeof content !== "string") {
+    return;
+  }
+
   const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
   const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
+
   if (rewritten !== content) {
-    await saveFile(filePath, rewritten);
+    await writeOutput(filePath, rewritten, outputAdapter);
   }
 
-  let currentDir = resolve(dirname(filePath));
-  let currentHref = basename(filePath);
-  let currentName = name;
-
-  while (currentDir.startsWith(graphqlRoot)) {
-    const tocPath = resolve(currentDir, "toc.yml");
-
-    if (!seenDirectories.has(currentDir)) {
-      seenDirectories.add(currentDir);
-      if (currentDir === graphqlRoot) {
-        // Homepage is written after hooks run, so add Overview unconditionally.
-        await updateToc(tocPath, "Overview", "index.md");
-      } else {
-        const indexPath = resolve(currentDir, "index.md");
-        if (await fileExists(indexPath)) {
-          await updateToc(
-            tocPath,
-            `${capitalize(basename(currentDir))} Overview`,
-            "index.md",
-          );
-        }
-      }
-    }
-
-    await updateToc(tocPath, currentName, currentHref);
-
-    if (currentDir === graphqlRoot) break;
-
-    currentHref = `${basename(currentDir)}/toc.yml`;
-    currentName = capitalize(basename(currentDir));
-    currentDir = dirname(currentDir);
+  // A page outside the output root has no toc to belong to.
+  if (pagePath.startsWith("..")) {
+    return;
   }
+
+  await updateTocChain({ filePath, name, outputDir, pagePath }, outputAdapter);
 };

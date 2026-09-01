@@ -25,8 +25,6 @@ import {
 import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  readFile,
-  saveFile,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
@@ -34,6 +32,7 @@ import {
   formatMDXLink,
   formatMDXPermalink,
 } from "../defaults";
+import { rewriteRenderedPage } from "../output";
 
 export const __default = {
   formatMDXBullet,
@@ -159,23 +158,7 @@ export const mdxExtension = ".md" as const;
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, outputDir } = (
-    event as {
-      data: { baseURL: string; filePath: string; outputDir: string };
-    }
-  ).data;
-
-  const content = await readFile(filePath, "utf-8");
-  const rewrittenContent = rewriteInternalLinks(
-    content,
-    filePath,
-    outputDir,
-    baseURL,
-  );
-
-  if (rewrittenContent !== content) {
-    await saveFile(filePath, rewrittenContent);
-  }
+  await rewriteRenderedPage(event, rewriteInternalLinks);
 };
 
 export { formatMDXBullet, formatMDXPermalink } from "../defaults";

@@ -40,7 +40,7 @@ import { dirname } from "node:path";
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { getRenderer } from "./renderer";
+import { getRenderer, logHandlerErrors } from "./renderer";
 import { getEvents } from "./event-emitter";
 import {
   SchemaEvent,
@@ -541,24 +541,38 @@ export const generateDocFromSchema = async ({
     afterRenderHomepageEvent,
   );
 
-  await events.emitAsync(
+  const { errors: renderFilesErrors } = await events.emitAsync(
     RenderFilesEvents.AFTER_RENDER,
     new RenderFilesEvent({
       baseURL,
       outputDir,
       rootDir: dirname(outputDir),
       pages,
+      // the resolved adapter, so a hook never has to fall back for itself
+      outputAdapter: renderer.outputAdapter,
     }),
   );
+  // without this a failure to write mdBook's SUMMARY.md is dropped, and the
+  // success line below claims the documentation is complete
+  logHandlerErrors(RenderFilesEvents.AFTER_RENDER, renderFilesErrors);
 
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(SEC_DECIMALS);
 
-  log(
-    `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
-    "success",
-  );
+  // a formatter that could not finish its output must not be reported as a
+  // success: mdBook cannot build without the SUMMARY.md written by that hook
+  if (renderFilesErrors.length > 0) {
+    log(
+      `Documentation generated in "${outputDir}" with base URL "${baseURL}", but ${renderFilesErrors.length} post-processing error(s) occurred: the output is incomplete.`,
+      LogLevel.error,
+    );
+  } else {
+    log(
+      `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+      "success",
+    );
+  }
   log(
     `${
       pages.flat().length

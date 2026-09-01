@@ -249,6 +249,27 @@ describe("config", () => {
   });
 
   describe("buildConfig()", () => {
+    test("preserves the methods of a class based outputAdapter", async () => {
+      expect.assertions(2);
+
+      class TestOutputAdapter {
+        public readonly writes = new Map<string, string>();
+        async writeFile(filePath: string, content: string): Promise<void> {
+          this.writes.set(filePath, content);
+        }
+        async readFile(filePath: string): Promise<string | undefined> {
+          return this.writes.get(filePath);
+        }
+      }
+      const outputAdapter = new TestOutputAdapter();
+
+      const config = await buildConfig({ outputAdapter }, undefined, undefined);
+
+      // deepmerge would rebuild it as a prototype-less copy, dropping writeFile
+      expect(config.outputAdapter).toBe(outputAdapter);
+      expect(typeof config.outputAdapter!.writeFile).toBe("function");
+    });
+
     test("returns default options is no config set", async () => {
       expect.hasAssertions();
 

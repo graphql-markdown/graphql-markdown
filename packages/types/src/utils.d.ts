@@ -24,8 +24,12 @@ export type EnsureDirOptions = Maybe<{ forceEmpty?: boolean }>;
  * an in-memory map, an object store - without forking the renderer.
  *
  * Paths passed to an adapter are the same ones the filesystem writer would use:
- * absolute, rooted at `outputDir`. An adapter backed by something other than a
- * filesystem can treat them as opaque keys.
+ * rooted at `outputDir`, and relative to the working directory unless the
+ * configured `rootPath` is itself absolute. An adapter backed by something
+ * other than a filesystem can treat them as opaque keys. The one path that sits
+ * outside `outputDir` is mdBook's `SUMMARY.md`, which the format requires one
+ * level above it: still inside `rootPath`, so keys taken relative to `rootPath`
+ * stay within the tree.
  */
 export interface OutputAdapter {
   /**
@@ -42,4 +46,14 @@ export interface OutputAdapter {
     dirPath: string,
     options?: EnsureDirOptions,
   ) => Promise<void>;
+  /**
+   * Reads back a page this adapter wrote, or resolves `undefined` when there is
+   * nothing at that path.
+   *
+   * The formatters that post-process their own output (DocFX, mdBook, MkDocs)
+   * read each page back after it is written. A write-only destination can
+   * return `undefined`, but the first page that cannot be read back is
+   * reported, since post-processing is skipped for the whole run.
+   */
+  readFile: (filePath: string) => Promise<string | undefined>;
 }

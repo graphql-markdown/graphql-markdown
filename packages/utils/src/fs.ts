@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { mkdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import type {
@@ -130,5 +130,18 @@ export const fsOutputAdapter: OutputAdapter = {
     options?: EnsureDirOptions,
   ): Promise<void> => {
     await ensureDir(dirPath, options);
+  },
+  readFile: async (filePath: string): Promise<string | undefined> => {
+    try {
+      return await readFile(filePath, "utf-8");
+    } catch (error) {
+      // a missing entry is the answer "there is nothing here", not a failure;
+      // reading once rather than stat-then-read also closes the window in
+      // which the file can vanish between the two calls
+      if ((error as { code?: string }).code === "ENOENT") {
+        return undefined;
+      }
+      throw error;
+    }
   },
 };

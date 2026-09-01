@@ -348,11 +348,12 @@ The destination for generated documentation. By default pages are written to the
 | --------------- | -------- | -------------------- |
 | `outputAdapter` | none     | local filesystem     |
 
-An adapter must provide `writeFile`, and may provide `ensureDir`:
+An adapter must provide `writeFile` and `readFile`, and may provide `ensureDir`:
 
 ```ts
 interface OutputAdapter {
   writeFile: (filePath: string, content: string) => Promise<void>;
+  readFile: (filePath: string) => Promise<string | undefined>;
   ensureDir?: (
     dirPath: string,
     options?: { forceEmpty?: boolean },
@@ -367,6 +368,7 @@ const path = require("node:path");
 const {
   S3Client,
   PutObjectCommand,
+  GetObjectCommand,
   ListObjectsV2Command,
   DeleteObjectsCommand,
 } = require("@aws-sdk/client-s3");
@@ -376,8 +378,6 @@ const baseURL = "schema";
 const outputDir = path.join(rootPath, baseURL);
 
 const BUCKET = "docs";
-const KEY_PREFIX = "schema/";
-
 const r2 = new S3Client({
   region: "auto",
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -387,10 +387,13 @@ const r2 = new S3Client({
   },
 });
 
-// Object keys are the page paths relative to the output directory, always
-// forward-slashed so keys are identical whichever OS generated them.
+// Object keys are the paths relative to `rootPath`, always forward-slashed so
+// keys are identical whichever OS generated them. Keying off `rootPath` rather
+// than `outputDir` keeps the layout intact for mdBook's SUMMARY.md, which sits
+// one level above the pages: it lands at `SUMMARY.md`, above `schema/`, so the
+// links it holds still resolve.
 const toKey = (location) =>
-  KEY_PREFIX + path.relative(outputDir, location).split(path.sep).join("/");
+  path.relative(rootPath, location).split(path.sep).join("/");
 
 module.exports = {
   // ...
@@ -407,6 +410,21 @@ module.exports = {
         }),
       );
     },
+    // Required: the formatters that post-process their own output read each
+    // page back. A missing object is "there is nothing here", not a failure.
+    readFile: async (filePath) => {
+      try {
+        const object = await r2.send(
+          new GetObjectCommand({ Bucket: BUCKET, Key: toKey(filePath) }),
+        );
+        return await object.Body.transformToString();
+      } catch (error) {
+        if (error.name === "NoSuchKey") {
+          return undefined;
+        }
+        throw error;
+      }
+    },
     // R2 has no directories, so there is nothing to create. The work worth
     // doing is honouring `forceEmpty`: without it, pages for types deleted
     // from the schema would stay in the bucket forever.
@@ -415,7 +433,10 @@ module.exports = {
         return;
       }
 
-      const Prefix = toKey(dirPath);
+      // S3 prefix matching is literal, not directory aware: without the
+      // trailing delimiter, clearing `schema` would also delete `schema-v2/`.
+      const dirKey = toKey(dirPath);
+      const Prefix = dirKey === "" ? "" : `${dirKey}/`;
       let ContinuationToken;
 
       do {
@@ -447,9 +468,17 @@ module.exports = {
 
 :::info
 
-`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same absolute paths the filesystem writer would use, rooted at the output directory — an adapter backed by something other than a filesystem can treat them as opaque keys.
+`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute. The one exception is mdBook's `SUMMARY.md`, which the format requires one level above the output directory: the adapter is handed a path inside [`rootPath`](#rootpath) but outside `outputDir`, so keys derived with `path.relative(outputDir, filePath)` gain a leading `..` for that one file — an adapter backed by something other than a filesystem can treat them as opaque keys.
 
 Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
+
+:::
+
+:::caution
+
+The [`formatter`](#formatter) presets that post-process their own output — DocFX, mdBook and MkDocs — read each page back after it is written. A destination that cannot serve back what it wrote may return `undefined` from `readFile`, but then those presets cannot rewrite internal links, and DocFX gets no `toc.yml`: the first page an adapter cannot read back is reported, once for that adapter, and the post-processing is skipped.
+
+Docusaurus also reads back, once per category, to leave an existing `_category_.yml` alone: an adapter that cannot serve it back regenerates the file on every run, overwriting hand-made edits to it. Starlight, Fumadocs, Vocs, Hugo and HonKit never read back their output.
 
 :::
 

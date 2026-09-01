@@ -10,6 +10,11 @@ vi.mock("@graphql-markdown/utils", async (importOriginal): Promise<unknown> => {
     saveFile: vi.fn(),
     copyFile: vi.fn(),
     readFile: vi.fn(),
+    fsOutputAdapter: {
+      writeFile: vi.fn(),
+      ensureDir: vi.fn(),
+      readFile: vi.fn(),
+    },
   };
 });
 import * as Utils from "@graphql-markdown/utils";
@@ -25,8 +30,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -48,8 +53,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -75,8 +80,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -99,8 +104,10 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = "/output/docs";
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(true);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(
+      "label: Existing\n",
+    );
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -122,8 +129,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", category);
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -147,8 +154,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const filePath = path.join(outputPath, CATEGORY_YAML);
     const styleClass = "foo-baz";
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -174,8 +181,8 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const outputPath = path.join("/output/docs", "01-common");
     const filePath = path.join(outputPath, CATEGORY_YAML);
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const spy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {
@@ -196,9 +203,9 @@ describe("beforeGenerateIndexMetafileHook()", () => {
     const category = "foobar";
     const outputPath = "/output/docs";
 
-    vi.spyOn(Utils, "fileExists").mockResolvedValue(false);
-    const ensureDirSpy = vi.spyOn(Utils, "ensureDir");
-    const saveFileSpy = vi.spyOn(Utils, "saveFile");
+    vi.mocked(Utils.fsOutputAdapter.readFile!).mockResolvedValue(undefined);
+    const ensureDirSpy = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
+    const saveFileSpy = vi.mocked(Utils.fsOutputAdapter.writeFile);
 
     await beforeGenerateIndexMetafileHook({
       data: {

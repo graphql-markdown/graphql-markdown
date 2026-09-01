@@ -18,6 +18,7 @@ import type {
   FrontMatterOptions,
   GenerateIndexMetafileHook,
   Maybe,
+  OutputAdapter,
   MDXString,
   MetaInfo,
   TypeLink,
@@ -30,9 +31,7 @@ import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  ensureDir,
   formatFrontMatterObject,
-  saveFile,
   startCase,
 } from "@graphql-markdown/utils";
 import {
@@ -41,6 +40,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
+import { writeOutput } from "../output";
 
 /**
  * Maps graphql-markdown admonition types to Hugo GitHub-style alert types (Hugo 0.132+).
@@ -181,13 +181,18 @@ export const mdxExtension = ".md" as const;
  */
 export const beforeGenerateIndexMetafileHook: GenerateIndexMetafileHook =
   async (event): Promise<void> => {
-    const { dirPath, category } = (
-      event as { data: { dirPath: string; category: string } }
+    const { dirPath, category, outputAdapter } = (
+      event as {
+        data: {
+          dirPath: string;
+          category: string;
+          outputAdapter?: OutputAdapter;
+        };
+      }
     ).data;
     const filePath = join(dirPath, "_index.md");
     const label = startCase(category);
     const content = `${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}title: "${label}"${MARKDOWN_EOL}type: docs${MARKDOWN_EOL}bookCollapseSection: true${MARKDOWN_EOL}${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}${MARKDOWN_EOL}# ${label}${MARKDOWN_EOL}${MARKDOWN_EOL}`;
 
-    await ensureDir(dirPath);
-    await saveFile(filePath, content);
+    await writeOutput(filePath, content, outputAdapter, dirPath);
   };
