@@ -42,7 +42,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
-import { readOutput, writeOutput } from "../output";
+import { rewriteRenderedPage, writeOutput } from "../output";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -164,33 +164,7 @@ const rewriteInternalLinks = (
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, outputAdapter, outputDir } = (
-    event as {
-      data: {
-        baseURL: string;
-        filePath: string;
-        outputAdapter?: OutputAdapter;
-        outputDir: string;
-      };
-    }
-  ).data;
-
-  const content = await readOutput(filePath, outputAdapter);
-
-  if (typeof content !== "string") {
-    return;
-  }
-
-  const rewrittenContent = rewriteInternalLinks(
-    content,
-    filePath,
-    outputDir,
-    baseURL,
-  );
-
-  if (rewrittenContent !== content) {
-    await writeOutput(filePath, rewrittenContent, outputAdapter);
-  }
+  await rewriteRenderedPage(event, rewriteInternalLinks);
 };
 
 /**

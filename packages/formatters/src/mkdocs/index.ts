@@ -14,7 +14,6 @@ import type {
   Formatter,
   FrontMatterOptions,
   Maybe,
-  OutputAdapter,
   MDXString,
   MetaInfo,
   RenderTypeEntitiesHook,
@@ -33,7 +32,7 @@ import {
   formatMDXLink,
   formatMDXPermalink,
 } from "../defaults";
-import { readOutput, writeOutput } from "../output";
+import { rewriteRenderedPage } from "../output";
 
 export const __default = {
   formatMDXBullet,
@@ -159,33 +158,7 @@ export const mdxExtension = ".md" as const;
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, outputAdapter, outputDir } = (
-    event as {
-      data: {
-        baseURL: string;
-        filePath: string;
-        outputAdapter?: OutputAdapter;
-        outputDir: string;
-      };
-    }
-  ).data;
-
-  const content = await readOutput(filePath, outputAdapter);
-
-  if (typeof content !== "string") {
-    return;
-  }
-
-  const rewrittenContent = rewriteInternalLinks(
-    content,
-    filePath,
-    outputDir,
-    baseURL,
-  );
-
-  if (rewrittenContent !== content) {
-    await writeOutput(filePath, rewrittenContent, outputAdapter);
-  }
+  await rewriteRenderedPage(event, rewriteInternalLinks);
 };
 
 export { formatMDXBullet, formatMDXPermalink } from "../defaults";

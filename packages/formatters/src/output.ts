@@ -109,3 +109,46 @@ export const writeOutput = async (
 
   await adapter.writeFile(filePath, content);
 };
+
+/**
+ * Rewrites the content of a page a formatter has just rendered.
+ *
+ * The read-modify-write around an `afterRenderTypeEntities` hook is identical
+ * for every preset that post-processes its own output; only the rewriting
+ * differs. Presets supply that and nothing else.
+ *
+ * @param event - The hook event, carrying the page path and its destination
+ * @param rewrite - Returns the new content, or the content unchanged to skip
+ */
+export const rewriteRenderedPage = async (
+  event: unknown,
+  rewrite: (
+    content: string,
+    filePath: string,
+    outputDir: string,
+    baseURL: string,
+  ) => string,
+): Promise<void> => {
+  const { baseURL, filePath, outputAdapter, outputDir } = (
+    event as {
+      data: {
+        baseURL: string;
+        filePath: string;
+        outputAdapter?: OutputAdapter | null;
+        outputDir: string;
+      };
+    }
+  ).data;
+
+  const content = await readOutput(filePath, outputAdapter);
+
+  if (typeof content !== "string") {
+    return;
+  }
+
+  const rewritten = rewrite(content, filePath, outputDir, baseURL);
+
+  if (rewritten !== content) {
+    await writeOutput(filePath, rewritten, outputAdapter);
+  }
+};
