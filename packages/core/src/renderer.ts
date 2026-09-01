@@ -343,7 +343,7 @@ class CategoryPositionManager {
  * @param eventName - Name of the emitted event
  * @param errors - Errors collected from the handlers
  */
-const logHandlerErrors = (eventName: string, errors: Error[]): void => {
+export const logHandlerErrors = (eventName: string, errors: Error[]): void => {
   errors.forEach((error) => {
     log(`Error handler for ${eventName}: ${error.message}`, LogLevel.error);
   });

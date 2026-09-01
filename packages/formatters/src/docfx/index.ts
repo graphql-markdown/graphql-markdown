@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import { dirname, resolve, basename, relative } from "node:path";
+import { dirname, join, basename, relative } from "node:path";
 
 import type {
   AdmonitionType,
@@ -326,13 +326,11 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     }
   ).data;
 
-  const graphqlRoot = resolve(outputDir);
+  const pagePath = relative(outputDir, filePath);
 
   // Rewrite uid as a path-derived value to guarantee uniqueness across the site.
   // e.g. operations/queries/continent.md → uid: operations-queries-continent
-  const uid = relative(graphqlRoot, filePath)
-    .replace(/\.mdx?$/, "")
-    .replaceAll(/[/\\]/g, "-");
+  const uid = pagePath.replace(/\.mdx?$/, "").replaceAll(/[/\\]/g, "-");
   const content = await readOutput(filePath, outputAdapter);
 
   if (typeof content !== "string") {
@@ -345,20 +343,30 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     await writeOutput(filePath, rewritten, outputAdapter);
   }
 
-  let currentDir = resolve(dirname(filePath));
+  // A page outside the output root has no toc to belong to.
+  if (pagePath.startsWith("..")) {
+    return;
+  }
+
+  // Walk up in the same path shape the page was written with: resolving here
+  // would hand an adapter an absolute `toc.yml` key next to a relative page
+  // key, and a key based destination would file them apart.
+  let currentRelativeDir = dirname(pagePath);
   let currentHref = basename(filePath);
   let currentName = name;
 
-  while (currentDir.startsWith(graphqlRoot)) {
-    const tocPath = resolve(currentDir, "toc.yml");
+  for (;;) {
+    const isRoot = currentRelativeDir === "." || currentRelativeDir === "";
+    const currentDir = isRoot ? outputDir : join(outputDir, currentRelativeDir);
+    const tocPath = join(currentDir, "toc.yml");
 
     if (!seenDirectories.has(currentDir)) {
       seenDirectories.add(currentDir);
-      if (currentDir === graphqlRoot) {
+      if (isRoot) {
         // Homepage is written after hooks run, so add Overview unconditionally.
         await updateToc(tocPath, "Overview", "index.md", outputAdapter);
       } else {
-        const indexPath = resolve(currentDir, "index.md");
+        const indexPath = join(currentDir, "index.md");
         // the section index lives wherever the pages were written, which is not
         // the local filesystem when a custom adapter is configured
         if (
@@ -377,10 +385,10 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
 
     await updateToc(tocPath, currentName, currentHref, outputAdapter);
 
-    if (currentDir === graphqlRoot) break;
+    if (isRoot) break;
 
     currentHref = `${basename(currentDir)}/toc.yml`;
     currentName = capitalize(basename(currentDir));
-    currentDir = dirname(currentDir);
+    currentRelativeDir = dirname(currentRelativeDir);
   }
 };

@@ -40,7 +40,7 @@ import { dirname } from "node:path";
 import { DiffMethod } from "./config";
 import { hasChanges } from "./diff";
 import { getPrinter } from "./printer";
-import { getRenderer } from "./renderer";
+import { getRenderer, logHandlerErrors } from "./renderer";
 import { getEvents } from "./event-emitter";
 import {
   SchemaEvent,
@@ -541,7 +541,7 @@ export const generateDocFromSchema = async ({
     afterRenderHomepageEvent,
   );
 
-  await events.emitAsync(
+  const { errors: renderFilesErrors } = await events.emitAsync(
     RenderFilesEvents.AFTER_RENDER,
     new RenderFilesEvent({
       baseURL,
@@ -552,6 +552,9 @@ export const generateDocFromSchema = async ({
       outputAdapter: renderer.outputAdapter,
     }),
   );
+  // without this a failure to write mdBook's SUMMARY.md is dropped, and the
+  // success line below claims the documentation is complete
+  logHandlerErrors(RenderFilesEvents.AFTER_RENDER, renderFilesErrors);
 
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC

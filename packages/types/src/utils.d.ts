@@ -26,7 +26,9 @@ export type EnsureDirOptions = Maybe<{ forceEmpty?: boolean }>;
  * Paths passed to an adapter are the same ones the filesystem writer would use:
  * rooted at `outputDir`, and relative to the working directory unless the
  * configured `rootPath` is itself absolute. An adapter backed by something
- * other than a filesystem can treat them as opaque keys.
+ * other than a filesystem can treat them as opaque keys. The one path that sits
+ * outside `outputDir` is mdBook's `SUMMARY.md`, which the format requires one
+ * level above it.
  */
 export interface OutputAdapter {
   /**

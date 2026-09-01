@@ -203,6 +203,49 @@ describe("afterRenderTypeEntitiesHook", () => {
     expect(typeof afterRenderTypeEntitiesHook).toBe("function");
   });
 
+  test("keys toc.yml and index.md the same way as the page it is given", async () => {
+    expect.assertions(3);
+
+    // a key based destination files an absolute `toc.yml` apart from a
+    // relative page key, so both must keep the shape the renderer used
+    const store = new Map<string, string>([
+      ["docs/api/types/objects/book.md", "---\n  uid: book\n---\n\n# Book\n"],
+      ["docs/api/types/objects/index.md", "# Objects"],
+    ]);
+    const outputAdapter = {
+      writeFile: vi.fn(async (filePath: string, content: string) => {
+        store.set(filePath, content);
+      }),
+      readFile: vi.fn(async (filePath: string) => {
+        return store.get(filePath);
+      }),
+    };
+
+    await afterRenderTypeEntitiesHook({
+      data: {
+        baseURL: "api",
+        filePath: "docs/api/types/objects/book.md",
+        name: "Book",
+        outputDir: "docs/api",
+        outputAdapter,
+      },
+    });
+
+    const written = outputAdapter.writeFile.mock.calls.map(([path]) => {
+      return path;
+    });
+
+    expect(written).toContain("docs/api/types/objects/toc.yml");
+    expect(
+      written.some((path) => {
+        return path.startsWith("/");
+      }),
+    ).toBe(false);
+    expect(outputAdapter.readFile).toHaveBeenCalledWith(
+      "docs/api/types/objects/index.md",
+    );
+  });
+
   test("rewrites absolute links with linkRoot prefix to relative paths", async () => {
     const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
       await import("node:fs");

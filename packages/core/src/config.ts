@@ -129,6 +129,9 @@ export const ASSET_HOMEPAGE_LOCATION = join(
  */
 export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
 
+/** Memoised OS temp path, resolved on the first read of `DEFAULT_OPTIONS.tmpDir`. */
+let defaultTmpDir: string | undefined;
+
 /**
  * Default configuration options used when no user options are provided.
  * These values serve as fallbacks for any missing configuration.
@@ -136,9 +139,6 @@ export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
  * @public
  * @see {@link Options} for the complete configuration interface
  */
-/** Memoised OS temp path, resolved on the first read of `DEFAULT_OPTIONS.tmpDir`. */
-let defaultTmpDir: string | undefined;
-
 export const DEFAULT_OPTIONS: Readonly<
   Pick<
     ConfigOptions,

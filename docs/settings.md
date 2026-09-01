@@ -368,6 +368,7 @@ const path = require("node:path");
 const {
   S3Client,
   PutObjectCommand,
+  GetObjectCommand,
   ListObjectsV2Command,
   DeleteObjectsCommand,
 } = require("@aws-sdk/client-s3");
@@ -389,9 +390,16 @@ const r2 = new S3Client({
 });
 
 // Object keys are the page paths relative to the output directory, always
-// forward-slashed so keys are identical whichever OS generated them.
+// forward-slashed so keys are identical whichever OS generated them. mdBook
+// writes its SUMMARY.md one level above the output directory, so `..` segments
+// are folded away rather than sent to a store that would reject them.
 const toKey = (location) =>
-  KEY_PREFIX + path.relative(outputDir, location).split(path.sep).join("/");
+  KEY_PREFIX +
+  path
+    .relative(outputDir, location)
+    .split(path.sep)
+    .filter((segment) => segment !== "..")
+    .join("/");
 
 module.exports = {
   // ...
@@ -407,6 +415,21 @@ module.exports = {
           ContentType: "text/markdown",
         }),
       );
+    },
+    // Required: the formatters that post-process their own output read each
+    // page back. A missing object is "there is nothing here", not a failure.
+    readFile: async (filePath) => {
+      try {
+        const object = await r2.send(
+          new GetObjectCommand({ Bucket: BUCKET, Key: toKey(filePath) }),
+        );
+        return await object.Body.transformToString();
+      } catch (error) {
+        if (error.name === "NoSuchKey") {
+          return undefined;
+        }
+        throw error;
+      }
     },
     // R2 has no directories, so there is nothing to create. The work worth
     // doing is honouring `forceEmpty`: without it, pages for types deleted
@@ -448,7 +471,7 @@ module.exports = {
 
 :::info
 
-`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute — an adapter backed by something other than a filesystem can treat them as opaque keys.
+`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute. The one exception is mdBook's `SUMMARY.md`, which the format requires one level above the output directory, so an adapter mapping paths to keys should expect a leading `..` there — an adapter backed by something other than a filesystem can treat them as opaque keys.
 
 Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
 
