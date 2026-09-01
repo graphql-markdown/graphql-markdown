@@ -344,6 +344,8 @@ It only applies to types with a location compatible with the directive, i.e. if 
 
 The destination for generated documentation. By default pages are written to the local filesystem under [`rootPath`](#rootpath)/[`baseURL`](#baseurl). Set an adapter to send them somewhere else instead — a CMS storage API, an object store, an in-memory map — without forking the renderer.
 
+See **[Output Adapter](/docs/advanced/output-adapter)** for what the renderer expects from an adapter: when each method is called, how paths map onto keys, and which formatters read their output back.
+
 | Setting         | CLI flag | Default              |
 | --------------- | -------- | -------------------- |
 | `outputAdapter` | none     | local filesystem     |
