@@ -311,6 +311,86 @@ const seenDirectories = new Set<string>();
  * writing or updating a `toc.yml` at every directory level. Section index pages
  * are prepended as an "Overview" entry on first encounter.
  */
+/**
+ * Adds the "Overview" entry for a directory, the first time it is reached.
+ *
+ * @param currentDir - Directory whose toc.yml is being built
+ * @param tocPath - Path of that toc.yml
+ * @param isRoot - Whether the directory is the generated documentation root
+ * @param outputAdapter - Destination the pages were written to
+ */
+const addOverviewEntry = async (
+  currentDir: string,
+  tocPath: string,
+  isRoot: boolean,
+  outputAdapter: Maybe<OutputAdapter>,
+): Promise<void> => {
+  if (isRoot) {
+    // Homepage is written after hooks run, so add Overview unconditionally.
+    await updateToc(tocPath, "Overview", "index.md", outputAdapter);
+    return;
+  }
+
+  // the section index lives wherever the pages were written, which is not the
+  // local filesystem when a custom adapter is configured
+  const indexPath = join(currentDir, "index.md");
+
+  if (
+    typeof (await readOptionalOutput(indexPath, outputAdapter)) !== "string"
+  ) {
+    return;
+  }
+
+  await updateToc(
+    tocPath,
+    `${capitalize(basename(currentDir))} Overview`,
+    "index.md",
+    outputAdapter,
+  );
+};
+
+/**
+ * Adds a page, and every directory above it, to the toc.yml chain.
+ *
+ * The walk goes up in the same path shape the page was written with: resolving
+ * here would hand an adapter an absolute `toc.yml` key next to a relative page
+ * key, and a key based destination would file them apart.
+ *
+ * @param page - The rendered page, its display name and the output root
+ * @param outputAdapter - Destination the pages were written to
+ */
+const updateTocChain = async (
+  page: { filePath: string; name: string; outputDir: string; pagePath: string },
+  outputAdapter: Maybe<OutputAdapter>,
+): Promise<void> => {
+  const { filePath, name, outputDir, pagePath } = page;
+
+  let currentRelativeDir = dirname(pagePath);
+  let currentHref = basename(filePath);
+  let currentName = name;
+
+  for (;;) {
+    const isRoot = currentRelativeDir === "." || currentRelativeDir === "";
+    const currentDir = isRoot ? outputDir : join(outputDir, currentRelativeDir);
+    const tocPath = join(currentDir, "toc.yml");
+
+    if (!seenDirectories.has(currentDir)) {
+      seenDirectories.add(currentDir);
+      await addOverviewEntry(currentDir, tocPath, isRoot, outputAdapter);
+    }
+
+    await updateToc(tocPath, currentName, currentHref, outputAdapter);
+
+    if (isRoot) {
+      return;
+    }
+
+    currentHref = `${basename(currentDir)}/toc.yml`;
+    currentName = capitalize(basename(currentDir));
+    currentRelativeDir = dirname(currentRelativeDir);
+  }
+};
+
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
@@ -339,6 +419,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
 
   const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
   const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
+
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);
   }
@@ -348,47 +429,5 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     return;
   }
 
-  // Walk up in the same path shape the page was written with: resolving here
-  // would hand an adapter an absolute `toc.yml` key next to a relative page
-  // key, and a key based destination would file them apart.
-  let currentRelativeDir = dirname(pagePath);
-  let currentHref = basename(filePath);
-  let currentName = name;
-
-  for (;;) {
-    const isRoot = currentRelativeDir === "." || currentRelativeDir === "";
-    const currentDir = isRoot ? outputDir : join(outputDir, currentRelativeDir);
-    const tocPath = join(currentDir, "toc.yml");
-
-    if (!seenDirectories.has(currentDir)) {
-      seenDirectories.add(currentDir);
-      if (isRoot) {
-        // Homepage is written after hooks run, so add Overview unconditionally.
-        await updateToc(tocPath, "Overview", "index.md", outputAdapter);
-      } else {
-        const indexPath = join(currentDir, "index.md");
-        // the section index lives wherever the pages were written, which is not
-        // the local filesystem when a custom adapter is configured
-        if (
-          typeof (await readOptionalOutput(indexPath, outputAdapter)) ===
-          "string"
-        ) {
-          await updateToc(
-            tocPath,
-            `${capitalize(basename(currentDir))} Overview`,
-            "index.md",
-            outputAdapter,
-          );
-        }
-      }
-    }
-
-    await updateToc(tocPath, currentName, currentHref, outputAdapter);
-
-    if (isRoot) break;
-
-    currentHref = `${basename(currentDir)}/toc.yml`;
-    currentName = capitalize(basename(currentDir));
-    currentRelativeDir = dirname(currentRelativeDir);
-  }
+  await updateTocChain({ filePath, name, outputDir, pagePath }, outputAdapter);
 };
