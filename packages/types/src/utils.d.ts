@@ -28,7 +28,8 @@ export type EnsureDirOptions = Maybe<{ forceEmpty?: boolean }>;
  * configured `rootPath` is itself absolute. An adapter backed by something
  * other than a filesystem can treat them as opaque keys. The one path that sits
  * outside `outputDir` is mdBook's `SUMMARY.md`, which the format requires one
- * level above it.
+ * level above it: still inside `rootPath`, so keys taken relative to `rootPath`
+ * stay within the tree.
  */
 export interface OutputAdapter {
   /**

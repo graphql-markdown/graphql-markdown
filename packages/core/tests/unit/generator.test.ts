@@ -32,13 +32,14 @@ import * as CoreDiff from "../../src/diff";
 
 vi.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
+import { RenderFilesEvents } from "../../src/events";
 
 vi.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
 
 vi.mock("../../src/printer");
 
-import { resetEvents } from "../../src/event-emitter";
+import { getEvents, resetEvents } from "../../src/event-emitter";
 
 /*
  * `generateDocFromSchema()` calls the helpers exported by `src/generator.ts`
@@ -539,6 +540,37 @@ describe("generator", () => {
       // Verify execution completes and summary is printed even with empty schema
       expect(loggerSpy).toHaveBeenCalledWith(
         expect.stringContaining("Documentation successfully generated"),
+      );
+    });
+
+    test("does not report success when a render hook failed", async () => {
+      expect.assertions(2);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({} as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      // a formatter hook that cannot finish, eg. mdBook failing to write its
+      // required SUMMARY.md
+      getEvents().on(RenderFilesEvents.AFTER_RENDER, () => {
+        throw new Error("SUMMARY.md write failed");
+      });
+
+      const infoSpy = vi.spyOn(globalThis.console, "info");
+      const errorSpy = vi.spyOn(globalThis.console, "error");
+
+      await generateDocFromSchema(options);
+
+      expect(infoSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining("Documentation successfully generated"),
+      );
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("the output is incomplete"),
       );
     });
 

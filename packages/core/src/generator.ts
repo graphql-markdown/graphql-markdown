@@ -560,10 +560,19 @@ export const generateDocFromSchema = async ({
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
   ).toFixed(SEC_DECIMALS);
 
-  log(
-    `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
-    "success",
-  );
+  // a formatter that could not finish its output must not be reported as a
+  // success: mdBook cannot build without the SUMMARY.md written by that hook
+  if (renderFilesErrors.length > 0) {
+    log(
+      `Documentation generated in "${outputDir}" with base URL "${baseURL}", but ${renderFilesErrors.length} post-processing error(s) occurred: the output is incomplete.`,
+      LogLevel.error,
+    );
+  } else {
+    log(
+      `Documentation successfully generated in "${outputDir}" with base URL "${baseURL}".`,
+      "success",
+    );
+  }
   log(
     `${
       pages.flat().length

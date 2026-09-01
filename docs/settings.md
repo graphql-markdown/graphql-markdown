@@ -433,7 +433,10 @@ module.exports = {
         return;
       }
 
-      const Prefix = toKey(dirPath);
+      // S3 prefix matching is literal, not directory aware: without the
+      // trailing delimiter, clearing `schema` would also delete `schema-v2/`.
+      const dirKey = toKey(dirPath);
+      const Prefix = dirKey === "" ? "" : `${dirKey}/`;
       let ContinuationToken;
 
       do {
@@ -465,7 +468,7 @@ module.exports = {
 
 :::info
 
-`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute. The one exception is mdBook's `SUMMARY.md`, which the format requires one level above the output directory, so an adapter mapping paths to keys should expect a leading `..` there — an adapter backed by something other than a filesystem can treat them as opaque keys.
+`ensureDir` is optional so destinations with no directory concept can omit it; it receives `{ forceEmpty: true }` when [`force`](#force) is set. Paths are the same ones the filesystem writer would use, rooted at the output directory and relative to the working directory unless [`rootPath`](#rootpath) is itself absolute. The one exception is mdBook's `SUMMARY.md`, which the format requires one level above the output directory: the adapter is handed a path inside [`rootPath`](#rootpath) but outside `outputDir`, so keys derived with `path.relative(outputDir, filePath)` gain a leading `..` for that one file — an adapter backed by something other than a filesystem can treat them as opaque keys.
 
 Content arrives already formatted, so an adapter never has to handle [`pretty`](#pretty) itself.
 
