@@ -25,6 +25,7 @@ import type {
 import { quoteMarkdownLines } from "@graphql-markdown/helpers";
 import {
   capitalize,
+  fsOutputAdapter,
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -300,9 +301,12 @@ const updateToc = async (
   });
 };
 
-// Tracks directories whose index.md has already been prepended to their toc.yml.
-// Module-level so it persists across all hook invocations within one generation run.
-const seenDirectories = new Set<string>();
+// Tracks directories whose index.md has already been prepended to their toc.yml,
+// so the check runs once per directory rather than once per page. Keyed by
+// destination: two adapters writing the same paths keep their own state, and a
+// run with a fresh adapter starts over. `updateToc` skips an href it already
+// holds, so a repeated attempt adds nothing.
+const seenDirectories = new WeakMap<OutputAdapter, Set<string>>();
 
 /**
  * Builds DocFX `toc.yml` navigation files as each entity page is written.
@@ -364,6 +368,9 @@ const updateTocChain = async (
   outputAdapter: Maybe<OutputAdapter>,
 ): Promise<void> => {
   const { filePath, name, outputDir, pagePath } = page;
+  const destination = outputAdapter ?? fsOutputAdapter;
+  const seen = seenDirectories.get(destination) ?? new Set<string>();
+  seenDirectories.set(destination, seen);
 
   let currentRelativeDir = dirname(pagePath);
   let currentHref = basename(filePath);
@@ -374,8 +381,8 @@ const updateTocChain = async (
     const currentDir = isRoot ? outputDir : join(outputDir, currentRelativeDir);
     const tocPath = join(currentDir, "toc.yml");
 
-    if (!seenDirectories.has(currentDir)) {
-      seenDirectories.add(currentDir);
+    if (!seen.has(currentDir)) {
+      seen.add(currentDir);
       await addOverviewEntry(currentDir, tocPath, isRoot, outputAdapter);
     }
 

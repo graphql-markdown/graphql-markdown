@@ -378,8 +378,6 @@ const baseURL = "schema";
 const outputDir = path.join(rootPath, baseURL);
 
 const BUCKET = "docs";
-const KEY_PREFIX = "schema/";
-
 const r2 = new S3Client({
   region: "auto",
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -389,17 +387,13 @@ const r2 = new S3Client({
   },
 });
 
-// Object keys are the page paths relative to the output directory, always
-// forward-slashed so keys are identical whichever OS generated them. mdBook
-// writes its SUMMARY.md one level above the output directory, so `..` segments
-// are folded away rather than sent to a store that would reject them.
+// Object keys are the paths relative to `rootPath`, always forward-slashed so
+// keys are identical whichever OS generated them. Keying off `rootPath` rather
+// than `outputDir` keeps the layout intact for mdBook's SUMMARY.md, which sits
+// one level above the pages: it lands at `SUMMARY.md`, above `schema/`, so the
+// links it holds still resolve.
 const toKey = (location) =>
-  KEY_PREFIX +
-  path
-    .relative(outputDir, location)
-    .split(path.sep)
-    .filter((segment) => segment !== "..")
-    .join("/");
+  path.relative(rootPath, location).split(path.sep).join("/");
 
 module.exports = {
   // ...

@@ -324,17 +324,6 @@ class CategoryPositionManager {
 }
 
 /**
- * Core renderer class responsible for generating documentation files from GraphQL schema entities.
- * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
- *
- * HIERARCHY LEVELS WHEN categorySort IS ENABLED:
- * - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
- * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
- *
- * Each level has its own CategoryPositionManager that restarts numbering at 1.
- * @example
- */
-/**
  * Reports errors thrown by event handlers.
  *
  * Handler errors are collected rather than thrown, so without this they are
@@ -349,6 +338,17 @@ export const logHandlerErrors = (eventName: string, errors: Error[]): void => {
   });
 };
 
+/**
+ * Core renderer class responsible for generating documentation files from GraphQL schema entities.
+ * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
+ *
+ * HIERARCHY LEVELS WHEN categorySort IS ENABLED:
+ * - Level 0 (root): Query, Mutation, Subscription, Custom Groups → 01-Query, 02-Mutation, etc.
+ * - Level 1 (under root): Specific types within each root → 01-Objects, 02-Enums, etc.
+ *
+ * Each level has its own CategoryPositionManager that restarts numbering at 1.
+ * @example
+ */
 // Value export used only by unit tests for direct whitebox coverage; the type is used
 // elsewhere via getRenderer()'s return type.
 export class Renderer {
