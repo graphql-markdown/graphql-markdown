@@ -38,7 +38,6 @@ import { SectionLevels } from "./const/options";
  * ```
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const getRootTypeLocaleFromString = (
   text: string,
 ): Maybe<TypeLocale> => {
@@ -65,7 +64,6 @@ export const getRootTypeLocaleFromString = (
  * ```
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const printRelationOf = <T>(
   type: unknown,
   section: unknown,

@@ -267,7 +267,6 @@ export const loadGraphqlSchema = async (
  * When no changes are detected, a log message is generated indicating that the schema is unchanged.
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const checkSchemaDifferences = async (
   schema: GraphQLSchema,
   schemaLocation: string,
@@ -300,7 +299,6 @@ export const checkSchemaDifferences = async (
  *          the second with resolved "skip" directives. Only defined directives are included.
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const resolveSkipAndOnlyDirectives = (
   onlyDocDirective: Maybe<DirectiveName | DirectiveName[]>,
   skipDocDirective: Maybe<DirectiveName | DirectiveName[]>,
