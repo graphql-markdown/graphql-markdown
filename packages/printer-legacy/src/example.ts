@@ -42,7 +42,6 @@ import { hasPrintableDirective } from "./link";
  * @returns The directive example configuration if valid, otherwise `undefined`
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const getDirectiveExampleOption = ({
   exampleSection,
   schema,

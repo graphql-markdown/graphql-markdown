@@ -17,7 +17,6 @@ import { getTypeName } from "@graphql-markdown/graphql";
  * @returns A specification PageSection, or undefined when no URL exists
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const printSpecification = (
   type: unknown,
   options: PrintTypeOptions,

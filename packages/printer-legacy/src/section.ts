@@ -67,7 +67,6 @@ const printPermalink = (
  * @template T - Type of the GraphQL element being printed
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const printSectionItem = <T>(
   type: T,
   options: PrintTypeOptions,
@@ -128,7 +127,6 @@ export const printSectionItem = <T>(
  * @template V - Type of the values being printed
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const printSectionItems = <V>(
   values: V | V[],
   options: PrintTypeOptions,

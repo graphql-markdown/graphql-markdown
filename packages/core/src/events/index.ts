@@ -13,7 +13,6 @@ export { RenderFilesEvents } from "./render-files-events";
 export { RenderTypeEntitiesEvents } from "./render-type-entities-events";
 export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events";
 // Re-export used only by unit tests via the events barrel.
-// fallow-ignore-next-line unused-export
 export { PrintTypeEvents } from "./print-type-events";
 
 // Event classes

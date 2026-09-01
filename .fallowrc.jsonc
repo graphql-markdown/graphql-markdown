@@ -41,6 +41,12 @@
   // makes it "reachable production code" and flags these dev-only deps as
   // dev-dependencies-in-production. The root package.json is private with no `dependencies`
   // field and is never installed with `--prod`, so this is a false positive.
+  // mutation-testing-metrics is the same case: it is only read by dangerfile.js.
+  //
+  // memfs is declared once in the root package.json, like every other test tool, and is
+  // hoisted to the workspace packages that mock the filesystem in their tests. fallow reads
+  // each package.json on its own and so reports it as unlisted for packages/core, /diff and
+  // /utils; the packages deliberately declare no test tooling of their own.
   "ignoreDependencies": [
     "@graphql-markdown/cli",
     "@graphql-markdown/core",
@@ -60,7 +66,9 @@
     "jest-environment-node",
     "typedoc-docusaurus-theme",
     "diff",
-    "lodash.filter"
+    "lodash.filter",
+    "memfs",
+    "mutation-testing-metrics"
   ],
 
   // Class member false-positive suppressions.

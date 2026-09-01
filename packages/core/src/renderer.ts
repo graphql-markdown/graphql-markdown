@@ -122,7 +122,6 @@ enum SidebarPosition {
  * @see {@link getApiGroupFolder} For usage with type categorization
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
   types: "types",
@@ -145,7 +144,6 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
  * ```
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-// fallow-ignore-next-line unused-export
 export const getApiGroupFolder = (
   type: unknown,
   groups?: Maybe<ApiGroupOverrideType | boolean>,
@@ -338,7 +336,6 @@ class CategoryPositionManager {
  */
 // Value export used only by unit tests for direct whitebox coverage; the type is used
 // elsewhere via getRenderer()'s return type.
-// fallow-ignore-next-line unused-export
 export class Renderer {
   readonly group: Maybe<SchemaEntitiesGroupMap>;
   readonly outputDir: string;
