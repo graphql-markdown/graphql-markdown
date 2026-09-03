@@ -45,13 +45,18 @@ The paths handed to an adapter are the ones the filesystem writer would use. Two
 
 **They are relative to the working directory**, not absolute, unless [`rootPath`](/docs/settings#rootpath) is itself absolute. With the default `rootPath: "./docs"` and `baseURL: "schema"`, a page arrives as `docs/schema/types/objects/book.md`. Key off them directly, or make them relative to `outputDir` — do not assume a leading `/`.
 
+Because they are relative, a key derived from them depends on the working directory the generator was started from. Resolve both sides before comparing them, and the two forms can no longer be mixed — a relative `rootPath` against an absolute path yields a key that climbs out of the tree with `..`.
+
 **One path sits outside the output directory.** mdBook requires `SUMMARY.md` one level above the generated pages, so an adapter computing keys with `path.relative(outputDir, filePath)` gets a leading `..` for that one file, which many object stores reject.
 
 Do not strip the `..`: that moves `SUMMARY.md` in among the pages, and the links it holds — `schema/index.md` and the like — then resolve one level too deep. Key off [`rootPath`](/docs/settings#rootpath) instead, which keeps every path inside the tree and preserves the layout:
 
 ```js
 const toKey = (location) =>
-  path.relative(rootPath, location).split(path.sep).join("/");
+  path
+    .relative(path.resolve(rootPath), path.resolve(location))
+    .split(path.sep)
+    .join("/");
 ```
 
 | Written | Key |
