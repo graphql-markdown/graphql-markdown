@@ -394,8 +394,14 @@ const r2 = new S3Client({
 // than `outputDir` keeps the layout intact for mdBook's SUMMARY.md, which sits
 // one level above the pages: it lands at `SUMMARY.md`, above `schema/`, so the
 // links it holds still resolve.
+//
+// Both sides are resolved first, so a relative `rootPath` and an absolute path
+// cannot be compared against each other and produce a key full of `..`.
 const toKey = (location) =>
-  path.relative(rootPath, location).split(path.sep).join("/");
+  path
+    .relative(path.resolve(rootPath), path.resolve(location))
+    .split(path.sep)
+    .join("/");
 
 module.exports = {
   // ...
