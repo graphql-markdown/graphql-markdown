@@ -12,7 +12,7 @@ keywords:
 
 By default every generated page is written to the local filesystem, under [`rootPath`](/docs/settings#rootpath)/[`baseURL`](/docs/settings#baseurl). The [`outputAdapter`](/docs/settings#outputadapter) setting replaces that destination with one of your own — an object store, a headless CMS, a database, an in-memory map in a test — without forking the renderer.
 
-This page covers what the renderer expects from an adapter. For the setting itself and a complete Cloudflare R2 example, see [`outputAdapter`](/docs/settings#outputadapter) in the settings reference.
+This page covers what the renderer expects from an adapter, with two worked examples. For the setting itself, see [`outputAdapter`](/docs/settings#outputadapter) in the settings reference.
 
 ## The contract
 
@@ -78,13 +78,15 @@ A destination that genuinely cannot serve back what it wrote may return `undefin
 - DocFX, mdBook and MkDocs cannot rewrite internal links, which stay as absolute paths, and DocFX produces no `toc.yml`
 - Docusaurus regenerates `_category_.yml` on every run, discarding edits made to it by hand
 
+Starlight, Fumadocs, Vocs, Hugo and HonKit never read back their output, so a write-only destination costs them nothing.
+
 The first page that cannot be read back is reported once for that adapter, rather than once per page, so a broken destination is visible without burying the run in identical errors.
 
 ## Deleted types
 
 `ensureDir` receives `{ forceEmpty: true }` when [`force`](/docs/settings#force) is set, which is how a run clears out what a previous one left behind. Omit `ensureDir` and `force` has nothing to act on: pages for types deleted from the schema stay in the destination forever.
 
-A destination with no directories still usually wants `ensureDir` for exactly that reason — deleting by key prefix is the natural equivalent. Leave it out only when the destination is disposable or pruned elsewhere.
+A destination with no directories still usually wants `ensureDir` for exactly that reason — deleting by key prefix is the natural equivalent, as in the [Cloudflare R2 adapter](#a-cloudflare-r2-adapter) below. Leave it out only when the destination is disposable or pruned elsewhere.
 
 ## Formatting
 
@@ -117,6 +119,115 @@ export const memoryOutputAdapter = {
 ```
 
 This supports read-back, so every preset works against it.
+
+## A Cloudflare R2 adapter
+
+[graphql-markdown/demo-astro-r2](https://github.com/graphql-markdown/demo-astro-r2) is a live example: it generates straight into an R2 bucket and builds an Astro/Starlight site that reads the pages back out at build time. It reaches the bucket through Wrangler's R2 binding rather than the S3 API, but the adapter contract is the same.
+
+The example below publishes the generated pages to a [Cloudflare R2](https://developers.cloudflare.com/r2/) bucket instead of writing them to disk, using R2's S3-compatible API:
+
+```js
+const path = require("node:path");
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+} = require("@aws-sdk/client-s3");
+
+const rootPath = "./docs";
+const baseURL = "schema";
+
+const BUCKET = "docs";
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  },
+});
+
+// Object keys, derived as described in "Paths are keys" above.
+const toKey = (location) =>
+  path
+    .relative(path.resolve(rootPath), path.resolve(location))
+    .split(path.sep)
+    .join("/");
+
+module.exports = {
+  // ...
+  rootPath,
+  baseURL,
+  outputAdapter: {
+    writeFile: async (filePath, content) => {
+      await r2.send(
+        new PutObjectCommand({
+          Bucket: BUCKET,
+          Key: toKey(filePath),
+          Body: content,
+          ContentType: "text/markdown",
+        }),
+      );
+    },
+    // Required: the formatters that post-process their own output read each
+    // page back. A missing object is "there is nothing here", not a failure.
+    readFile: async (filePath) => {
+      try {
+        const object = await r2.send(
+          new GetObjectCommand({ Bucket: BUCKET, Key: toKey(filePath) }),
+        );
+        return await object.Body.transformToString();
+      } catch (error) {
+        if (error.name === "NoSuchKey") {
+          return undefined;
+        }
+        throw error;
+      }
+    },
+    // R2 has no directories, so there is nothing to create. The work worth
+    // doing is honouring `forceEmpty`: without it, pages for types deleted
+    // from the schema would stay in the bucket forever.
+    ensureDir: async (dirPath, options) => {
+      if (options?.forceEmpty !== true) {
+        return;
+      }
+
+      // S3 prefix matching is literal, not directory aware: without the
+      // trailing delimiter, clearing `schema` would also delete `schema-v2/`.
+      const dirKey = toKey(dirPath);
+      const Prefix = dirKey === "" ? "" : `${dirKey}/`;
+      let ContinuationToken;
+
+      do {
+        const listed = await r2.send(
+          new ListObjectsV2Command({
+            Bucket: BUCKET,
+            Prefix,
+            ContinuationToken,
+          }),
+        );
+
+        if (listed.KeyCount) {
+          await r2.send(
+            new DeleteObjectsCommand({
+              Bucket: BUCKET,
+              Delete: {
+                Objects: listed.Contents.map(({ Key }) => ({ Key })),
+              },
+            }),
+          );
+        }
+
+        ContinuationToken = listed.IsTruncated
+          ? listed.NextContinuationToken
+          : undefined;
+      } while (ContinuationToken);
+    },
+  },
+};
+```
 
 ## Limitations
 
