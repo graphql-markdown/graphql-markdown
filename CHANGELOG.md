@@ -1,7 +1,42 @@
+<a id="1.36.0"></a>
+# [1.36.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.36.0) - 2026-09-04
+
+1.36.0 makes the output destination pluggable: `outputAdapter` lets the generator write somewhere other than the local filesystem — object storage, a CMS, an in-memory bundle — while the filesystem stays the default. It also switches section header IDs to the syntax native to each target framework, which changes generated output by default.
+
+### 💥 Breaking Change
+
+- **Formatters**: `formatMDXPermalink` is now a required member of the [`Formatter`](https://graphql-markdown.dev/api/formatters/defaults#formatmdxpermalink) interface. The built-in presets are unaffected; a [custom formatter](https://graphql-markdown.dev/docs/settings#formatter) written in TypeScript must implement it to type-check — spreading a built-in preset is the easiest way. At runtime a default permalink format is applied, so JavaScript formatters keep working ([#3255](https://github.com/graphql-markdown/graphql-markdown/issues/3255)).
+
+### What's New
+
+- **Core**: pluggable `outputAdapter` sends generated pages to a destination other than the local filesystem. `fsOutputAdapter` remains the default, so existing setups are unchanged, and formatter lifecycle hooks write through the same adapter — post-processed pages follow the output instead of silently landing on disk ([#3238](https://github.com/graphql-markdown/graphql-markdown/issues/3238), [#3258](https://github.com/graphql-markdown/graphql-markdown/issues/3258)). See the [output adapter guide](https://graphql-markdown.dev/docs/advanced/output-adapter).
+- **Formatters**: section header IDs now use each framework's native syntax — `{/* #ID */}` on Docusaurus 3.10 and later, `[#ID]` on Fumadocs, escaped `\{#ID\}` on Starlight and Vocs, and the classic `{#ID}` elsewhere. Since `docOptions.sectionHeaderId` defaults to `true`, this changes generated output without any config change: set it to `false` to restore the previous behaviour, or override `formatMDXPermalink` in a custom formatter ([#3255](https://github.com/graphql-markdown/graphql-markdown/issues/3255)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.36.0 |
+| @graphql-markdown/core | 1.22.0 |
+| @graphql-markdown/printer-legacy | 1.17.0 |
+| @graphql-markdown/types | 1.14.0 |
+| @graphql-markdown/utils | 1.13.0 |
+| @graphql-markdown/graphql | 1.2.5 |
+| @graphql-markdown/cli | 1.0.3 |
+| @graphql-markdown/diff | 1.1.18 |
+| @graphql-markdown/helpers | 1.1.3 |
+| @graphql-markdown/logger | 1.0.10 |
+| @graphql-markdown/formatters | 1.1.0 |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.2...1.36.0
+
+[Changes][1.36.0]
+
+
 <a id="1.35.2"></a>
 # [1.35.2](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.2) - 2026-08-30
 
-1.35.2 introduces support for **GraphQL.js v17**. It also adds some minor improvements to Fumadocs, Astro Starlight, and Vocs formatters.
+1.35.2 introduces support for **GraphQL.js v17**. It also adds some minor fixes and improvements to Fumadocs, Astro Starlight, and Vocs formatters.
 
 ### Bug Fixes 🐛
 
@@ -136,7 +171,7 @@ A new lifecycle hook lets you reorder, filter, or hide sections on any generated
 
 See the [Hook Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes#reorder-or-hide-sections-before-page-composition) documentation for usage examples.
 
-Using deprecated CLI flags or config options (`--noCode`, `--noRelatedType`, `--noExample`, `codeSection`, `relatedTypeSection`) will now emits a visible warning at runtime to help with migration.
+Using deprecated CLI flags or config options (`--noCode`, `--noRelatedType`, `--noExample`, `codeSection`, `relatedTypeSection`) will now emit a visible warning at runtime to help with migration.
 
 #### Namespace wrapping in code snippets
 
@@ -144,7 +179,7 @@ Operations that belong to a namespace (introduced in [1.33.0](https://github.com
 
 #### Docusaurus `<details>` MDX implementation update
 
-The Docusaurus package updates its MDX handling for `<details>` blocks to align with the official Docusarus implementation.
+The Docusaurus package updates its MDX handling for `<details>` blocks to align with the official Docusaurus implementation.
 
 ### Bug Fixes 🐛 
 
@@ -955,7 +990,7 @@ _The compatibility with Docusaurus 2 is maintained, and there is no plan to drop
 * :package: bump dependency @graphql-markdown/utils to 1.6.1 [#1075](https://github.com/graphql-markdown/graphql-markdown/issues/1075)
 
 ### @graphql-markdown/utils@1.6.1
-*  📝 udpate typedoc to fix compatibility with docusaurus v3 [#1072](https://github.com/graphql-markdown/graphql-markdown/issues/1072) 
+*  📝 update typedoc to fix compatibility with docusaurus v3 [#1072](https://github.com/graphql-markdown/graphql-markdown/issues/1072) 
 
 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.21.0...1.21.1
 
@@ -2279,7 +2314,7 @@ plugins: [
 *Note, you don't need to re-declare `graphql-file-loader` since it is provided out-of-the-box.*
 
 > #### Why this change?
-> There are several reasons behing this change:
+> There are several reasons behind this change:
 > - Reducing dependencies footprint and management
 > - More flexibility as more GraphQL document loaders become available
 > - Preparation work for version 2.0
@@ -2420,6 +2455,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.36.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.2...1.36.0
 [1.35.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.1...1.35.2
 [1.35.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.0...1.35.1
 [1.35.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.34.0...1.35.0
