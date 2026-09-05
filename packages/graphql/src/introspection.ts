@@ -270,6 +270,32 @@ export const getDirective = (
 };
 
 /**
+ * Returns the AST node holding the directives for a GraphQL schema type.
+ *
+ * @internal
+ *
+ * @param type - the GraphQL schema type to parse.
+ *
+ * @returns the AST node carrying the `directives` list.
+ *
+ */
+const getDirectivesHolder = (
+  type: unknown,
+): Maybe<{ readonly directives?: readonly DirectiveNode[] }> => {
+  if (typeof type !== "object" || type === null) {
+    return undefined;
+  }
+  if (hasAstNode(type)) {
+    return (type as GraphQLNamedType).astNode as {
+      readonly directives?: readonly DirectiveNode[];
+    };
+  }
+  return type as ASTNode as {
+    readonly directives?: readonly DirectiveNode[];
+  };
+};
+
+/**
  * Returns all directive's arguments' values linked to a GraphQL schema type.
  *
  * @param directive - a GraphQL directive defined in the schema.
@@ -282,20 +308,63 @@ export const getTypeDirectiveValues = (
   directive: GraphQLDirective,
   type: unknown,
 ): Maybe<Record<string, unknown>> => {
-  if (hasAstNode(type)) {
-    return getDirectiveValues(
-      directive,
-      (type as GraphQLNamedType).astNode as {
-        readonly directives?: readonly DirectiveNode[];
-      },
-    );
+  const node = getDirectivesHolder(type);
+
+  if (!node) {
+    return undefined;
   }
-  return getDirectiveValues(
-    directive,
-    type as ASTNode as {
-      readonly directives?: readonly DirectiveNode[];
-    },
-  );
+
+  return getDirectiveValues(directive, node);
+};
+
+/**
+ * Returns the arguments' values of every occurrence of a directive on a GraphQL schema type.
+ *
+ * Unlike {@link getTypeDirectiveValues}, which resolves only the first occurrence,
+ * this returns one record per occurrence, in schema declaration order. This is
+ * required for [repeatable directives](https://spec.graphql.org/draft/#sec-Type-System.Directives).
+ *
+ * @param directive - a GraphQL directive defined in the schema.
+ * @param type - the GraphQL schema type to parse.
+ *
+ * @returns a list of records k/v with arguments' name as keys and arguments' value, empty if the directive is not present.
+ *
+ * @example
+ * ```graphql
+ * type Query {
+ *   user(id: ID!): User
+ *     @httpResponse(code: 200, description: "OK")
+ *     @httpResponse(code: 404, description: "User not found")
+ * }
+ * ```
+ * ```js
+ * getTypeDirectiveValuesList(httpResponseDirective, queryUserField);
+ * // [ { code: 200, description: "OK" }, { code: 404, description: "User not found" } ]
+ * ```
+ *
+ */
+export const getTypeDirectiveValuesList = (
+  directive: GraphQLDirective,
+  type: unknown,
+): Record<string, unknown>[] => {
+  const node = getDirectivesHolder(type);
+
+  if (!Array.isArray(node?.directives)) {
+    return [];
+  }
+
+  return node.directives
+    .filter((directiveNode: DirectiveNode): boolean => {
+      return directiveNode.name.value === directive.name;
+    })
+    .map((directiveNode: DirectiveNode): Maybe<Record<string, unknown>> => {
+      // Coerce each occurrence in isolation, as `getDirectiveValues` only ever
+      // resolves the first directive node matching the directive name.
+      return getDirectiveValues(directive, { directives: [directiveNode] });
+    })
+    .filter((values): values is Record<string, unknown> => {
+      return typeof values !== "undefined";
+    });
 };
 
 /**

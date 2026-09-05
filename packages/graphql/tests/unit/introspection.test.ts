@@ -35,6 +35,7 @@ import {
   getOperation,
   getSchemaMap,
   getTypeDirectiveValues,
+  getTypeDirectiveValuesList,
   getTypeFromSchema,
   getTypeName,
   hasDirective,
@@ -807,6 +808,78 @@ describe("introspection", () => {
         typeAstNode,
       );
       expect(values).toMatchObject({ arg: "ARGA" });
+    });
+  });
+
+  describe("getTypeDirectiveValuesList", () => {
+    const schema = buildSchema(`
+      directive @dirWithoutArg on OBJECT | FIELD_DEFINITION
+
+      directive @httpResponse(
+        code: Int!
+        description: String
+      ) repeatable on OBJECT | FIELD_DEFINITION
+
+      type Test 
+        @httpResponse(code: 200, description: "OK") 
+        @dirWithoutArg
+        @httpResponse(code: 404, description: "Not found")
+        @httpResponse(code: 500) {
+        id: ID!
+        fieldA: [String!] @httpResponse(code: 201)
+        fieldB: ID! @dirWithoutArg
+      }
+    `);
+    const type = schema.getType("Test")!;
+    const directiveType = schema.getDirective("httpResponse")!;
+
+    test("returns one record per directive occurrence in declaration order", () => {
+      expect.assertions(1);
+
+      expect(getTypeDirectiveValuesList(directiveType, type)).toStrictEqual([
+        { code: 200, description: "OK" },
+        { code: 404, description: "Not found" },
+        { code: 500 },
+      ]);
+    });
+
+    test("converts type to astNode", () => {
+      expect.assertions(1);
+
+      expect(getTypeDirectiveValuesList(directiveType, type)).toStrictEqual(
+        getTypeDirectiveValuesList(directiveType, type.astNode!),
+      );
+    });
+
+    test("returns values for a field definition", () => {
+      expect.assertions(1);
+
+      const field = (type as GraphQLObjectType).getFields()["fieldA"];
+
+      expect(getTypeDirectiveValuesList(directiveType, field)).toStrictEqual([
+        { code: 201 },
+      ]);
+    });
+
+    test("returns an empty list if the directive is not present", () => {
+      expect.assertions(1);
+
+      const field = (type as GraphQLObjectType).getFields()["fieldB"];
+
+      expect(getTypeDirectiveValuesList(directiveType, field)).toStrictEqual(
+        [],
+      );
+    });
+
+    test("returns an empty list if the type has no directives", () => {
+      expect.assertions(2);
+
+      expect(
+        getTypeDirectiveValuesList(directiveType, undefined),
+      ).toStrictEqual([]);
+      expect(
+        getTypeDirectiveValuesList(directiveType, { name: "NoAstNode" }),
+      ).toStrictEqual([]);
     });
   });
 
