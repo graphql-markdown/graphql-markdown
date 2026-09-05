@@ -236,6 +236,17 @@ describe("custom-section", () => {
       expect(sections["absent"]).toBeUndefined();
     });
 
+    test("keeps a repeated section name only once", () => {
+      expect.assertions(1);
+
+      const sections = printCustomSections(type, {
+        ...options,
+        customSections: [httpResponses, { ...httpResponses, title: "Other" }],
+      });
+
+      expect(sections["httpResponses"]).toMatchObject({ title: "Responses" });
+    });
+
     test("drops sections claiming a reserved name", () => {
       expect.assertions(1);
 
@@ -394,6 +405,26 @@ describe("custom-section", () => {
         "code",
         "httpResponses",
         "httpHeaders",
+        "metadata",
+        "relations",
+      ]);
+    });
+
+    test("places a repeated section name once, at its first declaration", () => {
+      expect.assertions(1);
+
+      expect(
+        getCustomSectionsOrder(order, {
+          ...options,
+          customSections: [
+            { ...httpResponses, position: { after: "code" } },
+            { ...httpResponses, position: { after: "relations" } },
+          ],
+        }),
+      ).toStrictEqual([
+        "description",
+        "code",
+        "httpResponses",
         "metadata",
         "relations",
       ]);

@@ -179,10 +179,47 @@ export const printCustomSection = (
 };
 
 /**
+ * Returns the custom sections to build, in declaration order.
+ *
+ * Sections claiming a reserved name are dropped, and a name is kept only once:
+ * the printer is reachable directly through its public API, bypassing the
+ * configuration validation, and a repeated name would otherwise render the same
+ * section twice on the page.
+ *
+ * @internal
+ *
+ * @param options - the print options in effect.
+ *
+ * @returns the custom sections to build, empty when none is declared.
+ *
+ */
+const getDeclaredSections = (
+  options: PrintTypeOptions,
+): TypeCustomSectionOption[] => {
+  if (!Array.isArray(options.customSections)) {
+    return [];
+  }
+
+  const names = new Set<string>();
+
+  return options.customSections.filter((section): boolean => {
+    if (
+      RESERVED_SECTION_NAMES.includes(section.name) ||
+      names.has(section.name)
+    ) {
+      return false;
+    }
+    names.add(section.name);
+    return true;
+  });
+};
+
+/**
  * Prints every custom section declared in the print options.
  *
  * Every declared section yields an entry, so that composition hooks can restore
- * a section which rendered no content. Sections with a reserved name are dropped.
+ * a section which rendered no content. Sections with a reserved or repeated name
+ * are dropped.
  *
  * @param type - the GraphQL type being printed.
  * @param options - the print options in effect.
@@ -194,19 +231,11 @@ export const printCustomSections = (
   type: unknown,
   options: PrintTypeOptions,
 ): PageSections => {
-  if (!Array.isArray(options.customSections)) {
-    return {};
-  }
-
   const sections: PageSections = {};
 
-  options.customSections
-    .filter((section): boolean => {
-      return !RESERVED_SECTION_NAMES.includes(section.name);
-    })
-    .forEach((section): void => {
-      sections[section.name] = printCustomSection(type, section, options);
-    });
+  getDeclaredSections(options).forEach((section): void => {
+    sections[section.name] = printCustomSection(type, section, options);
+  });
 
   return sections;
 };
@@ -217,6 +246,7 @@ export const printCustomSections = (
  * A section is placed after or before the section named by its `position`, and
  * appended last when `position` is absent or names an unknown section. Sections
  * are placed in declaration order, so a section may target a previously placed one.
+ * A repeated name is placed once, at its first declaration.
  *
  * @param sectionOrder - the built-in section order.
  * @param options - the print options in effect.
@@ -228,31 +258,23 @@ export const getCustomSectionsOrder = (
   sectionOrder: readonly string[],
   options: PrintTypeOptions,
 ): string[] => {
-  if (!Array.isArray(options.customSections)) {
-    return [...sectionOrder];
-  }
+  return getDeclaredSections(options).reduce(
+    (order: string[], section: TypeCustomSectionOption): string[] => {
+      const position = section.position;
+      const anchor =
+        position && typeof position === "object"
+          ? (position.after ?? position.before)
+          : undefined;
+      const index = anchor ? order.indexOf(anchor) : -1;
 
-  return options.customSections
-    .filter((section): boolean => {
-      return !RESERVED_SECTION_NAMES.includes(section.name);
-    })
-    .reduce(
-      (order: string[], section: TypeCustomSectionOption): string[] => {
-        const position = section.position;
-        const anchor =
-          position && typeof position === "object"
-            ? (position.after ?? position.before)
-            : undefined;
-        const index = anchor ? order.indexOf(anchor) : -1;
-
-        if (index === -1) {
-          order.push(section.name);
-          return order;
-        }
-
-        order.splice(position?.after ? index + 1 : index, 0, section.name);
+      if (index === -1) {
+        order.push(section.name);
         return order;
-      },
-      [...sectionOrder],
-    );
+      }
+
+      order.splice(position?.after ? index + 1 : index, 0, section.name);
+      return order;
+    },
+    [...sectionOrder],
+  );
 };
