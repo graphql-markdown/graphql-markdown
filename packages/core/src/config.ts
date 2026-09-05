@@ -32,6 +32,7 @@ import type {
   Maybe,
   Options,
   Pointer,
+  TypeCustomSectionOption,
   TypeDeprecatedOption,
   TypeDiffMethod,
   TypeHierarchyObjectType,
@@ -158,8 +159,12 @@ export const DEFAULT_OPTIONS: Readonly<
     >
 > & {
   printTypeOptions: Required<
-    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
+    Omit<
+      ConfigPrintTypeOptions,
+      "customSections" | "exampleSection" | "hierarchy"
+    >
   > & {
+    customSections: ConfigPrintTypeOptions["customSections"];
     exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   };
@@ -182,13 +187,18 @@ export const DEFAULT_OPTIONS: Readonly<
   metatags: [] as Record<string, string>[],
   pretty: false as const,
   printTypeOptions: {
+    customSections: undefined,
     deprecated: DeprecatedOption.DEFAULT,
     exampleSection: undefined,
     parentTypePrefix: true as const,
     typeBadges: true as const,
   } as Required<
-    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
+    Omit<
+      ConfigPrintTypeOptions,
+      "customSections" | "exampleSection" | "hierarchy"
+    >
   > & {
+    customSections: ConfigPrintTypeOptions["customSections"];
     exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   },
@@ -644,11 +654,104 @@ export const parseDeprecatedPrintTypeOptions = (
  * @see {@link DeprecatedOption} for deprecated handling options
  * @see {@link getTypeHierarchyOption} for hierarchy resolution
  */
+/**
+ * Section keys owned by the printer, which a custom section cannot claim.
+ *
+ * @internal
+ */
+const RESERVED_SECTION_NAMES: readonly string[] = [
+  "header",
+  "metatags",
+  "mdxDeclaration",
+  "tags",
+  "description",
+  "code",
+  "customDirectives",
+  "metadata",
+  "example",
+  "relations",
+] as const;
+
+/**
+ * Validates the custom sections option.
+ *
+ * Each entry must declare a unique `name` that is not a built-in section key, a
+ * `directive` name, and a `render` callback. An invalid entry is a configuration
+ * error rather than something to silently drop, as it would otherwise produce a
+ * page missing a section without any indication why.
+ *
+ * @param customSections - the custom sections declared in the config file.
+ *
+ * @returns the validated custom sections, or `undefined` when none is declared.
+ *
+ * @throws Error if an entry is malformed, duplicated, or claims a built-in section name.
+ *
+ * @example
+ * ```js
+ * getCustomSectionsOption([
+ *   {
+ *     name: "httpResponses",
+ *     title: "Responses",
+ *     directive: "httpResponse",
+ *     position: { after: "metadata" },
+ *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
+ *   },
+ * ]);
+ * ```
+ */
+export const getCustomSectionsOption = (
+  customSections: Maybe<TypeCustomSectionOption[]>,
+): Maybe<TypeCustomSectionOption[]> => {
+  if (!customSections) {
+    return DEFAULT_OPTIONS.printTypeOptions.customSections;
+  }
+
+  if (!Array.isArray(customSections)) {
+    throw new Error("Option 'printTypeOptions.customSections' must be a list.");
+  }
+
+  const names = new Set<string>();
+
+  customSections.forEach((section: Maybe<TypeCustomSectionOption>): void => {
+    if (typeof section?.name !== "string" || section.name.length === 0) {
+      throw new Error(
+        "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
+      );
+    }
+
+    if (RESERVED_SECTION_NAMES.includes(section.name)) {
+      throw new Error(
+        `Custom section name '${section.name}' is reserved, please use another name.`,
+      );
+    }
+
+    if (names.has(section.name)) {
+      throw new Error(`Custom section name '${section.name}' is duplicated.`);
+    }
+    names.add(section.name);
+
+    if (typeof section.directive !== "string" || !section.directive) {
+      throw new Error(
+        `Custom section '${section.name}' requires a 'directive' name.`,
+      );
+    }
+
+    if (typeof section.render !== "function") {
+      throw new Error(
+        `Custom section '${section.name}' requires a 'render' function.`,
+      );
+    }
+  });
+
+  return customSections;
+};
+
 const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
   return {
+    customSections: getCustomSectionsOption(configOptions?.customSections),
     deprecated: (
       (cliOpts?.deprecated ??
         configOptions?.deprecated ??

@@ -8,6 +8,7 @@ import type {
   GraphQLDirective,
   Maybe,
   PackageName,
+  TypeCustomSectionOption,
   TypeDeprecatedOption,
   TypeDiffMethod,
   TypeHierarchyType,
@@ -36,6 +37,7 @@ import {
   parseGroupByOption,
   parseHomepageOption,
   TypeHierarchy,
+  getCustomSectionsOption,
 } from "../../src/config";
 
 import * as graphqlConfigModule from "../../src/graphql-config";
@@ -336,6 +338,7 @@ describe("config", () => {
           sectionHeaderId: false,
         },
         printTypeOptions: {
+          customSections: undefined,
           deprecated: "group",
           exampleSection: { directive: "example" },
           hierarchy: TypeHierarchy.ENTITY,
@@ -810,6 +813,90 @@ describe("config", () => {
         expect(parseGroupByOption(value)).toBeUndefined();
       },
     );
+  });
+
+  describe("getCustomSectionsOption", () => {
+    const section = {
+      name: "httpResponses",
+      directive: "httpResponse",
+      render: (): string => {
+        return "content";
+      },
+    };
+
+    test("returns undefined if not configured", () => {
+      expect.assertions(1);
+
+      expect(getCustomSectionsOption(undefined)).toBeUndefined();
+    });
+
+    test("returns the sections if valid", () => {
+      expect.assertions(1);
+
+      expect(getCustomSectionsOption([section])).toStrictEqual([section]);
+    });
+
+    test("throws an error if not a list", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption(
+          section as unknown as TypeCustomSectionOption[],
+        );
+      }).toThrow("Option 'printTypeOptions.customSections' must be a list.");
+    });
+
+    test("throws an error if a section has no name", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption([
+          { ...section, name: "" },
+        ] as TypeCustomSectionOption[]);
+      }).toThrow(
+        "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
+      );
+    });
+
+    test("throws an error if a section name is reserved", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption([{ ...section, name: "metadata" }]);
+      }).toThrow(
+        "Custom section name 'metadata' is reserved, please use another name.",
+      );
+    });
+
+    test("throws an error if a section name is duplicated", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption([section, { ...section, title: "Other" }]);
+      }).toThrow("Custom section name 'httpResponses' is duplicated.");
+    });
+
+    test("throws an error if a section has no directive", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption([
+          { ...section, directive: "" },
+        ] as TypeCustomSectionOption[]);
+      }).toThrow("Custom section 'httpResponses' requires a 'directive' name.");
+    });
+
+    test("throws an error if a section has no render function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getCustomSectionsOption([
+          { ...section, render: {} },
+        ] as unknown as TypeCustomSectionOption[]);
+      }).toThrow(
+        "Custom section 'httpResponses' requires a 'render' function.",
+      );
+    });
   });
 
   describe("getCustomDirectives", () => {
