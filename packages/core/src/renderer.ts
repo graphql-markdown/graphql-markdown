@@ -619,6 +619,7 @@ export class Renderer {
           entityName,
           (type as Record<string, unknown>)[name],
           operationNamespaceParts,
+          rootTypeName,
         );
       }),
     );
@@ -630,6 +631,8 @@ export class Renderer {
    * @param dirPath - The directory path where the file should be saved
    * @param name - The name of the type entity
    * @param type - The type entity to render
+   * @param operationNamespaceParts - The namespace parts for a namespaced operation
+   * @param entity - The schema entity kind being rendered, e.g. `queries`
    * @returns The category information for the rendered entity or undefined
    * @example
    */
@@ -638,6 +641,7 @@ export class Renderer {
     name: string,
     type: unknown,
     operationNamespaceParts?: string[],
+    entity?: SchemaEntity,
   ): Promise<Maybe<Category>> {
     if (!isPath(dirPath)) {
       throw new Error("Output directory is empty or not specified");
@@ -692,6 +696,7 @@ export class Renderer {
         ...(operationNamespaceParts === undefined
           ? {}
           : { operationNamespaceParts }),
+        ...(entity === undefined ? {} : { entity }),
       };
       content = await this.printer.printType(fileName, type, printOptions);
       if (typeof content !== "string" || content === "") {

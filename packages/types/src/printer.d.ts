@@ -3,6 +3,7 @@ import type {
   ConfigPrintTypeOptions,
   FrontMatterOptions,
   MetaInfo,
+  TypeCustomSectionOption,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
@@ -122,6 +123,7 @@ import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntitiesGroupMap,
+  SchemaEntity,
 } from "./graphql";
 import type { CustomDirectiveMap } from "./helpers";
 
@@ -200,6 +202,7 @@ export interface AdmonitionType {
  * Configuration options for printing type documentation
  */
 export interface PrinterConfigPrintTypeOptions {
+  customSections?: TypeCustomSectionOption[];
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption;
   hierarchy?: TypeHierarchyObjectType;
@@ -215,7 +218,10 @@ export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
+  customSections?: Maybe<TypeCustomSectionOption[]>;
   deprecated?: Maybe<TypeDeprecatedOption>;
+  /** The schema entity kind being printed, when known by the caller. */
+  entity?: Maybe<SchemaEntity>;
   exampleSection?: Maybe<TypeExampleSectionOption>;
   formatCategoryFolderName?: Maybe<(categoryName: string) => string>;
   frontMatter?: Maybe<FrontMatterOptions>;

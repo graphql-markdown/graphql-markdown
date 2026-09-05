@@ -720,6 +720,35 @@ describe("renderer", () => {
     });
 
     describe("renderRootTypes()", () => {
+      test.each(["queries", "objects"] as const)(
+        "passes the %s entity kind to the printer",
+        async (rootTypeName) => {
+          expect.assertions(1);
+
+          const printSpy = vi
+            .spyOn(Printer, "printType")
+            .mockResolvedValue("content" as MDXString);
+
+          await rendererInstance.renderRootTypes(rootTypeName, {
+            foo: new GraphQLScalarType({
+              name: "foo",
+              astNode: {
+                kind: Kind.SCALAR_TYPE_DEFINITION,
+                name: { kind: Kind.NAME, value: "foo" },
+              },
+            }),
+          });
+
+          // `appliesTo` cannot classify an operation from the type guards alone,
+          // so the entity kind has to reach the printer from here.
+          expect(printSpy).toHaveBeenCalledWith(
+            "foo",
+            expect.anything(),
+            expect.objectContaining({ entity: rootTypeName }),
+          );
+        },
+      );
+
       test("render root type", async () => {
         expect.assertions(2);
 

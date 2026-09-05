@@ -1,12 +1,22 @@
 import type { UnnormalizedTypeDefPointer } from "@graphql-tools/load";
 import type { BaseLoaderOptions } from "@graphql-tools/utils";
 
-import type { DirectiveName, GraphQLDirective, GraphQLSchema } from "./graphql";
+import type {
+  DirectiveName,
+  GraphQLDirective,
+  GraphQLSchema,
+  SchemaEntity,
+} from "./graphql";
 
 import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString, OutputAdapter } from "./utils";
-import type { AdmonitionType, Badge, TypeLink } from "./printer";
+import type {
+  AdmonitionType,
+  Badge,
+  PrintTypeOptions,
+  TypeLink,
+} from "./printer";
 import type {
   BeforeComposePageTypeHook,
   DiffCheckHook,
@@ -217,6 +227,54 @@ export type TypeExampleSectionOption = Partial<
   Omit<TypeDirectiveExample, "directive"> & { directive: string }
 >;
 
+/**
+ * Renderer callback for a custom section.
+ *
+ * Receives one record of coerced directive arguments per directive occurrence,
+ * in schema declaration order, and returns the section content as Markdown.
+ *
+ * @param values - the directive occurrences, one record of arguments each.
+ * @param options - the print options in effect for the type being rendered.
+ *
+ * @returns the section content, or a nullish value to skip the section.
+ */
+export type CustomSectionRenderer = (
+  values: Record<string, unknown>[],
+  options: PrintTypeOptions,
+) => Maybe<string>;
+
+/**
+ * Placement of a custom section relative to another section of the type page.
+ * When omitted, the section is appended after the last built-in section.
+ */
+export type CustomSectionPosition =
+  | { after: string; before?: never }
+  | { after?: never; before: string };
+
+/**
+ * Custom section configuration options.
+ *
+ * Declares a directive-driven, top-level section of a type page. The section is
+ * rendered when the configured directive is present on the type being printed,
+ * and is skipped otherwise.
+ */
+export interface TypeCustomSectionOption {
+  /** Section key, injected into the page sections map. Must not collide with a built-in section. */
+  name: string;
+  /** Name of the schema directive carrying the section data. */
+  directive: string;
+  /** Optional heading for the section. Omit for an untitled section. */
+  title?: Maybe<string>;
+  /** Optional heading level, defaults to `3`. */
+  level?: Maybe<number>;
+  /** Optional placement relative to another section. */
+  position?: Maybe<CustomSectionPosition>;
+  /** Optional list of schema entities the section applies to. Defaults to all. */
+  appliesTo?: Maybe<SchemaEntity[]>;
+  /** Callback rendering the section content from the directive occurrences. */
+  render: CustomSectionRenderer;
+}
+
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
 declare const DIFF_METHOD_NAME: unique symbol;
@@ -283,6 +341,8 @@ export interface ConfigOptions {
 export interface ConfigPrintTypeOptions {
   /** How to handle deprecated items */
   deprecated?: TypeDeprecatedOption;
+  /** Configuration for directive-driven custom sections */
+  customSections?: TypeCustomSectionOption[];
   /** Configuration for example sections */
   exampleSection?: TypeExampleSectionOption;
   /** Documentation hierarchy structure */
