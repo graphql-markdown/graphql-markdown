@@ -110,6 +110,12 @@ Optional directive arguments that were omitted are absent from the record rather
 
 Another custom section can also be named, as long as it is declared earlier. A section whose `position` names an unknown section is appended last.
 
+:::note
+
+`example` is itself a custom section, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `customSections`.
+
+:::
+
 :::tip
 
 Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) when the placement has to be decided per type, rather than once in the configuration.

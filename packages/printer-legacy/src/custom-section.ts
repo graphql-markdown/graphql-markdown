@@ -30,7 +30,34 @@ import {
   isUnionType,
 } from "@graphql-markdown/graphql";
 
-import { MARKDOWN_EOP } from "./const/strings";
+import { printExample } from "./example";
+
+import { MARKDOWN_EOC, MARKDOWN_EOP, MARKDOWN_SOC } from "./const/strings";
+
+/**
+ * Resolves the values a section renders, replacing the default directive lookup.
+ *
+ * Used by the built-in sections, such as the example section, whose values do
+ * not come from reading directive occurrences off the type.
+ *
+ * @internal
+ */
+export type SectionValuesResolver = (
+  type: unknown,
+  options: PrintTypeOptions,
+) => Maybe<Record<string, unknown>[]>;
+
+/**
+ * A custom section, optionally resolving its own values.
+ *
+ * The `resolve` callback is internal: a section declared through
+ * `printTypeOptions.customSections` always reads directive occurrences.
+ *
+ * @internal
+ */
+export type SectionDefinition = TypeCustomSectionOption & {
+  resolve?: SectionValuesResolver;
+};
 
 /**
  * Section keys owned by the printer, which a custom section cannot claim.
@@ -123,11 +150,97 @@ const appliesToEntity = (
 };
 
 /**
+ * Builds the example section as a custom section definition.
+ *
+ * The example section is a specialized custom section: it is driven by a schema
+ * directive, named by [`printTypeOptions.exampleSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions),
+ * and rendered as a code block.
+ *
+ * It resolves its own value rather than reading directive occurrences, because
+ * an example is also derived from the fields of a type carrying no example
+ * directive itself. The `directive` name is therefore descriptive only: the
+ * schema lookup belongs to {@link printExample}.
+ *
+ * @param options - the print options in effect.
+ *
+ * @returns the example section definition.
+ *
+ * @example
+ * ```ts
+ * const section = getExampleSectionDefinition(options);
+ * const example = printCustomSection(type, section, options);
+ * ```
+ *
+ */
+export const getExampleSectionDefinition = (
+  options: PrintTypeOptions,
+): SectionDefinition => {
+  const { exampleSection } = options;
+  // Matches `getDirectiveExampleOption`: an empty directive name falls back too.
+  const directive =
+    exampleSection &&
+    typeof exampleSection === "object" &&
+    exampleSection.directive
+      ? exampleSection.directive
+      : "example";
+
+  return {
+    name: "example",
+    title: "Example",
+    directive,
+    resolve: (
+      type: unknown,
+      printOptions: PrintTypeOptions,
+    ): Record<string, unknown>[] => {
+      const example = printExample(type, printOptions);
+      return example ? [{ example }] : [];
+    },
+    render: (values: Record<string, unknown>[]): string => {
+      return `${MARKDOWN_SOC}${values[0]!.example as string}${MARKDOWN_EOC}`;
+    },
+  };
+};
+
+/**
+ * Reads every occurrence of a section's directive on a type.
+ *
+ * @internal
+ *
+ * @param type - the GraphQL type being printed.
+ * @param section - the section declaration.
+ * @param options - the print options in effect.
+ *
+ * @returns one record of arguments per occurrence, empty when the directive is
+ * absent from the schema or from the type.
+ *
+ */
+const getDirectiveValues = (
+  type: unknown,
+  section: SectionDefinition,
+  options: PrintTypeOptions,
+): Record<string, unknown>[] => {
+  const schema = options.schema;
+  const directive =
+    schema && instanceOf(schema, GraphQLSchema as never)
+      ? schema.getDirective(section.directive)
+      : undefined;
+
+  if (!directive) {
+    return [];
+  }
+
+  return getTypeDirectiveValuesList(directive, type);
+};
+
+/**
  * Prints a single custom section for a type.
  *
- * The section is skipped, returning `undefined`, when its name is reserved, its
- * `appliesTo` filter excludes the type, the directive is absent from the schema
- * or from the type, or the render callback returns no content.
+ * The section is skipped, returning `undefined`, when its `appliesTo` filter
+ * excludes the type, no value is resolved for it, or the render callback returns
+ * no content.
+ *
+ * Reserved names are filtered by `getDeclaredSections`, not here: the built-in
+ * sections are themselves declared with a reserved name.
  *
  * @param type - the GraphQL type being printed.
  * @param section - the custom section declaration.
@@ -138,30 +251,21 @@ const appliesToEntity = (
  */
 export const printCustomSection = (
   type: unknown,
-  section: TypeCustomSectionOption,
+  section: SectionDefinition,
   options: PrintTypeOptions,
 ): Maybe<PageSection> => {
   if (
-    RESERVED_SECTION_NAMES.includes(section.name) ||
     typeof section.render !== "function" ||
     !appliesToEntity(type, section, options)
   ) {
     return undefined;
   }
 
-  const schema = options.schema;
-  const directive =
-    schema && instanceOf(schema, GraphQLSchema as never)
-      ? schema.getDirective(section.directive)
-      : undefined;
+  const values = section.resolve
+    ? section.resolve(type, options)
+    : getDirectiveValues(type, section, options);
 
-  if (!directive) {
-    return undefined;
-  }
-
-  const values = getTypeDirectiveValuesList(directive, type);
-
-  if (values.length === 0) {
+  if (!Array.isArray(values) || values.length === 0) {
     return undefined;
   }
 

@@ -74,13 +74,12 @@ Union
 
 exports[`Printer > printExample() > returns a Markdown graphql codeblock with example 1`] = `
 {
-  "content": "
-\`\`\`graphql
+  "content": "\`\`\`graphql
 This is an example
 \`\`\`
 
-
 ",
+  "level": 3,
   "title": "Example",
 }
 `;

@@ -47,7 +47,15 @@ import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
 
-vi.mock("../../src/example");
+// Partial mock: `printExample` is stubbed per test, while
+// `getExampleSectionDefinition` stays real so the example section is still built
+// through the shared custom section machinery.
+vi.mock("../../src/example", async (importOriginal) => {
+  return {
+    ...(await importOriginal<Record<string, unknown>>()),
+    printExample: vi.fn(),
+  };
+});
 import * as ExamplePrinter from "../../src/example";
 
 import * as Link from "../../src/link";
