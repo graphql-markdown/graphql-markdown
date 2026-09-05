@@ -120,6 +120,25 @@ describe("custom-section", () => {
       ).toBeUndefined();
     });
 
+    test("preserves the Markdown returned by the render callback", () => {
+      expect.assertions(1);
+
+      // Leading whitespace is significant in Markdown: an indented code block
+      // stops being one if the section builder trims it.
+      expect(
+        printCustomSection(
+          type,
+          {
+            ...httpResponses,
+            render: () => {
+              return "    indented code block";
+            },
+          },
+          options,
+        ),
+      ).toMatchObject({ content: expect.stringMatching(/^ {4}indented/) });
+    });
+
     test("returns undefined if the render callback returns no content", () => {
       expect.assertions(2);
 
@@ -247,6 +266,20 @@ describe("custom-section", () => {
       expect(sections["httpResponses"]).toMatchObject({ title: "Responses" });
     });
 
+    test("keeps a section named __proto__ as an own entry", () => {
+      expect.assertions(2);
+
+      const sections = printCustomSections(type, {
+        ...options,
+        customSections: [{ ...httpResponses, name: "__proto__" }],
+      });
+
+      expect(Object.hasOwn(sections, "__proto__")).toBe(true);
+      expect({ ...sections }["__proto__"]).toMatchObject({
+        title: "Responses",
+      });
+    });
+
     test("drops sections claiming a reserved name", () => {
       expect.assertions(1);
 
@@ -261,13 +294,15 @@ describe("custom-section", () => {
     test("returns an empty map if no section is declared", () => {
       expect.assertions(2);
 
-      expect(printCustomSections(type, options)).toStrictEqual({});
+      expect(Object.keys(printCustomSections(type, options))).toStrictEqual([]);
       expect(
-        printCustomSections(type, {
-          ...options,
-          customSections: {} as unknown as TypeCustomSectionOption[],
-        }),
-      ).toStrictEqual({});
+        Object.keys(
+          printCustomSections(type, {
+            ...options,
+            customSections: {} as unknown as TypeCustomSectionOption[],
+          }),
+        ),
+      ).toStrictEqual([]);
     });
   });
 

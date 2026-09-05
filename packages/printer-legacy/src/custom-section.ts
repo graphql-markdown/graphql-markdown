@@ -173,7 +173,9 @@ export const printCustomSection = (
 
   return {
     title: section.title ?? undefined,
-    content: `${content.trim()}${MARKDOWN_EOP}`,
+    // The render callback owns its Markdown: trimming here would alter content
+    // whose leading whitespace is significant, such as an indented code block.
+    content: `${content}${MARKDOWN_EOP}`,
     level: section.level ?? 3,
   };
 };
@@ -231,7 +233,10 @@ export const printCustomSections = (
   type: unknown,
   options: PrintTypeOptions,
 ): PageSections => {
-  const sections: PageSections = {};
+  // Null-prototype map: a section named `__proto__` would otherwise reach the
+  // prototype setter of an object literal and never become an own property.
+  // Configuration rejects that name, but the printer is also reachable directly.
+  const sections = Object.create(null) as PageSections;
 
   getDeclaredSections(options).forEach((section): void => {
     sections[section.name] = printCustomSection(type, section, options);

@@ -824,11 +824,31 @@ describe("config", () => {
       },
     };
 
-    test("returns undefined if not configured", () => {
-      expect.assertions(1);
+    test.each([undefined, null])(
+      "returns undefined if not configured (%s)",
+      (value) => {
+        expect.assertions(1);
 
-      expect(getCustomSectionsOption(undefined)).toBeUndefined();
-    });
+        expect(getCustomSectionsOption(value)).toBeUndefined();
+      },
+    );
+
+    test.each([false, 0, ""])(
+      "throws a type error if the option is the falsy non-list %p",
+      (value) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getCustomSectionsOption(
+            value as unknown as TypeCustomSectionOption[],
+          );
+        }).toThrow(
+          new TypeError(
+            "Option 'printTypeOptions.customSections' must be a list.",
+          ),
+        );
+      },
+    );
 
     test("returns the sections if valid", () => {
       expect.assertions(1);
@@ -864,15 +884,18 @@ describe("config", () => {
       );
     });
 
-    test("throws an error if a section name is reserved", () => {
-      expect.assertions(1);
+    test.each(["metadata", "__proto__"])(
+      "throws an error if a section name is reserved (%s)",
+      (name) => {
+        expect.assertions(1);
 
-      expect(() => {
-        getCustomSectionsOption([{ ...section, name: "metadata" }]);
-      }).toThrow(
-        "Custom section name 'metadata' is reserved, please use another name.",
-      );
-    });
+        expect(() => {
+          getCustomSectionsOption([{ ...section, name }]);
+        }).toThrow(
+          `Custom section name '${name}' is reserved, please use another name.`,
+        );
+      },
+    );
 
     test("throws an error if a section name is duplicated", () => {
       expect.assertions(1);

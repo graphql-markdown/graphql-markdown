@@ -660,6 +660,9 @@ export const parseDeprecatedPrintTypeOptions = (
  * @internal
  */
 const RESERVED_SECTION_NAMES: readonly string[] = [
+  // Assigning `__proto__` on an object literal reaches the prototype setter
+  // instead of creating an own entry, so the section would never be rendered.
+  "__proto__",
   "header",
   "metatags",
   "mdxDeclaration",
@@ -675,8 +678,8 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
 /**
  * Validates the custom sections option.
  *
- * Each entry must declare a unique `name` that is not a built-in section key, a
- * `directive` name, and a `render` callback. An invalid entry is a configuration
+ * Each entry must declare a unique `name` that is neither a built-in section key
+ * nor `__proto__`, a `directive` name, and a `render` callback. An invalid entry is a configuration
  * error rather than something to silently drop, as it would otherwise produce a
  * page missing a section without any indication why.
  *
@@ -702,7 +705,10 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
 export const getCustomSectionsOption = (
   customSections: Maybe<TypeCustomSectionOption[]>,
 ): Maybe<TypeCustomSectionOption[]> => {
-  if (!customSections) {
+  // Only an absent option selects the default: a configuration file is runtime
+  // JavaScript, so a falsy non-list such as `false` or `""` is a mistake worth
+  // reporting rather than a silent way to disable the sections.
+  if (customSections === null || customSections === undefined) {
     return DEFAULT_OPTIONS.printTypeOptions.customSections;
   }
 
