@@ -73,6 +73,7 @@ import { pathUrl } from "@graphql-markdown/utils";
 import { printRelations } from "./relation";
 import { printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
+import { getCustomSectionsOrder, printCustomSections } from "./custom-section";
 import { printFrontMatter } from "./frontmatter";
 import {
   printCodeDirective,
@@ -194,6 +195,11 @@ export class Printer implements IPrinter {
    */
   static readonly printCustomTags = printCustomTags;
 
+  /**
+   * Prints directive-driven custom sections
+   */
+  static readonly printCustomSections = printCustomSections;
+
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 
   private static _options: Readonly<Maybe<PrintTypeOptions>>;
@@ -273,6 +279,9 @@ export class Printer implements IPrinter {
         ...DEFAULT_OPTIONS,
         basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
         customDirectives,
+        customSections: Array.isArray(printTypeOptions?.customSections)
+          ? printTypeOptions.customSections
+          : undefined,
         exampleSection:
           typeof printTypeOptions?.exampleSection === "object"
             ? printTypeOptions.exampleSection
@@ -622,9 +631,13 @@ export class Printer implements IPrinter {
       metadata: Printer.normalizePageSection(metadata),
       example: Printer.normalizePageSection(example),
       relations: Printer.normalizePageSection(relations),
+      ...Printer.printCustomSections(type, printTypeOptions),
     };
 
-    let sectionOrder: (keyof PageSections)[] = [...TYPE_PAGE_SECTION_ORDER];
+    let sectionOrder: (keyof PageSections)[] = getCustomSectionsOrder(
+      TYPE_PAGE_SECTION_ORDER,
+      printTypeOptions,
+    );
 
     // Emit BEFORE_COMPOSE_PAGE_TYPE event if emitter is configured
     if (Printer.eventEmitter) {

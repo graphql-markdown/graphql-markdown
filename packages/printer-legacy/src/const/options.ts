@@ -38,10 +38,12 @@ export enum SectionLevels {
 }
 
 export const PRINT_TYPE_DEFAULT_OPTIONS: Required<
-  Omit<PrinterConfigPrintTypeOptions, "exampleSection">
+  Omit<PrinterConfigPrintTypeOptions, "customSections" | "exampleSection">
 > & {
+  customSections: PrintTypeOptions["customSections"];
   exampleSection: PrintTypeOptions["exampleSection"];
 } = {
+  customSections: undefined,
   deprecated: "default" as const,
   exampleSection: undefined,
   metatags: [] as const,
@@ -57,6 +59,8 @@ export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
+    | "customSections"
+    | "entity"
     | "exampleSection"
     | "formatCategoryFolderName"
     | "groups"
@@ -69,6 +73,8 @@ export const DEFAULT_OPTIONS: Required<
   >
 > & {
   collapsible: Maybe<CollapsibleOption>;
+  customSections: PrintTypeOptions["customSections"];
+  entity: PrintTypeOptions["entity"];
   exampleSection: PrintTypeOptions["exampleSection"];
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
@@ -81,6 +87,8 @@ export const DEFAULT_OPTIONS: Required<
   basePath: "/" as const,
   collapsible: undefined,
   customDirectives: {} as const,
+  customSections: PRINT_TYPE_DEFAULT_OPTIONS.customSections,
+  entity: undefined,
   exampleSection: undefined,
   groups: undefined,
   frontMatter: {},
