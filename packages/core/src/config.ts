@@ -707,14 +707,16 @@ export const getCustomSectionsOption = (
   }
 
   if (!Array.isArray(customSections)) {
-    throw new Error("Option 'printTypeOptions.customSections' must be a list.");
+    throw new TypeError(
+      "Option 'printTypeOptions.customSections' must be a list.",
+    );
   }
 
   const names = new Set<string>();
 
   customSections.forEach((section: Maybe<TypeCustomSectionOption>): void => {
     if (typeof section?.name !== "string" || section.name.length === 0) {
-      throw new Error(
+      throw new TypeError(
         "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
       );
     }
@@ -731,13 +733,13 @@ export const getCustomSectionsOption = (
     names.add(section.name);
 
     if (typeof section.directive !== "string" || !section.directive) {
-      throw new Error(
+      throw new TypeError(
         `Custom section '${section.name}' requires a 'directive' name.`,
       );
     }
 
     if (typeof section.render !== "function") {
-      throw new Error(
+      throw new TypeError(
         `Custom section '${section.name}' requires a 'render' function.`,
       );
     }

@@ -836,17 +836,21 @@ describe("config", () => {
       expect(getCustomSectionsOption([section])).toStrictEqual([section]);
     });
 
-    test("throws an error if not a list", () => {
+    test("throws a type error if not a list", () => {
       expect.assertions(1);
 
       expect(() => {
         getCustomSectionsOption(
           section as unknown as TypeCustomSectionOption[],
         );
-      }).toThrow("Option 'printTypeOptions.customSections' must be a list.");
+      }).toThrow(
+        new TypeError(
+          "Option 'printTypeOptions.customSections' must be a list.",
+        ),
+      );
     });
 
-    test("throws an error if a section has no name", () => {
+    test("throws a type error if a section has no name", () => {
       expect.assertions(1);
 
       expect(() => {
@@ -854,7 +858,9 @@ describe("config", () => {
           { ...section, name: "" },
         ] as TypeCustomSectionOption[]);
       }).toThrow(
-        "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
+        new TypeError(
+          "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
+        ),
       );
     });
 
@@ -876,17 +882,21 @@ describe("config", () => {
       }).toThrow("Custom section name 'httpResponses' is duplicated.");
     });
 
-    test("throws an error if a section has no directive", () => {
+    test("throws a type error if a section has no directive", () => {
       expect.assertions(1);
 
       expect(() => {
         getCustomSectionsOption([
           { ...section, directive: "" },
         ] as TypeCustomSectionOption[]);
-      }).toThrow("Custom section 'httpResponses' requires a 'directive' name.");
+      }).toThrow(
+        new TypeError(
+          "Custom section 'httpResponses' requires a 'directive' name.",
+        ),
+      );
     });
 
-    test("throws an error if a section has no render function", () => {
+    test("throws a type error if a section has no render function", () => {
       expect.assertions(1);
 
       expect(() => {
@@ -894,7 +904,9 @@ describe("config", () => {
           { ...section, render: {} },
         ] as unknown as TypeCustomSectionOption[]);
       }).toThrow(
-        "Custom section 'httpResponses' requires a 'render' function.",
+        new TypeError(
+          "Custom section 'httpResponses' requires a 'render' function.",
+        ),
       );
     });
   });
