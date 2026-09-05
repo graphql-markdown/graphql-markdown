@@ -248,9 +248,15 @@ describe("custom-section", () => {
     });
 
     test("returns an empty map if no section is declared", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       expect(printCustomSections(type, options)).toStrictEqual({});
+      expect(
+        printCustomSections(type, {
+          ...options,
+          customSections: {} as unknown as TypeCustomSectionOption[],
+        }),
+      ).toStrictEqual({});
     });
   });
 
@@ -394,9 +400,15 @@ describe("custom-section", () => {
     });
 
     test("returns the order unchanged if no section is declared", () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       expect(getCustomSectionsOrder(order, options)).toStrictEqual(order);
+      expect(
+        getCustomSectionsOrder(order, {
+          ...options,
+          customSections: {} as unknown as TypeCustomSectionOption[],
+        }),
+      ).toStrictEqual(order);
     });
   });
 });

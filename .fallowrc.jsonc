@@ -47,6 +47,10 @@
   // hoisted to the workspace packages that mock the filesystem in their tests. fallow reads
   // each package.json on its own and so reports it as unlisted for packages/core, /diff and
   // /utils; the packages deliberately declare no test tooling of their own.
+  //
+  // graphql is the same case: it is declared in the root package.json (catalog:) and hoisted
+  // to the packages whose tests build schemas with it. Only tests import it directly in
+  // packages/printer-legacy, so it is neither a dependency nor a peer dependency there.
   "ignoreDependencies": [
     "@graphql-markdown/cli",
     "@graphql-markdown/core",
@@ -67,6 +71,7 @@
     "typedoc-docusaurus-theme",
     "diff",
     "lodash.filter",
+    "graphql",
     "memfs",
     "mutation-testing-metrics"
   ],

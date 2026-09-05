@@ -279,9 +279,7 @@ export class Printer implements IPrinter {
         ...DEFAULT_OPTIONS,
         basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
         customDirectives,
-        customSections: Array.isArray(printTypeOptions?.customSections)
-          ? printTypeOptions.customSections
-          : undefined,
+        customSections: printTypeOptions?.customSections,
         exampleSection:
           typeof printTypeOptions?.exampleSection === "object"
             ? printTypeOptions.exampleSection
