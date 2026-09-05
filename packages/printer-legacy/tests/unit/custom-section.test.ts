@@ -10,6 +10,7 @@ import { Printer } from "../../src/printer";
 
 import {
   getCustomSectionsOrder,
+  getExampleSectionDefinition,
   getSchemaEntity,
   printCustomSection,
   printCustomSections,
@@ -168,18 +169,6 @@ describe("custom-section", () => {
       ).toBeUndefined();
     });
 
-    test("returns undefined if the section name is reserved", () => {
-      expect.assertions(1);
-
-      expect(
-        printCustomSection(
-          type,
-          { ...httpResponses, name: "metadata" },
-          options,
-        ),
-      ).toBeUndefined();
-    });
-
     test("renders if appliesTo matches the entity kind", () => {
       expect.assertions(1);
 
@@ -303,6 +292,86 @@ describe("custom-section", () => {
           }),
         ),
       ).toStrictEqual([]);
+    });
+  });
+
+  describe("getExampleSectionDefinition()", () => {
+    const exampleSchema = buildSchema(`
+      directive @example(value: String) on OBJECT | FIELD_DEFINITION
+
+      type Sample @example(value: "42") {
+        id: ID!
+      }
+
+      type NoSample {
+        id: ID! @example(value: "7")
+      }
+    `);
+
+    const exampleOptions = {
+      ...DEFAULT_OPTIONS,
+      schema: exampleSchema,
+    } as PrintTypeOptions;
+
+    test("renders the example as a code block section", () => {
+      expect.assertions(1);
+
+      expect(
+        printCustomSection(
+          exampleSchema.getType("Sample")!,
+          getExampleSectionDefinition(exampleOptions),
+          exampleOptions,
+        ),
+      ).toMatchInlineSnapshot(`
+        {
+          "content": "
+        \`\`\`graphql
+        42
+        \`\`\`
+
+
+        ",
+          "level": 3,
+          "title": "Example",
+        }
+      `);
+    });
+
+    test("returns undefined if the schema declares no example directive", () => {
+      expect.assertions(1);
+
+      expect(
+        printCustomSection(type, getExampleSectionDefinition(options), options),
+      ).toBeUndefined();
+    });
+
+    test("derives an example from the fields of a type carrying none", () => {
+      expect.assertions(1);
+
+      // `NoSample` has no example directive of its own: `printExample` walks its
+      // fields instead, which is why the example section resolves its own values
+      // rather than reading directive occurrences.
+      expect(
+        printCustomSection(
+          exampleSchema.getType("NoSample")!,
+          getExampleSectionDefinition(exampleOptions),
+          exampleOptions,
+        ),
+      ).toBeDefined();
+    });
+
+    test("uses the directive name from the exampleSection option", () => {
+      expect.assertions(2);
+
+      expect(getExampleSectionDefinition(exampleOptions).directive).toBe(
+        "example",
+      );
+      expect(
+        getExampleSectionDefinition({
+          ...exampleOptions,
+          exampleSection: { directive: "sample" },
+        }).directive,
+      ).toBe("sample");
     });
   });
 

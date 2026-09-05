@@ -73,7 +73,12 @@ import { pathUrl } from "@graphql-markdown/utils";
 import { printRelations } from "./relation";
 import { printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
-import { getCustomSectionsOrder, printCustomSections } from "./custom-section";
+import {
+  getCustomSectionsOrder,
+  getExampleSectionDefinition,
+  printCustomSection,
+  printCustomSections,
+} from "./custom-section";
 import { printFrontMatter } from "./frontmatter";
 import {
   printCodeDirective,
@@ -107,7 +112,6 @@ import {
   PRINT_TYPE_DEFAULT_OPTIONS,
   SectionLevels,
 } from "./const/options";
-import { printExample } from "./example";
 import {
   PrintCodeEvent,
   PrintTypeEvent,
@@ -446,16 +450,11 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): Maybe<PageSection> => {
-    const example = printExample(type, options);
-
-    if (!example) {
-      return undefined;
-    }
-
-    return {
-      content: `${MARKDOWN_SOC}${example}${MARKDOWN_EOC}${MARKDOWN_EOP}`,
-      title: "Example",
-    };
+    return printCustomSection(
+      type,
+      getExampleSectionDefinition(options),
+      options,
+    );
   };
 
   /**
