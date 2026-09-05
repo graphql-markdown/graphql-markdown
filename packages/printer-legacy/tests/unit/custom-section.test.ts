@@ -324,9 +324,11 @@ describe("custom-section", () => {
         ),
       ).toMatchInlineSnapshot(`
         {
-          "content": "\`\`\`graphql
+          "content": "
+        \`\`\`graphql
         42
         \`\`\`
+
 
         ",
           "level": 3,
