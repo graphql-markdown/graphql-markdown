@@ -1042,6 +1042,24 @@ describe("CLI Module", () => {
       expect(vi.mocked(core.generateDocFromSchema)).not.toHaveBeenCalled();
     });
 
+    test("runs documentation generation without CLI options", async () => {
+      expect.assertions(2);
+
+      const options = {
+        schema: "./schema.graphql",
+        rootPath: "./docs",
+      };
+
+      await runGraphQLMarkdown(options);
+
+      expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
+        options,
+        undefined,
+        undefined,
+      );
+      expect(vi.mocked(core.generateDocFromSchema)).toHaveBeenCalled();
+    });
+
     test("forwards noSectionId CLI option to buildConfig", async () => {
       expect.assertions(1);
 
