@@ -35,7 +35,7 @@ export type GraphQLMarkdownCliType = Command;
  * Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
  *
  * @param options - Options for configuring the GraphQL Markdown CLI.
- * @param cliOptions - Command-line options passed to the CLI.
+ * @param cliOptions - Optional command-line options passed to the CLI.
  * @param loggerModule - Optional logger module to use.
  *
  * @example
@@ -49,13 +49,13 @@ export type GraphQLMarkdownCliType = Command;
  */
 export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
-  cliOptions: CliOptions,
+  cliOptions?: CliOptions,
   loggerModule?: string,
 ): Promise<void> => {
   await Logger(loggerModule);
   const config = await buildConfig(options, cliOptions, options.id);
 
-  if (cliOptions.config) {
+  if (cliOptions?.config) {
     console.dir(config, { depth: null });
     return;
   }
