@@ -95,7 +95,7 @@ const resolveLoggerInstance = (
  * Instantiate a logger module.
  * By default, the logger module uses `globalThis.console`
  *
- * @param moduleName - optional name of the logger package.
+ * @param moduleName - optional name of the logger package, or a logger instance to use directly.
  *
  * @example
  * ```js
@@ -105,18 +105,25 @@ const resolveLoggerInstance = (
  *
  * Logger("@docusaurus/logger");
  * log("Info message", "info"); // Expected Docusaurus log output "Info message"
+ *
+ * Logger({ info: (message) => process.stdout.write(message) }); // Logger instance
+ * log("Info message", "info"); // Expected custom logger output "Info message"
  * ```
  *
  */
-export const Logger = async (moduleName?: string): Promise<void> => {
+export const Logger = async (
+  moduleName?: Record<string, unknown> | string,
+): Promise<void> => {
   if (globalThis.logger?.instance && moduleName === undefined) {
     return;
   }
 
-  const moduleExports =
-    typeof moduleName === "string" && moduleName !== ""
-      ? await import(moduleName)
-      : undefined;
+  let moduleExports: Record<string, unknown> | undefined;
+  if (typeof moduleName === "string" && moduleName !== "") {
+    moduleExports = await import(moduleName);
+  } else if (typeof moduleName === "object") {
+    moduleExports = moduleName;
+  }
 
   const instance =
     resolveLoggerInstance(moduleExports) ??
@@ -138,7 +145,6 @@ export const Logger = async (moduleName?: string): Promise<void> => {
 
   const _log = (
     message: string,
-
     level: LogLevel | keyof typeof LogLevel = LogLevel.info,
   ): void => {
     const callback = getCallbackForLevel(instance, level);
@@ -167,7 +173,6 @@ export const Logger = async (moduleName?: string): Promise<void> => {
  */
 export const log = (
   message: string,
-
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
   Promise.resolve(Logger()).catch(() => {});

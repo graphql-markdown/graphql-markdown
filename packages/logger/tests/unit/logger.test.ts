@@ -122,6 +122,67 @@ describe("logger", () => {
       expect(spyLogger).toHaveBeenCalledWith("test", "info");
     });
 
+    test("returns the logger instance passed as an object", async () => {
+      expect.hasAssertions();
+
+      const info = vi.fn();
+
+      await Logger.Logger({ info });
+      Logger.log("test");
+
+      expect(globalThis.logger?.instance).toEqual(
+        expect.objectContaining({ info }),
+      );
+      expect(info).toHaveBeenCalledWith("test");
+    });
+
+    test("resolves a nested logger instance passed as an object", async () => {
+      expect.hasAssertions();
+
+      const info = vi.fn();
+
+      await Logger.Logger({ default: { info } });
+      Logger.log("test");
+
+      expect(info).toHaveBeenCalledWith("test");
+    });
+
+    test("falls back to console if the object passed is not a logger", async () => {
+      expect.hasAssertions();
+
+      const spy = vi
+        .spyOn(globalThis.console, "info")
+        .mockImplementation(() => {
+          return "Mocked Console";
+        });
+
+      await Logger.Logger({ foo: "bar" });
+      Logger.log("test");
+
+      expect(spy).toHaveBeenCalledWith("test");
+      expect(globalThis.logger?.instance).toBe(globalThis.console);
+    });
+
+    test("overrides current logger with an instance passed as an object", async () => {
+      expect.hasAssertions();
+
+      const spyConsole = vi
+        .spyOn(globalThis.console, "info")
+        .mockImplementation(() => {
+          return "Mocked Console";
+        });
+      const info = vi.fn();
+
+      await Logger.Logger();
+      expect(globalThis.logger).toBeDefined();
+
+      await Logger.Logger({ info });
+      Logger.log("test");
+
+      expect(spyConsole).not.toHaveBeenCalled();
+      expect(info).toHaveBeenCalledWith("test");
+    });
+
     test("overrides current logger with Docusaurus", async () => {
       expect.hasAssertions();
 
