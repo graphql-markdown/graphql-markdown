@@ -12,7 +12,7 @@ sidebar_class_name: navbar__toggle
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This documentation has been automatically generated using [AniList APIv2](https://anilist.gitbook.io/anilist-apiv2-docs/) endpoint with following plugin configuration:
+This documentation has been automatically generated using the [AniList APIv2](https://anilist.gitbook.io/anilist-apiv2-docs/) schema with following plugin configuration:
 
 <Tabs groupId="config">
 <TabItem value="docusaurus" label="Docusaurus (JSON)">
