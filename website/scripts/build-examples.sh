@@ -16,7 +16,7 @@ npm install --save prettier
 
 mkdir -p examples
 
-"$GQLMD" --options "--homepage data/anilist.md --schema https://graphql.anilist.co/ --base . --link /examples/default --force --pretty --deprecated group"
+"$GQLMD" --options "--homepage data/anilist.md --schema data/anilist.graphql --base . --link /examples/default --force --pretty --deprecated group"
 mv docs ./examples/default
 if [[ -z "$(find ./examples/default -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)" ]]; then
   echo "No markdown files generated for the 'default' example" >&2
