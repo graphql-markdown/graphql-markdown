@@ -92,6 +92,7 @@
     "smoke": ".github/scripts/e2e/run-smoke.sh",
     "test": "turbo run test",
     "test:all": "vitest run --passWithNoTests",
+    "test:scripts": "vitest run --config tests/ci/vitest.config.mjs",
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
     "test:ci": "turbo run test:ci",
