@@ -100,8 +100,8 @@ jobs:
         case:
           - name: local schema, no options
             options: ""
-          - name: remote schema with parameters
-            options: "--homepage data/anilist.md --schema https://graphql.anilist.co/ --force"
+          - name: local AniList schema with parameters
+            options: "--homepage data/anilist.md --schema data/anilist.graphql --force"
           - name: groupByDirective option
             options: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
     steps:
