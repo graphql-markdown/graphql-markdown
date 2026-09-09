@@ -9,8 +9,14 @@ set -euo pipefail
 
 BASE_REF="${1:?usage: changed-files.sh <base-ref>}"
 
+# Deliberately NOT `--depth=1`: the caller checks out with `fetch-depth: 0`, and
+# a shallow fetch into a complete repository writes a `.git/shallow` graft that
+# can hide the real merge base -- which would silently fail open to the full
+# matrix on every run.
 if ! git rev-parse --verify --quiet "$BASE_REF" >/dev/null; then
-  git fetch --no-tags --depth=1 origin "${BASE_REF#origin/}" >/dev/null 2>&1 || true
+  BRANCH="${BASE_REF#origin/}"
+  git fetch --no-tags origin \
+    "+refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}" >/dev/null 2>&1 || true
 fi
 
 if MERGE_BASE="$(git merge-base "$BASE_REF" HEAD 2>/dev/null)"; then

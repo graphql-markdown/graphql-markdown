@@ -78,6 +78,10 @@ describe("computeAffected()", () => {
     ["packages/tooling-config/stryker/stryker.conf.mjs"],
     [".github/actions/setup/action.yml"],
     [".github/scripts/affected-packages.mts"],
+    // This very file: the gate must invalidate itself, or a change to its own
+    // tests would report `docs_only` and never run them.
+    ["tests/ci/affected-packages.test.mts"],
+    ["tests/ci/vitest.config.mjs"],
   ])("fails open to the whole matrix for %s", (file) => {
     const outputs = computeAffected([file], packagesMap);
 
@@ -115,6 +119,12 @@ describe("computeAffected()", () => {
     expect(outputs.smoke_docusaurus).toBe(docusaurus);
     // e2e specs are outside every Stryker `mutate` glob.
     expect(outputs.direct_packages).toStrictEqual([]);
+  });
+
+  test("flags its own test suite so the linter job runs it", () => {
+    expect(
+      computeAffected(["tests/ci/affected-packages.test.mts"], packagesMap),
+    ).toMatchObject({ workflows: true, docs_only: false });
   });
 
   test("flags workflow changes so actionlint and shellcheck still run", () => {

@@ -50,6 +50,7 @@ const GLOBAL_PATTERNS = [
   /^packages\/tooling-config\//u,
   /^\.github\/actions\//u,
   /^\.github\/scripts\//u,
+  /^tests\/ci\//u,
 ];
 
 // Scoped deliberately rather than a blanket `\.md$`: `tests/e2e/__data__` holds
@@ -190,8 +191,11 @@ const computeAffected = (
       );
     });
 
+  // "CI tooling", not just workflow YAML: this drives the linter job's
+  // actionlint / shellcheck / `test:scripts` steps, and the gate's own suite
+  // lives under `tests/ci`.
   const workflows = files.some((file) => {
-    return file.startsWith(".github/");
+    return file.startsWith(".github/") || file.startsWith("tests/ci/");
   });
 
   const sort = (names: Iterable<string>): string[] => {
