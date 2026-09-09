@@ -24,9 +24,13 @@ jobs:
     name: Build and pack workspace packages
     runs-on: ubuntu-latest
     needs: changes
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
+    # broken gate runs the full matrix instead of skipping to green: a skipped
+    # job reports a `skipped` check run, which the ruleset counts as satisfied.
     if: >-
-      (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-      && needs.changes.outputs.smoke == 'true'
+      !cancelled()
+      && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+      && (needs.changes.result != 'success' || needs.changes.outputs.smoke == 'true')
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -62,7 +66,13 @@ jobs:
     name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }} with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
     needs: [changes, build-packages]
-    if: needs.changes.outputs.smoke_docusaurus == 'true'
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_docusaurus == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -92,7 +102,13 @@ jobs:
     name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }} build (${{ matrix.case.name }}) with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
     needs: [changes, build-packages]
-    if: needs.changes.outputs.smoke_docusaurus == 'true'
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_docusaurus == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -126,7 +142,13 @@ jobs:
     name: Smoke Tests on CLI with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
     needs: [changes, build-packages]
-    if: needs.changes.outputs.smoke_cli == 'true'
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_cli == 'true')
     strategy:
       fail-fast: false
       matrix:

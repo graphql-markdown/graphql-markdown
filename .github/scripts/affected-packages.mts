@@ -8,6 +8,12 @@
 // GitHub counts as satisfied. So every matrix stays full width and the gating
 // happens through the outputs computed here.
 //
+// That same "skipped counts as satisfied" rule is why every caller guards its
+// jobs with `!cancelled()` and treats `needs.changes.result != 'success'` as
+// "run everything": a gate that errors must not skip the matrix into a green
+// PR. This script's fail-open branches cover git-level failures; the workflow
+// conditions cover the job failing around it.
+//
 // Usage: .github/scripts/changed-files.sh <base> | node affected-packages.mts
 //
 // Run directly by Node (>= 22.18) through type stripping, so it must stay

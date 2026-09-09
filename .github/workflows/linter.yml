@@ -22,6 +22,19 @@ jobs:
     needs: changes
     # The job itself always runs -- it is a required check -- but each step is
     # gated on the kind of change, so a docs-only PR reports green in seconds.
+    #
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, and
+    # both flags below fall open when the gate did not succeed: a skipped job
+    # reports a `skipped` check run, which the ruleset counts as satisfied, so
+    # a broken gate must run every check rather than silently pass the PR.
+    if: ${{ !cancelled() }}
+    env:
+      RUN_WORKFLOW_CHECKS: >-
+        ${{ needs.changes.result != 'success'
+          || needs.changes.outputs.workflows == 'true' }}
+      RUN_CODE_CHECKS: >-
+        ${{ needs.changes.result != 'success'
+          || needs.changes.outputs.code == 'true' }}
 
     steps:
       - name: Checkout Code Base
@@ -31,7 +44,7 @@ jobs:
           persist-credentials: false
 
       - name: Install actionlint
-        if: needs.changes.outputs.workflows == 'true'
+        if: env.RUN_WORKFLOW_CHECKS == 'true'
         run: |
           curl -fsSL -o actionlint.tar.gz "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz"
           tar xzf actionlint.tar.gz actionlint
@@ -39,43 +52,43 @@ jobs:
           rm actionlint.tar.gz
 
       - name: Run actionlint
-        if: needs.changes.outputs.workflows == 'true'
+        if: env.RUN_WORKFLOW_CHECKS == 'true'
         run: actionlint -color
 
       - name: Run shellcheck
-        if: needs.changes.outputs.workflows == 'true'
+        if: env.RUN_WORKFLOW_CHECKS == 'true'
         run: find .github/scripts website/scripts packages/tooling-config/scripts -name '*.sh' -exec shellcheck {} +
 
       - name: Setup environment
-        if: needs.changes.outputs.code == 'true' || needs.changes.outputs.workflows == 'true'
+        if: env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
         uses: ./.github/actions/setup
 
       # The CI gate script decides which jobs the rest of the matrix skips, so
       # it is tested here, where the toolchain is already installed.
       - name: Test CI scripts
-        if: needs.changes.outputs.workflows == 'true'
+        if: env.RUN_WORKFLOW_CHECKS == 'true'
         run: bun run test:scripts
 
       - name: Run TS Check
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: bun run ts:check
 
       - name: Run Prettier
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: bun run prettier
 
       - name: Run ESLint
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: bun run lint
 
       - name: Run knip
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: bun run knip --no-config-hints --reporter github-actions
 
       - name: Fetch base branch for fallow
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
 
       - name: Run fallow
-        if: needs.changes.outputs.code == 'true'
+        if: env.RUN_CODE_CHECKS == 'true'
         run: bun run fallow -- audit --base "origin/${GITHUB_BASE_REF}"

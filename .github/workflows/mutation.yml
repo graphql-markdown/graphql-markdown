@@ -37,11 +37,17 @@ jobs:
     # job-level `if:` (it is evaluated before the matrix expands). An unaffected
     # package still starts a runner, but skips every step, so it finishes in
     # seconds and still reports the check name the ruleset requires.
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
+    # broken gate runs the full matrix instead of skipping to green: a skipped
+    # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    if: >-
+      !cancelled()
+      && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     env:
       RUN_MUTATION: >-
-        ${{ github.event_name != 'pull_request'
-          || contains(fromJSON(needs.changes.outputs.direct_packages), matrix.package) }}
+        ${{ needs.changes.result != 'success'
+          || github.event_name != 'pull_request'
+          || contains(fromJSON(needs.changes.outputs.direct_packages || '[]'), matrix.package) }}
     strategy:
       fail-fast: false
       matrix:
