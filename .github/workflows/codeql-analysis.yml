@@ -24,6 +24,7 @@ on:
       - "*.mjs"
       - "*.mts"
       - "bun.lock"
+      - ".github/scripts/**"
       - ".github/workflows/codeql-analysis.yml"
   pull_request:
     # The branches below must be a subset of the branches above
@@ -34,6 +35,7 @@ on:
       - "*.mjs"
       - "*.mts"
       - "bun.lock"
+      - ".github/scripts/**"
       - ".github/workflows/codeql-analysis.yml"
   schedule:
     - cron: "19 6 * * 5"
