@@ -5,13 +5,16 @@
   // but still needed. Declaring them as entry points silences unused-file
   // false positives. Stryker and danger configs are dev tooling so they must
   // be declared explicitly. E2e specs are run via Earthfile (outside jest plugin
-  // detection range) so they are declared here too.
+  // detection range) so they are declared here too, as are the CI tooling specs,
+  // which run through their own vitest config (`tests/ci/vitest.config.mjs`)
+  // rather than the workspace one.
   "entry": [
     "dangerfile.js",
     ".github/scripts/**",
     "**/stryker.conf.mjs",
     "packages/tooling-config/scripts/**",
     "packages/tooling-config/typedoc/**",
+    "tests/ci/**",
     "tests/e2e/*/specs/*.spec.mjs",
     "tests/e2e/helpers/**"
   ],
