@@ -1,0 +1,85 @@
+name: Changes
+
+# Shared gate: maps the files a PR (or a push to main) touches onto the CI work
+# that actually needs to run. Callers use the outputs in job-level `if:`
+# conditions rather than trigger-level `paths:` filters, because the
+# `main-checklist` ruleset requires ~32 named checks: a job skipped by an `if:`
+# still reports a `skipped` check run (which GitHub counts as satisfied), while
+# a workflow never started by a `paths:` filter reports nothing at all and
+# leaves the required check pending forever.
+
+on:
+  workflow_call:
+    outputs:
+      code:
+        description: At least one workspace package is affected
+        value: ${{ jobs.changes.outputs.code }}
+      packages:
+        description: JSON array of affected packages, including their dependents
+        value: ${{ jobs.changes.outputs.packages }}
+      direct_packages:
+        description: JSON array of packages changed directly, without dependents
+        value: ${{ jobs.changes.outputs.direct_packages }}
+      smoke:
+        description: At least one smoke target is affected
+        value: ${{ jobs.changes.outputs.smoke }}
+      smoke_cli:
+        description: The CLI smoke target is affected
+        value: ${{ jobs.changes.outputs.smoke_cli }}
+      smoke_docusaurus:
+        description: The Docusaurus smoke targets are affected
+        value: ${{ jobs.changes.outputs.smoke_docusaurus }}
+      workflows:
+        description: Something under .github/ changed
+        value: ${{ jobs.changes.outputs.workflows }}
+      docs_only:
+        description: Nothing outside documentation changed
+        value: ${{ jobs.changes.outputs.docs_only }}
+
+jobs:
+  changes:
+    name: Detect affected
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.affected.outputs.code }}
+      packages: ${{ steps.affected.outputs.packages }}
+      direct_packages: ${{ steps.affected.outputs.direct_packages }}
+      smoke: ${{ steps.affected.outputs.smoke }}
+      smoke_cli: ${{ steps.affected.outputs.smoke_cli }}
+      smoke_docusaurus: ${{ steps.affected.outputs.smoke_docusaurus }}
+      workflows: ${{ steps.affected.outputs.workflows }}
+      docs_only: ${{ steps.affected.outputs.docs_only }}
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # Deep enough for the merge base of a normal PR; the diff step falls
+          # back to the full matrix if the base commit is still unreachable.
+          fetch-depth: 0
+          persist-credentials: false
+
+      # No `bun ci` here on purpose: the script only reads package.json files,
+      # so the gate stays a few seconds rather than a full toolchain install.
+      - name: Setup NodeJS LTS
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "lts/*"
+
+      - name: Compute affected packages
+        id: affected
+        env:
+          BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || format('{0}^', github.sha) }}
+        run: .github/scripts/changed-files.sh "$BASE_REF" | node .github/scripts/affected-packages.mts
+
+      - name: Summary
+        run: |
+          {
+            echo "| Output | Value |"
+            echo "| --- | --- |"
+            echo "| packages | \`${{ steps.affected.outputs.packages }}\` |"
+            echo "| direct_packages | \`${{ steps.affected.outputs.direct_packages }}\` |"
+            echo "| smoke_cli | ${{ steps.affected.outputs.smoke_cli }} |"
+            echo "| smoke_docusaurus | ${{ steps.affected.outputs.smoke_docusaurus }} |"
+            echo "| workflows | ${{ steps.affected.outputs.workflows }} |"
+            echo "| docs_only | ${{ steps.affected.outputs.docs_only }} |"
+          } >> "$GITHUB_STEP_SUMMARY"

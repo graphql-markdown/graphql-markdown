@@ -10,29 +10,32 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "tests/**/*"
-      - "packages/**/*"
-      - "packages/tooling-config/**/*"
-      - "config/**/*"
-      - "*.json"
-      - "*.mjs"
-      - ".github/actions/**/*"
-      - ".github/scripts/**/*"
-      - ".github/workflows/smoke.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Changes
+    uses: ./.github/workflows/changes.yml
+
   build-packages:
     name: Build and pack workspace packages
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: changes
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
+    # broken gate runs the full matrix instead of skipping to green: a skipped
+    # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    if: >-
+      !cancelled()
+      && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+      && (needs.changes.result != 'success' || needs.changes.outputs.smoke == 'true')
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -41,7 +44,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'packages/*/src/**', 'packages/*/tsconfig*.json', 'tsconfig.base.json') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
@@ -62,8 +65,14 @@ jobs:
   smoke-docusaurus-test:
     name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }} with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
-    needs: build-packages
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: [changes, build-packages]
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_docusaurus == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -72,6 +81,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Scaffold Docusaurus project
         uses: ./.github/actions/scaffold-docusaurus
@@ -90,8 +101,14 @@ jobs:
   smoke-docusaurus-build:
     name: Smoke Tests on Docusaurus ${{ matrix.docusaurus }} build (${{ matrix.case.name }}) with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
-    needs: build-packages
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: [changes, build-packages]
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_docusaurus == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -107,6 +124,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Scaffold Docusaurus project
         uses: ./.github/actions/scaffold-docusaurus
@@ -122,8 +141,14 @@ jobs:
   smoke-cli:
     name: Smoke Tests on CLI with GraphQL ${{ matrix.graphql }}
     runs-on: ubuntu-latest
-    needs: build-packages
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: [changes, build-packages]
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_cli == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -131,6 +156,8 @@ jobs:
     steps:
       - name: Checkout Code Base
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Scaffold CLI project
         uses: ./.github/actions/scaffold-cli

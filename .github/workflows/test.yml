@@ -9,22 +9,32 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "packages/**/*"
-      - "packages/tooling-config/**/*"
-      - "config/**/*"
-      - "*.json"
-      - "*.mjs"
-      - ".github/workflows/test.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Changes
+    uses: ./.github/workflows/changes.yml
+
   test:
     name: Test ${{ matrix.package }}
     runs-on: ubuntu-latest
+    needs: changes
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
+    # broken gate runs the full matrix instead of skipping to green: a skipped
+    # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    if: ${{ !cancelled() }}
+    # Gated per step rather than per job: `matrix` is not available in a
+    # job-level `if:` (it is evaluated before the matrix expands). An unaffected
+    # package therefore still starts a runner, but every step is skipped, so it
+    # finishes in seconds and still reports the check name the ruleset requires.
+    env:
+      RUN_TESTS: >-
+        ${{ needs.changes.result != 'success'
+          || contains(fromJSON(needs.changes.outputs.packages || '[]'), matrix.package) }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,15 +54,18 @@ jobs:
 
     steps:
       - name: Checkout Code Base
+        if: env.RUN_TESTS == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup environment
+        if: env.RUN_TESTS == 'true'
         uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
+        if: env.RUN_TESTS == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
@@ -61,16 +74,21 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Build packages
+        if: env.RUN_TESTS == 'true'
         run: bun run build -- --filter=@graphql-markdown/${{ matrix.package }}...
 
       - name: Run Tests
+        if: env.RUN_TESTS == 'true'
         run: |
           cd packages/${{ matrix.package }}
           bun test:ci -- --coverage --reporter=github-actions --reporter=default
 
       - name: SonarCloud Scan
         id: sonarcloud
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        if: >-
+          env.RUN_TESTS == 'true'
+          && (github.event_name != 'pull_request'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2
         with:
           projectBaseDir: ${{ github.workspace }}

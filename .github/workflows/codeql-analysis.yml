@@ -11,12 +11,32 @@
 #
 name: "CodeQL"
 
+# `Analyze` is not one of the ruleset's required checks, so a trigger-level
+# `paths:` filter is safe here (unlike test/mutation/smoke, where a workflow
+# that never starts would leave a required check pending forever). The weekly
+# cron keeps the code-scanning results fresh through a run of docs-only PRs.
 on:
   push:
     branches: [main]
+    paths:
+      - "packages/**"
+      - "tests/**"
+      - "*.mjs"
+      - "*.mts"
+      - "bun.lock"
+      - ".github/scripts/**"
+      - ".github/workflows/codeql-analysis.yml"
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [main]
+    paths:
+      - "packages/**"
+      - "tests/**"
+      - "*.mjs"
+      - "*.mts"
+      - "bun.lock"
+      - ".github/scripts/**"
+      - ".github/workflows/codeql-analysis.yml"
   schedule:
     - cron: "19 6 * * 5"
 

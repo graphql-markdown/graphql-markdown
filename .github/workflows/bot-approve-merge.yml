@@ -1,20 +1,30 @@
 name: Auto approve & merge PR
 
-on: pull_request_target
+# Without `types` this also fired on `labeled` (including the label it adds
+# itself), `edited`, `assigned` and friends, re-approving and re-merging each
+# time.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 env:
   PR_URL: ${{ github.event.pull_request.html_url }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: |
-      github.actor == 'dependabot[bot]' || 
-      github.actor == 'dependabot-preview[bot]' || 
-      github.actor == 'renovate[bot]' || 
-      github.actor == 'graphql-markdown-bot'
+    if: >-
+      github.repository == 'graphql-markdown/graphql-markdown'
+      && (github.actor == 'dependabot[bot]'
+        || github.actor == 'dependabot-preview[bot]'
+        || github.actor == 'renovate[bot]'
+        || github.actor == 'graphql-markdown-bot')
     env:
       GH_REPO: ${{ github.repository }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
@@ -23,14 +33,14 @@ jobs:
         run: gh pr review --approve "$PR_URL"
       - name: Add label "automerge"
         run: gh pr edit --add-label "automerge" "$PR_URL"
-        
+
   auto-merge:
     needs: auto-approve
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-    if: | 
+    if: |
       github.repository == 'graphql-markdown/graphql-markdown'
     env:
       GH_REPO: ${{ github.repository }}

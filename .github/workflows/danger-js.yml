@@ -1,5 +1,11 @@
 name: "Danger JS"
-on: pull_request
+# Danger reviews PR hygiene (title, description, changed files), which applies
+# to docs PRs too, so this one stays unfiltered by path. It is restricted to the
+# events that actually change the diff: without `types` it also fired on
+# `labeled`, `edited`, `assigned` and friends.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
 
 env:
   HUSKY: 0

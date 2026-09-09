@@ -7,16 +7,47 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  # PRs only run the packages they change (see the `if` below), so the full
+  # matrix runs on a schedule to keep every Stryker dashboard module's score
+  # fresh. Weekly rather than per-merge: a quality dashboard does not need
+  # per-commit granularity, and per-merge would undo most of the PR savings.
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Changes
+    uses: ./.github/workflows/changes.yml
+
   mutation:
     name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    needs: changes
+    # Stryker mutates a package's own `src/**/*.ts` and runs that same package's
+    # tests, so its score is a pure function of the two. An upstream change can
+    # only make the tests fail, which the Test job already reports -- hence
+    # `direct_packages` here rather than the dependency closure `test.yml` uses.
+    #
+    # Gated per step rather than per job: `matrix` is not available in a
+    # job-level `if:` (it is evaluated before the matrix expands). An unaffected
+    # package still starts a runner, but skips every step, so it finishes in
+    # seconds and still reports the check name the ruleset requires.
+    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
+    # broken gate runs the full matrix instead of skipping to green: a skipped
+    # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    if: >-
+      !cancelled()
+      && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    env:
+      RUN_MUTATION: >-
+        ${{ needs.changes.result != 'success'
+          || github.event_name != 'pull_request'
+          || contains(fromJSON(needs.changes.outputs.direct_packages || '[]'), matrix.package) }}
     strategy:
       fail-fast: false
       matrix:
@@ -36,27 +67,32 @@ jobs:
 
     steps:
       - name: Checkout Code Base
+        if: env.RUN_MUTATION == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - name: Setup environment
+        if: env.RUN_MUTATION == 'true'
         uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
+        if: env.RUN_MUTATION == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'packages/*/src/**', 'packages/*/tsconfig*.json', 'tsconfig.base.json') }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
       - name: Build packages
+        if: env.RUN_MUTATION == 'true'
         run: bun run build
 
       - name: Run Mutations Tests
+        if: env.RUN_MUTATION == 'true'
         run: bun run --filter '@graphql-markdown/${{ matrix.package }}' stryker --allowEmpty --reporters dashboard,json --dashboard.module ${{matrix.package}}
 
       - name: Mutation summary
-        if: always()
+        if: always() && env.RUN_MUTATION == 'true'
         run: bun .github/scripts/mutation-summary.mjs ${{ matrix.package }} packages/${{ matrix.package }}/reports/mutation/mutation.json
