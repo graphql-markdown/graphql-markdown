@@ -43,18 +43,29 @@ type AffectedOutputs = {
   docs_only: boolean;
 };
 
-// Anything matching these invalidates every assumption below (shared build
-// config, the toolchain, the type definitions every package compiles against,
-// or this script itself), so they fail open to the full matrix.
-const GLOBAL_PATTERNS = [
+// Anything matching these invalidates the workspace graph the closure below is
+// computed from, so the unit test matrix fails open to every package.
+//
+// They are split in two tiers because they do not all invalidate the same
+// thing. A `_RUNTIME` entry changes what a package's own tests actually
+// execute -- the installed dependency tree, the compiler settings, the test
+// runner, the CI toolchain -- so it fans out to mutation testing as well. A
+// `_STATIC` entry cannot: type definitions are erased before a mutant ever
+// runs, and the CI tooling is not part of any package. Those keep mutation
+// testing on the packages genuinely touched, which is most of the saving on a
+// `packages/types` change -- the shape of nearly every public API PR.
+const GLOBAL_RUNTIME_PATTERNS = [
   /^bun\.lock$/u,
   /^package\.json$/u,
   /^tsconfig(\..+)?\.json$/u,
   /^turbo\.json$/u,
   /^vitest\.config\.mjs$/u,
-  /^packages\/types\//u,
   /^packages\/tooling-config\//u,
   /^\.github\/actions\//u,
+];
+
+const GLOBAL_STATIC_PATTERNS = [
+  /^packages\/types\//u,
   /^\.github\/scripts\//u,
   /^tests\/ci\//u,
 ];
@@ -131,15 +142,94 @@ const expandDependents = (
 
   while (queue.length > 0) {
     const packageName = queue.shift()!;
-    for (const dependent of dependentsMap.get(packageName) ?? []) {
-      if (!closure.has(dependent)) {
-        closure.add(dependent);
-        queue.push(dependent);
-      }
-    }
+    const added = [...(dependentsMap.get(packageName) ?? [])].filter(
+      (dependent) => {
+        return !closure.has(dependent);
+      },
+    );
+
+    added.forEach((dependent) => {
+      closure.add(dependent);
+    });
+    queue.push(...added);
   }
 
   return closure;
+};
+
+/**
+ * Which global tier the change set falls into: `runtime` also invalidates
+ * mutation testing, `any` only the dependency closure.
+ */
+const getGlobalScope = (
+  files: string[],
+): { runtime: boolean; any: boolean } => {
+  const runtime = files.some((file) => {
+    return matches(file, GLOBAL_RUNTIME_PATTERNS);
+  });
+
+  const staticOnly = files.some((file) => {
+    return matches(file, GLOBAL_STATIC_PATTERNS);
+  });
+
+  return { runtime, any: runtime || staticOnly };
+};
+
+/**
+ * The packages a change set touches directly, ignoring the dependency graph.
+ */
+const getTouchedPackages = (
+  files: string[],
+  allPackages: string[],
+): Set<string> => {
+  return new Set(
+    files.flatMap((file) => {
+      const name = /^packages\/([^/]+)\//u.exec(file)?.[1];
+      return name && allPackages.includes(name) ? [name] : [];
+    }),
+  );
+};
+
+/**
+ * Both smoke scaffolds install every workspace package, so any package change
+ * runs every smoke job; only the e2e spec directories are target-specific.
+ */
+const getSmokeTargets = (
+  files: string[],
+  packagesTouched: boolean,
+): { cli: boolean; docusaurus: boolean; any: boolean } => {
+  const touches = (patterns: RegExp[]): boolean => {
+    return files.some((file) => {
+      return matches(file, patterns) || matches(file, SMOKE_PATTERNS.both);
+    });
+  };
+
+  const cli = packagesTouched || touches(SMOKE_PATTERNS.cli);
+  const docusaurus = packagesTouched || touches(SMOKE_PATTERNS.docusaurus);
+
+  return { cli, docusaurus, any: cli || docusaurus };
+};
+
+/**
+ * "CI tooling", not just workflow YAML: this drives the linter job's
+ * actionlint / shellcheck / `test:scripts` steps, and the gate's own suite
+ * lives under `tests/ci`.
+ */
+const touchesCiTooling = (files: string[]): boolean => {
+  return files.some((file) => {
+    return file.startsWith(".github/") || file.startsWith("tests/ci/");
+  });
+};
+
+/**
+ * Nothing outside documentation changed: every gated job can skip.
+ */
+const isDocsOnly = (
+  packagesTouched: boolean,
+  smoke: boolean,
+  workflows: boolean,
+): boolean => {
+  return !packagesTouched && !smoke && !workflows;
 };
 
 const computeAffected = (
@@ -157,52 +247,23 @@ const computeAffected = (
       return !matches(file, DOC_PATTERNS);
     });
 
-  const isGlobal = files.some((file) => {
-    return matches(file, GLOBAL_PATTERNS);
-  });
+  const global = getGlobalScope(files);
+  const touched = getTouchedPackages(files, allPackages);
 
   // `direct` drives mutation testing: Stryker mutates `src/**/*.ts` and runs
   // that same package's tests, so a module's score is a pure function of its
   // own sources and specs. An upstream change cannot move it -- it can only
   // make the tests fail, which the closure-gated unit test job already reports.
-  const direct = new Set(
-    isGlobal
-      ? allPackages
-      : files.flatMap((file) => {
-          const name = /^packages\/([^/]+)\//u.exec(file)?.[1];
-          return name && allPackages.includes(name) ? [name] : [];
-        }),
-  );
+  // Only a runtime-tier global widens it past the packages actually touched.
+  const direct = global.runtime ? new Set(allPackages) : touched;
 
-  const affected = isGlobal
+  const affected = global.any
     ? new Set(allPackages)
-    : expandDependents(direct, getDependentsMap(packagesMap));
+    : expandDependents(touched, getDependentsMap(packagesMap));
 
-  // Both smoke scaffolds install every workspace package, so any package change
-  // runs every smoke job; only the e2e spec directories are target-specific.
   const packagesTouched = affected.size > 0;
-  const smokeCli =
-    packagesTouched ||
-    files.some((file) => {
-      return (
-        matches(file, SMOKE_PATTERNS.cli) || matches(file, SMOKE_PATTERNS.both)
-      );
-    });
-  const smokeDocusaurus =
-    packagesTouched ||
-    files.some((file) => {
-      return (
-        matches(file, SMOKE_PATTERNS.docusaurus) ||
-        matches(file, SMOKE_PATTERNS.both)
-      );
-    });
-
-  // "CI tooling", not just workflow YAML: this drives the linter job's
-  // actionlint / shellcheck / `test:scripts` steps, and the gate's own suite
-  // lives under `tests/ci`.
-  const workflows = files.some((file) => {
-    return file.startsWith(".github/") || file.startsWith("tests/ci/");
-  });
+  const smoke = getSmokeTargets(files, packagesTouched);
+  const workflows = touchesCiTooling(files);
 
   const sort = (names: Iterable<string>): string[] => {
     return [...names].sort();
@@ -212,11 +273,11 @@ const computeAffected = (
     code: packagesTouched,
     packages: sort(affected),
     direct_packages: sort(direct),
-    smoke: smokeCli || smokeDocusaurus,
-    smoke_cli: smokeCli,
-    smoke_docusaurus: smokeDocusaurus,
+    smoke: smoke.any,
+    smoke_cli: smoke.cli,
+    smoke_docusaurus: smoke.docusaurus,
     workflows,
-    docs_only: !packagesTouched && !smokeCli && !smokeDocusaurus && !workflows,
+    docs_only: isDocsOnly(packagesTouched, smoke.any, workflows),
   };
 };
 

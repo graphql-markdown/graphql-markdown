@@ -24,23 +24,7 @@ const packagesMap: PackagesMap = {
 
 const allPackages = ["cli", "core", "graphql", "logger", "utils"];
 
-describe("computeAffected()", () => {
-  test("returns nothing to run for a documentation-only change", () => {
-    expect(
-      computeAffected(
-        ["docs/settings.md", "README.md", "api/index.md", "website/src/app.js"],
-        packagesMap,
-      ),
-    ).toMatchObject({
-      code: false,
-      packages: [],
-      direct_packages: [],
-      smoke: false,
-      workflows: false,
-      docs_only: true,
-    });
-  });
-
+describe("computeAffected() dependency closure", () => {
   test("expands a package change into its transitive dependents", () => {
     const outputs = computeAffected(
       ["packages/utils/src/string.ts"],
@@ -67,22 +51,20 @@ describe("computeAffected()", () => {
     // upstream change must not re-run every dependent's Stryker job.
     expect(outputs.direct_packages).toStrictEqual(["utils"]);
   });
+});
 
+describe("computeAffected() global fail-open", () => {
+  // Runtime tier: these change what a package's own tests execute, so they
+  // widen mutation testing as well as the dependency closure.
   test.each([
     ["bun.lock"],
     ["package.json"],
     ["tsconfig.base.json"],
     ["turbo.json"],
     ["vitest.config.mjs"],
-    ["packages/types/src/core.d.ts"],
     ["packages/tooling-config/stryker/stryker.conf.mjs"],
     [".github/actions/setup/action.yml"],
-    [".github/scripts/affected-packages.mts"],
-    // This very file: the gate must invalidate itself, or a change to its own
-    // tests would report `docs_only` and never run them.
-    ["tests/ci/affected-packages.test.mts"],
-    ["tests/ci/vitest.config.mjs"],
-  ])("fails open to the whole matrix for %s", (file) => {
+  ])("runs the whole matrix, mutation included, for %s", (file) => {
     const outputs = computeAffected([file], packagesMap);
 
     expect(outputs.packages).toStrictEqual(allPackages);
@@ -90,15 +72,43 @@ describe("computeAffected()", () => {
     expect(outputs.smoke).toBe(true);
   });
 
-  test("ignores documentation shipped inside a package", () => {
-    expect(
-      computeAffected(
-        ["packages/utils/docs/api.md", "packages/utils/README.md"],
-        packagesMap,
-      ),
-    ).toMatchObject({ code: false, packages: [], docs_only: true });
+  // Static tier: type definitions are erased before a mutant runs and CI
+  // tooling is not part of any package, so neither can move a Stryker score.
+  test.each([
+    ["packages/types/src/core.d.ts"],
+    [".github/scripts/affected-packages.mts"],
+    // This very file: the gate must invalidate itself, or a change to its own
+    // tests would report `docs_only` and never run them.
+    ["tests/ci/affected-packages.test.mts"],
+    ["tests/ci/vitest.config.mjs"],
+  ])("runs the whole test matrix but no extra mutation job for %s", (file) => {
+    const outputs = computeAffected([file], packagesMap);
+
+    expect(outputs.packages).toStrictEqual(allPackages);
+    expect(outputs.smoke).toBe(true);
   });
 
+  test("keeps mutation on the touched packages for a types-only change", () => {
+    // The shape of nearly every public API PR: a `.d.ts` edit alongside the
+    // packages implementing it. The closure still covers everything, but
+    // Stryker only runs where the sources actually changed.
+    const outputs = computeAffected(
+      ["packages/types/src/core.d.ts", "packages/core/src/config.ts"],
+      packagesMap,
+    );
+
+    expect(outputs.packages).toStrictEqual(allPackages);
+    expect(outputs.direct_packages).toStrictEqual(["core"]);
+  });
+
+  test("runs no mutation job for a CI-only change", () => {
+    expect(
+      computeAffected([".github/scripts/changed-files.sh"], packagesMap),
+    ).toHaveProperty("direct_packages", []);
+  });
+});
+
+describe("computeAffected() smoke targets", () => {
   test("runs every smoke target when any package changes", () => {
     expect(
       computeAffected(["packages/logger/src/index.ts"], packagesMap),
@@ -119,6 +129,33 @@ describe("computeAffected()", () => {
     expect(outputs.smoke_docusaurus).toBe(docusaurus);
     // e2e specs are outside every Stryker `mutate` glob.
     expect(outputs.direct_packages).toStrictEqual([]);
+  });
+});
+
+describe("computeAffected() documentation and tooling", () => {
+  test("returns nothing to run for a documentation-only change", () => {
+    expect(
+      computeAffected(
+        ["docs/settings.md", "README.md", "api/index.md", "website/src/app.js"],
+        packagesMap,
+      ),
+    ).toMatchObject({
+      code: false,
+      packages: [],
+      direct_packages: [],
+      smoke: false,
+      workflows: false,
+      docs_only: true,
+    });
+  });
+
+  test("ignores documentation shipped inside a package", () => {
+    expect(
+      computeAffected(
+        ["packages/utils/docs/api.md", "packages/utils/README.md"],
+        packagesMap,
+      ),
+    ).toMatchObject({ code: false, packages: [], docs_only: true });
   });
 
   test("flags its own test suite so the linter job runs it", () => {
